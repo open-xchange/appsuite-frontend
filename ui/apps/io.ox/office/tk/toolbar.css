@@ -71,14 +71,11 @@ div.io-ox-toolbar {
 
     /* tool bar formatting ================================================= */
 
-    /* redefine margin, padding, formatting for usage in OX */
     margin: 0;
     padding: 4px 13px;
-
     /* font size may affect box sizing, shrink it */
     font-size: 1px;
     line-height: 100%;
-
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
 
@@ -114,6 +111,10 @@ div.io-ox-toolbar {
     i.icon-io-ox-caret {
         background-position: 0 0;
         width: 7px;
+        
+        &.up {
+            background-position: -7px 0;
+        }
     }
 
     /* generic controls ==================================================== */
@@ -137,6 +138,7 @@ div.io-ox-toolbar {
         background: none;
         border: 1px solid transparent;
         white-space: nowrap;
+        text-align: center;
         vertical-align: middle;
         text-shadow: none;
 
@@ -144,7 +146,7 @@ div.io-ox-toolbar {
             .opacity(0.5);
         }
 
-        /* class for whitespace between icons, text, and dropdown arrows */
+        /* whitespace between icons, text, and drop-down carets */
         > span.whitespace {
             display: inline-block;
             width: 5px;
@@ -216,83 +218,82 @@ div.io-ox-toolbar {
                 }
             }
         }
-
-        /* drop-down caret ------------------------------------------------- */
-
-        /* move drop-down arrow down to the center of the button */
-        > span.caret {
-            margin-top: 6px;
-        }
-
-        /* remove hover highlight of drop-down arrow for disabled buttons */
-        &.disabled > span.caret {
-            .opacity(0.3);
-        }
     }
 
-    /* button groups ======================================================= */
+    /* groups ============================================================== */
 
-    .btn-group {
+    .group {
+        display: inline-block;
+        /* relative position is essential for drop-down menu positioning (absolute) */
+        position: relative;
 
-        /* The class 'io-ox-hidden' is used to hide button groups. */
-        &.io-ox-hidden {
+        /* The class 'hidden' is used to hide button groups. */
+        &.hidden {
             display: none;
         }
 
-        /* increase space between button groups */
-        + .btn-group {
+        /* space between groups */
+        + .group {
             margin-left: 10px;
-        }
-        
-        button {
-            .border-radius(0);
-            .box-shadow(none);
         }
 
         > button + button {
             margin-left: -1px;
         }
+
+        /* drop-down groups ------------------------------------------------ */
+
+        /* adjust margins for caret buttons in split mode */
+        > button.caret-button {
+            padding-left: 4px;
+            padding-right: 4px;
+        }
+
+        /* set border to all buttons in drop-down group with visible menu */
+        &.open > button:not(:focus):not(:active) {
+            border-color: @border-color;
+        }
     }
 
     /* drop-down menus ===================================================== */
 
-    .btn-group > .dropdown-menu {
-
+    .group > .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        max-width: none;
+        z-index: 1000;
+        margin: 1px 0 0 0;
+        padding: 0;
         border: 1px solid @border-color;
         .border-radius(0);
 
-        /* table-style button drop-downs ----------------------------------- */
+        /* button chooser drop-down menu ----------------------------------- */
 
-        &.io-ox-button-grid {
-
-            padding: 0;
+        &.button-chooser-menu {
             border-collapse: collapse;
 
             td {
                 padding: 0;
 
-                /* all buttons: adjust for table view */
+                /* expand button width to entire table cell */
                 > button {
                     width: 100%;
                 }
             }
         }
 
-        /* size chooser drop-downs ----------------------------------------- */
+        /* size chooser drop-down menu ------------------------------------- */
 
-        &.io-ox-size-chooser {
+        &.size-chooser-menu {
 
             /* inner size of one cell in the size chooser */
             @cell-size: 18px;
-            /* minimum dimensions for the outer container (in cells) */
-            @min-cell-width: 5;
-            @min-cell-height: 3;
 
-            /* reset Bootstrap's formatting */
-            padding: 0;
-            min-width: @min-cell-width * (@cell-size + 1px) - 1px;
-            max-width: none;
-            min-height: @min-cell-height * (@cell-size + 1px) - 1px;
+            /* minimum dimensions for the outer container (in cells) */
+            min-width: 5 * (@cell-size + 1px) - 1px;
+            min-height: 3 * (@cell-size + 1px) - 1px;
 
             > button {
                 margin: -1px;
@@ -338,6 +339,7 @@ div.io-ox-toolbar {
                     position: absolute;
                     top: 100%;
                     right: @cell-size;
+                    z-index: 1020;
                     margin: 5px 0 0 0;
                     padding: 4px 6px;
                     background-color: black;
@@ -348,22 +350,12 @@ div.io-ox-toolbar {
                     line-height: 100%;
                     color: white;
                     text-shadow: none;
-                    z-index: 100;
                 }
             }
         }
     }
 
-    /* adjustments for drop-down buttons ----------------------------------- */
-
-    /* adjust margins for caret buttons in split mode */
-    .btn-group > button.io-ox-caret-button {
-        padding-left: 4px;
-        padding-right: 4px;
-    }
-    
-    /* set border to drop-down buttons with visible drop-down menu */
-    .btn-group.open > button:not(:focus):not(:active) {
-        border-color: @border-color;
+    .group.open > .dropdown-menu {
+        display: block;
     }
 }

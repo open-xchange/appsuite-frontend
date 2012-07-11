@@ -19,7 +19,10 @@ define('io.ox/office/tk/dropdown',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // CSS class for the group node, if drop-down menu is opened
+        OPEN_CLASS = 'open';
 
     // class DropDown =========================================================
 
@@ -76,30 +79,18 @@ define('io.ox/office/tk/dropdown',
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
             caretTooltip = Utils.getStringOption(options, 'caretTooltip'),
             caretOptions = caretTooltip ? Utils.extendOptions(options, { tooltip: caretTooltip }) : options,
-            caretButton = split ? Utils.createButton(key, caretOptions).addClass(Group.FOCUSABLE_CLASS + ' io-ox-caret-button').empty() : $(),
+            caretButton = split ? Utils.createButton(key, caretOptions).addClass(Group.FOCUSABLE_CLASS + ' caret-button').empty() : $(),
 
             // reference to the button that triggers the drop-down menu
-            menuButton = split ? caretButton : actionButton,
-
-            // if set to true, toggling the drop-down menu was done with keyboard
-            menuWithKeyboard = false;
+            menuButton = split ? caretButton : actionButton;
 
         // private methods ----------------------------------------------------
 
         /**
-         * Triggers a click event on the drop-down button. In split mode, this
-         * is the separated caret button.
-         *
-         * @param {Boolean} [fromKeyEvent]
-         *  If set to true, the call originates from a keyboard event. This
-         *  will cause to trigger the 'menu:enter' event if the menu has been
-         *  actually opened by this function call.
+         * Returns whether the drop-down menu is currently visible.
          */
-        function triggerMenuButton(fromKeyEvent) {
-            // remember parameter in local variable, will be reset in click handler
-            menuWithKeyboard = fromKeyEvent === true;
-            // click drop-down button, this triggers the click listeners
-            menuButton.click();
+        function isMenuVisible() {
+            return self.getNode().hasClass(OPEN_CLASS);
         }
 
         /**
@@ -112,24 +103,27 @@ define('io.ox/office/tk/dropdown',
          *  its current visibility.
          *
          * @param {Boolean} [fromKeyEvent]
-         *  If set to true, the call originates from a keyboard event. This
-         *  will cause to trigger the 'menu:enter' event if the menu has been
-         *  actually opened by this function call.
+         *  If set to true, the call originates from a keyboard event.
          */
         function toggleMenu(state, fromKeyEvent) {
-            if (self.isMenuVisible()) {
-                if (state !== true) {
-                    // move focus to drop-down button, if control in drop-down menu is focused
-                    if (Utils.containsFocusedControl(menuNode)) {
-                        menuButton.focus();
-                    }
-                    triggerMenuButton(fromKeyEvent);
-                } else if (fromKeyEvent) {
-                    // menu already open, trigger 'menu:enter' event manually
-                    self.trigger('menu:enter');
+
+            var // the source type passed to the 'menuopen'/'menuclose' event handlers
+                from = fromKeyEvent ? 'key' : 'click',
+                // whether to show or hide the menu
+                show = (state === true) || ((state !== false) && !isMenuVisible());
+
+            if (show) {
+                self.getNode().addClass(OPEN_CLASS);
+                self.trigger('menuopen', from);
+                window.setTimeout(function () { $('html').on('click', globalClickHandler); }, 0);
+            } else {
+                // move focus to drop-down button, if control in drop-down menu is focused
+                if (Utils.containsFocusedControl(menuNode)) {
+                    menuButton.focus();
                 }
-            } else if (state !== false) {
-                triggerMenuButton(fromKeyEvent);
+                self.getNode().removeClass(OPEN_CLASS);
+                self.trigger('menuclose', from);
+                $('html').off('click', globalClickHandler);
             }
         }
 
@@ -139,35 +133,27 @@ define('io.ox/office/tk/dropdown',
          */
         function menuButtonClickHandler() {
 
-            var // remember global variable (will be reset before the timer callback is executed)
-                withKeyboard = menuWithKeyboard;
-
-            // WebKit does not set focus to clicked button, which is needed to get
-            // keyboard control in the drop-down menu
+            // WebKit does not set focus to clicked button, which is needed to
+            // get keyboard control in the drop-down menu
             if (!Utils.isControlFocused(menuButton)) {
                 menuButton.focus();
             }
 
-            if (!self.isMenuVisible()) {
-                // After a click on the drop-down button with hidden drop-down
-                // menu, wait for Bootstrap to open the menu, and trigger the
-                // 'menu:open' event afterwards. This ensures that listeners
-                // will be executed with a visible drop-down menu.
-                window.setTimeout(function () {
-                    self.trigger('menu:open');
-                    // if menu has been opened by keyboard, trigger a
-                    // 'menu:enter' event requesting clients to move the focus
-                    // into the drop-down menu
-                    if (withKeyboard) {
-                        self.trigger('menu:enter');
-                    }
-                }, 0);
-            } else if (!withKeyboard) {
-                // if menu has been closed with a mouse click, trigger a
-                // 'cancel' event allowing clients to handle this
+            // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
+            toggleMenu(null, false);
+
+            // trigger 'cancel' event, if menu has been closed with mouse click
+            if (!isMenuVisible()) {
                 self.trigger('cancel');
             }
-            menuWithKeyboard = false;
+        }
+
+        /**
+         * Handles mouse clicks everywhere on the page. Closes the drop-down
+         * menu automatically.
+         */
+        function globalClickHandler() {
+            toggleMenu(false);
         }
 
         /**
@@ -256,14 +242,7 @@ define('io.ox/office/tk/dropdown',
         };
 
         /**
-         * Returns whether the drop-down menu is currently visible.
-         */
-        this.isMenuVisible = function () {
-            return menuNode.css('display') !== 'none';
-        };
-
-        /**
-         * Shows the drop-down menu unless it is already visible.
+         * Displays the drop-down menu.
          */
         this.showMenu = function (fromKeyEvent) {
             toggleMenu(true, fromKeyEvent);
@@ -271,29 +250,12 @@ define('io.ox/office/tk/dropdown',
         };
 
         /**
-         * Hides the drop-down menu unless it is already hidden.
+         * Hides the drop-down menu.
          */
         this.hideMenu = function (fromKeyEvent) {
             toggleMenu(false, fromKeyEvent);
             return this;
         };
-
-        /**
-         * Toggles the visibility of the drop-down menu.
-         */
-        this.toggleMenu = function (fromKeyEvent) {
-            toggleMenu(null, fromKeyEvent);
-            return this;
-        };
-
-        // overwrite the hide() method; add hiding the drop-down menu
-        (function () {
-            var baseMethod = self.hide;
-            self.hide = function () {
-                this.hideMenu();
-                return baseMethod.call(this);
-            };
-        }());
 
         // initialization -----------------------------------------------------
 
@@ -303,7 +265,7 @@ define('io.ox/office/tk/dropdown',
             if (this.contents().length) {
                 this.append($('<span>').addClass('whitespace'));
             }
-            return this.append($('<span>').addClass('caret'));
+            return this.append($('<i>').addClass('icon-io-ox-caret'));
         };
 
         // in split mode, register a action handler for the action button
@@ -318,8 +280,6 @@ define('io.ox/office/tk/dropdown',
         // prepare drop-down button, and register event handlers
         menuButton
             .appendCaret()
-            .addClass('dropdown-toggle')
-            .attr('data-toggle', 'dropdown')
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
             .on('blur:key', function () { self.hideMenu(); });

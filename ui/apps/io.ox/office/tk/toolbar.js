@@ -49,7 +49,7 @@ define('io.ox/office/tk/toolbar',
             toolbar = this,
 
             // create the DOM root element representing the tool bar
-            node = $('<div>').addClass('btn-toolbar io-ox-toolbar'),
+            node = $('<div>').addClass('io-ox-toolbar'),
 
             // DOM child element measuring the total width of the controls
             containerNode = $('<span>').appendTo(node),

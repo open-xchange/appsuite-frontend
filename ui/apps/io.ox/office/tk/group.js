@@ -39,7 +39,7 @@ define('io.ox/office/tk/group',
             self = this,
 
             // create the group container element
-            groupNode = $('<div>').addClass('btn-group'),
+            groupNode = $('<div>').addClass('group'),
 
             // update handlers, mapped by key
             updateHandlers = {};
@@ -245,7 +245,7 @@ define('io.ox/office/tk/group',
      *
      * @constant
      */
-    Group.HIDDEN_CLASS = 'io-ox-hidden';
+    Group.HIDDEN_CLASS = 'hidden';
 
     /**
      * CSS selector for visible groups.
@@ -259,7 +259,7 @@ define('io.ox/office/tk/group',
      *
      * @constant
      */
-    Group.FOCUSABLE_CLASS = 'io-ox-focusable';
+    Group.FOCUSABLE_CLASS = 'focusable';
 
     /**
      * CSS selector for focusable controls.

@@ -79,7 +79,7 @@ define('io.ox/office/tk/sizechooser',
             gridButton = Utils.createButton(key).append(gridNode, sizeLabel),
 
             // the drop-down menu element
-            menuNode = $('<div>').addClass('io-ox-size-chooser').append(gridButton),
+            menuNode = $('<div>').addClass('size-chooser-menu').append(gridButton),
 
             // grid size limits
             minSize = getSizeOption(options, 'minSize', { width: 1, height: 1 }, { width: 1, height: 1 }),
@@ -151,12 +151,12 @@ define('io.ox/office/tk/sizechooser',
                 //#. %1$d is the number of columns in the drop-down grid of a size-chooser control (table size selector)
                 //#, c-format
                 gt.ngettext('%1$d column', '%1$d columns', size.width),
-                gt.noI18n(size.width)
+                size.width
             ) + ' \xd7 ' + gt.format(
                 //#. %1$d is the number of rows in the drop-down grid of a size-chooser control (table size selector)
                 //#, c-format
                 gt.ngettext('%1$d row', '%1$d rows', size.height),
-                gt.noI18n(size.height)
+                size.height
             ));
         }
 
@@ -172,16 +172,35 @@ define('io.ox/office/tk/sizechooser',
         }
 
         /**
-         * Handles 'menu:open' events and initializes the drop-down grid.
+         * Handles 'menuopen' events and initializes the drop-down grid.
          * Registers a 'mouseenter' handler at the drop-down menu that starts
          * a 'mousemove' listener when the mouse first hovers the grid element.
          */
-        function menuOpenHandler() {
+        function menuOpenHandler(event, from) {
+
+            // stop running mousemove handler
             enableGridMouseMoveHandling(false);
+
+            // initialize grid size to default size
             setGridSize(defSize);
+
+            // move focus to button, if opened by keyboard
+            if (from === 'key') {
+                gridButton.focus();
+            }
+
+            // wait for mouse to enter the grid before listening to mousemove events
             gridButton.off('mouseenter').one('mouseenter', function () {
                 enableGridMouseMoveHandling(true);
             });
+        }
+
+        /**
+         * Handles 'menuclose' events.
+         */
+        function menuCloseHandler(event, from) {
+            // unbind the 'mousemove' listener
+            enableGridMouseMoveHandling(false);
         }
 
         /**
@@ -197,12 +216,6 @@ define('io.ox/office/tk/sizechooser',
                 // mouse position relative to grid
                 mouseX = event.pageX - gridNode.offset().left,
                 mouseY = event.pageY - gridNode.offset().top;
-
-            // unbind ourselves, if the drop-down menu has been closed
-            if (!self.isMenuVisible()) {
-                enableGridMouseMoveHandling(false);
-                return;
-            }
 
             // Calculate new grid size. Enlarge width/height of the grid area, if
             // the last column/row is covered more than 80% of its width/height.
@@ -249,8 +262,8 @@ define('io.ox/office/tk/sizechooser',
 
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)
-            .on('menu:open', menuOpenHandler)
-            .on('menu:enter', function () { gridButton.focus(); });
+            .on('menuopen', menuOpenHandler)
+            .on('menuclose', menuCloseHandler);
         gridButton.on('keydown keypress keyup', gridKeyHandler);
 
     } // class SizeChooser

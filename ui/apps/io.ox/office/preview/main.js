@@ -143,12 +143,11 @@ define("io.ox/office/preview/main",
                 .addClass("io-ox-office-preview-main")
                 .append(preview.getNode());
 
-            // trigger all window resize handlers on 'show' events
+            // The toolkit will clear the toolbar area and insert extension
+            // point links everytime the window is shown. Therefore it is
+            // needed to re-insert the own toolbar into the toolbar node of the
+            // window.
             win.on('show', function () {
-                $(window).resize();
-
-                // The toolkit will clear the toolbar area and insert
-                // extension point links everytime the window is shown.
                 win.nodes.toolbar.append(toolbar.getNode());
             });
 
@@ -171,13 +170,6 @@ define("io.ox/office/preview/main",
             def.resolve();
 
             return def;
-        }
-
-        /**
-         * Recalculates the size of the preview frame according to the current
-         * view port size.
-         */
-        function windowResizeHandler() {
         }
 
         /**
@@ -286,7 +278,6 @@ define("io.ox/office/preview/main",
 
             // show application window
             win.show().busy();
-            $(window).resize();
             updateTitles();
 
             // initialize the deferred to be returned
@@ -336,7 +327,6 @@ define("io.ox/office/preview/main",
          * window close button).
          */
         app.destroy = function () {
-            $(window).off('resize', windowResizeHandler);
             controller.destroy();
             toolbar.destroy();
             preview.destroy();

@@ -51,7 +51,7 @@ define('io.ox/office/tk/buttonchooser',
             self = this,
 
             // the drop-down grid element
-            gridNode = $('<table>').addClass('io-ox-button-grid'),
+            gridNode = $('<table>').addClass('button-chooser-menu'),
 
             // number of rows in the grid
             rows = 0,
@@ -65,11 +65,24 @@ define('io.ox/office/tk/buttonchooser',
         // private methods ----------------------------------------------------
 
         /**
-         * Handles 'menu:open' events and initializes the drop-down menu.
+         * Handles 'menuopen' events and initializes the drop-down menu.
          */
-        function menuOpenHandler() {
-            // move focus to first enabled control
-            if (!Utils.containsFocusedControl(gridNode)) {
+        function menuOpenHandler(event, from) {
+
+            // Recalculate the width of the grid element. Firefox restricts the
+            // width of the table to the parent button group element, thus the
+            // table shrinks its buttons way too much. The only way (?) to
+            // expand the table to the correct width is to set its CSS
+            // 'min-width' property to the calculated width of the tbody
+            // element. To do this, it is required to expand the 'min-width' of
+            // the table to a large value to give the tbody enough space, and
+            // then query its calculated width.
+            gridNode
+                .css('min-width', '10000px')
+                .css('min-width', gridNode.find('tbody').outerWidth() + 'px');
+
+            // move focus to first enabled control, if opened by keyboard
+            if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
                 self.getGridButtons().first().focus();
             }
         }
@@ -112,25 +125,6 @@ define('io.ox/office/tk/buttonchooser',
             case KeyCodes.DOWN_ARROW:
                 if (keydown && (row + 1 < rows)) { focus(index + columns); }
                 return false;
-            }
-        }
-
-        /**
-         * Recalculates the width of the grid element. Firefox restricts the
-         * width of the table to the parent button group element, thus the
-         * table shrinks its buttons way too much. The only way (?) to expand
-         * the table to the correct width is to set its CSS 'min-width'
-         * property to the calculated width of the tbody element. To do this,
-         * it is required to expand the 'min-width' of the table to a large
-         * value to give the tbody enough space, and then query its calculated
-         * width.
-         */
-        function recalcGridWidthHandler() {
-            // handler may be called directly, check if grid is visible
-            if (self.isMenuVisible()) {
-                gridNode
-                    .css('min-width', '10000px')
-                    .css('min-width', gridNode.find('tbody').outerWidth() + 'px');
             }
         }
 
@@ -190,8 +184,7 @@ define('io.ox/office/tk/buttonchooser',
         // initialization -----------------------------------------------------
 
         // register event handlers
-        this.on('menu:open', recalcGridWidthHandler)
-            .on('menu:enter', menuOpenHandler);
+        this.on('menuopen', menuOpenHandler);
         gridNode.on('keydown keypress keyup', gridKeyHandler);
 
     } // class ButtonChooser
