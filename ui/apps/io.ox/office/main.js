@@ -15,96 +15,18 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/tk/controller',
-     'io.ox/office/view',
      'io.ox/office/editor',
+     'io.ox/office/view',
+     'io.ox/office/controller',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (filesApi, Controller, View, Editor, gt) {
+    ], function (filesApi, Editor, View, Controller, gt) {
 
     'use strict';
 
     var // application identifier
         MODULE_NAME = 'io.ox/office';
-
-    // class EditorController =================================================
-
-    var EditorController = Controller.extend({ constructor: function (app, editor) {
-
-        var // all the little controller items
-            items = {
-                'action/undo': {
-                    enable: function () { return editor.hasUndo(); },
-                    set: function () { editor.undo(); editor.grabFocus(); }
-                },
-                'action/redo': {
-                    enable: function () { return editor.hasRedo(); },
-                    set: function () { editor.redo(); editor.grabFocus(); }
-                },
-
-                'insert/table': {
-                    set: function (size) { editor.insertTable(size); editor.grabFocus(); }
-                },
-
-                'character/font/bold': {
-                    get: function () { return editor.getAttribute('bold'); },
-                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
-                },
-                'character/font/italic': {
-                    get: function () { return editor.getAttribute('italic'); },
-                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
-                },
-                'character/font/underline': {
-                    get: function () { return editor.getAttribute('underline'); },
-                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
-                },
-
-                'paragraph/alignment': {
-                    set: function (value) { editor.grabFocus(); }
-                },
-
-                'debug/toggle': {
-                    get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
-                }
-            };
-
-        // private methods ----------------------------------------------------
-
-        function cancelAction() {
-            editor.grabFocus();
-        }
-
-        // base constructor ---------------------------------------------------
-
-        Controller.call(this, items, cancelAction);
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Registers a new editor instance. If the editor has the browser
-         * focus, this controller will use it as target for item actions
-         * triggered by any registered view component.
-         */
-        this.registerEditor = function (newEditor, supportedItems) {
-            newEditor
-                .on('focus', _.bind(function (event, focused) {
-                    if (focused && (editor !== newEditor)) {
-                        editor = newEditor;
-                        this.enableAndDisable(supportedItems).update();
-                    }
-                }, this))
-                .on('operation', _.bind(function () {
-                    this.update([/^action\//, /^character\//, /^paragraph\//]);
-                }, this))
-                .on('selectionChanged', _.bind(function () {
-                    this.update([/^character\//, /^paragraph\//]);
-                }, this));
-            return this;
-        };
-
-    }}); // class EditorController
 
     // createApplication() ====================================================
 
@@ -720,7 +642,7 @@ define('io.ox/office/main',
         editor = editors[Editor.TextMode.RICH];
 
         // register GUI elements and editors at the controller
-        controller = new EditorController(app, editor)
+        controller = new Controller(app, editor)
             .registerViewComponent(toolbar)
             .registerEditor(editors[Editor.TextMode.RICH])
             .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
