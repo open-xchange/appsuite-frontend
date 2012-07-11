@@ -14,12 +14,12 @@
 define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/group',
      'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/buttonchooser',
      'io.ox/office/tk/sizechooser',
-     'io.ox/office/tk/group',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, ButtonGroup, ButtonChooser, SizeChooser, Group) {
+    ], function (Events, Utils, Group, ButtonGroup, ButtonChooser, SizeChooser) {
 
     'use strict';
 

@@ -25,6 +25,8 @@ define('io.ox/office/tk/buttongroup',
      * buttons.
      *
      * @constructor
+     *
+     * @extends Group
      */
     function ButtonGroup() {
 

@@ -11,69 +11,61 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define("io.ox/officepreview/main",
-    ["io.ox/officepreview/preview",
+define("io.ox/office/preview/main",
+    ["io.ox/office/preview/preview",
+     "io.ox/office/tk/toolbar",
+     "io.ox/office/tk/controller",
      "gettext!io.ox/office/main",
-     "less!io.ox/officepreview/style.css"
-    ], function (OfficePreview, gt) {
+    ], function (Preview, ToolBar, Controller, gt) {
+    "less!io.ox/office/preview/style.css"
 
     'use strict';
 
-    var MODULE_NAME = 'io.ox/officepreview';
+    var MODULE_NAME = 'io.ox/office/preview';
 
     // createApplication() ====================================================
 
     function createApplication(options) {
 
         var app = ox.ui.createApp({ name: MODULE_NAME }),
-            
+
             win = null,
-            
-            file = null,
-        
-            preview = null,
-            
+
+            file = _.isObject(options) ? options.file : null,
+
             pageIndicator = $("<span>").addClass("io-ox-office-preview-page-indicator").text("1"),
 
-            firstButton = $("<button>").addClass("btn btn-primary")
-            .append("<i class='icon-white icon-fast-backward'>")
-            .attr("id", "firstButton")
-            .on("click", function (e) {
-                e.preventDefault();
-                preview.firstPage();
-                updateButtons();
-            }),
-            
-            previousButton = $("<button>").addClass("btn btn-primary")
-            .append("<i class='icon-white icon-step-backward'>")
-            .attr("id", "previousButton")
-            .on("click", function (e) {
-                e.preventDefault();
-                preview.previousPage();
-                updateButtons();
-            }),
+            toolbar = new ToolBar()
+                .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
+                .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
+                .addButton('next', { icon: 'icon-step-forward', tooltip: gt('Next page') })
+                .addButton('last', { icon: 'icon-fast-forward', tooltip: gt('Last page') }),
 
-            nextButton = $("<button>").addClass("btn btn-primary")
-                .append("<i class='icon-white icon-step-forward'>")
-                .attr("id", "nextButton")
-                .on("click", function (e) {
-                    e.preventDefault();
-                    preview.nextPage();
-                    updateButtons();
-                }),
+            controller = new Controller({
+                page: {
+                    get: function () { return preview.getPage(); }
+                },
+                first: {
+                    enable: function () { return preview.firstAvail(); },
+                    set: function () { preview.firstPage(); }
+                },
+                previous: {
+                    enable: function () { return preview.previousAvail(); },
+                    set: function () { preview.previousPage(); }
+                },
+                next: {
+                    enable: function () { return preview.nextAvail(); },
+                    set: function () { preview.nextPage(); }
+                },
+                last: {
+                    enable: function () { return preview.lastAvail(); },
+                    set: function () { preview.lastPage(); }
+                }
+            }).registerViewComponent(toolbar),
 
-            lastButton = $("<button>").addClass("btn btn-primary")
-            .append("<i class='icon-white icon-fast-forward'>")
-                .attr("id", "lastButton")
-                .on("click", function (e) {
-                e.preventDefault();
-                preview.lastPage();
-                updateButtons();
-            }),
-                
-            previewContainer = $('<div>').addClass('abs')
-                .css({ overflow: "auto", zIndex: 2 });
-        
+            preview = new Preview()
+                .on('showpage', function () { controller.update(); });
+
         // ---------------------
         // - private functions -
         // ---------------------
@@ -123,40 +115,6 @@ define("io.ox/officepreview/main",
         }
 
         /**
-         * Sets the application button status according to the current status
-         * of the preview
-         */
-        function updateButtons() {
-            if (preview.firstAvail()) {
-                $("#firstButton").removeAttr("disabled");
-            }
-            else {
-                $("#firstButton").attr("disabled", "disabled");
-            }
-
-            if (preview.previousAvail()) {
-                $("#previousButton").removeAttr("disabled");
-            }
-            else {
-                $("#previousButton").attr("disabled", "disabled");
-            }
-
-            if (preview.nextAvail()) {
-                $("#nextButton").removeAttr("disabled");
-            }
-            else {
-                $("#nextButton").attr("disabled", "disabled");
-            }
-
-            if (preview.lastAvail()) {
-                $("#lastButton").removeAttr("disabled");
-            }
-            else {
-                $("#lastButton").attr("disabled", "disabled");
-            }
-        }
-
-        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
@@ -169,28 +127,27 @@ define("io.ox/officepreview/main",
                 search: false,
                 toolbar: true
             });
-            
+
             app.setWindow(win);
 
             win.nodes.main
-                .append(preview.getNode());
-
-            win.nodes.main
-                .addClass("io-ox-office-preview-background")
-                .append(pageIndicator);
+                .addClass("io-ox-office-preview-main")
+                .append(preview.getNode(), pageIndicator);
 
             // trigger all window resize handlers on 'show' events
             win.on('show', function () {
-                win.nodes.toolbar
-                    .append($("<div>")
-                    .append(firstButton, $.txt(' '), previousButton, $.txt(' '), nextButton, $.txt(' '), lastButton))
-                    .css({ left: "45%" });
-                
                 $(window).resize();
-
-                // disable FF spell checking
-                $('body').attr('spellcheck', false);
             });
+
+            // The toolkit will clear the toolbar area and insert extension
+            // point links *after* calling this launch handler. Thus, insert
+            // the own toolbar node the first time the window is made visible.
+            win.one('show', function () {
+                win.nodes.toolbar.append(toolbar.getNode().css('border', 'none'));
+            });
+
+            // disable FF spell checking
+            $('body').attr('spellcheck', false);
         }
 
         /**
@@ -232,7 +189,7 @@ define("io.ox/officepreview/main",
                 '&session=' + ox.session) +
                 '&filter_format=html';
         }
-        
+
         /**
          * loading the document from the filestore as HTML
          */
@@ -261,11 +218,11 @@ define("io.ox/officepreview/main",
                 // reject deferred on error
                 return def.reject(ex);
             }
-            
+
             // resolve the deferred with the preview document
             return def.resolve(response.data);
         }
-        
+
         // methods ============================================================
 
         /**
@@ -330,7 +287,7 @@ define("io.ox/officepreview/main",
             def = $.Deferred().always(function () {
                 win.idle();
             });
-            
+
             // load the file
             $.ajax({
                 type: 'GET',
@@ -341,7 +298,6 @@ define("io.ox/officepreview/main",
                 importHTML(response)
                 .done(function (previewDocument) {
                     preview.setPreviewDocument(previewDocument.HTMLPages);
-                    updateButtons();
                     def.resolve();
                 })
                 .fail(function (ex) {
@@ -375,18 +331,17 @@ define("io.ox/officepreview/main",
          */
         app.destroy = function () {
             $(window).off('resize', windowResizeHandler);
-            app = win = preview = null;
+            controller.destroy();
+            toolbar.destroy();
+            app = win = preview = toolbar = controller = null;
         };
 
         // ------------------------------------------------
         // - initialization of createApplication function -
         // ------------------------------------------------
 
-        preview = new OfficePreview(previewContainer);
-        file = _.isObject(options) ? options.file : null;
-
         return app.setLauncher(launchHandler).setQuit(quitHandler);
-    
+
     } // createApplication()
 
     // exports ================================================================

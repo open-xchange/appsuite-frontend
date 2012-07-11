@@ -30,6 +30,8 @@ define('io.ox/office/tk/dropdown',
      *
      * @constructor
      *
+     * @extends Group
+     *
      * @param {String} key
      *  The unique key of the group. This key is shared by all buttons
      *  inserted into this group.

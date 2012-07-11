@@ -39,6 +39,8 @@ define('io.ox/office/tk/sizechooser',
      *
      * @constructor
      *
+     * @extends DropDown
+     *
      * @param {String} key
      *  The unique key of the size chooser.
      *

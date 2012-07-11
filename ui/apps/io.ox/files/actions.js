@@ -80,18 +80,18 @@ define("io.ox/files/actions",
         }
     });
 
-    new Action('io.ox/files/actions/officepreview', {
+    new Action('io.ox/files/actions/office/preview', {
         id: 'officepreview',
         requires: function (e) {
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|sdc|ppt|pptx|sdp|sdg)$/i.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/officepreview/main', { file: data }).done(function () {
+            ox.launch('io.ox/office/preview/main', { file: data }).done(function () {
                 this.load();
             });
         }
     });
-    
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -268,9 +268,9 @@ define("io.ox/files/actions",
         prio: 'hi',
         // TODO (KA): finalize menu entry
         label: gt("Preview (OXO)"),
-        ref: "io.ox/files/actions/officepreview"
+        ref: "io.ox/files/actions/office/preview"
     }));
-    
+
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,

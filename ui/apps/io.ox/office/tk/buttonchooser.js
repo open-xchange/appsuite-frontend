@@ -32,6 +32,8 @@ define('io.ox/office/tk/buttonchooser',
      *
      * @constructor
      *
+     * @extends DropDown
+     *
      * @param {String} key
      *  The unique key of the group. This key is shared by all controls
      *  inserted into the drop-down grid of this group.
