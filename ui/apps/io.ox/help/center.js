@@ -50,10 +50,12 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
 
         _(allReferenceElements).each(function (elem) {
             var $elem = $(elem),
-                datRef = $elem.attr('data-ref'),
-                helpText = "<div>" + getHelp(datRef) + "</div>";
-            if (helpText) {
-                origPopovers[datRef] = $elem.popover;
+                datRef = $elem.attr('data-ref');
+
+            if ($elem.hasClass('io-ox-help-item')) {
+                $elem.popover('enable');
+            } else {
+                var helpText = getHelp(datRef);
                 $elem.popover({
                     title: datRef,
                     content: helpText,
@@ -63,8 +65,11 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
-                }).addClass('help-highlight');
+                })
+                .addClass('io-ox-help-item');
             }
+            $elem.addClass('io-ox-help-highlight')
+                 .append($('<i class="icon-info-sign io-ox-help-icon">'));
         });
     };
     
@@ -74,11 +79,14 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
     
     var disableHelpHandlers = function () {
         var allReferenceElements = $('[data-ref]');
-        
         _(allReferenceElements).each(function (elem) {
-            $(elem).popover('disable').popover('hide').removeClass('help-highlight');
+            $(elem)
+            .popover('disable')
+            .popover('hide')
+            .removeClass('io-ox-help-highlight');
         });
-        
+
+        $(".io-ox-help-icon").remove();
         console.log("Help handlers disabled");
     };
     
