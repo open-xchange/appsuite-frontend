@@ -162,6 +162,8 @@ define('io.ox/office/tk/group',
                     key = control.attr('data-key');
                     value = actionHandler.call(self, control);
                     self.trigger('change', key, value);
+                } else {
+                    self.trigger('cancel');
                 }
             }
 

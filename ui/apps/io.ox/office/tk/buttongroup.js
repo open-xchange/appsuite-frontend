@@ -30,7 +30,7 @@ define('io.ox/office/tk/buttongroup',
      */
     function ButtonGroup() {
 
-        // private methods ------------------------------------------------
+        // private methods ----------------------------------------------------
 
         /**
          * Returns whether the first button control in the passed jQuery
@@ -49,7 +49,7 @@ define('io.ox/office/tk/buttongroup',
         /**
          * A generic update handler for push buttons and toggle buttons.
          */
-        function buttonUpdateHandler(button, value) {
+        function updateHandler(button, value) {
             if (isToggleButton(button)) {
                 // Translate undefined (special 'no value' state) or null (special
                 // 'ambiguous' state) to false to prevent toggling the button as
@@ -62,7 +62,7 @@ define('io.ox/office/tk/buttongroup',
         /**
          * A generic action handler for push buttons and toggle buttons.
          */
-        function buttonClickHandler(button) {
+        function clickHandler(button) {
             if (isToggleButton(button)) {
                 Utils.toggleButtons(button);
                 return Utils.isButtonSelected(button);
@@ -105,7 +105,7 @@ define('io.ox/office/tk/buttongroup',
 
             // register update handler (use the generic update handler)
             this.registerUpdateHandler(key, function (value) {
-                buttonUpdateHandler.call(this, button, value);
+                updateHandler.call(this, button, value);
             });
 
             return button;
@@ -114,7 +114,7 @@ define('io.ox/office/tk/buttongroup',
         // initialization -----------------------------------------------------
 
         // add action handlers for buttons
-        this.registerActionHandler('click', 'button', buttonClickHandler);
+        this.registerActionHandler('click', 'button', clickHandler);
 
     } // class ButtonGroup
 

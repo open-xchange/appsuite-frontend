@@ -24,18 +24,18 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // constants --------------------------------------------------------------
 
     /**
-     * CSS selector for disabled controls.
+     * CSS class for disabled controls.
      *
      * @constant
      */
-    Utils.DISABLED_SELECTOR = ':disabled';
+    Utils.DISABLED_CLASS = 'disabled';
 
     /**
      * CSS selector for enabled controls.
      *
      * @constant
      */
-    Utils.ENABLED_SELECTOR = ':not(' + Utils.DISABLED_SELECTOR + ')';
+    Utils.ENABLED_SELECTOR = ':not(.' + Utils.DISABLED_CLASS + ')';
 
     /**
      * CSS selector for focused controls.
@@ -87,28 +87,111 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // form control elements --------------------------------------------------
 
     /**
+     * Creates and returns a new form control element.
+     *
+     * @param {String} element
+     *  The tag name of the element to be created.
+     *
+     * @param {String} key
+     *  The key associated to the control element. Will be stored in its
+     *  'data-key' attribute.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new element. The
+     *  following options are supported:
+     *  @param {String} [options.classes]
+     *      The CSS class names to be added to the element. If omitted, no
+     *      classes will be added.
+     *  @param {String} [options.tooltip]
+     *      Tool tip text shown when the mouse hovers the control. If omitted,
+     *      the control will not show a tool tip.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new control element.
+     */
+    Utils.createControl = function (element, key, options) {
+
+        var // create the DOM element
+            control = $('<' + element + '>'),
+
+            // option values
+            classes = Utils.getStringOption(options, 'classes'),
+            tooltip = Utils.getStringOption(options, 'tooltip');
+
+        // add the key as data attribute
+        if (_.isString(key)) {
+            control.attr('data-key', key);
+        }
+
+        // add CSS classes
+        if (classes) {
+            control.addClass(classes);
+        }
+        // add tool tip text
+        if (tooltip) {
+            control.tooltip({ title: tooltip, placement: 'top', animation: false });
+        }
+
+        return control;
+    };
+
+    /**
+     * Appends an icon and a text label to the existing contents of the passed
+     * form control.
+     *
+     * @param {jQuery} control
+     *  The control to be manipulated, as jQuery collection.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new label. Supports
+     *  all generic options (see method Utils.createControl() for details).
+     *  Additionally, the following options are supported:
+     *  @param {String} [options.icon]
+     *      The full name of the Bootstrap or OX icon class. If omitted, no
+     *      icon will be shown.
+     *  @param {String} [options.label]
+     *      The text label. Will follow an icon. If omitted, no text will be
+     *      shown.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new label element.
+     */
+    Utils.insertControlLabel = function (control, options) {
+
+        var // option values
+            icon = Utils.getStringOption(options, 'icon'),
+            label = Utils.getStringOption(options, 'label');
+
+        // add icon in an i element
+        if (icon) {
+            control.append($('<i>').addClass(icon + ' ' + language));
+        }
+        // add text label, separate it from the icon
+        if (label) {
+            if (icon) { control.append($('<span>').addClass('whitespace')); }
+            control.append($('<span>').text(label));
+        }
+    };
+
+    /**
      * Returns whether the first form control in the passed jQuery collection
      * is enabled.
      *
      * @param {jQuery} control
-     *  A jQuery collection containing a form control supporting the 'disabled'
-     *  attribute.
+     *  A jQuery collection containing a form control.
      *
      * @returns {Boolean}
-     *  True, if the form control is enabled (its 'disabled' attribute is not
-     *  set).
+     *  True, if the form control is enabled.
      */
     Utils.isControlEnabled = function (control) {
         return control.first().is(Utils.ENABLED_SELECTOR);
     };
 
     /**
-     * Enables or disables all form controls in the passed jQuery collection by
-     * changing their 'disabled' attributes.
+     * Enables or disables all form controls in the passed jQuery collection.
      *
      * @param {jQuery} controls
-     *  A jQuery collection containing one or more form controls supporting the
-     *  'disabled' attribute.
+     *  A jQuery collection containing one or more form controls.
      *
      * @param {Boolean} [state]
      *  If omitted or set to true, all form controls in the passed collection
@@ -116,11 +199,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.enableControls = function (controls, state) {
         var enabled = (state === true) || (state === undefined);
-        if (enabled) {
-            controls.removeAttr('disabled');
-        } else {
-            controls.attr('disabled', 'disabled');
-        }
+        controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
     };
 
     /**
@@ -181,6 +260,38 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return node.find(Utils.FOCUSED_SELECTOR).length !== 0;
     };
 
+    // label elements ---------------------------------------------------------
+
+    /**
+     * Creates and returns a new label element.
+     *
+     * @param {String} key
+     *  The key associated to this label element. Will be stored in the
+     *  'data-key' attribute of the label.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new label. Supports
+     *  all generic options (see method Utils.createControl() for details).
+     *  Additionally, the following options are supported:
+     *  @param {String} [options.icon]
+     *      The full name of the Bootstrap or OX icon class. If omitted, no
+     *      icon will be shown.
+     *  @param {String} [options.label]
+     *      The text label. Will follow an icon. If omitted, no text will be
+     *      shown.
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new label element.
+     */
+    Utils.createLabel = function (key, options) {
+
+        var // create the DOM label element
+            label = Utils.createControl('label', key, options);
+
+        Utils.insertControlLabel(label, options);
+        return label;
+    };
+
     // button elements --------------------------------------------------------
 
     /**
@@ -191,20 +302,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  'data-key' attribute of the button.
      *
      * @param {Object} [options]
-     *  A map of options to control the properties of the new button. The
-     *  following options are supported:
-     *  @param {String} [options.classes]
-     *      The CSS class names to be added to the button element. If omitted,
-     *      no classes will be added.
+     *  A map of options to control the properties of the new button. Supports
+     *  all generic options (see method Utils.createControl() for details).
+     *  Additionally, the following options are supported:
      *  @param {String} [options.icon]
      *      The full name of the Bootstrap or OX icon class. If omitted, no
      *      icon will be shown.
      *  @param {String} [options.label]
      *      The text label of the button. Will follow an icon. If omitted, no
      *      label will be shown.
-     *  @param {String} [options.tooltip]
-     *      Tool tip text shown when the mouse hovers the button. If omitted,
-     *      the button will not show a tool tip.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
@@ -212,37 +318,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = $('<button>').addClass('btn'),
+            button = Utils.createControl('button', key, options);
 
-            // option values
-            classes = Utils.getStringOption(options, 'classes'),
-            icon = Utils.getStringOption(options, 'icon'),
-            label = Utils.getStringOption(options, 'label'),
-            tooltip = Utils.getStringOption(options, 'tooltip');
-
-        // add the key as data attribute
-        if (_.isString(key)) {
-            button.attr('data-key', key);
-        }
-
-        // add CSS classes
-        if (classes) {
-            button.addClass(classes);
-        }
-        // add icon in an i element
-        if (icon) {
-            button.append($('<i>').addClass(icon + ' ' + language));
-        }
-        // add text label, separate it from the icon
-        if (label) {
-            if (icon) { button.append($('<span>').addClass('whitespace')); }
-            button.append($('<span>').text(label));
-        }
-        // add tool tip text
-        if (tooltip) {
-            button.tooltip({ title: tooltip, placement: 'top', animation: false });
-        }
-
+        Utils.insertControlLabel(button, options);
         return button;
     };
 

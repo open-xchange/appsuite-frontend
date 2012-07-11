@@ -74,12 +74,9 @@ define('io.ox/office/main',
 
     // class EditorController =================================================
 
-    var EditorController = Controller.extend({ constructor: function (app) {
+    var EditorController = Controller.extend({ constructor: function (app, editor) {
 
-        var // current editor having the focus
-            editor = null,
-
-            // all the little controller items
+        var // all the little controller items
             items = {
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
@@ -138,10 +135,8 @@ define('io.ox/office/main',
             newEditor
                 .on('focus', _.bind(function (event, focused) {
                     if (focused && (editor !== newEditor)) {
-                        // set as current editor
                         editor = newEditor;
-                        // update view components
-                        this.enableAndDisable(supportedItems);
+                        this.enableAndDisable(supportedItems).update();
                     }
                 }, this))
                 .on('operation', _.bind(function () {
@@ -169,7 +164,7 @@ define('io.ox/office/main',
             file = null,
 
             // controller as single connection point between editors and view elements
-            controller = new EditorController(app),
+            controller = null,
 
             // main tool bar
             toolbar = new MainToolBar(),
@@ -748,15 +743,6 @@ define('io.ox/office/main',
             editors[textMode] = new Editor(node, textMode);
         });
 
-        // register GUI elements and editors at the controller
-        controller
-            .registerViewComponent(toolbar)
-            .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
-
-        // primary editor for global operations (e.g. save)
-        editor = editors[Editor.TextMode.RICH];
-
         // operations output console
         editors.output = {
             node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
@@ -773,6 +759,15 @@ define('io.ox/office/main',
                 }
             }
         };
+
+        // primary editor for global operations (e.g. save)
+        editor = editors[Editor.TextMode.RICH];
+
+        // register GUI elements and editors at the controller
+        controller = new EditorController(app, editor)
+            .registerViewComponent(toolbar)
+            .registerEditor(editors[Editor.TextMode.RICH])
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 
         // build debug table for plain-text editor and operations output console
         debugTable = $('<table>').append(

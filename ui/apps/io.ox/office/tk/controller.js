@@ -121,12 +121,8 @@ define('io.ox/office/tk/controller', function () {
          */
         function updateComponents(components, items) {
             _(items).each(function (item, key) {
-                // ask if item is dynamically disabled
-                var enabled = item.enabled && item.enable();
-                _(components).invoke('enable', key, enabled);
-                // pass undefined value for disabled items
-                var value = enabled ? item.get() : undefined;
-                _(components).invoke('update', key, value);
+                _(components).invoke('enable', key, item.enabled && item.enable());
+                _(components).invoke('update', key, item.get());
             });
         }
 
@@ -165,7 +161,6 @@ define('io.ox/office/tk/controller', function () {
         this.registerViewComponent = function (component) {
             if (!_(components).contains(component)) {
                 components.push(component);
-                updateComponents([component], allItems);
                 component.on('change cancel', componentListener);
             }
             return this;
@@ -315,8 +310,7 @@ define('io.ox/office/tk/controller', function () {
                     enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
                     get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
                     set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
-                    // items are initially disabled
-                    enabled: false
+                    enabled: true
                 };
             }
         });

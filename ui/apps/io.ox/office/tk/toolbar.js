@@ -14,12 +14,13 @@
 define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/label',
      'io.ox/office/tk/group',
      'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/buttonchooser',
      'io.ox/office/tk/sizechooser',
      'less!io.ox/office/tk/toolbar.css'
-    ], function (Events, Utils, Group, ButtonGroup, ButtonChooser, SizeChooser) {
+    ], function (Events, Utils, Label, Group, ButtonGroup, ButtonChooser, SizeChooser) {
 
     'use strict';
 
@@ -415,6 +416,27 @@ define('io.ox/office/tk/toolbar',
          */
         this.getNode = function () {
             return node;
+        };
+
+        /**
+         * Creates a new dynamic label element in its own group, and appends it
+         * to this tool bar. The label text will be updated according to calls
+         * of the method ToolBar.update().
+         *
+         * @param {String} key
+         *  The unique key of the label.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new label
+         *  element. Supports all generic formatting options (see method
+         *  Utils.createLabel() for details.
+         *
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
+         */
+        this.addLabel = function (key, options) {
+            registerGroup(new Label(key, options));
+            return this;
         };
 
         /**

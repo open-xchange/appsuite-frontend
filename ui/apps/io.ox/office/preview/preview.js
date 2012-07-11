@@ -71,6 +71,7 @@ define('io.ox/office/preview/preview',
                 // (initially, hide all pages)
                 pages = node.children('svg').hide();
             } else {
+                node.empty();
                 pages = $();
             }
 
@@ -128,6 +129,10 @@ define('io.ox/office/preview/preview',
          */
         this.lastPage = function () {
             showPage(pages.length);
+        };
+
+        this.destroy = function () {
+            this.events.destroy();
         };
 
         // initialization -----------------------------------------------------

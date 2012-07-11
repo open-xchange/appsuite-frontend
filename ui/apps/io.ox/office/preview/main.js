@@ -16,8 +16,8 @@ define("io.ox/office/preview/main",
      "io.ox/office/tk/toolbar",
      "io.ox/office/tk/controller",
      "gettext!io.ox/office/main",
+     "less!io.ox/office/preview/style.css"
     ], function (Preview, ToolBar, Controller, gt) {
-    "less!io.ox/office/preview/style.css"
 
     'use strict';
 
@@ -33,17 +33,27 @@ define("io.ox/office/preview/main",
 
             file = _.isObject(options) ? options.file : null,
 
-            pageIndicator = $("<span>").addClass("io-ox-office-preview-page-indicator").text("1"),
-
             toolbar = new ToolBar()
                 .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
                 .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
+                .addLabel('page', { tooltip: gt('Page number') })
                 .addButton('next', { icon: 'icon-step-forward', tooltip: gt('Next page') })
                 .addButton('last', { icon: 'icon-fast-forward', tooltip: gt('Last page') }),
 
             controller = new Controller({
                 page: {
-                    get: function () { return preview.getPage(); }
+                    enable: function () { return preview.getPageCount() > 0; },
+                    get: function () {
+                        // the gettext comments MUST be directly before gt(),
+                        // but 'return' cannot be the last token in a line
+                        // -> use a temporary variable to store the result
+                        var msg =
+                            //#. %1$s is the current page index
+                            //#. %2$s is the number of pages
+                            //#, c-format
+                            gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
+                        return msg;
+                    }
                 },
                 first: {
                     enable: function () { return preview.firstAvail(); },
@@ -61,10 +71,9 @@ define("io.ox/office/preview/main",
                     enable: function () { return preview.lastAvail(); },
                     set: function () { preview.lastPage(); }
                 }
-            }).registerViewComponent(toolbar),
+            }),
 
-            preview = new Preview()
-                .on('showpage', function () { controller.update(); });
+            preview = new Preview();
 
         // ---------------------
         // - private functions -
@@ -132,18 +141,15 @@ define("io.ox/office/preview/main",
 
             win.nodes.main
                 .addClass("io-ox-office-preview-main")
-                .append(preview.getNode(), pageIndicator);
+                .append(preview.getNode());
 
             // trigger all window resize handlers on 'show' events
             win.on('show', function () {
                 $(window).resize();
-            });
 
-            // The toolkit will clear the toolbar area and insert extension
-            // point links *after* calling this launch handler. Thus, insert
-            // the own toolbar node the first time the window is made visible.
-            win.one('show', function () {
-                win.nodes.toolbar.append(toolbar.getNode().css('border', 'none'));
+                // The toolkit will clear the toolbar area and insert
+                // extension point links everytime the window is shown.
+                win.nodes.toolbar.append(toolbar.getNode());
             });
 
             // disable FF spell checking
@@ -333,12 +339,19 @@ define("io.ox/office/preview/main",
             $(window).off('resize', windowResizeHandler);
             controller.destroy();
             toolbar.destroy();
+            preview.destroy();
             app = win = preview = toolbar = controller = null;
         };
 
         // ------------------------------------------------
         // - initialization of createApplication function -
         // ------------------------------------------------
+
+        // register view components at the controller
+        controller.registerViewComponent(toolbar);
+
+        // listen to 'showpage' events and update controller
+        preview.on('showpage', function () { controller.update(); });
 
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
