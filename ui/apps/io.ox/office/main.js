@@ -15,62 +15,18 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
-     'io.ox/office/tk/toolbar',
      'io.ox/office/tk/controller',
+     'io.ox/office/view',
      'io.ox/office/editor',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (filesApi, ToolBar, Controller, Editor, gt) {
+    ], function (filesApi, Controller, View, Editor, gt) {
 
     'use strict';
 
     var // application identifier
         MODULE_NAME = 'io.ox/office';
-
-    // class MainToolBar ======================================================
-
-    /**
-     * Creates and returns a new instance of the main editor tool bar.
-     *
-     * @constructor
-     */
-    var MainToolBar = ToolBar.extend({ constructor: function () {
-
-        // base constructor ---------------------------------------------------
-
-        ToolBar.call(this);
-
-        // initialization -----------------------------------------------------
-
-        // add all tool bar controls
-        this
-        .addButtonGroup()
-            .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-            .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
-        .end()
-        .addButtonGroup()
-            .addButton('character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-            .addButton('character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-            .addButton('character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
-        .end()
-        .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
-            .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-            .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-            .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-            .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-        .end()
-        .addSizeChooser('insert/table', {
-            icon: 'icon-io-ox-table',
-            tooltip: gt('Insert table'),
-            split: true,
-            caretTooltip: gt('Select table size'),
-            maxSize: { width: 15, height: 15 },
-            defaultValue: { width: 5, height: 3 }
-        })
-        .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
-
-    }}); // class MainToolBar
 
     // class EditorController =================================================
 
@@ -167,7 +123,7 @@ define('io.ox/office/main',
             controller = null,
 
             // main tool bar
-            toolbar = new MainToolBar(),
+            toolbar = View.createMainToolBar(),
 
             // editors mapped by text mode
             editors = {},
