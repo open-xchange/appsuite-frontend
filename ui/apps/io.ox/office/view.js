@@ -22,11 +22,14 @@ define('io.ox/office/view',
 
     function View() {
 
-        var // the main tool bar
+        var // the tool bar selector
+            toolBarTabs = $('<div>'),
+
+            // the main tool bar
             mainToolBar = new ToolBar(),
 
             // the top-level tool pane container
-            toolPane = $('<div>').addClass('io-ox-pane top').append(mainToolBar.getNode()),
+            toolPane = $('<div>').addClass('io-ox-pane top').append(/*toolBarTabs, */mainToolBar.getNode()),
 
             // table element containing the debug mode elements
             debugTable = $('<table>').addClass('debug-table'),
@@ -36,20 +39,42 @@ define('io.ox/office/view',
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Returns the tool pane on top of the editor window, containing the
+         * tool bars and the tool bar selector.
+         *
+         * @returns {jQuery}
+         */
         this.getToolPane = function () {
             return toolPane;
         };
 
+        /**
+         * Returns the main tool bar.
+         *
+         * @returns {ToolBar}
+         */
         this.getMainToolBar = function () {
             return mainToolBar;
         };
 
-        this.getDebugTable = function () {
-            return debugTable;
-        };
-
+        /**
+         * Returns the debug pane below the editor window, containing the plain
+         * text editor and the operations output console.
+         *
+         * @returns {jQuery}
+         */
         this.getDebugPane = function () {
             return debugPane;
+        };
+
+        /**
+         * Returns the table element contained in the debug pane.
+         *
+         * @returns {jQuery}
+         */
+        this.getDebugTable = function () {
+            return debugTable;
         };
 
         this.destroy = function () {
@@ -58,6 +83,12 @@ define('io.ox/office/view',
         };
 
         // initialization -----------------------------------------------------
+
+        toolBarTabs.css('text-align', 'center').append(
+            $('<a>', { href: '#' }).text('Insert'),
+            $('<a>', { href: '#' }).text('Format'),
+            $('<a>', { href: '#' }).text('Table')
+        );
 
         mainToolBar
             .addButtonGroup()
