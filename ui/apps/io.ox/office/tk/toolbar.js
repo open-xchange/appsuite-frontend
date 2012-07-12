@@ -19,7 +19,7 @@ define('io.ox/office/tk/toolbar',
      'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/buttonchooser',
      'io.ox/office/tk/sizechooser',
-     'less!io.ox/office/tk/toolbar.css'
+     'less!io.ox/office/tk/style.css'
     ], function (Events, Utils, Label, Group, ButtonGroup, ButtonChooser, SizeChooser) {
 
     'use strict';

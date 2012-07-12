@@ -24,11 +24,6 @@
     }
 }
 
-.io-ox-office-tool-pane {
-    background-color: #f5f5f5;
-    border-bottom: 1px solid #d5d5d5;
-}
-
 .io-ox-office-editor {
 	.box-sizing(@sizing-mode) {
 	    -webkit-box-sizing: @sizing-mode;
@@ -108,12 +103,8 @@
     }
 }
 
-.io-ox-office-debug-pane {
+.io-ox-pane > table.debug-table {
+    width: 100%;
+    table-layout: fixed;
     background-color: white;
-    border-top: 1px #d5d5d5 solid;
-
-    table {
-	    width: 100%;
-	    table-layout: fixed;
-	}
 }

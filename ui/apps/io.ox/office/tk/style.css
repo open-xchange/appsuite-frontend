@@ -11,127 +11,124 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-div.io-ox-toolbar {
+/* ========================================================================= */
+/* generic mixin classes                                                     */
+/* ========================================================================= */
 
-    /* generic mixin classes =============================================== */
+.box-sizing(@sizing-mode) {
+    -webkit-box-sizing: @sizing-mode;
+    -moz-box-sizing: @sizing-mode;
+    box-sizing: @sizing-mode;
+}
 
-    .box-sizing(@sizing-mode) {
-        -webkit-box-sizing: @sizing-mode;
-        -moz-box-sizing: @sizing-mode;
-        box-sizing: @sizing-mode;
-    }
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
 
-    .border-radius(@radius) {
-        -webkit-border-radius: @radius;
-        -moz-border-radius: @radius;
-        border-radius: @radius;
-    }
+.border-top-left-radius(@radius) {
+    -webkit-border-top-left-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    border-top-left-radius: @radius;
+}
 
-    .border-top-left-radius(@radius) {
-        -webkit-border-top-left-radius: @radius;
-        -moz-border-radius-topleft: @radius;
-        border-top-left-radius: @radius;
-    }
+.border-top-right-radius(@radius) {
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-right-radius: @radius;
+}
 
-    .border-top-right-radius(@radius) {
-        -webkit-border-top-right-radius: @radius;
-        -moz-border-radius-topright: @radius;
-        border-top-right-radius: @radius;
-    }
+.border-bottom-left-radius(@radius) {
+    -webkit-border-bottom-left-radius: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    border-bottom-left-radius: @radius;
+}
 
-    .border-bottom-left-radius(@radius) {
-        -webkit-border-bottom-left-radius: @radius;
-        -moz-border-radius-bottomleft: @radius;
-        border-bottom-left-radius: @radius;
-    }
+.border-bottom-right-radius(@radius) {
+    -webkit-border-bottom-right-radius: @radius;
+    -moz-border-radius-bottomright: @radius;
+    border-bottom-right-radius: @radius;
+}
 
-    .border-bottom-right-radius(@radius) {
-        -webkit-border-bottom-right-radius: @radius;
-        -moz-border-radius-bottomright: @radius;
-        border-bottom-right-radius: @radius;
-    }
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
 
-    .box-shadow(@shadow) {
-        -webkit-box-shadow: @shadow;
-        -moz-box-shadow: @shadow;
-        box-shadow: @shadow;
-    }
+.box-shadow(@outset-shadow, @inset-shadow) {
+    -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
+    -moz-box-shadow: @outset-shadow, inset @inset-shadow;
+    box-shadow: @outset-shadow, inset @inset-shadow;
+}
 
-    .box-shadow(@outset-shadow, @inset-shadow) {
-        -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
-        -moz-box-shadow: @outset-shadow, inset @inset-shadow;
-        box-shadow: @outset-shadow, inset @inset-shadow;
-    }
+.opacity(@opacity) {
+    @opacity-percent: @opacity * 100;
+    opacity: @opacity;
+    filter: alpha(opacity=@opacity-percent);
+}
 
-    .opacity(@opacity) {
-        @opacity-percent: @opacity * 100;
-        opacity: @opacity;
-        filter: alpha(opacity=@opacity-percent);
-    }
+/* ========================================================================= */
+/* OX icons                                                                  */
+/* ========================================================================= */
 
-    /* tool bar formatting ================================================= */
-
-    margin: 0;
-    padding: 4px 13px;
-    /* font size may affect box sizing, shrink it */
-    font-size: 1px;
-    line-height: 100%;
-    /* prevent multi-line layout of button groups */
-    white-space: nowrap;
-    text-align: center;
-
-    /* icons =============================================================== */
-
-    /*
-     * Replace images for icon classes starting with "icon-io-ox-". Icons are
-     * 14x14px with a 6px grid spacing.
-     */
-    i[class^="icon-io-ox-"] {
-        background-image: url(img/ox-icons-black.png);
-        width: 14px;
-        height: 14px;
-        
-        &.icon-white {
-            background-image: url(img/ox-icons-white.png);
-        }
-    }
-
-    /*
-     * Define class names for all icons.
-     */
-    i.icon-io-ox-undo           { background-position:  -20px    0; }
-    i.icon-io-ox-redo           { background-position:  -40px    0; }
-    i.icon-io-ox-bold           { background-position:  -60px    0; }
-    i.icon-io-ox-bold.de_DE     { background-position:  -80px    0; }
-    i.icon-io-ox-italic         { background-position: -100px    0; }
-    i.icon-io-ox-italic.de_DE   { background-position: -120px    0; }
-    i.icon-io-ox-underline      { background-position: -140px    0; }
-    i.icon-io-ox-table          { background-position: -160px    0; }
-
-    /* special icon for the drop-down caret */
-    i.icon-io-ox-caret {
-        background-position: 0 0;
-        width: 7px;
-        
-        &.up {
-            background-position: -7px 0;
-        }
-    }
-
-    /* controls ============================================================ */
+/*
+ * Replace images for icon classes starting with "icon-io-ox-". Icons are
+ * 14x14px with a 6px grid spacing.
+ */
+i[class^="icon-io-ox-"] {
+    background-image: url(img/ox-icons-black.png);
+    width: 14px;
+    height: 14px;
     
+    &.icon-white {
+        background-image: url(img/ox-icons-white.png);
+    }
+}
+
+/*
+ * Define class names for all icons.
+ */
+i.icon-io-ox-undo           { background-position:  -20px    0; }
+i.icon-io-ox-redo           { background-position:  -40px    0; }
+i.icon-io-ox-bold           { background-position:  -60px    0; }
+i.icon-io-ox-bold.de_DE     { background-position:  -80px    0; }
+i.icon-io-ox-italic         { background-position: -100px    0; }
+i.icon-io-ox-italic.de_DE   { background-position: -120px    0; }
+i.icon-io-ox-underline      { background-position: -140px    0; }
+i.icon-io-ox-table          { background-position: -160px    0; }
+
+/* special icon for the drop-down caret */
+i.icon-io-ox-caret {
+    background-position: 0 0;
+    width: 7px;
+    
+    &.up {
+        background-position: -7px 0;
+    }
+}
+
+/* ========================================================================= */
+/* controls in panes and tool bars                                           */
+/* ========================================================================= */
+
+div.io-ox-pane, div.io-ox-toolbar {
+
+    /* common controls ===================================================== */
+
     /* hover border color */
     @border-color: #d5d5d5;
-
+    
     /* background color for selected controls */
     @selected-color: #d5d5ff;
-
+    
     /* mixin that adds a border and inset shadow in the same color to a box */
     .accented-border(@color) {
         border: 1px solid @color;
         .box-shadow(inset 0 0 4px @color);
     }
-
+    
     label, button {
         display: inline;
         margin: 0;
@@ -142,16 +139,16 @@ div.io-ox-toolbar {
         text-align: center;
         vertical-align: middle;
         text-shadow: none;
-
+    
         &.disabled {
             .opacity(0.5);
         }
-
+    
         /* prevent dotted focus rectangle around the control */
         &:focus, &:active {
             outline: none;
         }
-
+    
         /* whitespace between icons, text, and drop-down carets */
         > span.whitespace {
             display: inline-block;
@@ -359,4 +356,40 @@ div.io-ox-toolbar {
     .group.menu-open > .dropdown-menu {
         display: block;
     }
+}
+
+/* ========================================================================= */
+/* panes                                                                     */
+/* ========================================================================= */
+
+.io-ox-pane {
+    background-color: #f5f5f5;
+
+    &.top {
+        border-bottom: 1px solid #d5d5d5;
+    }
+    &.bottom {
+        border-top: 1px solid #d5d5d5;
+    }
+    &.left {
+        border-right: 1px solid #d5d5d5;
+    }
+    &.right {
+        border-left: 1px solid #d5d5d5;
+    }
+}
+
+/* ========================================================================= */
+/* tool bars                                                                 */
+/* ========================================================================= */
+
+div.io-ox-toolbar {
+    margin: 0;
+    padding: 4px 13px;
+    /* font size may affect box sizing, shrink it */
+    font-size: 1px;
+    line-height: 100%;
+    /* prevent multi-line layout of button groups */
+    white-space: nowrap;
+    text-align: center;
 }

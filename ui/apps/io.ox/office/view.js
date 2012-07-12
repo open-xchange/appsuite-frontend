@@ -26,7 +26,13 @@ define('io.ox/office/view',
             mainToolBar = new ToolBar(),
 
             // the top-level tool pane container
-            toolPane = $('<div>').addClass('io-ox-office-tool-pane').append(mainToolBar.getNode());
+            toolPane = $('<div>').addClass('io-ox-pane top').append(mainToolBar.getNode()),
+
+            // table element containing the debug mode elements
+            debugTable = $('<table>').addClass('debug-table'),
+
+            // bottom pane for debug output
+            debugPane = $('<div>').addClass('io-ox-pane bottom').append(debugTable);
 
         // methods ------------------------------------------------------------
 
@@ -36,6 +42,14 @@ define('io.ox/office/view',
 
         this.getMainToolBar = function () {
             return mainToolBar;
+        };
+
+        this.getDebugTable = function () {
+            return debugTable;
+        };
+
+        this.getDebugPane = function () {
+            return debugPane;
         };
 
         this.destroy = function () {
@@ -70,6 +84,12 @@ define('io.ox/office/view',
                 defaultValue: { width: 5, height: 3 }
             })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
+
+        // build debug table for plain-text editor and operations output console
+        debugTable.append($('<colgroup>').append(
+            $('<col>', { width: '50%' }),
+            $('<col>', { width: '50%' })
+        ));
 
     } // class View
 

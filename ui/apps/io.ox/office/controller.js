@@ -17,7 +17,7 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
 
     // class Controller =======================================================
 
-    function Controller(app, view) {
+    function Controller(app) {
 
         var // current editor
             editor = app.getEditor(),
@@ -93,10 +93,6 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                 }, this));
             return this;
         };
-
-        // initialization -----------------------------------------------------
-
-        this.registerViewComponent(view.getMainToolBar());
 
     } // class Controller
 

@@ -63,9 +63,6 @@ define('io.ox/office/main',
             // browser timer for operations handling
             operationsTimer = null,
 
-            // table element containing the debug mode elements
-            debugTable = null,
-
             // if true, debug mode is active (second editor and operations output console)
             debugMode = false;
 
@@ -177,6 +174,7 @@ define('io.ox/office/main',
         function updateDebugMode() {
             editor.getNode().toggleClass('debug-highlight', debugMode);
             win.nodes.debugPane.toggle(debugMode);
+            controller.update('debug/toggle');
             // resize editor pane
             windowResizeHandler();
         }
@@ -215,7 +213,7 @@ define('io.ox/office/main',
                 // main application container
                 win.nodes.appPane = $('<div>').addClass('container').append(editor.getNode()),
                 // bottom pane for debug output
-                win.nodes.debugPane = $('<div>').addClass('io-ox-office-debug-pane').append(debugTable)
+                win.nodes.debugPane = view.getDebugPane()
             );
             updateDebugMode();
 
@@ -534,7 +532,7 @@ define('io.ox/office/main',
 
             // In debug mode, stop polling.
             // Advantage 1: Less debug output in FireBug (http-get)
-            // Advantage 2: Simpulate a slow/lost connection
+            // Advantage 2: Simulate a slow/lost connection
             if (!debugMode) {
                 timeout = timeout || 1000;
 
@@ -691,22 +689,19 @@ define('io.ox/office/main',
         // editor view
         view = new View();
 
-        // register GUI elements and editors at the controller
-        controller = new Controller(app, view)
-            .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
-
-        // build debug table for plain-text editor and operations output console
-        debugTable = $('<table>').append(
-            $('<colgroup>').append(
-                $('<col>', { width: '50%' }),
-                $('<col>', { width: '50%' })
-            ),
+        // add plain-text editor and operations output console to debug table
+        view.getDebugTable().append(
             $('<tr>').append(
                 $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
                 $('<td>').append(editors.output.node)
             )
         );
+
+        // register GUI elements and editors at the controller
+        controller = new Controller(app)
+            .registerViewComponent(view.getMainToolBar())
+            .registerEditor(editors[Editor.TextMode.RICH])
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {

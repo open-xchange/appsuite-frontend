@@ -13,7 +13,8 @@
 
 define('io.ox/office/tk/group',
     ['io.ox/core/event',
-     'io.ox/office/tk/utils'
+     'io.ox/office/tk/utils',
+     'less!io.ox/office/tk/style.css'
     ], function (Events, Utils) {
 
     'use strict';
