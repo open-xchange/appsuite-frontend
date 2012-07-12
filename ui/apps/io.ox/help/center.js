@@ -21,8 +21,8 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
-            blockOtherContent();
             enableHelpHandlers();
+            blockOtherContent();
         } else {
             unblockOtherContent();
             disableHelpHandlers();
@@ -30,8 +30,9 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
     };
     
     var blockOtherContent = function () {
-        //TODO overlay funktion rausfinden, wird bei D&D benutzt.
-        console.log("Blocked other content");
+        var $saveThese = $('.io-ox-help-item');
+        
+        console.log("Blocked content");
     };
     
     var getHelp = function (id) {
@@ -78,7 +79,7 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
     };
     
     var disableHelpHandlers = function () {
-        var allReferenceElements = $('[data-ref]');
+        var allReferenceElements = $('.io-ox-help-item');
         _(allReferenceElements).each(function (elem) {
             $(elem)
             .popover('disable')

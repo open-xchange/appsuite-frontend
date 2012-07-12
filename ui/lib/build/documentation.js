@@ -45,20 +45,23 @@ var buildExtension = function () {
         '* Copyright (C) Open-Xchange Inc., 2006-2012\n' +
         '* Mail: info@open-xchange.com\n' +
         '*\n' +
-        '* @author An automatted script by Tobias Prinz <tobias.prinz@open-xchange.com>\n' +
+        '* @author document.js build task\n' +
         '*/\n' +
-        'define("io.ox/help/data", [], function () {\n' +
+        'define("io.ox/help/core_doc",  ["io.ox/core/extensions"], function (ext) {\n' +
         '    "use strict";\n' +
         '    var help = ' + JSON.stringify(nodes, null, 8).replace(/\}$/,"    }") + ';\n' +
-        '    var get = function (id) {\n' +
-        '        if (help[id]) {\n' +
-        '            return $("<div>").html(help[id]);\n' +
-        '        }\n' +
-        '        return;\n' +
-        '    };\n' +
-        '    var has = function (id) {\n' +
-        '        return help.hasOwnProperty(id);\n' +
-        '    };\n' +
+        '    ext.point("io.ox/help/helper").extend({\n'+
+        '        id: "Core documentation",\n'+
+        '        get: function (id) {\n'+
+        '            if (help[id]) {\n'+
+        '                return help[id];\n'+
+        '            }\n'+
+        '            return;\n'+
+        '        },\n'+
+        '        has: function (id) {\n'+
+        '            return help.hasOwnProperty(id);\n'+
+        '        }\n'+
+        '    });\n'+
         '});\n';
     console.log(extension);
 };
