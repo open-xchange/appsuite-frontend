@@ -18,17 +18,34 @@ define('io.ox/office/view',
 
     'use strict';
 
-    // static class View ======================================================
+    // class View =============================================================
 
-    var View = {};
+    function View() {
 
-    // static methods ---------------------------------------------------------
+        var // the main tool bar
+            mainToolBar = new ToolBar(),
 
-    /**
-     * Creates and returns a new instance of the main tool bar.
-     */
-    View.createMainToolBar = function () {
-        return new ToolBar()
+            // the top-level tool pane container
+            toolPane = $('<div>').addClass('io-ox-office-tool-pane').append(mainToolBar.getNode());
+
+        // methods ------------------------------------------------------------
+
+        this.getToolPane = function () {
+            return toolPane;
+        };
+
+        this.getMainToolBar = function () {
+            return mainToolBar;
+        };
+
+        this.destroy = function () {
+            mainToolBar.destroy();
+            mainToolBar = toolPane = null;
+        };
+
+        // initialization -----------------------------------------------------
+
+        mainToolBar
             .addButtonGroup()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
@@ -53,7 +70,8 @@ define('io.ox/office/view',
                 defaultValue: { width: 5, height: 3 }
             })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
-    };
+
+    } // class View
 
     // exports ================================================================
 

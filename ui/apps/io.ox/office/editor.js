@@ -440,6 +440,13 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             }
         };
 
+        /**
+         * Destructs the editor object.
+         */
+        this.destroy = function () {
+            this.events.destroy();
+        };
+
         // OPERATIONS API
 
         this.clearOperations = function () {

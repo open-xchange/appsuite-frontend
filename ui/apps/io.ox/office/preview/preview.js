@@ -69,13 +69,14 @@ define('io.ox/office/preview/preview',
 
                 // use all top-level svg elements as pages to be displayed
                 // (initially, hide all pages)
-                pages = node.children('svg').hide();
+                pages = node.children('p').hide();
             } else {
                 node.empty();
                 pages = $();
             }
 
             curPage = pages.length ? 1 : 0;
+            pages.first().show();
             self.trigger('showpage', curPage);
         };
 

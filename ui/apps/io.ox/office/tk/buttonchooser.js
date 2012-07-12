@@ -51,7 +51,10 @@ define('io.ox/office/tk/buttonchooser',
             self = this,
 
             // the drop-down grid element
-            gridNode = $('<table>').addClass('button-chooser-menu'),
+            gridNode = $('<table>'),
+
+            // the drop-down grid element
+            menuNode = $('<div>').addClass('button-chooser-menu').append(gridNode),
 
             // number of rows in the grid
             rows = 0,
@@ -68,18 +71,6 @@ define('io.ox/office/tk/buttonchooser',
          * Handles 'menuopen' events and initializes the drop-down menu.
          */
         function menuOpenHandler(event, from) {
-
-            // Recalculate the width of the grid element. Firefox restricts the
-            // width of the table to the parent button group element, thus the
-            // table shrinks its buttons way too much. The only way (?) to
-            // expand the table to the correct width is to set its CSS
-            // 'min-width' property to the calculated width of the tbody
-            // element. To do this, it is required to expand the 'min-width' of
-            // the table to a large value to give the tbody enough space, and
-            // then query its calculated width.
-            gridNode
-                .css('min-width', '10000px')
-                .css('min-width', gridNode.find('tbody').outerWidth() + 'px');
 
             // move focus to first enabled control, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
@@ -116,7 +107,7 @@ define('io.ox/office/tk/buttonchooser',
                 return false;
             case KeyCodes.UP_ARROW:
                 if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { self.hideMenu(true); }
+                    if (row > 0) { focus(index - columns); } else { self.hideMenu('key'); }
                 }
                 return false;
             case KeyCodes.RIGHT_ARROW:
@@ -130,7 +121,7 @@ define('io.ox/office/tk/buttonchooser',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, key, options, gridNode);
+        DropDown.call(this, key, options, menuNode);
 
         // methods ------------------------------------------------------------
 

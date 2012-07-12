@@ -241,7 +241,7 @@ define('io.ox/office/tk/sizechooser',
                 return false;
             case KeyCodes.UP_ARROW:
                 if (keydown) {
-                    if (gridSize.height > 1) { gridSize.height -= 1; setGridSize(gridSize); } else { self.hideMenu(true); }
+                    if (gridSize.height > 1) { gridSize.height -= 1; setGridSize(gridSize); } else { self.hideMenu('key'); }
                 }
                 return false;
             case KeyCodes.RIGHT_ARROW:

@@ -41,14 +41,17 @@ define('io.ox/office/main',
             // connection to infostore file
             file = null,
 
-            // controller as single connection point between editors and view elements
-            controller = null,
-
-            // main tool bar
-            toolbar = View.createMainToolBar(),
-
             // editors mapped by text mode
             editors = {},
+
+            // primary editor used in save, quit, etc.
+            editor = null,
+
+            // editor view, containing panes, tool bars, etc.
+            view = null,
+
+            // controller as single connection point between editors and view elements
+            controller = null,
 
             // buffer for user operations. One should be enough, as the editors here are always in sync
             operationsBuffer = [],
@@ -58,9 +61,6 @@ define('io.ox/office/main',
 
             // true while sending or receiving operation updates via the deferred object
             processingOperations = null,
-
-            // primary editor used in save, quit, etc.
-            editor = null,
 
             // table element containing the debug mode elements
             debugTable = null,
@@ -177,7 +177,7 @@ define('io.ox/office/main',
             // create panes and attach them to the main window
             win.nodes.main.addClass('io-ox-office-main').append(
                 // top pane for tool bars
-                win.nodes.toolPane = $('<div>').addClass('io-ox-office-tool-pane').append(toolbar.getNode()),
+                win.nodes.toolPane = view.getToolPane(),
                 // main application container
                 win.nodes.appPane = $('<div>').addClass('container').append(editor.getNode()),
                 // bottom pane for debug output
@@ -606,8 +606,9 @@ define('io.ox/office/main',
                 window.clearTimeout(operationsTimer);
             }
             controller.destroy();
-            toolbar.destroy();
-            app = win = toolbar = controller = editors = editor = null;
+            view.destroy();
+            _(editors).invoke('destroy');
+            app = win = editors = editor = view = controller = null;
         };
 
         // initialization -----------------------------------------------------
@@ -635,15 +636,18 @@ define('io.ox/office/main',
                 } else {
                     this.applyOperation(operations);
                 }
-            }
+            },
+            destroy: $.noop
         };
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
 
+        // editor view
+        view = new View();
+
         // register GUI elements and editors at the controller
-        controller = new Controller(app, editor)
-            .registerViewComponent(toolbar)
+        controller = new Controller(app, view)
             .registerEditor(editors[Editor.TextMode.RICH])
             .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 

@@ -22,7 +22,7 @@ define('io.ox/office/tk/dropdown',
         KeyCodes = Utils.KeyCodes,
 
         // CSS class for the group node, if drop-down menu is opened
-        OPEN_CLASS = 'open';
+        MENUOPEN_CLASS = 'menu-open';
 
     // class DropDown =========================================================
 
@@ -90,40 +90,44 @@ define('io.ox/office/tk/dropdown',
          * Returns whether the drop-down menu is currently visible.
          */
         function isMenuVisible() {
-            return self.getNode().hasClass(OPEN_CLASS);
+            return self.getNode().hasClass(MENUOPEN_CLASS);
         }
 
         /**
-         * Changes the visibility of the drop-down menu.
+         * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
+         * or 'menuclose' event, passing the value of the parameter from.
          *
-         * @param {Boolean} [state]
+         * @param {Boolean|Null} state
          *  If set to true, the drop-down menu will be displayed. If set to
-         *  false, the drop-down menu will be hidden. If omitted (or set to
-         *  undefined or null), the drop-down menu will be toggled according to
-         *  its current visibility.
+         *  false, the drop-down menu will be hidden. If set to null, the
+         *  drop-down menu will be toggled according to its current visibility.
          *
-         * @param {Boolean} [fromKeyEvent]
-         *  If set to true, the call originates from a keyboard event.
+         * @param {String} [from]
+         *  Specifies the origin of the method call. May be set to 'key' if the
+         *  method has been called from a keyboard event handler, or to
+         *  'mouse', if the method has been called from a mouse click handler.
          */
-        function toggleMenu(state, fromKeyEvent) {
+        function toggleMenu(state, from) {
 
-            var // the source type passed to the 'menuopen'/'menuclose' event handlers
-                from = fromKeyEvent ? 'key' : 'click',
-                // whether to show or hide the menu
+            var // whether to show or hide the menu
                 show = (state === true) || ((state !== false) && !isMenuVisible());
 
             if (show) {
-                self.getNode().addClass(OPEN_CLASS);
+                self.getNode().addClass(MENUOPEN_CLASS);
                 self.trigger('menuopen', from);
-                window.setTimeout(function () { $('html').on('click', globalClickHandler); }, 0);
+                // add global click handler after handling this button completely,
+                // otherwise it would close the opened drop-down menu right away
+                window.setTimeout(function () {
+                    $(document).on('click', globalClickHandler);
+                }, 0);
             } else {
                 // move focus to drop-down button, if control in drop-down menu is focused
                 if (Utils.containsFocusedControl(menuNode)) {
                     menuButton.focus();
                 }
-                self.getNode().removeClass(OPEN_CLASS);
+                self.getNode().removeClass(MENUOPEN_CLASS);
                 self.trigger('menuclose', from);
-                $('html').off('click', globalClickHandler);
+                $(document).off('click', globalClickHandler);
             }
         }
 
@@ -140,7 +144,7 @@ define('io.ox/office/tk/dropdown',
             }
 
             // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
-            toggleMenu(null, false);
+            toggleMenu(null, 'mouse');
 
             // trigger 'cancel' event, if menu has been closed with mouse click
             if (!isMenuVisible()) {
@@ -153,7 +157,7 @@ define('io.ox/office/tk/dropdown',
          * menu automatically.
          */
         function globalClickHandler() {
-            toggleMenu(false);
+            toggleMenu(false, 'mouse');
         }
 
         /**
@@ -168,13 +172,13 @@ define('io.ox/office/tk/dropdown',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { toggleMenu(true, true); }
+                if (keydown) { toggleMenu(true, 'key'); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) { toggleMenu(false, true); }
+                if (keydown) { toggleMenu(false, 'key'); }
                 return false;
             case KeyCodes.ESCAPE:
-                if (keydown) { toggleMenu(false, true); }
+                if (keydown) { toggleMenu(false, 'key'); }
                 break; // let ESCAPE key bubble up
             }
         }
@@ -190,7 +194,7 @@ define('io.ox/office/tk/dropdown',
             switch (event.keyCode) {
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
-                if (keyup) { toggleMenu(null, true); }
+                if (keyup) { toggleMenu(null, 'key'); }
                 return false;
             }
 
@@ -218,7 +222,7 @@ define('io.ox/office/tk/dropdown',
                 // let the TAB key event bubble up to the tool bar
                 break;
             case KeyCodes.ESCAPE:
-                if (keydown) { toggleMenu(false, true); }
+                if (keydown) { toggleMenu(false, 'key'); }
                 // let ESCAPE key bubble up
                 break;
             }
@@ -243,17 +247,27 @@ define('io.ox/office/tk/dropdown',
 
         /**
          * Displays the drop-down menu.
+         *
+         * @param {String} [from]
+         *  Specifies the origin of the method call. May be set to 'key' if the
+         *  method has been called from a keyboard event handler, or to
+         *  'mouse', if the method has been called from a mouse click handler.
          */
-        this.showMenu = function (fromKeyEvent) {
-            toggleMenu(true, fromKeyEvent);
+        this.showMenu = function (from) {
+            toggleMenu(true, from);
             return this;
         };
 
         /**
          * Hides the drop-down menu.
+         *
+         * @param {String} [from]
+         *  Specifies the origin of the method call. May be set to 'key' if the
+         *  method has been called from a keyboard event handler, or to
+         *  'mouse', if the method has been called from a mouse click handler.
          */
-        this.hideMenu = function (fromKeyEvent) {
-            toggleMenu(false, fromKeyEvent);
+        this.hideMenu = function (from) {
+            toggleMenu(false, from);
             return this;
         };
 

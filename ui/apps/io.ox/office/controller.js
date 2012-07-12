@@ -17,9 +17,12 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
 
     // class Controller =======================================================
 
-    function Controller(app, editor) {
+    function Controller(app, view) {
 
-        var // all the little controller items
+        var // current editor
+            editor = app.getEditor(),
+
+            // all the little controller items
             items = {
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
@@ -90,6 +93,10 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                 }, this));
             return this;
         };
+
+        // initialization -----------------------------------------------------
+
+        this.registerViewComponent(view.getMainToolBar());
 
     } // class Controller
 

@@ -78,6 +78,7 @@ div.io-ox-toolbar {
     line-height: 100%;
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
+    text-align: center;
 
     /* icons =============================================================== */
 
@@ -117,7 +118,7 @@ div.io-ox-toolbar {
         }
     }
 
-    /* generic controls ==================================================== */
+    /* controls ============================================================ */
     
     /* hover border color */
     @border-color: #d5d5d5;
@@ -144,6 +145,11 @@ div.io-ox-toolbar {
 
         &.disabled {
             .opacity(0.5);
+        }
+
+        /* prevent dotted focus rectangle around the control */
+        &:focus, &:active {
+            outline: none;
         }
 
         /* whitespace between icons, text, and drop-down carets */
@@ -185,11 +191,6 @@ div.io-ox-toolbar {
             }
         }
 
-        /* prevent dotted focus rectangle around buttons */
-        &:focus, &:active {
-            outline: none;
-        }
-
         /* selected toggle buttons ----------------------------------------- */
 
         &.selected {
@@ -224,10 +225,10 @@ div.io-ox-toolbar {
 
     .group {
         display: inline-block;
-        /* relative position is essential for drop-down menu positioning (absolute) */
+        /* relative position is essential for drop-down menu positioning */
         position: relative;
 
-        /* The class 'hidden' is used to hide button groups. */
+        /* class 'hidden' is used to hide the entire group */
         &.hidden {
             display: none;
         }
@@ -250,7 +251,7 @@ div.io-ox-toolbar {
         }
 
         /* set border to all buttons in drop-down group with visible menu */
-        &.open > button:not(:focus):not(:active) {
+        &.menu-open > button:not(:focus):not(:active) {
             border-color: @border-color;
         }
     }
@@ -262,6 +263,7 @@ div.io-ox-toolbar {
         position: absolute;
         top: 100%;
         left: 0;
+        min-width: 0;
         max-width: none;
         z-index: 1000;
         margin: 1px 0 0 0;
@@ -272,15 +274,13 @@ div.io-ox-toolbar {
         /* button chooser drop-down menu ----------------------------------- */
 
         &.button-chooser-menu {
-            border-collapse: collapse;
-
-            td {
-                padding: 0;
-
-                /* expand button width to entire table cell */
-                > button {
-                    width: 100%;
-                }
+        
+            > table {
+                margin: -1px;
+                border-collapse: collapse;
+                max-width: none;
+    
+                td { padding: 0; }
             }
         }
 
@@ -294,6 +294,7 @@ div.io-ox-toolbar {
             /* minimum dimensions for the outer container (in cells) */
             min-width: 5 * (@cell-size + 1px) - 1px;
             min-height: 3 * (@cell-size + 1px) - 1px;
+            text-align: left;
 
             > button {
                 margin: -1px;
@@ -355,7 +356,7 @@ div.io-ox-toolbar {
         }
     }
 
-    .group.open > .dropdown-menu {
+    .group.menu-open > .dropdown-menu {
         display: block;
     }
 }
