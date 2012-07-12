@@ -479,6 +479,40 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 */
     };
 
+    // other useful functions -------------------------------------------------
+
+    /**
+     * Wraps the passed function, protecting it from being called
+     * recursively.
+     *
+     * @param {Function} func
+     *  The original function that needs to be protected against recursive
+     *  calls.
+     *
+     * @param {Object} [context]
+     *  The calling context used to invoke the wapped function.
+     *
+     * @returns {Function}
+     *  A wrapper function that initially calls the wrapped function and
+     *  returns its value. When called recursively while running (directly
+     *  or indirectly in the same call stack, or even asynchronously), it
+     *  simply returns undefined instead of calling the wrapped function
+     *  again.
+     */
+    Utils.makeNoRecursionGuard = function (func, context) {
+        var running = false;
+        return function () {
+            if (!running) {
+                try {
+                    running = true;
+                    return func.apply(context, arguments);
+                } finally {
+                    running = false;
+                }
+            }
+        };
+    };
+
     // global initialization ==================================================
 
     // get current language: TODO review

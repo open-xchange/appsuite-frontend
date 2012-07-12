@@ -48,20 +48,20 @@ define('io.ox/office/main',
             // primary editor used in save, quit, etc.
             editor = null,
 
-            // editor view, containing panes, tool bars, etc.
+            // editor view, contains panes, tool bars, etc.
             view = null,
 
             // controller as single connection point between editors and view elements
             controller = null,
 
+            // deferred objects causing the quit handler to delay destruction of the application
+            quitDelays = [],
+
             // buffer for user operations. One should be enough, as the editors here are always in sync
             operationsBuffer = [],
 
-            // timer for operations
+            // browser timer for operations handling
             operationsTimer = null,
-
-            // true while sending or receiving operation updates via the deferred object
-            processingOperations = null,
 
             // table element containing the debug mode elements
             debugTable = null,
@@ -71,37 +71,42 @@ define('io.ox/office/main',
 
         // private functions --------------------------------------------------
 
-        /**
-         * Wraps the passed function, protecting it from being called
-         * recursively.
-         *
-         * @param {Function} func
-         *  The original function that needs to be protected against recursive
-         *  calls.
-         *
-         * @returns {Function}
-         *  A wrapper function that initially calls the wrapped function and
-         *  returns its value. When called recursively while running (directly
-         *  or indirectly), it simply returns undefined instead of calling the
-         *  wrapped function again.
-         */
-        function noRecursionGuard(func) {
-            var self = this, running = false;
-            return function () {
-                if (!running) {
-                    try {
-                        running = true;
-                        return func.apply(self, arguments);
-                    } finally {
-                        running = false;
-                    }
-                }
-            };
-        }
-
         function initializeApp(options) {
             file = Utils.getObjectOption(options, 'file', null);
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
+        }
+
+        /**
+         * Creates a deferred object that will be stored internally and used by
+         * the quit handler to delay closing the application. The creator of a
+         * quit delay has to resolve or reject the deferred when the blocking
+         * operation is finished.
+         *
+         * @returns {Object}
+         *  A wrapper object that offers the methods resolve() and reject(). By
+         *  calling resolve() the caller agrees to close the application, and
+         *  by calling reject() the application will stay alive.
+         */
+        function createQuitDelay() {
+
+            var // the underlying deferred
+                deferred = $.Deferred();
+
+            // push the deferred into the array of all quit delays
+            quitDelays.push(deferred);
+
+            // register a handler that removes the deferred from the array
+            deferred.always(function () {
+                quitDelays = _(quitDelays).without(deferred);
+            });
+
+            // Return a wrapper object that reconfigures the resolve() and
+            // reject() calls to always resolve the deferred. With this 'trick'
+            // $.when() will finish all delays even if one of them fails.
+            return {
+                resolve: function () { deferred.resolve(true); },
+                reject: function () { deferred.resolve(false); }
+            };
         }
 
         /**
@@ -240,27 +245,57 @@ define('io.ox/office/main',
          *  alive (user has cancelled the dialog, save operation failed).
          */
         function quitHandler() {
-            var def = $.Deferred().done(app.destroy);
 
-            // callback function for the 'Save' button
-            function saveChanges() {
-                // save and resolve/reject the own deferred according to the deferred returned by save()
-                app.save().pipe(
-                    function () { def.resolve(); },
-                    function () { def.reject(); }
-                );
+            var // the deferred returned to the framework
+                def = $.Deferred().done(app.destroy);
+
+            win.busy();
+
+            // silently send pending operations (no new quit delay, no operations timer)
+            if (operationsBuffer.length) {
+                sendOperations(true);
             }
 
-            if (operationsBuffer.length || processingOperations) {
-                // TODO: push ops now, delay closing this window...
-                // Do not close while processingOperations === true
-                def.reject();
-            }
-            else {
-                def.resolve();
-            }
+            // Wait for all registered quit delays ($.when() resolves immediately,
+            // if the array is empty). All deferreds will resolve with a boolean
+            // result (never reject, see createQuitDelay() function).
+            $.when.apply(this, quitDelays).done(function () {
+
+                var // each deferred returns its result as a boolean
+                    resolved = _(arguments).all(_.identity);
+
+                win.idle();
+                if (resolved) { def.resolve(); } else { def.reject(); }
+            });
 
             return def;
+        }
+
+        /**
+         * Applies the passed operations at all known editor objects but the
+         * editor specified as event source.
+         *
+         * @param {Object|Object[]} operations
+         *  An operation or an array of operations to be applied.
+         *
+         * @param {Editor} [eventSource]
+         *  The editor that has called the function. This editor will not
+         *  receive the passed operations again. May be omitted to apply the
+         *  operations to all editors.
+         */
+        function applyOperations(operations, eventSource) {
+
+            // normalize operations parameter
+            if (!_.isArray(operations)) {
+                operations = [operations];
+            }
+
+            // apply operations to all editors
+            _(editors).each(function (editor) {
+                if (editor !== eventSource) {
+                    editor.applyOperations(operations, false, false);
+                }
+            });
         }
 
         /**
@@ -315,6 +350,204 @@ define('io.ox/office/main',
             return def.resolve(response.data.operations);
         }
 
+        /**
+         * Loads the document described in the file descriptor passed to the
+         * constructor of this application, and shows the application window.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that reflects the result of the load operation.
+         */
+        function load() {
+            var def = null;
+
+            // show application window
+            win.show().busy();
+            $(window).resize();
+            updateTitles();
+
+            editor.initDocument();
+            operationsBuffer = []; // initDocument will result in an operation
+
+            // initialize the deferred to be returned
+            def = $.Deferred().always(function () {
+                win.idle();
+                editor.setModified(false);
+                editor.grabFocus(true);
+            });
+
+            // load the file
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl('importdocument'),
+                dataType: 'json'
+            })
+            .done(function (response) {
+                importOperations(response)
+                .done(function (operations) {
+                    editor.enableUndo(false);
+                    applyOperations(operations);
+                    editor.enableUndo(true);
+                    startOperationsTimer();
+                    def.resolve();
+                })
+                .fail(function (ex) {
+                    showExceptionError(ex);
+                    def.reject();
+                });
+            })
+            .fail(function (response) {
+                showAjaxError(response);
+                def.reject();
+            });
+
+            return def;
+        }
+
+        /**
+         * Saves the document to its origin.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that reflects the result of the save operation.
+         */
+        function saveOrFlush(action) {
+
+            var // initialize the deferred to be returned
+                def = $.Deferred().always(function () {
+                    win.idle();
+                    editor.grabFocus();
+                });
+
+            // do not try to save, if file descriptor is missing
+            if (!file) {
+                return def.reject();
+            }
+
+            win.busy();
+            // var allOperations = editor.getOperations();
+            // var dataObject = { operations: JSON.stringify(allOperations) };
+
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl(action),
+                dataType: 'json'
+                /* data: dataObject,
+                beforeSend: function (xhr) {
+                    if (xhr && xhr.overrideMimeType) {
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
+                }*/
+            })
+            .done(function (response) {
+                filesApi.caches.get.clear(); // TODO
+                filesApi.caches.versions.clear();
+                filesApi.trigger('refresh.all');
+                // editor.setModified(false);
+                def.resolve();
+            })
+            .fail(function (response) {
+                showAjaxError(response);
+                def.reject();
+            });
+
+            return def;
+        }
+
+        /**
+         * Sends all operations contained in the operationsBuffer array to the
+         * server, creates a quit delay object causing the quit handler to wait
+         * for the AJAX request, and starts the operations timer.
+         *
+         * @param {Boolean} [silent]
+         *  If set to true, the AJAX request will be sent silently, without
+         *  creating a quit delay, and without restarting the operations timer.
+         */
+        var sendOperations = Utils.makeNoRecursionGuard(function (silent) {
+
+            var // deep copy of the current buffer
+                sendOps = _.copy(operationsBuffer, true),
+                // the data object to be passed to the AJAX request
+                dataObject = { operations: JSON.stringify(sendOps) },
+                // a deferred that will cause the quit handler to wait for the AJAX request
+                quitDelay = (silent === true) ? null : createQuitDelay();
+
+            // We might receive new operations while sending the current ones...
+            operationsBuffer = [];
+
+            $.ajax({
+                type: 'POST',
+                url: getFilterUrl('pushoperationupdates'),
+                dataType: 'json',
+                data: dataObject,
+                beforeSend: function (xhr) {
+                    if (xhr && xhr.overrideMimeType) {
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
+                }
+            })
+            .done(function (response) {
+                if (quitDelay) { quitDelay.resolve(); }
+            })
+            .fail(function (response) {
+                // Try again later. TODO: NOT TESTED YET!
+                operationsBuffer = $.extend(true, operationsBuffer, sendOps);
+                // TODO: reject? (causing the application to stay alive?)
+                if (quitDelay) { quitDelay.resolve(); }
+            })
+            .always(function () {
+                if (silent !== true) { startOperationsTimer(); }
+            });
+        });
+
+        var receiveAndSendOperations = Utils.makeNoRecursionGuard(function () {
+
+            var // a deferred that will cause the quit handler to wait for the AJAX request
+                quitDelay = createQuitDelay();
+
+            // first, check if the server has new operations for me
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl('pulloperationupdates'),
+                dataType: 'json'
+            })
+            .done(function (response) {
+                if (response && response.data) {
+                    var operations = JSON.parse(response.data);
+                    if (operations.length) {
+                        // We might need to do some "T" here!
+                        applyOperations(operations);
+                    }
+                }
+                // Then, send our operations in case we have some...
+                if (operationsBuffer.length) {
+                    // We might first need to do some "T" here!
+                    sendOperations(); // will start the operations timer
+                } else {
+                    startOperationsTimer();
+                }
+            })
+            .always(function () {
+                quitDelay.resolve(); // always resolve, ignore failed GET
+            });
+        });
+
+        function startOperationsTimer(timeout) {
+
+            // In debug mode, stop polling.
+            // Advantage 1: Less debug output in FireBug (http-get)
+            // Advantage 2: Simpulate a slow/lost connection
+            if (!debugMode) {
+                timeout = timeout || 1000;
+
+                if (operationsTimer) {                      // If it running, restart - don't send too many updates while the user is typing.
+                    window.clearTimeout(operationsTimer);   // If we change this, and decide to not restart, then make sure that we don't start twice
+                }
+                operationsTimer = window.setTimeout(function () {
+                    operationsTimer = null;
+                    receiveAndSendOperations();
+                }, timeout);
+            }
+        }
+
         // methods ============================================================
 
         /**
@@ -361,207 +594,18 @@ define('io.ox/office/main',
          *  A deferred that reflects the result of the load operation.
          */
         app.load = function () {
-            var def = null;
-
             // do not load twice (may be called repeatedly from app launcher)
             app.load = app.show;
-
             // do not try to load, if file descriptor is missing
-            if (!file) {
-                return app.show();
-            }
-
-            // show application window
-            win.show().busy();
-            $(window).resize();
-            updateTitles();
-
-            editor.initDocument();
-            operationsBuffer = []; // initDocument will result in an operation
-
-
-            // initialize the deferred to be returned
-            def = $.Deferred().always(function () {
-                win.idle();
-                editor.setModified(false);
-                editor.grabFocus(true);
-            });
-
-            // load the file
-            $.ajax({
-                type: 'GET',
-                url: getFilterUrl('importdocument'),
-                dataType: 'json'
-            })
-            .done(function (response) {
-                importOperations(response)
-                .done(function (operations) {
-                    editor.enableUndo(false);
-                    app.applyOperations(operations);
-                    editor.enableUndo(true);
-                    app.startOperationsTimer();
-                    def.resolve();
-                })
-                .fail(function (ex) {
-                    showExceptionError(ex);
-                    def.reject();
-                });
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-                def.reject();
-            });
-
-            return def;
-        };
-
-        /**
-         * Saves the document to its origin.
-         *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the save operation.
-         */
-        app.saveOrFlush = function (action) {
-
-            var // initialize the deferred to be returned
-                def = $.Deferred().always(function () {
-                    win.idle();
-                    editor.grabFocus();
-                });
-
-            // do not try to save, if file descriptor is missing
-            if (!file) {
-                return def.reject();
-            }
-
-            win.busy();
-            // var allOperations = editor.getOperations();
-            // var dataObject = { operations: JSON.stringify(allOperations) };
-
-            $.ajax({
-                type: 'GET',
-                url: getFilterUrl(action),
-                dataType: 'json'
-                /* data: dataObject,
-                beforeSend: function (xhr) {
-                    if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                }*/
-            })
-            .done(function (response) {
-                filesApi.caches.get.clear(); // TODO
-                filesApi.caches.versions.clear();
-                filesApi.trigger('refresh.all');
-                // editor.setModified(false);
-                def.resolve();
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-                def.reject();
-            });
-
-            return def;
+            return file ? load() : app.show();
         };
 
         app.save = function () {
-            return app.saveOrFlush('exportdocument');
+            return saveOrFlush('exportdocument');
         };
 
         app.flush = function () {
-            return app.saveOrFlush('savedocument');
-        };
-
-        app.sendReceiveOperations = function () {
-
-            operationsTimer = null; // Because this is the timeout function
-
-            if (processingOperations)
-                return;
-
-            processingOperations = true;
-
-            // First, check if the server has new ops for me
-            $.ajax({
-                type: 'GET',
-                url: getFilterUrl('pulloperationupdates'),
-                dataType: 'json'
-            })
-            .done(function (response) {
-                processingOperations = false;
-                if (response && response.data) {
-                    var operations = JSON.parse(response.data);
-                    if (operations.length) {
-                        // We might need to do some "T" here!
-                        app.applyOperations(operations);
-                    }
-                }
-                // Then, send our operations in case we have some...
-                if (operationsBuffer.length) {
-
-                    // We might first need to do some "T" here!
-                    app.sendOperations();   // will also restart the timer
-                }
-                else
-                    app.startOperationsTimer();
-            })
-            .fail(function (response) {
-                processingOperations = false;
-            });
-        };
-
-        app.sendOperations = function () {
-
-            if (processingOperations)
-                return;
-
-            processingOperations = true;
-
-            var sendOps = _.copy(operationsBuffer, true);
-
-            // We might receive new Ops while sending the current ones...
-            operationsBuffer = [];
-
-            var dataObject = { operations: JSON.stringify(sendOps) };
-
-            $.ajax({
-                type: 'POST',
-                url: getFilterUrl('pushoperationupdates'),
-                dataType: 'json',
-                data: dataObject,
-                beforeSend: function (xhr) {
-                    if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                }
-            })
-            .done(function (response) {
-                processingOperations = false;
-                app.startOperationsTimer();
-            })
-            .fail(function (response) {
-                // showAjaxError(response);
-                operationsBuffer = $.extend(true, operationsBuffer, sendOps); // Try again later. NOT TESTED YET!
-                processingOperations = false;
-                app.startOperationsTimer();
-            });
-        };
-
-        app.startOperationsTimer = function (timeout) {
-
-            // In debug mode, stop polling.
-            // Advantage 1: Less debug output in FireBug (http-get)
-            // Advantage 2: Simpulate a slow/lost connection
-            if (!debugMode) {
-                var _this = this;
-                var to = timeout || 1000;
-
-                if (operationsTimer)                        // If it running, restart - don't send too many updates while the user is typing.
-                    window.clearTimeout(operationsTimer);   // If we change this, and decide to not restart, then make sure that we don't start twice
-
-                operationsTimer = window.setTimeout(function () { _this.sendReceiveOperations(); }, to);
-            }
-
+            return saveOrFlush('savedocument');
         };
 
         app.failSave = function () {
@@ -573,33 +617,6 @@ define('io.ox/office/main',
             initializeApp(point);
             updateDebugMode();
             return app.load();
-        };
-
-        /**
-         * Applies the passed operations at all known editor objects but the
-         * editor specified as event source.
-         *
-         * @param {Object|Object[]} operations
-         *  An operation or an array of operations to be applied.
-         *
-         * @param {Editor} [eventSource]
-         *  The editor that has called the function. This editor will not
-         *  receive the passed operations again. May be omitted to apply the
-         *  operations to all editors.
-         */
-        app.applyOperations = function (operations, eventSource) {
-
-            // normalize operations parameter
-            if (!_.isArray(operations)) {
-                operations = [operations];
-            }
-
-            // apply operations to all editors
-            _(editors).each(function (editor) {
-                if (editor !== eventSource) {
-                    editor.applyOperations(operations, false, false);
-                }
-            });
         };
 
         /**
@@ -636,7 +653,7 @@ define('io.ox/office/main',
             controller.destroy();
             view.destroy();
             _(editors).invoke('destroy');
-            app = win = editors = editor = view = controller = null;
+            app = win = editors = editor = view = controller = operationsTimer = null;
         };
 
         // initialization -----------------------------------------------------
@@ -696,7 +713,7 @@ define('io.ox/office/main',
             editor.on('operation', function (event, operation) {
                 // buffer operations for sending them later on...
                 operationsBuffer.push(operation);
-                app.applyOperations(operation, editor);
+                applyOperations(operation, editor);
             });
         });
 
