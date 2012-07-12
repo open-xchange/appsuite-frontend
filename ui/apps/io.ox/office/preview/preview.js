@@ -65,7 +65,7 @@ define('io.ox/office/preview/preview',
                 // here for cost reasons
                 node.children('hr').hide();
                 // use all top-level p elements as pages to be displayed
-                pages = node.children('p[id^="pres_page"]').css('display', 'inline-block').hide();
+                pages = node.children('p').css('display', 'inline-block').hide();
             } else {
                 node.empty();
                 pages = $();
