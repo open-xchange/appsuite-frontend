@@ -15,13 +15,14 @@
 
 define('io.ox/office/main',
     ['io.ox/files/api',
+     'io.ox/office/tk/utils',
      'io.ox/office/editor',
      'io.ox/office/view',
      'io.ox/office/controller',
      'gettext!io.ox/office/main',
      'io.ox/office/actions',
      'less!io.ox/office/main.css'
-    ], function (filesApi, Editor, View, Controller, gt) {
+    ], function (filesApi, Utils, Editor, View, Controller, gt) {
 
     'use strict';
 
@@ -70,9 +71,37 @@ define('io.ox/office/main',
 
         // private functions --------------------------------------------------
 
+        /**
+         * Wraps the passed function, protecting it from being called
+         * recursively.
+         *
+         * @param {Function} func
+         *  The original function that needs to be protected against recursive
+         *  calls.
+         *
+         * @returns {Function}
+         *  A wrapper function that initially calls the wrapped function and
+         *  returns its value. When called recursively while running (directly
+         *  or indirectly), it simply returns undefined instead of calling the
+         *  wrapped function again.
+         */
+        function noRecursionGuard(func) {
+            var self = this, running = false;
+            return function () {
+                if (!running) {
+                    try {
+                        running = true;
+                        return func.apply(self, arguments);
+                    } finally {
+                        running = false;
+                    }
+                }
+            };
+        }
+
         function initializeApp(options) {
-            file = _.isObject(options) ? options.file : null;
-            debugMode = _.isObject(options) && (options.debugMode === true);
+            file = Utils.getObjectOption(options, 'file', null);
+            debugMode = Utils.getBooleanOption(options, 'debugMode', false);
         }
 
         /**
@@ -443,7 +472,6 @@ define('io.ox/office/main',
             return app.saveOrFlush('savedocument');
         };
 
-
         app.sendReceiveOperations = function () {
 
             operationsTimer = null; // Because this is the timeout function
@@ -685,10 +713,10 @@ define('io.ox/office/main',
         getApp: function (options) {
 
             var // get file descriptor from options
-                file = _.isObject(options) ? options.file : null,
+                file = Utils.getObjectOption(options, 'file', null),
 
                 // find running editor application
-                running = _.isObject(file) ? ox.ui.App.get(MODULE_NAME).filter(function (app) {
+                runningApps = file ? ox.ui.App.get(MODULE_NAME).filter(function (app) {
                     var appFile = app.getFileDescriptor();
                     // TODO: check file version too?
                     return _.isObject(appFile) &&
@@ -696,7 +724,7 @@ define('io.ox/office/main',
                         (file.folder_id === appFile.folder_id);
                 }) : [];
 
-            return running.length ? running[0] : createApplication(options);
+            return runningApps.length ? runningApps[0] : createApplication(options);
         }
     };
 

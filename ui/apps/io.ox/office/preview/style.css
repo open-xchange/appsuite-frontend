@@ -15,22 +15,15 @@
 .io-ox-office-preview-main {
     margin: 0;
     padding: 0;
-    background-color: #ddd;
-
-    .container {
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        background-color: #eee;
-        overflow-y: auto;
-    }
+    background-color: #e5e5e5;
+    overflow-y: auto;
+    text-align: center;
     
     .io-ox-office-preview-page {
-        width: 220mm;
-        box-sizing: border-box; -moz-box-sizing: border-box;
-        padding: 0cm;
-        margin: 0cm auto 0cm auto;
-        overflow: auto;
+        display: inline-block;
+        margin: 30px;
+        background-color: white;
+        border: 1px solid gray;
     }
     
     .io-ox-office-preview-presentation {

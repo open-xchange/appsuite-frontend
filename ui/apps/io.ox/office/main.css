@@ -19,7 +19,7 @@
     	width: 100%;
     	margin: 0;
     	padding: 0;
-    	background-color: #eee;
+    	background-color: #e5e5e5;
     	overflow-y: auto;
     }
 }
@@ -54,7 +54,7 @@
         width: 210mm;
         padding: 15mm;
         margin: 30px auto;
-        border: 1px gray solid;
+        border: 1px solid gray;
 
         p {
 	        font-family: 'Times New Roman',Times,serif;
