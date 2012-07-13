@@ -33,34 +33,63 @@ define('io.ox/office/tk/controller', function () {
      *
      * @param {Object} definitions
      *  A map of key/definition pairs. Each attribute in this map defines an
-     *  item, keyed by its name. Definitions are maps themselves, supporting
-     *  the following attributes:
-     *  @param {Function} [definitions.enable]
-     *      Predicate function returning true if the item is enabled, and false
-     *      otherwise. Defaults to a function returning always true.
-     *  @param {Function} [definitions.get]
-     *      Getter function returning the current value of the item. Can be
-     *      omitted for one-way action items (actions without a return value).
-     *      May return null to indicate an ambiguous state, or undefined to
-     *      indicate a 'no value' state independent from the type of the item.
-     *      Defaults to a getter returning undefined. Will be executed in the
-     *      context of this controller.
-     *  @param {Function} [definitions.set]
-     *      Setter function changing the value of an item to the first
-     *      parameter of the setter. Can be omitted for read-only items.
-     *      Defaults to a no-op function. Will be executed in the context of
-     *      this controller.
+     *  item, keyed by its name. See method Controller.addDefinitions() for
+     *  details.
      *
-     * @param {Function} [cancelAction]
-     *  A function that will be executed if a view component triggers a
-     *  'cancel' event.
+     * @param {Function} [defaultDoneHandler]
+     *  A function that will run when an item setter function has been executed
+     *  after a 'change' event and the item does not define its own done
+     *  handler, or if a view component triggers a 'cancel' event. Will be
+     *  executed in the context of this controller.
      */
-    function Controller(definitions, cancelAction) {
+    function Controller(definitions, defaultDoneHandler) {
 
-        var // definitions for all items, mapped by item key
+        var // self reference
+            controller = this,
+
+            // definitions for all items, mapped by item key
             allItems = {},
+
             // registered view components
             components = [];
+
+        // class Item ---------------------------------------------------------
+
+        function Item(definition) {
+
+            var enabled = true,
+                // handler for enabled state
+                enableHandler = _.isFunction(definition.enable) ? definition.enable : TRUE,
+                // handler for value getter
+                getHandler = _.isFunction(definition.get) ? definition.get : $.noop,
+                // handler for value setter
+                setHandler = _.isFunction(definition.set) ? definition.set : $.noop,
+                // done handler
+                doneHandler = _.isFunction(definition.done) ? definition.done : defaultDoneHandler;
+
+
+            this.enable = function (state) {
+                enabled = (state === undefined) || (state === true);
+            };
+
+            this.isEnabled = function () {
+                return enabled && enableHandler.call(controller);
+            };
+
+            this.getValue = function (defaultValue) {
+                var value = getHandler.call(controller);
+                return (value === undefined) ? defaultValue : value;
+            };
+
+            this.setValue = function (value) {
+                setHandler.call(controller, value);
+            };
+
+            this.done = function () {
+                doneHandler.call(controller);
+            };
+
+        } // class Item
 
         // private methods ----------------------------------------------------
 
@@ -109,39 +138,104 @@ define('io.ox/office/tk/controller', function () {
         }
 
         /**
+         * Updates a specific item in all view components.
+         *
+         * @param {String} key
+         *  The unique control key.
+         *
+         * @param {Item} item
+         *  The item to be updated in the view components.
+         *
+         * @param [defaultValue]
+         *  The default value passed to the Item.getValue() method.
+         */
+        function updateItem(key, item, defaultValue) {
+            _.chain(components)
+                .invoke('enable', key, item.isEnabled())
+                .invoke('update', key, item.getValue(defaultValue));
+        }
+
+        /**
          * Updates all controls associated to the specified items according to
          * the current item value.
-         *
-         * @param {Object[]} components
-         *  View components to be updated, as array.
          *
          * @param {Object} items
          *  Items to be updated in the view components, according to their
          *  current value and enabled state.
          */
-        function updateComponents(components, items) {
+        function updateComponents(items) {
             _(items).each(function (item, key) {
-                _(components).invoke('enable', key, item.enabled && item.enable());
-                _(components).invoke('update', key, item.get());
+                updateItem(key, item);
             });
         }
 
         /**
-         * The listener function that will listen to 'change' and 'cancel'
+         * The event handler function that will listen to 'change' and 'cancel'
          * events in all registered view components.
          */
-        function componentListener(event, key, value) {
+        function componentEventHandler(event, key, value) {
+
+            var item = null;
+
             if (event.type === 'change') {
-                var item = allItems[key];
-                if (item && item.enabled) {
-                    item.set(value);
+                if (key in allItems) {
+                    item = allItems[key];
+                    if (item.isEnabled()) {
+                        item.setValue(value);
+                        updateItem(key, item, value);
+                    }
+                    item.done();
+                } else {
+                    defaultDoneHandler();
                 }
-            } else if ((event.type === 'cancel') && _.isFunction(cancelAction)) {
-                cancelAction();
+            } else if (event.type === 'cancel') {
+                defaultDoneHandler();
             }
         }
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Adds more item definitions to this controller.
+         *
+         * @param {Object} definitions
+         *  A map of key/definition pairs. Each attribute in this map defines
+         *  an item, keyed by its name. Definitions are maps themselves,
+         *  supporting the following attributes:
+         *  @param {Function} [definitions.enable]
+         *      Predicate function returning true if the item is enabled, and
+         *      false otherwise. Defaults to a function returning always true.
+         *  @param {Function} [definitions.get]
+         *      Getter function returning the current value of the item. Can be
+         *      omitted for one-way action items (actions without a return
+         *      value). May return null to indicate an ambiguous state. May
+         *      return undefined to indicate that calculating the value is not
+         *      applicable, not possible, not implemented, etc. In the case of
+         *      an undefined return value, the current state of the controls in
+         *      the view components will not be changed. Defaults to a getter
+         *      returning undefined. Will be executed in the context of this
+         *      controller.
+         *  @param {Function} [definitions.set]
+         *      Setter function changing the value of an item to the first
+         *      parameter of the setter. Can be omitted for read-only items.
+         *      Defaults to a no-op function. Will be executed in the context
+         *      of this controller.
+         *  @param {Function} [definitions.done]
+         *      A function that will be executed after the setter function has
+         *      returned. If specified, overrides the default done handler
+         *      passed to the constructor of this controller.
+         *
+         * @returns {Controller}
+         *  A reference to this controller instance.
+         */
+        this.addDefinitions = function (definitions) {
+            _(definitions).each(function (definition, key) {
+                if (_.isString(key) && key && _.isObject(definition)) {
+                    allItems[key] = new Item(definition);
+                }
+            });
+            return this;
+        };
 
         /**
          * Registers a view component (e.g. a tool bar) that contains form
@@ -161,7 +255,7 @@ define('io.ox/office/tk/controller', function () {
         this.registerViewComponent = function (component) {
             if (!_(components).contains(component)) {
                 components.push(component);
-                component.on('change cancel', componentListener);
+                component.on('change cancel', componentEventHandler);
             }
             return this;
         };
@@ -179,7 +273,7 @@ define('io.ox/office/tk/controller', function () {
          */
         this.unregisterViewComponent = function (component) {
             if (_(components).contains(component)) {
-                component.off('change cancel', componentListener);
+                component.off('change cancel', componentEventHandler);
                 components = _(components).without(component);
             }
             return this;
@@ -209,13 +303,10 @@ define('io.ox/office/tk/controller', function () {
                 items = selectItems(keys);
 
             // enable/disable the items
-            var enabled = (state === true) || (state === undefined);
-            _(items).each(function (item, key) {
-                item.enabled = enabled;
-            });
+            _(items).invoke('enable', state);
 
             // update all view components
-            updateComponents(components, items);
+            updateComponents(items);
 
             return this;
         };
@@ -264,7 +355,7 @@ define('io.ox/office/tk/controller', function () {
             });
 
             // update all view components
-            updateComponents(components, allItems);
+            updateComponents(allItems);
 
             return this;
         };
@@ -284,7 +375,12 @@ define('io.ox/office/tk/controller', function () {
          *  A reference to this controller.
          */
         this.update = function (keys) {
-            updateComponents(components, selectItems(keys));
+            updateComponents(selectItems(keys));
+            return this;
+        };
+
+        this.trigger = function (key, value) {
+            componentEventHandler({ type: 'change' }, key, value);
             return this;
         };
 
@@ -293,27 +389,14 @@ define('io.ox/office/tk/controller', function () {
          */
         this.destroy = function () {
             // unregister from view components
-            _(components).each(function (component) {
-                component.off('change', componentListener);
-            });
+            _(components).invoke('off', 'change cancel', componentEventHandler);
             allItems = components = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // process passed definitions
-        _(definitions).each(function (def, key) {
-            if (key && _.isObject(def)) {
-                // build the item object
-                allItems[key] = {
-                    // bind getters and setters to this controller instance
-                    enable: _.isFunction(def.enable) ? _.bind(def.enable, this) : TRUE,
-                    get: _.isFunction(def.get) ? _.bind(def.get, this) : $.noop,
-                    set: _.isFunction(def.set) ? _.bind(def.set, this) : $.noop,
-                    enabled: true
-                };
-            }
-        });
+        defaultDoneHandler = _.isFunction(defaultDoneHandler) ? _.bind(defaultDoneHandler, this) : $.noop;
+        this.addDefinitions(definitions);
 
     } // class Controller
 

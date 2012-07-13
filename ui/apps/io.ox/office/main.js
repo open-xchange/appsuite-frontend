@@ -203,7 +203,7 @@ define('io.ox/office/main',
             });
             app.setWindow(win);
 
-            // do not detach when hiding to keep edit selection alive
+            // do not detach when hiding to keep editor selection alive
             win.detachable = false;
 
             // create panes and attach them to the main window
@@ -686,8 +686,13 @@ define('io.ox/office/main',
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
 
+        // craete controller and register editors
+        controller = new Controller(app)
+            .registerEditor(editors[Editor.TextMode.RICH])
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
+
         // editor view
-        view = new View();
+        view = new View(controller);
 
         // add plain-text editor and operations output console to debug table
         view.getDebugTable().append(
@@ -696,12 +701,6 @@ define('io.ox/office/main',
                 $('<td>').append(editors.output.node)
             )
         );
-
-        // register GUI elements and editors at the controller
-        controller = new Controller(app)
-            .registerViewComponent(view.getMainToolBar())
-            .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {

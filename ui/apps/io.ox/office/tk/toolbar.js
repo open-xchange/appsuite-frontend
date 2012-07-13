@@ -15,12 +15,11 @@ define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/label',
-     'io.ox/office/tk/group',
      'io.ox/office/tk/buttongroup',
+     'io.ox/office/tk/radiogroup',
      'io.ox/office/tk/buttonchooser',
-     'io.ox/office/tk/sizechooser',
-     'less!io.ox/office/tk/style.css'
-    ], function (Events, Utils, Label, Group, ButtonGroup, ButtonChooser, SizeChooser) {
+     'io.ox/office/tk/sizechooser'
+    ], function (Events, Utils, Label, ButtonGroup, RadioGroup, ButtonChooser, SizeChooser) {
 
     'use strict';
 
@@ -46,7 +45,7 @@ define('io.ox/office/tk/toolbar',
     function ToolBar() {
 
         var // reference to this tool bar
-            toolbar = this,
+            toolBar = this,
 
             // create the DOM root element representing the tool bar
             node = $('<div>').addClass('io-ox-toolbar'),
@@ -105,34 +104,12 @@ define('io.ox/office/tk/toolbar',
 
             // try to enlarge one or more controls, until tool bar overflows
             _(resizeHandlers).each(function (resizeHandler) {
-                if (containerNode.width() < width) { resizeHandler.call(toolbar, true); }
+                if (containerNode.width() < width) { resizeHandler.call(toolBar, true); }
             });
 
             // try to shrink one or more controls, until tool bar does not overflow
             _(resizeHandlers).each(function (resizeHandler) {
-                if (containerNode.width() > width) { resizeHandler.call(toolbar, false); }
-            });
-        }
-
-        /**
-         * Registers the passed control group, and inserts it into this tool
-         * bar. Calls to the method ToolBar.update() will be forwarded to all
-         * registered groups.
-         *
-         * @param {Group} group
-         *  The group object. Must provide a method getNode() returning the
-         *  root node of the group. Must provide a method update() taking the
-         *  key and value of the control to be updated.
-         */
-        function registerGroup(group) {
-            // remember the group object
-            groups.push(group);
-            // append its root node to this tool bar
-            containerNode.append(group.getNode());
-
-            // forward 'change' and 'cancel' events to the tool bar
-            group.on('change cancel', function (event, key, value) {
-                toolbar.trigger(event.type, key, value);
+                if (containerNode.width() > width) { resizeHandler.call(toolBar, false); }
             });
         }
 
@@ -185,7 +162,7 @@ define('io.ox/office/tk/toolbar',
                 if (keydown) { moveFocus(true); }
                 return false;
             case KeyCodes.ESCAPE:
-                if (keyup) { toolbar.trigger('cancel'); }
+                if (keyup) { toolBar.trigger('cancel'); }
                 return false;
             }
         }
@@ -212,14 +189,7 @@ define('io.ox/office/tk/toolbar',
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  Supports all generic formatting options (see method
-             *  Utils.createButton() for details). Additionally, the following
-             *  options are supported:
-             *  @param {Boolean} [option.toggle=false]
-             *      If set to true, the button toggles its state and passes a
-             *      boolean value to change listeners. Otherwise, the button is
-             *      a simple push button and passes undefined to its change
-             *      listeners.
+             *  See method ToolBar.addButton() for details.
              *
              * @return {ButtonGroupProxy}
              *  A reference to this proxy object.
@@ -234,13 +204,13 @@ define('io.ox/office/tk/toolbar',
              * group. Useful for method chaining.
              */
             this.end = function () {
-                return toolbar;
+                return toolBar;
             };
 
             // initialization -------------------------------------------------
 
             // register the group object at this tool bar
-            registerGroup(group);
+            toolBar.addGroup(group);
 
         } // class ButtonGroupProxy
 
@@ -268,7 +238,7 @@ define('io.ox/office/tk/toolbar',
                 type = Utils.getStringOption(options, 'type', 'buttons'),
 
                 // create a new group container for the button group
-                buttonGroup = new Group(),
+                radioGroup = new RadioGroup(key),
 
                 // create a new group container for the drop-down group
                 dropDownGroup = new ButtonChooser(key, Utils.extendOptions(options, { split: false }));
@@ -285,8 +255,8 @@ define('io.ox/office/tk/toolbar',
              */
             function updateHandler(value) {
 
-                var // find all option buttons (in button group and drop-down menu)
-                    buttons = buttonGroup.getNode().children().add(dropDownGroup.getGridButtons()),
+                var // find all option buttons in the drop-down menu
+                    buttons = dropDownGroup.getGridButtons(),
                     // ambiguous state indicated by null value
                     inactive = _.isUndefined(value) || _.isNull(value),
                     // find the button to activate
@@ -334,9 +304,9 @@ define('io.ox/office/tk/toolbar',
                 // decide which group to hide and to show
                 if (enlarge && dropDownGroup.isVisible()) {
                     hideGroup = dropDownGroup;
-                    showGroup = buttonGroup;
-                } else if (!enlarge && buttonGroup.isVisible()) {
-                    hideGroup = buttonGroup;
+                    showGroup = radioGroup;
+                } else if (!enlarge && radioGroup.isVisible()) {
+                    hideGroup = radioGroup;
                     showGroup = dropDownGroup;
                 }
 
@@ -364,9 +334,7 @@ define('io.ox/office/tk/toolbar',
              *  See method Utils.createButton() for details.
              */
             this.addButton = function (value, options) {
-                buttonGroup.getNode().append(
-                    Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).attr('data-value', value)
-                );
+                radioGroup.addButton(value, options);
                 dropDownGroup.addButton(options).attr('data-value', value);
                 return this;
             };
@@ -375,13 +343,12 @@ define('io.ox/office/tk/toolbar',
              * Returns a reference to the tool bar containing this button
              * group. Useful for method chaining.
              */
-            this.end = function () { return toolbar; };
+            this.end = function () { return toolBar; };
 
             // initialization -------------------------------------------------
 
             // register the group objects at this tool bar
-            registerGroup(buttonGroup);
-            registerGroup(dropDownGroup);
+            toolBar.addGroup(radioGroup).addGroup(dropDownGroup);
 
             // configure according to group type
             switch (type) {
@@ -394,14 +361,11 @@ define('io.ox/office/tk/toolbar',
                 break;
 
             default: // 'dropdown'
-                buttonGroup.hide();
+                radioGroup.hide();
                 break;
             }
 
             // register event handlers
-            buttonGroup
-                .registerActionHandler('click', 'button', clickHandler)
-                .registerUpdateHandler(key, updateHandler);
             dropDownGroup
                 .registerActionHandler('click', 'button', clickHandler)
                 .registerUpdateHandler(key, updateHandler);
@@ -416,6 +380,27 @@ define('io.ox/office/tk/toolbar',
          */
         this.getNode = function () {
             return node;
+        };
+
+        /**
+         * Adds the passed control group to this tool bar. Calls to the method
+         * ToolBar.update() will be forwarded to all registered groups.
+         *
+         * @param {Group} group
+         *  The control group object. Will be appended to the contents of this
+         *  tool bar.
+         */
+        this.addGroup = function (group) {
+            // remember the group object
+            groups.push(group);
+            // append its root node to this tool bar
+            containerNode.append(group.getNode());
+
+            // forward 'change' and 'cancel' events to the tool bar
+            group.on('change cancel', function (event, key, value) {
+                toolBar.trigger(event.type, key, value);
+            });
+            return this;
         };
 
         /**
@@ -435,8 +420,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addLabel = function (key, options) {
-            registerGroup(new Label(key, options));
-            return this;
+            return this.addGroup(new Label(key, options));
         };
 
         /**
@@ -470,8 +454,8 @@ define('io.ox/office/tk/toolbar',
          * toggle buttons).
          *
          * @returns {ButtonGroupProxy}
-         *  A proxy object that implements methods to add controls to the
-         *  group.
+         *  A proxy object that implements the methods addButton() to add
+         *  buttons to the group.
          */
         this.addButtonGroup = function () {
             return new ButtonGroupProxy();
@@ -525,8 +509,7 @@ define('io.ox/office/tk/toolbar',
          *  the SizeChooser() constructor function for details.
          */
         this.addSizeChooser = function (key, options) {
-            registerGroup(new SizeChooser(key, options));
-            return this;
+            return this.addGroup(new SizeChooser(key, options));
         };
 
         /**
@@ -586,7 +569,7 @@ define('io.ox/office/tk/toolbar',
             this.events.destroy();
             $(window).off('resize', updateGroupSizes);
             node.off().remove();
-            toolbar = node = containerNode = groups = resizeHandlers = null;
+            toolBar = node = containerNode = groups = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------

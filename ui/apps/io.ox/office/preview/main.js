@@ -48,8 +48,8 @@ define("io.ox/office/preview/main",
                         // but 'return' cannot be the last token in a line
                         // -> use a temporary variable to store the result
                         var msg =
-                            //#. %1$s is the current page index
-                            //#. %2$s is the number of pages
+                            //#. %1$s is the current page index in office document preview
+                            //#. %2$s is the number of pages in office document preview
                             //#, c-format
                             gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
                         return msg;

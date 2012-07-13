@@ -26,49 +26,54 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
             items = {
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
-                    set: function () { editor.undo(); editor.grabFocus(); }
+                    set: function () { editor.undo(); }
                 },
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
-                    set: function () { editor.redo(); editor.grabFocus(); }
+                    set: function () { editor.redo(); }
                 },
 
                 'insert/table': {
-                    set: function (size) { editor.insertTable(size); editor.grabFocus(); }
+                    set: function (size) { editor.insertTable(size); }
                 },
 
                 'character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
-                    set: function (state) { editor.setAttribute('bold', state); editor.grabFocus(); }
+                    set: function (state) { editor.setAttribute('bold', state); }
                 },
                 'character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
-                    set: function (state) { editor.setAttribute('italic', state); editor.grabFocus(); }
+                    set: function (state) { editor.setAttribute('italic', state); }
                 },
                 'character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
-                    set: function (state) { editor.setAttribute('underline', state); editor.grabFocus(); }
+                    set: function (state) { editor.setAttribute('underline', state); }
                 },
 
                 'paragraph/alignment': {
-                    set: function (value) { editor.grabFocus(); }
                 },
 
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); app.getEditor().grabFocus(); }
+                    set: function (state) { app.setDebugMode(state); },
+                    done: function (state) { app.getEditor().grabFocus(); }
                 }
             };
 
         // private methods ----------------------------------------------------
 
-        function cancelAction() {
+        /**
+         * The controller done handler that will be executed after an item
+         * setter function (of items without own done handler), and after a
+         * view component triggers a 'cancel' event.
+         */
+        function doneHandler() {
             editor.grabFocus();
         }
 
         // base constructor ---------------------------------------------------
 
-        BaseController.call(this, items, cancelAction);
+        BaseController.call(this, items, doneHandler);
 
         // methods ------------------------------------------------------------
 

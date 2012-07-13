@@ -63,6 +63,16 @@
     box-shadow: @outset-shadow, inset @inset-shadow;
 }
 
+.vertical-gradient(@startColor, @endColor) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor);
+    background-image: -ms-linear-gradient(top, @startColor, @endColor);
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor);
+    background-image: -o-linear-gradient(top, @startColor, @endColor);
+    background-image: linear-gradient(top, @startColor, @endColor);
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@startColor,@endColor));
+}
+  
 .opacity(@opacity) {
     @opacity-percent: @opacity * 100;
     opacity: @opacity;
@@ -108,15 +118,16 @@ i.icon-io-ox-caret {
         background-position: -7px 0;
     }
 }
-
+   
 /* ========================================================================= */
-/* controls in panes and tool bars                                           */
+/* panes and tool bars                                                       */
 /* ========================================================================= */
 
-div.io-ox-pane, div.io-ox-toolbar {
+div.io-ox-pane {
 
-    /* common controls ===================================================== */
-
+    /* background color for panes */
+    @fill-color: #f5f5f5;
+    
     /* hover border color */
     @border-color: #d5d5d5;
     
@@ -128,7 +139,18 @@ div.io-ox-pane, div.io-ox-toolbar {
         border: 1px solid @color;
         .box-shadow(inset 0 0 4px @color);
     }
+
+    /* --------------------------------------------------------------------- */
+
+    background-color: @fill-color;
+
+    &.top { border-bottom: 1px solid @border-color; }
+    &.bottom { border-top: 1px solid @border-color; }
+    &.left { border-right: 1px solid @border-color; }
+    &.right { border-left: 1px solid @border-color; }
     
+    /* common controls ===================================================== */
+
     label, button {
         display: inline;
         margin: 0;
@@ -158,9 +180,6 @@ div.io-ox-pane, div.io-ox-toolbar {
 
     /* buttons ============================================================= */
 
-    /*
-     * Adjust the default formatting of buttons defined by Bootstrap.
-     */
     button {
 
         /* mouse and keyboard effects -------------------------------------- */
@@ -305,9 +324,6 @@ div.io-ox-pane, div.io-ox-toolbar {
                     > div {
                         /* need to set height explicitly for Firefox */
                         height: @cell-size + 1px;
-                        /* font size may affect box sizing, shrink it */
-                        font-size: 1px;
-                        line-height: 100%;
 
                         /* a cell in the grid */
                         > div {
@@ -356,40 +372,20 @@ div.io-ox-pane, div.io-ox-toolbar {
     .group.menu-open > .dropdown-menu {
         display: block;
     }
-}
 
-/* ========================================================================= */
-/* panes                                                                     */
-/* ========================================================================= */
+    /* tool bars =========================================================== */
 
-.io-ox-pane {
-    background-color: #f5f5f5;
-
-    &.top {
-        border-bottom: 1px solid #d5d5d5;
+    div.io-ox-toolbar {
+        padding: 4px 13px;
+        /* prevent multi-line layout of button groups */
+        white-space: nowrap;
+        text-align: center;
     }
-    &.bottom {
-        border-top: 1px solid #d5d5d5;
-    }
-    &.left {
-        border-right: 1px solid #d5d5d5;
-    }
-    &.right {
-        border-left: 1px solid #d5d5d5;
-    }
-}
 
-/* ========================================================================= */
-/* tool bars                                                                 */
-/* ========================================================================= */
+    /* tool bar selector =================================================== */
 
-div.io-ox-toolbar {
-    margin: 0;
-    padding: 4px 13px;
-    /* font size may affect box sizing, shrink it */
-    font-size: 1px;
-    line-height: 100%;
-    /* prevent multi-line layout of button groups */
-    white-space: nowrap;
-    text-align: center;
+    div.io-ox-toolbar.tabs {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
 }
