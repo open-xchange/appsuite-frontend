@@ -112,8 +112,8 @@ define('io.ox/office/tk/controller', function () {
             };
 
             /**
-             * Executes the setter function of this item, passing in the new
-             * value, and the done handler, and updates all registered view
+             * Executes the setter function of this item (passing in the new
+             * value), and the done handler, and updates all registered view
              * components.
              *
              * @param value

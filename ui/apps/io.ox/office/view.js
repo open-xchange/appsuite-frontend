@@ -76,7 +76,7 @@ define('io.ox/office/view',
 
         function showToolBar(key) {
             // hide all tool bars
-            toolPane.children().not(tabToolBar.getNode()).hide();
+            toolPane.children('.io-ox-toolbar').not(tabToolBar.getNode()).hide();
             if (key in toolBars) {
                 toolBars[key].getNode().show();
             }
@@ -120,19 +120,19 @@ define('io.ox/office/view',
 
         // initialization -----------------------------------------------------
 
-        // create controller items for tool bar handling
-        controller
-            .addDefinitions({
-                'view/toolbars/show': {
-                    set: showToolBar
-                }
-            })
-            .registerViewComponent(tabToolBar);
+        // insert the tool bar selector and a separator line into the tool pane
+        toolPane.append(
+            tabToolBar.getNode().addClass('tabs'),
+            $('<div>').addClass('tabs-separator').append(
+                $('<div>').addClass('left'),
+                $('<div>').addClass('right')
+            )
+        );
 
-        // insert the tool bar selector on top
-        toolPane.append(tabToolBar.getNode().addClass('tabs'));
+        // insert the radio buttons into the tool bar
         tabToolBar.addGroup(radioGroup);
 
+        // create the tool bars
         createToolBar('insert', gt('Insert'))
             .addSizeChooser('insert/table', insertTableOptions);
 
@@ -155,8 +155,14 @@ define('io.ox/office/view',
         createToolBar('debug', gt('Debug'))
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
-        // make the format tool bar visible
-        controller.change('view/toolbars/show', 'format');
+        // prepare controller
+        controller
+            // create controller item for tool bar handling
+            .addDefinitions({ 'view/toolbars/show': { set: showToolBar } })
+            // register the tab tool bar at the controller
+            .registerViewComponent(tabToolBar)
+            // make the format tool bar visible
+            .change('view/toolbars/show', 'format');
 
         // build debug table for plain-text editor and operations output console
         debugTable.append($('<colgroup>').append(
