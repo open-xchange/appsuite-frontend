@@ -317,7 +317,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  will be enabled. Otherwise, all controls will be disabled.
      */
     Utils.enableControls = function (controls, state) {
-        var enabled = (state === true) || (state === undefined);
+        var enabled = _.isUndefined(state) || (state === true);
         controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
     };
 

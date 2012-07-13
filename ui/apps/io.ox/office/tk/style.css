@@ -380,12 +380,12 @@ div.io-ox-pane {
         /* prevent multi-line layout of button groups */
         white-space: nowrap;
         text-align: center;
-    }
 
-    /* tool bar selector =================================================== */
+        /* tool bar selector ----------------------------------------------- */
 
-    div.io-ox-toolbar.tabs {
-        padding-top: 0;
-        padding-bottom: 0;
+        &.tabs {
+//            padding-top: 0;
+            padding-bottom: 0;
+        }
     }
 }

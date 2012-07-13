@@ -130,7 +130,7 @@ define('io.ox/office/view',
             .registerViewComponent(tabToolBar);
 
         // insert the tool bar selector on top
-        toolPane.append(tabToolBar.getNode());
+        toolPane.append(tabToolBar.getNode().addClass('tabs'));
         tabToolBar.addGroup(radioGroup);
 
         createToolBar('insert', gt('Insert'))
@@ -156,7 +156,7 @@ define('io.ox/office/view',
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
 
         // make the format tool bar visible
-        controller.trigger('view/toolbars/show', 'format');
+        controller.change('view/toolbars/show', 'format');
 
         // build debug table for plain-text editor and operations output console
         debugTable.append($('<colgroup>').append(

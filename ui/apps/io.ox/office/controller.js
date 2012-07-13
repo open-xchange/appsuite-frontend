@@ -34,7 +34,8 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                 },
 
                 'insert/table': {
-                    set: function (size) { editor.insertTable(size); }
+                    set: function (size) { editor.insertTable(size); },
+                    done: function () { this.change('view/toolbars/show', 'table'); }
                 },
 
                 'character/font/bold': {

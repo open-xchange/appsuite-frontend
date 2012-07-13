@@ -51,11 +51,13 @@ define('io.ox/office/tk/radiogroup',
             var // find all option buttons
                 buttons = self.getNode().children('button');
 
-            // remove highlighting from all buttons, highlight active button
-            Utils.toggleButtons(buttons, false);
-            // ambiguous state indicated by null value
-            if (!_.isUndefined(value) && !_.isNull(value)) {
-                Utils.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
+            if (!_.isUndefined(value)) {
+                // remove highlighting from all buttons, highlight active button
+                Utils.toggleButtons(buttons, false);
+                // ambiguous state indicated by null value
+                if (!_.isNull(value)) {
+                    Utils.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
+                }
             }
         }
 

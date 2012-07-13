@@ -184,10 +184,10 @@ define('io.ox/office/tk/group',
             }
 
             // attach event handler to the node
-            if (selector === undefined) {
-                node.on(type, actionEventHandler);
-            } else {
+            if (selector) {
                 node.on(type, selector, actionEventHandler);
+            } else {
+                node.on(type, actionEventHandler);
             }
 
             return this;

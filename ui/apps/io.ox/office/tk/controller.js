@@ -48,14 +48,14 @@ define('io.ox/office/tk/controller', function () {
             controller = this,
 
             // definitions for all items, mapped by item key
-            allItems = {},
+            items = {},
 
             // registered view components
             components = [];
 
         // class Item ---------------------------------------------------------
 
-        function Item(definition) {
+        function Item(key, definition) {
 
             var enabled = true,
                 // handler for enabled state
@@ -67,26 +67,68 @@ define('io.ox/office/tk/controller', function () {
                 // done handler
                 doneHandler = _.isFunction(definition.done) ? definition.done : defaultDoneHandler;
 
-
-            this.enable = function (state) {
-                enabled = (state === undefined) || (state === true);
-            };
-
-            this.isEnabled = function () {
+            /**
+             * Returns whether this item is effectively enabled, by looking at
+             * the own state, and by asking the enable handler of the item.
+             */
+            function isEnabled() {
                 return enabled && enableHandler.call(controller);
+            }
+
+            /**
+             * Enables or disables this item, and updates all registered view
+             * components.
+             *
+             * @param {Boolean} [state=true]
+             *  If omitted or set to true, the item will be enabled. Otherwise,
+             *  the item will be disabled.
+             *
+             * @returns {Item}
+             *  A reference to this item.
+             */
+            this.enable = function (state) {
+                enabled = _.isUndefined(state) || (state === true);
+                return this.update();
             };
 
-            this.getValue = function (defaultValue) {
+            /**
+             * Updates the controls associated to this item in all view
+             * components.
+             *
+             * @param [defaultValue]
+             *  The default value if the value getter returns undefined.
+             *
+             * @returns {Item}
+             *  A reference to this item.
+             */
+            this.update = function (defaultValue) {
                 var value = getHandler.call(controller);
-                return (value === undefined) ? defaultValue : value;
+                value = _.isUndefined(value) ? defaultValue : value;
+                _(components).invoke('enable', key, isEnabled());
+                if (!_.isUndefined(value)) {
+                    _(components).invoke('update', key, value);
+                }
+                return this;
             };
 
-            this.setValue = function (value) {
-                setHandler.call(controller, value);
-            };
-
-            this.done = function () {
+            /**
+             * Executes the setter function of this item, passing in the new
+             * value, and the done handler, and updates all registered view
+             * components.
+             *
+             * @param value
+             *  The new value of the item.
+             *
+             * @returns {Item}
+             *  A reference to this item.
+             */
+            this.change = function (value) {
+                if (isEnabled()) {
+                    setHandler.call(controller, value);
+                    this.update(value);
+                }
                 doneHandler.call(controller);
+                return this;
             };
 
         } // class Item
@@ -113,7 +155,7 @@ define('io.ox/office/tk/controller', function () {
 
             // return all items, if parameter is missing
             if (_.isUndefined(keys)) {
-                return allItems;
+                return items;
             }
 
             // convert passed parameter to array
@@ -125,10 +167,10 @@ define('io.ox/office/tk/controller', function () {
 
             // pick items by string key or by regular expression
             _(keys).each(function (key) {
-                if (_.isString(key) && (key in allItems)) {
-                    matchingItems[key] = allItems[key];
+                if (_.isString(key) && (key in items)) {
+                    matchingItems[key] = items[key];
                 } else if (_.isRegExp(key)) {
-                    _(allItems).each(function (item, itemKey) {
+                    _(items).each(function (item, itemKey) {
                         if (key.test(itemKey)) { matchingItems[itemKey] = item; }
                     });
                 }
@@ -138,58 +180,18 @@ define('io.ox/office/tk/controller', function () {
         }
 
         /**
-         * Updates a specific item in all view components.
-         *
-         * @param {String} key
-         *  The unique control key.
-         *
-         * @param {Item} item
-         *  The item to be updated in the view components.
-         *
-         * @param [defaultValue]
-         *  The default value passed to the Item.getValue() method.
-         */
-        function updateItem(key, item, defaultValue) {
-            _.chain(components)
-                .invoke('enable', key, item.isEnabled())
-                .invoke('update', key, item.getValue(defaultValue));
-        }
-
-        /**
-         * Updates all controls associated to the specified items according to
-         * the current item value.
-         *
-         * @param {Object} items
-         *  Items to be updated in the view components, according to their
-         *  current value and enabled state.
-         */
-        function updateComponents(items) {
-            _(items).each(function (item, key) {
-                updateItem(key, item);
-            });
-        }
-
-        /**
          * The event handler function that will listen to 'change' and 'cancel'
          * events in all registered view components.
          */
         function componentEventHandler(event, key, value) {
-
-            var item = null;
-
             if (event.type === 'change') {
-                if (key in allItems) {
-                    item = allItems[key];
-                    if (item.isEnabled()) {
-                        item.setValue(value);
-                        updateItem(key, item, value);
-                    }
-                    item.done();
+                if (key in items) {
+                    items[key].change(value);
                 } else {
-                    defaultDoneHandler();
+                    defaultDoneHandler.call(controller);
                 }
             } else if (event.type === 'cancel') {
-                defaultDoneHandler();
+                defaultDoneHandler.call(controller);
             }
         }
 
@@ -231,7 +233,7 @@ define('io.ox/office/tk/controller', function () {
         this.addDefinitions = function (definitions) {
             _(definitions).each(function (definition, key) {
                 if (_.isString(key) && key && _.isObject(definition)) {
-                    allItems[key] = new Item(definition);
+                    items[key] = new Item(key, definition);
                 }
             });
             return this;
@@ -298,16 +300,7 @@ define('io.ox/office/tk/controller', function () {
          *  A reference to this controller.
          */
         this.enable = function (keys, state) {
-
-            var // get all items specified by the passed selector
-                items = selectItems(keys);
-
-            // enable/disable the items
-            _(items).invoke('enable', state);
-
-            // update all view components
-            updateComponents(items);
-
+            _(selectItems(keys)).invoke('enable', state);
             return this;
         };
 
@@ -347,15 +340,12 @@ define('io.ox/office/tk/controller', function () {
         this.enableAndDisable = function (keys) {
 
             var // get all items specified by the passed selector
-                items = selectItems(keys);
+                enabledItems = selectItems(keys);
 
             // enable/disable the items
-            _(allItems).each(function (item, key) {
-                item.enabled = key in items;
+            _(items).each(function (item, key) {
+                item.enable(key in enabledItems);
             });
-
-            // update all view components
-            updateComponents(allItems);
 
             return this;
         };
@@ -375,11 +365,24 @@ define('io.ox/office/tk/controller', function () {
          *  A reference to this controller.
          */
         this.update = function (keys) {
-            updateComponents(selectItems(keys));
+            _(selectItems(keys)).invoke('update');
             return this;
         };
 
-        this.trigger = function (key, value) {
+        /**
+         * Triggers a change event manually. Executes the setter function of
+         * the item associated to the specified key, passing in the new value.
+         *
+         * @param {String} key
+         *  The key of the item to be changed.
+         *
+         * @param value
+         *  The new value of the item.
+         *
+         * @returns {Controller}
+         *  A reference to this controller.
+         */
+        this.change = function (key, value) {
             componentEventHandler({ type: 'change' }, key, value);
             return this;
         };
@@ -390,12 +393,12 @@ define('io.ox/office/tk/controller', function () {
         this.destroy = function () {
             // unregister from view components
             _(components).invoke('off', 'change cancel', componentEventHandler);
-            allItems = components = null;
+            items = components = null;
         };
 
         // initialization -----------------------------------------------------
 
-        defaultDoneHandler = _.isFunction(defaultDoneHandler) ? _.bind(defaultDoneHandler, this) : $.noop;
+        defaultDoneHandler = _.isFunction(defaultDoneHandler) ? defaultDoneHandler : $.noop;
         this.addDefinitions(definitions);
 
     } // class Controller
