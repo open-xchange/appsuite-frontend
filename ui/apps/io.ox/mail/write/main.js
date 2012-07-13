@@ -508,8 +508,9 @@ define.async('io.ox/mail/write/main',
         /**
          * Compose new mail
          */
-        app.compose = function (data) {
+        app.compose = function (data, senderMail) {
 
+            defaultSender = senderMail;
             // register mailto!
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
@@ -556,7 +557,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Reply all
          */
-        app.replyall = function (obj) {
+        app.replyall = function (obj, senderMail) {
+            defaultSender = senderMail;
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
@@ -577,7 +579,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Reply
          */
-        app.reply = function (obj) {
+        app.reply = function (obj, senderMail) {
+            defaultSender = senderMail;
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
@@ -598,7 +601,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Forward
          */
-        app.forward = function (obj) {
+        app.forward = function (obj, senderMail) {
+            defaultSender = senderMail;
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
@@ -869,15 +873,14 @@ define.async('io.ox/mail/write/main',
         getApp: createInstance
     };
 
-    // load user
     return userAPI.get({ id: config.get('identifier') })
         .done(function (sender) {
-            // inject 'from'
-            defaultSender = ['"' + sender.display_name + '"', sender.email1];
-        })
+            // there is something wrong with a deferred object here
+    })
         .pipe(function () {
             return module;
         });
+
 });
 
 

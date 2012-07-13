@@ -235,6 +235,11 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
                 var email = String(arr[1] || '').toLowerCase();
                 return memo + (email && !(email in addresses) ? 1 : 0);
             }, 0);
+        },
+
+        getInitialDefaultSender: function () {
+            var mailArray = _(config.get('mail.addresses', []));
+            return mailArray._wrapped[0];
         }
     };
     return that;
