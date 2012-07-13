@@ -33,7 +33,9 @@ define("io.ox/office/preview/main",
 
             file = _.isObject(options) ? options.file : null,
 
-            toolbar = new ToolBar()
+            toolPane = $('<div>').addClass('io-ox-pane'),
+
+            toolBar = new ToolBar()
                 .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
                 .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
                 .addLabel('page', { tooltip: gt('Page number') })
@@ -151,13 +153,10 @@ define("io.ox/office/preview/main",
             // window in the 'show' event, and to detach it in the 'hide' event
             // (otherwise, removing the toolbar will destroy all listeners).
             win.on('show', function () {
-                win.nodes.toolbar.append(toolbar.getNode());
+                win.nodes.toolbar.append(toolPane);
             })
             .on('hide', function () {
-                // toolbar is already destructed when application is closed
-                if (toolbar) {
-                    toolbar.getNode().detach();
-                }
+                toolPane.detach();
             });
 
             // disable FF spell checking
@@ -337,17 +336,19 @@ define("io.ox/office/preview/main",
          */
         app.destroy = function () {
             controller.destroy();
-            toolbar.destroy();
+            toolBar.destroy();
             preview.destroy();
-            app = win = preview = toolbar = controller = null;
+            app = win = preview = toolBar = controller = null;
         };
 
         // ------------------------------------------------
         // - initialization of createApplication function -
         // ------------------------------------------------
 
+        toolPane.css('background', 'none').append(toolBar.getNode());
+
         // register view components at the controller
-        controller.registerViewComponent(toolbar);
+        controller.registerViewComponent(toolBar);
 
         // listen to 'showpage' events and update controller
         preview.on('showpage', function () { controller.update(); });
