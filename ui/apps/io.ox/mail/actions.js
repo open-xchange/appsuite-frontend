@@ -544,4 +544,15 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
+    // DND actions
+
+    ext.point('io.ox/mail/dnd/actions').extend({
+        id: 'importEML',
+        index: 10,
+        label: gt('Drop here to import this mail'),
+        action: function (file, app) {
+            app.queues.importEML.offer(file);
+        }
+    });
+
 });

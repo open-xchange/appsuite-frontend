@@ -128,7 +128,6 @@ define('io.ox/calendar/edit/view-main',
         }
     };
 
-
     /// strings end
 
     //customize datepicker
