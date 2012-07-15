@@ -69,13 +69,7 @@ $(document).ready(function () {
                 break;
 
             case 9: // tab
-                break;
             case 13: // enter
-
-                if (!this.shown) {
-                    return;
-                }
-
                 e.stopPropagation();
                 if (!this.shown) {
                     return;
@@ -143,7 +137,7 @@ $(document).ready(function () {
             this.$menu.show();
             var selected = this.$menu.find('.active');
             if (selected.length > 0) {
-                this.$menu.scrollTop(selected.offset().top - selected.offsetParent().offset().top);
+                selected.get(0).scrollIntoView();
             }
             this.shown = true;
             return this;
@@ -167,6 +161,35 @@ $(document).ready(function () {
             }
             prev.get(0).scrollIntoView();
             prev.addClass('active');
+        },
+        lookup: function (event) {
+            var self = this,
+                items,
+                q;
+
+            this.query = this.$element.val();
+
+            if (!this.query && this.options.autocompleteBehavoir) {
+                return this.shown ? this.hide() : this;
+            }
+
+            if (this.options.autocompleteBehavoir) {
+                items = $.grep(this.source, function (item) {
+                    if (self.matcher(item)) {
+                        return item;
+                    }
+                });
+            } else {
+                items = this.source;
+            }
+
+            items = this.sorter(items);
+
+            if (!items.length) {
+                return this.shown ? this.hide() : this;
+            }
+
+            return this.render(items.slice(0, this.options.items)).show();
         }
 
     });
@@ -191,7 +214,8 @@ $(document).ready(function () {
         source: [],
         items: 8,
         menu: '<ul class="typeahead dropdown-menu"></ul>',
-        item: '<li><a href="#"></a></li>'
+        item: '<li><a href="#"></a></li>',
+        autocompleteBehavoir: false
     };
 
     $.fn.combobox.Constructor = Combobox;

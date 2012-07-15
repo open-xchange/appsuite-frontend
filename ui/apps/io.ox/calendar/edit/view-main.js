@@ -123,9 +123,7 @@ define('io.ox/calendar/edit/view-main',
             });
             return items;
         },
-        matcher: function () {
-            return true;
-        }
+        autocompleteBehavoir: false
     };
 
     /// strings end
