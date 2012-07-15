@@ -53,9 +53,6 @@ define('io.ox/office/tk/buttonchooser',
             // the drop-down grid element
             gridNode = $('<table>'),
 
-            // the drop-down grid element
-            menuNode = $('<div>').addClass('button-chooser-menu').append(gridNode),
-
             // number of rows in the grid
             rows = 0,
 
@@ -121,7 +118,7 @@ define('io.ox/office/tk/buttonchooser',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, key, options, menuNode);
+        DropDown.call(this, key, options);
 
         // methods ------------------------------------------------------------
 
@@ -173,6 +170,9 @@ define('io.ox/office/tk/buttonchooser',
         };
 
         // initialization -----------------------------------------------------
+
+        // initialize the drop-down element
+        this.getMenuNode().addClass('button-chooser').append(gridNode);
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);

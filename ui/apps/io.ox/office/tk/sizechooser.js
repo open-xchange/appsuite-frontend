@@ -78,9 +78,6 @@ define('io.ox/office/tk/sizechooser',
             // the drop-down button filling up the entire drop-down menu
             gridButton = Utils.createButton(key).append(gridNode, sizeLabel),
 
-            // the drop-down menu element
-            menuNode = $('<div>').addClass('size-chooser-menu').append(gridButton),
-
             // grid size limits
             minSize = getSizeOption(options, 'minSize', { width: 1, height: 1 }, { width: 1, height: 1 }),
             maxSize = getSizeOption(options, 'maxSize', undefined, minSize),
@@ -256,9 +253,12 @@ define('io.ox/office/tk/sizechooser',
         // base constructor ---------------------------------------------------
 
         // insert validated default size for action button into the options
-        DropDown.call(this, key, Utils.extendOptions(options, { defaultValue: defSize }), menuNode);
+        DropDown.call(this, key, Utils.extendOptions(options, { defaultValue: defSize }));
 
         // initialization -----------------------------------------------------
+
+        // initialize the drop-down element
+        this.getMenuNode().addClass('size-chooser').append(gridButton);
 
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)

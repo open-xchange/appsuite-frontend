@@ -25,7 +25,7 @@ define('io.ox/office/view',
     function View(controller) {
 
         var // the top-level tool pane container
-            toolPane = $('<div>').addClass('io-ox-pane top'),
+            toolPane = $('<div>').addClass('io-ox-toolpane top'),
 
             // the tool bar selector
             tabToolBar = new ToolBar(),
@@ -36,8 +36,8 @@ define('io.ox/office/view',
             // all registered tool bars, mapped by tool bar key
             toolBars = { '': tabToolBar },
 
-            // bottom pane for debug output
-            debugPane = $('<div>').addClass('io-ox-pane bottom'),
+            // bottom tool pane for debug output
+            debugPane = $('<div>').addClass('io-ox-toolpane bottom'),
 
             // table element containing the debug mode elements
             debugTable = $('<table>').addClass('debug-table').appendTo(debugPane),
@@ -76,7 +76,7 @@ define('io.ox/office/view',
 
         function showToolBar(key) {
             // hide all tool bars
-            toolPane.children('.io-ox-toolbar').not(tabToolBar.getNode()).hide();
+            toolPane.children(':not(.tabbar)').hide();
             if (key in toolBars) {
                 toolBars[key].getNode().show();
             }
@@ -122,10 +122,11 @@ define('io.ox/office/view',
 
         // insert the tool bar selector and a separator line into the tool pane
         toolPane.append(
-            tabToolBar.getNode().addClass('tabs'),
-            $('<div>').addClass('tabs-separator').append(
-                $('<div>').addClass('left'),
-                $('<div>').addClass('right')
+            tabToolBar.getNode().addClass('tabbar').append(
+                $('<div>').addClass('separator').append(
+                    $('<span>').addClass('left'),
+                    $('<span>').addClass('right')
+                )
             )
         );
 

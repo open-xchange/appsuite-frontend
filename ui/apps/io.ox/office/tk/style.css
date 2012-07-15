@@ -133,33 +133,41 @@ i.icon-io-ox-caret {
 /* panes and tool bars                                                       */
 /* ========================================================================= */
 
-div.io-ox-pane {
+/* background color for panes */
+@fill-color: #f5f5f5;
 
-    /* background color for panes */
-    @fill-color: #f5f5f5;
-    
-    /* hover border color */
-    @border-color: #d5d5d5;
-    
-    /* background color for selected controls */
-    @selected-color: #d5d5ff;
+/* hover border color */
+@border-color: #d5d5d5;
 
-    /* mixin that adds a border and inset shadow in the same color to a box */
-    .accented-border(@color) {
-        border: 1px solid @color;
-        .box-shadow(inset 0 0 4px @color);
-    }
+/* background color for selected controls */
+@selected-color: #d5d5ff;
 
-    /* --------------------------------------------------------------------- */
+/* mixin that adds a border and inset shadow in the same color to a box */
+.accented-border(@color) {
+    border: 1px solid @color;
+    .box-shadow(inset 0 0 4px @color);
+}
 
+/* tool panes ============================================================== */
+
+div.io-ox-toolpane {
     background-color: @fill-color;
 
     &.top { border-bottom: 1px solid @border-color; }
     &.bottom { border-top: 1px solid @border-color; }
     &.left { border-right: 1px solid @border-color; }
     &.right { border-left: 1px solid @border-color; }
-    
-    /* common controls ===================================================== */
+}
+
+/* tool bars =============================================================== */
+
+div.io-ox-toolbar {
+    padding: 4px 13px;
+    /* prevent multi-line layout of button groups */
+    white-space: nowrap;
+    text-align: center;
+
+    /* common controls ----------------------------------------------------- */
 
     label, button {
         display: inline;
@@ -188,12 +196,11 @@ div.io-ox-pane {
         }
     }
 
-    /* buttons ============================================================= */
+    /* buttons ------------------------------------------------------------- */
 
     button {
 
-        /* mouse and keyboard effects -------------------------------------- */
-
+        /* mouse and keyboard effects */
         &:not(.disabled) {
 
             /* mouse hover effect (not for disabled nor focused buttons) */
@@ -217,8 +224,7 @@ div.io-ox-pane {
             }
         }
 
-        /* selected toggle buttons ----------------------------------------- */
-
+        /* selected toggle buttons */
         &.selected {
             z-index: 5;
             background-color: @selected-color;
@@ -247,7 +253,7 @@ div.io-ox-pane {
         }
     }
 
-    /* groups ============================================================== */
+    /* groups -------------------------------------------------------------- */
 
     .group {
         display: inline-block;
@@ -268,9 +274,7 @@ div.io-ox-pane {
             margin-left: -1px;
         }
 
-        /* drop-down groups ------------------------------------------------ */
-
-        /* adjust margins for caret buttons in split mode */
+        /* adjust margins for caret buttons in drop-down split mode */
         > button.caret-button {
             padding-left: 4px;
             padding-right: 4px;
@@ -282,7 +286,7 @@ div.io-ox-pane {
         }
     }
 
-    /* drop-down menus ===================================================== */
+    /* drop-down menus ----------------------------------------------------- */
 
     .group > .dropdown-menu {
         display: none;
@@ -297,22 +301,19 @@ div.io-ox-pane {
         border: 1px solid @border-color;
         .border-radius(0);
 
-        /* button chooser drop-down menu ----------------------------------- */
+        /* button chooser control */
 
-        &.button-chooser-menu {
-        
-            > table {
-                margin: -1px;
-                border-collapse: collapse;
-                max-width: none;
-    
-                td { padding: 0; }
-            }
+        &.button-chooser > table {
+            margin: -1px;
+            border-collapse: collapse;
+            max-width: none;
+
+            td { padding: 0; }
         }
 
-        /* size chooser drop-down menu ------------------------------------- */
+        /* size chooser control */
 
-        &.size-chooser-menu {
+        &.size-chooser {
 
             /* inner size of one cell in the size chooser */
             @cell-size: 18px;
@@ -385,40 +386,31 @@ div.io-ox-pane {
     .group.menu-open > .dropdown-menu {
         display: block;
     }
+}
 
-    /* tool bars =========================================================== */
+/* tab bars ================================================================ */
 
-    div.io-ox-toolbar {
-        padding: 4px 13px;
-        /* prevent multi-line layout of button groups */
-        white-space: nowrap;
+div.io-ox-toolbar.tabbar {
+    padding-bottom: 0;
+    
+    .group > button {
+        &, &:hover, &:focus, &:active, &.disabled, &.selected {
+            border-bottom: none;
+        }
+    }
+
+    > div.separator {
         text-align: center;
+        font-size: 1px;
+        line-height: 0;
 
-        /* tool bar selector ----------------------------------------------- */
-
-        &.tabs {
-            padding-bottom: 0;
+        > span {
+            display: inline-block;
+            width: 40%;
+            height: 1px;
             
-            .group > button {
-                &, &:hover, &:focus, &:active, &.disabled, &.selected {
-                    border-bottom: none;
-                }
-            }
-
-            + div.tabs-separator {
-                text-align: center;
-                font-size: 1px;
-                line-height: 0;
-
-                > div {
-                    display: inline-block;
-                    width: 40%;
-                    height: 1px;
-                    
-                    &.left { .horizontal-gradient(@fill-color, @selected-color); }
-                    &.right { .horizontal-gradient(@selected-color, @fill-color); }
-                }
-            }
+            &.left { .horizontal-gradient(@fill-color, @selected-color); }
+            &.right { .horizontal-gradient(@selected-color, @fill-color); }
         }
     }
 }

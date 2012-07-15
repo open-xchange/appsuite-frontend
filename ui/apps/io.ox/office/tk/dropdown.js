@@ -58,11 +58,8 @@ define('io.ox/office/tk/dropdown',
      *      If specified, the click handler of the action button will return
      *      this value. Will be used in split mode (options.split set to true)
      *      only.
-     *
-     * @param {jQuery} dropDownMenu
-     *  The drop-down menu container element, as jQuery collection.
      */
-    function DropDown(key, options, menuNode) {
+    function DropDown(key, options) {
 
         var // self reference to be used in event handlers
             self = this,
@@ -82,7 +79,10 @@ define('io.ox/office/tk/dropdown',
             caretButton = split ? Utils.createButton(key, caretOptions).addClass(Group.FOCUSABLE_CLASS + ' caret-button').empty() : $(),
 
             // reference to the button that triggers the drop-down menu
-            menuButton = split ? caretButton : actionButton;
+            menuButton = split ? caretButton : actionButton,
+
+            // the drop-down menu element
+            menuNode = $('<div>').addClass('dropdown-menu');
 
         // private methods ----------------------------------------------------
 
@@ -245,6 +245,10 @@ define('io.ox/office/tk/dropdown',
             return this;
         };
 
+        this.getMenuNode = function () {
+            return menuNode;
+        };
+
         /**
          * Displays the drop-down menu.
          *
@@ -300,7 +304,6 @@ define('io.ox/office/tk/dropdown',
 
         // prepare drop-down menu, and register event handlers
         menuNode
-            .addClass('dropdown-menu')
             .on('keydown keypress keyup', menuKeyHandler);
 
         // append buttons and menu to the group container

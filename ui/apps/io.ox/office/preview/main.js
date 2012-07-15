@@ -33,8 +33,6 @@ define("io.ox/office/preview/main",
 
             file = _.isObject(options) ? options.file : null,
 
-            toolPane = $('<div>').addClass('io-ox-pane'),
-
             toolBar = new ToolBar()
                 .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
                 .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
@@ -153,10 +151,10 @@ define("io.ox/office/preview/main",
             // window in the 'show' event, and to detach it in the 'hide' event
             // (otherwise, removing the toolbar will destroy all listeners).
             win.on('show', function () {
-                win.nodes.toolbar.append(toolPane);
+                win.nodes.toolbar.append(toolBar.getNode());
             })
             .on('hide', function () {
-                toolPane.detach();
+                toolBar.getNode().detach();
             });
 
             // disable FF spell checking
@@ -344,8 +342,6 @@ define("io.ox/office/preview/main",
         // ------------------------------------------------
         // - initialization of createApplication function -
         // ------------------------------------------------
-
-        toolPane.css('background', 'none').append(toolBar.getNode());
 
         // register view components at the controller
         controller.registerViewComponent(toolBar);
