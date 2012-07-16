@@ -140,7 +140,7 @@ define('io.ox/office/tk/buttonchooser',
          * @returns {jQuery}
          *  The new button, as jQuery collection.
          */
-        this.addButton = function (options) {
+        this.createGridButton = function (options) {
 
             var // button for the button group
                 button = Utils.createButton(key, options),

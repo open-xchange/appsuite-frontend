@@ -17,9 +17,8 @@ define('io.ox/office/tk/toolbar',
      'io.ox/office/tk/label',
      'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/radiogroup',
-     'io.ox/office/tk/buttonchooser',
-     'io.ox/office/tk/sizechooser'
-    ], function (Events, Utils, Label, ButtonGroup, RadioGroup, ButtonChooser, SizeChooser) {
+     'io.ox/office/tk/radiochooser'
+    ], function (Events, Utils, Label, ButtonGroup, RadioGroup, RadioChooser) {
 
     'use strict';
 
@@ -167,53 +166,6 @@ define('io.ox/office/tk/toolbar',
             }
         }
 
-        // class ButtonGroupProxy ---------------------------------------------
-
-        /**
-         * Proxy class returned as inserter for buttons into a button group.
-         *
-         * @constructor
-         */
-        function ButtonGroupProxy() {
-
-            var // create a new group object
-                group = new ButtonGroup();
-
-            // methods --------------------------------------------------------
-
-            /**
-             * Adds a new push button or toggle button to this button group.
-             *
-             * @param {String} key
-             *  The unique key of the button.
-             *
-             * @param {Object} [options]
-             *  A map of options to control the properties of the new button.
-             *  See method ToolBar.addButton() for details.
-             *
-             * @return {ButtonGroupProxy}
-             *  A reference to this proxy object.
-             */
-            this.addButton = function (key, options) {
-                group.addButton(key, options);
-                return this;
-            };
-
-            /**
-             * Returns a reference to the tool bar containing this button
-             * group. Useful for method chaining.
-             */
-            this.end = function () {
-                return toolBar;
-            };
-
-            // initialization -------------------------------------------------
-
-            // register the group object at this tool bar
-            toolBar.addGroup(group);
-
-        } // class ButtonGroupProxy
-
         // class RadioGroupProxy ----------------------------------------------
 
         /**
@@ -241,53 +193,9 @@ define('io.ox/office/tk/toolbar',
                 radioGroup = new RadioGroup(key),
 
                 // create a new group container for the drop-down group
-                dropDownGroup = new ButtonChooser(key, Utils.extendOptions(options, { split: false }));
+                radioChooser = new RadioChooser(key, options);
 
             // private methods ------------------------------------------------
-
-            /**
-             * Activates a button in this radio group.
-             *
-             * @param {String|Null} [value]
-             *  The unique value associated to the button to be activated. If
-             *  omitted or set to null, does not activate any button (ambiguous
-             *  state).
-             */
-            function updateHandler(value) {
-
-                var // find all option buttons in the drop-down menu
-                    buttons = dropDownGroup.getGridButtons(),
-                    // ambiguous state indicated by null value
-                    inactive = _.isUndefined(value) || _.isNull(value),
-                    // find the button to activate
-                    button = inactive ? $() : buttons.filter('[data-value="' + value + '"]');
-
-                // remove highlighting from all buttons
-                Utils.toggleButtons(buttons, false);
-
-                // update the contents of the drop-down button (use first button in group if no button is active)
-                dropDownGroup.replaceButtonContents((button.length ? button : buttons).first().contents().clone());
-
-                // highlight active button
-                Utils.toggleButtons(button, true);
-            }
-
-            /**
-             * Click handler for an option button in this radio group. Will
-             * activate the clicked button, and return its value.
-             *
-             * @param {jQuery} button
-             *  The clicked button, as jQuery object.
-             *
-             * @returns {String}
-             *  The button value that has been passed to the addButton()
-             *  method.
-             */
-            function clickHandler(button) {
-                var value = button.attr('data-value');
-                updateHandler(value);
-                return value;
-            }
 
             /**
              * Tries to show the button group or the drop-down button according
@@ -302,12 +210,12 @@ define('io.ox/office/tk/toolbar',
                 var hideGroup = null, showGroup = null, hasFocus = false;
 
                 // decide which group to hide and to show
-                if (enlarge && dropDownGroup.isVisible()) {
-                    hideGroup = dropDownGroup;
+                if (enlarge && radioChooser.isVisible()) {
+                    hideGroup = radioChooser;
                     showGroup = radioGroup;
                 } else if (!enlarge && radioGroup.isVisible()) {
                     hideGroup = radioGroup;
-                    showGroup = dropDownGroup;
+                    showGroup = radioChooser;
                 }
 
                 // hide and show the groups
@@ -335,7 +243,7 @@ define('io.ox/office/tk/toolbar',
              */
             this.addButton = function (value, options) {
                 radioGroup.addButton(value, options);
-                dropDownGroup.addButton(options).attr('data-value', value);
+                radioChooser.addButton(value, options);
                 return this;
             };
 
@@ -348,12 +256,12 @@ define('io.ox/office/tk/toolbar',
             // initialization -------------------------------------------------
 
             // register the group objects at this tool bar
-            toolBar.addGroup(radioGroup).addGroup(dropDownGroup);
+            toolBar.addGroup(radioGroup).addGroup(radioChooser);
 
             // configure according to group type
             switch (type) {
             case 'buttons':
-                dropDownGroup.hide();
+                radioChooser.hide();
                 break;
 
             case 'auto':
@@ -364,11 +272,6 @@ define('io.ox/office/tk/toolbar',
                 radioGroup.hide();
                 break;
             }
-
-            // register event handlers
-            dropDownGroup
-                .registerActionHandler('click', 'button', clickHandler)
-                .registerUpdateHandler(key, updateHandler);
 
         } // class RadioGroupProxy
 
@@ -445,20 +348,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addButton = function (key, options) {
-            return this.addButtonGroup().addButton(key, options).end();
-        };
-
-        /**
-         * Creates a new button group, and appends it to this tool bar. Button
-         * groups contain several independent buttons (push buttons, and/or
-         * toggle buttons).
-         *
-         * @returns {ButtonGroupProxy}
-         *  A proxy object that implements the methods addButton() to add
-         *  buttons to the group.
-         */
-        this.addButtonGroup = function () {
-            return new ButtonGroupProxy();
+            return this.addGroup(new ButtonGroup().addButton(key, options));
         };
 
         /**
@@ -493,23 +383,6 @@ define('io.ox/office/tk/toolbar',
          */
         this.addRadioGroup = function (key, options) {
             return new RadioGroupProxy(key, options);
-        };
-
-        /**
-         * Creates a size-chooser control with a drop-down button shown on top,
-         * and a drop-down grid area used to select a specific size.
-         *
-         * @constructor
-         *
-         * @param {String} key
-         *  The unique key of the size chooser.
-         *
-         * @param {Object} options
-         *  A map of options to control the properties of the size chooser. See
-         *  the SizeChooser() constructor function for details.
-         */
-        this.addSizeChooser = function (key, options) {
-            return this.addGroup(new SizeChooser(key, options));
         };
 
         /**

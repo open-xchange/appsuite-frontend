@@ -14,9 +14,12 @@
 define('io.ox/office/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/toolbar',
+     'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/radiogroup',
+     'io.ox/office/tk/listchooser',
+     'io.ox/office/tk/sizechooser',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolBar, RadioGroup, gt) {
+    ], function (Utils, ToolBar, ButtonGroup, RadioGroup, ListChooser, SizeChooser, gt) {
 
     'use strict';
 
@@ -60,11 +63,10 @@ define('io.ox/office/view',
                 toolBar = toolBars[key] = new ToolBar();
 
             // create common controls present in all tool bars
-            toolBar
-                .addButtonGroup()
-                    .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                    .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
-                .end();
+            toolBar.addGroup(new ButtonGroup()
+                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
+            );
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             radioGroup.addButton(key, { label: label });
@@ -129,14 +131,15 @@ define('io.ox/office/view',
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
-            .addSizeChooser('insert/table', insertTableOptions);
+            .addGroup(new SizeChooser('insert/table', insertTableOptions));
 
         createToolBar('format', gt('Format'))
-            .addButtonGroup()
+            .addGroup(new ListChooser('format/character/font/family', { label: gt('Font'), tooltip: gt('Font name') }))
+            .addGroup(new ButtonGroup()
                 .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
                 .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
                 .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
-            .end()
+            )
             .addRadioGroup('format/paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
@@ -145,7 +148,7 @@ define('io.ox/office/view',
             .end();
 
         createToolBar('table', gt('Table'))
-            .addSizeChooser('insert/table', insertTableOptions);
+            .addGroup(new SizeChooser('insert/table', insertTableOptions));
 
         createToolBar('debug', gt('Debug'))
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });

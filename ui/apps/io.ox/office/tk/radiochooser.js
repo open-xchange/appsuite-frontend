@@ -11,27 +11,27 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/radiogroup',
+define('io.ox/office/tk/radiochooser',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/group'
-    ], function (Utils, Group) {
+     'io.ox/office/tk/buttonchooser'
+    ], function (Utils, ButtonChooser) {
 
     'use strict';
 
-    // class RadioGroup =======================================================
+    // class RadioChooser =====================================================
 
     /**
-     * Creates a container element used to hold a set of radio buttons.
+     * Creates a drop-down control used to hold a set of radio buttons.
      *
      * @constructor
      *
-     * @extends Group
+     * @extends ButtonChooser
      *
      * @param {String} key
-     *  The unique key of the radio group. This key is shared by all buttons
-     *  inserted into this group.
+     *  The unique key of the radio chooser. This key is shared by all buttons
+     *  inserted into the drop-down menu.
      */
-    function RadioGroup(key) {
+    function RadioChooser(key, options) {
 
         var // self reference
             self = this;
@@ -49,15 +49,17 @@ define('io.ox/office/tk/radiogroup',
         function updateHandler(value) {
 
             var // find all option buttons
-                buttons = self.getNode().children('button');
+                buttons = self.getGridButtons(),
+                // find the button to activate
+                button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]');
 
             if (!_.isUndefined(value)) {
                 // remove highlighting from all buttons, highlight active button
                 Utils.toggleButtons(buttons, false);
-                // ambiguous state indicated by null value
-                if (!_.isNull(value)) {
-                    Utils.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
-                }
+                // update the contents of the drop-down button (use first button if no button is active)
+                self.replaceButtonContents((button.length ? button : buttons).first().contents().clone());
+                // highlight active button
+                Utils.toggleButtons(button, true);
             }
         }
 
@@ -79,7 +81,7 @@ define('io.ox/office/tk/radiogroup',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        ButtonChooser.call(this, key, Utils.extendOptions(options, { split: false }));
 
         // methods ------------------------------------------------------------
 
@@ -93,14 +95,12 @@ define('io.ox/office/tk/radiogroup',
          *  A map of options to control the properties of the new button. See
          *  method Utils.createButton() for details.
          *
-         * @returns {RadioGroup}
+         * @returns {RadioChooser}
          *  A reference to this button group.
          */
         this.addButton = function (value, options) {
-            Utils.createButton(key, options)
-                .addClass(Group.FOCUSABLE_CLASS)
-                .attr('data-value', value)
-                .appendTo(this.getNode());
+            this.createGridButton(options).attr('data-value', value);
+            updateHandler();
             return this;
         };
 
@@ -110,11 +110,11 @@ define('io.ox/office/tk/radiogroup',
         this.registerUpdateHandler(key, updateHandler)
             .registerActionHandler('click', 'button', clickHandler);
 
-    } // class RadioGroup
+    } // class RadioChooser
 
     // exports ================================================================
 
-    // derive this class from class Group
-    return Group.extend({ constructor: RadioGroup });
+    // derive this class from class ButtonChooser
+    return ButtonChooser.extend({ constructor: RadioChooser });
 
 });

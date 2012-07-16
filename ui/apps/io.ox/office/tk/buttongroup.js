@@ -18,6 +18,22 @@ define('io.ox/office/tk/buttongroup',
 
     'use strict';
 
+    // static functions =======================================================
+
+    /**
+     * Returns whether the first button control in the passed jQuery
+     * collection is a toggle button.
+     *
+     * @param {jQuery} button
+     *  A jQuery collection containing a button element.
+     *
+     * @returns {Boolean}
+     *  True, if the button is a toggle button.
+     */
+    function isToggleButton(button) {
+        return button.first().attr('data-toggle') === 'toggle';
+    }
+
     // class ButtonGroup ======================================================
 
     /**
@@ -31,20 +47,6 @@ define('io.ox/office/tk/buttongroup',
     function ButtonGroup() {
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Returns whether the first button control in the passed jQuery
-         * collection is a toggle button.
-         *
-         * @param {jQuery} button
-         *  A jQuery collection containing a button element.
-         *
-         * @returns {Boolean}
-         *  True, if the button is a toggle button.
-         */
-        function isToggleButton(button) {
-            return button.first().attr('data-toggle') === 'toggle';
-        }
 
         /**
          * A generic update handler for push buttons and toggle buttons.
@@ -90,8 +92,8 @@ define('io.ox/office/tk/buttongroup',
          *      If set to true, the button represents a boolean value and
          *      toggles its state when clicked.
          *
-         * @returns {jQuery}
-         *  The new button, as jQuery collection.
+         * @returns {ButtonGroup}
+         *  A reference to this button group.
          */
         this.addButton = function (key, options) {
 
@@ -108,7 +110,7 @@ define('io.ox/office/tk/buttongroup',
                 updateHandler.call(this, button, value);
             });
 
-            return button;
+            return this;
         };
 
         // initialization -----------------------------------------------------
