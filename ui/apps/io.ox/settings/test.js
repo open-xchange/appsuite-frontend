@@ -147,7 +147,7 @@ define("io.ox/settings/test",
 //                        };
 //                        me.ready = false;
 //
-//                        api.configtestSet(data, 'ui')
+//                        api.configtestSet(data, 'apps/io.ox/mail')
 //                        .done(function () {
 //                            me.ready = true;
 //                        });

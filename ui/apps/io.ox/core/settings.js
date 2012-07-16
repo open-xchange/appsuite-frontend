@@ -12,7 +12,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
+define("settings", ['io.ox/core/http', 'io.ox/core/cache',
+                    'io.ox/core/tk/model', 'io.ox/mail/util'], function (http, cache, Model, util) {
 
     'use strict';
 
@@ -20,6 +21,32 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
         var settings = {},
             settingsCache;
+
+
+        var settingsDefaults = {
+                'removeDeletedPermanently': false,
+                'contactCollectOnMailTransport': false,
+                'contactCollectOnMailAccess': false,
+                'appendVcard': false,
+                'appendMailTextOnReply': false,
+                'forwardMessageAs': 'Inline',
+                'messageFormat': 'html',
+                'lineWrapAfter': '',
+                'defaultSendAddress': util.getInitialDefaultSender(),
+                'autoSafeDraftsAfter': false,
+                'allowHtmlMessages': true,
+                'allowHtmlImages': false,
+                'displayEmomticons': false,
+                'isColorQuoted': false
+            };
+
+        var settingsInitial = function (settings, settingsDefaults) {
+            _.each(settingsDefaults, function (value, key) {
+                if (settings[key] === undefined) {
+                    settings[key] = settingsDefaults[key];
+                }
+            });
+        };
 
         var get = function (key) {
             var parts = key.split(/\//),
@@ -125,7 +152,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
             createModel: function (ModelClass) {
 
-                return new ModelClass({ data: settings.mail })
+                return new ModelClass({ data: settings })
                     .on('change', $.proxy(fnChange, this));
             },
 
@@ -133,7 +160,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                 if (!path) { // undefined, null, ''
                     return get(that.settingsPath);
                 } else {
-                    path = that.settingsPath + '/' + path;
                     console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
@@ -146,7 +172,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
             set: function (path, value, permanent) {
                 if (path) {
                     var orgpath = path;
-                    path = (that.settingsPath + '/' + path);
                     console.log(path);
                     set(path, value);
                     if (permanent) {
@@ -182,7 +207,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                         params: {
                             action: 'list'
                         },
-                        data: ['ui']
+                        data: ['apps/io.ox/' + that.settingsPath]
                     }).done(function (data) {
                             settings = data[0].tree;
                             settingsCache.add('settingsDefault', settings);
@@ -205,13 +230,14 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                     });
             },
             save: function () {
+                settingsInitial(settings, settingsDefaults);
                 settingsCache.add('settingsDefault', settings);
                 console.log(settings);
                 return http.PUT({
                     module: 'jslob',
                     params: {
                         action: 'update',
-                        id: 'ui' //id
+                        id: 'apps/io.ox/' + that.settingsPath //id
                     },
                     data: settings
                 });
