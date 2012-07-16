@@ -11,8 +11,13 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'less!io.ox/help/style.css'], function (ext, core_doc) {
-    
+define("io.ox/help/center", [
+    'io.ox/core/extensions',
+    'io.ox/help/core_doc',
+    'gettext!io.ox/help',
+    'less!io.ox/help/style.css'
+], function (ext, core_doc, gt) {
+    //TODO Launcher refactoren, hier hin
     'use strict';
     
     var center = { active: false },
@@ -21,21 +26,79 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
-            enableHelpHandlers();
-            blockOtherContent();
+            enableHelp();
         } else {
-            unblockOtherContent();
-            disableHelpHandlers();
+            disableHelp();
         }
+        console.log("Toggling help center. Active? %s", this.active);
     };
     
-    var blockOtherContent = function () {
-        var $saveThese = $('.io-ox-help-item');
+    var enableHelp = function () {
+        var $body = $('body');
+        var $helpButton = $('#io-ox-help-on');
+        var $saveThese = $(_($('[data-ref]')).filter(function (elem) {
+            var $elem = $(elem);
+            var dataRef = $elem.attr('data-ref');
+            return getHelpText(dataRef) !== undefined;
+        }));
         
-        console.log("Blocked content");
+        //blackout everything
+        $body.append($('<div class="io-ox-help-blacksheepwall"/>'));
+        
+        //highlight things with help texts
+        _($saveThese).each(function (elem) {
+            var $elem = $(elem);
+            var offset = $elem.offset();
+            var dataRef = $elem.attr('data-ref');
+            
+            if (! ($elem.width() === 0 || $elem.height() === 0 || (offset.left === 0 && offset.top === 0))) {
+                var helpText = getHelpText(dataRef);
+                $("<div>").css({
+                    position: 'absolute',
+                    top: offset.top,
+                    left: offset.left,
+                    width: $elem.outerWidth(),
+                    height: $elem.outerHeight()
+                })
+                .addClass('io-ox-help-highlight')
+                .popover({
+                    title: gt('Help'),
+                    content: helpText,
+                    html: true,
+                    placement: function (tip, element) {
+                        var off = $(element).offset(),
+                            width = $('body').width() / 2;
+                        return off.left > width ? 'left' : 'right';
+                    }
+                })
+                .appendTo($body);
+            }
+        });
+        
+        //add cancel button
+        console.log("Check help button:", $helpButton);
+        $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
+        .css({
+            position: 'absolute',
+            top: $helpButton.offset().top,
+            left: $helpButton.offset().left,
+            width: $helpButton.outerWidth(),
+            height: $helpButton.outerHeight()
+        })
+        .popover({
+            content: gt('Click here to quit the help center'),
+            html: true,
+            placement: 'left'
+        })
+        .click(function () {
+            $(this).popover('disable').popover("hide");
+            disableHelp();
+            center.active = false;
+        })
+        .appendTo($body);
     };
     
-    var getHelp = function (id) {
+    var getHelpText = function (id) {
         var help;
         ext.point('io.ox/help/helper').each(function (helper) {
             if (helper.has(id)) {
@@ -46,50 +109,12 @@ define("io.ox/help/center", ['io.ox/core/extensions', 'io.ox/help/core_doc', 'le
         return help;
     };
     
-    var enableHelpHandlers = function () {
-        var allReferenceElements = $('[data-ref]');
-
-        _(allReferenceElements).each(function (elem) {
-            var $elem = $(elem),
-                datRef = $elem.attr('data-ref');
-
-            if ($elem.hasClass('io-ox-help-item')) {
-                $elem.popover('enable');
-            } else {
-                var helpText = getHelp(datRef);
-                $elem.popover({
-                    title: datRef,
-                    content: helpText,
-                    html: true,
-                    placement: function (tip, element) {
-                        var off = $(element).offset(),
-                            width = $('body').width() / 2;
-                        return off.left > width ? 'left' : 'right';
-                    }
-                })
-                .addClass('io-ox-help-item');
-            }
-            $elem.addClass('io-ox-help-highlight')
-                 .append($('<i class="icon-info-sign io-ox-help-icon">'));
-        });
+    var disableHelp = function () {
+        $('.io-ox-help-blacksheepwall').remove();
+        $('.io-ox-help-highlight').remove();
+        $('#io-ox-help-off').remove();
     };
     
-    var unblockOtherContent = function () {
-        console.log("Unblocking other content");
-    };
-    
-    var disableHelpHandlers = function () {
-        var allReferenceElements = $('.io-ox-help-item');
-        _(allReferenceElements).each(function (elem) {
-            $(elem)
-            .popover('disable')
-            .popover('hide')
-            .removeClass('io-ox-help-highlight');
-        });
-
-        $(".io-ox-help-icon").remove();
-        console.log("Help handlers disabled");
-    };
     
     return center;
     
