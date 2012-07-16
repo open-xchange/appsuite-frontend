@@ -145,16 +145,19 @@ define("io.ox/office/preview/main",
                 .addClass("io-ox-office-preview-main")
                 .append(preview.getNode());
 
-            // The toolkit will clear the toolbar area and insert extension
-            // point links everytime the window is shown. Therefore it is
-            // needed to -insert the own toolbar into the toolbar node of the
+            // The toolkit will clear the tool bar area and insert extension
+            // point links every time the window is shown. Therefore it is
+            // needed to -insert the own tool bar into the tool bar node of the
             // window in the 'show' event, and to detach it in the 'hide' event
-            // (otherwise, removing the toolbar will destroy all listeners).
+            // (otherwise, removing the tool bar will destroy all listeners).
             win.on('show', function () {
                 win.nodes.toolbar.append(toolBar.getNode());
             })
             .on('hide', function () {
-                toolBar.getNode().detach();
+                // tool bar is destroyed already, if app is shutting down
+                if (toolBar) {
+                    toolBar.getNode().detach();
+                }
             });
 
             // disable FF spell checking
@@ -164,18 +167,10 @@ define("io.ox/office/preview/main",
         /**
          * The handler function that will be called when the application shuts
          * down.
-         *
-         * @returns {jQuery.Deferred}
-         *  A deferred that will be resolved if the application can be closed
-         *  (either if it is unchanged, or the user has chosen to save or lose
-         *  the changes), or will be rejected if the application must remain
-         *  alive (user has cancelled the dialog, save operation failed).
          */
         function quitHandler() {
-            var def = $.Deferred().done(app.destroy);
-            def.resolve();
-
-            return def;
+            app.destroy();
+            return $.when();
         }
 
         /**

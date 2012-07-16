@@ -99,7 +99,7 @@ i[class^="icon-io-ox-"] {
     background-image: url(img/ox-icons-black.png);
     width: 14px;
     height: 14px;
-    
+
     &.icon-white {
         background-image: url(img/ox-icons-white.png);
     }
@@ -109,12 +109,12 @@ i[class^="icon-io-ox-"] {
 i.icon-io-ox-caret {
     background-position: 0 0;
     width: 7px;
-    
+
     &.up {
         background-position: -7px 0;
     }
 }
-   
+
 /*
  * Define class names for all icons.
  */
@@ -170,227 +170,234 @@ div.io-ox-toolbar {
 
     > span {
         display: inline-block;
-    }
 
-    /* common controls ----------------------------------------------------- */
+        /* groups ---------------------------------------------------------- */
 
-    label, button {
-        display: inline;
-        position: relative;
-        margin: 0;
-        padding: 4px 8px;
-        background: none;
-        border: 1px solid transparent;
-        white-space: nowrap;
-        text-align: center;
-        vertical-align: middle;
-        text-shadow: none;
-    
-        &.disabled {
-            .opacity(0.5);
-        }
-    
-        /* prevent dotted focus rectangle around the control */
-        &:focus, &:active {
-            outline: none;
-        }
-    
-        /* whitespace between icons, text, and drop-down carets */
-        > span.whitespace {
+        > .group {
             display: inline-block;
-            width: 5px;
-        }
-    }
+            /* relative position is essential for drop-down menu positioning */
+            position: relative;
 
-    /* buttons ------------------------------------------------------------- */
-
-    button {
-
-        /* mouse and keyboard effects */
-        &:not(.disabled) {
-
-            /* mouse hover effect (not for disabled nor focused buttons) */
-            &:hover:not(:focus) {
-                z-index: 1;
-                border-color: @pane-border-color;
+            /* class 'hidden' is used to hide the entire group */
+            &.hidden {
+                display: none;
             }
 
-            /* add focus highlighting (but not for active buttons) */
-            &:focus:not(:active) {
-                z-index: 2;
-                .accented-border(@pane-border-color);
+            /* space between groups */
+            + .group {
+                margin-left: 10px;
             }
 
-            /* active effect (button currently clicked) */
-            &:active {
-                z-index: 3;
-                .accented-border(darken(@pane-border-color, 5%));
-                /* remove Bootstrap's gray text color */
-                color: black;
+            /* collapse borders of top-level buttons inside group */
+            > button + button {
+                margin-left: -1px;
             }
-        }
 
-        /* selected toggle buttons */
-        &.selected {
-            z-index: 20;
-            background-color: @selected-fill-color;
-            border-color: @selected-border-color;
+            /* common controls --------------------------------------------- */
 
-            &:not(.disabled) {
+            label, button {
+                display: inline;
+                position: relative;
+                margin: 0;
+                padding: 4px 8px;
+                background: none;
+                border: 1px solid transparent;
+                white-space: nowrap;
+                text-align: center;
+                vertical-align: middle;
+                text-shadow: none;
 
-                /* mouse hover effect (not for disabled nor focused buttons) */
-                &:hover:not(:focus) {
-                    z-index: 21;
-                    border-color: darken(@selected-border-color, 5%);
+                &.disabled {
+                    .opacity(0.5);
                 }
 
-                /* add focus highlighting (but not for active buttons) */
-                &:focus:not(:active) {
-                    z-index: 22;
-                    .accented-border(darken(@selected-border-color, 5%));
+                /* prevent dotted focus rectangle around the control */
+                &:focus, &:active {
+                    outline: none;
                 }
 
-                /* active effect (button currently clicked) */
-                &:active {
-                    z-index: 23;
-                    .accented-border(darken(@selected-border-color, 10%));
+                /* whitespace between icons, text, and drop-down carets */
+                > span.whitespace {
+                    display: inline-block;
+                    width: 5px;
                 }
             }
-        }
-    }
 
-    /* groups -------------------------------------------------------------- */
+            /* buttons ----------------------------------------------------- */
 
-    .group {
-        display: inline-block;
-        /* relative position is essential for drop-down menu positioning */
-        position: relative;
+            button {
 
-        /* class 'hidden' is used to hide the entire group */
-        &.hidden {
-            display: none;
-        }
+                /* mouse and keyboard effects */
+                &:not(.disabled) {
 
-        /* space between groups */
-        + .group {
-            margin-left: 10px;
-        }
+                    /* mouse hover effect (not for disabled nor focused buttons) */
+                    &:hover:not(:focus) {
+                        z-index: 1;
+                        border-color: @pane-border-color;
+                    }
 
-        > button + button {
-            margin-left: -1px;
-        }
+                    /* add focus highlighting (but not for active buttons) */
+                    &:focus:not(:active) {
+                        z-index: 2;
+                        .accented-border(@pane-border-color);
+                    }
 
-        /* adjust margins for caret buttons in drop-down split mode */
-        > button.caret-button {
-            padding-left: 4px;
-            padding-right: 4px;
-        }
-
-        /* set border to all buttons in drop-down group with visible menu */
-        &.menu-open > button:not(:focus):not(:active) {
-            border-color: @pane-border-color;
-        }
-    }
-
-    /* drop-down menus ----------------------------------------------------- */
-
-    .group > .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        min-width: 0;
-        max-width: none;
-        z-index: 1000;
-        margin: 1px 0 0 0;
-        padding: 0;
-        border: 1px solid @pane-border-color;
-        .border-radius(0);
-
-        /* button chooser control */
-
-        &.button-chooser > table {
-            margin: -1px;
-            border-collapse: collapse;
-            max-width: none;
-
-            td { padding: 0; }
-        }
-
-        /* size chooser control */
-
-        &.size-chooser {
-
-            /* inner size of one cell in the size chooser */
-            @cell-size: 18px;
-
-            /* minimum dimensions for the outer container (in cells) */
-            min-width: 5 * (@cell-size + 1px) - 1px;
-            min-height: 3 * (@cell-size + 1px) - 1px;
-            text-align: left;
-
-            > button {
-                margin: -1px;
-                padding: 0;
-                .accented-border(@pane-border-color);
-                vertical-align: top;
-                font-size: 1px;
-                line-height: normal;
-
-                /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                > div {
-
-                    /* a row in the grid */
-                    > div {
-                        /* need to set height explicitly for Firefox */
-                        height: @cell-size + 1px;
-
-                        /* a cell in the grid */
-                        > div {
-                            display: inline-block;
-                            width: @cell-size;
-                            height: @cell-size;
-                            border-bottom: 1px solid @pane-border-color;
-
-                            &:not(:last-child) {
-                                border-right: 1px solid @pane-border-color;
-                            }
-                        }
-
-                        &:not(:last-child) > div {
-                            border-bottom: 1px solid @pane-border-color;
-                        }
-
-                        /* height for last row (again, especially for Firefox) */
-                        &:last-child {
-                            height: @cell-size;
-                        }
+                    /* active effect (button currently clicked) */
+                    &:active {
+                        z-index: 3;
+                        .accented-border(darken(@pane-border-color, 5%));
+                        /* remove Bootstrap's gray text color */
+                        color: black;
                     }
                 }
 
-                /* the badge labels showing the width and height of the grid */
-                > span {
-                    position: absolute;
-                    top: 100%;
-                    right: @cell-size;
-                    z-index: 1020;
-                    margin: 5px 0 0 0;
-                    padding: 4px 6px;
-                    background-color: black;
-                    .opacity(0.8);
-                    .border-radius(9px);
-                    .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-                    font-size: 11px;
-                    line-height: 100%;
-                    color: white;
-                    text-shadow: none;
+                /* selected toggle buttons */
+                &.selected {
+                    z-index: 20;
+                    background-color: @selected-fill-color;
+                    border-color: @selected-border-color;
+
+                    &:not(.disabled) {
+
+                        /* mouse hover effect (not for disabled nor focused buttons) */
+                        &:hover:not(:focus) {
+                            z-index: 21;
+                            border-color: darken(@selected-border-color, 5%);
+                        }
+
+                        /* add focus highlighting (but not for active buttons) */
+                        &:focus:not(:active) {
+                            z-index: 22;
+                            .accented-border(darken(@selected-border-color, 5%));
+                        }
+
+                        /* active effect (button currently clicked) */
+                        &:active {
+                            z-index: 23;
+                            .accented-border(darken(@selected-border-color, 10%));
+                        }
+                    }
+                }
+            }
+
+            /* drop-down menus --------------------------------------------- */
+
+            > .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                min-width: 0;
+                max-width: none;
+                z-index: 1000;
+                margin: 1px 0 0 0;
+                padding: 0;
+                border: 1px solid @pane-border-color;
+                .border-radius(0);
+
+                /* button chooser control */
+
+                &.button-chooser > table {
+                    margin: -1px;
+                    border-collapse: collapse;
+                    max-width: none;
+
+                    td { padding: 0; }
+                }
+
+                /* size chooser control */
+
+                &.size-chooser {
+
+                    /* inner size of one cell in the size chooser */
+                    @cell-size: 18px;
+
+                    /* minimum dimensions for the outer container (in cells) */
+                    min-width: 5 * (@cell-size + 1px) - 1px;
+                    min-height: 3 * (@cell-size + 1px) - 1px;
+                    text-align: left;
+
+                    > button {
+                        margin: -1px;
+                        padding: 0;
+                        .accented-border(@pane-border-color);
+                        vertical-align: top;
+                        font-size: 1px;
+                        line-height: normal;
+
+                        /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
+                        > div {
+
+                            /* a row in the grid */
+                            > div {
+                                /* need to set height explicitly for Firefox */
+                                height: @cell-size + 1px;
+
+                                /* a cell in the grid */
+                                > div {
+                                    display: inline-block;
+                                    width: @cell-size;
+                                    height: @cell-size;
+                                    border-bottom: 1px solid @pane-border-color;
+
+                                    &:not(:last-child) {
+                                        border-right: 1px solid @pane-border-color;
+                                    }
+                                }
+
+                                &:not(:last-child) > div {
+                                    border-bottom: 1px solid @pane-border-color;
+                                }
+
+                                /* height for last row (again, especially for Firefox) */
+                                &:last-child {
+                                    height: @cell-size;
+                                }
+                            }
+                        }
+
+                        /* the badge labels showing the width and height of the grid */
+                        > span {
+                            position: absolute;
+                            top: 100%;
+                            right: @cell-size;
+                            z-index: 1020;
+                            margin: 5px 0 0 0;
+                            padding: 4px 6px;
+                            background-color: black;
+                            .opacity(0.8);
+                            .border-radius(9px);
+                            .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+                            font-size: 11px;
+                            line-height: 100%;
+                            color: white;
+                            text-shadow: none;
+                        }
+                    }
+                }
+            }
+
+            /* adjust margins for caret buttons in drop-down split mode */
+            > button.caret-button {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            /* open drop-down menus ---------------------------------------- */
+
+            &.menu-open {
+
+                /* show drop-down menu element */
+                > .dropdown-menu {
+                    display: block;
+                }
+
+                /* set border to all buttons in the group */
+                > button:not(:focus):not(:active) {
+                    border-color: @pane-border-color;
                 }
             }
         }
-    }
-
-    .group.menu-open > .dropdown-menu {
-        display: block;
     }
 }
 
@@ -401,6 +408,10 @@ div.io-ox-toolbar.tabs {
 
     > span {
         margin-bottom: -1px;
+
+        button {
+            padding: 2px 12px;
+        }
     }
 
     > div.separator {
