@@ -1,3 +1,9 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(fonts/OpenSans-Light.ttf);
+    src: url(fonts/opensans-300.woff);
+}
+
 .io-ox-portal {
     padding: 0 13px 0 13px;
     position: relative;
@@ -18,11 +24,14 @@
     border-bottom: 0px none;
 }
 .io-ox-portal h1 {
-    font-size: 24px;
-    font-weight: normal;
+    font-size: 16pt;
+    font-weight: 200;
+    line-height: 1.15em;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 .io-ox-portal h2 {
     font-size: 18px;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 .io-ox-portal-column {
     display: inline-block;
