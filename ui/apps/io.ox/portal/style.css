@@ -102,7 +102,7 @@
     height: 4em;
 }
 .io-ox-portal-tile-active {
-    border-left: 4px solid #B94A48;
+    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
     width: 80px;
