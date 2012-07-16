@@ -388,6 +388,18 @@ define('io.ox/office/tk/controller', function () {
         };
 
         /**
+         * Triggers a cancel event manually. Executes the default done handler
+         * of this controller.
+         *
+         * @returns {Controller}
+         *  A reference to this controller.
+         */
+        this.cancel = this.done = function () {
+            componentEventHandler({ type: 'cancel' });
+            return this;
+        };
+
+        /**
          * Destructor: Removes this controller from all event sources.
          */
         this.destroy = function () {

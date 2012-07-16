@@ -103,7 +103,7 @@
     }
 }
 
-.io-ox-pane > table.debug-table {
+.io-ox-toolpane > table.debug-table {
     width: 100%;
     table-layout: fixed;
     background-color: white;

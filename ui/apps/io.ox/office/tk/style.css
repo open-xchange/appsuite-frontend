@@ -63,24 +63,22 @@
     box-shadow: @outset-shadow, inset @inset-shadow;
 }
 
-.horizontal-gradient(@leftColor, @rightColor) {
-    background-color: mix(@leftColor, @rightColor, 60%);
-    background-image: -moz-linear-gradient(left, @leftColor, @rightColor);
-    background-image: -ms-linear-gradient(left, @leftColor, @rightColor);
-    background-image: -webkit-linear-gradient(left, @leftColor, @rightColor);
-    background-image: -o-linear-gradient(left, @leftColor, @rightColor);
-    background-image: linear-gradient(left, @leftColor, @rightColor);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=1)",@leftColor,@rightColor));
+.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
+    background-color: mix(@start-color, @end-color, 50%);
+    background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
+    background: -moz-linear-gradient(@start-point, @start-color, @end-color);
+    background: -ms-linear-gradient(@start-point, @start-color, @end-color);
+    background: -o-linear-gradient(@start-point, @start-color, @end-color);
+    background: linear-gradient(@start-point, @start-color, @end-color);
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
 }
 
-.vertical-gradient(@topColor, @bottomColor) {
-    background-color: mix(@topColor, @bottomColor, 60%);
-    background-image: -moz-linear-gradient(top, @topColor, @bottomColor);
-    background-image: -ms-linear-gradient(top, @topColor, @bottomColor);
-    background-image: -webkit-linear-gradient(top, @topColor, @bottomColor);
-    background-image: -o-linear-gradient(top, @topColor, @bottomColor);
-    background-image: linear-gradient(top, @topColor, @bottomColor);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",@topColor,@bottomColor));
+.horizontal-gradient(@left-color, @right-color) {
+    .impl-linear-gradient(left, @left-color, @right-color, 1);
+}
+
+.vertical-gradient(@top-color, @bottom-color) {
+    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
 }
 
 .opacity(@opacity) {
@@ -107,6 +105,16 @@ i[class^="icon-io-ox-"] {
     }
 }
 
+/* special icon for the drop-down caret */
+i.icon-io-ox-caret {
+    background-position: 0 0;
+    width: 7px;
+    
+    &.up {
+        background-position: -7px 0;
+    }
+}
+   
 /*
  * Define class names for all icons.
  */
@@ -119,28 +127,21 @@ i.icon-io-ox-italic.de_DE   { background-position: -120px    0; }
 i.icon-io-ox-underline      { background-position: -140px    0; }
 i.icon-io-ox-table          { background-position: -160px    0; }
 
-/* special icon for the drop-down caret */
-i.icon-io-ox-caret {
-    background-position: 0 0;
-    width: 7px;
-    
-    &.up {
-        background-position: -7px 0;
-    }
-}
-   
 /* ========================================================================= */
 /* panes and tool bars                                                       */
 /* ========================================================================= */
 
 /* background color for panes */
-@fill-color: #f5f5f5;
+@pane-fill-color: #f5f5f5;
 
-/* hover border color */
-@border-color: #d5d5d5;
+/* border color for panes */
+@pane-border-color: #d5d5d5;
 
-/* background color for selected controls */
-@selected-color: #d5d5ff;
+/* border color for selected controls */
+@selected-border-color: #b5b5ff;
+
+/* fill color for selected controls */
+@selected-fill-color: #d5d5ff;
 
 /* mixin that adds a border and inset shadow in the same color to a box */
 .accented-border(@color) {
@@ -151,12 +152,12 @@ i.icon-io-ox-caret {
 /* tool panes ============================================================== */
 
 div.io-ox-toolpane {
-    background-color: @fill-color;
+    background-color: @pane-fill-color;
 
-    &.top { border-bottom: 1px solid @border-color; }
-    &.bottom { border-top: 1px solid @border-color; }
-    &.left { border-right: 1px solid @border-color; }
-    &.right { border-left: 1px solid @border-color; }
+    &.top { border-bottom: 1px solid @pane-border-color; }
+    &.bottom { border-top: 1px solid @pane-border-color; }
+    &.left { border-right: 1px solid @pane-border-color; }
+    &.right { border-left: 1px solid @pane-border-color; }
 }
 
 /* tool bars =============================================================== */
@@ -167,10 +168,15 @@ div.io-ox-toolbar {
     white-space: nowrap;
     text-align: center;
 
+    > span {
+        display: inline-block;
+    }
+
     /* common controls ----------------------------------------------------- */
 
     label, button {
         display: inline;
+        position: relative;
         margin: 0;
         padding: 4px 8px;
         background: none;
@@ -206,19 +212,19 @@ div.io-ox-toolbar {
             /* mouse hover effect (not for disabled nor focused buttons) */
             &:hover:not(:focus) {
                 z-index: 1;
-                border-color: @border-color;
+                border-color: @pane-border-color;
             }
 
             /* add focus highlighting (but not for active buttons) */
             &:focus:not(:active) {
                 z-index: 2;
-                .accented-border(@border-color);
+                .accented-border(@pane-border-color);
             }
 
             /* active effect (button currently clicked) */
             &:active {
                 z-index: 3;
-                .accented-border(darken(@border-color, 5%));
+                .accented-border(darken(@pane-border-color, 5%));
                 /* remove Bootstrap's gray text color */
                 color: black;
             }
@@ -226,28 +232,28 @@ div.io-ox-toolbar {
 
         /* selected toggle buttons */
         &.selected {
-            z-index: 5;
-            background-color: @selected-color;
-            border-color: darken(@selected-color, 5%);
+            z-index: 20;
+            background-color: @selected-fill-color;
+            border-color: @selected-border-color;
 
             &:not(.disabled) {
 
                 /* mouse hover effect (not for disabled nor focused buttons) */
                 &:hover:not(:focus) {
-                    z-index: 6;
-                    border-color: darken(@selected-color, 10%);
+                    z-index: 21;
+                    border-color: darken(@selected-border-color, 5%);
                 }
 
                 /* add focus highlighting (but not for active buttons) */
                 &:focus:not(:active) {
-                    z-index: 7;
-                    .accented-border(darken(@selected-color, 10%));
+                    z-index: 22;
+                    .accented-border(darken(@selected-border-color, 5%));
                 }
 
                 /* active effect (button currently clicked) */
                 &:active {
-                    z-index: 8;
-                    .accented-border(darken(@selected-color, 15%));
+                    z-index: 23;
+                    .accented-border(darken(@selected-border-color, 10%));
                 }
             }
         }
@@ -282,7 +288,7 @@ div.io-ox-toolbar {
 
         /* set border to all buttons in drop-down group with visible menu */
         &.menu-open > button:not(:focus):not(:active) {
-            border-color: @border-color;
+            border-color: @pane-border-color;
         }
     }
 
@@ -298,7 +304,7 @@ div.io-ox-toolbar {
         z-index: 1000;
         margin: 1px 0 0 0;
         padding: 0;
-        border: 1px solid @border-color;
+        border: 1px solid @pane-border-color;
         .border-radius(0);
 
         /* button chooser control */
@@ -326,7 +332,7 @@ div.io-ox-toolbar {
             > button {
                 margin: -1px;
                 padding: 0;
-                .accented-border(@border-color);
+                .accented-border(@pane-border-color);
                 vertical-align: top;
                 font-size: 1px;
                 line-height: normal;
@@ -344,15 +350,15 @@ div.io-ox-toolbar {
                             display: inline-block;
                             width: @cell-size;
                             height: @cell-size;
-                            border-bottom: 1px solid @border-color;
+                            border-bottom: 1px solid @pane-border-color;
 
                             &:not(:last-child) {
-                                border-right: 1px solid @border-color;
+                                border-right: 1px solid @pane-border-color;
                             }
                         }
 
                         &:not(:last-child) > div {
-                            border-bottom: 1px solid @border-color;
+                            border-bottom: 1px solid @pane-border-color;
                         }
 
                         /* height for last row (again, especially for Firefox) */
@@ -390,13 +396,11 @@ div.io-ox-toolbar {
 
 /* tab bars ================================================================ */
 
-div.io-ox-toolbar.tabbar {
+div.io-ox-toolbar.tabs {
     padding-bottom: 0;
-    
-    .group > button {
-        &, &:hover, &:focus, &:active, &.disabled, &.selected {
-            border-bottom: none;
-        }
+
+    > span {
+        margin-bottom: -1px;
     }
 
     > div.separator {
@@ -406,11 +410,15 @@ div.io-ox-toolbar.tabbar {
 
         > span {
             display: inline-block;
+            position: relative;
             width: 40%;
             height: 1px;
-            
-            &.left { .horizontal-gradient(@fill-color, @selected-color); }
-            &.right { .horizontal-gradient(@selected-color, @fill-color); }
+            /* override the button borders */
+            z-index: 100;
+
+            @border-color: @pane-border-color;
+            &.left { .horizontal-gradient(fade(@border-color, 0%), @border-color); }
+            &.right { .horizontal-gradient(@border-color, fade(@border-color, 0%)); }
         }
     }
 }

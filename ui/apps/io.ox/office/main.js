@@ -132,9 +132,13 @@ define('io.ox/office/main',
          *  The title of the error message. Defaults to 'Error'.
          */
         function showError(message, title) {
+
+            var // the alert box
+                alert = $.alert(title || gt('Error'), message).click(function () { controller.done(); });
+
             win.nodes.appPane
                 .find('.alert').remove().end()
-                .prepend($.alert(title || gt('Error'), message));
+                .prepend(alert);
         }
 
         /**
@@ -689,7 +693,7 @@ define('io.ox/office/main',
         // craete controller and register editors
         controller = new Controller(app)
             .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|debug)\//);
+            .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|debug)\//);
 
         // editor view
         view = new View(controller);

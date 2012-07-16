@@ -27,14 +27,14 @@ define('io.ox/office/view',
         var // the top-level tool pane container
             toolPane = $('<div>').addClass('io-ox-toolpane top'),
 
-            // the tool bar selector
-            tabToolBar = new ToolBar(),
+            // the top-level tab bar to select tool bars
+            tabBar = new ToolBar(),
 
             // the tab buttons to select the tool bars
-            radioGroup = new RadioGroup('view/toolbars/show'),
+            radioGroup = tabBar.addRadioGroup('view/toolbars/show', { type: 'buttons' }),
 
             // all registered tool bars, mapped by tool bar key
-            toolBars = { '': tabToolBar },
+            toolBars = {},
 
             // bottom tool pane for debug output
             debugPane = $('<div>').addClass('io-ox-toolpane bottom'),
@@ -75,9 +75,8 @@ define('io.ox/office/view',
         }
 
         function showToolBar(key) {
-            // hide all tool bars
-            toolPane.children(':not(.tabbar)').hide();
             if (key in toolBars) {
+                toolPane.children().slice(1).hide();
                 toolBars[key].getNode().show();
             }
         }
@@ -115,23 +114,21 @@ define('io.ox/office/view',
 
         this.destroy = function () {
             _(toolBars).invoke('destroy');
-            toolPane = tabToolBar = radioGroup = toolBars = debugPane = debugTable = null;
+            tabBar.destroy();
+            toolPane = tabBar = radioGroup = toolBars = debugPane = debugTable = null;
         };
 
         // initialization -----------------------------------------------------
 
         // insert the tool bar selector and a separator line into the tool pane
         toolPane.append(
-            tabToolBar.getNode().addClass('tabbar').append(
+            tabBar.getNode().addClass('tabs').append(
                 $('<div>').addClass('separator').append(
                     $('<span>').addClass('left'),
                     $('<span>').addClass('right')
                 )
             )
         );
-
-        // insert the radio buttons into the tool bar
-        tabToolBar.addGroup(radioGroup);
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
@@ -158,10 +155,10 @@ define('io.ox/office/view',
 
         // prepare controller
         controller
-            // create controller item for tool bar handling
+            // create a controller item for tool bar handling
             .addDefinitions({ 'view/toolbars/show': { set: showToolBar } })
-            // register the tab tool bar at the controller
-            .registerViewComponent(tabToolBar)
+            // register the tab bar at the controller
+            .registerViewComponent(tabBar)
             // make the format tool bar visible
             .change('view/toolbars/show', 'format');
 
