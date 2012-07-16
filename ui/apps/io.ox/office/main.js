@@ -215,7 +215,7 @@ define('io.ox/office/main',
                 // top pane for tool bars
                 win.nodes.toolPane = view.getToolPane(),
                 // main application container
-                win.nodes.appPane = $('<div>').addClass('container').append(editor.getNode()),
+                win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editor.getNode()),
                 // bottom pane for debug output
                 win.nodes.debugPane = view.getDebugPane()
             );
@@ -651,11 +651,12 @@ define('io.ox/office/main',
         app.destroy = function () {
             if (operationsTimer) {
                 window.clearTimeout(operationsTimer);
+                operationsTimer = null;
             }
             controller.destroy();
             view.destroy();
             _(editors).invoke('destroy');
-            app = win = editors = editor = view = controller = operationsTimer = null;
+            app = win = editors = editor = view = controller = null;
         };
 
         // initialization -----------------------------------------------------

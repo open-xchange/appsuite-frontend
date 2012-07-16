@@ -38,20 +38,20 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                     done: function () { this.change('view/toolbars/show', 'table'); }
                 },
 
-                'character/font/bold': {
+                'format/character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); }
                 },
-                'character/font/italic': {
+                'format/character/font/italic': {
                     get: function () { return editor.getAttribute('italic'); },
                     set: function (state) { editor.setAttribute('italic', state); }
                 },
-                'character/font/underline': {
+                'format/character/font/underline': {
                     get: function () { return editor.getAttribute('underline'); },
                     set: function (state) { editor.setAttribute('underline', state); }
                 },
 
-                'paragraph/alignment': {
+                'format/paragraph/alignment': {
                 },
 
                 'debug/toggle': {
@@ -92,10 +92,10 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                     }
                 }, this))
                 .on('operation', _.bind(function () {
-                    this.update([/^action\//, /^character\//, /^paragraph\//]);
+                    this.update(/^(action|format)\//);
                 }, this))
                 .on('selectionChanged', _.bind(function () {
-                    this.update([/^character\//, /^paragraph\//]);
+                    this.update(/^format\//);
                 }, this));
             return this;
         };

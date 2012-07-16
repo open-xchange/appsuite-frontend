@@ -121,14 +121,11 @@ define('io.ox/office/view',
         // initialization -----------------------------------------------------
 
         // insert the tool bar selector and a separator line into the tool pane
-        toolPane.append(
-            tabBar.getNode().addClass('tabs').append(
-                $('<div>').addClass('separator').append(
-                    $('<span>').addClass('left'),
-                    $('<span>').addClass('right')
-                )
-            )
+        tabBar.getNode().addClass('tabs').children().first().append(
+            $('<span>').addClass('separator left'),
+            $('<span>').addClass('separator right')
         );
+        toolPane.append(tabBar.getNode());
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
@@ -136,11 +133,11 @@ define('io.ox/office/view',
 
         createToolBar('format', gt('Format'))
             .addButtonGroup()
-                .addButton('character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-                .addButton('character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-                .addButton('character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
+                .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
+                .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
+                .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .end()
-            .addRadioGroup('paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('format/paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })

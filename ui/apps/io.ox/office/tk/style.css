@@ -170,6 +170,7 @@ div.io-ox-toolbar {
 
     > span {
         display: inline-block;
+        position: relative;
 
         /* groups ---------------------------------------------------------- */
 
@@ -233,7 +234,7 @@ div.io-ox-toolbar {
                     /* mouse hover effect (not for disabled nor focused buttons) */
                     &:hover:not(:focus) {
                         z-index: 1;
-                        border-color: @pane-border-color;
+                        border: 1px solid @pane-border-color;
                     }
 
                     /* add focus highlighting (but not for active buttons) */
@@ -251,18 +252,19 @@ div.io-ox-toolbar {
                     }
                 }
 
-                /* selected toggle buttons */
+                /* selected toggle/radio buttons */
                 &.selected {
                     z-index: 20;
                     background-color: @selected-fill-color;
-                    border-color: @selected-border-color;
+                    border: 1px solid @selected-border-color;
 
+                    /* do not add any effects to disabled buttons */
                     &:not(.disabled) {
 
                         /* mouse hover effect (not for disabled nor focused buttons) */
                         &:hover:not(:focus) {
                             z-index: 21;
-                            border-color: darken(@selected-border-color, 5%);
+                            border: 1px solid darken(@selected-border-color, 5%);
                         }
 
                         /* add focus highlighting (but not for active buttons) */
@@ -407,29 +409,64 @@ div.io-ox-toolbar.tabs {
     padding-bottom: 0;
 
     > span {
-        margin-bottom: -1px;
-
-        button {
+        > .group > button {
             padding: 2px 12px;
+            border-bottom: 1px solid @pane-border-color;
+            .border-top-left-radius(3px);
+            .border-top-right-radius(3px);
+
+            /* override the default style of selected buttons */
+            &.selected {
+                background: none;
+                border: 1px solid @pane-border-color;
+                border-bottom-color: transparent;
+
+                /* do not add any effects to disabled buttons */
+                &:not(.disabled) {
+
+                    /* mouse hover effect (not for focused buttons) */
+                    &:hover:not(:focus) {
+                        border: 1px solid darken(@pane-border-color, 10%);
+                        border-bottom-color: transparent;
+                    }
+
+                    /* add focus highlighting (but not for active buttons) */
+                    &:focus:not(:active) {
+                        .box-shadow(none);
+                        border: 1px solid darken(@pane-border-color, 15%);
+                        border-bottom-color: transparent;
+                    }
+
+                    /* active effect (button currently clicked) */
+                    &:active {
+                        .box-shadow(none);
+                        border: 1px solid darken(@pane-border-color, 10%);
+                        border-bottom-color: transparent;
+                    }
+                }
+            }
         }
-    }
 
-    > div.separator {
-        text-align: center;
-        font-size: 1px;
-        line-height: 0;
-
-        > span {
+        > span.separator {
             display: inline-block;
-            position: relative;
-            width: 40%;
+            position: absolute;
+            width: 50%;
             height: 1px;
-            /* override the button borders */
-            z-index: 100;
+            bottom: 0;
+            font-size: 1px;
+            line-height: 0;
 
-            @border-color: @pane-border-color;
-            &.left { .horizontal-gradient(fade(@border-color, 0%), @border-color); }
-            &.right { .horizontal-gradient(@border-color, fade(@border-color, 0%)); }
+            &.left {
+                right: 100%;
+                margin-right: -1px;
+                .horizontal-gradient(fade(@pane-border-color, 0%), @pane-border-color);
+            }
+
+            &.right {
+                left: 100%;
+                margin-left: -1px;
+                .horizontal-gradient(@pane-border-color, fade(@pane-border-color, 0%));
+            }
         }
     }
 }
