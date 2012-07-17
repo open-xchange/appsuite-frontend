@@ -162,7 +162,6 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     grid.refresh(true);
                 },
                 refreshList = function () {
-                    console.log('refreshlist');
                     grid.repaint().done(function () {
                         grid.selection.retrigger();
                     });
