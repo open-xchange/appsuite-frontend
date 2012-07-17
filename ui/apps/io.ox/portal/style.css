@@ -81,14 +81,14 @@
     width: 400px;
     overflow: auto;
     min-height: 95%;
-    padding: 0 1em;
+    padding: 0 13px 0 0;
     float: left;
 }
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
-    padding: 0 8px 0 4px;
-    border-left: 4px solid transparent;
+    padding: 0 8px 0 8px;
+//    border-left: 4px solid transparent;
     overflow: hidden;
     width: 270px;
     height: 180px;
@@ -102,7 +102,7 @@
     height: 4em;
 }
 .io-ox-portal-tile-active {
-    border-left: 4px solid transparent;
+//    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
     width: 80px;
