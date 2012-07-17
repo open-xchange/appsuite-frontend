@@ -16,10 +16,10 @@ define('io.ox/office/view',
      'io.ox/office/tk/toolbar',
      'io.ox/office/tk/buttongroup',
      'io.ox/office/tk/radiogroup',
-     'io.ox/office/tk/listchooser',
      'io.ox/office/tk/sizechooser',
+     'io.ox/office/tk/fontchooser',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolBar, ButtonGroup, RadioGroup, ListChooser, SizeChooser, gt) {
+    ], function (Utils, ToolBar, ButtonGroup, RadioGroup, SizeChooser, FontChooser, gt) {
 
     'use strict';
 
@@ -134,7 +134,7 @@ define('io.ox/office/view',
             .addGroup(new SizeChooser('insert/table', insertTableOptions));
 
         createToolBar('format', gt('Format'))
-            .addGroup(new ListChooser('format/character/font/family', { label: gt('Font'), tooltip: gt('Font name') }))
+            .addGroup(new FontChooser('format/character/font/family', { icon: 'icon-font', tooltip: gt('Font name') }))
             .addGroup(new ButtonGroup()
                 .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
                 .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })

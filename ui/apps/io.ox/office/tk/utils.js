@@ -221,6 +221,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  @param {String} [options.classes]
      *      The CSS class names to be added to the element. If omitted, no
      *      classes will be added.
+     *  @param {Object} [options.css]
+     *      A map with CSS formatting attributes to be added to the element.
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
@@ -235,6 +237,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
             // option values
             classes = Utils.getStringOption(options, 'classes'),
+            css = Utils.getObjectOption(options, 'css'),
             tooltip = Utils.getStringOption(options, 'tooltip');
 
         // add the key as data attribute
@@ -242,11 +245,13 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             control.attr('data-key', key);
         }
 
-        // add CSS classes
+        // add optional formatting
         if (classes) {
             control.addClass(classes);
         }
-        // add tool tip text
+        if (css) {
+            control.css(css);
+        }
         if (tooltip) {
             control.tooltip({ title: tooltip, placement: 'top', animation: false });
         }

@@ -22,7 +22,7 @@ define('io.ox/office/tk/buttonchooser',
         KeyCodes = Utils.KeyCodes,
 
         // placeholder button for new cells (must contain something to get its correct height)
-        placeholderButton = Utils.createButton(undefined, { label: '\xa0' });
+        placeholder = Utils.createButton(undefined, { label: '\xa0' });
 
     // class ButtonChooser ====================================================
 
@@ -68,6 +68,14 @@ define('io.ox/office/tk/buttonchooser',
          * Handles 'menuopen' events and initializes the drop-down menu.
          */
         function menuOpenHandler(event, from) {
+
+            // Work around a Firefox bug which displays the menu too narrow (it
+            // restricts the table width to the width of the group element). If
+            // this is not a bug but a CSS feature, it needs to be worked
+            // around anyway.
+            self.getMenuNode()
+                .css('min-width', '99999px')
+                .css('min-width', gridNode.outerWidth(true) + 'px');
 
             // move focus to first enabled control, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
@@ -127,7 +135,7 @@ define('io.ox/office/tk/buttonchooser',
          * collection.
          */
         this.getGridButtons = function () {
-            return gridNode.find('button');
+            return gridNode.find('button' + Utils.ENABLED_SELECTOR);
         };
 
         /**
@@ -154,7 +162,7 @@ define('io.ox/office/tk/buttonchooser',
                 // create a new row in the table, and fill it with dummy buttons
                 tableRow = $('<tr>').appendTo(gridNode);
                 _(columns).times(function () {
-                    tableRow.append($('<td>').append(placeholderButton.clone()));
+                    tableRow.append($('<td>').append(placeholder.clone()));
                 });
                 rows += 1;
             } else {
@@ -183,7 +191,7 @@ define('io.ox/office/tk/buttonchooser',
     // global initialization ==================================================
 
     // disable the placeholder button
-    Utils.enableControls(placeholderButton, false);
+    Utils.enableControls(placeholder, false);
 
     // exports ================================================================
 

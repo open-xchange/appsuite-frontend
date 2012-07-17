@@ -291,7 +291,7 @@ div.io-ox-toolbar {
                     padding-left: 4px;
                     padding-right: 4px;
                 }
-                
+
                 /* the drop-down menu element */
                 > .dropdown-menu {
                     display: none;
@@ -303,29 +303,65 @@ div.io-ox-toolbar {
                     z-index: 1000;
                     margin: 1px 0 0 0;
                     padding: 0;
+                    background-color: @pane-fill-color;
                     border: 1px solid @pane-border-color;
                     .border-radius(0);
-    
+
                     /* button chooser control */
                     &.button-chooser > table {
                         margin: -1px;
                         border-collapse: collapse;
                         max-width: none;
-    
-                        td { padding: 0; }
+
+                        td {
+                            padding: 0;
+
+                            /* expand width to entire table cell */
+                            > button {
+                                width: 100%;
+                            }
+                        }
                     }
-    
+
+                    /* list chooser control */
+                    &.list-chooser {
+
+                        > ul {
+                            display: inline-block;
+                            margin: 0;
+                            padding: 0;
+                            list-style: none;
+
+                            > li {
+                                margin: 0 -1px;
+                                padding: 0;
+
+                                > button {
+                                    width: 100%;
+                                    margin-top: -1px;
+                                    padding-top: 2px;
+                                    padding-bottom: 2px;
+                                }
+
+                                &:last-child > button {
+                                    margin-bottom: -1px;
+                                }
+                            }
+                        }
+                    }
+
                     /* size chooser control */
                     &.size-chooser {
-    
+
                         /* inner size of one cell in the size chooser */
                         @cell-size: 18px;
-    
+
                         /* minimum dimensions for the outer container (in cells) */
                         min-width: 5 * (@cell-size + 1px) - 1px;
                         min-height: 3 * (@cell-size + 1px) - 1px;
+                        background-color: white;
                         text-align: left;
-    
+
                         > button {
                             margin: -1px;
                             padding: 0;
@@ -333,38 +369,38 @@ div.io-ox-toolbar {
                             vertical-align: top;
                             font-size: 1px;
                             line-height: normal;
-    
+
                             /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
                             > div {
-    
+
                                 /* a row in the grid */
                                 > div {
                                     /* need to set height explicitly for Firefox */
                                     height: @cell-size + 1px;
-    
+
                                     /* a cell in the grid */
                                     > div {
                                         display: inline-block;
                                         width: @cell-size;
                                         height: @cell-size;
                                         border-bottom: 1px solid @pane-border-color;
-    
+
                                         &:not(:last-child) {
                                             border-right: 1px solid @pane-border-color;
                                         }
                                     }
-    
+
                                     &:not(:last-child) > div {
                                         border-bottom: 1px solid @pane-border-color;
                                     }
-    
+
                                     /* height for last row (again, especially for Firefox) */
                                     &:last-child {
                                         height: @cell-size;
                                     }
                                 }
                             }
-    
+
                             /* the badge labels showing the width and height of the grid */
                             > span {
                                 position: absolute;
@@ -385,12 +421,12 @@ div.io-ox-toolbar {
                         }
                     }
                 }
-    
+
                 /* show drop-down menu element */
                 &.menu-open > .dropdown-menu {
                     display: block;
                 }
-    
+
                 /* set border to all buttons in the group when hovered or opened (split mode) */
                 &:hover, &.menu-open {
                     > button:not(:focus):not(:active):not(.disabled) {

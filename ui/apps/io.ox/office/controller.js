@@ -38,6 +38,8 @@ define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (Base
                     done: function () { this.change('view/toolbars/show', 'table'); }
                 },
 
+                'format/character/font/family': {
+                },
                 'format/character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); }

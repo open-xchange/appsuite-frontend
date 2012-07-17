@@ -47,9 +47,8 @@ define('io.ox/office/tk/radiochooser',
          * Activates an option button in this radio group.
          *
          * @param {String|Null} [value]
-         *  The unique value associated to the button to be activated. If
-         *  omitted or set to null, does not activate any button (ambiguous
-         *  state).
+         *  The unique value associated to the button to be activated. If set
+         *  to null, does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
 
@@ -59,7 +58,7 @@ define('io.ox/office/tk/radiochooser',
                 button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]');
 
             if (!_.isUndefined(value)) {
-                // remove highlighting from all buttons, highlight active button
+                // remove highlighting from all buttons
                 Utils.toggleButtons(buttons, false);
                 // update the contents of the drop-down button (use first button if no button is active)
                 self.replaceButtonContents((button.length ? button : buttons).first().contents().clone());
@@ -104,8 +103,15 @@ define('io.ox/office/tk/radiochooser',
          *  A reference to this button group.
          */
         this.addButton = function (value, options) {
-            this.createGridButton(options).attr('data-value', value);
-            updateHandler();
+
+            var // create the new button
+                button = this.createGridButton(options).attr('data-value', value);
+
+            // insert contents of first inserted button into the top-level button
+            if (this.getGridButtons().length === 1) {
+                self.replaceButtonContents(button.contents().clone());
+            }
+
             return this;
         };
 
