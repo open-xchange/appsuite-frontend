@@ -72,12 +72,12 @@ define('io.ox/office/tk/dropdown',
             defaultValue = Utils.getOption(options, 'defaultValue'),
 
             // the action button (either triggering a default action, or toggling the drop-down menu)
-            actionButton = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS),
+            actionButton = Utils.createButton(key, options),
 
             // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
             caretTooltip = Utils.getStringOption(options, 'caretTooltip'),
             caretOptions = caretTooltip ? Utils.extendOptions(options, { tooltip: caretTooltip }) : options,
-            caretButton = split ? Utils.createButton(key, caretOptions).addClass(Group.FOCUSABLE_CLASS + ' caret-button').empty() : $(),
+            caretButton = split ? Utils.createButton(key, caretOptions).addClass('caret-button').empty() : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
@@ -235,8 +235,8 @@ define('io.ox/office/tk/dropdown',
 
         // base constructor ---------------------------------------------------
 
-        // pass the drop-down menu node as action root node
-        Group.call(this, menuNode);
+        // pass the drop-down menu node as root node for action listeners
+        Group.call(this, { classes: 'dropdown-group', actionNode: menuNode });
 
         // methods ------------------------------------------------------------
 
@@ -283,7 +283,9 @@ define('io.ox/office/tk/dropdown',
         // initialization -----------------------------------------------------
 
         // append buttons and menu to the group container
-        this.getNode().addClass('dropdown-group').append(actionButton, caretButton, menuNode);
+        this.addFocusableControl(actionButton)
+            .addFocusableControl(caretButton)
+            .addControl(menuNode);
 
         // helper function appending a caret sign to the contents of the drop-down button
         actionButton.appendCaret = function () { return this; };

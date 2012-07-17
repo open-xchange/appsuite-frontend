@@ -39,7 +39,7 @@ define('io.ox/office/tk/label',
         // initialization -----------------------------------------------------
 
         // append the label to the group container
-        this.getNode().append(label);
+        this.addControl(label);
 
         // register update handler
         this.registerUpdateHandler(key, function (value) {

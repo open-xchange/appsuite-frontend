@@ -36,8 +36,8 @@ define('io.ox/office/tk/listchooser',
      *  The unique key of the list chooser.
      *
      * @param {Object} options
-     *  A map of options to control the properties of this control. Supports
-     *  all options of the base class (see DropDown() constructor for details).
+     *  A map of options to control the properties of the list chooser.
+     *  Supports all options of the DropDown() base class constructor.
      */
     function ListChooser(key, options) {
 

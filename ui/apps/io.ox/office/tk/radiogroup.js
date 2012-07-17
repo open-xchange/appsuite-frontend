@@ -97,11 +97,8 @@ define('io.ox/office/tk/radiogroup',
          *  A reference to this button group.
          */
         this.addButton = function (value, options) {
-            Utils.createButton(key, options)
-                .addClass(Group.FOCUSABLE_CLASS)
-                .attr('data-value', value)
-                .appendTo(this.getNode());
-            return this;
+            var button = Utils.createButton(key, options).attr('data-value', value);
+            return this.addFocusableControl(button);
         };
 
         // initialization -----------------------------------------------------

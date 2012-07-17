@@ -98,7 +98,7 @@ define('io.ox/office/tk/buttongroup',
         this.addButton = function (key, options) {
 
             var // create the button
-                button = Utils.createButton(key, options).addClass(Group.FOCUSABLE_CLASS).appendTo(this.getNode());
+                button = Utils.createButton(key, options);
 
             // add toggle button marker
             if (Utils.getBooleanOption(options, 'toggle')) {
@@ -110,7 +110,8 @@ define('io.ox/office/tk/buttongroup',
                 updateHandler.call(this, button, value);
             });
 
-            return this;
+            // insert the button into this group
+            return this.addFocusableControl(button);
         };
 
         // initialization -----------------------------------------------------

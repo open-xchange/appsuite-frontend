@@ -39,9 +39,9 @@ define('io.ox/office/tk/buttonchooser',
      *  inserted into the drop-down grid of this group.
      *
      * @param {Object} options
-     *  A map of options to control the properties of the drop-down button.
-     *  Supports all options of the base class (see DropDown() constructor for
-     *  details). Additionally, the following options are supported:
+     *  A map of options to control the properties of the button chooser.
+     *  Supports all options of the DropDown() base class constructor.
+     *  Additionally, the following options are supported:
      *  @param {Number} [options.columns=3]
      *      Number of columns used to build the drop-down grid.
      */

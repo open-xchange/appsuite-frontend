@@ -30,6 +30,11 @@ define('io.ox/office/tk/radiochooser',
      * @param {String} key
      *  The unique key of the radio chooser. This key is shared by all buttons
      *  inserted into the drop-down menu.
+     *
+     * @param {Object} options
+     *  A map of options to control the properties of the radio chooser.
+     *  Supports all options of the ButtonChooser() base class constructor,
+     *  except the options.split value, which will be set to false.
      */
     function RadioChooser(key, options) {
 

@@ -19,6 +19,15 @@ define('io.ox/office/tk/group',
 
     'use strict';
 
+    var // CSS class for hidden groups
+        HIDDEN_CLASS = 'hidden',
+
+        // CSS class for focusable controls
+        FOCUSABLE_CLASS = 'focusable',
+
+        // CSS selector for focusable controls
+        FOCUSABLE_SELECTOR = '.' + FOCUSABLE_CLASS;
+
     // class Group ============================================================
 
     /**
@@ -27,20 +36,30 @@ define('io.ox/office/tk/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
-     * @param {jQuery} [actionRootNode]
-     *  The default node where action handlers will be attached to, collecting
-     *  action events of embedded control elements embedded. If omitted, uses
-     *  the root node of this group.
+     * @param {Object} [options]
+     *  A map of options to control the properties of the group. The following
+     *  options are supported:
+     *  @param {String} [options.classes]
+     *      The CSS class names to be added to the group container element. If
+     *      omitted, no classes will be added.
+     *  @param {jQuery} [options.actionNode]
+     *      The default node where action handlers will be attached to,
+     *      collecting action events of embedded control elements embedded. If
+     *      omitted, uses the root node of this group.
      *
      * @constructor
      */
-    function Group(actionRootNode) {
+    function Group(options) {
 
         var // self reference
             self = this,
 
             // create the group container element
             groupNode = $('<div>').addClass('group'),
+
+            // option values
+            classes = Utils.getStringOption(options, 'classes'),
+            actionNode = Utils.getObjectOption(options, 'actionNode', groupNode),
 
             // update handlers, mapped by key
             updateHandlers = {};
@@ -55,11 +74,40 @@ define('io.ox/office/tk/group',
         };
 
         /**
+         * Inserts the passed control into this group.
+         *
+         * @param {jQuery} control
+         *  The control to be inserted into this group, as jQuery object.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.addControl = function (control) {
+            groupNode.append(control);
+            return this;
+        };
+
+        /**
+         * Inserts the passed control into this group, and marks it to be
+         * included into keyboard focus navigation.
+         *
+         * @param {jQuery} control
+         *  The control to be inserted into this group, as jQuery object.
+         *
+         * @returns {Group}
+         *  A reference to this group.
+         */
+        this.addFocusableControl = function (control) {
+            groupNode.append(control.addClass(FOCUSABLE_CLASS));
+            return this;
+        };
+
+        /**
          * Returns all controls from this group that need to be included into
          * keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(Group.FOCUSABLE_SELECTOR + Utils.ENABLED_SELECTOR);
+            return groupNode.find(FOCUSABLE_SELECTOR + Utils.ENABLED_SELECTOR);
         };
 
         /**
@@ -72,6 +120,9 @@ define('io.ox/office/tk/group',
 
         /**
          * Sets the focus to the first enabled control in this group.
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.grabFocus = function () {
             if (!this.hasFocus()) {
@@ -84,30 +135,39 @@ define('io.ox/office/tk/group',
          * Returns whether this control group is visible.
          */
         this.isVisible = function () {
-            return !groupNode.hasClass(Group.HIDDEN_CLASS);
+            return !groupNode.hasClass(HIDDEN_CLASS);
         };
 
         /**
          * Displays this control group, if it is currently hidden.
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.show = function () {
-            groupNode.removeClass(Group.HIDDEN_CLASS);
+            groupNode.removeClass(HIDDEN_CLASS);
             return this;
         };
 
         /**
          * Hides this control group, if it is currently visible.
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.hide = function () {
-            groupNode.addClass(Group.HIDDEN_CLASS);
+            groupNode.addClass(HIDDEN_CLASS);
             return this;
         };
 
         /**
          * Toggles the visibility of this control group.
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.toggle = function () {
-            groupNode.toggleClass(Group.HIDDEN_CLASS);
+            groupNode.toggleClass(HIDDEN_CLASS);
             return this;
         };
 
@@ -122,6 +182,9 @@ define('io.ox/office/tk/group',
          *  The update handler function. Will be called in the context of this
          *  tool bar. Receives the control associated to the passed key, and
          *  the value passed to the 'update' event.
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.registerUpdateHandler = function (key, updateHandler) {
             (updateHandlers[key] || (updateHandlers[key] = [])).push(updateHandler);
@@ -154,6 +217,9 @@ define('io.ox/office/tk/group',
          *  tool bar. Receives the control passed to this function. Must return
          *  the current value of the control (e.g. the boolean state of a
          *  toggle button, or the text of a text field).
+         *
+         * @returns {Group}
+         *  A reference to this group.
          */
         this.registerActionHandler = function (node, type, selector, actionHandler) {
 
@@ -174,7 +240,7 @@ define('io.ox/office/tk/group',
                 actionHandler = selector;
                 selector = type;
                 type = node;
-                node = actionRootNode || groupNode;
+                node = actionNode;
             }
 
             // normalize passed parameters, if selector parameter is missing
@@ -237,37 +303,12 @@ define('io.ox/office/tk/group',
         // add event hub
         Events.extend(this);
 
+        // add the specified CSS classes to the root node
+        if (classes) {
+            groupNode.addClass(classes);
+        }
+
     } // class Group
-
-    // constants --------------------------------------------------------------
-
-    /**
-     * CSS class for hidden groups.
-     *
-     * @constant
-     */
-    Group.HIDDEN_CLASS = 'hidden';
-
-    /**
-     * CSS selector for visible groups.
-     *
-     * @constant
-     */
-    Group.VISIBLE_SELECTOR = ':not(.' + Group.HIDDEN_CLASS + ')';
-
-    /**
-     * CSS class for focusable controls.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_CLASS = 'focusable';
-
-    /**
-     * CSS selector for focusable controls.
-     *
-     * @constant
-     */
-    Group.FOCUSABLE_SELECTOR = '.' + Group.FOCUSABLE_CLASS;
 
     // exports ================================================================
 
