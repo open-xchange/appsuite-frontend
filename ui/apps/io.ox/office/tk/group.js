@@ -131,9 +131,9 @@ define('io.ox/office/tk/group',
         /**
          * Registers the passed action handler for a specific control. Action
          * handlers will be executed, when the control has been activated in
-         * the user interface. Will trigger a 'change' event at the tool bar,
-         * passing the key of the source control, and its current value as
-         * returned by the passed action handler.
+         * the user interface. Will trigger a 'change' event, passing the key
+         * of the source control, and its current value as returned by the
+         * passed action handler.
          *
          * @param {jQuery} [node]
          *  The DOM node that catches the jQuery action events. May be a single

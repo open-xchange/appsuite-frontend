@@ -54,10 +54,11 @@ define('io.ox/office/tk/dropdown',
      *      button. Will be used in split mode (options.split set to true)
      *      only. If omitted, the standard tool tip (options.tooltip) will be
      *      used for both buttons.
-     *  @param {Any} [options.defaultValue]
+     *  @param [options.defaultValue]
      *      If specified, the click handler of the action button will return
      *      this value. Will be used in split mode (options.split set to true)
-     *      only.
+     *      only. If omitted, the value undefined will be returned by the
+     *      action button.
      */
     function DropDown(key, options) {
 
@@ -137,14 +138,18 @@ define('io.ox/office/tk/dropdown',
          */
         function menuButtonClickHandler() {
 
-            // WebKit does not set focus to clicked button, which is needed to
-            // get keyboard control in the drop-down menu
-            if (!Utils.isControlFocused(menuButton)) {
-                menuButton.focus();
-            }
+            // do nothing (but the 'cancel' event) if the drop-down control is disabled
+            if (Utils.isControlEnabled(menuButton)) {
 
-            // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
-            toggleMenu(null, 'mouse');
+                // WebKit does not set focus to clicked button, which is needed to
+                // get keyboard control in the drop-down menu
+                if (!Utils.isControlFocused(menuButton)) {
+                    menuButton.focus();
+                }
+
+                // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
+                toggleMenu(null, 'mouse');
+            }
 
             // trigger 'cancel' event, if menu has been closed with mouse click
             if (!isMenuVisible()) {
@@ -277,6 +282,9 @@ define('io.ox/office/tk/dropdown',
 
         // initialization -----------------------------------------------------
 
+        // append buttons and menu to the group container
+        this.getNode().addClass('dropdown-group').append(actionButton, caretButton, menuNode);
+
         // helper function appending a caret sign to the contents of the drop-down button
         actionButton.appendCaret = function () { return this; };
         menuButton.appendCaret = function () {
@@ -286,7 +294,7 @@ define('io.ox/office/tk/dropdown',
             return this.append($('<i>').addClass('icon-io-ox-caret'));
         };
 
-        // in split mode, register a action handler for the action button
+        // in split mode, register an action handler for the action button
         if (split) {
             this.registerActionHandler(actionButton, 'click', function () { return defaultValue; });
         }
@@ -305,9 +313,6 @@ define('io.ox/office/tk/dropdown',
         // prepare drop-down menu, and register event handlers
         menuNode
             .on('keydown keypress keyup', menuKeyHandler);
-
-        // append buttons and menu to the group container
-        this.getNode().append(actionButton, caretButton, menuNode);
 
     } // class DropDown
 

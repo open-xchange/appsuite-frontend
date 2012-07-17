@@ -142,9 +142,6 @@ i.icon-io-ox-table              { background-position: -200px    0; }
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
-/* fill color for selected controls */
-@selected-fill-color: #d5d5ff;
-
 /* mixin that adds a border and inset shadow in the same color to a box */
 .accented-border(@color) {
     border: 1px solid @color;
@@ -204,6 +201,7 @@ div.io-ox-toolbar {
                 margin: 0;
                 padding: 4px 8px;
                 background: none;
+                /* reserve space for border in hover/focus/active mode */
                 border: 1px solid transparent;
                 white-space: nowrap;
                 text-align: center;
@@ -257,7 +255,7 @@ div.io-ox-toolbar {
                 /* selected toggle/radio buttons */
                 &.selected {
                     z-index: 20;
-                    background-color: @selected-fill-color;
+                    background-color: fade(@selected-border-color, 50%);
                     border: 1px solid @selected-border-color;
 
                     /* do not add any effects to disabled buttons */
@@ -284,121 +282,120 @@ div.io-ox-toolbar {
                 }
             }
 
-            /* drop-down menus --------------------------------------------- */
+            /* drop-down groups -------------------------------------------- */
 
-            > .dropdown-menu {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                min-width: 0;
-                max-width: none;
-                z-index: 1000;
-                margin: 1px 0 0 0;
-                padding: 0;
-                border: 1px solid @pane-border-color;
-                .border-radius(0);
+            &.dropdown-group {
 
-                /* button chooser control */
-
-                &.button-chooser > table {
-                    margin: -1px;
-                    border-collapse: collapse;
-                    max-width: none;
-
-                    td { padding: 0; }
+                /* adjust margins for caret buttons in drop-down split mode */
+                > button.caret-button {
+                    padding-left: 4px;
+                    padding-right: 4px;
                 }
-
-                /* size chooser control */
-
-                &.size-chooser {
-
-                    /* inner size of one cell in the size chooser */
-                    @cell-size: 18px;
-
-                    /* minimum dimensions for the outer container (in cells) */
-                    min-width: 5 * (@cell-size + 1px) - 1px;
-                    min-height: 3 * (@cell-size + 1px) - 1px;
-                    text-align: left;
-
-                    > button {
+                
+                /* the drop-down menu element */
+                > .dropdown-menu {
+                    display: none;
+                    position: absolute;
+                    top: 100%;
+                    left: 0;
+                    min-width: 0;
+                    max-width: none;
+                    z-index: 1000;
+                    margin: 1px 0 0 0;
+                    padding: 0;
+                    border: 1px solid @pane-border-color;
+                    .border-radius(0);
+    
+                    /* button chooser control */
+                    &.button-chooser > table {
                         margin: -1px;
-                        padding: 0;
-                        .accented-border(@pane-border-color);
-                        vertical-align: top;
-                        font-size: 1px;
-                        line-height: normal;
-
-                        /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                        > div {
-
-                            /* a row in the grid */
+                        border-collapse: collapse;
+                        max-width: none;
+    
+                        td { padding: 0; }
+                    }
+    
+                    /* size chooser control */
+                    &.size-chooser {
+    
+                        /* inner size of one cell in the size chooser */
+                        @cell-size: 18px;
+    
+                        /* minimum dimensions for the outer container (in cells) */
+                        min-width: 5 * (@cell-size + 1px) - 1px;
+                        min-height: 3 * (@cell-size + 1px) - 1px;
+                        text-align: left;
+    
+                        > button {
+                            margin: -1px;
+                            padding: 0;
+                            .accented-border(@pane-border-color);
+                            vertical-align: top;
+                            font-size: 1px;
+                            line-height: normal;
+    
+                            /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
                             > div {
-                                /* need to set height explicitly for Firefox */
-                                height: @cell-size + 1px;
-
-                                /* a cell in the grid */
+    
+                                /* a row in the grid */
                                 > div {
-                                    display: inline-block;
-                                    width: @cell-size;
-                                    height: @cell-size;
-                                    border-bottom: 1px solid @pane-border-color;
-
-                                    &:not(:last-child) {
-                                        border-right: 1px solid @pane-border-color;
+                                    /* need to set height explicitly for Firefox */
+                                    height: @cell-size + 1px;
+    
+                                    /* a cell in the grid */
+                                    > div {
+                                        display: inline-block;
+                                        width: @cell-size;
+                                        height: @cell-size;
+                                        border-bottom: 1px solid @pane-border-color;
+    
+                                        &:not(:last-child) {
+                                            border-right: 1px solid @pane-border-color;
+                                        }
+                                    }
+    
+                                    &:not(:last-child) > div {
+                                        border-bottom: 1px solid @pane-border-color;
+                                    }
+    
+                                    /* height for last row (again, especially for Firefox) */
+                                    &:last-child {
+                                        height: @cell-size;
                                     }
                                 }
-
-                                &:not(:last-child) > div {
-                                    border-bottom: 1px solid @pane-border-color;
-                                }
-
-                                /* height for last row (again, especially for Firefox) */
-                                &:last-child {
-                                    height: @cell-size;
-                                }
                             }
-                        }
-
-                        /* the badge labels showing the width and height of the grid */
-                        > span {
-                            position: absolute;
-                            top: 100%;
-                            right: @cell-size;
-                            z-index: 1020;
-                            margin: 5px 0 0 0;
-                            padding: 4px 6px;
-                            background-color: black;
-                            .opacity(0.8);
-                            .border-radius(9px);
-                            .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-                            font-size: 11px;
-                            line-height: 100%;
-                            color: white;
-                            text-shadow: none;
+    
+                            /* the badge labels showing the width and height of the grid */
+                            > span {
+                                position: absolute;
+                                top: 100%;
+                                right: @cell-size;
+                                z-index: 1020;
+                                margin: 5px 0 0 0;
+                                padding: 4px 6px;
+                                background-color: black;
+                                .opacity(0.8);
+                                .border-radius(9px);
+                                .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+                                font-size: 11px;
+                                line-height: 100%;
+                                color: white;
+                                text-shadow: none;
+                            }
                         }
                     }
                 }
-            }
-
-            /* adjust margins for caret buttons in drop-down split mode */
-            > button.caret-button {
-                padding-left: 4px;
-                padding-right: 4px;
-            }
-
-            /* open drop-down menus ---------------------------------------- */
-
-            &.menu-open {
-
+    
                 /* show drop-down menu element */
-                > .dropdown-menu {
+                &.menu-open > .dropdown-menu {
                     display: block;
                 }
-
-                /* set border to all buttons in the group */
-                > button:not(:focus):not(:active) {
-                    border-color: @pane-border-color;
+    
+                /* set border to all buttons in the group when hovered or opened (split mode) */
+                &:hover, &.menu-open {
+                    > button:not(:focus):not(:active):not(.disabled) {
+                        border-color: @pane-border-color;
+                    }
                 }
             }
         }

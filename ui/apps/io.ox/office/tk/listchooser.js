@@ -25,20 +25,19 @@ define('io.ox/office/tk/listchooser',
 
     /**
      * Creates a container element with a drop-down button shown on top, and a
-     * drop-down menu containing a linear list.
+     * drop-down menu containing a list of items. The list may change
+     * dynamically at runtime, using the setItems() method.
      *
      * @constructor
      *
      * @extends DropDown
      *
      * @param {String} key
-     *  The unique key of the group. This key is shared by all list items
-     *  inserted into the drop-down menu of this group.
+     *  The unique key of the list chooser.
      *
      * @param {Object} options
-     *  A map of options to control the properties of the drop-down button.
-     *  Supports all options of the base class (see DropDown() constructor for
-     *  details).
+     *  A map of options to control the properties of this control. Supports
+     *  all options of the base class (see DropDown() constructor for details).
      */
     function ListChooser(key, options) {
 

@@ -92,27 +92,6 @@ define('io.ox/office/tk/toolbar',
         }
 
         /**
-         * Listens to size events of the browser window, and tries to expand or
-         * shrink resizeable button groups according to the available space in
-         * the tool bar.
-         */
-        function updateGroupSizes() {
-
-            var // available space (width() returns content width without padding)
-                width = node.width();
-
-            // try to enlarge one or more controls, until tool bar overflows
-            _(resizeHandlers).each(function (resizeHandler) {
-                if (containerNode.width() < width) { resizeHandler.call(toolBar, true); }
-            });
-
-            // try to shrink one or more controls, until tool bar does not overflow
-            _(resizeHandlers).each(function (resizeHandler) {
-                if (containerNode.width() > width) { resizeHandler.call(toolBar, false); }
-            });
-        }
-
-        /**
          * Registers a resize handler function provided by a button group
          * object.
          *
@@ -126,10 +105,31 @@ define('io.ox/office/tk/toolbar',
         function registerResizeHandler(resizeHandler) {
             // add window resize listener on first call
             if (!resizeHandlers.length) {
-                $(window).on('resize', updateGroupSizes);
+                $(window).on('resize', windowResizeHandler);
             }
             // store the resize handler object
             resizeHandlers.push(resizeHandler);
+        }
+
+        /**
+         * Listens to size events of the browser window, and tries to expand or
+         * shrink resizeable button groups according to the available space in
+         * the tool bar.
+         */
+        function windowResizeHandler() {
+
+            var // available space (width() returns content width without padding)
+                width = node.width();
+
+            // try to enlarge one or more controls, until tool bar overflows
+            _(resizeHandlers).each(function (resizeHandler) {
+                if (containerNode.width() < width) { resizeHandler.call(toolBar, true); }
+            });
+
+            // try to shrink one or more controls, until tool bar does not overflow
+            _(resizeHandlers).each(function (resizeHandler) {
+                if (containerNode.width() > width) { resizeHandler.call(toolBar, false); }
+            });
         }
 
         /**
@@ -440,7 +440,7 @@ define('io.ox/office/tk/toolbar',
          */
         this.destroy = function () {
             this.events.destroy();
-            $(window).off('resize', updateGroupSizes);
+            $(window).off('resize', windowResizeHandler);
             node.off().remove();
             toolBar = node = containerNode = groups = resizeHandlers = null;
         };
