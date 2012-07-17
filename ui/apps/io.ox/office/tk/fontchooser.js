@@ -37,9 +37,6 @@ define('io.ox/office/tk/fontchooser',
      */
     function FontChooser(key, options) {
 
-        var // self reference
-            self = this;
-
         // base constructor ---------------------------------------------------
 
         ListChooser.call(this, key, options);

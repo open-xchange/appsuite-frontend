@@ -64,9 +64,7 @@ define('io.ox/office/tk/listchooser',
             // restricts the table width to the width of the group element). If
             // this is not a bug but a CSS feature, it needs to be worked
             // around anyway.
-            self.getMenuNode()
-                .css('min-width', '99999px')
-                .css('min-width', listNode.outerWidth() + 'px');
+            self.getMenuNode().width(99999).width(listNode.outerWidth());
 
             // move focus to first list item, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(listNode)) {

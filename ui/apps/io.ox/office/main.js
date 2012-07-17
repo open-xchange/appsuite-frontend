@@ -468,7 +468,7 @@ define('io.ox/office/main',
                     editor.grabFocus();
                 });
 
-            // do not try to save, if file descriptor is missing
+            // do not try to print, if file descriptor is missing
             if (!file) {
                 return def.reject();
             }

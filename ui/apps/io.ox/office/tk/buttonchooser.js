@@ -73,9 +73,7 @@ define('io.ox/office/tk/buttonchooser',
             // restricts the table width to the width of the group element). If
             // this is not a bug but a CSS feature, it needs to be worked
             // around anyway.
-            self.getMenuNode()
-                .css('min-width', '99999px')
-                .css('min-width', gridNode.outerWidth(true) + 'px');
+            self.getMenuNode().width(99999).width(gridNode.outerWidth(true));
 
             // move focus to first enabled control, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
