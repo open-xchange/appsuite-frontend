@@ -93,7 +93,7 @@ define('io.ox/office/tk/listchooser',
                 }
                 return false;
             case KeyCodes.DOWN_ARROW:
-                if (keydown && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
+                if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
                 return false;
             }
         }

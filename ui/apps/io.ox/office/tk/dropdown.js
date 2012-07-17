@@ -116,10 +116,20 @@ define('io.ox/office/tk/dropdown',
             if (show) {
                 self.getNode().addClass(MENUOPEN_CLASS);
                 self.trigger('menuopen', from);
-                // add global click handler after handling this button completely,
-                // otherwise it would close the opened drop-down menu right away
+                // Add a global click handler to close the menu automatically
+                // when clicking somewhere in the page. Listeining to the
+                // 'mousedown' event will catch all real mouse clicks and close
+                // the menu immediately ('click' events will not be generated
+                // by the browser when selecting a text range over several text
+                // spans or paragraphs). It is still needed to listen to real
+                // 'click' events which may be triggered indirectly, e.g. after
+                // pressing a button with the keyboard. The event handler will
+                // be attached in a timeout handler, otherwise it would close
+                // the drop-down menu immediately after it has been opened with
+                // a mouse click on the drop-down button while the event
+                // bubbles up to the document root.
                 window.setTimeout(function () {
-                    $(document).on('click', globalClickHandler);
+                    $(document).on('mousedown click', globalClickHandler);
                 }, 0);
             } else {
                 // move focus to drop-down button, if control in drop-down menu is focused
@@ -128,7 +138,7 @@ define('io.ox/office/tk/dropdown',
                 }
                 self.getNode().removeClass(MENUOPEN_CLASS);
                 self.trigger('menuclose', from);
-                $(document).off('click', globalClickHandler);
+                $(document).off('mousedown click', globalClickHandler);
             }
         }
 
@@ -161,8 +171,16 @@ define('io.ox/office/tk/dropdown',
          * Handles mouse clicks everywhere on the page. Closes the drop-down
          * menu automatically.
          */
-        function globalClickHandler() {
-            toggleMenu(false, 'mouse');
+        function globalClickHandler(event) {
+
+            var // clicked inside the drop-down menu or on the drop-down button
+                innerClick = (event.target === menuButton.get(0)) || (event.target === menuNode.get(0)) || menuNode.has(event.target).length;
+
+            // do not close the menu in a 'mousedown' event, if clicked inside
+            // the menu or on the drop-down button
+            if (!innerClick || (event.type !== 'mousedown')) {
+                toggleMenu(false, 'mouse');
+            }
         }
 
         /**
