@@ -455,6 +455,30 @@ define('io.ox/office/main',
         }
 
         /**
+         * Creates a PDF preview for printing.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that reflects the result of the operation.
+         */
+        function print() {
+
+            var // initialize the deferred to be returned
+                def = $.Deferred().always(function () {
+                    win.idle();
+                    editor.grabFocus();
+                });
+
+            // do not try to save, if file descriptor is missing
+            if (!file) {
+                return def.reject();
+            }
+
+            win.busy();
+
+            return def.resolve();
+        }
+
+        /**
          * Sends all operations contained in the operationsBuffer array to the
          * server, creates a quit delay object causing the quit handler to wait
          * for the AJAX request, and starts the operations timer.
@@ -609,6 +633,8 @@ define('io.ox/office/main',
         app.flush = function () {
             return saveOrFlush('savedocument');
         };
+
+        app.print = print;
 
         app.failSave = function () {
             var point = { file: file, debugMode: debugMode };
