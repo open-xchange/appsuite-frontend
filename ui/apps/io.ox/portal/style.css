@@ -95,6 +95,9 @@
     margin: 13px 13px 0 0;
     cursor: pointer;
 }
+:hover.io-ox-portal-widget-tile  {
+    opacity: 0.75;
+}
 .io-ox-portal-widget-tile h1 {
     line-height: 2em;
 }
