@@ -43,7 +43,12 @@ define('io.ox/office/tk/fontchooser',
 
         // base constructor ---------------------------------------------------
 
-        ListChooser.call(this, key, Utils.extendOptions({ icon: 'icon-font', tooltip: gt('Font name'), sorted: true }, options));
+        ListChooser.call(this, key, Utils.extendOptions({
+            icon: 'icon-font',
+            label: gt('Font name'),
+            tooltip: gt('Font name'),
+            sorted: true
+        }, options));
 
         // initialization -----------------------------------------------------
 

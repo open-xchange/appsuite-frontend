@@ -74,6 +74,8 @@ define('io.ox/office/tk/listchooser',
                 menuNode = self.getMenuNode(),
                 // all list items (button elements)
                 buttons = getListItems(),
+                // width of the drop-down group buttons (used as min-width of the menu)
+                minWidth = self.getNode().outerWidth(),
                 // width of the scrollbar in pixels
                 scrollBarWidth = 0;
 
@@ -89,10 +91,14 @@ define('io.ox/office/tk/listchooser',
             // container shrink to the inner container (needed if a scroll bar
             // has been shown the last time, which is hidden now due to a
             // larger browser window). Afterwards, the width of the scroll bar
-            // will be calculated, if existing.
+            // will be calculated, if existing. Last, the outer width will be
+            // expanded and set to the automatic width of the inner list node.
             menuNode.css('width', 'auto');
+            listNode.css('width', 'auto');
             scrollBarWidth = menuNode.innerWidth() - listNode.outerWidth();
-            menuNode.width(99999).width(listNode.outerWidth() + scrollBarWidth);
+            menuNode.width(99999).width(Math.max(minWidth, listNode.outerWidth() + scrollBarWidth));
+            // expand width of list node to menu width (needed in case minimum width is active)
+            listNode.css('width', '100%');
 
             // move focus to first list item, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(listNode)) {
@@ -146,15 +152,19 @@ define('io.ox/office/tk/listchooser',
         function updateHandler(value) {
 
             var // all list items (button elements)
-                buttons = getListItems();
+                buttons = getListItems(),
+                // find the button to activate
+                button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]'),
+                // label of the active button (undefined if no button is active)
+                label = Utils.getControlLabel(button);
 
             if (!_.isUndefined(value)) {
                 // remove highlighting from all buttons, highlight active button
                 Utils.toggleButtons(buttons, false);
-                // ambiguous state indicated by null value
-                if (!_.isNull(value)) {
-                    Utils.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
-                }
+                Utils.toggleButtons(button, true);
+                // update the label of the drop-down button (use group options if no button is active)
+                Utils.setControlCaption(self.getActionButton(),
+                    _.isUndefined(label) ? options : Utils.extendOptions(options, { label: label }));
             }
         }
 

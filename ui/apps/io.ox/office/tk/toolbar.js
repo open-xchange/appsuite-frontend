@@ -431,6 +431,8 @@ define('io.ox/office/tk/toolbar',
          */
         this.update = function (key, value) {
             _(groups).invoke('update', key, value);
+            // update may have changed control size, recalculate sizes
+            windowResizeHandler();
             return this;
         };
 
