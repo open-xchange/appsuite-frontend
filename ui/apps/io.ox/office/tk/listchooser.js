@@ -198,19 +198,20 @@ define('io.ox/office/tk/listchooser',
                 listItem = $('<li>').append(button),
                 // the text label of the new list item
                 label = Utils.getControlLabel(button),
-                // array with all existing labels
-                labels = null, index = -1;
+                // insertion index for sorted lists
+                index = -1;
 
+            // find insertion index for sorted lists
             if (sorted && _.isString(label)) {
-
-                // extract all button labels as a plain JS array
-                labels = _(listNode.find('button').get()).map(function (button) {
-                    return Utils.getControlLabel($(button));
-                });
-                // find the index to insert the new list item
-                index = _(labels).sortedIndex(label, function (label) {
-                    return _.isString(label) ? ('a' + label.toLowerCase()) : 'b';
-                });
+                index = _.chain(listNode.find('button').get())
+                    // convert array of button elements to array of label texts
+                    .map(function (button) { return Utils.getControlLabel($(button)); })
+                    // filter trailing undefined values of buttons without labels
+                    .filter(_.isString)
+                    // calculate the insertion index of the new list item (ignoring case)
+                    .sortedIndex(label, function (label) { return label.toLowerCase(); })
+                    // exit the call chain, returns result of sortedIndex()
+                    .value();
             }
 
             // insert the new list item element
