@@ -134,7 +134,7 @@ define('io.ox/office/view',
             .addGroup(new SizeChooser('insert/table', insertTableOptions));
 
         createToolBar('format', gt('Format'))
-            .addGroup(new FontChooser('format/character/font/family', { icon: 'icon-font', tooltip: gt('Font name') }))
+            .addGroup(new FontChooser('format/character/font/family'))
             .addGroup(new ButtonGroup()
                 .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
                 .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })

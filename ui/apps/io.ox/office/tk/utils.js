@@ -278,7 +278,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.setControlCaption = function (control, options) {
 
         var // the caption element
-            caption = $('<span>').addClass('caption'),
+            caption = $('<span>').attr('data-role', 'caption'),
 
             // option values
             icon = Utils.getStringOption(options, 'icon'),
@@ -288,11 +288,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             caption.append($('<i>').addClass(icon + ' ' + language));
         }
         if (label) {
-            caption.append($('<span>').text(label));
+            caption.append($('<span>').attr('data-role', 'label').text(label));
         }
 
         // insert the caption into the control(s)
-        control.children('.caption').remove();
+        control.children('[data-role="caption"]').remove();
         if (caption.children().length) {
             control.prepend(caption);
         }
@@ -302,20 +302,38 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * Clones the caption in the specified source control, and inserts it into
      * the target control(s).
      *
-     * @param control
+     * @param {jQuery} target
+     *  The target control(s) that will receive a clone of the source control
+     *  caption.
      *
-     * @param source
+     * @param {jQuery} source
+     *  The source control containing a caption element.
      */
     Utils.cloneControlCaption = function (target, source) {
 
         var // the caption area of the source control
-            sourceCaption = source.first().children('.caption');
+            sourceCaption = source.first().children('[data-role="caption"]');
 
         // insert the caption into the control(s)
-        target.children('.caption').remove();
+        target.children('[data-role="caption"]').remove();
         if (sourceCaption.length) {
             target.prepend(sourceCaption.clone());
         }
+    };
+
+    /**
+     * Returns the text label of the first control in the passed jQuery
+     * collection.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
+     *
+     * @return {String|Undefined}
+     *  The text label of the control, if existing, otherwise undefined.
+     */
+    Utils.getControlLabel = function (control) {
+        var label = control.first().find('[data-role="label"]');
+        return label.length ? label.text() : undefined;
     };
 
     /**

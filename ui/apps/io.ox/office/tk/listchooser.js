@@ -37,6 +37,10 @@ define('io.ox/office/tk/listchooser',
      * @param {Object} options
      *  A map of options to control the properties of the list chooser control.
      *  Supports all options of the DropDown() base class constructor.
+     *  Additionally, supports the following options:
+     *  @param {Boolean} [options.sorted]
+     *      if set to true, the list items will be inserted sorted by their
+     *      label text. Otherwise, list items will be appended to the list.
      */
     function ListChooser(key, options) {
 
@@ -45,6 +49,9 @@ define('io.ox/office/tk/listchooser',
 
             // the container element for all list items
             listNode = $('<ul>'),
+
+            // sorted list items
+            sorted = Utils.getBooleanOption(options, 'sorted', false),
 
             // number of items to skip for page up/down keys
             itemsPerPage = 1;
@@ -168,7 +175,10 @@ define('io.ox/office/tk/listchooser',
         // methods ------------------------------------------------------------
 
         /**
-         * Adds a new item to this list.
+         * Adds a new item to this list. If the list items are sorted (see the
+         * options passed to the constructor), the item will be inserted
+         * according to its text label. If the item does not have a text label,
+         * it will be appended.
          *
          * @param {String} value
          *  The unique value associated to the list item.
@@ -181,7 +191,35 @@ define('io.ox/office/tk/listchooser',
          *  A reference to this list control.
          */
         this.addItem = function (value, options) {
-            listNode.append($('<li>').append(Utils.createButton(key, options).attr('data-value', value)));
+
+            var // create the button element representing the list item
+                button = Utils.createButton(key, options).attr('data-value', value),
+                // embed it into a list item element
+                listItem = $('<li>').append(button),
+                // the text label of the new list item
+                label = Utils.getControlLabel(button),
+                // array with all existing labels
+                labels = null, index = -1;
+
+            if (sorted && _.isString(label)) {
+
+                // extract all button labels as a plain JS array
+                labels = _(listNode.find('button').get()).map(function (button) {
+                    return Utils.getControlLabel($(button));
+                });
+                // find the index to insert the new list item
+                index = _(labels).sortedIndex(label, function (label) {
+                    return _.isString(label) ? ('a' + label.toLowerCase()) : 'b';
+                });
+            }
+
+            // insert the new list item element
+            if ((0 <= index) && (index < listNode.children().length)) {
+                listNode.children().eq(index).before(listItem);
+            } else {
+                listNode.append(listItem);
+            }
+
             return this;
         };
 
