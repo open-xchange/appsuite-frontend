@@ -77,7 +77,7 @@ define('io.ox/office/tk/buttonchooser',
 
             // move focus to first enabled control, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
-                self.getGridButtons().first().focus();
+                self.getGridButtons().filter(Utils.ENABLED_SELECTOR).first().focus();
             }
         }
 
@@ -133,7 +133,8 @@ define('io.ox/office/tk/buttonchooser',
          * collection.
          */
         this.getGridButtons = function () {
-            return gridNode.find('button' + Utils.ENABLED_SELECTOR);
+            // do not return the trailing placeholder buttons
+            return gridNode.find('button').slice(0, buttonCount);
         };
 
         /**

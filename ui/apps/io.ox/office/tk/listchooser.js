@@ -44,14 +44,17 @@ define('io.ox/office/tk/listchooser',
             self = this,
 
             // the container element for all list items
-            listNode = $('<ul>');
+            listNode = $('<ul>'),
+
+            // number of items to skip for page up/down keys
+            itemsPerPage = 1;
 
         // private methods ----------------------------------------------------
 
         /**
          * Returns all button elements representing the list items.
          */
-        function getButtons() {
+        function getListItems() {
             return listNode.find('button');
         }
 
@@ -60,15 +63,27 @@ define('io.ox/office/tk/listchooser',
          */
         function menuOpenHandler(event, from) {
 
+            var // the outer menu node containing the list element
+                menuNode = self.getMenuNode(),
+                // all list items (button elements)
+                buttons = getListItems(),
+                // width of the scrollbar in pixels
+                scrollBarWidth = 0;
+
+            // set maximum height of the drop-down menu, depending on window height
+            menuNode.css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px');
+            itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+
             // Work around a Firefox bug which displays the menu too narrow (it
             // restricts the table width to the width of the group element). If
             // this is not a bug but a CSS feature, it needs to be worked
             // around anyway.
-            self.getMenuNode().width(99999).width(listNode.outerWidth());
+            scrollBarWidth = menuNode.innerWidth() - listNode.outerWidth();
+            menuNode.width(99999).width(listNode.outerWidth() + scrollBarWidth);
 
             // move focus to first list item, if opened by keyboard
             if ((from === 'key') && !Utils.containsFocusedControl(listNode)) {
-                getButtons().first().focus();
+                getListItems().first().focus();
             }
         }
 
@@ -79,8 +94,8 @@ define('io.ox/office/tk/listchooser',
 
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
-                // all list items
-                buttons = getButtons(),
+                // all list items (button elements)
+                buttons = getListItems(),
                 // index of the focused list item
                 index = buttons.index(event.target);
 
@@ -92,6 +107,18 @@ define('io.ox/office/tk/listchooser',
                 return false;
             case KeyCodes.DOWN_ARROW:
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
+                return false;
+            case KeyCodes.PAGE_UP:
+                if (keydown) { buttons.eq(Math.max(0, index - itemsPerPage)).focus(); }
+                return false;
+            case KeyCodes.PAGE_DOWN:
+                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + itemsPerPage)).focus(); }
+                return false;
+            case KeyCodes.HOME:
+                if (keydown) { buttons.first().focus(); }
+                return false;
+            case KeyCodes.END:
+                if (keydown) { buttons.last().focus(); }
                 return false;
             }
         }
@@ -105,8 +132,8 @@ define('io.ox/office/tk/listchooser',
          */
         function updateHandler(value) {
 
-            var // find all list items
-                buttons = getButtons();
+            var // all list items (button elements)
+                buttons = getListItems();
 
             if (!_.isUndefined(value)) {
                 // remove highlighting from all buttons, highlight active button

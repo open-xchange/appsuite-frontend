@@ -236,8 +236,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             control = $('<' + element + '>'),
 
             // option values
-            classes = Utils.getStringOption(options, 'classes'),
-            css = Utils.getObjectOption(options, 'css'),
+            classes = Utils.getStringOption(options, 'classes', ''),
+            css = Utils.getObjectOption(options, 'css', {}),
             tooltip = Utils.getStringOption(options, 'tooltip');
 
         // add the key as data attribute
@@ -246,12 +246,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         }
 
         // add optional formatting
-        if (classes) {
-            control.addClass(classes);
-        }
-        if (css) {
-            control.css(css);
-        }
+        control.addClass(classes).css(css);
         if (tooltip) {
             control.tooltip({ title: tooltip, placement: 'top', animation: false });
         }
@@ -289,12 +284,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             icon = Utils.getStringOption(options, 'icon'),
             label = Utils.getStringOption(options, 'label');
 
-        // remove the old
-        // add icon in an i element
         if (icon) {
             caption.append($('<i>').addClass(icon + ' ' + language));
         }
-        // add text label, separate it from the icon
         if (label) {
             caption.append($('<span>').text(label));
         }
