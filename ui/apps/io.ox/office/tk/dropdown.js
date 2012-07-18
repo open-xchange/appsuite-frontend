@@ -74,10 +74,9 @@ define('io.ox/office/tk/dropdown',
             // the action button (either triggering a default action, or toggling the drop-down menu)
             actionButton = Utils.createButton(key, options),
 
-            // the drop-down button in split mode (pass 'options' for formatting, but drop any contents)
+            // the drop-down button in split mode
             caretTooltip = Utils.getStringOption(options, 'caretTooltip'),
-            caretOptions = caretTooltip ? Utils.extendOptions(options, { tooltip: caretTooltip }) : options,
-            caretButton = split ? Utils.createButton(key, caretOptions).addClass('caret-button').empty() : $(),
+            caretButton = split ? Utils.createButton(key, { classes: 'caret-button', tooltip: caretTooltip }) : $(),
 
             // reference to the button that triggers the drop-down menu
             menuButton = split ? caretButton : actionButton,
