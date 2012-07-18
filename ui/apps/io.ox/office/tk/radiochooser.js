@@ -58,12 +58,11 @@ define('io.ox/office/tk/radiochooser',
                 button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]');
 
             if (!_.isUndefined(value)) {
-                // remove highlighting from all buttons
+                // remove highlighting from all buttons, highlight active button
                 Utils.toggleButtons(buttons, false);
-                // update the contents of the drop-down button (use first button if no button is active)
-                self.replaceButtonContents((button.length ? button : buttons).first().contents().clone());
-                // highlight active button
                 Utils.toggleButtons(button, true);
+                // update the contents of the drop-down button (use first button if no button is active)
+                Utils.cloneControlCaption(self.getActionButton(), (button.length ? button : buttons).first());
             }
         }
 
@@ -109,7 +108,7 @@ define('io.ox/office/tk/radiochooser',
 
             // insert contents of first inserted button into the top-level button
             if (this.getGridButtons().length === 1) {
-                self.replaceButtonContents(button.contents().clone());
+                Utils.cloneControlCaption(self.getActionButton(), button);
             }
 
             return this;

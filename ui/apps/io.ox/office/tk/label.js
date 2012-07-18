@@ -44,7 +44,7 @@ define('io.ox/office/tk/label',
         // register update handler
         this.registerUpdateHandler(key, function (value) {
             if (!_.isUndefined(value)) {
-                Utils.insertControlLabel(label.empty(), Utils.extendOptions(options, { label: value }));
+                Utils.setControlCaption(label, Utils.extendOptions(options, { label: value }));
             }
         });
 

@@ -258,14 +258,8 @@ define('io.ox/office/tk/dropdown',
 
         // methods ------------------------------------------------------------
 
-        /**
-         * Replaces the contents of the drop-down button with the passed
-         * elements, and appends a caret sign (unless this group is in split
-         * mode).
-         */
-        this.replaceButtonContents = function (nodes) {
-            actionButton.empty().append(nodes).appendCaret();
-            return this;
+        this.getActionButton = function () {
+            return actionButton;
         };
 
         this.getMenuNode = function () {
@@ -305,15 +299,6 @@ define('io.ox/office/tk/dropdown',
             .addFocusableControl(caretButton)
             .addControl(menuNode);
 
-        // helper function appending a caret sign to the contents of the drop-down button
-        actionButton.appendCaret = function () { return this; };
-        menuButton.appendCaret = function () {
-            if (this.contents().length) {
-                this.append($('<span>').addClass('whitespace'));
-            }
-            return this.append($('<i>').addClass('icon-io-ox-caret'));
-        };
-
         // in split mode, register an action handler for the action button
         if (split) {
             this.registerActionHandler(actionButton, 'click', function () { return defaultValue; });
@@ -325,7 +310,7 @@ define('io.ox/office/tk/dropdown',
 
         // prepare drop-down button, and register event handlers
         menuButton
-            .appendCaret()
+            .append($('<i>').addClass('icon-io-ox-caret'))
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
             .on('blur:key', function () { self.hideMenu(); });

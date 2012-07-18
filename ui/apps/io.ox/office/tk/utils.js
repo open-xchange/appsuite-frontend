@@ -209,7 +209,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * Creates and returns a new form control element.
      *
      * @param {String} element
-     *  The tag name of the element to be created.
+     *  The tag name of the DOM element to be created.
      *
      * @param {String} key
      *  The key associated to the control element. Will be stored in its
@@ -260,7 +260,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Appends an icon and a text label to the existing contents of the passed
+     * Inserts an icon and a text label to the existing contents of the passed
      * form control.
      *
      * @param {jQuery} control
@@ -280,21 +280,34 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  A jQuery object containing the new label element.
      */
-    Utils.insertControlLabel = function (control, options) {
+    Utils.setControlCaption = function (control, options) {
 
-        var // option values
+        var // the caption element
+            caption = control.children('span.caption').empty(),
+
+            // option values
             icon = Utils.getStringOption(options, 'icon'),
             label = Utils.getStringOption(options, 'label');
 
+        // remove the old
         // add icon in an i element
         if (icon) {
-            control.append($('<i>').addClass(icon + ' ' + language));
+            caption.append($('<i>').addClass(icon + ' ' + language));
         }
         // add text label, separate it from the icon
         if (label) {
-            if (icon) { control.append($('<span>').addClass('whitespace')); }
-            control.append($('<span>').text(label));
+            caption.append($('<span>').text(label));
         }
+    };
+
+    Utils.cloneControlCaption = function (control, source) {
+
+        var // the caption area of the target control(s)
+            targetCaption = control.children('span.caption').empty(),
+            // the caption area of the source control
+            sourceCaption = source.first().children('span.caption');
+
+        targetCaption.append(sourceCaption.contents().clone());
     };
 
     /**
@@ -410,9 +423,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.createLabel = function (key, options) {
 
         var // create the DOM label element
-            label = Utils.createControl('label', key, options);
+            label = Utils.createControl('label', key, options).append($('<span>').addClass('caption'));
 
-        Utils.insertControlLabel(label, options);
+        Utils.setControlCaption(label, options);
         return label;
     };
 
@@ -442,9 +455,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = Utils.createControl('button', key, options);
+            button = Utils.createControl('button', key, options).append($('<span>').addClass('caption'));
 
-        Utils.insertControlLabel(button, options);
+        Utils.setControlCaption(button, options);
         return button;
     };
 

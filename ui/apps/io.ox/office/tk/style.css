@@ -217,10 +217,16 @@ div.io-ox-toolbar {
                     outline: none;
                 }
 
-                /* whitespace between icons, text, and drop-down carets */
-                > span.whitespace {
+                /* captions */
+                span.caption {
                     display: inline-block;
-                    width: 5px;
+                }
+
+                /* whitespace between control caption elements */
+                span, i {
+                    + span, + i { 
+                        margin-left: 5px;
+                    }
                 }
             }
 
