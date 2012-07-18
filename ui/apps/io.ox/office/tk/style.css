@@ -316,7 +316,7 @@ div.io-ox-toolbar {
                     margin: 1px 0 0 0;
                     padding: 0;
                     background-color: @pane-fill-color;
-                    .simple-border(@pane-border-color);
+                    border: 1px solid @pane-border-color;
                     .border-radius(0);
 
                     /* button chooser control */
@@ -400,13 +400,15 @@ div.io-ox-toolbar {
                         > button {
                             margin: -1px;
                             padding: 0;
-                            .accented-border(@pane-border-color);
+                            background-color: @pane-fill-color;
                             vertical-align: top;
                             font-size: 1px;
                             line-height: normal;
 
                             /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
                             > div {
+                                margin: -1px;
+                                .simple-border(@pane-border-color);
 
                                 /* a row in the grid */
                                 > div {
