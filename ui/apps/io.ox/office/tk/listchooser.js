@@ -80,11 +80,17 @@ define('io.ox/office/tk/listchooser',
             // set maximum height of the drop-down menu, depending on window height
             menuNode.css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px');
             itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+            menuNode.scrollTop(0);
 
             // Work around a Firefox bug which displays the menu too narrow (it
             // restricts the table width to the width of the group element). If
             // this is not a bug but a CSS feature, it needs to be worked
-            // around anyway.
+            // around anyway. First, set width to 'auto' to let the outer
+            // container shrink to the inner container (needed if a scroll bar
+            // has been shown the last time, which is hidden now due to a
+            // larger browser window). Afterwards, the width of the scroll bar
+            // will be calculated, if existing.
+            menuNode.css('width', 'auto');
             scrollBarWidth = menuNode.innerWidth() - listNode.outerWidth();
             menuNode.width(99999).width(listNode.outerWidth() + scrollBarWidth);
 
