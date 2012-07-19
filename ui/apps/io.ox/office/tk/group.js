@@ -32,9 +32,9 @@ define('io.ox/office/tk/group',
 
     /**
      * Creates a container element used to hold control elements. All controls
-     * shown in a tool bar must be inserted into such group containers. This is
-     * the base class for specialized groups and does not add any specific
-     * functionality to the inserted controls.
+     * shown in view components must be inserted into such group containers.
+     * This is the base class for specialized groups and does not add any
+     * specific functionality to the inserted controls.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the group. The following
@@ -180,8 +180,8 @@ define('io.ox/office/tk/group',
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  tool bar. Receives the control associated to the passed key, and
-         *  the value passed to the 'update' event.
+         *  group. Receives the control associated to the passed key, and the
+         *  value passed to the 'update' event.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -214,9 +214,10 @@ define('io.ox/office/tk/group',
          *
          * @param {Function} actionHandler
          *  The action handler function. Will be called in the context of this
-         *  tool bar. Receives the control passed to this function. Must return
+         *  group. Receives the control passed to this function. Must return
          *  the current value of the control (e.g. the boolean state of a
-         *  toggle button, or the text of a text field).
+         *  toggle button, the value of a list item, or the current text in a
+         *  text input field).
          *
          * @returns {Group}
          *  A reference to this group.
@@ -290,7 +291,7 @@ define('io.ox/office/tk/group',
          *  A reference to this group.
          */
         this.update = function (key, value) {
-            if (key in updateHandlers) {
+            if (!_.isUndefined(value) && (key in updateHandlers)) {
                 _(updateHandlers[key]).each(function (updateHandler) {
                     updateHandler.call(this, value);
                 }, this);

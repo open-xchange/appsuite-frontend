@@ -54,16 +54,11 @@ define('io.ox/office/tk/radiochooser',
 
             var // find all option buttons
                 buttons = self.getGridButtons(),
-                // find the button to activate
-                button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]');
+                // activate the button with the specified value
+                button = Utils.selectRadioButton(buttons, value);
 
-            if (!_.isUndefined(value)) {
-                // remove highlighting from all buttons, highlight active button
-                Utils.toggleButtons(buttons, false);
-                Utils.toggleButtons(button, true);
-                // update the contents of the drop-down button (use first button if no button is active)
-                Utils.cloneControlCaption(self.getActionButton(), (button.length ? button : buttons).first());
-            }
+            // update the contents of the drop-down button (use first button if no button is active)
+            Utils.cloneControlCaption(self.getActionButton(), (button.length ? button : buttons).first());
         }
 
         /**

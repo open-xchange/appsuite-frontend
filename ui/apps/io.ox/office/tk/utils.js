@@ -516,6 +516,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         buttons.toggleClass(Utils.SELECTED_CLASS, state);
     };
 
+    /**
+     * Activates a button from the passed collection of buttons, after
+     * deactivating all buttons in the collection.
+     *
+     * @param {jQuery} buttons
+     *  A jQuery collection containing one or more button elements.
+     *
+     * @param {String|Null} [value]
+     *  If set to a string, activates the button whose 'data-value' attribute
+     *  is equal to this string. Otherwise, does not activate any button.
+     *
+     * @returns {jQuery}
+     *  The activated button, if existing, otherwise an empty jQuery object.
+     */
+    Utils.selectRadioButton = function (buttons, value) {
+
+        var // find the button to activate
+            button = _.isString(value) ? buttons.filter('[data-value="' + value + '"]') : $();
+
+        // remove highlighting from all buttons, highlight active button
+        Utils.toggleButtons(buttons, false);
+        Utils.toggleButtons(button, true);
+        return button;
+    };
+
     // key codes --------------------------------------------------------------
 
     /**

@@ -34,7 +34,7 @@ define('io.ox/office/view',
             tabBar = new ToolBar(),
 
             // the tab buttons to select the tool bars
-            radioGroup = tabBar.addRadioGroup('view/toolbars/show', { type: 'buttons' }),
+            radioGroup = tabBar.addRadioGroup('view/toolbars/show', { type: 'list', autoExpand: true }),
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
@@ -140,7 +140,7 @@ define('io.ox/office/view',
                 .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
                 .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             )
-            .addRadioGroup('format/paragraph/alignment', { type: 'auto', columns: 2, tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })

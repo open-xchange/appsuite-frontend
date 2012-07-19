@@ -189,8 +189,8 @@ div.io-ox-toolbar {
                 display: none;
             }
 
-            /* space between groups */
-            + .group {
+            /* spacing between groups */
+            &:not(.hidden) ~ .group {
                 margin-left: 10px;
             }
 
@@ -516,7 +516,7 @@ div.io-ox-toolbar.tabs {
         > span.separator {
             display: inline-block;
             position: absolute;
-            width: 50%;
+            width: 75%;
             height: 1px;
             bottom: 0;
             font-size: 1px;

@@ -52,7 +52,7 @@ define('io.ox/office/tk/buttongroup',
          * A generic update handler for push buttons and toggle buttons.
          */
         function updateHandler(button, value) {
-            if (!_.isUndefined(value) && isToggleButton(button)) {
+            if (isToggleButton(button)) {
                 // Translate null (special 'ambiguous' state) to false to
                 // prevent toggling the button as implemented by the static
                 // method Utils.toggleButtons().

@@ -41,24 +41,12 @@ define('io.ox/office/tk/radiogroup',
         /**
          * Activates an option button in this radio group.
          *
-         * @param {String|Null} [value]
-         *  The unique value associated to the button to be activated. If
-         *  omitted or set to null, does not activate any button (ambiguous
-         *  state).
+         * @param {String|Null} value
+         *  The unique value associated to the button to be activated. If set
+         *  to null, does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
-
-            var // find all option buttons
-                buttons = self.getNode().children('button');
-
-            if (!_.isUndefined(value)) {
-                // remove highlighting from all buttons, highlight active button
-                Utils.toggleButtons(buttons, false);
-                // ambiguous state indicated by null value
-                if (!_.isNull(value)) {
-                    Utils.toggleButtons(buttons.filter('[data-value="' + value + '"]'), true);
-                }
-            }
+            Utils.selectRadioButton(self.getNode().children('button'), value);
         }
 
         /**

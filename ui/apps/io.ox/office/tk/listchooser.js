@@ -75,7 +75,7 @@ define('io.ox/office/tk/listchooser',
                 // all list items (button elements)
                 buttons = getListItems(),
                 // width of the drop-down group buttons (used as min-width of the menu)
-                minWidth = self.getNode().outerWidth(),
+                minWidth = self.getNode().width(),
                 // width of the scrollbar in pixels
                 scrollBarWidth = 0;
 
@@ -84,20 +84,28 @@ define('io.ox/office/tk/listchooser',
             itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
             menuNode.scrollTop(0);
 
-            // Work around a Firefox bug which displays the menu too narrow (it
-            // restricts the table width to the width of the group element). If
-            // this is not a bug but a CSS feature, it needs to be worked
-            // around anyway. First, set width to 'auto' to let the outer
-            // container shrink to the inner container (needed if a scroll bar
-            // has been shown the last time, which is hidden now due to a
-            // larger browser window). Afterwards, the width of the scroll bar
-            // will be calculated, if existing. Last, the outer width will be
-            // expanded and set to the automatic width of the inner list node.
+            // Calculate the width of the drop-down menu. Work around a Firefox
+            // bug which displays the menu too narrow (it restricts the width
+            // of the drop-down menu to the width of the group element, if the
+            // width of the list items is set to '100%' to give them the same
+            // width). If this is not a bug but a CSS feature, it needs to be
+            // worked around anyway.
+
+            // 1) Set width of menu node and list node to 'auto' to let the
+            // containers shrink together (needed if a scroll bar has been
+            // shown the last time, which is hidden now due to a larger browser
+            // window). Here, Firefox shrinks too much.
             menuNode.css('width', 'auto');
             listNode.css('width', 'auto');
+            // 2) Calculate the width of the scroll bar, if existing.
             scrollBarWidth = menuNode.innerWidth() - listNode.outerWidth();
-            menuNode.width(99999).width(Math.max(minWidth, listNode.outerWidth() + scrollBarWidth));
-            // expand width of list node to menu width (needed in case minimum width is active)
+            // 3) Expand the width of the outer menu node, this gives the list
+            // node enough space. Then, set it to the calculated width of the
+            // list node. Take the width of the top-level buttons as minimum
+            // width into account.
+            menuNode.width(99999).width(Math.max(minWidth - 2, listNode.outerWidth() + scrollBarWidth));
+            // 4) Expand width of the list node to the menu width (needed in
+            // case minimum width is active).
             listNode.css('width', '100%');
 
             // move focus to first list item, if opened by keyboard
@@ -153,19 +161,15 @@ define('io.ox/office/tk/listchooser',
 
             var // all list items (button elements)
                 buttons = getListItems(),
-                // find the button to activate
-                button = _.isNull(value) ? $() : buttons.filter('[data-value="' + value + '"]'),
+                // activate the button with the specified value
+                button = Utils.selectRadioButton(buttons, value),
                 // label of the active button (undefined if no button is active)
-                label = Utils.getControlLabel(button);
+                label = Utils.getControlLabel(button),
+                // options used to update the drop-down button (use group label if no button is active)
+                buttonOptions = _.isUndefined(label) ? options : Utils.extendOptions(options, { label: label });
 
-            if (!_.isUndefined(value)) {
-                // remove highlighting from all buttons, highlight active button
-                Utils.toggleButtons(buttons, false);
-                Utils.toggleButtons(button, true);
-                // update the label of the drop-down button (use group options if no button is active)
-                Utils.setControlCaption(self.getActionButton(),
-                    _.isUndefined(label) ? options : Utils.extendOptions(options, { label: label }));
-            }
+            // update the label of the drop-down button
+            Utils.setControlCaption(self.getActionButton(), buttonOptions);
         }
 
         /**
