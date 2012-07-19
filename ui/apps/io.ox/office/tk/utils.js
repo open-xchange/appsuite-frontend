@@ -434,14 +434,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new label. Supports
-     *  all generic options (see method Utils.createControl() for details).
-     *  Additionally, the following options are supported:
-     *  @param {String} [options.icon]
-     *      The full name of the Bootstrap or OX icon class. If omitted, no
-     *      icon will be shown.
-     *  @param {String} [options.label]
-     *      The text label. Will follow an icon. If omitted, no text will be
-     *      shown.
+     *  all generic options supported by the method Utils.createControl(), and
+     *  all caption options supported by the method Utils.setControlLabel().
      *
      * @returns {jQuery}
      *  A jQuery object containing the new label element.
@@ -466,14 +460,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new button. Supports
-     *  all generic options (see method Utils.createControl() for details).
+     *  all generic options supported by the method Utils.createControl(), and
+     *  all caption options supported by the method Utils.setControlLabel().
      *  Additionally, the following options are supported:
-     *  @param {String} [options.icon]
-     *      The full name of the Bootstrap or OX icon class. If omitted, no
-     *      icon will be shown.
-     *  @param {String} [options.label]
-     *      The text label of the button. Will follow an icon. If omitted, no
-     *      label will be shown.
+     *  @param {String} [options.value]
+     *      A string value that will be copied to the 'data-value' attribute of
+     *      the button.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
@@ -481,9 +473,14 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.createButton = function (key, options) {
 
         var // create the DOM button element
-            button = Utils.createControl('button', key, options);
+            button = Utils.createControl('button', key, options),
+            // value for the data-value attribute
+            value = Utils.getStringOption(options, 'value');
 
         Utils.setControlCaption(button, options);
+        if (value) {
+            button.attr('data-value', value);
+        }
         return button;
     };
 
@@ -514,6 +511,17 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.toggleButtons = function (buttons, state) {
         buttons.toggleClass(Utils.SELECTED_CLASS, state);
+    };
+
+    /**
+     * Returns the string value of the first button control in the passed
+     * jQuery collection.
+     *
+     * @param button
+     *  A jQuery collection containing a button element.
+     */
+    Utils.getButtonValue = function (button) {
+        return button.first().attr('data-value');
     };
 
     /**

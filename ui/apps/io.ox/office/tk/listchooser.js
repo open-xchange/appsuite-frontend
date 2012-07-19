@@ -183,7 +183,7 @@ define('io.ox/office/tk/listchooser',
          *  The item value that has been passed to the addItem() method.
          */
         function clickHandler(button) {
-            var value = button.attr('data-value');
+            var value = Utils.getButtonValue(button);
             updateHandler(value);
             return value;
         }
@@ -213,7 +213,7 @@ define('io.ox/office/tk/listchooser',
         this.addItem = function (value, options) {
 
             var // create the button element representing the list item
-                button = Utils.createButton(key, options).attr('data-value', value),
+                button = Utils.createButton(key, Utils.extendOptions(options, { value: value })),
                 // embed it into a list item element
                 listItem = $('<li>').append(button),
                 // the text label of the new list item

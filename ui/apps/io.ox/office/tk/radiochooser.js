@@ -72,7 +72,7 @@ define('io.ox/office/tk/radiochooser',
          *  The button value that has been passed to the addButton() method.
          */
         function clickHandler(button) {
-            var value = button.attr('data-value');
+            var value = Utils.getButtonValue(button);
             updateHandler(value);
             return value;
         }
@@ -99,7 +99,7 @@ define('io.ox/office/tk/radiochooser',
         this.addButton = function (value, options) {
 
             var // create the new button
-                button = this.createGridButton(options).attr('data-value', value);
+                button = this.createGridButton(Utils.extendOptions(options, { value: value }));
 
             // insert contents of first inserted button into the top-level button
             if (this.getGridButtons().length === 1) {

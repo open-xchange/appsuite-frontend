@@ -60,7 +60,7 @@ define('io.ox/office/tk/radiogroup',
          *  The button value that has been passed to the addButton() method.
          */
         function clickHandler(button) {
-            var value = button.attr('data-value');
+            var value = Utils.getButtonValue(button);
             updateHandler(value);
             return value;
         }
@@ -85,7 +85,7 @@ define('io.ox/office/tk/radiogroup',
          *  A reference to this button group.
          */
         this.addButton = function (value, options) {
-            var button = Utils.createButton(key, options).attr('data-value', value);
+            var button = Utils.createButton(key, Utils.extendOptions(options, { value: value }));
             return this.addFocusableControl(button);
         };
 
