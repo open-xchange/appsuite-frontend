@@ -294,6 +294,29 @@ define.async('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
+        app.setDefaultSender = function (sender) {
+            var arrayOfAccounts = view.sidepanel.find('.io-ox-mail-write-sender');
+            _.each(arrayOfAccounts, function (value) {
+                var mail = $(value).find('div').text();
+                if (mail === sender[1]) {
+                    $(value).attr({
+                        'checked': 'checked'
+                    });
+                }
+            });
+            defaultSender = sender;
+        };
+
+        app.getSender = function () {
+            var primaryAddress = view.sidepanel.find('.io-ox-mail-write-sender[checked="checked"] div').text(),
+                personal = view.sidepanel.find('.io-ox-mail-write-sender[checked="checked"] div').attr('data-id'),
+                sender = ['"' + personal + '"', primaryAddress];
+            if (!primaryAddress) {
+                return defaultSender;
+            }
+            return sender;
+        };
+
         app.setBody = function (str) {
             app.markDirty();
             // get default signature
@@ -508,9 +531,10 @@ define.async('io.ox/mail/write/main',
         /**
          * Compose new mail
          */
-        app.compose = function (data, senderMail) {
+        app.compose = function (data) {
 
-            defaultSender = senderMail;
+            this.setDefaultSender(data.defaultSender);
+
             // register mailto!
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
@@ -557,8 +581,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Reply all
          */
-        app.replyall = function (obj, senderMail) {
-            defaultSender = senderMail;
+        app.replyall = function (obj) {
+            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
@@ -579,8 +603,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Reply
          */
-        app.reply = function (obj, senderMail) {
-            defaultSender = senderMail;
+        app.reply = function (obj) {
+            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
@@ -601,8 +625,8 @@ define.async('io.ox/mail/write/main',
         /**
          * Forward
          */
-        app.forward = function (obj, senderMail) {
-            defaultSender = senderMail;
+        app.forward = function (obj) {
+            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
@@ -685,8 +709,11 @@ define.async('io.ox/mail/write/main',
                 };
             }
             // transform raw data
+            var sender = this.getSender();
+
             mail = {
-                from: [defaultSender] || [],
+//                from: [defaultSender] || [],
+                from: [sender] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),

@@ -41,10 +41,12 @@ define('io.ox/mail/actions',
             require(['io.ox/mail/write/main'], function (m) {
                 var initialFolder = app.folder.get(),
                     accountID = api.getAccountIDFromFolder(initialFolder);
-                accountAPI.get(accountID).done(function (data) {
-                    var defaultSender = ['"' + data.personal + '"', data.primary_address];
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
                     m.getApp().launch().done(function () {
-                        this.compose({}, defaultSender);
+                        this.compose({
+                                defaultSender:  defaultSender
+                            });
                     });
                 });
 
@@ -75,7 +77,8 @@ define('io.ox/mail/actions',
                 accountAPI.get(accountID).done(function (accountdata) {
                     var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
                     m.getApp().launch().done(function () {
-                        this.replyall(data, defaultSender);
+                        data.defaultSender = defaultSender;
+                        this.replyall(data);
                     });
                 });
             });
@@ -94,7 +97,8 @@ define('io.ox/mail/actions',
                 accountAPI.get(accountID).done(function (accountdata) {
                     var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
                     m.getApp().launch().done(function () {
-                        this.reply(data, defaultSender);
+                        data.defaultSender = defaultSender;
+                        this.reply(data);
                     });
                 });
             });
@@ -113,7 +117,8 @@ define('io.ox/mail/actions',
                 accountAPI.get(accountID).done(function (accountdata) {
                     var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
                     m.getApp().launch().done(function () {
-                        this.forward(data, defaultSender);
+                        data.defaultSender = defaultSender;
+                        this.forward(data);
                     });
                 });
             });

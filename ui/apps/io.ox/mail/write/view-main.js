@@ -24,8 +24,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/preview/main',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
+     'io.ox/core/api/account',
      'gettext!io.ox/mail/mail'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, gt) {
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, gt) {
 
     'use strict';
 
@@ -213,6 +214,60 @@ define("io.ox/mail/write/view-main",
             );
         },
 
+        createSenderField: function () {
+
+            var node = $('<div>').addClass('sender-list'),
+                that = this;
+
+            accountAPI.all().done(function (array) {
+                _.each(array, function (key, value) {
+                    var itemNode = $('<div>').on('click', function () {
+                        node.find('.section-item').removeAttr('checked');
+                        $(this).attr({
+                            'checked': 'checked'
+                        });
+                    });
+                    node.append(
+                        itemNode.addClass('io-ox-mail-write-sender section-item').append(
+                            $('<div>').attr('data-id', key.personal).text(key.primary_address)
+                        )
+                    );
+                });
+
+//            var node = $('<div>').addClass('form-horizontal controls'),
+//                that = this;
+//
+//            accountAPI.all().done(function (array) {
+//                _.each(array, function (key, value) {
+//                    var label = $('<label>').addClass('radio');
+//                    var itemNode = $('<input>').attr({
+//                        'type': 'radio',
+//                        'name': 'sender'
+//                    }).on('click', function () {
+//
+//                        node.find('.section-item').removeAttr('checked');
+//                        $(this).attr({
+//                            'checked': 'checked'
+//                        });
+//                    });
+//                    var text = key.primary_address;
+//                    node.append(
+//                        label.append(
+//                            itemNode.addClass('io-ox-mail-write-sender section-item').append(
+//                                    $('<div>').attr('data-id', key.personal).text(key.primary_address)
+//                            ),
+//                            text
+//                        )
+//                    );
+//                });
+
+                if (array[1]) {
+                    return that.addSection('from', gt('From')).append(node);
+                }
+            });
+
+        },
+
         createRecipientList: function (id) {
             return (this.sections[id + 'List'] = $('<div>'))
                 .addClass('recipient-list').hide();
@@ -364,6 +419,9 @@ define("io.ox/mail/write/view-main",
             this.sidepanel = this.scrollpane.scrollable();
 
             // sections
+
+            // FROM
+            this.createSenderField();
 
             // TO
             this.addSection('to', gt('To'))
