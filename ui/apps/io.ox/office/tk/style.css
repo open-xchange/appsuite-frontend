@@ -465,7 +465,7 @@ div.io-ox-toolbar.tabs {
     padding-bottom: 0;
 
     > span {
-        > .group button {
+        > .group > button {
             padding: 2px 12px;
             border-bottom: 1px solid @pane-border-color;
             .border-top-left-radius(4px);
