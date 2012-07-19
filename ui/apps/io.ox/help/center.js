@@ -30,12 +30,11 @@ define("io.ox/help/center", [
         } else {
             disableHelp();
         }
-        console.log("Toggling help center. Active? %s", this.active);
     };
     
     var enableHelp = function () {
         var $body = $('body');
-        var $helpButton = $('#io-ox-help-on');
+        var $helpButton = $body.find('#io-ox-help-on');
         var $saveThese = $(_($('[data-ref]')).filter(function (elem) {
             var $elem = $(elem);
             var dataRef = $elem.attr('data-ref');
@@ -50,16 +49,38 @@ define("io.ox/help/center", [
             var $elem = $(elem);
             var offset = $elem.offset();
             var dataRef = $elem.attr('data-ref');
-            
+            console.log("Sizes for %s: width %s/%s, height %s/%s, padding = %s %s %s %s, margin = %s %s %s %s",
+                dataRef,
+                $elem.outerWidth(),
+                $elem.width(),
+                $elem.outerHeight(),
+                $elem.height(),
+                $elem.css("paddingTop"),
+                $elem.css("paddingRight"),
+                $elem.css("paddingBottom"),
+                $elem.css("paddingLeft"),
+                $elem.css("marginTop"),
+                $elem.css("marginRight"),
+                $elem.css("marginBottom"),
+                $elem.css("marginLeft"));
             if (! ($elem.width() === 0 || $elem.height() === 0 || (offset.left === 0 && offset.top === 0))) {
                 var helpText = getHelpText(dataRef);
                 $("<div>").css({
                     position: 'absolute',
                     top: offset.top,
                     left: offset.left,
-                    width: $elem.outerWidth(),
-                    height: $elem.outerHeight()
+                    width: $elem.width(),
+                    height: $elem.height(),
+                    paddingLeft: $elem.css("paddingLeft"),
+                    paddingRight: $elem.css("paddingRight"),
+                    paddingTop: $elem.css("paddingTop"),
+                    paddingBottom: $elem.css("paddingBottom"),
+                    marginLeft: $elem.css("marginLeft"),
+                    marginRight: $elem.css("marginRight"),
+                    marginTop: $elem.css("marginTop"),
+                    marginBottom: $elem.css("marginBottom")
                 })
+                .text($elem.text())
                 .addClass('io-ox-help-highlight')
                 .popover({
                     title: gt('Help'),

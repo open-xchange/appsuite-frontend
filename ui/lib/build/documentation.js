@@ -1,9 +1,11 @@
-var jsdom = require("/Users/tobiasprinz/dev/jsdom");
 var _ = require('../underscore');
+var jsdom = require("../jsdom");
 var fs = require('fs');
+var utils = require("./fileutils");
+var util = require("util");
+
 var numberOfFilesRead = 0, expectedNumberOfFilesRead = 0;
 var doc2ox, doc2html;
-
 
 /** Merges the maps of gui ids, documentation ids and documentation text so that a gui id points to a documentation text snippet */
 var merge = function (doc2ox, doc2html) {
