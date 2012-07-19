@@ -1604,7 +1604,7 @@ define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], fun
             foundParagraph = false;
 
             var domPos = this.getDOMPosition(position);
-            if (domPos) {
+            if (domPos && domPos.node) {
                 var node = domPos.node;
                 if (node.nodeName !== 'P') {
                     localPos.pop();
