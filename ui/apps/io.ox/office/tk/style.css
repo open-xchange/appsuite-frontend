@@ -142,18 +142,6 @@ i.icon-io-ox-table              { background-position: -200px    0; }
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
-/* mixin that adds a thin border to a box, and removes an inset shadow */
-.simple-border(@color) {
-    border: 1px solid @color;
-    .box-shadow(none);
-}
-
-/* mixin that adds a border and inset shadow in the same color to a box */
-.accented-border(@color) {
-    border: 1px solid @color;
-    .box-shadow(inset 0 0 4px @color);
-}
-
 /* tool panes ============================================================== */
 
 div.io-ox-toolpane {
@@ -201,60 +189,65 @@ div.io-ox-toolbar {
 
             /* common controls --------------------------------------------- */
 
-            label, button {
-                display: inline;
+            label, button, input {
                 position: relative;
                 margin: 0;
-                padding: 4px 8px;
-                background: none;
-                /* reserve space for border in hover/focus/active mode */
-                .simple-border(transparent);
+                .border-radius(0);
                 white-space: nowrap;
-                text-align: center;
                 text-shadow: none;
 
                 &.disabled {
                     .opacity(0.5);
+                    cursor: default;
                 }
 
                 /* prevent dotted focus rectangle around the control */
                 &:focus, &:active {
                     outline: none;
                 }
+            }
 
-                /* whitespace between control caption elements */
-                span, i {
-                    + span, + i { 
-                        margin-left: 5px;
-                    }
+            /* whitespace between control caption elements */
+            label, button {
+                span + span { 
+                    margin-left: 5px;
                 }
+            }
+
+            /* labels ------------------------------------------------------ */
+
+            label {
+                display: inline-block;
+                padding: 5px 0;
+                background: none;
+                border: none;
+                text-align: center;
             }
 
             /* buttons ----------------------------------------------------- */
 
             button {
+                display: inline;
+                padding: 4px 8px;
+                background: none;
+                /* reserve space for border in hover/focus/active mode */
+                border: 1px solid transparent;
+                color: #333333;
+                text-align: center;
 
                 /* mouse and keyboard effects */
                 &:not(.disabled) {
 
-                    /* mouse hover effect (not for disabled nor focused buttons) */
-                    &:hover:not(:focus):not(:active) {
-                        z-index: 1;
-                        .simple-border(@pane-border-color);
-                    }
-
-                    /* add focus highlighting (but not for active buttons) */
-                    &:focus:not(:active) {
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
                         z-index: 2;
-                        .accented-border(@pane-border-color);
+                        border-color: @pane-border-color;
                     }
 
                     /* active effect (button currently clicked) */
                     &:active {
-                        z-index: 3;
-                        .accented-border(darken(@pane-border-color, 5%));
-                        /* remove Bootstrap's gray text color */
-                        color: black;
+                        z-index: 4;
+                        background-color: fade(@pane-border-color, 25%);
                     }
                 }
 
@@ -262,30 +255,29 @@ div.io-ox-toolbar {
                 &.selected {
                     z-index: 20;
                     background-color: fade(@selected-border-color, 50%);
-                    .simple-border(@selected-border-color);
+                    border-color: @selected-border-color;
 
                     /* do not add any effects to disabled buttons */
                     &:not(.disabled) {
 
-                        /* mouse hover effect (not for disabled nor focused buttons) */
-                        &:hover:not(:focus):not(:active) {
-                            z-index: 21;
-                            .simple-border(darken(@selected-border-color, 5%));
-                        }
-
-                        /* add focus highlighting (but not for active buttons) */
-                        &:focus:not(:active) {
+                        /* mouse/keyboard effects */
+                        &:hover, &:focus, &:active {
                             z-index: 22;
-                            .accented-border(darken(@selected-border-color, 5%));
+                            border-color: darken(@selected-border-color, 10%);
                         }
 
                         /* active effect (button currently clicked) */
                         &:active {
-                            z-index: 23;
-                            .accented-border(darken(@selected-border-color, 10%));
+                            z-index: 24;
+                            background-color: fade(@selected-border-color, 75%);
                         }
                     }
                 }
+            }
+
+            /* text fields ------------------------------------------------- */
+
+            input[type="text"] {
             }
 
             /* drop-down groups -------------------------------------------- */
@@ -347,22 +339,20 @@ div.io-ox-toolbar {
                                     width: 100%;
                                     padding-top: 2px;
                                     padding-bottom: 2px;
+                                    border-color: transparent;
 
                                     /* mouse hover and focus effect */
                                     &:hover:not(:active), &:focus:not(:active) {
-                                        background-color: fade(@pane-border-color, 50%);
-                                        .simple-border(transparent);
+                                        background-color: fade(@pane-border-color, 25%);
                                     }
 
                                     /* active effect (button currently clicked) */
                                     &:active {
-                                        background-color: @pane-border-color;
-                                        .simple-border(transparent);
+                                        background-color: fade(@pane-border-color, 50%);
                                     }
                                     
                                     &.selected {
                                         background-color: fade(@selected-border-color, 50%);
-                                        .simple-border(transparent);
                     
                                         /* mouse hover and focus effect */
                                         &:hover:not(:active), &:focus:not(:active) {
@@ -402,7 +392,7 @@ div.io-ox-toolbar {
                             /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
                             > div {
                                 margin: -1px;
-                                .simple-border(@pane-border-color);
+                                border: 1px solid @pane-border-color;
 
                                 /* a row in the grid */
                                 > div {
@@ -461,7 +451,7 @@ div.io-ox-toolbar {
                 /* set border to all buttons in the group when hovered or opened (split mode) */
                 &:hover, &.menu-open {
                     > button:not(.disabled):not(:focus):not(:active) {
-                        .simple-border(@pane-border-color);
+                        border-color: @pane-border-color;
                     }
                 }
             }
@@ -486,27 +476,12 @@ div.io-ox-toolbar.tabs {
                 background: none;
                 border: 1px solid @pane-border-color;
                 border-bottom-color: transparent;
+                cursor: default;
 
-                /* do not add any effects to disabled buttons */
+                /* mouse/keyboard effects (not for disabled buttons) */
                 &:not(.disabled) {
-
-                    /* mouse hover effect (not for focused buttons) */
-                    &:hover:not(:focus):not(:active) {
-                        border: 1px solid darken(@pane-border-color, 10%);
-                        border-bottom-color: transparent;
-                    }
-
-                    /* add focus highlighting (but not for active buttons) */
-                    &:focus:not(:active) {
-                        .box-shadow(none);
-                        border: 1px solid darken(@pane-border-color, 15%);
-                        border-bottom-color: transparent;
-                    }
-
-                    /* active effect (button currently clicked) */
-                    &:active {
-                        .box-shadow(none);
-                        border: 1px solid darken(@pane-border-color, 10%);
+                    &:hover, &:focus, &:active {
+                        border-color: darken(@pane-border-color, 10%);
                         border-bottom-color: transparent;
                     }
                 }

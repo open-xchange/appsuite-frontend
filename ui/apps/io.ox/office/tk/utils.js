@@ -285,10 +285,16 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             label = Utils.getStringOption(options, 'label');
 
         if (icon) {
-            caption.append($('<i>').addClass(icon + ' ' + language));
+            caption.append($('<span>')
+                .attr('data-role', 'icon')
+                .append($('<i>').addClass(icon + ' ' + language))
+            );
         }
         if (label) {
-            caption.append($('<span>').attr('data-role', 'label').text(label));
+            caption.append($('<span>')
+                .attr('data-role', 'label')
+                .text(label)
+            );
         }
 
         // insert the caption into the control(s)

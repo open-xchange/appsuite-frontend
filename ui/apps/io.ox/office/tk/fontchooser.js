@@ -55,7 +55,7 @@ define('io.ox/office/tk/fontchooser',
         // add all known fonts
         _(Fonts.getFontNames()).each(function (fontName) {
             var fontFamily = Fonts.getFontFamily(fontName);
-            this.addItem(fontFamily, { label: fontName, css: { fontFamily: fontFamily, textAlign: 'left' } });
+            this.addItem(fontFamily, { label: fontName, css: { fontFamily: fontFamily, fontSize: '15px', textAlign: 'left' } });
         }, this);
 
     } // class FontChooser

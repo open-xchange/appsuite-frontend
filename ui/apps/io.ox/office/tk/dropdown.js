@@ -309,7 +309,7 @@ define('io.ox/office/tk/dropdown',
 
         // prepare drop-down button, and register event handlers
         menuButton
-            .append($('<i>').addClass('icon-io-ox-caret'))
+            .append($('<span>').append($('<i>').addClass('icon-io-ox-caret')))
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
             .on('blur:key', function () { self.hideMenu(); });
