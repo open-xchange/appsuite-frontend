@@ -14,12 +14,10 @@
 define('io.ox/office/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/toolbar',
-     'io.ox/office/tk/buttongroup',
-     'io.ox/office/tk/radiogroup',
-     'io.ox/office/tk/sizechooser',
-     'io.ox/office/tk/fontchooser',
+     'io.ox/office/tk/control/sizechooser',
+     'io.ox/office/tk/control/fontchooser',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolBar, ButtonGroup, RadioGroup, SizeChooser, FontChooser, gt) {
+    ], function (Utils, ToolBar, SizeChooser, FontChooser, gt) {
 
     'use strict';
 
@@ -63,10 +61,9 @@ define('io.ox/office/view',
                 toolBar = toolBars[key] = new ToolBar();
 
             // create common controls present in all tool bars
-            toolBar.addGroup(new ButtonGroup()
+            toolBar
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
-            );
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') });
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             radioGroup.addButton(key, { label: label });
@@ -135,11 +132,9 @@ define('io.ox/office/view',
 
         createToolBar('format', gt('Format'))
             .addGroup(new FontChooser('format/character/font/family'))
-            .addGroup(new ButtonGroup()
-                .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-                .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-                .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
-            )
+            .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
+            .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
+            .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })

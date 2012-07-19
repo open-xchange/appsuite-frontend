@@ -14,12 +14,10 @@
 define('io.ox/office/tk/toolbar',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/label',
-     'io.ox/office/tk/buttongroup',
-     'io.ox/office/tk/radiogroup',
-     'io.ox/office/tk/radiochooser',
-     'io.ox/office/tk/listchooser'
-    ], function (Events, Utils, Label, ButtonGroup, RadioGroup, RadioChooser, ListChooser) {
+     'io.ox/office/tk/control/label',
+     'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/radiogroup'
+    ], function (Events, Utils, Label, Button, RadioGroup) {
 
     'use strict';
 
@@ -194,8 +192,8 @@ define('io.ox/office/tk/toolbar',
                 // automatic expansion
                 autoExpand = Utils.getBooleanOption(options, 'autoExpand', false),
 
-                // the button group, and the drop-down groups
-                buttonGroup = null, buttonChooser = null, listChooser = null, dropDownGroup = null;
+                // the button group, and the drop-down group
+                buttonGroup = null, dropDownGroup = null;
 
             // private methods ------------------------------------------------
 
@@ -245,8 +243,7 @@ define('io.ox/office/tk/toolbar',
              */
             this.addButton = function (value, options) {
                 if (buttonGroup) { buttonGroup.addButton(value, options); }
-                if (buttonChooser) { buttonChooser.addButton(value, options); }
-                if (listChooser) { listChooser.addItem(value, options); }
+                if (dropDownGroup) { dropDownGroup.addButton(value, options); }
                 return this;
             };
 
@@ -261,10 +258,8 @@ define('io.ox/office/tk/toolbar',
             // configure according to group type
             switch (type) {
             case 'dropdown':
-                toolBar.addGroup(buttonChooser = dropDownGroup = new RadioChooser(key, options));
-                break;
             case 'list':
-                toolBar.addGroup(listChooser = dropDownGroup = new ListChooser(key, options));
+                toolBar.addGroup(dropDownGroup = new RadioGroup(key, options));
                 break;
             default:
                 type = 'buttons';
@@ -273,7 +268,7 @@ define('io.ox/office/tk/toolbar',
 
             // create the button group (also in auto-expand mode)
             if (autoExpand || (type === 'buttons')) {
-                toolBar.addGroup(buttonGroup = new RadioGroup(key));
+                toolBar.addGroup(buttonGroup = new RadioGroup(Utils.extendOptions(options, { type: 'buttons' })));
             }
 
             // register the window resize handler showing one of the groups
@@ -335,28 +330,21 @@ define('io.ox/office/tk/toolbar',
         };
 
         /**
-         * Creates a new push button or toggle button in its own button group,
-         * and appends it to this tool bar.
+         * Creates a new push button or toggle button, and appends it to this
+         * tool bar.
          *
          * @param {String} key
          *  The unique key of the button.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button.
-         *  Supports all generic formatting options (see method
-         *  Utils.createButton() for details). Additionally, the following
-         *  options are supported:
-         *  @param {Boolean} [option.toggle=false]
-         *      If set to true, the button toggles its state and passes a
-         *      boolean value to change listeners. Otherwise, the button is a
-         *      simple push button and passes undefined to its change
-         *      listeners.
+         *  Supports all options of the Button class constructor.
          *
          * @returns {ToolBar}
          *  A reference to this tool bar.
          */
         this.addButton = function (key, options) {
-            return this.addGroup(new ButtonGroup().addButton(key, options));
+            return this.addGroup(new Button(key, options));
         };
 
         /**
@@ -370,23 +358,14 @@ define('io.ox/office/tk/toolbar',
          *  inserted into this group.
          *
          * @param {Object} [options]
-         *  A map of options to control the properties of the drop-down group.
-         *  Supports all generic formatting options for the drop-down button
-         *  (see method Utils.createButton() for details). Additionally, the
-         *  following options are supported:
-         *  @param {String} [options.type='buttons']
-         *      If set to 'buttons' or omitted, a button group will be created.
-         *      If set to 'dropdown', a drop-down button group will be created.
-         *      If set to 'list', a drop-down list group will be created.
-         *  @param {Number} [options.columns=3]
-         *      Number of columns used to build the drop-down button menu. Does
-         *      not have any effect, if options.type is not set to 'dropdown'.
-         *      Defaults to the value 3.
+         *  A map of options to control the properties of the radio group.
+         *  Supports all generic formatting options of the RadioGroup class
+         *  constructor. Additionally, the following options are supported:
          *  @param {Boolean} [options.autoExpand=false]
          *      If set to true, the type of this group will be changed to
          *      'buttons' automatically, if there is enough horizontal space
          *      available in the tool bar. Does not have any effect, if
-         *      options.type is set to 'buttons'.
+         *      options.type is already set to 'buttons'.
          *
          * @returns {RadioGroupProxy}
          *  A proxy object that implements methods to add option buttons to the

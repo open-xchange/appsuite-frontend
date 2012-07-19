@@ -211,10 +211,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {String} element
      *  The tag name of the DOM element to be created.
      *
-     * @param {String} key
-     *  The key associated to the control element. Will be stored in its
-     *  'data-key' attribute.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
@@ -230,7 +226,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  A jQuery object containing the new control element.
      */
-    Utils.createControl = function (element, key, options) {
+    Utils.createControl = function (element, options) {
 
         var // create the DOM element
             control = $('<' + element + '>'),
@@ -239,11 +235,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             classes = Utils.getStringOption(options, 'classes', ''),
             css = Utils.getObjectOption(options, 'css', {}),
             tooltip = Utils.getStringOption(options, 'tooltip');
-
-        // add the key as data attribute
-        if (_.isString(key)) {
-            control.attr('data-key', key);
-        }
 
         // add optional formatting
         control.addClass(classes).css(css);
@@ -434,10 +425,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     /**
      * Creates and returns a new label element.
      *
-     * @param {String} key
-     *  The key associated to this label element. Will be stored in the
-     *  'data-key' attribute of the label.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the new label. Supports
      *  all generic options supported by the method Utils.createControl(), and
@@ -446,10 +433,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  A jQuery object containing the new label element.
      */
-    Utils.createLabel = function (key, options) {
+    Utils.createLabel = function (options) {
 
         var // create the DOM label element
-            label = Utils.createControl('label', key, options);
+            label = Utils.createControl('label', options);
 
         Utils.setControlCaption(label, options);
         return label;
@@ -459,10 +446,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     /**
      * Creates and returns a new button element.
-     *
-     * @param {String} key
-     *  The key associated to this button element. Will be stored in the
-     *  'data-key' attribute of the button.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the new button. Supports
@@ -476,10 +459,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
      */
-    Utils.createButton = function (key, options) {
+    Utils.createButton = function (options) {
 
         var // create the DOM button element
-            button = Utils.createControl('button', key, options),
+            button = Utils.createControl('button', options),
             // value for the data-value attribute
             value = Utils.getStringOption(options, 'value');
 
