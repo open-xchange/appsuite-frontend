@@ -256,7 +256,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('table-sizer').append(gridButton);
+        group.getMenuNode().addClass('grid-sizer').append(gridButton);
 
         // register event handlers
         group.registerActionHandler(gridButton, 'click', getGridSize)

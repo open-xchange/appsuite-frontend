@@ -76,8 +76,10 @@ define('io.ox/office/editor/view',
 
             // create common controls present in all tool bars
             toolBar
+                .startCollapseGroups()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') });
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
+                .endCollapseGroups();
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             radioGroup.addButton(key, { label: label });
@@ -146,15 +148,17 @@ define('io.ox/office/editor/view',
 
         createToolBar('format', gt('Format'))
             .addGroup('format/character/font/family', new FontChooser())
+            .startCollapseGroups()
             .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
+            .endCollapseGroups()
             .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
-            .end();
+                .end();
 
         createToolBar('table', gt('Table'))
             .addGroup('insert/table', new TableSizeChooser(insertTableOptions));

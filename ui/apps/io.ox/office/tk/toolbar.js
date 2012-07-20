@@ -58,7 +58,10 @@ define('io.ox/office/tk/toolbar',
             groupsByKey = {},
 
             // resize handler functions supporting flexible tool bar sizing
-            resizeHandlers = [];
+            resizeHandlers = [],
+
+            // if set to true, inserted groups will have no spacing between previous group
+            collapseGroups = false;
 
         // private methods ----------------------------------------------------
 
@@ -188,10 +191,7 @@ define('io.ox/office/tk/toolbar',
          */
         function RadioGroupProxy(key, options) {
 
-            var // type of the group
-                type = Utils.getStringOption(options, 'type', 'buttons'),
-
-                // the group object containing the option buttons
+            var // the group object containing the option buttons
                 radioGroup = new RadioGroup(options),
 
                 // automatic expansion (disable, if group is not in drop-down mode)
@@ -296,8 +296,12 @@ define('io.ox/office/tk/toolbar',
             // remember the group object
             groups.push(group);
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
+
             // append its root node to this tool bar
             containerNode.append(group.getNode());
+            if (collapseGroups) {
+                group.getNode().addClass('collapse-group');
+            }
 
             // forward 'change' and 'cancel' events to the tool bar
             group.on('change cancel', function (event, value) {
@@ -371,6 +375,16 @@ define('io.ox/office/tk/toolbar',
          */
         this.addRadioGroup = function (key, options) {
             return new RadioGroupProxy(key, options);
+        };
+
+        this.startCollapseGroups = function () {
+            collapseGroups = true;
+            return this;
+        };
+
+        this.endCollapseGroups = function () {
+            collapseGroups = false;
+            return this;
         };
 
         /**

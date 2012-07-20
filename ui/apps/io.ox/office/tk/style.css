@@ -178,8 +178,13 @@ div.io-ox-toolbar {
             }
 
             /* spacing between groups */
-            &:not(.hidden) ~ .group {
+            &:not(.hidden) ~ .group:not(.hidden) {
                 margin-left: 10px;
+            }
+
+            /* collapse groups if specified */
+            &.collapse-group:not(.hidden) + .group.collapse-group:not(.hidden) {
+                margin-left: -1px;
             }
 
             /* collapse borders of top-level buttons inside group */
@@ -369,8 +374,8 @@ div.io-ox-toolbar {
                         }
                     }
 
-                    /* the Sizer mix-in class */
-                    &.sizer {
+                    /* the GridSizer mix-in class */
+                    &.grid-sizer {
 
                         /* inner size (pixels between grid lines) of one cell in the size chooser */
                         @cell-width: 18px;
