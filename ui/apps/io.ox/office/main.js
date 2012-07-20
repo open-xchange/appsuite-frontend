@@ -110,7 +110,7 @@ define('io.ox/office/main',
          * Returns the URL passed to the AJAX calls used to convert a document
          * file from and to an operations list.
          */
-        function getFilterUrl(action) {
+        function getFilterUrl(action, format) {
             return file && (ox.apiRoot +
                 '/oxodocumentfilter' +
                 '?action=' + action +
@@ -119,7 +119,8 @@ define('io.ox/office/main',
                 '&version=' + file.version +
                 '&filename=' + file.filename +
                 '&session=' + ox.session +
-                '&uid=' + app.getUniqueId());
+                '&uid=' + app.getUniqueId() +
+                (format ? ('&filter_format=' + format) : ''));
         }
 
         /**
@@ -474,8 +475,22 @@ define('io.ox/office/main',
             }
 
             win.busy();
+            // load the file
+            $.ajax({
+                type: 'GET',
+                url: getFilterUrl('importdocument', 'pdf'),
+                dataType: 'json'
+            })
+            .done(function (response) {
+                showError('Printing is not implemented yet.');
+                def.reject();
+            })
+            .fail(function (response) {
+                showAjaxError(response);
+                def.reject();
+            });
 
-            return def.resolve();
+            return def;
         }
 
         /**

@@ -185,8 +185,8 @@ define("io.ox/office/preview/main",
                 '&folder_id=' + file.folder_id +
                 '&version=' + file.version +
                 '&filename=' + file.filename +
-                '&session=' + ox.session) +
-                '&filter_format=html';
+                '&session=' + ox.session +
+                '&filter_format=html');
         }
 
         /**
