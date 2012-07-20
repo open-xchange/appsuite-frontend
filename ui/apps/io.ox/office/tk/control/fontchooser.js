@@ -14,9 +14,10 @@
 define('io.ox/office/tk/control/fontchooser',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/tk/control/radiogroup',
+     'io.ox/office/tk/control/textfield',
+     'io.ox/office/tk/dropdown/list',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, RadioGroup, gt) {
+    ], function (Utils, Fonts, TextField, List, gt) {
 
     'use strict';
 
@@ -27,38 +28,79 @@ define('io.ox/office/tk/control/fontchooser',
      *
      * @constructor
      *
-     * @extends Group
+     * @extends TextField
      *
      * @param {Object} options
      *  A map of options to control the properties of the font chooser control.
-     *  Supports all options of the RadioChooser base class. The default values
-     *  are changed as following: options.icon will be set to a font icon,
-     *  options.label will be set to the localized text 'Font name', and
-     *  options.sorted will be set to true. The control will always be
-     *  displayed as a list drop-down (the value of options.type does not have
-     *  any effect).
+     *  Supports all options of the TextField base class, and the List mix-in
+     *  class. The default values are changed as following: options.icon will
+     *  be set to a font icon, options.label will be set to the localized text
+     *  'Font name', and options.sorted will be set to true.
      */
     function FontChooser(options) {
 
-        var // extend default values with passed options, but fix the 'type' option to 'list'
-            finalOptions = Utils.extendOptions(
-                Utils.extendOptions({
+        var // self reference
+            self = this,
+
+            // options for the text field
+            fieldOptions = Utils.extendOptions({
                     icon: 'icon-font',
-                    label: gt('Font name'),
+                    tooltip: gt('Font name')
+                }, options),
+
+            // options for the drop-down list
+            listOptions = Utils.extendOptions(
+                Utils.extendOptions({
                     tooltip: gt('Font name'),
                     sorted: true
-                }, options), { type: 'list' });
+                }, options), { icon: undefined, label: undefined });
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Activates a font in this font chooser control.
+         *
+         * @param {String|Null} value
+         *  The name of the font to be activated. If set to null, does not
+         *  activate any font (ambiguous state).
+         */
+        function updateHandler(value) {
+
+            var // the font name
+                fontName = _.isString(value) ? value.toLowerCase() : value,
+
+                // activate a list item
+                button = Utils.selectRadioButton(self.getListItems(), fontName);
+        }
+
+        /**
+         * Click handler for an option button in this radio group. Will
+         * activate the clicked button, and return its value.
+         *
+         * @param {jQuery} button
+         *  The clicked button, as jQuery object.
+         *
+         * @returns {String}
+         *  The button value that has been passed to the addButton() method.
+         */
+        function clickHandler(button) {
+            var value = Utils.getControlValue(button);
+            updateHandler(value);
+            return value;
+        }
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, finalOptions);
+        TextField.call(this, fieldOptions);
+        List.extend(this, listOptions);
 
         // initialization -----------------------------------------------------
 
         // add all known fonts
         _(Fonts.getFontNames()).each(function (fontName) {
-            this.addButton(fontName.toLowerCase(), {
-                icon: finalOptions.icon,
+            this.createListItem({
+                value: fontName.toLowerCase(),
+                icon: fieldOptions.icon,
                 label: fontName,
                 labelCss: {
                     fontFamily: Fonts.getFontFamily(fontName),
@@ -67,11 +109,15 @@ define('io.ox/office/tk/control/fontchooser',
             });
         }, this);
 
+        // register event handlers
+        this.registerUpdateHandler(updateHandler)
+            .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
+
     } // class FontChooser
 
     // exports ================================================================
 
-    // derive this class from class RadioGroup
-    return RadioGroup.extend({ constructor: FontChooser });
+    // derive this class from class TextField
+    return TextField.extend({ constructor: FontChooser });
 
 });

@@ -185,12 +185,14 @@ define('io.ox/office/tk/controller', function () {
          */
         function componentEventHandler(event, key, value) {
             if (event.type === 'change') {
+                window.console.log('Controller: received change event: key="' + key + '", value=' + JSON.stringify(value));
                 if (key in items) {
                     items[key].change(value);
                 } else {
                     defaultDoneHandler.call(controller);
                 }
             } else if (event.type === 'cancel') {
+                window.console.log('Controller: received cancel event');
                 defaultDoneHandler.call(controller);
             }
         }

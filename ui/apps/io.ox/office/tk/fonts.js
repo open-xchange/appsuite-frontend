@@ -15,7 +15,7 @@ define('io.ox/office/tk/fonts', function () {
 
     'use strict';
 
-    var // all known fonts, mapped by font name, mapping the fall-back font
+    var // all known fonts, mapped by font name, mapping the replacement font
         fonts = {
             // sans-serif
             'Helvetica':            'sans-serif',
@@ -53,17 +53,17 @@ define('io.ox/office/tk/fonts', function () {
     };
 
     /**
-     * Returns the name of the fall-back font registered for the specified
+     * Returns the name of the replacement font registered for the specified
      * font.
      *
      * @param {String} fontName
      *  The name of a font (case does not matter).
      *
      * @returns {String}
-     *  The name of the fall-back font, if the specified font is known,
+     *  The name of the replacement font, if the specified font is known,
      *  otherwise undefined.
      */
-    Fonts.getFallBackFont = function (fontName) {
+    Fonts.getReplacementFont = function (fontName) {
         return _(fonts).find(function (value, key) {
             return key.toLowerCase() === fontName.toLowerCase();
         });
@@ -71,7 +71,7 @@ define('io.ox/office/tk/fonts', function () {
 
     /**
      * Returns the font family to be used in CSS. Chains the passed font name
-     * with all known fall-back font names, and returns a string suitable for
+     * with all known replacement font names, and returns a string suitable for
      * the CSS 'font-family' attribute.
      *
      * @param {String} fontName
@@ -83,17 +83,17 @@ define('io.ox/office/tk/fonts', function () {
      */
     Fonts.getFontFamily = function (fontName) {
 
-        var // array with the passed font and all fall-back font names
+        var // array with the passed font and all replacement font names
             fontNames = [];
 
         function appendFont(fontName) {
             fontNames.push((fontName.indexOf(' ') >= 0) ? ('"' + fontName + '"') : fontName);
         }
 
-        // collect all fall-back fonts
+        // collect all replacement fonts
         if (_.isString(fontName)) {
             appendFont(fontName);
-            while (_.isString(fontName = Fonts.getFallBackFont(fontName))) {
+            while (_.isString(fontName = Fonts.getReplacementFont(fontName))) {
                 appendFont(fontName);
             }
         }

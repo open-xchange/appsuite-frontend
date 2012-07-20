@@ -161,9 +161,6 @@ define('io.ox/office/tk/dropdown/list',
          * according to its text label. If the item does not have a text label,
          * it will be appended.
          *
-         * @param {String} value
-         *  The unique value associated to the list item.
-         *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
@@ -172,10 +169,10 @@ define('io.ox/office/tk/dropdown/list',
          *  The button element representing the new list item, as jQuery
          *  collection.
          */
-        group.createListItem = function (value, options) {
+        group.createListItem = function (options) {
 
             var // create the button element representing the list item
-                button = Utils.createButton(Utils.extendOptions(options, { value: value })),
+                button = Utils.createButton(options),
                 // embed it into a list item element
                 listItem = $('<li>').append(button),
                 // the text label of the new list item

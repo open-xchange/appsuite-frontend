@@ -73,7 +73,10 @@ define('io.ox/office/tk/utils',
      * @param {String} element
      *  The tag name of the DOM element to be created.
      *
-     * @param {Object} options
+     * @param {Object} [attribs]
+     *  A map of attributes to be passed to the element constructor.
+     *
+     * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
      *  @param {String} [options.value]
@@ -88,10 +91,10 @@ define('io.ox/office/tk/utils',
      * @returns {jQuery}
      *  A jQuery object containing the new control element.
      */
-    Utils.createControl = function (element, options) {
+    Utils.createControl = function (element, attribs, options) {
 
         var // create the DOM element
-            control = $('<' + element + '>'),
+            control = $('<' + element + '>', attribs),
 
             // option values
             value = Utils.getStringOption(options, 'value'),
@@ -314,7 +317,7 @@ define('io.ox/office/tk/utils',
     Utils.createLabel = function (options) {
 
         var // create the DOM label element
-            label = Utils.createControl('label', options);
+            label = Utils.createControl('label', undefined, options);
 
         Utils.setControlCaption(label, options);
         return label;
@@ -336,7 +339,7 @@ define('io.ox/office/tk/utils',
     Utils.createButton = function (options) {
 
         var // create the DOM button element
-            button = Utils.createControl('button', options);
+            button = Utils.createControl('button', undefined, options);
 
         Utils.setControlCaption(button, options);
         return button;
@@ -394,6 +397,27 @@ define('io.ox/office/tk/utils',
         Utils.toggleButtons(buttons, false);
         Utils.toggleButtons(button, true);
         return button;
+    };
+
+    // text field elements ----------------------------------------------------
+
+    /**
+     * Creates and returns a new text input field.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new text input field.
+     *  Supports all generic options supported by the method
+     *  Utils.createControl().
+     *
+     * @returns {jQuery}
+     *  A jQuery object containing the new text field element.
+     */
+    Utils.createTextField = function (options) {
+
+        var // create the DOM input element
+            input = Utils.createControl('input', { type: 'text' }, options);
+
+        return input;
     };
 
     // key codes --------------------------------------------------------------

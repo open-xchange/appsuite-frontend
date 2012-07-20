@@ -142,7 +142,7 @@ define('io.ox/office/tk/control/radiogroup',
                 this.createGridButton(buttonOptions);
                 break;
             case 'list':
-                this.createListItem(value, options);
+                this.createListItem(buttonOptions);
                 break;
             default:
                 this.addFocusableControl(Utils.createButton(buttonOptions));
