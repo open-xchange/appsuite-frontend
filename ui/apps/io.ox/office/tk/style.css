@@ -388,6 +388,7 @@ div.io-ox-toolbar {
                         text-align: left;
 
                         > button {
+                            height: auto;
                             margin: -1px;
                             padding: 0;
                             background-color: @pane-fill-color;
