@@ -87,6 +87,14 @@
     filter: alpha(opacity=@opacity-percent);
 }
 
+.transition(@transition) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -ms-transition: @transition;
+    -o-transition: @transition;
+    transition: @transition;
+} 
+
 /* ========================================================================= */
 /* OX icons                                                                  */
 /* ========================================================================= */
@@ -187,8 +195,8 @@ div.io-ox-toolbar {
                 margin-left: -1px;
             }
 
-            /* collapse borders of top-level buttons inside group */
-            > button + button {
+            /* collapse borders of top-level elements inside group */
+            > :not(:first-child) {
                 margin-left: -1px;
             }
 
@@ -220,8 +228,25 @@ div.io-ox-toolbar {
 
             /* whitespace between control caption elements */
             label, button {
-                > span + span { 
+                > span + span {
                     margin-left: 5px;
+                }
+            }
+
+            /* mouse and keyboard effects for buttons and text fields */
+            button, input {
+                &:not(.disabled) {
+
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
+                        z-index: 2;
+                        border-color: @pane-border-color;
+                    }
+
+                    /* active effect (control currently clicked) */
+                    &:active {
+                        z-index: 4;
+                    }
                 }
             }
 
@@ -241,20 +266,9 @@ div.io-ox-toolbar {
                 /* reserve space for border in hover/focus/active mode */
                 text-align: center;
 
-                /* mouse and keyboard effects */
-                &:not(.disabled) {
-
-                    /* mouse/keyboard effects */
-                    &:hover, &:focus, &:active {
-                        z-index: 2;
-                        border-color: @pane-border-color;
-                    }
-
-                    /* active effect (button currently clicked) */
-                    &:active {
-                        z-index: 4;
-                        background-color: fade(@pane-border-color, 25%);
-                    }
+                /* active effect (control currently clicked) */
+                &:not(.disabled):active {
+                    background-color: fade(@pane-border-color, 25%);
                 }
 
                 /* selected toggle/radio buttons */
@@ -283,7 +297,9 @@ div.io-ox-toolbar {
 
             /* text fields ------------------------------------------------- */
 
-            input[type="text"] {
+            input {
+                .box-shadow(none);
+                .transition(none);
             }
 
             /* drop-down groups -------------------------------------------- */
@@ -355,15 +371,15 @@ div.io-ox-toolbar {
                                     &:active {
                                         background-color: fade(@pane-border-color, 50%);
                                     }
-                                    
+
                                     &.selected {
                                         background-color: fade(@selected-border-color, 50%);
-                    
+
                                         /* mouse hover and focus effect */
                                         &:hover:not(:active), &:focus:not(:active) {
                                             background-color: fade(@selected-border-color, 75%);
                                         }
-                
+
                                         /* active effect (button currently clicked) */
                                         &:active {
                                             background-color: @selected-border-color;
@@ -455,10 +471,12 @@ div.io-ox-toolbar {
                     display: block;
                 }
 
-                /* set border to all buttons in the group when hovered or opened (split mode) */
+                /* set border to all buttons and text fields in the group when hovered or opened (split mode) */
                 &:hover, &.menu-open {
-                    > button:not(.disabled):not(:focus):not(:active) {
-                        border-color: @pane-border-color;
+                    > button, input {
+                        &:not(.disabled):not(:focus):not(:active) {
+                            border-color: @pane-border-color;
+                        }
                     }
                 }
             }
