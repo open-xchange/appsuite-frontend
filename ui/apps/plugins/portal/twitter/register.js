@@ -37,7 +37,7 @@ define('plugins/portal/twitter/register',
             };
         });
         _(entities.user_mentions).each(function (user_mention) {
-            var elem = $('<a>', {href: 'https://twitter.com/#!/' + user_mention.screen_name.text, target: '_blank'}).text('@' + user_mention.screen_name);
+            var elem = $('<a>', {href: 'https://twitter.com/#!/' + user_mention.screen_name, target: '_blank'}).text('@' + user_mention.screen_name);
             offsets[user_mention.indices[0]] = {
                 elem: elem,
                 indices: user_mention.indices

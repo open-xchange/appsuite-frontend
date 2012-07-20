@@ -120,7 +120,7 @@ define("io.ox/core/main",
         }, gt('Sign out'));
 
         // help
-        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white">'), function () {
+        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
             require(['io.ox/help/center'], function (center) {
                 center.toggle();
             });
