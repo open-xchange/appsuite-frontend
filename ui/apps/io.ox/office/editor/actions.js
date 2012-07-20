@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/actions',
+define('io.ox/office/editor/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/office/main'], function (ext, links, gt) {
@@ -25,42 +25,42 @@ define('io.ox/office/actions',
 
     // actions
 
-    new Action('io.ox/office/actions/save', {
+    new Action('io.ox/office/editor/actions/save', {
         id: 'save',
         action: function (app) { app.save(); }
     });
 
-    new Action('io.ox/office/actions/flush', {
+    new Action('io.ox/office/editor/actions/flush', {
         id: 'flush',
         action: function (app) { app.flush(); }
     });
 
-    new Action('io.ox/office/actions/print', {
+    new Action('io.ox/office/editor/actions/print', {
         id: 'print',
         action: function (app) { app.print(); }
     });
 
     // links
 
-    ext.point('io.ox/office/links/toolbar').extend(new Link({
+    ext.point('io.ox/office/editor/links/toolbar').extend(new Link({
         index: 100,
         id: 'save',
         label: gt('Export Document'),
-        ref: 'io.ox/office/actions/save'
+        ref: 'io.ox/office/editor/actions/save'
     }));
 
-    ext.point('io.ox/office/links/toolbar').extend(new Link({
+    ext.point('io.ox/office/editor/links/toolbar').extend(new Link({
         index: 110,
         id: 'flush',
         label: gt('Flush'),
-        ref: 'io.ox/office/actions/flush'
+        ref: 'io.ox/office/editor/actions/flush'
     }));
 
-    ext.point('io.ox/office/links/toolbar').extend(new Link({
+    ext.point('io.ox/office/editor/links/toolbar').extend(new Link({
         index: 120,
         id: 'print',
         label: gt('Print'),
-        ref: 'io.ox/office/actions/print'
+        ref: 'io.ox/office/editor/actions/print'
     }));
 
 });

@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/controller', ['io.ox/office/tk/controller'], function (BaseController) {
+define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], function (BaseController) {
 
     'use strict';
 

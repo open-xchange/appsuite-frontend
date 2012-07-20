@@ -192,11 +192,15 @@ div.io-ox-toolbar {
             label, button, input {
                 display: inline-block;
                 position: relative;
+                .box-sizing(border-box);
                 height: 28px;
                 margin: 0;
+                border: 1px solid transparent;
                 .border-radius(0);
                 white-space: nowrap;
+                color: #333333;
                 text-shadow: none;
+                vertical-align: middle;
 
                 &.disabled {
                     .opacity(0.5);
@@ -219,9 +223,8 @@ div.io-ox-toolbar {
             /* labels ------------------------------------------------------ */
 
             label {
-                padding: 3px 0;
+                padding: 4px 0;
                 background: none;
-                border: none;
                 text-align: center;
             }
 
@@ -231,8 +234,6 @@ div.io-ox-toolbar {
                 padding: 2px 8px;
                 background: none;
                 /* reserve space for border in hover/focus/active mode */
-                border: 1px solid transparent;
-                color: #333333;
                 text-align: center;
 
                 /* mouse and keyboard effects */
@@ -285,9 +286,9 @@ div.io-ox-toolbar {
             &.dropdown-group {
 
                 /* adjust margins for caret buttons in drop-down split mode */
-                > button.caret-button {
-                    padding-left: 4px;
-                    padding-right: 4px;
+                > button > span[data-role="caret"]:only-child {
+                    margin-left: -4px;
+                    margin-right: -4px;
                 }
 
                 /* the drop-down menu element */

@@ -11,13 +11,14 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define("io.ox/office/preview/main",
-    ["io.ox/office/preview/preview",
-     "io.ox/office/tk/toolbar",
-     "io.ox/office/tk/controller",
-     "gettext!io.ox/office/main",
-     "less!io.ox/office/preview/style.css"
-    ], function (Preview, ToolBar, Controller, gt) {
+define('io.ox/office/preview/main',
+    ['io.ox/office/apphelper',
+     'io.ox/office/preview/preview',
+     'io.ox/office/tk/toolbar',
+     'io.ox/office/tk/controller',
+     'gettext!io.ox/office/main',
+     'less!io.ox/office/preview/style.css'
+    ], function (AppHelper, Preview, ToolBar, Controller, gt) {
 
     'use strict';
 
@@ -142,7 +143,7 @@ define("io.ox/office/preview/main",
             app.setWindow(win);
 
             win.nodes.main
-                .addClass("io-ox-office-preview-main")
+                .addClass('io-ox-office-preview-main')
                 .append(preview.getNode());
 
             // The toolkit will clear the tool bar area and insert extension
@@ -171,55 +172,6 @@ define("io.ox/office/preview/main",
         function quitHandler() {
             app.destroy();
             return $.when();
-        }
-
-        /**
-         * Returns the URL passed to the AJAX calls used to convert a document
-         * file into an HTML document.
-         */
-        function getFilterUrl(action) {
-            return file && (ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=' + action +
-                '&id=' + file.id +
-                '&folder_id=' + file.folder_id +
-                '&version=' + file.version +
-                '&filename=' + file.filename +
-                '&session=' + ox.session +
-                '&filter_format=html');
-        }
-
-        /**
-         * loading the document from the filestore as HTML
-         */
-        function importHTML(response) {
-
-            var def = $.Deferred();
-
-            // big try/catch, exception handler will reject the deferred with the exception
-            try {
-
-                // check that the passed AJAX result is an object
-                if (!_.isObject(response)) {
-                    throw 'Missing AJAX result.';
-                }
-
-                // convert JSON result string to object (may throw)
-                if (_.isString(response.data)) {
-                    response.data = JSON.parse(response.data);
-                }
-
-                // check that a result object exists and contains an operations array
-                if (!_.isObject(response.data) || !_.isString(response.data.HTMLPages)) {
-                    throw 'Missing AJAX result data.';
-                }
-            } catch (ex) {
-                // reject deferred on error
-                return def.reject(ex);
-            }
-
-            // resolve the deferred with the preview document
-            return def.resolve(response.data);
         }
 
         // methods ============================================================
@@ -289,20 +241,21 @@ define("io.ox/office/preview/main",
             // load the file
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl('importdocument'),
+                url: AppHelper.getDocumentFilterUrl(app, 'importdocument', 'html'),
                 dataType: 'json'
             })
-            .done(function (response) {
-                importHTML(response)
-                .done(function (previewDocument) {
-                    preview.setPreviewDocument(previewDocument.HTMLPages);
+            .pipe(function (response) {
+                return AppHelper.extractAjaxStringResult(response, 'HTMLPages');
+            })
+            .done(function (previewDocument) {
+                if (_.isString(previewDocument)) {
+                    preview.setPreviewDocument(previewDocument);
                     def.resolve();
-                })
-                .fail(function (ex) {
-                    showExceptionError(ex);
+                } else {
+                    showError(gt('An error occurred while loading the document.'), gt('Load Error'));
                     preview.setPreviewDocument(null);
                     def.reject();
-                });
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);

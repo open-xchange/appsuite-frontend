@@ -13,21 +13,58 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 
-define('io.ox/office/main',
+define('io.ox/office/editor/main',
     ['io.ox/files/api',
-     'io.ox/office/tk/utils',
-     'io.ox/office/editor',
-     'io.ox/office/view',
-     'io.ox/office/controller',
+     'io.ox/office/apphelper',
+     'io.ox/office/editor/editor',
+     'io.ox/office/editor/view',
+     'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
-     'io.ox/office/actions',
-     'less!io.ox/office/main.css'
-    ], function (filesApi, Utils, Editor, View, Controller, gt) {
+     'io.ox/office/editor/actions',
+     'less!io.ox/office/editor/main.css'
+    ], function (filesApi, AppHelper, Editor, View, Controller, gt) {
 
     'use strict';
 
     var // application identifier
-        MODULE_NAME = 'io.ox/office';
+        MODULE_NAME = 'io.ox/office/editor';
+
+    // static functions =======================================================
+
+    /**
+     * Extracts the operations list from the passed response object of an
+     * AJAX import request.
+     *
+     * @param {Object} response
+     *  The response object of the AJAX request.
+     *
+     * @return {Object[]|Undefined}
+     *  The operations array, if existing, otherwise undefined.
+     */
+    function extractOperationsList(response) {
+
+        var // the result data
+            data = AppHelper.extractAjaxResultData(response);
+
+        // check that the result data object contains an operations array
+        if (!_.isObject(data) || !_.isArray(data.operations)) {
+            return;
+        }
+
+        try {
+            // check all operation objects in the array
+            _(data.operations).each(function (operation) {
+                if (!_.isObject(operation) || !_.isString(operation.name)) {
+                    throw null; // exit the each() loop
+                }
+            });
+        } catch (ex) {
+            return;
+        }
+
+        // operations array is valid, return it
+        return data.operations;
+    }
 
     // createApplication() ====================================================
 
@@ -69,8 +106,8 @@ define('io.ox/office/main',
         // private functions --------------------------------------------------
 
         function initializeApp(options) {
-            file = Utils.getObjectOption(options, 'file', null);
-            debugMode = Utils.getBooleanOption(options, 'debugMode', false);
+            file = AppHelper.getObjectOption(options, 'file', null);
+            debugMode = AppHelper.getBooleanOption(options, 'debugMode', false);
         }
 
         /**
@@ -104,23 +141,6 @@ define('io.ox/office/main',
                 resolve: function () { deferred.resolve(true); },
                 reject: function () { deferred.resolve(false); }
             };
-        }
-
-        /**
-         * Returns the URL passed to the AJAX calls used to convert a document
-         * file from and to an operations list.
-         */
-        function getFilterUrl(action, format) {
-            return file && (ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=' + action +
-                '&id=' + file.id +
-                '&folder_id=' + file.folder_id +
-                '&version=' + file.version +
-                '&filename=' + file.filename +
-                '&session=' + ox.session +
-                '&uid=' + app.getUniqueId() +
-                (format ? ('&filter_format=' + format) : ''));
         }
 
         /**
@@ -302,58 +322,6 @@ define('io.ox/office/main',
         }
 
         /**
-         * Extracts the operations list from the passed response object of an
-         * AJAX import request.
-         *
-         * @param {Object} response
-         *  The response object of the AJAX request.
-         *
-         * @return {jQuery.Deferred}
-         *  A deferred indicating the success or failure of the operations
-         *  import. On success, passes an array of operations to the done
-         *  handler. On failure, passes an exception object or a string to the
-         *  fail handler.
-         */
-        function importOperations(response) {
-
-            var // the deferred return value
-                def = $.Deferred();
-
-            // big try/catch, exception handler will reject the deferred with the exception
-            try {
-
-                // check that the passed AJAX result is an object
-                if (!_.isObject(response)) {
-                    throw 'Missing AJAX result.';
-                }
-
-                // convert JSON result string to object (may throw)
-                if (_.isString(response.data)) {
-                    response.data = JSON.parse(response.data);
-                }
-
-                // check that a result object exists and contains an operations array
-                if (!_.isObject(response.data) || !_.isArray(response.data.operations)) {
-                    throw 'Missing AJAX result data.';
-                }
-
-                // check all operation objects in the array
-                _(response.data.operations).each(function (operation) {
-                    if (!_.isObject(operation) || !_.isString(operation.name)) {
-                        throw 'Invalid element in operations list.';
-                    }
-                });
-
-            } catch (ex) {
-                // reject deferred on error
-                return def.reject(ex);
-            }
-
-            // resolve the deferred with the operations list
-            return def.resolve(response.data.operations);
-        }
-
-        /**
          * Loads the document described in the file descriptor passed to the
          * constructor of this application, and shows the application window.
          *
@@ -381,22 +349,21 @@ define('io.ox/office/main',
             // load the file
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl('importdocument'),
+                url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
                 dataType: 'json'
             })
-            .done(function (response) {
-                importOperations(response)
-                .done(function (operations) {
+            .pipe(extractOperationsList)
+            .done(function (operations) {
+                if (operations) {
                     editor.enableUndo(false);
                     applyOperations(operations);
                     editor.enableUndo(true);
                     startOperationsTimer();
                     def.resolve();
-                })
-                .fail(function (ex) {
-                    showExceptionError(ex);
+                } else {
+                    showError(gt('An error occurred while importing the document.'), gt('Load Error'));
                     def.reject();
-                });
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
@@ -431,7 +398,7 @@ define('io.ox/office/main',
 
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl(action),
+                url: AppHelper.getDocumentFilterUrl(app, action),
                 dataType: 'json'
                 /* data: dataObject,
                 beforeSend: function (xhr) {
@@ -478,12 +445,20 @@ define('io.ox/office/main',
             // load the file
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl('importdocument', 'pdf'),
+                url: AppHelper.getDocumentFilterUrl(app, 'importdocument', 'pdf'),
                 dataType: 'json'
             })
-            .done(function (response) {
-                showError('Printing is not implemented yet.');
-                def.reject();
+            .pipe(function (response) {
+                return AppHelper.extractAjaxStringResult(response, 'PDFDoc');
+            })
+            .done(function (document) {
+                if (_.isString(document)) {
+                    showError('Printing is not implemented yet.', gt('Print Error'));
+                    def.reject();
+                } else {
+                    showError(gt('An error occurred while printing the document.'), gt('Print Error'));
+                    def.reject();
+                }
             })
             .fail(function (response) {
                 showAjaxError(response);
@@ -502,7 +477,7 @@ define('io.ox/office/main',
          *  If set to true, the AJAX request will be sent silently, without
          *  creating a quit delay, and without restarting the operations timer.
          */
-        var sendOperations = Utils.makeNoRecursionGuard(function (silent) {
+        var sendOperations = AppHelper.makeNoRecursionGuard(function (silent) {
 
             var // deep copy of the current buffer
                 sendOps = _.copy(operationsBuffer, true),
@@ -516,7 +491,7 @@ define('io.ox/office/main',
 
             $.ajax({
                 type: 'POST',
-                url: getFilterUrl('pushoperationupdates'),
+                url: AppHelper.getDocumentFilterUrl(app, 'pushoperationupdates'),
                 dataType: 'json',
                 data: dataObject,
                 beforeSend: function (xhr) {
@@ -539,7 +514,7 @@ define('io.ox/office/main',
             });
         });
 
-        var receiveAndSendOperations = Utils.makeNoRecursionGuard(function () {
+        var receiveAndSendOperations = AppHelper.makeNoRecursionGuard(function () {
 
             var // a deferred that will cause the quit handler to wait for the AJAX request
                 quitDelay = createQuitDelay();
@@ -547,7 +522,7 @@ define('io.ox/office/main',
             // first, check if the server has new operations for me
             $.ajax({
                 type: 'GET',
-                url: getFilterUrl('pulloperationupdates'),
+                url: AppHelper.getDocumentFilterUrl(app, 'pulloperationupdates'),
                 dataType: 'json'
             })
             .done(function (response) {
@@ -770,7 +745,7 @@ define('io.ox/office/main',
         getApp: function (options) {
 
             var // get file descriptor from options
-                file = Utils.getObjectOption(options, 'file', null),
+                file = AppHelper.getObjectOption(options, 'file', null),
 
                 // find running editor application
                 runningApps = file ? ox.ui.App.get(MODULE_NAME).filter(function (app) {

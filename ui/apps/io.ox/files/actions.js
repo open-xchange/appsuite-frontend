@@ -68,13 +68,13 @@ define("io.ox/files/actions",
         }
     });
 
-    new Action('io.ox/files/actions/office', {
-        id: 'office',
+    new Action('io.ox/files/actions/office/editor', {
+        id: 'officeeditor',
         requires: function (e) {
             return e.collection.has('one') && /\.(odt|docx)$/i.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/office/main', { file: data }).done(function () {
+            ox.launch('io.ox/office/editor/main', { file: data }).done(function () {
                 this.load();
             });
         }
@@ -255,11 +255,11 @@ define("io.ox/files/actions",
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "office",
+        id: "officeeditor",
         index: 60,
         prio: 'hi',
         label: gt("Edit office document"),
-        ref: "io.ox/files/actions/office"
+        ref: "io.ox/files/actions/office/editor"
     }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({

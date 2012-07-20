@@ -13,7 +13,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], function (Events, Utils) {
+define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], function (Events, Utils) {
 
     'use strict';
 
