@@ -28,6 +28,9 @@ define('io.ox/office/tk/dropdown/list',
      * containing a list of items. Extends the Menu mix-in class with
      * functionality specific to the list drop-down element.
      *
+     * Note: This is a mix-in class supposed to extend an existing instance of
+     * the class Group or one of its derived classes.
+     *
      * @extends Menu
      *
      * @param {Group} group
@@ -139,44 +142,6 @@ define('io.ox/office/tk/dropdown/list',
             }
         }
 
-        /**
-         * Activates a list item.
-         *
-         * @param {String|Null} value
-         *  The unique value associated to the list item to be activated. If
-         *  set to null, does not activate any list item (ambiguous state).
-         */
-        function updateHandler(value) {
-
-            var // all list items (button elements)
-                buttons = group.getListItems(),
-                // activate the button with the specified value
-                button = Utils.selectRadioButton(buttons, value),
-                // label of the active button (undefined if no button is active)
-                label = Utils.getControlLabel(button),
-                // options used to update the drop-down button (use group label if no button is active)
-                buttonOptions = _.isUndefined(label) ? options : Utils.extendOptions(options, { label: label });
-
-            // update the label of the drop-down button
-            Utils.setControlCaption(group.getMenuButton(), buttonOptions);
-        }
-
-        /**
-         * Click handler for a list item in this list control. Will activate
-         * the clicked list item, and return its value.
-         *
-         * @param {jQuery} button
-         *  The clicked button, as jQuery object.
-         *
-         * @returns {String}
-         *  The item value that has been passed to the addItem() method.
-         */
-        function clickHandler(button) {
-            var value = Utils.getButtonValue(button);
-            updateHandler(value);
-            return value;
-        }
-
         // base constructor ---------------------------------------------------
 
         Menu.extend(group, options);
@@ -203,10 +168,11 @@ define('io.ox/office/tk/dropdown/list',
          *  A map of options to control the properties of the new button
          *  representing the item. See method Utils.createButton() for details.
          *
-         * @returns {Group}
-         *  A reference to the group.
+         * @returns {jQuery}
+         *  The button element representing the new list item, as jQuery
+         *  collection.
          */
-        group.addListItem = function (value, options) {
+        group.createListItem = function (value, options) {
 
             var // create the button element representing the list item
                 button = Utils.createButton(Utils.extendOptions(options, { value: value })),
@@ -237,18 +203,16 @@ define('io.ox/office/tk/dropdown/list',
                 listNode.append(listItem);
             }
 
-            return group;
+            return button;
         };
 
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('list-chooser').append(listNode);
+        group.getMenuNode().addClass('list').append(listNode);
 
         // register event handlers
-        group.on('menuopen', menuOpenHandler)
-            .registerUpdateHandler(updateHandler)
-            .registerActionHandler('click', 'button', clickHandler);
+        group.on('menuopen', menuOpenHandler);
         listNode.on('keydown keypress keyup', listKeyHandler);
 
     } // class List

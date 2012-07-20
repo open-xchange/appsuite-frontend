@@ -31,6 +31,9 @@ define('io.ox/office/tk/dropdown/buttons',
      * menu containing button elements. Extends the Menu mix-in class with
      * functionality specific to the tabular button drop-down element.
      *
+     * Note: This is a mix-in class supposed to extend an existing instance of
+     * the class Group or one of its derived classes.
+     *
      * @extends Menu
      *
      * @param {Group} group
@@ -135,18 +138,21 @@ define('io.ox/office/tk/dropdown/buttons',
         /**
          * Inserts a new button to the drop-down grid.
          *
-         * @param {jQuery} button
-         *  A button control, as jQuery collection.
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new button. See
+         *  method Utils.createButton() for details.
          *
-         * @returns {Group}
-         *  A reference to the group.
+         * @returns {jQuery}
+         *  The new button element, as jQuery collection.
          */
-        group.addGridButton = function (button) {
+        group.createGridButton = function (options) {
 
             var // table row taking the new button
                 tableRow = null,
                 // column index for the new button
-                column = buttonCount % columns;
+                column = buttonCount % columns,
+                // the new button
+                button = Utils.createButton(options);
 
             // get/create table row with empty cell from drop-down menu
             if (column === 0) {
@@ -165,13 +171,13 @@ define('io.ox/office/tk/dropdown/buttons',
             tableRow.children().eq(column).empty().append(button);
             buttonCount += 1;
 
-            return group;
+            return button;
         };
 
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('button-chooser').append(gridNode);
+        group.getMenuNode().addClass('buttons').append(gridNode);
 
         // register event handlers
         group.on('menuopen', menuOpenHandler);

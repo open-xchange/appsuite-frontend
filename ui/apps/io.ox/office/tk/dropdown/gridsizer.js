@@ -11,11 +11,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/sizechooser',
+define('io.ox/office/tk/dropdown/gridsizer',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown',
+     'io.ox/office/tk/dropdown/menu',
      'gettext!io.ox/office/tk/main'
-    ], function (Utils, DropDown, gt) {
+    ], function (Utils, Menu, gt) {
 
     'use strict';
 
@@ -31,23 +31,26 @@ define('io.ox/office/tk/sizechooser',
         return value;
     }
 
-    // class SizeChooser ======================================================
+    // class GridSizer ========================================================
 
     /**
-     * Creates a size-chooser control with a drop-down button shown on top, and
-     * a drop-down grid area used to select a specific size.
+     * Extends a Group object with a drop-down button and a drop-down menu
+     * containing a resizeable grid allowing to select a specific size. Extends
+     * the Menu mix-in class with functionality specific to the sizer drop-down
+     * element.
      *
-     * @constructor
+     * Note: This is a mix-in class supposed to extend an existing instance of
+     * the class Group or one of its derived classes.
      *
-     * @extends DropDown
+     * @extends Menu
      *
-     * @param {String} key
-     *  The unique key of the size chooser.
+     * @param {Group} group
+     *  The group object to be extended with a drop-down menu.
      *
      * @param {Object} options
-     *  A map of options to control the properties of the size chooser.
-     *  Supports all options of the DropDown() base class constructor.
-     *  Additionally, the following options are supported:
+     *  A map of options to control the properties of the sizer. Supports all
+     *  options of the Menu base class. Additionally, the following options are
+     *  supported:
      *  @param {Object} [options.minSize={width: 1, height: 1}]
      *      Minimum size allowed to choose. Either width or height may be
      *      omitted. Values but must be positive integers if specified.
@@ -57,18 +60,14 @@ define('io.ox/office/tk/sizechooser',
      *      greater than or equal to the values in options.minSize. If omitted,
      *      the maximum width and/or height is only limited by available screen
      *      space.
-     *  @param {Object} [options.defaultValue]
-     *      Default size that will be returned, if the action button is
-     *      clicked, and that will be shown initially, when the drop-down grid
+     *  @param {Object} [options.defaultSize]
+     *      Default size that will be shown initially, when the drop-down grid
      *      will be opened. Must be positive integers if specified. Omitted
      *      values will be set to the minimum width and/or height.
      */
-    function SizeChooser(key, options) {
+    function extend(group, options) {
 
-        var // self reference to be used in event handlers
-            self = this,
-
-            // build a table of embedded div elements used to show the grid
+        var // build a table of embedded div elements used to show the grid
             // (do not use a table element because grid flickers in different browsers...)
             gridNode = $('<div>').append($('<div>').append($('<div>'))),
 
@@ -76,12 +75,12 @@ define('io.ox/office/tk/sizechooser',
             sizeLabel = $('<span>'),
 
             // the drop-down button filling up the entire drop-down menu
-            gridButton = Utils.createButton(key).append(gridNode, sizeLabel),
+            gridButton = Utils.createButton().append(gridNode, sizeLabel),
 
             // grid size limits
             minSize = getSizeOption(options, 'minSize', { width: 1, height: 1 }, { width: 1, height: 1 }),
             maxSize = getSizeOption(options, 'maxSize', undefined, minSize),
-            defSize = getSizeOption(options, 'defaultValue', minSize, minSize, maxSize);
+            defSize = getSizeOption(options, 'defaultSize', minSize, minSize, maxSize);
 
         // private methods ----------------------------------------------------
 
@@ -238,7 +237,7 @@ define('io.ox/office/tk/sizechooser',
                 return false;
             case KeyCodes.UP_ARROW:
                 if (keydown) {
-                    if (gridSize.height > 1) { gridSize.height -= 1; setGridSize(gridSize); } else { self.hideMenu('key'); }
+                    if (gridSize.height > 1) { gridSize.height -= 1; setGridSize(gridSize); } else { group.hideMenu('key'); }
                 }
                 return false;
             case KeyCodes.RIGHT_ARROW:
@@ -252,25 +251,23 @@ define('io.ox/office/tk/sizechooser',
 
         // base constructor ---------------------------------------------------
 
-        // insert validated default size for action button into the options
-        DropDown.call(this, key, Utils.extendOptions(options, { defaultValue: defSize }));
+        Menu.extend(group, options);
 
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        this.getMenuNode().addClass('size-chooser').append(gridButton);
+        group.getMenuNode().addClass('table-sizer').append(gridButton);
 
         // register event handlers
-        this.registerActionHandler(gridButton, 'click', getGridSize)
+        group.registerActionHandler(gridButton, 'click', getGridSize)
             .on('menuopen', menuOpenHandler)
             .on('menuclose', menuCloseHandler);
         gridButton.on('keydown keypress keyup', gridKeyHandler);
 
-    } // class SizeChooser
+    } // class GridSizer
 
     // exports ================================================================
 
-    // derive this class from class DropDown
-    return DropDown.extend({ constructor: SizeChooser });
+    return { extend: extend };
 
 });

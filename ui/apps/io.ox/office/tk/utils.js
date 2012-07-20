@@ -52,6 +52,13 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.SELECTED_CLASS = 'selected';
 
+    /**
+     * Attribute name for string values to be stored in the control.
+     *
+     * @constant
+     */
+    Utils.DATA_VALUE_ATTR = 'data-value';
+
     // options object ---------------------------------------------------------
 
     /**
@@ -188,10 +195,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     /**
      * Extends the passed object with the specified attributes.
      *
-     * @param {Object|Undefined} options
+     * @param {Object} [options]
      *  An object containing some attribute values. May be undefined.
      *
-     * @param {Object} extensions
+     * @param {Object} [extensions]
      *  Another object whose attributes will be inserted into the former
      *  object. Will overwrite existing attributes.
      *
@@ -200,7 +207,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  parameters.
      */
     Utils.extendOptions = function (options, extensions) {
-        return _(_.isObject(options) ? options : {}).extend(extensions);
+        return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
     // form control elements --------------------------------------------------
@@ -211,17 +218,17 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {String} element
      *  The tag name of the DOM element to be created.
      *
-     * @param {Object} [options]
+     * @param {Object} options
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
-     *  @param {String} [options.classes]
-     *      The CSS class names to be added to the element. If omitted, no
-     *      classes will be added.
-     *  @param {Object} [options.css]
-     *      A map with CSS formatting attributes to be added to the element.
+     *  @param {String} [options.value]
+     *      A string value that will be copied to the 'data-value' attribute of
+     *      the control.
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
+     *  @param {Object} [options.css]
+     *      A map with CSS formatting attributes to be added to the control.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new control element.
@@ -232,105 +239,18 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             control = $('<' + element + '>'),
 
             // option values
-            classes = Utils.getStringOption(options, 'classes', ''),
-            css = Utils.getObjectOption(options, 'css', {}),
-            tooltip = Utils.getStringOption(options, 'tooltip');
+            value = Utils.getStringOption(options, 'value'),
+            tooltip = Utils.getStringOption(options, 'tooltip'),
+            css = Utils.getObjectOption(options, 'css', {});
 
-        // add optional formatting
-        control.addClass(classes).css(css);
+        if (!_.isUndefined(value)) {
+            control.attr(Utils.DATA_VALUE_ATTR, value);
+        }
         if (tooltip) {
             control.tooltip({ title: tooltip, placement: 'top', animation: false });
         }
 
-        return control;
-    };
-
-    /**
-     * Inserts an icon and a text label to the existing contents of the passed
-     * form control.
-     *
-     * @param {jQuery} control
-     *  The control to be manipulated, as jQuery collection.
-     *
-     * @param {Object} [options]
-     *  A map of options to control the properties of the new label. Supports
-     *  all generic options (see method Utils.createControl() for details).
-     *  Additionally, the following options are supported:
-     *  @param {String} [options.icon]
-     *      The full name of the Bootstrap or OX icon class. If omitted, no
-     *      icon will be shown.
-     *  @param {String} [options.label]
-     *      The text label. Will follow an icon. If omitted, no text will be
-     *      shown.
-     *
-     * @returns {jQuery}
-     *  A jQuery object containing the new label element.
-     */
-    Utils.setControlCaption = function (control, options) {
-
-        var // the caption element
-            caption = $('<span>').attr('data-role', 'caption'),
-
-            // option values
-            icon = Utils.getStringOption(options, 'icon'),
-            label = Utils.getStringOption(options, 'label');
-
-        if (icon) {
-            caption.append($('<span>')
-                .attr('data-role', 'icon')
-                .append($('<i>').addClass(icon + ' ' + language))
-            );
-        }
-        if (label) {
-            caption.append($('<span>')
-                .attr('data-role', 'label')
-                .text(label)
-            );
-        }
-
-        // insert the caption into the control(s)
-        control.children('[data-role="caption"]').remove();
-        if (caption.children().length) {
-            control.prepend(caption);
-        }
-    };
-
-    /**
-     * Clones the caption in the specified source control, and inserts it into
-     * the target control(s).
-     *
-     * @param {jQuery} target
-     *  The target control(s) that will receive a clone of the source control
-     *  caption.
-     *
-     * @param {jQuery} source
-     *  The source control containing a caption element.
-     */
-    Utils.cloneControlCaption = function (target, source) {
-
-        var // the caption area of the source control
-            sourceCaption = source.first().children('[data-role="caption"]');
-
-        // insert the caption into the control(s)
-        target.children('[data-role="caption"]').remove();
-        if (sourceCaption.length) {
-            target.prepend(sourceCaption.clone());
-        }
-    };
-
-    /**
-     * Returns the text label of the first control in the passed jQuery
-     * collection.
-     *
-     * @param {jQuery} control
-     *  A jQuery collection containing a form control.
-     *
-     * @return {String|Undefined}
-     *  The text label of the control, if existing, otherwise undefined.
-     */
-    Utils.getControlLabel = function (control) {
-        var label = control.first().find('[data-role="label"]');
-        return label.length ? label.text() : undefined;
+        return control.css(css);
     };
 
     /**
@@ -420,6 +340,109 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return node.find(Utils.FOCUSED_SELECTOR).length !== 0;
     };
 
+    /**
+     * Returns the string value of the first control in the passed jQuery
+     * collection.
+     *
+     * @param control
+     *  A jQuery collection containing a control element.
+     */
+    Utils.getControlValue = function (control) {
+        return control.first().attr(Utils.DATA_VALUE_ATTR);
+    };
+
+    // control captions -------------------------------------------------------
+
+    /**
+     * Removes the icon and the text label from the passed form control.
+     *
+     * @param {jQuery} control
+     *  The control to be manipulated, as jQuery collection.
+     */
+    Utils.removeControlCaption = function (control) {
+        control.children('span[data-role="icon"], span[data-role="label"]').remove();
+    };
+
+    /**
+     * Inserts an icon and a text label into the passed form control.
+     *
+     * @param {jQuery} control
+     *  The control to be manipulated, as jQuery collection.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the caption. The
+     *  following options are supported:
+     *  @param {String} [options.icon]
+     *      The full name of the Bootstrap or OX icon class. If omitted, no
+     *      icon will be shown.
+     *  @param {String} [options.label]
+     *      The text label. Will follow an icon. If omitted, no text will be
+     *      shown.
+     *  @param {Object} [options.labelCss]
+     *      A map with CSS formatting attributes to be added to the label span.
+     */
+    Utils.setControlCaption = function (control, options) {
+
+        var // option values
+            icon = Utils.getStringOption(options, 'icon'),
+            label = Utils.getStringOption(options, 'label'),
+            labelCss = Utils.getObjectOption(options, 'labelCss', {});
+
+        // remove the old spans
+        Utils.removeControlCaption(control);
+
+        // prepend the label
+        if (label) {
+            control.prepend($('<span>')
+                .attr('data-role', 'label')
+                .text(label)
+                .css(labelCss));
+        }
+
+        // prepend the icon
+        if (icon) {
+            control.prepend($('<span>')
+                .attr('data-role', 'icon')
+                .append($('<i>').addClass(icon + ' ' + language))
+            );
+        }
+    };
+
+    /**
+     * Clones the caption in the specified source control, and inserts it into
+     * the target control(s).
+     *
+     * @param {jQuery} target
+     *  The target control(s) that will receive a clone of the source control
+     *  caption.
+     *
+     * @param {jQuery} source
+     *  The source control containing a caption element.
+     */
+    Utils.cloneControlCaption = function (target, source) {
+
+        // remove the old spans
+        Utils.removeControlCaption(target);
+
+        // clone the label and the icon from the source control
+        target.prepend(source.first().children('span[data-role="icon"], span[data-role="label"]').clone());
+    };
+
+    /**
+     * Returns the text label of the first control in the passed jQuery
+     * collection.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
+     *
+     * @return {String|Undefined}
+     *  The text label of the control, if existing, otherwise undefined.
+     */
+    Utils.getControlLabel = function (control) {
+        var label = control.first().find('[data-role="label"]');
+        return label.length ? label.text() : undefined;
+    };
+
     // label elements ---------------------------------------------------------
 
     /**
@@ -451,10 +474,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  A map of options to control the properties of the new button. Supports
      *  all generic options supported by the method Utils.createControl(), and
      *  all caption options supported by the method Utils.setControlLabel().
-     *  Additionally, the following options are supported:
-     *  @param {String} [options.value]
-     *      A string value that will be copied to the 'data-value' attribute of
-     *      the button.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new button element.
@@ -462,14 +481,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.createButton = function (options) {
 
         var // create the DOM button element
-            button = Utils.createControl('button', options),
-            // value for the data-value attribute
-            value = Utils.getStringOption(options, 'value');
+            button = Utils.createControl('button', options);
 
         Utils.setControlCaption(button, options);
-        if (value) {
-            button.attr('data-value', value);
-        }
         return button;
     };
 
@@ -503,17 +517,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Returns the string value of the first button control in the passed
-     * jQuery collection.
-     *
-     * @param button
-     *  A jQuery collection containing a button element.
-     */
-    Utils.getButtonValue = function (button) {
-        return button.first().attr('data-value');
-    };
-
-    /**
      * Activates a button from the passed collection of buttons, after
      * deactivating all buttons in the collection.
      *
@@ -530,7 +533,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.selectRadioButton = function (buttons, value) {
 
         var // find the button to activate
-            button = _.isString(value) ? buttons.filter('[data-value="' + value + '"]') : $();
+            button = _.isString(value) ? buttons.filter('[' + Utils.DATA_VALUE_ATTR + '="' + value + '"]') : $();
 
         // remove highlighting from all buttons, highlight active button
         Utils.toggleButtons(buttons, false);

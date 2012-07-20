@@ -36,22 +36,15 @@ define('io.ox/office/tk/control/group',
      * the base class for specialized groups and does not add any specific
      * functionality to the inserted controls.
      *
-     * @param {String} key
-     *  The unique key of this group. Will be passed to change events, after a
-     *  control element has triggered an action event.
-     *
      * @constructor
      */
-    function Group(key) {
+    function Group() {
 
         var // self reference
             self = this,
 
             // create the group container element
             groupNode = $('<div>').addClass('group'),
-
-            // the action node used to attach global event handlers
-            actionNode = groupNode,
 
             // update handler functions
             updateHandlers = [];
@@ -84,15 +77,14 @@ define('io.ox/office/tk/control/group',
         /**
          * Registers the passed action handler for a specific control. Action
          * handlers will be executed, when the control has been activated in
-         * the user interface. Will trigger a 'change' event, passing the key
-         * of the source control, and its current value as returned by the
-         * passed action handler.
+         * the user interface. Will trigger a 'change' event, passing its
+         * current value as returned by the passed action handler.
          *
          * @param {jQuery} [node]
          *  The DOM node that catches the jQuery action events. May be a single
          *  control, or a parent element of several controls. If omitted, uses
-         *  the action root node of this group. In case a container element is
-         *  used, the parameter 'selector' must be specified.
+         *  the root node of this group. In case a container element is used,
+         *  the parameter 'selector' must be specified.
          *
          * @param {String} type
          *  The type of the action event, e.g. 'click' or 'change'.
@@ -117,7 +109,7 @@ define('io.ox/office/tk/control/group',
                 var control = $(this), value;
                 if (Utils.isControlEnabled(control)) {
                     value = actionHandler.call(self, control);
-                    self.trigger('change', key, value);
+                    self.trigger('change', value);
                 } else {
                     self.trigger('cancel');
                 }
@@ -129,7 +121,7 @@ define('io.ox/office/tk/control/group',
                 actionHandler = selector;
                 selector = type;
                 type = node;
-                node = actionNode;
+                node = groupNode;
             }
 
             // normalize passed parameters, if selector parameter is missing

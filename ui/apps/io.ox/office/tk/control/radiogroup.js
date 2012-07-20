@@ -15,7 +15,7 @@ define('io.ox/office/tk/control/radiogroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/dropdown/buttons',
-     'io.ox/office/tk/dropdown/buttons'
+     'io.ox/office/tk/dropdown/list'
     ], function (Utils, Group, Buttons, List) {
 
     'use strict';
@@ -29,10 +29,6 @@ define('io.ox/office/tk/control/radiogroup',
      *
      * @extends Group
      *
-     * @param {String} key
-     *  The unique key of this group. Will be passed to change events, after
-     *  an option button has been clicked.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
      *  menu. Supports all options of the Buttons mix-in class (if options.type
@@ -45,13 +41,13 @@ define('io.ox/office/tk/control/radiogroup',
      *      will be created, showing a tabular button menu. If set to 'list', a
      *      drop-down button will be created, showing a list.
      */
-    function RadioGroup(key, options) {
+    function RadioGroup(options) {
 
         var // self reference
             self = this,
 
             // display mode
-            type = Utils.getBooleanOption(options, 'type', 'buttons');
+            type = Utils.getStringOption(options, 'type', 'buttons');
 
         // private methods ----------------------------------------------------
 
@@ -77,14 +73,16 @@ define('io.ox/office/tk/control/radiogroup',
          */
         function updateHandler(value) {
 
-            var // all option buttons in this radio group
-                buttons = getRadioButtons(),
-                // the activated radio button
-                button = Utils.selectRadioButton(buttons, value);
+            var // activate a radio button
+                button = Utils.selectRadioButton(getRadioButtons(), value);
 
-            // update the contents of the drop-down button (use first button if no button is active)
-            if (type !== 'buttons') {
-                Utils.cloneControlCaption(self.getMenuButton(), (button.length ? button : buttons).first());
+            // update the contents of the drop-down button (use group options if no button is active)
+            if (self.hasMenu) {
+                if (button.length) {
+                    Utils.cloneControlCaption(self.getMenuButton(), button.first());
+                } else {
+                    Utils.setControlCaption(self.getMenuButton(), options);
+                }
             }
         }
 
@@ -99,14 +97,14 @@ define('io.ox/office/tk/control/radiogroup',
          *  The button value that has been passed to the addButton() method.
          */
         function clickHandler(button) {
-            var value = Utils.getButtonValue(button);
+            var value = Utils.getControlValue(button);
             updateHandler(value);
             return value;
         }
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, key);
+        Group.call(this);
         switch (type) {
         case 'dropdown':
             Buttons.extend(this, options);
@@ -135,24 +133,19 @@ define('io.ox/office/tk/control/radiogroup',
          */
         this.addButton = function (value, options) {
 
-            var // options for the new button
+            var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value });
 
             // insert the button depending on the display mode
             switch (type) {
             case 'dropdown':
-                this.addGridButton(Utils.createButton(buttonOptions));
+                this.createGridButton(buttonOptions);
                 break;
             case 'list':
-                this.addListItem(value, options);
+                this.createListItem(value, options);
                 break;
             default:
                 this.addFocusableControl(Utils.createButton(buttonOptions));
-            }
-
-            // insert contents of first inserted button into the drop-down button
-            if ((type !== 'buttons') && (getRadioButtons().length === 1)) {
-                Utils.setControlCaption(this.getMenuButton(), options);
             }
 
             return this;
@@ -162,7 +155,7 @@ define('io.ox/office/tk/control/radiogroup',
 
         // register event handlers
         this.registerUpdateHandler(updateHandler)
-            .registerActionHandler('click', 'button', clickHandler);
+            .registerActionHandler(this.hasMenu ? this.getMenuNode() : this.getNode(), 'click', 'button', clickHandler);
 
     } // class RadioGroup
 

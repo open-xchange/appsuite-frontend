@@ -28,10 +28,6 @@ define('io.ox/office/tk/control/button',
      *
      * @extends Group
      *
-     * @param {String} key
-     *  The unique key of this button. Will be passed to change events, after
-     *  the button has been clicked.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the button. Supports all
      *  generic formatting options (see method Utils.createButton() for
@@ -40,7 +36,7 @@ define('io.ox/office/tk/control/button',
      *      If set to true, the button represents a boolean value and
      *      toggles its state when clicked.
      */
-    function Button(key, options) {
+    function Button(options) {
 
         var // create the button
             button = Utils.createButton(options),
@@ -70,12 +66,14 @@ define('io.ox/office/tk/control/button',
             if (toggle) {
                 Utils.toggleButtons(button);
                 return Utils.isButtonSelected(button);
-            } // else: push button, return undefined
+            }
+            // push button: return the 'data-value' attribute
+            return Utils.getControlValue(button);
         }
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, key);
+        Group.call(this);
 
         // initialization -----------------------------------------------------
 

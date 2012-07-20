@@ -24,17 +24,22 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
     // class Menu =============================================================
 
     /**
-     * Extends a Group object with a drop-down button and menu. Implements
-     * mouse and keyboard event handling for the drop-down button (open, close,
-     * automatic close of the drop-down menu on focus navigation). Adds new
-     * methods to the group.
+     * Extends a Group object with a drop-down menu. Creates a new drop-down
+     * button in the group or reuses an existing button extending it with a
+     * caret sign. Implements mouse and keyboard event handling for the
+     * drop-down button (open, close, automatic close of the drop-down menu on
+     * focus navigation). Adds new methods to the group to control the
+     * drop-down button and menu.
+     *
+     * Note: This is a mix-in class supposed to extend an existing instance of
+     * the class Group or one of its derived classes.
      *
      * @param {Group} group
      *  The group object to be extended with a drop-down menu.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button.
-     *  Supports all generic formatting options for buttons (see method
+     *  Supports all generic button formatting options (see method
      *  Utils.createButton() for details).
      */
     function extend(group, options) {
@@ -205,6 +210,12 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         // methods ------------------------------------------------------------
 
         /**
+         * A simple boolean marker to test whether the group contains a
+         * drop-down menu.
+         */
+        group.hasMenu = true;
+
+        /**
          * Returns the drop-down button added to the group.
          */
         group.getMenuButton = function () {
@@ -255,7 +266,7 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         // marker class for extended formatting
         groupNode.addClass('dropdown-group');
 
-        // append button and menu to the group container
+        // append menu button and menu to the group container
         group.addFocusableControl(menuButton).addControl(menuNode);
 
         // prepare drop-down button, and register event handlers

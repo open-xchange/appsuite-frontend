@@ -14,12 +14,32 @@
 define('io.ox/office/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/toolbar',
-     'io.ox/office/tk/control/sizechooser',
+     'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/fontchooser',
+     'io.ox/office/tk/dropdown/gridsizer',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolBar, SizeChooser, FontChooser, gt) {
+    ], function (Utils, ToolBar, Button, FontChooser, GridSizer, gt) {
 
     'use strict';
+
+    // class TableSizeChooser =================================================
+
+    var TableSizeChooser = Button.extend({ constructor: function (buttonOptions, sizerOptions) {
+
+        var finalSizerOptions = Utils.extendOptions({
+                tooltip: gt('Select table size'),
+                defaultSize: { width: 5, height: 3 },
+                maxSize: { width: 15, height: 15 }
+            }, sizerOptions);
+
+        // base constructor ---------------------------------------------------
+
+        // create the default button (set value to default size, will be returned by click handler)
+        Button.call(this, Utils.extendOptions(buttonOptions, { value: finalSizerOptions.defaultSize }));
+        // create the grid sizer
+        GridSizer.extend(this, finalSizerOptions);
+
+    }});
 
     // class View =============================================================
 
@@ -44,14 +64,7 @@ define('io.ox/office/view',
             debugTable = $('<table>').addClass('debug-table').appendTo(debugPane),
 
             // options for the 'insert table' control
-            insertTableOptions = {
-                icon: 'icon-io-ox-table',
-                tooltip: gt('Insert table'),
-                split: true,
-                caretTooltip: gt('Select table size'),
-                maxSize: { width: 15, height: 15 },
-                defaultValue: { width: 5, height: 3 }
-            };
+            insertTableOptions = { icon: 'icon-io-ox-table', tooltip: gt('Insert table') };
 
         // private methods ----------------------------------------------------
 
@@ -128,14 +141,14 @@ define('io.ox/office/view',
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
-            .addGroup(new SizeChooser('insert/table', insertTableOptions));
+            .addGroup('insert/table', new TableSizeChooser(insertTableOptions));
 
         createToolBar('format', gt('Format'))
-            .addGroup(new FontChooser('format/character/font/family'))
+            .addGroup('format/character/font/family', new FontChooser())
             .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
-            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
@@ -143,7 +156,7 @@ define('io.ox/office/view',
             .end();
 
         createToolBar('table', gt('Table'))
-            .addGroup(new SizeChooser('insert/table', insertTableOptions));
+            .addGroup('insert/table', new TableSizeChooser(insertTableOptions));
 
         createToolBar('debug', gt('Debug'))
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });

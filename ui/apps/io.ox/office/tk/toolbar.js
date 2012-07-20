@@ -51,8 +51,11 @@ define('io.ox/office/tk/toolbar',
             // DOM child element measuring the total width of the controls
             containerNode = $('<span>').appendTo(node),
 
-            // all control groups
+            // all control groups, as plain array
             groups = [],
+
+            // all control groups, mapped by key
+            groupsByKey = {},
 
             // resize handler functions supporting flexible tool bar sizing
             resizeHandlers = [];
@@ -177,8 +180,7 @@ define('io.ox/office/tk/toolbar',
          * @constructor
          *
          * @param {String} key
-         *  The unique key of the radio group. This key is shared by all
-         *  buttons inserted into this group.
+         *  The unique key of the radio group.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the radio group. See
@@ -189,11 +191,14 @@ define('io.ox/office/tk/toolbar',
             var // type of the group
                 type = Utils.getStringOption(options, 'type', 'buttons'),
 
-                // automatic expansion
-                autoExpand = Utils.getBooleanOption(options, 'autoExpand', false),
+                // the group object containing the option buttons
+                radioGroup = new RadioGroup(options),
 
-                // the button group, and the drop-down group
-                buttonGroup = null, dropDownGroup = null;
+                // automatic expansion (disable, if group is not in drop-down mode)
+                autoExpand = radioGroup.hasMenu && Utils.getBooleanOption(options, 'autoExpand', false),
+
+                // expanded group, if autoExpand is enabled
+                expandGroup = autoExpand ? new RadioGroup(Utils.extendOptions(options, { type: 'buttons' })) : null;
 
             // private methods ------------------------------------------------
 
@@ -210,12 +215,12 @@ define('io.ox/office/tk/toolbar',
                 var hideGroup = null, showGroup = null, hasFocus = false;
 
                 // decide which group to hide and to show
-                if (enlarge && dropDownGroup.isVisible()) {
-                    hideGroup = dropDownGroup;
-                    showGroup = buttonGroup;
-                } else if (!enlarge && buttonGroup.isVisible()) {
-                    hideGroup = buttonGroup;
-                    showGroup = dropDownGroup;
+                if (enlarge && radioGroup.isVisible()) {
+                    hideGroup = radioGroup;
+                    showGroup = expandGroup;
+                } else if (!enlarge && expandGroup.isVisible()) {
+                    hideGroup = expandGroup;
+                    showGroup = radioGroup;
                 }
 
                 // hide and show the groups
@@ -242,8 +247,10 @@ define('io.ox/office/tk/toolbar',
              *  See method Utils.createButton() for details.
              */
             this.addButton = function (value, options) {
-                if (buttonGroup) { buttonGroup.addButton(value, options); }
-                if (dropDownGroup) { dropDownGroup.addButton(value, options); }
+                radioGroup.addButton(value, options);
+                if (expandGroup) {
+                    expandGroup.addButton(value, options);
+                }
                 return this;
             };
 
@@ -255,24 +262,9 @@ define('io.ox/office/tk/toolbar',
 
             // initialization -------------------------------------------------
 
-            // configure according to group type
-            switch (type) {
-            case 'dropdown':
-            case 'list':
-                toolBar.addGroup(dropDownGroup = new RadioGroup(key, options));
-                break;
-            default:
-                type = 'buttons';
-                autoExpand = false;
-            }
-
-            // create the button group (also in auto-expand mode)
-            if (autoExpand || (type === 'buttons')) {
-                toolBar.addGroup(buttonGroup = new RadioGroup(Utils.extendOptions(options, { type: 'buttons' })));
-            }
-
-            // register the window resize handler showing one of the groups
-            if (autoExpand) {
+            toolBar.addGroup(key, radioGroup);
+            if (expandGroup) {
+                toolBar.addGroup(key, expandGroup);
                 registerResizeHandler(resizeHandler);
             }
 
@@ -292,20 +284,26 @@ define('io.ox/office/tk/toolbar',
          * Adds the passed control group to this tool bar. Calls to the method
          * ToolBar.update() will be forwarded to all registered groups.
          *
+         * @param {String} key
+         *  The unique key of this group.
+         *
          * @param {Group} group
          *  The control group object. Will be appended to the contents of this
          *  tool bar.
          */
-        this.addGroup = function (group) {
+        this.addGroup = function (key, group) {
+
             // remember the group object
             groups.push(group);
+            (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
             // append its root node to this tool bar
             containerNode.append(group.getNode());
 
             // forward 'change' and 'cancel' events to the tool bar
-            group.on('change cancel', function (event, key, value) {
+            group.on('change cancel', function (event, value) {
                 toolBar.trigger(event.type, key, value);
             });
+
             return this;
         };
 
@@ -326,7 +324,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addLabel = function (key, options) {
-            return this.addGroup(new Label(key, options));
+            return this.addGroup(key, new Label(options));
         };
 
         /**
@@ -344,7 +342,7 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.addButton = function (key, options) {
-            return this.addGroup(new Button(key, options));
+            return this.addGroup(key, new Button(options));
         };
 
         /**
@@ -389,7 +387,9 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.enable = function (key, state) {
-            _(groups).invoke('enable', key, state);
+            if (key in groupsByKey) {
+                _(groupsByKey[key]).invoke('enable', state);
+            }
             return this;
         };
 
@@ -420,9 +420,11 @@ define('io.ox/office/tk/toolbar',
          *  A reference to this tool bar.
          */
         this.update = function (key, value) {
-            _(groups).invoke('update', key, value);
-            // update may have changed control size, recalculate sizes
-            windowResizeHandler();
+            if (key in groupsByKey) {
+                _(groupsByKey[key]).invoke('update', value);
+                // update may have changed control size, recalculate sizes
+                windowResizeHandler();
+            }
             return this;
         };
 

@@ -27,15 +27,12 @@ define('io.ox/office/tk/control/label',
      *
      * @extends Group
      *
-     * @param {String} key
-     *  The unique key of this label.
-     *
      * @param {Object} [options]
      *  A map of options to control the properties of the label. Supports all
      *  generic formatting options (see method Utils.createLabel() for
      *  details).
      */
-    function Label(key, options) {
+    function Label(options) {
 
         var // create the label
             label = Utils.createLabel(options);
@@ -49,7 +46,7 @@ define('io.ox/office/tk/control/label',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this, key);
+        Group.call(this);
 
         // initialization -----------------------------------------------------
 

@@ -190,7 +190,9 @@ div.io-ox-toolbar {
             /* common controls --------------------------------------------- */
 
             label, button, input {
+                display: inline-block;
                 position: relative;
+                height: 28px;
                 margin: 0;
                 .border-radius(0);
                 white-space: nowrap;
@@ -209,7 +211,7 @@ div.io-ox-toolbar {
 
             /* whitespace between control caption elements */
             label, button {
-                span + span { 
+                > span + span { 
                     margin-left: 5px;
                 }
             }
@@ -217,8 +219,7 @@ div.io-ox-toolbar {
             /* labels ------------------------------------------------------ */
 
             label {
-                display: inline-block;
-                padding: 5px 0;
+                padding: 3px 0;
                 background: none;
                 border: none;
                 text-align: center;
@@ -227,8 +228,7 @@ div.io-ox-toolbar {
             /* buttons ----------------------------------------------------- */
 
             button {
-                display: inline;
-                padding: 4px 8px;
+                padding: 2px 8px;
                 background: none;
                 /* reserve space for border in hover/focus/active mode */
                 border: 1px solid transparent;
@@ -305,8 +305,8 @@ div.io-ox-toolbar {
                     border: 1px solid @pane-border-color;
                     .border-radius(0);
 
-                    /* button chooser control */
-                    &.button-chooser > table {
+                    /* the Buttons mix-in class */
+                    &.buttons > table {
                         margin: -1px;
                         border-collapse: collapse;
                         max-width: none;
@@ -321,8 +321,8 @@ div.io-ox-toolbar {
                         }
                     }
 
-                    /* list chooser control */
-                    &.list-chooser {
+                    /* the List mix-in class */
+                    &.list {
                         overflow-y: auto;
 
                         > ul {
@@ -337,9 +337,8 @@ div.io-ox-toolbar {
 
                                 > button {
                                     width: 100%;
-                                    padding-top: 2px;
-                                    padding-bottom: 2px;
                                     border-color: transparent;
+                                    text-align: left;
 
                                     /* mouse hover and focus effect */
                                     &:hover:not(:active), &:focus:not(:active) {
@@ -369,15 +368,16 @@ div.io-ox-toolbar {
                         }
                     }
 
-                    /* size chooser control */
-                    &.size-chooser {
+                    /* the Sizer mix-in class */
+                    &.sizer {
 
-                        /* inner size of one cell in the size chooser */
-                        @cell-size: 18px;
+                        /* inner size (pixels between grid lines) of one cell in the size chooser */
+                        @cell-width: 18px;
+                        @cell-height: 16px;
 
                         /* minimum dimensions for the outer container (in cells) */
-                        min-width: 5 * (@cell-size + 1px) - 1px;
-                        min-height: 3 * (@cell-size + 1px) - 1px;
+                        min-width: 5 * (@cell-width + 1px) - 1px;
+                        min-height: 3 * (@cell-height + 1px) - 1px;
                         background-color: white;
                         text-align: left;
 
@@ -397,13 +397,13 @@ div.io-ox-toolbar {
                                 /* a row in the grid */
                                 > div {
                                     /* need to set height explicitly for Firefox */
-                                    height: @cell-size + 1px;
+                                    height: @cell-height + 1px;
 
                                     /* a cell in the grid */
                                     > div {
                                         display: inline-block;
-                                        width: @cell-size;
-                                        height: @cell-size;
+                                        width: @cell-width;
+                                        height: @cell-height;
                                         border-bottom: 1px solid @pane-border-color;
 
                                         &:not(:last-child) {
@@ -417,7 +417,7 @@ div.io-ox-toolbar {
 
                                     /* height for last row (again, especially for Firefox) */
                                     &:last-child {
-                                        height: @cell-size;
+                                        height: @cell-height;
                                     }
                                 }
                             }
@@ -426,7 +426,7 @@ div.io-ox-toolbar {
                             > span {
                                 position: absolute;
                                 top: 100%;
-                                right: @cell-size;
+                                right: @cell-width;
                                 z-index: 1020;
                                 margin: 5px 0 0 0;
                                 padding: 4px 6px;
@@ -466,7 +466,8 @@ div.io-ox-toolbar.tabs {
 
     > span {
         > .group > button {
-            padding: 2px 12px;
+            height: 24px;
+            padding: 1px 12px;
             border-bottom: 1px solid @pane-border-color;
             .border-top-left-radius(4px);
             .border-top-right-radius(4px);
