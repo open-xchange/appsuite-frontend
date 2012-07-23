@@ -75,10 +75,10 @@ define('io.ox/office/tk/toolbar',
          */
         function moveFocus(forward) {
 
-            var // all visible group objects
-                visibleGroups = _(groups).filter(function (group) { return group.isVisible(); }),
-                // extract all focusable controls from all visible groups
-                controls = _(visibleGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
+            var // all visible and enabled group objects
+                enabledGroups = _(groups).filter(function (group) { return group.isVisible() && group.isEnabled(); }),
+                // extract all focusable controls from all visible and enabled groups
+                controls = _(enabledGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
                 control = Utils.getFocusedControl(controls),
                 // index of focused control in all enabled controls

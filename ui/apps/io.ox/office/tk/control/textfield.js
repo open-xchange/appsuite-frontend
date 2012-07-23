@@ -34,7 +34,10 @@ define('io.ox/office/tk/control/textfield',
      */
     function TextField(options) {
 
-        var // create the text field
+        var // self reference
+            self = this,
+
+            // create the text field
             textField = Utils.createTextField(options);
 
         // private methods ----------------------------------------------------
@@ -53,6 +56,18 @@ define('io.ox/office/tk/control/textfield',
             return textField.val();
         }
 
+        /**
+         * Handles mouse-down events for this text field. Prevents starting the
+         * edit mode if the control is disabled.
+         */
+        function mouseDownHandler(event) {
+            // mousedown event starts edit mode, also if disabled class is set
+            if (!self.isEnabled()) {
+                // do not stop propagation, needed to close pending drop-down menu
+                event.preventDefault();
+            }
+        }
+
         // base constructor ---------------------------------------------------
 
         Group.call(this);
@@ -63,6 +78,7 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(textField, 'change', changeHandler);
+        textField.on('mousedown', mouseDownHandler);
 
     } // class TextField
 

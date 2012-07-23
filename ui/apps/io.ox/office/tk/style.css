@@ -95,6 +95,11 @@
     transition: @transition;
 }
 
+/* Opera does not get "-o-transition: none" right */
+.transition(none) {
+    -o-transition-property: none;
+}
+
 /* ========================================================================= */
 /* OX icons                                                                  */
 /* ========================================================================= */
@@ -193,7 +198,7 @@ div.io-ox-toolbar {
             }
 
             /* collapse borders of top-level elements inside group */
-            > :not(:first-child) {
+            :not(:first-child) {
                 margin-left: -1px;
             }
 
