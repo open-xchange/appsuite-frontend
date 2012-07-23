@@ -13,7 +13,7 @@
 
 define('io.ox/office/tk/utils',
     ['io.ox/core/gettext',
-     'io.ox/office/apphelper'
+     'io.ox/office/tk/apphelper'
     ], function (gettext, AppHelper) {
 
     'use strict';

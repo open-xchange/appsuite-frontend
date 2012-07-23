@@ -33,9 +33,9 @@ define('io.ox/office/tk/control/fontchooser',
      * @param {Object} options
      *  A map of options to control the properties of the font chooser control.
      *  Supports all options of the TextField base class, and the List mix-in
-     *  class. The default values are changed as following: options.icon will
-     *  be set to a font icon, options.label will be set to the localized text
-     *  'Font name', and options.sorted will be set to true.
+     *  class. The default settings are changed as following: options.icon will
+     *  be set to a font icon, options.tooltip will be set to the localized
+     *  text 'Font name', and options.sorted will be set to true.
      */
     function FontChooser(options) {
 
@@ -100,7 +100,6 @@ define('io.ox/office/tk/control/fontchooser',
         _(Fonts.getFontNames()).each(function (fontName) {
             this.createListItem({
                 value: fontName.toLowerCase(),
-                icon: fieldOptions.icon,
                 label: fontName,
                 labelCss: {
                     fontFamily: Fonts.getFontFamily(fontName),

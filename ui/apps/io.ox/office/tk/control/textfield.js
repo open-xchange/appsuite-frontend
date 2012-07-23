@@ -59,7 +59,7 @@ define('io.ox/office/tk/control/textfield',
 
         // initialization -----------------------------------------------------
 
-        // insert the button into this group, and register event handlers
+        // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(textField, 'change', changeHandler);

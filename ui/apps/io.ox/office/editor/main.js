@@ -15,7 +15,7 @@
 
 define('io.ox/office/editor/main',
     ['io.ox/files/api',
-     'io.ox/office/apphelper',
+     'io.ox/office/tk/apphelper',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view',
      'io.ox/office/editor/controller',

@@ -12,14 +12,13 @@
  */
 
 define('io.ox/office/editor/view',
-    ['io.ox/office/apphelper',
-     'io.ox/office/tk/utils',
+    ['io.ox/office/tk/utils',
      'io.ox/office/tk/toolbar',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/fontchooser',
      'io.ox/office/tk/dropdown/gridsizer',
      'gettext!io.ox/office/main'
-    ], function (AppHelper, Utils, ToolBar, Button, FontChooser, GridSizer, gt) {
+    ], function (Utils, ToolBar, Button, FontChooser, GridSizer, gt) {
 
     'use strict';
 
@@ -27,7 +26,7 @@ define('io.ox/office/editor/view',
 
     var TableSizeChooser = Button.extend({ constructor: function (buttonOptions, sizerOptions) {
 
-        var finalSizerOptions = AppHelper.extendOptions({
+        var finalSizerOptions = Utils.extendOptions({
                 tooltip: gt('Select table size'),
                 defaultSize: { width: 5, height: 3 },
                 maxSize: { width: 15, height: 15 }
@@ -36,7 +35,7 @@ define('io.ox/office/editor/view',
         // base constructor ---------------------------------------------------
 
         // create the default button (set value to default size, will be returned by click handler)
-        Button.call(this, AppHelper.extendOptions(buttonOptions, { value: finalSizerOptions.defaultSize }));
+        Button.call(this, Utils.extendOptions(buttonOptions, { value: finalSizerOptions.defaultSize }));
         // create the grid sizer
         GridSizer.extend(this, finalSizerOptions);
 

@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/apphelper', function () {
+define('io.ox/office/tk/apphelper', function () {
 
     'use strict';
 
