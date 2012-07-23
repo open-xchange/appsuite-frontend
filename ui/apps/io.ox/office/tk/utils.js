@@ -31,6 +31,13 @@ define('io.ox/office/tk/utils',
     // constants --------------------------------------------------------------
 
     /**
+     * CSS selector for visible elements.
+     *
+     * @constant
+     */
+    Utils.VISIBLE_SELECTOR = ':visible';
+
+    /**
      * CSS class for disabled controls.
      *
      * @constant
@@ -105,10 +112,23 @@ define('io.ox/office/tk/utils',
             control.attr(Utils.DATA_VALUE_ATTR, value);
         }
         if (tooltip) {
-            control.tooltip({ title: tooltip, placement: 'top', animation: false });
+            // Bootstrap tool tips do not vanish in drop-down menus, when button clicked
+            //control.tooltip({ title: tooltip, placement: 'top', animation: false });
+            control.attr('title', tooltip);
         }
 
         return control.css(css);
+    };
+
+    /**
+     * Returns the string value of the first control in the passed jQuery
+     * collection.
+     *
+     * @param control
+     *  A jQuery collection containing a control element.
+     */
+    Utils.getControlValue = function (control) {
+        return control.first().attr(Utils.DATA_VALUE_ATTR);
     };
 
     /**
@@ -198,17 +218,6 @@ define('io.ox/office/tk/utils',
         return node.find(Utils.FOCUSED_SELECTOR).length !== 0;
     };
 
-    /**
-     * Returns the string value of the first control in the passed jQuery
-     * collection.
-     *
-     * @param control
-     *  A jQuery collection containing a control element.
-     */
-    Utils.getControlValue = function (control) {
-        return control.first().attr(Utils.DATA_VALUE_ATTR);
-    };
-
     // control captions -------------------------------------------------------
 
     /**
@@ -219,6 +228,7 @@ define('io.ox/office/tk/utils',
      */
     Utils.removeControlCaption = function (control) {
         control.children('span[data-role="icon"], span[data-role="label"]').remove();
+        control.addClass('narrow-padding');
     };
 
     /**
@@ -251,7 +261,7 @@ define('io.ox/office/tk/utils',
 
         // prepend the label
         if (label) {
-            control.prepend($('<span>')
+            control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'label')
                 .text(label)
                 .css(labelCss));
@@ -259,7 +269,7 @@ define('io.ox/office/tk/utils',
 
         // prepend the icon
         if (icon) {
-            control.prepend($('<span>')
+            control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'icon')
                 .append($('<i>').addClass(icon + ' ' + language))
             );
@@ -279,11 +289,12 @@ define('io.ox/office/tk/utils',
      */
     Utils.cloneControlCaption = function (target, source) {
 
-        // remove the old spans
-        Utils.removeControlCaption(target);
+        var // clone the label and the icon from the source control
+            caption = source.first().children('span[data-role="icon"], span[data-role="label"]').clone();
 
-        // clone the label and the icon from the source control
-        target.prepend(source.first().children('span[data-role="icon"], span[data-role="label"]').clone());
+        // remove the old spans, and insert the new caption nodes
+        Utils.removeControlCaption(target);
+        target.prepend(caption).toggleClass('narrow-padding', !caption.length);
     };
 
     /**
@@ -360,6 +371,19 @@ define('io.ox/office/tk/utils',
     };
 
     /**
+     * Returns the selected button controls from the passed jQuery collection.
+     *
+     * @param {jQuery} buttons
+     *  A jQuery collection containing button elements.
+     *
+     * @returns {jQuery}
+     *  A jQuery collection with all selected buttons.
+     */
+    Utils.getSelectedButtons = function (buttons) {
+        return buttons.filter('.' + Utils.SELECTED_CLASS);
+    };
+
+    /**
      * Selects, deselects, or toggles the passed button or collection of
      * buttons.
      *
@@ -392,6 +416,11 @@ define('io.ox/office/tk/utils',
 
         var // find the button to activate
             button = _.isString(value) ? buttons.filter('[' + Utils.DATA_VALUE_ATTR + '="' + value + '"]') : $();
+
+        // button not found: return currently selected button
+        if (!button.length && !_.isNull(value)) {
+            return Utils.getSelectedButtons(buttons);
+        }
 
         // remove highlighting from all buttons, highlight active button
         Utils.toggleButtons(buttons, false);

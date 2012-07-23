@@ -63,22 +63,22 @@
     box-shadow: @outset-shadow, inset @inset-shadow;
 }
 
-.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
+.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-start-color, @ie-end-color, @ie-gradient-type) {
     background-color: mix(@start-color, @end-color, 50%);
     background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
     background: -moz-linear-gradient(@start-point, @start-color, @end-color);
     background: -ms-linear-gradient(@start-point, @start-color, @end-color);
     background: -o-linear-gradient(@start-point, @start-color, @end-color);
     background: linear-gradient(@start-point, @start-color, @end-color);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@ie-start-color,@ie-end-color,@ie-gradient-type));
 }
 
-.horizontal-gradient(@left-color, @right-color) {
-    .impl-linear-gradient(left, @left-color, @right-color, 1);
+.horizontal-gradient(@left-color, @right-color, @ie-left-color, @ie-right-color) {
+    .impl-linear-gradient(left, @left-color, @right-color, @ie-left-color, @ie-right-color, 1);
 }
 
-.vertical-gradient(@top-color, @bottom-color) {
-    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
+.vertical-gradient(@top-color, @bottom-color, @ie-top-color, @ie-bottom-color) {
+    .impl-linear-gradient(top, @top-color, @bottom-color, @ie-top-color, @ie-bottom-color, 0);
 }
 
 .opacity(@opacity) {
@@ -93,7 +93,7 @@
     -ms-transition: @transition;
     -o-transition: @transition;
     transition: @transition;
-} 
+}
 
 /* ========================================================================= */
 /* OX icons                                                                  */
@@ -105,6 +105,7 @@
  */
 i[class^="icon-io-ox-"] {
     background-image: url(img/ox-icons-black.png);
+    background-origin: content-box;
     width: 14px;
     height: 14px;
 
@@ -173,31 +174,34 @@ div.io-ox-toolbar {
         display: inline-block;
         position: relative;
 
+        /* disabled style for any element marked with the 'disabled' class */
+        .disabled {
+            .opacity(0.5);
+            cursor: default;
+        }
+
         /* groups ---------------------------------------------------------- */
 
-        > .group {
+        .group {
             display: inline-block;
             /* relative position is essential for drop-down menu positioning */
             position: relative;
 
-            /* class 'hidden' is used to hide the entire group */
+            /* hidden control groups */
             &.hidden {
                 display: none;
-            }
-
-            /* spacing between groups */
-            &:not(.hidden) ~ .group:not(.hidden) {
-                margin-left: 10px;
-            }
-
-            /* collapse groups if specified */
-            &.collapse-group:not(.hidden) + .group.collapse-group:not(.hidden) {
-                margin-left: -1px;
             }
 
             /* collapse borders of top-level elements inside group */
             > :not(:first-child) {
                 margin-left: -1px;
+            }
+
+            /* reset mouse pointer for controls embedded in a disabled group */
+            &.disabled {
+                label, button, input {
+                    cursor: default;
+                }
             }
 
             /* common controls --------------------------------------------- */
@@ -215,11 +219,6 @@ div.io-ox-toolbar {
                 text-shadow: none;
                 vertical-align: middle;
 
-                &.disabled {
-                    .opacity(0.5);
-                    cursor: default;
-                }
-
                 /* prevent dotted focus rectangle around the control */
                 &:focus, &:active {
                     outline: none;
@@ -234,8 +233,8 @@ div.io-ox-toolbar {
             }
 
             /* mouse and keyboard effects for buttons and text fields */
-            button, input {
-                &:not(.disabled) {
+            &:not(.disabled) {
+                button, input {
 
                     /* mouse/keyboard effects */
                     &:hover, &:focus, &:active {
@@ -266,31 +265,35 @@ div.io-ox-toolbar {
                 /* reserve space for border in hover/focus/active mode */
                 text-align: center;
 
-                /* active effect (control currently clicked) */
-                &:not(.disabled):active {
-                    background-color: fade(@pane-border-color, 25%);
-                }
-
                 /* selected toggle/radio buttons */
                 &.selected {
                     z-index: 20;
                     background-color: fade(@selected-border-color, 50%);
                     border-color: @selected-border-color;
+                }
+            }
 
-                    /* do not add any effects to disabled buttons */
-                    &:not(.disabled) {
+            /* keyboard/mouse effects (not for disabled btutons) */
+            &:not(.disabled) button {
 
-                        /* mouse/keyboard effects */
-                        &:hover, &:focus, &:active {
-                            z-index: 22;
-                            border-color: darken(@selected-border-color, 10%);
-                        }
+                /* active effect (control currently clicked) */
+                &:active {
+                    background-color: fade(@pane-border-color, 25%);
+                }
 
-                        /* active effect (button currently clicked) */
-                        &:active {
-                            z-index: 24;
-                            background-color: fade(@selected-border-color, 75%);
-                        }
+                /* selected toggle/radio buttons */
+                &.selected {
+
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
+                        z-index: 22;
+                        border-color: darken(@selected-border-color, 10%);
+                    }
+
+                    /* active effect (button currently clicked) */
+                    &:active {
+                        z-index: 24;
+                        background-color: fade(@selected-border-color, 75%);
                     }
                 }
             }
@@ -307,9 +310,26 @@ div.io-ox-toolbar {
             &.dropdown-group {
 
                 /* adjust margins for caret buttons in drop-down split mode */
-                > button > span[data-role="caret"]:only-child {
-                    margin-left: -4px;
-                    margin-right: -4px;
+                > button.narrow-padding {
+                    padding-left: 4px;
+                    padding-right: 4px;
+                }
+
+                &:not(.disabled) {
+
+                    /* show drop-down menu element */
+                    &.menu-open > .dropdown-menu {
+                        display: block;
+                    }
+
+                    /* set border to all buttons and text fields in the group when hovered or opened (split mode) */
+                    &.menu-open, &:hover {
+                        > button, > input {
+                            &:not(:focus):not(:active) {
+                                border-color: @pane-border-color;
+                            }
+                        }
+                    }
                 }
 
                 /* the drop-down menu element */
@@ -398,24 +418,27 @@ div.io-ox-toolbar {
                         @cell-height: 16px;
 
                         /* minimum dimensions for the outer container (in cells) */
-                        min-width: 5 * (@cell-width + 1px) - 1px;
-                        min-height: 3 * (@cell-height + 1px) - 1px;
+                        min-width: 5 * (@cell-width + 1px) + 1px;
+                        min-height: 3 * (@cell-height + 1px) + 1px;
                         background-color: white;
                         text-align: left;
 
-                        > button {
-                            height: auto;
-                            margin: -1px;
-                            padding: 0;
-                            background-color: @pane-fill-color;
+                        > div {
                             vertical-align: top;
                             font-size: 1px;
                             line-height: normal;
 
                             /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                            > div {
-                                margin: -1px;
-                                border: 1px solid @pane-border-color;
+                            > button {
+                                height: auto;
+                                margin: 0;
+                                padding: 0;
+                                background-color: @pane-fill-color;
+
+                                /* always show the same border */
+                                &, &:hover, &:focus, &:active {
+                                    border: 1px solid @pane-border-color;
+                                }
 
                                 /* a row in the grid */
                                 > div {
@@ -465,20 +488,22 @@ div.io-ox-toolbar {
                         }
                     }
                 }
+            }
+        }
 
-                /* show drop-down menu element */
-                &.menu-open > .dropdown-menu {
-                    display: block;
-                }
+        /* group spacing --------------------------------------------------- */
 
-                /* set border to all buttons and text fields in the group when hovered or opened (split mode) */
-                &:hover, &.menu-open {
-                    > button, input {
-                        &:not(.disabled):not(:focus):not(:active) {
-                            border-color: @pane-border-color;
-                        }
-                    }
-                }
+        /* spacing between top-level elements (groups and collapsed group containers */
+        > :not(.hidden) ~ :not(.hidden) {
+            margin-left: 10px;
+        }
+
+        /* collapse group elements inside a collapse-groups container */
+        > .collapsed-groups {
+            display: inline-block;
+
+            > :not(.hidden) ~ :not(.hidden) {
+                margin-left: -1px;
             }
         }
     }
@@ -490,27 +515,29 @@ div.io-ox-toolbar.tabs {
     padding-bottom: 0;
 
     > span {
-        > .group > button {
-            height: 24px;
-            padding: 1px 12px;
-            border-bottom: 1px solid @pane-border-color;
-            .border-top-left-radius(4px);
-            .border-top-right-radius(4px);
+        > .group {
+            > button {
+                height: 24px;
+                padding: 1px 12px;
+                border-bottom: 1px solid @pane-border-color;
+                .border-top-left-radius(4px);
+                .border-top-right-radius(4px);
 
-            /* override the default style of selected buttons */
-            &.selected {
-                background: none;
-                border: 1px solid @pane-border-color;
-                border-bottom-color: transparent;
-                cursor: default;
+                /* override the default style of selected buttons */
+                &.selected {
+                    background: none;
+                    border: 1px solid @pane-border-color;
+                    border-bottom-color: transparent;
+                    cursor: default;
+                }
+            }
 
-                /* mouse/keyboard effects (not for disabled buttons) */
-                &:not(.disabled) {
-                    &:hover, &:focus, &:active {
-                        background: none;
-                        border-color: darken(@pane-border-color, 10%);
-                        border-bottom-color: transparent;
-                    }
+            /* mouse/keyboard effects of selected tabs (not for disabled group) */
+            &:not(.disabled) > button.selected {
+                &:hover, &:focus, &:active {
+                    background: none;
+                    border-color: darken(@pane-border-color, 10%);
+                    border-bottom-color: transparent;
                 }
             }
         }
@@ -527,13 +554,13 @@ div.io-ox-toolbar.tabs {
             &.left {
                 right: 100%;
                 margin-right: -1px;
-                .horizontal-gradient(fade(@pane-border-color, 0%), @pane-border-color);
+                .horizontal-gradient(fade(@pane-border-color, 0%), @pane-border-color, @pane-fill-color, @pane-border-color);
             }
 
             &.right {
                 left: 100%;
                 margin-left: -1px;
-                .horizontal-gradient(@pane-border-color, fade(@pane-border-color, 0%));
+                .horizontal-gradient(@pane-border-color, fade(@pane-border-color, 0%), @pane-border-color, @pane-fill-color);
             }
         }
     }

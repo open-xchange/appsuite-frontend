@@ -117,8 +117,8 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
          */
         function menuButtonClickHandler() {
 
-            // do nothing (but the 'cancel' event) if the drop-down control is disabled
-            if (Utils.isControlEnabled(menuButton)) {
+            // do nothing (but the 'cancel' event) if the group is disabled
+            if (group.isEnabled()) {
 
                 // WebKit does not focus the clicked button, which is needed to
                 // get keyboard control in the drop-down menu
@@ -142,12 +142,15 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
          */
         function globalClickHandler(event) {
 
-            var // clicked inside the drop-down menu or on the drop-down button
-                innerClick = (event.target === menuButton.get(0)) || (event.target === menuNode.get(0)) || menuNode.has(event.target).length;
+            // Returns whether one of the specified nodes contains the DOM
+            // element in event.target, or if it is the event.target by itself.
+            function isTargetIn(nodes) {
+                return nodes.filter(event.target).length || nodes.has(event.target).length;
+            }
 
-            // do not close the menu in a 'mousedown' event, if clicked inside
-            // the menu or on the drop-down button
-            if (!innerClick || (event.type !== 'mousedown')) {
+            // Close the menu unless a 'mousedown' event occurred inside the
+            // menu node or on the drop-down button.
+            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode))) {
                 toggleMenu(false, 'mouse');
             }
         }

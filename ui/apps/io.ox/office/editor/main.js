@@ -627,14 +627,20 @@ define('io.ox/office/editor/main',
         app.print = print;
 
         app.failSave = function () {
-            var point = { file: file, debugMode: debugMode };
+            var point = {
+                file: file,
+                toolBarTab: controller.get('view/toolbars/show'),
+                debugMode: debugMode
+            };
             return { module: MODULE_NAME, point: point };
         };
 
         app.failRestore = function (point) {
             initializeApp(point);
             updateDebugMode();
-            return app.load();
+            return app.load().always(function () {
+                controller.change('view/toolbars/show', AppHelper.getStringOption(point, 'toolBarTab'));
+            });
         };
 
         /**
