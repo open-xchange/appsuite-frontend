@@ -2834,41 +2834,46 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 var thisPara = allParagraphs[para];
                 var nextPara = allParagraphs[para + 1];
 
-                var oldParaLen = 0;
-                oldParaLen = this.getParagraphLength(position);
+                // Only merging, if both paragraph nodes have name 'p'. Tables cannot be merged this way, and
+                // 'p' and 'table' cannot be merged either.
+                if ((thisPara.nodeName === 'P') && (nextPara.nodeName === 'P')) {
 
-                var lastCurrentChild = thisPara.lastChild;
-                if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
-                    thisPara.removeChild(lastCurrentChild);
-                }
+                    var oldParaLen = 0;
+                    oldParaLen = this.getParagraphLength(position);
 
-                var child = nextPara.firstChild;
-
-                while (child !== null) {
-                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
-
-                    if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
-                        thisPara.lastChild.nodeValue += child.nodeValue;
-                    } else {
-                        thisPara.appendChild(child);
+                    var lastCurrentChild = thisPara.lastChild;
+                    if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
+                        thisPara.removeChild(lastCurrentChild);
                     }
 
-                    child = nextChild;
-                }
+                    var child = nextPara.firstChild;
 
-                var localPosition = _.copy(position, true);
-                localPosition[posLength] += 1;  // posLength is 0 for non-tables
+                    while (child !== null) {
+                        var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                this.implDeleteParagraph(localPosition);
+                        if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
+                            thisPara.lastChild.nodeValue += child.nodeValue;
+                        } else {
+                            thisPara.appendChild(child);
+                        }
 
-                var lastPos = _.copy(position);
-                lastPos.push(oldParaLen);
-                lastOperationEnd = new OXOPaM(lastPos);
-                this.implParagraphChanged(position);
+                        child = nextChild;
+                    }
 
-                // DEBUG STUFF
-                if (paragraphs.size() !== (dbg_oldparacount - 1)) {
-                    this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                    var localPosition = _.copy(position, true);
+                    localPosition[posLength] += 1;  // posLength is 0 for non-tables
+
+                    this.implDeleteParagraph(localPosition);
+
+                    var lastPos = _.copy(position);
+                    lastPos.push(oldParaLen);
+                    lastOperationEnd = new OXOPaM(lastPos);
+                    this.implParagraphChanged(position);
+
+                    // DEBUG STUFF
+                    if (paragraphs.size() !== (dbg_oldparacount - 1)) {
+                        this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                    }
                 }
             }
         };
