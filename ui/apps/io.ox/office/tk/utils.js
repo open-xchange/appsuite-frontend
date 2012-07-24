@@ -145,12 +145,16 @@ define('io.ox/office/tk/utils',
      * @param {Boolean} [state]
      *  If omitted or set to true, all form controls in the passed collection
      *  will be enabled. Otherwise, all controls will be disabled.
+     *
+     * @returns {Boolean}
+     *  The effective state (whether the controls are enabled or disabled now).
      */
     Utils.enableControls = function (controls, state) {
         var enabled = _.isUndefined(state) || (state === true);
         controls
             .toggleClass(Utils.DISABLED_CLASS, !enabled)
             .tooltip(enabled ? 'enable' : 'disable');
+        return enabled;
     };
 
     /**
@@ -452,6 +456,8 @@ define('io.ox/office/tk/utils',
      *  A map of options to control the properties of the new text input field.
      *  Supports all generic options supported by the method
      *  Utils.createControl().
+     *  @param {Number} [options.width=200]
+     *      The fixed width of the text field, in pixels.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
@@ -461,7 +467,7 @@ define('io.ox/office/tk/utils',
         var // create the DOM input element
             input = Utils.createControl('input', { type: 'text' }, options);
 
-        return input;
+        return input.width(Utils.getIntegerOption(options, 'width', 200, 1));
     };
 
     // key codes --------------------------------------------------------------

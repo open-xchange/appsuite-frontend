@@ -181,7 +181,7 @@ define('io.ox/office/tk/dropdown/list',
 
             // find insertion index for sorted lists
             if (sorted && _.isString(label)) {
-                index = _.chain(listNode.find('button').get())
+                index = _.chain(group.getListItems().get())
                     // convert array of button elements to array of label texts
                     .map(function (button) { return Utils.getControlLabel($(button)); })
                     // filter trailing undefined values of buttons without labels

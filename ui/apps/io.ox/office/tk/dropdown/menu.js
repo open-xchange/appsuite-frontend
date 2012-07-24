@@ -238,7 +238,7 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         groupNode.addClass('dropdown-group');
 
         // append menu button and menu to the group container
-        group.addFocusableControl(menuButton).addControl(menuNode);
+        group.addFocusableControl(menuButton).addChildNodes(menuNode);
 
         // prepare drop-down button, and register event handlers
         group.getNode().on('keydown keypress keyup', groupKeyHandler);
