@@ -54,7 +54,7 @@ define('io.ox/office/editor/view',
 
         var options = {
                 width: 35,
-                icon: 'icon-text-height',
+                icon: 'icon-io-ox-font-height',
                 tooltip: gt('Font Size'),
                 css: { textAlign: 'right' }
             };
