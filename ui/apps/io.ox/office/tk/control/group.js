@@ -288,6 +288,14 @@ define('io.ox/office/tk/control/group',
         // add event hub
         Events.extend(this);
 
+        // suppress events for disabled controls
+        groupNode.on('mousedown dragover drop contextmenu', FOCUSABLE_SELECTOR, function (event) {
+            if (!self.isEnabled()) {
+                event.preventDefault();
+                self.trigger('cancel');
+            }
+        });
+
     } // class Group
 
     // exports ================================================================
