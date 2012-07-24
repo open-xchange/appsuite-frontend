@@ -156,19 +156,14 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         }
 
         /**
-         * Handles keyboard events in the focused drop-down button.
+         * Handles keyboard events from any control in the group object.
          */
-        function menuButtonKeyHandler(event) {
+        function groupKeyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                keyup = event.type === 'keyup';
+                keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
-            case KeyCodes.SPACE:
-            case KeyCodes.ENTER:
-                if (keyup) { toggleMenu(null, 'key'); }
-                return false;
             case KeyCodes.DOWN_ARROW:
                 if (keydown) { toggleMenu(true, 'key'); }
                 return false;
@@ -177,7 +172,24 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
                 return false;
             case KeyCodes.ESCAPE:
                 if (keydown) { toggleMenu(false, 'key'); }
-                break; // let ESCAPE key bubble up
+                // let the ESCAPE key bubble up to trigger the cancel event
+                break;
+            }
+        }
+
+        /**
+         * Handles keyboard events in the focused drop-down button.
+         */
+        function menuButtonKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.SPACE:
+            case KeyCodes.ENTER:
+                if (keyup) { toggleMenu(null, 'key'); }
+                return false;
             }
 
             // suppress 'keypress' event for SPACE bar (event.keyCode may be zero in Firefox)
@@ -190,23 +202,11 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
          * Handles keyboard events inside the open drop-down menu.
          */
         function menuKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown';
-
-            switch (event.keyCode) {
-            case KeyCodes.TAB:
-                if (!event.ctrlKey && !event.altKey && !event.metaKey) {
-                    // move focus to drop-down button, needed for correct
-                    // keyboard focus navigation (find next/previous control)
-                    if (keydown) { menuButton.focus(); }
-                }
-                // let the TAB key event bubble up to the tool bar
-                break;
-            case KeyCodes.ESCAPE:
-                if (keydown) { toggleMenu(false, 'key'); }
-                // let ESCAPE key bubble up
-                break;
+            if ((event.type === 'keydown') && (event.keyCode === KeyCodes.TAB) && !event.ctrlKey && !event.altKey && !event.metaKey) {
+                // move focus to drop-down button, needed for correct
+                // keyboard focus navigation (find next/previous control)
+                menuButton.focus();
+                // always let the TAB key event bubble up to the view component
             }
         }
 
@@ -232,38 +232,6 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
             return menuNode;
         };
 
-        /**
-         * Displays the drop-down menu.
-         *
-         * @param {String} [from]
-         *  Specifies the origin of the method call. May be set to 'key' if the
-         *  method has been called from a keyboard event handler, or to
-         *  'mouse', if the method has been called from a mouse click handler.
-         *
-         * @returns {Group}
-         *  A reference to the group.
-         */
-        group.showMenu = function (from) {
-            toggleMenu(true, from);
-            return group;
-        };
-
-        /**
-         * Hides the drop-down menu.
-         *
-         * @param {String} [from]
-         *  Specifies the origin of the method call. May be set to 'key' if the
-         *  method has been called from a keyboard event handler, or to
-         *  'mouse', if the method has been called from a mouse click handler.
-         *
-         * @returns {Group}
-         *  A reference to the group.
-         */
-        group.hideMenu = function (from) {
-            toggleMenu(false, from);
-            return group;
-        };
-
         // initialization -----------------------------------------------------
 
         // marker class for extended formatting
@@ -273,11 +241,12 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         group.addFocusableControl(menuButton).addControl(menuNode);
 
         // prepare drop-down button, and register event handlers
+        group.getNode().on('keydown keypress keyup', groupKeyHandler);
         menuButton
             .append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')))
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler)
-            .on('blur:key', function () { group.hideMenu(); });
+            .on('blur:key', function () { toggleMenu(false, 'key'); });
         menuNode.on('keydown keypress keyup', menuKeyHandler);
 
     } // class Menu

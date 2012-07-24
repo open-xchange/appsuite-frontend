@@ -40,8 +40,15 @@ define('io.ox/office/tk/control/group',
      * functionality to the inserted controls.
      *
      * @constructor
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the new group. The
+     *  following options are supported:
+     *  @param {String} [options.tooltip]
+     *      Tool tip text shown when the mouse hovers the control. If omitted,
+     *      the control will not show a tool tip.
      */
-    function Group() {
+    function Group(options) {
 
         var // self reference
             self = this,
@@ -287,6 +294,9 @@ define('io.ox/office/tk/control/group',
 
         // add event hub
         Events.extend(this);
+
+        // tool tip
+        Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
         // suppress events for disabled controls
         groupNode.on('mousedown dragover drop contextmenu', FOCUSABLE_SELECTOR, function (event) {

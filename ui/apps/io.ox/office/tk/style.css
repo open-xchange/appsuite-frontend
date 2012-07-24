@@ -429,6 +429,8 @@ div.io-ox-toolbar {
                         text-align: left;
 
                         > div {
+                            display: inline-block;
+                            position: relative;
                             vertical-align: top;
                             font-size: 1px;
                             line-height: normal;

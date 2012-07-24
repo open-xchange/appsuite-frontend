@@ -29,8 +29,8 @@ define('io.ox/office/tk/control/label',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the label. Supports all
-     *  generic formatting options (see method Utils.createLabel() for
-     *  details).
+     *  options of the Group base class, and all generic formatting options for
+     *  labels (see method Utils.createLabel() for details).
      */
     function Label(options) {
 
@@ -46,7 +46,7 @@ define('io.ox/office/tk/control/label',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        Group.call(this, options);
 
         // initialization -----------------------------------------------------
 

@@ -89,9 +89,6 @@ define('io.ox/office/tk/utils',
      *  @param {String} [options.value]
      *      A string value that will be copied to the 'data-value' attribute of
      *      the control.
-     *  @param {String} [options.tooltip]
-     *      Tool tip text shown when the mouse hovers the control. If omitted,
-     *      the control will not show a tool tip.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -105,16 +102,10 @@ define('io.ox/office/tk/utils',
 
             // option values
             value = Utils.getStringOption(options, 'value'),
-            tooltip = Utils.getStringOption(options, 'tooltip'),
             css = Utils.getObjectOption(options, 'css', {});
 
         if (!_.isUndefined(value)) {
             control.attr(Utils.DATA_VALUE_ATTR, value);
-        }
-        if (tooltip) {
-            // Bootstrap tool tips do not vanish in drop-down menus, when button clicked
-            //control.tooltip({ title: tooltip, placement: 'top', animation: false });
-            control.attr('title', tooltip);
         }
 
         return control.css(css);
@@ -157,7 +148,9 @@ define('io.ox/office/tk/utils',
      */
     Utils.enableControls = function (controls, state) {
         var enabled = _.isUndefined(state) || (state === true);
-        controls.toggleClass(Utils.DISABLED_CLASS, !enabled);
+        controls
+            .toggleClass(Utils.DISABLED_CLASS, !enabled)
+            .tooltip(enabled ? 'enable' : 'disable');
     };
 
     /**
@@ -310,6 +303,28 @@ define('io.ox/office/tk/utils',
     Utils.getControlLabel = function (control) {
         var label = control.first().find('[data-role="label"]');
         return label.length ? label.text() : undefined;
+    };
+
+    /**
+     * Adds a tool tip box to the specified control.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
+     *
+     * @param {String} [tooltip]
+     *  Tool tip text shown when the mouse hovers the control. If omitted, the
+     *  control will not show a tool tip.
+     *
+     * @param {String} [placement='top']
+     *  Placement of the tool tip box. Allowed values are 'top', 'bottom',
+     *  'left', and 'right'.
+     */
+    Utils.setControlTooltip = function (control, tooltip, placement) {
+        control.tooltip({
+            title: tooltip,
+            placement: placement || 'top',
+            animation: false
+        });
     };
 
     // label elements ---------------------------------------------------------

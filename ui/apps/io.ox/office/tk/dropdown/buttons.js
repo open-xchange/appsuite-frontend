@@ -107,9 +107,8 @@ define('io.ox/office/tk/dropdown/buttons',
                 if (keydown && (column > 0)) { focus(index - 1); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (row > 0) { focus(index - columns); } else { group.hideMenu('key'); }
-                }
+                if (row === 0) { break; } // let key bubble up to hide the menu
+                if (keydown) { focus(index - columns); }
                 return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown && (column + 1 < columns)) { focus(index + 1); }
