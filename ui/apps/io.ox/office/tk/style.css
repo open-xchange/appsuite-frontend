@@ -198,7 +198,7 @@ div.io-ox-toolbar {
             }
 
             /* collapse borders of top-level elements inside group */
-            :not(:first-child) {
+            > :not(:first-child) {
                 margin-left: -1px;
             }
 
