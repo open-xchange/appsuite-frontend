@@ -804,6 +804,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 node = null,
                 offset = null;
 
+            if (oxoPosition === undefined) {
+                // this.implDbgOutInfo('getDOMPosition: oxoPosition is undefined!');
+                return;
+            }
+
             if (oxoPos[0] === undefined) {
                 // this.implDbgOutInfo('getDOMPosition: Position is undefined!');
                 return;
@@ -1107,18 +1112,33 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         nextParagraphPosition[lastValue] += 1;
 
                         var domPos = this.getDOMPosition(nextParagraphPosition),
-                            nextIsTable = false;
+                            nextIsTable = false,
+                            isLastParagraph = false;
 
                         if (domPos) {
                             if (this.getDOMPosition(nextParagraphPosition).node.nodeName === 'TABLE') {
                                 nextIsTable = true;
                             }
+                        } else {
+                            nextParagraphPosition[lastValue] -= 1;
+                            isLastParagraph = true;
                         }
 
                         this.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
                             selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(nextParagraphPosition);
+                        } else if (isLastParagraph) {
+                            if (this.isPositionInTable(nextParagraphPosition)) {
+                                var returnObj = this.getFirstPositionInNextCell(nextParagraphPosition);
+                                selection.startPaM.oxoPosition = returnObj.position;
+                                var endOfTable = returnObj.endOfTable;
+                                if (endOfTable) {
+                                    var lastVal = selection.startPaM.oxoPosition.length - 1;
+                                    selection.startPaM.oxoPosition[lastVal] += 1;
+                                    selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(selection.startPaM.oxoPosition);
+                                }
+                            }
                         }
                     }
                 }
@@ -1778,17 +1798,51 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             // paragraph must be a position, representing a 'p' or a 'table' node
 
-            var isTableNode = this.getDOMPosition(paragraph).node.nodeName === 'TABLE' ? true : false;
+            var domPos = this.getDOMPosition(paragraph);
 
-            if (isTableNode) {
-                paragraph.push(0);  // column
-                paragraph.push(0);  // row
-                paragraph.push(0);  // paragraph
+            if (domPos) {
+                var isTableNode = domPos.node.nodeName === 'TABLE' ? true : false;
+
+                if (isTableNode) {
+                    paragraph.push(0);  // column
+                    paragraph.push(0);  // row
+                    paragraph.push(0);  // paragraph
+                }
+
+                paragraph.push(0);
             }
 
-            paragraph.push(0);
-
             return paragraph;
+        };
+
+        this.getFirstPositionInNextCell = function (paragraph) {
+            paragraph.pop(); // removing paragraph
+            var row = paragraph.pop(),
+                column = paragraph.pop(),
+                endOfTable = false;
+
+            var lastRow = this.getLastRowIndexInTable(paragraph),
+                lastColumn = this.getLastColumnIndexInTable(paragraph);
+
+            if (column < lastColumn) {
+                column += 1;
+            } else {
+                if (row < lastRow) {
+                    row += 1;
+                    column = 0;
+                } else {
+                    endOfTable = true;
+                }
+            }
+
+            if (! endOfTable) {
+                paragraph.push(column);
+                paragraph.push(row);
+                paragraph.push(0);  // first paragraph
+                paragraph.push(0);  // first position
+            }
+
+            return {position: paragraph, endOfTable: endOfTable};
         };
 
         this.getLastPositionInDocument = function () {
