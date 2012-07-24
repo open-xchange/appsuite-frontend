@@ -1129,8 +1129,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         var length = this.getParagraphLength(startPosition);
 
                         this.mergeParagraph(startPosition);
+
                         selection.startPaM.oxoPosition[lastValue - 1] -= 1;
-                        selection.startPaM.oxoPosition[lastValue] = length;
+                        selection.startPaM.oxoPosition.pop();
+
+                        if (this.getDOMPosition(selection.startPaM.oxoPosition).node.nodeName === 'TABLE') {
+                            selection.startPaM.oxoPosition = this.getLastPositionInParagraph(selection.startPaM.oxoPosition);
+                        } else {
+                            selection.startPaM.oxoPosition.push(length);
+                        }
                     }
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1727,26 +1734,25 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.getLastPositionInParagraph = function (paragraph) {
 
-            var oxoPosition = [],
-                para = paragraph[0];
+            // paragraph must be a position, representing a 'p' or a 'table' node
 
-            if (this.isPositionInTable(paragraph)) {
-                var lastRow = this.getLastRowIndexInTable([para]),
-                    lastColumn = this.getLastColumnIndexInTable([para]),
-                    lastParaInCell = this.getLastParaIndexInCell([para, lastColumn, lastRow]),
-                    paraLen = this.getParagraphLength([para, lastColumn, lastRow, lastParaInCell]);
+            var isTableNode = this.getDOMPosition(paragraph).node.nodeName === 'TABLE' ? true : false;
 
-                oxoPosition.push(para);
-                oxoPosition.push(lastColumn);
-                oxoPosition.push(lastRow);
-                oxoPosition.push(lastParaInCell);
-                oxoPosition.push(paraLen);
-            } else {
-                oxoPosition[0] = para;
-                oxoPosition[1] = this.getParagraphLength([para]);
+            if (isTableNode) {
+                var lastRow = this.getLastRowIndexInTable(paragraph),
+                    lastColumn = this.getLastColumnIndexInTable(paragraph);
+
+                paragraph.push(lastColumn);
+                paragraph.push(lastRow);
+
+                var lastParaInCell = this.getLastParaIndexInCell(paragraph);
+
+                paragraph.push(lastParaInCell);
             }
 
-            return oxoPosition;
+            paragraph.push(this.getParagraphLength(paragraph));
+
+            return paragraph;
         };
 
         this.getLastPositionInDocument = function () {
@@ -2761,7 +2767,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             if (para > 0) {
-                newPara.insertAfter(paragraphs[para - 1]);
+                newPara.insertAfter(paragraphs[para]);
             }
             else {
                 newPara.insertBefore(paragraphs[0]);
