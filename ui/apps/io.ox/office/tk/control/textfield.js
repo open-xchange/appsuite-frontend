@@ -46,9 +46,44 @@ define('io.ox/office/tk/control/textfield',
             caption = Utils.createLabel(options).addClass('input-caption'),
 
             // create the text field
-            textField = Utils.createTextField(options);
+            textField = Utils.createTextField(options),
+
+            // old value of text field, needed for ESCAPE key handling
+            oldValue = null;
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Saves the current value of the text field in an internal variable,
+         * to be able to restore it when editing is cancelled.
+         */
+        function saveValue() {
+            oldValue = textField.val();
+        }
+
+        /**
+         * Restores the old value saved in the last call of the method
+         * saveValue().
+         */
+        function restoreValue() {
+            if (_.isString(oldValue)) {
+                textField.val(oldValue);
+                oldValue = null;
+            }
+        }
+
+        /**
+         * Triggers a change event, if the value has been changed since the
+         * last call of the method saveValue().
+         */
+        function commitValue() {
+            if (oldValue !== textField.val()) {
+                oldValue = null;
+                self.trigger('change', textField.val());
+            } else {
+                self.trigger('cancel');
+            }
+        }
 
         /**
          * The update handler for this text field.
@@ -58,36 +93,33 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
-         * The action handler for this text field.
-         */
-        function changeHandler(textField) {
-            return textField.val();
-        }
-
-        /**
          * Handles mouse click events on the caption element preceding the text
          * field element.
          */
-        function captionClickHandler(event) {
+        function captionClickHandler() {
             if (self.isEnabled()) {
                 textField.focus();
-            } else {
-                self.trigger('cancel');
             }
         }
 
         /**
          * Handles keyboard events, especially the cursor keys.
          */
-        function keyHandler(event) {
+        function fieldKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
             switch (event.keyCode) {
             case KeyCodes.LEFT_ARROW:
             case KeyCodes.RIGHT_ARROW:
                 // do not bubble to view component (suppress focus navigation)
                 event.stopPropagation();
-                // ... but let the browser perform its default action
+                // ... but let the browser perform cursor movement
                 break;
-            // browser ESCAPE handling inconsistent or buggy, e.g.: https://bugzilla.mozilla.org/show_bug.cgi?id=598819
+            case KeyCodes.ENTER:
+                if (keyup) { commitValue(); }
+                return false;
             }
         }
 
@@ -104,10 +136,13 @@ define('io.ox/office/tk/control/textfield',
 
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
-            .registerUpdateHandler(updateHandler)
-            .registerActionHandler(textField, 'change', changeHandler);
-        caption.on('click', captionClickHandler);
-        textField.on('keydown keypress keyup', keyHandler);
+            .registerUpdateHandler(updateHandler);
+        caption
+            .on('click', captionClickHandler);
+        textField
+            .on('focus', saveValue)
+            .on('blur', restoreValue)
+            .on('keydown keypress keyup', fieldKeyHandler);
 
     } // class TextField
 
