@@ -345,6 +345,31 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         return false;
     }
 
+    function getFirstTextNode(element) {
+        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+            if (child.nodeType === 3) {
+                if (child.nodeValue.length)
+                    return child;
+            }
+            else if (hasTextContent(child)) {
+                return getFirstTextNode(child);
+            }
+        }
+        return element;
+    }
+
+    function getLastTextNode(element) {
+        for (var child = element.lastChild; child !== null; child = child.previousSibling) {
+            if (child.nodeType === 3) {
+                return child;
+            }
+            else if (hasTextContent(child)) {
+                return getLastTextNode(child);
+            }
+        }
+        return element;
+    }
+
     // class OXOEditor ========================================================
 
     /**
@@ -729,37 +754,42 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
             // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-            if ((domSelection.startPaM.node.nodeType === 3) || (domSelection.startPaM.node.nodeName === 'TR')) {
-                startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
-            } else {
-                this.implDbgOutInfo("INFO: Ignoring getOXOPositionFromDOMPosition: " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
-                // Work around browser selection bugs...
-                // This will be important for the selection of cells in tables!
-                var myParagraph = paragraphs.has(domSelection.startPaM.node.firstChild);
-                var para = myParagraph.index();
-                var nPos = 0;
+            // Some browsers select the p-elements instead of the required text nodes (Chrome)
+            if (domSelection.startPaM.node.nodeName === 'P') {
+                this.implDbgOutInfo("INFO: Changing DOMPosition (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
                 if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
-                    nPos = this.getParagraphLength([para]);
+                    domSelection.startPaM.node = getLastTextNode(domSelection.startPaM.node);
+                    if (domSelection.startPaM.node.nodeType === 3) {
+                        domSelection.startPaM.offset = domSelection.startPaM.node.nodeValue.length;
+                    }
+                } else {
+                    domSelection.startPaM.node = getFirstTextNode(domSelection.startPaM.node);
+                    if (domSelection.startPaM.node.nodeType === 3) {
+                        domSelection.startPaM.offset = 0;
+                    }
                 }
-                startOxoPaM = new OXOPaM([para, nPos]);
-                // this.implDbgOutInfo('info: fixed invalid selection (start): ' + startPaM.toString());
+                this.implDbgOutInfo("INFO: Changing DOMPosition (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
             }
 
-            if ((domSelection.endPaM.node.nodeType === 3)  || (domSelection.endPaM.node.nodeName === 'TR')) {
-                endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
-            } else {
-                this.implDbgOutInfo("INFO: Ignoring getOXOPositionFromDOMPosition: " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
-                // Work around browser selection bugs...
-                // This will be important for the selection of cells in tables!
-                var myParagraph = paragraphs.has(domSelection.endPaM.node.firstChild);
-                var para = myParagraph.index();
+            startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
+
+            // Some browsers select the p-elements instead of the required text nodes (Chrome)
+            if (domSelection.endPaM.node.nodeName === 'P') {
+                this.implDbgOutInfo("INFO: Changing DOMPosition (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
+
                 // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
-                if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.node.nodeName === 'P') && (domSelection.endPaM.offset === 0)) {
-                    para--;
+                if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.offset === 0)) {
+                    domSelection.endPaM.node = domSelection.endPaM.node.previousSibling;
                 }
-                endOxoPaM = new OXOPaM([para, this.getParagraphLength([para])]);
-                // this.implDbgOutInfo('info: fixed invalid selection (end):' + endPaM.toString());
+
+                domSelection.endPaM.node = getLastTextNode(domSelection.endPaM.node);
+                if (domSelection.endPaM.node.nodeType === 3) {
+                    domSelection.endPaM.offset = domSelection.endPaM.node.nodeValue.length;
+                }
+                this.implDbgOutInfo("INFO: Changing DOMPosition (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
             }
+
+            endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
 
             var aOXOSelection = new OXOSelection(startOxoPaM, endOxoPaM);
 
@@ -1752,6 +1782,33 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return currentTable;
         };
 
+        this.getCurrentParagraph = function (position) {
+
+            var paragraph = null,
+                foundParagraph = false;
+
+            var domPos = this.getDOMPosition(position);
+            if (domPos) {
+                var node = domPos.node;
+                if (node.nodeName !== 'P') {
+                    for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                        if (node.nodeName === 'P') {
+                            foundParagraph = true;
+                            break;
+                        }
+                    }
+                } else {
+                    foundParagraph = true;
+                }
+
+                if (foundParagraph) {
+                    paragraph = node;
+                }
+            }
+
+            return paragraph;
+        };
+
         this.getAllAdjacentParagraphs = function (position) {
             // position can be paragraph itself or textnode inside it.
             var allParagraphs = [],
@@ -2123,39 +2180,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return paraIndex;
         };
 
-        this.getParagraphFromTableCell = function (position) {
-
-            var paragraph = null,
-                isInTable = this.isPositionInTable(position),
-                localPos = _.copy(position),
-                foundParagraph = false;
-
-            if (isInTable) {
-                var domPos = this.getDOMPosition(position);
-                if (domPos) {
-                    var node = domPos.node;
-                    if (node.nodeName !== 'P') {
-                        localPos.pop();
-                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                            if (node.nodeName === 'P') {
-                                foundParagraph = true;
-                                break;
-                            }
-                        }
-                    } else {
-                        foundParagraph = true;
-                    }
-
-                    if (foundParagraph) {
-                        var paraIndex = localPos.pop();
-                        paragraph = $(node.parentNode).children().get(paraIndex);
-                    }
-                }
-            }
-
-            return paragraph;
-        };
-
         this.getAllParagraphsFromTableCell = function (position) {
             var allParagraphs = [],
                 isInTable = this.isPositionInTable(position),
@@ -2467,80 +2491,68 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         // IMPL METHODS
         // ==================================================================
 
-        this.implParagraphChanged = function (para) {
+        this.implParagraphChanged = function (position) {
 
             // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
 
-            var paragraph = null;
-            if (this.isPositionInTable([para])) {
-                return; // do nothing for tables
-                // paragraph = this.getParagraphFromTableCell(para);
-            } else {
-                paragraph = paragraphs[para];
-            }
+            var paragraph = this.getCurrentParagraph(position);
 
-            // var paragraph = paragraphs[para];
+            if (paragraph) {
 
-            if (!hasTextContent(paragraph)) {
-                // We need an empty text node and a br
-                if (!paragraph.lastChild || !paragraph.lastChild.dummyBR) {
-                    paragraph.appendChild(document.createTextNode(''));
-                    var dummyBR = document.createElement('br');
-                    dummyBR.dummyBR = true;
-                    paragraph.appendChild(dummyBR);
-                }
-            }
-            else {
-                // only keep it when inserted by the user
-                if (paragraph.lastChild.dummyBR) {
-                    paragraph.removeChild(paragraph.lastChild);
-                }
-
-                // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
-                var textNodes = [];
-                var localParagraph = null;
-                if (this.isPositionInTable(para)) {
-                    localParagraph = this.getParagraphFromTableCell([para]);
-                } else {
-                    localParagraph = paragraphs[para];
-                }
-                collectTextNodes(localParagraph, textNodes);
-                var nNode, nChar;
-                var currChar = 0, prevChar = 0;
-                var node, nodes = textNodes.length;
-                for (nNode = 0; nNode < nodes; nNode++) {
-
-                    node = textNodes[nNode];
-
-                    if (!node.nodeValue.length)
-                        continue;
-
-                    // this.implDbgOutInfo(node.nodeValue, true);
-                    for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
-                        currChar = node.nodeValue.charCodeAt(nChar);
-                        if ((currChar === charcodeSPACE) && (prevChar === charcodeSPACE)) { // Space - make sure there is no space before
-                            currChar = charcodeNBSP;
-                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
-                        }
-                        else if ((currChar === charcodeNBSP) && (prevChar !== charcodeSPACE)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
-                            currChar = charcodeSPACE;
-                            node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
-                        }
-                        prevChar = currChar;
+                if (!hasTextContent(paragraph)) {
+                    // We need an empty text node and a br
+                    if (!paragraph.lastChild || !paragraph.lastChild.dummyBR) {
+                        paragraph.appendChild(document.createTextNode(''));
+                        var dummyBR = document.createElement('br');
+                        dummyBR.dummyBR = true;
+                        paragraph.appendChild(dummyBR);
                     }
-                    // this.implDbgOutInfo(node.nodeValue, true);
                 }
+                else {
+                    // only keep it when inserted by the user
+                    if (paragraph.lastChild.dummyBR) {
+                        paragraph.removeChild(paragraph.lastChild);
+                    }
 
-                if (prevChar === charcodeSPACE) { // SPACE hat para end is a problem in some browsers
-                    // this.implDbgOutInfo(node.nodeValue, true);
-                    currChar = charcodeNBSP;
-                    node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
-                    // this.implDbgOutInfo(node.nodeValue, true);
+                    // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
+                    var textNodes = [];
+                    collectTextNodes(paragraph, textNodes);
+                    var nNode, nChar;
+                    var currChar = 0, prevChar = 0;
+                    var node, nodes = textNodes.length;
+                    for (nNode = 0; nNode < nodes; nNode++) {
+
+                        node = textNodes[nNode];
+
+                        if (!node.nodeValue.length)
+                            continue;
+
+                        // this.implDbgOutInfo(node.nodeValue, true);
+                        for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
+                            currChar = node.nodeValue.charCodeAt(nChar);
+                            if ((currChar === charcodeSPACE) && (prevChar === charcodeSPACE)) { // Space - make sure there is no space before
+                                currChar = charcodeNBSP;
+                                node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
+                            }
+                            else if ((currChar === charcodeNBSP) && (prevChar !== charcodeSPACE)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
+                                currChar = charcodeSPACE;
+                                node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
+                            }
+                            prevChar = currChar;
+                        }
+                        // this.implDbgOutInfo(node.nodeValue, true);
+                    }
+
+                    if (prevChar === charcodeSPACE) { // SPACE hat para end is a problem in some browsers
+                        // this.implDbgOutInfo(node.nodeValue, true);
+                        currChar = charcodeNBSP;
+                        node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
+                        // this.implDbgOutInfo(node.nodeValue, true);
+                    }
+
+                    // TODO: Adjust tabs, ...
                 }
-
-                // TODO: Adjust tabs, ...
             }
-
         };
 
         this.implSetDOMSelection = function (startnode, startpos, endnode, endpos) {
@@ -2592,7 +2604,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         this.implInitDocument = function () {
             editdiv[0].innerHTML = '<html><p></p></html>';
             paragraphs = editdiv.children();
-            this.implParagraphChanged(0);
+            this.implParagraphChanged([0]);
             this.setSelection(new OXOSelection());
             lastOperationEnd = new OXOPaM([0, 0]);
             this.clearUndo();
@@ -2600,24 +2612,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.implInsertText = function (text, position) {
             // -1 not allowed here - but code need to be robust
-            var posLength = position.length - 1,
-                para = position[posLength - 1],
-                allParagraphs = this.getAllAdjacentParagraphs(position);
-
-            if ((para < 0) || (para >= allParagraphs.size())) {
-                this.implDbgOutInfo('error: invalid para pos in implInsertText (' + para + ', maximum: ' + allParagraphs.size() + ')');
-                para = allParagraphs.size() - 1;
-                // return;
-            }
-
             var domPos = this.getDOMPosition(position);
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
             domPos.node.nodeValue = newText;
             var lastPos = _.copy(position);
+            var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + text.length;
             lastOperationEnd = new OXOPaM(lastPos);
-            this.implParagraphChanged(para);  // tables?
+            this.implParagraphChanged(position);
         };
 
         this.implSetAttribute = function (attr, value, startposition, endposition) {
@@ -2687,6 +2690,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             if (para === -1) {
                 para = allParagraphs.size();
+                position[posLength] = para;
             }
 
             if (para > 0) {
@@ -2703,7 +2707,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             var lastPos = _.copy(position);
             lastPos.push(0);
             lastOperationEnd = new OXOPaM(lastPos);
-            this.implParagraphChanged(para);  // for table?
+
+            this.implParagraphChanged(position);
         };
 
         this.implInsertTable = function (position) {
@@ -2786,8 +2791,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             endPosition[posLength - 1] = startPosition[posLength - 1];
             this.implDeleteText(startPosition, endPosition);
 
-            this.implParagraphChanged(para);  // for tables?
-            this.implParagraphChanged(para + 1);  // for tables?
+            this.implParagraphChanged(position);
+            this.implParagraphChanged(startPosition);
             lastOperationEnd = new OXOPaM(startPosition);
 
             // DEBUG STUFF
@@ -2844,7 +2849,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 var lastPos = _.copy(position);
                 lastPos.push(oldParaLen);
                 lastOperationEnd = new OXOPaM(lastPos);
-                this.implParagraphChanged(para);   // for tables?
+                this.implParagraphChanged(position);
 
                 // DEBUG STUFF
                 if (paragraphs.size() !== (dbg_oldparacount - 1)) {
@@ -2919,7 +2924,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         this.implDeleteText = function (startPosition, endPosition) {
 
             var lastValue = startPosition.length - 1;
-            var para = startPosition[0];
             var start = startPosition[lastValue];
             var end = endPosition[lastValue];
 
@@ -2932,12 +2936,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             var textNodes = [];
-            var oneParagraph = null;
-            if (this.isPositionInTable(startPosition)) {
-                oneParagraph = this.getParagraphFromTableCell(startPosition);
-            } else {
-                oneParagraph = paragraphs[para];
-            }
+            var oneParagraph = this.getCurrentParagraph(startPosition);
             collectTextNodes(oneParagraph, textNodes);
             var node, nodeLen, delStart, delEnd;
             var nodes = textNodes.length;
@@ -2973,7 +2972,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             lastOperationEnd = new OXOPaM(_.copy(startPosition, true));
             // old:  lastOperationEnd = new OXOPaM([para, start]);
 
-            this.implParagraphChanged(para);
+            this.implParagraphChanged(startPosition);
         };
 
         this.implDbgOutEvent = function (event) {
