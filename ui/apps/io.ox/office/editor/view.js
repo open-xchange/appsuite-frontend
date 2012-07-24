@@ -24,9 +24,9 @@ define('io.ox/office/editor/view',
 
     'use strict';
 
-    // class FontChooser ======================================================
+    // class FontFamilyChooser ================================================
 
-    var FontChooser = ComboField.extend({ constructor: function () {
+    var FontFamilyChooser = ComboField.extend({ constructor: function () {
 
         var options = {
                 width: 150,
@@ -46,7 +46,24 @@ define('io.ox/office/editor/view',
             this.addListEntry(fontName, { labelCss: { fontFamily: Fonts.getFontFamily(fontName), fontSize: '115%' } });
         }, this);
 
-    }}); // class FontChooser
+    }}); // class FontFamilyChooser
+
+    // class FontHeightChooser ================================================
+
+    var FontHeightChooser = TextField.extend({ constructor: function () {
+
+        var options = {
+                width: 35,
+                icon: 'icon-text-height',
+                tooltip: gt('Font Size'),
+                css: { textAlign: 'right' }
+            };
+
+        // base constructor ---------------------------------------------------
+
+        TextField.call(this, options);
+
+    }}); // class FontHeightChooser
 
     // class TableSizeChooser =================================================
 
@@ -178,8 +195,8 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', gt('Format'))
-            .addGroup('format/character/font/family', new FontChooser())
-            .addGroup('format/character/font/height', new TextField({ width: 35, icon: 'icon-text-height', tooltip: gt('Font Size'), css: { textAlign: 'right' } }))
+            .addGroup('format/character/font/family', new FontFamilyChooser())
+            .addGroup('format/character/font/height', new FontHeightChooser())
             .startCollapseGroups()
             .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
