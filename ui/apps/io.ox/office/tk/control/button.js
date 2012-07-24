@@ -30,8 +30,9 @@ define('io.ox/office/tk/control/button',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the button. Supports all
-     *  generic formatting options (see method Utils.createButton() for
-     *  details). Additionally, the following options are supported:
+     *  options of the Group base class and all generic formatting options for
+     *  buttons (see method Utils.createButton() for details). Additionally,
+     *  the following options are supported:
      *  @param {Boolean} [option.toggle=false]
      *      If set to true, the button represents a boolean value and
      *      toggles its state when clicked.
@@ -73,7 +74,7 @@ define('io.ox/office/tk/control/button',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        Group.call(this, options);
 
         // initialization -----------------------------------------------------
 

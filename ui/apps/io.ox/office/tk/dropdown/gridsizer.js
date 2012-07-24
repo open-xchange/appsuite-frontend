@@ -238,9 +238,8 @@ define('io.ox/office/tk/dropdown/gridsizer',
                 if (keydown) { gridSize.width -= 1; setGridSize(gridSize); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) {
-                    if (gridSize.height > 1) { gridSize.height -= 1; setGridSize(gridSize); } else { group.hideMenu('key'); }
-                }
+                if (gridSize.height <= 1) { break; } // let key bubble up to hide the menu
+                if (keydown) { gridSize.height -= 1; setGridSize(gridSize); }
                 return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { gridSize.width += 1; setGridSize(gridSize); }

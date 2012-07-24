@@ -31,10 +31,10 @@ define('io.ox/office/tk/control/radiogroup',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
-     *  menu. Supports all options of the Buttons mix-in class (if options.type
-     *  is set to 'dropdown') and all options of the List mix-in class (if
-     *  options.type is set to 'list'). Additionally, the following options are
-     *  supported:
+     *  menu. Supports all options of the Group base class, of the Buttons
+     *  mix-in class (if 'options.type' is set to 'dropdown'), and of the List
+     *  mix-in class (if 'options.type' is set to 'list'). Additionally, the
+     *  following options are supported:
      *  @param {String} [options.type='buttons']
      *      If set to 'buttons' or omitted, the buttons will be inserted
      *      directly into this group. If set to 'dropdown', a drop-down button
@@ -104,7 +104,7 @@ define('io.ox/office/tk/control/radiogroup',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        Group.call(this, options);
         switch (type) {
         case 'dropdown':
             Buttons.extend(this, options);
@@ -125,8 +125,13 @@ define('io.ox/office/tk/control/radiogroup',
          *  The unique value associated to the button.
          *
          * @param {Object} [options]
-         *  A map of options to control the properties of the new button. See
-         *  method Utils.createButton() for details.
+         *  A map of options to control the properties of the new button.
+         *  Supports all generic formatting options for buttons (See method
+         *  Utils.createButton() for details), except 'options.value' which
+         *  will be set to the 'value' parameter passed to this function.
+         *  Additionally, the following options are supported:
+         *  @param {String} [options.tooltip]
+         *      Tool tip text shown when the mouse hovers the button.
          *
          * @returns {RadioGroup}
          *  A reference to this button group.
@@ -134,19 +139,24 @@ define('io.ox/office/tk/control/radiogroup',
         this.addButton = function (value, options) {
 
             var // options for the new button, including the passed value
-                buttonOptions = Utils.extendOptions(options, { value: value });
+                buttonOptions = Utils.extendOptions(options, { value: value }),
+                // the new button
+                button = null;
 
             // insert the button depending on the display mode
             switch (type) {
             case 'dropdown':
-                this.createGridButton(buttonOptions);
+                button = this.createGridButton(buttonOptions);
                 break;
             case 'list':
-                this.createListItem(buttonOptions);
+                button = this.createListItem(buttonOptions);
                 break;
             default:
-                this.addFocusableControl(Utils.createButton(buttonOptions));
+                this.addFocusableControl(button = Utils.createButton(buttonOptions));
             }
+
+            // add tool tip
+            Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
             return this;
         };

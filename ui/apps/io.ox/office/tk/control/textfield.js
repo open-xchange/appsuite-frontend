@@ -29,15 +29,12 @@ define('io.ox/office/tk/control/textfield',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the text field. Supports
-     *  all generic formatting options (see method Utils.createInput() for
-     *  details).
+     *  all options of the Group base class, and all generic formatting options
+     *  of input fields (see method Utils.createInput() for details).
      */
     function TextField(options) {
 
-        var // self reference
-            self = this,
-
-            // create the text field
+        var // create the text field
             textField = Utils.createTextField(options);
 
         // private methods ----------------------------------------------------
@@ -58,7 +55,7 @@ define('io.ox/office/tk/control/textfield',
 
         // base constructor ---------------------------------------------------
 
-        Group.call(this);
+        Group.call(this, options);
 
         // initialization -----------------------------------------------------
 

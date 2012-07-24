@@ -13,33 +13,58 @@
 
 define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/fonts',
      'io.ox/office/tk/toolbar',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/fontchooser',
+     'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'gettext!io.ox/office/main'
-    ], function (Utils, ToolBar, Button, FontChooser, GridSizer, gt) {
+    ], function (Utils, Fonts, ToolBar, Button, ComboField, GridSizer, gt) {
 
     'use strict';
 
+    // class FontChooser ======================================================
+
+    var FontChooser = ComboField.extend({ constructor: function () {
+
+        var options = {
+                icon: 'icon-font',
+                tooltip: gt('Font Name'),
+                sorted: true
+            };
+
+        // base constructor ---------------------------------------------------
+
+        ComboField.call(this, options);
+
+        // initialization -----------------------------------------------------
+
+        // add all known fonts
+        _(Fonts.getFontNames()).each(function (fontName) {
+            this.addListEntry(fontName, { labelCss: { fontFamily: Fonts.getFontFamily(fontName), fontSize: '115%' } });
+        }, this);
+
+    }}); // class FontChooser
+
     // class TableSizeChooser =================================================
 
-    var TableSizeChooser = Button.extend({ constructor: function (buttonOptions, sizerOptions) {
+    var TableSizeChooser = Button.extend({ constructor: function () {
 
-        var finalSizerOptions = Utils.extendOptions({
-                tooltip: gt('Select table size'),
+        var options = {
+                icon: 'icon-io-ox-table',
+                tooltip: gt('Insert Table'),
                 defaultSize: { width: 5, height: 3 },
                 maxSize: { width: 15, height: 15 }
-            }, sizerOptions);
+            };
 
         // base constructor ---------------------------------------------------
 
         // create the default button (set value to default size, will be returned by click handler)
-        Button.call(this, Utils.extendOptions(buttonOptions, { value: finalSizerOptions.defaultSize }));
+        Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
         // create the grid sizer
-        GridSizer.extend(this, finalSizerOptions);
+        GridSizer.extend(this, Utils.extendOptions(options, { icon: undefined, label: undefined }));
 
-    }});
+    }}); // class TableSizeChooser
 
     // class View =============================================================
 
@@ -64,10 +89,7 @@ define('io.ox/office/editor/view',
             debugPane = $('<div>').addClass('io-ox-toolpane bottom'),
 
             // table element containing the debug mode elements
-            debugTable = $('<table>').addClass('debug-table').appendTo(debugPane),
-
-            // options for the 'insert table' control
-            insertTableOptions = { icon: 'icon-io-ox-table', tooltip: gt('Insert table') };
+            debugTable = $('<table>').addClass('debug-table').appendTo(debugPane);
 
         // private methods ----------------------------------------------------
 
@@ -79,8 +101,8 @@ define('io.ox/office/editor/view',
             // create common controls present in all tool bars
             toolBar
                 .startCollapseGroups()
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert last operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore last operation') })
+                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
+                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .endCollapseGroups();
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
@@ -89,6 +111,10 @@ define('io.ox/office/editor/view',
             controller.registerViewComponent(toolBar);
 
             return toolBar;
+        }
+
+        function getVisibleToolBarKey() {
+            return visibleToolBar;
         }
 
         function showToolBar(key) {
@@ -147,7 +173,7 @@ define('io.ox/office/editor/view',
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
-            .addGroup('insert/table', new TableSizeChooser(insertTableOptions));
+            .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', gt('Format'))
             .addGroup('format/character/font/family', new FontChooser())
@@ -156,7 +182,7 @@ define('io.ox/office/editor/view',
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .endCollapseGroups()
-            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph alignment') })
+            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
@@ -164,15 +190,15 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('table', gt('Table'))
-            .addGroup('insert/table', new TableSizeChooser(insertTableOptions));
+            .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('debug', gt('Debug'))
-            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug mode', toggle: true });
+            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true });
 
         // prepare controller
         controller
             // create a controller item for tool bar handling
-            .addDefinitions({ 'view/toolbars/show': { get: function () { return visibleToolBar; }, set: showToolBar } })
+            .addDefinitions({ 'view/toolbars/show': { get: getVisibleToolBarKey, set: showToolBar } })
             // register the tab bar at the controller
             .registerViewComponent(tabBar)
             // make the format tool bar visible
