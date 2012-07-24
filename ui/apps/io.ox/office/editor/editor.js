@@ -1100,7 +1100,26 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     else {
                         var mergeselection = _.copy(selection.startPaM.oxoPosition);
                         mergeselection.pop();
+
+                        var nextParagraphPosition = _.copy(mergeselection),
+                            lastValue = nextParagraphPosition.length - 1;
+
+                        nextParagraphPosition[lastValue] += 1;
+
+                        var domPos = this.getDOMPosition(nextParagraphPosition),
+                            nextIsTable = false;
+
+                        if (domPos) {
+                            if (this.getDOMPosition(nextParagraphPosition).node.nodeName === 'TABLE') {
+                                nextIsTable = true;
+                            }
+                        }
+
                         this.mergeParagraph(mergeselection);
+
+                        if (nextIsTable) {
+                            selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(nextParagraphPosition);
+                        }
                     }
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1751,6 +1770,23 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             paragraph.push(this.getParagraphLength(paragraph));
+
+            return paragraph;
+        };
+
+        this.getFirstPositionInParagraph = function (paragraph) {
+
+            // paragraph must be a position, representing a 'p' or a 'table' node
+
+            var isTableNode = this.getDOMPosition(paragraph).node.nodeName === 'TABLE' ? true : false;
+
+            if (isTableNode) {
+                paragraph.push(0);  // column
+                paragraph.push(0);  // row
+                paragraph.push(0);  // paragraph
+            }
+
+            paragraph.push(0);
 
             return paragraph;
         };
