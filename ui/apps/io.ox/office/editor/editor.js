@@ -984,6 +984,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         };
 
         this.processFocus = function (state) {
+            window.console.log('Editor focus: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
                 this.trigger('focus', state);

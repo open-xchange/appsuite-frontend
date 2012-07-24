@@ -34,7 +34,10 @@ define('io.ox/office/tk/control/textfield',
      */
     function TextField(options) {
 
-        var // create the text field
+        var // self reference
+            self = this,
+
+            // create the text field
             textField = Utils.createTextField(options);
 
         // private methods ----------------------------------------------------

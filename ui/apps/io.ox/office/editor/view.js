@@ -57,6 +57,9 @@ define('io.ox/office/editor/view',
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
 
+            // key of the tool bar currently visible
+            visibleToolBar = '',
+
             // bottom tool pane for debug output
             debugPane = $('<div>').addClass('io-ox-toolpane bottom'),
 
@@ -90,6 +93,7 @@ define('io.ox/office/editor/view',
 
         function showToolBar(key) {
             if (key in toolBars) {
+                visibleToolBar = key;
                 toolPane.children().slice(1).hide();
                 toolBars[key].getNode().show();
             }
@@ -168,7 +172,7 @@ define('io.ox/office/editor/view',
         // prepare controller
         controller
             // create a controller item for tool bar handling
-            .addDefinitions({ 'view/toolbars/show': { set: showToolBar } })
+            .addDefinitions({ 'view/toolbars/show': { get: function () { return visibleToolBar; }, set: showToolBar } })
             // register the tab bar at the controller
             .registerViewComponent(tabBar)
             // make the format tool bar visible

@@ -22,6 +22,9 @@ define('io.ox/office/tk/control/group',
     var // CSS class for hidden groups
         HIDDEN_CLASS = 'hidden',
 
+        // CSS class for disabled groups
+        DISABLED_CLASS = 'disabled',
+
         // CSS class for focusable controls
         FOCUSABLE_CLASS = 'focusable',
 
@@ -107,7 +110,7 @@ define('io.ox/office/tk/control/group',
 
             function actionEventHandler(event) {
                 var control = $(this), value;
-                if (Utils.isControlEnabled(control)) {
+                if (self.isEnabled()) {
                     value = actionHandler.call(self, control);
                     self.trigger('change', value);
                 } else {
@@ -239,17 +242,25 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Enables or disables the controls in this group.
+         * Returns whether this control group is enabled.
+         */
+        this.isEnabled = function () {
+            return Utils.isControlEnabled(groupNode);
+        };
+
+        /**
+         * Enables or disables this control group.
          *
          * @param {Boolean} [state=true]
-         *  If omitted or set to true, all controls in the group will be
-         *  enabled. Otherwise, the controls will be disabled.
+         *  If omitted or set to true, the group will be enabled. Otherwise,
+         *  the group will be disabled.
          *
          * @returns {Group}
          *  A reference to this group.
          */
         this.enable = function (state) {
-            Utils.enableControls(groupNode.children(), state);
+            // enable/disable the entire group node with all its descendants
+            Utils.enableControls(groupNode, state);
             return this;
         };
 
@@ -276,6 +287,14 @@ define('io.ox/office/tk/control/group',
 
         // add event hub
         Events.extend(this);
+
+        // suppress events for disabled controls
+        groupNode.on('mousedown dragover drop contextmenu', FOCUSABLE_SELECTOR, function (event) {
+            if (!self.isEnabled()) {
+                event.preventDefault();
+                self.trigger('cancel');
+            }
+        });
 
     } // class Group
 

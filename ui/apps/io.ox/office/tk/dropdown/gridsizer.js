@@ -69,13 +69,15 @@ define('io.ox/office/tk/dropdown/gridsizer',
 
         var // build a table of embedded div elements used to show the grid
             // (do not use a table element because grid flickers in different browsers...)
-            gridNode = $('<div>').append($('<div>').append($('<div>'))),
+            gridButton = Utils.createButton().append($('<div>').append($('<div>'))),
 
             // the badge label showing the current grid size
             sizeLabel = $('<span>'),
 
-            // the drop-down button filling up the entire drop-down menu
-            gridButton = Utils.createButton().append(gridNode, sizeLabel),
+            // the top-level filling up the entire drop-down menu (the size label
+            // must be outside the button element, because IE *always* clips the
+            // button contents and thus would make the label invisible)
+            gridNode = $('<div>').append(gridButton, sizeLabel),
 
             // grid size limits
             minSize = getSizeOption(options, 'minSize', { width: 1, height: 1 }, { width: 1, height: 1 }),
@@ -89,7 +91,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
          * 'height' attributes.
          */
         function getGridSize() {
-            var rows = gridNode.children();
+            var rows = gridButton.children();
             return { width: rows.first().children().length, height: rows.length };
         }
 
@@ -101,7 +103,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
             var // current size of the grid
                 currSize = getGridSize(),
                 // all row elements in the grid
-                rows = gridNode.children();
+                rows = gridButton.children();
 
             // validate passed size
             if (size.width < minSize.width) {
@@ -138,7 +140,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
             } else if (size.height > currSize.height) {
                 // add row elements (clone the entire row instead of single cells)
                 _(size.height - currSize.height).times(function () {
-                    gridNode.append(rows.first().clone());
+                    gridButton.append(rows.first().clone());
                 });
             }
 
@@ -186,7 +188,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
             }
 
             // wait for mouse to enter the grid before listening to mousemove events
-            gridButton.off('mouseenter').one('mouseenter', function () {
+            gridNode.off('mouseenter').one('mouseenter', function () {
                 enableGridMouseMoveHandling(true);
             });
         }
@@ -207,11 +209,11 @@ define('io.ox/office/tk/dropdown/gridsizer',
             var // current and new size of the grid
                 gridSize = getGridSize(),
                 // width and height of one cell
-                cellWidth = gridNode.outerWidth() / gridSize.width,
-                cellHeight = gridNode.outerHeight() / gridSize.height,
+                cellWidth = gridButton.outerWidth() / gridSize.width,
+                cellHeight = gridButton.outerHeight() / gridSize.height,
                 // mouse position relative to grid
-                mouseX = event.pageX - gridNode.offset().left,
-                mouseY = event.pageY - gridNode.offset().top;
+                mouseX = event.pageX - gridButton.offset().left,
+                mouseY = event.pageY - gridButton.offset().top;
 
             // Calculate new grid size. Enlarge width/height of the grid area, if
             // the last column/row is covered more than 80% of its width/height.
@@ -256,7 +258,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('grid-sizer').append(gridButton);
+        group.getMenuNode().addClass('grid-sizer').append(gridNode);
 
         // register event handlers
         group.registerActionHandler(gridButton, 'click', getGridSize)

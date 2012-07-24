@@ -51,6 +51,9 @@ define('io.ox/office/tk/toolbar',
             // DOM child element measuring the total width of the controls
             containerNode = $('<span>').appendTo(node),
 
+            // if set to true, inserted groups will have no spacing between previous group
+            collapsedGroupsNode = null,
+
             // all control groups, as plain array
             groups = [],
 
@@ -58,10 +61,7 @@ define('io.ox/office/tk/toolbar',
             groupsByKey = {},
 
             // resize handler functions supporting flexible tool bar sizing
-            resizeHandlers = [],
-
-            // if set to true, inserted groups will have no spacing between previous group
-            collapseGroups = false;
+            resizeHandlers = [];
 
         // private methods ----------------------------------------------------
 
@@ -75,10 +75,10 @@ define('io.ox/office/tk/toolbar',
          */
         function moveFocus(forward) {
 
-            var // all visible group objects
-                visibleGroups = _(groups).filter(function (group) { return group.isVisible(); }),
-                // extract all focusable controls from all visible groups
-                controls = _(visibleGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
+            var // all visible and enabled group objects
+                enabledGroups = _(groups).filter(function (group) { return group.isVisible() && group.isEnabled(); }),
+                // extract all focusable controls from all visible and enabled groups
+                controls = _(enabledGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
                 control = Utils.getFocusedControl(controls),
                 // index of focused control in all enabled controls
@@ -212,7 +212,7 @@ define('io.ox/office/tk/toolbar',
              */
             function resizeHandler(enlarge) {
 
-                var hideGroup = null, showGroup = null, hasFocus = false;
+                var hideGroup = null, showGroup = null;
 
                 // decide which group to hide and to show
                 if (enlarge && radioGroup.isVisible()) {
@@ -225,12 +225,11 @@ define('io.ox/office/tk/toolbar',
 
                 // hide and show the groups
                 if (hideGroup && showGroup) {
-                    hasFocus = hideGroup.hasFocus();
-                    hideGroup.hide();
                     showGroup.show();
-                    if (hasFocus) {
+                    if (hideGroup.hasFocus()) {
                         showGroup.grabFocus();
                     }
+                    hideGroup.hide();
                 }
             }
 
@@ -298,9 +297,13 @@ define('io.ox/office/tk/toolbar',
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
 
             // append its root node to this tool bar
-            containerNode.append(group.getNode());
-            if (collapseGroups) {
-                group.getNode().addClass('collapse-group');
+            if (collapsedGroupsNode) {
+                if (!collapsedGroupsNode.children().length) {
+                    containerNode.append(collapsedGroupsNode);
+                }
+                collapsedGroupsNode.append(group.getNode());
+            } else {
+                containerNode.append(group.getNode());
             }
 
             // forward 'change' and 'cancel' events to the tool bar
@@ -378,12 +381,12 @@ define('io.ox/office/tk/toolbar',
         };
 
         this.startCollapseGroups = function () {
-            collapseGroups = true;
+            collapsedGroupsNode = $('<div>').addClass('collapsed-groups');
             return this;
         };
 
         this.endCollapseGroups = function () {
-            collapseGroups = false;
+            collapsedGroupsNode = null;
             return this;
         };
 
@@ -450,7 +453,7 @@ define('io.ox/office/tk/toolbar',
             this.events.destroy();
             $(window).off('resize', windowResizeHandler);
             node.off().remove();
-            toolBar = node = containerNode = groups = resizeHandlers = null;
+            toolBar = node = containerNode = collapsedGroupsNode = groups = groupsByKey = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------

@@ -99,7 +99,7 @@ define('io.ox/office/tk/control/fontchooser',
         // add all known fonts
         _(Fonts.getFontNames()).each(function (fontName) {
             this.createListItem({
-                value: fontName.toLowerCase(),
+                value: fontName,
                 label: fontName,
                 labelCss: {
                     fontFamily: Fonts.getFontFamily(fontName),

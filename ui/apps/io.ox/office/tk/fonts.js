@@ -24,6 +24,7 @@ define('io.ox/office/tk/fonts', function () {
             'Tahoma':               'Arial',
             'Calibri':              'Arial',
             'Impact':               'Arial',
+            'Open Sans':            'Arial',
 
             // serif
             'Times':                'serif',

@@ -92,6 +92,13 @@ define('io.ox/office/tk/controller', function () {
             };
 
             /**
+             * Returns the current value of this item.
+             */
+            this.get = function () {
+                return getHandler.call(controller);
+            };
+
+            /**
              * Updates the controls associated to this item in all view
              * components.
              *
@@ -102,7 +109,7 @@ define('io.ox/office/tk/controller', function () {
              *  A reference to this item.
              */
             this.update = function (defaultValue) {
-                var value = getHandler.call(controller);
+                var value = this.get();
                 value = _.isUndefined(value) ? defaultValue : value;
                 _(components).invoke('enable', key, isEnabled());
                 if (!_.isUndefined(value)) {
@@ -369,6 +376,20 @@ define('io.ox/office/tk/controller', function () {
         this.update = function (keys) {
             _(selectItems(keys)).invoke('update');
             return this;
+        };
+
+        /**
+         * Returns the current value of the specified item.
+         *
+         * @param {String} key
+         *  The key of the item.
+         *
+         * @returns
+         *  The current value of the item, or undefined, if the item does not
+         *  exist.
+         */
+        this.get = function (key) {
+            return (key in items) ? items[key].get() : undefined;
         };
 
         /**
