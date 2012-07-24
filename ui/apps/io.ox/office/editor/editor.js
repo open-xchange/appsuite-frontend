@@ -950,11 +950,16 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         };
 
         this.setSelection = function (oxosel) {
-            var oldSelection = this.getSelection();
+            // var oldSelection = this.getSelection();
             var aDOMSelection = this.getDOMSelection(oxosel);
-            this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
-            // if (TODO: Compare Arrays oldSelection, oxosel)
-            this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
+
+            if (aDOMSelection) {
+                this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
+                // if (TODO: Compare Arrays oldSelection, oxosel)
+                this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
+            } else {
+                dbgOutError("ERROR: Failed to determine DOM Selection from OXO Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
+            }
         };
 
         this.clearUndo = function () {
@@ -1095,7 +1100,26 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     else {
                         var mergeselection = _.copy(selection.startPaM.oxoPosition);
                         mergeselection.pop();
+
+                        var nextParagraphPosition = _.copy(mergeselection),
+                            lastValue = nextParagraphPosition.length - 1;
+
+                        nextParagraphPosition[lastValue] += 1;
+
+                        var domPos = this.getDOMPosition(nextParagraphPosition),
+                            nextIsTable = false;
+
+                        if (domPos) {
+                            if (this.getDOMPosition(nextParagraphPosition).node.nodeName === 'TABLE') {
+                                nextIsTable = true;
+                            }
+                        }
+
                         this.mergeParagraph(mergeselection);
+
+                        if (nextIsTable) {
+                            selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(nextParagraphPosition);
+                        }
                     }
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1124,8 +1148,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         var length = this.getParagraphLength(startPosition);
 
                         this.mergeParagraph(startPosition);
+
                         selection.startPaM.oxoPosition[lastValue - 1] -= 1;
-                        selection.startPaM.oxoPosition[lastValue] = length;
+                        selection.startPaM.oxoPosition.pop();
+
+                        if (this.getDOMPosition(selection.startPaM.oxoPosition).node.nodeName === 'TABLE') {
+                            selection.startPaM.oxoPosition = this.getLastPositionInParagraph(selection.startPaM.oxoPosition);
+                        } else {
+                            selection.startPaM.oxoPosition.push(length);
+                        }
                     }
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1135,36 +1166,13 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             else if (event.ctrlKey) {
                 var c = this.getPrintableChar(event);
                 if (c === 'A') {
-                    selection = new OXOSelection(new OXOPaM([0, 0]), new OXOPaM([0, 0]));
+                    var startPaM = new OXOPaM([0]),
+                        endPaM = new OXOPaM(this.getLastPositionInDocument());
 
-                    if (this.isPositionInTable([0])) {
-                        selection.startPaM.oxoPosition = [];
-                        selection.startPaM.oxoPosition.push(0);
-                        selection.startPaM.oxoPosition.push(0);
-                        selection.startPaM.oxoPosition.push(0);
-                        selection.startPaM.oxoPosition.push(0);
-                        selection.startPaM.oxoPosition.push(0);
-                    }
+                    selection = new OXOSelection(startPaM, endPaM);
 
-                    var lastPara = this.getParagraphCount() - 1;
-
-                    if (this.isPositionInTable([lastPara])) {
-                        var lastRow = this.getLastRowIndexInTable([lastPara]),
-                            lastColumn = this.getLastColumnIndexInTable([lastPara]),
-                            lastParaInCell = this.getLastParaIndexInCell([lastPara, lastColumn, lastRow]),
-                            paraLen = this.getParagraphLength([lastPara, lastColumn, lastRow, lastParaInCell]);
-
-                        selection.endPaM.oxoPosition = [];
-                        selection.endPaM.oxoPosition.push(lastPara);
-                        selection.endPaM.oxoPosition.push(lastColumn);
-                        selection.endPaM.oxoPosition.push(lastRow);
-                        selection.endPaM.oxoPosition.push(lastParaInCell);
-                        selection.endPaM.oxoPosition.push(paraLen);
-                    } else {
-                        selection.endPaM.oxoPosition[0] = lastPara;
-                        selection.endPaM.oxoPosition[1] = this.getParagraphLength([lastPara]);
-                    }
                     event.preventDefault();
+
                     this.setSelection(selection);
                 }
                 else if (c === 'Z') {
@@ -1741,6 +1749,54 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             return isSameLevel;
+        };
+
+        this.getLastPositionInParagraph = function (paragraph) {
+
+            // paragraph must be a position, representing a 'p' or a 'table' node
+
+            var isTableNode = this.getDOMPosition(paragraph).node.nodeName === 'TABLE' ? true : false;
+
+            if (isTableNode) {
+                var lastRow = this.getLastRowIndexInTable(paragraph),
+                    lastColumn = this.getLastColumnIndexInTable(paragraph);
+
+                paragraph.push(lastColumn);
+                paragraph.push(lastRow);
+
+                var lastParaInCell = this.getLastParaIndexInCell(paragraph);
+
+                paragraph.push(lastParaInCell);
+            }
+
+            paragraph.push(this.getParagraphLength(paragraph));
+
+            return paragraph;
+        };
+
+        this.getFirstPositionInParagraph = function (paragraph) {
+
+            // paragraph must be a position, representing a 'p' or a 'table' node
+
+            var isTableNode = this.getDOMPosition(paragraph).node.nodeName === 'TABLE' ? true : false;
+
+            if (isTableNode) {
+                paragraph.push(0);  // column
+                paragraph.push(0);  // row
+                paragraph.push(0);  // paragraph
+            }
+
+            paragraph.push(0);
+
+            return paragraph;
+        };
+
+        this.getLastPositionInDocument = function () {
+
+            var lastPara = this.getParagraphCount() - 1,
+                oxoPosition = this.getLastPositionInParagraph([lastPara]);
+
+            return oxoPosition;
         };
 
         // ==================================================================
@@ -2747,7 +2803,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             if (para > 0) {
-                newPara.insertAfter(paragraphs[para - 1]);
+                newPara.insertAfter(paragraphs[para]);
             }
             else {
                 newPara.insertBefore(paragraphs[0]);
@@ -2820,41 +2876,46 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 var thisPara = allParagraphs[para];
                 var nextPara = allParagraphs[para + 1];
 
-                var oldParaLen = 0;
-                oldParaLen = this.getParagraphLength(position);
+                // Only merging, if both paragraph nodes have name 'p'. Tables cannot be merged this way, and
+                // 'p' and 'table' cannot be merged either.
+                if ((thisPara.nodeName === 'P') && (nextPara.nodeName === 'P')) {
 
-                var lastCurrentChild = thisPara.lastChild;
-                if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
-                    thisPara.removeChild(lastCurrentChild);
-                }
+                    var oldParaLen = 0;
+                    oldParaLen = this.getParagraphLength(position);
 
-                var child = nextPara.firstChild;
-
-                while (child !== null) {
-                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
-
-                    if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
-                        thisPara.lastChild.nodeValue += child.nodeValue;
-                    } else {
-                        thisPara.appendChild(child);
+                    var lastCurrentChild = thisPara.lastChild;
+                    if (lastCurrentChild && (lastCurrentChild.nodeName === 'BR')) {
+                        thisPara.removeChild(lastCurrentChild);
                     }
 
-                    child = nextChild;
-                }
+                    var child = nextPara.firstChild;
 
-                var localPosition = _.copy(position, true);
-                localPosition[posLength] += 1;  // posLength is 0 for non-tables
+                    while (child !== null) {
+                        var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                this.implDeleteParagraph(localPosition);
+                        if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
+                            thisPara.lastChild.nodeValue += child.nodeValue;
+                        } else {
+                            thisPara.appendChild(child);
+                        }
 
-                var lastPos = _.copy(position);
-                lastPos.push(oldParaLen);
-                lastOperationEnd = new OXOPaM(lastPos);
-                this.implParagraphChanged(position);
+                        child = nextChild;
+                    }
 
-                // DEBUG STUFF
-                if (paragraphs.size() !== (dbg_oldparacount - 1)) {
-                    this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                    var localPosition = _.copy(position, true);
+                    localPosition[posLength] += 1;  // posLength is 0 for non-tables
+
+                    this.implDeleteParagraph(localPosition);
+
+                    var lastPos = _.copy(position);
+                    lastPos.push(oldParaLen);
+                    lastOperationEnd = new OXOPaM(lastPos);
+                    this.implParagraphChanged(position);
+
+                    // DEBUG STUFF
+                    if (paragraphs.size() !== (dbg_oldparacount - 1)) {
+                        this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                    }
                 }
             }
         };
