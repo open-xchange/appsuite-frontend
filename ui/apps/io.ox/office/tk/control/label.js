@@ -51,7 +51,7 @@ define('io.ox/office/tk/control/label',
         // initialization -----------------------------------------------------
 
         // insert the label into this group, and register event handlers
-        this.addControl(label)
+        this.addChildNodes(label)
             .registerUpdateHandler(updateHandler);
 
     } // class Label

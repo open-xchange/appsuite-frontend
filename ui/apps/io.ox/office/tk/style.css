@@ -153,6 +153,9 @@ i.icon-io-ox-table              { background-position: -200px    0; }
 /* border color for panes */
 @pane-border-color: #d5d5d5;
 
+/* base border color for controls */
+@control-border-color: @pane-border-color;
+
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
@@ -217,6 +220,7 @@ div.io-ox-toolbar {
                 .box-sizing(border-box);
                 height: 28px;
                 margin: 0;
+                /* reserve space for border in hover/focus/active mode */
                 border: 1px solid transparent;
                 .border-radius(0);
                 white-space: nowrap;
@@ -244,7 +248,7 @@ div.io-ox-toolbar {
                     /* mouse/keyboard effects */
                     &:hover, &:focus, &:active {
                         z-index: 2;
-                        border-color: @pane-border-color;
+                        border-color: @control-border-color;
                     }
 
                     /* active effect (control currently clicked) */
@@ -267,7 +271,6 @@ div.io-ox-toolbar {
             button {
                 padding: 2px 8px;
                 background: none;
-                /* reserve space for border in hover/focus/active mode */
                 text-align: center;
 
                 /* selected toggle/radio buttons */
@@ -278,12 +281,12 @@ div.io-ox-toolbar {
                 }
             }
 
-            /* keyboard/mouse effects (not for disabled btutons) */
+            /* keyboard/mouse effects (not for disabled buttons) */
             &:not(.disabled) button {
 
                 /* active effect (control currently clicked) */
                 &:active {
-                    background-color: fade(@pane-border-color, 25%);
+                    background-color: fade(@control-border-color, 25%);
                 }
 
                 /* selected toggle/radio buttons */
@@ -310,6 +313,23 @@ div.io-ox-toolbar {
                 .transition(none);
             }
 
+            label.input-caption {
+                padding: 4px 4px;
+            }
+
+            &:not(.disabled) {
+                input, label.input-caption {
+                    cursor: text;
+                }
+            }
+
+            /* hover effect for an input field and its caption */
+            &:not(.disabled):hover {
+                > label.input-caption, > input:not(:focus):not(:active) {
+                    border-color: @control-border-color;
+                }
+            }
+            
             /* drop-down groups -------------------------------------------- */
 
             &.dropdown-group {
@@ -327,11 +347,11 @@ div.io-ox-toolbar {
                         display: block;
                     }
 
-                    /* set border to all buttons and text fields in the group when hovered or opened (split mode) */
+                    /* set border to all controls in the group when hovered or opened (split mode) */
                     &.menu-open, &:hover {
-                        > button, > input {
+                        > label, > button, > input {
                             &:not(:focus):not(:active) {
-                                border-color: @pane-border-color;
+                                border-color: @control-border-color;
                             }
                         }
                     }
@@ -349,7 +369,7 @@ div.io-ox-toolbar {
                     margin: 1px 0 0 0;
                     padding: 0;
                     background-color: @pane-fill-color;
-                    border: 1px solid @pane-border-color;
+                    border: 1px solid @control-border-color;
                     .border-radius(0);
 
                     /* the Buttons mix-in class */
@@ -389,12 +409,12 @@ div.io-ox-toolbar {
 
                                     /* mouse hover and focus effect */
                                     &:hover:not(:active), &:focus:not(:active) {
-                                        background-color: fade(@pane-border-color, 25%);
+                                        background-color: fade(@control-border-color, 25%);
                                     }
 
                                     /* active effect (button currently clicked) */
                                     &:active {
-                                        background-color: fade(@pane-border-color, 50%);
+                                        background-color: fade(@control-border-color, 50%);
                                     }
 
                                     &.selected {
@@ -444,7 +464,7 @@ div.io-ox-toolbar {
 
                                 /* always show the same border */
                                 &, &:hover, &:focus, &:active {
-                                    border: 1px solid @pane-border-color;
+                                    border: 1px solid @control-border-color;
                                 }
 
                                 /* a row in the grid */
@@ -457,15 +477,15 @@ div.io-ox-toolbar {
                                         display: inline-block;
                                         width: @cell-width;
                                         height: @cell-height;
-                                        border-bottom: 1px solid @pane-border-color;
+                                        border-bottom: 1px solid @control-border-color;
 
                                         &:not(:last-child) {
-                                            border-right: 1px solid @pane-border-color;
+                                            border-right: 1px solid @control-border-color;
                                         }
                                     }
 
                                     &:not(:last-child) > div {
-                                        border-bottom: 1px solid @pane-border-color;
+                                        border-bottom: 1px solid @control-border-color;
                                     }
 
                                     /* height for last row (again, especially for Firefox) */
@@ -523,6 +543,8 @@ div.io-ox-toolbar.tabs {
 
     > span {
         > .group {
+
+            /* style buttons as tabs */
             > button {
                 height: 24px;
                 padding: 1px 12px;
@@ -539,12 +561,21 @@ div.io-ox-toolbar.tabs {
                 }
             }
 
-            /* mouse/keyboard effects of selected tabs (not for disabled group) */
-            &:not(.disabled) > button.selected {
+            /* mouse/keyboard effects (not for disabled group) */
+            &:not(.disabled) > button {
+
                 &:hover, &:focus, &:active {
-                    background: none;
-                    border-color: darken(@pane-border-color, 10%);
-                    border-bottom-color: transparent;
+                    border-color: @pane-border-color;
+
+                    &:active {
+                        background-color: fade(@pane-border-color, 25%);
+                    }
+
+                    &.selected {
+                        background: none;
+                        border-color: darken(@pane-border-color, 10%);
+                        border-bottom-color: transparent;
+                    }
                 }
             }
         }

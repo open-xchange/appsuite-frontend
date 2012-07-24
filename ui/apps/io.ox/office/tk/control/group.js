@@ -151,16 +151,16 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Inserts the passed control into this group.
+         * Inserts the passed DOM elements into this group.
          *
-         * @param {jQuery} control
-         *  The control to be inserted into this group, as jQuery object.
+         * @param {jQuery} nodes
+         *  The nodes to be inserted into this group, as jQuery object.
          *
          * @returns {Group}
          *  A reference to this group.
          */
-        this.addControl = function (control) {
-            groupNode.append(control);
+        this.addChildNodes = function (nodes) {
+            groupNode.append(nodes);
             return this;
         };
 
@@ -184,7 +184,7 @@ define('io.ox/office/tk/control/group',
          * keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(FOCUSABLE_SELECTOR + Utils.ENABLED_SELECTOR);
+            return groupNode.find(FOCUSABLE_SELECTOR);
         };
 
         /**
@@ -196,7 +196,7 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Sets the focus to the first enabled control in this group.
+         * Sets the focus to the first control in this group.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -266,9 +266,12 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.enable = function (state) {
-            // enable/disable the entire group node with all its descendants
-            Utils.enableControls(groupNode, state);
-            return this;
+
+            var // enable/disable the entire group node with all its descendants
+                enabled = Utils.enableControls(groupNode, state);
+
+            // trigger an 'enable' event so that derived classes can react
+            return this.trigger('enable', enabled);
         };
 
         /**
@@ -299,7 +302,7 @@ define('io.ox/office/tk/control/group',
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
         // suppress events for disabled controls
-        groupNode.on('mousedown dragover drop contextmenu', FOCUSABLE_SELECTOR, function (event) {
+        groupNode.on('mousedown dragover drop contextmenu', function (event) {
             if (!self.isEnabled()) {
                 event.preventDefault();
                 self.trigger('cancel');

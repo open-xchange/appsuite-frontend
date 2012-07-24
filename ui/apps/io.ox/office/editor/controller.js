@@ -40,6 +40,8 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
 
                 'format/character/font/family': {
                 },
+                'format/character/font/height': {
+                },
                 'format/character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
                     set: function (state) { editor.setAttribute('bold', state); }

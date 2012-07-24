@@ -16,10 +16,11 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/fonts',
      'io.ox/office/tk/toolbar',
      'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, ToolBar, Button, ComboField, GridSizer, gt) {
+    ], function (Utils, Fonts, ToolBar, Button, TextField, ComboField, GridSizer, gt) {
 
     'use strict';
 
@@ -28,6 +29,7 @@ define('io.ox/office/editor/view',
     var FontChooser = ComboField.extend({ constructor: function () {
 
         var options = {
+                width: 150,
                 icon: 'icon-font',
                 tooltip: gt('Font Name'),
                 sorted: true
@@ -177,6 +179,7 @@ define('io.ox/office/editor/view',
 
         createToolBar('format', gt('Format'))
             .addGroup('format/character/font/family', new FontChooser())
+            .addGroup('format/character/font/height', new TextField({ width: 35, icon: 'icon-text-height', tooltip: gt('Font Size'), css: { textAlign: 'right' } }))
             .startCollapseGroups()
             .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })

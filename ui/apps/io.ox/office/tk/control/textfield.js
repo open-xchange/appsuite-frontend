@@ -18,6 +18,9 @@ define('io.ox/office/tk/control/textfield',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class TextField ========================================================
 
     /**
@@ -29,12 +32,20 @@ define('io.ox/office/tk/control/textfield',
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the text field. Supports
-     *  all options of the Group base class, and all generic formatting options
-     *  of input fields (see method Utils.createInput() for details).
+     *  all options of the Group base class, generic caption options (see
+     *  Utils.setControlCaption() for details), and all generic formatting
+     *  options of input fields (see method Utils.createTextField() for
+     *  details).
      */
     function TextField(options) {
 
-        var // create the text field
+        var // self reference
+            self = this,
+
+            // container for caption elements
+            caption = Utils.createLabel(options).addClass('input-caption'),
+
+            // create the text field
             textField = Utils.createTextField(options);
 
         // private methods ----------------------------------------------------
@@ -53,16 +64,50 @@ define('io.ox/office/tk/control/textfield',
             return textField.val();
         }
 
+        /**
+         * Handles mouse click events on the caption element preceding the text
+         * field element.
+         */
+        function captionClickHandler(event) {
+            if (self.isEnabled()) {
+                textField.focus();
+            } else {
+                self.trigger('cancel');
+            }
+        }
+
+        /**
+         * Handles keyboard events, especially the cursor keys.
+         */
+        function keyHandler(event) {
+            switch (event.keyCode) {
+            case KeyCodes.LEFT_ARROW:
+            case KeyCodes.RIGHT_ARROW:
+                // do not bubble to view component (suppress focus navigation)
+                event.stopPropagation();
+                // ... but let the browser perform its default action
+                break;
+            // browser ESCAPE handling inconsistent or buggy, e.g.: https://bugzilla.mozilla.org/show_bug.cgi?id=598819
+            }
+        }
+
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
 
         // initialization -----------------------------------------------------
 
+        // add the caption
+        if (caption.children().length) {
+            this.addChildNodes(caption);
+        }
+
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(textField, 'change', changeHandler);
+        caption.on('click', captionClickHandler);
+        textField.on('keydown keypress keyup', keyHandler);
 
     } // class TextField
 
