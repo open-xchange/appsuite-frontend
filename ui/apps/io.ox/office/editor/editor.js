@@ -554,7 +554,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
-                this.implInsertTable(operation.start);
+                this.implInsertTable(operation.start, operation.columns, operation.rows);
             }
             else if (operation.name === OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -649,6 +649,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             function getOXOPositionFromDOMPosition(node, offset) {
 
+                var origNodeName = node.nodeName,
+                    origOffset = node.offset;
+
                 // check input values
                 if (! node) {
                     this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Node not defined');
@@ -664,13 +667,13 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 var editorDiv = editdiv.has(node).get(0);
 
                 if (!editorDiv) { // range not in text area
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not part of the editor DIV!');
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not part of the editor DIV: !' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                     return;
                 }
 
                 // Checking node in root elements
                 if (paragraphs.has(node).length === 0) {
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!');
+                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                     return;
                 }
 
@@ -720,7 +723,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.implDbgOutInfo('getOXOPositionFromDOMPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
                 }
 
-                // this.implDbgOutInfo('getOXOPositionFromDOMPosition: Info: Converting node: ' + node.nodeName + ',' + node.nodeType + ' and offset (optionally): ' + offset + ' to oxoPosition: ' + oxoPosition);
+                // window.console.log('getOXOPositionFromDOMPosition: Info: Converting node: ' + origNodeName + ' and offset (optionally): ' + origOffset + ' to oxoPosition: ' + oxoPosition);
 
                 return new OXOPaM(oxoPosition);
             }
@@ -735,10 +738,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is 3, but offset is not defined!');
                     return;
                 }
-            } else {
-                if (_.isNumber(domSelection.startPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is: ' + domSelection.startPaM.node.nodeType + "(" + domSelection.startPaM.node.nodeName + ")" + ', but offset is set: ' + domSelection.startPaM.offset + ' . Offset will be ignored!');
-                }
             }
 
             if (domSelection.endPaM.node.nodeType === 3) {
@@ -746,17 +745,23 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is 3, but offset is not defined!');
                     return;
                 }
-            } else {
-                if (_.isNumber(domSelection.endPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is: ' + domSelection.endPaM.node.nodeType + "(" + domSelection.startPaM.node.nodeName + ")" + ', but offset is set: ' + domSelection.endPaM.offset + ' . Offset will be ignored!');
-                }
+            }
+
+            // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
+            // These DIVs need to be converted to the correct paragraph first.
+            if (domSelection.startPaM.node.nodeName === 'DIV') {
+                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset: " + domSelection.startPaM.offset);
+                domSelection.startPaM.node = domSelection.startPaM.node.childNodes[domSelection.startPaM.offset];
+                domSelection.startPaM.offset = 0;
+                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset: " + domSelection.startPaM.offset);
             }
 
             // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
             // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
             // Some browsers select the p-elements instead of the required text nodes (Chrome)
+            // <DIV> is selected with double click in Chrome
             if (domSelection.startPaM.node.nodeName === 'P') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
+                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
                 if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
                     domSelection.startPaM.node = getLastTextNode(domSelection.startPaM.node);
                     if (domSelection.startPaM.node.nodeType === 3) {
@@ -768,14 +773,23 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         domSelection.startPaM.offset = 0;
                     }
                 }
-                this.implDbgOutInfo("INFO: Changing DOMPosition (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType);
+                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
             }
 
             startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
 
+            // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
+            // These DIVs need to be converted to the correct paragraph first.
+            if (domSelection.endPaM.node.nodeName === 'DIV') {
+                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset: " + domSelection.endPaM.offset);
+                domSelection.endPaM.node = domSelection.endPaM.node.childNodes[domSelection.endPaM.offset];
+                domSelection.endPaM.offset = 0;
+                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset: " + domSelection.endPaM.offset);
+            }
+
             // Some browsers select the p-elements instead of the required text nodes (Chrome)
             if (domSelection.endPaM.node.nodeName === 'P') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
+                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset : " + domSelection.endPaM.offset);
 
                 // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
                 if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.offset === 0)) {
@@ -786,7 +800,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 if (domSelection.endPaM.node.nodeType === 3) {
                     domSelection.endPaM.offset = domSelection.endPaM.node.nodeValue.length;
                 }
-                this.implDbgOutInfo("INFO: Changing DOMPosition (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType);
+                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset : " + domSelection.endPaM.offset);
             }
 
             endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
@@ -1063,7 +1077,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertTable();
+                    this.insertTable({width: 3, height: 4});
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -1506,8 +1520,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         this.insertTable = function (size) {
             var selection = this.getSelection();
             selection.adjust();
-            var position = [selection.startPaM.oxoPosition[0]];
-            var newOperation = {name: OP_TABLE_INSERT, start: _.copy(position, true)};
+            var position = [selection.startPaM.oxoPosition[0]];  // TODO
+            var newOperation = {name: OP_TABLE_INSERT, start: _.copy(position, true), columns: size.width, rows: size.height};
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1794,6 +1808,13 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             return isSameLevel;
+        };
+
+        this.prepareNewParagraph = function (paragraph) {
+            paragraph.appendChild(document.createTextNode(''));
+            var dummyBR = document.createElement('br');
+            dummyBR.dummyBR = true;
+            paragraph.appendChild(dummyBR);
         };
 
         this.getLastPositionInParagraph = function (paragraph) {
@@ -2665,10 +2686,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 if (!hasTextContent(paragraph)) {
                     // We need an empty text node and a br
                     if (!paragraph.lastChild || !paragraph.lastChild.dummyBR) {
-                        paragraph.appendChild(document.createTextNode(''));
-                        var dummyBR = document.createElement('br');
-                        dummyBR.dummyBR = true;
-                        paragraph.appendChild(dummyBR);
+                        this.prepareNewParagraph(paragraph);
                     }
                 }
                 else {
@@ -2882,32 +2900,21 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             this.implParagraphChanged(position);
         };
 
-        this.implInsertTable = function (position) {
-            var para = position[0];
-            // var newPara = document.createElement('table');
-            var newPara = $('<table>')
-            // .append($('<colgroup>')
-            //     .append($('<col>').attr('width', '40%'))
-            //     .append($('<col>').attr('width', '30%'))
-            //     .append($('<col>').attr('width', '30%')))
-            // .append('<colgroup><col width="40%"><col width="30%"><col width="30%"></colgroup>')
+        this.implInsertTable = function (position, columns, rows) {
 
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>'))
-                .append($('<td><p>&nbsp;</p></td>')));
+            var para = position[0];
+
+            var newPara = $('<table>');
+
+            for (var i = 1; i <= rows; i++) {
+                var newRow = ($('<tr>').attr('valign', 'top'));
+
+                for (var j = 1; j <= columns; j++) {
+                    newRow.append($('<td><p></p></td>'));
+                }
+
+                newPara.append(newRow);
+            }
 
             if (para === -1) {
                 para = paragraphs.size();
@@ -2915,16 +2922,33 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             if (para > 0) {
                 newPara.insertAfter(paragraphs[para]);
+                para = para + 1;
             }
             else {
                 newPara.insertBefore(paragraphs[0]);
+                para = 0;
             }
 
             paragraphs = editdiv.children();
             blockOperationNotifications = true;  // test table does not work in second editor.
 
-            lastOperationEnd = new OXOPaM([para, 0]);  // table?
+            // Filling empty paragraphs in table cells with minimal content.
+            // We need an empty text node and a <br>.
 
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < columns; j++) {
+                    var pos = [para];
+                    pos.push(j);
+                    pos.push(i);
+                    pos.push(0); // first paragraph
+
+                    var paragraph = this.getCurrentParagraph(pos);
+
+                    this.prepareNewParagraph(paragraph);
+                }
+            }
+
+            lastOperationEnd = new OXOPaM([para, 0]);  // table?
         };
 
         this.implSplitParagraph = function (position) {
