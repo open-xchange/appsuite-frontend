@@ -22,22 +22,24 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
         var settings = {},
             settingsCache;
 
-
         var settingsDefaults = {
-                'removeDeletedPermanently': false,
-                'contactCollectOnMailTransport': false,
-                'contactCollectOnMailAccess': false,
-                'appendVcard': false,
-                'appendMailTextOnReply': false,
-                'forwardMessageAs': 'Inline',
-                'messageFormat': 'html',
-                'lineWrapAfter': '',
-                'defaultSendAddress': util.getInitialDefaultSender(),
-                'autoSafeDraftsAfter': false,
-                'allowHtmlMessages': true,
-                'allowHtmlImages': false,
-                'displayEmomticons': false,
-                'isColorQuoted': false
+                mail: {
+                    'removeDeletedPermanently': false,
+                    'contactCollectOnMailTransport': false,
+                    'contactCollectOnMailAccess': false,
+                    'appendVcard': false,
+                    'appendMailTextOnReply': false,
+                    'forwardMessageAs': 'Inline',
+                    'messageFormat': 'html',
+                    'lineWrapAfter': '',
+                    'defaultSendAddress': util.getInitialDefaultSender(),
+                    'autoSafeDraftsAfter': false,
+                    'allowHtmlMessages': true,
+                    'allowHtmlImages': false,
+                    'displayEmomticons': false,
+                    'isColorQuoted': false
+                }
+
             };
 
         var settingsInitial = function (settings, settingsDefaults) {
@@ -50,40 +52,22 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
 
         var get = function (key) {
             var parts = key.split(/\//),
-              tmp = settings || {};
-
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[partname];
-                } else {
-                    tmp = null;
-                    return null; // cant return
-                }
-            });
-            return tmp;
+            tmp = settings || {}, i = 0, $i = parts.length;
+//            for (; i < $i; i++) {
+//                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
+//                if (tmpHasSubNode) {
+//                    tmp = tmp[i];
+//                } else {
+//                    tmp = null;
+//                    return null;
+//                }
+//            }
+            return tmp[key];
         };
 
         var set = function (key, value) {
-
-            var parts = key.split(/\//),
-              tmp = settings || {},
-              rkey = parts.pop();
-
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[partname];
-                    if (typeof tmp !== 'object') {
-                        console.error('settings.set: ' + tmp + ' is a value');
-                        return false; // cant return
-                    }
-                } else {
-                    tmp[partname] = {};
-                    tmp = tmp[partname];
-                }
-            });
-            tmp[rkey] = value;
+            var tmp = settings || {};
+            tmp[key] = value;
         };
 
         var contains = function (key) {
@@ -92,9 +76,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                 falseSwitch;
 
             _.each(parts, function (partname, index) {
-                console.log(tmp);
                 var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-//                falseSwitch = tmpHasSubNode ? true : false;
                 if (tmpHasSubNode) {
                     tmp = tmp[partname];
                     falseSwitch = true;
@@ -110,22 +92,21 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
 
         var remove = function (key) {
             var parts = key.split(/\//),
-              tmp = settings || {},
-              rkey = parts.pop();
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                tmp = settings || {},  i = 0, $i = parts.length - 1;
+            for (; i < $i; i++) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(i) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
                 if (tmpHasSubNode) {
-                    tmp = tmp[partname];
+                    tmp = tmp[i];
                     if (typeof tmp !== 'object') {
                         console.error('settings.remove: ' + tmp + ' is a value');
-                        return false; // cant return
+                        return false;
                     }
                 } else {
-                    return false; // cant return
+                    return false;
                 }
-            });
+            }
 
-            delete [tmp[rkey]];
+            delete tmp[parts[$i]];
             return true;
         };
 
@@ -169,21 +150,11 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                 }
             },
 
-            set: function (path, value, permanent) {
+            set: function (path, value) {
                 if (path) {
                     var orgpath = path;
                     console.log(path);
                     set(path, value);
-                    if (permanent) {
-                        // save settings path on server
-                        settingsCache.add('settingsDefault', settings);
-                        return http.PUT({
-                            module: 'config/gui',
-                            appendColumns: false,
-                            processResponse: false,
-                            data: settings
-                        });
-                    }
                 }
             },
 
@@ -230,7 +201,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                     });
             },
             save: function () {
-                settingsInitial(settings, settingsDefaults);
+                settingsInitial(settings, settingsDefaults[that.settingsPath]);
                 settingsCache.add('settingsDefault', settings);
                 console.log(settings);
                 return http.PUT({
@@ -249,7 +220,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
     return {
         load: function (name, req, load, config) {
             var mywrapper = settingsWrapper();
-
             name = name.split('/');
             mywrapper.settingsPath = name[1]; //encodeURIComponent(name);
             mywrapper.load()

@@ -31,7 +31,7 @@ define("io.ox/settings/test",
                         me.ready = false;
                         api.configtestGet()
                         .done(function (o) {
-                            if (o[0].id === 'ui') {
+                            if (o[0].id === 'apps/io.ox/mail') {
                                 console.log(o);
                                 me.ready = true;
                             }
