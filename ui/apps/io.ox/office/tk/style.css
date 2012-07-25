@@ -189,21 +189,23 @@ div.io-ox-toolbar {
             cursor: default;
         }
 
-        /* groups ---------------------------------------------------------- */
+        /* groups (container elements for controls) ------------------------ */
 
         .group {
             display: inline-block;
             /* relative position is essential for drop-down menu positioning */
             position: relative;
 
-            /* hidden control groups */
+            /* hidden groups */
             &.hidden {
                 display: none;
             }
 
-            /* collapse borders of top-level elements inside group */
-            > :not(:first-child) {
-                margin-left: -1px;
+            /* collapse borders of top-level control elements inside group */
+            > label, > button, > input {
+                ~ label, ~ button, ~ input {
+                    margin-left: -1px;
+                }
             }
 
             /* reset mouse pointer for controls embedded in a disabled group */
@@ -221,13 +223,17 @@ div.io-ox-toolbar {
                 .box-sizing(border-box);
                 height: 28px;
                 margin: 0;
-                /* reserve space for border in hover/focus/active mode */
+                padding: 0;
+                /* reserve space for border */
                 border: 1px solid transparent;
                 .border-radius(0);
                 white-space: nowrap;
+                line-height: 26px;
+                font-size: 13px;
+                font-weight: normal;
                 color: #333333;
                 text-shadow: none;
-                vertical-align: middle;
+                vertical-align: top;
 
                 /* prevent dotted focus rectangle around the control */
                 &:focus, &:active {
@@ -235,26 +241,37 @@ div.io-ox-toolbar {
                 }
             }
 
-            /* whitespace between control caption elements */
+            /* control caption elements (always spans as children) */
             label, button {
-                > span + span {
-                    margin-left: 5px;
+                > span {
+                    display: inline-block;
+                    vertical-align: top;
+
+                    > i[class^="icon-"] {
+                        vertical-align: center;
+                    }
+
+                    + span {
+                        margin-left: 5px;
+                    }
                 }
             }
 
             /* mouse and keyboard effects for buttons and text fields */
             &:not(.disabled) {
                 button, input {
+                    &:not(.disabled) {
 
-                    /* mouse/keyboard effects */
-                    &:hover, &:focus, &:active {
-                        z-index: 2;
-                        border-color: @control-border-color;
-                    }
+                        /* mouse/keyboard effects */
+                        &:hover, &:focus, &:active {
+                            z-index: 2;
+                            border-color: @control-border-color;
+                        }
 
-                    /* active effect (control currently clicked) */
-                    &:active {
-                        z-index: 4;
+                        /* active effect (control currently clicked) */
+                        &:active {
+                            z-index: 4;
+                        }
                     }
                 }
             }
@@ -262,7 +279,6 @@ div.io-ox-toolbar {
             /* labels ------------------------------------------------------ */
 
             label {
-                padding: 4px 0;
                 background: none;
                 text-align: center;
             }
@@ -270,7 +286,8 @@ div.io-ox-toolbar {
             /* buttons ----------------------------------------------------- */
 
             button {
-                padding: 2px 8px;
+                padding-left: 8px;
+                padding-right: 8px;
                 background: none;
                 text-align: center;
 
@@ -282,8 +299,8 @@ div.io-ox-toolbar {
                 }
             }
 
-            /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) button {
+            /* more keyboard/mouse effects (not for disabled buttons) */
+            &:not(.disabled) button:not(.disabled) {
 
                 /* active effect (control currently clicked) */
                 &:active {
@@ -310,16 +327,19 @@ div.io-ox-toolbar {
             /* text fields ------------------------------------------------- */
 
             input {
+                padding-left: 4px;
+                padding-right: 4px;
                 .box-shadow(none);
                 .transition(none);
             }
 
             label.input-caption {
-                padding: 4px 4px;
+                padding-left: 4px;
+                padding-right: 4px;
             }
 
             &:not(.disabled) {
-                input, label.input-caption {
+                label.input-caption, input {
                     cursor: text;
                 }
             }
@@ -405,7 +425,9 @@ div.io-ox-toolbar {
 
                                 > button {
                                     width: 100%;
+                                    height: 26px;
                                     border-color: transparent;
+                                    line-height: 24px;
                                     text-align: left;
 
                                     /* mouse hover and focus effect */
@@ -424,11 +446,13 @@ div.io-ox-toolbar {
                                         /* mouse hover and focus effect */
                                         &:hover:not(:active), &:focus:not(:active) {
                                             background-color: fade(@selected-border-color, 75%);
+                                            border-color: transparent;
                                         }
 
                                         /* active effect (button currently clicked) */
                                         &:active {
                                             background-color: @selected-border-color;
+                                            border-color: transparent;
                                         }
                                     }
                                 }
@@ -454,7 +478,7 @@ div.io-ox-toolbar {
                             position: relative;
                             vertical-align: top;
                             font-size: 1px;
-                            line-height: normal;
+                            line-height: 1px;
 
                             /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
                             > button {
@@ -478,7 +502,7 @@ div.io-ox-toolbar {
                                         display: inline-block;
                                         width: @cell-width;
                                         height: @cell-height;
-                                        border-bottom: 1px solid @control-border-color;
+                                        vertical-align: top;
 
                                         &:not(:last-child) {
                                             border-right: 1px solid @control-border-color;
@@ -527,7 +551,7 @@ div.io-ox-toolbar {
         }
 
         /* collapse group elements inside a collapse-groups container */
-        > .collapsed-groups {
+        > div.collapsed-groups {
             display: inline-block;
 
             > :not(.hidden) ~ :not(.hidden) {
@@ -552,6 +576,7 @@ div.io-ox-toolbar.tabs {
                 border-bottom: 1px solid @pane-border-color;
                 .border-top-left-radius(4px);
                 .border-top-right-radius(4px);
+                line-height: 22px;
 
                 /* override the default style of selected buttons */
                 &.selected {
