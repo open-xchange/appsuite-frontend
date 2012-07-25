@@ -86,9 +86,9 @@ define('io.ox/office/tk/utils',
      * @param {Object} [options]
      *  A map of options to control the properties of the new element. The
      *  following options are supported:
-     *  @param {String} [options.value]
-     *      A string value that will be copied to the 'data-value' attribute of
-     *      the control.
+     *  @param [options.value]
+     *      A value or object that will be copied to the 'data-value' attribute
+     *      of the control. Will be converted to a JSON string.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -101,25 +101,35 @@ define('io.ox/office/tk/utils',
             control = $('<' + element + '>', attribs),
 
             // option values
-            value = Utils.getStringOption(options, 'value'),
+            value = Utils.getOption(options, 'value'),
             css = Utils.getObjectOption(options, 'css', {});
 
         if (!_.isUndefined(value)) {
-            control.attr(Utils.DATA_VALUE_ATTR, value);
+            try {
+                control.attr(Utils.DATA_VALUE_ATTR, JSON.stringify(value));
+            } catch (ex) {
+            }
         }
 
         return control.css(css);
     };
 
     /**
-     * Returns the string value of the first control in the passed jQuery
-     * collection.
+     * Returns the value stored in the 'data-value' attribute of the first
+     * control in the passed jQuery collection. Will be converted from the JSON
+     * string to the original value.
      *
      * @param control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
-        return control.first().attr(Utils.DATA_VALUE_ATTR);
+        var value = control.first().attr(Utils.DATA_VALUE_ATTR);
+        if (_.isString(value)) {
+            try {
+                return JSON.parse(value);
+            } catch (ex) {
+            }
+        }
     };
 
     /**
@@ -424,17 +434,19 @@ define('io.ox/office/tk/utils',
      * @param {jQuery} buttons
      *  A jQuery collection containing one or more button elements.
      *
-     * @param {String|Null} [value]
-     *  If set to a string, activates the button whose 'data-value' attribute
-     *  is equal to this string. Otherwise, does not activate any button.
+     * @param value
+     *  The value of the button to be activated. If set to null, deactivates
+     *  all buttons and does not activate a button. If no button with the
+     *  specified value has been found, does not change the button that is
+     *  currently active.
      *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
      */
     Utils.selectRadioButton = function (buttons, value) {
 
-        var // find the button to activate
-            button = _.isString(value) ? buttons.filter('[' + Utils.DATA_VALUE_ATTR + '="' + value + '"]') : $();
+        var // find the button to be activated
+            button = _.isNull(value) ? $() : buttons.filter(function () { return _.isEqual(value, Utils.getControlValue($(this))); });
 
         // button not found: return currently selected button
         if (!button.length && !_.isNull(value)) {

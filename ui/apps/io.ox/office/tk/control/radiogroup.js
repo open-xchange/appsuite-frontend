@@ -75,9 +75,9 @@ define('io.ox/office/tk/control/radiogroup',
         /**
          * Activates an option button in this radio group.
          *
-         * @param {String|Null} value
-         *  The unique value associated to the button to be activated. If set
-         *  to null, does not activate any button (ambiguous state).
+         * @param value
+         *  The value associated to the button to be activated. If set to null,
+         *  does not activate any button (ambiguous state).
          */
         function updateHandler(value) {
 
@@ -101,7 +101,7 @@ define('io.ox/office/tk/control/radiogroup',
          * @param {jQuery} button
          *  The clicked button, as jQuery object.
          *
-         * @returns {String}
+         * @returns
          *  The button value that has been passed to the addButton() method.
          */
         function clickHandler(button) {
@@ -129,8 +129,9 @@ define('io.ox/office/tk/control/radiogroup',
         /**
          * Adds a new option button to this radio group.
          *
-         * @param {String} value
-         *  The unique value associated to the button.
+         * @param value
+         *  The unique value associated to the button. Must not be null or
+         *  undefined.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button.
