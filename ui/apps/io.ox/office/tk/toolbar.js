@@ -39,8 +39,12 @@ define('io.ox/office/tk/toolbar',
      *  closes the opened drop-down menu).
      *
      * @constructor
+     *
+     * @param {ox.ui.Window} win
+     *  The window containing this tool bar. Will be used to listen to 'show'
+     *  and 'hide' events.
      */
-    function ToolBar() {
+    function ToolBar(win) {
 
         var // reference to this tool bar
             toolBar = this,
@@ -59,6 +63,9 @@ define('io.ox/office/tk/toolbar',
 
             // all control groups, mapped by key
             groupsByKey = {},
+
+            // group initializer waiting for the first window 'show' event
+            deferredInit = $.Deferred(),
 
             // resize handler functions supporting flexible tool bar sizing
             resizeHandlers = [];
@@ -306,7 +313,15 @@ define('io.ox/office/tk/toolbar',
                 containerNode.append(group.getNode());
             }
 
-            // forward 'change' and 'cancel' events to the tool bar
+            // Trigger an 'init' event at the group when the container window
+            // becomes visible the first time. The 'deferredInit' object will
+            // be resolved on the first window 'show' event and will execute
+            // all done handlers attached here. If the window is already
+            // visible when calling this method, the deferred is resolved and
+            // will execute the new done handler immediately.
+            deferredInit.done(function () { group.trigger('init'); });
+
+            // forward group events to listeners of this tool bar
             group.on('change cancel', function (event, value) {
                 toolBar.trigger(event.type, key, value);
             });
@@ -453,13 +468,16 @@ define('io.ox/office/tk/toolbar',
             this.events.destroy();
             $(window).off('resize', windowResizeHandler);
             node.off().remove();
-            toolBar = node = containerNode = collapsedGroupsNode = groups = groupsByKey = resizeHandlers = null;
+            toolBar = node = containerNode = collapsedGroupsNode = groups = groupsByKey = deferredInit = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------
 
         // add event hub
         Events.extend(this);
+
+        // wait for the first window 'show' event and trigger an 'init' event at all groups
+        win.one('show', function () { deferredInit.resolve(); });
 
         // listen to key events
         node.on('keydown keypress keyup', keyHandler);

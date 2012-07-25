@@ -12,7 +12,7 @@
  */
 
 /* ========================================================================= */
-/* generic mixin classes                                                     */
+/* generic mix-in classes                                                    */
 /* ========================================================================= */
 
 .box-sizing(@sizing-mode) {
@@ -160,6 +160,9 @@ i.icon-io-ox-font-height        { background-position: -220px    0; }
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
+/* fill color for input controls */
+@input-fill-color: white;
+
 /* tool panes ============================================================== */
 
 div.io-ox-toolpane {
@@ -224,6 +227,7 @@ div.io-ox-toolbar {
                 height: 28px;
                 margin: 0;
                 padding: 0;
+                background: none;
                 /* reserve space for border */
                 border: 1px solid transparent;
                 .border-radius(0);
@@ -279,7 +283,6 @@ div.io-ox-toolbar {
             /* labels ------------------------------------------------------ */
 
             label {
-                background: none;
                 text-align: center;
             }
 
@@ -288,7 +291,6 @@ div.io-ox-toolbar {
             button {
                 padding-left: 8px;
                 padding-right: 8px;
-                background: none;
                 text-align: center;
 
                 /* selected toggle/radio buttons */
@@ -327,30 +329,34 @@ div.io-ox-toolbar {
             /* text fields ------------------------------------------------- */
 
             input {
+                width: 150px;
+                z-index: 1;
                 padding-left: 4px;
                 padding-right: 4px;
                 .box-shadow(none);
                 .transition(none);
-            }
+                
+                + div.input-overlay {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    bottom: 0;
+                    z-index: 0;
 
-            label.input-caption {
-                padding-left: 4px;
-                padding-right: 4px;
-            }
-
-            &:not(.disabled) {
-                label.input-caption, input {
-                    cursor: text;
+                    > label {
+                        padding-left: 4px;
+                        padding-right: 4px;
+                    }
+                    
+                    > div {
+                        display: inline-block;
+                        position: relative;
+                        top: 1px;
+                        background-color: @input-fill-color;
+                    }
                 }
             }
 
-            /* hover effect for an input field and its caption */
-            &:not(.disabled):hover {
-                > label.input-caption, > input:not(:focus):not(:active) {
-                    border-color: @control-border-color;
-                }
-            }
-            
             /* drop-down groups -------------------------------------------- */
 
             &.dropdown-group {
@@ -370,7 +376,7 @@ div.io-ox-toolbar {
 
                     /* set border to all controls in the group when hovered or opened (split mode) */
                     &.menu-open, &:hover {
-                        > label, > button, > input {
+                        > button, > input {
                             &:not(:focus):not(:active) {
                                 border-color: @control-border-color;
                             }

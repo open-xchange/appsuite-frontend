@@ -19,8 +19,9 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
+     'io.ox/office/editor/editor',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, ToolBar, Button, TextField, ComboField, GridSizer, gt) {
+    ], function (Utils, Fonts, ToolBar, Button, TextField, ComboField, GridSizer, Editor, gt) {
 
     'use strict';
 
@@ -87,13 +88,10 @@ define('io.ox/office/editor/view',
 
     // class View =============================================================
 
-    function View(controller) {
+    function View(win, controller, editors) {
 
-        var // the top-level tool pane container
-            toolPane = $('<div>').addClass('io-ox-toolpane top'),
-
-            // the top-level tab bar to select tool bars
-            tabBar = new ToolBar(),
+        var // the top-level tab bar to select tool bars
+            tabBar = new ToolBar(win),
 
             // the tab buttons to select the tool bars
             radioGroup = tabBar.addRadioGroup('view/toolbars/show', { type: 'list', autoExpand: true }),
@@ -102,20 +100,14 @@ define('io.ox/office/editor/view',
             toolBars = {},
 
             // key of the tool bar currently visible
-            visibleToolBar = '',
-
-            // bottom tool pane for debug output
-            debugPane = $('<div>').addClass('io-ox-toolpane bottom'),
-
-            // table element containing the debug mode elements
-            debugTable = $('<table>').addClass('debug-table').appendTo(debugPane);
+            visibleToolBar = '';
 
         // private methods ----------------------------------------------------
 
         function createToolBar(key, label) {
 
             var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[key] = new ToolBar();
+                toolBar = toolBars[key] = new ToolBar(win);
 
             // create common controls present in all tool bars
             toolBar
@@ -126,7 +118,7 @@ define('io.ox/office/editor/view',
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             radioGroup.addButton(key, { label: label });
-            toolPane.append(toolBar.getNode().hide());
+            win.nodes.toolPane.append(toolBar.getNode().hide());
             controller.registerViewComponent(toolBar);
 
             return toolBar;
@@ -137,58 +129,52 @@ define('io.ox/office/editor/view',
         }
 
         function showToolBar(key) {
+            if (visibleToolBar in toolBars) {
+            }
             if (key in toolBars) {
                 visibleToolBar = key;
-                toolPane.children().slice(1).hide();
+                win.nodes.toolPane.children().slice(1).hide();
                 toolBars[key].getNode().show();
             }
         }
 
         // methods ------------------------------------------------------------
 
-        /**
-         * Returns the tool pane on top of the editor window, containing the
-         * tool bars and the tool bar selector.
-         *
-         * @returns {jQuery}
-         */
-        this.getToolPane = function () {
-            return toolPane;
-        };
-
-        /**
-         * Returns the debug pane below the editor window, containing the plain
-         * text editor and the operations output console.
-         *
-         * @returns {jQuery}
-         */
-        this.getDebugPane = function () {
-            return debugPane;
-        };
-
-        /**
-         * Returns the table element contained in the debug pane.
-         *
-         * @returns {jQuery}
-         */
-        this.getDebugTable = function () {
-            return debugTable;
-        };
-
         this.destroy = function () {
             _(toolBars).invoke('destroy');
             tabBar.destroy();
-            toolPane = tabBar = radioGroup = toolBars = debugPane = debugTable = null;
+            tabBar = radioGroup = toolBars = null;
         };
 
         // initialization -----------------------------------------------------
+
+        // create the tool panes and append them to the window main node
+        win.nodes.main.addClass('io-ox-office-main').append(
+            win.nodes.toolPane = $('<div>').addClass('io-ox-toolpane top'),
+            win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editors[Editor.TextMode.RICH].getNode()),
+            win.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
+        );
+
+        // table element containing the debug mode elements
+        win.nodes.debugPane.append($('<table>').addClass('debug-table').append(
+            $('<colgroup>').append(
+                $('<col>', { width: '50%' }),
+                $('<col>', { width: '50%' })
+            ),
+            $('<tr>').append(
+                // add plain-text editor and operations output console to debug table
+                $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
+                $('<td>').append(editors.output.getNode())
+            )
+        ));
+
 
         // insert the tool bar selector and a separator line into the tool pane
         tabBar.getNode().addClass('tabs').children().first().append(
             $('<span>').addClass('separator left'),
             $('<span>').addClass('separator right')
         );
-        toolPane.append(tabBar.getNode());
+        win.nodes.toolPane.append(tabBar.getNode());
 
         // create the tool bars
         createToolBar('insert', gt('Insert'))
@@ -223,12 +209,6 @@ define('io.ox/office/editor/view',
             .registerViewComponent(tabBar)
             // make the format tool bar visible
             .change('view/toolbars/show', 'format');
-
-        // build debug table for plain-text editor and operations output console
-        debugTable.append($('<colgroup>').append(
-            $('<col>', { width: '50%' }),
-            $('<col>', { width: '50%' })
-        ));
 
     } // class View
 

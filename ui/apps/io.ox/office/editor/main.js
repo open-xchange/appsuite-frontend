@@ -231,15 +231,13 @@ define('io.ox/office/editor/main',
             // do not detach when hiding to keep editor selection alive
             win.detachable = false;
 
-            // create panes and attach them to the main window
-            win.nodes.main.addClass('io-ox-office-main').append(
-                // top pane for tool bars
-                win.nodes.toolPane = view.getToolPane(),
-                // main application container
-                win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editor.getNode()),
-                // bottom pane for debug output
-                win.nodes.debugPane = view.getDebugPane()
-            );
+            // create controller and register editors
+            controller = new Controller(app)
+                .registerEditor(editors[Editor.TextMode.RICH])
+                .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|debug)\//);
+
+            // editor view
+            view = new View(win, controller, editors);
             updateDebugMode();
 
             // register window event handlers
@@ -695,6 +693,7 @@ define('io.ox/office/editor/main',
         // operations output console
         editors.output = {
             node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
+            getNode: function () { return this.node; },
             on: function () { return this; },
             applyOperation: function (operation) {
                 this.node.append($('<p>').text(JSON.stringify(operation)));
@@ -712,22 +711,6 @@ define('io.ox/office/editor/main',
 
         // primary editor for global operations (e.g. save)
         editor = editors[Editor.TextMode.RICH];
-
-        // craete controller and register editors
-        controller = new Controller(app)
-            .registerEditor(editors[Editor.TextMode.RICH])
-            .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|debug)\//);
-
-        // editor view
-        view = new View(controller);
-
-        // add plain-text editor and operations output console to debug table
-        view.getDebugTable().append(
-            $('<tr>').append(
-                $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
-                $('<td>').append(editors.output.node)
-            )
-        );
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {
