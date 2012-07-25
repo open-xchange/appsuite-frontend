@@ -21,7 +21,7 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // left/right padding in the text field
+        // left/right padding in the text field, in pixels
         FIELD_PADDING = 4;
 
     // class TextField ========================================================
@@ -128,6 +128,22 @@ define('io.ox/office/tk/control/textfield',
             textField.val(_.isString(value) ? value : '');
         }
 
+        function fieldFocusHandler(event) {
+            switch (event.type) {
+            case 'focus':
+                saveValue();
+                break;
+            case 'focus:key':
+                // select entire text when reaching the field with keyboard
+                textField.get(0).selectionStart = 0;
+                textField.get(0).selectionEnd = textField.val().length;
+                break;
+            case 'blur':
+                restoreValue();
+                break;
+            }
+        }
+
         /**
          * Handles keyboard events, especially the cursor keys.
          */
@@ -161,8 +177,7 @@ define('io.ox/office/tk/control/textfield',
             .on('init', initHandler)
             .registerUpdateHandler(updateHandler);
         textField
-            .on('focus', saveValue)
-            .on('blur', restoreValue)
+            .on('focus focus:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler);
 
     } // class TextField
