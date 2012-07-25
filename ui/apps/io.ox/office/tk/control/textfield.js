@@ -165,6 +165,13 @@ define('io.ox/office/tk/control/textfield',
             }
         }
 
+        /**
+         * Handles input events triggered when the text changes while typing.
+         * Performs live validation with a registered validator.
+         */
+        function fieldInputHandler(event) {
+        }
+
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
@@ -178,7 +185,11 @@ define('io.ox/office/tk/control/textfield',
             .registerUpdateHandler(updateHandler);
         textField
             .on('focus focus:key blur', fieldFocusHandler)
-            .on('keydown keypress keyup', fieldKeyHandler);
+            .on('keydown keypress keyup', fieldKeyHandler)
+            // Validation while typing. IE9 does not trigger 'input' when deleting
+            // characters, use key events as a workaround. This is still not perfect,
+            // as it misses cut/delete from context menu, drag&drop, etc.
+            .on('input keydown keyup', fieldInputHandler);
 
     } // class TextField
 
