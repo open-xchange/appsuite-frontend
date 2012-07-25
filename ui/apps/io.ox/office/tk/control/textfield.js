@@ -22,7 +22,20 @@ define('io.ox/office/tk/control/textfield',
         KeyCodes = Utils.KeyCodes,
 
         // left/right padding in the text field, in pixels
-        FIELD_PADDING = 4;
+        FIELD_PADDING = 4,
+
+        // the default text validator that does not do anything
+        defaultValidator = {
+
+            // method that converts a value from an update events to field text
+            valueToText: function (value) { return _.isString(value) ? value : ''; },
+
+            // method that converts the field text to a value returned by action handlers
+            textToValue: function (text) { return text; },
+
+            // method that validates the current text while editing
+            validate: function (text) { return text; }
+        };
 
     // class TextField ========================================================
 
@@ -42,6 +55,13 @@ define('io.ox/office/tk/control/textfield',
      *  @param {Number} [options.width=200]
      *      The fixed inner width of the editing area (without any padding), in
      *      pixels.
+     *  @param {Object} [validator]
+     *      A text validator that will be used to convert the values from
+     *      'update' events to the text representation used in this text field,
+     *      to validate the text while typing in the text field, and to convert
+     *      the entered text to the value returned by the action handler. If
+     *      no validator is specified, a default validator will be used that
+     *      does not perform any conversions.
      */
     function TextField(options) {
 
@@ -60,8 +80,10 @@ define('io.ox/office/tk/control/textfield',
             // the overlay container for the caption and the background
             overlay = $('<div>').addClass('input-overlay').append(caption, background),
 
-            // old value of text field, needed for ESCAPE key handling
-            oldValue = null;
+            validator = Utils.getObjectOption(options, 'validator', defaultValidator),
+
+            // initial value of text field when focused, needed for ESCAPE key handling
+            savedValue = null;
 
         // private methods ----------------------------------------------------
 
@@ -70,7 +92,7 @@ define('io.ox/office/tk/control/textfield',
          * to be able to restore it when editing is cancelled.
          */
         function saveValue() {
-            oldValue = textField.val();
+            savedValue = textField.val();
         }
 
         /**
@@ -78,9 +100,9 @@ define('io.ox/office/tk/control/textfield',
          * saveValue().
          */
         function restoreValue() {
-            if (_.isString(oldValue)) {
-                textField.val(oldValue);
-                oldValue = null;
+            if (_.isString(savedValue)) {
+                textField.val(savedValue);
+                savedValue = null;
             }
         }
 
@@ -89,9 +111,9 @@ define('io.ox/office/tk/control/textfield',
          * last call of the method saveValue().
          */
         function commitValue() {
-            if (oldValue !== textField.val()) {
-                oldValue = null;
-                self.trigger('change', textField.val());
+            if (savedValue !== textField.val()) {
+                savedValue = null;
+                self.trigger('change', validator.textToValue(textField.val()));
             } else {
                 self.trigger('cancel');
             }
@@ -125,7 +147,7 @@ define('io.ox/office/tk/control/textfield',
          * The update handler for this text field.
          */
         function updateHandler(value) {
-            textField.val(_.isString(value) ? value : '');
+            textField.val(validator.valueToText(value));
         }
 
         function fieldFocusHandler(event) {
@@ -167,9 +189,29 @@ define('io.ox/office/tk/control/textfield',
 
         /**
          * Handles input events triggered when the text changes while typing.
-         * Performs live validation with a registered validator.
+         * Performs live validation with the current validator.
          */
         function fieldInputHandler(event) {
+
+            var // get current value of the text field
+                oldValue = textField.val(),
+                // get validated value
+                newValue = validator.validate(oldValue),
+                // the DOM input element
+                input = textField.get(0),
+                // current selection
+                selStart, selEnd;
+
+            if (oldValue !== newValue) {
+                // first save selection (browsers mess with selection when changing text)
+                selStart = input.selectionStart;
+                selEnd = input.selectionEnd;
+                // set the new value
+                textField.val(newValue);
+                // restore selection
+                input.selectionStart = Math.min(selStart, newValue.length);
+                input.selectionEnd = Math.min(selEnd, newValue.length);
+            }
         }
 
         // base constructor ---------------------------------------------------
@@ -193,9 +235,38 @@ define('io.ox/office/tk/control/textfield',
 
     } // class TextField
 
+    // class TextField.TextValidator ==========================================
+
+    function TextValidator(options) {
+
+        var // maximum length
+            maxLength = Utils.getIntegerOption(options, 'maxLength', undefined, 0),
+            // last valid value
+            lastValid = '';
+
+        // methods ------------------------------------------------------------
+
+        this.valueToText = function (value) {
+            if (_.isString(value)) {
+                lastValid = _.isNumber(maxLength) ? value.substr(0, maxLength) : value;
+                return this.validate(value);
+            }
+            return (lastValid = '');
+        };
+
+        this.textToValue = function (text) {
+            return text;
+        };
+
+        this.validate = function (text) {
+            return (_.isNumber(maxLength) && (text.length > maxLength)) ? lastValid : (lastValid = text);
+        };
+
+    } // class TextField.TextValidator
+
     // exports ================================================================
 
     // derive this class from class Group
-    return Group.extend({ constructor: TextField });
+    return Group.extend({ constructor: TextField }, { TextValidator: TextValidator });
 
 });

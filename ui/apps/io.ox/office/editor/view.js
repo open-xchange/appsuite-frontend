@@ -57,7 +57,8 @@ define('io.ox/office/editor/view',
                 width: 35,
                 icon: 'icon-io-ox-font-height',
                 tooltip: gt('Font Size'),
-                css: { textAlign: 'right' }
+                css: { textAlign: 'right' },
+                validator: new TextField.TextValidator({ maxLength: 3 })
             };
 
         // base constructor ---------------------------------------------------
