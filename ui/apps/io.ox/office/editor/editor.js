@@ -1160,22 +1160,47 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         this.deleteText(startPosition, endPosition);
                         selection.startPaM.oxoPosition[lastValue] -= 1;
                     }
-                    else if (selection.startPaM.oxoPosition[lastValue - 1] > 0) {
+                    else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue - 1] -= 1;
                         startPosition.pop();
 
-                        var length = this.getParagraphLength(startPosition);
+                        var length = this.getParagraphLength(startPosition),
+                            domPos = this.getDOMPosition(startPosition),
+                            prevIsTable = false;
 
-                        this.mergeParagraph(startPosition);
+                        if (domPos) {
+                            if (this.getDOMPosition(startPosition).node.nodeName === 'TABLE') {
+                                prevIsTable = true;
+                            }
+                        }
 
-                        selection.startPaM.oxoPosition[lastValue - 1] -= 1;
-                        selection.startPaM.oxoPosition.pop();
+                        if (startPosition[lastValue - 1] >= 0) {
+                            this.mergeParagraph(startPosition);
+                            selection.startPaM.oxoPosition[lastValue - 1] -= 1;
+                            selection.startPaM.oxoPosition.pop();
+                        }
 
-                        if (this.getDOMPosition(selection.startPaM.oxoPosition).node.nodeName === 'TABLE') {
+                        if (prevIsTable) {
                             selection.startPaM.oxoPosition = this.getLastPositionInParagraph(selection.startPaM.oxoPosition);
                         } else {
-                            selection.startPaM.oxoPosition.push(length);
+                            var isFirstPosition = (startPosition[lastValue - 1] < 0) ? true : false;
+                            if (isFirstPosition) {
+                                if (this.isPositionInTable(startPosition)) {
+                                    var returnObj = this.getLastPositionInPrevCell(startPosition);
+                                    selection.startPaM.oxoPosition = returnObj.position;
+                                    var beginOfTable = returnObj.beginOfTable;
+                                    if (beginOfTable) {
+                                        var lastVal = selection.startPaM.oxoPosition.length - 1;
+                                        selection.startPaM.oxoPosition[lastVal] -= 1;
+                                        selection.startPaM.oxoPosition = this.getLastPositionInParagraph(selection.startPaM.oxoPosition);
+                                    }
+                                } else {
+                                    selection.startPaM.oxoPosition.push(length);
+                                }
+                            } else {
+                                selection.startPaM.oxoPosition.push(length);
+                            }
                         }
                     }
                 }
@@ -1819,9 +1844,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             paragraph.pop(); // removing paragraph
             var row = paragraph.pop(),
                 column = paragraph.pop(),
-                endOfTable = false;
-
-            var lastRow = this.getLastRowIndexInTable(paragraph),
+                endOfTable = false,
+                lastRow = this.getLastRowIndexInTable(paragraph),
                 lastColumn = this.getLastColumnIndexInTable(paragraph);
 
             if (column < lastColumn) {
@@ -1843,6 +1867,34 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             return {position: paragraph, endOfTable: endOfTable};
+        };
+
+        this.getLastPositionInPrevCell = function (paragraph) {
+            paragraph.pop(); // removing paragraph
+            var row = paragraph.pop(),
+                column = paragraph.pop(),
+                beginOfTable = false,
+                lastColumn = this.getLastColumnIndexInTable(paragraph);
+
+            if (column > 0) {
+                column -= 1;
+            } else {
+                if (row > 0) {
+                    row -= 1;
+                    column = lastColumn;
+                } else {
+                    beginOfTable = true;
+                }
+            }
+
+            if (! beginOfTable) {
+                paragraph.push(column);
+                paragraph.push(row);
+                paragraph.push(this.getLastParaIndexInCell(paragraph));  // last paragraph
+                paragraph.push(this.getParagraphLength(paragraph));  // last position
+            }
+
+            return {position: paragraph, beginOfTable: beginOfTable};
         };
 
         this.getLastPositionInDocument = function () {
