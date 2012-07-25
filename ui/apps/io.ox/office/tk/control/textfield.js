@@ -19,7 +19,10 @@ define('io.ox/office/tk/control/textfield',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
+
+        // left/right padding in the text field
+        FIELD_PADDING = 4;
 
     // class TextField ========================================================
 
@@ -35,18 +38,27 @@ define('io.ox/office/tk/control/textfield',
      *  all options of the Group base class, generic caption options (see
      *  Utils.setControlCaption() for details), and all generic formatting
      *  options of input fields (see method Utils.createTextField() for
-     *  details).
+     *  details). Additionally, the following options are supported:
+     *  @param {Number} [options.width=200]
+     *      The fixed inner width of the editing area (without any padding), in
+     *      pixels.
      */
     function TextField(options) {
 
         var // self reference
             self = this,
 
-            // container for caption elements
-            caption = Utils.createLabel(options).addClass('input-caption'),
-
             // create the text field
             textField = Utils.createTextField(options),
+
+            // the caption (icon and text label) for the text field
+            caption = Utils.createLabel(options).addClass('input-caption'),
+
+            // the caption (icon and text label) for the text field
+            background = $('<div>'),
+
+            // the overlay container for the caption and the background
+            overlay = $('<div>').addClass('input-overlay').append(caption, background),
 
             // old value of text field, needed for ESCAPE key handling
             oldValue = null;
@@ -86,20 +98,34 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
+         * Called when the application window will be shown for the first time.
+         * Initializes the caption overlay. Needs the calculated element sizes
+         * which become available when the window becomes visible and all
+         * elements have been inserted into the DOM.
+         */
+        function initHandler() {
+
+            var // the inner width of the editing area
+                width = Utils.getIntegerOption(options, 'width', 200, 1),
+                // the width including the padding of the text field
+                paddedWidth = width + 2 * FIELD_PADDING,
+                // the current width of the caption element
+                captionWidth = caption.outerWidth();
+
+            // expand the text field by the size of the overlay caption
+            textField
+                .width(captionWidth + paddedWidth + 1) // text field has box-sizing: border-box
+                .css({ paddingLeft: (captionWidth - 1 + FIELD_PADDING) + 'px', paddingRight: FIELD_PADDING + 'px' });
+
+            // set the size of the white background area
+            background.width(paddedWidth).height(textField.height());
+        }
+
+        /**
          * The update handler for this text field.
          */
         function updateHandler(value) {
             textField.val(_.isString(value) ? value : '');
-        }
-
-        /**
-         * Handles mouse click events on the caption element preceding the text
-         * field element.
-         */
-        function captionClickHandler() {
-            if (self.isEnabled()) {
-                textField.focus();
-            }
         }
 
         /**
@@ -129,16 +155,11 @@ define('io.ox/office/tk/control/textfield',
 
         // initialization -----------------------------------------------------
 
-        // add the caption
-        if (caption.children().length) {
-            this.addChildNodes(caption);
-        }
-
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
+            .addChildNodes(overlay)
+            .on('init', initHandler)
             .registerUpdateHandler(updateHandler);
-        caption
-            .on('click', captionClickHandler);
         textField
             .on('focus', saveValue)
             .on('blur', restoreValue)

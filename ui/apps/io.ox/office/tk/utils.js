@@ -456,18 +456,12 @@ define('io.ox/office/tk/utils',
      *  A map of options to control the properties of the new text input field.
      *  Supports all generic options supported by the method
      *  Utils.createControl().
-     *  @param {Number} [options.width=200]
-     *      The fixed width of the text field, in pixels.
      *
      * @returns {jQuery}
      *  A jQuery object containing the new text field element.
      */
     Utils.createTextField = function (options) {
-
-        var // create the DOM input element
-            input = Utils.createControl('input', { type: 'text' }, options);
-
-        return input.width(Utils.getIntegerOption(options, 'width', 200, 1));
+        return Utils.createControl('input', { type: 'text' }, options);
     };
 
     // key codes --------------------------------------------------------------

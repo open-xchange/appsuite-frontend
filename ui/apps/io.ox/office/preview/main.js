@@ -34,19 +34,16 @@ define('io.ox/office/preview/main',
 
             file = _.isObject(options) ? options.file : null,
 
-            toolBar = new ToolBar()
-                .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
-                .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
-                .addLabel('page', { tooltip: gt('Page number') })
-                .addButton('next', { icon: 'icon-step-forward', tooltip: gt('Next page') })
-                .addButton('last', { icon: 'icon-fast-forward', tooltip: gt('Last page') }),
+            preview = new Preview(),
+
+            toolBar = null,
 
             controller = new Controller({
                 page: {
                     enable: function () { return preview.getPageCount() > 0; },
                     get: function () {
-                        // the gettext comments MUST be directly before gt(),
-                        // but 'return' cannot be the last token in a line
+                        // the gettext comments MUST be located directly before
+                        // gt(), but 'return' cannot be the last token in a line
                         // -> use a temporary variable to store the result
                         var msg =
                             //#. %1$s is the current page index in office document preview
@@ -72,9 +69,7 @@ define('io.ox/office/preview/main',
                     enable: function () { return preview.lastAvail(); },
                     set: function () { preview.lastPage(); }
                 }
-            }),
-
-            preview = new Preview();
+            });
 
         // ---------------------
         // - private functions -
@@ -145,6 +140,17 @@ define('io.ox/office/preview/main',
             win.nodes.main
                 .addClass('io-ox-office-preview-main')
                 .append(preview.getNode());
+
+            // create the tool bar
+            toolBar = new ToolBar(win)
+                .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
+                .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
+                .addLabel('page', { tooltip: gt('Page number') })
+                .addButton('next', { icon: 'icon-step-forward', tooltip: gt('Next page') })
+                .addButton('last', { icon: 'icon-fast-forward', tooltip: gt('Last page') });
+
+            // register view components at the controller
+            controller.registerViewComponent(toolBar);
 
             // The toolkit will clear the tool bar area and insert extension
             // point links every time the window is shown. Therefore it is
@@ -290,9 +296,6 @@ define('io.ox/office/preview/main',
         // ------------------------------------------------
         // - initialization of createApplication function -
         // ------------------------------------------------
-
-        // register view components at the controller
-        controller.registerViewComponent(toolBar);
 
         // listen to 'showpage' events and update controller
         preview.on('showpage', function () { controller.update(); });
