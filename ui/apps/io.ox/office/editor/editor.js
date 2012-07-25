@@ -346,25 +346,29 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
     }
 
     function getFirstTextNode(element) {
-        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
-            if (child.nodeType === 3) {
-                if (child.nodeValue.length)
-                    return child;
-            }
-            else if (hasTextContent(child)) {
-                return getFirstTextNode(child);
+        if (element) {
+            for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+                if (child.nodeType === 3) {
+                    if (child.nodeValue.length)
+                        return child;
+                }
+                else if (hasTextContent(child)) {
+                    return getFirstTextNode(child);
+                }
             }
         }
         return element;
     }
 
     function getLastTextNode(element) {
-        for (var child = element.lastChild; child !== null; child = child.previousSibling) {
-            if (child.nodeType === 3) {
-                return child;
-            }
-            else if (hasTextContent(child)) {
-                return getLastTextNode(child);
+        if (element) {
+            for (var child = element.lastChild; child !== null; child = child.previousSibling) {
+                if (child.nodeType === 3) {
+                    return child;
+                }
+                else if (hasTextContent(child)) {
+                    return getLastTextNode(child);
+                }
             }
         }
         return element;
@@ -1518,11 +1522,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         };
 
         this.insertTable = function (size) {
-            var selection = this.getSelection();
-            selection.adjust();
-            var position = [selection.startPaM.oxoPosition[0]];  // TODO
-            var newOperation = {name: OP_TABLE_INSERT, start: _.copy(position, true), columns: size.width, rows: size.height};
-            this.applyOperation(newOperation, true, true);
+            if (size) {
+                var selection = this.getSelection();
+                selection.adjust();
+                if (selection.hasRange()) {
+                    this.deleteSelected(selection);
+                }
+                var newOperation = {name: OP_TABLE_INSERT, start: _.copy(selection.startPaM.oxoPosition, true), columns: size.width, rows: size.height};
+                this.applyOperation(newOperation, true, true);
+            }
         };
 
         this.splitParagraph = function (position) {
@@ -2902,9 +2910,10 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.implInsertTable = function (position, columns, rows) {
 
-            var para = position[0];
+            this.implSplitParagraph(position);
+            paragraphs = editdiv.children();
 
-            var newPara = $('<table>');
+            var newTable = $('<table>');
 
             for (var i = 1; i <= rows; i++) {
                 var newRow = ($('<tr>').attr('valign', 'top'));
@@ -2913,31 +2922,23 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     newRow.append($('<td><p></p></td>'));
                 }
 
-                newPara.append(newRow);
+                newTable.append(newRow);
             }
 
-            if (para === -1) {
-                para = paragraphs.size();
-            }
+            position.pop();
+            var domParagraph = this.getDOMPosition(position).node;
 
-            if (para > 0) {
-                newPara.insertAfter(paragraphs[para]);
-                para = para + 1;
-            }
-            else {
-                newPara.insertBefore(paragraphs[0]);
-                para = 0;
-            }
+            newTable.insertAfter(domParagraph);
+            position[position.length - 1] += 1;
 
             paragraphs = editdiv.children();
-            blockOperationNotifications = true;  // test table does not work in second editor.
 
             // Filling empty paragraphs in table cells with minimal content.
             // We need an empty text node and a <br>.
 
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < columns; j++) {
-                    var pos = [para];
+                    var pos = _.copy(position, true);
                     pos.push(j);
                     pos.push(i);
                     pos.push(0); // first paragraph
@@ -2948,7 +2949,13 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 }
             }
 
-            lastOperationEnd = new OXOPaM([para, 0]);  // table?
+            // Setting cursor into table (unfortunately not visible in Firefox)
+            var oxoPosition = this.getFirstPositionInParagraph(position);
+            var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
+            this.setSelection(selection);
+
+            blockOperationNotifications = true;  // test table does not work in second editor.
+            // lastOperationEnd = new OXOPaM([position, 0]);  // table?
         };
 
         this.implSplitParagraph = function (position) {
