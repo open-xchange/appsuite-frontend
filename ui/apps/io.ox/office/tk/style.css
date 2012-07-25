@@ -335,19 +335,19 @@ div.io-ox-toolbar {
                 padding-right: 4px;
                 .box-shadow(none);
                 .transition(none);
-                
+                line-height: 18px;
+
                 + div.input-overlay {
                     position: absolute;
                     top: 0;
                     left: 0;
-                    bottom: 0;
                     z-index: 0;
 
                     > label {
                         padding-left: 4px;
                         padding-right: 4px;
                     }
-                    
+
                     > div {
                         display: inline-block;
                         position: relative;
