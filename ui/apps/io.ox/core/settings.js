@@ -53,17 +53,16 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
         var get = function (key) {
             var parts = key.split(/\//),
             tmp = settings || {}, i = 0, $i = parts.length;
-
-            for (; i < $i; i++) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[i];
-                } else {
-                    tmp = null;
-                    return null;
-                }
-            }
-            return tmp;
+//            for (; i < $i; i++) {
+//                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
+//                if (tmpHasSubNode) {
+//                    tmp = tmp[i];
+//                } else {
+//                    tmp = null;
+//                    return null;
+//                }
+//            }
+            return tmp[key];
         };
 
         var set = function (key, value) {
