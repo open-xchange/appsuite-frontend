@@ -2719,6 +2719,14 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             this.setSelection(new OXOSelection());
             lastOperationEnd = new OXOPaM([0, 0]);
             this.clearUndo();
+
+            // disable FireFox table manipulation handlers in edit mode
+            // (the commands must be executed after the editable div is in the DOM)
+            try {
+                document.execCommand('enableObjectResizing', false, false);
+                document.execCommand('enableInlineTableEditing', false, false);
+            } catch (ex) {
+            }
         };
 
         this.implInsertText = function (text, position) {
@@ -2825,10 +2833,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         this.implInsertTable = function (position) {
             var para = position[0];
             // var newPara = document.createElement('table');
-            var newPara = $('<table>');
-
-            newPara.attr('border', '4').attr('cellspacing', '10').attr('cellpadding', '20').attr('width', '80%')
-            .append($('<tbody>'))
+            var newPara = $('<table>')
             // .append($('<colgroup>')
             //     .append($('<col>').attr('width', '40%'))
             //     .append($('<col>').attr('width', '30%'))
