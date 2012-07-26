@@ -1081,7 +1081,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertTable({width: 3, height: 4});
+                    this.insertTable({width: 2, height: 2});
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
