@@ -158,6 +158,10 @@ define('io.ox/office/tk/control/textfield',
                 Utils.setTextFieldSelection(textField, { start: 0, end: textField.val().length });
                 validationFieldState = getFieldState();
                 break;
+            case 'blur:key':
+                // commit value when losing focus via keyboard
+                commitValue();
+                break;
             case 'blur':
                 // restore saved value
                 if (_.isString(initialFocusValue)) {
@@ -195,23 +199,30 @@ define('io.ox/office/tk/control/textfield',
          */
         function fieldInputHandler(event) {
 
-            var // validate the text field
+            var // result of the text field validation
+                result = null;
+
+            // do not perform validation if nothing has changed
+            if (!_.isEqual(validationFieldState, getFieldState())) {
+
+                // validate the current field text
                 result = validator.validate(textField.val());
 
-            // update the text field according to the validation result
-            if (result === false) {
-                // false: restore the old field state stored in validationFieldState
-                restoreFieldState(validationFieldState);
-            } else if (_.isString(result) && (result !== textField.val())) {
-                // insert the validation result and restore the old selection
-                restoreFieldState(_(validationFieldState).extend({ value: result }));
+                // update the text field according to the validation result
+                if (result === false) {
+                    // false: restore the old field state stored in validationFieldState
+                    restoreFieldState(validationFieldState);
+                } else if (_.isString(result) && (result !== textField.val())) {
+                    // insert the validation result and restore the old selection
+                    restoreFieldState(_(validationFieldState).extend({ value: result }));
+                }
+
+                // trigger 'validated' event to all listeners, pass old field state
+                self.trigger('validated', textField, validationFieldState);
+
+                // save current state of the text field
+                validationFieldState = getFieldState();
             }
-
-            // trigger 'validated' event to all listeners, pass old field state
-            self.trigger('validated', textField, validationFieldState);
-
-            // save current state of the text field
-            validationFieldState = getFieldState();
         }
 
         // base constructor ---------------------------------------------------
@@ -242,7 +253,7 @@ define('io.ox/office/tk/control/textfield',
             .on('init', initHandler)
             .registerUpdateHandler(updateHandler);
         textField
-            .on('focus focus:key blur', fieldFocusHandler)
+            .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
             // Validation while typing. IE9 does not trigger 'input' when deleting
             // characters, use key events as a workaround. This is still not perfect,
