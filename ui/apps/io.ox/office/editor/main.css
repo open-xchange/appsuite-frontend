@@ -27,7 +27,6 @@
     padding: 0;
 
     .io-ox-office-apppane {
-    	width: 100%;
     	margin: 0;
     	padding: 0;
     	background-color: #e5e5e5;
@@ -49,6 +48,18 @@
             margin: 0;
         }
 
+        table {
+            table-layout: fixed;
+            width: 100%;
+            margin: 6px 0;
+            border-collapse: collapse;
+
+            th, td {
+                padding: 4px;
+                border: 1px solid black;
+            }
+        }
+
         /* prevent dotted focus rectangle around page area */
         &:focus, &:active {
             outline: none;
@@ -63,18 +74,6 @@
             p {
                 font-family: 'Times New Roman',Times,serif;
                 font-size: 12pt;
-            }
-
-            table {
-                table-layout: fixed;
-                width: 100%;
-                margin: 6px 0;
-                border-collapse: collapse;
-
-                th, td {
-                    padding: 4px;
-                    border: 1px solid black;
-                }
             }
         }
 

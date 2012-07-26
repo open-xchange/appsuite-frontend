@@ -234,7 +234,7 @@ define('io.ox/office/editor/main',
             // create controller and register editors
             controller = new Controller(app)
                 .registerEditor(editors[Editor.TextMode.RICH])
-                .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|debug)\//);
+                .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|insert|debug)\//);
 
             // editor view
             view = new View(win, controller, editors);
