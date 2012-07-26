@@ -345,14 +345,24 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         return false;
     }
 
+    function hasTextNode(element) {
+        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
+            if (child.nodeType === 3) {
+                return true;
+            }
+            else if (child.nodeType === 1)
+                return hasTextNode(child);
+        }
+        return false;
+    }
+
     function getFirstTextNode(element) {
         if (element) {
             for (var child = element.firstChild; child !== null; child = child.nextSibling) {
                 if (child.nodeType === 3) {
-                    if (child.nodeValue.length)
-                        return child;
+                    return child;
                 }
-                else if (hasTextContent(child)) {
+                else if (hasTextNode(child)) {
                     return getFirstTextNode(child);
                 }
             }
@@ -366,7 +376,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 if (child.nodeType === 3) {
                     return child;
                 }
-                else if (hasTextContent(child)) {
+                else if (hasTextNode(child)) {
                     return getLastTextNode(child);
                 }
             }
@@ -649,12 +659,49 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return '';
         };
 
+        this.getTextNodeFromTableRow = function (node, offset) {
+
+            var useFirstTextNode = true,  // can be false for final cells in a row
+                localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
+
+            if (! localNode) {
+                localNode = node.childNodes[offset - 1];
+                useFirstTextNode = false;
+            }
+
+            var textNode = useFirstTextNode ? getFirstTextNode(localNode) : getLastTextNode(localNode);
+
+            if (! textNode) {
+                dbgOutError("ERROR: Failed to determine text node from table row node! (useFirstTextNode: " + useFirstTextNode + ")");
+                return;
+            }
+
+            if (textNode.nodeType !== 3) {
+                dbgOutError("ERROR: Failed to determine text node from table row node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                return;
+            }
+
+            var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
+
+            return {node: textNode, offset: offset};
+        };
+
         this.implGetOXOSelection = function (domSelection) {
 
             function getOXOPositionFromDOMPosition(node, offset) {
 
                 var origNodeName = node.nodeName,
                     origOffset = node.offset;
+
+                if (node.nodeName === 'TR') {
+                    var newNode = this.getTextNodeFromTableRow(node, offset);
+                    if (newNode) {
+                        node = newNode.node;
+                        offset = newNode.offset;
+                    } else {
+                        node = null;
+                    }
+                }
 
                 // check input values
                 if (! node) {
@@ -768,13 +815,23 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 this.implDbgOutInfo("INFO: Changing DOMPosition <p> (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
                 if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
                     domSelection.startPaM.node = getLastTextNode(domSelection.startPaM.node);
-                    if (domSelection.startPaM.node.nodeType === 3) {
-                        domSelection.startPaM.offset = domSelection.startPaM.node.nodeValue.length;
+                    if (domSelection.startPaM.node) {
+                        if (domSelection.startPaM.node.nodeType === 3) {
+                            domSelection.startPaM.offset = domSelection.startPaM.node.nodeValue.length;
+                        }
+                    } else {
+                        this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
+                        return;
                     }
                 } else {
                     domSelection.startPaM.node = getFirstTextNode(domSelection.startPaM.node);
-                    if (domSelection.startPaM.node.nodeType === 3) {
-                        domSelection.startPaM.offset = 0;
+                    if (domSelection.startPaM.node) {
+                        if (domSelection.startPaM.node.nodeType === 3) {
+                            domSelection.startPaM.offset = 0;
+                        }
+                    } else {
+                        this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
+                        return;
                     }
                 }
                 this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
@@ -798,11 +855,20 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
                 if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.offset === 0)) {
                     domSelection.endPaM.node = domSelection.endPaM.node.previousSibling;
+                    if (domSelection.endPaM.node === null) {
+                        this.implDbgOutInfo('implGetOXOSelection: Previous sibling is not defined!');
+                        return;
+                    }
                 }
 
                 domSelection.endPaM.node = getLastTextNode(domSelection.endPaM.node);
-                if (domSelection.endPaM.node.nodeType === 3) {
-                    domSelection.endPaM.offset = domSelection.endPaM.node.nodeValue.length;
+                if (domSelection.endPaM.node) {
+                    if (domSelection.endPaM.node.nodeType === 3) {
+                        domSelection.endPaM.offset = domSelection.endPaM.node.nodeValue.length;
+                    }
+                } else {
+                    this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
+                    return;
                 }
                 this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset : " + domSelection.endPaM.offset);
             }
