@@ -295,21 +295,15 @@ define.async('io.ox/mail/write/main',
         };
 
         app.setDefaultSender = function (sender) {
-            var arrayOfAccounts = view.sidepanel.find('.io-ox-mail-write-sender');
-            _.each(arrayOfAccounts, function (value) {
-                var mail = $(value).find('div').text();
-                if (mail === sender[1]) {
-                    $(value).attr({
-                        'checked': 'checked'
-                    });
-                }
-            });
+            var arrayOfAccounts = view.sidepanel.find('.fromselect-wrapper option'),
+                selectBox = view.sidepanel.find('select');
+            selectBox.val(sender);
             defaultSender = sender;
         };
 
         app.getSender = function () {
-            var primaryAddress = view.sidepanel.find('.io-ox-mail-write-sender[checked="checked"] div').text(),
-                personal = view.sidepanel.find('.io-ox-mail-write-sender[checked="checked"] div').attr('data-id'),
+            var primaryAddress = view.sidepanel.find('.fromselect-wrapper select').val(),
+                personal = view.sidepanel.find('.fromselect-wrapper option[data-primary_address="' + primaryAddress + '"]').attr('data-displayname'),
                 sender = ['"' + personal + '"', primaryAddress];
             if (!primaryAddress) {
                 return defaultSender;

@@ -216,56 +216,26 @@ define("io.ox/mail/write/view-main",
 
         createSenderField: function () {
 
-            var node = $('<div>').addClass('sender-list'),
-                that = this;
+            var that = this,
+                selectDiv = $('<div>').addClass('fromselect-wrapper').append(
+                    $('<select>').css('width', '100%')
+            );
 
             accountAPI.all().done(function (array) {
                 _.each(array, function (key, value) {
-                    var itemNode = $('<div>').on('click', function () {
-                        node.find('.section-item').removeAttr('checked');
-                        $(this).attr({
-                            'checked': 'checked'
-                        });
-                    });
-                    node.append(
-                        itemNode.addClass('io-ox-mail-write-sender section-item').append(
-                            $('<div>').attr('data-id', key.personal).text(key.primary_address)
-                        )
+                    var item = $('<option>').attr({
+                        'data-displayname': key.personal,
+                        'data-primary_address': key.primary_address
+                    }).text(key.primary_address);
+                    selectDiv.find('select').append(
+                        item
                     );
                 });
 
-//            var node = $('<div>').addClass('form-horizontal controls'),
-//                that = this;
-//
-//            accountAPI.all().done(function (array) {
-//                _.each(array, function (key, value) {
-//                    var label = $('<label>').addClass('radio');
-//                    var itemNode = $('<input>').attr({
-//                        'type': 'radio',
-//                        'name': 'sender'
-//                    }).on('click', function () {
-//
-//                        node.find('.section-item').removeAttr('checked');
-//                        $(this).attr({
-//                            'checked': 'checked'
-//                        });
-//                    });
-//                    var text = key.primary_address;
-//                    node.append(
-//                        label.append(
-//                            itemNode.addClass('io-ox-mail-write-sender section-item').append(
-//                                    $('<div>').attr('data-id', key.personal).text(key.primary_address)
-//                            ),
-//                            text
-//                        )
-//                    );
-//                });
-
                 if (array[1]) {
-                    return that.addSection('from', gt('From')).append(node);
+                    return that.addSection('from', gt('From')).append(selectDiv);
                 }
             });
-
         },
 
         createRecipientList: function (id) {
