@@ -26,10 +26,7 @@ define('io.ox/office/tk/control/group',
         DISABLED_CLASS = 'disabled',
 
         // CSS class for focusable controls
-        FOCUSABLE_CLASS = 'focusable',
-
-        // CSS selector for focusable controls
-        FOCUSABLE_SELECTOR = '.' + FOCUSABLE_CLASS;
+        FOCUSABLE_CLASS = 'focusable';
 
     // class Group ============================================================
 
@@ -185,7 +182,7 @@ define('io.ox/office/tk/control/group',
          * keyboard focus navigation.
          */
         this.getFocusableControls = function () {
-            return groupNode.find(FOCUSABLE_SELECTOR);
+            return groupNode.find(Group.FOCUSABLE_SELECTOR);
         };
 
         /**
@@ -311,6 +308,15 @@ define('io.ox/office/tk/control/group',
         });
 
     } // class Group
+
+    // constants --------------------------------------------------------------
+
+    /**
+     * CSS selector for focusable control elements in this group.
+     *
+     * @constant
+     */
+    Group.FOCUSABLE_SELECTOR = '.' + FOCUSABLE_CLASS;
 
     // exports ================================================================
 

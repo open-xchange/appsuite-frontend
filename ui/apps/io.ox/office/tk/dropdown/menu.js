@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/dropdown/menu',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/group'
+    ], function (Utils, Group) {
 
     'use strict';
 
@@ -178,6 +181,13 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         }
 
         /**
+         * Handles lost focus and closes the drop-down menu.
+         */
+        function groupBlurHandler(event) {
+            toggleMenu(false, (event.type === 'blur:key') ? 'key' : undefined);
+        }
+
+        /**
          * Handles keyboard events in the focused drop-down button.
          */
         function menuButtonKeyHandler(event) {
@@ -232,6 +242,20 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
             return menuNode;
         };
 
+        /**
+         * Shows the drop-down menu.
+         */
+        group.showMenu = function () {
+            toggleMenu(true);
+        };
+
+        /**
+         * Shows the drop-down menu.
+         */
+        group.hideMenu = function () {
+            toggleMenu(false);
+        };
+
         // initialization -----------------------------------------------------
 
         // marker class for extended formatting
@@ -241,12 +265,13 @@ define('io.ox/office/tk/dropdown/menu', ['io.ox/office/tk/utils'], function (Uti
         group.addFocusableControl(menuButton).addChildNodes(menuNode);
 
         // prepare drop-down button, and register event handlers
-        group.getNode().on('keydown keypress keyup', groupKeyHandler);
+        group.getNode()
+            .on('keydown keypress keyup', groupKeyHandler)
+            .on('blur:key', Group.FOCUSABLE_SELECTOR, groupBlurHandler);
         menuButton
             .append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')))
             .on('click', menuButtonClickHandler)
-            .on('keydown keypress keyup', menuButtonKeyHandler)
-            .on('blur:key', function () { toggleMenu(false, 'key'); });
+            .on('keydown keypress keyup', menuButtonKeyHandler);
         menuNode.on('keydown keypress keyup', menuKeyHandler);
 
     } // class Menu

@@ -83,33 +83,37 @@ define('io.ox/office/tk/control/combofield',
          * while editing. Will try to insert auto-completion text according to
          * existing entries in the drop-down list.
          */
-        function validationHandler(event, textField, oldFieldState) {
+        function editValidationHandler(event, textField, oldFieldState) {
 
             var // current text of the text field
                 value = textField.val(),
                 // current selection of the text field
                 selection = Utils.getTextFieldSelection(textField),
                 // the list item button containing the text of the text field
-                button = null;
+                button = $();
+
+            // show the drop-down menu when the text has been changed
+            if (value !== oldFieldState.value) {
+                self.showMenu();
+            }
+
+            // find the first button whose label starts with the entered text
+            button = self.getListItems().filter(function () {
+                var label = Utils.getControlLabel($(this));
+                return _.isString(label) && (label.length >= value.length) && (label.substr(0, value.length).toLowerCase() === value.toLowerCase());
+            }).first();
 
             // try to add the remaining text of an existing list item, but only
             // if the text field does not contain a selection, and something
-            // has been appended to the text
-            if ((selection.start === value.length) && (oldFieldState.start < selection.start) && (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
-
-                // find the first button whose label starts with the entered text
-                button = self.getListItems().filter(function () {
-                    var label = Utils.getControlLabel($(this));
-                    return _.isString(label) && (label.length >= value.length) && (label.substr(0, value.length).toLowerCase() === value.toLowerCase());
-                });
-
-                // update the text field and the list selection if a matching button exists
-                if (button.length) {
-                    textField.val(Utils.getControlLabel(button));
-                    Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
-                    updateHandler(Utils.getControlValue(button));
-                }
+            // has been appended to the old text
+            if (button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
+                    (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
+                textField.val(Utils.getControlLabel(button));
+                Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
             }
+
+            // update selection in drop-down list
+            updateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
         }
 
         // base constructor ---------------------------------------------------
@@ -145,7 +149,7 @@ define('io.ox/office/tk/control/combofield',
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
 
         if (typeAhead) {
-            this.on('validated', validationHandler);
+            this.on('validated', editValidationHandler);
         }
 
     } // class ComboField
