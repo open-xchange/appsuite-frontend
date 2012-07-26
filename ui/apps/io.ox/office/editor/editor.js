@@ -1194,7 +1194,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         }
 
                         if (startPosition[lastValue - 1] >= 0) {
-                            this.mergeParagraph(startPosition);
+                            if (! prevIsTable) {
+                                this.mergeParagraph(startPosition);
+                            }
                             selection.startPaM.oxoPosition[lastValue - 1] -= 1;
                             selection.startPaM.oxoPosition.pop();
                         }
