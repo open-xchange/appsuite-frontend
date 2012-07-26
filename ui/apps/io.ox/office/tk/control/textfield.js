@@ -25,7 +25,12 @@ define('io.ox/office/tk/control/textfield',
         FIELD_PADDING = 4,
 
         // default validator without any restrictions on the field text
-        defaultValidator = null;
+        defaultValidator = null,
+
+        // limit for integer validators
+        MAX_INT = 0x7FFFFFFF,
+        MIN_INT = (-MAX_INT) - 1;
+
 
     // class TextField ========================================================
 
@@ -281,7 +286,8 @@ define('io.ox/office/tk/control/textfield',
          *  The value to be converted to a text.
          *
          * @returns {String}
-         *  The text converted from the passed value.
+         *  The text converted from the passed value, or an empty string, if
+         *  the passed value cannot be converted to text.
          *
          */
         this.valueToText = function (value) {
@@ -297,7 +303,8 @@ define('io.ox/office/tk/control/textfield',
          *  The text to be converted to a value.
          *
          * @returns
-         *  The value converted from the passed text.
+         *  The value converted from the passed text. The value undefined
+         *  indicates that the text cannot be converted to a valid value.
          */
         this.textToValue = function (text) {
             return text;
@@ -363,6 +370,48 @@ define('io.ox/office/tk/control/textfield',
         };
 
     }}); // class TextField.TextValidator
+
+    // class TextField.TextValidator ==========================================
+
+    /**
+     * A validator for text fields that restricts the allowed values to integer
+     * numbers.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the validator. The
+     *  following options are supported:
+     *  @param {Number} [options.min]
+     *      The minimum value allowed to enter. If omitted, defaults to -2^31.
+     *  @param {Number} [options.max]
+     *      The maximum value allowed to enter. If omitted, defaults to 2^31-1.
+     */
+    TextField.IntegerValidator = TextField.Validator.extend({ constructor: function (options) {
+
+        var // minimum and maximum
+            min = Utils.getIntegerOption(options, 'min', MIN_INT, MIN_INT, MAX_INT),
+            max = Utils.getIntegerOption(options, 'max', MAX_INT, min, MAX_INT);
+
+        // base constructor ---------------------------------------------------
+
+        TextField.Validator.call(this);
+
+        // methods ------------------------------------------------------------
+
+        this.valueToText = function (value) {
+            return _.isFinite(value) ? String(value) : '';
+        };
+
+        this.textToValue = function (text) {
+            var value = parseInt(text, 10);
+            return (_.isFinite(value) && (min <= value) && (value <= max)) ? value : undefined;
+        };
+
+        this.validate = function (text) {
+            var value = this.textToValue(text);
+            return (text === '') || ((min < 0) && (text === '-')) || (_.isFinite(value) && String(value));
+        };
+
+    }}); // class TextField.IntegerValidator
 
     // exports ================================================================
 
