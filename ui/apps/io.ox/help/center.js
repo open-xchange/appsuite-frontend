@@ -131,9 +131,9 @@ define("io.ox/help/center", [
     };
     
     var disableHelp = function () {
-        $('.io-ox-help-blacksheepwall').remove();
-        $('.io-ox-help-highlight').remove();
-        $('#io-ox-help-off').remove();
+        $('.io-ox-help-blacksheepwall').detach();
+        $('.io-ox-help-highlight').detach();
+        $('#io-ox-help-off').detach();
     };
     
     
