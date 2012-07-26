@@ -1465,7 +1465,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     endPosition[endposLength] = this.getParagraphLength(endPosition);
                     this.deleteText(selection.startPaM.oxoPosition, endPosition);
 
-                    // 2) delete completly slected paragraphs completely
+                    // 2) delete completly selected paragraphs completely
                     for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
@@ -3162,15 +3162,14 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.implDeleteTable = function (position) {
 
-            var para = position[0],
+            var localPositon = _.copy(position, true),
                 lastRow = this.getLastRowIndexInTable(position),
                 lastColumn = this.getLastColumnIndexInTable(position);
 
             // iterating over all cells and remove all paragraphs in the cells
             for (var i = 0; i <= lastColumn; i++) {
                 for (var j = 0; j <= lastRow; j++) {
-                    var localPos = [];
-                    localPos.push(para);
+                    var localPos = _.copy(localPositon, true);
                     localPos.push(i);
                     localPos.push(j);
                     localPos.push(0);
@@ -3180,14 +3179,16 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             // Finally removing the table itself
-            var paragraph = paragraphs[para];
+            // var paragraph = paragraphs[para];
+            var paragraph = this.getDOMPosition(localPositon).node;
             paragraph.parentNode.removeChild(paragraph);
 
-            var localPos = _.copy(position, true);
+            var localPos = _.copy(localPositon, true);
+            var para = localPos.pop();
             if (para > 0) {
                 para -= 1;
             }
-            localPos[0] = para;
+            localPos.push(para);
             localPos.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
             lastOperationEnd = new OXOPaM(localPos);
             paragraphs = editdiv.children();
