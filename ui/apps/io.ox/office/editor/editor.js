@@ -1081,7 +1081,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.grabFocus(true);
                 }
                 if (c === 'T') {
-                    this.insertTable({width: 3, height: 4});
+                    this.insertTable({width: 2, height: 2});
                 }
                 if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
@@ -1194,7 +1194,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                         }
 
                         if (startPosition[lastValue - 1] >= 0) {
-                            this.mergeParagraph(startPosition);
+                            if (! prevIsTable) {
+                                this.mergeParagraph(startPosition);
+                            }
                             selection.startPaM.oxoPosition[lastValue - 1] -= 1;
                             selection.startPaM.oxoPosition.pop();
                         }
