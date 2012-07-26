@@ -49,10 +49,9 @@ define('io.ox/office/tk/control/textfield',
      *      A text validator that will be used to convert the values from
      *      'update' events to the text representation used in this text field,
      *      to validate the text while typing in the text field, and to convert
-     *      the entered text to the value returned by the action handler. Each
-     *      text field must have its own instance of a validator class. If no
-     *      validator has been specified, a default validator will be created
-     *      that does not perform any conversions.
+     *      the entered text to the value returned by the action handler. If no
+     *      validator has been specified, a default validator will be used that
+     *      does not perform any conversions.
      */
     function TextField(options) {
 
@@ -100,21 +99,6 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
-         * Triggers a change event, if the value has been changed while editing
-         * this text field.
-         */
-        function commitValue() {
-            if (textField.val() !== initialFocusValue) {
-                // reset initialFocusValue before triggering to prevent
-                // restoration of the old value when text field loses focus
-                initialFocusValue = null;
-                self.trigger('change', validator.textToValue(textField.val()));
-            } else {
-                self.trigger('cancel');
-            }
-        }
-
-        /**
          * Called when the application window will be shown for the first time.
          * Initializes the caption overlay. Needs the calculated element sizes
          * which become available when the window becomes visible and all
@@ -146,6 +130,19 @@ define('io.ox/office/tk/control/textfield',
             validationFieldState = getFieldState();
         }
 
+        /**
+         * The action handler for this text field.
+         */
+        function commitHandler() {
+            // reset initialFocusValue before triggering to prevent
+            // restoration of the old value when text field loses focus
+            initialFocusValue = null;
+            return validator.textToValue(textField.val());
+        }
+
+        /**
+         * Handles all focus events of the text field.
+         */
         function fieldFocusHandler(event) {
             switch (event.type) {
             case 'focus':
@@ -160,7 +157,7 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur:key':
                 // commit value when losing focus via keyboard
-                commitValue();
+                textField.trigger('commit');
                 break;
             case 'blur':
                 // restore saved value
@@ -188,7 +185,7 @@ define('io.ox/office/tk/control/textfield',
                 // ... but let the browser perform cursor movement
                 break;
             case KeyCodes.ENTER:
-                if (keyup) { commitValue(); }
+                if (keyup) { self.hideMenu(); textField.trigger('commit'); }
                 return false;
             }
         }
@@ -251,7 +248,8 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(textField)
             .addChildNodes(overlayNode)
             .on('init', initHandler)
-            .registerUpdateHandler(updateHandler);
+            .registerUpdateHandler(updateHandler)
+            .registerActionHandler(textField, 'commit', commitHandler);
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
@@ -348,6 +346,10 @@ define('io.ox/office/tk/control/textfield',
 
         var // maximum length
             maxLength = Utils.getIntegerOption(options, 'maxLength', undefined, 0);
+
+        // base constructor ---------------------------------------------------
+
+        TextField.Validator.call(this);
 
         // methods ------------------------------------------------------------
 

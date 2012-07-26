@@ -450,10 +450,9 @@ define('io.ox/office/tk/utils',
      *  A jQuery collection containing one or more button elements.
      *
      * @param value
-     *  The value of the button to be activated. If set to null, deactivates
-     *  all buttons and does not activate a button. If no button with the
-     *  specified value has been found, does not change the button that is
-     *  currently active.
+     *  The value of the button to be activated. If set to null, or if no
+     *  button with the specified value has been found, deactivates all buttons
+     *  and does not activate a button.
      *
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
@@ -462,11 +461,6 @@ define('io.ox/office/tk/utils',
 
         var // find the button to be activated
             button = _.isNull(value) ? $() : buttons.filter(function () { return _.isEqual(value, Utils.getControlValue($(this))); });
-
-        // button not found: return currently selected button
-        if (!button.length && !_.isNull(value)) {
-            return Utils.getSelectedButtons(buttons);
-        }
 
         // remove highlighting from all buttons, highlight active button
         Utils.toggleButtons(buttons, false);
