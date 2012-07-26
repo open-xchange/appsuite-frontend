@@ -2912,7 +2912,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.implInsertTable = function (position, columns, rows) {
 
-            this.implSplitParagraph(position);
+            var localPosition = _.copy(position);
+            this.implSplitParagraph(localPosition);
             paragraphs = editdiv.children();
 
             var newTable = $('<table>');
@@ -2927,11 +2928,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 newTable.append(newRow);
             }
 
-            position.pop();
-            var domParagraph = this.getDOMPosition(position).node;
+            localPosition.pop();
+            var domParagraph = this.getDOMPosition(localPosition).node;
 
             newTable.insertAfter(domParagraph);
-            position[position.length - 1] += 1;
+            localPosition[localPosition.length - 1] += 1;
 
             paragraphs = editdiv.children();
 
@@ -2940,7 +2941,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
             for (var i = 0; i < rows; i++) {
                 for (var j = 0; j < columns; j++) {
-                    var pos = _.copy(position, true);
+                    var pos = _.copy(localPosition, true);
                     pos.push(j);
                     pos.push(i);
                     pos.push(0); // first paragraph
@@ -2952,11 +2953,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             // Setting cursor into table (unfortunately not visible in Firefox)
-            var oxoPosition = this.getFirstPositionInParagraph(position);
-            var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
-            this.setSelection(selection);
+ //           var oxoPosition = this.getFirstPositionInParagraph(localPosition);
+ //           var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
+ //           this.setSelection(selection);
 
-            blockOperationNotifications = true;  // test table does not work in second editor.
+            // blockOperationNotifications = true;  // test table does not work in second editor.
             // lastOperationEnd = new OXOPaM([position, 0]);  // table?
         };
 
