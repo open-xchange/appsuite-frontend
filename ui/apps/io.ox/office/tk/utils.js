@@ -88,7 +88,8 @@ define('io.ox/office/tk/utils',
      *  following options are supported:
      *  @param [options.value]
      *      A value or object that will be copied to the 'data-value' attribute
-     *      of the control. Will be converted to a JSON string.
+     *      of the control. Will be converted to a JSON string. Must not be
+     *      null. The undefined value will be ignored.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -100,17 +101,10 @@ define('io.ox/office/tk/utils',
         var // create the DOM element
             control = $('<' + element + '>', attribs),
 
-            // option values
-            value = Utils.getOption(options, 'value'),
+            // CSS formatting attributes
             css = Utils.getObjectOption(options, 'css', {});
 
-        if (!_.isUndefined(value)) {
-            try {
-                control.attr(Utils.DATA_VALUE_ATTR, JSON.stringify(value));
-            } catch (ex) {
-            }
-        }
-
+        Utils.setControlValue(control, Utils.getOption(options, 'value'));
         return control.css(css);
     };
 
@@ -127,6 +121,27 @@ define('io.ox/office/tk/utils',
         if (_.isString(value)) {
             try {
                 return JSON.parse(value);
+            } catch (ex) {
+            }
+        }
+    };
+
+    /**
+     * Stores the passed value in the 'data-value' attribute of the control in
+     * the passed jQuery collection, after converting it to a JSON string.
+     *
+     * @param control
+     *  A jQuery collection containing a control element.
+     *
+     * @param value
+     *  A value or object that will be copied to the 'data-value' attribute of
+     *  the control. Will be converted to a JSON string. Must not be null. The
+     *  undefined value will be ignored.
+     */
+    Utils.setControlValue = function (control, value) {
+        if (!_.isUndefined(value) && !_.isNull(value)) {
+            try {
+                control.attr(Utils.DATA_VALUE_ATTR, JSON.stringify(value));
             } catch (ex) {
             }
         }
@@ -474,6 +489,19 @@ define('io.ox/office/tk/utils',
      */
     Utils.createTextField = function (options) {
         return Utils.createControl('input', { type: 'text' }, options);
+    };
+
+    Utils.getTextFieldSelection = function (textField) {
+        var input = textField.get(0);
+        return input ? { start: input.selectionStart, end: input.selectionEnd } : undefined;
+    };
+
+    Utils.setTextFieldSelection = function (textField, selection) {
+        var input = textField.get(0);
+        if (input && _.isObject(selection)) {
+            input.selectionStart = selection.start;
+            input.selectionEnd = selection.end;
+        }
     };
 
     // key codes --------------------------------------------------------------

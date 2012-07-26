@@ -153,6 +153,29 @@ define('io.ox/office/tk/apphelper', function () {
     };
 
     /**
+     * Extracts a function from the passed object. If the attribute does not
+     * exist, or is not a function, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not a
+     *  function, or if it does not contain the specified attribute, or if the
+     *  attribute is not an object. May be any value (not only functions).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    AppHelper.getFunctionOption = function (options, name, def) {
+        var value = AppHelper.getOption(options, name);
+        return _.isFunction(value) ? value : def;
+    };
+
+    /**
      * Extends the passed object with the specified attributes.
      *
      * @param {Object} [options]

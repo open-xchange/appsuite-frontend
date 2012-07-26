@@ -32,11 +32,19 @@ define('io.ox/office/tk/control/combofield',
      * @param {Object} options
      *  A map of options to control the properties of the control. Supports all
      *  options of the TextField base class, and the List mix-in class.
+     *  Additionally, the following options are supported:
+     *  @param {Boolean} [options.typeAhead]
+     *      If set to true, the label of the first list item that starts with
+     *      the text currently edited will be inserted into the text field.
+     *      The remaining text appended to the current text will be selected.
      */
     function ComboField(options) {
 
         var // self reference
-            self = this;
+            self = this,
+
+            // search the list items and insert label into text field while editing
+            typeAhead = Utils.getBooleanOption(options, 'typeAhead', false);
 
         // private methods ----------------------------------------------------
 
@@ -70,6 +78,40 @@ define('io.ox/office/tk/control/combofield',
             return value;
         }
 
+        /**
+         * Handler that will be called after the text field has been validated
+         * while editing. Will try to insert auto-completion text according to
+         * existing entries in the drop-down list.
+         */
+        function validationHandler(event, textField, oldFieldState) {
+
+            var // current text of the text field
+                value = textField.val(),
+                // current selection of the text field
+                selection = Utils.getTextFieldSelection(textField),
+                // the list item button containing the text of the text field
+                button = null;
+
+            // try to add the remaining text of an existing list item, but only
+            // if the text field does not contain a selection, and something
+            // has been appended to the text
+            if ((selection.start === value.length) && (oldFieldState.start < selection.start) && (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
+
+                // find the first button whose label starts with the entered text
+                button = self.getListItems().filter(function () {
+                    var label = Utils.getControlLabel($(this));
+                    return _.isString(label) && (label.length >= value.length) && (label.substr(0, value.length).toLowerCase() === value.toLowerCase());
+                });
+
+                // update the text field and the list selection if a matching button exists
+                if (button.length) {
+                    textField.val(Utils.getControlLabel(button));
+                    Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
+                    updateHandler(Utils.getControlValue(button));
+                }
+            }
+        }
+
         // base constructor ---------------------------------------------------
 
         TextField.call(this, options);
@@ -81,8 +123,9 @@ define('io.ox/office/tk/control/combofield',
         /**
          * Adds a new string entry to the drop-down list.
          *
-         * @param {String} value
-         *  The string value to be shown in the drop-down list.
+         * @param value
+         *  The value to be shown in the drop-down list. Will be converted to
+         *  a string using the current validator of the text field.
          *
          * @param {Object} [options]
          *  Additional options for the list entry. Supports all button
@@ -91,7 +134,7 @@ define('io.ox/office/tk/control/combofield',
          *  to the 'value' parameter passed to this function.
          */
         this.addListEntry = function (value, options) {
-            this.createListItem(Utils.extendOptions(options, { value: value, label: value }));
+            this.createListItem(Utils.extendOptions(options, { value: value, label: this.valueToText(value) }));
             return this;
         };
 
@@ -100,6 +143,10 @@ define('io.ox/office/tk/control/combofield',
         // register event handlers
         this.registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
+
+        if (typeAhead) {
+            this.on('validated', validationHandler);
+        }
 
     } // class ComboField
 
