@@ -41,8 +41,17 @@ define('io.ox/office/tk/dropdown/list',
      *  options of the Menu base class. Additionally, the following options are
      *  supported:
      *  @param {Boolean} [options.sorted]
-     *      if set to true, the list items will be inserted sorted by their
-     *      label text. Otherwise, list items will be appended to the list.
+     *      If set to true, the list items will be inserted ordered according
+     *      to the registered sort functor (see 'option.sortFunctor').
+     *      Otherwise, list items will be appended to the list.
+     *  @param {Function} [options.sortFunctor]
+     *      A function that returns a string for each list item. The list items
+     *      will be sorted lexicographically by these strings. The function
+     *      receives the button object representing the list item, as jQuery
+     *      object. If omitted, the list items will be ordered by their label
+     *      texts, ignoring case; items without text label will be prepended in
+     *      no special order. This option has no effect, if sorting is not
+     *      enabled.
      */
     function extend(group, options) {
 
@@ -51,6 +60,9 @@ define('io.ox/office/tk/dropdown/list',
 
             // sorted list items
             sorted = Utils.getBooleanOption(options, 'sorted', false),
+
+            // functor used to sort the items
+            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
 
             // number of items to skip for page up/down keys
             itemsPerPage = 1;
@@ -157,8 +169,7 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Adds a new item to this list. If the list items are sorted (see the
          * options passed to the constructor), the item will be inserted
-         * according to its text label. If the item does not have a text label,
-         * it will be appended.
+         * according to these settings.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new button
@@ -174,20 +185,16 @@ define('io.ox/office/tk/dropdown/list',
                 button = Utils.createButton(options),
                 // embed it into a list item element
                 listItem = $('<li>').append(button),
-                // the text label of the new list item
-                label = Utils.getControlLabel(button),
                 // insertion index for sorted lists
                 index = -1;
 
             // find insertion index for sorted lists
-            if (sorted && _.isString(label)) {
+            if (sorted) {
                 index = _.chain(group.getListItems().get())
-                    // convert array of button elements to array of label texts
-                    .map(function (button) { return Utils.getControlLabel($(button)); })
-                    // filter trailing undefined values of buttons without labels
-                    .filter(_.isString)
-                    // calculate the insertion index of the new list item (ignoring case)
-                    .sortedIndex(label, function (label) { return label.toLowerCase(); })
+                    // convert array of button elements to strings returned by sort functor
+                    .map(function (button) { return sortFunctor.call(group, $(button)); })
+                    // calculate the insertion index of the new list item
+                    .sortedIndex(sortFunctor.call(group, button))
                     // exit the call chain, returns result of sortedIndex()
                     .value();
             }
@@ -203,6 +210,12 @@ define('io.ox/office/tk/dropdown/list',
         };
 
         // initialization -----------------------------------------------------
+
+        // default sort functor: sort by button label text, case insensitive
+        sortFunctor = _.isFunction(sortFunctor) ? sortFunctor : function (button) {
+            var label = Utils.getControlLabel(button);
+            return _.isString(label) ? label.toLowerCase() : '';
+        };
 
         // initialize the drop-down element
         group.getMenuNode().addClass('list').append(listNode);

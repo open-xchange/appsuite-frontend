@@ -70,11 +70,12 @@ define('io.ox/office/tk/control/group',
 
         /**
          * Registers the passed update handler function. These handlers will be
-         * called from the method Group.update().
+         * called from the method Group.update() in order of their
+         * registration.
          *
          * @param {Function} updateHandler
          *  The update handler function. Will be called in the context of this
-         *  group. Receives the value passed to the 'update' event.
+         *  group. Receives the value passed to the method Group.update().
          *
          * @returns {Group}
          *  A reference to this group.

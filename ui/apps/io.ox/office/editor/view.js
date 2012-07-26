@@ -33,7 +33,8 @@ define('io.ox/office/editor/view',
                 width: 150,
                 icon: 'icon-font',
                 tooltip: gt('Font Name'),
-                sorted: true
+                sorted: true,
+                typeAhead: true
             };
 
         // base constructor ---------------------------------------------------
@@ -54,7 +55,7 @@ define('io.ox/office/editor/view',
     var FontHeightChooser = TextField.extend({ constructor: function () {
 
         var options = {
-                width: 35,
+                width: 30,
                 icon: 'icon-io-ox-font-height',
                 tooltip: gt('Font Size'),
                 css: { textAlign: 'right' },
@@ -152,9 +153,12 @@ define('io.ox/office/editor/view',
         // create the tool panes and append them to the window main node
         win.nodes.main.addClass('io-ox-office-main').append(
             win.nodes.toolPane = $('<div>').addClass('io-ox-toolpane top'),
-            win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editors[Editor.TextMode.RICH].getNode()),
+            win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
             win.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
         );
+
+        // insert editor into the app pane
+        win.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
 
         // table element containing the debug mode elements
         win.nodes.debugPane.append($('<table>').addClass('debug-table').append(
