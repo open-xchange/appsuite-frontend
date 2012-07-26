@@ -2953,12 +2953,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             // Setting cursor into table (unfortunately not visible in Firefox)
- //           var oxoPosition = this.getFirstPositionInParagraph(localPosition);
- //           var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
- //           this.setSelection(selection);
+            // var oxoPosition = this.getFirstPositionInParagraph(localPosition);
+            // var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
+            // this.setSelection(selection);
 
-            // blockOperationNotifications = true;  // test table does not work in second editor.
-            // lastOperationEnd = new OXOPaM([position, 0]);  // table?
+            // lastOperationEnd = new OXOPaM([position, 0]);
         };
 
         this.implSplitParagraph = function (position) {
