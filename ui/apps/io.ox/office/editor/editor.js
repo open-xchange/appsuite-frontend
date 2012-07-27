@@ -1454,9 +1454,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                } else if (this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
-                    // The included paragraphs are neighbours.
+                } else if ((this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) || (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
 
+                    if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        selection.endPaM.oxoPosition.pop();
+                        var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
+                        selection.endPaM.oxoPosition = returnObj.position;
+                    }
+
+                    // The included paragraphs are neighbours.
                     var endPosition = _.copy(selection.startPaM.oxoPosition, true),
                         startposLength = selection.startPaM.oxoPosition.length - 1,
                         endposLength = selection.endPaM.oxoPosition.length - 1;
@@ -1884,6 +1890,37 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             return isSameLevel;
+        };
+
+        this.isCellSelection = function (posA, posB) {
+            // If both positions are start positions of cells, the content of the complete cell is selected
+            var isCompleteCell = false;
+
+            if (posA.length === posB.length) {
+                if (this.isPositionInTable(posA)) {
+                    var lastVal = posA.length - 1;
+                    if ((posA[lastVal] === 0) && (posB[lastVal] === 0)) {  // start position
+                        if ((posA[lastVal - 1] === 0) && (posB[lastVal - 1] === 0)) {  // start paragraph
+                            if (posA[lastVal - 2] === posB[lastVal - 2]) {    // same row
+                                if (((posA[lastVal - 3] - posB[lastVal - 3]) === 1) || ((posA[lastVal - 3] - posB[lastVal - 3]) === -1)) {    // difference of one column
+                                    var isSame = true;
+                                    for (var i = 0; i < lastVal - 3; i++) {  // all others have to be equal
+                                        if (posA[i] !== posB[i]) {
+                                            isSame = false;
+                                            break;
+                                        }
+                                    }
+                                    if (isSame) {
+                                        isCompleteCell = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return isCompleteCell;
         };
 
         this.prepareNewParagraph = function (paragraph) {
