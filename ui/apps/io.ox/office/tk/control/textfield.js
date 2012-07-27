@@ -190,7 +190,7 @@ define('io.ox/office/tk/control/textfield',
                 // ... but let the browser perform cursor movement
                 break;
             case KeyCodes.ENTER:
-                if (keyup) { self.hideMenu(); textField.trigger('commit'); }
+                if (keyup) { textField.trigger('commit'); }
                 return false;
             }
         }

@@ -156,8 +156,7 @@ define('io.ox/office/tk/toolbar',
         function keyHandler(event) {
 
             var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                keyup = event.type === 'keyup';
+                keydown = event.type === 'keydown';
 
             switch (event.keyCode) {
             case KeyCodes.TAB:
@@ -171,9 +170,6 @@ define('io.ox/office/tk/toolbar',
                 return false;
             case KeyCodes.RIGHT_ARROW:
                 if (keydown) { moveFocus(true); }
-                return false;
-            case KeyCodes.ESCAPE:
-                if (keyup) { toolBar.trigger('cancel'); }
                 return false;
             }
         }
@@ -479,7 +475,7 @@ define('io.ox/office/tk/toolbar',
         // wait for the first window 'show' event and trigger an 'init' event at all groups
         win.one('show', function () { deferredInit.resolve(); });
 
-        // listen to key events
+        // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);
 
     } // class ToolBar

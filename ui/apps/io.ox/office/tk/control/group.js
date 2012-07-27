@@ -19,7 +19,10 @@ define('io.ox/office/tk/control/group',
 
     'use strict';
 
-    var // CSS class for hidden groups
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes,
+
+        // CSS class for hidden groups
         HIDDEN_CLASS = 'hidden',
 
         // CSS class for disabled groups
@@ -55,6 +58,22 @@ define('io.ox/office/tk/control/group',
 
             // update handler functions
             updateHandlers = [];
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Keyboard handler for the entire group.
+         */
+        function keyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
+            if (event.keyCode === KeyCodes.ESCAPE) {
+                if (keyup) { self.trigger('cancel'); }
+                return false;
+            }
+        }
 
         // methods ------------------------------------------------------------
 
@@ -299,13 +318,16 @@ define('io.ox/office/tk/control/group',
         // tool tip
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
-        // suppress events for disabled controls
-        groupNode.on('mousedown dragover drop contextmenu', function (event) {
-            if (!self.isEnabled()) {
-                event.preventDefault();
-                self.trigger('cancel');
-            }
-        });
+        // add event handlers
+        groupNode
+            .on('keydown keypress keyup', keyHandler)
+            // suppress events for disabled controls
+            .on('mousedown dragover drop contextmenu', function (event) {
+                if (!self.isEnabled()) {
+                    event.preventDefault();
+                    self.trigger('cancel');
+                }
+            });
 
     } // class Group
 
