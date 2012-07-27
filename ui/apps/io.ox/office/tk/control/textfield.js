@@ -25,7 +25,12 @@ define('io.ox/office/tk/control/textfield',
         FIELD_PADDING = 4,
 
         // default validator without any restrictions on the field text
-        defaultValidator = null;
+        defaultValidator = null,
+
+        // limit for integer validators
+        MAX_INT = 0x7FFFFFFF,
+        MIN_INT = (-MAX_INT) - 1;
+
 
     // class TextField ========================================================
 
@@ -49,10 +54,9 @@ define('io.ox/office/tk/control/textfield',
      *      A text validator that will be used to convert the values from
      *      'update' events to the text representation used in this text field,
      *      to validate the text while typing in the text field, and to convert
-     *      the entered text to the value returned by the action handler. Each
-     *      text field must have its own instance of a validator class. If no
-     *      validator has been specified, a default validator will be created
-     *      that does not perform any conversions.
+     *      the entered text to the value returned by the action handler. If no
+     *      validator has been specified, a default validator will be used that
+     *      does not perform any conversions.
      */
     function TextField(options) {
 
@@ -100,21 +104,6 @@ define('io.ox/office/tk/control/textfield',
         }
 
         /**
-         * Triggers a change event, if the value has been changed while editing
-         * this text field.
-         */
-        function commitValue() {
-            if (textField.val() !== initialFocusValue) {
-                // reset initialFocusValue before triggering to prevent
-                // restoration of the old value when text field loses focus
-                initialFocusValue = null;
-                self.trigger('change', validator.textToValue(textField.val()));
-            } else {
-                self.trigger('cancel');
-            }
-        }
-
-        /**
          * Called when the application window will be shown for the first time.
          * Initializes the caption overlay. Needs the calculated element sizes
          * which become available when the window becomes visible and all
@@ -146,6 +135,19 @@ define('io.ox/office/tk/control/textfield',
             validationFieldState = getFieldState();
         }
 
+        /**
+         * The action handler for this text field.
+         */
+        function commitHandler() {
+            // reset initialFocusValue before triggering to prevent
+            // restoration of the old value when text field loses focus
+            initialFocusValue = null;
+            return validator.textToValue(textField.val());
+        }
+
+        /**
+         * Handles all focus events of the text field.
+         */
         function fieldFocusHandler(event) {
             switch (event.type) {
             case 'focus':
@@ -160,7 +162,7 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur:key':
                 // commit value when losing focus via keyboard
-                commitValue();
+                textField.trigger('commit');
                 break;
             case 'blur':
                 // restore saved value
@@ -188,7 +190,7 @@ define('io.ox/office/tk/control/textfield',
                 // ... but let the browser perform cursor movement
                 break;
             case KeyCodes.ENTER:
-                if (keyup) { commitValue(); }
+                if (keyup) { textField.trigger('commit'); }
                 return false;
             }
         }
@@ -197,7 +199,7 @@ define('io.ox/office/tk/control/textfield',
          * Handles input events triggered when the text changes while typing.
          * Performs live validation with the current validator.
          */
-        function fieldInputHandler(event) {
+        function fieldInputHandler() {
 
             var // result of the text field validation
                 result = null;
@@ -218,7 +220,7 @@ define('io.ox/office/tk/control/textfield',
                 }
 
                 // trigger 'validated' event to all listeners, pass old field state
-                self.trigger('validated', textField, validationFieldState);
+                textField.trigger('validated', validationFieldState);
 
                 // save current state of the text field
                 validationFieldState = getFieldState();
@@ -230,6 +232,13 @@ define('io.ox/office/tk/control/textfield',
         Group.call(this, options);
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the text control element, as jQuery object.
+         */
+        this.getTextField = function () {
+            return textField;
+        };
 
         /**
          * Converts the passed value to a text using the current validator.
@@ -251,7 +260,8 @@ define('io.ox/office/tk/control/textfield',
         this.addFocusableControl(textField)
             .addChildNodes(overlayNode)
             .on('init', initHandler)
-            .registerUpdateHandler(updateHandler);
+            .registerUpdateHandler(updateHandler)
+            .registerActionHandler(textField, 'commit', commitHandler);
         textField
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
@@ -283,7 +293,8 @@ define('io.ox/office/tk/control/textfield',
          *  The value to be converted to a text.
          *
          * @returns {String}
-         *  The text converted from the passed value.
+         *  The text converted from the passed value, or an empty string, if
+         *  the passed value cannot be converted to text.
          *
          */
         this.valueToText = function (value) {
@@ -299,7 +310,8 @@ define('io.ox/office/tk/control/textfield',
          *  The text to be converted to a value.
          *
          * @returns
-         *  The value converted from the passed text.
+         *  The value converted from the passed text. The value undefined
+         *  indicates that the text cannot be converted to a valid value.
          */
         this.textToValue = function (text) {
             return text;
@@ -349,6 +361,10 @@ define('io.ox/office/tk/control/textfield',
         var // maximum length
             maxLength = Utils.getIntegerOption(options, 'maxLength', undefined, 0);
 
+        // base constructor ---------------------------------------------------
+
+        TextField.Validator.call(this);
+
         // methods ------------------------------------------------------------
 
         this.valueToText = function (value) {
@@ -361,6 +377,48 @@ define('io.ox/office/tk/control/textfield',
         };
 
     }}); // class TextField.TextValidator
+
+    // class TextField.IntegerValidator =======================================
+
+    /**
+     * A validator for text fields that restricts the allowed values to integer
+     * numbers.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the properties of the validator. The
+     *  following options are supported:
+     *  @param {Number} [options.min]
+     *      The minimum value allowed to enter. If omitted, defaults to -2^31.
+     *  @param {Number} [options.max]
+     *      The maximum value allowed to enter. If omitted, defaults to 2^31-1.
+     */
+    TextField.IntegerValidator = TextField.Validator.extend({ constructor: function (options) {
+
+        var // minimum and maximum
+            min = Utils.getIntegerOption(options, 'min', MIN_INT, MIN_INT, MAX_INT),
+            max = Utils.getIntegerOption(options, 'max', MAX_INT, min, MAX_INT);
+
+        // base constructor ---------------------------------------------------
+
+        TextField.Validator.call(this);
+
+        // methods ------------------------------------------------------------
+
+        this.valueToText = function (value) {
+            return _.isFinite(value) ? String(value) : '';
+        };
+
+        this.textToValue = function (text) {
+            var value = parseInt(text, 10);
+            return (_.isFinite(value) && (min <= value) && (value <= max)) ? value : undefined;
+        };
+
+        this.validate = function (text) {
+            var value = this.textToValue(text);
+            return (text === '') || ((min < 0) && ((text === '-') || (text === '-0'))) || (_.isFinite(value) && String(value));
+        };
+
+    }}); // class TextField.IntegerValidator
 
     // exports ================================================================
 

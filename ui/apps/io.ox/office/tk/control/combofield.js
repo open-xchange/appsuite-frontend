@@ -49,11 +49,7 @@ define('io.ox/office/tk/control/combofield',
         // private methods ----------------------------------------------------
 
         /**
-         * Activates a font in this font chooser control.
-         *
-         * @param {String|Null} value
-         *  The name of the font to be activated. If set to null, does not
-         *  activate any font (ambiguous state).
+         * Update handler that activates a list item.
          */
         function updateHandler(value) {
             var button = Utils.selectRadioButton(self.getListItems(), value);
@@ -63,14 +59,7 @@ define('io.ox/office/tk/control/combofield',
         }
 
         /**
-         * Click handler for an option button in this radio group. Will
-         * activate the clicked button, and return its value.
-         *
-         * @param {jQuery} button
-         *  The clicked button, as jQuery object.
-         *
-         * @returns {String}
-         *  The button value that has been passed to the addButton() method.
+         * Click handler for a button representing a list item.
          */
         function clickHandler(button) {
             var value = Utils.getControlValue(button);
@@ -83,9 +72,11 @@ define('io.ox/office/tk/control/combofield',
          * while editing. Will try to insert auto-completion text according to
          * existing entries in the drop-down list.
          */
-        function editValidationHandler(event, textField, oldFieldState) {
+        function textFieldValidationHandler(event, oldFieldState) {
 
-            var // current text of the text field
+            var // the text field element
+                textField = self.getTextField(),
+                // current text of the text field
                 value = textField.val(),
                 // current selection of the text field
                 selection = Utils.getTextFieldSelection(textField),
@@ -149,7 +140,7 @@ define('io.ox/office/tk/control/combofield',
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
 
         if (typeAhead) {
-            this.on('validated', editValidationHandler);
+            this.getTextField().on('validated', textFieldValidationHandler);
         }
 
     } // class ComboField

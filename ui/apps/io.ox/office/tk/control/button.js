@@ -66,7 +66,7 @@ define('io.ox/office/tk/control/button',
         /**
          * The action handler for this button.
          */
-        function clickHandler(button) {
+        function clickHandler() {
             if (toggle) {
                 Utils.toggleButtons(button);
                 return Utils.isButtonSelected(button);

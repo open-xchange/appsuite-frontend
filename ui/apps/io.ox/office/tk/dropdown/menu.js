@@ -173,10 +173,6 @@ define('io.ox/office/tk/dropdown/menu',
             case KeyCodes.UP_ARROW:
                 if (keydown) { toggleMenu(false, 'key'); }
                 return false;
-            case KeyCodes.ESCAPE:
-                if (keydown) { toggleMenu(false, 'key'); }
-                // let the ESCAPE key bubble up to trigger the cancel event
-                break;
             }
         }
 
@@ -264,7 +260,8 @@ define('io.ox/office/tk/dropdown/menu',
         // append menu button and menu to the group container
         group.addFocusableControl(menuButton).addChildNodes(menuNode);
 
-        // prepare drop-down button, and register event handlers
+        // register event handlers, prepare drop-down button
+        group.on('change cancel', function () { toggleMenu(false); });
         group.getNode()
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, groupBlurHandler);
