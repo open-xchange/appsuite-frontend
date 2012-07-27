@@ -23,10 +23,8 @@ define('io.ox/office/tk/utils',
 
     // static class Utils =====================================================
 
-    var Utils = {};
-
     // inject all methods from AppHelper
-    _.extend(Utils, AppHelper);
+    var Utils = _.extend({}, AppHelper);
 
     // constants --------------------------------------------------------------
 
@@ -71,6 +69,73 @@ define('io.ox/office/tk/utils',
      * @constant
      */
     Utils.DATA_VALUE_ATTR = 'data-value';
+
+    // generic DOM helpers ----------------------------------------------------
+
+    Utils.scrollToChildNode = (function () {
+
+        var horizontalNames = {
+                offset: 'left',
+                innerSize: 'innerWidth',
+                outerSize: 'outerWidth',
+                scroll: 'scrollLeft'
+            },
+
+            verticalNames = {
+                offset: 'top',
+                innerSize: 'innerHeight',
+                outerSize: 'outerHeight',
+                scroll: 'scrollTop'
+            };
+
+        return function (scrollableNode, childNode, options) {
+
+            var // scroll direction
+                horizontal = Utils.getBooleanOption(options, 'horizontal', false),
+                // attribute and function names depending on scroll direction
+                names = horizontal ? horizontalNames : verticalNames,
+
+                // padding between scrolled element and container border
+                padding = Utils.getIntegerOption(options, 'padding', 0, 0, 9999),
+                // conflict resolution mode
+                conflict = Utils.getStringOption(options, 'conflict'),
+
+                // inner size of the scrollable container node
+                scrollableSize = scrollableNode[names.innerSize](),
+                // TODO: assuming same border size on both ends, need to parse the exact CSS measurement string and convert to pixels
+                scrollableBorderSize = Math.floor((scrollableNode[names.outerSize]() - scrollableSize) / 2),
+                // current position of the scrollable container node (inner area, relative to browser window)
+                scrollableOffset = scrollableNode.offset()[names.offset] + scrollableBorderSize,
+
+                // current position of the child node (relative to browser window)
+                childOffset = childNode.offset()[names.offset],
+                // outer size of the child node
+                childSize = childNode[names.outerSize](),
+                // minimum offset valid for the child node (with margin from left/top)
+                minChildOffset = scrollableOffset + padding,
+                // maximum offset valid for the child node (with margin from right/bottom)
+                maxChildOffset = scrollableOffset + scrollableSize - padding - childSize;
+
+            if (minChildOffset <= maxChildOffset) {
+                // if there is a valid range for the child element, calculate its new position
+                childOffset = Math.min(Math.max(childOffset, minChildOffset), maxChildOffset);
+            } else {
+                // otherwise: use conflict resolution
+                switch (conflict) {
+                case 'center':
+                    childOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
+                    break;
+                case 'end':
+                    childOffset = maxChildOffset;
+                    break;
+                default:
+                    childOffset = minChildOffset;
+                }
+            }
+
+            scrollableNode[names.scroll](childOffset - scrollableOffset);
+        };
+    }());
 
     // form control elements --------------------------------------------------
 

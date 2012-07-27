@@ -52,9 +52,13 @@ define('io.ox/office/tk/control/combofield',
          * Update handler that activates a list item.
          */
         function updateHandler(value) {
-            var button = Utils.selectRadioButton(self.getListItems(), value);
-            if (!button.length || (Utils.getControlValue(button) !== value)) {
-                Utils.selectRadioButton(self.getListItems(), null);
+
+            var // activate a button representing a list item
+                button = Utils.selectRadioButton(self.getListItems(), value);
+
+            // scroll to make the element visible
+            if (button.length && self.isMenuVisible()) {
+                //Utils.scrollToChildNode(self.getMenuNode(), button);
             }
         }
 

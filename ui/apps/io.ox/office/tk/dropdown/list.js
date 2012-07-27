@@ -86,7 +86,6 @@ define('io.ox/office/tk/dropdown/list',
             // set maximum height of the drop-down menu, depending on window height
             menuNode.css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px');
             itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
-            menuNode.scrollTop(0);
 
             // Calculate the width of the drop-down menu. Work around a Firefox
             // bug which displays the menu too narrow (it restricts the width

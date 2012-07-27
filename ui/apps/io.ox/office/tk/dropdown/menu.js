@@ -59,13 +59,6 @@ define('io.ox/office/tk/dropdown/menu',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns whether the drop-down menu is currently visible.
-         */
-        function isMenuVisible() {
-            return groupNode.hasClass(MENUOPEN_CLASS);
-        }
-
-        /**
          * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
          * or 'menuclose' event at the group, passing the value of the
          * parameter from.
@@ -83,7 +76,7 @@ define('io.ox/office/tk/dropdown/menu',
         function toggleMenu(state, from) {
 
             var // whether to show or hide the menu
-                show = (state === true) || ((state !== false) && !isMenuVisible());
+                show = (state === true) || ((state !== false) && !group.isMenuVisible());
 
             if (show) {
                 groupNode.addClass(MENUOPEN_CLASS);
@@ -134,7 +127,7 @@ define('io.ox/office/tk/dropdown/menu',
             }
 
             // trigger 'cancel' event, if menu has been closed with mouse click
-            if (!isMenuVisible()) {
+            if (!group.isMenuVisible()) {
                 group.trigger('cancel');
             }
         }
@@ -236,6 +229,13 @@ define('io.ox/office/tk/dropdown/menu',
          */
         group.getMenuNode = function () {
             return menuNode;
+        };
+
+        /**
+         * Returns whether the drop-down menu is currently visible.
+         */
+        group.isMenuVisible = function () {
+            return groupNode.hasClass(MENUOPEN_CLASS);
         };
 
         /**
