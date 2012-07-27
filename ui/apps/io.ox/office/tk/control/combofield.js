@@ -72,9 +72,11 @@ define('io.ox/office/tk/control/combofield',
          * while editing. Will try to insert auto-completion text according to
          * existing entries in the drop-down list.
          */
-        function editValidationHandler(event, textField, oldFieldState) {
+        function textFieldValidationHandler(event, oldFieldState) {
 
-            var // current text of the text field
+            var // the text field element
+                textField = self.getTextField(),
+                // current text of the text field
                 value = textField.val(),
                 // current selection of the text field
                 selection = Utils.getTextFieldSelection(textField),
@@ -138,7 +140,7 @@ define('io.ox/office/tk/control/combofield',
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
 
         if (typeAhead) {
-            this.on('validated', editValidationHandler);
+            this.getTextField().on('validated', textFieldValidationHandler);
         }
 
     } // class ComboField

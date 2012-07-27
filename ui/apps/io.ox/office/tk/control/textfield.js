@@ -199,7 +199,7 @@ define('io.ox/office/tk/control/textfield',
          * Handles input events triggered when the text changes while typing.
          * Performs live validation with the current validator.
          */
-        function fieldInputHandler(event) {
+        function fieldInputHandler() {
 
             var // result of the text field validation
                 result = null;
@@ -220,7 +220,7 @@ define('io.ox/office/tk/control/textfield',
                 }
 
                 // trigger 'validated' event to all listeners, pass old field state
-                self.trigger('validated', textField, validationFieldState);
+                textField.trigger('validated', validationFieldState);
 
                 // save current state of the text field
                 validationFieldState = getFieldState();
@@ -232,6 +232,13 @@ define('io.ox/office/tk/control/textfield',
         Group.call(this, options);
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the text control element, as jQuery object.
+         */
+        this.getTextField = function () {
+            return textField;
+        };
 
         /**
          * Converts the passed value to a text using the current validator.
@@ -371,7 +378,7 @@ define('io.ox/office/tk/control/textfield',
 
     }}); // class TextField.TextValidator
 
-    // class TextField.TextValidator ==========================================
+    // class TextField.IntegerValidator =======================================
 
     /**
      * A validator for text fields that restricts the allowed values to integer
@@ -408,7 +415,7 @@ define('io.ox/office/tk/control/textfield',
 
         this.validate = function (text) {
             var value = this.textToValue(text);
-            return (text === '') || ((min < 0) && (text === '-')) || (_.isFinite(value) && String(value));
+            return (text === '') || ((min < 0) && ((text === '-') || (text === '-0'))) || (_.isFinite(value) && String(value));
         };
 
     }}); // class TextField.IntegerValidator
