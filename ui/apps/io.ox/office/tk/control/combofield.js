@@ -58,7 +58,7 @@ define('io.ox/office/tk/control/combofield',
 
             // scroll to make the element visible
             if (button.length && self.isMenuVisible()) {
-                //Utils.scrollToChildNode(self.getMenuNode(), button);
+                Utils.scrollToChildNode(self.getMenuNode(), button);
             }
         }
 

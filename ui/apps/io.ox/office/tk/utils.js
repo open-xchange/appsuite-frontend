@@ -111,29 +111,34 @@ define('io.ox/office/tk/utils',
                 childOffset = childNode.offset()[names.offset],
                 // outer size of the child node
                 childSize = childNode[names.outerSize](),
+                // maximum possible padding to fit child node into container node
+                maxPadding = Math.min(padding, Math.max(Math.floor((scrollableSize - childSize) / 2), 0)),
                 // minimum offset valid for the child node (with margin from left/top)
-                minChildOffset = scrollableOffset + padding,
+                minChildOffset = scrollableOffset + maxPadding,
                 // maximum offset valid for the child node (with margin from right/bottom)
-                maxChildOffset = scrollableOffset + scrollableSize - padding - childSize;
+                maxChildOffset = scrollableOffset + scrollableSize - maxPadding - childSize,
+                // new absolute offset of the child node to make it visible
+                newChildOffset = 0;
 
             if (minChildOffset <= maxChildOffset) {
                 // if there is a valid range for the child element, calculate its new position
-                childOffset = Math.min(Math.max(childOffset, minChildOffset), maxChildOffset);
+                newChildOffset = Math.min(Math.max(childOffset, minChildOffset), maxChildOffset);
             } else {
                 // otherwise: use conflict resolution
                 switch (conflict) {
                 case 'center':
-                    childOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
+                    newChildOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
                     break;
                 case 'end':
-                    childOffset = maxChildOffset;
+                    newChildOffset = maxChildOffset;
                     break;
                 default:
-                    childOffset = minChildOffset;
+                    newChildOffset = minChildOffset;
                 }
             }
 
-            scrollableNode[names.scroll](childOffset - scrollableOffset);
+            // change the current scroll position of the container node by the difference of old and new child offset
+            scrollableNode[names.scroll](scrollableNode[names.scroll]() + childOffset - newChildOffset);
         };
     }());
 
