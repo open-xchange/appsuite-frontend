@@ -72,6 +72,36 @@ define('io.ox/office/tk/utils',
 
     // generic DOM helpers ----------------------------------------------------
 
+    /**
+     * Scrolls an element to a position to make the specified child node
+     * visible.
+     *
+     * @param {jQuery} scrollableNode
+     *  The container node as jQuery object that contains the specified child
+     *  node.
+     *
+     * @param {jQuery} childNode
+     *  The node as jQuery object that will be made visible by scrolling the
+     *  container node.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the scroll action. Supports the following
+     *  options:
+     *  @param {Boolean} [options.horizontal=false]
+     *      If set to true, scrolls the element in horizontal direction.
+     *      Otherwise, scrolls the element in vertical direction.
+     *  @param {Number} [options.padding=0]
+     *      Minimum padding between the inner border of the container node and
+     *      the outer border of the child node.
+     *  @param {String} [options.overflow='begin']
+     *      Specifies how to position the child node if it is larger than the
+     *      visible area of the container node. If omitted or set to 'begin',
+     *      the top border (left border in horizontal mode) of the child node
+     *      will be visible. If set to 'center', the child node will be
+     *      centered in the visible area. If set to 'end', the bottom border
+     *      (right border in horizontal mode) of the child node will be
+     *      visible.
+     */
     Utils.scrollToChildNode = (function () {
 
         var horizontalNames = {
@@ -97,8 +127,8 @@ define('io.ox/office/tk/utils',
 
                 // padding between scrolled element and container border
                 padding = Utils.getIntegerOption(options, 'padding', 0, 0, 9999),
-                // conflict resolution mode
-                conflict = Utils.getStringOption(options, 'conflict'),
+                // how to position an oversized child node
+                overflow = Utils.getStringOption(options, 'overflow'),
 
                 // inner size of the scrollable container node
                 scrollableSize = scrollableNode[names.innerSize](),
@@ -124,8 +154,8 @@ define('io.ox/office/tk/utils',
                 // if there is a valid range for the child element, calculate its new position
                 newChildOffset = Math.min(Math.max(childOffset, minChildOffset), maxChildOffset);
             } else {
-                // otherwise: use conflict resolution
-                switch (conflict) {
+                // otherwise: find position according to overflow mode
+                switch (overflow) {
                 case 'center':
                     newChildOffset = Math.floor((minChildOffset + maxChildOffset) / 2);
                     break;
