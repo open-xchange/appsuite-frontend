@@ -122,10 +122,11 @@ define('io.ox/office/tk/control/group',
          *
          * @param {Function} actionHandler
          *  The action handler function. Will be called in the context of this
-         *  group. Receives the control that triggered the event. Must return
-         *  the current value of the control (e.g. the boolean state of a
-         *  toggle button, the value of a list item, or the current text in a
-         *  text input field).
+         *  group. Receives the control that triggered the action event. Must
+         *  return the current value of the control (e.g. the boolean state of
+         *  a toggle button, the value of a list item, or the current text in a
+         *  text input field). May return null to indicate that a 'cancel'
+         *  event should be triggered instead of a 'change' event.
          *
          * @returns {Group}
          *  A reference to this group.
@@ -133,12 +134,11 @@ define('io.ox/office/tk/control/group',
         this.registerActionHandler = function (node, type, selector, actionHandler) {
 
             function actionEventHandler(event) {
-                var control = $(this), value;
-                if (self.isEnabled()) {
-                    value = actionHandler.call(self, control);
-                    self.trigger('change', value);
-                } else {
+                var value =  self.isEnabled() ? actionHandler.call(self, $(this)) : null;
+                if (_.isNull(value)) {
                     self.trigger('cancel');
+                } else {
+                    self.trigger('change', value);
                 }
             }
 

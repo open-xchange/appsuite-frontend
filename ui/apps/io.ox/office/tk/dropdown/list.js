@@ -72,7 +72,7 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Handles 'menuopen' events and initializes the drop-down menu.
          */
-        function menuOpenHandler(event, from) {
+        function menuOpenHandler(event) {
 
             var // the outer menu node containing the list element
                 menuNode = group.getMenuNode(),
@@ -86,6 +86,7 @@ define('io.ox/office/tk/dropdown/list',
             // set maximum height of the drop-down menu, depending on window height
             menuNode.css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px');
             itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+            menuNode.scrollTop(0);
 
             // Calculate the width of the drop-down menu. Work around a Firefox
             // bug which displays the menu too narrow (it restricts the width
@@ -110,11 +111,6 @@ define('io.ox/office/tk/dropdown/list',
             // 4) Expand width of the list node to the menu width (needed in
             // case minimum width is active).
             listNode.css('width', '100%');
-
-            // move focus to first list item, if opened by keyboard
-            if ((from === 'key') && !Utils.containsFocusedControl(listNode)) {
-                group.getListItems().first().focus();
-            }
         }
 
         /**
@@ -163,6 +159,15 @@ define('io.ox/office/tk/dropdown/list',
          */
         group.getListItems = function () {
             return listNode.find('button');
+        };
+
+        /**
+         * Sets the focus to the first list item in the drop-down list.
+         */
+        group.grabMenuFocus = function () {
+            if (!Utils.containsFocusedControl(listNode)) {
+                group.getListItems().first().focus();
+            }
         };
 
         /**

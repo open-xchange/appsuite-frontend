@@ -60,10 +60,7 @@ define('io.ox/office/tk/control/textfield',
      */
     function TextField(options) {
 
-        var // self reference
-            self = this,
-
-            // create the text field
+        var // create the text field
             textField = Utils.createTextField(options),
 
             // the caption (icon and text label) for the text field
@@ -82,7 +79,7 @@ define('io.ox/office/tk/control/textfield',
             validationFieldState = null,
 
             // initial value of text field when focused, needed for ESCAPE key handling
-            initialFocusValue = null;
+            initialText = null;
 
         // private methods ----------------------------------------------------
 
@@ -139,10 +136,11 @@ define('io.ox/office/tk/control/textfield',
          * The action handler for this text field.
          */
         function commitHandler() {
-            // reset initialFocusValue before triggering to prevent
-            // restoration of the old value when text field loses focus
-            initialFocusValue = null;
-            return validator.textToValue(textField.val());
+            var value = validator.textToValue(textField.val());
+            if (!_.isNull(value)) {
+                initialText = null;
+            }
+            return value;
         }
 
         /**
@@ -152,7 +150,7 @@ define('io.ox/office/tk/control/textfield',
             switch (event.type) {
             case 'focus':
                 // save current value
-                initialFocusValue = textField.val();
+                initialText = textField.val();
                 validationFieldState = getFieldState();
                 break;
             case 'focus:key':
@@ -166,9 +164,9 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'blur':
                 // restore saved value
-                if (_.isString(initialFocusValue)) {
-                    textField.val(initialFocusValue);
-                    initialFocusValue = null;
+                if (_.isString(initialText)) {
+                    textField.val(initialText);
+                    initialText = null;
                 }
                 break;
             }
@@ -310,8 +308,8 @@ define('io.ox/office/tk/control/textfield',
          *  The text to be converted to a value.
          *
          * @returns
-         *  The value converted from the passed text. The value undefined
-         *  indicates that the text cannot be converted to a valid value.
+         *  The value converted from the passed text. The value null indicates
+         *  that the text cannot be converted to a valid value.
          */
         this.textToValue = function (text) {
             return text;
@@ -321,8 +319,9 @@ define('io.ox/office/tk/control/textfield',
          * Validates the passed text that has been changed while editing a text
          * field. It is possible to return a new string value that will be
          * inserted into the text field, or a boolean value indicating whether
-         * to restore the old state of the text field. This default
-         * implementation does not change the text field.
+         * to restore the old state of the text field. Intended to be
+         * overwritten by derived classes. This default implementation does not
+         * change the text field.
          *
          * @param {String} text
          *  The current contents of the text field to be validated.
@@ -333,7 +332,7 @@ define('io.ox/office/tk/control/textfield',
          *  destroy the selection when changing the text). When returning the
          *  boolean value false, the previous state of the text field (as it
          *  was after the last validation) will be restored. Otherwise, the
-         *  text field will not be modified.
+         *  valueof the text field is considered valid will not be modified.
          */
         this.validate = function (text) {
         };
@@ -352,14 +351,14 @@ define('io.ox/office/tk/control/textfield',
      * @param {Object} [options]
      *  A map of options to control the properties of the text validator. The
      *  following options are supported:
-     *  @param {Number} [options.maxLength]
+     *  @param {Number} [options.maxLength=MAX_INT]
      *      The maximum number of characters to be inserted into the text
      *      field. All attempts to insert more characters will be rejected.
      */
     TextField.TextValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // maximum length
-            maxLength = Utils.getIntegerOption(options, 'maxLength', undefined, 0);
+            maxLength = Utils.getIntegerOption(options, 'maxLength', MAX_INT, 0, MAX_INT);
 
         // base constructor ---------------------------------------------------
 
@@ -368,12 +367,11 @@ define('io.ox/office/tk/control/textfield',
         // methods ------------------------------------------------------------
 
         this.valueToText = function (value) {
-            return _.isString(value) ?
-                (_.isNumber(maxLength) ? value.substr(0, maxLength) : value) : '';
+            return _.isString(value) ? value.substr(0, maxLength) : '';
         };
 
         this.validate = function (text) {
-            return !_.isNumber(maxLength) || (maxLength < text.length);
+            return text.length <= maxLength;
         };
 
     }}); // class TextField.TextValidator
@@ -410,7 +408,7 @@ define('io.ox/office/tk/control/textfield',
 
         this.textToValue = function (text) {
             var value = parseInt(text, 10);
-            return (_.isFinite(value) && (min <= value) && (value <= max)) ? value : undefined;
+            return (_.isFinite(value) && (min <= value) && (value <= max)) ? value : null;
         };
 
         this.validate = function (text) {

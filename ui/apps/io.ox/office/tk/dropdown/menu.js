@@ -60,27 +60,21 @@ define('io.ox/office/tk/dropdown/menu',
 
         /**
          * Changes the visibility of the drop-down menu. Triggers a 'menuopen'
-         * or 'menuclose' event at the group, passing the value of the
-         * parameter from.
+         * or 'menuclose' event at the group.
          *
          * @param {Boolean|Null} state
          *  If set to true, the drop-down menu will be displayed. If set to
          *  false, the drop-down menu will be hidden. If set to null, the
          *  drop-down menu will be toggled according to its current visibility.
-         *
-         * @param {String} [from]
-         *  Specifies the origin of the method call. May be set to 'key' if the
-         *  method has been called from a keyboard event handler, or to
-         *  'mouse', if the method has been called from a mouse click handler.
          */
-        function toggleMenu(state, from) {
+        function toggleMenu(state) {
 
             var // whether to show or hide the menu
                 show = (state === true) || ((state !== false) && !group.isMenuVisible());
 
-            if (show) {
+            if (show && !group.isMenuVisible()) {
                 groupNode.addClass(MENUOPEN_CLASS);
-                group.trigger('menuopen', from);
+                group.trigger('menuopen');
                 // Add a global click handler to close the menu automatically
                 // when clicking somewhere in the page. Listeining to the
                 // 'mousedown' event will catch all real mouse clicks and close
@@ -96,13 +90,13 @@ define('io.ox/office/tk/dropdown/menu',
                 window.setTimeout(function () {
                     $(document).on('mousedown click', globalClickHandler);
                 }, 0);
-            } else {
+            } else if (!show && group.isMenuVisible()) {
                 // move focus to drop-down button, if drop-down menu is focused
                 if (Utils.containsFocusedControl(menuNode)) {
                     menuButton.focus();
                 }
                 groupNode.removeClass(MENUOPEN_CLASS);
-                group.trigger('menuclose', from);
+                group.trigger('menuclose');
                 $(document).off('mousedown click', globalClickHandler);
             }
         }
@@ -123,7 +117,7 @@ define('io.ox/office/tk/dropdown/menu',
                 }
 
                 // toggle the menu, this triggers the 'menuopen'/'menuclose' listeners
-                toggleMenu(null, 'mouse');
+                toggleMenu(null);
             }
 
             // trigger 'cancel' event, if menu has been closed with mouse click
@@ -147,7 +141,7 @@ define('io.ox/office/tk/dropdown/menu',
             // Close the menu unless a 'mousedown' event occurred inside the
             // menu node or on the drop-down button.
             if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode))) {
-                toggleMenu(false, 'mouse');
+                toggleMenu(false);
             }
         }
 
@@ -161,19 +155,12 @@ define('io.ox/office/tk/dropdown/menu',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { toggleMenu(true, 'key'); }
+                if (keydown) { toggleMenu(true); group.grabMenuFocus(); }
                 return false;
             case KeyCodes.UP_ARROW:
-                if (keydown) { toggleMenu(false, 'key'); }
+                if (keydown) { toggleMenu(false); }
                 return false;
             }
-        }
-
-        /**
-         * Handles lost focus and closes the drop-down menu.
-         */
-        function groupBlurHandler(event) {
-            toggleMenu(false, (event.type === 'blur:key') ? 'key' : undefined);
         }
 
         /**
@@ -187,7 +174,12 @@ define('io.ox/office/tk/dropdown/menu',
             switch (event.keyCode) {
             case KeyCodes.SPACE:
             case KeyCodes.ENTER:
-                if (keyup) { toggleMenu(null, 'key'); }
+                if (keyup) {
+                    toggleMenu(null);
+                    if (group.isMenuVisible()) {
+                        group.grabMenuFocus();
+                    }
+                }
                 return false;
             }
 
@@ -252,6 +244,13 @@ define('io.ox/office/tk/dropdown/menu',
             toggleMenu(false);
         };
 
+        /**
+         * Sets the focus into the first control element of the drop-down menu
+         * element. Intended to be overwritten by derived classes.
+         */
+        group.grabMenuFocus = function () {
+        };
+
         // initialization -----------------------------------------------------
 
         // marker class for extended formatting
@@ -264,7 +263,7 @@ define('io.ox/office/tk/dropdown/menu',
         group.on('change cancel', function () { toggleMenu(false); });
         group.getNode()
             .on('keydown keypress keyup', groupKeyHandler)
-            .on('blur:key', Group.FOCUSABLE_SELECTOR, groupBlurHandler);
+            .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
         menuButton
             .append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')))
             .on('click', menuButtonClickHandler)

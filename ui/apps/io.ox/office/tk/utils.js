@@ -73,8 +73,7 @@ define('io.ox/office/tk/utils',
     // generic DOM helpers ----------------------------------------------------
 
     /**
-     * Scrolls an element to a position to make the specified child node
-     * visible.
+     * Scrolls a specific child node of a container node into its visible area.
      *
      * @param {jQuery} scrollableNode
      *  The container node as jQuery object that contains the specified child

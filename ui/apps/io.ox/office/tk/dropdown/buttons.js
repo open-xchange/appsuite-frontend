@@ -65,18 +65,13 @@ define('io.ox/office/tk/dropdown/buttons',
         /**
          * Handles 'menuopen' events and initializes the drop-down menu.
          */
-        function menuOpenHandler(event, from) {
+        function menuOpenHandler(event) {
 
             // Work around a Firefox bug which displays the menu too narrow (it
             // restricts the table width to the width of the group element). If
             // this is not a bug but a CSS feature, it needs to be worked
             // around anyway.
             group.getMenuNode().width(99999).width(gridNode.outerWidth(true));
-
-            // move focus to first enabled control, if opened by keyboard
-            if ((from === 'key') && !Utils.containsFocusedControl(gridNode)) {
-                group.getGridButtons().filter(Utils.ENABLED_SELECTOR).first().focus();
-            }
         }
 
         /**
@@ -132,6 +127,15 @@ define('io.ox/office/tk/dropdown/buttons',
         group.getGridButtons = function () {
             // do not return the trailing placeholder buttons
             return gridNode.find('button').slice(0, buttonCount);
+        };
+
+        /**
+         * Sets the focus to the first enabled button in the drop-down menu.
+         */
+        group.grabMenuFocus = function () {
+            if (!Utils.containsFocusedControl(gridNode)) {
+                group.getGridButtons().filter(Utils.ENABLED_SELECTOR).first().focus();
+            }
         };
 
         /**

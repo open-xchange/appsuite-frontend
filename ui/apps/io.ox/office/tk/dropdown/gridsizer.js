@@ -174,18 +174,13 @@ define('io.ox/office/tk/dropdown/gridsizer',
          * Registers a 'mouseenter' handler at the drop-down menu that starts
          * a 'mousemove' listener when the mouse first hovers the grid element.
          */
-        function menuOpenHandler(event, from) {
+        function menuOpenHandler(event) {
 
             // stop running mousemove handler
             enableGridMouseMoveHandling(false);
 
             // initialize grid size to default size
             setGridSize(defSize);
-
-            // move focus to button, if opened by keyboard
-            if (from === 'key') {
-                gridButton.focus();
-            }
 
             // wait for mouse to enter the grid before listening to mousemove events
             gridNode.off('mouseenter').one('mouseenter', function () {
@@ -253,6 +248,15 @@ define('io.ox/office/tk/dropdown/gridsizer',
         // base constructor ---------------------------------------------------
 
         Menu.extend(group, options);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Sets the focus to the button element in the sizer drop-down menu.
+         */
+        group.grabMenuFocus = function () {
+            gridButton.focus();
+        };
 
         // initialization -----------------------------------------------------
 
