@@ -2910,6 +2910,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 document.execCommand('enableInlineTableEditing', false, false);
             } catch (ex) {
             }
+
+            // disable IE table manipulation handlers in edit mode
+            editdiv.get(0).onresizestart = function () { return false; };
         };
 
         this.implInsertText = function (text, position) {
