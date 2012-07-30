@@ -105,16 +105,17 @@
 
         &.rich.debug-highlight {
 
-            > p {
+            p {
                 .highlight-mixin(#8f8, #efe);
             }
 
-            span {
+            span, b, i, u, strong, em {
                 .highlight-mixin(#88f, #eef);
             }
 
-            table p {
+            table {
                 .highlight-mixin(#f88, #fee);
+                outline-offset: 2px;
             }
         }
     }
