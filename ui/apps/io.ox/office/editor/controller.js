@@ -126,17 +126,6 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
             return this;
         };
 
-        // initialization -----------------------------------------------------
-
-        // manually trigger events for the search box
-        app.getWindow()
-            .on('search', function (event, query) {
-                self.change('action/search', query);
-            })
-            .on('cancel-search', function () {
-                self.cancel();
-            });
-
     } // class Controller
 
     // exports ================================================================

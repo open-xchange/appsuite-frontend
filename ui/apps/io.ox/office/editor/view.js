@@ -25,6 +25,9 @@ define('io.ox/office/editor/view',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class FontFamilyChooser ================================================
 
     var FontFamilyChooser = ComboField.extend({ constructor: function () {
@@ -112,7 +115,19 @@ define('io.ox/office/editor/view',
 
         // private methods ----------------------------------------------------
 
-        function createToolBar(key, label) {
+        /**
+         * Creates a new tool bar object and registers it at the tab bar.
+         *
+         * @param {String} key
+         *  The unique key of the tool bar. Will be used as value in the
+         *  'view/toolbars/show' controller events.
+         *
+         * @param {Object} [options]
+         *  A map of options to control the properties of the new tab in the
+         *  tab bar representing the tool bar. Supports all options for buttons
+         *  in radio groups (see method RadioGroup.addButton() for details).
+         */
+        function createToolBar(key, options) {
 
             var // create a new tool bar object, and store it in the map
                 toolBar = toolBars[key] = new ToolBar(win);
@@ -125,17 +140,23 @@ define('io.ox/office/editor/view',
                 .endCollapseGroups();
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
-            radioGroup.addButton(key, { label: label });
+            radioGroup.addButton(key, options);
             win.nodes.toolPane.append(toolBar.getNode().hide());
             controller.registerViewComponent(toolBar);
 
             return toolBar;
         }
 
+        /**
+         * Returns the key of the tool bar currently visible.
+         */
         function getVisibleToolBarKey() {
             return visibleToolBar;
         }
 
+        /**
+         * Activates the tool bar with the specified key.
+         */
         function showToolBar(key) {
             if (visibleToolBar in toolBars) {
             }
@@ -143,6 +164,24 @@ define('io.ox/office/editor/view',
                 visibleToolBar = key;
                 win.nodes.toolPane.children().slice(1).hide();
                 toolBars[key].getNode().show();
+            }
+        }
+
+        /**
+         * Handles keyboard events in the quick-search text field.
+         */
+        function searchKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keyup = event.type === 'keyup';
+
+            switch (event.keyCode) {
+            case KeyCodes.ENTER:
+                if (keyup) { controller.change('action/search', $(this).val()); }
+                return false;
+            case KeyCodes.ESCAPE:
+                if (keyup) { $(this).val(''); controller.cancel(); }
+                return false;
             }
         }
 
@@ -188,10 +227,10 @@ define('io.ox/office/editor/view',
         win.nodes.toolPane.append(tabBar.getNode());
 
         // create the tool bars
-        createToolBar('insert', gt('Insert'))
+        createToolBar('insert', { label: gt('Insert') })
             .addGroup('insert/table', new TableSizeChooser());
 
-        createToolBar('format', gt('Format'))
+        createToolBar('format', { label: gt('Format') })
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addGroup('format/character/font/height', new FontHeightChooser())
             .startCollapseGroups()
@@ -206,7 +245,7 @@ define('io.ox/office/editor/view',
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
                 .end();
 
-        createToolBar('table', gt('Table'))
+        createToolBar('table', { label: gt('Table') })
             .addGroup('insert/table', new TableSizeChooser())
             .startCollapseGroups()
             .addButton('table/insert/row', { label: gt('Insert Row'), tooltip: gt('Insert Row') })
@@ -215,7 +254,7 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { label: gt('Delete Column'), tooltip: gt('Delete Column') })
             .endCollapseGroups();
 
-        createToolBar('debug', gt('Debug'))
+        createToolBar('debug', { label: gt('Debug') })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true });
 
         // prepare controller
@@ -226,6 +265,9 @@ define('io.ox/office/editor/view',
             .registerViewComponent(tabBar)
             // make the format tool bar visible
             .change('view/toolbars/show', 'format');
+
+        // override the limited functionality of the quick-search button
+        win.nodes.search.off().on('keydown keypress keyup', searchKeyHandler);
 
     } // class View
 
