@@ -248,9 +248,6 @@ define('io.ox/office/editor/main',
                 .on('hide', function () {
                     // unbind resize handler when window is hidden
                     $(window).off('resize', windowResizeHandler);
-                })
-                .on('search', function (event, query) {
-                    window.console.log('Editor: received search request: query="' + query + '"');
                 });
 
             // disable Firfox spell checking. TODO: better solution...

@@ -970,6 +970,95 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return undomgr.hasRedo();
         };
 
+        /**
+         * Searches the passed text in the entire document, and selects the
+         * first occurence.
+         *
+         * @param {String} query
+         *  The text that will be searched in the document.
+         */
+        this.search = function (query) {
+
+            var // the DOM text node and offset of the first character in the query text
+                startTextNode = null, startOffset = 0,
+                // the DOM text node and offset of the last character in the query text
+                endTextNode = null, endOffset = 0,
+                // the browser selection object, and a text range object for the selection
+                windowSelection = null, range = null;
+
+            // check input parameter
+            if (!_.isString(query) || !query.length) {
+                return;
+            }
+
+            // try/catch to escape from the jQuery.each() loops
+            try {
+                // search in all paragraphs (also in tables, TODO: other elements, e.g. headers, ...?)
+                editdiv.find('p').each(function () {
+
+                    var // the concatenated text from all text nodes
+                        elementText = $(this).text().replace(/\s/, ' ').toLowerCase(),
+                        // first index of query text
+                        index = elementText.indexOf(query.toLowerCase()),
+                        // all DOM text nodes in the element
+                        textNodes = [];
+
+                    // non-negative index: query text exists in the element
+                    if (index >= 0) {
+
+                        // extract all text nodes from the element
+                        collectTextNodes(this, textNodes);
+
+                        // find the text nodes that contain the start and end position of the query text
+                        _(textNodes).each(function (textNode) {
+
+                            var // the text in the current text node
+                                text = textNode.nodeValue;
+
+                            // test if text node contains the first character of the query text
+                            if ((0 <= index) && (index < text.length)) {
+                                startTextNode = textNode;
+                                startOffset = index;
+                            }
+
+                            // test if text node contains the last character of the query text
+                            if (index + query.length <= text.length) {
+                                endTextNode = textNode;
+                                endOffset = index + query.length;
+                                // escape from the _.each() and jQuery.each() loops
+                                throw null;
+                            }
+
+                            // skip this text node
+                            index -= text.length;
+                        });
+
+                        // we should not get here, just in case...
+                        window.console.log('Editor.search(): invalid state, did not find text nodes for query text');
+                        throw null;
+                    }
+                });
+            } catch (ex) {
+            }
+
+            // position found, select it
+            if (startTextNode && endTextNode) {
+                this.grabFocus();
+                try {
+                    // first, remove the old browser selection
+                    windowSelection = window.getSelection();
+                    windowSelection.removeAllRanges();
+
+                    // initialize the range object
+                    range = document.createRange();
+                    range.setStart(startTextNode, startOffset);
+                    range.setEnd(endTextNode, endOffset);
+                    windowSelection.addRange(range);
+                } catch (ex) {
+                }
+            }
+        };
+
         this.processFocus = function (state) {
             window.console.log('Editor focus: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
