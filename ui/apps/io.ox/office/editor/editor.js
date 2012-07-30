@@ -659,9 +659,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return '';
         };
 
-        this.getTextNodeFromTableRow = function (node, offset) {
+        this.getTextNodeFromCurrentNode = function (node, offset) {
 
-            var useFirstTextNode = true,  // can be false for final cells in a row
+            var useFirstTextNode = true,  // can be false for final child in a paragraph
                 localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
 
             if (! localNode) {
@@ -672,13 +672,18 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             var textNode = useFirstTextNode ? getFirstTextNode(localNode) : getLastTextNode(localNode);
 
             if (! textNode) {
-                dbgOutError("ERROR: Failed to determine text node from table row node! (useFirstTextNode: " + useFirstTextNode + ")");
+                dbgOutError("ERROR: Failed to determine text node from paragraph node! (useFirstTextNode: " + useFirstTextNode + ")");
                 return;
             }
 
             if (textNode.nodeType !== 3) {
-                dbgOutError("ERROR: Failed to determine text node from table row node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
-                return;
+                dbgOutError("ERROR: Failed to determine text node from paragraph node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                if (textNode.nodeName === 'BR') {
+                    textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
+                }
+                if ((! textNode) || (textNode.nodeType !== 3)) {
+                    return;
+                }
             }
 
             var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
@@ -693,20 +698,33 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 var origNodeName = node.nodeName,
                     origOffset = node.offset;
 
-                if (node.nodeName === 'TR') {
-                    var newNode = this.getTextNodeFromTableRow(node, offset);
-                    if (newNode) {
-                        node = newNode.node;
-                        offset = newNode.offset;
-                    } else {
-                        node = null;
-                    }
-                }
-
                 // check input values
                 if (! node) {
                     this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Node not defined');
                     return;
+                }
+
+                // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
+                // These DIVs need to be converted to the correct paragraph first.
+                // Also cells in columns have to be converted at this point.
+                if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR')) {
+
+                    var newNode = this.getTextNodeFromCurrentNode(node, offset);
+                    if (newNode) {
+                        node = newNode.node;
+                        offset = newNode.offset;
+                    } else {
+                        this.implDbgOutInfo('getOXOPositionFromDOMPosition: Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                        return;
+                    }
+                }
+
+                // Checking offset for text nodes
+                if (node.nodeType === 3) {
+                    if (! _.isNumber(offset)) {
+                        this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is 3, but offset is not defined!');
+                        return;
+                    }
                 }
 
                 if (offset < 0) {
@@ -784,95 +802,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             var startOxoPaM,
                 endOxoPaM;
 
-            if (domSelection.startPaM.node.nodeType === 3) {
-                if (! _.isNumber(domSelection.startPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is 3, but offset is not defined!');
-                    return;
-                }
-            }
-
-            if (domSelection.endPaM.node.nodeType === 3) {
-                if (! _.isNumber(domSelection.endPaM.offset)) {
-                    this.implDbgOutInfo('implGetOXOSelection: Invalid end position. NodeType is 3, but offset is not defined!');
-                    return;
-                }
-            }
-
-            // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
-            // These DIVs need to be converted to the correct paragraph first.
-            if (domSelection.startPaM.node.nodeName === 'DIV') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset: " + domSelection.startPaM.offset);
-                domSelection.startPaM.node = domSelection.startPaM.node.childNodes[domSelection.startPaM.offset];
-                domSelection.startPaM.offset = 0;
-                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset: " + domSelection.startPaM.offset);
-            }
-
-            // Checking selection - setting a valid selection doesn't always work on para end, browser is manipulating it....
-            // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-            // Some browsers select the p-elements instead of the required text nodes (Chrome)
-            // <DIV> is selected with double click in Chrome
-            if (domSelection.startPaM.node.nodeName === 'P') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (original): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
-                if ((domSelection.startPaM.node === domSelection.endPaM.node) && (domSelection.startPaM.offset === domSelection.endPaM.offset)) {
-                    domSelection.startPaM.node = getLastTextNode(domSelection.startPaM.node);
-                    if (domSelection.startPaM.node) {
-                        if (domSelection.startPaM.node.nodeType === 3) {
-                            domSelection.startPaM.offset = domSelection.startPaM.node.nodeValue.length;
-                        }
-                    } else {
-                        this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
-                        return;
-                    }
-                } else {
-                    domSelection.startPaM.node = getFirstTextNode(domSelection.startPaM.node);
-                    if (domSelection.startPaM.node) {
-                        if (domSelection.startPaM.node.nodeType === 3) {
-                            domSelection.startPaM.offset = 0;
-                        }
-                    } else {
-                        this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
-                        return;
-                    }
-                }
-                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.startPaM.node.nodeName + " : " + domSelection.startPaM.node.nodeType + " : Offset : " + domSelection.startPaM.offset);
-            }
-
             startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
-
-            // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
-            // These DIVs need to be converted to the correct paragraph first.
-            if (domSelection.endPaM.node.nodeName === 'DIV') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset: " + domSelection.endPaM.offset);
-                domSelection.endPaM.node = domSelection.endPaM.node.childNodes[domSelection.endPaM.offset];
-                domSelection.endPaM.offset = 0;
-                this.implDbgOutInfo("INFO: Changing DOMPosition <div> (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset: " + domSelection.endPaM.offset);
-            }
-
-            // Some browsers select the p-elements instead of the required text nodes (Chrome)
-            if (domSelection.endPaM.node.nodeName === 'P') {
-                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (original): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset : " + domSelection.endPaM.offset);
-
-                // Special handling for triple click in Chrome, that selects the start of the following paragraph as end point
-                if ((domSelection.startPaM.node.nodeType === 3) && (domSelection.endPaM.offset === 0)) {
-                    domSelection.endPaM.node = domSelection.endPaM.node.previousSibling;
-                    if (domSelection.endPaM.node === null) {
-                        this.implDbgOutInfo('implGetOXOSelection: Previous sibling is not defined!');
-                        return;
-                    }
-                }
-
-                domSelection.endPaM.node = getLastTextNode(domSelection.endPaM.node);
-                if (domSelection.endPaM.node) {
-                    if (domSelection.endPaM.node.nodeType === 3) {
-                        domSelection.endPaM.offset = domSelection.endPaM.node.nodeValue.length;
-                    }
-                } else {
-                    this.implDbgOutInfo('implGetOXOSelection: Changing from <p> to text node failed!');
-                    return;
-                }
-                this.implDbgOutInfo("INFO: Changing DOMPosition <p> (new): " + domSelection.endPaM.node.nodeName + " : " + domSelection.endPaM.node.nodeType + " : Offset : " + domSelection.endPaM.offset);
-            }
-
             endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
 
             var aOXOSelection = new OXOSelection(startOxoPaM, endOxoPaM);
