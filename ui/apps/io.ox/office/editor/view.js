@@ -267,7 +267,7 @@ define('io.ox/office/editor/view',
             .change('view/toolbars/show', 'format');
 
         // override the limited functionality of the quick-search button
-        win.nodes.search.off().on('keydown keypress keyup', searchKeyHandler);
+        win.nodes.search.off('keydown search change').on('keydown keypress keyup', searchKeyHandler);
 
     } // class View
 
