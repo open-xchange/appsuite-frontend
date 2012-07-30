@@ -668,123 +668,108 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return {node: textNode, offset: offset};
         };
 
-        this.implGetOXOSelection = function (domSelection) {
+        this.getOXOPosition = function(node, offset) {
 
-            function getOXOPositionFromDOMPosition(node, offset) {
+            var origNodeName = node.nodeName,
+            origOffset = node.offset;
 
-                var origNodeName = node.nodeName,
-                    origOffset = node.offset;
+            // check input values
+            if (! node) {
+                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. Node not defined');
+                return;
+            }
 
-                // check input values
-                if (! node) {
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Node not defined');
+            // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
+            // These DIVs need to be converted to the correct paragraph first.
+            // Also cells in columns have to be converted at this point.
+            if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR')) {
+
+                var newNode = this.getTextNodeFromCurrentNode(node, offset);
+                if (newNode) {
+                    node = newNode.node;
+                    offset = newNode.offset;
+                } else {
+                    this.implDbgOutInfo('getOXOPosition: Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                     return;
                 }
+            }
 
-                // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
-                // These DIVs need to be converted to the correct paragraph first.
-                // Also cells in columns have to be converted at this point.
-                if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR')) {
-
-                    var newNode = this.getTextNodeFromCurrentNode(node, offset);
-                    if (newNode) {
-                        node = newNode.node;
-                        offset = newNode.offset;
-                    } else {
-                        this.implDbgOutInfo('getOXOPositionFromDOMPosition: Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
-                        return;
-                    }
-                }
-
-                // Checking offset for text nodes
-                if (node.nodeType === 3) {
-                    if (! _.isNumber(offset)) {
-                        this.implDbgOutInfo('implGetOXOSelection: Invalid start position. NodeType is 3, but offset is not defined!');
-                        return;
-                    }
-                }
-
-                if (offset < 0) {
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            // Checking offset for text nodes
+            if (node.nodeType === 3) {
+                if (! _.isNumber(offset)) {
+                    this.implDbgOutInfo('getOXOPosition: Invalid start position. NodeType is 3, but offset is not defined!');
                     return;
                 }
+            }
 
-                // Check, if the selected node is a descendant of "this.editdiv"
-                var editorDiv = editdiv.has(node).get(0);
+            if (offset < 0) {
+                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+                return;
+            }
 
-                if (!editorDiv) { // range not in text area
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not part of the editor DIV: !' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
-                    return;
-                }
+            // Check, if the selected node is a descendant of "this.editdiv"
+            var editorDiv = editdiv.has(node).get(0);
 
-                // Checking node in root elements
-                if (paragraphs.has(node).length === 0) {
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
-                    return;
-                }
+            if (!editorDiv) { // range not in text area
+                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. It is not part of the editor DIV: !' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+                return;
+            }
 
-                // Calculating the position inside the editdiv.
-                var oxoPosition = [],
-                    evaluateOffset = (node.nodeType === 3) ? true : false,  // Is evaluation of offset required?
+            // Checking node in root elements
+            if (paragraphs.has(node).length === 0) {
+                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+                return;
+            }
+
+            // Calculating the position inside the editdiv.
+            var oxoPosition = [],
+            evaluateOffset = (node.nodeType === 3) ? true : false,  // Is evaluation of offset required?
                     offsetEvaluated = false,
                     columnBuffer = -1,
                     textLength = 0;
 
-                // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
-                // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
-                // Column must be integrated after row -> a buffer is required.
+            // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
+            // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
+            // Column must be integrated after row -> a buffer is required.
 
-                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                    if ((node.nodeName === 'TD') ||
+            for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
+                if ((node.nodeName === 'TD') ||
                         (node.nodeName === 'TH') ||
                         (node.nodeName === 'TR') ||
                         (node.nodeName === 'P') ||
                         (node.nodeName === 'TABLE')) {
 
-                        if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {  // special handling to change order of column and row.
-                            columnBuffer = $(node).prevAll().length;
-                        } else {
-                            oxoPosition.unshift($(node).prevAll().length);  // zero based
-                            if (columnBuffer !== -1) {
-                                oxoPosition.unshift(columnBuffer);
-                                columnBuffer = -1;
-                            }
+                    if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {  // special handling to change order of column and row.
+                        columnBuffer = $(node).prevAll().length;
+                    } else {
+                        oxoPosition.unshift($(node).prevAll().length);  // zero based
+                        if (columnBuffer !== -1) {
+                            oxoPosition.unshift(columnBuffer);
+                            columnBuffer = -1;
                         }
-
-                        evaluateOffset = false;
                     }
-                    if (evaluateOffset) {
-                        for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
-                            textLength += $(prevNode).text().length;
-                        }
-                        offsetEvaluated = true;
+
+                    evaluateOffset = false;
+                }
+                if (evaluateOffset) {
+                    for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
+                        textLength += $(prevNode).text().length;
                     }
+                    offsetEvaluated = true;
                 }
-
-                if (offsetEvaluated) {
-                    oxoPosition.push(textLength + offset);
-                }
-
-                if ((node.nodeType === 3) && (! offsetEvaluated)) {
-                    this.implDbgOutInfo('getOXOPositionFromDOMPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
-                }
-
-                // window.console.log('getOXOPositionFromDOMPosition: Info: Converting node: ' + origNodeName + ' and offset (optionally): ' + origOffset + ' to oxoPosition: ' + oxoPosition);
-
-                return new OXOPaM(oxoPosition);
             }
 
-            // Only supporting single selection at the moment
+            if (offsetEvaluated) {
+                oxoPosition.push(textLength + offset);
+            }
 
-            var startOxoPaM,
-                endOxoPaM;
+            if ((node.nodeType === 3) && (! offsetEvaluated)) {
+                this.implDbgOutInfo('getOXOPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
+            }
 
-            startOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.startPaM.node, domSelection.startPaM.offset);
-            endOxoPaM = getOXOPositionFromDOMPosition.call(this, domSelection.endPaM.node, domSelection.endPaM.offset);
+            // window.console.log('getOXOPosition: Info: Converting node: ' + origNodeName + ' and offset (optionally): ' + origOffset + ' to oxoPosition: ' + oxoPosition);
 
-            var aOXOSelection = new OXOSelection(startOxoPaM, endOxoPaM);
-
-            return aOXOSelection;
+            return new OXOPaM(oxoPosition);
         };
 
         this.getDOMPosition = function (oxoPosition) {
@@ -941,7 +926,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 return;
 
             var domSelection = this.implGetCurrentDOMSelection();
-            var selection = this.implGetOXOSelection(domSelection);
+            var selection = new OXOSelection(getOXOPosition(domSelection.startPaM.node, domSelection.startPaM.offset), getOXOPosition(domSelection.endPaM.node, domSelection.endPaM.offset));
+
             return selection;
         };
 
