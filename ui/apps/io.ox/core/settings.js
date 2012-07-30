@@ -12,7 +12,8 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
+define("settings", ['io.ox/core/http', 'io.ox/core/cache',
+                    'io.ox/core/tk/model', 'io.ox/mail/util'], function (http, cache, Model, util) {
 
     'use strict';
 
@@ -21,42 +22,52 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
         var settings = {},
             settingsCache;
 
-        var get = function (key) {
-            var parts = key.split(/\//),
-              tmp = settings || {};
+        var settingsDefaults = {
+                mail: {
+                    'removeDeletedPermanently': false,
+                    'contactCollectOnMailTransport': false,
+                    'contactCollectOnMailAccess': false,
+                    'appendVcard': false,
+                    'appendMailTextOnReply': false,
+                    'forwardMessageAs': 'Inline',
+                    'messageFormat': 'html',
+                    'lineWrapAfter': '',
+                    'defaultSendAddress': util.getInitialDefaultSender(),
+                    'autoSafeDraftsAfter': false,
+                    'allowHtmlMessages': true,
+                    'allowHtmlImages': false,
+                    'displayEmomticons': false,
+                    'isColorQuoted': false
+                }
 
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[partname];
-                } else {
-                    tmp = null;
-                    return null; // cant return
+            };
+
+        var settingsInitial = function (settings, settingsDefaults) {
+            _.each(settingsDefaults, function (value, key) {
+                if (settings[key] === undefined) {
+                    settings[key] = settingsDefaults[key];
                 }
             });
-            return tmp;
+        };
+
+        var get = function (key) {
+            var parts = key.split(/\//),
+            tmp = settings || {}, i = 0, $i = parts.length;
+//            for (; i < $i; i++) {
+//                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
+//                if (tmpHasSubNode) {
+//                    tmp = tmp[i];
+//                } else {
+//                    tmp = null;
+//                    return null;
+//                }
+//            }
+            return tmp[key];
         };
 
         var set = function (key, value) {
-
-            var parts = key.split(/\//),
-              tmp = settings || {},
-              rkey = parts.pop();
-
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-                if (tmpHasSubNode) {
-                    tmp = tmp[partname];
-                    if (typeof tmp !== 'object') {
-                        console.error('settings.set: ' + tmp + ' is a value');
-                        return false; // cant return
-                    }
-                } else {
-                    tmp[partname] = {};
-                    tmp = tmp[partname];
-                }
-            });
-            tmp[rkey] = value;
+            var tmp = settings || {};
+            tmp[key] = value;
         };
 
         var contains = function (key) {
@@ -65,9 +76,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                 falseSwitch;
 
             _.each(parts, function (partname, index) {
-                console.log(tmp);
                 var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
-//                falseSwitch = tmpHasSubNode ? true : false;
                 if (tmpHasSubNode) {
                     tmp = tmp[partname];
                     falseSwitch = true;
@@ -83,22 +92,21 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
         var remove = function (key) {
             var parts = key.split(/\//),
-              tmp = settings || {},
-              rkey = parts.pop();
-            _.each(parts, function (partname, index) {
-                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(partname) && typeof tmp[partname] !== 'undefined' && tmp[partname] !== null);
+                tmp = settings || {},  i = 0, $i = parts.length - 1;
+            for (; i < $i; i++) {
+                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty(i) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
                 if (tmpHasSubNode) {
-                    tmp = tmp[partname];
+                    tmp = tmp[i];
                     if (typeof tmp !== 'object') {
                         console.error('settings.remove: ' + tmp + ' is a value');
-                        return false; // cant return
+                        return false;
                     }
                 } else {
-                    return false; // cant return
+                    return false;
                 }
-            });
+            }
 
-            delete [tmp[rkey]];
+            delete tmp[parts[$i]];
             return true;
         };
 
@@ -125,7 +133,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
 
             createModel: function (ModelClass) {
 
-                return new ModelClass({ data: settings.mail })
+                return new ModelClass({ data: settings })
                     .on('change', $.proxy(fnChange, this));
             },
 
@@ -133,7 +141,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                 if (!path) { // undefined, null, ''
                     return get(that.settingsPath);
                 } else {
-                    path = that.settingsPath + '/' + path;
                     console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
@@ -143,22 +150,11 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                 }
             },
 
-            set: function (path, value, permanent) {
+            set: function (path, value) {
                 if (path) {
                     var orgpath = path;
-                    path = (that.settingsPath + '/' + path);
                     console.log(path);
                     set(path, value);
-                    if (permanent) {
-                        // save settings path on server
-                        settingsCache.add('settingsDefault', settings);
-                        return http.PUT({
-                            module: 'config/gui',
-                            appendColumns: false,
-                            processResponse: false,
-                            data: settings
-                        });
-                    }
                 }
             },
 
@@ -182,7 +178,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                         params: {
                             action: 'list'
                         },
-                        data: ['ui']
+                        data: ['apps/io.ox/' + that.settingsPath]
                     }).done(function (data) {
                             settings = data[0].tree;
                             settingsCache.add('settingsDefault', settings);
@@ -205,13 +201,14 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
                     });
             },
             save: function () {
+                settingsInitial(settings, settingsDefaults[that.settingsPath]);
                 settingsCache.add('settingsDefault', settings);
                 console.log(settings);
                 return http.PUT({
                     module: 'jslob',
                     params: {
                         action: 'update',
-                        id: 'ui' //id
+                        id: 'apps/io.ox/' + that.settingsPath //id
                     },
                     data: settings
                 });
@@ -223,7 +220,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'
     return {
         load: function (name, req, load, config) {
             var mywrapper = settingsWrapper();
-
             name = name.split('/');
             mywrapper.settingsPath = name[1]; //encodeURIComponent(name);
             mywrapper.load()

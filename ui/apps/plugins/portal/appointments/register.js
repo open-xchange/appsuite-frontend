@@ -11,8 +11,12 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/portal/appointments/register",
-    ["io.ox/core/extensions", "io.ox/core/date", "gettext!plugins/portal/appointments"], function (ext, date, gt) {
+define("plugins/portal/appointments/register", [
+    "io.ox/core/extensions",
+    "io.ox/core/date",
+    "gettext!plugins/portal/appointments",
+    "less!plugins/portal/appointments/style.css"
+], function (ext, date, gt) {
 
     "use strict";
     var loadTile = function () {

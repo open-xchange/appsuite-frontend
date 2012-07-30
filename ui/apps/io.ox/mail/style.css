@@ -187,6 +187,7 @@
 
 .mail-detail-pane .scrollable-pane {
     margin-bottom: 20px;
+    height: 110%; /* allows hiding "Entire thread" */
 }
 
 .mail-detail-pane .mail-detail.view {

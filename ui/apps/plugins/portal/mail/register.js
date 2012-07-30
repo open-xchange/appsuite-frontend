@@ -57,7 +57,7 @@ define('plugins/portal/mail/register',
         loadTile: function () {
             var folderLoaded = $.Deferred();
             var mailsLoaded = $.Deferred();
-            
+
             require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
                 folderApi.get(
                     {
@@ -93,25 +93,28 @@ define('plugins/portal/mail/register',
             require(["io.ox/mail/api"], function (mailApi) {
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 140) + " ...";
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100) + " ...";
                 subject = strings.shorten(subject, 40);
 
                 $node.append(
                     $('<h1>').text(gt("Mail")),
-                    $('<div class="io-ox-clear">').append(
-                        $('<div class="">').append($("<b>").text(subject), $('<br>'), $("<span>").text(mailtext))
+                    $('<div class="io-ox-clear io-ox-mail-preview">').append(
+                        $("<b>").text(subject),
+                        $('<br>'),
+                        $("<span>").text(mailtext)
                     )
                 );
                 deferred.resolve();
             });
-            
+
             return deferred;
         },
         load: function () {
             var loading = new $.Deferred();
             require(['io.ox/mail/api'], function (api) {
                 api.getAllThreads()
-                    .done(function (ids) {
+                    .done(function (response) {
+                        var ids = response.data;
                         api.getThreads(ids.slice(0, 5))
                             .done(loading.resolve)
                             .fail(loading.reject);

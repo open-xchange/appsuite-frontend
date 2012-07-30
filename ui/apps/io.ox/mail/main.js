@@ -21,9 +21,11 @@ define("io.ox/mail/main",
      "io.ox/mail/view-detail",
      "io.ox/mail/view-grid-template",
      "gettext!io.ox/mail/main",
+     "io.ox/core/tk/upload",
+     "io.ox/core/extPatterns/dnd",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd) {
 
     'use strict';
 
@@ -186,15 +188,23 @@ define("io.ox/mail/main",
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now
-            var node = grid.getToolbar().find('.grid-count').text('');
-            // be lazy
-            setTimeout(function () {
-                // loop over all top-level items (=threads) to get total number of mails
-                var count = _(all).reduce(function (memo, obj) {
-                    return memo + (obj.thread ? obj.thread.length : 1);
-                }, 0);
-                node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
-            }, 10);
+            var node = grid.getToolbar().find('.grid-count').text(''),
+                total = grid.prop('total'),
+                set = function (count) {
+                    node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
+                };
+            if (total !== undefined) {
+                set(total);
+            } else {
+                // be lazy
+                setTimeout(function () {
+                    // loop over all top-level items (=threads) to get total number of mails
+                    var count = _(all).reduce(function (memo, obj) {
+                        return memo + (obj.thread ? obj.thread.length : 1);
+                    }, 0);
+                    set(count);
+                }, 10);
+            }
         });
 
         grid.setAllRequest(function () {
@@ -372,6 +382,24 @@ define("io.ox/mail/main",
                 gt('No mails found for "%s"', win.search.query) :
                 gt('No mails in this folder');
         });
+
+        // Uploads
+        app.queues = {
+            'importEML': upload.createQueue({
+                processFile: function (file) {
+                    win.busy();
+                    return api.importEML({ file: file, folder: app.folder.get() })
+                        .done(function (data) {
+                            grid.selection.set(data.data);
+                        })
+                        .always(win.idle);
+                }
+            })
+        };
+
+        // drop zone
+        var dropZone = new dnd.UploadZone({ ref: "io.ox/mail/dnd/actions" }, app);
+        win.on("show", dropZone.include).on('hide', dropZone.remove);
 
         // go!
         commons.addFolderSupport(app, grid, 'mail')

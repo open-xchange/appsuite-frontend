@@ -24,8 +24,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/preview/main',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
+     'io.ox/core/api/account',
      'gettext!io.ox/mail/mail'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, gt) {
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, gt) {
 
     'use strict';
 
@@ -213,6 +214,25 @@ define("io.ox/mail/write/view-main",
             );
         },
 
+        createSenderField: function () {
+            var selectDiv;
+            accountAPI.all().done(function (array) {
+                selectDiv = $('<div>').addClass('fromselect-wrapper').append(
+                        $('<select>').css('width', '100%')
+                );
+                _.each(array, function (key, value) {
+                    var item = $('<option>').attr({
+                        'data-displayname': key.personal,
+                        'data-primary_address': key.primary_address
+                    }).text(key.primary_address);
+                    selectDiv.find('select').append(
+                        item
+                    );
+                });
+            });
+            return selectDiv;
+        },
+
         createRecipientList: function (id) {
             return (this.sections[id + 'List'] = $('<div>'))
                 .addClass('recipient-list').hide();
@@ -381,6 +401,11 @@ define("io.ox/mail/write/view-main",
                 .append(this.createRecipientList('bcc'))
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to ...'));
+
+         // FROM
+            this.addSection('from', gt('From'), false, true)
+            .append(this.createSenderField());
+            this.addLink('from', gt('From'));
 
             // Attachments
             this.addSection('attachments', gt('Attachments'), false, true);

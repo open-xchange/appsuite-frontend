@@ -131,7 +131,9 @@ define("io.ox/mail/api",
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
                     // mail no longer exists, so we remove it locally
-                    api.remove([params], true);
+                    api.remove([params], true).done(function () {
+                        api.trigger('not-found');
+                    });
                 }
             }
         },
@@ -222,17 +224,18 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             order: options.order || 'desc',
             includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            cache: false, // never use server cache
             max: 1000 // apply internal limit to build threads fast enough
         });
         var t1, t2;
         console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         // use cache?
         if (useCache === 'auto') {
-            useCache = options.cache = (cacheControl[options.folder] !== false);
+            useCache = (cacheControl[options.folder] !== false);
         }
-        return this.getAll(options, useCache)
-            .done(function (data) {
-                _(data).each(function (obj) {
+        return this.getAll(options, useCache, null, false)
+            .done(function (response) {
+                _(response.data).each(function (obj) {
                     // build thread hash
                     var key = obj.folder_id + '.' + obj.id;
                     threads[key] = [options.order]
@@ -243,7 +246,7 @@ define("io.ox/mail/api",
                         threadHash[o] = key;
                     });
                 });
-                console.log('time.post', '#', data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
+                console.log('time.post', '#', response.data.length, 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
                 cacheControl[options.folder] = true;
             });
     };
@@ -895,6 +898,11 @@ define("io.ox/mail/api",
         return folderAPI.getDefaultFolder('mail');
     };
 
+    api.getAccountIDFromFolder = function (inintialFolder) {
+        var accountId = /^default(\d*)\b/.exec(inintialFolder);
+        return accountId[1];
+    };
+
     api.beautifyMailText = function (str, lengthLimit) {
         lengthLimit = lengthLimit || 500;
         str = String(str)
@@ -910,6 +918,31 @@ define("io.ox/mail/api",
         return $.trim(str);
     };
 
+    // import mail as EML
+    api.importEML = function (options) {
+
+        options.folder = options.folder || api.getDefaultFolder();
+
+        var form = new FormData();
+        form.append('file', options.file);
+
+        return http.UPLOAD({
+                module: 'mail',
+                params: {
+                    action: 'import',
+                    folder: options.folder,
+                    force: true // don't check from address!
+                },
+                data: form,
+                fixPost: true
+            })
+            .pipe(function (data) {
+                return api.caches.all.grepRemove(options.folder + '\t').pipe(function () {
+                    api.trigger('refresh.all');
+                    return data;
+                });
+            });
+    };
 
     return api;
 });

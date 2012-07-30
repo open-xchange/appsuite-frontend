@@ -1,3 +1,9 @@
+@font-face {
+    font-family: OpenSans;
+    src: url(fonts/OpenSans-Light.ttf);
+    src: url(fonts/opensans-300.woff);
+}
+
 .io-ox-portal {
     padding: 0 13px 0 13px;
     position: relative;
@@ -18,11 +24,14 @@
     border-bottom: 0px none;
 }
 .io-ox-portal h1 {
-    font-size: 24px;
-    font-weight: normal;
+    font-size: 16pt;
+    font-weight: 200;
+    line-height: 1.15em;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 .io-ox-portal h2 {
     font-size: 18px;
+    font-family: OpenSans, Helvetica, Arial, sans-serif;
 }
 .io-ox-portal-column {
     display: inline-block;
@@ -72,19 +81,22 @@
     width: 400px;
     overflow: auto;
     min-height: 95%;
-    padding: 0 1em;
+    padding: 0 13px 0 0;
     float: left;
 }
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
-    padding: 0 8px 0 4px;
-    border-left: 4px solid transparent;
+    padding: 0 8px 0 8px;
     overflow: hidden;
     width: 270px;
     height: 180px;
-    margin: 5px;
+    margin: 13px 13px 0 0;
     cursor: pointer;
+}
+:hover.io-ox-portal-widget-tile  {
+    opacity: 0.75;
+    filter: alpha(opacity=75);
 }
 .io-ox-portal-widget-tile h1 {
     line-height: 2em;
@@ -93,7 +105,7 @@
     height: 4em;
 }
 .io-ox-portal-tile-active {
-    border-left: 4px solid #B94A48;
+//    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
     width: 80px;

@@ -12,87 +12,129 @@
  */
 
 define("io.ox/help/center", [
+    'io.ox/core/extensions',
+    'io.ox/help/core_doc',
+    'gettext!io.ox/help',
     'less!io.ox/help/style.css'
-], function () {
-    
+], function (ext, core_doc, gt) {
+    //TODO Launcher refactoren, hier hin
     'use strict';
     
     var center = { active: false },
-        help = {},
         origPopovers = {};
     
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
-            loadHelpTexts();
-            blockOtherContent();
-            enableHelpHandlers();
+            enableHelp();
         } else {
-            unblockOtherContent();
-            disableHelpHandlers();
+            disableHelp();
         }
     };
     
-    var loadHelpTexts = function () {
-        help = {
-            'io.ox/mail/actions/reply': "Allows you to reply to the sender of a message, not to every recipient. We might change this behaviour randomly to make your life more awkward.",
-            'io.ox/mail/actions/markunread': "Mark an e-mail as unread. Will be displayed as bold, but won't bother you as 'unread' message any more.",
-            'io.ox/mail/actions/move': "Move mail to a different folder. We highly recommend the trash bin to store important data. That's what all the cool kids do (e.g. Outlook) and that's why we actually sync the trash bin!"
-        };
-        console.log("Help texts loaded");
-    };
-    
-    var blockOtherContent = function () {
-        //TODO overlay funktion rausfinden, wird bei D&D benutzt.
-        console.log("Blocked other content");
-    };
-    
-    var enableHelpHandlers = function () {
-        var allReferenceElements = $('[data-ref]');
+    var enableHelp = function () {
+        var $body = $('body');
+        var $helpButton = $body.find('#io-ox-help-on');
+        var $saveThese = $(_($('[data-ref]')).filter(function (elem) {
+            var $elem = $(elem);
+            var dataRef = $elem.attr('data-ref');
+            return getHelpText(dataRef) !== undefined;
+        }));
         
-        console.log("Help handlers enabled");
-
-        _(allReferenceElements).each(function (elem) {
-            var $elem = $(elem),
-                datRef = $elem.attr('data-ref'),
-                text = help[datRef];
-
-            if (text) {
-                origPopovers[datRef] = $elem.popover;
-                $elem.popover({
-                    title: datRef,
-                    content: text,
+        //blackout everything
+        $body.append($('<div class="io-ox-help-blacksheepwall"/>'));
+        
+        //highlight things with help texts
+        _($saveThese).each(function (elem) {
+            var $elem = $(elem);
+            var offset = $elem.offset();
+            var dataRef = $elem.attr('data-ref');
+            console.log("Sizes for %s: width %s/%s, height %s/%s, padding = %s %s %s %s, margin = %s %s %s %s",
+                dataRef,
+                $elem.outerWidth(),
+                $elem.width(),
+                $elem.outerHeight(),
+                $elem.height(),
+                $elem.css("paddingTop"),
+                $elem.css("paddingRight"),
+                $elem.css("paddingBottom"),
+                $elem.css("paddingLeft"),
+                $elem.css("marginTop"),
+                $elem.css("marginRight"),
+                $elem.css("marginBottom"),
+                $elem.css("marginLeft"));
+            if (! ($elem.width() === 0 || $elem.height() === 0 || (offset.left === 0 && offset.top === 0))) {
+                var helpText = getHelpText(dataRef);
+                $("<div>").css({
+                    position: 'absolute',
+                    top: offset.top,
+                    left: offset.left,
+                    width: $elem.width(),
+                    height: $elem.height(),
+                    paddingLeft: $elem.css("paddingLeft"),
+                    paddingRight: $elem.css("paddingRight"),
+                    paddingTop: $elem.css("paddingTop"),
+                    paddingBottom: $elem.css("paddingBottom"),
+                    marginLeft: $elem.css("marginLeft"),
+                    marginRight: $elem.css("marginRight"),
+                    marginTop: $elem.css("marginTop"),
+                    marginBottom: $elem.css("marginBottom")
+                })
+                .text($elem.text())
+                .addClass('io-ox-help-highlight')
+                .popover({
+                    title: gt('Help'),
+                    content: helpText,
+                    html: true,
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
                         return off.left > width ? 'left' : 'right';
                     }
-                }).addClass('help-highlight');
+                })
+                .appendTo($body);
             }
         });
-    };
-    
-    var unblockOtherContent = function () {
-        console.log("Unblocking other content");
-    };
-    
-    var disableHelpHandlers = function () {
-        var refs = _(help).keys(),
-            allReferenceElements = $('[data-ref]');
         
-        _(allReferenceElements).each(function (elem) {
-            $(elem).popover('disable').popover('hide').removeClass('help-highlight');
+        //add cancel button
+        console.log("Check help button:", $helpButton);
+        $('<i class="icon-remove-circle icon-white" id="io-ox-help-off">')
+        .css({
+            position: 'absolute',
+            top: $helpButton.offset().top,
+            left: $helpButton.offset().left,
+            width: $helpButton.outerWidth(),
+            height: $helpButton.outerHeight()
+        })
+        .popover({
+            content: gt('Click here to quit the help center'),
+            html: true,
+            placement: 'left'
+        })
+        .click(function () {
+            $(this).popover('disable').popover("hide");
+            disableHelp();
+            center.active = false;
+        })
+        .appendTo($body);
+    };
+    
+    var getHelpText = function (id) {
+        var help;
+        ext.point('io.ox/help/helper').each(function (helper) {
+            if (helper.has(id)) {
+                help = helper.get(id);
+                return;
+            }
         });
-        
-        console.log("Help handlers disabled");
-        
-        _(refs).each(function (ref) {
-            var $elem = $('[data-ref="' + ref + '"]');
-            $elem.popover = origPopovers[ref];
-            console.log("Disabling " + ref, $elem);
-        });
+        return help;
     };
     
+    var disableHelp = function () {
+        $('.io-ox-help-blacksheepwall').detach();
+        $('.io-ox-help-highlight').detach();
+        $('#io-ox-help-off').detach();
+    };
     
     
     return center;

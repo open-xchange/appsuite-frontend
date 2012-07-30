@@ -23,7 +23,7 @@ define('io.ox/calendar/acceptdeny',
 
         var inputid = _.uniqueId('dialog');
 
-        return new dialogs.ModalDialog()
+        return new dialogs.ModalDialog({easyOut: true})
             .header($('<h3>').text('Change confirmation status'))
             .append($('<p>').text(gt('You are about the change your confirmation status. Please leave a comment for other participants.')))
             .append(

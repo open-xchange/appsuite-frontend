@@ -15,14 +15,16 @@ define('io.ox/mail/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
+     'io.ox/core/api/account',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
-     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
+     'io.ox/core/config'], function (ext, links, api, accountAPI, util, gt, config) {
 
     'use strict';
 
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
+
 
     // actions
 
@@ -37,9 +39,18 @@ define('io.ox/mail/actions',
         id: 'compose',
         action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.compose();
+                var initialFolder = app.folder.get(),
+                    accountID = api.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
+                    m.getApp().launch().done(function () {
+                        this.compose({
+                                defaultSender:  defaultSender
+                            });
+                    });
                 });
+
+
             });
         }
     });
@@ -61,8 +72,14 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.replyall(data);
+                var initialFolder = data.folder_id,
+                    accountID = api.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
+                    m.getApp().launch().done(function () {
+                        data.defaultSender = defaultSender;
+                        this.replyall(data);
+                    });
                 });
             });
         }
@@ -75,8 +92,14 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.reply(data);
+                var initialFolder = data.folder_id,
+                    accountID = api.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
+                    m.getApp().launch().done(function () {
+                        data.defaultSender = defaultSender;
+                        this.reply(data);
+                    });
                 });
             });
         }
@@ -89,8 +112,14 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.forward(data);
+                var initialFolder = data.folder_id,
+                    accountID = api.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
+                    m.getApp().launch().done(function () {
+                        data.defaultSender = defaultSender;
+                        this.forward(data);
+                    });
                 });
             });
         }
@@ -519,5 +548,16 @@ define('io.ox/mail/actions',
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
+
+    // DND actions
+
+    ext.point('io.ox/mail/dnd/actions').extend({
+        id: 'importEML',
+        index: 10,
+        label: gt('Drop here to import this mail'),
+        action: function (file, app) {
+            app.queues.importEML.offer(file);
+        }
+    });
 
 });

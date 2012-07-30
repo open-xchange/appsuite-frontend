@@ -133,6 +133,7 @@ define('io.ox/contacts/api',
                     return api.get({ id: o.id, folder: o.folder }, false)
                         .pipe(function (data) {
                             $.when(
+                                api.caches.get.add(data),
                                 api.caches.all.grepRemove(o.folder + '\t'),
                                 api.caches.list.remove({ id: o.id, folder: o.folder }),
                                 contactPictures.clear()

@@ -23,9 +23,10 @@ define.async('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, settings, gt) {
 
     'use strict';
 
@@ -65,7 +66,6 @@ define.async('io.ox/mail/write/main',
 //    }));
 
     // default sender (used to set from address)
-    var defaultSender = [];
     var UUID = 1;
 
     // multi instance pattern
@@ -76,7 +76,7 @@ define.async('io.ox/mail/write/main',
             editorHash = {},
             currentSignature = '',
             editorMode,
-            defaultEditorMode = config.get('gui.mail.formatmessage', 'TEXT/PLAIN') === 'TEXT/PLAIN' ? 'text' : 'html',
+            defaultEditorMode = settings.get('messageFormat'),
             mailState,
             composeMode,
             view,
@@ -117,7 +117,7 @@ define.async('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-        view.signatures = config.get('gui.mail.signatures', []);
+        view.signatures = config.get('gui.mail.signatures', []); // removed from mail setting
 
         app.setSignature = function (e) {
 
@@ -293,6 +293,19 @@ define.async('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
+        app.setSender = function (sender) {
+            var arrayOfAccounts = view.sidepanel.find('.fromselect-wrapper option'),
+                selectBox = view.sidepanel.find('select');
+            selectBox.val(sender);
+        };
+
+        app.getSender = function () {
+            var primaryAddress = view.sidepanel.find('.fromselect-wrapper select').val(),
+                personal = view.sidepanel.find('.fromselect-wrapper option[data-primary_address="' + primaryAddress + '"]').attr('data-displayname'),
+                sender = ['"' + personal + '"', primaryAddress];
+            return sender;
+        };
+
         app.setBody = function (str) {
             app.markDirty();
             // get default signature
@@ -442,6 +455,10 @@ define.async('io.ox/mail/write/main',
             mail.mode = mail.mode || 'compose';
             mail.format = mail.format || defaultEditorMode || 'text';
             mail.initial = mail.initial || false;
+
+            //config settings
+            mail.data.vcard = settings.get('appendVcard');
+
             // call setters
             var data = mail.data;
             this.setSubject(data.subject);
@@ -505,6 +522,8 @@ define.async('io.ox/mail/write/main',
          */
         app.compose = function (data) {
 
+            this.setSender(data.defaultSender);
+
             // register mailto!
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
@@ -552,6 +571,7 @@ define.async('io.ox/mail/write/main',
          * Reply all
          */
         app.replyall = function (obj) {
+            this.setSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
@@ -573,6 +593,7 @@ define.async('io.ox/mail/write/main',
          * Reply
          */
         app.reply = function (obj) {
+            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
@@ -594,6 +615,7 @@ define.async('io.ox/mail/write/main',
          * Forward
          */
         app.forward = function (obj) {
+            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
@@ -676,8 +698,10 @@ define.async('io.ox/mail/write/main',
                 };
             }
             // transform raw data
+            var sender = this.getSender();
+
             mail = {
-                from: [defaultSender] || [],
+                from: [sender] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
@@ -864,15 +888,14 @@ define.async('io.ox/mail/write/main',
         getApp: createInstance
     };
 
-    // load user
     return userAPI.get({ id: config.get('identifier') })
         .done(function (sender) {
-            // inject 'from'
-            defaultSender = ['"' + sender.display_name + '"', sender.email1];
-        })
+            // there is something wrong with a deferred object here
+    })
         .pipe(function () {
             return module;
         });
+
 });
 
 

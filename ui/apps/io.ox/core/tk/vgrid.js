@@ -544,6 +544,14 @@ define('io.ox/core/tk/vgrid',
 
             load.call(self)
                 .done(function (list) {
+
+                    // get list
+                    if (!isArray(list)) {
+                        // try to use 'data' property
+                        self.prop('total', list.more);
+                        list = list.data;
+                    }
+
                     if (isArray(list)) {
                         changed = list.length !== all.length || !_.isEqual(all, list);
                         apply(list)
