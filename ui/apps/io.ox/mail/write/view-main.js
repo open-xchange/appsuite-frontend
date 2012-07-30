@@ -215,13 +215,11 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-
-            var that = this,
-                selectDiv = $('<div>').addClass('fromselect-wrapper').append(
-                    $('<select>').css('width', '100%')
-            );
-
+            var selectDiv;
             accountAPI.all().done(function (array) {
+                selectDiv = $('<div>').addClass('fromselect-wrapper').append(
+                        $('<select>').css('width', '100%')
+                );
                 _.each(array, function (key, value) {
                     var item = $('<option>').attr({
                         'data-displayname': key.personal,
@@ -231,11 +229,8 @@ define("io.ox/mail/write/view-main",
                         item
                     );
                 });
-
-                if (array[1]) {
-                    return that.addSection('from', gt('From')).append(selectDiv);
-                }
             });
+            return selectDiv;
         },
 
         createRecipientList: function (id) {
@@ -390,9 +385,6 @@ define("io.ox/mail/write/view-main",
 
             // sections
 
-            // FROM
-            this.createSenderField();
-
             // TO
             this.addSection('to', gt('To'))
                 .append(this.createRecipientList('to'))
@@ -409,6 +401,11 @@ define("io.ox/mail/write/view-main",
                 .append(this.createRecipientList('bcc'))
                 .append(this.createField('bcc'));
             this.addLink('bcc', gt('Blind copy (BCC) to ...'));
+
+         // FROM
+            this.addSection('from', gt('From'), false, true)
+            .append(this.createSenderField());
+            this.addLink('from', gt('From'));
 
             // Attachments
             this.addSection('attachments', gt('Attachments'), false, true);

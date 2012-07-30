@@ -66,7 +66,6 @@ define.async('io.ox/mail/write/main',
 //    }));
 
     // default sender (used to set from address)
-    var defaultSender = [];
     var UUID = 1;
 
     // multi instance pattern
@@ -294,20 +293,16 @@ define.async('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
-        app.setDefaultSender = function (sender) {
+        app.setSender = function (sender) {
             var arrayOfAccounts = view.sidepanel.find('.fromselect-wrapper option'),
                 selectBox = view.sidepanel.find('select');
             selectBox.val(sender);
-            defaultSender = sender;
         };
 
         app.getSender = function () {
             var primaryAddress = view.sidepanel.find('.fromselect-wrapper select').val(),
                 personal = view.sidepanel.find('.fromselect-wrapper option[data-primary_address="' + primaryAddress + '"]').attr('data-displayname'),
                 sender = ['"' + personal + '"', primaryAddress];
-            if (!primaryAddress) {
-                return defaultSender;
-            }
             return sender;
         };
 
@@ -527,7 +522,7 @@ define.async('io.ox/mail/write/main',
          */
         app.compose = function (data) {
 
-            this.setDefaultSender(data.defaultSender);
+            this.setSender(data.defaultSender);
 
             // register mailto!
             if (navigator.registerProtocolHandler) {
@@ -576,7 +571,7 @@ define.async('io.ox/mail/write/main',
          * Reply all
          */
         app.replyall = function (obj) {
-            this.setDefaultSender(obj.defaultSender);
+            this.setSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
@@ -706,7 +701,6 @@ define.async('io.ox/mail/write/main',
             var sender = this.getSender();
 
             mail = {
-//                from: [defaultSender] || [],
                 from: [sender] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
