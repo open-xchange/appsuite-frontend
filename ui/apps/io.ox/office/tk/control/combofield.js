@@ -142,7 +142,7 @@ define('io.ox/office/tk/control/combofield',
                 button = $();
 
             // show the drop-down menu when the text has been changed
-            if (value !== oldFieldState.value) {
+            if (typeAhead && (value !== oldFieldState.value)) {
                 self.showMenu();
             }
 
@@ -155,7 +155,7 @@ define('io.ox/office/tk/control/combofield',
             // try to add the remaining text of an existing list item, but only
             // if the text field does not contain a selection, and something
             // has been appended to the old text
-            if (button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
+            if (typeAhead && button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
                     (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
                 textField.val(Utils.getControlLabel(button));
                 Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
@@ -197,11 +197,9 @@ define('io.ox/office/tk/control/combofield',
         this.on('menuopen', menuOpenHandler)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
-        this.getTextField().on('keydown keypress keyup', textFieldKeyHandler);
-
-        if (typeAhead) {
-            this.getTextField().on('validated', textFieldValidationHandler);
-        }
+        this.getTextField()
+            .on('keydown keypress keyup', textFieldKeyHandler)
+            .on('validated', textFieldValidationHandler);
 
     } // class ComboField
 
