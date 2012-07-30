@@ -649,12 +649,12 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             var textNode = useFirstTextNode ? getFirstTextNode(localNode) : getLastTextNode(localNode);
 
             if (! textNode) {
-                dbgOutError("ERROR: Failed to determine text node from paragraph node! (useFirstTextNode: " + useFirstTextNode + ")");
+                dbgOutError("ERROR: Failed to determine text node from current node! (useFirstTextNode: " + useFirstTextNode + ")");
                 return;
             }
 
             if (textNode.nodeType !== 3) {
-                dbgOutError("ERROR: Failed to determine text node from paragraph node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
                 if (textNode.nodeName === 'BR') {
                     textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
                 }
@@ -668,7 +668,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             return {node: textNode, offset: offset};
         };
 
-        this.getOXOPosition = function(node, offset) {
+        this.getOXOPosition = function (node, offset) {
 
             var origNodeName = node.nodeName,
             origOffset = node.offset;
@@ -926,7 +926,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 return;
 
             var domSelection = this.implGetCurrentDOMSelection();
-            var selection = new OXOSelection(getOXOPosition(domSelection.startPaM.node, domSelection.startPaM.offset), getOXOPosition(domSelection.endPaM.node, domSelection.endPaM.offset));
+            var selection = new OXOSelection(this.getOXOPosition(domSelection.startPaM.node, domSelection.startPaM.offset), this.getOXOPosition(domSelection.endPaM.node, domSelection.endPaM.offset));
 
             return selection;
         };
