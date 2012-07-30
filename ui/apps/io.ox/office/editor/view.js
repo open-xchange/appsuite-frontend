@@ -207,7 +207,13 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('table', gt('Table'))
-            .addGroup('insert/table', new TableSizeChooser());
+            .addGroup('insert/table', new TableSizeChooser())
+            .startCollapseGroups()
+            .addButton('table/insert/row', { label: gt('Insert Row'), tooltip: gt('Insert Row') })
+            .addButton('table/insert/column', { label: gt('Insert Column'), tooltip: gt('Insert Column') })
+            .addButton('table/delete/row', { label: gt('Delete Row'), tooltip: gt('Delete Row') })
+            .addButton('table/delete/column', { label: gt('Delete Column'), tooltip: gt('Delete Column') })
+            .endCollapseGroups();
 
         createToolBar('debug', gt('Debug'))
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true });

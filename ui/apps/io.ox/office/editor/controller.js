@@ -19,7 +19,9 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
 
     function Controller(app) {
 
-        var // current editor
+        var // self reference
+            self = this,
+            // current editor
             editor = app.getEditor(),
 
             // all the little controller items
@@ -31,6 +33,9 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'action/redo': {
                     enable: function () { return editor.hasRedo(); },
                     set: function () { editor.redo(); }
+                },
+                'action/search': {
+                    set: function (query) { editor.search(query); }
                 },
 
                 'insert/table': {
@@ -56,6 +61,23 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'format/paragraph/alignment': {
+                },
+
+                'table/insert/row': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.insertTableRow(); }
+                },
+                'table/insert/column': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.insertTableColumn(); }
+                },
+                'table/delete/row': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.deleteTableRow(); }
+                },
+                'table/delete/column': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.deleteTableColumn(); }
                 },
 
                 'debug/toggle': {
@@ -89,20 +111,31 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
          */
         this.registerEditor = function (newEditor, supportedItems) {
             newEditor
-                .on('focus', _.bind(function (event, focused) {
+                .on('focus', function (event, focused) {
                     if (focused && (editor !== newEditor)) {
                         editor = newEditor;
-                        this.enableAndDisable(supportedItems).update();
+                        self.enableAndDisable(supportedItems).update();
                     }
-                }, this))
-                .on('operation', _.bind(function () {
-                    this.update(/^(action|format)\//);
-                }, this))
-                .on('selectionChanged', _.bind(function () {
-                    this.update(/^format\//);
-                }, this));
+                })
+                .on('operation', function () {
+                    self.update(/^(action|format|table)\//);
+                })
+                .on('selectionChanged', function () {
+                    self.update(/^(format|table)\//);
+                });
             return this;
         };
+
+        // initialization -----------------------------------------------------
+
+        // manually trigger events for the search box
+        app.getWindow()
+            .on('search', function (event, query) {
+                self.change('action/search', query);
+            })
+            .on('cancel-search', function () {
+                self.cancel();
+            });
 
     } // class Controller
 

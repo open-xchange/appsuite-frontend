@@ -1062,14 +1062,16 @@ define("io.ox/core/desktop",
                         .addClass("window-controls")
                         .append(
                             // settings
-                            win.nodes.settingsButton = $("<div>").hide()
+                            win.nodes.settingsButton = $("<div>")
                             .addClass("window-control")
+                            .css({ display: 'inline-block' })
                             .text("\u270E")
                         )
                         .append(
                             // close
-                            win.nodes.closeButton = $("<div>").hide()
+                            win.nodes.closeButton = $("<div>")
                             .addClass("window-control")
+                            .css({ display: 'inline-block' })
                             .append(
                                 $('<a class="close">&times;</a>')
                             )
@@ -1170,7 +1172,7 @@ define("io.ox/core/desktop",
                 $('<form>')
                 .on('submit', false)
                 .addClass('form-search')
-                .css({ 'float': 'right' })
+                .css({ display: 'inline-block', verticalAlign: 'top' })
                 .append(
                     $('<label>', { 'for': searchId })
                     .append(
@@ -1240,8 +1242,10 @@ define("io.ox/core/desktop",
 
                 // add close handler
                 if (opt.close === true) {
-                    win.nodes.closeButton.show().on("click", close);
+                    win.nodes.closeButton.on("click", close);
                     win.setQuitOnClose(true);
+                } else {
+                    win.nodes.closeButton.hide();
                 }
 
                 // set title
@@ -1250,7 +1254,8 @@ define("io.ox/core/desktop",
                 // quick settings?
                 if (opt.settings) {
                     $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-                    win.nodes.settingsButton.show();
+                } else {
+                    win.nodes.settingsButton.hide();
                 }
             }
 
