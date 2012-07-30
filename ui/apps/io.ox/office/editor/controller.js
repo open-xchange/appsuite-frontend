@@ -58,6 +58,23 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'format/paragraph/alignment': {
                 },
 
+                'table/insert/row': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.insertTableRow(); }
+                },
+                'table/insert/column': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.insertTableColumn(); }
+                },
+                'table/delete/row': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.deleteTableRow(); }
+                },
+                'table/delete/column': {
+                    enable: function () { return editor.isPositionInTable(); },
+                    set: function () { editor.deleteTableColumn(); }
+                },
+
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
@@ -96,10 +113,10 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     }
                 }, this))
                 .on('operation', _.bind(function () {
-                    this.update(/^(action|format)\//);
+                    this.update(/^(action|format|table)\//);
                 }, this))
                 .on('selectionChanged', _.bind(function () {
-                    this.update(/^format\//);
+                    this.update(/^(format|table)\//);
                 }, this));
             return this;
         };

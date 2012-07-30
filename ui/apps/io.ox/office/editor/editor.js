@@ -2045,8 +2045,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.isPositionInTable = function (position) {
             var positionInTable = false,
-                domPos = this.getDOMPosition(position);
-
+                domPos = this.getDOMPosition(position || this.getSelection().endPaM.oxoPosition);
             if (domPos) {
                 var node = domPos.node;
 
@@ -2782,6 +2781,18 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
                 this.setAttribute(attr, value, startPosition, endPosition);
             }
+        };
+
+        this.insertTableRow = function () {
+        };
+
+        this.insertTableColumn = function () {
+        };
+
+        this.deleteTableRow = function () {
+        };
+
+        this.deleteTableColumn = function () {
         };
 
         // ==================================================================
