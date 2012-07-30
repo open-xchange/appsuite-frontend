@@ -591,9 +591,14 @@ define('io.ox/office/tk/utils',
 
     Utils.setTextFieldSelection = function (textField, selection) {
         var input = textField.get(0);
-        if (input && _.isObject(selection)) {
-            input.selectionStart = selection.start;
-            input.selectionEnd = selection.end;
+        if (input) {
+            if (_.isObject(selection)) {
+                input.selectionStart = selection.start;
+                input.selectionEnd = selection.end;
+            } else if (_.isBoolean(selection)) {
+                input.selectionStart = selection ? 0 : textField.val().length;
+                input.selectionEnd = textField.val().length;
+            }
         }
     };
 

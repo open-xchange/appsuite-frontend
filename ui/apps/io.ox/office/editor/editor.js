@@ -392,7 +392,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
      * Triggers the following events:
      * - 'focus': When the editor container got or lost browser focus.
      * - 'operation': When a new operation has been applied.
-     * - 'modified': When the modified flag has been changed.
      * - 'selectionChanged': When the selection has been changed.
      */
     function OXOEditor(editdiv, textMode) {
@@ -407,7 +406,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
-        var modified = false;
         var focused = false;
 
         var lastKeyDownEvent;
@@ -441,24 +439,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
          */
         this.getNode = function () {
             return editdiv;
-        };
-
-        /**
-         * Returns whether the editor contains unsaved changes.
-         */
-        this.isModified = function () {
-            return modified;
-        };
-
-        /**
-         * Sets the editor to modified or unmodified state, and triggers a
-         * 'modified' event, if the state has been changed.
-         */
-        this.setModified = function (state) {
-            if (modified !== state) {
-                modified = state;
-                this.trigger('modified', state);
-            }
         };
 
         /**
@@ -600,9 +580,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                 }
             }
-
-            // document state
-            this.setModified(true);
 
             if (bNotify && !blockOperationNotifications) {
                 // Will give everybody the same copy - how to give everybody his own copy?
@@ -1037,7 +1014,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             var currentSelection = this.getSelection();
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
-                this.trigger('selectionChanged');
+                if (currentSelection) {
+                    this.trigger('selectionChanged');
+                } else {
+                    window.console.log('Editor.implCheckEventSelection(): missing selection!');
+                }
             }
         };
 
@@ -1975,8 +1956,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.isPositionInTable = function (position) {
             var positionInTable = false,
-                domPos = this.getDOMPosition(position);
-
+                domPos = this.getDOMPosition(position || this.getSelection().endPaM.oxoPosition);
             if (domPos) {
                 var node = domPos.node;
 
@@ -2714,6 +2694,18 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
         };
 
+        this.insertTableRow = function () {
+        };
+
+        this.insertTableColumn = function () {
+        };
+
+        this.deleteTableRow = function () {
+        };
+
+        this.deleteTableColumn = function () {
+        };
+
         // ==================================================================
         // IMPL METHODS
         // ==================================================================
@@ -2840,6 +2832,9 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 document.execCommand('enableInlineTableEditing', false, false);
             } catch (ex) {
             }
+
+            // disable IE table manipulation handlers in edit mode
+            editdiv.get(0).onresizestart = function () { return false; };
         };
 
         this.implInsertText = function (text, position) {

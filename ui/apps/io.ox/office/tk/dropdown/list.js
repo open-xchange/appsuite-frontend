@@ -45,13 +45,14 @@ define('io.ox/office/tk/dropdown/list',
      *      to the registered sort functor (see 'option.sortFunctor').
      *      Otherwise, list items will be appended to the list.
      *  @param {Function} [options.sortFunctor]
-     *      A function that returns a string for each list item. The list items
-     *      will be sorted lexicographically by these strings. The function
-     *      receives the button object representing the list item, as jQuery
-     *      object. If omitted, the list items will be ordered by their label
-     *      texts, ignoring case; items without text label will be prepended in
-     *      no special order. This option has no effect, if sorting is not
-     *      enabled.
+     *      A function that returns a value for each list item. The list items
+     *      will be sorted according to these values, either by number or
+     *      lexicographically by strings. Will be called in the context of the
+     *      group object. The function receives the button object representing
+     *      the list item, as jQuery object. If omitted, the list items will be
+     *      ordered by their label texts, ignoring case; items without text
+     *      label will be prepended in no special order. This option has no
+     *      effect, if sorting is not enabled.
      */
     function extend(group, options) {
 
@@ -72,7 +73,7 @@ define('io.ox/office/tk/dropdown/list',
         /**
          * Handles 'menuopen' events and initializes the drop-down menu.
          */
-        function menuOpenHandler(event) {
+        function menuOpenHandler() {
 
             var // the outer menu node containing the list element
                 menuNode = group.getMenuNode(),
@@ -168,6 +169,14 @@ define('io.ox/office/tk/dropdown/list',
             if (!Utils.containsFocusedControl(listNode)) {
                 group.getListItems().first().focus();
             }
+        };
+
+        /**
+         * Returns the number of list items that can be shown at the same time
+         * in the drop-down list, depending on the current screen size.
+         */
+        group.getItemCountPerPage = function () {
+            return itemsPerPage;
         };
 
         /**

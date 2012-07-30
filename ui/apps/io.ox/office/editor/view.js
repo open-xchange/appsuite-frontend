@@ -52,7 +52,7 @@ define('io.ox/office/editor/view',
 
     // class FontHeightChooser ================================================
 
-    var FontHeightChooser = TextField.extend({ constructor: function () {
+    var FontHeightChooser = ComboField.extend({ constructor: function () {
 
         var options = {
                 width: 30,
@@ -64,7 +64,13 @@ define('io.ox/office/editor/view',
 
         // base constructor ---------------------------------------------------
 
-        TextField.call(this, options);
+        ComboField.call(this, options);
+
+        // initialization -----------------------------------------------------
+
+        _([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96]).each(function (size) {
+            this.addListEntry(size);
+        }, this);
 
     }}); // class FontHeightChooser
 
@@ -201,7 +207,13 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('table', gt('Table'))
-            .addGroup('insert/table', new TableSizeChooser());
+            .addGroup('insert/table', new TableSizeChooser())
+            .startCollapseGroups()
+            .addButton('table/insert/row', { label: gt('Insert Row'), tooltip: gt('Insert Row') })
+            .addButton('table/insert/column', { label: gt('Insert Column'), tooltip: gt('Insert Column') })
+            .addButton('table/delete/row', { label: gt('Delete Row'), tooltip: gt('Delete Row') })
+            .addButton('table/delete/column', { label: gt('Delete Column'), tooltip: gt('Delete Column') })
+            .endCollapseGroups();
 
         createToolBar('debug', gt('Debug'))
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true });

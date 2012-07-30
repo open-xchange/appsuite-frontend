@@ -19,6 +19,9 @@ define('io.ox/office/tk/control/combofield',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class ComboField =======================================================
 
     /**
@@ -49,6 +52,13 @@ define('io.ox/office/tk/control/combofield',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'menuopen' events and moves the focus to the text field.
+         */
+        function menuOpenHandler() {
+            self.getTextField().focus();
+        }
+
+        /**
          * Update handler that activates a list item.
          */
         function updateHandler(value) {
@@ -72,6 +82,50 @@ define('io.ox/office/tk/control/combofield',
         }
 
         /**
+         * Handles keyboard events in the text field. Moves the active list
+         * entry according to cursor keys.
+         */
+        function textFieldKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown';
+
+            function moveListItem(delta, page) {
+
+                var // all list items (button elements)
+                    buttons = self.getListItems(),
+                    // index of the active list item
+                    index = buttons.index(Utils.getSelectedButtons(buttons));
+
+                // first show the menu to be able to calculate the items-per-page value
+                self.showMenu();
+                // calculate new index, if old index is valid
+                if (index >= 0) {
+                    index += delta * (page ? self.getItemCountPerPage() : 1);
+                }
+                index = Math.max(Math.min(index, buttons.length - 1), 0);
+                // call the update handler to update the text field and list selection
+                self.update(Utils.getControlValue(buttons.eq(index)));
+                Utils.setTextFieldSelection(self.getTextField(), true);
+            }
+
+            switch (event.keyCode) {
+            case KeyCodes.UP_ARROW:
+                if (keydown) { moveListItem(-1, false); }
+                return false;
+            case KeyCodes.DOWN_ARROW:
+                if (keydown) { moveListItem(1, false); }
+                return false;
+            case KeyCodes.PAGE_UP:
+                if (keydown) { moveListItem(-1, true); }
+                return false;
+            case KeyCodes.PAGE_DOWN:
+                if (keydown) { moveListItem(1, true); }
+                return false;
+            }
+        }
+
+        /**
          * Handler that will be called after the text field has been validated
          * while editing. Will try to insert auto-completion text according to
          * existing entries in the drop-down list.
@@ -88,7 +142,7 @@ define('io.ox/office/tk/control/combofield',
                 button = $();
 
             // show the drop-down menu when the text has been changed
-            if (value !== oldFieldState.value) {
+            if (typeAhead && (value !== oldFieldState.value)) {
                 self.showMenu();
             }
 
@@ -101,7 +155,7 @@ define('io.ox/office/tk/control/combofield',
             // try to add the remaining text of an existing list item, but only
             // if the text field does not contain a selection, and something
             // has been appended to the old text
-            if (button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
+            if (typeAhead && button.length && (selection.start === value.length) && (oldFieldState.start < selection.start) &&
                     (oldFieldState.value.substr(0, oldFieldState.start) === value.substr(0, oldFieldState.start))) {
                 textField.val(Utils.getControlLabel(button));
                 Utils.setTextFieldSelection(textField, { start: value.length, end: textField.val().length });
@@ -140,12 +194,12 @@ define('io.ox/office/tk/control/combofield',
         // initialization -----------------------------------------------------
 
         // register event handlers
-        this.registerUpdateHandler(updateHandler)
+        this.on('menuopen', menuOpenHandler)
+            .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
-
-        if (typeAhead) {
-            this.getTextField().on('validated', textFieldValidationHandler);
-        }
+        this.getTextField()
+            .on('keydown keypress keyup', textFieldKeyHandler)
+            .on('validated', textFieldValidationHandler);
 
     } // class ComboField
 

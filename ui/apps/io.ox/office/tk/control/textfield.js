@@ -155,7 +155,7 @@ define('io.ox/office/tk/control/textfield',
                 break;
             case 'focus:key':
                 // select entire text when reaching the field with keyboard
-                Utils.setTextFieldSelection(textField, { start: 0, end: textField.val().length });
+                Utils.setTextFieldSelection(textField, true);
                 validationFieldState = getFieldState();
                 break;
             case 'blur:key':

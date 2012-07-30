@@ -223,7 +223,7 @@ define('io.ox/office/editor/main',
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
                 close: true,
-                search: false,
+                search: true,
                 toolbar: true
             });
             app.setWindow(win);
@@ -248,6 +248,9 @@ define('io.ox/office/editor/main',
                 .on('hide', function () {
                     // unbind resize handler when window is hidden
                     $(window).off('resize', windowResizeHandler);
+                })
+                .on('search', function (event, query) {
+                    window.console.log('Editor: received search request: query="' + query + '"');
                 });
 
             // disable Firfox spell checking. TODO: better solution...
@@ -327,45 +330,45 @@ define('io.ox/office/editor/main',
          *  A deferred that reflects the result of the load operation.
          */
         function load() {
-            var def = null;
+
+            var // initialize the deferred to be returned
+                def = $.Deferred().always(function () {
+                    win.idle();
+                    editor.grabFocus(true);
+                });
 
             // show application window
-            win.show().busy();
-            $(window).resize();
-            updateTitles();
+            win.show(function () {
+                win.busy();
+                $(window).resize();
+                updateTitles();
 
-            editor.initDocument();
-            operationsBuffer = []; // initDocument will result in an operation
+                editor.initDocument();
+                operationsBuffer = []; // initDocument will result in an operation
 
-            // initialize the deferred to be returned
-            def = $.Deferred().always(function () {
-                win.idle();
-                editor.setModified(false);
-                editor.grabFocus(true);
-            });
-
-            // load the file
-            $.ajax({
-                type: 'GET',
-                url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
-                dataType: 'json'
-            })
-            .pipe(extractOperationsList)
-            .done(function (operations) {
-                if (operations) {
-                    editor.enableUndo(false);
-                    applyOperations(operations);
-                    editor.enableUndo(true);
-                    startOperationsTimer();
-                    def.resolve();
-                } else {
-                    showError(gt('An error occurred while importing the document.'), gt('Load Error'));
+                // load the file
+                $.ajax({
+                    type: 'GET',
+                    url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
+                    dataType: 'json'
+                })
+                .pipe(extractOperationsList)
+                .done(function (operations) {
+                    if (operations) {
+                        editor.enableUndo(false);
+                        applyOperations(operations);
+                        editor.enableUndo(true);
+                        startOperationsTimer();
+                        def.resolve();
+                    } else {
+                        showError(gt('An error occurred while importing the document.'), gt('Load Error'));
+                        def.reject();
+                    }
+                })
+                .fail(function (response) {
+                    showAjaxError(response);
                     def.reject();
-                }
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-                def.reject();
+                });
             });
 
             return def;
@@ -409,7 +412,6 @@ define('io.ox/office/editor/main',
                 filesApi.caches.get.clear(); // TODO
                 filesApi.caches.versions.clear();
                 filesApi.trigger('refresh.all');
-                // editor.setModified(false);
                 def.resolve();
             })
             .fail(function (response) {
@@ -589,10 +591,11 @@ define('io.ox/office/editor/main',
             var def = $.Deferred();
 
             if (win && editor) {
-                win.show();
-                updateTitles();
-                editor.grabFocus();
-                def.resolve();
+                win.show(function () {
+                    updateTitles();
+                    editor.grabFocus();
+                    def.resolve();
+                });
             } else {
                 def.reject();
             }
