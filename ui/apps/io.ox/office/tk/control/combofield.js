@@ -19,6 +19,9 @@ define('io.ox/office/tk/control/combofield',
 
     'use strict';
 
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes;
+
     // class ComboField =======================================================
 
     /**
@@ -49,6 +52,13 @@ define('io.ox/office/tk/control/combofield',
         // private methods ----------------------------------------------------
 
         /**
+         * Handles 'menuopen' events and moves the focus to the text field.
+         */
+        function menuOpenHandler() {
+            self.getTextField().focus();
+        }
+
+        /**
          * Update handler that activates a list item.
          */
         function updateHandler(value) {
@@ -69,6 +79,50 @@ define('io.ox/office/tk/control/combofield',
             var value = Utils.getControlValue(button);
             updateHandler(value);
             return value;
+        }
+
+        /**
+         * Handles keyboard events in the text field. Moves the active list
+         * entry according to cursor keys.
+         */
+        function textFieldKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown';
+
+            function moveListItem(delta, page) {
+
+                var // all list items (button elements)
+                    buttons = self.getListItems(),
+                    // index of the active list item
+                    index = buttons.index(Utils.getSelectedButtons(buttons));
+
+                // first show the menu to be able to calculate the items-per-page value
+                self.showMenu();
+                // calculate new index, if old index is valid
+                if (index >= 0) {
+                    index += delta * (page ? self.getItemCountPerPage() : 1);
+                }
+                index = Math.max(Math.min(index, buttons.length - 1), 0);
+                // call the update handler to update the text field and list selection
+                self.update(Utils.getControlValue(buttons.eq(index)));
+                Utils.setTextFieldSelection(self.getTextField(), true);
+            }
+
+            switch (event.keyCode) {
+            case KeyCodes.UP_ARROW:
+                if (keydown) { moveListItem(-1, false); }
+                return false;
+            case KeyCodes.DOWN_ARROW:
+                if (keydown) { moveListItem(1, false); }
+                return false;
+            case KeyCodes.PAGE_UP:
+                if (keydown) { moveListItem(-1, true); }
+                return false;
+            case KeyCodes.PAGE_DOWN:
+                if (keydown) { moveListItem(1, true); }
+                return false;
+            }
         }
 
         /**
@@ -140,8 +194,10 @@ define('io.ox/office/tk/control/combofield',
         // initialization -----------------------------------------------------
 
         // register event handlers
-        this.registerUpdateHandler(updateHandler)
+        this.on('menuopen', menuOpenHandler)
+            .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
+        this.getTextField().on('keydown keypress keyup', textFieldKeyHandler);
 
         if (typeAhead) {
             this.getTextField().on('validated', textFieldValidationHandler);
