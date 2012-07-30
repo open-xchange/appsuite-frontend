@@ -110,6 +110,7 @@
                     name: config.baseUrl + name,
                     source: data.less,
                 };
+                file.path = dirname(file.name);
                 if (data.css) file.node = insert(file.name, data.css, "script");
                 lessFiles.push(file);
                 load();
