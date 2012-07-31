@@ -991,7 +991,7 @@ define('io.ox/office/editor/editor',
             // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
             // These DIVs need to be converted to the correct paragraph first.
             // Also cells in columns have to be converted at this point.
-            if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR')) {
+            if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR') || (node.nodeName === 'TD') || (node.nodeName === 'TH')) {
 
                 var newNode = this.getTextNodeFromCurrentNode(node, offset);
                 if (newNode) {
