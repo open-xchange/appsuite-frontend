@@ -13,7 +13,11 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils'], function (Events, Utils) {
+define('io.ox/office/editor/editor',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils',
+     'io.ox/office/tk/fonts'
+    ], function (Events, Utils, Fonts) {
 
     'use strict';
 
@@ -192,7 +196,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             processingUndoRedo = false;
         };
 
-    }
+    } // class OXOUndoManager
 
     function fillstr(str, len, fill, right) {
         while (str.length < len) {
@@ -547,6 +551,47 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         }
         return element;
     }
+
+    // formatting attributes ==================================================
+
+    /**
+     * Maps formatting attribute names used in the operations API to getter and
+     * setter functions that manipulate the CSS formatting of DOM elements.
+     */
+    var AttributeConversion = {
+
+        bold: {
+            get: function (element) {
+                var value = $(element).css('font-weight');
+                return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
+            }
+        },
+
+        italic: {
+            get: function (element) {
+                var value = $(element).css('font-style');
+                return (value === 'italic') || (value === 'oblique');
+            }
+        },
+
+        underline: {
+            get: function (element) {
+                var values = $(element).css('text-decoration').split(/\s+/);
+                return _(values).contains('underline');
+            }
+        },
+
+        fontname: {
+            get: function (element) {
+                var value = $(element).css('font-family');
+                return Fonts.getFontName(value);
+            }
+        },
+
+        fontsize: {
+        }
+
+    };
 
     // class OXOEditor ========================================================
 
@@ -1345,10 +1390,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 } else {
                     window.console.log('Editor.implCheckEventSelection(): missing selection!');
                 }
-                var i = 0;
-                iterateSelectedTextNodes(function (node) {
-                    window.console.log(i++ + ': "' + node.nodeValue + '"');
-                });
             }
         };
 
@@ -2007,21 +2048,20 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.getAttribute = function (attr, para, start, end) {
             // TODO
-            if (attr === undefined) {
+            if (_.isUndefined(attr)) {
                 this.implDbgOutInfo('getAttribute - no attribute specified');
                 return;
             }
 
             // TODO
-            if (para === undefined) {
+            if (_.isUndefined(para)) {
                 // Get Attr for selection
                 return (attr === 'fontname' || attr === 'fontsize') ? document.queryCommandValue(attr) : document.queryCommandState(attr);
             }
-            else {
-                // TODO
-                this.implDbgOutInfo('niy: getAttribute with selection parameter');
-                // implGetAttribute( attr, para, start, end );
-            }
+
+            // TODO
+            this.implDbgOutInfo('niy: getAttribute with selection parameter');
+            // implGetAttribute( attr, para, start, end );
         };
 
         this.getParagraphCount = function () {
