@@ -90,6 +90,7 @@ function (ext, config, userAPI, date, tasks, gt) {
         
         function drawContent(extension) {
             contentQueue.fasttrack(extension.id).done(function (node) {
+                contentSide.find(":first").detach();
                 contentSide.append(node);
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
@@ -99,7 +100,7 @@ function (ext, config, userAPI, date, tasks, gt) {
         
         function makeClickHandler(extension) {
             return function (event) {
-                contentSide.empty();
+                contentSide.find(":first").detach();
                 contentSide.busy();
                 app.active = extension;
                 return drawContent(extension);
