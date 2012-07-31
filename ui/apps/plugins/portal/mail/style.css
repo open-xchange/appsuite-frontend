@@ -22,7 +22,7 @@
 .io-ox-mail-preview {
     margin: 0;
     padding: 13px;
-    background: rgba(0, 0, 0, 0.2);
+//    background: rgba(0, 0, 0, 0.2);
     position: absolute;
     bottom: 13px;
     width: 244px;
