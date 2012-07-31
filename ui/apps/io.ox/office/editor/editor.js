@@ -670,9 +670,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.getOXOPosition = function (node, offset) {
 
-            var origNodeName = node.nodeName,
-            origOffset = node.offset;
-
             // check input values
             if (! node) {
                 this.implDbgOutInfo('getOXOPosition: Invalid DOM position. Node not defined');
@@ -766,8 +763,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             if ((node.nodeType === 3) && (! offsetEvaluated)) {
                 this.implDbgOutInfo('getOXOPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
             }
-
-            // window.console.log('getOXOPosition: Info: Converting node: ' + origNodeName + ' and offset (optionally): ' + origOffset + ' to oxoPosition: ' + oxoPosition);
 
             return new OXOPaM(oxoPosition);
         };
