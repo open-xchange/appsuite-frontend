@@ -320,46 +320,176 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
     }
 
     /**
-     * Iterates over all text nodes contained by the specified elements or any
-     * of their descendants.
+     * Returns whether node1 is located before node2 in the DOM. This is also
+     * the case if node1 contains node2, because node1 starts before node2 in
+     * this case.
+     *
+     * @param {Node} node1
+     *  The first DOM node tested if it is located before the second.
+     *
+     * @param {Node} node2
+     *  The second DOM node.
+     *
+     * @returns {Boolean}
+     *  Whether node1 is located before node2.
+     */
+    function isNodeBeforeNode(node1, node2) {
+        return (node1.compareDocumentPosition(node2) & 4) === 4;
+    }
+
+    /**
+     * Returns whether the passed DOM node is located before the text position.
+     * If 'position' contains a text node, then this text node itself is
+     * considered to be located before 'position', if the position's offset is
+     * greater than zero. If 'position' contains an element node, than the
+     * specified node must be located before the element's child node specified
+     * by the possition's offset.
+     *
+     * @param {Node} node
+     *  The DOM node tested if it is located before the text position.
+     *
+     * @param {Object} position
+     *  The text position. Must contain a 'node' attribute containing a DOM
+     *  node, and an 'offset' attribute containing an integer offset depending
+     *  on the position's node.
+     *
+     * @return {Boolean}
+     *  Whether the node is located before the text position.
+     */
+    function isNodeBeforeTextPosition(node, position) {
+
+        // if 'node' is located before the position node, it is always considered 'before'
+        if (isNodeBeforeNode(node, position.node)) {
+            return true;
+        }
+
+        switch (position.node.nodeType) {
+        case 1:
+            // position is element node: 'node' must be contained, index of its
+            // ancestor node must be less than the position's offset
+            if (!position.node.contains(node)) { return false; }
+            // travel up until we are a direct child of position.node
+            while (node.parentNode !== position.node) {
+                node = node.parentNode;
+            }
+            // check own index in all siblings
+            return $(node).index() < position.offset;
+        case 3:
+            // text node: text offset must be greater than null if 'node' is the text node
+            return (node === position.node) && (position.offset > 0);
+        }
+
+        window.console.log('isNodeBeforeTextPosition(): invalid node type');
+        return false;
+    }
+
+    /**
+     * Iterates over all descendant DOM nodes of the specified element.
      *
      * @param {HTMLElement} element
-     *  A DOM element object whose text nodes will be iterated.
+     *  A DOM element object whose descendant nodes will be iterated.
      *
      * @param {Function} iterator
-     *  The iterator function that will be called for every text node. Receives
-     *  the DOM text node object as first parameter, and its index among all
-     *  text nodes as second index. If the iterator returns the boolean value
-     *  false, iteration will be stopped immediately.
+     *  The iterator function that will be called for every node. Receives the
+     *  DOM node object as first parameter. If the iterator returns the boolean
+     *  value false, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Boolean|Undefined}
+     *  The boolean value false, if any iterator call has returned false to
+     *  stop the iteration process, otherwise undefined.
      */
-    function iterateTextNodes(element, iterator, context) {
+    function iterateNodesInElement(element, iterator, context) {
 
-        var // the index of the text node currently visited
-            index = 0;
+        // create a local function that can call itself and return an exit flag
+        (function iterate(element) {
 
-        (function traverse(element) {
-            var child = null;
-            for (child = element.firstChild; child; child = child.nextSibling) {
-                switch (child.nodeType) {
-                case 1:
-                    if (traverse(child) === false) { return false; }
-                    break;
-                case 3:
-                    if (iterator.call(context, child, index) === false) { return false; }
-                    index += 1;
-                    break;
+            for (var child = element.firstChild; child; child = child.nextSibling) {
+
+                // call iterator for child node; if it returns false, exit loop and return too
+                if (iterator.call(context, child) === false) { return false; }
+
+                // iterate child nodes; if iterator for any descendant node returns false, return false too
+                if ((child.nodeType === 1) && (iterate(child) === false)) { return false; }
+            }
+
+        }(element)); // call the local function immediately with the passed element
+    }
+
+    /**
+     * Iterates over all DOM nodes contained in the specified DOM text range.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges whose text nodes will be iterated. May be an array
+     *  of DOM text range objects, or a single DOM text range object. Each text
+     *  range must contain a 'start' attribute and an 'end' attribute, both
+     *  attribute values must be DOM text position objects containing a 'node'
+     *  and 'offset' attribute.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every node. Receives the
+     *  DOM node object as first parameter. If the iterator returns the boolean
+     *  value false, iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the
+     *  symbol 'this' will be bound to the context inside the iterator
+     *  function).
+     *
+     * @returns {Boolean|Undefined}
+     *  The boolean value false, if any iterator call has returned false to
+     *  stop the iteration process, otherwise undefined.
+     */
+    function iterateNodesInTextRanges(ranges, iterator, context) {
+
+        var // the current text range
+            range = null,
+            // the current node
+            node = null;
+
+        // convert parameter to an array
+        if (!_.isArray(ranges)) {
+            ranges = [ranges];
+        }
+
+        for (var index = 0; index < ranges.length; ranges += 1) {
+            range = ranges[index];
+            node = range.start.node;
+
+            // element/child node position, go to child node
+            if (node.nodeType === 1) {
+                node = node.childNodes[range.start.offset];
+            }
+
+            // iterate as long as the end of the range has not been reached
+            while (node && isNodeBeforeTextPosition(node, range.end)) {
+
+                // call iterator for the node, return if iterator returns false
+                if (iterator.call(context, node) === false) { return false; }
+
+                // find next node
+                if ((node.nodeType === 1) && node.firstChild) {
+                    // current node is an element with child nodes, go to first child
+                    node = node.firstChild;
+                } else {
+                    // find first node up the tree that has a sibling, go to that sibling
+                    while (node && !node.nextSibling) {
+                        node = node.parentNode;
+                    }
+                    node = node && node.nextSibling;
                 }
             }
-        }(element));
+        }
     }
 
     function collectTextNodes(element) {
         var textNodes = [];
-        iterateTextNodes(element, function (textNode) { textNodes.push(textNode); });
+        iterateNodesInElement(element, function (node) {
+            if (node.nodeType === 3) { textNodes.push(node); }
+        });
         return textNodes;
     }
 
@@ -440,6 +570,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
+        var self = this;
+
         var focused = false;
 
         var lastKeyDownEvent;
@@ -465,6 +597,87 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         // add event hub
         Events.extend(this);
+
+        // private functions --------------------------------------------------
+
+        /**
+         * Returns an array of objects representing the current browser
+         * selection. Each array element is a DOM text range object with
+         * 'begin' and 'end' attributes representing the DOM text positions
+         * where the text range begins and ends. Each DOM text position is an
+         * object by itself, containing the two attributes 'node' and 'offset'.
+         * If 'node' points to a DOM text node, 'offset' specifies the
+         * character of the text node. If 'node' points to an element node,
+         * 'offset' specifies the index of its child node. In each DOM text
+         * range object, the start position is always located before the end
+         * position.
+         */
+        function getNormalizedSelection() {
+
+            var // the browser selection
+                selection = window.getSelection(),
+                // an array of all text ranges
+                ranges = [],
+                // a single range object
+                range = null;
+
+            // build an array of text range objects holding start and end nodes/offsets
+            for (var index = 0; index < selection.rangeCount; index += 1) {
+
+                // get the native selection Range object
+                range = selection.getRangeAt(index);
+
+                // translate to the internal text range representation
+                range = { start: { node: range.startContainer, offset: range.startOffset }, end: { node: range.endContainer, offset: range.endOffset } };
+
+                // check that the nodes are inside the editor
+                if (editdiv.get(0).contains(range.start.node) && editdiv.get(0).contains(range.end.node)) {
+
+                    // adjust start/end by node DOM position
+                    if (isNodeBeforeNode(range.end.node, range.start.node)) {
+                        range.tmp = range.start;
+                        range.start = range.end;
+                        range.end = range.tmp;
+                        delete range.tmp;
+                    }
+                    ranges.push(range);
+                }
+            }
+
+            return ranges;
+        }
+
+        /**
+         * Iterates over all text nodes contained in the current browser
+         * selection.
+         *
+         * @param {Function} iterator
+         *  The iterator function that will be called for every text node.
+         *  Receives the DOM text node object as first parameter. If the
+         *  iterator returns the boolean value false, iteration will be stopped
+         *  immediately.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         *
+         * @returns {Boolean|Undefined}
+         *  The boolean value false, if any iterator call has returned false to
+         *  stop the iteration process, otherwise undefined.
+         */
+        function iterateSelectedTextNodes(iterator, context) {
+
+            var // all text ranges in the current browser selection
+                ranges = getNormalizedSelection();
+
+            // iterate over all selected nodes, and call iterator for all text nodes
+            return iterateNodesInTextRanges(ranges, function (node) {
+                if (node.nodeType === 3) {
+                    return iterator.call(context, node);
+                }
+            });
+        }
 
         // global editor settings ---------------------------------------------
 
@@ -1021,41 +1234,42 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     elementText = $(element).text().replace(/\s/g, ' ').toLowerCase(),
                     // first index of query text
                     textPos = elementText.indexOf(query.toLowerCase()),
-                    // the DOM text node and offset of the first character in the query text
-                    startTextNode = null, startOffset = 0,
-                    // the DOM text node and offset of the last character in the query text
-                    endTextNode = null, endOffset = 0,
-                    // the browser selection object, and a text range object for the selection
-                    windowSelection = null, range = null;
+                    // the DOM text range containing the query text
+                    range = {},
+                    // the browser selection object, and a document range object
+                    windowSelection = null, docRange = null;
 
                 // non-negative position: query text exists in the element
                 if (textPos >= 0) {
 
                     // visit all text nodes in the element
-                    iterateTextNodes(element, function (textNode) {
+                    iterateNodesInElement(element, function (node) {
 
                         var // the text in the current text node
-                            text = textNode.nodeValue;
+                            text = null;
 
-                        // test if text node contains the first character of the query text
-                        if ((0 <= textPos) && (textPos < text.length)) {
-                            startTextNode = textNode;
-                            startOffset = textPos;
+                        // filter text nodes
+                        if (node.nodeType === 3) {
+                            text = node.nodeValue;
+
+                            // test if text node contains the first character of the query text
+                            if ((0 <= textPos) && (textPos < text.length)) {
+                                range.start = { node: node, offset: textPos };
+                            }
+
+                            // test if text node contains the last character of the query text
+                            if (textPos + query.length <= text.length) {
+                                range.end = { node: node, offset: textPos + query.length };
+                                return false;
+                            }
+
+                            // skip this text node
+                            textPos -= text.length;
                         }
-
-                        // test if text node contains the last character of the query text
-                        if (textPos + query.length <= text.length) {
-                            endTextNode = textNode;
-                            endOffset = textPos + query.length;
-                            return false;
-                        }
-
-                        // skip this text node
-                        textPos -= text.length;
                     }, this);
 
                     // position found, select it
-                    if (startTextNode && endTextNode) {
+                    if (range.start && range.end) {
                         this.grabFocus();
                         try {
                             // first, remove the old browser selection
@@ -1063,10 +1277,10 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                             windowSelection.removeAllRanges();
 
                             // initialize the range object
-                            range = document.createRange();
-                            range.setStart(startTextNode, startOffset);
-                            range.setEnd(endTextNode, endOffset);
-                            windowSelection.addRange(range);
+                            docRange = document.createRange();
+                            docRange.setStart(range.start.node, range.start.offset);
+                            docRange.setEnd(range.end.node, range.end.offset);
+                            windowSelection.addRange(docRange);
                         } catch (ex) {
                         }
                     }
@@ -1098,9 +1312,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         };
 
         this.implStartCheckEventSelection = function () {
-            var _this = this;
             // I Don't think we need some way to stop the timer, as the user won't be able to close this window "immediatly" after a mouse click or key press...
-            window.setTimeout(function () { _this.implCheckEventSelection(); }, 10);
+            window.setTimeout(function () { self.implCheckEventSelection(); }, 10);
         };
 
         this.implCheckEventSelection = function () {
@@ -1768,7 +1981,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             // TODO
             if (para === undefined) {
                 // Get Attr for selection
-                return document.queryCommandState(attr);
+                return (attr === 'fontname' || attr === 'fontsize') ? document.queryCommandValue(attr) : document.queryCommandState(attr);
             }
             else {
                 // TODO

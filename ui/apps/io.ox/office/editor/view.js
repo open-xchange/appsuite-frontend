@@ -47,8 +47,8 @@ define('io.ox/office/editor/view',
         // initialization -----------------------------------------------------
 
         // add all known fonts
-        _(Fonts.getFontNames()).each(function (fontName) {
-            this.addListEntry(fontName, { labelCss: { fontFamily: Fonts.getFontFamily(fontName), fontSize: '115%' } });
+        _(Fonts.getRegisteredFontNames()).each(function (fontName) {
+            this.addListEntry(fontName, { labelCss: { fontFamily: Fonts.getCssFontFamily(fontName), fontSize: '115%' } });
         }, this);
 
     }}); // class FontFamilyChooser
