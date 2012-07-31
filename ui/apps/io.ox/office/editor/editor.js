@@ -1404,13 +1404,29 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             else {
 
                 if (event.keyCode === KeyCodes.ENTER) {
+
                     this.deleteSelected(selection);
-                    var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    this.splitParagraph(startPosition);
-                    // TODO / TBD: Should all API / Operation calls return the new position?!
-                    var lastValue = selection.startPaM.oxoPosition.length - 1;
-                    selection.startPaM.oxoPosition[lastValue - 1] += 1;
-                    selection.startPaM.oxoPosition[lastValue] = 0;
+                    var startPosition = _.copy(selection.startPaM.oxoPosition, true),
+                        lastValue = selection.startPaM.oxoPosition.length - 1,
+                        prepareEmptyParagraph = false;
+
+                    if ((lastValue >= 4) &&
+                        (this.isPositionInTable([0])) &&
+                        (startPosition[0] === 0) &&
+                        (startPosition[1] === 0) &&
+                        (startPosition[2] === 0) &&
+                        (startPosition[3] === 0) &&
+                        (startPosition[4] === 0)) {
+                        this.insertParagraph([0]);
+                        paragraphs = editdiv.children();
+                        selection.startPaM.oxoPosition = [0, 0];
+                    } else {
+                        this.splitParagraph(startPosition);
+                        // TODO / TBD: Should all API / Operation calls return the new position?!
+                        var lastValue = selection.startPaM.oxoPosition.length - 1;
+                        selection.startPaM.oxoPosition[lastValue - 1] += 1;
+                        selection.startPaM.oxoPosition[lastValue] = 0;
+                    }
                     selection.endPaM = _.copy(selection.startPaM, true);
                     event.preventDefault();
                     this.setSelection(selection);
@@ -2110,6 +2126,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 foundParagraph = false;
 
             var domPos = this.getDOMPosition(position);
+
             if (domPos) {
                 var node = domPos.node;
                 if (node.nodeName !== 'P') {
@@ -3023,8 +3040,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         this.implInsertParagraph = function (position) {
             var posLength = position.length - 1,
                 para = position[posLength],
-                allParagraphs = this.getAllAdjacentParagraphs(position),
-                isTable = this.isPositionInTable(position) ? true : false;
+                allParagraphs = this.getAllAdjacentParagraphs(position);
 
             var newPara = document.createElement('p');
             newPara = $(newPara);
@@ -3041,9 +3057,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 newPara.insertBefore(allParagraphs[0]);
             }
 
-            if (! isTable) {
-                paragraphs = editdiv.children();
-            }
+            paragraphs = editdiv.children();
 
             var lastPos = _.copy(position);
             lastPos.push(0);
