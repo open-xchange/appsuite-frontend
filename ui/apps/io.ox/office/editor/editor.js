@@ -1607,15 +1607,12 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     this.deleteSelected(selection);
                 }
 
-                if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === 0) {
-                    // Insert table before the current paragraph, without splitting
-                } else if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === this.getParagraphLength(selection.startPaM.oxoPosition)) {
-                    // Insert table after the current paragraph, without splitting
-                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 2] += 1;
-                } else {
+                // Splitting paragraph, if the cursor is not at the beginning of the paragraph.
+                if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] !== 0) {
                     this.splitParagraph(selection.startPaM.oxoPosition);
                     selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 2] += 1;
                 }
+
                 selection.startPaM.oxoPosition.pop();
                 paragraphs = editdiv.children();
 
@@ -3070,19 +3067,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 newTable.append(newRow);
             }
 
-            var domParagraph = null,
-                localDomPos = this.getDOMPosition(localPosition);
-
-            if (localDomPos) {
-                domParagraph = localDomPos.node;
-                newTable.insertBefore(domParagraph);
-            } else {
-                // adding the table to the end of the document
-                localPosition[localPosition.length - 1] -= 1;
-                domParagraph = this.getDOMPosition(localPosition).node;
-                newTable.insertAfter(domParagraph);
-                localPosition[localPosition.length - 1] += 1;
-            }
+            var domParagraph = this.getDOMPosition(localPosition).node;
+            newTable.insertBefore(domParagraph);
             paragraphs = editdiv.children();
 
             // Filling empty paragraphs in table cells with minimal content.
