@@ -99,7 +99,7 @@ function (ext, config, userAPI, date, tasks, gt) {
         
         function makeClickHandler(extension) {
             return function (event) {
-                contentSide.empty();
+                contentSide.find(":first").detach();
                 contentSide.busy();
                 app.active = extension;
                 return drawContent(extension);
