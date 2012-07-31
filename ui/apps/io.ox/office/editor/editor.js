@@ -688,11 +688,11 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             }
 
             if (textNode.nodeType !== 3) {
-                dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
                 if (textNode.nodeName === 'BR') {
                     textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
                 }
                 if ((! textNode) || (textNode.nodeType !== 3)) {
+                    dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
                     return;
                 }
             }
@@ -703,9 +703,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         };
 
         this.getOXOPosition = function (node, offset) {
-
-            var origNodeName = node.nodeName,
-            origOffset = node.offset;
 
             // check input values
             if (! node) {
@@ -800,8 +797,6 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             if ((node.nodeType === 3) && (! offsetEvaluated)) {
                 this.implDbgOutInfo('getOXOPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
             }
-
-            // window.console.log('getOXOPosition: Info: Converting node: ' + origNodeName + ' and offset (optionally): ' + origOffset + ' to oxoPosition: ' + oxoPosition);
 
             return new OXOPaM(oxoPosition);
         };
@@ -2054,7 +2049,19 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.isPositionInTable = function (position) {
             var positionInTable = false,
-                domPos = this.getDOMPosition(position || this.getSelection().endPaM.oxoPosition);
+                domPos = null;
+
+            if (position) {
+                domPos = this.getDOMPosition(position);
+            } else {
+                var selection = this.getSelection();
+                if (selection) {
+                    domPos = this.getDOMPosition(selection.endPaM.oxoPosition);
+                } else {
+                    return false;
+                }
+            }
+
             if (domPos) {
                 var node = domPos.node;
 
