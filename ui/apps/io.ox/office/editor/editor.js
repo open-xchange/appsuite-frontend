@@ -455,7 +455,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
             ranges = [ranges];
         }
 
-        for (var index = 0; index < ranges.length; ranges += 1) {
+        for (var index = 0; index < ranges.length; index += 1) {
             range = ranges[index];
             node = range.start.node;
 
@@ -648,14 +648,38 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         }
 
         /**
-         * Iterates over all text nodes contained in the current browser
+         * Iterates over all DOM nodes contained in the current browser
          * selection.
          *
          * @param {Function} iterator
-         *  The iterator function that will be called for every text node.
+         *  The iterator function that will be called for every DOM node.
+         *  Receives the DOM node object as first parameter. If the iterator
+         *  returns the boolean value false, the iteration process will be
+         *  stopped immediately.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         *
+         * @returns {Boolean|Undefined}
+         *  The boolean value false, if any iterator call has returned false to
+         *  stop the iteration process, otherwise undefined.
+         */
+        function iterateSelectedNodes(iterator, context) {
+            // iterate over all selected nodes
+            return iterateNodesInTextRanges(getNormalizedSelection(), iterator, context);
+        }
+
+        /**
+         * Iterates over all DOM text nodes contained in the current browser
+         * selection.
+         *
+         * @param {Function} iterator
+         *  The iterator function that will be called for every DOM text node.
          *  Receives the DOM text node object as first parameter. If the
-         *  iterator returns the boolean value false, iteration will be stopped
-         *  immediately.
+         *  iterator returns the boolean value false, the iteration process
+         *  will be stopped immediately.
          *
          * @param {Object} [context]
          *  If specified, the iterator will be called with this context (the
@@ -667,12 +691,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
          *  stop the iteration process, otherwise undefined.
          */
         function iterateSelectedTextNodes(iterator, context) {
-
-            var // all text ranges in the current browser selection
-                ranges = getNormalizedSelection();
-
             // iterate over all selected nodes, and call iterator for all text nodes
-            return iterateNodesInTextRanges(ranges, function (node) {
+            return iterateSelectedNodes(function (node) {
                 if (node.nodeType === 3) {
                     return iterator.call(context, node);
                 }
@@ -1325,6 +1345,10 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 } else {
                     window.console.log('Editor.implCheckEventSelection(): missing selection!');
                 }
+                var i = 0;
+                iterateSelectedTextNodes(function (node) {
+                    window.console.log(i++ + ': "' + node.nodeValue + '"');
+                });
             }
         };
 
