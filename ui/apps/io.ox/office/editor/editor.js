@@ -1583,6 +1583,19 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
                 }
+
+                if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === 0) {
+                    // Insert table before the current paragraph, without splitting
+                } else if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === this.getParagraphLength(selection.startPaM.oxoPosition)) {
+                    // Insert table after the current paragraph, without splitting
+                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 2] += 1;
+                } else {
+                    this.splitParagraph(selection.startPaM.oxoPosition);
+                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 2] += 1;
+                }
+                selection.startPaM.oxoPosition.pop();
+                paragraphs = editdiv.children();
+
                 var newOperation = {name: OP_TABLE_INSERT, start: _.copy(selection.startPaM.oxoPosition, true), columns: size.width, rows: size.height};
                 this.applyOperation(newOperation, true, true);
             }
@@ -3022,11 +3035,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.implInsertTable = function (position, columns, rows) {
 
-            var localPosition = _.copy(position);
-            this.implSplitParagraph(localPosition);
-            paragraphs = editdiv.children();
-
-            var newTable = $('<table>');
+            var localPosition = _.copy(position),
+                newTable = $('<table>');
 
             for (var i = 1; i <= rows; i++) {
                 var newRow = ($('<tr>').attr('valign', 'top'));
@@ -3038,12 +3048,19 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 newTable.append(newRow);
             }
 
-            localPosition.pop();
-            var domParagraph = this.getDOMPosition(localPosition).node;
+            var domParagraph = null,
+                localDomPos = this.getDOMPosition(localPosition);
 
-            newTable.insertAfter(domParagraph);
-            localPosition[localPosition.length - 1] += 1;
-
+            if (localDomPos) {
+                domParagraph = localDomPos.node;
+                newTable.insertBefore(domParagraph);
+            } else {
+                // adding the table to the end of the document
+                localPosition[localPosition.length - 1] -= 1;
+                domParagraph = this.getDOMPosition(localPosition).node;
+                newTable.insertAfter(domParagraph);
+                localPosition[localPosition.length - 1] += 1;
+            }
             paragraphs = editdiv.children();
 
             // Filling empty paragraphs in table cells with minimal content.
