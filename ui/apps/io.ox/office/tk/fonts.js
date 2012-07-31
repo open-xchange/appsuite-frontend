@@ -49,7 +49,7 @@ define('io.ox/office/tk/fonts', function () {
      * Returns an array with the names of all registered fonts. The array is
      * not sorted.
      */
-    Fonts.getFontNames = function () {
+    Fonts.getRegisteredFontNames = function () {
         return _.keys(fonts);
     };
 
@@ -80,9 +80,11 @@ define('io.ox/office/tk/fonts', function () {
      *
      * @returns {String}
      *  The CSS font family string, if the specified font is known, otherwise
-     *  the unchanged fontName parameter.
+     *  the fontName parameter. All font names inserted into the return value
+     *  will be enclosed in a pair of quote characters if they contain
+     *  whitespace characters.
      */
-    Fonts.getFontFamily = function (fontName) {
+    Fonts.getCssFontFamily = function (fontName) {
 
         var // array with the passed font and all replacement font names
             fontNames = [];
@@ -101,6 +103,29 @@ define('io.ox/office/tk/fonts', function () {
 
         // return a comma-separated string
         return fontNames.join(',');
+    };
+
+    /**
+     * Returns the first font name specified in the passed font family string
+     * received from a CSS font-family attribute. The CSS font family may
+     * consist of a comma separated list of font names, where the font names
+     * may be enclosed in quote characters.
+     *
+     * @param {String} cssFontFamily
+     *  The value of a CSS font-family attribute.
+     *
+     * @returns {String}
+     *  The first font name from the passed string, without quote characters.
+     */
+    Fonts.getFontName = function (cssFontFamily) {
+
+        var // extract first font name from comma separated list
+            fontName = $.trim(cssFontFamily.split(',')[0]);
+
+        // Remove leading and trailing quote characters (be tolerant and allow
+        // mixed quotes such as "Font' or even a missing quote character on one
+        // side of the string). After that, trim again and return.
+        return $.trim(fontName.match(/^["']?(.*?)["']?$/)[1]);
     };
 
     // exports ================================================================
