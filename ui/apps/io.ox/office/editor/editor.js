@@ -344,10 +344,10 @@ define('io.ox/office/editor/editor',
     /**
      * Returns whether the passed DOM node is located before the text position.
      * If 'position' contains a text node, then this text node itself is
-     * considered to be located before 'position', if the position's offset is
-     * greater than zero. If 'position' contains an element node, than the
-     * specified node must be located before the element's child node specified
-     * by the possition's offset.
+     * considered to be located before 'position' regardless of the position's
+     * offset. If 'position' contains an element node, than the specified node
+     * must be located before the element's child node specified by the
+     * possition's offset.
      *
      * @param {Node} node
      *  The DOM node tested if it is located before the text position.
@@ -379,8 +379,8 @@ define('io.ox/office/editor/editor',
             // check own index in all siblings
             return $(node).index() < position.offset;
         case 3:
-            // text node: text offset must be greater than null if 'node' is the text node
-            return (node === position.node) && (position.offset > 0);
+            // position is text node: include it in the set of valid nodes
+            return node === position.node;
         }
 
         window.console.log('isNodeBeforeTextPosition(): invalid node type');
@@ -424,6 +424,35 @@ define('io.ox/office/editor/editor',
     }
 
     /**
+     * Returns the DOM node that follows the passed node in DOM tree order.
+     * If the node is an element with children, returns its first child node.
+     * Otherwise, tries to return the next sibling of the node. If the node is
+     * the last sibling, goes up to the parent node(s) and tries to return
+     * their next sibling.
+     *
+     * @param {Node} node
+     *  The DOM node whose successor will be returned.
+     *
+     * @returns {Node|Undefined}
+     *  The next node in the DOM tree, or undefined, if the passed node is the
+     *  very last leaf in the DOM tree.
+     */
+    function getNextNodeInTree(node) {
+
+        // node is an element with child nodes, return its first child
+        if ((node.nodeType === 1) && node.firstChild) {
+            return node.firstChild;
+        }
+
+        // find first node up the tree that has a sibling, return that sibling
+        while (node && !node.nextSibling) {
+            node = node.parentNode;
+        }
+        return node && node.nextSibling;
+    }
+
+
+    /**
      * Iterates over all DOM nodes contained in the specified DOM text range.
      *
      * @param {Object[]|Object} ranges
@@ -463,28 +492,21 @@ define('io.ox/office/editor/editor',
             range = ranges[index];
             node = range.start.node;
 
-            // element/child node position, go to child node
             if (node.nodeType === 1) {
+                // element/child node position, go to child node described by offset
                 node = node.childNodes[range.start.offset];
+            } else if ((node.nodeType === 3) && (range.start.offset === node.nodeValue.length) && (range.start.node !== range.end.node)) {
+                // ignore first text node, if text range starts directly at its end and is not a simple cursor
+                // TODO: is this the desired behavior?
+                node = getNextNodeInTree(node);
             }
 
             // iterate as long as the end of the range has not been reached
             while (node && isNodeBeforeTextPosition(node, range.end)) {
-
                 // call iterator for the node, return if iterator returns false
                 if (iterator.call(context, node) === false) { return false; }
-
                 // find next node
-                if ((node.nodeType === 1) && node.firstChild) {
-                    // current node is an element with child nodes, go to first child
-                    node = node.firstChild;
-                } else {
-                    // find first node up the tree that has a sibling, go to that sibling
-                    while (node && !node.nextSibling) {
-                        node = node.parentNode;
-                    }
-                    node = node && node.nextSibling;
-                }
+                node = getNextNodeInTree(node);
             }
         }
     }
@@ -586,11 +608,7 @@ define('io.ox/office/editor/editor',
                 var value = $(element).css('font-family');
                 return Fonts.getFontName(value);
             }
-        },
-
-        fontsize: {
         }
-
     };
 
     // class OXOEditor ========================================================
@@ -714,34 +732,6 @@ define('io.ox/office/editor/editor',
         function iterateSelectedNodes(iterator, context) {
             // iterate over all selected nodes
             return iterateNodesInTextRanges(getNormalizedSelection(), iterator, context);
-        }
-
-        /**
-         * Iterates over all DOM text nodes contained in the current browser
-         * selection.
-         *
-         * @param {Function} iterator
-         *  The iterator function that will be called for every DOM text node.
-         *  Receives the DOM text node object as first parameter. If the
-         *  iterator returns the boolean value false, the iteration process
-         *  will be stopped immediately.
-         *
-         * @param {Object} [context]
-         *  If specified, the iterator will be called with this context (the
-         *  symbol 'this' will be bound to the context inside the iterator
-         *  function).
-         *
-         * @returns {Boolean|Undefined}
-         *  The boolean value false, if any iterator call has returned false to
-         *  stop the iteration process, otherwise undefined.
-         */
-        function iterateSelectedTextNodes(iterator, context) {
-            // iterate over all selected nodes, and call iterator for all text nodes
-            return iterateSelectedNodes(function (node) {
-                if (node.nodeType === 3) {
-                    return iterator.call(context, node);
-                }
-            });
         }
 
         // global editor settings ---------------------------------------------
@@ -2063,16 +2053,32 @@ define('io.ox/office/editor/editor',
         };
 
         this.getAttribute = function (attr, para, start, end) {
+
+            var // the attribute converter
+                attrConverter = AttributeConversion[attr],
+                // the attribute value
+                value;
+
             // TODO
-            if (_.isUndefined(attr)) {
-                this.implDbgOutInfo('getAttribute - no attribute specified');
+            if (!attrConverter) {
+                this.implDbgOutInfo('getAttribute - no valid attribute specified');
                 return;
             }
 
-            // TODO
             if (_.isUndefined(para)) {
-                // Get Attr for selection
-                return (attr === 'fontname' || attr === 'fontsize') ? document.queryCommandValue(attr) : document.queryCommandState(attr);
+                iterateSelectedNodes(function (node) {
+                    var nodeValue;
+                    // process all text nodes and get attriubutes from their parent element
+                    if (node.nodeType === 3) {
+                        nodeValue = attrConverter.get(node.parentNode);
+                        if (!_.isUndefined(value) && (nodeValue !== value)) {
+                            value = null;
+                            return false;
+                        }
+                        value = nodeValue;
+                    }
+                });
+                return value;
             }
 
             // TODO
