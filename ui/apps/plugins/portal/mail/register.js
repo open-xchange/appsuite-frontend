@@ -93,7 +93,7 @@ define('plugins/portal/mail/register',
             require(["io.ox/mail/api"], function (mailApi) {
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100) + " ...";
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 60) + " ...";
                 subject = strings.shorten(subject, 40);
 
                 $node.append(
