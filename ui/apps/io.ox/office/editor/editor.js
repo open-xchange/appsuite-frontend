@@ -319,14 +319,48 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
         return true;
     }
 
+    /**
+     * Iterates over all text nodes contained by the specified elements or any
+     * of their descendants.
+     *
+     * @param {HTMLElement} element
+     *  A DOM element object whose text nodes will be iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text node. Receives
+     *  the DOM text node object as first parameter, and its index among all
+     *  text nodes as second index. If the iterator returns the boolean value
+     *  false, iteration will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     */
+    function iterateTextNodes(element, iterator, context) {
 
-    function collectTextNodes(element, textNodes) {
-        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
-            if (child.nodeType === 3)
-                textNodes.push(child);
-            else if (child.nodeType === 1)
-                collectTextNodes(child, textNodes);
-        }
+        var // the index of the text node currently visited
+            index = 0;
+
+        (function traverse(element) {
+            var child = null;
+            for (child = element.firstChild; child; child = child.nextSibling) {
+                switch (child.nodeType) {
+                case 1:
+                    if (traverse(child) === false) { return false; }
+                    break;
+                case 3:
+                    if (iterator.call(context, child, index) === false) { return false; }
+                    index += 1;
+                    break;
+                }
+            }
+        }(element));
+    }
+
+    function collectTextNodes(element) {
+        var textNodes = [];
+        iterateTextNodes(element, function (textNode) { textNodes.push(textNode); });
+        return textNodes;
     }
 
     function hasTextContent(element) {
@@ -979,84 +1013,73 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
          */
         this.search = function (query) {
 
-            var // the DOM text node and offset of the first character in the query text
-                startTextNode = null, startOffset = 0,
-                // the DOM text node and offset of the last character in the query text
-                endTextNode = null, endOffset = 0,
-                // the browser selection object, and a text range object for the selection
-                windowSelection = null, range = null;
-
             // check input parameter
             if (!_.isString(query) || !query.length) {
                 return;
             }
 
-            // try/catch to escape from the jQuery.each() loops
-            try {
-                // search in all paragraphs (also in tables, TODO: other elements, e.g. headers, ...?)
-                editdiv.find('p').each(function () {
+            // Search in all paragraphs (also in tables, TODO: other elements, e.g. headers, ...?).
+            // _.find() exits if the callback function returns true, use this to escape from the loop.
+            _(editdiv.find('p')).find(function (element) {
 
-                    var // the concatenated text from all text nodes
-                        elementText = $(this).text().replace(/\s/, ' ').toLowerCase(),
-                        // first index of query text
-                        index = elementText.indexOf(query.toLowerCase()),
-                        // all DOM text nodes in the element
-                        textNodes = [];
+                var // the concatenated text from all text nodes
+                    elementText = $(element).text().replace(/\s/g, ' ').toLowerCase(),
+                    // first index of query text
+                    textPos = elementText.indexOf(query.toLowerCase()),
+                    // the DOM text node and offset of the first character in the query text
+                    startTextNode = null, startOffset = 0,
+                    // the DOM text node and offset of the last character in the query text
+                    endTextNode = null, endOffset = 0,
+                    // the browser selection object, and a text range object for the selection
+                    windowSelection = null, range = null;
 
-                    // non-negative index: query text exists in the element
-                    if (index >= 0) {
+                // non-negative position: query text exists in the element
+                if (textPos >= 0) {
 
-                        // extract all text nodes from the element
-                        collectTextNodes(this, textNodes);
+                    // visit all text nodes in the element
+                    iterateTextNodes(element, function (textNode) {
 
-                        // find the text nodes that contain the start and end position of the query text
-                        _(textNodes).each(function (textNode) {
+                        var // the text in the current text node
+                            text = textNode.nodeValue;
 
-                            var // the text in the current text node
-                                text = textNode.nodeValue;
+                        // test if text node contains the first character of the query text
+                        if ((0 <= textPos) && (textPos < text.length)) {
+                            startTextNode = textNode;
+                            startOffset = textPos;
+                        }
 
-                            // test if text node contains the first character of the query text
-                            if ((0 <= index) && (index < text.length)) {
-                                startTextNode = textNode;
-                                startOffset = index;
-                            }
+                        // test if text node contains the last character of the query text
+                        if (textPos + query.length <= text.length) {
+                            endTextNode = textNode;
+                            endOffset = textPos + query.length;
+                            return false;
+                        }
 
-                            // test if text node contains the last character of the query text
-                            if (index + query.length <= text.length) {
-                                endTextNode = textNode;
-                                endOffset = index + query.length;
-                                // escape from the _.each() and jQuery.each() loops
-                                throw null;
-                            }
+                        // skip this text node
+                        textPos -= text.length;
+                    }, this);
 
-                            // skip this text node
-                            index -= text.length;
-                        });
+                    // position found, select it
+                    if (startTextNode && endTextNode) {
+                        this.grabFocus();
+                        try {
+                            // first, remove the old browser selection
+                            windowSelection = window.getSelection();
+                            windowSelection.removeAllRanges();
 
-                        // we should not get here, just in case...
-                        window.console.log('Editor.search(): invalid state, did not find text nodes for query text');
-                        throw null;
+                            // initialize the range object
+                            range = document.createRange();
+                            range.setStart(startTextNode, startOffset);
+                            range.setEnd(endTextNode, endOffset);
+                            windowSelection.addRange(range);
+                        } catch (ex) {
+                        }
                     }
-                });
-            } catch (ex) {
-            }
 
-            // position found, select it
-            if (startTextNode && endTextNode) {
-                this.grabFocus();
-                try {
-                    // first, remove the old browser selection
-                    windowSelection = window.getSelection();
-                    windowSelection.removeAllRanges();
-
-                    // initialize the range object
-                    range = document.createRange();
-                    range.setStart(startTextNode, startOffset);
-                    range.setEnd(endTextNode, endOffset);
-                    windowSelection.addRange(range);
-                } catch (ex) {
+                    // return true to exit the outer _.find() loop iterating over all paragraphs
+                    return true;
                 }
-            }
+            }, this);
         };
 
         this.processFocus = function (state) {
@@ -1804,15 +1827,15 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
 
         this.getParagraphText = function (para, start, end) {
 
-            var text = '';
-            var textNodes = [];
+            var text = '',
+                textNodes = null;
 
             if (start === undefined)
                 start = 0;
             if (end === undefined)
                 end = 0xFFFF; // don't need correct len, just a very large value
 
-            collectTextNodes(paragraphs[para], textNodes);
+            textNodes = collectTextNodes(paragraphs[para]);
             var node, nodeLen, startpos, endpos;
             var nodes = textNodes.length;
             var nodeStart = 0;
@@ -2806,8 +2829,7 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                     }
 
                     // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
-                    var textNodes = [];
-                    collectTextNodes(paragraph, textNodes);
+                    var textNodes = collectTextNodes(paragraph);
                     var nNode, nChar;
                     var currChar = 0, prevChar = 0;
                     var node, nodes = textNodes.length;
@@ -3245,9 +3267,8 @@ define('io.ox/office/editor/editor', ['io.ox/core/event', 'io.ox/office/tk/utils
                 return;
             }
 
-            var textNodes = [];
             var oneParagraph = this.getCurrentParagraph(startPosition);
-            collectTextNodes(oneParagraph, textNodes);
+            var textNodes = collectTextNodes(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = textNodes.length;
             var nodeStart = 0;
