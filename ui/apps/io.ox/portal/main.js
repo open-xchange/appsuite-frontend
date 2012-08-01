@@ -18,9 +18,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/api/user',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
+     'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, gt) {
+function (ext, config, userAPI, date, tasks, control, gt) {
 
     'use strict';
 
@@ -129,13 +130,21 @@ function (ext, config, userAPI, date, tasks, gt) {
 
                     if (!extension.drawTile) {
                         extension.drawTile = function () {
-                            $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
                             var $node = $(this);
-                                                                                    
+                            $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
+
                             extension.asyncMetadata("title").done(function (title) {
+                                if (title === control.CANCEL) {
+                                    $node.remove();
+                                    return;
+                                }
                                 $node.find(".tile-heading").text(title);
                             });
                             extension.asyncMetadata("icon").done(function (icon) {
+                                if (icon === control.CANCEL) {
+                                    $node.remove();
+                                    return;
+                                }
                                 if (icon) {
                                     $node.find(".tile-image").attr("src", icon);
                                 } else {
@@ -143,18 +152,31 @@ function (ext, config, userAPI, date, tasks, gt) {
                                 }
                             });
                             extension.asyncMetadata("preview").done(function (preview) {
+                                if (preview === control.CANCEL) {
+                                    $node.remove();
+                                    return;
+                                }
                                 if (preview) {
                                     $node.append(preview);
                                 }
                             });
                             extension.asyncMetadata("background").done(function (bgColor) {
+                                if (bgColor === control.CANCEL) {
+                                    $node.remove();
+                                    return;
+                                }
                                 $node.css("background", bgColor);
                             });
                             extension.asyncMetadata("color").done(function (color) {
+                                if (color === control.CANCEL) {
+                                    $node.remove();
+                                    return;
+                                }
                                 $node.addClass("tile-" + color);
                             });
                             
-                            return $.Deferred().resolve();
+                            
+                            return $.when();
                         };
                     }
 
