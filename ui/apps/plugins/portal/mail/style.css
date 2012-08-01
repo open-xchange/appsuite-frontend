@@ -11,21 +11,10 @@
     font-size: 80%;
 }
 .mail-portal-tile {
-    padding: 0 13px;
+    padding: 13px;
     position: relative;
     overflow: auto;
 }
 
 .mail-portal-tile h1 {
-}
-
-.io-ox-mail-preview {
-    margin: 0;
-    padding: 13px;
-//    background: rgba(0, 0, 0, 0.2);
-    position: absolute;
-    bottom: 13px;
-    width: 244px;
-    height: 50%;
-    overflow: hidden;
 }
