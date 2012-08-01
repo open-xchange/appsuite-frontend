@@ -34,6 +34,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      */
     var Selection = {};
 
+    // DOM text positions and ranges ------------------------------------------
+
     /**
      * Returns whether the passed DOM node is located before the specified DOM
      * text position. If 'position' contains a text node, then this text node
@@ -66,6 +68,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         case 1:
             // position is element node: 'node' must be contained, index of its
             // ancestor node must be less than the position's offset
+            if (node === position.node) { return true; }
             if (!position.node.contains(node)) { return false; }
             // travel up until we are a direct child of position.node
             while (node.parentNode !== position.node) {
@@ -144,6 +147,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         }
     };
 
+    // browser selection ------------------------------------------------------
+
     /**
      * Returns an array of DOM text range objects representing the current
      * browser selection.
@@ -162,10 +167,15 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             // an array of all text ranges
             ranges = [],
             // a single range object
-            range = null;
+            range = null,
+            // the limiting text position for valid ranges (next sibling of root node)
+            globalEndPos = null;
 
         // convert parameter to DOM element
         rootNode = Utils.getDomNode(rootNode);
+
+        // end position if the range selects the entire root node
+        globalEndPos = { node: rootNode.parentNode, offset: $(rootNode).index() + 1 };
 
         // build an array of text range objects holding start and end nodes/offsets
         for (var index = 0; index < selection.rangeCount; index += 1) {
@@ -179,14 +189,41 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
                 end: { node: range.endContainer, offset: range.endOffset }
             };
 
-            // check that the nodes are inside the editor
-            if (rootNode.contains(range.start.node) && rootNode.contains(range.end.node)) {
+            // check that the nodes are inside the root node
+            if (rootNode.contains(range.start.node) && (rootNode.contains(range.end.node) || _.isEqual(range.end, globalEndPos))) {
                 ranges.push(range);
             }
         }
 
         return ranges;
     };
+
+    /**
+     * Sets the browser selection to the passed DOM text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges representing the new browser selection. May be an
+     *  array of DOM text range objects, or a single DOM text range object.
+     */
+    Selection.setBrowserSelection = function (ranges) {
+
+        var // the browser selection
+            selection = window.getSelection();
+
+        // process all passed text ranges
+        selection.removeAllRanges();
+        _.chain(ranges).getArray().each(function (range) {
+            try {
+                var docRange = window.document.createRange();
+                docRange.setStart(range.start.node, range.start.offset);
+                docRange.setEnd(range.end.node, range.end.offset);
+                selection.addRange(docRange);
+            } catch (ex) {
+                window.console.log('Selection.setBrowserSelection(): failed to add text range to selection');
+            }
+        });
+    };
+
 
     // exports ================================================================
 
