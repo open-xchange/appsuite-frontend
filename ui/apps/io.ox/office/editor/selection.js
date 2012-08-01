@@ -81,7 +81,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
     };
 
     /**
-     * Iterates over all DOM nodes contained in the specified DOM text range.
+     * Iterates over all DOM nodes contained in the specified DOM text ranges.
      *
      * @param {Object[]|Object} ranges
      *  The DOM text ranges whose text nodes will be iterated. May be an array
@@ -89,8 +89,9 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the boolean
-     *  value false, iteration process will be stopped immediately.
+     *  DOM node object as first parameter, and the current DOM text range
+     *  object as second parameter. If the iterator returns the boolean value
+     *  false, iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the
@@ -103,8 +104,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      */
     Selection.iterateNodesInTextRanges = function (ranges, iterator, context) {
 
-        var // the start and end position of the current text range
-            startPos = null, endPos = null,
+        var // copy of the current text range
+            range = null,
             // the current node in the current text range
             node = null;
 
@@ -114,32 +115,76 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
 
             // adjust start/end by node DOM position
             if (Utils.isNodeBeforeNode(ranges[index].end.node, ranges[index].start.node)) {
-                startPos = ranges[index].end;
-                endPos = ranges[index].start;
+                range = { start: ranges[index].end, end: ranges[index].start };
             } else {
-                startPos = ranges[index].start;
-                endPos = ranges[index].end;
+                range = { start: ranges[index].start, end: ranges[index].end };
             }
+            // range will be passed to callback, make deep copy
+            range = _.copy(range, true);
 
             // get first node in text range
-            node = startPos.node;
+            node = range.start.node;
             if (node.nodeType === 1) {
                 // element/child node position, go to child node described by offset
-                node = node.childNodes[startPos.offset];
-            } else if ((node.nodeType === 3) && (startPos.offset === node.nodeValue.length) && (node !== endPos.node)) {
+                node = node.childNodes[range.start.offset];
+            } else if ((node.nodeType === 3) && (range.start.offset === node.nodeValue.length) && (node !== range.end.node)) {
                 // ignore first text node, if text range starts directly at its end and is not a simple cursor
                 // TODO: is this the desired behavior?
                 node = Utils.getNextNodeInTree(node);
             }
 
             // iterate as long as the end of the range has not been reached
-            while (node && Selection.isNodeBeforeTextPosition(node, endPos)) {
+            while (node && Selection.isNodeBeforeTextPosition(node, range.end)) {
                 // call iterator for the node, return if iterator returns false
-                if (iterator.call(context, node) === false) { return false; }
+                if (iterator.call(context, node, range) === false) { return false; }
                 // find next node
                 node = Utils.getNextNodeInTree(node);
             }
         }
+    };
+
+    /**
+     * Iterates over all text nodes contained in the specified DOM text
+     * ranges. The iterator function will receive the text node and the
+     * character range in its text contents that is covered by the specified
+     * DOM text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges whose text nodes will be iterated. May be an array
+     *  of DOM text range objects, or a single DOM text range object.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text node. Receives
+     *  the DOM text node object as first parameter, the offset of the first
+     *  character as second parameter, the offset after the last character as
+     *  third parameter, and the current DOM text range as fourth parameter. If
+     *  the iterator returns the boolean value false, iteration process will be
+     *  stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the
+     *  symbol 'this' will be bound to the context inside the iterator
+     *  function).
+     *
+     * @returns {Boolean|Undefined}
+     *  The boolean value false, if any iterator call has returned false to
+     *  stop the iteration process, otherwise undefined.
+     */
+    Selection.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
+
+        // iterate over all nodes, and process the text nodes
+        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+
+            var // start and end offset of covered text in text node
+                startOffset = 0, endOffset = 0;
+
+            // call passed iterator for all text nodes
+            if (node.nodeType === 3) {
+                startOffset = (node === range.start.node) ? range.start.offset : 0;
+                endOffset = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
+                iterator.call(context, node, startOffset, endOffset, range);
+            }
+        });
     };
 
     // browser selection ------------------------------------------------------

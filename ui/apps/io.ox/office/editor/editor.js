@@ -449,36 +449,6 @@ define('io.ox/office/editor/editor',
         // add event hub
         Events.extend(this);
 
-        // private functions --------------------------------------------------
-
-        /**
-         * Iterates over all DOM nodes contained in the current browser
-         * selection.
-         *
-         * @param {Function} iterator
-         *  The iterator function that will be called for every DOM node.
-         *  Receives the DOM node object as first parameter. If the iterator
-         *  returns the boolean value false, the iteration process will be
-         *  stopped immediately.
-         *
-         * @param {Object} [context]
-         *  If specified, the iterator will be called with this context (the
-         *  symbol 'this' will be bound to the context inside the iterator
-         *  function).
-         *
-         * @returns {Boolean|Undefined}
-         *  The boolean value false, if any iterator call has returned false to
-         *  stop the iteration process, otherwise undefined.
-         */
-        function iterateSelectedNodes(iterator, context) {
-
-            var // get the browser selection
-                ranges = Selection.getBrowserSelection(editdiv);
-
-            // iterate over all selected nodes
-            return Selection.iterateNodesInTextRanges(ranges, iterator, context);
-        }
-
         // global editor settings ---------------------------------------------
 
         /**
@@ -1797,6 +1767,8 @@ define('io.ox/office/editor/editor',
 
             var // the attribute converter
                 attrConverter = AttributeConversion[attr],
+                // all text ranges to iterate
+                ranges = null,
                 // the attribute value
                 value = null;
 
@@ -1806,25 +1778,24 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            if (_.isUndefined(para)) {
-                iterateSelectedNodes(function (node) {
-                    var nodeValue;
-                    // process all text nodes, get attributes from their parent element
-                    if (node.nodeType === 3) {
-                        nodeValue = attrConverter.get(node.parentNode);
-                        if (!_.isNull(value) && (nodeValue !== value)) {
-                            value = null;
-                            return false;
-                        }
-                        value = nodeValue;
-                    }
-                });
-                return value;
+            if (!_.isUndefined(para)) {
+                // TODO
+                this.implDbgOutInfo('niy: getAttribute with selection parameter');
+                // implGetAttribute( attr, para, start, end );
+                return;
             }
 
-            // TODO
-            this.implDbgOutInfo('niy: getAttribute with selection parameter');
-            // implGetAttribute( attr, para, start, end );
+            // process all text nodes, get attributes from their parent element
+            ranges = Selection.getBrowserSelection();
+            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+                var nodeValue = attrConverter.get(textNode.parentNode);
+                if (!_.isNull(value) && (nodeValue !== value)) {
+                    value = null;
+                    return false;
+                }
+                value = nodeValue;
+            });
+            return value;
         };
 
         this.getParagraphCount = function () {
