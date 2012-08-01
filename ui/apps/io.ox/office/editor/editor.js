@@ -1437,6 +1437,7 @@ define('io.ox/office/editor/editor',
 
                 // Is the end position the starting point of a table cell ?
                 // Then the endpoint of the previous cell need to be used.
+                // This has to be done before adjust is called! adjust is problematic for tables.
                 if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
                     selection.endPaM.oxoPosition.pop();
                     var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
@@ -1645,6 +1646,7 @@ define('io.ox/office/editor/editor',
 
                     // Is the end position the starting point of a table cell ?
                     // Then the endpoint of the previous cell need to be used.
+                    // This has to be done before adjust is called! adjust is problematic for tables.
                     if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
                         selection.endPaM.oxoPosition.pop();
                         var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
