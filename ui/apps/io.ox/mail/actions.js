@@ -17,9 +17,11 @@ define('io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
-     'io.ox/core/config'], function (ext, links, api, accountAPI, util, gt, config) {
+     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
 
     'use strict';
+
+    console.log(config);
 
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
