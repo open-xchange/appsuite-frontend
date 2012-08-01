@@ -608,6 +608,13 @@ define('io.ox/office/editor/editor',
                 var value = $(element).css('font-family');
                 return Fonts.getFontName(value);
             }
+        },
+
+        fontsize: {
+            get: function (element) {
+                var value = $(element).css('font-size');
+                return Utils.convertCssLength(value, 'pt', 0);
+            }
         }
     };
 

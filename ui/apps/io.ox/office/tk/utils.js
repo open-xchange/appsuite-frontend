@@ -11,10 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils',
-    ['io.ox/core/gettext',
-     'io.ox/office/tk/apphelper'
-    ], function (gettext, AppHelper) {
+define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     'use strict';
 
@@ -23,8 +20,7 @@ define('io.ox/office/tk/utils',
 
     // static class Utils =====================================================
 
-    // inject all methods from AppHelper
-    var Utils = _.extend({}, AppHelper);
+    var Utils = {};
 
     // constants --------------------------------------------------------------
 
@@ -69,6 +65,259 @@ define('io.ox/office/tk/utils',
      * @constant
      */
     Utils.DATA_VALUE_ATTR = 'data-value';
+
+    // options object ---------------------------------------------------------
+
+    /**
+     * Extracts an attribute value from the passed object. If the attribute
+     * does not exist, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getOption = function (options, name, def) {
+        return (_.isObject(options) && (name in options)) ? options[name] : def;
+    };
+
+    /**
+     * Extracts a string attribute from the passed object. If the attribute
+     * does not exist, or is not a string, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the string attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a string. May be any value (not only strings).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getStringOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isString(value) ? value : def;
+    };
+
+    /**
+     * Extracts a boolean attribute from the passed object. If the attribute
+     * does not exist, or is not a boolean value, returns the specified default
+     * value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the boolean attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a boolean value. May be any value (not only booleans).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getBooleanOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isBoolean(value) ? value : def;
+    };
+
+    /**
+     * Extracts an integer attribute from the passed object. If the attribute
+     * does not exist, or is not a number, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the integer attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a number. May be any value (not only numbers).
+     *
+     * @param [min]
+     *  If specified and a number, set a lower bound for the returned value. Is
+     *  not used, if neither the attribute nor the passed default are numbers.
+     *
+     * @param [max]
+     *  If specified and a number, set an upper bound for the returned value.
+     *  Is not used, if neither the attribute nor the passed default are
+     *  numbers.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value, rounded
+     *  down to an integer.
+     */
+    Utils.getIntegerOption = function (options, name, def, min, max) {
+        var value = Utils.getOption(options, name);
+        value = _.isNumber(value) ? value : def;
+        if (_.isNumber(value)) {
+            if (_.isNumber(min) && (value < min)) { value = min; }
+            if (_.isNumber(max) && (value > max)) { value = max; }
+            return Math.floor(value);
+        }
+        return value;
+    };
+
+    /**
+     * Extracts an object attribute from the passed object. If the attribute
+     * does not exist, or is not an object, returns the specified default
+     * value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not an object. May be any value (not only objects).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getObjectOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isObject(value) ? value : def;
+    };
+
+    /**
+     * Extracts a function from the passed object. If the attribute does not
+     * exist, or is not a function, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not a
+     *  function, or if it does not contain the specified attribute, or if the
+     *  attribute is not an object. May be any value (not only functions).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getFunctionOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isFunction(value) ? value : def;
+    };
+
+    /**
+     * Extends the passed object with the specified attributes.
+     *
+     * @param {Object} [options]
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {Object} [extensions]
+     *  Another object whose attributes will be inserted into the former
+     *  object. Will overwrite existing attributes.
+     *
+     * @returns {Object}
+     *  An object containing the attributes of the objects passed to both
+     *  parameters.
+     */
+    Utils.extendOptions = function (options, extensions) {
+        return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
+    };
+
+    // length unit conversion -------------------------------------------------
+
+    /**
+     * Converts a length value from an absolute CSS measurement unit into
+     * another absolute CSS measurement unit.
+     *
+     * @param {Number} value
+     *  The length value to convert, as floating-point number.
+     *
+     * @param {String} fromUnit
+     *  The CSS measurement unit of the passed value, as string. Supported
+     *  units are 'px' (pixels), 'pc' (picas), 'pt' (points), 'in' (inches),
+     *  'cm' (centimeters), and 'mm' (millimeters).
+     *
+     * @param {String} toUnit
+     *  The target measurement unit.
+     *
+     * @param {Number} [digits]
+     *  If specified, the number of digits after the decimal point to round the
+     *  result to.
+     *
+     * @returns {Number}
+     *  The length value converted to the target measurement unit, as
+     *  floating-point number.
+     */
+    Utils.convertLength = (function () {
+
+        var // the conversion factors between pixels and other units
+            FACTORS = {
+                'px': 1,
+                'pc': 1 / 9,
+                'pt': 4 / 3,
+                'in': 96,
+                'cm': 96 / 2.54,
+                'mm': 96 / 25.4
+            };
+
+        return function (value, fromUnit, toUnit, digits) {
+            var pow10 = 0;
+            value *= (FACTORS[fromUnit] || 1) / (FACTORS[toUnit] || 1);
+            if (_.isFinite(digits)) {
+                pow10 = Math.pow(10, digits);
+                value = Math.round(value * pow10) / pow10;
+            }
+            return value;
+        };
+    }());
+
+    /**
+     * Converts a CSS length value with measurement unit into a value of
+     * another absolute CSS measurement unit.
+     *
+     * @param {String} valueAndUnit
+     *  The value with its measurement unit to be converted, as string.
+     *
+     * @param {String} toUnit
+     *  The target CSS measurement unit. See method Utils.convertLength() for
+     *  a list of supported units.
+     *
+     * @param {Number} [digits]
+     *  If specified, the number of digits after the decimal point to round the
+     *  result to.
+     *
+     * @returns {Number}
+     *  The length value converted to the target measurement unit, as
+     *  floating-point number.
+     */
+    Utils.convertCssLength = function (valueAndUnit, toUnit, digits) {
+        var value = parseFloat(valueAndUnit);
+        if (!_.isFinite(value)) {
+            value = 0;
+        }
+        if (value && (valueAndUnit.length > 2)) {
+            var fromUnit = valueAndUnit.substr(valueAndUnit.length - 2);
+            value = Utils.convertLength(value, fromUnit, toUnit, digits);
+        }
+        return value;
+    };
 
     // generic DOM helpers ----------------------------------------------------
 
