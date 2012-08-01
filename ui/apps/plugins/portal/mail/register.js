@@ -147,7 +147,6 @@ define('plugins/portal/mail/register',
                                 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
-                        node.find('[data-ref="io.ox/portal/widget/mail/actions/compose"]').remove();
 
                         new dialogs.SidePopup(600)
                         .delegate(node, '.vgrid-cell', function (pane) {
