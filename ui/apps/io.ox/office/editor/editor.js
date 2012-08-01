@@ -1765,30 +1765,25 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.getAttribute = function (attr, para, start, end) {
+        /**
+         * Returns the value of a specific formatting attribute in the current
+         * browser selection.
+         */
+        this.getAttribute = function (attrName) {
 
             var // the attribute converter
-                attrConverter = AttributeConversion[attr],
+                attrConverter = AttributeConversion[attrName],
                 // all text ranges to iterate
-                ranges = null,
+                ranges = Selection.getBrowserSelection(),
                 // the attribute value
                 value = null;
 
-            // TODO
             if (!attrConverter) {
                 this.implDbgOutInfo('getAttribute - no valid attribute specified');
                 return;
             }
 
-            if (!_.isUndefined(para)) {
-                // TODO
-                this.implDbgOutInfo('niy: getAttribute with selection parameter');
-                // implGetAttribute( attr, para, start, end );
-                return;
-            }
-
             // process all text nodes, get attributes from their parent element
-            ranges = Selection.getBrowserSelection();
             Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
                 var nodeValue = attrConverter.get(textNode.parentNode);
                 if (!_.isNull(value) && (nodeValue !== value)) {
@@ -1797,7 +1792,45 @@ define('io.ox/office/editor/editor',
                 }
                 value = nodeValue;
             });
+
             return value;
+        };
+
+        /**
+         * Returns the value of all formatting attribute in the current browser
+         * selection.
+         */
+        this.getAttributes = function () {
+
+            var // all text ranges to iterate
+                ranges = Selection.getBrowserSelection(editdiv),
+                // the attribute values, mapped by name
+                values = {},
+                // detect early loop exit, if all attributes are ambiguous
+                hasNonNull = false;
+
+            // process all text nodes, get attributes from their parent element
+            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+
+                // update all attributes
+                hasNonNull = false;
+                _(AttributeConversion).each(function (attrConverter, attrName) {
+                    var nodeValue = attrConverter.get(textNode.parentNode);
+                    if (!(attrName in values)) {
+                        // initial iteration: store value of first text portion
+                        values[attrName] = nodeValue;
+                    } else if (nodeValue !== values[attrName]) {
+                        // value differs from previous text portion(s): ambiguous state
+                        values[attrName] = null;
+                    }
+                    hasNonNull = hasNonNull || !_.isNull(values[attrName]);
+                });
+
+                // exit iteration loop if there are no unambiguous attributes left
+                if (!hasNonNull) { return false; }
+            });
+
+            return values;
         };
 
         this.getParagraphCount = function () {

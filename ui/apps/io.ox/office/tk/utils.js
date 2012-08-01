@@ -473,6 +473,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         var horizontalNames = {
                 offset: 'left',
+                offsetBorder: 'border-left-width',
                 innerSize: 'innerWidth',
                 outerSize: 'outerWidth',
                 scroll: 'scrollLeft'
@@ -480,6 +481,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
             verticalNames = {
                 offset: 'top',
+                offsetBorder: 'border-top-width',
                 innerSize: 'innerHeight',
                 outerSize: 'outerHeight',
                 scroll: 'scrollTop'
@@ -499,8 +501,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
                 // inner size of the scrollable container node
                 scrollableSize = scrollableNode[names.innerSize](),
-                // TODO: assuming same border size on both ends, need to parse the exact CSS measurement string and convert to pixels
-                scrollableBorderSize = Math.floor((scrollableNode[names.outerSize]() - scrollableSize) / 2),
+                // border size on left/top end of the container node
+                scrollableBorderSize = Utils.convertCssLength(scrollableNode.css(names.offsetBorder), 'px', 0),
                 // current position of the scrollable container node (inner area, relative to browser window)
                 scrollableOffset = scrollableNode.offset()[names.offset] + scrollableBorderSize,
 

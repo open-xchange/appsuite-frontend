@@ -114,13 +114,12 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         for (var index = 0; index < ranges.length; index += 1) {
 
             // adjust start/end by node DOM position
+            // range will be passed to callback, create a clone (but do not clone the DOM nodes!)
             if (Utils.isNodeBeforeNode(ranges[index].end.node, ranges[index].start.node)) {
-                range = { start: ranges[index].end, end: ranges[index].start };
+                range = { start: _.clone(ranges[index].end), end: _.clone(ranges[index].start) };
             } else {
-                range = { start: ranges[index].start, end: ranges[index].end };
+                range = { start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) };
             }
-            // range will be passed to callback, make deep copy
-            range = _.copy(range, true);
 
             // get first node in text range
             node = range.start.node;
