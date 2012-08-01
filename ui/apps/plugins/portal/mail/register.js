@@ -97,7 +97,7 @@ define('plugins/portal/mail/register',
                 subject = strings.shorten(subject, 40);
 
                 $node.append(
-                    $('<h1>').text(gt("Mail")),
+                    $('<h1 class="tile-heading">').text(gt("Mail")),
                     $('<div class="io-ox-clear io-ox-mail-preview">').append(
                         $("<b>").text(subject),
                         $('<br>'),

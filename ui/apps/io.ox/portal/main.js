@@ -131,6 +131,7 @@ function (ext, config, userAPI, date, tasks, gt) {
                         extension.drawTile = function () {
                             $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
                             var $node = $(this);
+                                                                                    
                             extension.asyncMetadata("title").done(function (title) {
                                 $node.find(".tile-heading").text(title);
                             });

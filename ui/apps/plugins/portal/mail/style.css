@@ -11,7 +11,7 @@
     font-size: 80%;
 }
 .mail-portal-tile {
-    padding: 13px;
+    padding: 0 13px;
     position: relative;
     overflow: auto;
 }

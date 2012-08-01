@@ -65,7 +65,7 @@ define('plugins/portal/twitter/register',
         return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
     };
     var drawTile = function (tweets, $node) {
-        if (tweets === null) {
+        if (!tweets) {
             return;
         }
         if (tweets.length === 0) {
