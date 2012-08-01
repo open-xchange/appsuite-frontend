@@ -966,6 +966,12 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
                 domRange = _(domSelection).last();
+
+                // allowing "special" multiselection for tables (rectangle cell selection)
+                if (domRange.start.node.nodeName === 'TR') {
+                    domRange.start = _(domSelection).first().start;
+                }
+
                 return new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
             }
         };
@@ -1468,7 +1474,7 @@ define('io.ox/office/editor/editor',
                 // Is the end position the starting point of a table cell ?
                 // Then the endpoint of the previous cell need to be used.
                 // This has to be done before adjust is called! adjust is problematic for tables.
-                if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
                     selection.endPaM.oxoPosition.pop();
                     var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                     selection.endPaM.oxoPosition = returnObj.position;
@@ -1677,7 +1683,7 @@ define('io.ox/office/editor/editor',
                     // Is the end position the starting point of a table cell ?
                     // Then the endpoint of the previous cell need to be used.
                     // This has to be done before adjust is called! adjust is problematic for tables.
-                    if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                    if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
                         selection.endPaM.oxoPosition.pop();
                         var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                         selection.endPaM.oxoPosition = returnObj.position;
@@ -1728,6 +1734,31 @@ define('io.ox/office/editor/editor',
                             localstartPosition[endposLength] = 0;
 
                             this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
+                        }
+
+                    } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        // This cell selection is a rectangle selection of cells in a table.
+                        var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                            endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+                        startPos.pop();
+                        startPos.pop();
+                        endPos.pop();
+                        endPos.pop();
+
+                        var startRow = startPos.pop(),
+                            startCol = startPos.pop(),
+                            endRow = endPos.pop(),
+                            endCol = endPos.pop();
+
+                        for (var i = startRow; i <= endRow; i++) {
+                            for (var j = startCol; j <= endCol; j++) {
+                                var position = _.copy(startPos, true);
+                                position.push(j);
+                                position.push(i);
+                                position.push(0);
+                                this.setAttributeToCompleteCell(attr, value, position);
+                            }
                         }
 
                     } else {
@@ -1948,7 +1979,15 @@ define('io.ox/office/editor/editor',
             return isSameLevel;
         };
 
-        this.isStartPointInTableCell = function (pos) {
+        this.isCellSelection = function (posA, posB) {
+            // If cells in a table are selected, posA must be the start point of a cell and posB
+            // must be the last point of a cell
+            var isFirst = this.isFirstPositionInTableCell(posA),
+                isLast = this.isLastPositionInTableCell(posB);
+            return (isFirst && isLast);
+        };
+
+        this.isFirstPositionInTableCell = function (pos) {
             // In Chrome, a triple click on the last paragraph of a cell, selects the start point of the following cell
             // as end point. In this case, the last position of the cell containing the selection should be the endpoint.
             var isCellStartPosition = false,
@@ -1966,6 +2005,26 @@ define('io.ox/office/editor/editor',
             }
 
             return isCellStartPosition;
+        };
+
+        this.isLastPositionInTableCell = function (pos) {
+            var isCellEndPosition = false,
+                localPos = _.copy(pos, true);
+
+            if (this.isPositionInTable(localPos)) {
+                var pos = localPos.pop();
+                if (pos === this.getParagraphLength(localPos)) {   // last position
+                    var lastPara = localPos.pop();
+                    if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
+                        var domPos = this.getDOMPosition(localPos);
+                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                            isCellEndPosition = true;
+                        }
+                    }
+                }
+            }
+
+            return isCellEndPosition;
         };
 
         this.prepareNewParagraph = function (paragraph) {
