@@ -9,7 +9,9 @@
  * Mail: info@open-xchange.com
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
+ 
 
 define("plugins/portal/appointments/register", [
     "io.ox/core/extensions",
@@ -19,6 +21,35 @@ define("plugins/portal/appointments/register", [
 ], function (ext, date, gt) {
 
     "use strict";
+ 
+ 
+    //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
+    var timespan = function (timestamp1, timestamp2) {
+        var delta = timestamp1 - timestamp2;
+        var unit = gt("In %s milliseconds");
+        if (delta / 1000 > 1) {
+            delta = delta / 1000;
+            unit = gt("In %s seconds");
+        }
+        if (delta / 60 > 1) {
+            delta = delta / 60;
+            unit = gt("In %s minutes");
+        }
+        if (delta / 60 > 1) {
+            delta = delta / 60;
+            unit = gt("In %s hours");
+        }
+        if (delta / 24 > 1) {
+            delta = delta / 24;
+            unit = gt("In %s days");
+        }
+        if (delta / 7 > 1) {
+            delta = delta / 7;
+            unit = gt("In %s weeks");
+        }
+        return unit.replace("%s", Math.round(delta));
+    };
+    
     var loadTile = function () {
         var loadingTile = new $.Deferred();
         require(["io.ox/calendar/api"], function (api) {
@@ -44,7 +75,7 @@ define("plugins/portal/appointments/register", [
 
         if (appointments.length > 0) {
             var nextApp = appointments[0];
-            var deltaT = 'in 2 days';//startSpan.formatInterval(new date.Local(), date.MINUTE);
+            var deltaT = timespan(nextApp.start_date, new Date().getTime());
             $('<div>').html(gt("Next") + ": <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo($node);
         }
     };
