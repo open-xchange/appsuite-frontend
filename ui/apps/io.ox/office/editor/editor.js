@@ -1499,6 +1499,30 @@ define('io.ox/office/editor/editor',
                         this.mergeParagraph(mergeselection);
                     }
 
+                } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    // This cell selection is a rectangle selection of cells in a table.
+                    var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                        endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+                    startPos.pop();
+                    startPos.pop();
+                    endPos.pop();
+                    endPos.pop();
+
+                    var startRow = startPos.pop(),
+                        startCol = startPos.pop(),
+                        endRow = endPos.pop(),
+                        endCol = endPos.pop();
+
+                    for (var i = startRow; i <= endRow; i++) {
+                        for (var j = startCol; j <= endCol; j++) {
+                            var position = _.copy(startPos, true);
+                            position.push(j);
+                            position.push(i);
+                            this.deleteAllParagraphsInCell(position);
+                        }
+                    }
+
                 } else {
 
                     // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
@@ -2672,7 +2696,11 @@ define('io.ox/office/editor/editor',
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
-                    this.implDeleteParagraph(localPos);
+                    if (i < lastParaInCell) {
+                        this.implDeleteParagraph(localPos);
+                    } else {
+                        this.implDeleteParagraphContent(localPos);
+                    }
                 }
             }
         };
@@ -3302,6 +3330,14 @@ define('io.ox/office/editor/editor',
                 if (! isTable) {
                     paragraphs = editdiv.children();
                 }
+            }
+        };
+
+        this.implDeleteParagraphContent = function (position) {
+            var paragraph = this.getDOMPosition(position).node;
+            if (paragraph) {
+                $(paragraph).empty();  // removes the content of the paragraph
+                this.prepareNewParagraph(paragraph);
             }
         };
 
