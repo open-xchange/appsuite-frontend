@@ -1689,16 +1689,11 @@ define('io.ox/office/editor/editor',
 
                     this.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true),
-                        lastValue = selection.startPaM.oxoPosition.length - 1,
-                        prepareEmptyParagraph = false;
+                        lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     if ((lastValue >= 4) &&
                         (this.isPositionInTable([0])) &&
-                        (startPosition[0] === 0) &&
-                        (startPosition[1] === 0) &&
-                        (startPosition[2] === 0) &&
-                        (startPosition[3] === 0) &&
-                        (startPosition[4] === 0)) {
+                        _(startPosition).all(function (value) { return (value === 0); })) {
                         this.insertParagraph([0]);
                         paragraphs = editdiv.children();
                         selection.startPaM.oxoPosition = [0, 0];
