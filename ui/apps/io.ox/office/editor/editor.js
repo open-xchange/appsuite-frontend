@@ -1228,8 +1228,8 @@ define('io.ox/office/editor/editor',
                         this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
                     else {
-                        var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                        mergeselection.pop();
+                        var mergeselection = _.copy(selection.startPaM.oxoPosition),
+                            characterPos = mergeselection.pop();
 
                         var nextParagraphPosition = _.copy(mergeselection),
                             lastValue = nextParagraphPosition.length - 1;
@@ -1252,6 +1252,13 @@ define('io.ox/office/editor/editor',
                         this.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
+                            if (characterPos === 0) {
+                                // removing empty paragraph
+                                var localPos = _.copy(selection.startPaM.oxoPosition, true);
+                                localPos.pop();
+                                this.deleteParagraph(localPos);
+                                nextParagraphPosition[lastValue] -= 1;
+                            }
                             selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(nextParagraphPosition);
                         } else if (isLastParagraph) {
                             if (this.isPositionInTable(nextParagraphPosition)) {
@@ -1444,16 +1451,11 @@ define('io.ox/office/editor/editor',
 
                     this.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true),
-                        lastValue = selection.startPaM.oxoPosition.length - 1,
-                        prepareEmptyParagraph = false;
+                        lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     if ((lastValue >= 4) &&
                         (this.isPositionInTable([0])) &&
-                        (startPosition[0] === 0) &&
-                        (startPosition[1] === 0) &&
-                        (startPosition[2] === 0) &&
-                        (startPosition[3] === 0) &&
-                        (startPosition[4] === 0)) {
+                        _(startPosition).all(function (value) { return (value === 0); })) {
                         this.insertParagraph([0]);
                         paragraphs = editdiv.children();
                         selection.startPaM.oxoPosition = [0, 0];
@@ -2044,10 +2046,13 @@ define('io.ox/office/editor/editor',
             if (domPos) {
                 var isTableNode = domPos.node.nodeName === 'TABLE' ? true : false;
 
-                if (isTableNode) {
+                while (isTableNode) {
                     paragraph.push(0);  // column
                     paragraph.push(0);  // row
                     paragraph.push(0);  // paragraph
+
+                    domPos = this.getDOMPosition(paragraph);
+                    isTableNode = domPos.node.nodeName === 'TABLE' ? true : false;
                 }
 
                 paragraph.push(0);
