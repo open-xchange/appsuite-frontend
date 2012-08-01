@@ -715,7 +715,10 @@ define('io.ox/office/editor/editor',
             return {node: textNode, offset: offset};
         };
 
-        this.getOXOPosition = function (node, offset) {
+        this.getOXOPosition = function (position) {
+
+            var node = position.node,
+                offset = position.offset;
 
             // check input values
             if (! node) {
@@ -963,7 +966,7 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
                 domRange = _(domSelection).last();
-                return new OXOSelection(this.getOXOPosition(domRange.start.node, domRange.start.offset), this.getOXOPosition(domRange.end.node, domRange.end.offset));
+                return new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
             }
         };
 
@@ -1029,9 +1032,7 @@ define('io.ox/office/editor/editor',
                     // first index of query text
                     textPos = elementText.indexOf(query.toLowerCase()),
                     // the DOM text range containing the query text
-                    range = {},
-                    // the browser selection object, and a document range object
-                    windowSelection = null, docRange = null;
+                    range = {};
 
                 // non-negative position: query text exists in the element
                 if (textPos >= 0) {
@@ -1065,18 +1066,7 @@ define('io.ox/office/editor/editor',
                     // position found, select it
                     if (range.start && range.end) {
                         this.grabFocus();
-                        try {
-                            // first, remove the old browser selection
-                            windowSelection = window.getSelection();
-                            windowSelection.removeAllRanges();
-
-                            // initialize the range object
-                            docRange = document.createRange();
-                            docRange.setStart(range.start.node, range.start.offset);
-                            docRange.setEnd(range.end.node, range.end.offset);
-                            windowSelection.addRange(docRange);
-                        } catch (ex) {
-                        }
+                        Selection.setBrowserSelection(range);
                     }
 
                     // return true to exit the outer _.find() loop iterating over all paragraphs
