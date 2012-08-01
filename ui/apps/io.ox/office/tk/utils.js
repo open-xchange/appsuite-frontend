@@ -322,6 +322,125 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // generic DOM helpers ----------------------------------------------------
 
     /**
+     * Converts the passed object to a DOM node object.
+     *
+     * @param {Node|jQuery} node
+     *  If the object is a DOM node object, returns it unmodified. If the
+     *  object is a jQuery collection, returns its first node.
+     *
+     * @returns {Node}
+     *  The DOM node object.
+     */
+    Utils.getDomNode = function (node) {
+        return (node instanceof $) ? node.get(0) : node;
+    };
+
+    /**
+     * Returns whether node1 is located before node2 in the DOM. This is also
+     * the case if node1 contains node2, because node1 starts before node2, but
+     * a node is not located before itself.
+     *
+     * @param {Node|jQuery} node1
+     *  The first DOM node tested if it is located before the second node. If
+     *  this object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {Node|jQuery} node2
+     *  The second DOM node. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether node1 is located before node2.
+     */
+    Utils.isNodeBeforeNode = function (node1, node2) {
+        node1 = Utils.getDomNode(node1);
+        node2 = Utils.getDomNode(node2);
+        return (node1.compareDocumentPosition(node2) & 4) === 4;
+    };
+
+    /**
+     * Returns the DOM node that follows the passed node in DOM tree order.
+     * If the node is an element with children, returns its first child node.
+     * Otherwise, tries to return the next sibling of the node. If the node is
+     * the last sibling, goes up to the parent node(s) and tries to return
+     * their next sibling.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose successor will be returned. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @returns {Node|Undefined}
+     *  The next node in the DOM tree, or undefined, if the passed node is the
+     *  very last leaf in the DOM tree.
+     */
+    Utils.getNextNodeInTree = function (node) {
+
+        // node is an element with child nodes, return its first child
+        node = Utils.getDomNode(node);
+        if ((node.nodeType === 1) && node.firstChild) {
+            return node.firstChild;
+        }
+
+        // find first node up the tree that has a sibling, return that sibling
+        while (node && !node.nextSibling) {
+            node = node.parentNode;
+        }
+        return node && node.nextSibling;
+    };
+
+    /**
+     * Iterates over all descendant DOM nodes of the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant nodes will be iterated. If this
+     *  object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every node. Receives the
+     *  DOM node object as first parameter. If the iterator returns the boolean
+     *  value false, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Boolean|Undefined}
+     *  The boolean value false, if any iterator call has returned false to
+     *  stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateDescendantNodes = function (element, iterator, context) {
+
+        // visit all child nodes
+        element = Utils.getDomNode(element);
+        for (var child = element.firstChild; child; child = child.nextSibling) {
+
+            // call iterator for child node; if it returns false, exit loop and return too
+            if (iterator.call(context, child) === false) { return false; }
+
+            // iterate child nodes; if iterator for any descendant node returns false, return false too
+            if ((child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context) === false)) { return false; }
+        }
+    };
+
+    /**
+     * Returns all text nodes contained in the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant text nodes will be returned. If
+     *  this object is a jQuery collection, uses the first node it contains.
+     *
+     * @returns {TextNode[]}
+     *  An array of text nodes contained in the passed element, in the correct
+     *  order.
+     */
+    Utils.collectTextNodes = function (element) {
+        var textNodes = [];
+        Utils.iterateDescendantNodes(element, function (node) {
+            if (node.nodeType === 3) { textNodes.push(node); }
+        });
+        return textNodes;
+    };
+
+    /**
      * Scrolls a specific child node of a container node into its visible area.
      *
      * @param {jQuery} scrollableNode
