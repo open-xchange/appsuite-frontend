@@ -15,6 +15,7 @@
 
 define('io.ox/office/editor/main',
     ['io.ox/files/api',
+     'io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view',
@@ -22,7 +23,7 @@ define('io.ox/office/editor/main',
      'gettext!io.ox/office/main',
      'io.ox/office/editor/actions',
      'less!io.ox/office/editor/main.css'
-    ], function (filesApi, AppHelper, Editor, View, Controller, gt) {
+    ], function (filesApi, Utils, AppHelper, Editor, View, Controller, gt) {
 
     'use strict';
 
@@ -106,8 +107,8 @@ define('io.ox/office/editor/main',
         // private functions --------------------------------------------------
 
         function initializeApp(options) {
-            file = AppHelper.getObjectOption(options, 'file', null);
-            debugMode = AppHelper.getBooleanOption(options, 'debugMode', false);
+            file = Utils.getObjectOption(options, 'file', null);
+            debugMode = Utils.getBooleanOption(options, 'debugMode', false);
         }
 
         /**
@@ -637,7 +638,7 @@ define('io.ox/office/editor/main',
             initializeApp(point);
             updateDebugMode();
             return app.load().always(function () {
-                controller.change('view/toolbars/show', AppHelper.getStringOption(point, 'toolBarTab'));
+                controller.change('view/toolbars/show', Utils.getStringOption(point, 'toolBarTab'));
             });
         };
 
@@ -734,7 +735,7 @@ define('io.ox/office/editor/main',
         getApp: function (options) {
 
             var // get file descriptor from options
-                file = AppHelper.getObjectOption(options, 'file', null),
+                file = Utils.getObjectOption(options, 'file', null),
 
                 // find running editor application
                 runningApps = file ? ox.ui.App.get(MODULE_NAME).filter(function (app) {

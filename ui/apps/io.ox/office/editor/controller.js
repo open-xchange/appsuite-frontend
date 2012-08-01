@@ -47,6 +47,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     get: function () { return editor.getAttribute('fontname'); }
                 },
                 'format/character/font/height': {
+                    get: function () { return editor.getAttribute('fontsize'); }
                 },
                 'format/character/font/bold': {
                     get: function () { return editor.getAttribute('bold'); },
