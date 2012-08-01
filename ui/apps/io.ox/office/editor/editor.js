@@ -1465,19 +1465,18 @@ define('io.ox/office/editor/editor',
             var selection = _selection || this.getSelection();
             if (selection.hasRange()) {
 
-                undomgr.startGroup();
-
-                selection.adjust();
-
                 // Is the end position the starting point of a table cell ?
                 // Then the endpoint of the previous cell need to be used.
+                // This has to be done before adjust is called! adjust is problematic for tables.
                 if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
-                    window.console.log("AAA: deleteSelected: old: " + selection.endPaM.oxoPosition);
                     selection.endPaM.oxoPosition.pop();
                     var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                     selection.endPaM.oxoPosition = returnObj.position;
-                    window.console.log("AAA: deleteSelected: new: " + selection.endPaM.oxoPosition);
                 }
+
+                undomgr.startGroup();
+
+                selection.adjust();
 
                 if (this.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // Only one paragraph concerned from deletion.
@@ -1675,15 +1674,16 @@ define('io.ox/office/editor/editor',
                 var selection = this.getSelection();
                 if (selection.hasRange()) {
 
-                    selection.adjust();
-
                     // Is the end position the starting point of a table cell ?
                     // Then the endpoint of the previous cell need to be used.
+                    // This has to be done before adjust is called! adjust is problematic for tables.
                     if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
                         selection.endPaM.oxoPosition.pop();
                         var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                         selection.endPaM.oxoPosition = returnObj.position;
                     }
+
+                    selection.adjust();
 
                     if (this.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // Only one paragraph concerned from attribute changes.
