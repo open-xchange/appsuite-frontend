@@ -16,8 +16,9 @@
 define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/fonts'
-    ], function (Events, Utils, Fonts) {
+     'io.ox/office/tk/fonts',
+     'io.ox/office/editor/selection'
+    ], function (Events, Utils, Fonts, Selection) {
 
     'use strict';
 
@@ -323,202 +324,6 @@ define('io.ox/office/editor/editor',
         return true;
     }
 
-    /**
-     * Returns whether node1 is located before node2 in the DOM. This is also
-     * the case if node1 contains node2, because node1 starts before node2 in
-     * this case.
-     *
-     * @param {Node} node1
-     *  The first DOM node tested if it is located before the second.
-     *
-     * @param {Node} node2
-     *  The second DOM node.
-     *
-     * @returns {Boolean}
-     *  Whether node1 is located before node2.
-     */
-    function isNodeBeforeNode(node1, node2) {
-        return (node1.compareDocumentPosition(node2) & 4) === 4;
-    }
-
-    /**
-     * Returns whether the passed DOM node is located before the text position.
-     * If 'position' contains a text node, then this text node itself is
-     * considered to be located before 'position' regardless of the position's
-     * offset. If 'position' contains an element node, than the specified node
-     * must be located before the element's child node specified by the
-     * possition's offset.
-     *
-     * @param {Node} node
-     *  The DOM node tested if it is located before the text position.
-     *
-     * @param {Object} position
-     *  The text position. Must contain a 'node' attribute containing a DOM
-     *  node, and an 'offset' attribute containing an integer offset depending
-     *  on the position's node.
-     *
-     * @return {Boolean}
-     *  Whether the node is located before the text position.
-     */
-    function isNodeBeforeTextPosition(node, position) {
-
-        // if 'node' is located before the position node, it is always considered 'before'
-        if (isNodeBeforeNode(node, position.node)) {
-            return true;
-        }
-
-        switch (position.node.nodeType) {
-        case 1:
-            // position is element node: 'node' must be contained, index of its
-            // ancestor node must be less than the position's offset
-            if (!position.node.contains(node)) { return false; }
-            // travel up until we are a direct child of position.node
-            while (node.parentNode !== position.node) {
-                node = node.parentNode;
-            }
-            // check own index in all siblings
-            return $(node).index() < position.offset;
-        case 3:
-            // position is text node: include it in the set of valid nodes
-            return node === position.node;
-        }
-
-        window.console.log('isNodeBeforeTextPosition(): invalid node type');
-        return false;
-    }
-
-    /**
-     * Iterates over all descendant DOM nodes of the specified element.
-     *
-     * @param {HTMLElement} element
-     *  A DOM element object whose descendant nodes will be iterated.
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the boolean
-     *  value false, the iteration process will be stopped immediately.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
-     *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
-     */
-    function iterateNodesInElement(element, iterator, context) {
-
-        // create a local function that can call itself and return an exit flag
-        (function iterate(element) {
-
-            for (var child = element.firstChild; child; child = child.nextSibling) {
-
-                // call iterator for child node; if it returns false, exit loop and return too
-                if (iterator.call(context, child) === false) { return false; }
-
-                // iterate child nodes; if iterator for any descendant node returns false, return false too
-                if ((child.nodeType === 1) && (iterate(child) === false)) { return false; }
-            }
-
-        }(element)); // call the local function immediately with the passed element
-    }
-
-    /**
-     * Returns the DOM node that follows the passed node in DOM tree order.
-     * If the node is an element with children, returns its first child node.
-     * Otherwise, tries to return the next sibling of the node. If the node is
-     * the last sibling, goes up to the parent node(s) and tries to return
-     * their next sibling.
-     *
-     * @param {Node} node
-     *  The DOM node whose successor will be returned.
-     *
-     * @returns {Node|Undefined}
-     *  The next node in the DOM tree, or undefined, if the passed node is the
-     *  very last leaf in the DOM tree.
-     */
-    function getNextNodeInTree(node) {
-
-        // node is an element with child nodes, return its first child
-        if ((node.nodeType === 1) && node.firstChild) {
-            return node.firstChild;
-        }
-
-        // find first node up the tree that has a sibling, return that sibling
-        while (node && !node.nextSibling) {
-            node = node.parentNode;
-        }
-        return node && node.nextSibling;
-    }
-
-
-    /**
-     * Iterates over all DOM nodes contained in the specified DOM text range.
-     *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges whose text nodes will be iterated. May be an array
-     *  of DOM text range objects, or a single DOM text range object. Each text
-     *  range must contain a 'start' attribute and an 'end' attribute, both
-     *  attribute values must be DOM text position objects containing a 'node'
-     *  and 'offset' attribute.
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the boolean
-     *  value false, iteration process will be stopped immediately.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the
-     *  symbol 'this' will be bound to the context inside the iterator
-     *  function).
-     *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
-     */
-    function iterateNodesInTextRanges(ranges, iterator, context) {
-
-        var // the current text range
-            range = null,
-            // the current node
-            node = null;
-
-        // convert parameter to an array
-        if (!_.isArray(ranges)) {
-            ranges = [ranges];
-        }
-
-        for (var index = 0; index < ranges.length; index += 1) {
-            range = ranges[index];
-            node = range.start.node;
-
-            if (node.nodeType === 1) {
-                // element/child node position, go to child node described by offset
-                node = node.childNodes[range.start.offset];
-            } else if ((node.nodeType === 3) && (range.start.offset === node.nodeValue.length) && (range.start.node !== range.end.node)) {
-                // ignore first text node, if text range starts directly at its end and is not a simple cursor
-                // TODO: is this the desired behavior?
-                node = getNextNodeInTree(node);
-            }
-
-            // iterate as long as the end of the range has not been reached
-            while (node && isNodeBeforeTextPosition(node, range.end)) {
-                // call iterator for the node, return if iterator returns false
-                if (iterator.call(context, node) === false) { return false; }
-                // find next node
-                node = getNextNodeInTree(node);
-            }
-        }
-    }
-
-    function collectTextNodes(element) {
-        var textNodes = [];
-        iterateNodesInElement(element, function (node) {
-            if (node.nodeType === 3) { textNodes.push(node); }
-        });
-        return textNodes;
-    }
-
     function hasTextContent(element) {
         for (var child = element.firstChild; child !== null; child = child.nextSibling) {
             if (child.nodeName === 'BR') {
@@ -671,53 +476,6 @@ define('io.ox/office/editor/editor',
         // private functions --------------------------------------------------
 
         /**
-         * Returns an array of objects representing the current browser
-         * selection. Each array element is a DOM text range object with
-         * 'begin' and 'end' attributes representing the DOM text positions
-         * where the text range begins and ends. Each DOM text position is an
-         * object by itself, containing the two attributes 'node' and 'offset'.
-         * If 'node' points to a DOM text node, 'offset' specifies the
-         * character of the text node. If 'node' points to an element node,
-         * 'offset' specifies the index of its child node. In each DOM text
-         * range object, the start position is always located before the end
-         * position.
-         */
-        function getNormalizedSelection() {
-
-            var // the browser selection
-                selection = window.getSelection(),
-                // an array of all text ranges
-                ranges = [],
-                // a single range object
-                range = null;
-
-            // build an array of text range objects holding start and end nodes/offsets
-            for (var index = 0; index < selection.rangeCount; index += 1) {
-
-                // get the native selection Range object
-                range = selection.getRangeAt(index);
-
-                // translate to the internal text range representation
-                range = { start: { node: range.startContainer, offset: range.startOffset }, end: { node: range.endContainer, offset: range.endOffset } };
-
-                // check that the nodes are inside the editor
-                if (editdiv.get(0).contains(range.start.node) && editdiv.get(0).contains(range.end.node)) {
-
-                    // adjust start/end by node DOM position
-                    if (isNodeBeforeNode(range.end.node, range.start.node)) {
-                        range.tmp = range.start;
-                        range.start = range.end;
-                        range.end = range.tmp;
-                        delete range.tmp;
-                    }
-                    ranges.push(range);
-                }
-            }
-
-            return ranges;
-        }
-
-        /**
          * Iterates over all DOM nodes contained in the current browser
          * selection.
          *
@@ -737,8 +495,12 @@ define('io.ox/office/editor/editor',
          *  stop the iteration process, otherwise undefined.
          */
         function iterateSelectedNodes(iterator, context) {
+
+            var // get the browser selection
+                ranges = Selection.getBrowserSelection(editdiv);
+
             // iterate over all selected nodes
-            return iterateNodesInTextRanges(getNormalizedSelection(), iterator, context);
+            return Selection.iterateNodesInTextRanges(ranges, iterator, context);
         }
 
         // global editor settings ---------------------------------------------
@@ -1305,7 +1067,7 @@ define('io.ox/office/editor/editor',
                 if (textPos >= 0) {
 
                     // visit all text nodes in the element
-                    iterateNodesInElement(element, function (node) {
+                    Utils.iterateDescendantNodes(element, function (node) {
 
                         var // the text in the current text node
                             text = null;
@@ -2076,7 +1838,7 @@ define('io.ox/office/editor/editor',
             var // the attribute converter
                 attrConverter = AttributeConversion[attr],
                 // the attribute value
-                value;
+                value = null;
 
             // TODO
             if (!attrConverter) {
@@ -2087,10 +1849,10 @@ define('io.ox/office/editor/editor',
             if (_.isUndefined(para)) {
                 iterateSelectedNodes(function (node) {
                     var nodeValue;
-                    // process all text nodes and get attriubutes from their parent element
+                    // process all text nodes, get attributes from their parent element
                     if (node.nodeType === 3) {
                         nodeValue = attrConverter.get(node.parentNode);
-                        if (!_.isUndefined(value) && (nodeValue !== value)) {
+                        if (!_.isNull(value) && (nodeValue !== value)) {
                             value = null;
                             return false;
                         }
@@ -2158,7 +1920,7 @@ define('io.ox/office/editor/editor',
             if (end === undefined)
                 end = 0xFFFF; // don't need correct len, just a very large value
 
-            textNodes = collectTextNodes(paragraphs[para]);
+            textNodes = Utils.collectTextNodes(paragraphs[para]);
             var node, nodeLen, startpos, endpos;
             var nodes = textNodes.length;
             var nodeStart = 0;
@@ -3157,7 +2919,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
-                    var textNodes = collectTextNodes(paragraph);
+                    var textNodes = Utils.collectTextNodes(paragraph);
                     var nNode, nChar;
                     var currChar = 0, prevChar = 0;
                     var node, nodes = textNodes.length;
@@ -3586,7 +3348,7 @@ define('io.ox/office/editor/editor',
             }
 
             var oneParagraph = this.getCurrentParagraph(startPosition);
-            var textNodes = collectTextNodes(oneParagraph);
+            var textNodes = Utils.collectTextNodes(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = textNodes.length;
             var nodeStart = 0;
