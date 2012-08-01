@@ -1743,6 +1743,14 @@ define('io.ox/office/editor/editor',
             var selection = _selection || this.getSelection();
             if (selection.hasRange()) {
 
+                // Is the end position the starting point of a table cell ?
+                // Then the endpoint of the previous cell need to be used.
+                if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                    selection.endPaM.oxoPosition.pop();
+                    var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
+                    selection.endPaM.oxoPosition = returnObj.position;
+                }
+
                 undomgr.startGroup();
 
                 selection.adjust();
@@ -1751,13 +1759,7 @@ define('io.ox/office/editor/editor',
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
-                } else if ((this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) || (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
-
-                    if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
-                        selection.endPaM.oxoPosition.pop();
-                        var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
-                        selection.endPaM.oxoPosition = returnObj.position;
-                    }
+                } else if (this.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
 
                     // The included paragraphs are neighbours.
                     var endPosition = _.copy(selection.startPaM.oxoPosition, true),
@@ -1948,6 +1950,14 @@ define('io.ox/office/editor/editor',
                 // Set attr to current selection
                 var selection = this.getSelection();
                 if (selection.hasRange()) {
+
+                    // Is the end position the starting point of a table cell ?
+                    // Then the endpoint of the previous cell need to be used.
+                    if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                        selection.endPaM.oxoPosition.pop();
+                        var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
+                        selection.endPaM.oxoPosition = returnObj.position;
+                    }
 
                     selection.adjust();
 
@@ -2214,35 +2224,24 @@ define('io.ox/office/editor/editor',
             return isSameLevel;
         };
 
-        this.isCellSelection = function (posA, posB) {
-            // If both positions are start positions of cells, the content of the complete cell is selected
-            var isCompleteCell = false;
+        this.isStartPointInTableCell = function (pos) {
+            // In Chrome, a triple click on the last paragraph of a cell, selects the start point of the following cell
+            // as end point. In this case, the last position of the cell containing the selection should be the endpoint.
+            var isCellStartPosition = false,
+                localPos = _.copy(pos, true);
 
-            if (posA.length === posB.length) {
-                if (this.isPositionInTable(posA)) {
-                    var lastVal = posA.length - 1;
-                    if ((posA[lastVal] === 0) && (posB[lastVal] === 0)) {  // start position
-                        if ((posA[lastVal - 1] === 0) && (posB[lastVal - 1] === 0)) {  // start paragraph
-                            if (posA[lastVal - 2] === posB[lastVal - 2]) {    // same row
-                                if (((posA[lastVal - 3] - posB[lastVal - 3]) === 1) || ((posA[lastVal - 3] - posB[lastVal - 3]) === -1)) {    // difference of one column
-                                    var isSame = true;
-                                    for (var i = 0; i < lastVal - 3; i++) {  // all others have to be equal
-                                        if (posA[i] !== posB[i]) {
-                                            isSame = false;
-                                            break;
-                                        }
-                                    }
-                                    if (isSame) {
-                                        isCompleteCell = true;
-                                    }
-                                }
-                            }
+            if (this.isPositionInTable(localPos)) {
+                if (localPos.pop() === 0) {   // start position
+                    if (localPos.pop() === 0) {   // start paragraph
+                        var domPos = this.getDOMPosition(localPos);
+                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                            isCellStartPosition = true;
                         }
                     }
                 }
             }
 
-            return isCompleteCell;
+            return isCellStartPosition;
         };
 
         this.prepareNewParagraph = function (paragraph) {
