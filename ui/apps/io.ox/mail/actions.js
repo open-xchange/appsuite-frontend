@@ -15,7 +15,6 @@ define('io.ox/mail/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
-     'io.ox/core/api/account',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
      'io.ox/core/config'], function (ext, links, api, accountAPI, util, gt, config) {
@@ -39,18 +38,12 @@ define('io.ox/mail/actions',
         id: 'compose',
         action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
-                var initialFolder = app.folder.get(),
-                    accountID = api.getAccountIDFromFolder(initialFolder);
-                accountAPI.get(accountID).done(function (accountdata) {
-                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
-                    m.getApp().launch().done(function () {
-                        this.compose({
-                                defaultSender:  defaultSender
-                            });
+                m.getApp().launch().done(function () {
+                    this.getAccount({
+                        app:  app,
+                        actionID: 'compose'
                     });
                 });
-
-
             });
         }
     });
@@ -72,13 +65,10 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                var initialFolder = data.folder_id,
-                    accountID = api.getAccountIDFromFolder(initialFolder);
-                accountAPI.get(accountID).done(function (accountdata) {
-                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
-                    m.getApp().launch().done(function () {
-                        data.defaultSender = defaultSender;
-                        this.replyall(data);
+                m.getApp().launch().done(function () {
+                    this.getAccount({
+                        data:  data,
+                        actionID: 'replyall'
                     });
                 });
             });
@@ -92,13 +82,10 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                var initialFolder = data.folder_id,
-                    accountID = api.getAccountIDFromFolder(initialFolder);
-                accountAPI.get(accountID).done(function (accountdata) {
-                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
-                    m.getApp().launch().done(function () {
-                        data.defaultSender = defaultSender;
-                        this.reply(data);
+                m.getApp().launch().done(function () {
+                    this.getAccount({
+                        data:  data,
+                        actionID: 'reply'
                     });
                 });
             });
@@ -112,13 +99,10 @@ define('io.ox/mail/actions',
         },
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
-                var initialFolder = data.folder_id,
-                    accountID = api.getAccountIDFromFolder(initialFolder);
-                accountAPI.get(accountID).done(function (accountdata) {
-                    var defaultSender = ['"' + accountdata.personal + '"', accountdata.primary_address];
-                    m.getApp().launch().done(function () {
-                        data.defaultSender = defaultSender;
-                        this.forward(data);
+                m.getApp().launch().done(function () {
+                    this.getAccount({
+                        data:  data,
+                        actionID: 'forward'
                     });
                 });
             });

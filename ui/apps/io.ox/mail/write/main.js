@@ -12,7 +12,7 @@
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define.async('io.ox/mail/write/main',
+define('io.ox/mail/write/main',
     ['io.ox/mail/api',
      'io.ox/mail/util',
      'io.ox/core/extensions',
@@ -20,13 +20,14 @@ define.async('io.ox/mail/write/main',
      'io.ox/contacts/api',
      'io.ox/contacts/util',
      'io.ox/core/api/user',
+     'io.ox/core/api/account',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
      'settings!io.ox/mail',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, upload, MailModel, WriteView, settings, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, settings, gt) {
 
     'use strict';
 
@@ -65,7 +66,6 @@ define.async('io.ox/mail/write/main',
 //        ref: 'io.ox/mail/write/actions/proofread'
 //    }));
 
-    // default sender (used to set from address)
     var UUID = 1;
 
     // multi instance pattern
@@ -283,6 +283,31 @@ define.async('io.ox/mail/write/main',
             });
         }());
 
+        app.getAccount = function (obj) {
+            var that = this;
+
+            if (obj.app) {
+                var initialFolder = obj.app.folder.get(),
+                    accountID = mailAPI.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var from = [accountdata.personal, accountdata.primary_address];
+                    that.setFrom(from);
+                    app[obj.actionID]({
+                        from:  from
+                    });
+                });
+            } else {
+                var initialFolder = obj.data.folder_id,
+                    accountID = mailAPI.getAccountIDFromFolder(initialFolder);
+                accountAPI.get(accountID).done(function (accountdata) {
+                    var from = [accountdata.personal, accountdata.primary_address];
+                    that.setFrom(from);
+                    obj.data.from = from;
+                    app[obj.actionID](obj.data);
+                });
+            }
+        };
+
         app.setSubject = function (str) {
             app.markDirty();
             view.subject.val(str || '');
@@ -293,17 +318,16 @@ define.async('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
-        app.setSender = function (sender) {
-            var arrayOfAccounts = view.sidepanel.find('.fromselect-wrapper option'),
-                selectBox = view.sidepanel.find('select');
-            selectBox.val(sender);
+        app.setFrom = function (from) {
+            var selectBox = view.sidepanel.find('select');
+            selectBox.val(from);
         };
 
-        app.getSender = function () {
+        app.getFrom = function () {
             var primaryAddress = view.sidepanel.find('.fromselect-wrapper select').val(),
                 personal = view.sidepanel.find('.fromselect-wrapper option[data-primary_address="' + primaryAddress + '"]').attr('data-displayname'),
-                sender = ['"' + personal + '"', primaryAddress];
-            return sender;
+                from = ['"' + personal + '"', primaryAddress];
+            return from;
         };
 
         app.setBody = function (str) {
@@ -522,8 +546,6 @@ define.async('io.ox/mail/write/main',
          */
         app.compose = function (data) {
 
-            this.setSender(data.defaultSender);
-
             // register mailto!
             if (navigator.registerProtocolHandler) {
                 var l = location, $l = l.href.indexOf('#'), url = l.href.substr(0, $l);
@@ -571,7 +593,6 @@ define.async('io.ox/mail/write/main',
          * Reply all
          */
         app.replyall = function (obj) {
-            this.setSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.replyall(obj, defaultEditorMode || 'text')
@@ -593,7 +614,6 @@ define.async('io.ox/mail/write/main',
          * Reply
          */
         app.reply = function (obj) {
-            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.reply(obj, defaultEditorMode || 'text')
@@ -615,7 +635,6 @@ define.async('io.ox/mail/write/main',
          * Forward
          */
         app.forward = function (obj) {
-            this.setDefaultSender(obj.defaultSender);
             var def = $.Deferred();
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
@@ -698,10 +717,10 @@ define.async('io.ox/mail/write/main',
                 };
             }
             // transform raw data
-            var sender = this.getSender();
+            var from = this.getFrom();
 
             mail = {
-                from: [sender] || [],
+                from: [from] || [],
                 to: parse(data.to),
                 cc: parse(data.cc),
                 bcc: parse(data.bcc),
@@ -884,17 +903,9 @@ define.async('io.ox/mail/write/main',
         return app;
     }
 
-    var module = {
+    return {
         getApp: createInstance
     };
-
-    return userAPI.get({ id: config.get('identifier') })
-        .done(function (sender) {
-            // there is something wrong with a deferred object here
-    })
-        .pipe(function () {
-            return module;
-        });
 
 });
 
