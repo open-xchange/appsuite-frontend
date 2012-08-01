@@ -15,13 +15,6 @@ define('io.ox/office/tk/controller', function () {
 
     'use strict';
 
-    // static functions =======================================================
-
-    /**
-     * Dummy predicate function returning always true.
-     */
-    function TRUE() { return true; }
-
     // class Controller =======================================================
 
     /**
@@ -50,6 +43,9 @@ define('io.ox/office/tk/controller', function () {
             // definitions for all items, mapped by item key
             items = {},
 
+            // cached results of called bulk getters
+            bulkGetResults = {},
+
             // registered view components
             components = [];
 
@@ -58,10 +54,14 @@ define('io.ox/office/tk/controller', function () {
         function Item(key, definition) {
 
             var enabled = true,
+                // handler for bulk enabled state
+                bulkEnableHandler = _.isFunction(definition.bulkEnable) ? definition.bulkEnable : function () { return true; },
                 // handler for enabled state
-                enableHandler = _.isFunction(definition.enable) ? definition.enable : TRUE,
+                enableHandler = _.isFunction(definition.enable) ? definition.enable : function (bulkEnable) { return bulkEnable; },
+                // handler for bulk value getter
+                bulkGetHandler = _.isFunction(definition.bulkGet) ? definition.bulkGet : $.noop,
                 // handler for value getter
-                getHandler = _.isFunction(definition.get) ? definition.get : $.noop,
+                getHandler = _.isFunction(definition.get) ? definition.get : function (bulkValue) { return bulkValue; },
                 // handler for value setter
                 setHandler = _.isFunction(definition.set) ? definition.set : $.noop,
                 // done handler
@@ -72,7 +72,7 @@ define('io.ox/office/tk/controller', function () {
              * the own state, and by asking the enable handler of the item.
              */
             function isEnabled() {
-                return enabled && enableHandler.call(controller);
+                return enabled && enableHandler.call(controller, bulkEnableHandler.call(controller));
             }
 
             /**
@@ -95,7 +95,7 @@ define('io.ox/office/tk/controller', function () {
              * Returns the current value of this item.
              */
             this.get = function () {
-                return getHandler.call(controller);
+                return getHandler.call(controller, bulkGetHandler.call(controller));
             };
 
             /**
@@ -211,12 +211,20 @@ define('io.ox/office/tk/controller', function () {
          *
          * @param {Object} definitions
          *  A map of key/definition pairs. Each attribute in this map defines
-         *  an item, keyed by its name. Definitions are maps themselves,
-         *  supporting the following attributes:
-         *  @param {Function} [definitions.enable]
+         *  an item, keyed by its name. Each definition is a map object by
+         *  itself, supporting the following attributes:
+         *  @param {Function} [definition.enable]
          *      Predicate function returning true if the item is enabled, and
          *      false otherwise. Defaults to a function returning always true.
-         *  @param {Function} [definitions.get]
+         *  @param {Function} [definition.bulkGet]
+         *      Getter function that will be executed before the actual getter
+         *      function of the item. The key feature of bulk getters is that
+         *      if a controller updates multiple item values at once, the same
+         *      bulk getter registered at different items will be executed
+         *      exactly once before the first item getter is called and its
+         *      result will be cached and passed to all item getters using the
+         *      same bulk getter.
+         *  @param {Function} [definition.get]
          *      Getter function returning the current value of the item. Can be
          *      omitted for one-way action items (actions without a return
          *      value). May return null to indicate an ambiguous state. May
@@ -225,13 +233,14 @@ define('io.ox/office/tk/controller', function () {
          *      an undefined return value, the current state of the controls in
          *      the view components will not be changed. Defaults to a getter
          *      returning undefined. Will be executed in the context of this
-         *      controller.
-         *  @param {Function} [definitions.set]
+         *      controller. If a bulk getter has been defined (see above), its
+         *      return value will be passed to this getter.
+         *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
          *      Defaults to a no-op function. Will be executed in the context
          *      of this controller.
-         *  @param {Function} [definitions.done]
+         *  @param {Function} [definition.done]
          *      A function that will be executed after the setter function has
          *      returned. If specified, overrides the default done handler
          *      passed to the constructor of this controller.
