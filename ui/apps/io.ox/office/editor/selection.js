@@ -59,16 +59,15 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         // convert parameter to plain DOM node
         node = Utils.getDomNode(node);
 
-        // if 'node' is located before the position node, it is always considered 'before'
-        if (Utils.isNodeBeforeNode(node, position.node)) {
+        // if 'node' is located before the position node, or is equal to the
+        // position node, it is always considered 'before'
+        if ((node === position.node) || Utils.isNodeBeforeNode(node, position.node)) {
             return true;
         }
 
-        switch (position.node.nodeType) {
-        case 1:
-            // position is element node: 'node' must be contained, index of its
-            // ancestor node must be less than the position's offset
-            if (node === position.node) { return true; }
+        // position is element node: 'node' must be contained, index of its
+        // ancestor node must be less than the position's offset
+        if (position.node.nodeType === 1) {
             if (!position.node.contains(node)) { return false; }
             // travel up until we are a direct child of position.node
             while (node.parentNode !== position.node) {
@@ -76,12 +75,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             }
             // check own index in all siblings
             return $(node).index() < position.offset;
-        case 3:
-            // position is text node: include it in the set of valid nodes
-            return node === position.node;
         }
 
-        window.console.log('Selection.isNodeBeforeTextPosition(): unexpected node type');
         return false;
     };
 

@@ -288,30 +288,6 @@ define('io.ox/office/editor/editor',
         };
     }
 
-    /**
-     * 'Point and mark'. Represents a text position a.k.a. cursor position.
-     * Member field 'aNode' contains the selected node, member field 'aOffset'
-     * contain the offset inside the node, where the selection starts.
-     */
-    function DOMPaM(node, offset) {
-        this.node = node;
-        this.offset = offset;
-        this.toString = function () {
-            return ("(node: " + this.node.nodeName + ", offset: " + this.offset + ")");
-        };
-    }
-
-    /**
-     * Represents a text range consisting of start position and end position.
-     */
-    function DOMSelection(start, end) {
-        this.startPaM = start;
-        this.endPaM = end;
-        this.toString = function () {
-            return ("Startpoint: " + this.startPaM.toString() + ", Endpoint: " + this.endPaM.toString());
-        };
-    }
-
     function isSameParagraph(pos1, pos2, includeLastPos) {
         if (pos1.length !== pos2.length)
             return false;
@@ -739,7 +715,10 @@ define('io.ox/office/editor/editor',
             return {node: textNode, offset: offset};
         };
 
-        this.getOXOPosition = function (node, offset) {
+        this.getOXOPosition = function (position) {
+
+            var node = position.node,
+                offset = position.offset;
 
             // check input values
             if (! node) {
@@ -961,21 +940,18 @@ define('io.ox/office/editor/editor',
 
             // this.implDbgOutInfo('getDOMPosition: Info: Converting position ' + oxoPosition + ' to node: ' + node.nodeName + ',' + node.nodeType + ' and offset (optionally): ' + offset);
 
-            return new DOMPaM(node, offset);
+            return { node: node, offset: offset };
         };
 
         this.getDOMSelection = function (oxoSelection) {
 
             // Only supporting single selection at the moment
-            var startPaM = this.getDOMPosition(oxoSelection.startPaM.oxoPosition),
-                endPaM = this.getDOMPosition(oxoSelection.endPaM.oxoPosition),
-                domSelection = null;
+            var start = this.getDOMPosition(oxoSelection.startPaM.oxoPosition),
+                end = this.getDOMPosition(oxoSelection.endPaM.oxoPosition);
 
-            if ((startPaM) && (endPaM)) {
-                domSelection = new DOMSelection(startPaM, endPaM);
-            }
-
-            return domSelection;
+            // DOM selection is always an array of text ranges
+            // TODO: fallback to HOME position in document instead of empty array?
+            return (start && end) ? [{ start: start, end: end }] : [];
         };
 
         this.initDocument = function () {
@@ -985,24 +961,21 @@ define('io.ox/office/editor/editor',
 
         this.getSelection = function () {
 
-            // quick check - no selection.
-            // TODO: Also check wether or not the selection is inside our edit div.
-            var windowSel = window.getSelection();
-            if (!windowSel.anchorNode)
-                return;
+            var domSelection = Selection.getBrowserSelection(editdiv),
+                domRange = null;
 
-            var domSelection = this.implGetCurrentDOMSelection();
-            var selection = new OXOSelection(this.getOXOPosition(domSelection.startPaM.node, domSelection.startPaM.offset), this.getOXOPosition(domSelection.endPaM.node, domSelection.endPaM.offset));
-
-            return selection;
+            if (domSelection.length) {
+                domRange = _(domSelection).last();
+                return new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+            }
         };
 
         this.setSelection = function (oxosel) {
             // var oldSelection = this.getSelection();
-            var aDOMSelection = this.getDOMSelection(oxosel);
+            var ranges = this.getDOMSelection(oxosel);
 
-            if (aDOMSelection) {
-                this.implSetDOMSelection(aDOMSelection.startPaM.node, aDOMSelection.startPaM.offset, aDOMSelection.endPaM.node, aDOMSelection.endPaM.offset);
+            if (ranges.length) {
+                Selection.setBrowserSelection(ranges);
                 // if (TODO: Compare Arrays oldSelection, oxosel)
                 this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
             } else {
@@ -1059,9 +1032,7 @@ define('io.ox/office/editor/editor',
                     // first index of query text
                     textPos = elementText.indexOf(query.toLowerCase()),
                     // the DOM text range containing the query text
-                    range = {},
-                    // the browser selection object, and a document range object
-                    windowSelection = null, docRange = null;
+                    range = {};
 
                 // non-negative position: query text exists in the element
                 if (textPos >= 0) {
@@ -1095,18 +1066,7 @@ define('io.ox/office/editor/editor',
                     // position found, select it
                     if (range.start && range.end) {
                         this.grabFocus();
-                        try {
-                            // first, remove the old browser selection
-                            windowSelection = window.getSelection();
-                            windowSelection.removeAllRanges();
-
-                            // initialize the range object
-                            docRange = document.createRange();
-                            docRange.setStart(range.start.node, range.start.offset);
-                            docRange.setEnd(range.end.node, range.end.offset);
-                            windowSelection.addRange(docRange);
-                        } catch (ex) {
-                        }
+                        Selection.setBrowserSelection(range);
                     }
 
                     // return true to exit the outer _.find() loop iterating over all paragraphs
@@ -2958,25 +2918,6 @@ define('io.ox/office/editor/editor',
                     // TODO: Adjust tabs, ...
                 }
             }
-        };
-
-        this.implSetDOMSelection = function (startnode, startpos, endnode, endpos) {
-            var range = window.document.createRange();
-            range.setStart(startnode, startpos);
-            range.setEnd(endnode, endpos);
-            var sel = window.getSelection();
-            sel.removeAllRanges();
-            sel.addRange(range);
-        };
-
-        this.implGetCurrentDOMSelection = function () {
-            // DOMSelection consists of Node and Offset for startpoint and for endpoint
-            var windowSel = window.getSelection();
-            var startPaM = new DOMPaM(windowSel.anchorNode, windowSel.anchorOffset);
-            var endPaM = new DOMPaM(windowSel.focusNode, windowSel.focusOffset);
-            var domSelection = new DOMSelection(startPaM, endPaM);
-
-            return domSelection;
         };
 
         /* This didn't work - browser doesn't accept the corrected selection, is changing it again immediatly...
