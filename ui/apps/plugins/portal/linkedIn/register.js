@@ -104,7 +104,7 @@ define("plugins/portal/linkedin/register",
             }).pipe(function (msgs) { return JSON.parse(msgs).values; });
         },
         drawTile: function (values) {
-            var message = values[0];
+            var message = values ? values[0] : null;
             
             
             $(this).append(

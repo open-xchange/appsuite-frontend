@@ -14,8 +14,9 @@
 define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
+     'io.ox/core/flowControl',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, gt) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, gt) {
 
     'use strict';
 
@@ -65,7 +66,7 @@ define('plugins/portal/twitter/register',
         return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
     };
     var drawTile = function (tweets, $node) {
-        if (tweets === null) {
+        if (!tweets) {
             return;
         }
         if (tweets.length === 0) {
@@ -90,9 +91,16 @@ define('plugins/portal/twitter/register',
         preview: function () {
             var deferred = $.Deferred();
             loadTile().done(function (tweets) {
+                if (!tweets) {
+                    deferred.resolve(control.CANCEL);
+                    return;
+                }
                 var $node = $('<div>');
                 drawTile(tweets, $node);
                 deferred.resolve($node);
+            }).fail(function () {
+                deferred.resolve(control.CANCEL);
+                return;
             });
             return deferred;
         },

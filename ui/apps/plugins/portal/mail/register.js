@@ -93,15 +93,15 @@ define('plugins/portal/mail/register',
             require(["io.ox/mail/api"], function (mailApi) {
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100) + " ...";
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100);
                 subject = strings.shorten(subject, 40);
 
                 $node.append(
-                    $('<h1>').text(gt("Mail")),
+                    $('<h1 class="tile-heading">').text(gt("Mail")),
                     $('<div class="io-ox-clear io-ox-mail-preview">').append(
                         $("<b>").text(subject),
                         $('<br>'),
-                        $("<span>").text(mailtext)
+                        $("<span>").html(mailtext)
                     )
                 );
                 deferred.resolve();
@@ -147,6 +147,7 @@ define('plugins/portal/mail/register',
                                 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
+                        node.find('[data-ref="io.ox/portal/widget/mail/actions/compose"]').remove();
 
                         new dialogs.SidePopup(600)
                         .delegate(node, '.vgrid-cell', function (pane) {

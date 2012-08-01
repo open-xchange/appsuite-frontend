@@ -15,8 +15,9 @@
 define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
+     'io.ox/core/flowControl',
      'gettext!plugins/portal/facebook',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, gt) {
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, gt) {
 
     'use strict';
 
@@ -63,9 +64,8 @@ define('plugins/portal/facebook/register',
                 var wall = resultsets.data[0].fql_result_set;
                 var profiles = resultsets.data[1].fql_result_set;
                 var $previewNode = $("<div />");
-               
                 if (!wall) {
-                    return $.Deferred().resolve();
+                    return deferred.resolve(control.CANCEL);
                 }
                 if (wall.length === 0) {
                     $previewNode.append(
@@ -83,6 +83,8 @@ define('plugins/portal/facebook/register',
                 }
                 
                 deferred.resolve($previewNode);
+            }).fail(function () {
+                deferred.resolve(control.CANCEL);
             });
             
             return deferred;
