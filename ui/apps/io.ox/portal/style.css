@@ -94,6 +94,9 @@
     margin: 13px 13px 0 0;
     cursor: pointer;
 }
+.io-ox-portal-preview {
+    overflow: hidden;
+}
 :hover.io-ox-portal-widget-tile  {
     opacity: 0.75;
     filter: alpha(opacity=75);

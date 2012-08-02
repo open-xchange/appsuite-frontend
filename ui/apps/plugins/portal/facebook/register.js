@@ -16,8 +16,9 @@ define('plugins/portal/facebook/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
+     'io.ox/core/strings',
      'gettext!plugins/portal/facebook',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, gt) {
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, strings, gt) {
 
     'use strict';
 
@@ -63,7 +64,7 @@ define('plugins/portal/facebook/register',
             }).pipe(JSON.parse).done(function (resultsets) {
                 var wall = resultsets.data[0].fql_result_set;
                 var profiles = resultsets.data[1].fql_result_set;
-                var $previewNode = $("<div />");
+                var $previewNode = $('<div class="io-ox-portal-preview" />');
                 if (!wall) {
                     return deferred.resolve(control.CANCEL);
                 }
@@ -77,9 +78,8 @@ define('plugins/portal/facebook/register',
                         message = message.substring(0, 150) + '...';
                     }
                     $previewNode.append(
-                        $('<div>').text(gt('Latest wall post:')),
                         $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
-                        $('<div>').text(message));
+                        $('<div>').text(strings.shorten(message, 100)));
                 }
                 
                 deferred.resolve($previewNode);
