@@ -15,8 +15,9 @@ define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
+     'io.ox/core/strings',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, gt) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, gt) {
 
     'use strict';
 
@@ -77,7 +78,7 @@ define('plugins/portal/twitter/register',
             var message = $('<div>').html(tweet.text).text();
             $node.append(
                 $('<div class="io-ox-clear">').append($('<b>').text('@' + tweet.user.name + ':')),
-                $('<div>').text(message));
+                $('<div>').text(strings.shorten(message, 140)));
         }
     };
     ext.point('io.ox/portal/widget').extend({
