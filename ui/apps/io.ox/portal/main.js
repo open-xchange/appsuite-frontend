@@ -91,7 +91,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
         
         function drawContent(extension) {
             contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.find(":first").detach();
+                contentSide.children().detach();
                 contentSide.append(node);
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
@@ -226,8 +226,6 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentQueue.start();
                 initExtensions();
                 if (app.active) {
-                    contentSide.empty();
-                    contentSide.busy();
                     drawContent(app.active);
                 }
             });
