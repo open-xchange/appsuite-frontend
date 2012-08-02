@@ -451,36 +451,6 @@ define('io.ox/office/editor/editor',
         // add event hub
         Events.extend(this);
 
-        // private functions --------------------------------------------------
-
-        /**
-         * Iterates over all DOM nodes contained in the current browser
-         * selection.
-         *
-         * @param {Function} iterator
-         *  The iterator function that will be called for every DOM node.
-         *  Receives the DOM node object as first parameter. If the iterator
-         *  returns the boolean value false, the iteration process will be
-         *  stopped immediately.
-         *
-         * @param {Object} [context]
-         *  If specified, the iterator will be called with this context (the
-         *  symbol 'this' will be bound to the context inside the iterator
-         *  function).
-         *
-         * @returns {Boolean|Undefined}
-         *  The boolean value false, if any iterator call has returned false to
-         *  stop the iteration process, otherwise undefined.
-         */
-        function iterateSelectedNodes(iterator, context) {
-
-            var // get the browser selection
-                ranges = Selection.getBrowserSelection(editdiv);
-
-            // iterate over all selected nodes
-            return Selection.iterateNodesInTextRanges(ranges, iterator, context);
-        }
-
         // global editor settings ---------------------------------------------
 
         /**
@@ -971,6 +941,12 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
                 domRange = _(domSelection).last();
+
+                // allowing "special" multiselection for tables (rectangle cell selection)
+                if (domRange.start.node.nodeName === 'TR') {
+                    domRange.start = _(domSelection).first().start;
+                }
+
                 currentSelection = new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
                 return  _.copy(currentSelection, true);
             }
@@ -1478,7 +1454,7 @@ define('io.ox/office/editor/editor',
                 // Is the end position the starting point of a table cell ?
                 // Then the endpoint of the previous cell need to be used.
                 // This has to be done before adjust is called! adjust is problematic for tables.
-                if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
                     selection.endPaM.oxoPosition.pop();
                     var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                     selection.endPaM.oxoPosition = returnObj.position;
@@ -1531,6 +1507,30 @@ define('io.ox/office/editor/editor',
                         var mergeselection = _.copy(selection.startPaM.oxoPosition);
                         mergeselection.pop();
                         this.mergeParagraph(mergeselection);
+                    }
+
+                } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    // This cell selection is a rectangle selection of cells in a table.
+                    var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                        endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+                    startPos.pop();
+                    startPos.pop();
+                    endPos.pop();
+                    endPos.pop();
+
+                    var startRow = startPos.pop(),
+                        startCol = startPos.pop(),
+                        endRow = endPos.pop(),
+                        endCol = endPos.pop();
+
+                    for (var i = startRow; i <= endRow; i++) {
+                        for (var j = startCol; j <= endCol; j++) {
+                            var position = _.copy(startPos, true);
+                            position.push(j);
+                            position.push(i);
+                            this.deleteAllParagraphsInCell(position);
+                        }
                     }
 
                 } else {
@@ -1687,7 +1687,7 @@ define('io.ox/office/editor/editor',
                     // Is the end position the starting point of a table cell ?
                     // Then the endpoint of the previous cell need to be used.
                     // This has to be done before adjust is called! adjust is problematic for tables.
-                    if (this.isStartPointInTableCell(selection.endPaM.oxoPosition)) {
+                    if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
                         selection.endPaM.oxoPosition.pop();
                         var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
                         selection.endPaM.oxoPosition = returnObj.position;
@@ -1738,6 +1738,31 @@ define('io.ox/office/editor/editor',
                             localstartPosition[endposLength] = 0;
 
                             this.setAttribute(attr, value, localstartPosition, selection.endPaM.oxoPosition);
+                        }
+
+                    } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        // This cell selection is a rectangle selection of cells in a table.
+                        var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                            endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+                        startPos.pop();
+                        startPos.pop();
+                        endPos.pop();
+                        endPos.pop();
+
+                        var startRow = startPos.pop(),
+                            startCol = startPos.pop(),
+                            endRow = endPos.pop(),
+                            endCol = endPos.pop();
+
+                        for (var i = startRow; i <= endRow; i++) {
+                            for (var j = startCol; j <= endCol; j++) {
+                                var position = _.copy(startPos, true);
+                                position.push(j);
+                                position.push(i);
+                                position.push(0);
+                                this.setAttributeToCompleteCell(attr, value, position);
+                            }
                         }
 
                     } else {
@@ -1805,38 +1830,72 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.getAttribute = function (attr, para, start, end) {
+        /**
+         * Returns the value of a specific formatting attribute in the current
+         * browser selection.
+         */
+        this.getAttribute = function (attrName) {
 
             var // the attribute converter
-                attrConverter = AttributeConversion[attr],
+                attrConverter = AttributeConversion[attrName],
+                // all text ranges to iterate
+                ranges = Selection.getBrowserSelection(),
                 // the attribute value
                 value = null;
 
-            // TODO
             if (!attrConverter) {
                 this.implDbgOutInfo('getAttribute - no valid attribute specified');
                 return;
             }
 
-            if (_.isUndefined(para)) {
-                iterateSelectedNodes(function (node) {
-                    var nodeValue;
-                    // process all text nodes, get attributes from their parent element
-                    if (node.nodeType === 3) {
-                        nodeValue = attrConverter.get(node.parentNode);
-                        if (!_.isNull(value) && (nodeValue !== value)) {
-                            value = null;
-                            return false;
-                        }
-                        value = nodeValue;
-                    }
-                });
-                return value;
-            }
+            // process all text nodes, get attributes from their parent element
+            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+                var nodeValue = attrConverter.get(textNode.parentNode);
+                if (!_.isNull(value) && (nodeValue !== value)) {
+                    value = null;
+                    return false;
+                }
+                value = nodeValue;
+            });
 
-            // TODO
-            this.implDbgOutInfo('niy: getAttribute with selection parameter');
-            // implGetAttribute( attr, para, start, end );
+            return value;
+        };
+
+        /**
+         * Returns the value of all formatting attribute in the current browser
+         * selection.
+         */
+        this.getAttributes = function () {
+
+            var // all text ranges to iterate
+                ranges = Selection.getBrowserSelection(editdiv),
+                // the attribute values, mapped by name
+                values = {},
+                // detect early loop exit, if all attributes are ambiguous
+                hasNonNull = false;
+
+            // process all text nodes, get attributes from their parent element
+            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+
+                // update all attributes
+                hasNonNull = false;
+                _(AttributeConversion).each(function (attrConverter, attrName) {
+                    var nodeValue = attrConverter.get(textNode.parentNode);
+                    if (!(attrName in values)) {
+                        // initial iteration: store value of first text portion
+                        values[attrName] = nodeValue;
+                    } else if (nodeValue !== values[attrName]) {
+                        // value differs from previous text portion(s): ambiguous state
+                        values[attrName] = null;
+                    }
+                    hasNonNull = hasNonNull || !_.isNull(values[attrName]);
+                });
+
+                // exit iteration loop if there are no unambiguous attributes left
+                if (!hasNonNull) { return false; }
+            });
+
+            return values;
         };
 
         this.getParagraphCount = function () {
@@ -1958,9 +2017,15 @@ define('io.ox/office/editor/editor',
             return isSameLevel;
         };
 
-        this.isStartPointInTableCell = function (pos) {
-            // In Chrome, a triple click on the last paragraph of a cell, selects the start point of the following cell
-            // as end point. In this case, the last position of the cell containing the selection should be the endpoint.
+        this.isCellSelection = function (posA, posB) {
+            // If cells in a table are selected, posA must be the start position of a cell and posB
+            // must be the last position of a cell
+            return (this.isFirstPositionInTableCell(posA) && this.isLastPositionInTableCell(posB));
+        };
+
+        this.isFirstPositionInTableCell = function (pos) {
+            // In Chrome, a triple click on the last paragraph of a cell, selects the start position of the following cell
+            // as end position. In this case, the last position of the cell containing the selection should be the end position.
             var isCellStartPosition = false,
                 localPos = _.copy(pos, true);
 
@@ -1976,6 +2041,26 @@ define('io.ox/office/editor/editor',
             }
 
             return isCellStartPosition;
+        };
+
+        this.isLastPositionInTableCell = function (pos) {
+            var isCellEndPosition = false,
+                localPos = _.copy(pos, true);
+
+            if (this.isPositionInTable(localPos)) {
+                var pos = localPos.pop();
+                if (pos === this.getParagraphLength(localPos)) {   // last position
+                    var lastPara = localPos.pop();
+                    if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
+                        var domPos = this.getDOMPosition(localPos);
+                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                            isCellEndPosition = true;
+                        }
+                    }
+                }
+            }
+
+            return isCellEndPosition;
         };
 
         this.prepareNewParagraph = function (paragraph) {
@@ -2613,13 +2698,21 @@ define('io.ox/office/editor/editor',
             if (isInTable) {
 
                 var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                    paraIndex = rowIndex + 1,
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
-                localPos[rowIndex + 1] = 0;
+                localPos[paraIndex] = 0;
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
-                    this.implDeleteParagraph(localPos);
+                    if (i < lastParaInCell) {
+                        this.implDeleteParagraph(localPos);
+                    } else {
+                        if ((localPos.length - 1) > paraIndex) {
+                            localPos.pop();
+                        }
+                        this.implDeleteParagraphContent(localPos);
+                    }
                 }
             }
         };
@@ -3249,6 +3342,14 @@ define('io.ox/office/editor/editor',
                 if (! isTable) {
                     paragraphs = editdiv.children();
                 }
+            }
+        };
+
+        this.implDeleteParagraphContent = function (position) {
+            var paragraph = this.getDOMPosition(position).node;
+            if (paragraph) {
+                $(paragraph).empty();  // removes the content of the paragraph
+                this.prepareNewParagraph(paragraph);
             }
         };
 
