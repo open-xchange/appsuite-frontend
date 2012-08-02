@@ -81,6 +81,21 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
     };
 
     /**
+     * Returns the passed DOM text range with adjusted start and end position,
+     * i.e. the start position precedes the end position.
+     *
+     * @param {Object} range
+     *  The DOM text range to be adjusted.
+     *
+     * @return {Object}
+     *  The adjusted DOM text range.
+     */
+    Selection.getAdjustedTextRange = function (range) {
+        return (((range.start.node === range.end.node) && (range.start.offset > range.end.offset)) || Utils.isNodeBeforeNode(range.end.node, range.start.node)) ?
+            { start: range.end, end: range.start } : range;
+    };
+
+    /**
      * Iterates over all DOM nodes contained in the specified DOM text ranges.
      *
      * @param {Object[]|Object} ranges
@@ -113,13 +128,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         ranges = _.getArray(ranges);
         for (var index = 0; index < ranges.length; index += 1) {
 
-            // adjust start/end by node DOM position
             // range will be passed to callback, create a clone (but do not clone the DOM nodes!)
-            if (Utils.isNodeBeforeNode(ranges[index].end.node, ranges[index].start.node)) {
-                range = { start: _.clone(ranges[index].end), end: _.clone(ranges[index].start) };
-            } else {
-                range = { start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) };
-            }
+            range = Selection.getAdjustedTextRange({ start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) });
 
             // get first node in text range
             node = range.start.node;
