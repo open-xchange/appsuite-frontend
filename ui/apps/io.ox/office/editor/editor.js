@@ -2008,16 +2008,14 @@ define('io.ox/office/editor/editor',
         };
 
         this.isCellSelection = function (posA, posB) {
-            // If cells in a table are selected, posA must be the start point of a cell and posB
-            // must be the last point of a cell
-            var isFirst = this.isFirstPositionInTableCell(posA),
-                isLast = this.isLastPositionInTableCell(posB);
-            return (isFirst && isLast);
+            // If cells in a table are selected, posA must be the start position of a cell and posB
+            // must be the last position of a cell
+            return (this.isFirstPositionInTableCell(posA) && this.isLastPositionInTableCell(posB));
         };
 
         this.isFirstPositionInTableCell = function (pos) {
-            // In Chrome, a triple click on the last paragraph of a cell, selects the start point of the following cell
-            // as end point. In this case, the last position of the cell containing the selection should be the endpoint.
+            // In Chrome, a triple click on the last paragraph of a cell, selects the start position of the following cell
+            // as end position. In this case, the last position of the cell containing the selection should be the end position.
             var isCellStartPosition = false,
                 localPos = _.copy(pos, true);
 
@@ -2690,15 +2688,19 @@ define('io.ox/office/editor/editor',
             if (isInTable) {
 
                 var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                    paraIndex = rowIndex + 1,
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
-                localPos[rowIndex + 1] = 0;
+                localPos[paraIndex] = 0;
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
                     if (i < lastParaInCell) {
                         this.implDeleteParagraph(localPos);
                     } else {
+                        if ((localPos.length - 1) > paraIndex) {
+                            localPos.pop();
+                        }
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
