@@ -99,19 +99,19 @@ define('io.ox/calendar/month/perspective',
 
         update: function () {
             var year = 2012,
-                month = 5,
+                month = 6,
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
                 i;
             for (i = 0; i < 20; i += 1, start += util.WEEK) {
-                this.updateWeek(start, start + util.DAY * 7);
+                this.updateWeek(start, start + util.WEEK);
             }
         },
 
         render: function (app) {
 
             var year = 2012,
-                month = 6,
+                month = 7,
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
                 i, tops;
@@ -172,6 +172,7 @@ define('io.ox/calendar/month/perspective',
 
             // watch for api refresh
             api.on('refresh.all', refresh);
+
             app.getWindow().on('show', refresh);
         }
     });

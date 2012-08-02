@@ -21,7 +21,6 @@ define('io.ox/mail/actions',
 
     'use strict';
 
-    console.log(config);
 
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
@@ -41,10 +40,7 @@ define('io.ox/mail/actions',
         action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.getAccount({
-                        app:  app,
-                        actionID: 'compose'
-                    });
+                    this.compose(app);
                 });
             });
         }
@@ -68,10 +64,8 @@ define('io.ox/mail/actions',
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.getAccount({
-                        data:  data,
-                        actionID: 'replyall'
-                    });
+                    this.replyall(data);
+
                 });
             });
         }
@@ -85,10 +79,7 @@ define('io.ox/mail/actions',
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.getAccount({
-                        data:  data,
-                        actionID: 'reply'
-                    });
+                    this.reply(data);
                 });
             });
         }
@@ -102,10 +93,7 @@ define('io.ox/mail/actions',
         action: function (data) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.getAccount({
-                        data:  data,
-                        actionID: 'forward'
-                    });
+                    this.forward(data);
                 });
             });
         }

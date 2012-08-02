@@ -138,6 +138,7 @@ define("io.ox/contacts/main",
         showContact = function (obj) {
             // get contact
             right.busy(true);
+            app.currentContact = obj;
             api.get(api.reduce(obj))
                 .done(_.lfo(drawContact))
                 .fail(_.lfo(drawFail, obj));
@@ -184,7 +185,14 @@ define("io.ox/contacts/main",
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
-
+        
+        api.on("edit", function (evt, updated) {
+            if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
+                // Reload
+                showContact(app.currentContact);
+            }
+        });
+        
         app.getGrid = function () {
             return grid;
         };

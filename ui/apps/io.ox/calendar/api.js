@@ -214,6 +214,7 @@ define("io.ox/calendar/api",
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
+            var key = o.data.folder_id + "." + o.data.id + "." + (o.data.recurrence_position || 0);
             return http.PUT({
                 module: 'calendar',
                 params: {
@@ -223,6 +224,8 @@ define("io.ox/calendar/api",
                 data: o.data
             })
             .done(function (resp) {
+                all_cache = {};
+                delete get_cache[key];
                 api.trigger('refresh.all');
             });
         },

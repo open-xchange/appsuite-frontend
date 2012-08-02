@@ -159,7 +159,10 @@ define("io.ox/editor/main",
                 // update
                 return api.uploadNewVersion({ json: json, file: file, filename: filename })
                     .always(win.idle)
-                    .done(showSuccess)
+                    .done(function () {
+                        model.save();
+                        showSuccess();
+                    })
                     .fail(showError);
 
             } else {
