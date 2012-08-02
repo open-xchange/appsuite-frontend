@@ -122,7 +122,9 @@ define("io.ox/core/main",
         // help
         desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
             require(['io.ox/help/center'], function (center) {
-                center.toggle();
+                setTimeout(function () {
+                    center.toggle();
+                }, 1);
             });
         }, gt('Help'));
 

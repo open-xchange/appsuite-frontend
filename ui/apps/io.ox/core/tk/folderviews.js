@@ -91,6 +91,11 @@ define('io.ox/core/tk/folderviews',
                         // invoke returns a nice array of all returns values which are deferred objects.
                         // we use this array to feed $.when(). Thus, we get a proper combined deferred object
                         // that will be resolved once all child nodes are resolved.
+                        if (!children || children.length === 0) {
+                            nodes.sub.idle().hide(); // Robustness. Sometimes the folder interface seems unsure about subfolders.
+                            hideArrow();
+                            return $.when();
+                        }
                         return $.when.apply(null, _(children).invoke(method, nodes.sub));
                     });
             },
@@ -106,6 +111,10 @@ define('io.ox/core/tk/folderviews',
             updateArrow = function () {
                 var image = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'none';
                 nodes.arrow.css('backgroundImage', image);
+            },
+            
+            hideArrow = function () {
+                nodes.arrow.css('backgroundImage', 'none');
             },
 
             // open/close tree node

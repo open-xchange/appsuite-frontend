@@ -17,8 +17,9 @@ define("plugins/portal/appointments/register", [
     "io.ox/core/extensions",
     "io.ox/core/date",
     "gettext!plugins/portal/appointments",
+    'io.ox/core/strings',
     "less!plugins/portal/appointments/style.css"
-], function (ext, date, gt) {
+], function (ext, date, gt, strings) {
 
     "use strict";
  
@@ -26,26 +27,26 @@ define("plugins/portal/appointments/register", [
     //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
     var timespan = function (timestamp1, timestamp2) {
         var delta = timestamp1 - timestamp2;
-        var unit = gt("In %s milliseconds");
+        var unit = gt("In %s milliseconds:");
         if (delta / 1000 > 1) {
             delta = delta / 1000;
-            unit = gt("In %s seconds");
+            unit = gt("In %s seconds:");
         }
         if (delta / 60 > 1) {
             delta = delta / 60;
-            unit = gt("In %s minutes");
+            unit = gt("In %s minutes:");
         }
         if (delta / 60 > 1) {
             delta = delta / 60;
-            unit = gt("In %s hours");
+            unit = gt("In %s hours:");
         }
         if (delta / 24 > 1) {
             delta = delta / 24;
-            unit = gt("In %s days");
+            unit = gt("In %s days:");
         }
         if (delta / 7 > 1) {
             delta = delta / 7;
-            unit = gt("In %s weeks");
+            unit = gt("In %s weeks:");
         }
         return unit.replace("%s", Math.round(delta));
     };
@@ -71,12 +72,14 @@ define("plugins/portal/appointments/register", [
             return app.start_date > endSpan || app.end_date < startSpan;
         });
 
-        var today = new date.Local().format(date.DATE);
-
         if (appointments.length > 0) {
             var nextApp = appointments[0];
             var deltaT = timespan(nextApp.start_date, new Date().getTime());
-            $('<div>').html(gt("Next") + ": <b>" + nextApp.title + '</b> (' + deltaT + ')').appendTo($node);
+            $node.append(
+                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
+                $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title), 100),
+                $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location), 100)
+            );
         }
     };
 

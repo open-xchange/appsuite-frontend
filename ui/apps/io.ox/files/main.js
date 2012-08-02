@@ -120,7 +120,7 @@ define("io.ox/files/main",
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
 
-
+        
         grid.selection.on('empty', function () {
             if (currentDetailView) {
                 currentDetailView.destroy();

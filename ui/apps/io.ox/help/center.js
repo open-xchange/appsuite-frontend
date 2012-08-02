@@ -23,6 +23,38 @@ define("io.ox/help/center", [
     var center = { active: false },
         origPopovers = {};
     
+    var isVisible = function (elem) {
+        var $elem = $(elem);
+        var rectPos = elem.getBoundingClientRect();
+        var result = 0;
+        
+        if ($elem.width() === 0 || $elem.height() === 0) {
+            return false;
+        }
+        
+        if (elem === document.elementFromPoint(rectPos.left, rectPos.top)) {
+            result++;
+        }
+        if (elem === document.elementFromPoint(rectPos.left, rectPos.bottom - 1)) {
+            result++;
+        }
+        if (elem === document.elementFromPoint(rectPos.right - 1, rectPos.top)) {
+            result++;
+        }
+        if (elem === document.elementFromPoint(rectPos.right - 1, rectPos.bottom - 1)) {
+            result++;
+        }
+
+        if (result === 4) {
+            result = 'visible';
+        } else if (result === 0) {
+            result = 'hidden';
+        } else {
+            result = 'partially visible';
+        }
+        return result === 'visible';
+    };
+    
     center.toggle = function () {
         this.active = !this.active;
         if (this.active) {
@@ -42,28 +74,14 @@ define("io.ox/help/center", [
         }));
         
         //blackout everything
-        $body.append($('<div class="io-ox-help-blacksheepwall"/>'));
+        var $wall = $('<div class="io-ox-help-blacksheepwall"/>');
         
         //highlight things with help texts
         _($saveThese).each(function (elem) {
             var $elem = $(elem);
             var offset = $elem.offset();
             var dataRef = $elem.attr('data-ref');
-            console.log("Sizes for %s: width %s/%s, height %s/%s, padding = %s %s %s %s, margin = %s %s %s %s",
-                dataRef,
-                $elem.outerWidth(),
-                $elem.width(),
-                $elem.outerHeight(),
-                $elem.height(),
-                $elem.css("paddingTop"),
-                $elem.css("paddingRight"),
-                $elem.css("paddingBottom"),
-                $elem.css("paddingLeft"),
-                $elem.css("marginTop"),
-                $elem.css("marginRight"),
-                $elem.css("marginBottom"),
-                $elem.css("marginLeft"));
-            if (! ($elem.width() === 0 || $elem.height() === 0 || (offset.left === 0 && offset.top === 0))) {
+            if (isVisible(elem)) {
                 var helpText = getHelpText(dataRef);
                 $("<div>").css({
                     position: 'absolute',
@@ -92,7 +110,7 @@ define("io.ox/help/center", [
                         return off.left > width ? 'left' : 'right';
                     }
                 })
-                .appendTo($body);
+                .appendTo($wall);
             }
         });
         
@@ -116,7 +134,8 @@ define("io.ox/help/center", [
             disableHelp();
             center.active = false;
         })
-        .appendTo($body);
+        .appendTo($wall);
+        $wall.appendTo($body);
     };
     
     var getHelpText = function (id) {
