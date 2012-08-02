@@ -80,6 +80,8 @@ define("plugins/portal/appointments/register", [
                 $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title), 100),
                 $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location), 100)
             );
+        } else {
+            $('<div class="io-ox-portal-calendar-message">').text(gt("You don't have any appointments in the near future.")).appendTo($node);
         }
     };
 

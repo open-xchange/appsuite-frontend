@@ -15,8 +15,9 @@ define('plugins/portal/twitter/register',
     ['io.ox/core/extensions',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
+     'io.ox/core/strings',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, gt) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, gt) {
 
     'use strict';
 
@@ -71,13 +72,13 @@ define('plugins/portal/twitter/register',
         }
         if (tweets.length === 0) {
             $node.append(
-                $('<div class="io-ox-clear">').text(gt('No tweets yet.')));
+                $('<div class="io-ox-portal-preview">').text(gt('No tweets yet.')));
         } else {
             var tweet = tweets[0];
             var message = $('<div>').html(tweet.text).text();
             $node.append(
-                $('<div class="io-ox-clear">').append($('<b>').text('@' + tweet.user.name + ':')),
-                $('<div>').text(message));
+                $('<div>').append($('<b>').text('@' + tweet.user.name + ':')),
+                $('<div class="io-ox-portal-preview">').text(strings.shorten(message, 120)));
         }
     };
     ext.point('io.ox/portal/widget').extend({

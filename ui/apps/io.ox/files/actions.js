@@ -146,8 +146,8 @@ define("io.ox/files/actions",
         id: "save",
         action: function (file, context) {
             var updatedFile = context.view.getModifiedFile();
-            api.update(updatedFile).done();
             context.view.endEdit();
+            api.update(updatedFile).done();
         }
     });
 

@@ -106,7 +106,6 @@ define("plugins/portal/linkedin/register",
         drawTile: function (values) {
             var message = values ? values[0] : null;
             
-            
             $(this).append(
                 $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
             ).addClass('io-ox-portal-tile-linkedin');
@@ -117,7 +116,6 @@ define("plugins/portal/linkedin/register",
                     $('<div class="linkedin-subject">').text(strings.shorten(message.subject, 50)),
                     $('<div class="linkedin-body">').text(strings.shorten(message.body, 50))
                 ).appendTo(this);
-                
             }
         },
         load: function () {
