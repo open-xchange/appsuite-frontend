@@ -367,6 +367,9 @@ define('io.ox/office/editor/editor',
             get: function (element) {
                 var value = $(element).css('font-weight');
                 return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
+            },
+            set: function (element, state) {
+                $(element).css('font-weight', state ? 'bold' : 'normal');
             }
         },
 
@@ -374,6 +377,9 @@ define('io.ox/office/editor/editor',
             get: function (element) {
                 var value = $(element).css('font-style');
                 return (value === 'italic') || (value === 'oblique');
+            },
+            set: function (element, state) {
+                $(element).css('font-style', state ? 'italic' : 'normal');
             }
         },
 
@@ -381,6 +387,17 @@ define('io.ox/office/editor/editor',
             get: function (element) {
                 var values = $(element).css('text-decoration').split(/\s+/);
                 return _(values).contains('underline');
+            },
+            set: function (element, state) {
+                var values = $(element).css('text-decoration').split(/\s+/);
+                if (state && !_(values).contains('underline')) {
+                    values = _(values).without('none');
+                    values.push('underline');
+                } else if (!state) {
+                    values = _(values).without('underline');
+                    if (!values.length) { values = ['none']; }
+                }
+                element.css('text-decoration', values.join(' '));
             }
         },
 
@@ -388,6 +405,9 @@ define('io.ox/office/editor/editor',
             get: function (element) {
                 var value = $(element).css('font-family');
                 return Fonts.getFontName(value);
+            },
+            set: function (element, fontName) {
+                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
             }
         },
 
@@ -395,6 +415,9 @@ define('io.ox/office/editor/editor',
             get: function (element) {
                 var value = $(element).css('font-size');
                 return Utils.convertCssLength(value, 'pt', 0);
+            },
+            set: function (element, fontSize) {
+                $(element).css('font-size', fontSize + 'pt');
             }
         }
     };
