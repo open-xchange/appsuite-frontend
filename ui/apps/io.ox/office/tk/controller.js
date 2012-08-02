@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/controller', function () {
+define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
@@ -43,37 +43,43 @@ define('io.ox/office/tk/controller', function () {
             // definitions for all items, mapped by item key
             items = {},
 
-            // cached results of called bulk getters
-            bulkGetResults = {},
-
             // registered view components
-            components = [];
+            components = [],
+
+            // keys of all items waiting for an update
+            pendingKeys = [],
+
+            // timer collecting multiple update requests
+            updateTimeout = null,
+
+            // cached results for chain operations
+            chainedResults = {};
+
 
         // class Item ---------------------------------------------------------
 
         function Item(key, definition) {
 
             var enabled = true,
-                // handler for bulk enabled state
-                bulkEnableHandler = _.isFunction(definition.bulkEnable) ? definition.bulkEnable : function () { return true; },
+                // chained item
+                chainKey = Utils.getStringOption(definition, 'chain'),
                 // handler for enabled state
-                enableHandler = _.isFunction(definition.enable) ? definition.enable : function (bulkEnable) { return bulkEnable; },
-                // handler for bulk value getter
-                bulkGetHandler = _.isFunction(definition.bulkGet) ? definition.bulkGet : $.noop,
+                enableHandler = Utils.getFunctionOption(definition, 'enable', _.identity),
                 // handler for value getter
-                getHandler = _.isFunction(definition.get) ? definition.get : function (bulkValue) { return bulkValue; },
+                getHandler = Utils.getFunctionOption(definition, 'get', _.identity),
                 // handler for value setter
-                setHandler = _.isFunction(definition.set) ? definition.set : $.noop,
+                setHandler = Utils.getFunctionOption(definition, 'set', $.noop),
                 // done handler
-                doneHandler = _.isFunction(definition.done) ? definition.done : defaultDoneHandler;
+                doneHandler = Utils.getFunctionOption(definition, 'done', defaultDoneHandler);
 
             /**
              * Returns whether this item is effectively enabled, by looking at
              * the own state, and by asking the enable handler of the item.
              */
-            function isEnabled() {
-                return enabled && enableHandler.call(controller, bulkEnableHandler.call(controller));
-            }
+            this.isEnabled = function () {
+                var chainedEnable = enabled && (_.isString(chainKey) ? getChainedResult(chainKey, 'isEnabled') : true);
+                return enabled && enableHandler.call(controller, chainedEnable);
+            };
 
             /**
              * Enables or disables this item, and updates all registered view
@@ -88,14 +94,16 @@ define('io.ox/office/tk/controller', function () {
              */
             this.enable = function (state) {
                 enabled = _.isUndefined(state) || (state === true);
-                return this.update();
+                _(components).invoke('enable', key, this.isEnabled());
+                return this;
             };
 
             /**
              * Returns the current value of this item.
              */
             this.get = function () {
-                return getHandler.call(controller, bulkGetHandler.call(controller));
+                var chainedValue = _.isString(chainKey) ? getChainedResult(chainKey, 'get') : undefined;
+                return getHandler.call(controller, chainedValue);
             };
 
             /**
@@ -111,7 +119,7 @@ define('io.ox/office/tk/controller', function () {
             this.update = function (defaultValue) {
                 var value = this.get();
                 value = _.isUndefined(value) ? defaultValue : value;
-                _(components).invoke('enable', key, isEnabled());
+                _(components).invoke('enable', key, this.isEnabled());
                 if (!_.isUndefined(value)) {
                     _(components).invoke('update', key, value);
                 }
@@ -130,7 +138,7 @@ define('io.ox/office/tk/controller', function () {
              *  A reference to this item.
              */
             this.change = function (value) {
-                if (isEnabled()) {
+                if (this.isEnabled()) {
                     setHandler.call(controller, value);
                     this.update(value);
                 }
@@ -141,6 +149,36 @@ define('io.ox/office/tk/controller', function () {
         } // class Item
 
         // private methods ----------------------------------------------------
+
+        /**
+         * Clears all cached results of chained items.
+         */
+        function clearChainedResultCache() {
+            chainedResults = {};
+        }
+
+        /**
+         * Returns the chained result for the specified item key and attribute.
+         * Creates a new empty result object if no result object exists yet,
+         * and resolves the specified attribute.
+         *
+         * @param {String} key
+         *  The key of the item whose attribute result will be cached and
+         *  returned.
+         *
+         * @param {String} attribute
+         *  An item attribute whose value will be cached and returned. May be
+         *  'isEnabled' to get the value of the enabler function registered for
+         *  the specified item, or 'get' to get the value of its getter
+         *  function.
+         */
+        function getChainedResult(key, attribute) {
+            var result = chainedResults[key] || (chainedResults[key] = {});
+            if (!(attribute in result)) {
+                result[attribute] = (key in items) ? items[key][attribute]() : undefined;
+            }
+            return result[attribute];
+        }
 
         /**
          * Returns all items matching the passed key selector in a map.
@@ -194,6 +232,7 @@ define('io.ox/office/tk/controller', function () {
             if (event.type === 'change') {
                 window.console.log('Controller: received change event: key="' + key + '", value=' + JSON.stringify(value));
                 if (key in items) {
+                    clearChainedResultCache();
                     items[key].change(value);
                 } else {
                     defaultDoneHandler.call(controller);
@@ -213,28 +252,40 @@ define('io.ox/office/tk/controller', function () {
          *  A map of key/definition pairs. Each attribute in this map defines
          *  an item, keyed by its name. Each definition is a map object by
          *  itself, supporting the following attributes:
+         *  @param {String} [definition.chain]
+         *      The name of an item that will be used to calculate intermediate
+         *      results for the getter function and enabler function (see
+         *      below). The key feature of chained items is that if a
+         *      controller enables or updates multiple items at once, the
+         *      chained item getter or enabler registered at multiple items
+         *      will be executed exactly once before the first item getter or
+         *      enabler is called, and its result will be cached and passed to
+         *      all item getters or enablers that are using the same chained
+         *      item.
          *  @param {Function} [definition.enable]
          *      Predicate function returning true if the item is enabled, and
-         *      false otherwise. Defaults to a function returning always true.
-         *  @param {Function} [definition.bulkGet]
-         *      Getter function that will be executed before the actual getter
-         *      function of the item. The key feature of bulk getters is that
-         *      if a controller updates multiple item values at once, the same
-         *      bulk getter registered at different items will be executed
-         *      exactly once before the first item getter is called and its
-         *      result will be cached and passed to all item getters using the
-         *      same bulk getter.
+         *      false otherwise. Will be executed in the context of this
+         *      controller. If a chained item has been defined (see above), the
+         *      cached return value of its enabler function will be passed to
+         *      this function. This means that the enabler function of chained
+         *      items may return other values then booleans, if the enablers of
+         *      items using the chained item will calculate a boolean value
+         *      from that result. Defaults to a function that returns always
+         *      true; or, if a chained item has been registered, that returns
+         *      its cached value.
          *  @param {Function} [definition.get]
          *      Getter function returning the current value of the item. Can be
          *      omitted for one-way action items (actions without a return
-         *      value). May return null to indicate an ambiguous state. May
-         *      return undefined to indicate that calculating the value is not
-         *      applicable, not possible, not implemented, etc. In the case of
-         *      an undefined return value, the current state of the controls in
-         *      the view components will not be changed. Defaults to a getter
-         *      returning undefined. Will be executed in the context of this
-         *      controller. If a bulk getter has been defined (see above), its
-         *      return value will be passed to this getter.
+         *      value). Will be executed in the context of this controller. If
+         *      a chained item has been defined (see above), the cached return
+         *      value of its getter will be passed to this getter. May return
+         *      null to indicate an ambiguous state. May return undefined to
+         *      indicate that calculating the value is not applicable, not
+         *      possible, not implemented, etc. In the case of an undefined
+         *      return value, the current state of the controls in the view
+         *      components will not be changed. Defaults to a function that
+         *      returns undefined; or, if a chained item has been registered,
+         *      that returns its cached value.
          *  @param {Function} [definition.set]
          *      Setter function changing the value of an item to the first
          *      parameter of the setter. Can be omitted for read-only items.
@@ -303,12 +354,11 @@ define('io.ox/office/tk/controller', function () {
          * Enables or disables the specified items, and updates all registered
          * view components.
          *
-         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         * @param {String|RegExp|Null} [keys]
          *  The keys of the items to be enabled or disabled, as space-separated
-         *  string, or as regular expression, or as array of strings or regular
-         *  expressions (also mixed). Strings have to match the keys exactly.
-         *  If omitted, all items will be enabled. If set to null, all items
-         *  will be disabled.
+         *  string, or as regular expression. Strings have to match the keys
+         *  exactly. If omitted, all items will be enabled or disabled. If set
+         *  to null, no item will be enabled or disabled.
          *
          * @param {Boolean} [state=true]
          *  If omitted or set to true, the items will be enabled. Otherwise,
@@ -318,6 +368,7 @@ define('io.ox/office/tk/controller', function () {
          *  A reference to this controller.
          */
         this.enable = function (keys, state) {
+            clearChainedResultCache();
             _(selectItems(keys)).invoke('enable', state);
             return this;
         };
@@ -326,12 +377,11 @@ define('io.ox/office/tk/controller', function () {
          * Disables the specified items, and updates all registered view
          * components. Shortcut for Controller.enable(keys, false).
          *
-         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         * @param {String|RegExp|Null} [keys]
          *  The keys of the items to be disabled, as space-separated string, or
-         *  as regular expression, or as array of strings or regular
-         *  expressions (also mixed). Strings have to match the keys exactly.
-         *  If omitted, all items will be enabled. If set to null, all items
-         *  will be disabled.
+         *  as regular expression. Strings have to match the keys exactly. If
+         *  omitted, all items will be disabled. If set to null, no item will
+         *  be disabled.
          *
          * @returns {Controller}
          *  A reference to this controller.
@@ -345,12 +395,11 @@ define('io.ox/office/tk/controller', function () {
          * components. Items matching the specified selector will be enabled,
          * all other items will be disabled.
          *
-         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         * @param {String|RegExp|Null} [keys]
          *  The keys of the items to be enabled, as space-separated string, or
-         *  as regular expression, or as array of strings or regular
-         *  expressions (also mixed). Strings have to match the keys exactly.
-         *  If omitted, all items will be enabled. If set to null, all items
-         *  will be disabled.
+         *  as regular expression. Strings have to match the keys exactly. If
+         *  omitted, all items will be enabled. If set to null, all items will
+         *  be disabled.
          *
          * @returns {Controller}
          *  A reference to this controller.
@@ -361,6 +410,7 @@ define('io.ox/office/tk/controller', function () {
                 enabledItems = selectItems(keys);
 
             // enable/disable the items
+            clearChainedResultCache();
             _(items).each(function (item, key) {
                 item.enable(key in enabledItems);
             });
@@ -372,18 +422,34 @@ define('io.ox/office/tk/controller', function () {
          * Updates the values of the specified items, and updates all
          * registered view components.
          *
-         * @param {String|RegExp|String[]|RegExp[]|Null} [keys]
+         * @param {String|RegExp|Null} [keys]
          *  The keys of the items to be updated, as space-separated string, or
-         *  as regular expression, or as array of strings or regular
-         *  expressions (also mixed). Strings have to match the keys exactly.
-         *  If omitted, all items will be updated. If set to null, no item will
-         *  be updated.
+         *  as regular expression. Strings have to match the keys exactly. If
+         *  omitted, all items will be updated. If set to null, no item will be
+         *  updated.
          *
          * @returns {Controller}
          *  A reference to this controller.
          */
         this.update = function (keys) {
-            _(selectItems(keys)).invoke('update');
+
+            // update the array of pending keys
+            if (_.isUndefined(keys)) {
+                pendingKeys = undefined;
+            } else if (_.isArray(pendingKeys) && (_.isString(keys) || _.isRegExp(keys))) {
+                pendingKeys.push(keys);
+            }
+
+            // start a timeout that calls the item update handlers
+            if (!updateTimeout) {
+                updateTimeout = window.setTimeout(function () {
+                    updateTimeout = null;
+                    clearChainedResultCache();
+                    _(selectItems(pendingKeys)).invoke('update');
+                    pendingKeys = [];
+                }, 0);
+            }
+
             return this;
         };
 
@@ -398,6 +464,7 @@ define('io.ox/office/tk/controller', function () {
          *  exist.
          */
         this.get = function (key) {
+            clearChainedResultCache();
             return (key in items) ? items[key].get() : undefined;
         };
 

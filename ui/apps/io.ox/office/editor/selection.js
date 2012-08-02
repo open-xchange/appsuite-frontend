@@ -263,7 +263,6 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         });
     };
 
-
     // exports ================================================================
 
     return Selection;

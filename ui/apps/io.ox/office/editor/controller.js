@@ -43,26 +43,29 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     done: function () { this.change('view/toolbars/show', 'table'); }
                 },
 
+                'chain/format/character': {
+                    get: function () { return editor.getAttributes(); }
+                },
                 'format/character/font/family': {
-                    bulkGet: getAttributes,
+                    chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontname; }
                 },
                 'format/character/font/height': {
-                    bulkGet: getAttributes,
+                    chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontsize; }
                 },
                 'format/character/font/bold': {
-                    bulkGet: getAttributes,
+                    chain: 'chain/format/character',
                     get: function (attributes) { return attributes.bold; },
                     set: function (state) { editor.setAttribute('bold', state); }
                 },
                 'format/character/font/italic': {
-                    bulkGet: getAttributes,
+                    chain: 'chain/format/character',
                     get: function (attributes) { return attributes.italic; },
                     set: function (state) { editor.setAttribute('italic', state); }
                 },
                 'format/character/font/underline': {
-                    bulkGet: getAttributes,
+                    chain: 'chain/format/character',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('underline', state); }
                 },
@@ -70,20 +73,23 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'format/paragraph/alignment': {
                 },
 
+                'chain/table': {
+                    enable: function () { return editor.isPositionInTable(); }
+                },
                 'table/insert/row': {
-                    bulkEnable: isPositionInTable,
+                    chain: 'chain/table',
                     set: function () { editor.insertTableRow(); }
                 },
                 'table/insert/column': {
-                    bulkEnable: isPositionInTable,
+                    chain: 'chain/table',
                     set: function () { editor.insertTableColumn(); }
                 },
                 'table/delete/row': {
-                    bulkEnable: isPositionInTable,
+                    chain: 'chain/table',
                     set: function () { editor.deleteTableRow(); }
                 },
                 'table/delete/column': {
-                    bulkEnable: isPositionInTable,
+                    chain: 'chain/table',
                     set: function () { editor.deleteTableColumn(); }
                 },
 
@@ -95,14 +101,6 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
             };
 
         // private methods ----------------------------------------------------
-
-        function getAttributes() {
-            return editor.getAttributes();
-        }
-
-        function isPositionInTable() {
-            return editor.isPositionInTable();
-        }
 
         /**
          * The controller done handler that will be executed after an item

@@ -1829,7 +1829,7 @@ define('io.ox/office/editor/editor',
             var // the attribute converter
                 attrConverter = AttributeConversion[attrName],
                 // all text ranges to iterate
-                ranges = Selection.getBrowserSelection(),
+                ranges = Selection.getBrowserSelection(editdiv),
                 // the attribute value
                 value = null;
 

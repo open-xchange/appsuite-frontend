@@ -158,11 +158,11 @@ define('io.ox/office/editor/view',
          * Activates the tool bar with the specified key.
          */
         function showToolBar(key) {
-            if (visibleToolBar in toolBars) {
-            }
             if (key in toolBars) {
+                if (visibleToolBar in toolBars) {
+                    toolBars[visibleToolBar].getNode().hide();
+                }
                 visibleToolBar = key;
-                win.nodes.toolPane.children().slice(1).hide();
                 toolBars[key].getNode().show();
             }
         }
@@ -248,10 +248,10 @@ define('io.ox/office/editor/view',
         createToolBar('table', { label: gt('Table') })
             .addGroup('insert/table', new TableSizeChooser())
             .startCollapseGroups()
-            .addButton('table/insert/row', { label: gt('Insert Row'), tooltip: gt('Insert Row') })
-            .addButton('table/insert/column', { label: gt('Insert Column'), tooltip: gt('Insert Column') })
-            .addButton('table/delete/row', { label: gt('Delete Row'), tooltip: gt('Delete Row') })
-            .addButton('table/delete/column', { label: gt('Delete Column'), tooltip: gt('Delete Column') })
+            .addButton('table/insert/row', { icon: 'icon-io-ox-table-insert-row', tooltip: gt('Insert Row') })
+            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
+            .addButton('table/delete/row', { icon: 'icon-io-ox-table-delete-row', tooltip: gt('Delete Row') })
+            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Column') })
             .endCollapseGroups();
 
         createToolBar('debug', { label: gt('Debug') })
