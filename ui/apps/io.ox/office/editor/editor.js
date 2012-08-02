@@ -428,6 +428,8 @@ define('io.ox/office/editor/editor',
         var lastKeyDownEvent;
         var lastEventSelection;
 
+        var currentSelection;
+
         // list of operations
         var operations = [];
 
@@ -959,19 +961,25 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
-        this.getSelection = function () {
+        this.getSelection = function (updateFromBrowser) {
+
+            if (currentSelection && !updateFromBrowser)
+                return currentSelection;
 
             var domSelection = Selection.getBrowserSelection(editdiv),
                 domRange = null;
 
             if (domSelection.length) {
                 domRange = _(domSelection).last();
-                return new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+                currentSelection = new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+                return  _.copy(currentSelection, true);
             }
         };
 
         this.setSelection = function (oxosel) {
-            // var oldSelection = this.getSelection();
+
+            currentSelection = _.copy(oxosel, true);
+
             var ranges = this.getDOMSelection(oxosel);
 
             if (ranges.length) {
@@ -1067,6 +1075,8 @@ define('io.ox/office/editor/editor',
                     if (range.start && range.end) {
                         this.grabFocus();
                         Selection.setBrowserSelection(range);
+                        currentSelection = null;
+                        this.implStartCheckEventSelection();
                     }
 
                     // return true to exit the outer _.find() loop iterating over all paragraphs
@@ -1079,6 +1089,8 @@ define('io.ox/office/editor/editor',
             window.console.log('Editor focus: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
+                if (focused && currentSelection)
+                    this.setSelection(currentSelection); // Update Browser Selection, might got lost.
                 this.trigger('focus', state);
             }
         };
@@ -1101,12 +1113,13 @@ define('io.ox/office/editor/editor',
         };
 
         this.implCheckEventSelection = function () {
-            var currentSelection = this.getSelection();
+            currentSelection = this.getSelection(true);
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
                     this.trigger('selectionChanged');
-                } else {
+                } else if (focused) {
+                    // If not focused, browser selection might not be available...
                     window.console.log('Editor.implCheckEventSelection(): missing selection!');
                 }
             }
@@ -1131,8 +1144,6 @@ define('io.ox/office/editor/editor',
             // this.implCheckSelection();
 
             this.implCheckEventSelection();
-            lastEventSelection = this.getSelection();
-            this.implStartCheckEventSelection();
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -1172,6 +1183,7 @@ define('io.ox/office/editor/editor',
 
             lastEventSelection = _.copy(selection, true);
             lastKeyDownEvent = event;   // For some keys we only get keyDown, not keyPressed!
+            this.implStartCheckEventSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
                 selection.adjust();
@@ -1359,10 +1371,11 @@ define('io.ox/office/editor/editor',
         this.processKeyPressed = function (event) {
 
             this.implDbgOutEvent(event);
-            // this.implCheckSelection();
+
+            var selection = this.getSelection();
 
             this.implCheckEventSelection();
-            lastEventSelection = this.getSelection();
+            lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
@@ -1371,9 +1384,6 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            var selection = this.getSelection();
-
-            lastEventSelection = _.copy(selection, true);
 
             selection.adjust();
 
