@@ -222,7 +222,7 @@ define("io.ox/mail/write/view-main",
                 );
                 _.each(array, function (key, value) {
                     var item = $('<option>').attr({
-                        'data-displayname': key.personal,
+                        'data-displayname': key.personal || key.primary_address,
                         'data-primary_address': key.primary_address
                     }).text(key.primary_address);
                     selectDiv.find('select').append(
