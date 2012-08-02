@@ -988,7 +988,7 @@ define('io.ox/office/editor/editor',
 
         this.setSelection = function (oxosel) {
 
-            if (this.isFirstPositionInTableCell(oxosel.endPaM.oxoPosition)) {
+            if (oxosel.hasRange() && (this.isFirstPositionInTableCell(oxosel.endPaM.oxoPosition))) {
                 oxosel.endPaM.oxoPosition.pop();
                 var returnObj = this.getLastPositionInPrevCell(oxosel.endPaM.oxoPosition);
                 oxosel.endPaM.oxoPosition = returnObj.position;
@@ -999,7 +999,7 @@ define('io.ox/office/editor/editor',
             currentSelection = _.copy(oxosel, true);
 
             // Multi selection for rectangle cell selection in Firefox.
-            if (this.isCellSelection(oxosel.startPaM.oxoPosition, oxosel.endPaM.oxoPosition)) {
+            if (oxosel.hasRange() && (this.isCellSelection(oxosel.startPaM.oxoPosition, oxosel.endPaM.oxoPosition))) {
                 ranges = this.getCellDOMSelections(oxosel);
             } else {
                 // var oldSelection = this.getSelection();
