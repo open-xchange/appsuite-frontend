@@ -428,6 +428,8 @@ define('io.ox/office/editor/editor',
         var lastKeyDownEvent;
         var lastEventSelection;
 
+        var currentSelection;
+
         // list of operations
         var operations = [];
 
@@ -924,12 +926,49 @@ define('io.ox/office/editor/editor',
             return (start && end) ? [{ start: start, end: end }] : [];
         };
 
+        this.getCellDOMSelections = function (oxoSelection) {
+
+            var ranges = [];
+
+            var startPos = _.copy(oxoSelection.startPaM.oxoPosition, true),
+                endPos = _.copy(oxoSelection.endPaM.oxoPosition, true);
+
+            startPos.pop();
+            startPos.pop();
+            endPos.pop();
+            endPos.pop();
+
+            var startRow = startPos.pop(),
+                startCol = startPos.pop(),
+                endRow = endPos.pop(),
+                endCol = endPos.pop();
+
+            for (var i = startRow; i <= endRow; i++) {
+                for (var j = startCol; j <= endCol; j++) {
+                    var position = _.copy(startPos, true);
+                    position.push(j);
+                    position.push(i);
+                    var cell = this.getDOMPosition(position);
+                    if (cell && ((cell.node.nodeName === 'TD') || (cell.node.nodeName === 'TH'))) {
+                        var node = cell.node.parentNode;
+                        var offset = $(cell.node).prevAll().length;
+                        ranges.push({ start: { node: node, offset: offset }, end: { node: node, offset: offset + 1 } });
+                    }
+                }
+            }
+
+            return ranges;
+        };
+
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
         };
 
-        this.getSelection = function () {
+        this.getSelection = function (updateFromBrowser) {
+
+            if (currentSelection && !updateFromBrowser)
+                return currentSelection;
 
             var domSelection = Selection.getBrowserSelection(editdiv),
                 domRange = null;
@@ -942,13 +981,30 @@ define('io.ox/office/editor/editor',
                     domRange.start = _(domSelection).first().start;
                 }
 
-                return new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+                currentSelection = new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+                return  _.copy(currentSelection, true);
             }
         };
 
         this.setSelection = function (oxosel) {
-            // var oldSelection = this.getSelection();
-            var ranges = this.getDOMSelection(oxosel);
+
+            if (this.isFirstPositionInTableCell(oxosel.endPaM.oxoPosition)) {
+                oxosel.endPaM.oxoPosition.pop();
+                var returnObj = this.getLastPositionInPrevCell(oxosel.endPaM.oxoPosition);
+                oxosel.endPaM.oxoPosition = returnObj.position;
+            }
+
+            var ranges = [];
+
+            currentSelection = _.copy(oxosel, true);
+
+            // Multi selection for rectangle cell selection in Firefox.
+            if (this.isCellSelection(oxosel.startPaM.oxoPosition, oxosel.endPaM.oxoPosition)) {
+                ranges = this.getCellDOMSelections(oxosel);
+            } else {
+                // var oldSelection = this.getSelection();
+                ranges = this.getDOMSelection(oxosel);
+            }
 
             if (ranges.length) {
                 Selection.setBrowserSelection(ranges);
@@ -1043,6 +1099,8 @@ define('io.ox/office/editor/editor',
                     if (range.start && range.end) {
                         this.grabFocus();
                         Selection.setBrowserSelection(range);
+                        currentSelection = null;
+                        this.implStartCheckEventSelection();
                     }
 
                     // return true to exit the outer _.find() loop iterating over all paragraphs
@@ -1055,6 +1113,8 @@ define('io.ox/office/editor/editor',
             window.console.log('Editor focus: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
+                if (focused && currentSelection)
+                    this.setSelection(currentSelection); // Update Browser Selection, might got lost.
                 this.trigger('focus', state);
             }
         };
@@ -1077,12 +1137,13 @@ define('io.ox/office/editor/editor',
         };
 
         this.implCheckEventSelection = function () {
-            var currentSelection = this.getSelection();
+            currentSelection = this.getSelection(true);
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
                     this.trigger('selectionChanged');
-                } else {
+                } else if (focused) {
+                    // If not focused, browser selection might not be available...
                     window.console.log('Editor.implCheckEventSelection(): missing selection!');
                 }
             }
@@ -1107,8 +1168,6 @@ define('io.ox/office/editor/editor',
             // this.implCheckSelection();
 
             this.implCheckEventSelection();
-            lastEventSelection = this.getSelection();
-            this.implStartCheckEventSelection();
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -1148,6 +1207,7 @@ define('io.ox/office/editor/editor',
 
             lastEventSelection = _.copy(selection, true);
             lastKeyDownEvent = event;   // For some keys we only get keyDown, not keyPressed!
+            this.implStartCheckEventSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
                 selection.adjust();
@@ -1335,10 +1395,11 @@ define('io.ox/office/editor/editor',
         this.processKeyPressed = function (event) {
 
             this.implDbgOutEvent(event);
-            // this.implCheckSelection();
+
+            var selection = this.getSelection();
 
             this.implCheckEventSelection();
-            lastEventSelection = this.getSelection();
+            lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
@@ -1347,9 +1408,6 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            var selection = this.getSelection();
-
-            lastEventSelection = _.copy(selection, true);
 
             selection.adjust();
 
@@ -2008,26 +2066,22 @@ define('io.ox/office/editor/editor',
         };
 
         this.isCellSelection = function (posA, posB) {
-            // If cells in a table are selected, posA must be the start point of a cell and posB
-            // must be the last point of a cell
-            var isFirst = this.isFirstPositionInTableCell(posA),
-                isLast = this.isLastPositionInTableCell(posB);
-            return (isFirst && isLast);
+            // If cells in a table are selected, posA must be the start position of a cell and posB
+            // must be the last position of a cell
+            return (this.isFirstPositionInTableCell(posA) && this.isLastPositionInTableCell(posB));
         };
 
         this.isFirstPositionInTableCell = function (pos) {
-            // In Chrome, a triple click on the last paragraph of a cell, selects the start point of the following cell
-            // as end point. In this case, the last position of the cell containing the selection should be the endpoint.
+            // In Chrome, a triple click on the last paragraph of a cell, selects the start position of the following cell
+            // as end position. In this case, the last position of the cell containing the selection should be the end position.
             var isCellStartPosition = false,
                 localPos = _.copy(pos, true);
 
-            if (this.isPositionInTable(localPos)) {
-                if (localPos.pop() === 0) {   // start position
-                    if (localPos.pop() === 0) {   // start paragraph
-                        var domPos = this.getDOMPosition(localPos);
-                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
-                            isCellStartPosition = true;
-                        }
+            if (localPos.pop() === 0) {   // start position
+                if (localPos.pop() === 0) {   // start paragraph
+                    var domPos = this.getDOMPosition(localPos);
+                    if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                        isCellStartPosition = true;
                     }
                 }
             }
@@ -2039,15 +2093,13 @@ define('io.ox/office/editor/editor',
             var isCellEndPosition = false,
                 localPos = _.copy(pos, true);
 
-            if (this.isPositionInTable(localPos)) {
-                var pos = localPos.pop();
-                if (pos === this.getParagraphLength(localPos)) {   // last position
-                    var lastPara = localPos.pop();
-                    if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
-                        var domPos = this.getDOMPosition(localPos);
-                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
-                            isCellEndPosition = true;
-                        }
+            var pos = localPos.pop();
+            if (pos === this.getParagraphLength(localPos)) {   // last position
+                var lastPara = localPos.pop();
+                if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
+                    var domPos = this.getDOMPosition(localPos);
+                    if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                        isCellEndPosition = true;
                     }
                 }
             }
@@ -2690,15 +2742,19 @@ define('io.ox/office/editor/editor',
             if (isInTable) {
 
                 var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                    paraIndex = rowIndex + 1,
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
-                localPos[rowIndex + 1] = 0;
+                localPos[paraIndex] = 0;
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
                     if (i < lastParaInCell) {
                         this.implDeleteParagraph(localPos);
                     } else {
+                        if ((localPos.length - 1) > paraIndex) {
+                            localPos.pop();
+                        }
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
