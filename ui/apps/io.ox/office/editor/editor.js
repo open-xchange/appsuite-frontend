@@ -926,6 +926,40 @@ define('io.ox/office/editor/editor',
             return (start && end) ? [{ start: start, end: end }] : [];
         };
 
+        this.getCellDOMSelections = function (oxoSelection) {
+
+            var ranges = [];
+
+            var startPos = _.copy(oxoSelection.startPaM.oxoPosition, true),
+                endPos = _.copy(oxoSelection.endPaM.oxoPosition, true);
+
+            startPos.pop();
+            startPos.pop();
+            endPos.pop();
+            endPos.pop();
+
+            var startRow = startPos.pop(),
+                startCol = startPos.pop(),
+                endRow = endPos.pop(),
+                endCol = endPos.pop();
+
+            for (var i = startRow; i <= endRow; i++) {
+                for (var j = startCol; j <= endCol; j++) {
+                    var position = _.copy(startPos, true);
+                    position.push(j);
+                    position.push(i);
+                    var cell = this.getDOMPosition(position);
+                    if (cell && ((cell.node.nodeName === 'TD') || (cell.node.nodeName === 'TH'))) {
+                        var node = cell.node.parentNode;
+                        var offset = $(cell.node).prevAll().length;
+                        ranges.push({ start: { node: node, offset: offset }, end: { node: node, offset: offset + 1 } });
+                    }
+                }
+            }
+
+            return ranges;
+        };
+
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
@@ -954,9 +988,23 @@ define('io.ox/office/editor/editor',
 
         this.setSelection = function (oxosel) {
 
+            if (this.isFirstPositionInTableCell(oxosel.endPaM.oxoPosition)) {
+                oxosel.endPaM.oxoPosition.pop();
+                var returnObj = this.getLastPositionInPrevCell(oxosel.endPaM.oxoPosition);
+                oxosel.endPaM.oxoPosition = returnObj.position;
+            }
+
+            var ranges = [];
+
             currentSelection = _.copy(oxosel, true);
 
-            var ranges = this.getDOMSelection(oxosel);
+            // Multi selection for rectangle cell selection in Firefox.
+            if (this.isCellSelection(oxosel.startPaM.oxoPosition, oxosel.endPaM.oxoPosition)) {
+                ranges = this.getCellDOMSelections(oxosel);
+            } else {
+                // var oldSelection = this.getSelection();
+                ranges = this.getDOMSelection(oxosel);
+            }
 
             if (ranges.length) {
                 Selection.setBrowserSelection(ranges);
@@ -2029,13 +2077,11 @@ define('io.ox/office/editor/editor',
             var isCellStartPosition = false,
                 localPos = _.copy(pos, true);
 
-            if (this.isPositionInTable(localPos)) {
-                if (localPos.pop() === 0) {   // start position
-                    if (localPos.pop() === 0) {   // start paragraph
-                        var domPos = this.getDOMPosition(localPos);
-                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
-                            isCellStartPosition = true;
-                        }
+            if (localPos.pop() === 0) {   // start position
+                if (localPos.pop() === 0) {   // start paragraph
+                    var domPos = this.getDOMPosition(localPos);
+                    if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                        isCellStartPosition = true;
                     }
                 }
             }
@@ -2047,15 +2093,13 @@ define('io.ox/office/editor/editor',
             var isCellEndPosition = false,
                 localPos = _.copy(pos, true);
 
-            if (this.isPositionInTable(localPos)) {
-                var pos = localPos.pop();
-                if (pos === this.getParagraphLength(localPos)) {   // last position
-                    var lastPara = localPos.pop();
-                    if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
-                        var domPos = this.getDOMPosition(localPos);
-                        if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
-                            isCellEndPosition = true;
-                        }
+            var pos = localPos.pop();
+            if (pos === this.getParagraphLength(localPos)) {   // last position
+                var lastPara = localPos.pop();
+                if (lastPara ===  this.getLastParaIndexInCell(localPos)) {   // last paragraph
+                    var domPos = this.getDOMPosition(localPos);
+                    if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                        isCellEndPosition = true;
                     }
                 }
             }
