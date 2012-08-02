@@ -146,7 +146,6 @@ define("io.ox/files/main",
             if (currentDetailView) {
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
-            console.log("Triggering", currentDetailView, args);
         });
 
         // Toggle Edit Mode
