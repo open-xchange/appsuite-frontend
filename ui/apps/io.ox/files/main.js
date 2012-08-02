@@ -120,7 +120,7 @@ define("io.ox/files/main",
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
 
-
+        
         grid.selection.on('empty', function () {
             if (currentDetailView) {
                 currentDetailView.destroy();
@@ -146,6 +146,7 @@ define("io.ox/files/main",
             if (currentDetailView) {
                 currentDetailView.trigger.apply(currentDetailView, args);
             }
+            console.log("Triggering", currentDetailView, args);
         });
 
         // Toggle Edit Mode

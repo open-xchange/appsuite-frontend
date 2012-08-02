@@ -51,6 +51,7 @@ define("io.ox/files/view-detail",
                 var self = this;
                 if (evt && evt.id && evt.id === file.id && type !== "delete") {
                     filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
+                        console.log("RELOAD FILE: ", file);
                         self.file = file;
                         sections.trigger($element, type, file);
                     });
