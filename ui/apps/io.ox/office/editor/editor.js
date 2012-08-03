@@ -1983,15 +1983,15 @@ define('io.ox/office/editor/editor',
             var // all text ranges to iterate
                 ranges = Selection.getBrowserSelection(editdiv),
                 // the attribute values, mapped by name
-                values = {},
-                // detect early loop exit, if all attributes are ambiguous
-                hasNonNull = false;
+                values = {};
 
             // process all text nodes, get attributes from their parent element
             Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
 
+                var // detect early loop exit, if all attributes are ambiguous
+                    hasNonNull = false;
+
                 // update all attributes
-                hasNonNull = false;
                 _(CharacterAttributes.getAttributes(textNode.parentNode)).each(function (value, name) {
                     if (!(name in values)) {
                         // initial iteration: store value of first text portion
@@ -2007,6 +2007,7 @@ define('io.ox/office/editor/editor',
                 if (!hasNonNull) { return false; }
             });
 
+            window.console.log('Editor.getCharacterAttributes(): values=' + JSON.stringify(values));
             return values;
         };
 
@@ -3263,7 +3264,7 @@ define('io.ox/office/editor/editor',
                     parent = textNode.parentNode;
 
                 // put text node into a span element, if not existing
-                if (parent.nodeName.toLowerCase() !== 'span') {
+                if (Utils.getNodeName(parent) !== 'span') {
                     $(textNode).wrap('<span>');
                     parent = textNode.parentNode;
                 }
@@ -3296,7 +3297,7 @@ define('io.ox/office/editor/editor',
 
             // try to merge last text node with next span
             nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
-            if (nextSpan && (nextSpan.nodeName.toLowerCase() === 'span')) {
+            if (nextSpan && (Utils.getNodeName(nextSpan) === 'span')) {
                 if (CharacterAttributes.hasEqualAttributes(lastTextNode.parentNode, nextSpan)) {
                     lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
                     $(nextSpan).remove();
