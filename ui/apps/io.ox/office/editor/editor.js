@@ -1293,7 +1293,7 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = false;
 
                         if (domPos) {
-                            if (this.getDOMPosition(nextParagraphPosition).node.nodeName === 'TABLE') {
+                            if (domPos.node.nodeName === 'TABLE') {
                                 nextIsTable = true;
                             }
                         } else {
