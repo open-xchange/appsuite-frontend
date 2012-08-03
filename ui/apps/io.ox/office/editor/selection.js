@@ -95,6 +95,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             { start: range.end, end: range.start } : range;
     };
 
+    // range iteration --------------------------------------------------------
+
     /**
      * Iterates over all DOM nodes contained in the specified DOM text ranges.
      *
@@ -109,9 +111,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  false, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the
-     *  symbol 'this' will be bound to the context inside the iterator
-     *  function).
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
      *
      * @returns {Boolean|Undefined}
      *  The boolean value false, if any iterator call has returned false to
@@ -170,9 +171,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  will be stopped immediately.
      *
      * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the
-     *  symbol 'this' will be bound to the context inside the iterator
-     *  function).
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
      *
      * @returns {Boolean|Undefined}
      *  The boolean value false, if any iterator call has returned false to
@@ -212,6 +212,40 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         });
     };
 
+    /**
+     * Iterates over specific parent element nodes of the nodes contained in
+     * the specified DOM text ranges that match the passed jQuery selector.
+     * Each parent node is visited exactly once even if it is the parent of
+     * multiple nodes in the passed selection.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges whose nodes will be iterated. May be an array of
+     *  DOM text range objects, or a single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. While searching for parent
+     *  nodes, this root node will never be left, but it may be selected as
+     *  parent node by itself. If this object is a jQuery collection, uses the
+     *  first node it contains.
+     *
+     * @param {String} selector
+     *  A jQuery selector that will be used to find an element while traversing
+     *  the parents of the node currently iterated.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every found parent node.
+     *  Receives the DOM node object as first parameter, and the current DOM
+     *  text range as second parameter. If the iterator returns the boolean
+     *  value false, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Boolean|Undefined}
+     *  The boolean value false, if any iterator call has returned false to
+     *  stop the iteration process, otherwise undefined.
+     */
     Selection.iterateParentNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
 
         var // all matching nodes the iterator has been called for
