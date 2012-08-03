@@ -2373,6 +2373,39 @@ define('io.ox/office/editor/editor',
         // ==================================================================
 
         this.isPositionInTable = function (position) {
+            var positionInTable = false;
+
+            if (! position) {
+                var selection = this.getSelection();
+                if (selection) {
+                    position = selection.endPaM.oxoPosition;
+                } else {
+                    return false;
+                }
+            }
+
+            var oxoPosition = [],
+                localPos = _.copy(position, true);
+
+            while (localPos.length > 0) {
+                oxoPosition.push(localPos.shift());
+
+                var domPos = this.getDOMPosition(oxoPosition);
+
+                if (domPos) {
+                    if (domPos.node.nodeName === 'TABLE') {
+                        positionInTable = true;
+                        break;
+                    } else if (domPos.node.nodeName === 'P') {
+                        break;
+                    }
+                }
+            }
+
+            return positionInTable;
+        };
+
+        this._isPositionInTable = function (position) {
             var positionInTable = false,
                 domPos = null;
 
