@@ -212,6 +212,21 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         });
     };
 
+/*
+    Selection.iterateParentNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+
+        rootNode = Utils.getDomNode(rootNode);
+
+        // iterate over all nodes, and try to find the specified parent nodes
+        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+
+            while (node !== rootNode) {
+
+            }
+        });
+    };
+*/
+
     // browser selection ------------------------------------------------------
 
     /**

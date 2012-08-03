@@ -72,7 +72,13 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     set: function (state) { editor.setAttribute('underline', state); }
                 },
 
+                'chain/format/paragraph': {
+                    get: function () { return editor.getParagraphAttributes(); }
+                },
                 'format/paragraph/alignment': {
+                    chain: 'chain/format/paragraph',
+                    get: function (attributes) { return attributes.alignment; },
+                    set: function (align) { editor.setAttribute('alignment', align); }
                 },
 
                 'chain/table': {
