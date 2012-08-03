@@ -255,7 +255,8 @@ define('io.ox/office/editor/view',
             .endCollapseGroups();
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true });
+            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
+            .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
         // prepare controller
         controller
@@ -264,7 +265,9 @@ define('io.ox/office/editor/view',
             // register the tab bar at the controller
             .registerViewComponent(tabBar)
             // make the format tool bar visible
-            .change('view/toolbars/show', 'format');
+            .change('view/toolbars/show', 'format')
+            // initialization
+            .update();
 
         // override the limited functionality of the quick-search button
         win.nodes.search.off('keydown search change').on('keydown keypress keyup', searchKeyHandler);

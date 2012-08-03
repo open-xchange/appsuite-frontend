@@ -397,7 +397,7 @@ define('io.ox/office/editor/editor',
                     values = _(values).without('underline');
                     if (!values.length) { values = ['none']; }
                 }
-                element.css('text-decoration', values.join(' '));
+                $(element).css('text-decoration', values.join(' '));
             }
         },
 
@@ -421,6 +421,39 @@ define('io.ox/office/editor/editor',
             }
         }
     };
+
+    function setAttributesToElement(element, attributes) {
+        _(attributes).each(function (value, name) {
+            if (name in AttributeConversion) {
+                AttributeConversion[name].set(element, value);
+            }
+        });
+    }
+
+    function setAttributes(ranges, attributes) {
+        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
+
+            var // length of the node text
+                length = textNode.nodeValue.length,
+                // the parent element of the text node
+                element = textNode.parentNode,
+                // text node is contained in a span element
+                isSpan = element.nodeName.toLowerCase() === 'span';
+
+            if (isSpan && (start === 0) && (end === length)) {
+                setAttributesToElement(element, attributes);
+            } else if ((start === 0) && (end === length)) {
+                $(textNode).wrap('<span>');
+                setAttributesToElement(textNode.parentNode, attributes);
+            }
+        });
+    }
+
+    function setAttribute(ranges, name, value) {
+        var attributes = {};
+        attributes[name] = value;
+        setAttributes(ranges, attributes);
+    }
 
     // class OXOEditor ========================================================
 
@@ -1747,6 +1780,11 @@ define('io.ox/office/editor/editor',
                 para = startPosition[startposLength - 1];
                 start = startPosition[startposLength];
                 end = endPosition[endposLength];
+            }
+
+            if (para === undefined) {
+//                setAttribute(Selection.getBrowserSelection(editdiv), attr, value);
+//                return;
             }
 
             // TODO

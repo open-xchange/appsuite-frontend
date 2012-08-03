@@ -97,6 +97,10 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
                     done: function (state) { app.getEditor().grabFocus(); }
+                },
+                'debug/sync': {
+                    get: function () { return app.isSynchronizedMode(); },
+                    set: function (state) { app.setSynchronizedMode(state); }
                 }
             };
 
