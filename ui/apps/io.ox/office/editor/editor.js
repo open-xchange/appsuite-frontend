@@ -3236,7 +3236,8 @@ define('io.ox/office/editor/editor',
                 start = startposition[startposLength],
                 end = endposition[endposLength],
                 range = null,
-                lastTextNode = null;
+                lastTextNode = null,
+                nextSpan = null;
 
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
@@ -3294,10 +3295,11 @@ define('io.ox/office/editor/editor',
             });
 
             // try to merge last text node with next span
-            if (lastTextNode && lastTextNode.parentNode.nextSibling) {
-                if (CharacterAttributes.hasEqualAttributes(lastTextNode.parentNode, lastTextNode.parentNode.nextSibling)) {
-                    lastTextNode.nodeValue = lastTextNode.nodeValue + $(lastTextNode.parentNode.nextSibling).text();
-                    $(lastTextNode.parentNode.nextSibling).remove();
+            nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
+            if (nextSpan && (nextSpan.nodeName.toLowerCase() === 'span')) {
+                if (CharacterAttributes.hasEqualAttributes(lastTextNode.parentNode, nextSpan)) {
+                    lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
+                    $(nextSpan).remove();
                 }
             }
 

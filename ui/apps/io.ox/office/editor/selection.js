@@ -185,13 +185,14 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
 
             var // start and end offset of covered text in text node
-                startOffset = 0, endOffset = 0;
+                start = 0, end = 0;
 
-            // call passed iterator for all text nodes, but ignore empty text nodes
-            if ((node.nodeType === 3) && node.nodeValue.length) {
-                startOffset = (node === range.start.node) ? range.start.offset : 0;
-                endOffset = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
-                iterator.call(context, node, startOffset, endOffset, range);
+            // call passed iterator for all text nodes, but ignore empty text
+            // nodes unless the entire range consists of this empty text node
+            if ((node.nodeType === 3) && (node.nodeValue.length || _.isEqual(range.start, range.end))) {
+                start = (node === range.start.node) ? range.start.offset : 0;
+                end = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
+                iterator.call(context, node, start, end, range);
             }
         });
     };
