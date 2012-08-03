@@ -361,7 +361,7 @@ define('io.ox/office/editor/editor',
 
         // methods ------------------------------------------------------------
 
-        this.hasConverter = function (name) {
+        this.hasAttribute = function (name) {
             return name in definitions;
         };
 
@@ -484,12 +484,12 @@ define('io.ox/office/editor/editor',
 
         alignment: {
             get: function (element) {
-                var value = $(element).css('alignment');
+                var value = $(element).css('text-align');
                 // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
                 return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
             },
             set: function (element, value) {
-                $(element).css('alignment', value);
+                $(element).css('text-align', value);
             }
         }
 
@@ -1974,6 +1974,11 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
+                // paragraph attributes also for cursor without selection
+                else if (ParagraphAttributes.hasAttribute(attr)) {
+                    var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
+                    this.applyOperation(newOperation, true, true);
+                }
             }
             else {
                 var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
@@ -1992,7 +1997,7 @@ define('io.ox/office/editor/editor',
                 // the resulting attribute value
                 value = null;
 
-            if (CharacterAttributes.hasConverter(attrName)) {
+            if (CharacterAttributes.hasAttribute(attrName)) {
                 // character attributes: process all text nodes, get attributes from their parent element
                 Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
 
@@ -2005,7 +2010,7 @@ define('io.ox/office/editor/editor',
                     }
                     value = nodeValue;
                 });
-            } else if (ParagraphAttributes.hasConverter(attrName)) {
+            } else if (ParagraphAttributes.hasAttribute(attrName)) {
                 // paragraph attributes: process all paragraph elements
                 Selection.iterateNodesInTextRanges(ranges, function (node) {
 
@@ -2068,18 +2073,14 @@ define('io.ox/office/editor/editor',
                 attributes = {};
 
             // get attributes from all paragraph elements
-            Selection.iterateNodesInTextRanges(ranges, function (node) {
+            Selection.iterateParentNodesInTextRanges(ranges, editdiv, 'p', function (node) {
 
-                // get all attributes of <p> elements
-                if (Utils.getNodeName(node) === 'p') {
+                // merge the existing attributes with the attributes of the new paragraph
+                ParagraphAttributes.mergeAttributes(attributes, node);
 
-                    // merge the existing attributes with the attributes of the new paragraph
-                    ParagraphAttributes.mergeAttributes(attributes, node);
-
-                    // exit iteration loop if there are no unambiguous attributes left
-                    if (_(attributes).all(_.isNull)) {
-                        return false;
-                    }
+                // exit iteration loop if there are no unambiguous attributes left
+                if (_(attributes).all(_.isNull)) {
+                    return false;
                 }
             });
 
@@ -3286,9 +3287,9 @@ define('io.ox/office/editor/editor',
         function implSetAttribute(attrName, value, startposition, endposition) {
             var attributes = {};
             attributes[attrName] = value;
-            if (CharacterAttributes.hasConverter(attrName)) {
+            if (CharacterAttributes.hasAttribute(attrName)) {
                 implSetCharacterAttributes(attributes, startposition, endposition);
-            } else if (ParagraphAttributes.hasConverter(attrName)) {
+            } else if (ParagraphAttributes.hasAttribute(attrName)) {
                 implSetParagraphAttributes(attributes, startposition, endposition);
             } else {
                 self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
@@ -3421,11 +3422,9 @@ define('io.ox/office/editor/editor',
             // build the DOM text range from the passed OXO selection
             range = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
 
-            // iterate all paragraph elements change their formatting
-            Selection.iterateNodesInTextRanges(range, function (node) {
-                if (Utils.getNodeName(node) === 'p') {
-                    ParagraphAttributes.setAttributes(node, attributes);
-                }
+            // iterate all paragraph elements and change their formatting
+            Selection.iterateParentNodesInTextRanges(range, editdiv, 'p', function (node) {
+                ParagraphAttributes.setAttributes(node, attributes);
             });
 
             lastOperationEnd = new OXOPaM(endposition);

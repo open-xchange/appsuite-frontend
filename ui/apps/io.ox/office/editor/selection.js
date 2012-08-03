@@ -212,20 +212,31 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         });
     };
 
-/*
     Selection.iterateParentNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+
+        var // all matching nodes the iterator has been called for
+            matchingNodes = [];
 
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
         return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
 
-            while (node !== rootNode) {
-
+            // try to find a matching element inside the root node
+            while (node) {
+                if ($(node).is(selector)) {
+                    // skip node if it has been found before
+                    if (!_(matchingNodes).contains(node)) {
+                        matchingNodes.push(node);
+                        if (iterator.call(context, node, range) === false) { return false; }
+                    }
+                    return;
+                }
+                if (node === rootNode) { return; }
+                node = node.parentNode;
             }
         });
     };
-*/
 
     // browser selection ------------------------------------------------------
 
