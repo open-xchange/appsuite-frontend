@@ -187,8 +187,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             var // start and end offset of covered text in text node
                 startOffset = 0, endOffset = 0;
 
-            // call passed iterator for all text nodes
-            if (node.nodeType === 3) {
+            // call passed iterator for all text nodes, but ignore empty text nodes
+            if ((node.nodeType === 3) && node.nodeValue.length) {
                 startOffset = (node === range.start.node) ? range.start.offset : 0;
                 endOffset = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
                 iterator.call(context, node, startOffset, endOffset, range);

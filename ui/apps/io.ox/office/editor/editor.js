@@ -355,13 +355,54 @@ define('io.ox/office/editor/editor',
         return element;
     }
 
-    // formatting attributes ==================================================
+    // class AttributeConverter ===============================================
+
+    function AttributeConverter(definitions) {
+
+        // methods ------------------------------------------------------------
+
+        this.hasConverter = function (name) {
+            return name in definitions;
+        };
+
+        this.getAttribute = function (element, name) {
+            if (name in definitions) {
+                return definitions[name].get(element);
+            }
+        };
+
+        this.getAttributes = function (element) {
+            var attributes = {};
+            _(definitions).each(function (converter, name) {
+                attributes[name] = converter.get(element);
+            });
+            return attributes;
+        };
+
+        this.hasEqualAttributes = function (element1, element2) {
+            return _.isEqual(this.getAttributes(element1), this.getAttributes(element2));
+        };
+
+        this.setAttribute = function (element, name, value) {
+            if (name in definitions) {
+                definitions[name].set(element, value);
+            }
+        };
+
+        this.setAttributes = function (element, attributes) {
+            _(attributes).each(function (value, name) {
+                this.setAttribute(element, name, value);
+            }, this);
+        };
+
+    } // class AttributeConverter
 
     /**
-     * Maps formatting attribute names used in the operations API to getter and
-     * setter functions that manipulate the CSS formatting of DOM elements.
+     * Maps character formatting attribute names used in the operations API to
+     * getter and setter functions that manipulate the CSS formatting of DOM
+     * elements.
      */
-    var AttributeConverters = {
+    var CharacterAttributes = new AttributeConverter({
 
         bold: {
             get: function (element) {
@@ -413,7 +454,8 @@ define('io.ox/office/editor/editor',
                 $(element).css('font-size', fontSize + 'pt');
             }
         }
-    };
+
+    }); // CharacterAttributes
 
     // class OXOEditor ========================================================
 
@@ -1907,36 +1949,36 @@ define('io.ox/office/editor/editor',
          */
         this.getAttribute = function (attrName) {
 
-            var // the attribute converter
-                attrConverter = AttributeConverters[attrName],
-                // all text ranges to iterate
+            var // all text ranges to iterate
                 ranges = Selection.getBrowserSelection(editdiv),
-                // the attribute value
+                // the resulting attribute value
                 value = null;
 
-            if (!attrConverter) {
-                this.implDbgOutInfo('getAttribute - no valid attribute specified');
-                return;
-            }
+            // character attributes: process all text nodes, get attributes from their parent element
+            if (CharacterAttributes.hasConverter(attrName)) {
+                Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
 
-            // process all text nodes, get attributes from their parent element
-            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
-                var nodeValue = attrConverter.get(textNode.parentNode);
-                if (!_.isNull(value) && (nodeValue !== value)) {
-                    value = null;
-                    return false;
-                }
-                value = nodeValue;
-            });
+                    var // attribute value of current text node
+                        nodeValue = CharacterAttributes.getAttribute(textNode.parentNode, attrName);
+
+                    if (!_.isNull(value) && (nodeValue !== value)) {
+                        value = null;
+                        return false;
+                    }
+                    value = nodeValue;
+                });
+            } else {
+                self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
+            }
 
             return value;
         };
 
         /**
-         * Returns the value of all formatting attribute in the current browser
-         * selection.
+         * Returns the value of all character formatting attributes in the
+         * current browser selection.
          */
-        this.getAttributes = function () {
+        this.getCharacterAttributes = function () {
 
             var // all text ranges to iterate
                 ranges = Selection.getBrowserSelection(editdiv),
@@ -1950,16 +1992,15 @@ define('io.ox/office/editor/editor',
 
                 // update all attributes
                 hasNonNull = false;
-                _(AttributeConverters).each(function (attrConverter, attrName) {
-                    var nodeValue = attrConverter.get(textNode.parentNode);
-                    if (!(attrName in values)) {
+                _(CharacterAttributes.getAttributes(textNode.parentNode)).each(function (value, name) {
+                    if (!(name in values)) {
                         // initial iteration: store value of first text portion
-                        values[attrName] = nodeValue;
-                    } else if (nodeValue !== values[attrName]) {
+                        values[name] = value;
+                    } else if (value !== values[name]) {
                         // value differs from previous text portion(s): ambiguous state
-                        values[attrName] = null;
+                        values[name] = null;
                     }
-                    hasNonNull = hasNonNull || !_.isNull(values[attrName]);
+                    hasNonNull = hasNonNull || !_.isNull(values[name]);
                 });
 
                 // exit iteration loop if there are no unambiguous attributes left
@@ -3154,8 +3195,7 @@ define('io.ox/office/editor/editor',
          * Changes a specific formatting attribute of the specified text range.
          *
          * @param {String} attrName
-         *  The name of the formatting attribute. Must be the name of an
-         *  attribute converter registered at the AttributeConverters map.
+         *  The name of the formatting attribute.
          *
          * @param value
          *  The new value of the formatting attribute.
@@ -3168,20 +3208,20 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttribute(attrName, value, startposition, endposition) {
             var attributes = {};
-            if (attrName in AttributeConverters) {
-                attributes[attrName] = value;
-                implSetAttributes(attributes, startposition, endposition);
+            attributes[attrName] = value;
+            if (CharacterAttributes.hasConverter(attrName)) {
+                implSetCharacterAttributes(attributes, startposition, endposition);
             } else {
                 self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
             }
         }
 
         /**
-         * Changes specific formatting attributes of the specified text range.
+         * Changes specific charcter formatting attributes of the specified
+         * text range.
          *
          * @param {Object} attributes
-         *  A map of attribute name/value pairs. The names must be names of
-         *  attribute converters registered at the AttributeConverters map.
+         *  A map of character attribute name/value pairs.
          *
          * @param {Number[]} startposition
          *  The start position of the text range to be changed.
@@ -3189,13 +3229,14 @@ define('io.ox/office/editor/editor',
          * @param {Number[} endposition
          *  The end position of the text range to be changed.
          */
-        function implSetAttributes(attributes, startposition, endposition) {
+        function implSetCharacterAttributes(attributes, startposition, endposition) {
 
             var startposLength = startposition.length - 1,
                 endposLength = endposition.length - 1,
                 start = startposition[startposLength],
                 end = endposition[endposLength],
-                ranges = null;
+                range = null,
+                lastTextNode = null;
 
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
@@ -3209,41 +3250,56 @@ define('io.ox/office/editor/editor',
             endposition = _.copy(endposition);
             endposition[endposLength] = end;
 
-            // build the DOM text ranges from the passed OXO selection
-            ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
+            // build the DOM text range from the passed OXO selection
+            range = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
 
             // iterate all text nodes and change their formatting
-            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
+            Selection.iterateTextPortionsInTextRanges(range, function (textNode, start, end) {
 
                 var // text of the node
-                    text = textNode.nodeValue;
+                    text = textNode.nodeValue,
+                    // parent element of the text node
+                    parent = textNode.parentNode;
 
                 // put text node into a span element, if not existing
-                if (textNode.parentNode.nodeName.toLowerCase() !== 'span') {
+                if (parent.nodeName.toLowerCase() !== 'span') {
                     $(textNode).wrap('<span>');
+                    parent = textNode.parentNode;
                 }
 
                 // if manipulating a part of the text node, split it
                 if (start > 0) {
                     // prepend a new text node to this text node
-                    $(textNode.parentNode).before($(textNode.parentNode).clone().text(text.substr(0, start)));
+                    $(parent).clone().text(text.substr(0, start)).insertBefore(parent);
                     // shorten text of this text node
                     textNode.nodeValue = text.substr(start);
                 }
                 if (end < text.length) {
                     // append a new text node to this text node
-                    $(textNode.parentNode).after($(textNode.parentNode).clone().text(text.substr(end)));
+                    $(parent).clone().text(text.substr(end)).insertAfter(parent);
                     // shorten text of this text node
                     textNode.nodeValue = text.substr(start, end - start);
                 }
 
                 // set the new formatting attributes at the span element
-                _(attributes).each(function (value, name) {
-                    if (name in AttributeConverters) {
-                        AttributeConverters[name].set(textNode.parentNode, value);
-                    }
-                });
+                CharacterAttributes.setAttributes(parent, attributes);
+
+                // try to merge with previous span
+                if (parent.previousSibling && CharacterAttributes.hasEqualAttributes(parent, parent.previousSibling)) {
+                    textNode.nodeValue = $(parent.previousSibling).text() + textNode.nodeValue;
+                    $(parent.previousSibling).remove();
+                }
+
+                lastTextNode = textNode;
             });
+
+            // try to merge last text node with next span
+            if (lastTextNode && lastTextNode.parentNode.nextSibling) {
+                if (CharacterAttributes.hasEqualAttributes(lastTextNode.parentNode, lastTextNode.parentNode.nextSibling)) {
+                    lastTextNode.nodeValue = lastTextNode.nodeValue + $(lastTextNode.parentNode.nextSibling).text();
+                    $(lastTextNode.parentNode.nextSibling).remove();
+                }
+            }
 
             lastOperationEnd = new OXOPaM(endposition);
         }

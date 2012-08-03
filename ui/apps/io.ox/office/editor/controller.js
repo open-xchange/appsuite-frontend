@@ -44,15 +44,17 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'chain/format/character': {
-                    get: function () { return editor.getAttributes(); }
+                    get: function () { return editor.getCharacterAttributes(); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
-                    get: function (attributes) { return attributes.fontname; }
+                    get: function (attributes) { return attributes.fontname; },
+                    set: function (fontName) { editor.setAttribute('fontname', fontName); }
                 },
                 'format/character/font/height': {
                     chain: 'chain/format/character',
-                    get: function (attributes) { return attributes.fontsize; }
+                    get: function (attributes) { return attributes.fontsize; },
+                    set: function (fontSize) { editor.setAttribute('fontsize', fontSize); }
                 },
                 'format/character/font/bold': {
                     chain: 'chain/format/character',
