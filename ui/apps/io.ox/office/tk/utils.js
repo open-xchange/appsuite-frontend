@@ -240,7 +240,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
-    // length unit conversion -------------------------------------------------
+    // attribute conversion ---------------------------------------------------
 
     /**
      * Converts a length value from an absolute CSS measurement unit into
@@ -319,6 +319,77 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return value;
     };
 
+    /**
+     * Returns whether the passed space-separated token list contains the
+     * specified token.
+     *
+     * @param {String} list
+     *  Space-separated list of tokens.
+     *
+     * @param {String} token
+     *  The token to look up in the token list.
+     *
+     * @returns {Boolean}
+     *  Whether the token is contained in the token list.
+     */
+    Utils.containsToken = function (list, token) {
+        return _(list.split(/\s+/)).contains(token);
+    };
+
+    /**
+     * Inserts the specified token into a space-separated token list. The token
+     * will not be inserted if it is already contained in the list.
+     *
+     * @param {String} list
+     *  Space-separated list of tokens.
+     *
+     * @param {String} token
+     *  The token to be inserted into the token list.
+     *
+     * @param {String} [nothing]
+     *  If specified, the name of a token that represents a special 'nothing'
+     *  or 'empty' state. If this token is contained in the passed token list,
+     *  it will be removed.
+     *
+     * @returns {String}
+     *  The new token list containing the specified token.
+     */
+    Utils.addToken = function (list, token, nothing) {
+        var tokens = list.split(/\s+/);
+        if (_.isString(nothing)) {
+            tokens = _(tokens).without(nothing);
+        }
+        if (!_(tokens).contains(token)) {
+            tokens.push(token);
+        }
+        return tokens.join(' ');
+    };
+
+    /**
+     * Removes the specified token from a space-separated token list.
+     *
+     * @param {String} list
+     *  Space-separated list of tokens.
+     *
+     * @param {String} token
+     *  The token to be removed from the token list.
+     *
+     * @param {String} [nothing]
+     *  If specified, the name of a token that represents a special 'nothing'
+     *  or 'empty' state. If the resulting token list is empty, this token will
+     *  be inserted instead.
+     *
+     * @returns {String}
+     *  The new token list without the specified token.
+     */
+    Utils.removeToken = function (list, token, nothing) {
+        var tokens = _(list.split(/\s+/)).without(token);
+        if (!tokens.length && _.isString(nothing)) {
+            tokens.push(nothing);
+        }
+        return tokens.join(' ');
+    };
+
     // generic DOM helpers ----------------------------------------------------
 
     /**
@@ -333,6 +404,21 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.getDomNode = function (node) {
         return (node instanceof $) ? node.get(0) : node;
+    };
+
+    /**
+     * Returns the lower-case name of a DOM node object.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose name will be returned. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @returns {String}
+     *  The lower-case name of the DOM node object. If the node is a text node,
+     *  returns the string '#text'.
+     */
+    Utils.getNodeName = function (node) {
+        return Utils.getDomNode(node).nodeName.toLowerCase();
     };
 
     /**

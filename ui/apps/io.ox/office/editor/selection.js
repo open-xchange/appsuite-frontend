@@ -106,7 +106,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  The iterator function that will be called for every node. Receives the
      *  DOM node object as first parameter, and the current DOM text range
      *  object as second parameter. If the iterator returns the boolean value
-     *  false, iteration process will be stopped immediately.
+     *  false, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the
@@ -153,10 +153,9 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
     };
 
     /**
-     * Iterates over all text nodes contained in the specified DOM text
-     * ranges. The iterator function will receive the text node and the
-     * character range in its text contents that is covered by the specified
-     * DOM text ranges.
+     * Iterates over all text nodes contained in the specified DOM text ranges.
+     * The iterator function will receive the text node and the character range
+     * in its text contents that is covered by the specified DOM text ranges.
      *
      * @param {Object[]|Object} ranges
      *  The DOM text ranges whose text nodes will be iterated. May be an array
@@ -167,8 +166,8 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  the DOM text node object as first parameter, the offset of the first
      *  character as second parameter, the offset after the last character as
      *  third parameter, and the current DOM text range as fourth parameter. If
-     *  the iterator returns the boolean value false, iteration process will be
-     *  stopped immediately.
+     *  the iterator returns the boolean value false, the iteration process
+     *  will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the
@@ -184,17 +183,49 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         // iterate over all nodes, and process the text nodes
         return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
 
-            var // start and end offset of covered text in text node
-                startOffset = 0, endOffset = 0;
+            var // cursor instead of selection
+                isCursor = _.isEqual(range.start, range.end),
+                // start and end offset of covered text in text node
+                start = 0, end = 0;
 
-            // call passed iterator for all text nodes
-            if (node.nodeType === 3) {
-                startOffset = (node === range.start.node) ? range.start.offset : 0;
-                endOffset = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
-                iterator.call(context, node, startOffset, endOffset, range);
+            // call passed iterator for all text nodes, but skip empty text nodes
+            // unless the entire text range consists of this empty text node
+            if ((node.nodeType === 3) && (isCursor || node.nodeValue.length)) {
+                start = (node === range.start.node) ? range.start.offset : 0;
+                end = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
+                // call iterator for the text node, return if iterator returns false
+                if (iterator.call(context, node, start, end, range) === false) { return false; }
+            } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
+                // cursor selects a single <br> element, visit end of preceding text node instead
+                node = node.previousSibling;
+                while (node && (node.nodeType === 1)) {
+                    node = node.lastChild;
+                }
+                if (node && (node.nodeType === 3)) {
+                    // prepare start, end, and range object
+                    start = range.start.offset = end = range.end.offset = node.nodeValue.length;
+                    range.start.node = range.end.node = node;
+                    // call iterator for the text node, return if iterator returns false
+                    if (iterator.call(context, node, start, end, range) === false) { return false; }
+                }
             }
         });
     };
+
+/*
+    Selection.iterateParentNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+
+        rootNode = Utils.getDomNode(rootNode);
+
+        // iterate over all nodes, and try to find the specified parent nodes
+        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+
+            while (node !== rootNode) {
+
+            }
+        });
+    };
+*/
 
     // browser selection ------------------------------------------------------
 
