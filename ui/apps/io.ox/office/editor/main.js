@@ -102,13 +102,17 @@ define('io.ox/office/editor/main',
             operationsTimer = null,
 
             // if true, debug mode is active (second editor and operations output console)
-            debugMode = false;
+            debugMode = false,
+
+            // if true, editor synchronizes operations with backend server
+            syncMode = true;
 
         // private functions --------------------------------------------------
 
         function initializeApp(options) {
             file = Utils.getObjectOption(options, 'file', null);
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
+            syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
 
         /**
@@ -546,20 +550,20 @@ define('io.ox/office/editor/main',
 
         function startOperationsTimer(timeout) {
 
-            // In debug mode, stop polling.
-            // Advantage 1: Less debug output in FireBug (http-get)
-            // Advantage 2: Simulate a slow/lost connection
-            if (!debugMode) {
-                timeout = timeout || 1000;
-
-                if (operationsTimer) {                      // If it running, restart - don't send too many updates while the user is typing.
-                    window.clearTimeout(operationsTimer);   // If we change this, and decide to not restart, then make sure that we don't start twice
-                }
-                operationsTimer = window.setTimeout(function () {
-                    operationsTimer = null;
-                    receiveAndSendOperations();
-                }, timeout);
+            // restart running timer, prevents sending too many updates while the user is typing
+            if (operationsTimer) {
+                window.clearTimeout(operationsTimer);
             }
+
+            // offline mode: do not start a new timer
+            if (!syncMode) {
+                return;
+            }
+
+            operationsTimer = window.setTimeout(function () {
+                operationsTimer = null;
+                receiveAndSendOperations();
+            }, timeout || 1000);
         }
 
         // methods ============================================================
@@ -629,7 +633,8 @@ define('io.ox/office/editor/main',
             var point = {
                 file: file,
                 toolBarTab: controller.get('view/toolbars/show'),
-                debugMode: debugMode
+                debugMode: debugMode,
+                syncMode: syncMode
             };
             return { module: MODULE_NAME, point: point };
         };
@@ -660,6 +665,18 @@ define('io.ox/office/editor/main',
             if (debugMode !== state) {
                 debugMode = state;
                 updateDebugMode();
+            }
+            return this;
+        };
+
+        app.isSynchronizedMode = function () {
+            return syncMode;
+        };
+
+        app.setSynchronizedMode = function (state) {
+            if (syncMode !== state) {
+                syncMode = state;
+                startOperationsTimer();
             }
             return this;
         };
