@@ -26,27 +26,29 @@ define("plugins/portal/appointments/register", [
  
     //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
     var timespan = function (timestamp1, timestamp2) {
-        var delta = timestamp1 - timestamp2;
-        var unit = gt("In %s milliseconds:");
+        var delta = Math.abs(timestamp1 - timestamp2);
+        var past = (timestamp1 - timestamp2) < 0;
+        var unit = past ? gt("Started %s milliseconds ago:") : gt("In %s milliseconds:");
+        
         if (delta / 1000 > 1) {
             delta = delta / 1000;
-            unit = gt("In %s seconds:");
+            var unit = past ? gt("Started %s seconds ago:") : gt("In %s seconds:");
         }
         if (delta / 60 > 1) {
             delta = delta / 60;
-            unit = gt("In %s minutes:");
+            var unit = past ? gt("Started %s minutes ago:") : gt("In %s minutes:");
         }
         if (delta / 60 > 1) {
             delta = delta / 60;
-            unit = gt("In %s hours:");
+            var unit = past ? gt("Started %s hours ago:") : gt("In %s hours:");
         }
         if (delta / 24 > 1) {
             delta = delta / 24;
-            unit = gt("In %s days:");
+            var unit = past ? gt("Started %s days ago:") : gt("In %s days:");
         }
         if (delta / 7 > 1) {
             delta = delta / 7;
-            unit = gt("In %s weeks:");
+            var unit = past ? gt("Started %s weeks ago:") : gt("In %s weeks:");
         }
         return unit.replace("%s", Math.round(delta));
     };
@@ -77,8 +79,8 @@ define("plugins/portal/appointments/register", [
             var deltaT = timespan(nextApp.start_date, new Date().getTime());
             $node.append(
                 $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
-                $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title), 100),
-                $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location), 100)
+                $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title || ""), 100),
+                $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location || ""), 100)
             );
         } else {
             $('<div class="io-ox-portal-calendar-message">').text(gt("You don't have any appointments in the near future.")).appendTo($node);
