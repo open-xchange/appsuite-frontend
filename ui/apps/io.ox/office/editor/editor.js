@@ -1005,6 +1005,13 @@ define('io.ox/office/editor/editor',
                 }
 
                 currentSelection = new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+
+                // this selection need to be changed for some browsers to set selection into end of text node instead
+                // of start of following text node.
+                if ((! currentSelection.hasRange()) && (domRange.start.node.nodeType === 3) && (domRange.start.offset === 0)) {
+                    this.setSelection(currentSelection);
+                }
+
                 return  _.copy(currentSelection, true);
             }
         };
