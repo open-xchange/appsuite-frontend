@@ -361,7 +361,7 @@ define('io.ox/office/editor/editor',
      * Maps formatting attribute names used in the operations API to getter and
      * setter functions that manipulate the CSS formatting of DOM elements.
      */
-    var AttributeConversion = {
+    var AttributeConverters = {
 
         bold: {
             get: function (element) {
@@ -385,19 +385,12 @@ define('io.ox/office/editor/editor',
 
         underline: {
             get: function (element) {
-                var values = $(element).css('text-decoration').split(/\s+/);
-                return _(values).contains('underline');
+                return Utils.containsToken($(element).css('text-decoration'), 'underline');
             },
             set: function (element, state) {
-                var values = $(element).css('text-decoration').split(/\s+/);
-                if (state && !_(values).contains('underline')) {
-                    values = _(values).without('none');
-                    values.push('underline');
-                } else if (!state) {
-                    values = _(values).without('underline');
-                    if (!values.length) { values = ['none']; }
-                }
-                $(element).css('text-decoration', values.join(' '));
+                var value = $(element).css('text-decoration');
+                value = Utils[state ? 'addToken' : 'removeToken'](value, 'underline', 'none');
+                $(element).css('text-decoration', value);
             }
         },
 
@@ -421,39 +414,6 @@ define('io.ox/office/editor/editor',
             }
         }
     };
-
-    function setAttributesToElement(element, attributes) {
-        _(attributes).each(function (value, name) {
-            if (name in AttributeConversion) {
-                AttributeConversion[name].set(element, value);
-            }
-        });
-    }
-
-    function setAttributes(ranges, attributes) {
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
-
-            var // length of the node text
-                length = textNode.nodeValue.length,
-                // the parent element of the text node
-                element = textNode.parentNode,
-                // text node is contained in a span element
-                isSpan = element.nodeName.toLowerCase() === 'span';
-
-            if (isSpan && (start === 0) && (end === length)) {
-                setAttributesToElement(element, attributes);
-            } else if ((start === 0) && (end === length)) {
-                $(textNode).wrap('<span>');
-                setAttributesToElement(textNode.parentNode, attributes);
-            }
-        });
-    }
-
-    function setAttribute(ranges, name, value) {
-        var attributes = {};
-        attributes[name] = value;
-        setAttributes(ranges, attributes);
-    }
 
     // class OXOEditor ========================================================
 
@@ -596,7 +556,7 @@ define('io.ox/office/editor/editor',
                     var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
-                this.implSetAttribute(operation.attr, operation.value, operation.start, operation.end);
+                implSetAttribute(operation.attr, operation.value, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1782,11 +1742,6 @@ define('io.ox/office/editor/editor',
                 end = endPosition[endposLength];
             }
 
-            if (para === undefined) {
-//                setAttribute(Selection.getBrowserSelection(editdiv), attr, value);
-//                return;
-            }
-
             // TODO
             if (para === undefined) {
                 // Set attr to current selection
@@ -1946,7 +1901,7 @@ define('io.ox/office/editor/editor',
         this.getAttribute = function (attrName) {
 
             var // the attribute converter
-                attrConverter = AttributeConversion[attrName],
+                attrConverter = AttributeConverters[attrName],
                 // all text ranges to iterate
                 ranges = Selection.getBrowserSelection(editdiv),
                 // the attribute value
@@ -1988,7 +1943,7 @@ define('io.ox/office/editor/editor',
 
                 // update all attributes
                 hasNonNull = false;
-                _(AttributeConversion).each(function (attrConverter, attrName) {
+                _(AttributeConverters).each(function (attrConverter, attrName) {
                     var nodeValue = attrConverter.get(textNode.parentNode);
                     if (!(attrName in values)) {
                         // initial iteration: store value of first text portion
@@ -3188,61 +3143,103 @@ define('io.ox/office/editor/editor',
             this.implParagraphChanged(position);
         };
 
-        this.implSetAttribute = function (attr, value, startposition, endposition) {
+        /**
+         * Changes a specific formatting attribute of the specified text range.
+         *
+         * @param {String} attrName
+         *  The name of the formatting attribute. Must be the name of an
+         *  attribute converter registered at the AttributeConverters map.
+         *
+         * @param value
+         *  The new value of the formatting attribute.
+         *
+         * @param {Number[]} startposition
+         *  The start position of the text range to be changed.
+         *
+         * @param {Number[} endposition
+         *  The end position of the text range to be changed.
+         */
+        function implSetAttribute(attrName, value, startposition, endposition) {
+            var attributes = {};
+            if (attrName in AttributeConverters) {
+                attributes[attrName] = value;
+                implSetAttributes(attributes, startposition, endposition);
+            } else {
+                self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
+            }
+        }
 
-            // The right thing to do is DOM manipulation, take care for correctly terminating/starting attributes.
-            // See also http://dvcs.w3.org/hg/editing/raw-file/tip/editing.html#set-the-selection%27s-value
-
-            // Alternative: Simply span new atributes. Results in ugly HTML, but the operations that we record are correct,
-            // and we don't care too much for the current/temporary HTML in this editor.
-            // It will not negativly unfluence the resulting document.
+        /**
+         * Changes specific formatting attributes of the specified text range.
+         *
+         * @param {Object} attributes
+         *  A map of attribute name/value pairs. The names must be names of
+         *  attribute converters registered at the AttributeConverters map.
+         *
+         * @param {Number[]} startposition
+         *  The start position of the text range to be changed.
+         *
+         * @param {Number[} endposition
+         *  The end position of the text range to be changed.
+         */
+        function implSetAttributes(attributes, startposition, endposition) {
 
             var startposLength = startposition.length - 1,
                 endposLength = endposition.length - 1,
-                para = startposition[startposLength - 1],
                 start = startposition[startposLength],
-                end = endposition[endposLength];
+                end = endposition[endposLength],
+                ranges = null;
 
             if (textMode === OXOEditor.TextMode.PLAIN) {
                 return;
             }
-            if ((start === undefined) || (start === -1)) {
-                start = 0;
-            }
-            if ((end === undefined) || (end === -1)) {
-                end = this.getParagraphLength(startposition);
-            }
 
-            // HACK
-            var oldselection = this.getSelection();
-            // DR: works without focus
-            //this.grabFocus(); // this is really ugly, but execCommand only works when having the focus. Can we restore the focus in case we didn't have it???
-            var startPos = _.copy(startposition);
-            startPos[startposLength] = start;
-            var endPos = _.copy(endposition);
-            endPos[endposLength] = end;
-            this.setSelection(new OXOSelection(new OXOPaM(startPos), new OXOPaM(endPos)));
-            // This will only work if the editor has the focus. Grabbing it would be ugly, can't restore.
-            // But anyway, it's just a hack, and in the future we need to do the DOM manipulations on our own...
-            // The boolean formatting attributes (e.g. bold/italic/underline) do always toggle, they
-            // cannot be set or cleared explicitly. Therefore, first check if anything needs to be done.
-            // Note that document.queryCommandState() returns false for mixed formatting, but execCommand()
-            // will set the formatting in this case too.
-            if (typeof value === 'boolean') {
-                if (document.queryCommandState(attr) !== value) {
-                    document.execCommand(attr, false, null);
+            if (!_.isFinite(start) || (start < 0)) { start = 0; }
+            if (!_.isFinite(end) || (end < 0)) { end = self.getParagraphLength(startposition); }
+
+            startposition = _.copy(startposition);
+            startposition[startposLength] = start;
+            endposition = _.copy(endposition);
+            endposition[endposLength] = end;
+
+            // build the DOM text ranges from the passed OXO selection
+            ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
+
+            // iterate all text nodes and change their formatting
+            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
+
+                var // text of the node
+                    text = textNode.nodeValue;
+
+                // put text node into a span element, if not existing
+                if (textNode.parentNode.nodeName.toLowerCase() !== 'span') {
+                    $(textNode).wrap('<span>');
                 }
-            } else {
-                document.execCommand(attr, false, value);
-            }
 
-            if (oldselection !== undefined) {
-                oldselection.adjust(); // FireFox can't restore selection if end < start
-                this.setSelection(oldselection);
-            }
+                // if manipulating a part of the text node, split it
+                if (start > 0) {
+                    // prepend a new text node to this text node
+                    $(textNode.parentNode).before($(textNode.parentNode).clone().text(text.substr(0, start)));
+                    // shorten text of this text node
+                    textNode.nodeValue = text.substr(start);
+                }
+                if (end < text.length) {
+                    // append a new text node to this text node
+                    $(textNode.parentNode).after($(textNode.parentNode).clone().text(text.substr(end)));
+                    // shorten text of this text node
+                    textNode.nodeValue = text.substr(start, end - start);
+                }
 
-            lastOperationEnd = new OXOPaM(endPos);
-        };
+                // set the new formatting attributes at the span element
+                _(attributes).each(function (value, name) {
+                    if (name in AttributeConverters) {
+                        AttributeConverters[name].set(textNode.parentNode, value);
+                    }
+                });
+            });
+
+            lastOperationEnd = new OXOPaM(endposition);
+        }
 
         this.implInsertParagraph = function (position) {
             var posLength = position.length - 1,

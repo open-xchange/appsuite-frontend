@@ -240,7 +240,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
-    // length unit conversion -------------------------------------------------
+    // attribute conversion ---------------------------------------------------
 
     /**
      * Converts a length value from an absolute CSS measurement unit into
@@ -317,6 +317,29 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             value = Utils.convertLength(value, fromUnit, toUnit, digits);
         }
         return value;
+    };
+
+    Utils.containsToken = function (list, token) {
+        return _(list.split(/\s+/)).contains(token);
+    };
+
+    Utils.addToken = function (list, token, nothing) {
+        var tokens = list.split(/\s+/);
+        if (_.isString(nothing)) {
+            tokens = _(tokens).without(nothing);
+        }
+        if (!_(tokens).contains(token)) {
+            tokens.push(token);
+        }
+        return tokens.join(' ');
+    };
+
+    Utils.removeToken = function (list, token, nothing) {
+        var tokens = _(list.split(/\s+/)).without(token);
+        if (!tokens.length && _.isString(nothing)) {
+            tokens.push(nothing);
+        }
+        return tokens.join(' ');
     };
 
     // generic DOM helpers ----------------------------------------------------
