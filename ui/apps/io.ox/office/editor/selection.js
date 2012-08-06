@@ -213,29 +213,29 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
     };
 
     /**
-     * Iterates over specific parent element nodes of the nodes contained in
+     * Iterates over specific ancestor element nodes of the nodes contained in
      * the specified DOM text ranges that match the passed jQuery selector.
-     * Each parent node is visited exactly once even if it is the parent of
-     * multiple nodes in the passed selection.
+     * Each ancestor node is visited exactly once even if it is the ancestor of
+     * multiple nodes covered in the passed selection.
      *
      * @param {Object[]|Object} ranges
      *  The DOM text ranges whose nodes will be iterated. May be an array of
      *  DOM text range objects, or a single DOM text range object.
      *
      * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing the text ranges. While searching for parent
+     *  The root node containing the text ranges. While searching for ancestor
      *  nodes, this root node will never be left, but it may be selected as
-     *  parent node by itself. If this object is a jQuery collection, uses the
-     *  first node it contains.
+     *  ancestor node by itself. If this object is a jQuery collection, uses
+     *  the first node it contains.
      *
      * @param {String} selector
      *  A jQuery selector that will be used to find an element while traversing
-     *  the parents of the node currently iterated.
+     *  the chain of parents of the node currently iterated.
      *
      * @param {Function} iterator
-     *  The iterator function that will be called for every found parent node.
-     *  Receives the DOM node object as first parameter, and the current DOM
-     *  text range as second parameter. If the iterator returns the boolean
+     *  The iterator function that will be called for every found ancestor
+     *  node. Receives the DOM node object as first parameter, and the current
+     *  DOM text range as second parameter. If the iterator returns the boolean
      *  value false, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
@@ -246,7 +246,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  The boolean value false, if any iterator call has returned false to
      *  stop the iteration process, otherwise undefined.
      */
-    Selection.iterateParentNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+    Selection.iterateAncestorNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
 
         var // all matching nodes the iterator has been called for
             matchingNodes = [];
