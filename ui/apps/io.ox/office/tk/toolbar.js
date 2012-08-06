@@ -115,10 +115,6 @@ define('io.ox/office/tk/toolbar',
          *  group.
          */
         function registerResizeHandler(resizeHandler) {
-            // add window resize listener on first call
-            if (!resizeHandlers.length) {
-                $(window).on('resize', windowResizeHandler);
-            }
             // store the resize handler object
             resizeHandlers.push(resizeHandler);
         }
@@ -473,7 +469,9 @@ define('io.ox/office/tk/toolbar',
         Events.extend(this);
 
         // wait for the first window 'show' event and trigger an 'init' event at all groups
-        win.one('show', function () { deferredInit.resolve(); });
+        win.one('show', function () { deferredInit.resolve(); })
+            .on('show', function () { windowResizeHandler(); $(window).on('resize', windowResizeHandler); })
+            .on('hide', function () { $(window).off('resize', windowResizeHandler); });
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

@@ -16,9 +16,9 @@
 define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/fonts',
-     'io.ox/office/editor/selection'
-    ], function (Events, Utils, Fonts, Selection) {
+     'io.ox/office/editor/selection',
+     'io.ox/office/editor/attributes'
+    ], function (Events, Utils, Selection, Attributes) {
 
     'use strict';
 
@@ -354,146 +354,6 @@ define('io.ox/office/editor/editor',
         }
         return element;
     }
-
-    // class AttributeConverter ===============================================
-
-    function AttributeConverter(definitions) {
-
-        // methods ------------------------------------------------------------
-
-        this.hasAttribute = function (name) {
-            return name in definitions;
-        };
-
-        this.getAttribute = function (element, name) {
-            if (name in definitions) {
-                return definitions[name].get(element);
-            }
-        };
-
-        this.getAttributes = function (element) {
-            var attributes = {};
-            _(definitions).each(function (converter, name) {
-                attributes[name] = converter.get(element);
-            });
-            return attributes;
-        };
-
-        this.mergeAttributes = function (attributes, element) {
-
-            // update all attributes
-            _(this.getAttributes(element)).each(function (value, name) {
-                if (!(name in attributes)) {
-                    // initial iteration: store value
-                    attributes[name] = value;
-                } else if (value !== attributes[name]) {
-                    // value differs from previous value: ambiguous state
-                    attributes[name] = null;
-                }
-            });
-        };
-
-        this.hasEqualAttributes = function (element1, element2) {
-            return _.isEqual(this.getAttributes(element1), this.getAttributes(element2));
-        };
-
-        this.setAttribute = function (element, name, value) {
-            if (name in definitions) {
-                definitions[name].set(element, value);
-            }
-        };
-
-        this.setAttributes = function (element, attributes) {
-            _(attributes).each(function (value, name) {
-                this.setAttribute(element, name, value);
-            }, this);
-        };
-
-    } // class AttributeConverter
-
-    // class CharacterAttributes ==============================================
-
-    /**
-     * Maps character formatting attribute names used in the operations API to
-     * getter and setter functions that manipulate the CSS formatting of DOM
-     * elements.
-     */
-    var CharacterAttributes = new AttributeConverter({
-
-        bold: {
-            get: function (element) {
-                var value = $(element).css('font-weight');
-                return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
-            },
-            set: function (element, state) {
-                $(element).css('font-weight', state ? 'bold' : 'normal');
-            }
-        },
-
-        italic: {
-            get: function (element) {
-                var value = $(element).css('font-style');
-                return (value === 'italic') || (value === 'oblique');
-            },
-            set: function (element, state) {
-                $(element).css('font-style', state ? 'italic' : 'normal');
-            }
-        },
-
-        underline: {
-            get: function (element) {
-                return Utils.containsToken($(element).css('text-decoration'), 'underline');
-            },
-            set: function (element, state) {
-                var value = $(element).css('text-decoration');
-                value = Utils[state ? 'addToken' : 'removeToken'](value, 'underline', 'none');
-                $(element).css('text-decoration', value);
-            }
-        },
-
-        fontname: {
-            get: function (element) {
-                var value = $(element).css('font-family');
-                return Fonts.getFontName(value);
-            },
-            set: function (element, fontName) {
-                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-            }
-        },
-
-        fontsize: {
-            get: function (element) {
-                var value = $(element).css('font-size');
-                return Utils.convertCssLength(value, 'pt', 0);
-            },
-            set: function (element, fontSize) {
-                $(element).css('font-size', fontSize + 'pt');
-            }
-        }
-
-    }); // class CharacterAttributes
-
-    // class ParagraphAttributes ==============================================
-
-    /**
-     * Maps paragraph formatting attribute names used in the operations API to
-     * getter and setter functions that manipulate the CSS formatting of DOM
-     * elements.
-     */
-    var ParagraphAttributes = new AttributeConverter({
-
-        alignment: {
-            get: function (element) {
-                var value = $(element).css('text-align');
-                // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
-                return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
-            },
-            set: function (element, value) {
-                $(element).css('text-align', value);
-            }
-        }
-
-    }); // class ParagraphAttributes
 
     // class OXOEditor ========================================================
 
@@ -1801,6 +1661,16 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
+        this.getParagraphAttributes = function () {
+            var ranges = Selection.getBrowserSelection(editdiv);
+            return Attributes.getParagraphAttributes(ranges);
+        };
+
+        this.getCharacterAttributes = function () {
+            var ranges = Selection.getBrowserSelection(editdiv);
+            return Attributes.getCharacterAttributes(ranges);
+        };
+
         this.setAttribute = function (attr, value, startPosition, endPosition) {
 
             var para,
@@ -1961,7 +1831,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (ParagraphAttributes.hasAttribute(attr)) {
+                else if (Attributes.isParagraphAttribute(attr)) {
                     var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -1978,100 +1848,20 @@ define('io.ox/office/editor/editor',
          */
         this.getAttribute = function (attrName) {
 
-            var // all text ranges to iterate
+            var // the current browser selection
                 ranges = Selection.getBrowserSelection(editdiv),
-                // the resulting attribute value
-                value = null;
+                // the resulting attributes
+                attributes = null;
 
-            if (CharacterAttributes.hasAttribute(attrName)) {
-                // character attributes: process all text nodes, get attributes from their parent element
-                Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
-
-                    var // attribute value of current text node
-                        nodeValue = CharacterAttributes.getAttribute(textNode.parentNode, attrName);
-
-                    if (!_.isNull(value) && (nodeValue !== value)) {
-                        value = null;
-                        return false;
-                    }
-                    value = nodeValue;
-                });
-            } else if (ParagraphAttributes.hasAttribute(attrName)) {
-                // paragraph attributes: process all paragraph elements
-                Selection.iterateNodesInTextRanges(ranges, function (node) {
-
-                    var // attribute value of current paragraph
-                        nodeValue = null;
-
-                    if (Utils.getNodeName(node) === 'p') {
-                        nodeValue = CharacterAttributes.getAttribute(node, attrName);
-
-                        if (!_.isNull(value) && (nodeValue !== value)) {
-                            value = null;
-                            return false;
-                        }
-                        value = nodeValue;
-                    }
-                });
+            if (Attributes.isParagraphAttribute(attrName)) {
+                attributes = Attributes.getParagraphAttributes(ranges, editdiv);
+            } else if (Attributes.isCharacterAttribute(attrName)) {
+                attributes = Attributes.getCharacterAttributes(ranges);
             } else {
                 self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
             }
 
-            return value;
-        };
-
-        /**
-         * Returns the value of all character formatting attributes in the
-         * current browser selection.
-         */
-        this.getCharacterAttributes = function () {
-
-            var // all text ranges to iterate
-                ranges = Selection.getBrowserSelection(editdiv),
-                // the attribute values, mapped by name
-                attributes = {};
-
-            // process all text nodes, get attributes from their parent element
-            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
-
-                // merge the existing attributes with the attributes of the new text node
-                CharacterAttributes.mergeAttributes(attributes, textNode.parentNode);
-
-                // exit iteration loop if there are no unambiguous attributes left
-                if (_(attributes).all(_.isNull)) {
-                    return false;
-                }
-            });
-
-            window.console.log('Editor.getCharacterAttributes(): attributes=' + JSON.stringify(attributes));
-            return attributes;
-        };
-
-        /**
-         * Returns the value of all paragraph formatting attributes in the
-         * current browser selection.
-         */
-        this.getParagraphAttributes = function () {
-
-            var // all text ranges to iterate
-                ranges = Selection.getBrowserSelection(editdiv),
-                // the attribute values, mapped by name
-                attributes = {};
-
-            // get attributes from all paragraph elements
-            Selection.iterateParentNodesInTextRanges(ranges, editdiv, 'p', function (node) {
-
-                // merge the existing attributes with the attributes of the new paragraph
-                ParagraphAttributes.mergeAttributes(attributes, node);
-
-                // exit iteration loop if there are no unambiguous attributes left
-                if (_(attributes).all(_.isNull)) {
-                    return false;
-                }
-            });
-
-            window.console.log('Editor.getParagraphAttributes(): attributes=' + JSON.stringify(attributes));
-            return attributes;
+            return attributes[attrName];
         };
 
         this.getParagraphCount = function () {
@@ -3295,156 +3085,51 @@ define('io.ox/office/editor/editor',
          * @param value
          *  The new value of the formatting attribute.
          *
-         * @param {Number[]} startposition
-         *  The start position of the text range to be changed.
+         * @param {Number[]} start
+         *  The logical start position of the text range to be formatted.
          *
-         * @param {Number[} endposition
-         *  The end position of the text range to be changed.
+         * @param {Number[]} end
+         *  The logical end position of the text range to be formatted.
          */
-        function implSetAttribute(attrName, value, startposition, endposition) {
-            var attributes = {};
+        function implSetAttribute(attrName, value, start, end) {
+
+            var // last index in the start position array
+                startLastIndex = start.length - 1,
+                // last index in the end position array
+                endLastIndex = end.length - 1,
+                // the DOM text range to be formatted
+                ranges = null,
+                // prepare an attribute map containing the passed single attribute
+                attributes = {};
+
+            // build local copies of the arrays (do not change caller's data)
+            start = _.copy(start);
+            end = _.copy(end);
+
+            // validate text offset
+            if (!_.isFinite(start[startLastIndex]) || (start[startLastIndex] < 0)) {
+                start[startLastIndex] = 0;
+            }
+            if (!_.isFinite(end[endLastIndex]) || (end[endLastIndex] < 0)) {
+                end[endLastIndex] = self.getParagraphLength(start);
+            }
+
+            // build the DOM text range
+            ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
+
             attributes[attrName] = value;
-            if (CharacterAttributes.hasAttribute(attrName)) {
-                implSetCharacterAttributes(attributes, startposition, endposition);
-            } else if (ParagraphAttributes.hasAttribute(attrName)) {
-                implSetParagraphAttributes(attributes, startposition, endposition);
+
+            if (Attributes.isParagraphAttribute(attrName)) {
+                Attributes.setParagraphAttributes(ranges, editdiv, attributes);
+            } else if (Attributes.isCharacterAttribute(attrName)) {
+                if (textMode !== OXOEditor.TextMode.PLAIN) {
+                    Attributes.setCharacterAttributes(ranges, attributes);
+                }
             } else {
                 self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
             }
-        }
 
-        /**
-         * Changes specific character formatting attributes of the specified
-         * text range.
-         *
-         * @param {Object} attributes
-         *  A map of character attribute name/value pairs.
-         *
-         * @param {Number[]} startposition
-         *  The start position of the text range to be changed.
-         *
-         * @param {Number[} endposition
-         *  The end position of the text range to be changed.
-         */
-        function implSetCharacterAttributes(attributes, startposition, endposition) {
-
-            var startposLength = startposition.length - 1,
-                endposLength = endposition.length - 1,
-                start = startposition[startposLength],
-                end = endposition[endposLength],
-                range = null,
-                lastTextNode = null,
-                nextSpan = null;
-
-            if (textMode === OXOEditor.TextMode.PLAIN) {
-                return;
-            }
-
-            if (!_.isFinite(start) || (start < 0)) { start = 0; }
-            if (!_.isFinite(end) || (end < 0)) { end = self.getParagraphLength(startposition); }
-
-            startposition = _.copy(startposition);
-            startposition[startposLength] = start;
-            endposition = _.copy(endposition);
-            endposition[endposLength] = end;
-
-            // build the DOM text range from the passed OXO selection
-            range = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
-
-            // iterate all text nodes and change their formatting
-            Selection.iterateTextPortionsInTextRanges(range, function (textNode, start, end) {
-
-                var // text of the node
-                    text = textNode.nodeValue,
-                    // parent element of the text node
-                    parent = textNode.parentNode;
-
-                // put text node into a span element, if not existing
-                if (Utils.getNodeName(parent) !== 'span') {
-                    $(textNode).wrap('<span>');
-                    parent = textNode.parentNode;
-                }
-
-                // if manipulating a part of the text node, split it
-                if (start > 0) {
-                    // prepend a new text node to this text node
-                    $(parent).clone().text(text.substr(0, start)).insertBefore(parent);
-                    // shorten text of this text node
-                    textNode.nodeValue = text.substr(start);
-                }
-                if (end < text.length) {
-                    // append a new text node to this text node
-                    $(parent).clone().text(text.substr(end)).insertAfter(parent);
-                    // shorten text of this text node
-                    textNode.nodeValue = text.substr(start, end - start);
-                }
-
-                // set the new formatting attributes at the span element
-                CharacterAttributes.setAttributes(parent, attributes);
-
-                // try to merge with previous span
-                if (parent.previousSibling && CharacterAttributes.hasEqualAttributes(parent, parent.previousSibling)) {
-                    textNode.nodeValue = $(parent.previousSibling).text() + textNode.nodeValue;
-                    $(parent.previousSibling).remove();
-                }
-
-                lastTextNode = textNode;
-            });
-
-            // try to merge last text node with next span
-            nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
-            if (nextSpan && (Utils.getNodeName(nextSpan) === 'span')) {
-                if (CharacterAttributes.hasEqualAttributes(lastTextNode.parentNode, nextSpan)) {
-                    lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
-                    $(nextSpan).remove();
-                }
-            }
-
-            lastOperationEnd = new OXOPaM(endposition);
-        }
-
-        /**
-         * Changes specific paragraph formatting attributes of the specified
-         * text range.
-         *
-         * @param {Object} attributes
-         *  A map of paragraph attribute name/value pairs.
-         *
-         * @param {Number[]} startposition
-         *  The start position of the text range to be changed.
-         *
-         * @param {Number[} endposition
-         *  The end position of the text range to be changed.
-         */
-        function implSetParagraphAttributes(attributes, startposition, endposition) {
-
-            var startposLength = startposition.length - 1,
-                endposLength = endposition.length - 1,
-                start = startposition[startposLength],
-                end = endposition[endposLength],
-                range = null;
-
-            if (textMode === OXOEditor.TextMode.PLAIN) {
-                return;
-            }
-
-            if (!_.isFinite(start) || (start < 0)) { start = 0; }
-            if (!_.isFinite(end) || (end < 0)) { end = self.getParagraphLength(startposition); }
-
-            startposition = _.copy(startposition);
-            startposition[startposLength] = start;
-            endposition = _.copy(endposition);
-            endposition[endposLength] = end;
-
-            // build the DOM text range from the passed OXO selection
-            range = self.getDOMSelection(new OXOSelection(new OXOPaM(startposition), new OXOPaM(endposition)));
-
-            // iterate all paragraph elements and change their formatting
-            Selection.iterateParentNodesInTextRanges(range, editdiv, 'p', function (node) {
-                ParagraphAttributes.setAttributes(node, attributes);
-            });
-
-            lastOperationEnd = new OXOPaM(endposition);
+            lastOperationEnd = new OXOPaM(end);
         }
 
         this.implInsertParagraph = function (position) {

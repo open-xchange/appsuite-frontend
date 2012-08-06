@@ -218,7 +218,6 @@ define('io.ox/office/editor/view',
             )
         ));
 
-
         // insert the tool bar selector and a separator line into the tool pane
         tabBar.getNode().addClass('tabs').children().first().append(
             $('<span>').addClass('separator left'),
