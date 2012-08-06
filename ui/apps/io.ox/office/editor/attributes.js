@@ -156,7 +156,7 @@ define('io.ox/office/editor/attributes',
         fontsize: {
             get: function (element) {
                 var value = $(element).css('font-size');
-                return Utils.convertCssLength(value, 'pt', 0);
+                return Utils.convertCssLength(value, 'pt');
             },
             set: function (element, fontSize) {
                 $(element).css('font-size', fontSize + 'pt');

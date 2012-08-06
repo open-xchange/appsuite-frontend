@@ -239,7 +239,7 @@ define('io.ox/office/editor/main',
             // create controller and register editors
             controller = new Controller(app)
                 .registerEditor(editors[Editor.TextMode.RICH])
-                .registerEditor(editors[Editor.TextMode.PLAIN], /^(view|action|insert|debug)\//);
+                .registerEditor(editors[Editor.TextMode.PLAIN], /^(action|insert|debug)\//);
 
             // editor view
             view = new View(win, controller, editors);
@@ -583,6 +583,13 @@ define('io.ox/office/editor/main',
         };
 
         /**
+         * Returns the global view object.
+         */
+        app.getView = function () {
+            return view;
+        };
+
+        /**
          * Shows the application window and activates the editor.
          *
          * @returns {jQuery.Deferred}
@@ -632,7 +639,7 @@ define('io.ox/office/editor/main',
         app.failSave = function () {
             var point = {
                 file: file,
-                toolBarTab: controller.get('view/toolbars/show'),
+                toolBarTab: view.getVisibleToolBarKey(),
                 debugMode: debugMode,
                 syncMode: syncMode
             };
@@ -643,7 +650,7 @@ define('io.ox/office/editor/main',
             initializeApp(point);
             updateDebugMode();
             return app.load().always(function () {
-                controller.change('view/toolbars/show', Utils.getStringOption(point, 'toolBarTab'));
+                view.showToolBar(Utils.getStringOption(point, 'toolBarTab'));
             });
         };
 

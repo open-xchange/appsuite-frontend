@@ -166,10 +166,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.getIntegerOption = function (options, name, def, min, max) {
         var value = Utils.getOption(options, name);
-        value = _.isNumber(value) ? value : def;
-        if (_.isNumber(value)) {
-            if (_.isNumber(min) && (value < min)) { value = min; }
-            if (_.isNumber(max) && (value > max)) { value = max; }
+        value = _.isFinite(value) ? value : def;
+        if (_.isFinite(value)) {
+            if (_.isFinite(min) && (value < min)) { value = min; }
+            if (_.isFinite(max) && (value > max)) { value = max; }
             return Math.floor(value);
         }
         return value;
@@ -242,6 +242,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // attribute conversion ---------------------------------------------------
 
+    Utils.roundDigits = function (value, digits) {
+        var pow10 = Math.round(Math.pow(10, digits));
+        return _.isFinite(value) ? (Math.round(value * pow10) / pow10) : value;
+    };
+
     /**
      * Converts a length value from an absolute CSS measurement unit into
      * another absolute CSS measurement unit.
@@ -278,13 +283,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             };
 
         return function (value, fromUnit, toUnit, digits) {
-            var pow10 = 0;
             value *= (FACTORS[fromUnit] || 1) / (FACTORS[toUnit] || 1);
-            if (_.isFinite(digits)) {
-                pow10 = Math.pow(10, digits);
-                value = Math.round(value * pow10) / pow10;
-            }
-            return value;
+            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
         };
     }());
 

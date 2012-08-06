@@ -14,6 +14,7 @@
 define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
+     'io.ox/office/tk/controller',
      'io.ox/office/tk/toolbar',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/textfield',
@@ -21,7 +22,7 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/editor/editor',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, ToolBar, Button, TextField, ComboField, GridSizer, Editor, gt) {
+    ], function (Utils, Fonts, Controller, ToolBar, Button, TextField, ComboField, GridSizer, Editor, gt) {
 
     'use strict';
 
@@ -62,7 +63,7 @@ define('io.ox/office/editor/view',
                 icon: 'icon-io-ox-font-height',
                 tooltip: gt('Font Size'),
                 css: { textAlign: 'right' },
-                validator: new TextField.IntegerValidator({ min: 1, max: 999 })
+                validator: new TextField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
             };
 
         // base constructor ---------------------------------------------------
@@ -101,7 +102,13 @@ define('io.ox/office/editor/view',
 
     function View(win, controller, editors) {
 
-        var // the top-level tab bar to select tool bars
+        var // self reference
+            self = this,
+
+            // internal controller to control view comnponents
+            viewController = null,
+
+            // the top-level tab bar to select tool bars
             tabBar = new ToolBar(win),
 
             // the tab buttons to select the tool bars
@@ -122,8 +129,7 @@ define('io.ox/office/editor/view',
          * Creates a new tool bar object and registers it at the tab bar.
          *
          * @param {String} key
-         *  The unique key of the tool bar. Will be used as value in the
-         *  'view/toolbars/show' controller events.
+         *  The unique key of the tool bar.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
@@ -149,13 +155,6 @@ define('io.ox/office/editor/view',
             toolBar.hide();
 
             return toolBar;
-        }
-
-        /**
-         * Returns the key of the tool bar currently visible.
-         */
-        function getVisibleToolBarKey() {
-            return visibleToolBar;
         }
 
         /**
@@ -196,7 +195,7 @@ define('io.ox/office/editor/view',
                 if (keydown) {
                     index = event.shiftKey ? (index - 1) : (index + 1);
                     index = Math.min(Math.max(index, 0), toolBarKeys.length - 1);
-                    controller.change('view/toolbars/show', toolBarKeys[index]);
+                    self.showToolBar(toolBarKeys[index]);
                     grabToolBarFocus();
                 }
                 return false;
@@ -223,13 +222,40 @@ define('io.ox/office/editor/view',
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Returns the key of the tool bar currently visible.
+         */
+        this.getVisibleToolBarKey = function () {
+            return visibleToolBar;
+        };
+
+        /**
+         * Activates the tool bar with the specified key.
+         *
+         * @returns {View}
+         *  A reference to this view instance.
+         */
+        this.showToolBar = function (key) {
+            viewController.change('view/toolbars/show', key);
+            return this;
+        };
+
         this.destroy = function () {
-            _(toolBars).invoke('destroy');
+            viewController.destroy();
             tabBar.destroy();
-            tabBar = radioGroup = toolBars = null;
+            _(toolBars).invoke('destroy');
+            viewController = tabBar = radioGroup = toolBars = null;
         };
 
         // initialization -----------------------------------------------------
+
+        // create the internal view controller
+        viewController = new Controller({
+            'view/toolbars/show': {
+                get: function () { return visibleToolBar; },
+                set: showToolBar
+            }
+        }, function () { controller.done(); });
 
         // create the tool panes and append them to the window main node
         win.nodes.main.addClass('io-ox-office-main').append(
@@ -293,16 +319,15 @@ define('io.ox/office/editor/view',
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
-        // prepare controller
-        controller
-            // create a controller item for tool bar handling
-            .addDefinitions({ 'view/toolbars/show': { get: getVisibleToolBarKey, set: showToolBar } })
+        // prepare editor controller
+        controller.update();
+
+        // prepare wiew controller
+        viewController
             // register the tab bar at the controller
             .registerViewComponent(tabBar)
             // make the format tool bar visible
-            .change('view/toolbars/show', 'format')
-            // initialization
-            .update();
+            .change('view/toolbars/show', 'format');
 
         // change visible tool bar with keyboard
         win.nodes.toolPane.on('keydown keypress keyup', toolPaneKeyHandler);

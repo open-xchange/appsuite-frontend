@@ -25,12 +25,7 @@ define('io.ox/office/tk/control/textfield',
         FIELD_PADDING = 4,
 
         // default validator without any restrictions on the field text
-        defaultValidator = null,
-
-        // limit for integer validators
-        MAX_INT = 0x7FFFFFFF,
-        MIN_INT = (-MAX_INT) - 1;
-
+        defaultValidator = null;
 
     // class TextField ========================================================
 
@@ -351,14 +346,14 @@ define('io.ox/office/tk/control/textfield',
      * @param {Object} [options]
      *  A map of options to control the properties of the text validator. The
      *  following options are supported:
-     *  @param {Number} [options.maxLength=MAX_INT]
+     *  @param {Number} [options.maxLength=0x7FFFFFFF]
      *      The maximum number of characters to be inserted into the text
      *      field. All attempts to insert more characters will be rejected.
      */
     TextField.TextValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // maximum length
-            maxLength = Utils.getIntegerOption(options, 'maxLength', MAX_INT, 0, MAX_INT);
+            maxLength = Utils.getIntegerOption(options, 'maxLength', 0x7FFFFFFF, 0, 0x7FFFFFFF);
 
         // base constructor ---------------------------------------------------
 
@@ -376,25 +371,32 @@ define('io.ox/office/tk/control/textfield',
 
     }}); // class TextField.TextValidator
 
-    // class TextField.IntegerValidator =======================================
+    // class TextField.NumberValidator ========================================
 
     /**
-     * A validator for text fields that restricts the allowed values to integer
-     * numbers.
+     * A validator for text fields that restricts the allowed values to
+     * floating-point numbers.
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the validator. The
      *  following options are supported:
      *  @param {Number} [options.min]
-     *      The minimum value allowed to enter. If omitted, defaults to -2^31.
+     *      The minimum value allowed to enter. If omitted, defaults to
+     *      -Math.MAX_VALUE.
      *  @param {Number} [options.max]
-     *      The maximum value allowed to enter. If omitted, defaults to 2^31-1.
+     *      The maximum value allowed to enter. If omitted, defaults to
+     *      Math.MAX_VALUE.
+     *  @param {Number} [options.digits=2]
+     *      The number of digits after the decimal point. If omitted, defaults
+     *      to 2.
      */
-    TextField.IntegerValidator = TextField.Validator.extend({ constructor: function (options) {
+    TextField.NumberValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // minimum and maximum
-            min = Utils.getIntegerOption(options, 'min', MIN_INT, MIN_INT, MAX_INT),
-            max = Utils.getIntegerOption(options, 'max', MAX_INT, min, MAX_INT);
+            min = Utils.getIntegerOption(options, 'min', -Math.MAX_VALUE, -Math.MAX_VALUE, Math.MAX_VALUE),
+            max = Utils.getIntegerOption(options, 'max', Math.MAX_VALUE, min, Math.MAX_VALUE),
+            digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
+            regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '(\\.[0-9]*)?' : '') + '$');
 
         // base constructor ---------------------------------------------------
 
@@ -403,20 +405,19 @@ define('io.ox/office/tk/control/textfield',
         // methods ------------------------------------------------------------
 
         this.valueToText = function (value) {
-            return _.isFinite(value) ? String(value) : '';
+            return _.isFinite(value) ? String(Utils.roundDigits(value, digits)) : '';
         };
 
         this.textToValue = function (text) {
-            var value = parseInt(text, 10);
-            return (_.isFinite(value) && (min <= value) && (value <= max)) ? value : null;
+            var value = parseFloat(text);
+            return (_.isFinite(value) && (min <= value) && (value <= max)) ? Utils.roundDigits(value, digits) : null;
         };
 
         this.validate = function (text) {
-            var value = this.textToValue(text);
-            return (text === '') || ((min < 0) && ((text === '-') || (text === '-0'))) || (_.isFinite(value) && String(value));
+            return regex.test(text);
         };
 
-    }}); // class TextField.IntegerValidator
+    }}); // class TextField.NumberValidator
 
     // exports ================================================================
 

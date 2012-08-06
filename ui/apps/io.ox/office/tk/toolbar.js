@@ -64,10 +64,19 @@ define('io.ox/office/tk/toolbar',
             // group initializer waiting for the first window 'show' event
             deferredInit = $.Deferred(),
 
+            // whether the application window has been shown at least once
+            windowShown = false,
+
             // resize handler functions supporting flexible tool bar sizing
             resizeHandlers = [];
 
         // private methods ----------------------------------------------------
+
+        function initialize() {
+            if (windowShown && (node.css('display') !== 'none')) {
+                deferredInit.resolve();
+            }
+        }
 
         /**
          * Returns all visible and enabled group objects as array.
@@ -283,6 +292,7 @@ define('io.ox/office/tk/toolbar',
 
         this.show = function () {
             node.show();
+            initialize();
             return this;
         };
 
@@ -504,7 +514,7 @@ define('io.ox/office/tk/toolbar',
         Events.extend(this);
 
         // wait for the first window 'show' event and trigger an 'init' event at all groups
-        win.one('show', function () { deferredInit.resolve(); })
+        win.one('show', function () { windowShown = true; initialize(); })
             .on('show', function () { windowResizeHandler(); $(window).on('resize', windowResizeHandler); })
             .on('hide', function () { $(window).off('resize', windowResizeHandler); });
 

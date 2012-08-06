@@ -39,8 +39,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'insert/table': {
-                    set: function (size) { editor.insertTable(size); },
-                    done: function () { this.change('view/toolbars/show', 'table'); }
+                    set: function (size) { editor.insertTable(size); app.getView().showToolBar('table'); }
                 },
 
                 'chain/format/character': {
