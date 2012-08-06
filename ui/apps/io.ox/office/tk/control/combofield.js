@@ -169,7 +169,7 @@ define('io.ox/office/tk/control/combofield',
 
         TextField.call(this, options);
         // no caption for the drop-down button
-        List.extend(this, Utils.extendOptions(options, { icon: undefined, label: undefined }));
+        List.extend(this, Utils.extendOptions(options, { ignoreCaption: true }));
 
         // methods ------------------------------------------------------------
 

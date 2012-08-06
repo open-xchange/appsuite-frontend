@@ -94,7 +94,7 @@ define('io.ox/office/editor/view',
         // create the default button (set value to default size, will be returned by click handler)
         Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
         // create the grid sizer
-        GridSizer.extend(this, Utils.extendOptions(options, { icon: undefined, label: undefined }));
+        GridSizer.extend(this, Utils.extendOptions(options, { ignoreCaption: true }));
 
     }}); // class TableSizeChooser
 

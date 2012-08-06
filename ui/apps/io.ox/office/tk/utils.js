@@ -242,8 +242,18 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // attribute conversion ---------------------------------------------------
 
+    /**
+     * Rounds the passed floating-point number to the specified number of
+     * digits after the decimal point.
+     *
+     * @param {Number} value
+     *  The value to be rounded.
+     *
+     * @param {Number} digits
+     *  The number of digits after the decimal point.
+     */
     Utils.roundDigits = function (value, digits) {
-        var pow10 = Math.round(Math.pow(10, digits));
+        var pow10 = Math.pow(10, digits);
         return _.isFinite(value) ? (Math.round(value * pow10) / pow10) : value;
     };
 

@@ -43,7 +43,11 @@ define('io.ox/office/tk/dropdown/menu',
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button.
      *  Supports all generic button formatting options (see method
-     *  Utils.createButton() for details).
+     *  Utils.createButton() for details). Additionally, the following options
+     *  are supported:
+     *  @param {Boolean} [options.ignoreCaption]
+     *      If set to true, the drop-down button will not contain a caption,
+     *      regardless of the other settings in the options object.
      */
     function extend(group, options) {
 
@@ -259,13 +263,18 @@ define('io.ox/office/tk/dropdown/menu',
         // append menu button and menu to the group container
         group.addFocusableControl(menuButton).addChildNodes(menuNode);
 
+        // prepare drop-down button
+        if (Utils.getBooleanOption(options, 'ignoreCaption')) {
+            Utils.removeControlCaption(menuButton);
+        }
+        menuButton.append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')));
+
         // register event handlers, prepare drop-down button
         group.on('change cancel', function () { toggleMenu(false); });
         group.getNode()
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
         menuButton
-            .append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')))
             .on('click', menuButtonClickHandler)
             .on('keydown keypress keyup', menuButtonKeyHandler);
         menuNode.on('keydown keypress keyup', menuKeyHandler);
