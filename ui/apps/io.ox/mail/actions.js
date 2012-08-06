@@ -46,13 +46,21 @@ define('io.ox/mail/actions',
         }
     });
 
-    new Action('io.ox/mail/actions/delete', {
+/*    new Action('io.ox/mail/actions/delete', {
         id: 'delete',
         requires: 'toplevel some delete',
         multiple: function (list) {
             api.remove(list);
         }
+    }); */
+
+    new Action('io.ox/mail/actions/delete', {
+        id: 'delete',
+        action: function (list) {
+            alert("I'm currently broken. Sorry.");
+        }
     });
+    
 
     new Action('io.ox/mail/actions/reply-all', {
         id: 'reply-all',
