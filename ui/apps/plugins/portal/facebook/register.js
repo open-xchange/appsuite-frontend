@@ -122,14 +122,13 @@ define('plugins/portal/facebook/register',
                         $('<a class="from">').text(profile.name).attr('href', profile.url),
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(new Date(post.created_time * 1000))
-//                        $('<span class="debugging-info">').text('Message type: ' + post.type + ', actor_id: ' + post.actor_id)
                     ));
 
                 //use extension mechanism to enable rendering of different contents
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-                        console.log(profile.name, ' Renderer: ', renderer.id, post);
+                        //console.log(profile.name, ' Renderer: ', renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -271,8 +270,9 @@ define('plugins/portal/facebook/register',
             return true;
         },
         draw: function (post) {
-            console.log("Please attach when reporting missing type " + post.type, post);
-            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
+            console.log('This message is of the type "' + post.type + '". We do not know how to render this yet. Please tell us about it! Here is some additional data:', post);
+            this.text(post.message);
+//            this.html('<em style="color: red;">This message is of the type <b>' + post.type + '</b>. We do not know how to render this yet. Please tell us about it!</em>');
         }
     });
 });
