@@ -24,13 +24,11 @@ define('io.ox/office/preview/main',
 
     var MODULE_NAME = 'io.ox/office/preview';
 
-    // createApplication() ====================================================
+    // initializeApplication() ================================================
 
-    function createApplication(options) {
+    function initializeApplication(app, options) {
 
-        var app = ox.ui.createApp({ name: MODULE_NAME }),
-
-            win = null,
+        var win = null,
 
             file = _.isObject(options) ? options.file : null,
 
@@ -302,27 +300,14 @@ define('io.ox/office/preview/main',
 
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // createApplication()
+    } // initializeApplication()
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-
-            var // get file descriptor from options
-                file = _.isObject(options) ? options.file : null,
-
-                // find running preview application
-                running = _.isObject(file) ? ox.ui.App.get(MODULE_NAME).filter(function (app) {
-                    var appFile = app.getFileDescriptor();
-                    // TODO: check file version too?
-                    return _.isObject(appFile) &&
-                        (file.id === appFile.id) &&
-                        (file.folder_id === appFile.folder_id);
-                }) : [];
-
-            return running.length ? running[0] : createApplication(options);
+            return AppHelper.getOrCreateApplication(MODULE_NAME, initializeApplication, options);
         }
     };
 

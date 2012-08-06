@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/apphelper', function () {
+define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
@@ -30,7 +30,7 @@ define('io.ox/office/tk/apphelper', function () {
      *  calls.
      *
      * @param {Object} [context]
-     *  The calling context used to invoke the wapped function.
+     *  The calling context used to invoke the wrapped function.
      *
      * @returns {Function}
      *  A wrapper function that initially calls the wrapped function and
@@ -148,6 +148,49 @@ define('io.ox/office/tk/apphelper', function () {
 
         // the result data object is valid, return the attribute value
         return data[attribName];
+    };
+
+    // application object -----------------------------------------------------
+
+    AppHelper.getRunningApplication = function (moduleName, options) {
+
+        var // get file descriptor from options
+            file = Utils.getObjectOption(options, 'file', null),
+
+            // find running editor application
+            runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
+                var appFile = app.getFileDescriptor();
+                // TODO: check file version too?
+                return _.isObject(appFile) &&
+                    (file.id === appFile.id) &&
+                    (file.folder_id === appFile.folder_id);
+            }) : [];
+
+        return runningApps.length ? runningApps[0] : null;
+    };
+
+    AppHelper.createApplication = function (moduleName, initAppHandler, options) {
+
+        var // the OX application object
+            app = ox.ui.createApp({ name: moduleName });
+
+        // call the initialization handler
+        initAppHandler(app, options);
+
+        return app;
+    };
+
+    AppHelper.getOrCreateApplication = function (moduleName, initAppHandler, options) {
+
+        var // try to find a running application
+            app = AppHelper.getRunningApplication(moduleName, options);
+
+        // no running application: create and initialize a new application object
+        if (!_.isObject(app)) {
+            app = AppHelper.createApplication(moduleName, initAppHandler, options);
+        }
+
+        return app;
     };
 
     // exports ================================================================

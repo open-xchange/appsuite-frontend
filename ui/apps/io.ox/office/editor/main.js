@@ -67,14 +67,11 @@ define('io.ox/office/editor/main',
         return data.operations;
     }
 
-    // createApplication() ====================================================
+    // initializeApplication() ================================================
 
-    function createApplication(options) {
+    function initializeApplication(app, options) {
 
-        var // OX application object
-            app = ox.ui.createApp({ name: MODULE_NAME }),
-
-            // application window
+        var // application window
             win = null,
 
             // connection to infostore file
@@ -107,7 +104,7 @@ define('io.ox/office/editor/main',
             // if true, editor synchronizes operations with backend server
             syncMode = true;
 
-        // private functions --------------------------------------------------
+        // private methods ----------------------------------------------------
 
         function initializeApp(options) {
             file = Utils.getObjectOption(options, 'file', null);
@@ -566,7 +563,7 @@ define('io.ox/office/editor/main',
             }, timeout || 1000);
         }
 
-        // methods ============================================================
+        // methods ------------------------------------------------------------
 
         /**
          * Returns the infostore file descriptor of the edited document.
@@ -750,27 +747,14 @@ define('io.ox/office/editor/main',
         initializeApp(options);
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // createApplication()
+    } // initializeApplication()
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-
-            var // get file descriptor from options
-                file = Utils.getObjectOption(options, 'file', null),
-
-                // find running editor application
-                runningApps = file ? ox.ui.App.get(MODULE_NAME).filter(function (app) {
-                    var appFile = app.getFileDescriptor();
-                    // TODO: check file version too?
-                    return _.isObject(appFile) &&
-                        (file.id === appFile.id) &&
-                        (file.folder_id === appFile.folder_id);
-                }) : [];
-
-            return runningApps.length ? runningApps[0] : createApplication(options);
+            return AppHelper.getOrCreateApplication(MODULE_NAME, initializeApplication, options);
         }
     };
 
