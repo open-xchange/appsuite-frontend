@@ -55,9 +55,6 @@ define('io.ox/office/tk/toolbar',
             // DOM child element measuring the total width of the controls
             containerNode = $('<span>').appendTo(node),
 
-            // if set to true, inserted groups will have no spacing between previous group
-            collapsedGroupsNode = null,
-
             // all control groups, as plain array
             groups = [],
 
@@ -73,6 +70,13 @@ define('io.ox/office/tk/toolbar',
         // private methods ----------------------------------------------------
 
         /**
+         * Returns all visible and enabled group objects as array.
+         */
+        function getEnabledGroups() {
+            return _(groups).filter(function (group) { return group.isVisible() && group.isEnabled(); });
+        }
+
+        /**
          * Moves the focus to the previous or next enabled control in the tool
          * bar. Triggers a 'blur:key' event at the currently focused control,
          * and a 'focus:key' event at the new focused control.
@@ -83,7 +87,7 @@ define('io.ox/office/tk/toolbar',
         function moveFocus(forward) {
 
             var // all visible and enabled group objects
-                enabledGroups = _(groups).filter(function (group) { return group.isVisible() && group.isEnabled(); }),
+                enabledGroups = getEnabledGroups(),
                 // extract all focusable controls from all visible and enabled groups
                 controls = _(enabledGroups).reduce(function (controls, group) { return controls.add(group.getFocusableControls()); }, $()),
                 // focused control
@@ -271,11 +275,59 @@ define('io.ox/office/tk/toolbar',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the root DOM element containing this tool bar as jQuery
-         * object.
+         * Returns the root element containing this tool bar as jQuery object.
          */
         this.getNode = function () {
             return node;
+        };
+
+        this.show = function () {
+            node.show();
+            return this;
+        };
+
+        this.hide = function () {
+            node.hide();
+            return this;
+        };
+
+        /**
+         * Returns whether this tool bar contains the control that is currently
+         * focused. Searches in all registered group objects.
+         */
+        this.hasFocus = function () {
+            return _(groups).any(function (group) { return group.hasFocus(); });
+        };
+
+        /**
+         * Sets the focus to the first enabled group object in this tool bar,
+         * unless it already contains a focused group.
+         *
+         * @returns {ToolBar}
+         *  A reference to this tool bar.
+         */
+        this.grabFocus = function () {
+
+            var // all visible and enabled group objects
+                enabledGroups = null;
+
+            // set focus to first enabled group, if no group is focused
+            if (!this.hasFocus()) {
+                enabledGroups = getEnabledGroups();
+                if (enabledGroups.length) {
+                    enabledGroups[0].grabFocus();
+                }
+            }
+
+            return this;
+        };
+
+        /**
+         * Adds separation space following the last inserted group.
+         */
+        this.addSeparator = function () {
+            containerNode.append($('<div>').addClass('group separator'));
+            return this;
         };
 
         /**
@@ -296,14 +348,7 @@ define('io.ox/office/tk/toolbar',
             (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
 
             // append its root node to this tool bar
-            if (collapsedGroupsNode) {
-                if (!collapsedGroupsNode.children().length) {
-                    containerNode.append(collapsedGroupsNode);
-                }
-                collapsedGroupsNode.append(group.getNode());
-            } else {
-                containerNode.append(group.getNode());
-            }
+            containerNode.append(group.getNode());
 
             // Trigger an 'init' event at the group when the container window
             // becomes visible the first time. The 'deferredInit' object will
@@ -387,16 +432,6 @@ define('io.ox/office/tk/toolbar',
             return new RadioGroupProxy(key, options);
         };
 
-        this.startCollapseGroups = function () {
-            collapsedGroupsNode = $('<div>').addClass('collapsed-groups');
-            return this;
-        };
-
-        this.endCollapseGroups = function () {
-            collapsedGroupsNode = null;
-            return this;
-        };
-
         /**
          * Enables or disables the specified control of this tool bar.
          *
@@ -460,7 +495,7 @@ define('io.ox/office/tk/toolbar',
             this.events.destroy();
             $(window).off('resize', windowResizeHandler);
             node.off().remove();
-            toolBar = node = containerNode = collapsedGroupsNode = groups = groupsByKey = deferredInit = resizeHandlers = null;
+            toolBar = node = containerNode = groups = groupsByKey = deferredInit = resizeHandlers = null;
         };
 
         // initialization -----------------------------------------------------

@@ -199,7 +199,7 @@ div.io-ox-toolbar {
 
         /* groups (container elements for controls) ------------------------ */
 
-        .group {
+        > .group {
             display: inline-block;
             /* relative position is essential for drop-down menu positioning */
             position: relative;
@@ -221,6 +221,16 @@ div.io-ox-toolbar {
                 label, button, input {
                     cursor: default;
                 }
+            }
+
+            /* group spacing ----------------------------------------------- */
+
+            + .group {
+                margin-left: -1px;
+            }
+
+            &.separator {
+                width: 10px;
             }
 
             /* common controls --------------------------------------------- */
@@ -551,22 +561,6 @@ div.io-ox-toolbar {
                         }
                     }
                 }
-            }
-        }
-
-        /* group spacing --------------------------------------------------- */
-
-        /* spacing between top-level elements (groups and collapsed group containers */
-        > :not(.hidden) ~ :not(.hidden) {
-            margin-left: 10px;
-        }
-
-        /* collapse group elements inside a collapse-groups container */
-        > div.collapsed-groups {
-            display: inline-block;
-
-            > :not(.hidden) ~ :not(.hidden) {
-                margin-left: -1px;
             }
         }
     }

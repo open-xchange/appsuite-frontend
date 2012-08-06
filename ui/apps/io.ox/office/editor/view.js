@@ -110,6 +110,9 @@ define('io.ox/office/editor/view',
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
 
+            // keys of all registered tool bars, in registration order
+            toolBarKeys = [],
+
             // key of the tool bar currently visible
             visibleToolBar = '';
 
@@ -134,15 +137,16 @@ define('io.ox/office/editor/view',
 
             // create common controls present in all tool bars
             toolBar
-                .startCollapseGroups()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
-                .endCollapseGroups();
+                .addSeparator();
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
+            toolBarKeys.push(key);
+            win.nodes.toolPane.append(toolBar.getNode());
             radioGroup.addButton(key, options);
-            win.nodes.toolPane.append(toolBar.getNode().hide());
             controller.registerViewComponent(toolBar);
+            toolBar.hide();
 
             return toolBar;
         }
@@ -160,10 +164,42 @@ define('io.ox/office/editor/view',
         function showToolBar(key) {
             if (key in toolBars) {
                 if (visibleToolBar in toolBars) {
-                    toolBars[visibleToolBar].getNode().hide();
+                    toolBars[visibleToolBar].hide();
                 }
                 visibleToolBar = key;
-                toolBars[key].getNode().show();
+                toolBars[key].show();
+            }
+        }
+
+        /**
+         * Sets the focus to the visible tool bar.
+         */
+        function grabToolBarFocus() {
+            if (visibleToolBar in toolBars) {
+                toolBars[visibleToolBar].grabFocus();
+            }
+        }
+
+        /**
+         * Handles keyboard events in the tool pane.
+         * @param event
+         * @returns {Boolean}
+         */
+        function toolPaneKeyHandler(event) {
+
+            var // distinguish between event types (ignore keypress events)
+                keydown = event.type === 'keydown',
+                // index of the visible tool bar
+                index = _(toolBarKeys).indexOf(visibleToolBar);
+
+            if (event.keyCode === KeyCodes.F7) {
+                if (keydown) {
+                    index = event.shiftKey ? (index - 1) : (index + 1);
+                    index = Math.min(Math.max(index, 0), toolBarKeys.length - 1);
+                    controller.change('view/toolbars/show', toolBarKeys[index]);
+                    grabToolBarFocus();
+                }
+                return false;
             }
         }
 
@@ -231,12 +267,13 @@ define('io.ox/office/editor/view',
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/character/font/family', new FontFamilyChooser())
+            .addSeparator()
             .addGroup('format/character/font/height', new FontHeightChooser())
-            .startCollapseGroups()
+            .addSeparator()
             .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
-            .endCollapseGroups()
+            .addSeparator()
             .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
                 .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
@@ -246,12 +283,11 @@ define('io.ox/office/editor/view',
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('insert/table', new TableSizeChooser())
-            .startCollapseGroups()
+            .addSeparator()
             .addButton('table/insert/row', { icon: 'icon-io-ox-table-insert-row', tooltip: gt('Insert Row') })
             .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
             .addButton('table/delete/row', { icon: 'icon-io-ox-table-delete-row', tooltip: gt('Delete Row') })
-            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Column') })
-            .endCollapseGroups();
+            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Column') });
 
         createToolBar('debug', { label: gt('Debug') })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
@@ -267,6 +303,9 @@ define('io.ox/office/editor/view',
             .change('view/toolbars/show', 'format')
             // initialization
             .update();
+
+        // change visible tool bar with keyboard
+        win.nodes.toolPane.on('keydown keypress keyup', toolPaneKeyHandler);
 
         // override the limited functionality of the quick-search button
         win.nodes.search.off('keydown search change').on('keydown keypress keyup', searchKeyHandler);

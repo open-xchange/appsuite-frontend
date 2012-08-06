@@ -1675,14 +1675,42 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
+        /**
+         * Returns the values of all paragraph formatting attribute in the
+         * current browser selection.
+         */
         this.getParagraphAttributes = function () {
             var ranges = Selection.getBrowserSelection(editdiv);
             return Attributes.getParagraphAttributes(ranges);
         };
 
+        /**
+         * Returns the values of all character formatting attribute in the
+         * current browser selection.
+         */
         this.getCharacterAttributes = function () {
             var ranges = Selection.getBrowserSelection(editdiv);
             return Attributes.getCharacterAttributes(ranges);
+        };
+
+        /**
+         * Returns the value of a specific formatting attribute in the current
+         * browser selection.
+         */
+        this.getAttribute = function (attrName) {
+
+            var // the resulting attributes
+                attributes = null;
+
+            if (Attributes.isParagraphAttribute(attrName)) {
+                attributes = this.getParagraphAttributes();
+            } else if (Attributes.isCharacterAttribute(attrName)) {
+                attributes = this.getCharacterAttributes();
+            } else {
+                self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
+            }
+
+            return attributes[attrName];
         };
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
@@ -1854,28 +1882,6 @@ define('io.ox/office/editor/editor',
                 var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
                 this.applyOperation(newOperation, true, true);
             }
-        };
-
-        /**
-         * Returns the value of a specific formatting attribute in the current
-         * browser selection.
-         */
-        this.getAttribute = function (attrName) {
-
-            var // the current browser selection
-                ranges = Selection.getBrowserSelection(editdiv),
-                // the resulting attributes
-                attributes = null;
-
-            if (Attributes.isParagraphAttribute(attrName)) {
-                attributes = Attributes.getParagraphAttributes(ranges, editdiv);
-            } else if (Attributes.isCharacterAttribute(attrName)) {
-                attributes = Attributes.getCharacterAttributes(ranges);
-            } else {
-                self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
-            }
-
-            return attributes[attrName];
         };
 
         this.getParagraphCount = function () {

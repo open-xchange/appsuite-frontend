@@ -213,7 +213,8 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
-         * Sets the focus to the first control in this group.
+         * Sets the focus to the first control in this group, unless it is
+         * already focused.
          *
          * @returns {Group}
          *  A reference to this group.
