@@ -171,6 +171,12 @@ define('io.ox/office/editor/attributes',
 
     // paragraph formatting ---------------------------------------------------
 
+    /**
+     * Returns whether the passed name is a paragraph attribute.
+     *
+     * @param {String} name
+     *  Attribute name to be checked.
+     */
     Attributes.isParagraphAttribute = function (name) {
         return ParagraphAttributes.hasAttribute(name);
     };
@@ -236,6 +242,12 @@ define('io.ox/office/editor/attributes',
 
     // character formatting ---------------------------------------------------
 
+    /**
+     * Returns whether the passed name is a character attribute.
+     *
+     * @param {String} name
+     *  Attribute name to be checked.
+     */
     Attributes.isCharacterAttribute = function (name) {
         return CharacterAttributes.hasAttribute(name);
     };
@@ -251,7 +263,7 @@ define('io.ox/office/editor/attributes',
      * @returns {Object}
      *  A map of character attribute name/value pairs.
      */
-    this.getCharacterAttributes = function (ranges) {
+    Attributes.getCharacterAttributes = function (ranges) {
 
         var // the attribute values, mapped by name
             attributes = {};

@@ -1675,6 +1675,16 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
+        this.getParagraphAttributes = function () {
+            var ranges = Selection.getBrowserSelection(editdiv);
+            return Attributes.getParagraphAttributes(ranges);
+        };
+
+        this.getCharacterAttributes = function () {
+            var ranges = Selection.getBrowserSelection(editdiv);
+            return Attributes.getCharacterAttributes(ranges);
+        };
+
         this.setAttribute = function (attr, value, startPosition, endPosition) {
 
             var para,
