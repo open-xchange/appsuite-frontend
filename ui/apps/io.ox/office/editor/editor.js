@@ -34,6 +34,7 @@ define('io.ox/office/editor/editor',
 
     var OP_TABLE_INSERT = 'insertTable';
     var OP_TABLE_DELETE = 'deleteTable';
+    var OP_CELLRANGE_DELETE = 'deleteCellRange';
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
 //    var OP_ATTR_DELETE =  'deleteAttribute';
@@ -532,6 +533,9 @@ define('io.ox/office/editor/editor',
                 }
                 this.implDeleteTable(operation.start);
             }
+            else if (operation.name === OP_CELLRANGE_DELETE) {
+                this.implDeleteCellRange(operation.position, operation.start, operation.end);
+            }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var undoOperation = { name: OP_PARA_MERGE, start: _.copy(operation.start, true) };
@@ -754,10 +758,15 @@ define('io.ox/office/editor/editor',
 
                 var returnObj = this.getNextChildNode(node, oxoPos.shift());
 
-                if (returnObj.node) {
-                    node = returnObj.node;
-                    if (returnObj.offset) {
-                        offset = returnObj.offset;
+                if (returnObj) {
+                    if (returnObj.node) {
+                        node = returnObj.node;
+                        if (returnObj.offset) {
+                            offset = returnObj.offset;
+                        }
+                    } else {
+                        this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
+                        return;
                     }
                 } else {
                     this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
@@ -1493,14 +1502,7 @@ define('io.ox/office/editor/editor',
                         endCol = endPos.pop(),
                         endRow = endPos.pop();
 
-                    for (var i = startRow; i <= endRow; i++) {
-                        for (var j = startCol; j <= endCol; j++) {
-                            var position = _.copy(startPos, true);
-                            position.push(i);
-                            position.push(j);
-                            this.deleteAllParagraphsInCell(position);
-                        }
-                    }
+                    this.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
 
                 } else {
 
@@ -1588,6 +1590,11 @@ define('io.ox/office/editor/editor',
 
         this.deleteTable = function (position) {
             var newOperation = { name: OP_TABLE_DELETE, start: _.copy(position, true) };
+            this.applyOperation(newOperation, true, true);
+        };
+
+        this.deleteCellRange = function (position, start, end) {
+            var newOperation = { name: OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -2646,12 +2653,19 @@ define('io.ox/office/editor/editor',
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
+                    if ((localPos.length - 1) > paraIndex) {
+                        localPos.pop();
+                    }
+
+                    var isTable = this.getDOMPosition(localPos).node.nodeName === 'TABLE' ? true : false;
+
                     if (i < lastParaInCell) {
-                        this.implDeleteParagraph(localPos);
-                    } else {
-                        if ((localPos.length - 1) > paraIndex) {
-                            localPos.pop();
+                        if (isTable) {
+                            this.implDeleteTable(localPos);
+                        } else {
+                            this.implDeleteParagraph(localPos);
                         }
+                    } else {
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
@@ -3324,6 +3338,23 @@ define('io.ox/office/editor/editor',
             localPos.push(0); // pos not corrct, but doesn't matter. Deleting paragraphs always happens between other operations, never at the last one.
             lastOperationEnd = new OXOPaM(localPos);
             paragraphs = editdiv.children();
+        };
+
+        this.implDeleteCellRange = function (pos, startCell, endCell) {
+
+            var startRow = startCell[0],
+                startCol = startCell[1],
+                endRow = endCell[0],
+                endCol = endCell[1];
+
+            for (var i = startRow; i <= endRow; i++) {
+                for (var j = startCol; j <= endCol; j++) {
+                    var position = _.copy(pos, true);
+                    position.push(i);
+                    position.push(j);
+                    this.deleteAllParagraphsInCell(position);
+                }
+            }
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
