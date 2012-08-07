@@ -13,12 +13,12 @@
 
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/apphelper',
-     'io.ox/office/tk/toolbar',
      'io.ox/office/tk/controller',
+     'io.ox/office/tk/component/toolbar',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (AppHelper, ToolBar, Controller, Preview, gt) {
+    ], function (AppHelper, Controller, ToolBar, Preview, gt) {
 
     'use strict';
 

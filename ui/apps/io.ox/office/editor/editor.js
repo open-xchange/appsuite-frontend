@@ -3048,7 +3048,7 @@ define('io.ox/office/editor/editor',
                 // the DOM text range to be formatted
                 ranges = null,
                 // prepare an attribute map containing the passed single attribute
-                attributes = {};
+                attributes = Utils.makeSingleOption(attrName, value);
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
@@ -3064,8 +3064,6 @@ define('io.ox/office/editor/editor',
 
             // build the DOM text range
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-
-            attributes[attrName] = value;
 
             if (Attributes.isParagraphAttribute(attrName)) {
                 Attributes.setParagraphAttributes(ranges, editdiv, attributes);

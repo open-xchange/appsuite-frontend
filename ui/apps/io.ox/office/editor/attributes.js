@@ -237,7 +237,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, state) {
                 var value = $(element).css('text-decoration');
-                value = Utils[state ? 'addToken' : 'removeToken'](value, 'underline', 'none');
+                value = Utils.toggleToken(value, 'underline', state, 'none');
                 $(element).css('text-decoration', value);
             }
         },

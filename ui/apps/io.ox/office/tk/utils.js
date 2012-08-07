@@ -240,6 +240,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
+    Utils.makeSingleOption = function (key, value) {
+        var options = {};
+        options[key] = value;
+        return options;
+    };
+
     // attribute conversion ---------------------------------------------------
 
     /**
@@ -398,6 +404,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             tokens.push(nothing);
         }
         return tokens.join(' ');
+    };
+
+    /**
+     * Inserts a token into or removes a token from the specified
+     * space-separated token list.
+     *
+     * @param {String} list
+     *  Space-separated list of tokens.
+     *
+     * @param {String} token
+     *  The token to be inserted into or removed from the token list.
+     *
+     * @param {Boolean} state
+     *  If set to true, the token will be inserted into the token list,
+     *  otherwise removed from the token list.
+     *
+     * @param {String} [nothing]
+     *  If specified, the name of a token that represents a special 'nothing'
+     *  or 'empty' state.
+     *
+     * @returns {String}
+     *  The new token list.
+     */
+    Utils.toggleToken = function (list, token, state, nothing) {
+        return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
     };
 
     // generic DOM helpers ----------------------------------------------------

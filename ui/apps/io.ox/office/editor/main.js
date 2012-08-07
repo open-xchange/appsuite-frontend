@@ -623,7 +623,7 @@ define('io.ox/office/editor/main',
         app.failSave = function () {
             var point = {
                 file: app.getFileDescriptor(),
-                toolBarKey: view.getVisibleToolBarKey(),
+                toolBarId: view.getToolPane().getVisibleToolBarId(),
                 debugMode: debugMode,
                 syncMode: syncMode
             };
@@ -634,7 +634,7 @@ define('io.ox/office/editor/main',
             initializeApp(point);
             updateDebugMode();
             return app.load().always(function () {
-                view.showToolBar(Utils.getStringOption(point, 'toolBarKey'));
+                view.getToolPane().showToolBar(Utils.getStringOption(point, 'toolBarId'));
             });
         };
 
