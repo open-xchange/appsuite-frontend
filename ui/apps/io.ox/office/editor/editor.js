@@ -2880,8 +2880,20 @@ define('io.ox/office/editor/editor',
                 localPos[paraIndex + 1] = 0;
 
                 for (var i = 0; i <= lastPara; i++) {
+
                     localPos[paraIndex] = i;
-                    this.setAttributeToParagraphInCell(attr, value, localPos);
+
+                    var last = localPos.pop();
+
+                    var isTable = this.getDOMPosition(localPos).node.nodeName === 'TABLE' ? true : false;
+
+                    localPos.push(last);
+
+                    if (isTable) {
+                        this.setAttributeToCompleteTable(attr, value, localPos);
+                    } else {
+                        this.setAttributeToParagraphInCell(attr, value, localPos);
+                    }
                 }
             }
         };
