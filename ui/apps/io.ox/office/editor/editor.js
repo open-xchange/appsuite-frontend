@@ -639,12 +639,15 @@ define('io.ox/office/editor/editor',
 
                 if (textNode.nodeType !== 3) {
                     if (textNode.nodeName === 'SPAN') {
-                        textNode = textNode.previousSibling;  // Special handling for <SPAN> in empty paragraphs.
+                        textNode = textNode.firstChild;  // Special handling for <SPAN> in empty paragraphs.
                     }
                 }
 
                 if ((! textNode) || (textNode.nodeType !== 3)) {
-                    dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                    dbgOutError("ERROR: Failed to determine text node from current node!");
+                    if (textNode) {
+                        dbgOutError("ERROR: NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                    }
                     return;
                 }
             }
