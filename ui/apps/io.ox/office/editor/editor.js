@@ -636,6 +636,13 @@ define('io.ox/office/editor/editor',
                 if (textNode.nodeName === 'BR') {
                     textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
                 }
+
+                if (textNode.nodeType !== 3) {
+                    if (textNode.nodeName === 'SPAN') {
+                        textNode = textNode.previousSibling;  // Special handling for <SPAN> in empty paragraphs.
+                    }
+                }
+
                 if ((! textNode) || (textNode.nodeType !== 3)) {
                     dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
                     return;
@@ -661,8 +668,7 @@ define('io.ox/office/editor/editor',
             // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
             // These DIVs need to be converted to the correct paragraph first.
             // Also cells in columns have to be converted at this point.
-            if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR') || (node.nodeName === 'TD') || (node.nodeName === 'TH')) {
-
+            if ($(node).is('DIV, P, TR, TD, TH')) {
                 var newNode = this.getTextNodeFromCurrentNode(node, offset);
                 if (newNode) {
                     node = newNode.node;
@@ -711,11 +717,7 @@ define('io.ox/office/editor/editor',
             // Column must be integrated after row -> a buffer is required.
 
             for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                if ((node.nodeName === 'TD') ||
-                        (node.nodeName === 'TH') ||
-                        (node.nodeName === 'TR') ||
-                        (node.nodeName === 'P') ||
-                        (node.nodeName === 'TABLE')) {
+                if ($(node).is('TABLE, P, TR, TH, TD')) {
                     oxoPosition.unshift($(node).prevAll().length);  // zero based
                     evaluateOffset = false;
                 }
