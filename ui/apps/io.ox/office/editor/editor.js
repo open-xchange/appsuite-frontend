@@ -737,10 +737,8 @@ define('io.ox/office/editor/editor',
         this.getDOMPosition = function (oxoPosition) {
 
             var oxoPos = _.copy(oxoPosition, true),
-                localElements = paragraphs,  // starting with root elements
-                calculateOffset = false,
-                node = null,
-                offset = null;
+            node = null,
+            offset = null;
 
             if (oxoPosition === undefined) {
                 // this.implDbgOutInfo('getDOMPosition: oxoPosition is undefined!');
@@ -752,79 +750,50 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            // Converting an oxoPosition array to a node and an offset
-            // Supported html tags: '<p>', '<table>', '<tr>', '<th>', '<td>' and 'nodeType === 3'
-
             while (oxoPos.length > 0) {
 
-                var currentPos = oxoPos.shift(),
+                var returnObj = this.getNextChildNode(node, oxoPos.shift());
 
-                node = localElements.get(currentPos);
-
-                var maxPara = localElements.length - 1;
-                if (currentPos > maxPara) {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph ' + currentPos + ' is out of range. Last paragraph: ' + maxPara);
-                    return;
-                }
-
-                if (oxoPos.length < 1) {
-                    break;
-                }
-
-                if (node.nodeName === 'P') {
-                    calculateOffset = true;
-                    break;  // leaving the while-iteration
-                } else if (node.nodeName === 'TABLE') {
-
-                    // Selecting the correct row in the table
-                    var row = oxoPos.shift();
-                    node = $('> TBODY > TR, > THEAD > TR', node).get(row);
-
-                    if (oxoPos.length < 1) {
-                        break;
+                if (returnObj.node) {
+                    node = returnObj.node;
+                    if (returnObj.offset) {
+                        offset = returnObj.offset;
                     }
-
-                    // Selecting the correct cell in the table
-                    var column =  oxoPos.shift();
-                    node = $('> TH, > TD', node).get(column);  // this is a table cell
-
-                    if (oxoPos.length < 1) {
-                        break;
-                    }
-
-                    localElements = $(node).children();
-                    continue;  // new iteration, should start with 'p' or 'table'
-
                 } else {
-                    this.implDbgOutInfo('getDOMPosition: Illegal position: ' + oxoPosition + ' . Node must be paragraph or table. NodeName: ' + node.nodeName);
+                    this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
                     return;
                 }
             }
 
-            if (calculateOffset) {
+            return { node: node, offset: offset };
+        };
 
-                // Node must be a paragraph
-                if (node.nodeName !== 'P') {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Node must be a paragraph for calculing offset. But it is: ' + node.nodeName);
+        this.getNextChildNode = function (node, pos) {
+
+            var childNode,
+                offset;
+
+            if (! node) {
+                if (pos > paragraphs.length - 1) {
+                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph ' + pos + ' is out of range. Last paragraph: ' + paragraphs.length - 1);
                     return;
                 }
+                childNode = paragraphs.get(pos);
+            } else if (node.nodeName === 'TABLE') {
+                childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
+            } else if (node.nodeName === 'TR') {
+                childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
+            } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {
+                childNode = $(node).children().get(pos);
+            } else if (node.nodeName === 'P') {
+                var textLength = 0;
+                var bFound = false;
 
                 // Checking if this paragraph has children
                 if (! node.hasChildNodes()) {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph is empty');
+                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph is empty');
                     return;
                 }
-
-                var pos = oxoPos.shift();
-
-                // now oxoPos should be empty
-                if (oxoPos.length > 0) {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Position has to many values: ' + oxoPosition + ' . Value for position (last required value): ' + pos);
-                    // return;
-                }
-
-                var textLength = 0;
-                var bFound = false;
 
                 while (node.hasChildNodes()) {
 
@@ -845,16 +814,19 @@ define('io.ox/office/editor/editor',
                 }
 
                 if (! bFound) {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
                     return;
                 }
 
+                childNode = node;
                 offset = pos - textLength;
+
+            } else {
+                this.implDbgOutInfo('getNextChildNode: Warning: Unknown node: ' + node.nodeName);
+                return;
             }
 
-            // this.implDbgOutInfo('getDOMPosition: Info: Converting position ' + oxoPosition + ' to node: ' + node.nodeName + ',' + node.nodeType + ' and offset (optionally): ' + offset);
-
-            return { node: node, offset: offset };
+            return { node: childNode, offset: offset };
         };
 
         this.getDOMSelection = function (oxoSelection) {
@@ -2166,48 +2138,18 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            var oxoPosition = [],
+            var domNode = null,
                 localPos = _.copy(position, true);
 
             while (localPos.length > 0) {
-                oxoPosition.push(localPos.shift());
 
-                var domPos = this.getDOMPosition(oxoPosition);
+                domNode = this.getNextChildNode(domNode, localPos.shift()).node;
 
-                if (domPos) {
-                    if (domPos.node.nodeName === 'TABLE') {
+                if (domNode) {
+                    if (domNode.nodeName === 'TABLE') {
                         positionInTable = true;
                         break;
-                    } else if (domPos.node.nodeName === 'P') {
-                        break;
-                    }
-                }
-            }
-
-            return positionInTable;
-        };
-
-        this._isPositionInTable = function (position) {
-            var positionInTable = false,
-                domPos = null;
-
-            if (position) {
-                domPos = this.getDOMPosition(position);
-            } else {
-                var selection = this.getSelection();
-                if (selection) {
-                    domPos = this.getDOMPosition(selection.endPaM.oxoPosition);
-                } else {
-                    return false;
-                }
-            }
-
-            if (domPos) {
-                var node = domPos.node;
-
-                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                    if (node.nodeName === 'TABLE') {
-                        positionInTable = true;
+                    } else if (domNode.nodeName === 'P') {
                         break;
                     }
                 }
