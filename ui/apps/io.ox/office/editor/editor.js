@@ -2790,9 +2790,9 @@ define('io.ox/office/editor/editor',
                     for (var i = 0; i <= max; i++) {
                         localPos[rowIndex] = j;   // row
                         localPos[columnIndex] = i;  // column
-                        localPos[paraIndex] = 0;
-                        localPos[paraIndex + 1] = 0;
-                        this.setAttributeToCompleteCell(attr, value, localPos);
+                        var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                        var endPosition = this.getLastPositionInCurrentCell(localPos);
+                        this.setAttribute(attr, value, startPosition, endPosition);
                     }
                 }
             }
@@ -2817,11 +2817,11 @@ define('io.ox/office/editor/editor',
                         min = thisColumn + 1;
                     }
                     for (var i = min; i <= lastColumn; i++) {
-                        localPos[rowIndex] = i;  // row
-                        localPos[columnIndex] = j;  // column
-                        localPos[columnIndex + 1] = 0;
-                        localPos[columnIndex + 2] = 0;
-                        this.setAttributeToCompleteCell(attr, value, localPos);
+                        localPos[rowIndex] = j;  // row
+                        localPos[columnIndex] = i;  // column
+                        var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                        var endPosition = this.getLastPositionInCurrentCell(localPos);
+                        this.setAttribute(attr, value, startPosition, endPosition);
                     }
                 }
             }
@@ -2878,48 +2878,18 @@ define('io.ox/office/editor/editor',
                 columnIndex = rowIndex + 1;
 
             localPos.push(0); // column
-            localPos.push(0); // paragraph
-            localPos.push(0); // position
 
             var lastRow = this.getLastRowIndexInTable(position),
                 lastColumn = this.getLastColumnIndexInTable(position);
+
 
             for (var j = 0; j <= lastRow; j++) {
                 for (var i = 0; i <= lastColumn; i++) {
                     localPos[rowIndex] = j;  // row
                     localPos[columnIndex] = i;  // column
-                    this.setAttributeToCompleteCell(attr, value, localPos);
-                }
-            }
-        };
-
-        this.setAttributeToCompleteCell = function (attr, value, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
-
-            if (isInTable) {
-
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
-                    lastPara = this.getLastParaIndexInCell(localPos);
-
-                localPos[paraIndex + 1] = 0;
-
-                for (var i = 0; i <= lastPara; i++) {
-
-                    localPos[paraIndex] = i;
-
-                    var last = localPos.pop();
-
-                    var isTable = this.getDOMPosition(localPos).node.nodeName === 'TABLE' ? true : false;
-
-                    localPos.push(last);
-
-                    if (isTable) {
-                        this.setAttributeToCompleteTable(attr, value, localPos);
-                    } else {
-                        this.setAttributeToParagraphInCell(attr, value, localPos);
-                    }
+                    var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                    var endPosition = this.getLastPositionInCurrentCell(localPos);
+                    this.setAttribute(attr, value, startPosition, endPosition);
                 }
             }
         };
