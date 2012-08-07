@@ -22,7 +22,15 @@ define('io.ox/office/editor/editor',
 
     'use strict';
 
-    var KeyCodes = Utils.KeyCodes;
+    var // shortcut for the KeyCodes object
+        KeyCodes = Utils.KeyCodes,
+
+        // shortcut for the paragraph attributes converter singleton
+        ParagraphAttributes = Attributes.ParagraphAttributes,
+
+        // shortcut for the character attributes converter singleton
+        CharacterAttributes = Attributes.CharacterAttributes;
+
 
     var OP_TEXT_INSERT =  'insertText';
     var OP_TEXT_DELETE =  'deleteText';
@@ -1651,7 +1659,7 @@ define('io.ox/office/editor/editor',
          */
         this.getParagraphAttributes = function () {
             var ranges = Selection.getBrowserSelection(editdiv);
-            return Attributes.getParagraphAttributes(ranges);
+            return ParagraphAttributes.getAttributes(ranges);
         };
 
         /**
@@ -1660,7 +1668,7 @@ define('io.ox/office/editor/editor',
          */
         this.getCharacterAttributes = function () {
             var ranges = Selection.getBrowserSelection(editdiv);
-            return Attributes.getCharacterAttributes(ranges);
+            return CharacterAttributes.getAttributes(ranges);
         };
 
         /**
@@ -1672,9 +1680,9 @@ define('io.ox/office/editor/editor',
             var // the resulting attributes
                 attributes = null;
 
-            if (Attributes.isParagraphAttribute(attrName)) {
+            if (ParagraphAttributes.hasAttribute(attrName)) {
                 attributes = this.getParagraphAttributes();
-            } else if (Attributes.isCharacterAttribute(attrName)) {
+            } else if (CharacterAttributes.hasAttribute(attrName)) {
                 attributes = this.getCharacterAttributes();
             } else {
                 self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
@@ -1844,7 +1852,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (Attributes.isParagraphAttribute(attr)) {
+                else if (ParagraphAttributes.hasAttribute(attr)) {
                     var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -3114,12 +3122,11 @@ define('io.ox/office/editor/editor',
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
             if (textMode !== OXOEditor.TextMode.PLAIN) {
-                if (Attributes.hasParagraphAttributes(attributes)) {
-                    Attributes.setParagraphAttributes(ranges, editdiv, attributes);
-                } else if (Attributes.hasCharacterAttributes(attributes)) {
-                    Attributes.setCharacterAttributes(ranges, attributes);
-                } else {
-                    self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
+                if (ParagraphAttributes.hasAnyAttribute(attributes)) {
+                    ParagraphAttributes.setAttributes(ranges, editdiv, attributes);
+                }
+                if (CharacterAttributes.hasAnyAttribute(attributes)) {
+                    CharacterAttributes.setAttributes(ranges, attributes);
                 }
             }
         }
