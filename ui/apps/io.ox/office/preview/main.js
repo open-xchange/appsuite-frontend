@@ -30,8 +30,6 @@ define('io.ox/office/preview/main',
 
         var win = null,
 
-            file = _.isObject(options) ? options.file : null,
-
             preview = new Preview(),
 
             toolBar = null,
@@ -114,9 +112,10 @@ define('io.ox/office/preview/main',
          * current file name.
          */
         function updateTitles() {
-            var fileName = (file && file.filename) ? file.filename : gt('Unnamed');
+            var file = app.getFileDescriptor(),
+                fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             app.setTitle(fileName);
-            win.setTitle(gt('OX OfficePreview') + ' - ' + fileName);
+            win.setTitle(gt('Preview') + ' - ' + fileName);
         }
 
         /**
@@ -181,13 +180,6 @@ define('io.ox/office/preview/main',
         // methods ============================================================
 
         /**
-         * Returns the infostore file descriptor of the edited document.
-         */
-        app.getFileDescriptor = function () {
-            return file;
-        };
-
-        /**
          * Returns the preview instance.
          */
         app.getPreview = function () {
@@ -229,7 +221,7 @@ define('io.ox/office/preview/main',
             app.load = app.show;
 
             // do not try to load, if file descriptor is missing
-            if (!file) {
+            if (!app.hasFileDescriptor()) {
                 return app.show();
             }
 
@@ -271,16 +263,16 @@ define('io.ox/office/preview/main',
         };
 
         app.failSave = function () {
-            return { module: MODULE_NAME, point: { file: file } };
+            return { module: MODULE_NAME, point: { file: app.getFileDescriptor() } };
         };
 
         app.failRestore = function (point) {
-            file = _.isObject(point) ? point.file : null;
+            app.setFileDescriptor(point);
             return app.load();
         };
 
         /**
-         * Destructs the application. Will be called automatically in a forced
+         * Destroys the application. Will be called automatically in a forced
          * quit, but has to be called manually for a regular quit (e.g. from
          * window close button).
          */

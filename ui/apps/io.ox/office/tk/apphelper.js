@@ -152,6 +152,23 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
 
     // application object -----------------------------------------------------
 
+    /**
+     * Tries to find a running application which is working on a file described
+     * in the passed options object.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Object} options
+     *  A map of options that may contain a file descriptor in 'options.file'.
+     *  If existing, compares it with the file descriptors of all running
+     *  applications with the specified module identifier (returned by their
+     *  getFileDescriptor() method).
+     *
+     * @returns {ox.ui.App}
+     *  A running application of the specified type with a matching file
+     *  descriptor.
+     */
     AppHelper.getRunningApplication = function (moduleName, options) {
 
         var // get file descriptor from options
@@ -159,7 +176,7 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
 
             // find running editor application
             runningApps = file ? ox.ui.App.get(moduleName).filter(function (app) {
-                var appFile = app.getFileDescriptor();
+                var appFile = _.isFunction(app.getFileDescriptor) ? app.getFileDescriptor() : null;
                 // TODO: check file version too?
                 return _.isObject(appFile) &&
                     (file.id === appFile.id) &&
@@ -169,10 +186,54 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         return runningApps.length ? runningApps[0] : null;
     };
 
+    /**
+     * Creates a new ox.ui.App application object of the specified type, and
+     * performs basic initialization steps.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Function} initAppHandler
+     *  A callback function intended to initialize the application object.
+     *  Receives the new application object as first parameter, and the passed
+     *  options map as second parameter.
+     *
+     * @param options
+     *  A map of options containing initialization data for the new application
+     *  object.
+     *
+     * @returns {ox.ui.App}
+     *  The new application object.
+     */
     AppHelper.createApplication = function (moduleName, initAppHandler, options) {
 
         var // the OX application object
-            app = ox.ui.createApp({ name: moduleName });
+            app = ox.ui.createApp({ name: moduleName }),
+
+            // file descriptor created by the Files application (InfoStore)
+            file = null;
+
+        // methods ------------------------------------------------------------
+
+        app.hasFileDescriptor = function () {
+            return _.isObject(file);
+        };
+
+        app.getFileDescriptor = function () {
+            return file;
+        };
+
+        app.setFileDescriptor = function (options) {
+            // only set new file descriptor, do not change it
+            if (_.isNull(file)) {
+                file = Utils.getObjectOption(options, 'file', null);
+            }
+        };
+
+        // initialization -----------------------------------------------------
+
+        // initialize file descriptor (options may be empty yet, e.g. in fail restore)
+        app.setFileDescriptor(options);
 
         // call the initialization handler
         initAppHandler(app, options);
@@ -180,6 +241,29 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         return app;
     };
 
+    /**
+     * Tries to find a running application which is working on a file described
+     * in the passed options object (see method AppHelper.getRunningApplication()
+     * for details). If no such application exists, creates a new application
+     * object (see method AppHelper.createApplication() for details).
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     *
+     * @param {Function} initAppHandler
+     *  A callback function intended to initialize the new application object.
+     *  Will not be used, if a running application has been found. Receives the
+     *  new application object as first parameter, and the passed options map
+     *  as second parameter.
+     *
+     * @param options
+     *  A map of options containing initialization data for the new application
+     *  object.
+     *
+     * @returns {ox.ui.App}
+     *  A running application of the specified type with a matching file
+     *  descriptor, or a newly created application object.
+     */
     AppHelper.getOrCreateApplication = function (moduleName, initAppHandler, options) {
 
         var // try to find a running application

@@ -74,9 +74,6 @@ define('io.ox/office/editor/main',
         var // application window
             win = null,
 
-            // connection to infostore file
-            file = null,
-
             // editors mapped by text mode
             editors = {},
 
@@ -107,7 +104,7 @@ define('io.ox/office/editor/main',
         // private methods ----------------------------------------------------
 
         function initializeApp(options) {
-            file = Utils.getObjectOption(options, 'file', null);
+            app.setFileDescriptor(options);
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
             syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
@@ -190,9 +187,10 @@ define('io.ox/office/editor/main',
          * current file name.
          */
         function updateTitles() {
-            var fileName = (file && file.filename) ? file.filename : gt('Unnamed');
+            var file = app.getFileDescriptor(),
+                fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             app.setTitle(fileName);
-            win.setTitle(gt('OX Office') + ' - ' + fileName);
+            win.setTitle(gt('Editor') + ' - ' + fileName);
         }
 
         /**
@@ -230,7 +228,9 @@ define('io.ox/office/editor/main',
             });
             app.setWindow(win);
 
-            // do not detach when hiding to keep editor selection alive
+            // do not detach when hiding for several reasons:
+            // - keep editor selection alive
+            // - prevent resize handles for tables and objects (re-enabled after detach/insert)
             win.detachable = false;
 
             // create controller and register editors
@@ -243,16 +243,10 @@ define('io.ox/office/editor/main',
             updateDebugMode();
 
             // register window event handlers
-            win.on('show', function () {
-                    // listen to resize events, initially execute all listeners
-                    $(window).on('resize', windowResizeHandler).resize();
-                })
-                .on('hide', function () {
-                    // unbind resize handler when window is hidden
-                    $(window).off('resize', windowResizeHandler);
-                });
+            Utils.registerWindowResizeHandler(win, windowResizeHandler);
+            win.on('show', function () { controller.done(); });
 
-            // disable Firfox spell checking. TODO: better solution...
+            // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
         }
 
@@ -388,7 +382,7 @@ define('io.ox/office/editor/main',
                 });
 
             // do not try to save, if file descriptor is missing
-            if (!file) {
+            if (!app.hasFileDescriptor()) {
                 return def.reject();
             }
 
@@ -436,7 +430,7 @@ define('io.ox/office/editor/main',
                 });
 
             // do not try to print, if file descriptor is missing
-            if (!file) {
+            if (!app.hasFileDescriptor()) {
                 return def.reject();
             }
 
@@ -566,13 +560,6 @@ define('io.ox/office/editor/main',
         // methods ------------------------------------------------------------
 
         /**
-         * Returns the infostore file descriptor of the edited document.
-         */
-        app.getFileDescriptor = function () {
-            return file;
-        };
-
-        /**
          * Returns the editor instance.
          */
         app.getEditor = function () {
@@ -620,7 +607,7 @@ define('io.ox/office/editor/main',
             // do not load twice (may be called repeatedly from app launcher)
             app.load = app.show;
             // do not try to load, if file descriptor is missing
-            return file ? load() : app.show();
+            return app.hasFileDescriptor() ? load() : app.show();
         };
 
         app.save = function () {
@@ -635,8 +622,8 @@ define('io.ox/office/editor/main',
 
         app.failSave = function () {
             var point = {
-                file: file,
-                toolBarTab: view.getVisibleToolBarKey(),
+                file: app.getFileDescriptor(),
+                toolBarKey: view.getVisibleToolBarKey(),
                 debugMode: debugMode,
                 syncMode: syncMode
             };
@@ -647,7 +634,7 @@ define('io.ox/office/editor/main',
             initializeApp(point);
             updateDebugMode();
             return app.load().always(function () {
-                view.showToolBar(Utils.getStringOption(point, 'toolBarTab'));
+                view.showToolBar(Utils.getStringOption(point, 'toolBarKey'));
             });
         };
 
@@ -686,7 +673,7 @@ define('io.ox/office/editor/main',
         };
 
         /**
-         * Destructs the application. Will be called automatically in a forced
+         * Destroys the application. Will be called automatically in a forced
          * quit, but has to be called manually for a regular quit (e.g. from
          * window close button).
          */

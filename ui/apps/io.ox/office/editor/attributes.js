@@ -21,20 +21,68 @@ define('io.ox/office/editor/attributes',
 
     // class AttributeConverter ===============================================
 
+    /**
+     * Converts between formatting attributes of an element's CSS and the
+     * 'setAttribute' operation of the editor's Operations API.
+     *
+     * @param {Object} definitions
+     *  A map that defines formatting attributes supported by this converter.
+     *  Each attribute is mapped by its name used in the Operations API, and
+     *  maps an object that contains a getter and setter method. The get()
+     *  method of a definition object receives the DOM element object, and
+     *  returns the value of the formatting attribute from the element's CSS
+     *  formatting. The set() method of a definition object receives the DOM
+     *  element object and the value of the formatting attribute, and modifies
+     *  the element's CSS formatting.
+     */
     function AttributeConverter(definitions) {
 
         // methods ------------------------------------------------------------
 
+        /**
+         * Returns whether this converter contains a definition for the
+         * specified formatting attribute.
+         *
+         * @param {String} name
+         *  The name of the formatting attribute.
+         *
+         * @returns {Boolean}
+         *  Whether the specified attribute is supported by this converter.
+         */
         this.hasAttribute = function (name) {
             return name in definitions;
         };
 
+        /**
+         * Returns the current value of the specified formatting attribute in
+         * the passed DOM element.
+         *
+         * @param {HTMLElement} element
+         *  The DOM element object containing CSS formatting.
+         *
+         * @param {String} name
+         *  The name of the formatting attribute.
+         *
+         * @returns
+         *  The current value of the specified formatting attribute.
+         */
         this.getAttribute = function (element, name) {
             if (name in definitions) {
                 return definitions[name].get(element);
             }
         };
 
+        /**
+         * Returns the current values of all supported formatting attributes in
+         * the passed DOM element.
+         *
+         * @param {HTMLElement} element
+         *  The DOM element object containing CSS formatting.
+         *
+         * @returns {Object}
+         *  The current values of all supported formatting attributes, mapped
+         *  by the attribute names.
+         */
         this.getAttributes = function (element) {
             var attributes = {};
             _(definitions).each(function (converter, name) {
@@ -43,6 +91,24 @@ define('io.ox/office/editor/attributes',
             return attributes;
         };
 
+        /**
+         * Merges the current values of all supported formatting attribute in
+         * the passed DOM element into an existing map of attribute values.
+         *
+         * @param {Object} attributes
+         *  (in/out) A map with formatting attribute values, mapped by the
+         *  attribute names. If a formatting attribute of the passed element
+         *  differs from the existing value in this map, the attribute value
+         *  in this map will be set to null, otherwise the attribute value of
+         *  the element will be inserted into this map or remains unchanged.
+         *
+         * @param {HTMLElement} element
+         *  The DOM element object containing CSS formatting.
+         *
+         * @returns {Boolean}
+         *  Whether the attributes map contains any unambiguous attribute
+         *  values (different from the value null) after executing this method.
+         */
         this.mergeAttributes = function (attributes, element) {
 
             var // whether any attribute is still unambiguous
@@ -63,16 +129,53 @@ define('io.ox/office/editor/attributes',
             return hasNonNull;
         };
 
+        /**
+         * Returns whether all supported formatting attributes in the two
+         * specified elements are equal.
+         *
+         * @param {HTMLElement} element1
+         *  The first DOM element object whose attributes will be compared.
+         *
+         * @param {HTMLElement} element2
+         *  The second DOM element object whose attributes will be compared.
+         *
+         * @returns {Boolean}
+         *  Whether all attribute value in the two DOM elements are equal.
+         */
         this.hasEqualAttributes = function (element1, element2) {
             return _.isEqual(this.getAttributes(element1), this.getAttributes(element2));
         };
 
+        /**
+         * Changes the current value of the specified formatting attribute in
+         * the passed DOM element.
+         *
+         * @param {HTMLElement} element
+         *  The DOM element object whose CSS formatting will be changed.
+         *
+         * @param {String} name
+         *  The name of the formatting attribute.
+         *
+         * @param value
+         *  The new value for the specified formatting attribute.
+         */
         this.setAttribute = function (element, name, value) {
             if (name in definitions) {
                 definitions[name].set(element, value);
             }
         };
 
+        /**
+         * Changes the values of multiple formatting attributes in the passed
+         * DOM element.
+         *
+         * @param {HTMLElement} element
+         *  The DOM element object whose CSS formatting will be changed.
+         *
+         * @param {Object} attributes
+         *  The new values of all formatting attributes, mapped by the
+         *  attribute names.
+         */
         this.setAttributes = function (element, attributes) {
             _(attributes).each(function (value, name) {
                 this.setAttribute(element, name, value);
@@ -84,9 +187,7 @@ define('io.ox/office/editor/attributes',
     // class ParagraphAttributes ==============================================
 
     /**
-     * Maps paragraph formatting attribute names used in the operations API to
-     * getter and setter functions that manipulate the CSS formatting of DOM
-     * elements.
+     * A converter for paragraph formatting attributes.
      */
     var ParagraphAttributes = new AttributeConverter({
 
@@ -106,9 +207,7 @@ define('io.ox/office/editor/attributes',
     // class CharacterAttributes ==============================================
 
     /**
-     * Maps character formatting attribute names used in the operations API to
-     * getter and setter functions that manipulate the CSS formatting of DOM
-     * elements.
+     * A converter for character formatting attributes.
      */
     var CharacterAttributes = new AttributeConverter({
 

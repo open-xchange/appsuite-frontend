@@ -503,7 +503,6 @@ define('io.ox/office/tk/toolbar',
          */
         this.destroy = function () {
             this.events.destroy();
-            $(window).off('resize', windowResizeHandler);
             node.off().remove();
             toolBar = node = containerNode = groups = groupsByKey = deferredInit = resizeHandlers = null;
         };
@@ -514,9 +513,10 @@ define('io.ox/office/tk/toolbar',
         Events.extend(this);
 
         // wait for the first window 'show' event and trigger an 'init' event at all groups
-        win.one('show', function () { windowShown = true; initialize(); })
-            .on('show', function () { windowResizeHandler(); $(window).on('resize', windowResizeHandler); })
-            .on('hide', function () { $(window).off('resize', windowResizeHandler); });
+        win.one('show', function () { windowShown = true; initialize(); });
+
+        // listen to browser window resize events when the OX window is visible
+        Utils.registerWindowResizeHandler(win, windowResizeHandler);
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);
