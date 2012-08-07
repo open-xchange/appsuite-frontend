@@ -1,3 +1,9 @@
+open-xchange-ui7 (7.0.0-2) unstable; urgency=low
+
+  * Release build for EDP drop #3
+
+ -- Viktor Pracht <viktor.pracht@open-xchange.com>  Tue, 07 Aug 2012 11:48:03 +0200
+
 open-xchange-ui7 (7.0.0-1) unstable; urgency=low
 
   * Initial Release.
