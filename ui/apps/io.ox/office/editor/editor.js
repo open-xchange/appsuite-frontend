@@ -2782,6 +2782,10 @@ define('io.ox/office/editor/editor',
                     thisColumn = localPos[columnIndex],
                     lastColumn = this.getLastColumnIndexInTable(localPos);
 
+                while (localPos.length > columnIndex) {
+                    localPos.pop();  // Removing position and paragraph optionally
+                }
+
                 for (var j = 0; j <= thisRow; j++) {
                     var max = lastColumn;
                     if (j === thisRow) {
@@ -2810,6 +2814,10 @@ define('io.ox/office/editor/editor',
                 thisColumn = localPos[columnIndex],
                 lastRow = this.getLastRowIndexInTable(position),
                 lastColumn = this.getLastColumnIndexInTable(position);
+
+                while (localPos.length > columnIndex) {
+                    localPos.pop();  // Removing position and paragraph optionally
+                }
 
                 for (var j = thisRow; j <= lastRow; j++) {
                     var min = 0;
