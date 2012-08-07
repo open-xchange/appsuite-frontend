@@ -13,36 +13,20 @@
  */
 
 define("settings", ['io.ox/core/http', 'io.ox/core/cache',
-                    'io.ox/core/tk/model', 'io.ox/mail/util'], function (http, cache, Model, util) {
+                    'io.ox/core/tk/model'], function (http, cache, Model) {
 
     'use strict';
 
     var settingsWrapper = function () {
 
         var settings = {},
-            settingsCache;
+            settingsCache,
+            settingsDefaults;
 
-        var settingsDefaults = {
-                mail: {
-                    'removeDeletedPermanently': false,
-                    'contactCollectOnMailTransport': false,
-                    'contactCollectOnMailAccess': false,
-                    'appendVcard': false,
-                    'appendMailTextOnReply': false,
-                    'forwardMessageAs': 'Inline',
-                    'messageFormat': 'html',
-                    'lineWrapAfter': '',
-                    'defaultSendAddress': util.getInitialDefaultSender(),
-                    'autoSafeDraftsAfter': false,
-                    'allowHtmlMessages': true,
-                    'allowHtmlImages': false,
-                    'displayEmomticons': false,
-                    'isColorQuoted': false
-                }
-
-            };
-
-        var settingsInitial = function (settings, settingsDefaults) {
+        var settingsInitial = function (settings, path) {
+            require(['io.ox/' + path + '/settings/defaults'], function (u) {
+                settingsDefaults = u;
+            });
             _.each(settingsDefaults, function (value, key) {
                 if (settings[key] === undefined) {
                     settings[key] = settingsDefaults[key];
@@ -201,7 +185,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                     });
             },
             save: function () {
-                settingsInitial(settings, settingsDefaults[that.settingsPath]);
+                settingsInitial(settings, [that.settingsPath]);
                 settingsCache.add('settingsDefault', settings);
                 console.log(settings);
                 return http.PUT({

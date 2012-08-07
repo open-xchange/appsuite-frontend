@@ -13,7 +13,7 @@
 /*global
 define: true, _: true
 */
-define('io.ox/mail/settings',
+define('io.ox/mail/settings/settings',
        ['io.ox/core/extensions',
         'io.ox/core/tk/view',
         'io.ox/core/tk/model',

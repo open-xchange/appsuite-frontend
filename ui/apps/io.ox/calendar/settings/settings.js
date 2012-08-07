@@ -10,7 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/calendar/settings',
+define('io.ox/calendar/settings/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils'], function (ext, utils) {
     'use strict';
