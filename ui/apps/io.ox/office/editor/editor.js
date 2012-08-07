@@ -2656,8 +2656,15 @@ define('io.ox/office/editor/editor',
                     if ((localPos.length - 1) > paraIndex) {
                         localPos.pop();
                     }
+
+                    var isTable = this.getDOMPosition(localPos).node.nodeName === 'TABLE' ? true : false;
+
                     if (i < lastParaInCell) {
-                        this.implDeleteParagraph(localPos);
+                        if (isTable) {
+                            this.implDeleteTable(localPos);
+                        } else {
+                            this.implDeleteParagraph(localPos);
+                        }
                     } else {
                         this.implDeleteParagraphContent(localPos);
                     }
