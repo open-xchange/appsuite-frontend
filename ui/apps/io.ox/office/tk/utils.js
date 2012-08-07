@@ -1081,11 +1081,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return Utils.createControl('input', { type: 'text' }, options);
     };
 
+    /**
+     * Returns the current selection in the passed text field.
+     *
+     * @param {jQuery} textField
+     *  A jQuery object containing a text field element.
+     *
+     * @returns {Object}
+     *  An object with the attributes 'start' and 'end' containing the start
+     *  and end character offset of the selection in the text field.
+     */
     Utils.getTextFieldSelection = function (textField) {
         var input = textField.get(0);
         return input ? { start: input.selectionStart, end: input.selectionEnd } : undefined;
     };
 
+    /**
+     * Changes the current selection in the passed text field.
+     *
+     * @param {jQuery} textField
+     *  A jQuery object containing a text field element.
+     *
+     * @param {Object} selection
+     *  An object with the attributes 'start' and 'end' containing the start
+     *  and end character offset of the new selection in the text field.
+     */
     Utils.setTextFieldSelection = function (textField, selection) {
         var input = textField.get(0);
         if (input) {

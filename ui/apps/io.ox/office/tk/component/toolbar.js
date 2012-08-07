@@ -40,11 +40,10 @@ define('io.ox/office/tk/component/toolbar',
      *
      * @constructor
      *
-     * @param {ox.ui.Window} win
-     *  The window containing this tool bar. Will be used to listen to 'show'
-     *  and 'hide' events.
+     * @param {ox.ui.Window} appWindow
+     *  The application window object.
      */
-    function ToolBar(win) {
+    function ToolBar(appWindow) {
 
         var // reference to this tool bar
             toolBar = this,
@@ -513,10 +512,10 @@ define('io.ox/office/tk/component/toolbar',
         Events.extend(this);
 
         // wait for the first window 'show' event and trigger an 'init' event at all groups
-        win.one('show', function () { windowShown = true; initialize(); });
+        appWindow.one('show', function () { windowShown = true; initialize(); });
 
         // listen to browser window resize events when the OX window is visible
-        Utils.registerWindowResizeHandler(win, windowResizeHandler);
+        Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
 
         // listen to key events for keyboard focus navigation
         node.on('keydown keypress keyup', keyHandler);

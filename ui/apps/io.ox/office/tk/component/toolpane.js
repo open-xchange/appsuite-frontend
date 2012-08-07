@@ -23,7 +23,22 @@ define('io.ox/office/tk/component/toolpane',
 
     // class ToolPane =========================================================
 
-    function ToolPane(win, controller, key) {
+    /**
+     * Represents a container element with multiple tool bars where one tool
+     * bar is visible at a time. Tool bars can be selected with a tab control
+     * shown above the visible tool bar.
+     *
+     * @param {ox.ui.Window} appWindow
+     *  The application window object.
+     *
+     * @param {Controller} controller
+     *  The application controller.
+     *
+     * @param {String} key
+     *  The controller key used to change the visible tool bar. Will be bound
+     *  to the tab control shown above the visible tool bar.
+     */
+    function ToolPane(appWindow, controller, key) {
 
         var // self reference
             self = this,
@@ -32,7 +47,7 @@ define('io.ox/office/tk/component/toolpane',
             node = $('<div>').addClass('io-ox-toolpane top'),
 
             // the top-level tab bar to select tool bars
-            tabBar = new ToolBar(win),
+            tabBar = new ToolBar(appWindow),
 
             // the tab buttons to select the tool bars
             radioGroup = tabBar.addRadioGroup(key, { type: 'list', autoExpand: true }),
@@ -62,18 +77,7 @@ define('io.ox/office/tk/component/toolpane',
         }
 
         /**
-         * Sets the focus to the visible tool bar.
-         */
-        function grabToolBarFocus() {
-            if (visibleToolBarId in toolBars) {
-                toolBars[visibleToolBarId].grabFocus();
-            }
-        }
-
-        /**
          * Handles keyboard events in the tool pane.
-         * @param event
-         * @returns {Boolean}
          */
         function toolPaneKeyHandler(event) {
 
@@ -87,7 +91,7 @@ define('io.ox/office/tk/component/toolpane',
                     index = event.shiftKey ? (index - 1) : (index + 1);
                     index = Math.min(Math.max(index, 0), toolBarIds.length - 1);
                     self.showToolBar(toolBarIds[index]);
-                    grabToolBarFocus();
+                    self.grabFocus();
                 }
                 return false;
             }
@@ -119,14 +123,18 @@ define('io.ox/office/tk/component/toolpane',
         this.createToolBar = function (id, options) {
 
             var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[id] = new ToolBar(win);
+                toolBar = toolBars[id] = new ToolBar(appWindow);
 
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             toolBarIds.push(id);
             node.append(toolBar.getNode());
             radioGroup.addButton(id, options);
             controller.registerViewComponent(toolBar);
-            toolBar.hide();
+            if (toolBarIds.length > 1) {
+                toolBar.hide();
+            } else {
+                visibleToolBarId = id;
+            }
 
             return toolBar;
         };
@@ -149,6 +157,25 @@ define('io.ox/office/tk/component/toolpane',
          */
         this.showToolBar = function (id) {
             controller.change(key, id);
+            return this;
+        };
+
+        /**
+         * Returns whether this tool pane contains the control that is
+         * currently focused. Searches in the visible tool bar and in the tool
+         * bar tabs.
+         */
+        this.hasFocus = function () {
+            return tabBar.hasFocus() || ((visibleToolBarId in toolBars) && toolBars[visibleToolBarId].hasFocus());
+        };
+
+        /**
+         * Sets the focus to the visible tool bar.
+         */
+        this.grabFocus = function () {
+            if (visibleToolBarId in toolBars) {
+                toolBars[visibleToolBarId].grabFocus();
+            }
             return this;
         };
 

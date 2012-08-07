@@ -497,7 +497,7 @@ define('io.ox/office/editor/editor',
                     var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
-                implSetAttribute(operation.attr, operation.value, operation.start, operation.end);
+                implSetAttribute(operation.start, operation.end, operation.attr, operation.value);
             }
             else if (operation.name === OP_PARA_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -3041,28 +3041,43 @@ define('io.ox/office/editor/editor',
         /**
          * Changes a specific formatting attribute of the specified text range.
          *
+         * @param {Number[]} start
+         *  The logical start position of the text range to be formatted.
+         *
+         * @param {Number[]} end
+         *  The logical end position of the text range to be formatted.
+         *
          * @param {String} attrName
          *  The name of the formatting attribute.
          *
          * @param value
          *  The new value of the formatting attribute.
+         */
+        function implSetAttribute(start, end, attrName, value) {
+            implSetAttributes(start, end, Utils.makeSingleOption(attrName, value));
+        }
+
+        /**
+         * Changes a specific formatting attribute of the specified text range.
          *
          * @param {Number[]} start
          *  The logical start position of the text range to be formatted.
          *
          * @param {Number[]} end
          *  The logical end position of the text range to be formatted.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
          */
-        function implSetAttribute(attrName, value, start, end) {
+        function implSetAttributes(start, end, attributes) {
 
             var // last index in the start position array
                 startLastIndex = start.length - 1,
                 // last index in the end position array
                 endLastIndex = end.length - 1,
                 // the DOM text range to be formatted
-                ranges = null,
-                // prepare an attribute map containing the passed single attribute
-                attributes = Utils.makeSingleOption(attrName, value);
+                ranges = null;
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
@@ -3076,20 +3091,21 @@ define('io.ox/office/editor/editor',
                 end[endLastIndex] = self.getParagraphLength(start);
             }
 
+            // store last position
+            lastOperationEnd = new OXOPaM(end);
+
             // build the DOM text range
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
-            if (Attributes.isParagraphAttribute(attrName)) {
-                Attributes.setParagraphAttributes(ranges, editdiv, attributes);
-            } else if (Attributes.isCharacterAttribute(attrName)) {
-                if (textMode !== OXOEditor.TextMode.PLAIN) {
+            if (textMode !== OXOEditor.TextMode.PLAIN) {
+                if (Attributes.hasParagraphAttributes(attributes)) {
+                    Attributes.setParagraphAttributes(ranges, editdiv, attributes);
+                } else if (Attributes.hasCharacterAttributes(attributes)) {
                     Attributes.setCharacterAttributes(ranges, attributes);
+                } else {
+                    self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
                 }
-            } else {
-                self.implDbgOutInfo('implSetAttribute() - no valid attribute specified');
             }
-
-            lastOperationEnd = new OXOPaM(end);
         }
 
         this.implInsertParagraph = function (position) {
@@ -3097,8 +3113,7 @@ define('io.ox/office/editor/editor',
                 para = position[posLength],
                 allParagraphs = this.getAllAdjacentParagraphs(position);
 
-            var newPara = document.createElement('p');
-            newPara = $(newPara);
+            var newPara = $('<p>');
 
             if (para === -1) {
                 para = allParagraphs.size();

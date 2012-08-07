@@ -99,10 +99,10 @@ define('io.ox/office/editor/view',
 
     // class View =============================================================
 
-    function View(win, controller, editors) {
+    function View(appWindow, controller, editors) {
 
         var // tool pane containing all tool bars
-            toolPane = new ToolPane(win, controller, 'view/toolbars/show');
+            toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show');
 
         // private methods ----------------------------------------------------
 
@@ -158,17 +158,17 @@ define('io.ox/office/editor/view',
         // initialization -----------------------------------------------------
 
         // create the tool panes and append them to the window main node
-        win.nodes.main.addClass('io-ox-office-main').append(
-            win.nodes.toolPane = toolPane.getNode(),
-            win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
-            win.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
+        appWindow.nodes.main.addClass('io-ox-office-main').append(
+            appWindow.nodes.toolPane = toolPane.getNode(),
+            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
+            appWindow.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
         );
 
         // insert editor into the app pane
-        win.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
+        appWindow.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
 
         // table element containing the debug mode elements
-        win.nodes.debugPane.append($('<table>').addClass('debug-table').append(
+        appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
             $('<colgroup>').append(
                 $('<col>', { width: '50%' }),
                 $('<col>', { width: '50%' })
@@ -219,7 +219,9 @@ define('io.ox/office/editor/view',
         toolPane.showToolBar('format');
 
         // override the limited functionality of the quick-search button
-        win.nodes.search.off('keydown search change').on('keydown keypress keyup', searchKeyHandler);
+        appWindow.nodes.search
+            .off('keydown search change')
+            .on('keydown keypress keyup', searchKeyHandler);
 
     } // class View
 

@@ -54,6 +54,22 @@ define('io.ox/office/editor/attributes',
         };
 
         /**
+         * Returns whether this converter contains a definition for at least
+         * one of the specified formatting attributes.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Boolean}
+         *  Whether at least one of the specified attributes is supported by
+         *  this converter.
+         */
+        this.hasAnyAttribute = function (attributes) {
+            return _(attributes).any(function (value, name) { return name in definitions; });
+        };
+
+        /**
          * Returns the current value of the specified formatting attribute in
          * the passed DOM element.
          *
@@ -187,7 +203,8 @@ define('io.ox/office/editor/attributes',
     // class ParagraphAttributes ==============================================
 
     /**
-     * A converter for paragraph formatting attributes.
+     * A converter for paragraph formatting attributes. The CSS formatting will
+     * be set at <p> elements.
      */
     var ParagraphAttributes = new AttributeConverter({
 
@@ -207,7 +224,8 @@ define('io.ox/office/editor/attributes',
     // class CharacterAttributes ==============================================
 
     /**
-     * A converter for character formatting attributes.
+     * A converter for character formatting attributes. The CSS formatting will
+     * be set at <span> elements contained in paragraph <p> elements.
      */
     var CharacterAttributes = new AttributeConverter({
 
@@ -260,6 +278,23 @@ define('io.ox/office/editor/attributes',
             set: function (element, fontSize) {
                 $(element).css('font-size', fontSize + 'pt');
             }
+        },
+
+        // Logically, the line height is a paragraph attribute. But technically
+        // in CSS, the line height must be set separately at every span element
+        // because a relative CSS line-height attribute at the paragraph (e.g.
+        // 200%) will not be derived relatively to the spans, but absolutely
+        // according to the paragraph's font size. Example: The paragraph has a
+        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
+        // value will be derived to a span with a font size of 6pt, resulting
+        // in a relative line height of 400%.
+        lineheight: {
+            get: function () {
+                return 'normal';
+            },
+            set: function (element) {
+                $(element).css('line-height', 'normal');
+            }
         }
 
     }); // class CharacterAttributes
@@ -278,6 +313,17 @@ define('io.ox/office/editor/attributes',
      */
     Attributes.isParagraphAttribute = function (name) {
         return ParagraphAttributes.hasAttribute(name);
+    };
+
+    /**
+     * Returns whether the passed attribute map contains at least one paragraph
+     * attribute.
+     *
+     * @param {Object} attributes
+     *  A map of attribute name/value pairs.
+     */
+    Attributes.hasParagraphAttributes = function (attributes) {
+        return ParagraphAttributes.hasAnyAttribute(attributes);
     };
 
     /**
@@ -352,6 +398,17 @@ define('io.ox/office/editor/attributes',
     };
 
     /**
+     * Returns whether the passed attribute map contains at least one character
+     * attribute.
+     *
+     * @param {Object} attributes
+     *  A map of attribute name/value pairs.
+     */
+    Attributes.hasCharacterAttributes = function (attributes) {
+        return CharacterAttributes.hasAnyAttribute(attributes);
+    };
+
+    /**
      * Returns the values of all character formatting attributes in the
      * specified DOM text ranges.
      *
@@ -419,6 +476,12 @@ define('io.ox/office/editor/attributes',
             if (Utils.getNodeName(parent) !== 'span') {
                 $(textNode).wrap('<span>');
                 parent = textNode.parentNode;
+                // Copy the paragraph's font-size to the span, and reset the
+                // font-size of the paragraph, otherwise CSS defines a lower
+                // limit for the line-height of all spans according to the
+                // parent paragraph's font-size.
+                $(parent).css('font-size', $(parent.parentNode).css('font-size'));
+                $(parent.parentNode).css('font-size', '0');
             }
 
             // if manipulating a part of the text node, split it
