@@ -636,8 +636,18 @@ define('io.ox/office/editor/editor',
                 if (textNode.nodeName === 'BR') {
                     textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
                 }
+
+                if (textNode.nodeType !== 3) {
+                    if (textNode.nodeName === 'SPAN') {
+                        textNode = textNode.firstChild;  // Special handling for <SPAN> in empty paragraphs.
+                    }
+                }
+
                 if ((! textNode) || (textNode.nodeType !== 3)) {
-                    dbgOutError("ERROR: Failed to determine text node from current node! NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                    dbgOutError("ERROR: Failed to determine text node from current node!");
+                    if (textNode) {
+                        dbgOutError("ERROR: NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
+                    }
                     return;
                 }
             }
@@ -661,8 +671,7 @@ define('io.ox/office/editor/editor',
             // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
             // These DIVs need to be converted to the correct paragraph first.
             // Also cells in columns have to be converted at this point.
-            if ((node.nodeName === 'DIV') || (node.nodeName === 'P') || (node.nodeName === 'TR') || (node.nodeName === 'TD') || (node.nodeName === 'TH')) {
-
+            if ($(node).is('DIV, P, TR, TD, TH')) {
                 var newNode = this.getTextNodeFromCurrentNode(node, offset);
                 if (newNode) {
                     node = newNode.node;
@@ -711,11 +720,7 @@ define('io.ox/office/editor/editor',
             // Column must be integrated after row -> a buffer is required.
 
             for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                if ((node.nodeName === 'TD') ||
-                        (node.nodeName === 'TH') ||
-                        (node.nodeName === 'TR') ||
-                        (node.nodeName === 'P') ||
-                        (node.nodeName === 'TABLE')) {
+                if ($(node).is('TABLE, P, TR, TH, TD')) {
                     oxoPosition.unshift($(node).prevAll().length);  // zero based
                     evaluateOffset = false;
                 }
@@ -1774,8 +1779,9 @@ define('io.ox/office/editor/editor',
                                 var position = _.copy(startPos, true);
                                 position.push(i);
                                 position.push(j);
-                                position.push(0);
-                                this.setAttributeToCompleteCell(attr, value, position);
+                                var startPosition = this.getFirstPositionInCurrentCell(position);
+                                var endPosition = this.getLastPositionInCurrentCell(position);
+                                this.setAttribute(attr, value, startPosition, endPosition);
                             }
                         }
 
@@ -2119,6 +2125,26 @@ define('io.ox/office/editor/editor',
             }
 
             return {position: paragraph, beginOfTable: beginOfTable};
+        };
+
+        this.getFirstPositionInCurrentCell = function (cellPosition) {
+
+            var position = _.copy(cellPosition, true);
+
+            position.push(0);  // first paragraph
+            position.push(0);  // first position
+
+            return position;
+        };
+
+        this.getLastPositionInCurrentCell = function (cellPosition) {
+
+            var position = _.copy(cellPosition, true);
+
+            position.push(this.getLastParaIndexInCell(position));  // last paragraph
+            position.push(this.getParagraphLength(position));  // last position
+
+            return position;
         };
 
         this.getLastPositionInDocument = function () {
@@ -2764,9 +2790,9 @@ define('io.ox/office/editor/editor',
                     for (var i = 0; i <= max; i++) {
                         localPos[rowIndex] = j;   // row
                         localPos[columnIndex] = i;  // column
-                        localPos[paraIndex] = 0;
-                        localPos[paraIndex + 1] = 0;
-                        this.setAttributeToCompleteCell(attr, value, localPos);
+                        var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                        var endPosition = this.getLastPositionInCurrentCell(localPos);
+                        this.setAttribute(attr, value, startPosition, endPosition);
                     }
                 }
             }
@@ -2791,11 +2817,11 @@ define('io.ox/office/editor/editor',
                         min = thisColumn + 1;
                     }
                     for (var i = min; i <= lastColumn; i++) {
-                        localPos[rowIndex] = i;  // row
-                        localPos[columnIndex] = j;  // column
-                        localPos[columnIndex + 1] = 0;
-                        localPos[columnIndex + 2] = 0;
-                        this.setAttributeToCompleteCell(attr, value, localPos);
+                        localPos[rowIndex] = j;  // row
+                        localPos[columnIndex] = i;  // column
+                        var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                        var endPosition = this.getLastPositionInCurrentCell(localPos);
+                        this.setAttribute(attr, value, startPosition, endPosition);
                     }
                 }
             }
@@ -2852,36 +2878,18 @@ define('io.ox/office/editor/editor',
                 columnIndex = rowIndex + 1;
 
             localPos.push(0); // column
-            localPos.push(0); // paragraph
-            localPos.push(0); // position
 
             var lastRow = this.getLastRowIndexInTable(position),
                 lastColumn = this.getLastColumnIndexInTable(position);
+
 
             for (var j = 0; j <= lastRow; j++) {
                 for (var i = 0; i <= lastColumn; i++) {
                     localPos[rowIndex] = j;  // row
                     localPos[columnIndex] = i;  // column
-                    this.setAttributeToCompleteCell(attr, value, localPos);
-                }
-            }
-        };
-
-        this.setAttributeToCompleteCell = function (attr, value, position) {
-
-            var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
-
-            if (isInTable) {
-
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
-                    lastPara = this.getLastParaIndexInCell(localPos);
-
-                localPos[paraIndex + 1] = 0;
-
-                for (var i = 0; i <= lastPara; i++) {
-                    localPos[paraIndex] = i;
-                    this.setAttributeToParagraphInCell(attr, value, localPos);
+                    var startPosition = this.getFirstPositionInCurrentCell(localPos);
+                    var endPosition = this.getLastPositionInCurrentCell(localPos);
+                    this.setAttribute(attr, value, startPosition, endPosition);
                 }
             }
         };
