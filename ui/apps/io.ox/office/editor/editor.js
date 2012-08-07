@@ -1776,8 +1776,9 @@ define('io.ox/office/editor/editor',
                                 var position = _.copy(startPos, true);
                                 position.push(i);
                                 position.push(j);
-                                position.push(0);
-                                this.setAttributeToCompleteCell(attr, value, position);
+                                var startPosition = this.getFirstPositionInCurrentCell(position);
+                                var endPosition = this.getLastPositionInCurrentCell(position);
+                                this.setAttribute(attr, value, startPosition, endPosition);
                             }
                         }
 
@@ -2121,6 +2122,26 @@ define('io.ox/office/editor/editor',
             }
 
             return {position: paragraph, beginOfTable: beginOfTable};
+        };
+
+        this.getFirstPositionInCurrentCell = function (cellPosition) {
+
+            var position = _.copy(cellPosition, true);
+
+            position.push(0);  // first paragraph
+            position.push(0);  // first position
+
+            return position;
+        };
+
+        this.getLastPositionInCurrentCell = function (cellPosition) {
+
+            var position = _.copy(cellPosition, true);
+
+            position.push(this.getLastParaIndexInCell(position));  // last paragraph
+            position.push(this.getParagraphLength(position));  // last position
+
+            return position;
         };
 
         this.getLastPositionInDocument = function () {
