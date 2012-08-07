@@ -754,10 +754,15 @@ define('io.ox/office/editor/editor',
 
                 var returnObj = this.getNextChildNode(node, oxoPos.shift());
 
-                if (returnObj.node) {
-                    node = returnObj.node;
-                    if (returnObj.offset) {
-                        offset = returnObj.offset;
+                if (returnObj) {
+                    if (returnObj.node) {
+                        node = returnObj.node;
+                        if (returnObj.offset) {
+                            offset = returnObj.offset;
+                        }
+                    } else {
+                        this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
+                        return;
                     }
                 } else {
                     this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
@@ -2646,12 +2651,12 @@ define('io.ox/office/editor/editor',
 
                 for (var i = 0; i <= lastParaInCell; i++) {
                     // this.deleteParagraph(localPos);
+                    if ((localPos.length - 1) > paraIndex) {
+                        localPos.pop();
+                    }
                     if (i < lastParaInCell) {
                         this.implDeleteParagraph(localPos);
                     } else {
-                        if ((localPos.length - 1) > paraIndex) {
-                            localPos.pop();
-                        }
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
