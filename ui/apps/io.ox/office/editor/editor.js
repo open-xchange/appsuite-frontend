@@ -41,7 +41,7 @@ define('io.ox/office/editor/editor',
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
-    
+
     var OP_INSERT_IMAGE = 'insertImage';
 //    var OP_ATTR_DELETE =  'deleteAttribute';
 
@@ -3340,7 +3340,6 @@ define('io.ox/office/editor/editor',
                     tbody.removeChild(rows[i]);
                 }
             }
-
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
