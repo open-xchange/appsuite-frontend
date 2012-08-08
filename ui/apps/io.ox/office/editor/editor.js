@@ -40,6 +40,8 @@ define('io.ox/office/editor/editor',
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
+    
+    var OP_INSERT_IMAGE = 'insertImage';
 //    var OP_ATTR_DELETE =  'deleteAttribute';
 
     function OXOUndoAction(_undoOperation, _redoOperation) {
@@ -553,6 +555,18 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implSplitParagraph(operation.start);
+            }
+            else if (operation.name === OP_INSERT_IMAGE) {
+                // TODO..  now only "*" placeholders are created for images
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var endPos = _.clone(operation.position, true);
+                    endPos[endPos.length - 1] += 1;
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.postition, true), end: endPos };
+                    var undoAction = new OXOUndoAction(undoOperation, _.copy(operation, true));
+                    undoAction.allowMerge = true;
+                    undomgr.addUndo(undoAction);
+                }
+                this.implInsertText("*", operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1146,6 +1160,11 @@ define('io.ox/office/editor/editor',
                 if (c === '4') {
                     blockOperationNotifications = !blockOperationNotifications;
                     window.console.log('block operation notifications is now ' + blockOperationNotifications);
+                }
+                if (c === '5') {
+                    var selection = this.getSelection();
+                    var newOperation = {name: OP_INSERT_IMAGE, position: _.copy(selection.startPaM.oxoPosition), imgurl: "blah"};
+                    this.applyOperation(newOperation, true, true);
                 }
             }
 
