@@ -14,15 +14,14 @@
 define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/tk/controller',
-     'io.ox/office/tk/toolbar',
      'io.ox/office/tk/control/button',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
+     'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/editor',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Controller, ToolBar, Button, TextField, ComboField, GridSizer, Editor, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, Editor, gt) {
 
     'use strict';
 
@@ -73,7 +72,7 @@ define('io.ox/office/editor/view',
         // initialization -----------------------------------------------------
 
         _([6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96]).each(function (size) {
-            this.addListEntry(size);
+            this.addListEntry(size, { css: { textAlign: 'right', paddingRight: '20px' } });
         }, this);
 
     }}); // class FontHeightChooser
@@ -100,106 +99,31 @@ define('io.ox/office/editor/view',
 
     // class View =============================================================
 
-    function View(win, controller, editors) {
+    function View(appWindow, controller, editors) {
 
-        var // self reference
-            self = this,
-
-            // internal controller to control view comnponents
-            viewController = null,
-
-            // the top-level tab bar to select tool bars
-            tabBar = new ToolBar(win),
-
-            // the tab buttons to select the tool bars
-            radioGroup = tabBar.addRadioGroup('view/toolbars/show', { type: 'list', autoExpand: true }),
-
-            // all registered tool bars, mapped by tool bar key
-            toolBars = {},
-
-            // keys of all registered tool bars, in registration order
-            toolBarKeys = [],
-
-            // key of the tool bar currently visible
-            visibleToolBar = '';
+        var // tool pane containing all tool bars
+            toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show');
 
         // private methods ----------------------------------------------------
 
         /**
-         * Creates a new tool bar object and registers it at the tab bar.
+         * Creates a new tool bar in the tool pane and inserts common controls.
          *
-         * @param {String} key
-         *  The unique key of the tool bar.
+         * @param {String} id
+         *  The unique identifier of the tool bar.
          *
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
          *  tab bar representing the tool bar. Supports all options for buttons
          *  in radio groups (see method RadioGroup.addButton() for details).
          */
-        function createToolBar(key, options) {
-
-            var // create a new tool bar object, and store it in the map
-                toolBar = toolBars[key] = new ToolBar(win);
+        function createToolBar(id, options) {
 
             // create common controls present in all tool bars
-            toolBar
+            return toolPane.createToolBar(id, options)
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .addSeparator();
-
-            // add a tool bar tab, add the tool bar to the pane, and register it at the controller
-            toolBarKeys.push(key);
-            win.nodes.toolPane.append(toolBar.getNode());
-            radioGroup.addButton(key, options);
-            controller.registerViewComponent(toolBar);
-            toolBar.hide();
-
-            return toolBar;
-        }
-
-        /**
-         * Activates the tool bar with the specified key.
-         */
-        function showToolBar(key) {
-            if (key in toolBars) {
-                if (visibleToolBar in toolBars) {
-                    toolBars[visibleToolBar].hide();
-                }
-                visibleToolBar = key;
-                toolBars[key].show();
-            }
-        }
-
-        /**
-         * Sets the focus to the visible tool bar.
-         */
-        function grabToolBarFocus() {
-            if (visibleToolBar in toolBars) {
-                toolBars[visibleToolBar].grabFocus();
-            }
-        }
-
-        /**
-         * Handles keyboard events in the tool pane.
-         * @param event
-         * @returns {Boolean}
-         */
-        function toolPaneKeyHandler(event) {
-
-            var // distinguish between event types (ignore keypress events)
-                keydown = event.type === 'keydown',
-                // index of the visible tool bar
-                index = _(toolBarKeys).indexOf(visibleToolBar);
-
-            if (event.keyCode === KeyCodes.F7) {
-                if (keydown) {
-                    index = event.shiftKey ? (index - 1) : (index + 1);
-                    index = Math.min(Math.max(index, 0), toolBarKeys.length - 1);
-                    self.showToolBar(toolBarKeys[index]);
-                    grabToolBarFocus();
-                }
-                return false;
-            }
         }
 
         /**
@@ -222,53 +146,29 @@ define('io.ox/office/editor/view',
 
         // methods ------------------------------------------------------------
 
-        /**
-         * Returns the key of the tool bar currently visible.
-         */
-        this.getVisibleToolBarKey = function () {
-            return visibleToolBar;
-        };
-
-        /**
-         * Activates the tool bar with the specified key.
-         *
-         * @returns {View}
-         *  A reference to this view instance.
-         */
-        this.showToolBar = function (key) {
-            viewController.change('view/toolbars/show', key);
-            return this;
+        this.getToolPane = function () {
+            return toolPane;
         };
 
         this.destroy = function () {
-            viewController.destroy();
-            tabBar.destroy();
-            _(toolBars).invoke('destroy');
-            viewController = tabBar = radioGroup = toolBars = null;
+            toolPane.destroy();
+            toolPane = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // create the internal view controller
-        viewController = new Controller({
-            'view/toolbars/show': {
-                get: function () { return visibleToolBar; },
-                set: showToolBar
-            }
-        }, function () { controller.done(); });
-
         // create the tool panes and append them to the window main node
-        win.nodes.main.addClass('io-ox-office-main').append(
-            win.nodes.toolPane = $('<div>').addClass('io-ox-toolpane top'),
-            win.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
-            win.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
+        appWindow.nodes.main.addClass('io-ox-office-main').append(
+            appWindow.nodes.toolPane = toolPane.getNode(),
+            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
+            appWindow.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
         );
 
         // insert editor into the app pane
-        win.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
+        appWindow.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
 
         // table element containing the debug mode elements
-        win.nodes.debugPane.append($('<table>').addClass('debug-table').append(
+        appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
             $('<colgroup>').append(
                 $('<col>', { width: '50%' }),
                 $('<col>', { width: '50%' })
@@ -279,13 +179,6 @@ define('io.ox/office/editor/view',
                 $('<td>').append(editors.output.getNode())
             )
         ));
-
-        // insert the tool bar selector and a separator line into the tool pane
-        tabBar.getNode().addClass('tabs').children().first().append(
-            $('<span>').addClass('separator left'),
-            $('<span>').addClass('separator right')
-        );
-        win.nodes.toolPane.append(tabBar.getNode());
 
         // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
@@ -319,21 +212,16 @@ define('io.ox/office/editor/view',
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
-        // prepare editor controller
+        // update all view components
         controller.update();
 
-        // prepare wiew controller
-        viewController
-            // register the tab bar at the controller
-            .registerViewComponent(tabBar)
-            // make the format tool bar visible
-            .change('view/toolbars/show', 'format');
-
-        // change visible tool bar with keyboard
-        win.nodes.toolPane.on('keydown keypress keyup', toolPaneKeyHandler);
+        // make the format tool bar visible
+        toolPane.showToolBar('format');
 
         // override the limited functionality of the quick-search button
-        win.nodes.search.off('keydown search change').on('keydown keypress keyup', searchKeyHandler);
+        appWindow.nodes.search
+            .off('keydown search change')
+            .on('keydown keypress keyup', searchKeyHandler);
 
     } // class View
 

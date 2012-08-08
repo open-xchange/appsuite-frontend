@@ -240,6 +240,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
+    Utils.makeSingleOption = function (key, value) {
+        var options = {};
+        options[key] = value;
+        return options;
+    };
+
     // attribute conversion ---------------------------------------------------
 
     /**
@@ -398,6 +404,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             tokens.push(nothing);
         }
         return tokens.join(' ');
+    };
+
+    /**
+     * Inserts a token into or removes a token from the specified
+     * space-separated token list.
+     *
+     * @param {String} list
+     *  Space-separated list of tokens.
+     *
+     * @param {String} token
+     *  The token to be inserted into or removed from the token list.
+     *
+     * @param {Boolean} state
+     *  If set to true, the token will be inserted into the token list,
+     *  otherwise removed from the token list.
+     *
+     * @param {String} [nothing]
+     *  If specified, the name of a token that represents a special 'nothing'
+     *  or 'empty' state.
+     *
+     * @returns {String}
+     *  The new token list.
+     */
+    Utils.toggleToken = function (list, token, state, nothing) {
+        return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
     };
 
     // generic DOM helpers ----------------------------------------------------
@@ -1050,11 +1081,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return Utils.createControl('input', { type: 'text' }, options);
     };
 
+    /**
+     * Returns the current selection in the passed text field.
+     *
+     * @param {jQuery} textField
+     *  A jQuery object containing a text field element.
+     *
+     * @returns {Object}
+     *  An object with the attributes 'start' and 'end' containing the start
+     *  and end character offset of the selection in the text field.
+     */
     Utils.getTextFieldSelection = function (textField) {
         var input = textField.get(0);
         return input ? { start: input.selectionStart, end: input.selectionEnd } : undefined;
     };
 
+    /**
+     * Changes the current selection in the passed text field.
+     *
+     * @param {jQuery} textField
+     *  A jQuery object containing a text field element.
+     *
+     * @param {Object} selection
+     *  An object with the attributes 'start' and 'end' containing the start
+     *  and end character offset of the new selection in the text field.
+     */
     Utils.setTextFieldSelection = function (textField, selection) {
         var input = textField.get(0);
         if (input) {
