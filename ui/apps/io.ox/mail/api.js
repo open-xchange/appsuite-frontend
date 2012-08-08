@@ -775,6 +775,27 @@ define("io.ox/mail/api",
                 attachment: _(data).pluck('id').join(','),
                 session: ox.session // required here!
             });
+        } else if (mode === 'eml') {
+            data = [].concat(data);
+            first = _(data).first();
+            // multiple?
+            if (data.length > 1) {
+               // zipped
+                return url + '?' + $.param({
+                    action: 'zip_messages',
+                    folder: first.folder_id,
+                    id: _(data).pluck('id').join(','),
+                    session: ox.session
+                });
+            } else {
+                // single EML
+                return url + '?' + $.param($.extend(api.reduce(first), {
+                    action: 'get',
+                    src: 1,
+                    save: 1,
+                    session: ox.session
+                }));
+            }
         } else {
             // inject filename for more convenient file downloads
             url += (data.filename ? '/' + encodeURIComponent(data.filename) : '') + '?' +

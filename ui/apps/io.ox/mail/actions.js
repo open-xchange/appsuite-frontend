@@ -328,6 +328,14 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/save', {
+        id: 'saveEML',
+        requires: 'some',
+        multiple: function (data) {
+            window.open(api.getUrl(data, 'eml'));
+        }
+    });
+
     // toolbar
 
     ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
@@ -479,8 +487,15 @@ define('io.ox/mail/actions',
         prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
-        ref: 'io.ox/mail/actions/delete',
-        special: "danger"
+        ref: 'io.ox/mail/actions/delete'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1100,
+        prio: 'lo',
+        id: 'saveEML',
+        label: gt('Save as EML'),
+        ref: 'io.ox/mail/actions/save'
     }));
 
     // Attachments
