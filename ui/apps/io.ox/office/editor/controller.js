@@ -43,7 +43,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'chain/format/character': {
-                    get: function () { return editor.getCharacterAttributes(); }
+                    get: function () { return editor.getAttributes('character'); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
@@ -72,7 +72,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'chain/format/paragraph': {
-                    get: function () { return editor.getParagraphAttributes(); }
+                    get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
@@ -133,12 +133,12 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
          * focus, this controller will use it as target for item actions
          * triggered by any registered view component.
          */
-        this.registerEditor = function (newEditor, supportedItems) {
+        this.registerEditor = function (newEditor, disabledItems) {
             newEditor
                 .on('focus', function (event, focused) {
                     if (focused && (editor !== newEditor)) {
                         editor = newEditor;
-                        self.enableAndDisable(supportedItems).update();
+                        self.enable().disable(disabledItems).update();
                     }
                 })
                 .on('operation', function () {

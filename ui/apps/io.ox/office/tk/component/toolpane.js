@@ -199,7 +199,7 @@ define('io.ox/office/tk/component/toolpane',
         // prepare the controller
         controller
             // add item definition for the tab bar
-            .addDefinitions(Utils.makeSingleOption(key, { get: function () { return visibleToolBarId; }, set: showToolBar }))
+            .addDefinition(key, { get: function () { return visibleToolBarId; }, set: showToolBar })
             // register the tab bar at the controller
             .registerViewComponent(tabBar);
 

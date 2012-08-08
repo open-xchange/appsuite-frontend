@@ -66,6 +66,27 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.DATA_VALUE_ATTR = 'data-value';
 
+    // generic JS object helpers ----------------------------------------------
+
+    /**
+     * Returns a new object containing a single attribute with the specified
+     * value.
+     *
+     * @param {String} key
+     *  The name of the attribute to be inserted into the returned object.
+     *
+     * @param value
+     *  The value of the attribute to be inserted into the returned object.
+     *
+     * @returns {Object}
+     *  A new object with a single attribute.
+     */
+    Utils.makeSimpleObject = function (key, value) {
+        var object = {};
+        object[key] = value;
+        return object;
+    };
+
     // options object ---------------------------------------------------------
 
     /**
@@ -238,12 +259,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.extendOptions = function (options, extensions) {
         return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
-    };
-
-    Utils.makeSingleOption = function (key, value) {
-        var options = {};
-        options[key] = value;
-        return options;
     };
 
     // attribute conversion ---------------------------------------------------

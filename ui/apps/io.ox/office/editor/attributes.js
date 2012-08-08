@@ -19,6 +19,9 @@ define('io.ox/office/editor/attributes',
 
     'use strict';
 
+    var // maps all attribute converters to a unique attribute type
+        converters = {};
+
     // class AttributeConverter ===============================================
 
     /**
@@ -67,25 +70,6 @@ define('io.ox/office/editor/attributes',
          */
         this.hasAnyAttribute = function (attributes) {
             return _(attributes).any(function (value, name) { return name in definitions; });
-        };
-
-        /**
-         * Returns the current value of the specified formatting attribute in
-         * the passed DOM element.
-         *
-         * @param {HTMLElement} element
-         *  The DOM element object containing CSS formatting.
-         *
-         * @param {String} name
-         *  The name of the formatting attribute.
-         *
-         * @returns
-         *  The current value of the specified formatting attribute.
-         */
-        this.getElementAttribute = function (element, name) {
-            if (name in definitions) {
-                return definitions[name].get(element);
-            }
         };
 
         /**
@@ -163,25 +147,6 @@ define('io.ox/office/editor/attributes',
         };
 
         /**
-         * Changes the current value of the specified formatting attribute in
-         * the passed DOM element.
-         *
-         * @param {HTMLElement} element
-         *  The DOM element object whose CSS formatting will be changed.
-         *
-         * @param {String} name
-         *  The name of the formatting attribute.
-         *
-         * @param value
-         *  The new value for the specified formatting attribute.
-         */
-        this.setElementAttribute = function (element, name, value) {
-            if (name in definitions) {
-                definitions[name].set(element, value);
-            }
-        };
-
-        /**
          * Changes the values of multiple formatting attributes in the passed
          * DOM element.
          *
@@ -194,296 +159,382 @@ define('io.ox/office/editor/attributes',
          */
         this.setElementAttributes = function (element, attributes) {
             _(attributes).each(function (value, name) {
-                this.setElementAttribute(element, name, value);
-            }, this);
+                if (name in definitions) {
+                    definitions[name].set(element, value);
+                }
+            });
         };
 
     } // class AttributeConverter
 
-    // class ParagraphAttributes ==============================================
+    // paragraph attributes ===================================================
 
     /**
      * A converter for paragraph formatting attributes. The CSS formatting will
-     * be set at <p> elements.
+     * be read from and written to <p> elements.
      */
-    function ParagraphAttributes() {
+    converters.paragraph = new AttributeConverter({
 
-        // base constructor ---------------------------------------------------
-
-        AttributeConverter.call(this, {
-            alignment: {
-                get: function (element) {
-                    var value = $(element).css('text-align');
-                    // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
-                    return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
-                },
-                set: function (element, value) {
-                    $(element).css('text-align', value);
-                }
+        alignment: {
+            get: function (element) {
+                var value = $(element).css('text-align');
+                // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
+                return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
+            },
+            set: function (element, value) {
+                $(element).css('text-align', value);
             }
-        });
+        }
 
-        // methods ------------------------------------------------------------
+    });
 
-        /**
-         * Returns the values of all paragraph formatting attributes in the
-         * specified DOM text ranges.
-         *
-         * @param {Object[]|Object} ranges
-         *  The DOM text ranges. May be an array of DOM text range objects, or a
-         *  single DOM text range object.
-         *
-         * @param {HTMLElement|jQuery} rootNode
-         *  The root node containing the text ranges. If this object is a jQuery
-         *  collection, uses the first node it contains.
-         *
-         * @returns {Object}
-         *  A map of paragraph attribute name/value pairs.
-         */
-        this.getAttributes = function (ranges, rootNode) {
+    // methods ----------------------------------------------------------------
 
-            var // the attribute values, mapped by name
-                attributes = {};
+    /**
+     * Returns the values of all paragraph formatting attributes in the
+     * specified DOM text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges. May be an array of DOM text range objects, or a
+     *  single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @returns {Object}
+     *  A map of paragraph attribute name/value pairs.
+     */
+    converters.paragraph.getAttributes = function (ranges, rootNode) {
 
-            // get attributes from all paragraph elements
-            Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+        var // the attribute values, mapped by name
+            attributes = {};
 
-                var // merge the existing attributes with the attributes of the new paragraph
-                    hasNonNull = this.mergeElementAttributes(attributes, node);
+        // get attributes from all paragraph elements
+        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
 
-                // exit iteration loop if there are no unambiguous attributes left
-                if (!hasNonNull) {
-                    return false;
-                }
-            }, this);
+            var // merge the existing attributes with the attributes of the new paragraph
+                hasNonNull = this.mergeElementAttributes(attributes, node);
 
-            return attributes;
-        };
+            // exit iteration loop if there are no unambiguous attributes left
+            if (!hasNonNull) {
+                return false;
+            }
+        }, this);
 
-        /**
-         * Changes specific paragraph formatting attributes in the specified DOM
-         * text ranges. The formatting attributes will be applied to all <p>
-         * elements containing the text nodes covered by the passed ranges.
-         *
-         * @param {Object[]|Object} ranges
-         *  The DOM text ranges to be formatted. May be an array of DOM text range
-         *  objects, or a single DOM text range object.
-         *
-         * @param {HTMLElement|jQuery} rootNode
-         *  The root node containing the text ranges. If this object is a jQuery
-         *  collection, uses the first node it contains.
-         *
-         * @param {Object} attributes
-         *  A map of paragraph attribute name/value pairs.
-         */
-        this.setAttributes = function (ranges, rootNode, attributes) {
+        return attributes;
+    };
 
-            // iterate all paragraph elements and change their formatting
-            Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
-                this.setElementAttributes(node, attributes);
-            }, this);
-        };
+    /**
+     * Changes specific paragraph formatting attributes in the specified DOM
+     * text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges to be formatted. May be an array of DOM text range
+     *  objects, or a single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {Object} attributes
+     *  A map of paragraph attribute name/value pairs.
+     */
+    converters.paragraph.setAttributes = function (ranges, rootNode, attributes) {
 
-    } // class ParagraphAttributes
+        // iterate all paragraph elements and change their formatting
+        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+            this.setElementAttributes(node, attributes);
+        }, this);
+    };
 
-    // class CharacterAttributes ==============================================
+    // character attributes ===================================================
 
     /**
      * A converter for character formatting attributes. The CSS formatting will
-     * be set at <span> elements contained in paragraph <p> elements.
+     * be read from and written to <span> elements contained in paragraph <p>
+     * elements.
      */
-    function CharacterAttributes() {
+    converters.character = new AttributeConverter({
 
-        // base constructor ---------------------------------------------------
-
-        AttributeConverter.call(this, {
-
-            bold: {
-                get: function (element) {
-                    var value = $(element).css('font-weight');
-                    return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
-                },
-                set: function (element, state) {
-                    $(element).css('font-weight', state ? 'bold' : 'normal');
-                }
+        bold: {
+            get: function (element) {
+                var value = $(element).css('font-weight');
+                return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
             },
-
-            italic: {
-                get: function (element) {
-                    var value = $(element).css('font-style');
-                    return (value === 'italic') || (value === 'oblique');
-                },
-                set: function (element, state) {
-                    $(element).css('font-style', state ? 'italic' : 'normal');
-                }
-            },
-
-            underline: {
-                get: function (element) {
-                    return Utils.containsToken($(element).css('text-decoration'), 'underline');
-                },
-                set: function (element, state) {
-                    var value = $(element).css('text-decoration');
-                    value = Utils.toggleToken(value, 'underline', state, 'none');
-                    $(element).css('text-decoration', value);
-                }
-            },
-
-            fontname: {
-                get: function (element) {
-                    var value = $(element).css('font-family');
-                    return Fonts.getFontName(value);
-                },
-                set: function (element, fontName) {
-                    $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                }
-            },
-
-            fontsize: {
-                get: function (element) {
-                    var value = $(element).css('font-size');
-                    return Utils.convertCssLength(value, 'pt');
-                },
-                set: function (element, fontSize) {
-                    $(element).css('font-size', fontSize + 'pt');
-                }
-            },
-
-            // Logically, the line height is a paragraph attribute. But technically
-            // in CSS, the line height must be set separately at every span element
-            // because a relative CSS line-height attribute at the paragraph (e.g.
-            // 200%) will not be derived relatively to the spans, but absolutely
-            // according to the paragraph's font size. Example: The paragraph has a
-            // font size of 12pt and a line-height of 200%, resulting in 24pt. This
-            // value will be derived to a span with a font size of 6pt, resulting
-            // in a relative line height of 400%.
-            lineheight: {
-                get: function () {
-                    return 'normal';
-                },
-                set: function (element) {
-                    $(element).css('line-height', 'normal');
-                }
+            set: function (element, state) {
+                $(element).css('font-weight', state ? 'bold' : 'normal');
             }
-        });
+        },
 
-        // methods ------------------------------------------------------------
-
-        /**
-         * Returns the values of all character formatting attributes in the
-         * specified DOM text ranges.
-         *
-         * @param {Object[]|Object} ranges
-         *  The DOM text ranges. May be an array of DOM text range objects, or a
-         *  single DOM text range object.
-         *
-         * @returns {Object}
-         *  A map of character attribute name/value pairs.
-         */
-        this.getAttributes = function (ranges) {
-
-            var // the attribute values, mapped by name
-                attributes = {};
-
-            // process all text nodes, get attributes from their parent element
-            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
-
-                var // merge the existing attributes with the attributes of the new text node
-                    hasNonNull = this.mergeElementAttributes(attributes, textNode.parentNode);
-
-                // exit iteration loop if there are no unambiguous attributes left
-                if (!hasNonNull) {
-                    return false;
-                }
-            }, this);
-
-            return attributes;
-        };
-
-        /**
-         * Changes specific character formatting attributes in the specified DOM
-         * text ranges. The formatting attributes will be applied to the text
-         * node's parent <span> elements which will be created as needed. Sibling
-         * <span> elements containing the same formatting will be merged.
-         *
-         * @param {Object[]|Object} ranges
-         *  The DOM text ranges to be formatted. May be an array of DOM text range
-         *  objects, or a single DOM text range object.
-         *
-         * @param {Object} attributes
-         *  A map of character attribute name/value pairs.
-         */
-        this.setAttributes = function (ranges, attributes) {
-
-            var // last text node visited while iteration
-                lastTextNode = null,
-                // parent span element of next sibling text node
-                nextSpan = null;
-
-            // iterate all text nodes and change their formatting
-            Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
-
-                var // text of the node
-                    text = textNode.nodeValue,
-                    // parent element of the text node
-                    parent = textNode.parentNode;
-
-                // put text node into a span element, if not existing
-                if (Utils.getNodeName(parent) !== 'span') {
-                    $(textNode).wrap('<span>');
-                    parent = textNode.parentNode;
-                    // Copy the paragraph's font-size to the span, and reset the
-                    // font-size of the paragraph, otherwise CSS defines a lower
-                    // limit for the line-height of all spans according to the
-                    // parent paragraph's font-size.
-                    $(parent).css('font-size', $(parent.parentNode).css('font-size'));
-                    $(parent.parentNode).css('font-size', '0');
-                }
-
-                // if manipulating a part of the text node, split it
-                if (start > 0) {
-                    // prepend a new text node to this text node
-                    $(parent).clone().text(text.substr(0, start)).insertBefore(parent);
-                    // shorten text of this text node
-                    textNode.nodeValue = text.substr(start);
-                }
-                if (end < text.length) {
-                    // append a new text node to this text node
-                    $(parent).clone().text(text.substr(end)).insertAfter(parent);
-                    // shorten text of this text node
-                    textNode.nodeValue = text.substr(start, end - start);
-                }
-
-                // set the new formatting attributes at the span element
-                this.setElementAttributes(parent, attributes);
-
-                // try to merge with previous span
-                if (parent.previousSibling && this.hasEqualElementAttributes(parent, parent.previousSibling)) {
-                    textNode.nodeValue = $(parent.previousSibling).text() + textNode.nodeValue;
-                    $(parent.previousSibling).remove();
-                }
-
-                lastTextNode = textNode;
-            }, this);
-
-            // try to merge last text node with next span
-            nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
-            if (nextSpan && (Utils.getNodeName(nextSpan) === 'span')) {
-                if (this.hasEqualElementAttributes(lastTextNode.parentNode, nextSpan)) {
-                    lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
-                    $(nextSpan).remove();
-                }
+        italic: {
+            get: function (element) {
+                var value = $(element).css('font-style');
+                return (value === 'italic') || (value === 'oblique');
+            },
+            set: function (element, state) {
+                $(element).css('font-style', state ? 'italic' : 'normal');
             }
-        };
+        },
 
-    } // class CharacterAttributes
+        underline: {
+            get: function (element) {
+                return Utils.containsToken($(element).css('text-decoration'), 'underline');
+            },
+            set: function (element, state) {
+                var value = $(element).css('text-decoration');
+                value = Utils.toggleToken(value, 'underline', state, 'none');
+                $(element).css('text-decoration', value);
+            }
+        },
+
+        fontname: {
+            get: function (element) {
+                var value = $(element).css('font-family');
+                return Fonts.getFontName(value);
+            },
+            set: function (element, fontName) {
+                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
+            }
+        },
+
+        fontsize: {
+            get: function (element) {
+                var value = $(element).css('font-size');
+                return Utils.convertCssLength(value, 'pt');
+            },
+            set: function (element, fontSize) {
+                $(element).css('font-size', fontSize + 'pt');
+            }
+        },
+
+        // Logically, the line height is a paragraph attribute. But technically
+        // in CSS, the line height must be set separately at every span element
+        // because a relative CSS line-height attribute at the paragraph (e.g.
+        // 200%) will not be derived relatively to the spans, but absolutely
+        // according to the paragraph's font size. Example: The paragraph has a
+        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
+        // value will be derived to a span with a font size of 6pt, resulting
+        // in a relative line height of 400%.
+        lineheight: {
+            get: function () {
+                return 'normal';
+            },
+            set: function (element) {
+                $(element).css('line-height', 'normal');
+            }
+        }
+
+    }); // converters.character
+
+    // methods ----------------------------------------------------------------
+
+    /**
+     * Returns the values of all character formatting attributes in the
+     * specified DOM text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges. May be an array of DOM text range objects, or a
+     *  single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @returns {Object}
+     *  A map of character attribute name/value pairs.
+     */
+    converters.character.getAttributes = function (ranges, rootNode) {
+
+        var // the attribute values, mapped by name
+            attributes = {};
+
+        // process all text nodes, get attributes from their parent element
+        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+
+            var // merge the existing attributes with the attributes of the new text node
+                hasNonNull = this.mergeElementAttributes(attributes, textNode.parentNode);
+
+            // exit iteration loop if there are no unambiguous attributes left
+            if (!hasNonNull) {
+                return false;
+            }
+        }, this);
+
+        return attributes;
+    };
+
+    /**
+     * Changes specific character formatting attributes in the specified DOM
+     * text ranges. The formatting attributes will be applied to the tex
+     * node's parent <span> elements which will be created as needed. Sibling
+     * <span> elements containing the same formatting will be merged.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges to be formatted. May be an array of DOM text range
+     *  objects, or a single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {Object} attributes
+     *  A map of character attribute name/value pairs.
+     */
+    converters.character.setAttributes = function (ranges, rootNode, attributes) {
+
+        var // last text node visited while iteration
+            lastTextNode = null,
+            // parent span element of next sibling text node
+            nextSpan = null;
+
+        // iterate all text nodes and change their formatting
+        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
+
+            var // text of the node
+                text = textNode.nodeValue,
+                // parent element of the text node
+                parent = textNode.parentNode;
+
+            // put text node into a span element, if not existing
+            if (Utils.getNodeName(parent) !== 'span') {
+                $(textNode).wrap('<span>');
+                parent = textNode.parentNode;
+                // Copy the paragraph's font-size to the span, and reset the
+                // font-size of the paragraph, otherwise CSS defines a lower
+                // limit for the line-height of all spans according to the
+                // parent paragraph's font-size.
+                $(parent).css('font-size', $(parent.parentNode).css('font-size'));
+                $(parent.parentNode).css('font-size', '0');
+            }
+
+            // if manipulating a part of the text node, split it
+            if (start > 0) {
+                // prepend a new text node to this text node
+                $(parent).clone().text(text.substr(0, start)).insertBefore(parent);
+                // shorten text of this text node
+                textNode.nodeValue = text.substr(start);
+            }
+            if (end < text.length) {
+                // append a new text node to this text node
+                $(parent).clone().text(text.substr(end)).insertAfter(parent);
+                // shorten text of this text node
+                textNode.nodeValue = text.substr(start, end - start);
+            }
+
+            // set the new formatting attributes at the span element
+            this.setElementAttributes(parent, attributes);
+
+            // try to merge with previous span
+            if (parent.previousSibling && this.hasEqualElementAttributes(parent, parent.previousSibling)) {
+                textNode.nodeValue = $(parent.previousSibling).text() + textNode.nodeValue;
+                $(parent.previousSibling).remove();
+            }
+
+            lastTextNode = textNode;
+        }, this);
+
+        // try to merge last text node with next span
+        nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
+        if (nextSpan && (Utils.getNodeName(nextSpan) === 'span')) {
+            if (this.hasEqualElementAttributes(lastTextNode.parentNode, nextSpan)) {
+                lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
+                $(nextSpan).remove();
+            }
+        }
+    };
+
+    // static class Attributes ================================================
+
+    var Attributes = {};
+
+    /**
+     * Returns whether the specified attribute converter contains a definition
+     * for the passed formatting attribute.
+     *
+     * @param {String} type
+     *  The type of the attribute converter.
+     *
+     * @param {String} name
+     *  The name of the formatting attribute.
+     *
+     * @returns {Boolean}
+     *  Whether the specified attribute is supported by the converter.
+     */
+    Attributes.isAttribute = function (type, name) {
+        return (type in converters) && converters[type].hasAttribute(name);
+    };
+
+    /**
+     * Returns whether the specified attribute converter contains a definition
+     * for at least one of the passed formatting attributes.
+     *
+     * @param {String} type
+     *  The type of the attribute converter.
+     *
+     * @param {Object} attributes
+     *  A map with formatting attribute values, mapped by the attribute names.
+     *
+     * @returns {Boolean}
+     *  Whether at least one of the specified attributes is supported by the
+     *  converter.
+     */
+    Attributes.isAnyAttribute = function (type, attributes) {
+        return (type in converters) && converters[type].hasAnyAttribute(attributes);
+    };
+
+    /**
+     * Returns the values of all formatting attributes of a specific type in
+     * the specified DOM text ranges.
+     *
+     * @param {String} type
+     *  The type of the attribute converter.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges. May be an array of DOM text range objects, or a
+     *  single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @returns {Object}
+     *  A map of attribute name/value pairs.
+     */
+    Attributes.getAttributes = function (type, ranges, rootNode) {
+        return (type in converters) ? converters[type].getAttributes(ranges, rootNode) : null;
+    };
+
+    /**
+     * Changes specific formatting attributes in the specified DOM text ranges.
+     *
+     * @param {String} type
+     *  The type of the attribute converter.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges to be formatted. May be an array of DOM text range
+     *  objects, or a single DOM text range object.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing the text ranges. If this object is a jQuery
+     *  collection, uses the first node it contains.
+     *
+     * @param {Object} attributes
+     *  A map of paragraph attribute name/value pairs.
+     */
+    Attributes.setAttributes = function (type, ranges, rootNode, attributes) {
+
+        var // the converter object
+            converter = converters[type];
+
+        // do not iterate over the passed ranges, if no attribute is supported
+        if (converter && converter.hasAnyAttribute(attributes)) {
+            converter.setAttributes(ranges, rootNode, attributes);
+        }
+    };
 
     // exports ================================================================
 
-    // return a singleton object of every attribute converter
-    return {
-        ParagraphAttributes: new ParagraphAttributes(),
-        CharacterAttributes: new CharacterAttributes()
-    };
+    return Attributes;
 
 });
