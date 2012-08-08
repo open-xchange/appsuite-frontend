@@ -107,16 +107,16 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
      *  DOM node object as first parameter, and the current DOM text range
-     *  object as second parameter. If the iterator returns the boolean value
-     *  false, the iteration process will be stopped immediately.
+     *  object as second parameter. If the iterator returns the Utils.BREAK
+     *  object, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
     Selection.iterateNodesInTextRanges = function (ranges, iterator, context) {
 
@@ -145,71 +145,12 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
 
             // iterate as long as the end of the range has not been reached
             while (node && Selection.isNodeBeforeTextPosition(node, range.end)) {
-                // call iterator for the node, return if iterator returns false
-                if (iterator.call(context, node, range) === false) { return false; }
+                // call iterator for the node, return if iterator returns Utils.BREAK
+                if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
                 node = Utils.getNextNodeInTree(node);
             }
         }
-    };
-
-    /**
-     * Iterates over all text nodes contained in the specified DOM text ranges.
-     * The iterator function will receive the text node and the character range
-     * in its text contents that is covered by the specified DOM text ranges.
-     *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges whose text nodes will be iterated. May be an array
-     *  of DOM text range objects, or a single DOM text range object.
-     *
-     * @param {Function} iterator
-     *  The iterator function that will be called for every text node. Receives
-     *  the DOM text node object as first parameter, the offset of the first
-     *  character as second parameter, the offset after the last character as
-     *  third parameter, and the current DOM text range as fourth parameter. If
-     *  the iterator returns the boolean value false, the iteration process
-     *  will be stopped immediately.
-     *
-     * @param {Object} [context]
-     *  If specified, the iterator will be called with this context (the symbol
-     *  'this' will be bound to the context inside the iterator function).
-     *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
-     */
-    Selection.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
-
-        // iterate over all nodes, and process the text nodes
-        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
-
-            var // cursor instead of selection
-                isCursor = _.isEqual(range.start, range.end),
-                // start and end offset of covered text in text node
-                start = 0, end = 0;
-
-            // call passed iterator for all text nodes, but skip empty text nodes
-            // unless the entire text range consists of this empty text node
-            if ((node.nodeType === 3) && (isCursor || node.nodeValue.length)) {
-                start = (node === range.start.node) ? range.start.offset : 0;
-                end = (node === range.end.node) ? range.end.offset : node.nodeValue.length;
-                // call iterator for the text node, return if iterator returns false
-                if (iterator.call(context, node, start, end, range) === false) { return false; }
-            } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
-                // cursor selects a single <br> element, visit end of preceding text node instead
-                node = node.previousSibling;
-                while (node && (node.nodeType === 1)) {
-                    node = node.lastChild;
-                }
-                if (node && (node.nodeType === 3)) {
-                    // prepare start, end, and range object
-                    start = range.start.offset = end = range.end.offset = node.nodeValue.length;
-                    range.start.node = range.end.node = node;
-                    // call iterator for the text node, return if iterator returns false
-                    if (iterator.call(context, node, start, end, range) === false) { return false; }
-                }
-            }
-        });
     };
 
     /**
@@ -235,16 +176,16 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * @param {Function} iterator
      *  The iterator function that will be called for every found ancestor
      *  node. Receives the DOM node object as first parameter, and the current
-     *  DOM text range as second parameter. If the iterator returns the boolean
-     *  value false, the iteration process will be stopped immediately.
+     *  DOM text range as second parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
     Selection.iterateAncestorNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
 
@@ -262,12 +203,71 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
                     // skip node if it has been found before
                     if (!_(matchingNodes).contains(node)) {
                         matchingNodes.push(node);
-                        if (iterator.call(context, node, range) === false) { return false; }
+                        if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
                     }
                     return;
                 }
                 if (node === rootNode) { return; }
                 node = node.parentNode;
+            }
+        });
+    };
+
+    /**
+     * Iterates over all text nodes contained in the specified DOM text ranges.
+     * The iterator function will receive the text node and the character range
+     * in its text contents that is covered by the specified DOM text ranges.
+     *
+     * @param {Object[]|Object} ranges
+     *  The DOM text ranges whose text nodes will be iterated. May be an array
+     *  of DOM text range objects, or a single DOM text range object.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text node. Receives
+     *  the DOM text node object as first parameter, the offset of the first
+     *  character as second parameter, the offset after the last character as
+     *  third parameter, and the current DOM text range as fourth parameter. If
+     *  the iterator returns the Utils.BREAK object, the iteration process will
+     *  be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Selection.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
+
+        // iterate over all nodes, and process the text nodes
+        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+
+            var // cursor instead of selection
+                isCursor = _.isEqual(range.start, range.end),
+                // start and end offset of covered text in text node
+                start = 0, end = 0;
+
+            // call passed iterator for all text nodes, but skip empty text nodes
+            // unless the entire text range consists of this empty text node
+            if ((node.nodeType === 3) && (isCursor || node.nodeValue.length)) {
+                start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
+                end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
+                // call iterator for the text node, return if iterator returns Utils.BREAK
+                if (iterator.call(context, node, start, end, range) === Utils.BREAK) { return Utils.BREAK; }
+            } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
+                // cursor selects a single <br> element, visit last preceding text node instead
+                node = node.previousSibling;
+                if (node && !Utils.isTextNode(node)) {
+                    node = Utils.findDescendantNode(node, Utils.isTextNode, this, { reverse: true });
+                }
+                if (node) {
+                    // prepare start, end, and range object
+                    start = range.start.offset = end = range.end.offset = node.nodeValue.length;
+                    range.start.node = range.end.node = node;
+                    // call iterator for the text node, return if iterator returns Utils.BREAK
+                    if (iterator.call(context, node, start, end, range) === Utils.BREAK) { return Utils.BREAK; }
+                }
             }
         });
     };

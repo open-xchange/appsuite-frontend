@@ -320,45 +320,6 @@ define('io.ox/office/editor/editor',
         return false;
     }
 
-    function hasTextNode(element) {
-        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
-            if (child.nodeType === 3) {
-                return true;
-            }
-            else if (child.nodeType === 1)
-                return hasTextNode(child);
-        }
-        return false;
-    }
-
-    function getFirstTextNode(element) {
-        if (element) {
-            for (var child = element.firstChild; child !== null; child = child.nextSibling) {
-                if (child.nodeType === 3) {
-                    return child;
-                }
-                else if (hasTextNode(child)) {
-                    return getFirstTextNode(child);
-                }
-            }
-        }
-        return element;
-    }
-
-    function getLastTextNode(element) {
-        if (element) {
-            for (var child = element.lastChild; child !== null; child = child.previousSibling) {
-                if (child.nodeType === 3) {
-                    return child;
-                }
-                else if (hasTextNode(child)) {
-                    return getLastTextNode(child);
-                }
-            }
-        }
-        return element;
-    }
-
     // class OXOEditor ========================================================
 
     /**
@@ -636,31 +597,21 @@ define('io.ox/office/editor/editor',
                 useFirstTextNode = false;
             }
 
-            var textNode = useFirstTextNode ? getFirstTextNode(localNode) : getLastTextNode(localNode);
+            // special handling for <br>, use last preceding text node instead
+            if (localNode && (Utils.getNodeName(localNode) === 'br')) {
+                localNode = localNode.previousSibling;
+                useFirstTextNode = false;
+            }
+
+            // find the first or last text node contained in the element
+            var textNode = null;
+            if (localNode) {
+                textNode = Utils.isTextNode(localNode) ? localNode : Utils.findDescendantNode(localNode, Utils.isTextNode, this, { reverse: !useFirstTextNode });
+            }
 
             if (! textNode) {
                 dbgOutError("ERROR: Failed to determine text node from current node! (useFirstTextNode: " + useFirstTextNode + ")");
                 return;
-            }
-
-            if (textNode.nodeType !== 3) {
-                if (textNode.nodeName === 'BR') {
-                    textNode = textNode.previousSibling;  // Special handling for <BR> in empty paragraphs.
-                }
-
-                if (textNode.nodeType !== 3) {
-                    if (textNode.nodeName === 'SPAN') {
-                        textNode = textNode.firstChild;  // Special handling for <SPAN> in empty paragraphs.
-                    }
-                }
-
-                if ((! textNode) || (textNode.nodeType !== 3)) {
-                    dbgOutError("ERROR: Failed to determine text node from current node!");
-                    if (textNode) {
-                        dbgOutError("ERROR: NodeType must be 3, but it is: " + textNode.nodeType + "(" + textNode.nodeName + ")");
-                    }
-                    return;
-                }
             }
 
             var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
@@ -1033,7 +984,7 @@ define('io.ox/office/editor/editor',
                             // test if text node contains the last character of the query text
                             if (textPos + query.length <= text.length) {
                                 range.end = { node: node, offset: textPos + query.length };
-                                return false;
+                                return Utils.BREAK;
                             }
 
                             // skip this text node
@@ -3050,7 +3001,7 @@ define('io.ox/office/editor/editor',
             }
 
             // disable IE table manipulation handlers in edit mode
-            editdiv.get(0).onresizestart = function () { return false; };
+            Utils.getDomNode(editdiv).onresizestart = function () { return false; };
         };
 
         this.implInsertText = function (text, position) {

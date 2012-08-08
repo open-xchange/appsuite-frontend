@@ -463,6 +463,34 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Returns whether the passed DOM node is an element node.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM node is an element node.
+     */
+    Utils.isElementNode = function (node) {
+        return Utils.getDomNode(node).nodeType === 1;
+    };
+
+    /**
+     * Returns whether the passed DOM node is a text node.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM node is a text node.
+     */
+    Utils.isTextNode = function (node) {
+        return Utils.getDomNode(node).nodeType === 3;
+    };
+
+    /**
      * Returns the lower-case name of a DOM node object.
      *
      * @param {Node|jQuery} node
@@ -530,6 +558,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * A unique object used as return value in callback functions of iteration
+     * loops to break the iteration process immediately.
+     */
+    Utils.BREAK = {};
+
+    /**
      * Iterates over all descendant DOM nodes of the specified element.
      *
      * @param {HTMLElement|jQuery} element
@@ -538,29 +572,82 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the boolean
-     *  value false, the iteration process will be stopped immediately.
+     *  DOM node object as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
-     * @returns {Boolean|Undefined}
-     *  The boolean value false, if any iterator call has returned false to
-     *  stop the iteration process, otherwise undefined.
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports the following
+     *  options:
+     *  @param {Boolean} [options.reverse]
+     *      If set to true, the descendant nodes are visited in reversed order.
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    Utils.iterateDescendantNodes = function (element, iterator, context) {
+    Utils.iterateDescendantNodes = function (element, iterator, context, options) {
+
+        var // iteration direction
+            reverse = Utils.getBooleanOption(options, 'reverse', false);
 
         // visit all child nodes
         element = Utils.getDomNode(element);
-        for (var child = element.firstChild; child; child = child.nextSibling) {
+        for (var child = reverse ? element.lastChild : element.firstChild; child; child = reverse ? child.previousSibling : child.nextSibling) {
 
-            // call iterator for child node; if it returns false, exit loop and return too
-            if (iterator.call(context, child) === false) { return false; }
+            // call iterator for child node; if it returns Utils.BREAK, exit loop and return too
+            if (iterator.call(context, child) === Utils.BREAK) { return Utils.BREAK; }
 
-            // iterate child nodes; if iterator for any descendant node returns false, return false too
-            if ((child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context) === false)) { return false; }
+            // iterate child nodes; if iterator for any descendant node returns Utils.BREAK, return too
+            if ((child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
         }
+    };
+
+    /**
+     * Iterates over all descendant DOM nodes of the specified element, and
+     * returns the first node that passes a truth test using the specified
+     * predicate function.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant nodes will be iterated. If this
+     *  object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every node. Receives the
+     *  DOM node object as first parameter. If the iterator returns the boolean
+     *  value true, the iteration process will be stopped and the current node
+     *  will be returned. If the iterator returns the Utils.BREAK object, the
+     *  iteration process will be stopped immediately, and the value null will
+     *  be returned.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports all options also
+     *  supported by the method Utils.iterateDescendantNodes().
+     *
+     * @returns {Node|Null}
+     *  The first node the iterator has returned true for. If no matching node
+     *  has been found, returns null.
+     */
+    Utils.findDescendantNode = function (element, iterator, context, options) {
+
+        var // the node to be returned
+            resultNode = null;
+
+        // find the first node passing the iterator test
+        Utils.iterateDescendantNodes(element, function (node) {
+            var result = iterator.call(context, node);
+            if (result === true) { resultNode = node; return Utils.BREAK; }
+            if (result === Utils.BREAK) { return Utils.BREAK; }
+        }, context, options);
+
+        return resultNode;
     };
 
     /**

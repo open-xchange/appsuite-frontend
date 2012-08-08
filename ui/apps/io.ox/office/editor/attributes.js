@@ -218,7 +218,7 @@ define('io.ox/office/editor/attributes',
 
             // exit iteration loop if there are no unambiguous attributes left
             if (!hasNonNull) {
-                return false;
+                return Utils.BREAK;
             }
         }, this);
 
@@ -357,7 +357,7 @@ define('io.ox/office/editor/attributes',
 
             // exit iteration loop if there are no unambiguous attributes left
             if (!hasNonNull) {
-                return false;
+                return Utils.BREAK;
             }
         }, this);
 
@@ -389,7 +389,8 @@ define('io.ox/office/editor/attributes',
             nextSpan = null;
 
         // iterate all text nodes and change their formatting
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end) {
+        // TODO: multi-range support, prevent removing a node selected by the next range
+        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end, range) {
 
             var // text of the node
                 text = textNode.nodeValue,
