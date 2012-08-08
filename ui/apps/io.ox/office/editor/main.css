@@ -114,7 +114,7 @@
                 .highlight-mixin(#88f, #eef);
             }
 
-            table {
+            img, table {
                 .highlight-mixin(#f88, #fee);
                 outline-offset: 2px;
             }

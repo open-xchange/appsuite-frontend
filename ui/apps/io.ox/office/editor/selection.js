@@ -95,6 +95,45 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             { start: range.end, end: range.start } : range;
     };
 
+    // text node manipulation -------------------------------------------------
+
+    Selection.wrapTextNode = function (textNode) {
+
+        var // parent element of the text node
+            parent = textNode.parentNode;
+
+        if (Utils.getNodeName(parent) !== 'span') {
+
+            // put text node into a span element, if not existing
+            $(textNode).wrap('<span>');
+            parent = textNode.parentNode;
+
+            // Copy the paragraph's font-size to the span, and reset the
+            // font-size of the paragraph, otherwise CSS defines a lower
+            // limit for the line-height of all spans according to the
+            // parent paragraph's font-size.
+            $(parent).css('font-size', $(parent.parentNode).css('font-size'));
+            $(parent.parentNode).css('font-size', '0');
+        }
+    };
+
+    Selection.splitTextNode = function (position) {
+
+        var // the text node
+            textNode = position.node,
+            // text of the node
+            text = textNode.nodeValue;
+
+        // put text node into a span element, if not existing
+        Selection.wrapTextNode(textNode);
+
+        // prepend a new text node to this text node
+        $(textNode.parentNode).clone().text(text.substr(0, position.offset)).insertBefore(textNode.parentNode);
+
+        // shorten text of this text node
+        textNode.nodeValue = text.substr(position.offset);
+    };
+
     // range iteration --------------------------------------------------------
 
     /**

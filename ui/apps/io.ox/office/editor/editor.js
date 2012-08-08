@@ -2998,9 +2998,18 @@ define('io.ox/office/editor/editor',
         };
 
         this.implInsertImage = function (url, position) {
-            var domPos = this.getDOMPosition(position);
-            // TODO: If offset, split node
-            // TODO: Insert img <IMG SRC="url">
+            var domPos = this.getDOMPosition(position),
+                node = domPos.node;
+            if (node && Utils.isTextNode(node)) {
+                // prepend text before offset in a new span (also if position
+                // points to start or end of text, needed to clone formatting)
+                Selection.splitTextNode(domPos);
+                // insert image before the parent <span> element of the text node
+                node = node.parentNode;
+            }
+            if (node) {
+                $('<img>', { src: url }).insertBefore(node);
+            }
             var lastPos = _.copy(position);
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + 1;
