@@ -423,43 +423,22 @@ define('io.ox/office/editor/main',
          */
         function print() {
 
-            var // initialize the deferred to be returned
-                def = $.Deferred().always(function () {
-                    win.idle();
-                    editor.grabFocus();
-                });
+            // the deferred to be returned
+            var def = $.Deferred().always(function () {
+                win.idle();
+                editor.grabFocus();
+            });
 
-            // do not try to print, if file descriptor is missing
+            //  do not try to save, if file descriptor is missing
             if (!app.hasFileDescriptor()) {
                 return def.reject();
             }
 
             win.busy();
-            // load the file
-            window.open(AppHelper.getDocumentFilterUrl(app, 'importdocument', 'pdf_document'));
-            /*
-            $.ajax({
-                type: 'GET',
-                url: AppHelper.getDocumentFilterUrl(app, 'importdocument', 'pdf'),
-                dataType: 'json'
-            })
-            .pipe(function (response) {
-                return AppHelper.extractAjaxStringResult(response, 'PDFDoc');
-            })
-            .done(function (document) {
-                if (_.isString(document)) {
-                    showError('Printing is not implemented yet.', gt('Print Error'));
-                    def.reject();
-                } else {
-                    showError(gt('An error occurred while printing the document.'), gt('Print Error'));
-                    def.reject();
-                }
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-                def.reject();
-            });
-            */
+                        
+            // load the PDF file into appropriate PDF Viewer for printing
+            window.open(AppHelper.getDocumentFilterUrl(app, 'getfile', 'pdf'), app.getFileDescriptor().title || 'file');
+            def.resolve();
 
             return def;
         }
