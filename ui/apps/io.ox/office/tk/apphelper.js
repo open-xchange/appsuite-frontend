@@ -76,16 +76,21 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         var // the descriptor of the file loaded by the application
             file = app.getFileDescriptor();
 
-        return ox.apiRoot +
+        var filterurl = ox.apiRoot +
             '/oxodocumentfilter' +
             '?action=' + action +
             '&id=' + file.id +
             '&folder_id=' + file.folder_id +
             '&version=' + file.version +
-            '&filename=' + file.filename +
             '&session=' + ox.session +
-            '&uid=' + app.getUniqueId() +
-            (format ? ('&filter_format=' + format) : '');
+            '&uid=' + app.getUniqueId();
+
+        if (format)
+            filterurl += '&filter_format=' + format;
+
+        filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers
+
+        return filterurl;
     };
 
     /**
