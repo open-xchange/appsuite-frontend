@@ -387,35 +387,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          *  A reference to this controller.
          */
         this.disable = function (keys) {
-            return this.enable(false);
-        };
-
-        /**
-         * Enables or disables all items, and updates all registered view
-         * components. Items matching the specified selector will be enabled,
-         * all other items will be disabled.
-         *
-         * @param {String|RegExp|Null} [keys]
-         *  The keys of the items to be enabled, as space-separated string, or
-         *  as regular expression. Strings have to match the keys exactly. If
-         *  omitted, all items will be enabled. If set to null, all items will
-         *  be disabled.
-         *
-         * @returns {Controller}
-         *  A reference to this controller.
-         */
-        this.enableAndDisable = function (keys) {
-
-            var // get all items specified by the passed selector
-                enabledItems = selectItems(keys);
-
-            // enable/disable the items
-            clearChainedResultCache();
-            _(items).each(function (item, key) {
-                item.enable(key in enabledItems);
-            });
-
-            return this;
+            return this.enable(keys, false);
         };
 
         /**

@@ -23,13 +23,7 @@ define('io.ox/office/editor/editor',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes,
-
-        // shortcut for the paragraph attributes converter singleton
-        ParagraphAttributes = Attributes.ParagraphAttributes,
-
-        // shortcut for the character attributes converter singleton
-        CharacterAttributes = Attributes.CharacterAttributes;
+        KeyCodes = Utils.KeyCodes;
 
 
     var OP_TEXT_INSERT =  'insertText';
@@ -1654,24 +1648,6 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the values of all paragraph formatting attribute in the
-         * current browser selection.
-         */
-        this.getParagraphAttributes = function () {
-            var ranges = Selection.getBrowserSelection(editdiv);
-            return ParagraphAttributes.getAttributes(ranges);
-        };
-
-        /**
-         * Returns the values of all character formatting attribute in the
-         * current browser selection.
-         */
-        this.getCharacterAttributes = function () {
-            var ranges = Selection.getBrowserSelection(editdiv);
-            return CharacterAttributes.getAttributes(ranges);
-        };
-
-        /**
          * Returns the value of a specific formatting attribute in the current
          * browser selection.
          */
@@ -1680,15 +1656,30 @@ define('io.ox/office/editor/editor',
             var // the resulting attributes
                 attributes = null;
 
-            if (ParagraphAttributes.hasAttribute(attrName)) {
-                attributes = this.getParagraphAttributes();
-            } else if (CharacterAttributes.hasAttribute(attrName)) {
-                attributes = this.getCharacterAttributes();
+            if (Attributes.isAttribute('paragraph', attrName)) {
+                attributes = this.getAttributes('paragraph');
+            } else if (Attributes.isAttribute('character', attrName)) {
+                attributes = this.getAttributes('character');
             } else {
                 self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
             }
 
             return attributes[attrName];
+        };
+
+        /**
+         * Returns the values of all formatting attributes of a specific type
+         * in the current selection.
+         *
+         * @param {String} type
+         *  The type of the attributes.
+         *
+         * @returns {Object}
+         *  A map of attribute name/value pairs.
+         */
+        this.getAttributes = function (type) {
+            var ranges = Selection.getBrowserSelection(editdiv);
+            return Attributes.getAttributes(type, ranges, editdiv);
         };
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
@@ -1852,7 +1843,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (ParagraphAttributes.hasAttribute(attr)) {
+                else if (Attributes.isAttribute('paragraph', attr)) {
                     var newOperation = {name: OP_ATTR_SET, attr: attr, value: value, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -3122,12 +3113,8 @@ define('io.ox/office/editor/editor',
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
             if (textMode !== OXOEditor.TextMode.PLAIN) {
-                if (ParagraphAttributes.hasAnyAttribute(attributes)) {
-                    ParagraphAttributes.setAttributes(ranges, editdiv, attributes);
-                }
-                if (CharacterAttributes.hasAnyAttribute(attributes)) {
-                    CharacterAttributes.setAttributes(ranges, attributes);
-                }
+                Attributes.setAttributes('paragraph', ranges, editdiv, attributes);
+                Attributes.setAttributes('character', ranges, editdiv, attributes);
             }
         }
 
