@@ -21,6 +21,12 @@ define('plugins/portal/twitter/register',
 
     'use strict';
 
+    var extensionId = 'twitter';
+    var loadEntriesPerPage = 20;
+    var offset = 0;
+    var tweets = $('<div class="twitter">');
+    var $busyIndicator = $('<div>').html('&nbsp;');
+    
     var parseTweet = function (text, entities) {
         var offsets = {};
 
@@ -81,8 +87,33 @@ define('plugins/portal/twitter/register',
                 $('<div class="io-ox-portal-preview">').text(strings.shorten(message, 120)));
         }
     };
+    
+    var loadTweets = function (count, offset) {
+        var params = {'count': count, 'include_entities': true};
+        if (offset) {
+            params.max_id = offset;
+            // increment because max_id is inclusive and we're going to ignore the first tweet in our result
+            params.count = count + 1;
+        }
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
+        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+    };
+    
+    var showTweet = function (tweet) {
+        var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id;
+        var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
+        
+        return $('<div class="tweet">')
+            .append($('<a>', {href: tweetLink, target: '_blank'})
+                .append($('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})))
+            .append($('<div class="text">')
+                .append($('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text(tweet.user.name))
+                .append('<br />')
+                .append(parseTweet(tweet.text, tweet.entities)));
+    };
+    
     ext.point('io.ox/portal/widget').extend({
-        id: 'twitter',
+        id: extensionId,
         index: 140,
         tileHeight: 2,
         title: "Twitter",
@@ -107,7 +138,7 @@ define('plugins/portal/twitter/register',
         },
         
         load: function () {
-            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 10, include_entities: true}});
+            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: loadEntriesPerPage, include_entities: true}});
             return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
         },
         draw: function (timeline) {
@@ -116,27 +147,34 @@ define('plugins/portal/twitter/register',
                 return $.Deferred().resolve();
             }
             var self = this;
+            
             self.append($('<div>').addClass('clear-title').text('Twitter'));
 
-            var count = 0;
-            var tweets = $('<div class="twitter">').appendTo(self);
+            tweets.appendTo(self);
+            $busyIndicator.appendTo(self);
+                        
             _(timeline).each(function (tweet) {
-                var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id;
-                var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-                
-                $('<div class="tweet">')
-                    .append($('<a>', {href: tweetLink, target: '_blank'})
-                        .append($('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})))
-                    .append($('<div class="text">')
-                        .append($('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text(tweet.user.name))
-                        .append('<br />')
-                        .append(parseTweet(tweet.text, tweet.entities)))
-                    .appendTo(tweets);
+                offset = tweet.id;
+                showTweet(tweet).appendTo(tweets);
             });
 
             return $.Deferred().resolve();
+        },
+        loadMoreResults: function (finishFn) {
+            $busyIndicator.addClass('io-ox-busy');
+
+            loadTweets(loadEntriesPerPage, offset)
+                .done(function (j) {
+                    j = j.slice(1);
+                    _(j).each(function (tweet) {
+                        offset = tweet.id;
+                        showTweet(tweet).appendTo(tweets);
+                    });
+                    finishFn($busyIndicator);
+                })
+                .fail(function () {
+                    finishFn($busyIndicator);
+                });
         }
     });
-
-
 });

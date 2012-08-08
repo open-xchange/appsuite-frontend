@@ -110,6 +110,17 @@ define("io.ox/core/extensions",
 
             extension.index = extension.index || 1000000000;
 
+            // Used for seamless scrolling
+            extension.isLoadingMoreResults = false;
+            extension.timer = 0;
+
+            extension.finishLoadingMoreResults = function (busyIndicator) {
+                extension.isLoadingMoreResults = false;
+                if (busyIndicator) {
+                    busyIndicator.removeClass('io-ox-busy');
+                }
+            };
+            
             // skip duplicates (= same id)
             if (!has(extension.id)) {
 

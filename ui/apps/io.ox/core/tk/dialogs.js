@@ -364,7 +364,9 @@ define("io.ox/core/tk/dialogs",
         };
 
         closeByScroll = function (e) {
-            close(e);
+            if (!options.disableCloseByScroll) {
+                close(e);
+            }
         };
 
         closeByClick = function (e) {

@@ -111,7 +111,6 @@ function (ext, config, userAPI, date, tasks, control, gt) {
         function initExtensions() {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
-                    
                     contentQueue.enqueue(createContentTask(extension));
                     
                     var $node = $('<div>')
@@ -126,6 +125,28 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
                         };
+                    }
+                    
+                    if (extension.loadMoreResults) {
+                        var $o = win.nodes.main;
+                        
+                        $o.bind('scroll',
+                                function () {
+                                    // TODO tidy enough? (loadingMoreResults + active tile)
+                                    if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
+                                        extension.timer = setTimeout(function () {
+                                            // Position + Height + Tolerance
+                                            var distance = $o.scrollTop() + $o.height() + 50;
+                                            
+                                            if ($('div.io-ox-portal-content').height() <= distance) {
+                                                extension.isLoadingMoreResults = true;
+                                                extension.loadMoreResults(extension.finishLoadingMoreResults);
+                                            }
+                                            extension.timer = 0;
+                                        }, 250);
+                                    }
+                                }
+                        );
                     }
 
                     if (!extension.drawTile) {
