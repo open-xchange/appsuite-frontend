@@ -28,6 +28,35 @@ define('io.ox/core/notifications',
         onChange: function () {
             this.$el.addClass('badge-error');
             this.$el.text(this.model.get('count'));
+        },
+        setNotifier: function (b) {
+            if (b) {
+                this.$el.addClass('badge-error');
+            } else {
+                this.$el.removeClass('badge-error');
+            }
+        },
+        setCount: function (count) {
+            this.model.set('count', count);
+        }
+    });
+    
+    var FaviconBadge = Backbone.Model.extend({
+        initialize: function (options) {
+            this.on('change', _.bind(this.onChange, this));
+        },
+        onChange: function () {
+            window.Tinycon.setBubble(this.get('count'));
+        },
+        setNotifier: function (b) {
+            if (b && this.get('count')) {
+                window.Tinycon.setBubble(this.get('count'));
+            } else {
+                window.Tinycon.setBubble(0);
+            }
+        },
+        setCount: function (count) {
+            this.set('count', count);
         }
     });
 
@@ -68,21 +97,18 @@ define('io.ox/core/notifications',
         }
     });
 
-
-
-
-
     var NotificationController = function () {
         this.notifications = {};
+        this.badges = [];
     };
 
     NotificationController.prototype = {
         attach: function (desktop, pos) {
             //view
             var self = this;
-            this.badgeView = new BadgeView({model: new Backbone.Model({ count: 0})});
+            var badgeView = new BadgeView({model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            desktop.addLauncher("right", this.badgeView.render().$el, $.proxy(this.toggleList, this));
+            desktop.addLauncher(pos, badgeView.render().$el, $.proxy(this.toggleList, this));
             $('#io-ox-core').prepend(
                 $('<div id="io-ox-notifications" class="scrollable">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
@@ -91,7 +117,8 @@ define('io.ox/core/notifications',
                     }
                 })
             );
-
+            this.badges.push(badgeView);
+            
             // invoke plugins
             var plugins = ext.getPlugins({name: 'notifications', prefix: 'plugins/notifications/'});
             require(plugins).done(function () {
@@ -107,6 +134,11 @@ define('io.ox/core/notifications',
 
 
         },
+        addFaviconNotification: function () {
+            if (window.Tinycon) {
+                this.badges.push(new FaviconBadge());
+            }
+        },
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};
@@ -118,30 +150,35 @@ define('io.ox/core/notifications',
                 this.notifications[key] = module;
                 $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
             }
-
             return this.notifications[key];
         },
         onAddNotification: function () {
-            this.badgeView.$el.addClass('badge-error');
+            _.each(this.badges, function (badgeView) {
+                badgeView.setNotifier(true);
+            });
             this.update();
         },
         onRemoveNotification: function () {
             this.update();
         },
         onResetNotifications: function () {
-            this.badgeView.$el.addClass('badge-error');
+            _.each(this.badges, function (badgeView) {
+                badgeView.setNotifier(true);
+            });
             this.update();
         },
         update: function () {
 
             var count = _.reduce(this.notifications, function (memo, module) {
                 if (module.collection.size() > 0) {
-                    return memo + 1;
+                    return memo + module.collection.size();
                 }
                 return memo;
             }, 0);
 
-            this.badgeView.model.set('count', (count || 0));
+            _.each(this.badges, function (badgeView) {
+                badgeView.setCount(count || 0);
+            });
             $('#io-ox-notifications').empty().append(this.notificationsView.render(this.notifications).el);
         },
         toggleList: function () {
@@ -166,7 +203,9 @@ define('io.ox/core/notifications',
         },
         hideList: function () {
             $('#io-ox-screens').removeClass('beside');
-            this.badgeView.$el.removeClass('badge-error');
+            _.each(this.badges, function (badgeView) {
+                badgeView.setNotifier(false);
+            });
             $('#io-ox-notifications').removeClass('active');
             $('#io-ox-notifications-overlay').empty().removeClass('active');
         }

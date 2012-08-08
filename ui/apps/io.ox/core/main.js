@@ -153,12 +153,9 @@ define("io.ox/core/main",
         // settings
         addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
 
-
         // notifications
         notifications.attach(desktop, "right");
-
-
-
+        notifications.addFaviconNotification();
 
         // apps
         desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
