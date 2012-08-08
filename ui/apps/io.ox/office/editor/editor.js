@@ -40,8 +40,8 @@ define('io.ox/office/editor/editor',
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
-    
-    var OP_INSERT_IMAGE = 'insertImage';
+
+    var OP_IMAGE_INSERT = 'insertImage';
 //    var OP_ATTR_DELETE =  'deleteAttribute';
 
     function OXOUndoAction(_undoOperation, _redoOperation) {
@@ -558,7 +558,7 @@ define('io.ox/office/editor/editor',
                 }
                 this.implSplitParagraph(operation.start);
             }
-            else if (operation.name === OP_INSERT_IMAGE) {
+            else if (operation.name === OP_IMAGE_INSERT) {
                 // TODO..  now only "*" placeholders are created for images
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
@@ -569,6 +569,7 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(undoAction);
                 }
                 this.implInsertText("*", operation.position);
+                this.implInsertImage(currentDocumentURL + '#/' + operation.imgurl, operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1201,7 +1202,7 @@ define('io.ox/office/editor/editor',
                 }
                 if (c === '5') {
                     var selection = this.getSelection();
-                    var newOperation = {name: OP_INSERT_IMAGE, position: _.copy(selection.startPaM.oxoPosition), imgurl: "blah"};
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg"};
                     this.applyOperation(newOperation, true, true);
                 }
             }
@@ -2977,7 +2978,6 @@ define('io.ox/office/editor/editor',
         };
 
         this.implInsertText = function (text, position) {
-            // -1 not allowed here - but code need to be robust
             var domPos = this.getDOMPosition(position);
             var oldText = domPos.node.nodeValue;
             var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
@@ -2985,6 +2985,17 @@ define('io.ox/office/editor/editor',
             var lastPos = _.copy(position);
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + text.length;
+            lastOperationEnd = new OXOPaM(lastPos);
+            this.implParagraphChanged(position);
+        };
+
+        this.implInsertImage = function (url, position) {
+            var domPos = this.getDOMPosition(position);
+            // TODO: If offset, split span
+            // TODO: Insert img <IMG SRC="url">
+            var lastPos = _.copy(position);
+            var posLength = position.length - 1;
+            lastPos[posLength] = position[posLength] + 1;
             lastOperationEnd = new OXOPaM(lastPos);
             this.implParagraphChanged(position);
         };
