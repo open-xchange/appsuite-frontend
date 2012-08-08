@@ -392,44 +392,28 @@ define('io.ox/office/editor/attributes',
         // TODO: multi-range support, prevent removing a node selected by the next range
         Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end, range) {
 
-            var // text of the node
-                text = textNode.nodeValue,
-                // parent element of the text node
-                parent = textNode.parentNode;
-
-            // put text node into a span element, if not existing
-            if (Utils.getNodeName(parent) !== 'span') {
-                $(textNode).wrap('<span>');
-                parent = textNode.parentNode;
-                // Copy the paragraph's font-size to the span, and reset the
-                // font-size of the paragraph, otherwise CSS defines a lower
-                // limit for the line-height of all spans according to the
-                // parent paragraph's font-size.
-                $(parent).css('font-size', $(parent.parentNode).css('font-size'));
-                $(parent.parentNode).css('font-size', '0');
-            }
+            var // put text node into a span element, if not existing
+                span = Selection.wrapTextNode(textNode),
+                // text of the node
+                textLen = textNode.nodeValue.length;
 
             // if manipulating a part of the text node, split it
             if (start > 0) {
                 // prepend a new text node to this text node
-                $(parent).clone().text(text.substr(0, start)).insertBefore(parent);
-                // shorten text of this text node
-                textNode.nodeValue = text.substr(start);
+                Selection.splitTextNode(textNode, start);
             }
-            if (end < text.length) {
+            if (end < textLen) {
                 // append a new text node to this text node
-                $(parent).clone().text(text.substr(end)).insertAfter(parent);
-                // shorten text of this text node
-                textNode.nodeValue = text.substr(start, end - start);
+                Selection.splitTextNode(textNode, end - start, true);
             }
 
             // set the new formatting attributes at the span element
-            this.setElementAttributes(parent, attributes);
+            this.setElementAttributes(span, attributes);
 
             // try to merge with previous span
-            if (parent.previousSibling && this.hasEqualElementAttributes(parent, parent.previousSibling)) {
-                textNode.nodeValue = $(parent.previousSibling).text() + textNode.nodeValue;
-                $(parent.previousSibling).remove();
+            if (span.previousSibling && this.hasEqualElementAttributes(span, span.previousSibling)) {
+                textNode.nodeValue = $(span.previousSibling).text() + textNode.nodeValue;
+                $(span.previousSibling).remove();
             }
 
             lastTextNode = textNode;

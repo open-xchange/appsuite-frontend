@@ -115,23 +115,33 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             $(parent).css('font-size', $(parent.parentNode).css('font-size'));
             $(parent.parentNode).css('font-size', '0');
         }
+
+        return parent;
     };
 
-    Selection.splitTextNode = function (position) {
+    Selection.splitTextNode = function (textNode, offset, append) {
 
-        var // the text node
-            textNode = position.node,
-            // text of the node
-            text = textNode.nodeValue;
+        var // put text node into a span element, if not existing
+            span = Selection.wrapTextNode(textNode),
+            // create a new span for the split text portion
+            newSpan = $(span).clone(),
+            // text for the left span
+            leftText = textNode.nodeValue.substr(0, offset),
+            // text for the right span
+            rightText = textNode.nodeValue.substr(offset);
 
-        // put text node into a span element, if not existing
-        Selection.wrapTextNode(textNode);
+        if (append) {
+            newSpan.insertAfter(span);
+            textNode.nodeValue = leftText;
+            newSpan.text(rightText);
+        } else {
+            newSpan.insertBefore(span);
+            newSpan.text(leftText);
+            textNode.nodeValue = rightText;
+        }
 
-        // prepend a new text node to this text node
-        $(textNode.parentNode).clone().text(text.substr(0, position.offset)).insertBefore(textNode.parentNode);
-
-        // shorten text of this text node
-        textNode.nodeValue = text.substr(position.offset);
+        // return the new text node
+        return newSpan[0].firstChild;
     };
 
     // range iteration --------------------------------------------------------

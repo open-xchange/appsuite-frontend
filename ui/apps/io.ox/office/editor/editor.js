@@ -2999,11 +2999,11 @@ define('io.ox/office/editor/editor',
 
         this.implInsertImage = function (url, position) {
             var domPos = this.getDOMPosition(position),
-                node = domPos.node;
+                node = domPos ? domPos.node : null;
             if (node && Utils.isTextNode(node)) {
                 // prepend text before offset in a new span (also if position
                 // points to start or end of text, needed to clone formatting)
-                Selection.splitTextNode(domPos);
+                Selection.splitTextNode(node, domPos.offset);
                 // insert image before the parent <span> element of the text node
                 node = node.parentNode;
             }
