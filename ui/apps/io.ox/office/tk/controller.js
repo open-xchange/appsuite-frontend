@@ -246,12 +246,13 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
         // methods ------------------------------------------------------------
 
         /**
-         * Adds more item definitions to this controller.
+         * Adds the definition for a new item to this controller.
          *
-         * @param {Object} definitions
-         *  A map of key/definition pairs. Each attribute in this map defines
-         *  an item, keyed by its name. Each definition is a map object by
-         *  itself, supporting the following attributes:
+         * @param {String} key
+         *  The key of the new item.
+         *
+         * @param {Object} definition
+         *  A map defining the item. The following attributes are supported:
          *  @param {String} [definition.chain]
          *      The name of an item that will be used to calculate intermediate
          *      results for the getter function and enabler function (see
@@ -299,12 +300,25 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * @returns {Controller}
          *  A reference to this controller instance.
          */
+        this.addDefinition = function (key, definition) {
+            if (_.isString(key) && key && _.isObject(definition)) {
+                items[key] = new Item(key, definition);
+            }
+            return this;
+        };
+
+        /**
+         * Adds definitions for multiple items to this controller.
+         *
+         * @param {Object} definitions
+         *  A map of key/definition pairs for all new items. Each item will be
+         *  defined by calling the method Controller.addDefinition().
+         *
+         * @returns {Controller}
+         *  A reference to this controller instance.
+         */
         this.addDefinitions = function (definitions) {
-            _(definitions).each(function (definition, key) {
-                if (_.isString(key) && key && _.isObject(definition)) {
-                    items[key] = new Item(key, definition);
-                }
-            });
+            _(definitions).each(function (definition, key) { this.addDefinition(key, definition); }, this);
             return this;
         };
 
