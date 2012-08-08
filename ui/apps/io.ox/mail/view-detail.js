@@ -739,7 +739,7 @@ define('io.ox/mail/view-detail',
                 this.append(
                     $('<div>')
                     .addClass('list')
-                    .addClass('infoblock backstripes')
+                    .addClass('infoblock backstripes cursor-pointer')
                     .append(
                          $('<a>').text(gt('Show images')),
                          $('<i>').text(
