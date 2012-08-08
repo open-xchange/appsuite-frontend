@@ -7,7 +7,8 @@ define("io.ox/core/strings", function () {
             }
             return string;
         },
-        shortenUri: function (string, maxlen) {
+        shortenUri: function (uriString, maxlen) {
+            var string = uriString.replace(/^https?:\/\//, "");
             var difference = string.length - maxlen;
             if (difference <= 0) {
                 return string;
