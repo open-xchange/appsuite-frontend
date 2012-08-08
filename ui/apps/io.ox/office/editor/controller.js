@@ -93,7 +93,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'table/delete/row': {
                     chain: 'chain/table',
-                    set: function () { editor.deleteTableRow(); }
+                    set: function () { editor.deleteRows(); }
                 },
                 'table/delete/column': {
                     chain: 'chain/table',

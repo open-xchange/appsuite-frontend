@@ -37,6 +37,7 @@ define('io.ox/office/editor/editor',
     var OP_TABLE_INSERT = 'insertTable';
     var OP_TABLE_DELETE = 'deleteTable';
     var OP_CELLRANGE_DELETE = 'deleteCellRange';
+    var OP_ROWS_DELETE = 'deleteRows';
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
@@ -546,6 +547,9 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_CELLRANGE_DELETE) {
                 this.implDeleteCellRange(operation.position, operation.start, operation.end);
+            }
+            else if (operation.name === OP_ROWS_DELETE) {
+                this.implDeleteRows(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1643,6 +1647,26 @@ define('io.ox/office/editor/editor',
 
         this.deleteCellRange = function (position, start, end) {
             var newOperation = { name: OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
+            this.applyOperation(newOperation, true, true);
+        };
+
+        this.deleteRows = function () {
+            var selection = this.getSelection(),
+                start = this.getRowIndexInTable(selection.startPaM.oxoPosition),
+                end = start,
+                position = _.copy(selection.startPaM.oxoPosition, true);
+
+            if (selection.hasRange()) {
+                end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
+            }
+
+            // removing position, paragraph, column and row
+            position.pop();
+            position.pop();
+            position.pop();
+            position.pop();
+
+            var newOperation = { name: OP_ROWS_DELETE, position: _.copy(position, true), start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -3273,6 +3297,31 @@ define('io.ox/office/editor/editor',
                     this.deleteAllParagraphsInCell(position);
                 }
             }
+        };
+
+        this.implDeleteRows = function (pos, startRow, endRow) {
+
+            var localPositon = _.copy(pos, true),
+                lastColumn = this.getLastColumnIndexInTable(localPositon);
+
+            // iterating over all cells and remove all paragraphs in the cells
+            this.implDeleteCellRange(pos, [startRow, 0], [endRow, lastColumn]);
+
+            // Finally removing the rows itself
+            var table = this.getDOMPosition(localPositon).node,
+                tbody = table.firstChild,
+                rows = tbody.childNodes,
+                maxRow = rows.length - 1;
+
+
+            if ((startRow === 0) && (endRow === maxRow)) {
+                this.implDeleteTable(pos);
+            } else {
+                for (var i = endRow; i >= startRow; i--) {
+                    tbody.removeChild(rows[i]);
+                }
+            }
+
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
