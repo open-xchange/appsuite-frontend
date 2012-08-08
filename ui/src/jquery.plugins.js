@@ -545,7 +545,7 @@
 
     // factory
     $.createViewContainer = function (data, api, getter) {
-//foo
+
         var cid = _.cid(data),
 
             node = $('<div>').attr('data-cid', cid),
