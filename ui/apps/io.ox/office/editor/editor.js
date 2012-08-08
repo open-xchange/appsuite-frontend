@@ -383,6 +383,8 @@ define('io.ox/office/editor/editor',
 
         var self = this;
 
+        var currentDocumentURL;
+
         var focused = false;
 
         var lastKeyDownEvent;
@@ -934,6 +936,10 @@ define('io.ox/office/editor/editor',
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
+        };
+
+        this.setDocumentURL = function (url) {
+            currentDocumentURL = url;
         };
 
         this.getSelection = function (updateFromBrowser) {

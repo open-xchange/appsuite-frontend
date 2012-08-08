@@ -336,18 +336,21 @@ define('io.ox/office/editor/main',
                 $(window).resize();
                 updateTitles();
 
+                var docurl = AppHelper.getDocumentFilterUrl(app, 'importdocument');
+
                 editor.initDocument();
                 operationsBuffer = []; // initDocument will result in an operation
 
                 // load the file
                 $.ajax({
                     type: 'GET',
-                    url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
+                    url: docurl,
                     dataType: 'json'
                 })
                 .pipe(extractOperationsList)
                 .done(function (operations) {
                     if (operations) {
+                        editor.setDocumentURL(docurl);
                         editor.enableUndo(false);
                         applyOperations(operations);
                         editor.enableUndo(true);
