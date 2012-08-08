@@ -1,0 +1,28 @@
+.io-ox-portal-rss-entry {
+   margin-bottom: 13px;
+   padding-bottom: 13px;
+   border-bottom: 2px solid #aaa;
+}
+.io-ox-portal-rss-source {
+    
+}
+.io-ox-portal-feedName {
+    
+}
+.io-ox-portal-feedUrl {
+    
+}
+.io-ox-portal-rss-feedTitle {
+    line-height: inherit;
+}
+.io-ox-portal-rss-content {
+    
+}
+.portal-preview {
+    height: 4em;
+    overflow: hidden;
+}
+.portal-full {
+    height: 100%;
+    overflow: auto;
+}

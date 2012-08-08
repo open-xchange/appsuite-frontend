@@ -8,128 +8,81 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
 define("plugins/portal/rss/register",
-    ["io.ox/core/extensions"], function (ext, api) {
+    ["io.ox/core/extensions",
+    "io.ox/core/strings",
+    "io.ox/messaging/accounts/api",
+    "io.ox/messaging/services/api",
+    "io.ox/messaging/messages/api",
+    'less!plugins/portal/rss/style.css'], function (ext, strings, accountApi, serviceApi, messageApi) {
 
     "use strict";
     
     var feeds = [];
-    
-    /*
-    // SPIEGEL Online
-    feeds.push({
-        id: "rss-spiegel",
-        url: "http://www.spiegel.de/international/europe/index.rss",
-        index: 400,
-        cssClass: "spiegel"
-    });
 
-    // Engadget
-    feeds.push({
-        id: "rss-engadget",
-        url: "http://www.engadget.com/rss.xml",
-        num: 2,
-        index: 500
-    });
-
-    // Another one...
-    feeds.push({
-        id: "rss-a",
-        url: "http://golem.de.dynamic.feedsportal.com/pf/578068/http://rss.golem.de/rss.php?feed=RSS1.0",
-        index: 550
-    });
-
-    // Another one...
-    feeds.push({
-        id: "rss-nyt",
-        url: "http://www.nytimes.com/services/xml/rss/nyt/GlobalHome.xml",
-        index: 550
-    });
-
-    // Another one...
-//    feeds.push({
-//        id: "rss-handelsblatt",
-//        url: "http://www.handelsblatt.com/contentexport/feed/schlagzeilen",
-//        index: 600
-//    });
-    */
-    
-    _(feeds).each(function (extension) {
-
-        ext.point("io.ox/portal/widget").extend({
-            id: extension.id,
-            index: extension.index,
-            loadTile: function () {
-                return $.when();
-            },
-            drawTile: function () {
-                $(this).append(
-                    $('<img>').attr({src: 'apps/plugins/portal/rss/rss.png', alt: '', width: '28px', height: 'auto'}).css({'float': 'left', 'margin': '1em .5em 0 0'}),
-                    $('<h1>').text(extension.id)
-                );
-            },
-            load: function () {
-                // get RSS feed via Google Feed API
-                var url = "http://ajax.googleapis.com/ajax/services/feed/" +
-                    "load?v=1.0&num=" + (extension.num || 4) +
-                    "&callback=?&q=" + encodeURIComponent(extension.url);
-                return $.getJSON(url)
-                    .pipe(function (data) {
-                        return data && data.responseData ? data.responseData.feed : {};
-                    });
-            },
-            draw: function (feed) {
-
-                var self = this;
-
-                this.addClass(
-                        "io-ox-portal-rss" + (extension.cssClass ? " " + extension.cssClass : "")
-                    )
-                    .append(
-                        $("<div/>").addClass("clear-title")
-                            .text(feed.title.replace(/&gt;/g, '>') || "RSS")
-                    );
-
-                _(feed.entries).each(function (entry) {
-                    self.append(
-                        $("<div>").addClass("rss-entry")
-                        .append(
-                            $("<div>").addClass("rss-title").text(entry.title || "")
-                        )
-                        .append(
-                            $("<div>").addClass("rss-content").html(entry.content || "")
-                            .find("a")
-                                .attr("target", "_blank")
-                            .end()
-                            .find("img")
-                                .removeAttr("hspace vspace align height")
-                                .attr('alt', 'alt')
-                                .css({ clear: "both", float: "", height: "auto", margin: "", border: "" })
-                            .end()
-                            .find(":header:empty")
-                                .remove()
-                                .end()
-                            .find("iframe")
-                                .attr("frameborder", "0")
-                                .attr("border", "0")
-                                .attr("width", "405")
-                                .attr("height", "230")
-                            .end()
-                            .append($.txt(" "))
-                            .append(
-                                $("<a>", { href: entry.link, target: "_blank"})
-                                .css("whiteSpace", "nowrap")
-                                .text("Read full article")
-                            )
-                        )
-                    );
+    ext.point("io.ox/portal/widget").extend({
+        id: 'rss',
+        index: 100,
+        preview: function () {
+            $(this).append(
+                $('<h2>').text("RSS"),
+                $('<div class="io-ox-portal-preview">').text('You know what would be great? Showing the latest RSS feed here.'));
+            return $.Deferred().resolve();
+        },
+        
+        load: function () {
+            var def = $.Deferred();
+            var requests = [];
+            var id2name = {};
+            accountApi.all('com.openexchange.messaging.rss').done(function (accounts) {
+                _(accounts).each(function (account) {
+                    var folderId = "com.openexchange.messaging.rss://" + account.id + "/";
+                    id2name[folderId] = account.displayName;
+                    requests.push(messageApi.all(folderId));
                 });
+                $.when.apply($, requests).done(function () {
+                    def.resolve($.makeArray(arguments));
+                }).fail(function (failure) {
+                    console.log("Error when retrieving RSS feeds:", failure);
+                    def.resolve();
+                });
+            });
+            return def.pipe(function (data) {
+                var result = _(data).map(function (elem) { return elem[0]; }); //drop the timestamp
+                result = _.flatten(result); // merge arrays
+                _(result).each(function (elem) { elem.feedName = id2name[elem.folder]; });
+                result = _.sortBy(result, function (elem) {return -1 * elem.receivedDate; }); //sort by date, newest first
+                return result;
+            });
+        },
+        
+        draw: function (feed) {
+            var $node = $('<div class="io-ox-portal-rss">').appendTo(this);
+            
+            $('<h1 class="clear-title">').text("RSS").appendTo($node);
 
-                return $.Deferred().resolve();
-            }
-        });
+            _(feed).each(function (entry) {
+                var body = _(entry.body).find(function (candidate) {
+                    return candidate.contentType.type === 'text/html';
+                }).body;
+                //TODO: run through HTML white list
+
+                var $entry = $('<div class="io-ox-portal-rss-entry">').appendTo($node);
+                $entry.append(
+                    $('<h2 class="io-ox-portal-rss-feedTitle">').text(entry.subject),
+                    $('<div class="io-ox-portal-rss-source">').append(
+                        $('<span class="io-ox-portal-feedName">').text(entry.feedName + ": "),
+                        $('<a class="io-ox-portal-feedUrl" target="_blank">').attr({href: entry.url}).text(strings.shortenUri(entry.url, 30))
+                    ),
+                    $('<div class="io-ox-portal-rss-content portal-preview">').html(body).click(function () {
+                        $(this).toggleClass('portal-preview');
+                    })
+                );
+            });
+            return $.Deferred().resolve();
+        }
     });
 });
