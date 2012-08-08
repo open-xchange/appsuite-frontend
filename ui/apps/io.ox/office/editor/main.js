@@ -436,6 +436,8 @@ define('io.ox/office/editor/main',
 
             win.busy();
             // load the file
+            window.open(AppHelper.getDocumentFilterUrl(app, 'importdocument', 'pdf_document'));
+            /*
             $.ajax({
                 type: 'GET',
                 url: AppHelper.getDocumentFilterUrl(app, 'importdocument', 'pdf'),
@@ -457,6 +459,7 @@ define('io.ox/office/editor/main',
                 showAjaxError(response);
                 def.reject();
             });
+            */
 
             return def;
         }
