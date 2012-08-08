@@ -872,29 +872,30 @@ define("io.ox/mail/api",
                     top = _.cid(key);
                     list = threads[key];
                     pos = _(list).indexOf(obj.id);
-                    // trick: remove from array to avoid further processing
-                    ids.splice(index, 1);
-                    if (pos === 1) {
-                        // proper replace
-                        return updateTopLevel(top.folder_id, function (o) {
-                            if (o.id === top.id) {
-                                o.thread = _(o.thread).without(obj.id);
-                                o.id = _(o.thread).first();
-                            }
-                            return o;
-                        });
-                    } else {
-                        // just remove from thread list
-                        return updateTopLevel(top.folder_id, function (o) {
-                            if (o.id === top.id) {
-                                o.thread = _(o.thread).without(obj.id);
-                            }
-                            return o;
-                        });
+                    if (list.length > 2) {
+                        // trick: remove from array to avoid further processing
+                        ids.splice(index, 1);
+                        if (pos === 1) {
+                            // proper replace
+                            return updateTopLevel(top.folder_id, function (o) {
+                                if (o.id === top.id) {
+                                    o.thread = _(o.thread).without(obj.id);
+                                    o.id = _(o.thread).first();
+                                }
+                                return o;
+                            });
+                        } else {
+                            // just remove from thread list
+                            return updateTopLevel(top.folder_id, function (o) {
+                                if (o.id === top.id) {
+                                    o.thread = _(o.thread).without(obj.id);
+                                }
+                                return o;
+                            });
+                        }
                     }
-                } else {
-                    return $.when();
                 }
+                return $.when();
             })
         );
     };
