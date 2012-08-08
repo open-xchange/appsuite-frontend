@@ -217,6 +217,7 @@ utils.concat("boot.js", [
         "lib/backbone.validation.js",
         "lib/backbone.custom.js",
         "lib/doT.js",
+        "lib/tinycon/tinycon.min.js",
 
         "tmp/boot.js"]);
 
