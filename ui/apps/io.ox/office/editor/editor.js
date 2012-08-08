@@ -1688,6 +1688,10 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
+                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
+                    selection.endPaM.oxoPosition.pop();
+                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
+                }
                 end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
             }
 
@@ -1708,6 +1712,10 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
+                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
+                    selection.endPaM.oxoPosition.pop();
+                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
+                }
                 end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
             }
 
@@ -3362,48 +3370,56 @@ define('io.ox/office/editor/editor',
 
         this.implDeleteRows = function (pos, startRow, endRow) {
 
-            var localPositon = _.copy(pos, true),
-                lastColumn = this.getLastColumnIndexInTable(localPositon);
+            var localPosition = _.copy(pos, true),
+                lastColumn = this.getLastColumnIndexInTable(localPosition);
+
+            if (! this.isPositionInTable(localPosition)) {
+                return;
+            }
 
             // iterating over all cells and remove all paragraphs in the cells
-            this.implDeleteCellRange(localPositon, [startRow, 0], [endRow, lastColumn]);
+            this.implDeleteCellRange(localPosition, [startRow, 0], [endRow, lastColumn]);
 
             // Finally removing the rows itself
-            var table = this.getDOMPosition(localPositon).node,
+            var table = this.getDOMPosition(localPosition).node,
                 tbody = table.firstChild,
                 rows = tbody.childNodes,
                 maxRow = rows.length - 1;
 
 
             if ((startRow === 0) && (endRow === maxRow)) {
-                this.implDeleteTable(localPositon);
+                this.implDeleteTable(localPosition);
             } else {
                 for (var i = endRow; i >= startRow; i--) {
                     tbody.removeChild(rows[i]);
                 }
 
                 // Setting cursor to first position in table
-                localPositon.push(0);
-                localPositon.push(0);
-                this.setSelection(new OXOSelection(new OXOPaM(localPositon), new OXOPaM(localPositon)));
+                localPosition.push(0);
+                localPosition.push(0);
+                this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
             }
         };
 
         this.implDeleteColumns = function (pos, startCol, endCol) {
 
-            var localPositon = _.copy(pos, true),
-                lastRow = this.getLastRowIndexInTable(localPositon),
-                lastColumn = this.getLastColumnIndexInTable(localPositon);
+            var localPosition = _.copy(pos, true),
+                lastRow = this.getLastRowIndexInTable(localPosition),
+                lastColumn = this.getLastColumnIndexInTable(localPosition);
+
+            if (! this.isPositionInTable(localPosition)) {
+                return;
+            }
 
             if ((startCol === 0) && (endCol === lastColumn)) {
-                this.implDeleteTable(localPositon);
+                this.implDeleteTable(localPosition);
             } else {
 
                 // iterating over all cells and remove all paragraphs in the cells
-                this.implDeleteCellRange(localPositon, [0, startCol], [lastRow, endCol]);
+                this.implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
 
                 // Finally removing the columns itself
-                var table = this.getDOMPosition(localPositon).node,
+                var table = this.getDOMPosition(localPosition).node,
                 tbody = table.firstChild,
                 rows = tbody.childNodes,
                 maxRow = rows.length - 1;
@@ -3417,9 +3433,9 @@ define('io.ox/office/editor/editor',
                 }
 
                 // Setting cursor to first position in table
-                localPositon.push(0);
-                localPositon.push(0);
-                this.setSelection(new OXOSelection(new OXOPaM(localPositon), new OXOPaM(localPositon)));
+                localPosition.push(0);
+                localPosition.push(0);
+                this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
             }
         };
 
