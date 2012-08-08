@@ -38,6 +38,7 @@ define('io.ox/office/editor/editor',
     var OP_TABLE_DELETE = 'deleteTable';
     var OP_CELLRANGE_DELETE = 'deleteCellRange';
     var OP_ROWS_DELETE = 'deleteRows';
+    var OP_COLUMNS_DELETE = 'deleteColumns';
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
@@ -552,6 +553,9 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_ROWS_DELETE) {
                 this.implDeleteRows(operation.position, operation.start, operation.end);
+            }
+            else if (operation.name === OP_COLUMNS_DELETE) {
+                this.implDeleteColumns(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1689,6 +1693,26 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
+        this.deleteColumns = function () {
+            var selection = this.getSelection(),
+                start = this.getColumnIndexInRow(selection.startPaM.oxoPosition),
+                end = start,
+                position = _.copy(selection.startPaM.oxoPosition, true);
+
+            if (selection.hasRange()) {
+                end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
+            }
+
+            // removing position, paragraph, column and row
+            position.pop();
+            position.pop();
+            position.pop();
+            position.pop();
+
+            var newOperation = { name: OP_COLUMNS_DELETE, position: _.copy(position, true), start: start, end: end };
+            this.applyOperation(newOperation, true, true);
+        };
+
         this.insertParagraph = function (position) {
             var newOperation = {name: OP_PARA_INSERT, start: _.copy(position, true)};
             this.applyOperation(newOperation, true, true);
@@ -2460,7 +2484,7 @@ define('io.ox/office/editor/editor',
                     var node = domPos.node;
 
                     for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if ((node.nodeName === 'TH') || (node.nodeName === 'TH')) {
+                        if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {
                             foundColumn = true;
                             break;
                         } else {
@@ -3324,7 +3348,7 @@ define('io.ox/office/editor/editor',
                 lastColumn = this.getLastColumnIndexInTable(localPositon);
 
             // iterating over all cells and remove all paragraphs in the cells
-            this.implDeleteCellRange(pos, [startRow, 0], [endRow, lastColumn]);
+            this.implDeleteCellRange(localPositon, [startRow, 0], [endRow, lastColumn]);
 
             // Finally removing the rows itself
             var table = this.getDOMPosition(localPositon).node,
@@ -3334,11 +3358,50 @@ define('io.ox/office/editor/editor',
 
 
             if ((startRow === 0) && (endRow === maxRow)) {
-                this.implDeleteTable(pos);
+                this.implDeleteTable(localPositon);
             } else {
                 for (var i = endRow; i >= startRow; i--) {
                     tbody.removeChild(rows[i]);
                 }
+
+                // Setting cursor to first position in table
+                localPositon.push(0);
+                localPositon.push(0);
+                this.setSelection(new OXOSelection(new OXOPaM(localPositon), new OXOPaM(localPositon)));
+            }
+        };
+
+        this.implDeleteColumns = function (pos, startCol, endCol) {
+
+            var localPositon = _.copy(pos, true),
+                lastRow = this.getLastRowIndexInTable(localPositon),
+                lastColumn = this.getLastColumnIndexInTable(localPositon);
+
+            if ((startCol === 0) && (endCol === lastColumn)) {
+                this.implDeleteTable(localPositon);
+            } else {
+
+                // iterating over all cells and remove all paragraphs in the cells
+                this.implDeleteCellRange(localPositon, [0, startCol], [lastRow, endCol]);
+
+                // Finally removing the columns itself
+                var table = this.getDOMPosition(localPositon).node,
+                tbody = table.firstChild,
+                rows = tbody.childNodes,
+                maxRow = rows.length - 1;
+
+                for (var i = 0; i <= maxRow; i++) {
+                    var columns = rows[i].childNodes;
+
+                    for (var j = endCol; j >= startCol; j--) {
+                        rows[i].removeChild(columns[j]);
+                    }
+                }
+
+                // Setting cursor to first position in table
+                localPositon.push(0);
+                localPositon.push(0);
+                this.setSelection(new OXOSelection(new OXOPaM(localPositon), new OXOPaM(localPositon)));
             }
         };
 
