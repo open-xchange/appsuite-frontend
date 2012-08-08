@@ -913,6 +913,38 @@ define('io.ox/office/editor/editor',
             return ranges;
         };
 
+        this.getLastIndexInPositionByNodeName = function (position, nodename) {
+
+            var index = -1,
+                counter = -1,
+                oxoPos = _.copy(position, true),
+                node = null;
+
+            while (oxoPos.length > 0) {
+
+                counter++;
+
+                var returnObj = this.getNextChildNode(node, oxoPos.shift());
+
+                if (returnObj) {
+                    if (returnObj.node) {
+                        node = returnObj.node;
+                        if (node.nodeName === nodename) {
+                            index = counter;
+                        }
+                    } else {
+                        index = -1;
+                        break;
+                    }
+                } else {
+                    index = -1;
+                    break;
+                }
+            }
+
+            return index;
+        };
+
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
@@ -2473,138 +2505,6 @@ define('io.ox/office/editor/editor',
             return lastPara;
         };
 
-        this.getIndexOfLastParagraphInTablePosition = function (position) {
-            var indexOfLastParagraph = null,
-                isInTable = this.isPositionInTable(position),
-                foundParagraph = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'P') {
-                            foundParagraph = true;
-                            break;
-                        } else {
-                            if (node.nodeType === 3) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundParagraph) {
-                        indexOfLastParagraph = localPos.length - 1;  // found the correct paragraph
-                    }
-                }
-            }
-
-            return indexOfLastParagraph;
-        };
-
-        this.getIndexOfLastRowInPosition = function (position) {
-            var indexOfLastRow = null,
-                isInTable = this.isPositionInTable(position),
-                foundRow = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'TR') {
-                            foundRow = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') || (node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundRow) {
-                        indexOfLastRow = localPos.length - 1;  // found the correct row
-                    }
-                }
-            }
-
-            return indexOfLastRow;
-        };
-
-        this.getIndexOfLastColumnInPosition = function (position) {
-            var indexOfLastColumn = null,
-                isInTable = this.isPositionInTable(position),
-                foundColumn = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {
-                            foundColumn = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundColumn) {
-                        indexOfLastColumn = localPos.length - 1;  // found the correct column
-                    }
-                }
-            }
-
-            return indexOfLastColumn;
-        };
-
-        this.getIndexOfLastTableInPosition = function (position) {
-            var indexOfLastTable = null,
-                isInTable = this.isPositionInTable(position),
-                foundTable = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'TABLE') {
-                            foundTable = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') ||
-                                (node.nodeName === 'TD') ||
-                                (node.nodeName === 'TH') ||
-                                (node.nodeName === 'TR') ||
-                                (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundTable) {
-                        indexOfLastTable = localPos.length - 1;  // found the correct table
-                    }
-                }
-            }
-
-            return indexOfLastTable;
-        };
-
         this.getParagraphIndexInCell = function (position) {
 
             var paraIndex = null,
@@ -2673,7 +2573,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -2702,8 +2602,8 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var columnIndex = this.getIndexOfLastColumnInPosition(localPos),
-                    paraIndex = columnIndex + 1,
+                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
+                    paraIndex = rowIndex + 2,
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
                 localPos[paraIndex] = 0;
@@ -2736,7 +2636,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
                     lastPara =  localPos[paraIndex];
 
                 localPos[paraIndex] = 0; // always 0, because paragraphs are deleted
@@ -2755,7 +2655,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -2771,8 +2671,6 @@ define('io.ox/office/editor/editor',
                     for (var i = min; i <= lastColumn; i++) {
                         localPos[rowIndex] = j;  // row
                         localPos[columnIndex] = i;  // column
-                        // localPos[columnIndex + 1] = 0;
-                        // localPos[columnIndex + 2] = 0;
                         this.deleteAllParagraphsInCell(localPos);
                     }
                 }
@@ -2786,7 +2684,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  this.getLastParaIndexInCell(localPos);
 
@@ -2806,7 +2704,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
                     columnIndex = paraIndex - 1,
                     rowIndex = columnIndex - 1,
                     thisRow = localPos[rowIndex],
@@ -2839,7 +2737,7 @@ define('io.ox/office/editor/editor',
                 isInTable = this.isPositionInTable(localPos);
 
             if (isInTable) {
-                var rowIndex = this.getIndexOfLastRowInPosition(localPos),
+                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
                 columnIndex = rowIndex + 1,
                 thisRow = localPos[rowIndex],
                 thisColumn = localPos[columnIndex],
@@ -2873,7 +2771,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
                     thisPara = localPos[paraIndex];
 
                 for (var i = 0; i < thisPara; i++) {
@@ -2890,7 +2788,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(localPos),
+                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  this.getLastParaIndexInCell(position);
 
@@ -2904,7 +2802,7 @@ define('io.ox/office/editor/editor',
         this.setAttributesToCompleteTable = function (attributes, position) {
 
             var localPos = _.copy(position),
-                tableIndex = this.getIndexOfLastTableInPosition(localPos),
+                tableIndex = this.getLastIndexInPositionByNodeName(localPos, 'TABLE'),
                 localPos = [];
 
             for (var i = 0; i <= tableIndex; i++) {
@@ -2940,7 +2838,7 @@ define('io.ox/office/editor/editor',
                 isInTable = this.isPositionInTable(startPosition);
 
             if (isInTable) {
-                var paraIndex = this.getIndexOfLastParagraphInTablePosition(startPosition);
+                var paraIndex = this.getLastIndexInPositionByNodeName(startPosition, 'P');
 
                 startPosition[paraIndex + 1] = 0;
                 endPosition[paraIndex + 1] = this.getParagraphLength(position);
@@ -3340,6 +3238,7 @@ define('io.ox/office/editor/editor',
             var paragraph = this.getDOMPosition(position).node;
             if (paragraph) {
                 $(paragraph).empty();  // removes the content of the paragraph
+                paragraph.removeAttribute("style");  // removes the styles ("font-size 0 pt")
                 this.prepareNewParagraph(paragraph);
             }
         };
