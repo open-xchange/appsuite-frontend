@@ -182,6 +182,12 @@ define('io.ox/mail/view-detail',
         });
     };
 
+    var copyThreadData = function (a, b) {
+        a.threadKey = b.threadKey;
+        a.threadPosition = b.threadPosition;
+        a.threadSize = b.threadSize;
+    };
+
     var that = {
 
         getContent: function (data) {
@@ -348,7 +354,13 @@ define('io.ox/mail/view-detail',
             }
 
             // outer node
-            var node = $('<div>').addClass('mail-detail');
+            var self = this,
+                node = $.createViewContainer(data, api)
+                    .on('redraw', function (e, tmp) {
+                        copyThreadData(tmp, data);
+                        node.replaceWith(self.draw(tmp));
+                    })
+                    .addClass('mail-detail');
 
             // threaded & send by myself (and not in sent folder)?
             if (data.threadSize > 1 && util.byMyself(data) && !account.is('sent', data.folder_id)) {
@@ -372,9 +384,7 @@ define('io.ox/mail/view-detail',
             var self = $(this), parents = self.parents();
             api.get(api.reduce(e.data)).done(function (data) {
                 // replace placeholder with mail content
-                data.threadKey = e.data.threadKey;
-                data.threadPosition = e.data.threadPosition;
-                data.threadSize = e.data.threadSize;
+                copyThreadData(data, e.data);
                 self.replaceWith(that.draw(data));
             });
         },
@@ -410,9 +420,7 @@ define('io.ox/mail/view-detail',
                 for (i = 0; (obj = list[i]); i++) {
                     if (i >= top && i <= bottom) {
                         mail = mails.shift();
-                        mail.threadKey = obj.threadKey;
-                        mail.threadPosition = obj.threadPosition;
-                        mail.threadSize = obj.threadSize;
+                        copyThreadData(mail, obj);
                         frag.appendChild(that.draw(mail).get(0));
                     } else {
                         frag.appendChild(that.drawScaffold(obj, that.autoResolveThreads).get(0));

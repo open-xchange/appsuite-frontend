@@ -529,6 +529,39 @@
     /** Reference the Defaults Object for compatibility with older versions of jGrowl **/
     $.jGrowl.defaults = $.fn.jGrowl.prototype.defaults;
 
+    /*
+     * View container
+     */
 
+    // view container with dispose capability
+    var originalCleanData = $.cleanData,
+        triggerDispose = function (elem) {
+            return $(elem).triggerHandler('dispose');
+        };
+
+    $.cleanData = function (list) {
+        return originalCleanData(_(list).map(triggerDispose));
+    };
+
+    // factory
+    $.createViewContainer = function (data, api, getter) {
+
+        var cid = _.cid(data),
+
+            node = $('<div>').attr('data-cid', cid),
+
+            update = function () {
+                (getter || api.get)(api.reduce(data)).done(function (data) {
+                    node.triggerHandler('redraw', data);
+                });
+            };
+
+        api.on('update:' + cid, update);
+
+        return node.on('dispose', function () {
+                api.off('update:' + cid, update);
+                api = update = data = node = null;
+            });
+    };
 
 }());

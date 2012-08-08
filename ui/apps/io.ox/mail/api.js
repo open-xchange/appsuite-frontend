@@ -379,6 +379,10 @@ define("io.ox/mail/api",
             if (!flagUpdate) {
                 api.trigger('refresh.list');
             }
+            // trigger update events
+            _(list).each(function (obj) {
+                api.trigger('update:' + _.cid(obj), obj);
+            });
         });
     };
 
@@ -412,17 +416,17 @@ define("io.ox/mail/api",
         // get proper keys (differ due to sort/order suffix)
         return cache.grepKeys(folder + '\t').pipe(function (keys) {
             return $.when.apply($,
-                _(keys).each(function (folder) {
-                    return cache.get(folder).pipe(function (data) {
-                        if (data) {
+                _(keys).map(function (folder) {
+                    return cache.get(folder).pipe(function (co) {
+                        if (co && co.data) {
                             // update affected items
-                            _(data).each(function (obj) {
+                            _(co.data).each(function (obj) {
                                 var cid = obj.folder_id + '.' + obj.id;
                                 if (cid in hash) {
                                     obj.flags = obj.flags & bitmask;
                                 }
                             });
-                            return cache.add(folder, data);
+                            return cache.add(folder, co.data);
                         } else {
                             return $.when();
                         }
@@ -453,6 +457,7 @@ define("io.ox/mail/api",
                 .pipe(function () {
                     return api.update(list, { flags: api.FLAGS.SEEN, value: bool })
                         .pipe(function () {
+                            // update folder
                             folderAPI[call](list);
                             folders = items = null;
                             return list;
