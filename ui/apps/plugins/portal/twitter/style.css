@@ -32,3 +32,26 @@
 .twitter .name {
     font-weight: bold;
 }
+
+.twitter-unselectable {
+   -moz-user-select: -moz-none;
+   -khtml-user-select: none;
+   -webkit-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
+.pulltorefresh {
+    background-image: url(busy.gif);    
+    background-repeat: no-repeat;
+    background-position: top center;
+    font-size: 16px;
+    text-align: center;
+    color: #999999;
+}
+
+.pulltorefreshRefreshing {
+    background-image: url(busy.gif);    
+    background-repeat: no-repeat;
+    background-position: top center;
+}
