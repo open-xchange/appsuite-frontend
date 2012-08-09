@@ -2,6 +2,10 @@
    margin-bottom: 39px;
 }
 
+.io-ox-portal-rss-entry:hover {
+   background: #eee;
+}
+
 .io-ox-portal-rss-source {
     
 }
