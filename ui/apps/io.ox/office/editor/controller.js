@@ -85,11 +85,11 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'table/insert/row': {
                     chain: 'chain/table',
-                    set: function () { editor.insertTableRow(); }
+                    set: function () { editor.copyRows(); }
                 },
                 'table/insert/column': {
                     chain: 'chain/table',
-                    set: function () { editor.insertTableColumn(); }
+                    set: function () { editor.copyColumns(); }
                 },
                 'table/delete/row': {
                     chain: 'chain/table',
