@@ -67,12 +67,11 @@ a:hover, .link:hover {
 
 @font-face {
     font-family: OpenSans;
-    src: url(fonts/OpenSans-Light.ttf);
     src: url(fonts/opensans-300.woff);
 }
 
 .clear-title {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-family: "Segoe UI", OpenSans, Helvetica, Arial, sans-serif;
     font-weight: 200;
     font-size: 20pt;
     line-height: 1.15em;

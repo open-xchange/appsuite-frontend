@@ -34,7 +34,7 @@ define("plugins/portal/linkedin/register",
                     .append(viewer.draw(person))
                     .append(busy);
 
-            new dialogs.SidePopup()
+            new dialogs.SidePopup(({ modal: true }))
                 .show(e, function (popup) {
                     popup.append(node);
                 });
@@ -105,11 +105,11 @@ define("plugins/portal/linkedin/register",
         },
         drawTile: function (values) {
             var message = values ? values[0] : null;
-            
+
             $(this).append(
                 $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
             ).addClass('io-ox-portal-tile-linkedin');
-            
+
             if (message) {
                 $('<div class="linkedin-preview">').append(
                     $('<div class="linkedin-name">').text(strings.shorten(message.from.person.firstName + " " + message.from.person.lastName, 50)),
@@ -132,7 +132,7 @@ define("plugins/portal/linkedin/register",
                 activityFeed.resolve(activities);
             })
             .fail(activityFeed.reject);
-            
+
             proxy.request({
                 api: 'linkedin',
                 url: 'http://api.linkedin.com/v1/people/~/mailbox:(id,folder,from:(person:(id,first-name,last-name,picture-url,headline)),recipients:(person:(id,first-name,last-name,picture-url,headline)),subject,short-body,last-modified,timestamp,mailbox-item-actions,body)?message-type=message-connections,invitation-request,invitation-reply,inmail-direct-connection&format=json'
@@ -141,16 +141,16 @@ define("plugins/portal/linkedin/register",
                 messages.resolve(JSON.parse(msgs).values);
             })
             .fail(messages.reject);
-            
+
             return $.when(activityFeed, messages);
-                
+
         },
         draw: function (activityFeed, messages) {
             var drawing = new $.Deferred(),
                 $node = this;
-                
+
             $node.addClass("linkedin-content");
-            
+
             $node.append(
                     $("<div/>").addClass("clear-title")
                     .text(gt("LinkedIn Network Updates"))
@@ -177,7 +177,7 @@ define("plugins/portal/linkedin/register",
                 });
             }
 
-            
+
             return drawing.resolve();
         }
     };

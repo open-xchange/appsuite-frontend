@@ -11,7 +11,7 @@ CACHE:
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
-@base@/apps/themes/login/fonts/OpenSans-Light.ttf
+@base@/apps/themes/login/fonts/opensans-300.woff
 
 NETWORK:
 *

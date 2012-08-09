@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
- 
+
 
 define("plugins/portal/appointments/register", [
     "io.ox/core/extensions",
@@ -22,14 +22,14 @@ define("plugins/portal/appointments/register", [
 ], function (ext, date, gt, strings) {
 
     "use strict";
- 
- 
+
+
     //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
     var timespan = function (timestamp1, timestamp2) {
         var delta = Math.abs(timestamp1 - timestamp2);
         var past = (timestamp1 - timestamp2) < 0;
         var unit = past ? gt("Started %s milliseconds ago:") : gt("In %s milliseconds:");
-        
+
         if (delta / 1000 > 1) {
             delta = delta / 1000;
             var unit = past ? gt("Started %s seconds ago:") : gt("In %s seconds:");
@@ -52,7 +52,7 @@ define("plugins/portal/appointments/register", [
         }
         return unit.replace("%s", Math.round(delta));
     };
-    
+
     var loadTile = function () {
         var loadingTile = new $.Deferred();
         require(["io.ox/calendar/api"], function (api) {
@@ -135,7 +135,7 @@ define("plugins/portal/appointments/register", [
 
                         viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
-                        new dialogs.SidePopup()
+                        new dialogs.SidePopup({ modal: true })
                             .delegate($node, ".vgrid-cell", function (popup) {
                                 var data = $(this).data("appointment");
                                 require(["io.ox/calendar/view-detail"], function (view) {

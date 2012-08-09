@@ -215,22 +215,22 @@ define("io.ox/mail/write/view-main",
         },
 
         createSenderField: function () {
-            var selectDiv;
+            var node = $('<div>').addClass('fromselect-wrapper')
+                    .append($('<select>').css('width', '100%'));
             accountAPI.all().done(function (array) {
-                selectDiv = $('<div>').addClass('fromselect-wrapper').append(
-                        $('<select>').css('width', '100%')
-                );
-                _.each(array, function (key, value) {
-                    var item = $('<option>').attr({
-                        'data-displayname': key.personal || key.primary_address,
-                        'data-primary_address': key.primary_address
-                    }).text(key.primary_address);
-                    selectDiv.find('select').append(
-                        item
-                    );
+                var select = node.find('select');
+                _.each(array, function (obj, index) {
+                    var display_name = obj.personal || obj.primary_address,
+                        value = obj.primary_address + '|' + display_name,
+                        option = $('<option>', { 'data-displayname': display_name, value: value })
+                            .text(obj.primary_address);
+                    if (index === 0) {
+                        option.attr('selected', 'selected');
+                    }
+                    select.append(option);
                 });
             });
-            return selectDiv;
+            return node;
         },
 
         createRecipientList: function (id) {

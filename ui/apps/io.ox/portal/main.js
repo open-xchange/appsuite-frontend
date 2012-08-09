@@ -1,5 +1,4 @@
 /**
- * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
  *
@@ -28,7 +27,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
     return require(plugins).pipe(function () {
-        
+
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -59,17 +58,17 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 return gt('Hello');
             }
         }
-        
+
         var contentQueue = new tasks.Queue();
-        
-        
+
+
         function createContentTask(extension) {
             return {
                 id: extension.id,
                 perform: function () {
                     var def = $.Deferred(),
                         $node = $("<div/>");
-                    
+
                     extension.invoke('load')
                         .pipe(function () {
                             return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
@@ -83,12 +82,12 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                             contentSide.idle();
                             def.reject(e);
                         });
-                    
+
                     return def;
                 }
             };
         }
-        
+
         function drawContent(extension) {
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().detach();
@@ -98,7 +97,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentSide.idle();
             });
         }
-        
+
         function makeClickHandler(extension) {
             return function (event) {
                 contentSide.find(":first").detach();
@@ -107,12 +106,12 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 return drawContent(extension);
             };
         }
-        
+
         function initExtensions() {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
-                    
+
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         .attr('widget-id', extension.id)
@@ -120,16 +119,16 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                         .busy();
 
                     $node.on('click', makeClickHandler(extension));
-                    
+
                     if (!extension.loadTile) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
                         };
                     }
-                    
+
                     if (extension.loadMoreResults) {
                         var $o = win.nodes.main;
-                        
+
                         $o.bind('scroll',
                                 function () {
                                     // TODO tidy enough? (loadingMoreResults + active tile)
@@ -137,7 +136,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                         extension.timer = setTimeout(function () {
                                             // Position + Height + Tolerance
                                             var distance = $o.scrollTop() + $o.height() + 50;
-                                            
+
                                             if ($('div.io-ox-portal-content').height() <= distance) {
                                                 extension.isLoadingMoreResults = true;
                                                 extension.loadMoreResults(extension.finishLoadingMoreResults);
@@ -195,8 +194,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                 }
                                 $node.addClass("tile-" + color);
                             });
-                            
-                            
+
+
                             return $.when();
                         };
                     }
@@ -214,12 +213,13 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                         });
                 });
         }
-        
+
         // launcher
         app.setLauncher(function () {
             contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
+                chromeless: true,
                 toolbar: true,
                 titleWidth: '100%'
             }));
@@ -236,11 +236,12 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentSide.busy();
                 drawContent(app.active);
             }
-            
+
             win.nodes.main
                 .addClass('io-ox-portal')
                 .append(tileSide);
-            
+                .append(contentSide, tileSide);
+
             ox.on('refresh^', function () {
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
@@ -250,7 +251,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                     drawContent(app.active);
                 }
             });
-            
+
             win.show();
         });
 

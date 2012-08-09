@@ -312,7 +312,9 @@ define("io.ox/core/tk/dialogs",
 
     var SidePopup = function (options) {
 
-        options = options || {};
+        options = _.extend({
+            modal: false
+        }, options || {});
 
         var processEvent,
             isProcessed,
@@ -323,6 +325,8 @@ define("io.ox/core/tk/dialogs",
             closeByClick,
             previousProp,
             timer = null,
+
+            overlay,
 
             pane = $("<div>")
                 .addClass("io-ox-sidepopup-pane default-content-padding abs"),
@@ -344,6 +348,10 @@ define("io.ox/core/tk/dialogs",
             self = this;
 
         pane = pane.scrollable();
+
+        if (options.modal) {
+            overlay = $("<div>").addClass("io-ox-sidepopup-overlay abs").append(popup, arrow);
+        }
 
         // public nodes
         this.nodes = {};
@@ -384,9 +392,13 @@ define("io.ox/core/tk/dialogs",
             self.lastTrigger = previousProp = null;
             // use time to avoid flicker
             timer = setTimeout(function () {
-                arrow.detach();
+                if (options.modal) {
+                    overlay.detach();
+                } else {
+                    arrow.detach();
+                    popup.detach();
+                }
                 pane.empty();
-                popup.detach();
             }, 100);
         };
 
@@ -453,7 +465,7 @@ define("io.ox/core/tk/dialogs",
                 arrow.css('zIndex', zIndex + 1);
 
                 // add popup to proper element
-                self.nodes.target.append(popup.css('visibility', 'hidden'));
+                self.nodes.target.append((options.modal ? overlay : popup).css('visibility', 'hidden'));
 
                 // call custom handler
                 (handler || $.noop).call(this, pane.empty(), e);
@@ -464,8 +476,10 @@ define("io.ox/core/tk/dialogs",
                 arrow.css("top", top);
 
                 // finally, add arrow
-                popup.css('visibility', '');
-                self.nodes.target.append(arrow);
+                (options.modal ? overlay : popup).css('visibility', '');
+                if (!options.modal) {
+                    self.nodes.target.append(arrow);
+                }
             }
         };
 
