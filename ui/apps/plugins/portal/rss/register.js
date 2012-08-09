@@ -26,12 +26,7 @@ define("plugins/portal/rss/register",
     ext.point("io.ox/portal/widget").extend({
         id: 'rss',
         index: 100,
-        preview: function () {
-            $(this).append(
-                $('<h2>').text("RSS"),
-                $('<div class="io-ox-portal-preview">').text('You know what would be great? Showing the latest RSS feed here.'));
-            return $.Deferred().resolve();
-        },
+        title: 'RSS',
         
         load: function () {
             var def = $.Deferred();
@@ -60,6 +55,10 @@ define("plugins/portal/rss/register",
         },
         
         draw: function (feed) {
+            var togglePreview = function () {
+                $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
+                $(this).parent().find('.io-ox-portal-previewToggle').toggleClass('icon-chevron-down');
+            };
             var $node = $('<div class="io-ox-portal-rss">').appendTo(this);
             
             $('<h1 class="clear-title">').text("RSS").appendTo($node);
@@ -72,14 +71,12 @@ define("plugins/portal/rss/register",
 
                 var $entry = $('<div class="io-ox-portal-rss-entry">').appendTo($node);
                 $entry.append(
-                    $('<h2 class="io-ox-portal-rss-feedTitle">').text(entry.subject),
+                    $('<h2 class="io-ox-portal-rss-feedTitle">').text(entry.subject).click(togglePreview),
                     $('<div class="io-ox-portal-rss-source">').append(
                         $('<span class="io-ox-portal-feedName">').text(entry.feedName + ": "),
                         $('<a class="io-ox-portal-feedUrl" target="_blank">').attr({href: entry.url}).text(strings.shortenUri(entry.url, 30))
                     ),
-                    $('<div class="io-ox-portal-rss-content portal-preview">').html(body).click(function () {
-                        $(this).toggleClass('portal-preview');
-                    })
+                    $('<div class="io-ox-portal-rss-content portal-preview">').html(body).click(togglePreview)
                 );
             });
             return $.Deferred().resolve();
