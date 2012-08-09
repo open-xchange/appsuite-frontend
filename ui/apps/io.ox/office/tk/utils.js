@@ -25,6 +25,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // constants --------------------------------------------------------------
 
     /**
+     * A unique object used as return value in callback functions of iteration
+     * loops to break the iteration process immediately.
+     */
+    Utils.BREAK = {};
+
+    /**
      * CSS selector for visible elements.
      *
      * @constant
@@ -557,12 +563,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         }
         return node && node.nextSibling;
     };
-
-    /**
-     * A unique object used as return value in callback functions of iteration
-     * loops to break the iteration process immediately.
-     */
-    Utils.BREAK = {};
 
     /**
      * Iterates over all descendant DOM nodes of the specified element.

@@ -387,12 +387,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.iterateNodesInRanges = function (ranges, iterator, context) {
 
-        // returns whether the passed node is before the DOM point and will be iterated
-        function isNodeBeforePoint(node, point) {
-            // visit a text node that
-            return point.isBehindNode(node);
-        }
-
         // convert parameter to an array, clone and adjust ranges, and sort the ranges in DOM order
         ranges = _.chain(ranges).getArray().map(function (range) { return range.clone(); }).invoke('adjust').value();
         ranges.sort(function (range1, range2) { return DOM.comparePoints(range1.start, range2.start); });
