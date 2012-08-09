@@ -25,6 +25,12 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // constants --------------------------------------------------------------
 
     /**
+     * A unique object used as return value in callback functions of iteration
+     * loops to break the iteration process immediately.
+     */
+    Utils.BREAK = {};
+
+    /**
      * CSS selector for visible elements.
      *
      * @constant
@@ -506,9 +512,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Returns whether node1 is located before node2 in the DOM. This is also
-     * the case if node1 contains node2, because node1 starts before node2, but
-     * a node is not located before itself.
+     * Returns an integer indicating how the two passed nodes are located to
+     * each other.
      *
      * @param {Node|jQuery} node1
      *  The first DOM node tested if it is located before the second node. If
@@ -518,13 +523,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The second DOM node. If this object is a jQuery collection, uses the
      *  first node it contains.
      *
-     * @returns {Boolean}
-     *  Whether node1 is located before node2.
+     * @returns {Number}
+     *  The value zero, if the nodes are equal, a negative number, if node1
+     *  precedes or contains node2, or a positive number, if node2 precedes or
+     *  contains node1.
      */
-    Utils.isNodeBeforeNode = function (node1, node2) {
+    Utils.compareNodes = function (node1, node2) {
         node1 = Utils.getDomNode(node1);
         node2 = Utils.getDomNode(node2);
-        return (node1.compareDocumentPosition(node2) & 4) === 4;
+        return (node1 === node2) ? 0 : ((node1.compareDocumentPosition(node2) & 4) === 4) ? -1 : 1;
     };
 
     /**
@@ -556,12 +563,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         }
         return node && node.nextSibling;
     };
-
-    /**
-     * A unique object used as return value in callback functions of iteration
-     * loops to break the iteration process immediately.
-     */
-    Utils.BREAK = {};
 
     /**
      * Iterates over all descendant DOM nodes of the specified element.
@@ -716,6 +717,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
                 scroll: 'scrollTop'
             };
 
+        // return the actual scrollToChildNode() method
         return function (scrollableNode, childNode, options) {
 
             var // scroll direction

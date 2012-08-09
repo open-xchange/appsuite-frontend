@@ -14,8 +14,8 @@
 define('io.ox/office/editor/attributes',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/editor/selection'
-    ], function (Utils, Fonts, Selection) {
+     'io.ox/office/editor/dom'
+    ], function (Utils, Fonts, DOM) {
 
     'use strict';
 
@@ -192,11 +192,11 @@ define('io.ox/office/editor/attributes',
 
     /**
      * Returns the values of all paragraph formatting attributes in the
-     * specified DOM text ranges.
+     * specified DOM ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges. May be an array of DOM text range objects, or a
-     *  single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
+     *  range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -211,7 +211,7 @@ define('io.ox/office/editor/attributes',
             attributes = {};
 
         // get attributes from all paragraph elements
-        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+        DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', function (node) {
 
             var // merge the existing attributes with the attributes of the new paragraph
                 hasNonNull = this.mergeElementAttributes(attributes, node);
@@ -227,11 +227,11 @@ define('io.ox/office/editor/attributes',
 
     /**
      * Changes specific paragraph formatting attributes in the specified DOM
-     * text ranges.
+     * ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges to be formatted. May be an array of DOM text range
-     *  objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges to be formatted. May be an array of DOM range objects,
+     *  or a single DOM range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -243,7 +243,7 @@ define('io.ox/office/editor/attributes',
     converters.paragraph.setAttributes = function (ranges, rootNode, attributes) {
 
         // iterate all paragraph elements and change their formatting
-        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+        DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', function (node) {
             this.setElementAttributes(node, attributes);
         }, this);
     };
@@ -331,11 +331,11 @@ define('io.ox/office/editor/attributes',
 
     /**
      * Returns the values of all character formatting attributes in the
-     * specified DOM text ranges.
+     * specified DOM ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges. May be an array of DOM text range objects, or a
-     *  single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
+     *  range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -350,7 +350,7 @@ define('io.ox/office/editor/attributes',
             attributes = {};
 
         // process all text nodes, get attributes from their parent element
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+        DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
 
             var // merge the existing attributes with the attributes of the new text node
                 hasNonNull = this.mergeElementAttributes(attributes, textNode.parentNode);
@@ -366,13 +366,13 @@ define('io.ox/office/editor/attributes',
 
     /**
      * Changes specific character formatting attributes in the specified DOM
-     * text ranges. The formatting attributes will be applied to the tex
-     * node's parent <span> elements which will be created as needed. Sibling
-     * <span> elements containing the same formatting will be merged.
+     * ranges. The formatting attributes will be applied to the text node's
+     * parent <span> elements which will be created as needed. Sibling <span>
+     * elements containing the same formatting will be merged.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges to be formatted. May be an array of DOM text range
-     *  objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges to be formatted. May be an array of DOM range objects,
+     *  or a single DOM range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -390,22 +390,16 @@ define('io.ox/office/editor/attributes',
 
         // iterate all text nodes and change their formatting
         // TODO: multi-range support, prevent removing a node selected by the next range
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end, range) {
+        DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range) {
 
-            var // put text node into a span element, if not existing
-                span = Selection.wrapTextNode(textNode),
-                // text of the node
-                textLen = textNode.nodeValue.length;
+            var // the parent <span> element of the text node
+                span = DOM.wrapTextNode(textNode);
 
-            // if manipulating a part of the text node, split it
-            if (start > 0) {
-                // prepend a new text node to this text node
-                Selection.splitTextNode(textNode, start);
-            }
-            if (end < textLen) {
-                // append a new text node to this text node
-                Selection.splitTextNode(textNode, end - start, true);
-            }
+            // Split text node to get the selected portion in its own span. The
+            // method DOM.splitTextNode() does not split the text node, if the
+            // passed offset points to the start or end of the text.
+            DOM.splitTextNode(textNode, start);
+            DOM.splitTextNode(textNode, end - start, { append: true });
 
             // set the new formatting attributes at the span element
             this.setElementAttributes(span, attributes);
@@ -470,14 +464,14 @@ define('io.ox/office/editor/attributes',
 
     /**
      * Returns the values of all formatting attributes of a specific type in
-     * the specified DOM text ranges.
+     * the specified DOM ranges.
      *
      * @param {String} type
      *  The type of the attribute converter.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges. May be an array of DOM text range objects, or a
-     *  single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
+     *  range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -491,14 +485,14 @@ define('io.ox/office/editor/attributes',
     };
 
     /**
-     * Changes specific formatting attributes in the specified DOM text ranges.
+     * Changes specific formatting attributes in the specified DOM ranges.
      *
      * @param {String} type
      *  The type of the attribute converter.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges to be formatted. May be an array of DOM text range
-     *  objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges to be formatted. May be an array of DOM range objects,
+     *  or a single DOM range object.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
