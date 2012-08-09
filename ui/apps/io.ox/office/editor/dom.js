@@ -63,9 +63,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         };
 
         /**
-         * Validates this instance. Restricts the offset to the available index
-         * range according to the node's contents, or initializes the offset,
-         * if it is missing.
+         * Validates the offset of this DOM point. Restricts the offset to the
+         * available index range according to the node's contents, or
+         * initializes the offset, if it is missing.
          *
          * If this instance points to a text node, the offset will be
          * restricted to the text in the node, or set to zero if missing.
@@ -122,8 +122,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns an integer indicating how the two text points are located to
-     * each other.
+     * Returns an integer indicating how the two DOM points are located to each
+     * other.
      *
      * @param {DOM.Point} point1
      *  The first DOM point. Must be valid (see DOM.Point.validate() method for
@@ -168,11 +168,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         }
 
         // Neither node contains the other: compare nodes regardless of offset.
-        return Utils.isNodeBeforeNode(point1.node, point2.node) ? -1 : 1;
+        return Utils.compareNodes(point1.node, point2.node);
     };
 
     // class DOM.Range ========================================================
 
+    /**
+     * A DOM text range represents a half-open range in the DOM tree. It
+     * contains 'start' and 'end' attributes referring to DOM point objects.
+     *
+     * @param {DOM.Point} start
+     *  The DOM point where the range starts.
+     *
+     * @param {DOM.Point} [end]
+     *  The DOM point where the range ends. If omitted, uses the start position
+     *  to construct a collapsed range (a simple 'cursor').
+     */
     DOM.Range = function (start, end) {
 
         // fields -------------------------------------------------------------
@@ -189,12 +200,20 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             return new DOM.Range(this.start.clone(), this.end.clone());
         };
 
+        /**
+         * Validates the start and end position of this DOM range. See method
+         * DOM.Point.validate() for details.
+         */
         this.validate = function () {
             this.start.validate();
             this.end.validate();
             return this;
         };
 
+        /**
+         * Swaps start and end position, if the start position is located after
+         * the end position in the DOM tree.
+         */
         this.adjust = function () {
             if (DOM.comparePoints(this.start, this.end) > 0) {
                 var tmp = this.start;
@@ -204,12 +223,41 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             return this;
         };
 
+        /**
+         * Returns whether the DOM range is collapsed, i.e. start position and
+         * end position are equal.
+         *
+         * @returns {Boolean}
+         *  Whether this DOM range is collapsed.
+         */
         this.isCollapsed = function () {
             return DOM.equalPoints(this.start, this.end);
         };
 
     }; // class DOM.Range
 
+    /**
+     * Creates a new DOM.Range instance from the passed nodes and offsets.
+     *
+     * @param {Node|jQuery} startNode
+     *  The DOM node used for the start point of the created range. If this
+     *  object is a jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Number} [startOffset]
+     *  The offset for the start point of the created range.
+     *
+     * @param {Node|jQuery} [endNode]
+     *  The DOM node used for the end point of the created range. If this
+     *  object is a jQuery collection, uses the first DOM node it contains. If
+     *  omitted, creates a collapsed range by cloning the start position.
+     *
+     * @param {Number} [endOffset]
+     *  The offset for the end point of the created range. Not used, if endNode
+     *  has been omitted.
+     *
+     * @returns {DOM.Range}
+     *  The new DOM range object.
+     */
     DOM.makeRange = function (startNode, startOffset, endNode, endOffset) {
         return new DOM.Range(new DOM.Point(startNode, startOffset), _.isObject(endNode) ? new DOM.Point(endNode, endOffset) : undefined);
     };
