@@ -919,11 +919,11 @@ define('io.ox/office/editor/editor',
                             index = counter;
                         }
                     } else {
-                        index = -1;
+                        // index = -1;
                         break;
                     }
                 } else {
-                    index = -1;
+                    // index = -1;
                     break;
                 }
             }
@@ -2806,10 +2806,12 @@ define('io.ox/office/editor/editor',
                         rowIndex = columnIndex - 1,
                         thisRow = localPos[rowIndex],
                         thisColumn = localPos[columnIndex],
-                        lastColumn = this.getLastColumnIndexInTable(localPos);
+                        lastColumn = this.getLastColumnIndexInTable(localPos),
+                        lastIndex = localPos.length - 1;
 
-                    while (localPos.length > columnIndex) {
+                    while (lastIndex > columnIndex) {
                         localPos.pop();  // Removing position and paragraph optionally
+                        lastIndex = localPos.length - 1;
                     }
 
                     for (var j = 0; j <= thisRow; j++) {
