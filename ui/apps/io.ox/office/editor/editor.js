@@ -642,7 +642,7 @@ define('io.ox/office/editor/editor',
 
             var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
 
-            return {node: textNode, offset: offset};
+            return new DOM.Point(textNode, offset);
         };
 
         this.getOXOPosition = function (position) {
@@ -767,7 +767,7 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            return { node: node, offset: offset };
+            return new DOM.Point(node, offset);
         };
 
         this.getNextChildNode = function (node, pos) {
@@ -828,7 +828,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            return { node: childNode, offset: offset };
+            return new DOM.Point(childNode, offset);
         };
 
         this.getDOMSelection = function (oxoSelection) {
@@ -839,7 +839,7 @@ define('io.ox/office/editor/editor',
 
             // DOM selection is always an array of text ranges
             // TODO: fallback to HOME position in document instead of empty array?
-            return (start && end) ? [{ start: start, end: end }] : [];
+            return (start && end) ? [new DOM.Range(start, end)] : [];
         };
 
         this.getCellDOMSelections = function (oxoSelection) {
@@ -868,7 +868,7 @@ define('io.ox/office/editor/editor',
                     if (cell && ((cell.node.nodeName === 'TD') || (cell.node.nodeName === 'TH'))) {
                         var node = cell.node.parentNode;
                         var offset = $(cell.node).prevAll().length;
-                        ranges.push({ start: { node: node, offset: offset }, end: { node: node, offset: offset + 1 } });
+                        ranges.push(DOM.makeRange(node, offset, node, offset + 1));
                     }
                 }
             }
@@ -1040,12 +1040,12 @@ define('io.ox/office/editor/editor',
 
                             // test if text node contains the first character of the query text
                             if ((0 <= textPos) && (textPos < text.length)) {
-                                range.start = { node: node, offset: textPos };
+                                range.start = new DOM.Point(node, textPos);
                             }
 
                             // test if text node contains the last character of the query text
                             if (textPos + query.length <= text.length) {
-                                range.end = { node: node, offset: textPos + query.length };
+                                range.end = new DOM.Point(node, textPos + query.length);
                                 return Utils.BREAK;
                             }
 
@@ -3003,7 +3003,7 @@ define('io.ox/office/editor/editor',
             if (node && Utils.isTextNode(node)) {
                 // prepend text before offset in a new span (also if position
                 // points to start or end of text, needed to clone formatting)
-                DOM.splitTextNode(node, domPos.offset);
+                DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
                 // insert image before the parent <span> element of the text node
                 node = node.parentNode;
             }

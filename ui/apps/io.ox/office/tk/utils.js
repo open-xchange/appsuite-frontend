@@ -716,6 +716,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
                 scroll: 'scrollTop'
             };
 
+        // return the actual scrollToChildNode() method
         return function (scrollableNode, childNode, options) {
 
             var // scroll direction

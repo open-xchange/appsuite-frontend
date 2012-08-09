@@ -18,22 +18,203 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // static class DOM =======================================================
 
     /**
-     * Provides static helper methods for basic editor DOM manipulation,
-     * handling of DOM text positions and text ranges, and the browser
-     * selection.
-     *
-     * A DOM text position contains a 'node' attribute pointing to a DOM node,
-     * and an 'offset' attribute containing an integer offset depending on the
-     * position's node. If 'node' points to a text node, then 'offset'
-     * specifies a character in the text node. If 'node' points to an element
-     * node, than 'offset' specifies a child node of the element.
-     *
-     * A DOM text range is an object consisting of two DOM text position
-     * objects, stored in the attributes 'start' and 'end'. Note that the end
-     * point of the text range may be located before the start point in the DOM
-     * tree.
+     * Provides classes representing DOM points (DOM.Point) and ranges
+     * (DOM.Range), and static helper methods for basic editor DOM
+     * manipulation, and access the browser selection.
      */
     var DOM = {};
+
+    // class DOM.Point ========================================================
+
+    /**
+     * A DOM text point contains a 'node' attribute referring to a DOM node,
+     * and an 'offset' attribute containing an integer offset specifying the
+     * position in the contents of the node.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node selected by this DOM.Point instance. If this object is a
+     *  jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Number} [offset]
+     *  An integer offset relative to the DOM node specifying the position in
+     *  the node's contents. If the node is a text node, the offset represents
+     *  the character position in the node text. If the node is an element
+     *  node, the offset specifies the index of a child node of this node. The
+     *  value of the offset may be equal to the text length respectively the
+     *  number of child nodes, in this case the DOM point refers to the
+     *  position directly after the node's contents. If omitted, this DOM.Point
+     *  instance refers to the start of the entire node, instead of specific
+     *  contents.
+     */
+    DOM.Point = function (node, offset) {
+
+        // fields -------------------------------------------------------------
+
+        this.node = Utils.getDomNode(node);
+        this.offset = offset;
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns a new clone of this DOM point.
+         */
+        this.clone = function () {
+            return new DOM.Point(this.node, this.offset);
+        };
+
+        /**
+         * Validates this instance. Restricts the offset to the available index
+         * range according to the node's contents, or initializes the offset,
+         * if it is missing.
+         *
+         * If this instance points to a text node, the offset will be
+         * restricted to the text in the node, or set to zero if missing.
+         *
+         * If this instance points to an element node, the offset will be
+         * restricted to the number of child nodes in the node. If the offset
+         * is missing, it will be set to the index of the node in its siblings,
+         * and the node will be replaced by its parent node.
+         *
+         * @returns {DOM.Point}
+         *  A reference to this instance.
+         */
+        this.validate = function () {
+
+            // element: if offset is missing, take own index and refer to the parent node
+            if (Utils.isElementNode(this.node)) {
+                if (_.isNumber(this.offset)) {
+                    this.offset = Math.min(Math.max(this.offset, 0), this.node.childNodes.length);
+                } else {
+                    this.offset = $(this.node).index();
+                    this.node = this.node.parentNode;
+                }
+
+            // text node: if offset is missing, use zero
+            } else if (Utils.isTextNode(this.node)) {
+                if (_.isNumber(this.offset)) {
+                    this.offset = Math.min(Math.max(this.offset, 0), this.node.nodeValue.length);
+                } else {
+                    this.offset = 0;
+                }
+            }
+
+            return this;
+        };
+
+    }; // class DOM.Point
+
+    /**
+     * Returns whether the two passed DOM points are equal.
+     *
+     * @param {DOM.Point} point1
+     *  The first DOM point. Must be valid (see DOM.Point.validate() method for
+     *  details).
+     *
+     * @param {DOM.Point} point2
+     *  The second DOM point. Must be valid (see DOM.Point.validate() method
+     *  for details).
+     *
+     * @returns {Boolean}
+     *  Whether the DOM points are equal.
+     */
+    DOM.equalPoints = function (point1, point2) {
+        return (point1.node === point2.node) && (point1.offset === point2.offset);
+    };
+
+    /**
+     * Returns an integer indicating how the two text points are located to
+     * each other.
+     *
+     * @param {DOM.Point} point1
+     *  The first DOM point. Must be valid (see DOM.Point.validate() method for
+     *  details).
+     *
+     * @param {DOM.Point} point2
+     *  The second DOM point. Must be valid (see DOM.Point.validate() method
+     *  for details).
+     *
+     * @returns {Number}
+     *  The value zero, if the DOM points are equal, a negative number, if
+     *  point1 precedes point2, or a positive number, if point1 follows point2.
+     */
+    DOM.comparePoints = function (point1, point2) {
+
+        // Returns the index of the inner node's ancestor in the outer node's
+        // children list. 'outerNode' MUST contain 'innerNode'.
+        function calculateOffsetInOuterNode(outerNode, innerNode) {
+            while (innerNode.parentNode !== outerNode) {
+                innerNode = innerNode.parentNode;
+            }
+            return $(innerNode).index();
+        }
+
+        // equal nodes: compare by offset
+        if (point1.node === point2.node) {
+            return point1.offset - point2.offset;
+        }
+
+        // Node in point1 contains the node in point2: point1 is before point2,
+        // if offset of point1 (index of its child node) is less than or equal
+        // to the offset of point2's ancestor node in the children of point1's
+        // node. If offsets are equal, point2 is a descendant of the child node
+        // pointed to by point1 and therefore located after point1.
+        if (point1.node.contains(point2.node)) {
+            return (point1.offset <= calculateOffsetInOuterNode(point1.node, point2.node)) ? -1 : 1;
+        }
+
+        // Node in point2 contains the node in point1: see above, reversed.
+        if (point2.node.contains(point1.node)) {
+            return (calculateOffsetInOuterNode(point2.node, point1.node) < point2.offset) ? -1 : 1;
+        }
+
+        // Neither node contains the other: compare nodes regardless of offset.
+        return Utils.isNodeBeforeNode(point1.node, point2.node) ? -1 : 1;
+    };
+
+    // class DOM.Range ========================================================
+
+    DOM.Range = function (start, end) {
+
+        // fields -------------------------------------------------------------
+
+        this.start = start;
+        this.end = _.isObject(end) ? end : _.clone(start);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns a new clone of this DOM range.
+         */
+        this.clone = function () {
+            return new DOM.Range(this.start.clone(), this.end.clone());
+        };
+
+        this.validate = function () {
+            this.start.validate();
+            this.end.validate();
+            return this;
+        };
+
+        this.adjust = function () {
+            if (DOM.comparePoints(this.start, this.end) > 0) {
+                var tmp = this.start;
+                this.start = this.end;
+                this.end = tmp;
+            }
+            return this;
+        };
+
+        this.isCollapsed = function () {
+            return DOM.equalPoints(this.start, this.end);
+        };
+
+    }; // class DOM.Range
+
+    DOM.makeRange = function (startNode, startOffset, endNode, endOffset) {
+        return new DOM.Range(new DOM.Point(startNode, startOffset), _.isObject(endNode) ? new DOM.Point(endNode, endOffset) : undefined);
+    };
+
+    // static functions =======================================================
 
     // text node manipulation -------------------------------------------------
 
@@ -79,103 +260,58 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *
      * @param {Number} offset
      *  The character position the text node will be split. If this position is
-     *  at the start or end of the text of the node, an empty text node will be
-     *  inserted.
+     *  at the start or end of the text of the node, an empty text node may be
+     *  inserted if needed (see the 'options.createEmpty' option below).
      *
-     * @param {Boolean} [append]
-     *  If set to true, the right part of the text will be inserted after the
-     *  passed text node; otherwise the left part of the text will be inserted
-     *  before the passed text node. May be important when iterating and
-     *  manipulating a range of DOM nodes.
+     * @param {Object} [options]
+     *  A map of options to control the split operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.append]
+     *      If set to true, the right part of the text will be inserted after
+     *      the passed text node; otherwise the left part of the text will be
+     *      inserted before the passed text node. May be important when
+     *      iterating and manipulating a range of DOM nodes.
+     *  @param {Boolean} [options.createEmpty]
+     *      If set to true, creates new text nodes also if the offset points to
+     *      the start or end of the text. The new text node will be empty.
+     *      Otherwise, no new text node will be created in this case, and the
+     *      method returns null.
      *
-     * @returns {Text}
+     * @returns {Text|Null}
      *  The newly created text node. Will be located before or after the passed
-     *  text node, depending on the 'append' parameter.
+     *  text node, depending on the 'append' parameter. If no text node has
+     *  been created (see the 'options.createEmpty' option above), returns
+     *  null.
      */
-    DOM.splitTextNode = function (textNode, offset, append) {
+    DOM.splitTextNode = function (textNode, offset, options) {
 
         var // put text node into a span element, if not existing
             span = DOM.wrapTextNode(textNode),
-            // create a new span for the split text portion
-            newSpan = $(span).clone(),
+            // the new span for the split text portion, as jQuery object
+            newSpan = null,
             // text for the left span
             leftText = textNode.nodeValue.substr(0, offset),
             // text for the right span
             rightText = textNode.nodeValue.substr(offset);
 
-        if (append) {
-            newSpan.insertAfter(span);
-            textNode.nodeValue = leftText;
-            newSpan.text(rightText);
-        } else {
-            newSpan.insertBefore(span);
-            newSpan.text(leftText);
-            textNode.nodeValue = rightText;
+        // check if a new text node has to be created
+        if (Utils.getBooleanOption(options, 'createEmpty') || (leftText.length && rightText.length)) {
+            // create the new span
+            newSpan = $(span).clone();
+            // insert the span and update the text nodes
+            if (Utils.getBooleanOption(options, 'append')) {
+                newSpan.insertAfter(span);
+                textNode.nodeValue = leftText;
+                newSpan.text(rightText);
+            } else {
+                newSpan.insertBefore(span);
+                newSpan.text(leftText);
+                textNode.nodeValue = rightText;
+            }
         }
 
         // return the new text node
-        return newSpan[0].firstChild;
-    };
-
-    // DOM text positions and ranges ------------------------------------------
-
-    /**
-     * Returns whether the passed DOM node is located before the specified DOM
-     * text position. If 'position' contains a text node, then this text node
-     * itself is considered to be located before the position regardless of the
-     * position's offset. If 'position' contains an element node, than the
-     * specified node must be located before the element's child node specified
-     * by the position's offset.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node tested if it is located before the text position. If this
-     *  object is a jQuery collection, uses the first node it contains.
-     *
-     * @param {Object} position
-     *  The DOM text position to test the node against.
-     *
-     * @return {Boolean}
-     *  Whether the node is located before the text position.
-     */
-    DOM.isNodeBeforeTextPosition = function (node, position) {
-
-        // convert parameter to plain DOM node
-        node = Utils.getDomNode(node);
-
-        // if 'node' is located before the position node, or is equal to the
-        // position node, it is always considered 'before'
-        if ((node === position.node) || Utils.isNodeBeforeNode(node, position.node)) {
-            return true;
-        }
-
-        // position is element node: 'node' must be contained, index of its
-        // ancestor node must be less than the position's offset
-        if (position.node.nodeType === 1) {
-            if (!position.node.contains(node)) { return false; }
-            // travel up until we are a direct child of position.node
-            while (node.parentNode !== position.node) {
-                node = node.parentNode;
-            }
-            // check own index in all siblings
-            return $(node).index() < position.offset;
-        }
-
-        return false;
-    };
-
-    /**
-     * Returns the passed DOM text range with adjusted start and end position,
-     * i.e. the start position precedes the end position.
-     *
-     * @param {Object} range
-     *  The DOM text range to be adjusted.
-     *
-     * @return {Object}
-     *  The adjusted DOM text range.
-     */
-    DOM.getAdjustedTextRange = function (range) {
-        return (((range.start.node === range.end.node) && (range.start.offset > range.end.offset)) || Utils.isNodeBeforeNode(range.end.node, range.start.node)) ?
-            { start: range.end, end: range.start } : range;
+        return newSpan ? newSpan[0].firstChild : null;
     };
 
     // range iteration --------------------------------------------------------
@@ -183,15 +319,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Iterates over all DOM nodes contained in the specified DOM text ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges whose text nodes will be iterated. May be an array
-     *  of DOM text range objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges whose text nodes will be iterated. May be an array of
+     *  DOM range objects, or a single DOM range object.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter, and the current DOM text range
-     *  object as second parameter. If the iterator returns the Utils.BREAK
-     *  object, the iteration process will be stopped immediately.
+     *  DOM node object as first parameter, and the current DOM range object as
+     *  second parameter. If the iterator returns the Utils.BREAK object, the
+     *  iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -201,33 +337,49 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateNodesInTextRanges = function (ranges, iterator, context) {
+    DOM.iterateNodesInRanges = function (ranges, iterator, context) {
 
-        var // copy of the current text range
-            range = null,
-            // the current node in the current text range
-            node = null;
+        // returns whether the passed node is before the DOM point and will be iterated
+        function isNodeBeforePoint(node, point) {
+            // visit a text node that
+            return point.isBehindNode(node);
+        }
 
-        // convert parameter to an array
-        ranges = _.getArray(ranges);
-        for (var index = 0; index < ranges.length; index += 1) {
+        // convert parameter to an array, clone and adjust ranges, and sort the ranges in DOM order
+        ranges = _.chain(ranges).getArray().map(function (range) { return range.clone(); }).invoke('adjust').value();
+        ranges.sort(function (range1, range2) { return DOM.comparePoints(range1.start, range2.start); });
 
-            // range will be passed to callback, create a clone (but do not clone the DOM nodes!)
-            range = DOM.getAdjustedTextRange({ start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) });
+        for (var index = 0, range, node; index < ranges.length; index += 1) {
+            range = ranges[index];
 
-            // get first node in text range
+            // merge following overlapping ranges
+            while ((index + 1 < ranges.length) && (DOM.comparePoints(range.end, ranges[index + 1].start) >= 0)) {
+                range.end = ranges[index + 1].end;
+                ranges.splice(index + 1, 1);
+            }
+
+            // get first node in DOM range
             node = range.start.node;
             if (node.nodeType === 1) {
                 // element/child node position, go to child node described by offset
                 node = node.childNodes[range.start.offset];
-            } else if ((node.nodeType === 3) && (range.start.offset === node.nodeValue.length) && (node !== range.end.node)) {
-                // ignore first text node, if text range starts directly at its end and is not a simple cursor
-                // TODO: is this the desired behavior?
+            }
+
+            // always visit the node if selected by a cursor
+            if (node && range.isCollapsed()) {
+                // call iterator for the node, return if iterator returns Utils.BREAK
+                if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
+                continue;
+            }
+
+            // skip first text node, if DOM range starts directly at its end
+            // TODO: is this the desired behavior?
+            if (node && (node.nodeType === 3) && (range.start.offset >= node.nodeValue.length)) {
                 node = Utils.getNextNodeInTree(node);
             }
 
             // iterate as long as the end of the range has not been reached
-            while (node && DOM.isNodeBeforeTextPosition(node, range.end)) {
+            while (node && (DOM.comparePoints(new DOM.Point(node).validate(), range.end) < 0)) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
                 if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
@@ -238,16 +390,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     /**
      * Iterates over specific ancestor element nodes of the nodes contained in
-     * the specified DOM text ranges that match the passed jQuery selector.
-     * Each ancestor node is visited exactly once even if it is the ancestor of
+     * the specified DOM ranges that match the passed jQuery selector. Each
+     * ancestor node is visited exactly once even if it is the ancestor of
      * multiple nodes covered in the passed selection.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges whose nodes will be iterated. May be an array of
-     *  DOM text range objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges whose nodes will be iterated. May be an array of DOM
+     *  range objects, or a single DOM range object.
      *
      * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing the text ranges. While searching for ancestor
+     *  The root node containing the DOM ranges. While searching for ancestor
      *  nodes, this root node will never be left, but it may be selected as
      *  ancestor node by itself. If this object is a jQuery collection, uses
      *  the first node it contains.
@@ -259,8 +411,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Function} iterator
      *  The iterator function that will be called for every found ancestor
      *  node. Receives the DOM node object as first parameter, and the current
-     *  DOM text range as second parameter. If the iterator returns the
-     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *  DOM range as second parameter. If the iterator returns the Utils.BREAK
+     *  object, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -270,7 +422,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateAncestorNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+    DOM.iterateAncestorNodesInRanges = function (ranges, rootNode, selector, iterator, context) {
 
         var // all matching nodes the iterator has been called for
             matchingNodes = [];
@@ -278,7 +430,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
-        return DOM.iterateNodesInTextRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInRanges(ranges, function (node, range) {
 
             // try to find a matching element inside the root node
             while (node) {
@@ -297,21 +449,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Iterates over all text nodes contained in the specified DOM text ranges.
-     * The iterator function will receive the text node and the character range
-     * in its text contents that is covered by the specified DOM text ranges.
+     * Iterates over all text nodes contained in the specified DOM ranges. The
+     * iterator function will receive the text node and the character range in
+     * its text contents that is covered by the specified DOM ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges whose text nodes will be iterated. May be an array
-     *  of DOM text range objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges whose text nodes will be iterated. May be an array of
+     *  DOM range objects, or a single DOM range object.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every text node. Receives
      *  the DOM text node object as first parameter, the offset of the first
      *  character as second parameter, the offset after the last character as
-     *  third parameter, and the current DOM text range as fourth parameter. If
-     *  the iterator returns the Utils.BREAK object, the iteration process will
-     *  be stopped immediately.
+     *  third parameter, and the current DOM range as fourth parameter. If the
+     *  iterator returns the Utils.BREAK object, the iteration process will be
+     *  stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -321,13 +473,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
+    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context) {
 
         // iterate over all nodes, and process the text nodes
-        return DOM.iterateNodesInTextRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInRanges(ranges, function (node, range) {
 
             var // cursor instead of selection
-                isCursor = _.isEqual(range.start, range.end),
+                isCursor = range.isCollapsed(),
                 // start and end offset of covered text in text node
                 start = 0, end = 0;
 
@@ -358,15 +510,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // browser selection ------------------------------------------------------
 
     /**
-     * Returns an array of DOM text range objects representing the current
-     * browser selection.
+     * Returns an array of DOM ranges representing the current browser
+     * selection.
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The container element the returned selection will be restricted to.
-     *  Only text ranges inside the root element will be included in the array.
+     *  Only ranges inside this root element will be included in the array.
      *
-     * @returns {Object[]}
-     *  The DOM text ranges representing the current browser selection.
+     * @returns {DOM.Range[]}
+     *  The DOM ranges representing the current browser selection.
      */
     DOM.getBrowserSelection = function (rootNode) {
 
@@ -376,14 +528,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             ranges = [],
             // a single range object
             range = null,
-            // the limiting text position for valid ranges (next sibling of root node)
+            // the limiting point for valid ranges (next sibling of root node)
             globalEndPos = null;
 
         // convert parameter to DOM element
         rootNode = Utils.getDomNode(rootNode);
 
         // end position if the range selects the entire root node
-        globalEndPos = { node: rootNode.parentNode, offset: $(rootNode).index() + 1 };
+        globalEndPos = new DOM.Point(rootNode).validate();
+        globalEndPos.offset += 1;
 
         // build an array of text range objects holding start and end nodes/offsets
         for (var index = 0; index < selection.rangeCount; index += 1) {
@@ -392,13 +545,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             range = selection.getRangeAt(index);
 
             // translate to the internal text range representation
-            range = {
-                start: { node: range.startContainer, offset: range.startOffset },
-                end: { node: range.endContainer, offset: range.endOffset }
-            };
+            range = DOM.makeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 
             // check that the nodes are inside the root node
-            if (rootNode.contains(range.start.node) && (rootNode.contains(range.end.node) || _.isEqual(range.end, globalEndPos))) {
+            if (rootNode.contains(range.start.node) && (DOM.comparePoints(range.end, globalEndPos) <= 0)) {
                 ranges.push(range);
             }
         }
@@ -407,11 +557,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Sets the browser selection to the passed DOM text ranges.
+     * Sets the browser selection to the passed DOM ranges.
      *
-     * @param {Object[]|Object} ranges
-     *  The DOM text ranges representing the new browser selection. May be an
-     *  array of DOM text range objects, or a single DOM text range object.
+     * @param {DOM.Range[]|DOM.Range} ranges
+     *  The DOM ranges representing the new browser selection. May be an array
+     *  of DOM range objects, or a single DOM range object.
      */
     DOM.setBrowserSelection = function (ranges) {
 
@@ -427,7 +577,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 docRange.setEnd(range.end.node, range.end.offset);
                 selection.addRange(docRange);
             } catch (ex) {
-                window.console.log('DOM.setBrowserSelection(): failed to add text range to selection');
+                window.console.log('DOM.setBrowserSelection(): failed to add range to selection');
             }
         });
     };
