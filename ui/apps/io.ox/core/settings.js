@@ -36,22 +36,39 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
 
         var get = function (key) {
             var parts = key.split(/\//),
-            tmp = settings || {}, i = 0, $i = parts.length;
-//            for (; i < $i; i++) {
-//                var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
-//                if (tmpHasSubNode) {
-//                    tmp = tmp[i];
-//                } else {
-//                    tmp = null;
-//                    return null;
-//                }
-//            }
-            return tmp[key];
+                tmp = settings || {}, i = 0, $i = parts.length;
+            if (parts[1]) {
+                for (; i < $i; i++) {
+                    var tmpHasSubNode = (tmp !== null && tmp.hasOwnProperty([i]) && typeof tmp[i] !== 'undefined' && tmp[i] !== null);
+                    if (tmpHasSubNode) {
+                        tmp = tmp[i];
+                    } else {
+                        tmp = null;
+                        return null;
+                    }
+                }
+            } else {
+                return tmp[key];
+            }
+
         };
 
         var set = function (key, value) {
-            var tmp = settings || {};
-            tmp[key] = value;
+            var parts = typeof key === 'string' ? key.split(/\./) : key,
+                tmp = settings || {}, i = 0, $i = parts.length;
+            if (parts[1]) {
+                for (; i < $i; i++) {
+                    if (tmp[parts[i]]) {
+                        tmp = tmp[parts[i]];
+                        if (typeof tmp !== 'object') {
+                            return;
+                        }
+                    } else {
+                        tmp = (tmp[parts[i]] = {});
+                    }
+                }
+            }
+            tmp[parts[$i - 1]] = value;
         };
 
         var contains = function (key) {
@@ -122,6 +139,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
             },
 
             get: function (path, defaultValue) {
+                console.log(arguments);
                 if (!path) { // undefined, null, ''
                     return get(that.settingsPath);
                 } else {
@@ -165,7 +183,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                         data: ['apps/io.ox/' + that.settingsPath]
                     }).done(function (data) {
                             settings = data[0].tree;
-                            settingsCache.add('settingsDefault', settings);
+                            settingsCache.add(that.settingsPath, settings);
                         });
                 };
                 // trick to be fast: cached?
@@ -173,7 +191,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                     settingsCache = new cache.SimpleCache('settings', true);
                 }
 
-                return settingsCache.get('settingsDefault')
+                return settingsCache.get(that.settingsPath)
                     .pipe(function (data) {
                         if (data !== null) {
                             settings = data;
@@ -186,7 +204,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
             },
             save: function () {
                 settingsInitial(settings, [that.settingsPath]);
-                settingsCache.add('settingsDefault', settings);
+                settingsCache.add(that.settingsPath, settings);
                 console.log(settings);
                 return http.PUT({
                     module: 'jslob',

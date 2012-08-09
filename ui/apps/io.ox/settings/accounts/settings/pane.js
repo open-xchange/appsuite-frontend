@@ -13,7 +13,7 @@
 /*global
 define: true, _: true
 */
-define('io.ox/settings/accounts/settings/settings',
+define('io.ox/settings/accounts/settings/pane',
       ['io.ox/core/extensions',
        'io.ox/core/tk/view',
        'io.ox/settings/utils',
