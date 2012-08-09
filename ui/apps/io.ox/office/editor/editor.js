@@ -539,7 +539,10 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(undoAction);
                 }
                 this.implInsertText("*", operation.position);
-                this.implInsertImage(currentDocumentURL + '#/' + operation.imgurl, operation.position);
+                var imgurl = operation.imgurl;
+                if (imgurl.indexOf("://") === -1)
+                    imgurl = currentDocumentURL + '#/' + operation.imgurl;
+                this.implInsertImage(imgurl, operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1134,36 +1137,36 @@ define('io.ox/office/editor/editor',
                 if (c === 'P') {
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
-                if (c === 'I') {
+                else if (c === 'I') {
                     this.insertParagraph([paragraphs.length]);
                 }
-                if (c === 'D') {
+                else if (c === 'D') {
                     this.initDocument();
                     this.grabFocus(true);
                 }
-                if (c === 'T') {
+                else if (c === 'T') {
                     this.insertTable({width: 2, height: 2});
                 }
-                if (c === '1') {
-                    dbgoutEvents = !dbgoutEvents;
-                    window.console.log('dbgoutEvents is now ' + dbgoutEvents);
-                }
-                if (c === '2') {
-                    dbgoutObjects = !dbgoutObjects;
-                    window.console.log('dbgoutObjects is now ' + dbgoutObjects);
-                }
-                if (c === '3') {
-                    dbgoutInfos = !dbgoutInfos;
-                    window.console.log('dbgoutInfos is now ' + dbgoutInfos);
-                }
-                if (c === '4') {
-                    blockOperationNotifications = !blockOperationNotifications;
-                    window.console.log('block operation notifications is now ' + blockOperationNotifications);
-                }
-                if (c === '5') {
+                else if (c === 'G') {
                     var selection = this.getSelection();
                     var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg"};
                     this.applyOperation(newOperation, true, true);
+                }
+                else if (c === '1') {
+                    dbgoutEvents = !dbgoutEvents;
+                    window.console.log('dbgoutEvents is now ' + dbgoutEvents);
+                }
+                else if (c === '2') {
+                    dbgoutObjects = !dbgoutObjects;
+                    window.console.log('dbgoutObjects is now ' + dbgoutObjects);
+                }
+                else if (c === '3') {
+                    dbgoutInfos = !dbgoutInfos;
+                    window.console.log('dbgoutInfos is now ' + dbgoutInfos);
+                }
+                else if (c === '4') {
+                    blockOperationNotifications = !blockOperationNotifications;
+                    window.console.log('block operation notifications is now ' + blockOperationNotifications);
                 }
             }
 
