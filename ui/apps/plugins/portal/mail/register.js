@@ -148,7 +148,7 @@ define('plugins/portal/mail/register',
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
 
-                        new dialogs.SidePopup(600)
+                        new dialogs.SidePopup({ modal: true })
                         .delegate(node, '.vgrid-cell', function (pane) {
                             var data = $(this).data('object-data');
                             pane.parent().removeClass('default-content-padding');

@@ -19,62 +19,6 @@ define("io.ox/core/desktop",
     "use strict";
 
     /**
-     * Quick settings for application windows
-     */
-    $.quickSettings = (function () {
-
-        return function (containerSelector, configSelector, link) {
-
-            var container = $(containerSelector);
-            var config = $(configSelector);
-
-            link = $(link);
-
-            if (!config.hasClass("quick-settings")) {
-                // adjust container
-                container.css({
-                    position: "absolute",
-                    zIndex: 2
-                });
-                // remember top position
-                container.data("top", parseInt(container.css("top") || 0, 10));
-                // adjust settings area
-                config.addClass("quick-settings").css({
-                    position: "absolute",
-                    zIndex: 1,
-                    top: (config.css("top") || 0) + "px",
-                    right: "0px",
-                    height: "auto",
-                    left: "0px",
-                    minHeight: "100px"
-                });
-            }
-
-            // rebind events
-            link.off("click")
-                .on("dblclick", false)
-                .on("click", function (e) {
-                    window.container = container;
-                    window.config = config;
-                    // open
-                    var top = container.data("top");
-                    if (link.data("open") !== true) {
-                        link.data("open", true);
-                        config.show();
-                        var h = Math.max(config.outerHeight(), 25);
-                        container.stop().animate({ top: (top + h) + "px" }, 250);
-                    } else {
-                        link.data("open", false);
-                        container.stop().animate({ top: top + "px" }, 250, function () {
-                            config.hide();
-                        });
-                    }
-                    return false;
-                });
-        };
-    }());
-
-    /**
      * Core UI
      */
 
@@ -1007,7 +951,7 @@ define("io.ox/core/desktop",
                 search: false,
                 toolbar: false,
                 settings: false,
-                chromesless: false
+                chromeless: false
             }, options);
 
             // get width
@@ -1246,12 +1190,6 @@ define("io.ox/core/desktop",
 
                 // set title
                 win.setTitle(opt.title);
-
-                // quick settings?
-                if (opt.settings) {
-                    $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-                    win.nodes.settingsButton.show();
-                }
             }
 
             // inc
