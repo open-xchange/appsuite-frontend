@@ -14,8 +14,8 @@
 define('io.ox/office/editor/attributes',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/editor/selection'
-    ], function (Utils, Fonts, Selection) {
+     'io.ox/office/editor/dom'
+    ], function (Utils, Fonts, DOM) {
 
     'use strict';
 
@@ -211,7 +211,7 @@ define('io.ox/office/editor/attributes',
             attributes = {};
 
         // get attributes from all paragraph elements
-        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+        DOM.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
 
             var // merge the existing attributes with the attributes of the new paragraph
                 hasNonNull = this.mergeElementAttributes(attributes, node);
@@ -243,7 +243,7 @@ define('io.ox/office/editor/attributes',
     converters.paragraph.setAttributes = function (ranges, rootNode, attributes) {
 
         // iterate all paragraph elements and change their formatting
-        Selection.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
+        DOM.iterateAncestorNodesInTextRanges(ranges, rootNode, 'p', function (node) {
             this.setElementAttributes(node, attributes);
         }, this);
     };
@@ -350,7 +350,7 @@ define('io.ox/office/editor/attributes',
             attributes = {};
 
         // process all text nodes, get attributes from their parent element
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode) {
+        DOM.iterateTextPortionsInTextRanges(ranges, function (textNode) {
 
             var // merge the existing attributes with the attributes of the new text node
                 hasNonNull = this.mergeElementAttributes(attributes, textNode.parentNode);
@@ -390,21 +390,21 @@ define('io.ox/office/editor/attributes',
 
         // iterate all text nodes and change their formatting
         // TODO: multi-range support, prevent removing a node selected by the next range
-        Selection.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end, range) {
+        DOM.iterateTextPortionsInTextRanges(ranges, function (textNode, start, end, range) {
 
             var // put text node into a span element, if not existing
-                span = Selection.wrapTextNode(textNode),
+                span = DOM.wrapTextNode(textNode),
                 // text of the node
                 textLen = textNode.nodeValue.length;
 
             // if manipulating a part of the text node, split it
             if (start > 0) {
                 // prepend a new text node to this text node
-                Selection.splitTextNode(textNode, start);
+                DOM.splitTextNode(textNode, start);
             }
             if (end < textLen) {
                 // append a new text node to this text node
-                Selection.splitTextNode(textNode, end - start, true);
+                DOM.splitTextNode(textNode, end - start, true);
             }
 
             // set the new formatting attributes at the span element

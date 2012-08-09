@@ -16,9 +16,9 @@
 define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/editor/selection',
+     'io.ox/office/editor/dom',
      'io.ox/office/editor/attributes'
-    ], function (Events, Utils, Selection, Attributes) {
+    ], function (Events, Utils, DOM, Attributes) {
 
     'use strict';
 
@@ -922,7 +922,7 @@ define('io.ox/office/editor/editor',
             if (currentSelection && !updateFromBrowser)
                 return currentSelection;
 
-            var domSelection = Selection.getBrowserSelection(editdiv),
+            var domSelection = DOM.getBrowserSelection(editdiv),
                 domRange = null;
 
             if (domSelection.length) {
@@ -966,7 +966,7 @@ define('io.ox/office/editor/editor',
             }
 
             if (ranges.length) {
-                Selection.setBrowserSelection(ranges);
+                DOM.setBrowserSelection(ranges);
                 // if (TODO: Compare Arrays oldSelection, oxosel)
                 this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
             } else {
@@ -1057,7 +1057,7 @@ define('io.ox/office/editor/editor',
                     // position found, select it
                     if (range.start && range.end) {
                         this.grabFocus();
-                        Selection.setBrowserSelection(range);
+                        DOM.setBrowserSelection(range);
                         currentSelection = null;
                         this.implStartCheckEventSelection();
                     }
@@ -1753,7 +1753,7 @@ define('io.ox/office/editor/editor',
          *  A map of attribute name/value pairs.
          */
         this.getAttributes = function (type) {
-            var ranges = Selection.getBrowserSelection(editdiv);
+            var ranges = DOM.getBrowserSelection(editdiv);
             return Attributes.getAttributes(type, ranges, editdiv);
         };
 
@@ -3003,7 +3003,7 @@ define('io.ox/office/editor/editor',
             if (node && Utils.isTextNode(node)) {
                 // prepend text before offset in a new span (also if position
                 // points to start or end of text, needed to clone formatting)
-                Selection.splitTextNode(node, domPos.offset);
+                DOM.splitTextNode(node, domPos.offset);
                 // insert image before the parent <span> element of the text node
                 node = node.parentNode;
             }

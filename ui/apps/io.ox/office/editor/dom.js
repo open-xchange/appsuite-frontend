@@ -11,15 +11,16 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     'use strict';
 
-    // static class Selection =================================================
+    // static class DOM =======================================================
 
     /**
-     * Provides static helper classes for low-level handling of the browser
-     * selection, or other DOM text ranges and text positions.
+     * Provides static helper methods for basic editor DOM manipulation,
+     * handling of DOM text positions and text ranges, and the browser
+     * selection.
      *
      * A DOM text position contains a 'node' attribute pointing to a DOM node,
      * and an 'offset' attribute containing an integer offset depending on the
@@ -32,7 +33,89 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * point of the text range may be located before the start point in the DOM
      * tree.
      */
-    var Selection = {};
+    var DOM = {};
+
+    // text node manipulation -------------------------------------------------
+
+    /**
+     * Ensures that the passed text node is embedded in its own <span> element.
+     * If the <span> element is missing, it will be inserted into the DOM.
+     *
+     * @param {Text} textNode
+     *  The DOM text node to be embedded in a <span> element.
+     *
+     * @returns {HTMLElement}
+     *  The parent <span> element (already existing or just created) of the
+     *  text node.
+     */
+    DOM.wrapTextNode = function (textNode) {
+
+        var // parent element of the text node
+            parent = textNode.parentNode;
+
+        if (Utils.getNodeName(parent) !== 'span') {
+
+            // put text node into a span element, if not existing
+            $(textNode).wrap('<span>');
+            parent = textNode.parentNode;
+
+            // Copy the paragraph's font-size to the span, and reset the
+            // font-size of the paragraph, otherwise CSS defines a lower limit
+            // for the line-height of all spans according to the parent
+            // paragraph's font-size.
+            $(parent).css('font-size', $(parent.parentNode).css('font-size'));
+            $(parent.parentNode).css('font-size', '0');
+        }
+
+        return parent;
+    };
+
+    /**
+     * Splits the passed text node into two text nodes. Additionally ensures
+     * that the text nodes are embedded in their own <span> elements.
+     *
+     * @param {Text} textNode
+     *  The DOM text node to be split.
+     *
+     * @param {Number} offset
+     *  The character position the text node will be split. If this position is
+     *  at the start or end of the text of the node, an empty text node will be
+     *  inserted.
+     *
+     * @param {Boolean} [append]
+     *  If set to true, the right part of the text will be inserted after the
+     *  passed text node; otherwise the left part of the text will be inserted
+     *  before the passed text node. May be important when iterating and
+     *  manipulating a range of DOM nodes.
+     *
+     * @returns {Text}
+     *  The newly created text node. Will be located before or after the passed
+     *  text node, depending on the 'append' parameter.
+     */
+    DOM.splitTextNode = function (textNode, offset, append) {
+
+        var // put text node into a span element, if not existing
+            span = DOM.wrapTextNode(textNode),
+            // create a new span for the split text portion
+            newSpan = $(span).clone(),
+            // text for the left span
+            leftText = textNode.nodeValue.substr(0, offset),
+            // text for the right span
+            rightText = textNode.nodeValue.substr(offset);
+
+        if (append) {
+            newSpan.insertAfter(span);
+            textNode.nodeValue = leftText;
+            newSpan.text(rightText);
+        } else {
+            newSpan.insertBefore(span);
+            newSpan.text(leftText);
+            textNode.nodeValue = rightText;
+        }
+
+        // return the new text node
+        return newSpan[0].firstChild;
+    };
 
     // DOM text positions and ranges ------------------------------------------
 
@@ -54,7 +137,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * @return {Boolean}
      *  Whether the node is located before the text position.
      */
-    Selection.isNodeBeforeTextPosition = function (node, position) {
+    DOM.isNodeBeforeTextPosition = function (node, position) {
 
         // convert parameter to plain DOM node
         node = Utils.getDomNode(node);
@@ -90,58 +173,9 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * @return {Object}
      *  The adjusted DOM text range.
      */
-    Selection.getAdjustedTextRange = function (range) {
+    DOM.getAdjustedTextRange = function (range) {
         return (((range.start.node === range.end.node) && (range.start.offset > range.end.offset)) || Utils.isNodeBeforeNode(range.end.node, range.start.node)) ?
             { start: range.end, end: range.start } : range;
-    };
-
-    // text node manipulation -------------------------------------------------
-
-    Selection.wrapTextNode = function (textNode) {
-
-        var // parent element of the text node
-            parent = textNode.parentNode;
-
-        if (Utils.getNodeName(parent) !== 'span') {
-
-            // put text node into a span element, if not existing
-            $(textNode).wrap('<span>');
-            parent = textNode.parentNode;
-
-            // Copy the paragraph's font-size to the span, and reset the
-            // font-size of the paragraph, otherwise CSS defines a lower
-            // limit for the line-height of all spans according to the
-            // parent paragraph's font-size.
-            $(parent).css('font-size', $(parent.parentNode).css('font-size'));
-            $(parent.parentNode).css('font-size', '0');
-        }
-
-        return parent;
-    };
-
-    Selection.splitTextNode = function (textNode, offset, append) {
-
-        var // put text node into a span element, if not existing
-            span = Selection.wrapTextNode(textNode),
-            // create a new span for the split text portion
-            newSpan = $(span).clone(),
-            // text for the left span
-            leftText = textNode.nodeValue.substr(0, offset),
-            // text for the right span
-            rightText = textNode.nodeValue.substr(offset);
-
-        if (append) {
-            newSpan.insertAfter(span);
-            textNode.nodeValue = leftText;
-            newSpan.text(rightText);
-        } else {
-            newSpan.insertBefore(span);
-            newSpan.text(leftText);
-            textNode.nodeValue = rightText;
-        }
-
-        // return the new text node
-        return newSpan[0].firstChild;
     };
 
     // range iteration --------------------------------------------------------
@@ -167,7 +201,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    Selection.iterateNodesInTextRanges = function (ranges, iterator, context) {
+    DOM.iterateNodesInTextRanges = function (ranges, iterator, context) {
 
         var // copy of the current text range
             range = null,
@@ -179,7 +213,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         for (var index = 0; index < ranges.length; index += 1) {
 
             // range will be passed to callback, create a clone (but do not clone the DOM nodes!)
-            range = Selection.getAdjustedTextRange({ start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) });
+            range = DOM.getAdjustedTextRange({ start: _.clone(ranges[index].start), end: _.clone(ranges[index].end) });
 
             // get first node in text range
             node = range.start.node;
@@ -193,7 +227,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
             }
 
             // iterate as long as the end of the range has not been reached
-            while (node && Selection.isNodeBeforeTextPosition(node, range.end)) {
+            while (node && DOM.isNodeBeforeTextPosition(node, range.end)) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
                 if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
@@ -236,7 +270,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    Selection.iterateAncestorNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
+    DOM.iterateAncestorNodesInTextRanges = function (ranges, rootNode, selector, iterator, context) {
 
         var // all matching nodes the iterator has been called for
             matchingNodes = [];
@@ -244,7 +278,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
-        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInTextRanges(ranges, function (node, range) {
 
             // try to find a matching element inside the root node
             while (node) {
@@ -287,10 +321,10 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    Selection.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
+    DOM.iterateTextPortionsInTextRanges = function (ranges, iterator, context) {
 
         // iterate over all nodes, and process the text nodes
-        return Selection.iterateNodesInTextRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInTextRanges(ranges, function (node, range) {
 
             var // cursor instead of selection
                 isCursor = _.isEqual(range.start, range.end),
@@ -334,7 +368,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      * @returns {Object[]}
      *  The DOM text ranges representing the current browser selection.
      */
-    Selection.getBrowserSelection = function (rootNode) {
+    DOM.getBrowserSelection = function (rootNode) {
 
         var // the browser selection
             selection = window.getSelection(),
@@ -379,7 +413,7 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
      *  The DOM text ranges representing the new browser selection. May be an
      *  array of DOM text range objects, or a single DOM text range object.
      */
-    Selection.setBrowserSelection = function (ranges) {
+    DOM.setBrowserSelection = function (ranges) {
 
         var // the browser selection
             selection = window.getSelection();
@@ -393,13 +427,13 @@ define('io.ox/office/editor/selection', ['io.ox/office/tk/utils'], function (Uti
                 docRange.setEnd(range.end.node, range.end.offset);
                 selection.addRange(docRange);
             } catch (ex) {
-                window.console.log('Selection.setBrowserSelection(): failed to add text range to selection');
+                window.console.log('DOM.setBrowserSelection(): failed to add text range to selection');
             }
         });
     };
 
     // exports ================================================================
 
-    return Selection;
+    return DOM;
 
 });
