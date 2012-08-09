@@ -916,6 +916,21 @@ define('io.ox/office/editor/editor',
             return index;
         };
 
+        this.getLastPositionFromPositionByNodeName = function (position, nodename) {
+
+            var pos = null,
+                index = this.getLastIndexInPositionByNodeName(position, nodename);
+
+            if (index !== -1) {
+                pos = [];
+                for (var i = 0; i <= index; i++) {
+                    pos.push(position[i]);
+                }
+            }
+
+            return pos;
+        };
+
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             this.applyOperation(newOperation, true, true);
@@ -1654,13 +1669,9 @@ define('io.ox/office/editor/editor',
                 end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
             }
 
-            // removing position, paragraph, column and row
-            position.pop();
-            position.pop();
-            position.pop();
-            position.pop();
+            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
 
-            var newOperation = { name: OP_ROWS_DELETE, position: _.copy(position, true), start: start, end: end };
+            var newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1678,13 +1689,9 @@ define('io.ox/office/editor/editor',
                 end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
             }
 
-            // removing position, paragraph, column and row
-            position.pop();
-            position.pop();
-            position.pop();
-            position.pop();
+            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
 
-            var newOperation = { name: OP_COLUMNS_DELETE, position: _.copy(position, true), start: start, end: end };
+            var newOperation = { name: OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1702,13 +1709,9 @@ define('io.ox/office/editor/editor',
                 end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
             }
 
-            // removing position, paragraph, column and row
-            position.pop();
-            position.pop();
-            position.pop();
-            position.pop();
+            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
 
-            var newOperation = { name: OP_ROWS_COPY, position: _.copy(position, true), start: start, end: end };
+            var newOperation = { name: OP_ROWS_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -1726,13 +1729,9 @@ define('io.ox/office/editor/editor',
                 end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
             }
 
-            // removing position, paragraph, column and row
-            position.pop();
-            position.pop();
-            position.pop();
-            position.pop();
+            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
 
-            var newOperation = { name: OP_COLUMNS_COPY, position: _.copy(position, true), start: start, end: end };
+            var newOperation = { name: OP_COLUMNS_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -3403,9 +3402,14 @@ define('io.ox/office/editor/editor',
             if ($(table).children().children().length === 0) {
                 $(table).remove();
                 paragraphs = editdiv.children();
-            } else {
-                // Setting cursor to first position in table
                 localPosition.push(0);
+            } else {
+                // Setting cursor
+                var lastRow = $(table).children().children().length - 1;
+                if (endRow > lastRow) {
+                    endRow = lastRow;
+                }
+                localPosition.push(endRow);
                 localPosition.push(0);
             }
 
@@ -3430,8 +3434,8 @@ define('io.ox/office/editor/editor',
             // iterating over all new cells and remove all paragraphs in the cells
             this.implDeleteCellRange(localPosition, [endRow + 1, 0], [endRow + diff + 1, lastColumn]);
 
-            // Setting cursor to first position in table
-            localPosition.push(0);
+            // Setting cursor
+            localPosition.push(endRow);
             localPosition.push(0);
             this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
@@ -3460,10 +3464,15 @@ define('io.ox/office/editor/editor',
             if ($(table).children().children().children().length === 0) {   // no more columns
                 $(table).remove();
                 paragraphs = editdiv.children();
+                localPosition.push(0);
             } else {
-                // Setting cursor to first position in table
+                // Setting cursor
+                var lastColInFirstRow = $(table).children().children().first().children().length - 1;
+                if (endCol > lastColInFirstRow) {
+                    endCol = lastColInFirstRow;
+                }
                 localPosition.push(0);
-                localPosition.push(0);
+                localPosition.push(endCol);
             }
 
             this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
@@ -3494,7 +3503,7 @@ define('io.ox/office/editor/editor',
 
             // Setting cursor to first position in table
             localPosition.push(0);
-            localPosition.push(0);
+            localPosition.push(endCol);
             this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
 
