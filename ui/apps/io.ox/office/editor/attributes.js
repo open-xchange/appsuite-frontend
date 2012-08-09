@@ -383,44 +383,77 @@ define('io.ox/office/editor/attributes',
      */
     converters.character.setAttributes = function (ranges, rootNode, attributes) {
 
-        var // last text node visited while iteration
-            lastTextNode = null,
-            // parent span element of next sibling text node
-            nextSpan = null;
+        var // self reference for local functions
+            self = this;
+
+        // Replaces text nodes in the DOM ranges that refer to the passed text
+        // node with another text node and adjusts the offsets.
+        function replaceTextNodeInRanges(ranges, oldTextNode, newTextNode, offsetDiff) {
+            _(ranges).each(function (range) {
+                if (range.start.node === oldTextNode) {
+                    range.start.node = newTextNode;
+                    range.start.offset += offsetDiff;
+                }
+                if (range.end.node === oldTextNode) {
+                    range.end.node = newTextNode;
+                    range.end.offset += offsetDiff;
+                }
+            });
+        }
+
+        // Returns the child text node of the next or previous sibling of the
+        // passed span element, if that sibling is a span containing exactly
+        // one text node and contains formatting attributes that are equal to
+        // the attributes of the passed span.
+        function getEqualFormattedSiblingTextNode(span, next) {
+            var siblingSpan = next ? span.nextSibling : span.previousSibling;
+            return (siblingSpan && (Utils.getNodeName(siblingSpan) === 'span') && (siblingSpan.childNodes.length === 1) &&
+                Utils.isTextNode(siblingSpan.firstChild) && self.hasEqualElementAttributes(span, siblingSpan)) ? siblingSpan.firstChild : null;
+        }
 
         // iterate all text nodes and change their formatting
-        // TODO: multi-range support, prevent removing a node selected by the next range
-        DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range) {
+        DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range, index, ranges) {
 
             var // the parent <span> element of the text node
-                span = DOM.wrapTextNode(textNode);
+                span = DOM.wrapTextNode(textNode),
+                // following text node when splitting this text node
+                newTextNode = null;
 
             // Split text node to get the selected portion in its own span. The
             // method DOM.splitTextNode() does not split the text node, if the
             // passed offset points to the start or end of the text.
             DOM.splitTextNode(textNode, start);
-            DOM.splitTextNode(textNode, end - start, { append: true });
+            newTextNode = DOM.splitTextNode(textNode, end - start, { append: true });
+
+            // adjust following DOM ranges that may refer to more text in the
+            // current text node which is now contained in the new text node
+            if (newTextNode) {
+                replaceTextNodeInRanges(ranges, textNode, newTextNode, -end);
+            }
 
             // set the new formatting attributes at the span element
             this.setElementAttributes(span, attributes);
 
-            // try to merge with previous span
-            if (span.previousSibling && this.hasEqualElementAttributes(span, span.previousSibling)) {
-                textNode.nodeValue = $(span.previousSibling).text() + textNode.nodeValue;
-                $(span.previousSibling).remove();
+            // try to merge with previous sibling span
+            newTextNode = getEqualFormattedSiblingTextNode(span, false);
+            if (newTextNode) {
+                // add text of the previous text node to the current text node and remove the previous span
+                textNode.nodeValue = newTextNode.nodeValue + textNode.nodeValue;
+                $(newTextNode.parentNode).remove();
             }
 
-            lastTextNode = textNode;
+            // try to merge last text node of each DOM range with next sibling span
+            if (textNode === range.end.node) {
+                newTextNode = getEqualFormattedSiblingTextNode(span, true);
+                if (newTextNode) {
+                    // replace the next text node (about to be removed) in the array of DOM ranges
+                    replaceTextNodeInRanges(ranges, newTextNode, textNode, textNode.nodeValue.length);
+                    // add text of the next text node to the current text node and remove the next span
+                    textNode.nodeValue = textNode.nodeValue + newTextNode.nodeValue;
+                    $(newTextNode.parentNode).remove();
+                }
+            }
         }, this);
-
-        // try to merge last text node with next span
-        nextSpan = lastTextNode ? lastTextNode.parentNode.nextSibling : null;
-        if (nextSpan && (Utils.getNodeName(nextSpan) === 'span')) {
-            if (this.hasEqualElementAttributes(lastTextNode.parentNode, nextSpan)) {
-                lastTextNode.nodeValue = lastTextNode.nodeValue + $(nextSpan).text();
-                $(nextSpan).remove();
-            }
-        }
     };
 
     // static class Attributes ================================================
