@@ -3403,13 +3403,13 @@ define('io.ox/office/editor/editor',
             if ($(table).children().children().length === 0) {
                 $(table).remove();
                 paragraphs = editdiv.children();
-                this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
             } else {
                 // Setting cursor to first position in table
                 localPosition.push(0);
                 localPosition.push(0);
-                this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
             }
+
+            this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
 
         this.implCopyRows = function (pos, startRow, endRow) {
@@ -3439,43 +3439,34 @@ define('io.ox/office/editor/editor',
         this.implDeleteColumns = function (pos, startCol, endCol) {
 
             var localPosition = _.copy(pos, true),
-                lastRow = this.getLastRowIndexInTable(localPosition),
-                lastColumn = this.getLastColumnIndexInTable(localPosition);
+                lastRow = this.getLastRowIndexInTable(localPosition);
 
             if (! this.isPositionInTable(localPosition)) {
                 return;
             }
 
-            if ((startCol === 0) && (endCol === lastColumn)) {
-                window.console.log("AAA: Calling implDeleteTable");
-                this.implDeleteTable(localPosition);
-            } else {
-                window.console.log("AAA: NOT Calling implDeleteTable");
+            // iterating over all cells and remove all paragraphs in the cells
+            this.implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
 
-                // iterating over all cells and remove all paragraphs in the cells
-                this.implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
+            var table = this.getDOMPosition(localPosition).node,
+            allRows = $(table).children().children();
 
-                // Finally removing the columns itself
-                var table = this.getDOMPosition(localPosition).node,
-                allRows = $(table).children().children();
-
-                allRows.each(
-                    function (i, elem) {
-                        $(elem).children().slice(startCol, endCol + 1).remove();
-                    }
-                );
-
-                if ($(table).children().children().length === 0) {
-                    $(table).remove();
-                    paragraphs = editdiv.children();
-                    this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
-                } else {
-                    // Setting cursor to first position in table
-                    localPosition.push(0);
-                    localPosition.push(0);
-                    this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
+            allRows.each(
+                function (i, elem) {
+                    $(elem).children().slice(startCol, endCol + 1).remove();
                 }
+            );
+
+            if ($(table).children().children().children().length === 0) {   // no more columns
+                $(table).remove();
+                paragraphs = editdiv.children();
+            } else {
+                // Setting cursor to first position in table
+                localPosition.push(0);
+                localPosition.push(0);
             }
+
+            this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
 
         this.implCopyColumns = function (pos, startCol, endCol) {
