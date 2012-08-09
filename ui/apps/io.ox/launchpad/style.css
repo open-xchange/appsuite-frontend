@@ -11,7 +11,7 @@
 }
 
 #io-ox-launchpad h1 {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-family: @font-light;
     font-size: 1.5em;
     font-weight: normal;
     line-height: 2em;

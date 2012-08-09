@@ -301,7 +301,7 @@
 }
 
 .mail-detail .io-ox-label {
-    font-family: OpenSans, Arial, Helvetica, sans-serif;
+    font-family: @font-light;
     color: #aaa;
 }
 

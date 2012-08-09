@@ -16,7 +16,7 @@
 }
 
 .file-details .basicInfo em {
-    font-family: OpenSans, Arial, Helvetica, sans-serif;
+    font-family: @font-light;
     color: #aaa;
     font-style: normal;
     white-space: nowrap;

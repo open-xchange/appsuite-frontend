@@ -212,7 +212,7 @@
 	margin: 0px 0 15px 0;
 	font-size: 1.25em;
 	color: #888;
-	font-family: OpenSans, Helvetica, Arial, sans-serif;
+	font-family: @font-light;
 	font-weight: 200;
 	line-height: 1.15em;
 }

@@ -40,8 +40,7 @@ define('io.ox/mail/actions',
         action: function (app) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    // TODO: don't pass app but just folder_id
-                    this.compose(app);
+                    this.compose({ folder_id: app.folder.get() });
                 });
             });
         }

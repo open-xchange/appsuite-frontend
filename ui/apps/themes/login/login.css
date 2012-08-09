@@ -67,7 +67,6 @@ a:hover, .link:hover {
 
 @font-face {
     font-family: OpenSans;
-    src: url(fonts/OpenSans-Light.ttf);
     src: url(fonts/opensans-300.woff);
 }
 

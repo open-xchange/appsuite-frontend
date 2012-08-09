@@ -293,44 +293,25 @@ define('io.ox/mail/write/main',
             app.getEditor().setContent(str);
         };
 
-        app.getPrimaryAddressFromFolder = function (data, def) {
-            var from,
-                initialFolder,
-                accountID;
-            if (!data.folder_id && !data.folder) {
-                initialFolder = 'default0/INBOX';
-            } else {
-                if (data.folder_id) {
-                    initialFolder = data.folder_id;
-                } else {
-                    initialFolder = data.folder.get();
-                }
-            }
-            accountID = mailAPI.getAccountIDFromFolder(initialFolder);
-            accountAPI.get(accountID).done(function (accountdata) {
-                from = [accountdata.personal, accountdata.primary_address];
-                def.resolve();
+        app.getPrimaryAddressFromFolder = function (data) {
+
+            var folder_id = 'folder_id' in data ? data.folder_id : 'default0/INBOX',
+                accountID = mailAPI.getAccountIDFromFolder(folder_id);
+
+            return accountAPI.get(accountID).pipe(function (data) {
+                return [data.personal || '', data.primary_address];
             });
-
-            return from;
-        };
-
-        app.preselectFrom = function (from) {
-            var selectBox = view.sidepanel.find('select');
-            selectBox.val(from);
         };
 
         app.getFrom = function () {
-            var primaryAddress = view.sidepanel.find('.fromselect-wrapper select').val(),
-                personal = view.sidepanel.find('.fromselect-wrapper option[data-primary_address="' + primaryAddress + '"]').attr('data-displayname'),
-                from = [personal, primaryAddress];
-            return from;
+            return view.sidepanel.find('.fromselect-wrapper select').val().split(/|/);
         };
 
-        app.setSender = function (data) {
-            var def = $.Deferred(),
-                from = this.getPrimaryAddressFromFolder(data, def);
-            def.done(this.preselectFrom(from));
+        app.setFrom = function (data) {
+            return this.getPrimaryAddressFromFolder(data).done(function (from) {
+                var value = from[1] + '|' + from[0];
+                view.sidepanel.find('select').val(value);
+            });
         };
 
         app.setBody = function (str) {
@@ -489,7 +470,7 @@ define('io.ox/mail/write/main',
             // call setters
             var data = mail.data;
 
-            this.setSender(data);
+            this.setFrom(data);
             this.setSubject(data.subject);
             this.setTo(data.to);
             this.setCC(data.cc);

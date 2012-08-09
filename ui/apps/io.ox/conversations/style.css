@@ -12,7 +12,7 @@
 }
 
 .io-ox-conversation .subject {
-    font-family: OpenSans, Helvetica, Arial, sans-serif;
+    font-family: @font-light;
     font-weight: 200;
     font-size: 16pt;
     color: #555;
