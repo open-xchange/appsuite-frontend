@@ -341,7 +341,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // loop through data
         for (; i < $l; i++) {
             // get id
-            var id = ids[columns[i]];
+            var id = ids[columns[i]] || columns[i];
             // extend object
             obj[id] = data[i];
         }

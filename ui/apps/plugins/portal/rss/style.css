@@ -1,0 +1,38 @@
+.io-ox-portal-rss-entry {
+    padding: 13px;
+    margin-bottom: 13px;
+}
+
+.io-ox-portal-rss-entry:hover {
+   background: #eee;
+}
+
+.io-ox-portal-rss-source {
+    
+}
+.io-ox-portal-feedName {
+    
+}
+.io-ox-portal-feedUrl {
+    
+}
+.io-ox-portal-rss-feedTitle {
+    line-height: inherit;
+    font-size: 24px;
+    font-weight: 500;
+}
+.io-ox-portal-rss-content {
+    
+}
+.portal-preview {
+    height: 4em;
+    overflow: hidden;
+}
+.portal-preview img{
+    width: 50%;
+    height: auto;
+}
+.portal-full {
+    height: 100%;
+    overflow: auto;
+}
