@@ -239,7 +239,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(contentSide, tileSide);
+                .append(tileSide);
             
             ox.on('refresh^', function () {
                 tileSide.empty();

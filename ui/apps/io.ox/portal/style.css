@@ -50,39 +50,14 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-.io-ox-portal-rss .rss-entry {
-    max-width: 450px;
-    clear: both;
-}
-.io-ox-portal-rss .rss-title {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #000;
-    margin: 2em 0 1em 0;
-}
-.io-ox-portal-rss.spiegel .rss-title {
-}
-.io-ox-portal-rss .rss-content {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    line-height: 1.2em;
-}
-.io-ox-portal-rss .rss-content img {
-    float: left;
-    margin: 0 1.5em 1em 0;
-    border: 0px none;
-    max-width: 250px;
+.io-ox-portal {
+    text-align: center;
 }
 .io-ox-portal-tiles {
-    margin-left: 400px;
-    max-width: 840px;
+    text-align: left;
+    margin: 0 auto;
 }
 .io-ox-portal-content {
-    width: 400px;
-    overflow: auto;
-    min-height: 95%;
-    padding: 0 13px 0 0;
-    float: left;
 }
 .io-ox-portal-widget-tile {
     background: #cce;
@@ -108,7 +83,6 @@
     height: 4em;
 }
 .io-ox-portal-tile-active {
-//    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
     width: 80px;
