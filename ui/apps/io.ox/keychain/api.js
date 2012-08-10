@@ -52,14 +52,16 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
     
     
     function initExtensions() {
-        api.submodules = [];
+        api.submodules = {};
         ext.point("io.ox/keychain/api").each(function (extension) {
             api.submodules[extension.id] = extension;
             extension.invoke("init");
         });
+        
+        console.log(api.submodules);
     }
     
-    ext.point("io.ox/keychain/api").on("extended", initExtensions());
+    ext.point("io.ox/keychain/api").on("extended", initExtensions);
     
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];
@@ -116,6 +118,14 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
         }
         
         return invokeExtension(account.type, "update");
+    };
+    
+    api.isEnabled = function (accountType) {
+        return !!api.submodules[accountType];
+    };
+    
+    api.accountType = function (accountType) {
+        return api.submodules[accountType];
     };
     
     return api;
