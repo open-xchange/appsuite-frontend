@@ -297,7 +297,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     /**
      * Splits the passed text node into two text nodes. Additionally ensures
-     * that the text nodes are embedded in their own <span> elements.
+     * that both text nodes are embedded in their own <span> elements.
      *
      * @param {Text} textNode
      *  The DOM text node to be split.
@@ -305,7 +305,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Number} offset
      *  The character position the text node will be split. If this position is
      *  at the start or end of the text of the node, an empty text node may be
-     *  inserted if needed (see the 'options.createEmpty' option below).
+     *  inserted if required (see the 'options.createEmpty' option below).
      *
      * @param {Object} [options]
      *  A map of options to control the split operation. Supports the following
@@ -323,8 +323,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *
      * @returns {Text|Null}
      *  The newly created text node. Will be located before or after the passed
-     *  text node, depending on the 'append' parameter. If no text node has
-     *  been created (see the 'options.createEmpty' option above), returns
+     *  text node, depending on the 'options.append' option. If no text node
+     *  has been created (see the 'options.createEmpty' option above), returns
      *  null.
      */
     DOM.splitTextNode = function (textNode, offset, options) {
@@ -356,6 +356,35 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // return the new text node
         return newSpan ? newSpan[0].firstChild : null;
+    };
+
+    /**
+     * Returns the text node of the next or previous sibling of parent <span>
+     * element of the passed text node. Checks that the sibling node is a span
+     * element, and contains exactly one text node.
+     *
+     * @param {Text} textNode
+     *  The DOM text node.
+     *
+     * @param {Boolean} next
+     *  If set to true, searches for the next sibling text node, otherwise
+     *  searches for the previous sibling text node.
+     *
+     * @returns {Text|Null}
+     *  The sibling text node if existing, otherwise null.
+     */
+    DOM.getSiblingTextNode = function (textNode, next) {
+
+        var // parent <span> element of passed text node
+            span = textNode.parentNode,
+            // sibling <span> element
+            siblingSpan = next ? span.nextSibling : span.previousSibling;
+
+        function isTextSpan(span) {
+            return span && (Utils.getNodeName(span) === 'span') && (span.childNodes.length === 1) && Utils.isTextNode(span.firstChild);
+        }
+
+        return (isTextSpan(span) && isTextSpan(siblingSpan)) ? siblingSpan.firstChild : null;
     };
 
     // range iteration --------------------------------------------------------
@@ -400,6 +429,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.iterateNodesInRanges = function (ranges, iterator, context) {
 
+        var // loop variables
+            index = 0, range = null, node = null;
+
         // shortcut for call to iterator function
         function callIterator() { return iterator.call(context, node, range, index, ranges); }
 
@@ -407,7 +439,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         ranges = _.chain(ranges).getArray().map(function (range) { return range.clone(); }).invoke('adjust').value();
         ranges.sort(function (range1, range2) { return DOM.Point.comparePoints(range1.start, range2.start); });
 
-        for (var index = 0, range, node; index < ranges.length; index += 1) {
+        for (index = 0; index < ranges.length; index += 1) {
             range = ranges[index];
 
             // merge following overlapping ranges
@@ -538,22 +570,70 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
+     * @param {Object} [options]
+     *  A map of options to control the iteration process. Supports the
+     *  following options:
+     *  @param {Boolean} [options.split]
+     *      If set to true, text nodes that are not covered completely by a DOM
+     *      range will be split before the iterator function will be called.
+     *      The iterator will always receives a text node and a character range
+     *      that covers the text node completely.
+     *
+     *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
-    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context) {
+    DOM.iterateTextPortionsInRanges = function (ranges, iterator, context, options) {
+
+        var // split partly covered the text nodes before visiting them
+            split = Utils.getBooleanOption(options, 'split', false);
+
+        // Replaces text nodes in the DOM ranges that refer to the passed text
+        // node with another text node and adjusts the offsets.
+        function replaceTextNodeInRanges(ranges, index, oldTextNode, newTextNode, offsetDiff) {
+            for (var range = null; index < ranges.length; index += 1) {
+                range = ranges[index];
+                if (range.start.node !== oldTextNode) { return; }
+                range.start.node = newTextNode;
+                range.start.offset += offsetDiff;
+                if (range.end.node !== oldTextNode) { return; }
+                range.end.node = newTextNode;
+                range.end.offset += offsetDiff;
+            }
+        }
 
         // iterate over all nodes, and process the text nodes
         return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
 
             var // cursor instead of selection
                 isCursor = range.isCollapsed(),
-                // start and end offset of covered text in text node
+                // start and end offset of covered text in the text node
                 start = 0, end = 0;
 
             // shortcut for call to iterator function
-            function callIterator() { return iterator.call(context, node, start, end, range, index, ranges); }
+            function callIterator() {
+
+                var // following text node when splitting this text node
+                    newTextNode = null;
+
+                if (split) {
+                    // Split text node to get the selected portion in its own
+                    // span. The method DOM.splitTextNode() does not split the
+                    // text node, if the passed offset points to the start or
+                    // end of the text.
+                    DOM.splitTextNode(node, start);
+                    newTextNode = DOM.splitTextNode(node, end - start, { append: true });
+
+                    // adjust following DOM ranges that may refer to more text in the
+                    // current text node which is now contained in the new text node
+                    if (newTextNode) {
+                        replaceTextNodeInRanges(ranges, index + 1, node, newTextNode, -end);
+                    }
+                }
+
+                return iterator.call(context, node, start, end, range, index, ranges);
+            }
 
             // call passed iterator for all text nodes, but skip empty text nodes
             // unless the entire text range consists of this empty text node
@@ -649,7 +729,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 docRange.setEnd(range.end.node, range.end.offset);
                 selection.addRange(docRange);
             } catch (ex) {
-                window.console.log('DOM.setBrowserSelection(): failed to add range to selection');
+                Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
             }
         });
     };
