@@ -362,7 +362,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
     Position.getLastRowIndexInTable = function (startnode, position) {
 
         var rowIndex = null,
-            table = Position.getCurrentTable(paragraphs, position);
+            table = Position.getCurrentTable(startnode, position);
 
         if (table) {
             rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
@@ -372,49 +372,26 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return rowIndex;
     };
 
-    this.getLastColumnIndexInTable = function (position) {
+    Position.getLastColumnIndexInTable = function (startnode, position) {
+
         var columnIndex = null,
-            table = Position.getCurrentTable(paragraphs, position);
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
 
         if (table) {
-            var localrow = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
-            columnIndex = $('> TH, > TD', localrow).length;
-            columnIndex--;
+            var row = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
+            columnIndex = $('> TH, > TD', row).length - 1;
         }
 
         return columnIndex;
     };
 
-    this.getLastColumnIndexInRow = function (position) {
+    Position.getLastColumnIndexInRow = function (startnode, position) {
+
         var columnIndex = null,
-            table = Position.getCurrentTable(paragraphs, position),
-            foundRow = false;
+            row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TR');
 
-        if (table) {
-            var localPos = _.copy(position, true);
-            var domPos = this.getDOMPosition(position);
-
-            if (domPos) {
-                var node = domPos.node;
-
-                for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                    if (node.nodeName === 'TR') {
-                        foundRow = true;
-                        break;
-                    } else {
-                        if ((node.nodeName === 'P') || (node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeType === 3)) {
-                            localPos.pop();
-                        }
-                    }
-                }
-
-                if (foundRow) {
-                    var row = localPos.pop();  // found the correct row
-                    var localrow = $('> TBODY > TR, > THEAD > TR', table).get(row);
-                    columnIndex = $('> TH, > TD', localrow).length;
-                    columnIndex--;
-                }
-            }
+        if (row) {
+            columnIndex = $('> TH, > TD', row).length - 1;
         }
 
         return columnIndex;

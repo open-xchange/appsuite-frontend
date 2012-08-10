@@ -2060,8 +2060,8 @@ define('io.ox/office/editor/editor',
             if (domPos) {
 
                 while (this.getDOMPosition(paragraph).node.nodeName === 'TABLE') {
-                    paragraph.push(this.getLastRowIndexInTable(paragraph));
-                    paragraph.push(this.getLastColumnIndexInTable(paragraph));
+                    paragraph.push(Position.getLastRowIndexInTable(paragraphs, paragraph));
+                    paragraph.push(Position.getLastColumnIndexInTable(paragraphs, paragraph));
                     paragraph.push(this.getLastParaIndexInCell(paragraph));
                 }
 
@@ -2096,8 +2096,8 @@ define('io.ox/office/editor/editor',
             var column = paragraph.pop(),
                 row = paragraph.pop(),
                 endOfTable = false,
-                lastRow = this.getLastRowIndexInTable(paragraph),
-                lastColumn = this.getLastColumnIndexInTable(paragraph);
+                lastRow = Position.getLastRowIndexInTable(paragraphs, paragraph),
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, paragraph);
 
             if (column < lastColumn) {
                 column += 1;
@@ -2125,7 +2125,7 @@ define('io.ox/office/editor/editor',
             var column = paragraph.pop(),
                 row = paragraph.pop(),
                 beginOfTable = false,
-                lastColumn = this.getLastColumnIndexInTable(paragraph);
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, paragraph);
 
             if (column > 0) {
                 column -= 1;
@@ -2193,66 +2193,6 @@ define('io.ox/office/editor/editor',
             }
 
             return Position.isPositionInTable(paragraphs, position);
-        };
-
-        this.getLastRowIndexInTable = function (position) {
-            var rowIndex = null,
-                table = Position.getCurrentTable(paragraphs, position);
-
-            if (table) {
-                rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
-                rowIndex--;
-            }
-
-            return rowIndex;
-        };
-
-        this.getLastColumnIndexInTable = function (position) {
-            var columnIndex = null,
-                table = Position.getCurrentTable(paragraphs, position);
-
-            if (table) {
-                var localrow = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
-                columnIndex = $('> TH, > TD', localrow).length;
-                columnIndex--;
-            }
-
-            return columnIndex;
-        };
-
-        this.getLastColumnIndexInRow = function (position) {
-            var columnIndex = null,
-                table = Position.getCurrentTable(paragraphs, position),
-                foundRow = false;
-
-            if (table) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'TR') {
-                            foundRow = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') || (node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundRow) {
-                        var row = localPos.pop();  // found the correct row
-                        var localrow = $('> TBODY > TR, > THEAD > TR', table).get(row);
-                        columnIndex = $('> TH, > TD', localrow).length;
-                        columnIndex--;
-                    }
-                }
-            }
-
-            return columnIndex;
         };
 
         this.getRowIndexInTable = function (position) {
@@ -2441,7 +2381,7 @@ define('io.ox/office/editor/editor',
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
-                    lastColumn = this.getLastColumnIndexInTable(localPos);
+                    lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPos);
 
                 for (var j = 0; j <= thisRow; j++) {
                     var max = lastColumn;
@@ -2523,8 +2463,8 @@ define('io.ox/office/editor/editor',
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
-                    lastRow = this.getLastRowIndexInTable(position),
-                    lastColumn = this.getLastColumnIndexInTable(position);
+                    lastRow = Position.getLastRowIndexInTable(paragraphs, position),
+                    lastColumn = Position.getLastColumnIndexInTable(paragraphs, position);
 
                 for (var j = thisRow; j <= lastRow; j++) {
                     var min = 0;
@@ -2576,7 +2516,7 @@ define('io.ox/office/editor/editor',
                         rowIndex = columnIndex - 1,
                         thisRow = localPos[rowIndex],
                         thisColumn = localPos[columnIndex],
-                        lastColumn = this.getLastColumnIndexInTable(localPos),
+                        lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPos),
                         lastIndex = localPos.length - 1;
 
                     while (lastIndex > columnIndex) {
@@ -2611,8 +2551,8 @@ define('io.ox/office/editor/editor',
                 columnIndex = rowIndex + 1,
                 thisRow = localPos[rowIndex],
                 thisColumn = localPos[columnIndex],
-                lastRow = this.getLastRowIndexInTable(position),
-                lastColumn = this.getLastColumnIndexInTable(position);
+                lastRow = Position.getLastRowIndexInTable(paragraphs, position),
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, position);
 
                 while (localPos.length > columnIndex) {
                     localPos.pop();  // Removing position and paragraph optionally
@@ -2686,8 +2626,8 @@ define('io.ox/office/editor/editor',
 
             localPos.push(0); // column
 
-            var lastRow = this.getLastRowIndexInTable(position),
-                lastColumn = this.getLastColumnIndexInTable(position);
+            var lastRow = Position.getLastRowIndexInTable(paragraphs, position),
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, position);
 
 
             for (var j = 0; j <= lastRow; j++) {
@@ -3135,8 +3075,8 @@ define('io.ox/office/editor/editor',
         this.implDeleteTable = function (position) {
 
             var localPositon = _.copy(position, true),
-                lastRow = this.getLastRowIndexInTable(position),
-                lastColumn = this.getLastColumnIndexInTable(position);
+                lastRow = Position.getLastRowIndexInTable(paragraphs, position),
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, position);
 
             // iterating over all cells and remove all paragraphs in the cells
             for (var i = 0; i <= lastColumn; i++) {
@@ -3186,7 +3126,7 @@ define('io.ox/office/editor/editor',
         this.implDeleteRows = function (pos, startRow, endRow) {
 
             var localPosition = _.copy(pos, true),
-                lastColumn = this.getLastColumnIndexInTable(localPosition);
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPosition);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3219,7 +3159,7 @@ define('io.ox/office/editor/editor',
         this.implCopyRows = function (pos, startRow, endRow) {
 
             var localPosition = _.copy(pos, true),
-                lastColumn = this.getLastColumnIndexInTable(localPosition);
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPosition);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3243,7 +3183,7 @@ define('io.ox/office/editor/editor',
         this.implDeleteColumns = function (pos, startCol, endCol) {
 
             var localPosition = _.copy(pos, true),
-                lastRow = this.getLastRowIndexInTable(localPosition);
+                lastRow = Position.getLastRowIndexInTable(paragraphs, localPosition);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3281,7 +3221,7 @@ define('io.ox/office/editor/editor',
         this.implCopyColumns = function (pos, startCol, endCol) {
 
             var localPosition = _.copy(pos, true),
-                lastRow = this.getLastRowIndexInTable(localPosition);
+                lastRow = Position.getLastRowIndexInTable(paragraphs, localPosition);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
