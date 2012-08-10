@@ -2195,37 +2195,6 @@ define('io.ox/office/editor/editor',
             return Position.isPositionInTable(paragraphs, position);
         };
 
-        this.getAllAdjacentParagraphs = function (position) {
-            // position can be paragraph itself or textnode inside it.
-            var allParagraphs = [],
-                foundParagraphNode = false;
-
-            if ((position.length === 1) || (position.length === 2)) {  // only for performance
-                allParagraphs = paragraphs;  // should be "rootElements" instead of "paragraphs"
-            } else {
-                var domPos = this.getDOMPosition(position);
-                if (domPos) {
-                    var node = domPos.node;
-                    if (node.nodeName !== 'P') {
-                        for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                            if (node.nodeName === 'P') {
-                                foundParagraphNode = true;
-                                break;
-                            }
-                        }
-                    } else {
-                        foundParagraphNode = true;
-                    }
-
-                    if (foundParagraphNode) {
-                        allParagraphs = $(node.parentNode).children();
-                    }
-                }
-            }
-
-            return allParagraphs;
-        };
-
         this.getLastRowIndexInTable = function (position) {
             var rowIndex = null,
                 table = Position.getCurrentTable(paragraphs, position);
@@ -2952,7 +2921,7 @@ define('io.ox/office/editor/editor',
         this.implInsertParagraph = function (position) {
             var posLength = position.length - 1,
                 para = position[posLength],
-                allParagraphs = this.getAllAdjacentParagraphs(position);
+                allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position);
 
             var newPara = $('<p>');
 
@@ -3025,7 +2994,7 @@ define('io.ox/office/editor/editor',
             var posLength = position.length - 1,
                 para = position[posLength - 1],
                 pos = position[posLength],
-                allParagraphs = this.getAllAdjacentParagraphs(position),
+                allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position),
                 isTable = Position.isPositionInTable(paragraphs, position) ? true : false;
 
             var dbg_oldparacount = allParagraphs.size();
@@ -3037,7 +3006,7 @@ define('io.ox/office/editor/editor',
                 paragraphs = editdiv.children();
             }
 
-            allParagraphs = this.getAllAdjacentParagraphs(position);
+            allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position);
 
             if (pos !== -1) {
                 var startPos = _.copy(position, true);
@@ -3069,7 +3038,7 @@ define('io.ox/office/editor/editor',
 
             position.push(0); // adding pos to position temporarely
 
-            var allParagraphs = this.getAllAdjacentParagraphs(position);
+            var allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position);
 
             position.pop();
 
@@ -3131,7 +3100,7 @@ define('io.ox/office/editor/editor',
 
             position.push(0); // adding pos to position temporarely
 
-            var allParagraphs = this.getAllAdjacentParagraphs(position),
+            var allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position),
                 isTable = Position.isPositionInTable(paragraphs, position);
 
             position.pop();

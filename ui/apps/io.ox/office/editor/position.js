@@ -51,20 +51,22 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      * Returns the following node and offset corresponding to the next
      * logical position. With a node and the next position index
      * the following node and in the case of a text node the offset
-     * are calculated. For performance reasons, the node can be an
+     * are calculated. For performance reasons, the node can be a
      * jQuery object, so that the start position can be determined from
      * the 'paragraphs' object.
      *
      * @param {Node} node
-     *  The node, whose child is searched. For performance reasons, an
+     *  The node, whose child is searched. For performance reasons, a
      *  jQuery object is also supported. The jQuery object 'paragraphs'
      *  from the editor can be used instead of the main DIV for the editor.
      *
      * @param {Number} pos
-     *  The one integer number, that determines the child according to the parent position.
+     *  The one integer number, that determines the child according to the
+     *  parent position.
      *
      * @returns {Node | Number}
-     *  The child node and an offset. Offset is only required for text nodes.
+     *  The child node and an offset. Offset is only set for text nodes,
+     *  otherwise it is undefined.
      */
     Position.getNextChildNode = function (node, pos) {
 
@@ -135,7 +137,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -190,7 +192,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
 
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -215,7 +217,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -241,7 +243,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -273,7 +275,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -311,7 +313,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -330,7 +332,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
-     *  (can be an jQuery object for performance reasons.)
+     *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
      *  The logical position.
@@ -343,6 +345,40 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
     };
 
+    /**
+     * Function, that returns all adjacent paragraphs of a paragraph
+     * described by the logical position. The logical position can
+     * describe a paragraph or a text node inside it.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position. It can be paragraph itself or text node
+     *  inside it.
+     *
+     * @returns {[Node]}
+     *  Returns all adjacent paragraphs of a paragraph described by
+     *  the logical position. This is an array of dom nodes.
+     */
+    Position.getAllAdjacentParagraphs = function (startnode, position) {
+
+        var allParagraphs = [];
+
+        if ((position.length === 1) || (position.length === 2)) {  // only for performance
+            allParagraphs = startnode;
+        } else {
+            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+
+            if (node) {
+                allParagraphs = $(node.parentNode).children();
+            }
+        }
+
+        return allParagraphs;
+    };
 
     return Position;
 
