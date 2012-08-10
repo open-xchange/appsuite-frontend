@@ -2195,34 +2195,6 @@ define('io.ox/office/editor/editor',
             return Position.isPositionInTable(paragraphs, position);
         };
 
-        this.getCurrentParagraph = function (position) {
-
-            var paragraph = null,
-                foundParagraph = false;
-
-            var domPos = this.getDOMPosition(position);
-
-            if (domPos) {
-                var node = domPos.node;
-                if (node.nodeName !== 'P') {
-                    for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'P') {
-                            foundParagraph = true;
-                            break;
-                        }
-                    }
-                } else {
-                    foundParagraph = true;
-                }
-
-                if (foundParagraph) {
-                    paragraph = node;
-                }
-            }
-
-            return paragraph;
-        };
-
         this.getAllAdjacentParagraphs = function (position) {
             // position can be paragraph itself or textnode inside it.
             var allParagraphs = [],
@@ -2796,7 +2768,7 @@ define('io.ox/office/editor/editor',
 
             // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
 
-            var paragraph = this.getCurrentParagraph(position);
+            var paragraph = Position.getCurrentParagraph(paragraphs, position);
 
             if (paragraph) {
 
@@ -3034,7 +3006,7 @@ define('io.ox/office/editor/editor',
                     pos.push(j);
                     pos.push(0); // first paragraph
 
-                    var paragraph = this.getCurrentParagraph(pos);
+                    var paragraph = Position.getCurrentParagraph(paragraphs, pos);
 
                     this.prepareNewParagraph(paragraph);
                 }
@@ -3380,7 +3352,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            var oneParagraph = this.getCurrentParagraph(startPosition);
+            var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
             var textNodes = Utils.collectTextNodes(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = textNodes.length;
