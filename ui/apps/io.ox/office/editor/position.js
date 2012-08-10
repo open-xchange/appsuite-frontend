@@ -359,6 +359,45 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return allParagraphs;
     };
 
+    Position.getLastRowIndexInTable = function (startnode, position) {
+
+        var rowIndex = null,
+            table = Position.getCurrentTable(startnode, position);
+
+        if (table) {
+            rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
+            rowIndex--;
+        }
+
+        return rowIndex;
+    };
+
+    Position.getLastColumnIndexInTable = function (startnode, position) {
+
+        var columnIndex = null,
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+
+        if (table) {
+            var row = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
+            columnIndex = $('> TH, > TD', row).length - 1;
+        }
+
+        return columnIndex;
+    };
+
+    Position.getLastColumnIndexInRow = function (startnode, position) {
+
+        var columnIndex = null,
+            row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TR');
+
+        if (row) {
+            columnIndex = $('> TH, > TD', row).length - 1;
+        }
+
+        return columnIndex;
+    };
+
+
     return Position;
 
 });
