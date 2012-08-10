@@ -59,7 +59,7 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
             return this.getAll().length > 0;
         };
         
-        this.createInteractively = function () {
+        function init(account) {
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName());
@@ -75,14 +75,18 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
                 .on("add", function () {
                     var callbackName = "oauth" + generateId();
                     require(["io.ox/core/http"], function (http) {
+                        var params = {
+                            action: "init",
+                            serviceId: service.id,
+                            displayName: $displayNameField.val(),
+                            cb: callbackName
+                        };
+                        if (account) {
+                            params.id = account.id;
+                        }
                         http.GET({
                             module: "oauth/accounts",
-                            params: {
-                                action: "init",
-                                serviceId: service.id,
-                                displayName: $displayNameField.val(),
-                                cb: callbackName
-                            }
+                            params: params
                         })
                         .done(function (interaction) {
                             var popupWindow = null;
@@ -107,18 +111,39 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
             });
             
             return def;
+        }
+        
+        this.createInteractively = function () {
+            return init();
         };
         
         this.remove = function (account) {
-            
+            return http.PUT({
+                module: "oauth/accounts",
+                params: {
+                    action: "delete",
+                    id: account.id
+                }
+            }).done(function (response) {
+                delete cache[service.id].accounts[account.id];
+            });
         };
         
         this.update = function (account) {
-            
+            return http.PUT({
+                module: "oauth/accounts",
+                params: {
+                    action: 'update',
+                    id: account.id
+                },
+                data: {displayName: account.displayName}
+            }).done(function (response) {
+                cache[service.id].accounts[account.id] = account;
+            });
         };
         
         this.reauthorize = function (account) {
-            
+            return init(account);
         };
     }
     
