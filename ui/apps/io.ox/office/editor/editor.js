@@ -17,8 +17,9 @@ define('io.ox/office/editor/editor',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
+     'io.ox/office/editor/position',
      'io.ox/office/editor/attributes'
-    ], function (Events, Utils, DOM, Attributes) {
+    ], function (Events, Utils, DOM, Position, Attributes) {
 
     'use strict';
 
@@ -744,7 +745,7 @@ define('io.ox/office/editor/editor',
         this.getDOMPosition = function (oxoPosition) {
 
             var oxoPos = _.copy(oxoPosition, true),
-            node = null,
+            node = paragraphs,
             offset = null;
 
             if (oxoPosition === undefined) {
@@ -759,7 +760,7 @@ define('io.ox/office/editor/editor',
 
             while (oxoPos.length > 0) {
 
-                var returnObj = this.getNextChildNode(node, oxoPos.shift());
+                var returnObj = Position.getNextChildNode(node, oxoPos.shift());
 
                 if (returnObj) {
                     if (returnObj.node) {
@@ -778,67 +779,6 @@ define('io.ox/office/editor/editor',
             }
 
             return new DOM.Point(node, offset);
-        };
-
-        this.getNextChildNode = function (node, pos) {
-
-            var childNode,
-                offset;
-
-            if (! node) {
-                if (pos > paragraphs.length - 1) {
-                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph ' + pos + ' is out of range. Last paragraph: ' + paragraphs.length - 1);
-                    return;
-                }
-                childNode = paragraphs.get(pos);
-            } else if (node.nodeName === 'TABLE') {
-                childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
-            } else if (node.nodeName === 'TR') {
-                childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
-            } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {
-                childNode = $(node).children().get(pos);
-            } else if (node.nodeName === 'P') {
-                var textLength = 0;
-                var bFound = false;
-
-                // Checking if this paragraph has children
-                if (! node.hasChildNodes()) {
-                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph is empty');
-                    return;
-                }
-
-                while (node.hasChildNodes()) {
-
-                    var nodeList = node.childNodes;
-
-                    for (var i = 0; i < nodeList.length; i++) {
-                        // Searching the children
-                        var currentNode = nodeList[i];
-                        var currentLength = $(nodeList[i]).text().length;
-                        if (textLength + currentLength >= pos) {
-                            bFound = true;
-                            node = currentNode;
-                            break;  // leaving the for-loop
-                        } else {
-                            textLength += currentLength;
-                        }
-                    }
-                }
-
-                if (! bFound) {
-                    this.implDbgOutInfo('getNextChildNode: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
-                    return;
-                }
-
-                childNode = node;
-                offset = pos - textLength;
-
-            } else {
-                this.implDbgOutInfo('getNextChildNode: Warning: Unknown node: ' + node.nodeName);
-                return;
-            }
-
-            return new DOM.Point(childNode, offset);
         };
 
         this.getDOMSelection = function (oxoSelection) {
@@ -884,83 +824,6 @@ define('io.ox/office/editor/editor',
             }
 
             return ranges;
-        };
-
-        /**
-         * Returns the index of the position, at which the corresponding dom
-         * node is of the specified selector. Returns -1, if the selector is
-         * never fulfilled.
-         *
-         * @param {OXOPam.oxoPosition} position
-         *  The logical position.
-         *
-         * @param {String} selector
-         *  The selector against which the dom node is compared.
-         *
-         * @returns {Numnber}
-         *  The index in the logical position or -1, if no corresponding
-         *  dom node can be found.
-         */
-        this.getLastIndexInPositionByNodeName = function (position, selector) {
-
-            var index = -1,
-                counter = -1,
-                oxoPos = _.copy(position, true),
-                node = null;
-
-            while (oxoPos.length > 0) {
-
-                counter++;
-
-                var returnObj = this.getNextChildNode(node, oxoPos.shift());
-
-                if (returnObj) {
-                    if (returnObj.node) {
-                        node = returnObj.node;
-                        if ($(node).is(selector)) {
-                            index = counter;
-                        }
-                    } else {
-                        // index = -1;
-                        break;
-                    }
-                } else {
-                    // index = -1;
-                    break;
-                }
-            }
-
-            return index;
-        };
-
-        /**
-         * Returns the logical position, at which the corresponding dom
-         * node is of the specified selector. Returns -1, if the selector is
-         * never fulfilled.
-         *
-         * @param {OXOPam.oxoPosition} position
-         *  The logical position.
-         *
-         * @param {String} selector
-         *  The selector against which the dom node is compared.
-         *
-         * @returns {[]}
-         *  The complete logical position or null, if no corresponding
-         *  dom node can be found.
-         */
-        this.getLastPositionFromPositionByNodeName = function (position, selector) {
-
-            var pos = null,
-                index = this.getLastIndexInPositionByNodeName(position, selector);
-
-            if (index !== -1) {
-                pos = [];
-                for (var i = 0; i <= index; i++) {
-                    pos.push(position[i]);
-                }
-            }
-
-            return pos;
         };
 
         this.initDocument = function () {
@@ -1276,7 +1139,7 @@ define('io.ox/office/editor/editor',
                             }
                             selection.startPaM.oxoPosition = this.getFirstPositionInParagraph(nextParagraphPosition);
                         } else if (isLastParagraph) {
-                            if (this.isPositionInTable(nextParagraphPosition)) {
+                            if (Position.isPositionInTable(paragraphs, nextParagraphPosition)) {
                                 var returnObj = this.getFirstPositionInNextCell(nextParagraphPosition);
                                 selection.startPaM.oxoPosition = returnObj.position;
                                 var endOfTable = returnObj.endOfTable;
@@ -1335,7 +1198,7 @@ define('io.ox/office/editor/editor',
                         } else {
                             var isFirstPosition = (startPosition[lastValue - 1] < 0) ? true : false;
                             if (isFirstPosition) {
-                                if (this.isPositionInTable(startPosition)) {
+                                if (Position.isPositionInTable(paragraphs, startPosition)) {
                                     var returnObj = this.getLastPositionInPrevCell(startPosition);
                                     selection.startPaM.oxoPosition = returnObj.position;
                                     var beginOfTable = returnObj.beginOfTable;
@@ -1467,7 +1330,7 @@ define('io.ox/office/editor/editor',
                         lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     if ((lastValue >= 4) &&
-                        (this.isPositionInTable([0])) &&
+                        (Position.isPositionInTable(paragraphs, [0])) &&
                         _(startPosition).all(function (value) { return (value === 0); })) {
                         this.insertParagraph([0]);
                         paragraphs = editdiv.children();
@@ -1606,7 +1469,7 @@ define('io.ox/office/editor/editor',
 
                     // 1) delete selected part or rest of para in first para (pos to end)
                     if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                        isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
+                        isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
                         endPosition = _.copy(selection.startPaM.oxoPosition);
                         if (isTable) {
                             var localEndPosition = _.copy(endPosition);
@@ -1624,7 +1487,7 @@ define('io.ox/office/editor/editor',
                         // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
                         var startPosition = [];
                         startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                        isTable = this.isPositionInTable(startPosition);
+                        isTable = Position.isPositionInTable(paragraphs, startPosition);
                         if (isTable) {
                             this.deleteTable(startPosition);
                         } else {
@@ -1641,7 +1504,7 @@ define('io.ox/office/editor/editor',
                         endPosition = _.copy(startPosition, true);
                         endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
 
-                        isTable = this.isPositionInTable(endPosition);
+                        isTable = Position.isPositionInTable(paragraphs, endPosition);
 
                         this.deleteText(startPosition, endPosition);
 
@@ -1701,7 +1564,7 @@ define('io.ox/office/editor/editor',
                 end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
             }
 
-            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
+            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
             var newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
@@ -1721,7 +1584,7 @@ define('io.ox/office/editor/editor',
                 end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
             }
 
-            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
+            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
             var newOperation = { name: OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
@@ -1741,7 +1604,7 @@ define('io.ox/office/editor/editor',
                 end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
             }
 
-            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
+            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
             var newOperation = { name: OP_ROWS_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
@@ -1761,7 +1624,7 @@ define('io.ox/office/editor/editor',
                 end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
             }
 
-            var tablePos = this.getLastPositionFromPositionByNodeName(position, 'TABLE');
+            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
             var newOperation = { name: OP_COLUMNS_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
@@ -1960,7 +1823,7 @@ define('io.ox/office/editor/editor',
                         var startposLength = selection.startPaM.oxoPosition.length - 1,
                             endposLength = selection.endPaM.oxoPosition.length - 1,
                             localendPosition = selection.endPaM.oxoPosition,
-                            isTable = this.isPositionInTable(selection.startPaM.oxoPosition);
+                            isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
 
                         if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                             // TODO: This is not sufficient
@@ -1980,7 +1843,7 @@ define('io.ox/office/editor/editor',
                             localstartPosition[0] = i;
                             localstartPosition[1] = 0;
 
-                            isTable = this.isPositionInTable(localstartPosition);
+                            isTable = Position.isPositionInTable(paragraphs, localstartPosition);
 
                             if (isTable) {
                                 this.setAttributesToCompleteTable(attributes, localstartPosition);
@@ -1997,7 +1860,7 @@ define('io.ox/office/editor/editor',
                             localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                             localstartPosition[endposLength] = 0;
 
-                            isTable = this.isPositionInTable(localstartPosition);
+                            isTable = Position.isPositionInTable(paragraphs, localstartPosition);
 
                             if (isTable) {
                                 // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
@@ -2318,36 +2181,18 @@ define('io.ox/office/editor/editor',
         // TABLE METHODS
         // ==================================================================
 
-        this.isPositionInTable = function (position) {
-            var positionInTable = false;
+        this.isPositionInTable = function () {
 
-            if (! position) {
-                var selection = this.getSelection();
-                if (selection) {
-                    position = selection.endPaM.oxoPosition;
-                } else {
-                    return false;
-                }
+            var selection = this.getSelection(),
+                position = null;
+
+            if (selection) {
+                position = selection.endPaM.oxoPosition;
+            } else {
+                return false;
             }
 
-            var domNode = null,
-                localPos = _.copy(position, true);
-
-            while (localPos.length > 0) {
-
-                domNode = this.getNextChildNode(domNode, localPos.shift()).node;
-
-                if (domNode) {
-                    if (domNode.nodeName === 'TABLE') {
-                        positionInTable = true;
-                        break;
-                    } else if (domNode.nodeName === 'P') {
-                        break;
-                    }
-                }
-            }
-
-            return positionInTable;
+            return Position.isPositionInTable(paragraphs, position);
         };
 
         this.getCurrentTable = function (position) {
@@ -2489,7 +2334,7 @@ define('io.ox/office/editor/editor',
 
         this.getRowIndexInTable = function (position) {
             var rowIndex = null,
-                isInTable = this.isPositionInTable(position),
+                isInTable = Position.isPositionInTable(paragraphs, position),
                 foundRow = false;
 
             if (isInTable) {
@@ -2521,7 +2366,7 @@ define('io.ox/office/editor/editor',
 
         this.getColumnIndexInRow = function (position) {
             var columnIndex = null,
-                isInTable = this.isPositionInTable(position),
+                isInTable = Position.isPositionInTable(paragraphs, position),
                 foundColumn = false;
 
             if (isInTable) {
@@ -2554,7 +2399,7 @@ define('io.ox/office/editor/editor',
         this.getLastParaIndexInCell = function (position) {
 
             var lastPara = null,
-                isInTable = this.isPositionInTable(position),
+                isInTable = Position.isPositionInTable(paragraphs, position),
                 foundParagraph = false,
                 foundCell = false;
 
@@ -2604,7 +2449,7 @@ define('io.ox/office/editor/editor',
         this.getParagraphIndexInCell = function (position) {
 
             var paraIndex = null,
-                isInTable = this.isPositionInTable(position),
+                isInTable = Position.isPositionInTable(paragraphs, position),
                 localPos = _.copy(position),
                 foundParagraph = false;
 
@@ -2635,7 +2480,7 @@ define('io.ox/office/editor/editor',
 
         this.getAllParagraphsFromTableCell = function (position) {
             var allParagraphs = [],
-                isInTable = this.isPositionInTable(position),
+                isInTable = Position.isPositionInTable(paragraphs, position),
                 foundParagraph = false;
 
             if (isInTable) {
@@ -2665,11 +2510,11 @@ define('io.ox/office/editor/editor',
         this.deletePreviousCellsInTable = function (position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
+                var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TR'),
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -2694,11 +2539,11 @@ define('io.ox/office/editor/editor',
         this.deleteAllParagraphsInCell = function (position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var colIndex = this.getLastIndexInPositionByNodeName(localPos, 'TH, TD'),
+                var colIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TH, TD'),
                     paraIndex = colIndex + 1,
                     lastParaInCell = this.getLastParaIndexInCell(localPos);
 
@@ -2728,11 +2573,11 @@ define('io.ox/office/editor/editor',
         this.deletePreviousParagraphsInCell = function (position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     lastPara =  localPos[paraIndex];
 
                 localPos[paraIndex] = 0; // always 0, because paragraphs are deleted
@@ -2747,11 +2592,11 @@ define('io.ox/office/editor/editor',
         this.deleteFollowingCellsInTable = function (position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
+                var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TR'),
                     columnIndex = rowIndex + 1,
                     thisRow = localPos[rowIndex],
                     thisColumn = localPos[columnIndex],
@@ -2776,11 +2621,11 @@ define('io.ox/office/editor/editor',
         this.deleteFollowingParagraphsInCell = function (position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  this.getLastParaIndexInCell(localPos);
 
@@ -2796,11 +2641,11 @@ define('io.ox/office/editor/editor',
         this.setAttributesToPreviousCellsInTable = function (attributes, position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P');
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P');
 
                 if (paraIndex !== -1) {
 
@@ -2836,10 +2681,10 @@ define('io.ox/office/editor/editor',
         this.setAttributesToFollowingCellsInTable = function (attributes, position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
-                var rowIndex = this.getLastIndexInPositionByNodeName(localPos, 'TR'),
+                var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TR'),
                 columnIndex = rowIndex + 1,
                 thisRow = localPos[rowIndex],
                 thisColumn = localPos[columnIndex],
@@ -2869,11 +2714,11 @@ define('io.ox/office/editor/editor',
         this.setAttributesToPreviousParagraphsInCell = function (attributes, position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     thisPara = localPos[paraIndex];
 
                 for (var i = 0; i < thisPara; i++) {
@@ -2886,11 +2731,11 @@ define('io.ox/office/editor/editor',
         this.setAttributesToFollowingParagraphsInCell = function (attributes, position) {
 
             var localPos = _.copy(position, true),
-                isInTable = this.isPositionInTable(localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos);
 
             if (isInTable) {
 
-                var paraIndex = this.getLastIndexInPositionByNodeName(localPos, 'P'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  this.getLastParaIndexInCell(position);
 
@@ -2904,7 +2749,7 @@ define('io.ox/office/editor/editor',
         this.setAttributesToCompleteTable = function (attributes, position) {
 
             var localPos = _.copy(position),
-                tableIndex = this.getLastIndexInPositionByNodeName(localPos, 'TABLE'),
+                tableIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TABLE'),
                 localPos = [];
 
             for (var i = 0; i <= tableIndex; i++) {
@@ -2937,10 +2782,10 @@ define('io.ox/office/editor/editor',
 
             var startPosition = _.copy(position, true),
                 endPosition = _.copy(position, true),
-                isInTable = this.isPositionInTable(startPosition);
+                isInTable = Position.isPositionInTable(paragraphs, startPosition);
 
             if (isInTable) {
-                var paraIndex = this.getLastIndexInPositionByNodeName(startPosition, 'P');
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPosition, 'P');
 
                 startPosition[paraIndex + 1] = 0;
                 endPosition[paraIndex + 1] = this.getParagraphLength(position);
@@ -3227,7 +3072,7 @@ define('io.ox/office/editor/editor',
                 para = position[posLength - 1],
                 pos = position[posLength],
                 allParagraphs = this.getAllAdjacentParagraphs(position),
-                isTable = this.isPositionInTable(position) ? true : false;
+                isTable = Position.isPositionInTable(paragraphs, position) ? true : false;
 
             var dbg_oldparacount = allParagraphs.size();
             var paraclone = $(allParagraphs[para]).clone();
@@ -3333,7 +3178,7 @@ define('io.ox/office/editor/editor',
             position.push(0); // adding pos to position temporarely
 
             var allParagraphs = this.getAllAdjacentParagraphs(position),
-                isTable = this.isPositionInTable(position);
+                isTable = Position.isPositionInTable(paragraphs, position);
 
             position.pop();
 
@@ -3420,7 +3265,7 @@ define('io.ox/office/editor/editor',
             var localPosition = _.copy(pos, true),
                 lastColumn = this.getLastColumnIndexInTable(localPosition);
 
-            if (! this.isPositionInTable(localPosition)) {
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
@@ -3453,7 +3298,7 @@ define('io.ox/office/editor/editor',
             var localPosition = _.copy(pos, true),
                 lastColumn = this.getLastColumnIndexInTable(localPosition);
 
-            if (! this.isPositionInTable(localPosition)) {
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
@@ -3477,7 +3322,7 @@ define('io.ox/office/editor/editor',
             var localPosition = _.copy(pos, true),
                 lastRow = this.getLastRowIndexInTable(localPosition);
 
-            if (! this.isPositionInTable(localPosition)) {
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
@@ -3515,7 +3360,7 @@ define('io.ox/office/editor/editor',
             var localPosition = _.copy(pos, true),
                 lastRow = this.getLastRowIndexInTable(localPosition);
 
-            if (! this.isPositionInTable(localPosition)) {
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
