@@ -268,6 +268,45 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return pos;
     };
 
+    /**
+     * Returns if the logical position is a position inside a table.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (can be an jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the logical position is inside a table,
+     *  otherwise false.
+     */
+    Position.isPositionInTable = function (startnode, position) {
+
+        var positionInTable = false,
+            domNode = startnode,
+            localPos = _.copy(position, true);
+
+        while (localPos.length > 0) {
+
+            domNode = Position.getNextChildNode(domNode, localPos.shift()).node;
+
+            if (domNode) {
+                if (domNode.nodeName === 'TABLE') {
+                    positionInTable = true;
+                    break;
+                } else if (domNode.nodeName === 'P') {
+                    break;
+                }
+            }
+        }
+
+        return positionInTable;
+    };
+
+
+
     return Position;
 
 });
