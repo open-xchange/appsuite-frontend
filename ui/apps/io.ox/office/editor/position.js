@@ -305,6 +305,43 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return positionInTable;
     };
 
+    /**
+     * Convenience function, that returns the last table node, if available.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (can be an jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Node}
+     *  Returns the last table node of the logical position if available,
+     *  otherwise null.
+     */
+    Position.getCurrentTable = function (startnode, position) {
+        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+    };
+
+    /**
+     * Convenience function, that returns the last paragraph node, if available.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (can be an jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Node}
+     *  Returns the last paragraph node of the logical position if available,
+     *  otherwise null.
+     */
+    Position.getCurrentParagraph = function (startnode, position) {
+        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+    };
 
 
     return Position;
