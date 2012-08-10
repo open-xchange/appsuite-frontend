@@ -9,6 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
+ * @author  Markus Bode <markus.bode@open-xchange.com>
  */
 
 define('plugins/portal/twitter/register',
@@ -69,9 +70,24 @@ define('plugins/portal/twitter/register',
 
         return bob;
     };
+    var loadFromTwitter = function (params) {
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
+        return def.pipe(function (response) {
+            if (response) {
+                var jsonResponse = JSON.parse(response);
+
+                if (!jsonResponse.error) {
+                    return jsonResponse;
+                } else {
+                    return {};
+                }
+            } else {
+                return {};
+            }
+        });
+    };
     var loadTile = function () {
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 1, include_entities: true}});
-        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+        return loadFromTwitter({count: 1, include_entities: true});
     };
     var drawTile = function (tweets, $node) {
         if (!tweets) {
@@ -103,8 +119,7 @@ define('plugins/portal/twitter/register',
             params.count = count;
         }
 
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
-        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+        return loadFromTwitter(params);
     };
 
     var showTweet = function (tweet) {
@@ -171,8 +186,7 @@ define('plugins/portal/twitter/register',
         },
 
         load: function () {
-            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: loadEntriesPerPage, include_entities: true}});
-            return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+            return loadFromTwitter({count: loadEntriesPerPage, include_entities: true});
         },
         draw: function (timeline) {
             // Pull to refresh
