@@ -1,10 +1,26 @@
 
+@portal-background-alt: @topbar-background;
+@portal-background: @topbar-background-alt;
+
 .io-ox-portal {
-    padding: 0 13px 0 13px;
+ 
+    padding: 13px;
     position: relative;
     height: 100%;
     overflow: auto;
+ 
+    border-top: 1px solid #000;
+    background-color: #2C2C2C;
+    
+    background-image: -moz-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -ms-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@portal-background-alt), to(@portal-background));
+    background-image: -webkit-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -o-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: linear-gradient(top, @portal-background-alt, @portal-background);
+    background-repeat: repeat-x;
 }
+
 .io-ox-portal, .io-ox-portal * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -69,7 +85,6 @@
     max-width: 250px;
 }
 .io-ox-portal-tiles {
-    margin-left: 400px;
     max-width: 840px;
 }
 .io-ox-portal-content {
@@ -77,7 +92,7 @@
     overflow: auto;
     min-height: 95%;
     padding: 0 13px 0 0;
-    float: left;
+    float: right;
 }
 .io-ox-portal-widget-tile {
     background: #cce;
@@ -86,15 +101,11 @@
     overflow: hidden;
     width: 270px;
     height: 180px;
-    margin: 13px 13px 0 0;
+    margin: 3px 3px 0 0;
     cursor: pointer;
 }
 .io-ox-portal-preview {
     overflow: hidden;
-}
-:hover.io-ox-portal-widget-tile  {
-    opacity: 0.75;
-    filter: alpha(opacity=75);
 }
 .io-ox-portal-widget-tile h1 {
     line-height: 2em;
@@ -115,4 +126,27 @@
 }    
 .io-ox-portal .tile-dark, .io-ox-portal .tile-dark * {
     color: #333;
+}
+
+.io-ox-portal {
+    .tile-color0 { background-color: #555; color: white; } /* grey */
+    .tile-color0:hover { background-color: lighten(#555, 5%); }
+    .tile-color1 { background-color: #49F; color: white; } /* twitter blue */
+    .tile-color1:hover { background-color: lighten(#49F, 5%); }
+    .tile-color2 { background-color: #3B5998; color: white; } /* facebook blue */
+    .tile-color2:hover { background-color: lighten(#3B5998, 5%); }
+    .tile-color3 { background-color: #86B300; color: white; } /* green */
+    .tile-color3:hover { background-color: lighten(#86B300, 5%); }
+    .tile-color4 { background-color: #8E488E; color: white; } /* purple */
+    .tile-color4:hover { background-color: lighten(#8E488E, 5%); }
+    .tile-color5 { background-color: #FFCC33; color: black; } /* orange */
+    .tile-color5:hover { background-color: lighten(#FFCC33, 5%); }
+    .tile-color6 { background-color: #F7FF5C; color: black; } /* yellow */
+    .tile-color6:hover { background-color: lighten(#F7FF5C, 5%); }
+    .tile-color7 { background-color: #8040BF; color: black; } /* violet */
+    .tile-color7:hover { background-color: lighten(#8040BF, 5%); }
+    .tile-color8 { background-color: #8040BF; color: black; } /* violet */
+    .tile-color8:hover { background-color: lighten(#8040BF, 5%); }
+    .tile-color9 { background-color: #8040BF; color: black; } /* violet */
+    .tile-color9:hover { background-color: lighten(#8040BF, 5%); }
 }

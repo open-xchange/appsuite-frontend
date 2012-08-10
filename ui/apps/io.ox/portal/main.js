@@ -114,6 +114,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
+                        // experimental
+                        .addClass('tile-color' + (Math.random() * 10 >> 0))
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
@@ -180,19 +182,25 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                     $node.append(preview);
                                 }
                             });
-                            extension.asyncMetadata("background").done(function (bgColor) {
-                                if (bgColor === control.CANCEL) {
+                            extension.asyncMetadata("tileColor").done(function (color) {
+                                if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.css("background", bgColor);
+                                if (color !== undefined) {
+                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
+                                    console.log('AHA', $node, color);
+                                    $node.addClass('tile-color' + color);
+                                }
                             });
                             extension.asyncMetadata("color").done(function (color) {
                                 if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.addClass("tile-" + color);
+                                if (color !== undefined) {
+                                    $node.addClass("tile-" + color);
+                                }
                             });
 
 
