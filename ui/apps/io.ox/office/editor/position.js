@@ -15,28 +15,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
 
     'use strict';
 
-    /**
-     * Debug output info
-     *
-     * @param {String} str
-     *  The string to be displayed in the console.
-     */
-    function implDbgOutInfo(str) {
-
-        // if (!dbgoutInfos)
-        //     return;
-
-        var msg = str;
-
-        msg = msg + ' (' + str.length + ' code points: ';
-        for (var i = 0; i < str.length; i++) {
-            msg = msg + '[' + str.charCodeAt(i) + ']';
-        }
-
-        window.console.log(msg);
-    }
-
-    // static class Position =======================================================
+    // static class Position ==================================================
 
     /**
      * Provides static helper methods for manipulation and calculation
@@ -73,7 +52,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
 
         if (node instanceof $) {  // true for jQuery objects
             if (pos > node.length - 1) {
-                this.implDbgOutInfo('getNextChildNode: Warning: Array ' + pos + ' is out of range. Last paragraph: ' + node.length - 1);
+                Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + node.length - 1);
                 return;
             }
             childNode = node.get(pos);
@@ -89,7 +68,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
-                this.implDbgOutInfo('getNextChildNode: Warning: Paragraph is empty');
+                Utils.warn('Position.getNextChildNode(): paragraph is empty');
                 return;
             }
 
@@ -112,7 +91,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
             }
 
             if (! bFound) {
-                this.implDbgOutInfo('getNextChildNode: Warning: Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
+                Utils.warn('Position.getNextChildNode(): Paragraph does not contain position: ' + pos + '. Last position: ' + textLength);
                 return;
             }
 
@@ -120,7 +99,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
             offset = pos - textLength;
 
         } else {
-            this.implDbgOutInfo('getNextChildNode: Warning: Unknown node: ' + node.nodeName);
+            Utils.warn('Position.getNextChildNode(): Unknown node: ' + node.nodeName);
             return;
         }
 
@@ -170,12 +149,12 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
                     }
                 } else {
                     // index = -1;
-                    this.implDbgOutInfo('getLastNodeInformationInPositionByNodeName (2): Error: Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
+                    Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (2) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
                     break;
                 }
             } else {
                 // index = -1;
-                this.implDbgOutInfo('getLastNodeInformationInPositionByNodeName (1): Error: Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
+                Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (1) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
                 break;
             }
         }
