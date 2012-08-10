@@ -987,7 +987,7 @@ define('io.ox/office/editor/editor',
         };
 
         this.processFocus = function (state) {
-            window.console.log('Editor focus: mode=' + textMode + ', state=' + state);
+            Utils.info('Editor: received focus event: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
                 if (focused && currentSelection)
@@ -1021,7 +1021,7 @@ define('io.ox/office/editor/editor',
                     this.trigger('selectionChanged');
                 } else if (focused) {
                     // If not focused, browser selection might not be available...
-                    window.console.log('Editor.implCheckEventSelection(): missing selection!');
+                    Utils.warn('Editor.implCheckEventSelection(): missing selection!');
                 }
             }
         };

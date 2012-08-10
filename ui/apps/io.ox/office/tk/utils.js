@@ -1384,7 +1384,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The message text to be written to the console.
      *
      * @param {String} [level='log']
-     *  The log level of the message. The string 'log' will greate a generic
+     *  The log level of the message. The string 'log' will create a generic
      *  log message, the string 'info' will create an information, the string
      *  'warn' will create a warning message, and the string 'error' will
      *  create an error message.
