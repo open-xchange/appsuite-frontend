@@ -106,7 +106,7 @@ define('io.ox/office/editor/main',
         function initializeApp(options) {
             app.setFileDescriptor(options);
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
-            syncMode = Utils.getBooleanOption(options, 'syncMode', true);
+            syncMode = Utils.getBooleanOption(options, 'syncMode', false);
         }
 
         /**
