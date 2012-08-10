@@ -589,17 +589,31 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         var // split partly covered the text nodes before visiting them
             split = Utils.getBooleanOption(options, 'split', false);
 
-        // Replaces text nodes in the DOM ranges that refer to the passed text
-        // node with another text node and adjusts the offsets.
-        function replaceTextNodeInRanges(ranges, index, oldTextNode, newTextNode, offsetDiff) {
-            for (var range = null; index < ranges.length; index += 1) {
+        // Split the passed text node if it is not covered completely.
+        function splitTextNode(textNode, start, end, ranges, index) {
+
+            var // following text node when splitting this text node
+                newTextNode = null,
+                // current range when updating range array
+                range = null;
+
+            // Split text node to get the selected portion in its own span.
+            // The method DOM.splitTextNode() does not split the text node,
+            // if the passed offset points to the start or end of the text.
+            DOM.splitTextNode(textNode, start);
+            newTextNode = DOM.splitTextNode(textNode, end - start, { append: true });
+
+            // adjust following DOM ranges that may refer to more text in the
+            // passed text node which is now contained in the new text node
+            if (!newTextNode) { return; }
+            for (index += 1; index < ranges.length; index += 1) {
                 range = ranges[index];
-                if (range.start.node !== oldTextNode) { return; }
+                if (range.start.node !== textNode) { return; }
                 range.start.node = newTextNode;
-                range.start.offset += offsetDiff;
-                if (range.end.node !== oldTextNode) { return; }
+                range.start.offset -= end;
+                if (range.end.node !== textNode) { return; }
                 range.end.node = newTextNode;
-                range.end.offset += offsetDiff;
+                range.end.offset -= end;
             }
         }
 
@@ -613,42 +627,30 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
             // shortcut for call to iterator function
             function callIterator() {
-
-                var // following text node when splitting this text node
-                    newTextNode = null;
-
-                if (split) {
-                    // Split text node to get the selected portion in its own
-                    // span. The method DOM.splitTextNode() does not split the
-                    // text node, if the passed offset points to the start or
-                    // end of the text.
-                    DOM.splitTextNode(node, start);
-                    newTextNode = DOM.splitTextNode(node, end - start, { append: true });
-
-                    // adjust following DOM ranges that may refer to more text in the
-                    // current text node which is now contained in the new text node
-                    if (newTextNode) {
-                        replaceTextNodeInRanges(ranges, index + 1, node, newTextNode, -end);
-                    }
-                }
-
                 return iterator.call(context, node, start, end, range, index, ranges);
             }
 
             // call passed iterator for all text nodes, but skip empty text nodes
             // unless the entire text range consists of this empty text node
             if ((node.nodeType === 3) && (isCursor || node.nodeValue.length)) {
+                // calculate/validate start/end offset in the text node
                 start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
                 end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
+                // split text node if specified
+                if (split) {
+                    splitTextNode(node, start, end, ranges, index);
+                    start = 0;
+                    end = node.nodeValue.length;
+                }
                 // call iterator for the text node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
             } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
                 // cursor selects a single <br> element, visit last preceding text node instead
                 node = node.previousSibling;
-                if (node && !Utils.isTextNode(node)) {
-                    node = Utils.findDescendantNode(node, Utils.isTextNode, this, { reverse: true });
+                if (node && (Utils.getNodeName(node) === 'span')) {
+                    node = node.lastChild;
                 }
-                if (node) {
+                if (node && Utils.isTextNode(node)) {
                     // prepare start, end, and current DOM range object
                     start = range.start.offset = end = range.end.offset = node.nodeValue.length;
                     range.start.node = range.end.node = node;

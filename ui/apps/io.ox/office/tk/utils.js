@@ -1377,6 +1377,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // console output ---------------------------------------------------------
 
+    Utils.MIN_LOG_LEVEL = 'log';
+
     /**
      * Writes a message to the browser output console.
      *
@@ -1392,10 +1394,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.log = (function () {
 
         var // supported log levels, sorted by severity
-            LOG_LEVELS = _(['log', 'info', 'warn', 'error']),
-
-            // all messages with this level and more severe levels are logged
-            minLogLevel = 'log';
+            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
 
         return function (message, level) {
 
@@ -1403,7 +1402,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             level = LOG_LEVELS.contains(level) ? level : 'log';
 
             // do not log if index is less than index of configured log level
-            if (LOG_LEVELS.contains(minLogLevel) && (LOG_LEVELS.indexOf(minLogLevel) <= LOG_LEVELS.indexOf(level))) {
+            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
 
                 // check that the browser console supports the operation
                 if (_.isFunction(window.console[level])) {
