@@ -368,16 +368,15 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *  (Can be a jQuery object for performance reasons.)
      *
      * @param {OXOPam.oxoPosition} position
-     *  The logical position. It can be paragraph itself or text node
-     *  inside it.
+     *  The logical position.
      *
-     * @returns {[Node]}
+     * @returns {jQuery}
      *  Returns all adjacent paragraphs of a paragraph described by
-     *  the logical position. This is an array of dom nodes.
+     *  the logical position. This return value is a jQuery object.
      */
     Position.getAllAdjacentParagraphs = function (startnode, position) {
 
-        var allParagraphs = [];
+        var allParagraphs = null;
 
         if ((position.length === 1) || (position.length === 2)) {  // only for performance
             allParagraphs = startnode;
@@ -393,9 +392,37 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
     };
 
     /**
+     * Collecting all paragraphs inside a table cell that is described
+     * by the logical position. If no table cell is found in the logical
+     * position, null will be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {jQuery}
+     *  Returns all paragraphs inside the cell. This return value is a
+     *  jQuery object. If no cell is found, null will be returned.
+     */
+    Position.getAllParagraphsFromTableCell = function (startnode, position) {
+
+        var allParagraphs = null,
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
+
+        if (cell) {
+            allParagraphs = $(cell).children();
+        }
+
+        return allParagraphs;
+    };
+
+    /**
      * Determining the number of rows in a table. Returned is the last
      * index, the value is 0-based. So this is not the length.
-     * Otherwise null we be returned.
+     * Otherwise -1 we be returned.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -405,13 +432,13 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *  The logical position.
      *
      * @returns {Number}
-     *  Returns the index of the last row or null, if the position
+     *  Returns the index of the last row or -1, if the position
      *  is not included in a table.
      */
     Position.getLastRowIndexInTable = function (startnode, position) {
 
-        var rowIndex = null,
-            table = Position.getCurrentTable(startnode, position);
+        var rowIndex = -1,
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
 
         if (table) {
             rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
@@ -425,7 +452,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      * Determining the number of columns in a table, respectively in
      * the first row of a table. Returned is the last index, the
      * value is 0-based. So this is not the length.
-     * Otherwise null we be returned.
+     * Otherwise -1 we be returned.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -436,11 +463,11 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @returns {Number}
      *  Returns the index of the last column of the first row of a
-     *  table or null, if the position is not included in a table.
+     *  table or -1, if the position is not included in a table.
      */
     Position.getLastColumnIndexInTable = function (startnode, position) {
 
-        var columnIndex = null,
+        var columnIndex = -1,
             table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
 
         if (table) {
@@ -455,7 +482,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      * Determining the number of columns in a row specified by the
      * logical position. Returned is the last index, the
      * value is 0-based. So this is not the length.
-     * Otherwise null we be returned.
+     * Otherwise -1 we be returned.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -466,11 +493,11 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      *
      * @returns {Number}
      *  Returns the index of the last column of the specified row of a
-     *  table or null, if the position is not included in a table.
+     *  table or -1, if the position is not included in a table.
      */
     Position.getLastColumnIndexInRow = function (startnode, position) {
 
-        var columnIndex = null,
+        var columnIndex = -1,
             row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TR');
 
         if (row) {
@@ -524,7 +551,92 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return Position.getLastValueFromPositionByNodeName(startnode, position, 'TH, TD');
     };
 
+    /**
+     * Determining the index of the paragraph specified by the logical
+     * position inside the document root or inside a table cell.
+     * The first paragraph has index 0, the second index 1
+     * and so on. The value is 0-based.
+     * If no paragraph is found in the logical position, -1 will be
+     * returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the paragraph inside the document row
+     *  or inside a table cell, or -1, if the
+     *  logical position does not contain a paragraph.
+     */
+    Position.getParagraphIndex = function (startnode, position) {
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'P');
+    };
 
+    /**
+     * Determining the index of the last paragraph in a cell specified by the logical
+     * position inside a row. The first cell has index 0, the second index 1
+     * and so on. The value is 0-based.
+     * If no cell is found in the logical position, -1 will be
+     * returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the last cell inside a row, or -1, if the
+     *  logical position does not contain a cell.
+     */
+    Position.getLastParaIndexInCell = function (startnode, position) {
+
+        var lastPara = -1,
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
+
+        if (cell) {
+            lastPara = $(cell).children().length - 1;
+        }
+
+        return lastPara;
+    };
+
+    /**
+     * Determining the length of the text nodes of the current paragraph
+     * specified by the logical position inside a row.
+     * If no paragraph is defined by the logical position, 0 is returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the length of all text nodes inside the paragraph or 0,
+     *  if the logical position does not contain a paragraph.
+     */
+    Position.getParagraphLength = function (startnode, position) {
+
+        var paraLen = 0,
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+
+        if (paragraph) {
+            if (paragraph.hasChildNodes()) {
+                var nodeList = paragraph.childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    paraLen += $(nodeList[i]).text().length;
+                }
+            }
+        }
+
+        return paraLen;
+    };
 
 
     return Position;
