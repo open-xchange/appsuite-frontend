@@ -1,4 +1,5 @@
 /**
+ * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
  *
@@ -90,7 +91,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function drawContent(extension) {
             contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.children().detach();
+                contentSide.children().trigger('onPause').detach();
+                $(node).trigger('onResume');
                 contentSide.append(node);
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
@@ -100,7 +102,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function makeClickHandler(extension) {
             return function (event) {
-                contentSide.find(":first").detach();
+                contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
                 return drawContent(extension);
@@ -227,11 +229,10 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-
             initExtensions();
 
-
             app.active = _(ext.point('io.ox/portal/widget').all()).first();
+
             if (app.active) {
                 contentSide.busy();
                 drawContent(app.active);

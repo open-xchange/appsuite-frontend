@@ -155,16 +155,17 @@ define('plugins/portal/twitter/register',
                 mouseY = -1,
                 refresh = false;
             
-            $(this).on('mousedown', function (e) {
+            
+            var eventDown = function (e) {
                 mouseButtonPressed = true;
                 mouseY = -1;
                 refresh = false;
                 $('div.tweet > div.text').addClass('twitter-unselectable');
                 $('div.tweet > div.text > span').addClass('twitter-unselectable');
                 $pullToRefresh.css({'height': '0px', 'padding-top': '0px'}).text('').prependTo(tweets);
-            });
+            };
             
-            $(this).on('mouseup', function (e) {
+            var eventUp = function (e) {
                 mouseButtonPressed = false;
                 $pullToRefresh.detach();
                 tweets.animate({'padding-top': 0}, 100, function () {
@@ -195,15 +196,15 @@ define('plugins/portal/twitter/register',
                             });
                     }
                 });
-            });
+            };
             
-            $(this).on('mousemove', function (e) {
+            var eventMove = function (e, pageY) {
                 if (mouseButtonPressed) {
                     if (mouseY !== -1) {
-                        var distance = mouseY - e.pageY;
+                        var distance = mouseY - pageY;
                         if (distance < 0 && distance > -50) {
                             $pullToRefresh.css('height', (-1 * distance) + 'px');
-//                            tweets.css('padding-top', -1 * distance);
+                            //tweets.css('padding-top', -1 * distance);
                         }
                         if (distance < -40) {
                             $pullToRefresh.css('padding-top', '20px').text(gt('Pull To Refresh'));
@@ -213,9 +214,40 @@ define('plugins/portal/twitter/register',
                             refresh = false;
                         }
                     } else {
-                        mouseY = e.pageY;
+                        mouseY = pageY;
                     }
                 }
+            };
+            
+            var touchMove = function (e) {
+                if (e.originalEvent.touches[0] && $('div.window-content').scrollTop() < 50) {
+                    e.preventDefault();
+                    eventMove(e, e.originalEvent.touches[0].pageY);
+                }
+            };
+            
+            var mouseMove = function (e) {
+                if ($('div.window-content').scrollTop() < 50) {
+                    eventMove(e, e.pageY);
+                }
+            };
+            
+            $(this).on('onResume', function () {
+                $(this).on('mousedown', eventDown);
+                $(this).on('touchstart', eventDown);
+                $(this).on('mouseup', eventUp);
+                $(this).on('touchend', eventUp);
+                $(this).on('touchmove', touchMove);
+                $(this).on('mousemove', mouseMove);
+            });
+            
+            $(this).on('onPause', function () {
+                $(this).off('mousedown', eventDown);
+                $(this).off('touchstart', eventDown);
+                $(this).off('mouseup', eventUp);
+                $(this).off('touchend', eventUp);
+                $(this).off('touchmove', touchMove);
+                $(this).off('mousemove', mouseMove);
             });
             
             if (!timeline) {
