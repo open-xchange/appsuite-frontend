@@ -380,6 +380,68 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return allParagraphs;
     };
 
+    Position.getLastRowIndexInTable = function (startnode, position) {
+
+        var rowIndex = null,
+            table = Position.getCurrentTable(paragraphs, position);
+
+        if (table) {
+            rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
+            rowIndex--;
+        }
+
+        return rowIndex;
+    };
+
+    this.getLastColumnIndexInTable = function (position) {
+        var columnIndex = null,
+            table = Position.getCurrentTable(paragraphs, position);
+
+        if (table) {
+            var localrow = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
+            columnIndex = $('> TH, > TD', localrow).length;
+            columnIndex--;
+        }
+
+        return columnIndex;
+    };
+
+    this.getLastColumnIndexInRow = function (position) {
+        var columnIndex = null,
+            table = Position.getCurrentTable(paragraphs, position),
+            foundRow = false;
+
+        if (table) {
+            var localPos = _.copy(position, true);
+            var domPos = this.getDOMPosition(position);
+
+            if (domPos) {
+                var node = domPos.node;
+
+                for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
+                    if (node.nodeName === 'TR') {
+                        foundRow = true;
+                        break;
+                    } else {
+                        if ((node.nodeName === 'P') || (node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeType === 3)) {
+                            localPos.pop();
+                        }
+                    }
+                }
+
+                if (foundRow) {
+                    var row = localPos.pop();  // found the correct row
+                    var localrow = $('> TBODY > TR, > THEAD > TR', table).get(row);
+                    columnIndex = $('> TH, > TD', localrow).length;
+                    columnIndex--;
+                }
+            }
+        }
+
+        return columnIndex;
+    };
+
+
     return Position;
 
 });
