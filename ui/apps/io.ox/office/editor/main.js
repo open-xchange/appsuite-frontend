@@ -99,7 +99,7 @@ define('io.ox/office/editor/main',
             debugMode = false,
 
             // if true, editor synchronizes operations with backend server
-            syncMode = true;
+            syncMode = false;
 
         // private methods ----------------------------------------------------
 
@@ -388,28 +388,26 @@ define('io.ox/office/editor/main',
             }
 
             win.busy();
-            // var allOperations = editor.getOperations();
-            // var dataObject = { operations: JSON.stringify(allOperations) };
 
-            $.ajax({
-                type: 'GET',
-                url: AppHelper.getDocumentFilterUrl(app, action),
-                dataType: 'json'
-                /* data: dataObject,
-                beforeSend: function (xhr) {
-                    if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
-                    }
-                }*/
+            receiveAndSendOperations()
+            .done(function () {
+                $.ajax({
+                    type: 'GET',
+                    url: AppHelper.getDocumentFilterUrl(app, action),
+                    dataType: 'json'
+                })
+                .done(function (response) {
+                    filesApi.caches.get.clear(); // TODO
+                    filesApi.caches.versions.clear();
+                    filesApi.trigger('refresh.all');
+                    def.resolve();
+                })
+                .fail(function (response) {
+                    showAjaxError(response);
+                    def.reject();
+                });
             })
-            .done(function (response) {
-                filesApi.caches.get.clear(); // TODO
-                filesApi.caches.versions.clear();
-                filesApi.trigger('refresh.all');
-                def.resolve();
-            })
-            .fail(function (response) {
-                showAjaxError(response);
+            .fail(function () {
                 def.reject();
             });
 
@@ -452,75 +450,122 @@ define('io.ox/office/editor/main',
          * @param {Boolean} [silent]
          *  If set to true, the AJAX request will be sent silently, without
          *  creating a quit delay, and without restarting the operations timer.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that will be resolved or rejected when the AJAX request
+         *  has returned.
          */
-        var sendOperations = AppHelper.makeNoRecursionGuard(function (silent) {
+        var sendOperations = (function () {
+            // local scope for 'def' variable used in original and fall-back function
 
-            var // deep copy of the current buffer
-                sendOps = _.copy(operationsBuffer, true),
-                // the data object to be passed to the AJAX request
-                dataObject = { operations: JSON.stringify(sendOps) },
-                // a deferred that will cause the quit handler to wait for the AJAX request
-                quitDelay = (silent === true) ? null : createQuitDelay();
+            var // the result deferred (created when called initially, used when called recursively)
+                def = null;
 
-            // We might receive new operations while sending the current ones...
-            operationsBuffer = [];
+            return AppHelper.makeNoRecursionGuard(function (silent) {
 
-            $.ajax({
-                type: 'POST',
-                url: AppHelper.getDocumentFilterUrl(app, 'pushoperationupdates'),
-                dataType: 'json',
-                data: dataObject,
-                beforeSend: function (xhr) {
-                    if (xhr && xhr.overrideMimeType) {
-                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                var // deep copy of the current buffer
+                    sendOps = _.copy(operationsBuffer, true),
+                    // the data object to be passed to the AJAX request
+                    dataObject = { operations: JSON.stringify(sendOps) },
+                    // a deferred that will cause the quit handler to wait for the AJAX request
+                    quitDelay = (silent === true) ? null : createQuitDelay();
+
+                // the result deferred
+                def = $.Deferred();
+
+                // We might receive new operations while sending the current ones...
+                operationsBuffer = [];
+
+                $.ajax({
+                    type: 'POST',
+                    url: AppHelper.getDocumentFilterUrl(app, 'pushoperationupdates'),
+                    dataType: 'json',
+                    data: dataObject,
+                    beforeSend: function (xhr) {
+                        if (xhr && xhr.overrideMimeType) {
+                            xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                        }
                     }
-                }
-            })
-            .done(function (response) {
-                if (quitDelay) { quitDelay.resolve(); }
-            })
-            .fail(function (response) {
-                // Try again later. TODO: NOT TESTED YET!
-                operationsBuffer = $.extend(true, operationsBuffer, sendOps);
-                // TODO: reject? (causing the application to stay alive?)
-                if (quitDelay) { quitDelay.resolve(); }
-            })
-            .always(function () {
-                if (silent !== true) { startOperationsTimer(); }
-            });
-        });
+                })
+                .done(function (response) {
+                    if (quitDelay) { quitDelay.resolve(); }
+                    def.resolve(response);
+                })
+                .fail(function (response) {
+                    // Try again later. TODO: NOT TESTED YET!
+                    operationsBuffer = $.extend(true, operationsBuffer, sendOps);
+                    // TODO: reject? (causing the application to stay alive?)
+                    if (quitDelay) { quitDelay.resolve(); }
+                    def.reject(response);
+                })
+                .always(function () {
+                    if (silent !== true) { startOperationsTimer(); }
+                });
 
-        var receiveAndSendOperations = AppHelper.makeNoRecursionGuard(function () {
+                return def;
+            },
+            function () { return def; }); // fall-back function for recursive calls
 
-            var // a deferred that will cause the quit handler to wait for the AJAX request
-                quitDelay = createQuitDelay();
+        }());
 
-            // first, check if the server has new operations for me
-            $.ajax({
-                type: 'GET',
-                url: AppHelper.getDocumentFilterUrl(app, 'pulloperationupdates'),
-                dataType: 'json'
-            })
-            .done(function (response) {
-                if (response && response.data) {
-                    var operations = JSON.parse(response.data);
-                    if (operations.length) {
-                        // We might need to do some "T" here!
-                        applyOperations(operations);
+        var receiveAndSendOperations = (function () {
+            // local scope for 'def' variable used in original and fall-back function
+
+            var // the result deferred (created when called initially, used when called recursively)
+                def = null;
+
+            return AppHelper.makeNoRecursionGuard(function () {
+
+                var // a deferred that will cause the quit handler to wait for the AJAX request
+                    quitDelay = createQuitDelay(),
+                    // the deferred waiting for the GET operation
+                    getDef = $.Deferred(),
+                    // the deferred waiting for sendOperations()
+                    sendDef = $.Deferred();
+
+                // the result deferred
+                def = $.when(getDef, sendDef);
+
+                // first, check if the server has new operations for me
+                $.ajax({
+                    type: 'GET',
+                    url: AppHelper.getDocumentFilterUrl(app, 'pulloperationupdates'),
+                    dataType: 'json'
+                })
+                .done(function (response) {
+                    if (response && response.data) {
+                        var operations = JSON.parse(response.data);
+                        if (operations.length) {
+                            // We might need to do some "T" here!
+                            applyOperations(operations);
+                        }
                     }
-                }
-                // Then, send our operations in case we have some...
-                if (operationsBuffer.length) {
-                    // We might first need to do some "T" here!
-                    sendOperations(); // will start the operations timer
-                } else {
-                    startOperationsTimer();
-                }
-            })
-            .always(function () {
-                quitDelay.resolve(); // always resolve, ignore failed GET
-            });
-        });
+                    // Then, send our operations in case we have some...
+                    if (operationsBuffer.length) {
+                        // We might first need to do some "T" here!
+                        // sendOperations() will start the operations timer
+                        sendOperations().then(
+                            function () { sendDef.resolve(); },
+                            function () { sendDef.reject(); }
+                        );
+                    } else {
+                        startOperationsTimer();
+                    }
+                    getDef.resolve(response);
+                })
+                .fail(function (response) {
+                    getDef.reject(response);
+                })
+                .always(function () {
+                    // always resolve the quit delay, ignore failed GET operation
+                    quitDelay.resolve();
+                });
+
+                return def;
+            },
+            function () { return def; }); // fall-back function for recursive calls
+
+        }());
 
         function startOperationsTimer(timeout) {
 
@@ -530,14 +575,12 @@ define('io.ox/office/editor/main',
             }
 
             // offline mode: do not start a new timer
-            if (!syncMode) {
-                return;
+            if (syncMode) {
+                operationsTimer = window.setTimeout(function () {
+                    operationsTimer = null;
+                    receiveAndSendOperations();
+                }, timeout || 1000);
             }
-
-            operationsTimer = window.setTimeout(function () {
-                operationsTimer = null;
-                receiveAndSendOperations();
-            }, timeout || 1000);
         }
 
         // methods ------------------------------------------------------------
