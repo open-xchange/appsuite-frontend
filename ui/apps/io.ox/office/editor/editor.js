@@ -546,10 +546,9 @@ define('io.ox/office/editor/editor',
                     undoAction.allowMerge = true;
                     undomgr.addUndo(undoAction);
                 }
-                this.implInsertText("*", operation.position);
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
-                    imgurl = currentDocumentURL + '#/' + operation.imgurl;
+                    imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 this.implInsertImage(imgurl, operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {

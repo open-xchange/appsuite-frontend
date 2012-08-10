@@ -336,21 +336,19 @@ define('io.ox/office/editor/main',
                 $(window).resize();
                 updateTitles();
 
-                var docurl = AppHelper.getDocumentFilterUrl(app, 'importdocument');
-
                 editor.initDocument();
                 operationsBuffer = []; // initDocument will result in an operation
 
                 // load the file
                 $.ajax({
                     type: 'GET',
-                    url: docurl,
+                    url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
                     dataType: 'json'
                 })
                 .pipe(extractOperationsList)
                 .done(function (operations) {
                     if (operations) {
-                        editor.setDocumentURL(docurl);
+                        editor.setDocumentURL(AppHelper.getDocumentFilterUrl(app, 'getfile'));
                         editor.enableUndo(false);
                         applyOperations(operations);
                         editor.enableUndo(true);
@@ -438,7 +436,7 @@ define('io.ox/office/editor/main',
             }
 
             win.busy();
-                        
+
             // load the PDF file into appropriate PDF Viewer for printing
             window.open(AppHelper.getDocumentFilterUrl(app, 'getfile', 'pdf'), app.getFileDescriptor().title || 'file');
             def.resolve();

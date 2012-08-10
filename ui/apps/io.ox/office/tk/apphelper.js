@@ -88,7 +88,8 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         if (format)
             filterurl += '&filter_format=' + format;
 
-        filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers
+        filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers.
+                                                   // Update: fragment identifiers don't work here, so filename doesn't need to be the last param...
 
         return filterurl;
     };
