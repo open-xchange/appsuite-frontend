@@ -2195,24 +2195,6 @@ define('io.ox/office/editor/editor',
             return Position.isPositionInTable(paragraphs, position);
         };
 
-        this.getCurrentTable = function (position) {
-            var currentTable = null,
-                domPos = this.getDOMPosition(position);
-
-            if (domPos) {
-                var node = domPos.node;
-
-                for (; node && (node !== editdiv.get(0)); node = node.parentNode) {
-                    if (node.nodeName === 'TABLE') {
-                        currentTable = node;
-                        break;
-                    }
-                }
-            }
-
-            return currentTable;
-        };
-
         this.getCurrentParagraph = function (position) {
 
             var paragraph = null,
@@ -2274,7 +2256,7 @@ define('io.ox/office/editor/editor',
 
         this.getLastRowIndexInTable = function (position) {
             var rowIndex = null,
-                table = this.getCurrentTable(position);
+                table = Position.getCurrentTable(paragraphs, position);
 
             if (table) {
                 rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
@@ -2286,7 +2268,7 @@ define('io.ox/office/editor/editor',
 
         this.getLastColumnIndexInTable = function (position) {
             var columnIndex = null,
-                table = this.getCurrentTable(position);
+                table = Position.getCurrentTable(paragraphs, position);
 
             if (table) {
                 var localrow = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
@@ -2299,7 +2281,7 @@ define('io.ox/office/editor/editor',
 
         this.getLastColumnIndexInRow = function (position) {
             var columnIndex = null,
-                table = this.getCurrentTable(position),
+                table = Position.getCurrentTable(paragraphs, position),
                 foundRow = false;
 
             if (table) {
