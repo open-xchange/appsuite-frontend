@@ -878,7 +878,7 @@ define('io.ox/office/editor/editor',
                     if (cell && ((cell.node.nodeName === 'TD') || (cell.node.nodeName === 'TH'))) {
                         var node = cell.node.parentNode;
                         var offset = $(cell.node).prevAll().length;
-                        ranges.push(DOM.makeRange(node, offset, node, offset + 1));
+                        ranges.push(DOM.Range.makeRange(node, offset, node, offset + 1));
                     }
                 }
             }

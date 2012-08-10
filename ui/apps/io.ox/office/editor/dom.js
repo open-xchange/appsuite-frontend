@@ -47,61 +47,59 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  contents.
      */
     DOM.Point = function (node, offset) {
-
-        // fields -------------------------------------------------------------
-
         this.node = Utils.getDomNode(node);
         this.offset = offset;
+    };
 
-        // methods ------------------------------------------------------------
+    // methods ----------------------------------------------------------------
 
-        /**
-         * Returns a new clone of this DOM point.
-         */
-        this.clone = function () {
-            return new DOM.Point(this.node, this.offset);
-        };
+    /**
+     * Returns a new clone of this DOM point.
+     */
+    DOM.Point.prototype.clone = function () {
+        return new DOM.Point(this.node, this.offset);
+    };
 
-        /**
-         * Validates the offset of this DOM point. Restricts the offset to the
-         * available index range according to the node's contents, or
-         * initializes the offset, if it is missing.
-         *
-         * If this instance points to a text node, the offset will be
-         * restricted to the text in the node, or set to zero if missing.
-         *
-         * If this instance points to an element node, the offset will be
-         * restricted to the number of child nodes in the node. If the offset
-         * is missing, it will be set to the index of the node in its siblings,
-         * and the node will be replaced by its parent node.
-         *
-         * @returns {DOM.Point}
-         *  A reference to this instance.
-         */
-        this.validate = function () {
+    /**
+     * Validates the offset of this DOM point. Restricts the offset to the
+     * available index range according to the node's contents, or
+     * initializes the offset, if it is missing.
+     *
+     * If this instance points to a text node, the offset will be
+     * restricted to the text in the node, or set to zero if missing.
+     *
+     * If this instance points to an element node, the offset will be
+     * restricted to the number of child nodes in the node. If the offset
+     * is missing, it will be set to the index of the node in its siblings,
+     * and the node will be replaced by its parent node.
+     *
+     * @returns {DOM.Point}
+     *  A reference to this instance.
+     */
+    DOM.Point.prototype.validate = function () {
 
-            // element: if offset is missing, take own index and refer to the parent node
-            if (Utils.isElementNode(this.node)) {
-                if (_.isNumber(this.offset)) {
-                    this.offset = Math.min(Math.max(this.offset, 0), this.node.childNodes.length);
-                } else {
-                    this.offset = $(this.node).index();
-                    this.node = this.node.parentNode;
-                }
-
-            // text node: if offset is missing, use zero
-            } else if (Utils.isTextNode(this.node)) {
-                if (_.isNumber(this.offset)) {
-                    this.offset = Math.min(Math.max(this.offset, 0), this.node.nodeValue.length);
-                } else {
-                    this.offset = 0;
-                }
+        // element: if offset is missing, take own index and refer to the parent node
+        if (Utils.isElementNode(this.node)) {
+            if (_.isNumber(this.offset)) {
+                this.offset = Math.min(Math.max(this.offset, 0), this.node.childNodes.length);
+            } else {
+                this.offset = $(this.node).index();
+                this.node = this.node.parentNode;
             }
 
-            return this;
-        };
+        // text node: if offset is missing, use zero
+        } else if (Utils.isTextNode(this.node)) {
+            if (_.isNumber(this.offset)) {
+                this.offset = Math.min(Math.max(this.offset, 0), this.node.nodeValue.length);
+            } else {
+                this.offset = 0;
+            }
+        }
 
-    }; // class DOM.Point
+        return this;
+    };
+
+    // static methods ---------------------------------------------------------
 
     /**
      * Returns whether the two passed DOM points are equal.
@@ -117,7 +115,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Boolean}
      *  Whether the DOM points are equal.
      */
-    DOM.equalPoints = function (point1, point2) {
+    DOM.Point.equalPoints = function (point1, point2) {
         return (point1.node === point2.node) && (point1.offset === point2.offset);
     };
 
@@ -137,7 +135,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  The value zero, if the DOM points are equal, a negative number, if
      *  point1 precedes point2, or a positive number, if point1 follows point2.
      */
-    DOM.comparePoints = function (point1, point2) {
+    DOM.Point.comparePoints = function (point1, point2) {
 
         // Returns the index of the inner node's ancestor in the outer node's
         // children list. 'outerNode' MUST contain 'innerNode'.
@@ -185,56 +183,54 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  to construct a collapsed range (a simple 'cursor').
      */
     DOM.Range = function (start, end) {
-
-        // fields -------------------------------------------------------------
-
         this.start = start;
         this.end = _.isObject(end) ? end : _.clone(start);
+    };
 
-        // methods ------------------------------------------------------------
+    // methods ----------------------------------------------------------------
 
-        /**
-         * Returns a new clone of this DOM range.
-         */
-        this.clone = function () {
-            return new DOM.Range(this.start.clone(), this.end.clone());
-        };
+    /**
+     * Returns a new clone of this DOM range.
+     */
+    DOM.Range.prototype.clone = function () {
+        return new DOM.Range(this.start.clone(), this.end.clone());
+    };
 
-        /**
-         * Validates the start and end position of this DOM range. See method
-         * DOM.Point.validate() for details.
-         */
-        this.validate = function () {
-            this.start.validate();
-            this.end.validate();
-            return this;
-        };
+    /**
+     * Validates the start and end position of this DOM range. See method
+     * DOM.Point.validate() for details.
+     */
+    DOM.Range.prototype.validate = function () {
+        this.start.validate();
+        this.end.validate();
+        return this;
+    };
 
-        /**
-         * Swaps start and end position, if the start position is located after
-         * the end position in the DOM tree.
-         */
-        this.adjust = function () {
-            if (DOM.comparePoints(this.start, this.end) > 0) {
-                var tmp = this.start;
-                this.start = this.end;
-                this.end = tmp;
-            }
-            return this;
-        };
+    /**
+     * Swaps start and end position, if the start position is located after
+     * the end position in the DOM tree.
+     */
+    DOM.Range.prototype.adjust = function () {
+        if (DOM.Point.comparePoints(this.start, this.end) > 0) {
+            var tmp = this.start;
+            this.start = this.end;
+            this.end = tmp;
+        }
+        return this;
+    };
 
-        /**
-         * Returns whether the DOM range is collapsed, i.e. start position and
-         * end position are equal.
-         *
-         * @returns {Boolean}
-         *  Whether this DOM range is collapsed.
-         */
-        this.isCollapsed = function () {
-            return DOM.equalPoints(this.start, this.end);
-        };
+    /**
+     * Returns whether the DOM range is collapsed, i.e. start position and
+     * end position are equal.
+     *
+     * @returns {Boolean}
+     *  Whether this DOM range is collapsed.
+     */
+    DOM.Range.prototype.isCollapsed = function () {
+        return DOM.Point.equalPoints(this.start, this.end);
+    };
 
-    }; // class DOM.Range
+    // static methods ---------------------------------------------------------
 
     /**
      * Creates a new DOM.Range instance from the passed nodes and offsets.
@@ -258,7 +254,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {DOM.Range}
      *  The new DOM range object.
      */
-    DOM.makeRange = function (startNode, startOffset, endNode, endOffset) {
+    DOM.Range.makeRange = function (startNode, startOffset, endNode, endOffset) {
         return new DOM.Range(new DOM.Point(startNode, startOffset), _.isObject(endNode) ? new DOM.Point(endNode, endOffset) : undefined);
     };
 
@@ -366,16 +362,33 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     /**
      * Iterates over all DOM nodes contained in the specified DOM text ranges.
+     * Before iteration starts, the passed array of DOM ranges will be cloned,
+     * and the DOM ranges in the new array will be adjusted (see method
+     * DOM.Range.adjust() for details). Then, the array will be sorted by the
+     * starting points of all DOM ranges, and overlapping ranges will be merged
+     * together. The iterator function may manipulate the sorted array of DOM
+     * ranges while iterating, see the comments in the description of the
+     * parameter 'iterator' for details.
      *
      * @param {DOM.Range[]|DOM.Range} ranges
      *  The DOM ranges whose text nodes will be iterated. May be an array of
-     *  DOM range objects, or a single DOM range object.
+     *  DOM range objects, or a single DOM range object. Will not be modified
+     *  while iterating (the iterator function receives a modified clone).
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter, and the current DOM range object as
-     *  second parameter. If the iterator returns the Utils.BREAK object, the
-     *  iteration process will be stopped immediately.
+     *  DOM node object as first parameter, the current DOM range as second
+     *  parameter, its index in the sorted array of DOM ranges as third
+     *  parameter, and the entire sorted array of DOM ranges as fourth
+     *  parameter. If the iterator returns the Utils.BREAK object, the
+     *  iteration process will be stopped immediately. The iterator may
+     *  manipulate the end point of the current DOM range, or the DOM ranges in
+     *  the array following the current DOM range, which will affect the
+     *  iteration process accordingly. Changing the starting point of the
+     *  current DOM range, or anything in the preceding DOM ranges in the array
+     *  will not have any effect. If the iterator deletes nodes from the DOM
+     *  tree, it MUST ensure that following DOM ranges in the array that refer
+     *  to the deleted node or its descendants will be updated accordingly.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -387,15 +400,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.iterateNodesInRanges = function (ranges, iterator, context) {
 
+        // shortcut for call to iterator function
+        function callIterator() { return iterator.call(context, node, range, index, ranges); }
+
         // convert parameter to an array, clone and adjust ranges, and sort the ranges in DOM order
         ranges = _.chain(ranges).getArray().map(function (range) { return range.clone(); }).invoke('adjust').value();
-        ranges.sort(function (range1, range2) { return DOM.comparePoints(range1.start, range2.start); });
+        ranges.sort(function (range1, range2) { return DOM.Point.comparePoints(range1.start, range2.start); });
 
         for (var index = 0, range, node; index < ranges.length; index += 1) {
             range = ranges[index];
 
             // merge following overlapping ranges
-            while ((index + 1 < ranges.length) && (DOM.comparePoints(range.end, ranges[index + 1].start) >= 0)) {
+            while ((index + 1 < ranges.length) && (DOM.Point.comparePoints(range.end, ranges[index + 1].start) >= 0)) {
                 range.end = ranges[index + 1].end;
                 ranges.splice(index + 1, 1);
             }
@@ -410,7 +426,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             // always visit the node if selected by a cursor
             if (node && range.isCollapsed()) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
-                if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
+                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 continue;
             }
 
@@ -421,9 +437,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             }
 
             // iterate as long as the end of the range has not been reached
-            while (node && (DOM.comparePoints(new DOM.Point(node).validate(), range.end) < 0)) {
+            while (node && (DOM.Point.comparePoints(new DOM.Point(node).validate(), range.end) < 0)) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
-                if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
+                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
                 node = Utils.getNextNodeInTree(node);
             }
@@ -452,9 +468,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every found ancestor
-     *  node. Receives the DOM node object as first parameter, and the current
-     *  DOM range as second parameter. If the iterator returns the Utils.BREAK
-     *  object, the iteration process will be stopped immediately.
+     *  node. Receives the DOM node object as first parameter, the current DOM
+     *  range as second parameter, its index in the sorted array of DOM ranges
+     *  as third parameter, and the entire sorted array of DOM ranges as fourth
+     *  parameter. If the iterator returns the Utils.BREAK object, the
+     *  iteration process will be stopped immediately. See the comments for the
+     *  method DOM.iterateNodesInRanges() for details about manipulation of the
+     *  array of DOM ranges and the DOM tree.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -472,7 +492,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         rootNode = Utils.getDomNode(rootNode);
 
         // iterate over all nodes, and try to find the specified parent nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
+
+            // shortcut for call to iterator function
+            function callIterator() { return iterator.call(context, node, range, index, ranges); }
 
             // try to find a matching element inside the root node
             while (node) {
@@ -480,7 +503,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     // skip node if it has been found before
                     if (!_(matchingNodes).contains(node)) {
                         matchingNodes.push(node);
-                        if (iterator.call(context, node, range) === Utils.BREAK) { return Utils.BREAK; }
+                        if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                     }
                     return;
                 }
@@ -503,9 +526,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  The iterator function that will be called for every text node. Receives
      *  the DOM text node object as first parameter, the offset of the first
      *  character as second parameter, the offset after the last character as
-     *  third parameter, and the current DOM range as fourth parameter. If the
-     *  iterator returns the Utils.BREAK object, the iteration process will be
-     *  stopped immediately.
+     *  third parameter, the current DOM range as fourth parameter, its index
+     *  in the sorted array of DOM ranges as fifth parameter, and the entire
+     *  sorted array of DOM ranges as sixth parameter. If the iterator returns
+     *  the Utils.BREAK object, the iteration process will be stopped
+     *  immediately. See the comments for the method DOM.iterateNodesInRanges()
+     *  for details about manipulation of the array of DOM ranges and the DOM
+     *  tree.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -518,12 +545,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.iterateTextPortionsInRanges = function (ranges, iterator, context) {
 
         // iterate over all nodes, and process the text nodes
-        return DOM.iterateNodesInRanges(ranges, function (node, range) {
+        return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
 
             var // cursor instead of selection
                 isCursor = range.isCollapsed(),
                 // start and end offset of covered text in text node
                 start = 0, end = 0;
+
+            // shortcut for call to iterator function
+            function callIterator() { return iterator.call(context, node, start, end, range, index, ranges); }
 
             // call passed iterator for all text nodes, but skip empty text nodes
             // unless the entire text range consists of this empty text node
@@ -531,7 +561,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
                 end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
                 // call iterator for the text node, return if iterator returns Utils.BREAK
-                if (iterator.call(context, node, start, end, range) === Utils.BREAK) { return Utils.BREAK; }
+                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
             } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
                 // cursor selects a single <br> element, visit last preceding text node instead
                 node = node.previousSibling;
@@ -539,11 +569,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     node = Utils.findDescendantNode(node, Utils.isTextNode, this, { reverse: true });
                 }
                 if (node) {
-                    // prepare start, end, and range object
+                    // prepare start, end, and current DOM range object
                     start = range.start.offset = end = range.end.offset = node.nodeValue.length;
                     range.start.node = range.end.node = node;
                     // call iterator for the text node, return if iterator returns Utils.BREAK
-                    if (iterator.call(context, node, start, end, range) === Utils.BREAK) { return Utils.BREAK; }
+                    if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 }
             }
         });
@@ -587,10 +617,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             range = selection.getRangeAt(index);
 
             // translate to the internal text range representation
-            range = DOM.makeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+            range = DOM.Range.makeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 
             // check that the nodes are inside the root node
-            if (rootNode.contains(range.start.node) && (DOM.comparePoints(range.end, globalEndPos) <= 0)) {
+            if (rootNode.contains(range.start.node) && (DOM.Point.comparePoints(range.end, globalEndPos) <= 0)) {
                 ranges.push(range);
             }
         }
