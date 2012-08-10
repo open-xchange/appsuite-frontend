@@ -1552,7 +1552,7 @@ define('io.ox/office/editor/editor',
 
         this.deleteRows = function () {
             var selection = this.getSelection(),
-                start = this.getRowIndexInTable(selection.startPaM.oxoPosition),
+                start = Position.getRowIndexInTable(paragraphs, selection.startPaM.oxoPosition),
                 end = start,
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
@@ -1561,7 +1561,7 @@ define('io.ox/office/editor/editor',
                     selection.endPaM.oxoPosition.pop();
                     selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
                 }
-                end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
+                end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
             }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
@@ -1572,7 +1572,7 @@ define('io.ox/office/editor/editor',
 
         this.deleteColumns = function () {
             var selection = this.getSelection(),
-                start = this.getColumnIndexInRow(selection.startPaM.oxoPosition),
+                start = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
                 end = start,
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
@@ -1581,7 +1581,7 @@ define('io.ox/office/editor/editor',
                     selection.endPaM.oxoPosition.pop();
                     selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
                 }
-                end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
+                end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
             }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
@@ -1592,7 +1592,7 @@ define('io.ox/office/editor/editor',
 
         this.copyRows = function () {
             var selection = this.getSelection(),
-                start = this.getRowIndexInTable(selection.startPaM.oxoPosition),
+                start = Position.getRowIndexInTable(paragraphs, selection.startPaM.oxoPosition),
                 end = start,
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
@@ -1601,7 +1601,7 @@ define('io.ox/office/editor/editor',
                     selection.endPaM.oxoPosition.pop();
                     selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
                 }
-                end = this.getRowIndexInTable(selection.endPaM.oxoPosition);
+                end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
             }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
@@ -1612,7 +1612,7 @@ define('io.ox/office/editor/editor',
 
         this.copyColumns = function () {
             var selection = this.getSelection(),
-                start = this.getColumnIndexInRow(selection.startPaM.oxoPosition),
+                start = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
                 end = start,
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
@@ -1621,7 +1621,7 @@ define('io.ox/office/editor/editor',
                     selection.endPaM.oxoPosition.pop();
                     selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
                 }
-                end = this.getColumnIndexInRow(selection.endPaM.oxoPosition);
+                end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
             }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
@@ -2193,70 +2193,6 @@ define('io.ox/office/editor/editor',
             }
 
             return Position.isPositionInTable(paragraphs, position);
-        };
-
-        this.getRowIndexInTable = function (position) {
-            var rowIndex = null,
-                isInTable = Position.isPositionInTable(paragraphs, position),
-                foundRow = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if (node.nodeName === 'TR') {
-                            foundRow = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') || (node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundRow) {
-                        rowIndex = localPos.pop();  // found the correct row
-                    }
-                }
-            }
-
-            return rowIndex;
-        };
-
-        this.getColumnIndexInRow = function (position) {
-            var columnIndex = null,
-                isInTable = Position.isPositionInTable(paragraphs, position),
-                foundColumn = false;
-
-            if (isInTable) {
-                var localPos = _.copy(position, true);
-                var domPos = this.getDOMPosition(position);
-
-                if (domPos) {
-                    var node = domPos.node;
-
-                    for (; node && (node.nodeName !== 'TABLE') && (node !== editdiv.get(0)); node = node.parentNode) {
-                        if ((node.nodeName === 'TH') || (node.nodeName === 'TD')) {
-                            foundColumn = true;
-                            break;
-                        } else {
-                            if ((node.nodeName === 'P') || (node.nodeType === 3)) {
-                                localPos.pop();
-                            }
-                        }
-                    }
-
-                    if (foundColumn) {
-                        columnIndex = localPos.pop();  // found the correct column
-                    }
-                }
-            }
-
-            return columnIndex;
         };
 
         this.getLastParaIndexInCell = function (position) {

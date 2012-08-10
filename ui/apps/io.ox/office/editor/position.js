@@ -132,21 +132,24 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
 
         var index = -1,
             counter = -1,
+            value = -1,
             searchedNode = null,
             oxoPos = _.copy(position, true),
             node = startnode;
 
         while (oxoPos.length > 0) {
 
-            counter++;
+            var valueSave = oxoPos.shift(),
+                returnObj = this.getNextChildNode(node, valueSave);
 
-            var returnObj = this.getNextChildNode(node, oxoPos.shift());
+            counter++;
 
             if (returnObj) {
                 if (returnObj.node) {
                     node = returnObj.node;
                     if ($(node).is(selector)) {
                         index = counter;
+                        value = valueSave;
                         searchedNode = node;
                     }
                 } else {
@@ -161,7 +164,7 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
             }
         }
 
-        return {index: index, node: searchedNode};
+        return {index: index, value: value, node: searchedNode};
     };
 
     /**
@@ -182,12 +185,42 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
      * @returns {Numnber}
      *  The index in the logical position or -1, if no corresponding
      *  dom node can be found.
+     *  Example: In the logical position [3,5,7,2,12] the index for a
+     *  table row is 1 and for a table column it is 2.
      */
     Position.getLastIndexInPositionByNodeName = function (startnode, position, selector) {
 
         var index = Position.getLastNodeInformationInPositionByNodeName(startnode, position, selector).index;
 
         return index;
+    };
+
+    /**
+     * Returns the value in the position, at which the corresponding dom
+     * node is of the specified selector. Returns -1, if the selector is
+     * never fulfilled.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @param {String} selector
+     *  The selector against which the dom node is compared.
+     *
+     * @returns {Numnber}
+     *  The value at the specific position in the logical position or -1,
+     *  if no corresponding dom node can be found.
+     *  Example: In the logical position [3,5,7,2,12] the 5 is value for a
+     *  table row, the 7 the value for a table column.
+     */
+    Position.getLastValueFromPositionByNodeName = function (startnode, position, selector) {
+
+        var value = Position.getLastNodeInformationInPositionByNodeName(startnode, position, selector).value;
+
+        return value;
     };
 
     /**
@@ -359,6 +392,22 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return allParagraphs;
     };
 
+    /**
+     * Determining the number of rows in a table. Returned is the last
+     * index, the value is 0-based. So this is not the length.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the last row or null, if the position
+     *  is not included in a table.
+     */
     Position.getLastRowIndexInTable = function (startnode, position) {
 
         var rowIndex = null,
@@ -372,6 +421,23 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return rowIndex;
     };
 
+    /**
+     * Determining the number of columns in a table, respectively in
+     * the first row of a table. Returned is the last index, the
+     * value is 0-based. So this is not the length.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the last column of the first row of a
+     *  table or null, if the position is not included in a table.
+     */
     Position.getLastColumnIndexInTable = function (startnode, position) {
 
         var columnIndex = null,
@@ -385,6 +451,23 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         return columnIndex;
     };
 
+    /**
+     * Determining the number of columns in a row specified by the
+     * logical position. Returned is the last index, the
+     * value is 0-based. So this is not the length.
+     * Otherwise null we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the last column of the specified row of a
+     *  table or null, if the position is not included in a table.
+     */
     Position.getLastColumnIndexInRow = function (startnode, position) {
 
         var columnIndex = null,
@@ -396,6 +479,52 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
 
         return columnIndex;
     };
+
+    /**
+     * Determining the index of the row specified by the logical position
+     * inside a table. The first row has index 0, the second index 1
+     * and so on. The value is 0-based.
+     * If no row is found in the logical position, -1 will be
+     * returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the row inside a table, or -1, if the
+     *  logical position does not contain a row.
+     */
+    Position.getRowIndexInTable = function (startnode, position) {
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'TR');
+    };
+
+    /**
+     * Determining the index of the column/cell specified by the logical
+     * position inside a row. The first column/cell has index 0, the second index 1
+     * and so on. The value is 0-based.
+     * If no column/cell is found in the logical position, -1 will be
+     * returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the column/cell inside a row, or -1, if the
+     *  logical position does not contain a column/cell.
+     */
+    Position.getColumnIndexInRow = function (startnode, position) {
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'TH, TD');
+    };
+
+
 
 
     return Position;
