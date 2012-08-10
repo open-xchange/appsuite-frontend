@@ -196,7 +196,8 @@ define('plugins/portal/twitter/register',
             }
             var self = this;
 
-            self.append($('<div>').addClass('clear-title').text('Twitter'));
+            self.empty().append($('<div>').addClass('clear-title').text('Twitter'));
+            $tweets.empty();
 
             $tweets.appendTo(self);
             $busyIndicator.appendTo(self);
