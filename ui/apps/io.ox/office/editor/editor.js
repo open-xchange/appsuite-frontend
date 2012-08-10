@@ -104,7 +104,7 @@ define('io.ox/office/editor/editor',
         this.endGroup = function () {
 
             if (!groupLevel) {
-                dbgOutError("ERROR - not in undo group!");
+                Utils.error('OXOUndoManager.endGroup(): not in undo group!');
                 return;
             }
 
@@ -124,7 +124,7 @@ define('io.ox/office/editor/editor',
         this.addUndo = function (oxoUndoAction) {
 
             if (this.isInUndo()) {
-                dbgOutError("ERROR - creating undo while processing undo!");
+                Utils.error('OXOUndoManager.addUndo(): creating undo while processing undo!');
                 return;
             }
 
@@ -377,7 +377,7 @@ define('io.ox/office/editor/editor',
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
-        var dbgoutEvents = false, dbgoutObjects = false, dbgoutInfos = true;
+        var dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
         Events.extend(this);
@@ -428,7 +428,7 @@ define('io.ox/office/editor/editor',
             if (blockOperations) {
                 // This can only happen if someone tries to apply new operation in the operation notify.
                 // This is not allowed because a document manipulation method might be split into multiple operations, following operations would have invalid positions then.
-                this.implDbgOutInfo('applyOperation - operations blocked');
+                Utils.info('Editor.applyOperation(): operations blocked');
                 return;
             }
 
@@ -437,7 +437,7 @@ define('io.ox/office/editor/editor',
             // Clone operation now, because undo might manipulate it when merging with previous one...
             var notifyOperation = _.clone(operation, true);
 
-            this.implDbgOutObject({type: 'operation', value: operation});
+            implDbgOutObject({type: 'operation', value: operation});
 
             if (bRecord) {
                 operations.push(operation);
@@ -578,9 +578,8 @@ define('io.ox/office/editor/editor',
 
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
-                this.implDbgOutInfo('applyOperation - para count invalid!');
+                Utils.warn('Editor.applyOperation(): paragraph count invalid!');
             }
-
         };
 
         this.applyOperations = function (theOperations, bRecord, notify) {
@@ -647,7 +646,7 @@ define('io.ox/office/editor/editor',
             }
 
             if (! textNode) {
-                dbgOutError("ERROR: Failed to determine text node from current node! (useFirstTextNode: " + useFirstTextNode + ")");
+                Utils.error('Editor.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + ')');
                 return;
             }
 
@@ -663,7 +662,7 @@ define('io.ox/office/editor/editor',
 
             // check input values
             if (! node) {
-                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. Node not defined');
+                Utils.error('Editor.getOXOPosition(): Invalid DOM position. Node not defined');
                 return;
             }
 
@@ -676,35 +675,31 @@ define('io.ox/office/editor/editor',
                     node = newNode.node;
                     offset = newNode.offset;
                 } else {
-                    this.implDbgOutInfo('getOXOPosition: Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                    Utils.error('Editor.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                     return;
                 }
             }
 
             // Checking offset for text nodes
-            if (node.nodeType === 3) {
-                if (! _.isNumber(offset)) {
-                    this.implDbgOutInfo('getOXOPosition: Invalid start position. NodeType is 3, but offset is not defined!');
-                    return;
-                }
+            if ((node.nodeType === 3) && !_.isNumber(offset)) {
+                Utils.error('Editor.getOXOPosition(): Invalid start position: text node without offset');
+                return;
             }
 
             if (offset < 0) {
-                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+                Utils.error('Editor.getOXOPosition(): Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                 return;
             }
 
             // Check, if the selected node is a descendant of "this.editdiv"
-            var editorDiv = editdiv.has(node).get(0);
-
-            if (!editorDiv) { // range not in text area
-                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. It is not part of the editor DIV: !' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            if (!editdiv.get(0).contains(node)) { // range not in text area
+                Utils.error('Editor.getOXOPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                 return;
             }
 
             // Checking node in root elements
             if (paragraphs.has(node).length === 0) {
-                this.implDbgOutInfo('getOXOPosition: Invalid DOM position. It is not included in the top level elements of the editor DIV!' + ' Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+                Utils.error('Editor.getOXOPosition(): Invalid DOM position. It is not included in the top level elements of the editor DIV! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
                 return;
             }
 
@@ -736,7 +731,7 @@ define('io.ox/office/editor/editor',
             }
 
             if ((node.nodeType === 3) && (! offsetEvaluated)) {
-                this.implDbgOutInfo('getOXOPosition: Warning: Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
+                Utils.warn('Editor.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
             }
 
             return new OXOPaM(oxoPosition);
@@ -749,12 +744,12 @@ define('io.ox/office/editor/editor',
             offset = null;
 
             if (oxoPosition === undefined) {
-                // this.implDbgOutInfo('getDOMPosition: oxoPosition is undefined!');
+                // Utils.error('Editor.getDOMPosition(): oxoPosition is undefined!');
                 return;
             }
 
             if (oxoPos[0] === undefined) {
-                // this.implDbgOutInfo('getDOMPosition: Position is undefined!');
+                // Utils.error('Editor.getDOMPosition(): Position is undefined!');
                 return;
             }
 
@@ -769,11 +764,11 @@ define('io.ox/office/editor/editor',
                             offset = returnObj.offset;
                         }
                     } else {
-                        this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
+                        Utils.warn('Editor.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
                         return;
                     }
                 } else {
-                    this.implDbgOutInfo('getDOMPosition: Warning: Failed to determine child node for node: ' + node.nodeName);
+                    Utils.warn('Editor.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
                     return;
                 }
             }
@@ -888,7 +883,7 @@ define('io.ox/office/editor/editor',
                 // if (TODO: Compare Arrays oldSelection, oxosel)
                 this.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
             } else {
-                dbgOutError("ERROR: Failed to determine DOM Selection from OXO Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
+                Utils.error('Editor.setSelection(): Failed to determine DOM Selection from OXO Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
             }
         };
 
@@ -1041,7 +1036,7 @@ define('io.ox/office/editor/editor',
 
         this.processKeyDown = function (event) {
 
-            this.implDbgOutEvent(event);
+            implDbgOutEvent(event);
             // this.implCheckSelection();
 
             this.implCheckEventSelection();
@@ -1069,19 +1064,19 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
-                    window.console.log('dbgoutEvents is now ' + dbgoutEvents);
+                    Utils.log('dbgoutEvents is now ' + dbgoutEvents);
                 }
                 else if (c === '2') {
                     dbgoutObjects = !dbgoutObjects;
-                    window.console.log('dbgoutObjects is now ' + dbgoutObjects);
+                    Utils.log('dbgoutObjects is now ' + dbgoutObjects);
                 }
                 else if (c === '3') {
-                    dbgoutInfos = !dbgoutInfos;
-                    window.console.log('dbgoutInfos is now ' + dbgoutInfos);
+                    Utils.MIN_LOG_LEVEL = Utils.MIN_LOG_LEVEL ? undefined : 'log';
+                    window.console.log('logging is now ' + (Utils.MIN_LOG_LEVEL ? 'on' : 'off'));
                 }
                 else if (c === '4') {
                     blockOperationNotifications = !blockOperationNotifications;
-                    window.console.log('block operation notifications is now ' + blockOperationNotifications);
+                    Utils.log('block operation notifications is now ' + blockOperationNotifications);
                 }
             }
 
@@ -1270,13 +1265,13 @@ define('io.ox/office/editor/editor',
             }
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
-                this.implDbgOutInfo('processKeyDown - para count invalid!');
+                Utils.warn('Editor.processKeyDown(): paragraph count invalid!');
             }
         };
 
         this.processKeyPressed = function (event) {
 
-            this.implDbgOutEvent(event);
+            implDbgOutEvent(event);
 
             var selection = this.getSelection();
 
@@ -1294,7 +1289,7 @@ define('io.ox/office/editor/editor',
             selection.adjust();
 
             /*
-            window.console.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + this.isNavigationKeyEvent(event));
+            Utils.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + this.isNavigationKeyEvent(event));
             if (this.isNavigationKeyEvent(event)) {
                 return;
             }
@@ -1353,24 +1348,24 @@ define('io.ox/office/editor/editor',
 
             // DEBUG STUFF
             if (this.getParagraphCount() !== editdiv.children().size()) {
-                this.implDbgOutInfo('processKeyPressed - para count invalid!');
+                Utils.warn('Editor.processKeyPressed(): paragraph count invalid!');
             }
 
         };
 
         this.cut = function () {
             // TODO
-            this.implDbgOutInfo('NIY: cut()');
+            Utils.warn('Editor.cut(): not yet implemented');
         };
 
         this.copy = function () {
             // TODO
-            this.implDbgOutInfo('NIY: copy()');
+            Utils.warn('Editor.copy(): not yet implemented');
         };
 
         this.paste = function () {
             // TODO
-            this.implDbgOutInfo('NIY: paste()');
+            Utils.warn('Editor.paste(): not yet implemented');
         };
 
         // HIGH LEVEL EDITOR API which finally results in Operations and creates Undo Actions
@@ -1686,7 +1681,7 @@ define('io.ox/office/editor/editor',
             } else if (Attributes.isAttribute('character', attrName)) {
                 attributes = this.getAttributes('character');
             } else {
-                self.implDbgOutInfo('Editor.getAttribute() - no valid attribute specified');
+                Utils.error('Editor.getAttribute(): no valid attribute specified');
             }
 
             return attributes[attrName];
@@ -2765,7 +2760,6 @@ define('io.ox/office/editor/editor',
                         if (!node.nodeValue.length)
                             continue;
 
-                        // this.implDbgOutInfo(node.nodeValue, true);
                         for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
                             currChar = node.nodeValue.charCodeAt(nChar);
                             if ((currChar === charcodeSPACE) && (prevChar === charcodeSPACE)) { // Space - make sure there is no space before
@@ -2778,14 +2772,11 @@ define('io.ox/office/editor/editor',
                             }
                             prevChar = currChar;
                         }
-                        // this.implDbgOutInfo(node.nodeValue, true);
                     }
 
                     if (prevChar === charcodeSPACE) { // SPACE hat para end is a problem in some browsers
-                        // this.implDbgOutInfo(node.nodeValue, true);
                         currChar = charcodeNBSP;
                         node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
-                        // this.implDbgOutInfo(node.nodeValue, true);
                     }
 
                     // TODO: Adjust tabs, ...
@@ -2799,7 +2790,7 @@ define('io.ox/office/editor/editor',
             var windowSel = window.getSelection();
             if ((windowSel.anchorNode.nodeType !== 3) || (windowSel.focusNode.nodeType !== 3)) {
 
-                this.implDbgOutInfo('warning: invalid selection');
+                Utils.warn('Editor.implCheckSelection: invalid selection');
 
                 var selection = this.getSelection();
 
@@ -3027,7 +3018,7 @@ define('io.ox/office/editor/editor',
 
             // DEBUG STUFF
             if (paragraphs.size() !== (dbg_oldparacount + 1)) {
-                this.implDbgOutInfo('implSplitParagraph - para count invalid!');
+                Utils.warn('Editor.implSplitParagraph(): paragraph count invalid!');
             }
         };
 
@@ -3087,7 +3078,7 @@ define('io.ox/office/editor/editor',
 
                     // DEBUG STUFF
                     if (paragraphs.size() !== (dbg_oldparacount - 1)) {
-                        this.implDbgOutInfo('implMergeParagraph - para count invalid!');
+                        Utils.warn('Editor.implMergeParagraph(): paragraph count invalid!');
                     }
                 }
             }
@@ -3360,12 +3351,12 @@ define('io.ox/office/editor/editor',
             this.implParagraphChanged(startPosition);
         };
 
-        this.implDbgOutEvent = function (event) {
+        function implDbgOutEvent(event) {
 
             if (!dbgoutEvents)
                 return;
 
-            var selection = this.getSelection();
+            var selection = self.getSelection();
 
             var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + getFormattedPositionString(selection.startPaM.oxoPosition) + '/' + getFormattedPositionString(selection.endPaM.oxoPosition) + ']';
 
@@ -3374,33 +3365,16 @@ define('io.ox/office/editor/editor',
             }
 
             window.console.log(dbg);
-        };
+        }
 
-        this.implDbgOutObject = function (obj) {
+        function implDbgOutObject(obj) {
 
             if (!dbgoutObjects)
                 return;
 
             var dbg = fillstr(obj.type + ': ', 10, ' ', true) + JSON.stringify(obj.value);
             window.console.log(dbg);
-        };
-
-        this.implDbgOutInfo = function (str, showStrCodePoints) {
-
-            if (!dbgoutInfos)
-                return;
-
-            var msg = str;
-
-            if (showStrCodePoints) {
-                msg = msg + ' (' + str.length + ' code points: ';
-                for (var i = 0; i < str.length; i++) {
-                    msg = msg + '[' + str.charCodeAt(i) + ']';
-                }
-            }
-
-            window.console.log(msg);
-        };
+        }
 
         // hybrid edit mode
         editdiv
@@ -3423,16 +3397,6 @@ define('io.ox/office/editor/editor',
         RICH: 'rich',
         PLAIN: 'plain'
     };
-
-    // DEBUG FUNCTIONS
-    function dbgOutError(str) {
-
-        // if (!dbgoutErrors)
-        //    return;
-
-        window.console.log(str);
-    }
-
 
     // exports ================================================================
 
