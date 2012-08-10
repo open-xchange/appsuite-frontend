@@ -25,30 +25,45 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
      * Wraps the passed function, protecting it from being called
      * recursively.
      *
-     * @param {Function} func
+     * @param {Function} originalFunc
      *  The original function that needs to be protected against recursive
      *  calls.
+     *
+     * @param {Function} [runningFunc]
+     *  An optional function that will be called and whose return value will be
+     *  returned, if the original function is currently running while trying to
+     *  call it again.
      *
      * @param {Object} [context]
      *  The calling context used to invoke the wrapped function.
      *
      * @returns {Function}
-     *  A wrapper function that initially calls the wrapped function and
-     *  returns its value. When called recursively while running (directly
-     *  or indirectly in the same call stack, or even asynchronously), it
-     *  simply returns undefined instead of calling the wrapped function
-     *  again.
+     *  A wrapper function that initially calls the original function and
+     *  returns its result afterwards. When called recursively while running
+     *  (directly or indirectly in the same call stack, or even
+     *  asynchronously), it calls the fall-back function and returns its
+     *  result. If no fall-back function has been specified, the value
+     *  undefined will be returned.
      */
-    AppHelper.makeNoRecursionGuard = function (func, context) {
-        var running = false;
+    AppHelper.makeNoRecursionGuard = function (originalFunc, runningFunc, context) {
+
+        var // running state, true as long as the function is running
+            running = false;
+
+        // return a wrapper function that calls the original function when called
         return function () {
-            if (!running) {
-                try {
-                    running = true;
-                    return func.apply(context, arguments);
-                } finally {
-                    running = false;
-                }
+
+            // original function already running: return value of fall-back function
+            if (running) {
+                return _.isFunction(runningFunc) ? runningFunc.apply(context, arguments) : undefined;
+            }
+
+            // call original function
+            try {
+                running = true;
+                return originalFunc.apply(context, arguments);
+            } finally {
+                running = false;
             }
         };
     };
