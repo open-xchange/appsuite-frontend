@@ -89,9 +89,10 @@
 }
 .io-ox-portal-content {
     width: 400px;
+    background-color: #fff;
     overflow: auto;
     min-height: 95%;
-    padding: 0 13px 0 0;
+    padding: 13px;
     float: right;
 }
 .io-ox-portal-widget-tile {

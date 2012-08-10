@@ -19,7 +19,7 @@ define('io.ox/core/api/autocomplete',
     'use strict';
 
     function Autocomplete(options) {
-        this.options = options || {};
+        this.options = options || {};
         this.cache = {};
         this.apis = [];
         if (options.contacts) {

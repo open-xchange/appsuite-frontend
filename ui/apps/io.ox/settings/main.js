@@ -159,13 +159,15 @@ define('io.ox/settings/main',
         });
 
         var showSettings = function (obj) {
-            var settingsID;
-            settingsID = obj.id + '/settings';
-            console.log('load:' + settingsID);
+            var settingsPath,
+                extPointPart;
+            settingsPath = obj.id + '/settings/pane';
+            extPointPart = obj.id + '/settings';
+            console.log('load:' + settingsPath);
             right.empty().busy();
-            require([ settingsID ], function (m) {
-                console.log("extpoint:" + settingsID + '/detail');
-                ext.point(settingsID + '/detail').invoke('draw', right, obj);
+            require([ settingsPath ], function (m) {
+                console.log("extpoint:" + extPointPart + '/detail');
+                ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
                 right.idle();
             });
