@@ -109,6 +109,23 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             };
         }
 
+        var getKulerIndex = (function () {
+
+            var list = '0123456789'.split(''), pos = 0, tmp = [];
+
+            function randomSort() { return Math.round(Math.random()) - 0.5; }
+
+            return function () {
+                if (tmp.length === 0) {
+                    tmp = list.slice(pos, pos + 5).sort(randomSort);
+                    console.log('KULER', tmp, pos, pos + 5, list);
+                    pos = pos === 0 ? 5 : 0;
+                }
+                console.log('KULER-VALUE', tmp[0]);
+                return tmp.shift();
+            };
+        }());
+
         function initExtensions() {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
@@ -117,7 +134,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         // experimental
-                        .addClass('tile-color' + (Math.random() * 10 >> 0))
+                        .addClass('tile-color' + getKulerIndex())
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
@@ -190,9 +207,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                     return;
                                 }
                                 if (color !== undefined) {
-                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
-                                    console.log('AHA', $node, color);
-                                    $node.addClass('tile-color' + color);
+//                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
+//                                    $node.addClass('tile-color' + color);
                                 }
                             });
                             extension.asyncMetadata("color").done(function (color) {

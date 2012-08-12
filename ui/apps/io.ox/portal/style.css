@@ -102,14 +102,18 @@
     overflow: hidden;
     width: 270px;
     height: 180px;
-    margin: 3px 3px 0 0;
+    margin: 2px 2px 0 0;
     cursor: pointer;
+    color: white;
 }
 .io-ox-portal-preview {
     overflow: hidden;
 }
 .io-ox-portal-widget-tile h1 {
-    line-height: 2em;
+    color: #eee;
+    color: rgba(255, 255, 255, 0.70);
+    line-height: 1em;
+    margin: 0.7em 0 1em 0;
 }
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
@@ -118,36 +122,35 @@
 //    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
-    width: 80px;
+    width: 50px;
     height: auto;
     float: right;
 }
-.io-ox-portal .tile-bright, .io-ox-portal .tile-bright *{
-    color: white;
-}    
-.io-ox-portal .tile-dark, .io-ox-portal .tile-dark * {
-    color: #333;
-}
+
+@tile-fix: 5%;
+@tile-darken: 10%;
 
 .io-ox-portal {
-    .tile-color0 { background-color: #555; color: white; } /* grey */
-    .tile-color0:hover { background-color: lighten(#555, 5%); }
-    .tile-color1 { background-color: #49F; color: white; } /* twitter blue */
-    .tile-color1:hover { background-color: lighten(#49F, 5%); }
-    .tile-color2 { background-color: #3B5998; color: white; } /* facebook blue */
-    .tile-color2:hover { background-color: lighten(#3B5998, 5%); }
-    .tile-color3 { background-color: #86B300; color: white; } /* green */
-    .tile-color3:hover { background-color: lighten(#86B300, 5%); }
-    .tile-color4 { background-color: #8E488E; color: white; } /* purple */
-    .tile-color4:hover { background-color: lighten(#8E488E, 5%); }
-    .tile-color5 { background-color: #FFCC33; color: black; } /* orange */
-    .tile-color5:hover { background-color: lighten(#FFCC33, 5%); }
-    .tile-color6 { background-color: #F7FF5C; color: black; } /* yellow */
-    .tile-color6:hover { background-color: lighten(#F7FF5C, 5%); }
-    .tile-color7 { background-color: #8040BF; color: black; } /* violet */
-    .tile-color7:hover { background-color: lighten(#8040BF, 5%); }
-    .tile-color8 { background-color: #8040BF; color: black; } /* violet */
-    .tile-color8:hover { background-color: lighten(#8040BF, 5%); }
-    .tile-color9 { background-color: #8040BF; color: black; } /* violet */
-    .tile-color9:hover { background-color: lighten(#8040BF, 5%); }
+
+    .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
+    .tile-color0:hover { background-color: @tile-color-0; }
+    .tile-color1 { background-color: darken(@tile-color-1, @tile-fix); }
+    .tile-color1:hover { background-color: @tile-color-1; }
+    .tile-color2 { background-color: darken(@tile-color-2, @tile-fix); }
+    .tile-color2:hover { background-color: @tile-color-2; }
+    .tile-color3 { background-color: darken(@tile-color-3, @tile-fix); }
+    .tile-color3:hover { background-color: @tile-color-3; }
+    .tile-color4 { background-color: darken(@tile-color-4, @tile-fix); }
+    .tile-color4:hover { background-color: @tile-color-4; }
+
+    .tile-color5 { background-color: darken(@tile-color-0, @tile-darken); }
+    .tile-color5:hover { background-color: darken(@tile-color-0, 5%); }
+    .tile-color6 { background-color: darken(@tile-color-1, @tile-darken); }
+    .tile-color6:hover { background-color: darken(@tile-color-1, 5%); }
+    .tile-color7 { background-color: darken(@tile-color-2, @tile-darken); }
+    .tile-color8:hover { background-color: darken(@tile-color-2, 5%); }
+    .tile-color8 { background-color: darken(@tile-color-3, @tile-darken); }
+    .tile-color8:hover { background-color: darken(@tile-color-3, 5%); }
+    .tile-color9 { background-color: darken(@tile-color-4, @tile-darken); }
+    .tile-color9:hover { background-color: darken(@tile-color-4, 5%); }
 }
