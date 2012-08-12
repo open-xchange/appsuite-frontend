@@ -27,7 +27,7 @@
         // return true, if there is a standard account, false otherwise
         
     },
-    createInteractively: function () {
+    createInteractively: function (e) { // e := a click event that triggered this dialog
         // Open a dialog or wizard to create an account of this type
         // returns a deferred object that is resolved if the account creation went through or rejected, if it failed or was aborted.
     },
@@ -94,14 +94,14 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
         return invokeExtension(accountType, "hasStandardAccount");
     };
     
-    api.getOrCreateStandardAccountInteractively = function (accountType) {
+    api.getOrCreateStandardAccountInteractively = function (accountType, e) {
         if (!api.hasStandardAccount(accountType)) {
-            return api.createInteractively(accountType);
+            return api.createInteractively(accountType, e);
         }
     };
     
-    api.createInteractively = function (accountType) {
-        return invokeExtension(accountType, "createInteractively");
+    api.createInteractively = function (accountType, e) {
+        return invokeExtension(accountType, "createInteractively", e);
     };
     
     api.remove = function (account) {

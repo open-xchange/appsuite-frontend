@@ -40,10 +40,11 @@ define("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api
         hasStandardAccount: function () {
             return !!accounts[0];
         },
-        createInteractively: function () {
+        createInteractively: function (e) {
             var def = $.Deferred();
             require(['io.ox/settings/accounts/email/settings'], function (mailSettings) {
-                mailSettings.mailAutoconfigDialog().done(def.resolve).fail(def.reject);
+                // FIXME: This is not very blackboxy
+                mailSettings.mailAutoconfigDialog(e).done(def.resolve).fail(def.reject);
             });
             
             return def;

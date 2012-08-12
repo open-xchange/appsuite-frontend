@@ -420,6 +420,7 @@ define("io.ox/core/tk/dialogs",
                 click: my.parents(".io-ox-sidepopup-pane, .window-body, .notifications-overlay"),
                 target: target || my.parents(".window-body, .notifications-overlay")
             };
+            console.log("MY", my, "TARGET", target);
             // get active side popup & triggering element
             sidepopup = self.nodes.closest.prop("sidepopup") || null;
             self.lastTrigger = sidepopup ? sidepopup.lastTrigger : null;
