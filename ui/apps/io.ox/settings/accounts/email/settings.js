@@ -111,7 +111,7 @@ define('io.ox/settings/accounts/email/settings',
             );
         },
 
-        validateMailaccount = function (data, alertPlaceholder) {
+        validateMailaccount = function (data, alertPlaceholder, def) {
             var deferedValidation = $.Deferred(),
                 deferedSave = $.Deferred();
 
@@ -133,6 +133,7 @@ define('io.ox/settings/accounts/email/settings',
                                 collection.add([response]);
                             }
                             successDialog();
+                            def.resolve(response);
                         }
                     });
                 }
@@ -143,7 +144,7 @@ define('io.ox/settings/accounts/email/settings',
             });
         },
 
-        autoconfigApiCall = function (args, newMailaddress, newPassword, alertPlaceholder) {
+        autoconfigApiCall = function (args, newMailaddress, newPassword, alertPlaceholder, def) {
             api.autoconfig({
                 'email': newMailaddress,
                 'password': newPassword
@@ -151,27 +152,34 @@ define('io.ox/settings/accounts/email/settings',
                 if (data.login) {
                     data.primary_address = newMailaddress;
                     data.password = newPassword;
-                    validateMailaccount(data, alertPlaceholder);
+                    validateMailaccount(data, alertPlaceholder, def);
                 } else {
                     var data = {};
                     console.log('no configdata recived');
                     data.primary_address = newMailaddress;
-                    args.data = data;
-                    createExtpointForNewAccount(args);
+                    if (args) {
+                        args.data = data;
+                        createExtpointForNewAccount(args);
+                    }
                     autoconfigDialogbox.close();
+                    def.reject();
                 }
             })
             .fail(function () {
                 var data = {};
                 console.log('no configdata recived');
                 data.primary_address = newMailaddress;
-                args.data = data;
-                createExtpointForNewAccount(args);
+                if (args) {
+                    args.data = data;
+                    createExtpointForNewAccount(args);
+                }
                 autoconfigDialogbox.close();
+                def.reject();
             });
         },
 
         mailAutoconfigDialog = function (args, o) {
+            var def = $.Deferred();
             if (o) {
                 collection = o.collection;
             }
@@ -218,7 +226,7 @@ define('io.ox/settings/accounts/email/settings',
 
                     if (myModel.isMailAddress(newMailaddress) === undefined) {
                         drawBusy(alertPlaceholder);
-                        autoconfigApiCall(args, newMailaddress, newPassword, alertPlaceholder);
+                        autoconfigApiCall(args, newMailaddress, newPassword, alertPlaceholder, def);
                     } else {
                         var message = gt('This is not a valid mail address');
                         drawAlert(alertPlaceholder, message);
@@ -227,6 +235,8 @@ define('io.ox/settings/accounts/email/settings',
                     }
                 });
             });
+            
+            return def;
         },
 
         successDialog = function () {

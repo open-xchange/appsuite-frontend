@@ -1,10 +1,26 @@
 
+@portal-background-alt: @topbar-background;
+@portal-background: @topbar-background-alt;
+
 .io-ox-portal {
-    padding: 0 13px 0 13px;
+ 
+    padding: 13px;
     position: relative;
     height: 100%;
     overflow: auto;
+ 
+    border-top: 1px solid #000;
+    background-color: #2C2C2C;
+    
+    background-image: -moz-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -ms-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@portal-background-alt), to(@portal-background));
+    background-image: -webkit-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: -o-linear-gradient(top, @portal-background-alt, @portal-background);
+    background-image: linear-gradient(top, @portal-background-alt, @portal-background);
+    background-repeat: repeat-x;
 }
+
 .io-ox-portal, .io-ox-portal * {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -64,6 +80,12 @@
     width: 1132px; // 4* (270 width + 13px margin), needs to depend on screen selector
 }
 .io-ox-portal-content {
+    width: 400px;
+    background-color: #fff;
+    overflow: auto;
+    min-height: 95%;
+    padding: 13px;
+    float: right;
 }
 .io-ox-portal-widget-tile {
     background: #cce;
@@ -72,18 +94,18 @@
     overflow: hidden;
     width: 270px;
     height: 180px;
-    margin: 13px 6.5px 0 6.5px;
+    margin: 0 2px 2px 0;
     cursor: pointer;
+    color: white;
 }
 .io-ox-portal-preview {
     overflow: hidden;
 }
-:hover.io-ox-portal-widget-tile  {
-    opacity: 0.75;
-    filter: alpha(opacity=75);
-}
 .io-ox-portal-widget-tile h1 {
-    line-height: 2em;
+    color: #eee;
+    color: rgba(255, 255, 255, 0.70);
+    line-height: 1em;
+    margin: 0.7em 0 1em 0;
 }
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
@@ -91,13 +113,38 @@
 .io-ox-portal-tile-active {
 }
 .io-ox-portal .tile-image {
-    width: 80px;
+    width: 32px;
     height: auto;
     float: right;
+    margin: 8px 0 8px 0;
 }
-.io-ox-portal .tile-bright, .io-ox-portal .tile-bright *{
-    color: white;
-}    
-.io-ox-portal .tile-dark, .io-ox-portal .tile-dark * {
-    color: #333;
+
+@tile-fix: 5%;
+@tile-hover: 12%;
+@tile-darken: 10%;
+@tile-hover-dark: 15%;
+
+.io-ox-portal {
+
+    .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
+    .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
+    .tile-color1 { background-color: darken(@tile-color-1, @tile-fix); }
+    .tile-color1:hover { background-color: darken(@tile-color-1, @tile-hover); }
+    .tile-color2 { background-color: darken(@tile-color-2, @tile-fix); }
+    .tile-color2:hover { background-color: darken(@tile-color-2, @tile-hover); }
+    .tile-color3 { background-color: darken(@tile-color-3, @tile-fix); }
+    .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
+    .tile-color4 { background-color: darken(@tile-color-4, @tile-fix); }
+    .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
+
+    .tile-color5 { background-color: darken(@tile-color-0, @tile-darken); }
+    .tile-color5:hover { background-color: darken(@tile-color-0, @tile-hover-dark); }
+    .tile-color6 { background-color: darken(@tile-color-1, @tile-darken); }
+    .tile-color6:hover { background-color: darken(@tile-color-1, @tile-hover-dark); }
+    .tile-color7 { background-color: darken(@tile-color-2, @tile-darken); }
+    .tile-color8:hover { background-color: darken(@tile-color-2, @tile-hover-dark); }
+    .tile-color8 { background-color: darken(@tile-color-3, @tile-darken); }
+    .tile-color8:hover { background-color: darken(@tile-color-3, @tile-hover-dark); }
+    .tile-color9 { background-color: darken(@tile-color-4, @tile-darken); }
+    .tile-color9:hover { background-color: darken(@tile-color-4, @tile-hover-dark); }
 }
