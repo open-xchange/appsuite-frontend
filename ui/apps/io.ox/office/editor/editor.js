@@ -3001,7 +3001,7 @@ define('io.ox/office/editor/editor',
                     localPos.push(i);
                     localPos.push(0);
                     localPos.push(0);
-                    this.deleteAllParagraphsInCell(localPos);
+                    this.deleteAllParagraphsInCell(localPos, true);
                 }
             }
 
