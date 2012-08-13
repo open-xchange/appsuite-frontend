@@ -61,11 +61,6 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-.io-ox-portal {
-    text-align: center;
-    background: rgb(187,187,187); /* Old browsers */
-    /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-}
 .io-ox-portal-tiles {
     text-align: left;
     margin: 0 auto;

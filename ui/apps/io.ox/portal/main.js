@@ -20,8 +20,9 @@ define.async('io.ox/portal/main',
      'io.ox/core/taskQueue',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
+     'io.ox/core/tk/dialogs',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
     'use strict';
 
@@ -69,7 +70,11 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 perform: function () {
                     var def = $.Deferred(),
                         $node = $("<div/>");
-
+                    new dialogs.SidePopup({modal: true}).show(def, function (popup) {
+                        popup.append(
+                            $('<h4>').text("Hallo Welt")
+                        );
+                    });
                     extension.invoke('load')
                         .pipe(function () {
                             return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
