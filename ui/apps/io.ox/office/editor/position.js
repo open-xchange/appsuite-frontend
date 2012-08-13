@@ -364,7 +364,7 @@ define('io.ox/office/editor/position',
         while (oxoPos.length > 0) {
 
             var valueSave = oxoPos.shift(),
-                returnObj = this.getNextChildNode(node, valueSave);
+                returnObj = Position.getNextChildNode(node, valueSave);
 
             counter++;
 
@@ -921,6 +921,208 @@ define('io.ox/office/editor/position',
         }
 
         return isCellEndPosition;
+    };
+
+    Position.isSameParagraph = function (posA, posB) {
+        // Assuming that the position is complete, only the last parameter
+        // is allowed to be different.
+
+        var isSamePara = true;
+
+        if (posA.length === posB.length) {
+            var max = posA.length - 1;  // excluding position
+            for (var i = 0; i < max; i++) {
+                if (posA[i] !== posB[i]) {
+                    isSamePara = false;
+                    break;
+                }
+            }
+        } else {
+            isSamePara = false;
+        }
+
+        return isSamePara;
+    };
+
+    Position.isSameParagraphLevel = function (posA, posB) {
+        // Assuming that the position is complete, only the two last parameters
+        // are allowed to be different.
+        var isSameLevel = true;
+
+        if (posA.length === posB.length) {
+            var max = posA.length - 2;  // excluding position and paragraph
+            for (var i = 0; i < max; i++) {
+                if (posA[i] !== posB[i]) {
+                    isSameLevel = false;
+                    break;
+                }
+            }
+        } else {
+            isSameLevel = false;
+        }
+
+        return isSameLevel;
+    };
+
+    Position.isSameTableLevel = function (startnode, posA, posB) {
+        // If both position are in the same table, but in different cells (this
+        // can happen in Chrome, but not in Firefox. In Firefox the complete cells
+        // are selected.
+        var isSameTableLevel = true;
+
+        if (posA.length === posB.length) {
+            var tableA = Position.getLastPositionFromPositionByNodeName(startnode, posA, 'TABLE'),
+                tableB = Position.getLastPositionFromPositionByNodeName(startnode, posB, 'TABLE');
+
+            // Both have to be identical
+            if (tableA.length === tableB.length) {
+                var max = tableA.length - 1;
+                for (var i = 0; i <= max; i++) {
+                    if (tableA[i] !== tableB[i]) {
+                        isSameTableLevel = false;
+                        break;
+                    }
+                }
+            } else {
+                isSameTableLevel = false;
+            }
+        } else {
+            isSameTableLevel = false;
+        }
+
+        return isSameTableLevel;
+    };
+
+    Position.isCellSelection = function (startPaM, endPaM) {
+        // If cells in a table are selected, both positions must have the selectedNodeName 'tr'.
+        // This is valid only in Firefox.
+        return (startPaM.selectedNodeName === 'TR' && endPaM.selectedNodeName === 'TR');
+    };
+
+    Position.getLastPositionInParagraph = function (startnode, paragraph) {
+
+        // paragraph must be a position, representing a 'p' or a 'table' node
+
+        var domPos = Position.getDOMPosition(startnode, paragraph);
+
+        if (domPos) {
+
+            while (Position.getDOMPosition(startnode, paragraph).node.nodeName === 'TABLE') {
+                paragraph.push(Position.getLastRowIndexInTable(startnode, paragraph));
+                paragraph.push(Position.getLastColumnIndexInTable(startnode, paragraph));
+                paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));
+            }
+
+            paragraph.push(Position.getParagraphLength(startnode, paragraph));
+        }
+
+        return paragraph;
+    };
+
+    Position.getFirstPositionInParagraph = function (startnode, paragraph) {
+
+        // paragraph must be a position, representing a 'p' or a 'table' node
+
+        var domPos = Position.getDOMPosition(startnode, paragraph);
+
+        if (domPos) {
+
+            while (Position.getDOMPosition(startnode, paragraph).node.nodeName === 'TABLE') {
+                paragraph.push(0);  // row
+                paragraph.push(0);  // column
+                paragraph.push(0);  // paragraph
+            }
+
+            paragraph.push(0);
+        }
+
+        return paragraph;
+    };
+
+    Position.getFirstPositionInNextCell = function (startnode, paragraph) {
+        paragraph.pop(); // removing paragraph
+        var column = paragraph.pop(),
+            row = paragraph.pop(),
+            endOfTable = false,
+            lastRow = Position.getLastRowIndexInTable(startnode, paragraph),
+            lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+
+        if (column < lastColumn) {
+            column += 1;
+        } else {
+            if (row < lastRow) {
+                row += 1;
+                column = 0;
+            } else {
+                endOfTable = true;
+            }
+        }
+
+        if (! endOfTable) {
+            paragraph.push(row);
+            paragraph.push(column);
+            paragraph.push(0);  // first paragraph
+            paragraph = Position.getFirstPositionInParagraph(startnode, paragraph);
+        }
+
+        return {position: paragraph, endOfTable: endOfTable};
+    };
+
+    Position.getLastPositionInPrevCell = function (startnode, paragraph) {
+        paragraph.pop(); // removing paragraph
+        var column = paragraph.pop(),
+            row = paragraph.pop(),
+            beginOfTable = false,
+            lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+
+        if (column > 0) {
+            column -= 1;
+        } else {
+            if (row > 0) {
+                row -= 1;
+                column = lastColumn;
+            } else {
+                beginOfTable = true;
+            }
+        }
+
+        if (! beginOfTable) {
+            paragraph.push(row);
+            paragraph.push(column);
+            paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
+            paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
+        }
+
+        return {position: paragraph, beginOfTable: beginOfTable};
+    };
+
+    Position.getFirstPositionInCurrentCell = function (startnode, cellPosition) {
+
+        var position = _.copy(cellPosition, true);
+
+        // The cell can start with a table or a paragraph
+        position.push(0);  // first paragraph or table
+        position = Position.getFirstPositionInParagraph(startnode, position);
+
+        return position;
+    };
+
+    Position.getLastPositionInCurrentCell = function (startnode, cellPosition) {
+
+        var position = _.copy(cellPosition, true);
+
+        position.push(Position.getLastParaIndexInCell(startnode, position));  // last paragraph
+        position = Position.getLastPositionInParagraph(startnode, position);
+
+        return position;
+    };
+
+    Position.getLastPositionInDocument = function (startnode) {
+
+        var lastPara = startnode.length - 1,
+            oxoPosition = Position.getLastPositionInParagraph(startnode, [lastPara]);
+
+        return oxoPosition;
     };
 
 
