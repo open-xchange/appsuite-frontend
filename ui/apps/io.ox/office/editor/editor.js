@@ -1444,6 +1444,54 @@ define('io.ox/office/editor/editor',
 
                     this.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
 
+                } else if (this.isSameTableLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+
+                    var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                        endPos = _.copy(selection.endPaM.oxoPosition, true),
+                        startposLength = selection.startPaM.oxoPosition.length - 1;
+
+                    // 1) delete selected part or rest of para in first para (pos to end)
+                    var localEndPosition = _.copy(selection.startPaM.oxoPosition, true);
+                    localEndPosition[startposLength] = Position.getParagraphLength(paragraphs, localEndPosition);
+                    this.deleteText(selection.startPaM.oxoPosition, localEndPosition);
+                    localEndPosition.pop();
+                    this.deleteFollowingParagraphsInCell(localEndPosition);
+
+                    // 2) completely selected cells
+                    var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
+                        columnIndex = rowIndex + 1,
+                        startRow = startPos[rowIndex],
+                        startColumn = startPos[columnIndex],
+                        endRow = endPos[rowIndex],
+                        endColumn = endPos[columnIndex],
+                        lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
+
+                    for (var j = startRow; j <= endRow; j++) {
+                        var startCol = (j === startRow) ? startColumn + 1 : 0;
+                        var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
+
+                        for (var i = startCol; i <= endCol; i++) {
+                            startPos[rowIndex] = j;  // row
+                            startPos[columnIndex] = i;  // column
+                            startPos[columnIndex + 1] = 0;
+                            startPos[columnIndex + 2] = 0;
+                            this.deleteAllParagraphsInCell(startPos);
+                        }
+                    }
+
+                    var startPosition = _.copy(selection.endPaM.oxoPosition, true),
+                        endposLength = selection.endPaM.oxoPosition.length - 1;
+
+                    startPosition[endposLength] = 0;
+                    localEndPosition = _.copy(startPosition, true);
+                    localEndPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+
+                    this.deleteText(startPosition, localEndPosition);
+
+                    // delete all previous paragraphs in this cell!
+                    localEndPosition.pop();
+                    this.deletePreviousParagraphsInCell(localEndPosition);
+
                 } else {
 
                     // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
@@ -1775,6 +1823,54 @@ define('io.ox/office/editor/editor',
                                 this.setAttributes(attributes, startPosition, endPosition);
                             }
                         }
+                    } else if (this.isSameTableLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                        var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                            endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+                        // 1) selected part in first cell
+                        var startposLength = selection.startPaM.oxoPosition.length - 1,
+                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+
+                        localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
+                        this.setAttributes(attributes, selection.startPaM.oxoPosition, localendPosition);
+                        this.setAttributesToFollowingParagraphsInCell(attributes, localendPosition);
+
+                        // 2) completely selected cells
+                        var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
+                            columnIndex = rowIndex + 1,
+                            startRow = startPos[rowIndex],
+                            startColumn = startPos[columnIndex],
+                            endRow = endPos[rowIndex],
+                            endColumn = endPos[columnIndex],
+                            lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
+
+                        while (startPos.length > columnIndex) {
+                            startPos.pop();  // Removing position and paragraph optionally
+                        }
+
+
+                        for (var j = startRow; j <= endRow; j++) {
+                            var startCol = (j === startRow) ? startColumn + 1 : 0;
+                            var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
+
+                            for (var i = startCol; i <= endCol; i++) {
+                                startPos[rowIndex] = j;  // row
+                                startPos[columnIndex] = i;  // column
+                                var startPosition = this.getFirstPositionInCurrentCell(startPos);
+                                var endPosition = this.getLastPositionInCurrentCell(startPos);
+                                this.setAttributes(attributes, startPosition, endPosition);
+                            }
+                        }
+
+                        // 3) selected part in final cell
+                        var endposLength = selection.endPaM.oxoPosition.length - 1,
+                            localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+
+                        localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                        localstartPosition[endposLength] = 0;
+
+                        this.setAttributesToPreviousParagraphsInCell(attributes, selection.endPaM.oxoPosition);
+                        this.setAttributes(attributes, localstartPosition, selection.endPaM.oxoPosition);
 
                     } else {
 
@@ -1924,6 +2020,35 @@ define('io.ox/office/editor/editor',
             }
 
             return isSameLevel;
+        };
+
+        this.isSameTableLevel = function (posA, posB) {
+            // If both position are in the same table, but in different cells (this
+            // can happen in Chrome, but not in Firefox. In Firefox the complete cells
+            // are selected.
+            var isSameTableLevel = true;
+
+            if (posA.length === posB.length) {
+                var tableA = Position.getLastPositionFromPositionByNodeName(paragraphs, posA, 'TABLE'),
+                    tableB = Position.getLastPositionFromPositionByNodeName(paragraphs, posB, 'TABLE');
+
+                // Both have to be identical
+                if (tableA.length === tableB.length) {
+                    var max = tableA.length - 1;
+                    for (var i = 0; i <= max; i++) {
+                        if (tableA[i] !== tableB[i]) {
+                            isSameTableLevel = false;
+                            break;
+                        }
+                    }
+                } else {
+                    isSameTableLevel = false;
+                }
+            } else {
+                isSameTableLevel = false;
+            }
+
+            return isSameTableLevel;
         };
 
         this.isCellSelection = function (startPaM, endPaM) {
@@ -2162,7 +2287,6 @@ define('io.ox/office/editor/editor',
                 localPos[paraIndex] = 0;
 
                 for (var i = 0; i <= lastParaInCell; i++) {
-                    // this.deleteParagraph(localPos);
                     if ((localPos.length - 1) > paraIndex) {
                         localPos.pop();
                     }
@@ -2171,11 +2295,16 @@ define('io.ox/office/editor/editor',
 
                     if (i < lastParaInCell) {
                         if (isTable) {
-                            this.implDeleteTable(localPos);
+                            this.deleteTable(localPos);
                         } else {
-                            this.implDeleteParagraph(localPos);
+                            this.deleteParagraph(localPos);
                         }
                     } else {
+                        var startPos = _.copy(localPos, true),
+                            endPos = _.copy(localPos, true);
+                        startPos.push(0);
+                        endPos.push(Position.getParagraphLength(paragraphs, localPos));
+                        this.deleteText(startPos, endPos);
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
@@ -2190,13 +2319,22 @@ define('io.ox/office/editor/editor',
             if (isInTable) {
 
                 var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
-                    lastPara =  localPos[paraIndex];
+                    lastPara =  localPos[paraIndex],
+                    paragraphPosition = [];
 
                 localPos[paraIndex] = 0; // always 0, because paragraphs are deleted
 
+                for (var i = 0; i <= paraIndex; i++) {
+                    paragraphPosition.push(localPos[i]);
+                }
+
                 for (var i = 0; i < lastPara; i++) {
-                    // this.deleteParagraph(localPos);
-                    this.implDeleteParagraph(localPos);
+                    var isTable = this.getDOMPosition(paragraphPosition).node.nodeName === 'TABLE' ? true : false;
+                    if (isTable) {
+                        this.deleteTable(localPos);
+                    } else {
+                        this.deleteParagraph(localPos);
+                    }
                 }
             }
         };
@@ -2239,13 +2377,22 @@ define('io.ox/office/editor/editor',
 
                 var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
-                    lastPara =  Position.getLastParaIndexInCell(paragraphs, localPos);
+                    lastPara =  Position.getLastParaIndexInCell(paragraphs, localPos),
+                    paragraphPosition = [];
 
                 localPos[paraIndex] = startPara; // always 'startPara', because paragraphs are deleted
 
+                for (var i = 0; i <= paraIndex; i++) {
+                    paragraphPosition.push(localPos[i]);
+                }
+
                 for (var i = startPara; i <= lastPara; i++) {
-                    // this.deleteParagraph(localPos);
-                    this.implDeleteParagraph(localPos);
+                    var isTable = this.getDOMPosition(paragraphPosition).node.nodeName === 'TABLE' ? true : false;
+                    if (isTable) {
+                        this.deleteTable(localPos);
+                    } else {
+                        this.deleteParagraph(localPos);
+                    }
                 }
             }
         };
@@ -2331,11 +2478,23 @@ define('io.ox/office/editor/editor',
             if (isInTable) {
 
                 var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
-                    thisPara = localPos[paraIndex];
+                    thisPara = localPos[paraIndex],
+                    paragraphPosition = [];
+
+                for (var i = 0; i <= paraIndex; i++) {
+                    paragraphPosition.push(localPos[i]);
+                }
 
                 for (var i = 0; i < thisPara; i++) {
                     localPos[paraIndex] = i;
-                    this.setAttributesToParagraphInCell(attributes, localPos);
+                    paragraphPosition[paraIndex] = i;
+
+                    // it can be a table next to a paragraph
+                    if (this.getDOMPosition(paragraphPosition).node.nodeName === 'TABLE') {
+                        this.setAttributesToCompleteTable(attributes, localPos);
+                    } else {
+                        this.setAttributesToParagraphInCell(attributes, localPos);
+                    }
                 }
             }
         };
@@ -2349,11 +2508,23 @@ define('io.ox/office/editor/editor',
 
                 var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'P'),
                     startPara = localPos[paraIndex] + 1,
-                    lastPara =  Position.getLastParaIndexInCell(paragraphs, position);
+                    lastPara =  Position.getLastParaIndexInCell(paragraphs, position),
+                    paragraphPosition = [];
+
+                for (var i = 0; i <= paraIndex; i++) {
+                    paragraphPosition.push(localPos[i]);
+                }
 
                 for (var i = startPara; i <= lastPara; i++) {
                     localPos[paraIndex] = i;
-                    this.setAttributesToParagraphInCell(attributes, localPos);
+                    paragraphPosition[paraIndex] = i;
+
+                    // it can be a table next to a paragraph
+                    if (this.getDOMPosition(paragraphPosition).node.nodeName === 'TABLE') {
+                        this.setAttributesToCompleteTable(attributes, localPos);
+                    } else {
+                        this.setAttributesToParagraphInCell(attributes, localPos);
+                    }
                 }
             }
         };
