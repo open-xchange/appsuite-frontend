@@ -2273,10 +2273,11 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.deleteAllParagraphsInCell = function (position) {
+        this.deleteAllParagraphsInCell = function (position, noOPs) {
 
             var localPos = _.copy(position, true),
-                isInTable = Position.isPositionInTable(paragraphs, localPos);
+                isInTable = Position.isPositionInTable(paragraphs, localPos),
+                noOPs = noOPs ? true : false;
 
             if (isInTable) {
 
@@ -2295,16 +2296,26 @@ define('io.ox/office/editor/editor',
 
                     if (i < lastParaInCell) {
                         if (isTable) {
-                            this.deleteTable(localPos);
+                            if (noOPs) {
+                                this.implDeleteTable(localPos);
+                            } else {
+                                this.deleteTable(localPos);
+                            }
                         } else {
-                            this.deleteParagraph(localPos);
+                            if (noOPs) {
+                                this.implDeleteParagraph(localPos);
+                            } else {
+                                this.deleteParagraph(localPos);
+                            }
                         }
                     } else {
-                        var startPos = _.copy(localPos, true),
-                            endPos = _.copy(localPos, true);
-                        startPos.push(0);
-                        endPos.push(Position.getParagraphLength(paragraphs, localPos));
-                        this.deleteText(startPos, endPos);
+                        if (! noOPs) {
+                            var startPos = _.copy(localPos, true),
+                                endPos = _.copy(localPos, true);
+                            startPos.push(0);
+                            endPos.push(Position.getParagraphLength(paragraphs, localPos));
+                            this.deleteText(startPos, endPos);
+                        }
                         this.implDeleteParagraphContent(localPos);
                     }
                 }
@@ -3022,7 +3033,9 @@ define('io.ox/office/editor/editor',
                     var position = _.copy(pos, true);
                     position.push(i);
                     position.push(j);
-                    this.deleteAllParagraphsInCell(position);
+                    // second parameter TRUE, so that no further
+                    // operations are created.
+                    this.deleteAllParagraphsInCell(position, true);
                 }
             }
         };
