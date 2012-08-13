@@ -101,6 +101,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     // static methods ---------------------------------------------------------
 
+    DOM.Point.createPointForNode = function (node) {
+        return new DOM.Point(node).validate();
+    };
+
     /**
      * Returns whether the two passed DOM points are equal.
      *
@@ -254,8 +258,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {DOM.Range}
      *  The new DOM range object.
      */
-    DOM.Range.makeRange = function (startNode, startOffset, endNode, endOffset) {
+    DOM.Range.createRange = function (startNode, startOffset, endNode, endOffset) {
         return new DOM.Range(new DOM.Point(startNode, startOffset), _.isObject(endNode) ? new DOM.Point(endNode, endOffset) : undefined);
+    };
+
+    DOM.Range.createRangeForNode = function (node) {
+        var range = new DOM.Range(DOM.Point.createPointForNode(node));
+        if (Utils.isTextNode(range.end.node)) {
+            range.end.offset = range.end.node.nodeValue.length;
+        } else {
+            range.end.offset += 1;
+        }
+        return range;
     };
 
     // static functions =======================================================
@@ -359,12 +373,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns the text node of the next or previous sibling of parent <span>
-     * element of the passed text node. Checks that the sibling node is a span
-     * element, and contains exactly one text node.
+     * Returns the text node of the next or previous sibling of the passed
+     * node. Checks that the sibling node is a span element, and contains
+     * exactly one text node.
      *
-     * @param {Text} textNode
-     *  The DOM text node.
+     * @param {Node|jQuery} node
+     *  The original DOM node. If this node is a text node, checks that it is
+     *  contained in its own <span> element and traverses to the next or
+     *  previous sibling of that span. Otherwise, directly traverses to the
+     *  next or previous sibling of the passed element node. If this object is
+     *  a jQuery collection, uses the first DOM node it contains.
      *
      * @param {Boolean} next
      *  If set to true, searches for the next sibling text node, otherwise
@@ -373,36 +391,62 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Text|Null}
      *  The sibling text node if existing, otherwise null.
      */
-    DOM.getSiblingTextNode = function (textNode, next) {
-
-        var // parent <span> element of passed text node
-            span = textNode.parentNode,
-            // sibling <span> element
-            siblingSpan = next ? span.nextSibling : span.previousSibling;
+    DOM.getSiblingTextNode = function (node, next) {
 
         function isTextSpan(span) {
             return span && (Utils.getNodeName(span) === 'span') && (span.childNodes.length === 1) && Utils.isTextNode(span.firstChild);
         }
 
-        return (isTextSpan(span) && isTextSpan(siblingSpan)) ? siblingSpan.firstChild : null;
+        // if the passed node is a text node, get its <span> parent element
+        node = Utils.getDomNode(node);
+        if (Utils.isTextNode(node)) {
+            node = isTextSpan(node.parentNode) ? node.parentNode : null;
+        }
+
+        // go to next or previous sibling of the element
+        if (node && Utils.isElementNode(node)) {
+            node = next ? node.nextSibling : node.previousSibling;
+        }
+
+        // extract the text node from the sibling element
+        return isTextSpan(node) ? node.firstChild : null;
     };
 
     // range iteration --------------------------------------------------------
 
+    DOM.validateAndSortRanges = function (ranges) {
+
+        // validate all ranges, adjust start/end points
+        _.chain(ranges).invoke('validate').invoke('adjust');
+
+        // sort the ranges by start point in DOM order
+        ranges.sort(function (range1, range2) {
+            return DOM.Point.comparePoints(range1.start, range2.start);
+        });
+
+        // merge ranges with their next siblings, if they overlap
+        for (var index = 0; index < ranges.length; index += 1) {
+            while ((index + 1 < ranges.length) && (DOM.Point.comparePoints(ranges[index].end, ranges[index + 1].start) >= 0)) {
+                if (DOM.Point.comparePoints(ranges[index].end, ranges[index + 1].end) < 0) {
+                    ranges[index].end = ranges[index + 1].end;
+                }
+                ranges.splice(index + 1, 1);
+            }
+        }
+    };
+
     /**
      * Iterates over all DOM nodes contained in the specified DOM text ranges.
-     * Before iteration starts, the passed array of DOM ranges will be cloned,
-     * and the DOM ranges in the new array will be adjusted (see method
-     * DOM.Range.adjust() for details). Then, the array will be sorted by the
-     * starting points of all DOM ranges, and overlapping ranges will be merged
-     * together. The iterator function may manipulate the sorted array of DOM
-     * ranges while iterating, see the comments in the description of the
-     * parameter 'iterator' for details.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges whose text nodes will be iterated. May be an array of
-     *  DOM range objects, or a single DOM range object. Will not be modified
-     *  while iterating (the iterator function receives a modified clone).
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges whose nodes will be iterated. Before iteration
+     *  starts, the DOM ranges in this array will be validated (see method
+     *  DOM.Range.validate() for details) and adjusted (see method
+     *  DOM.Range.adjust() for details). Then, the array will be sorted by the
+     *  starting points of all DOM ranges, and overlapping ranges will be
+     *  merged together. The iterator function may further manipulate this
+     *  array while iterating, see the comments in the description of the
+     *  parameter 'iterator' for details.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
@@ -415,9 +459,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  the array following the current DOM range, which will affect the
      *  iteration process accordingly. Changing the starting point of the
      *  current DOM range, or anything in the preceding DOM ranges in the array
-     *  will not have any effect. If the iterator deletes nodes from the DOM
-     *  tree, it MUST ensure that following DOM ranges in the array that refer
-     *  to the deleted node or its descendants will be updated accordingly.
+     *  will not have any effect. If the iterator modifies the DOM tree, it
+     *  MUST ensure that following DOM ranges in the array that refer to
+     *  deleted nodes or their descendants, or depend on any other DOM tree
+     *  change, will be updated accordingly.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -435,18 +480,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // shortcut for call to iterator function
         function callIterator() { return iterator.call(context, node, range, index, ranges); }
 
-        // convert parameter to an array, clone and adjust ranges, and sort the ranges in DOM order
-        ranges = _.chain(ranges).getArray().map(function (range) { return range.clone(); }).invoke('adjust').value();
-        ranges.sort(function (range1, range2) { return DOM.Point.comparePoints(range1.start, range2.start); });
+        // adjust start/end points of all ranges, sort the ranges in DOM order, merge overlapping ranges
+        DOM.validateAndSortRanges(ranges);
 
         for (index = 0; index < ranges.length; index += 1) {
             range = ranges[index];
-
-            // merge following overlapping ranges
-            while ((index + 1 < ranges.length) && (DOM.Point.comparePoints(range.end, ranges[index + 1].start) >= 0)) {
-                range.end = ranges[index + 1].end;
-                ranges.splice(index + 1, 1);
-            }
 
             // get first node in DOM range
             node = range.start.node;
@@ -469,7 +507,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             }
 
             // iterate as long as the end of the range has not been reached
-            while (node && (DOM.Point.comparePoints(new DOM.Point(node).validate(), range.end) < 0)) {
+            while (node && (DOM.Point.comparePoints(DOM.Point.createPointForNode(node), range.end) < 0)) {
                 // call iterator for the node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
                 // find next node
@@ -484,9 +522,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * ancestor node is visited exactly once even if it is the ancestor of
      * multiple nodes covered in the passed selection.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges whose nodes will be iterated. May be an array of DOM
-     *  range objects, or a single DOM range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges whose nodes will be iterated. The array will be
+     *  validated and sorted before iteration starts (see method
+     *  DOM.iterateNodesInRanges() for details).
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the DOM ranges. While searching for ancestor
@@ -550,9 +589,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * iterator function will receive the text node and the character range in
      * its text contents that is covered by the specified DOM ranges.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges whose text nodes will be iterated. May be an array of
-     *  DOM range objects, or a single DOM range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges whose text nodes will be iterated. The array
+     *  will be validated and sorted before iteration starts (see method
+     *  DOM.iterateNodesInRanges() for details).
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every text node. Receives
@@ -576,9 +616,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  @param {Boolean} [options.split]
      *      If set to true, text nodes that are not covered completely by a DOM
      *      range will be split before the iterator function will be called.
-     *      The iterator will always receives a text node and a character range
-     *      that covers the text node completely.
-     *
+     *      The iterator function will always receive a text node and a
+     *      character range that covers the text of that node completely.
+     *  @param {Function} [options.merge]
+     *      If set to a function, the visited text node may be merged with one
+     *      or both of its sibling text nodes after the iterator function
+     *      returns. The function attached to this option will be called once
+     *      or twice, always receiving exactly two DOM text nodes. It must
+     *      return whether these two text nodes can be merged to one text node.
+     *      It will be called once for the previous sibling of the visited text
+     *      node, and once for its next sibling (only if these sibling text
+     *      nodes exist).
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -587,34 +635,79 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.iterateTextPortionsInRanges = function (ranges, iterator, context, options) {
 
         var // split partly covered the text nodes before visiting them
-            split = Utils.getBooleanOption(options, 'split', false);
+            split = Utils.getBooleanOption(options, 'split', false),
+            // predicate whether to merge sibling text nodes after visiting them
+            merge = Utils.getFunctionOption(options, 'merge'),
+            // last visited text node and range, used in following iteration steps
+            lastTextNode = null, lastRange = null;
+
+        function replaceTextNodeInRanges(ranges, index, next, oldTextNode, newTextNode, offsetDiff) {
+
+            for (var range = null; next ? (index < ranges.length) : (0 <= index); next ? (index += 1) : (index -= 1)) {
+                range = ranges[index];
+
+                // update start point
+                if (range.start.node === oldTextNode) {
+                    range.start.node = newTextNode;
+                    range.start.offset += offsetDiff;
+                }
+
+                // update end point
+                if (range.end.node === oldTextNode) {
+                    range.end.node = newTextNode;
+                    range.end.offset += offsetDiff;
+                }
+            }
+        }
 
         // Split the passed text node if it is not covered completely.
         function splitTextNode(textNode, start, end, ranges, index) {
 
             var // following text node when splitting this text node
-                newTextNode = null,
-                // current range when updating range array
-                range = null;
+                newTextNode = null;
 
-            // Split text node to get the selected portion in its own span.
-            // The method DOM.splitTextNode() does not split the text node,
-            // if the passed offset points to the start or end of the text.
-            DOM.splitTextNode(textNode, start);
-            newTextNode = DOM.splitTextNode(textNode, end - start, { append: true });
-
-            // adjust following DOM ranges that may refer to more text in the
-            // passed text node which is now contained in the new text node
-            if (!newTextNode) { return; }
-            for (index += 1; index < ranges.length; index += 1) {
-                range = ranges[index];
-                if (range.start.node !== textNode) { return; }
-                range.start.node = newTextNode;
-                range.start.offset -= end;
-                if (range.end.node !== textNode) { return; }
-                range.end.node = newTextNode;
-                range.end.offset -= end;
+            // split text node to move the portion before start into its own span
+            if (start > 0) {
+                newTextNode = DOM.splitTextNode(textNode, start);
+                // adjust offsets of all following DOM ranges that refer to the text node
+                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, -start);
+                // new end position in shortened text node
+                end -= start;
             }
+
+            // split text node to move the portion after end into its own span
+            if (end < textNode.nodeValue.length) {
+                newTextNode = DOM.splitTextNode(textNode, end, { append: true });
+                // adjust all following DOM ranges that refer now to the new following text node
+                replaceTextNodeInRanges(ranges, index + 1, true, textNode, newTextNode, -end);
+            }
+        }
+
+        // Tries to merge the passed text node with its next or previous sibling.
+        function mergeSiblingTextNode(textNode, next, ranges, index) {
+
+            var // the sibling text node, depending on the passed direction
+                siblingTextNode = DOM.getSiblingTextNode(textNode, next),
+                // text in the passed and in the sibling node
+                text = null, siblingText = null;
+
+            if (siblingTextNode && merge.call(context, textNode, siblingTextNode)) {
+                // read texts from both text nodes
+                text = textNode.nodeValue;
+                siblingText = siblingTextNode.nodeValue;
+                // add text of the sibling text node to the passed text node, and update DOM ranges
+                if (next) {
+                    textNode.nodeValue = text + siblingText;
+                    replaceTextNodeInRanges(ranges, index, true, siblingTextNode, textNode, text.length);
+                } else {
+                    textNode.nodeValue = siblingText + text;
+                    replaceTextNodeInRanges(ranges, index, true, textNode, textNode, siblingText.length);
+                    replaceTextNodeInRanges(ranges, index, false, siblingTextNode, textNode, 0, false);
+                }
+                // remove the entire sibling span element
+                $(siblingTextNode.parentNode).remove();
+            }
+            return siblingTextNode;
         }
 
         // iterate over all nodes, and process the text nodes
@@ -625,9 +718,55 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // start and end offset of covered text in the text node
                 start = 0, end = 0;
 
-            // shortcut for call to iterator function
+            // Splits text node, calls iterator function, merges text node.
             function callIterator() {
-                return iterator.call(context, node, start, end, range, index, ranges);
+
+                var // the result of the iterator call
+                    result = null;
+
+                // split text node if specified
+                if (split) {
+                    splitTextNode(node, start, end, ranges, index);
+                    start = 0;
+                    end = node.nodeValue.length;
+                }
+
+                // call iterator function
+                result = iterator.call(context, node, start, end, range, index, ranges);
+
+                // merge text node if specified
+                if ((result !== Utils.BREAK) && _.isFunction(merge)) {
+
+                    // try to merge with previous sibling span
+                    if (start === 0) {
+                        mergeSiblingTextNode(node, false, ranges, index);
+                    }
+/*
+                    // try to merge with previous sibling span
+                    if ((start === 0) && (mergeSiblingTextNode(node, start, end, index, false) === lastTextNode)) {
+                        lastTextNode = lastRange = null;
+                    }
+
+                    // Try to merge the text node visited in the previous
+                    // iteration step with its next sibling. This cannot be done
+                    // before, otherwise merging with next text node may remove
+                    // nodes from the DOM that are still selected in following
+                    // ranges.
+                    if (lastTextNode) {
+                        mergeSiblingTextNode(lastTextNode, lastRange, true);
+                    }
+
+                    // remember current text node and range for next iteration step
+                    if (end === node.nodeValue.length) {
+                        lastTextNode = node;
+                        lastRange = range;
+                    } else {
+                        lastTextNode = lastRange = null;
+                    }
+*/
+                }
+
+                return result;
             }
 
             // call passed iterator for all text nodes, but skip empty text nodes
@@ -636,12 +775,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // calculate/validate start/end offset in the text node
                 start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
                 end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
-                // split text node if specified
-                if (split) {
-                    splitTextNode(node, start, end, ranges, index);
-                    start = 0;
-                    end = node.nodeValue.length;
-                }
                 // call iterator for the text node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
             } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
@@ -659,6 +792,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 }
             }
         });
+/*
+        // final merge with following text node
+        if (lastTextNode) {
+            mergeSiblingTextNode(lastTextNode, true);
+        }
+*/
     };
 
     // browser selection ------------------------------------------------------
@@ -689,7 +828,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         rootNode = Utils.getDomNode(rootNode);
 
         // end position if the range selects the entire root node
-        globalEndPos = new DOM.Point(rootNode).validate();
+        globalEndPos = DOM.Point.createPointForNode(rootNode);
         globalEndPos.offset += 1;
 
         // build an array of text range objects holding start and end nodes/offsets
@@ -699,7 +838,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             range = selection.getRangeAt(index);
 
             // translate to the internal text range representation
-            range = DOM.Range.makeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+            range = DOM.Range.createRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 
             // check that the nodes are inside the root node
             if (rootNode.contains(range.start.node) && (DOM.Point.comparePoints(range.end, globalEndPos) <= 0)) {

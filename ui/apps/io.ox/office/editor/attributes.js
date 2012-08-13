@@ -194,9 +194,10 @@ define('io.ox/office/editor/attributes',
      * Returns the values of all paragraph formatting attributes in the
      * specified DOM ranges.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
-     *  range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges to be visited. The array will be validated and
+     *  sorted before iteration starts (see method DOM.iterateNodesInRanges()
+     *  for details).
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -217,9 +218,8 @@ define('io.ox/office/editor/attributes',
                 hasNonNull = this.mergeElementAttributes(attributes, node);
 
             // exit iteration loop if there are no unambiguous attributes left
-            if (!hasNonNull) {
-                return Utils.BREAK;
-            }
+            if (!hasNonNull) { return Utils.BREAK; }
+
         }, this);
 
         return attributes;
@@ -229,9 +229,10 @@ define('io.ox/office/editor/attributes',
      * Changes specific paragraph formatting attributes in the specified DOM
      * ranges.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges to be formatted. May be an array of DOM range objects,
-     *  or a single DOM range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges to be formatted. The array will be validated
+     *  and sorted before iteration starts (see method
+     *  DOM.iterateNodesInRanges() for details).
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -323,6 +324,15 @@ define('io.ox/office/editor/attributes',
             set: function (element) {
                 $(element).css('line-height', 'normal');
             }
+        },
+
+        highlight: {
+            get: function (element) {
+                return $(element).hasClass('highlight');
+            },
+            set: function (element, state) {
+                $(element).toggleClass('highlight', state);
+            }
         }
 
     }); // converters.character
@@ -333,9 +343,10 @@ define('io.ox/office/editor/attributes',
      * Returns the values of all character formatting attributes in the
      * specified DOM ranges.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
-     *  range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges to be visited. The array will be validated and
+     *  sorted before iteration starts (see method DOM.iterateNodesInRanges()
+     *  for details).
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -356,9 +367,8 @@ define('io.ox/office/editor/attributes',
                 hasNonNull = this.mergeElementAttributes(attributes, textNode.parentNode);
 
             // exit iteration loop if there are no unambiguous attributes left
-            if (!hasNonNull) {
-                return Utils.BREAK;
-            }
+            if (!hasNonNull) { return Utils.BREAK; }
+
         }, this);
 
         return attributes;
@@ -370,9 +380,10 @@ define('io.ox/office/editor/attributes',
      * parent <span> elements which will be created as needed. Sibling <span>
      * elements containing the same formatting will be merged.
      *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges to be formatted. May be an array of DOM range objects,
-     *  or a single DOM range object.
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The DOM ranges to be formatted. The array will be validated
+     *  and sorted before iteration starts (see method
+     *  DOM.iterateNodesInRanges() for details).
      *
      * @param {HTMLElement|jQuery} rootNode
      *  The root node containing the text ranges. If this object is a jQuery
@@ -384,24 +395,16 @@ define('io.ox/office/editor/attributes',
     converters.character.setAttributes = function (ranges, rootNode, attributes) {
 
         var // self reference for local functions
-            self = this,
-            // last visited text node, used in following iteration step
-            lastTextNode = null;
+            self = this;
 
-        // Tries to merge the passed text node with its next or previous sibling.
-        function mergeSiblingTextNode(textNode, next) {
-            var siblingTextNode = DOM.getSiblingTextNode(textNode, next);
-            if (siblingTextNode && self.hasEqualElementAttributes(textNode.parentNode, siblingTextNode.parentNode)) {
-                // add text of the sibling text node to the passed text node
-                textNode.nodeValue = next ? (textNode.nodeValue + siblingTextNode.nodeValue) : (siblingTextNode.nodeValue + textNode.nodeValue);
-                // remove the entire sibling span element
-                $(siblingTextNode.parentNode).remove();
-            }
+        // Returns whether the passed text nodes contain equal character formatting.
+        function hasEqualAttributes(textNode1, textNode2) {
+            return self.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
         }
 
         // iterate all text nodes and change their formatting (passing the
-        // option split:true causes to split partly covered text nodes)
-        rootNode = Utils.getDomNode(rootNode);
+        // option 'split' causes to split partly covered text nodes, passing
+        // the option 'merge' will merge text spans with equal formatting)
         DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
 
             var // the parent <span> element of the text node
@@ -410,25 +413,8 @@ define('io.ox/office/editor/attributes',
             // set the new formatting attributes at the span element
             this.setElementAttributes(span, attributes);
 
-            // try to merge with previous sibling span with equal formatting
-            mergeSiblingTextNode(textNode, false);
+        }, this, { split: true, merge: hasEqualAttributes });
 
-            // Try to merge the last visited text node with its next sibling.
-            // This cannot be done in the previous iteration step, otherwise
-            // merging with next text node may remove nodes from the DOM that
-            // are still selected in following ranges, either directly (the
-            // text node) or indirectly (parent span of the text node).
-            if (lastTextNode && rootNode.contains(lastTextNode)) {
-                mergeSiblingTextNode(lastTextNode, true);
-            }
-            lastTextNode = textNode;
-
-        }, this, { split: true });
-
-        // final merge with following text node
-        if (lastTextNode) {
-            mergeSiblingTextNode(lastTextNode, true);
-        }
     };
 
     // static class Attributes ================================================

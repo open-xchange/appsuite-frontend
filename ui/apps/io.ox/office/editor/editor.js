@@ -377,6 +377,9 @@ define('io.ox/office/editor/editor',
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
+        // all DOM ranges highlighted (e.g. in quick search)
+        var highlightRanges = [];
+
         var dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
@@ -810,10 +813,8 @@ define('io.ox/office/editor/editor',
                     position.push(i);
                     position.push(j);
                     var cell = this.getDOMPosition(position);
-                    if (cell && ((cell.node.nodeName === 'TD') || (cell.node.nodeName === 'TH'))) {
-                        var node = cell.node.parentNode;
-                        var offset = $(cell.node).prevAll().length;
-                        ranges.push(DOM.Range.makeRange(node, offset, node, offset + 1));
+                    if (cell && $(cell.node).is('td, th')) {
+                        ranges.push(DOM.Range.createRangeForNode(cell.node));
                     }
                 }
             }
@@ -913,6 +914,11 @@ define('io.ox/office/editor/editor',
             return undomgr.hasRedo();
         };
 
+        function removeHighlightedRanges() {
+            Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: false });
+            highlightRanges = [];
+        }
+
         /**
          * Searches the passed text in the entire document, and selects the
          * first occurence.
@@ -921,6 +927,9 @@ define('io.ox/office/editor/editor',
          *  The text that will be searched in the document.
          */
         this.search = function (query) {
+
+            // remove old highlighting
+            removeHighlightedRanges();
 
             // check input parameter
             if (!_.isString(query) || !query.length) {
@@ -935,8 +944,8 @@ define('io.ox/office/editor/editor',
                     elementText = $(element).text().replace(/\s/g, ' ').toLowerCase(),
                     // first index of query text
                     textPos = elementText.indexOf(query.toLowerCase()),
-                    // the DOM text range containing the query text
-                    range = {};
+                    // the DOM start and end points containing the query text
+                    start = null, end = null;
 
                 // non-negative position: query text exists in the element
                 if (textPos >= 0) {
@@ -953,12 +962,12 @@ define('io.ox/office/editor/editor',
 
                             // test if text node contains the first character of the query text
                             if ((0 <= textPos) && (textPos < text.length)) {
-                                range.start = new DOM.Point(node, textPos);
+                                start = new DOM.Point(node, textPos);
                             }
 
                             // test if text node contains the last character of the query text
                             if (textPos + query.length <= text.length) {
-                                range.end = new DOM.Point(node, textPos + query.length);
+                                end = new DOM.Point(node, textPos + query.length);
                                 return Utils.BREAK;
                             }
 
@@ -968,25 +977,34 @@ define('io.ox/office/editor/editor',
                     }, this);
 
                     // position found, select it
-                    if (range.start && range.end) {
-                        this.grabFocus();
-                        DOM.setBrowserSelection(range);
-                        currentSelection = null;
-                        this.implStartCheckEventSelection();
+                    if (start && end) {
+                        //this.grabFocus();
+                        //DOM.setBrowserSelection(range);
+                        //currentSelection = null;
+                        //this.implStartCheckEventSelection();
+                        highlightRanges.push(new DOM.Range(start, end));
                     }
 
                     // return true to exit the outer _.find() loop iterating over all paragraphs
-                    return true;
+                    return highlightRanges.length >= 100;
                 }
             }, this);
+
+            Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: true });
         };
 
         this.processFocus = function (state) {
             Utils.info('Editor: received focus event: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
-                if (focused && currentSelection)
-                    this.setSelection(currentSelection); // Update Browser Selection, might got lost.
+                if (focused && currentSelection) {
+                    // remove highlighted ranges (e.g. from quick search)
+                    removeHighlightedRanges();
+                    // Update Browser Selection, might got lost.
+                    if (currentSelection) {
+                        this.setSelection(currentSelection);
+                    }
+                }
                 this.trigger('focus', state);
             }
         };

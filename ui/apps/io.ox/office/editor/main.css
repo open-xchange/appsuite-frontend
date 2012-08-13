@@ -76,6 +76,10 @@
                 font-family: 'Times New Roman',Times,serif;
                 font-size: 12pt;
             }
+            
+            span.highlight {
+                background-color: yellow !important;
+            }
         }
 
         &.plain {
