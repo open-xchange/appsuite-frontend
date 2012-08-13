@@ -240,8 +240,9 @@ define('io.ox/office/editor/editor',
      * field 'pos' contains the zero-based character index behind the cursor
      * position.
      */
-    function OXOPaM(oxoPosition) {
+    function OXOPaM(oxoPosition, selectedNodeName) {
         this.oxoPosition = oxoPosition;
+        this.selectedNodeName = selectedNodeName ? selectedNodeName : null;
 
         this.toString = function () {
             return oxoPosition.toString();
@@ -623,12 +624,17 @@ define('io.ox/office/editor/editor',
             return '';
         };
 
-        this.getTextNodeFromCurrentNode = function (node, offset) {
+        this.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
 
             var useFirstTextNode = true,  // can be false for final child in a paragraph
+                usePreviousCell = false,
                 localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
 
-            if (! localNode) {
+            if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
+                usePreviousCell = true;
+            }
+
+            if ((! localNode) || (usePreviousCell)) {
                 localNode = node.childNodes[offset - 1];
                 useFirstTextNode = false;
             }
@@ -655,10 +661,12 @@ define('io.ox/office/editor/editor',
             return new DOM.Point(textNode, offset);
         };
 
-        this.getOXOPosition = function (position) {
+        this.getOXOPosition = function (position, isEndPoint) {
 
             var node = position.node,
-                offset = position.offset;
+                offset = position.offset,
+                selectedNodeName = node.nodeName,
+                isEndPoint = isEndPoint ? true : false;
 
             // check input values
             if (! node) {
@@ -670,7 +678,7 @@ define('io.ox/office/editor/editor',
             // These DIVs need to be converted to the correct paragraph first.
             // Also cells in columns have to be converted at this point.
             if ($(node).is('DIV, P, TR, TD, TH')) {
-                var newNode = this.getTextNodeFromCurrentNode(node, offset);
+                var newNode = this.getTextNodeFromCurrentNode(node, offset, isEndPoint);
                 if (newNode) {
                     node = newNode.node;
                     offset = newNode.offset;
@@ -734,7 +742,7 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
             }
 
-            return new OXOPaM(oxoPosition);
+            return new OXOPaM(oxoPosition, selectedNodeName);
         };
 
         this.getDOMPosition = function (oxoPosition) {
@@ -846,7 +854,7 @@ define('io.ox/office/editor/editor',
                     domRange.start = _(domSelection).first().start;
                 }
 
-                currentSelection = new OXOSelection(this.getOXOPosition(domRange.start), this.getOXOPosition(domRange.end));
+                currentSelection = new OXOSelection(this.getOXOPosition(domRange.start, false), this.getOXOPosition(domRange.end, true));
 
                 // this selection need to be changed for some browsers to set selection into end of text node instead
                 // of start of following text node. it also needs to be set after double clicking a word.
@@ -860,18 +868,12 @@ define('io.ox/office/editor/editor',
 
         this.setSelection = function (oxosel) {
 
-            if (oxosel.hasRange() && (this.isFirstPositionInTableCell(oxosel.endPaM.oxoPosition))) {
-                oxosel.endPaM.oxoPosition.pop();
-                var returnObj = this.getLastPositionInPrevCell(oxosel.endPaM.oxoPosition);
-                oxosel.endPaM.oxoPosition = returnObj.position;
-            }
-
             var ranges = [];
 
             currentSelection = _.copy(oxosel, true);
 
             // Multi selection for rectangle cell selection in Firefox.
-            if (oxosel.hasRange() && (this.isCellSelection(oxosel.startPaM.oxoPosition, oxosel.endPaM.oxoPosition))) {
+            if (oxosel.hasRange() && (this.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = this.getCellDOMSelections(oxosel);
             } else {
                 // var oldSelection = this.getSelection();
@@ -1376,15 +1378,6 @@ define('io.ox/office/editor/editor',
             var selection = _selection || this.getSelection();
             if (selection.hasRange()) {
 
-                // Is the end position the starting point of a table cell ?
-                // Then the endpoint of the previous cell need to be used.
-                // This has to be done before adjust is called! adjust is problematic for tables.
-                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                    selection.endPaM.oxoPosition.pop();
-                    var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
-                    selection.endPaM.oxoPosition = returnObj.position;
-                }
-
                 undomgr.startGroup();
 
                 selection.adjust();
@@ -1434,7 +1427,7 @@ define('io.ox/office/editor/editor',
                         this.mergeParagraph(mergeselection);
                     }
 
-                } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                } else if (this.isCellSelection(selection.startPaM, selection.endPaM)) {
                     // This cell selection is a rectangle selection of cells in a table.
                     var startPos = _.copy(selection.startPaM.oxoPosition, true),
                         endPos = _.copy(selection.endPaM.oxoPosition, true);
@@ -1552,10 +1545,6 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
-                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                    selection.endPaM.oxoPosition.pop();
-                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
-                }
                 end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
             }
 
@@ -1572,10 +1561,6 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
-                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                    selection.endPaM.oxoPosition.pop();
-                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
-                }
                 end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
             }
 
@@ -1592,10 +1577,6 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
-                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                    selection.endPaM.oxoPosition.pop();
-                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
-                }
                 end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
             }
 
@@ -1612,10 +1593,6 @@ define('io.ox/office/editor/editor',
                 position = _.copy(selection.startPaM.oxoPosition, true);
 
             if (selection.hasRange()) {
-                if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                    selection.endPaM.oxoPosition.pop();
-                    selection.endPaM.oxoPosition = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition).position;
-                }
                 end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
             }
 
@@ -1726,15 +1703,6 @@ define('io.ox/office/editor/editor',
                 var selection = this.getSelection();
                 if (selection.hasRange()) {
 
-                    // Is the end position the starting point of a table cell ?
-                    // Then the endpoint of the previous cell need to be used.
-                    // This has to be done before adjust is called! adjust is problematic for tables.
-                    if (this.isFirstPositionInTableCell(selection.endPaM.oxoPosition)) {
-                        selection.endPaM.oxoPosition.pop();
-                        var returnObj = this.getLastPositionInPrevCell(selection.endPaM.oxoPosition);
-                        selection.endPaM.oxoPosition = returnObj.position;
-                    }
-
                     selection.adjust();
 
                     if (this.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
@@ -1782,7 +1750,7 @@ define('io.ox/office/editor/editor',
                             this.setAttributes(attributes, localstartPosition, selection.endPaM.oxoPosition);
                         }
 
-                    } else if (this.isCellSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    } else if (this.isCellSelection(selection.startPaM, selection.endPaM)) {
                         // This cell selection is a rectangle selection of cells in a table.
                         var startPos = _.copy(selection.startPaM.oxoPosition, true),
                             endPos = _.copy(selection.endPaM.oxoPosition, true);
@@ -1958,10 +1926,10 @@ define('io.ox/office/editor/editor',
             return isSameLevel;
         };
 
-        this.isCellSelection = function (posA, posB) {
-            // If cells in a table are selected, posA must be the start position of a cell and posB
-            // must be the last position of a cell
-            return (this.isFirstPositionInTableCell(posA) && this.isLastPositionInTableCell(posB));
+        this.isCellSelection = function (startPaM, endPaM) {
+            // If cells in a table are selected, both positions must have the selectedNodeName 'tr'.
+            // This is valid only in Firefox.
+            return (startPaM.selectedNodeName === 'TR' && endPaM.selectedNodeName === 'TR');
         };
 
         this.isFirstPositionInTableCell = function (pos) {
