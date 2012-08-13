@@ -118,10 +118,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             return function () {
                 if (tmp.length === 0) {
                     tmp = list.slice(pos, pos + 5).sort(randomSort);
-                    console.log('KULER', tmp, pos, pos + 5, list);
                     pos = pos === 0 ? 5 : 0;
                 }
-                console.log('KULER-VALUE', tmp[0]);
                 return tmp.shift();
             };
         }());
