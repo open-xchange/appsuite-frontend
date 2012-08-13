@@ -11,7 +11,10 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 
-define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/editor/dom'], function (Utils, DOM) {
+define('io.ox/office/editor/position',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/editor/dom',
+     'io.ox/office/editor/oxopam'], function (Utils, DOM, OXOPaM) {
 
     'use strict';
 
@@ -25,6 +28,227 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
     var Position = {};
 
     // static functions =======================================================
+
+    /**
+     * The central function to calculate logical position from dom positions.
+     * Receiving a dom position consisting of a dom node and an offset, it
+     * calculates the logical position (oxoPosition) that is an array of
+     * integer values. This logical position is saved together with the
+     * property nodeName of the dom node in the OXOPaM object, that is
+     * the return value of this function.
+     *
+     * @param {DOM.Point} domposition
+     *  The dom position, consisting of dom node and offset, whose logical
+     *  position will be calculated.
+     *
+     * @param {jQuery} maindiv
+     *  The jQuery object of a DIV node, that is the frame for the complete
+     *  search and calculation process. No dom position outside of this
+     *  maindiv can be calculated.
+     *
+     * @param {Boolean} isEndPoint
+     *  The information, if the specified domposition is the end point
+     *  of a range. This is important for some calculations, where the
+     *  dom node is a row inside a table.
+     *
+     * @returns {OXOPaM}
+     *  The calculated logical position (OXOPaM.oxoPosition) together with
+     *  the property nodeName of the dom node parameter.
+     */
+    Position.getOXOPosition = function (domposition, maindiv, isEndPoint) {
+
+        var node = domposition.node,
+            offset = domposition.offset,
+            selectedNodeName = node.nodeName,
+            isEndPoint = isEndPoint ? true : false;
+
+        // check input values
+        if (! node) {
+            Utils.error('Position.getOXOPosition(): Invalid DOM position. Node not defined');
+            return;
+        }
+
+        // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
+        // These DIVs need to be converted to the correct paragraph first.
+        // Also cells in columns have to be converted at this point.
+        if ($(node).is('DIV, P, TR, TD, TH')) {
+            var newNode = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
+            if (newNode) {
+                node = newNode.node;
+                offset = newNode.offset;
+            } else {
+                Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                return;
+            }
+        }
+
+        // Checking offset for text nodes
+        if ((node.nodeType === 3) && !_.isNumber(offset)) {
+            Utils.error('Position.getOXOPosition(): Invalid start position: text node without offset');
+            return;
+        }
+
+        if (offset < 0) {
+            Utils.error('Position.getOXOPosition(): Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            return;
+        }
+
+        // Check, if the selected node is a descendant of the maindiv
+        if (!maindiv.get(0).contains(node)) { // range not in text area
+            Utils.error('Position.getOXOPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            return;
+        }
+
+        // Calculating the position inside the editor div.
+        var oxoPosition = [],
+            evaluateOffset = (node.nodeType === 3) ? true : false,  // Is evaluation of offset required?
+            offsetEvaluated = false,
+            textLength = 0;
+
+        // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
+        // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
+        // Column must be integrated after row -> a buffer is required.
+
+        for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
+            if ($(node).is('TABLE, P, TR, TH, TD')) {
+                oxoPosition.unshift($(node).prevAll().length);  // zero based
+                evaluateOffset = false;
+            }
+            if (evaluateOffset) {
+                for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
+                    textLength += $(prevNode).text().length;
+                }
+                offsetEvaluated = true;
+            }
+        }
+
+        if (offsetEvaluated) {
+            oxoPosition.push(textLength + offset);
+        }
+
+        if ((node.nodeType === 3) && (! offsetEvaluated)) {
+            Utils.warn('Position.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
+        }
+
+        return new OXOPaM(oxoPosition, selectedNodeName);
+    };
+
+    /**
+     * The central function to calculate a dom position from a logical
+     * position. Receiving a logical position (oxoPosition) together with
+     * the start node, the current dom node and the corresponding offset
+     * are determined. This information is stored in the DOM.Point object.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} oxoPosition
+     *  The logical position.
+     *
+     * @returns {DOM.Point}
+     *  The calculated dom position consisting of dom node and offset.
+     *  Offset is only set for text nodes, otherwise it is undefined.
+     */
+    Position.getDOMPosition = function (startnode, oxoPosition) {
+
+        var oxoPos = _.copy(oxoPosition, true),
+            node = startnode,
+            offset = null;
+
+        if (oxoPosition === undefined) {
+            // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
+            return;
+        }
+
+        if (oxoPos[0] === undefined) {
+            // Utils.error('Position.getDOMPosition(): Position is undefined!');
+            return;
+        }
+
+        while (oxoPos.length > 0) {
+
+            var returnObj = Position.getNextChildNode(node, oxoPos.shift());
+
+            if (returnObj) {
+                if (returnObj.node) {
+                    node = returnObj.node;
+                    if (returnObj.offset) {
+                        offset = returnObj.offset;
+                    }
+                } else {
+                    Utils.warn('Position.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
+                    return;
+                }
+            } else {
+                Utils.warn('Position.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
+                return;
+            }
+        }
+
+        return new DOM.Point(node, offset);
+    };
+
+    /**
+     * Helper function for Position.getOxoPosition. If the node is not
+     * a text node, this function determines the correct text node, that
+     * is used for calculation of the logical position instead of the
+     * specified node. This could be a 'DIV', 'TABLE', 'P', ... . It is
+     * often browser dependent, which node type is used after a double
+     * or a triple click.
+     *
+     * @param {Node} node
+     *  The dom node, whose logical position will be calculated.
+     *
+     * @param {Number} offset
+     *  The offset of the dom node, whose logical position will be
+     *  calculated.
+     *
+     * @param {Boolean} isEndPoint
+     *  The information, if the specified domposition is the end point
+     *  of a range. This is important for some calculations, where the
+     *  dom node is a row inside a table.
+     *
+     * @returns {DOM.Point}
+     *  The text node, that will be used in Position.getOxoPosition
+     *  for the calculation of the logical position.
+     */
+    Position.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
+
+        var useFirstTextNode = true,  // can be false for final child in a paragraph
+            usePreviousCell = false,
+            localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
+
+        if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
+            usePreviousCell = true;
+        }
+
+        if ((! localNode) || (usePreviousCell)) {
+            localNode = node.childNodes[offset - 1];
+            useFirstTextNode = false;
+        }
+
+        // special handling for <br>, use last preceding text node instead
+        if (localNode && (Utils.getNodeName(localNode) === 'br')) {
+            localNode = localNode.previousSibling;
+            useFirstTextNode = false;
+        }
+
+        // find the first or last text node contained in the element
+        var textNode = null;
+        if (localNode) {
+            textNode = Utils.isTextNode(localNode) ? localNode : Utils.findDescendantNode(localNode, Utils.isTextNode, this, { reverse: !useFirstTextNode });
+        }
+
+        if (! textNode) {
+            Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + ')');
+            return;
+        }
+
+        var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
+
+        return new DOM.Point(textNode, offset);
+    };
 
     /**
      * Returns the following node and offset corresponding to the next
@@ -636,6 +860,67 @@ define('io.ox/office/editor/position', ['io.ox/office/tk/utils', 'io.ox/office/e
         }
 
         return paraLen;
+    };
+
+    /**
+     * Checks, if a specified position is the first position
+     * inside a text node in a cell in a table.
+     *
+     * @param {OXOPam.oxoPosition} pos
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the position is the first position inside
+     *  a table cell, otherwise false.
+     */
+    Position.isFirstPositionInTableCell = function (pos) {
+
+        var isCellStartPosition = false,
+            localPos = _.copy(pos, true);
+
+        if (localPos.pop() === 0) {   // start position
+            if (localPos.pop() === 0) {   // start paragraph
+                var domPos = Position.getDOMPosition(localPos);
+                if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                    isCellStartPosition = true;
+                }
+            }
+        }
+
+        return isCellStartPosition;
+    };
+
+    /**
+     * Checks, if a specified position is the last position
+     * inside a text node in a cell in a table.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} pos
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the position is the last position inside
+     *  a table cell, otherwise false.
+     */
+    Position.isLastPositionInTableCell = function (startnode, pos) {
+        var isCellEndPosition = false,
+            localPos = _.copy(pos, true);
+
+        var pos = localPos.pop();
+        if (pos === Position.getParagraphLength(startnode, localPos)) {   // last position
+            var lastPara = localPos.pop();
+            if (lastPara ===  Position.getLastParaIndexInCell(startnode, localPos)) {   // last paragraph
+                var domPos = Position.getDOMPosition(localPos);
+                if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                    isCellEndPosition = true;
+                }
+            }
+        }
+
+        return isCellEndPosition;
     };
 
 
