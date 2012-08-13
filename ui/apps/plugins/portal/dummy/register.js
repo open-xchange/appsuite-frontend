@@ -11,7 +11,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/dummy/register", ["io.ox/core/extensions", "less!"], function (ext) {
+define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext) {
 
     "use strict";
     
