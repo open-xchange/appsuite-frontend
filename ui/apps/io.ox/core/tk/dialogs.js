@@ -88,6 +88,8 @@ define("io.ox/core/tk/dialogs",
                     deferred.resolve(action, data, self.getContentNode().get(0));
                     close();
                 }
+                
+                e.preventDefault();
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -277,15 +279,15 @@ define("io.ox/core/tk/dialogs",
         };
 
         nodes.underlay.click(function () {
-            if (o.underlayAction) {
+            if (o && o.underlayAction) {
                 process(o.underlayAction);
-            } else if (o.easyOut) {
+            } else if (o && o.easyOut) {
                 process("cancel");
             }
         });
 
         nodes.popup.click(function () {
-            if (o.defaultAction) {
+            if (o && o.defaultAction) {
                 process(o.defaultAction);
             }
         });

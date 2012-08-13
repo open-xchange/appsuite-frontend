@@ -29,6 +29,7 @@ define(function () {
             signin: [],
             core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
+            keychain: ['io.ox/oauth/keychain', "io.ox/mail/accounts/keychain"],
             portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter'],
 //            portal: ['rss'],
             notifications: ['calendar', 'mail'],
