@@ -11,7 +11,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext) {
+define("plugins/portal/dummy/register", ["io.ox/core/extensions", "less!"], function (ext) {
 
     "use strict";
     
@@ -29,11 +29,17 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
         );
         return $.Deferred().resolve($node);
     };
-    
     for (var i = 0; i < 25; i++) {
+        //var color = 'rgb(' + (200 + i * (i % 3)) + ',' + (200 + i * ((i + 1) % 3)) + ',' + (200 + i * ((i + 2) % 3)) + ')';
+        //var palette = ["FF6728", "913C00", "432704", "A88247", "E5BD6C"]; //kuler palette: "mars" by robertnbrown
+        var palette = ["ADACA2", "828594", "614B59", "BFC47D", "E3E2B3"]; //kuler palette: "backstage" by robertnbrown
+        var color = '#' + palette[i % palette.length];
+        if (i % (palette.length * 2)) {
+            //color = darken(color);
+        }
         ext.point("io.ox/portal/widget").extend({
             id: 'dummy' + i,
-            background: 'rgb(' + (200 + i * (i % 3)) + ',' + (200 + i * ((i + 1) % 3)) + ',' + (200 + i * ((i + 2) % 3)) + ')',
+            background: color,
             index: 200,
             title: 'Dummy #' + i,
             load: load,
