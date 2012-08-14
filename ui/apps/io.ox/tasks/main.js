@@ -32,12 +32,19 @@ define("io.ox/tasks/main", function () {
         
         app.setWindow(win);
         
+        
+        // This appends a node into our window
+        win.nodes.main.append($("<h1>").text("Hello!"));
+        
+        
+        // Let's define some event handlers on our window
         win.on("show", function () {
+            // Gets called whenever the window is shown
             console.log("Wow! I'm here!");
-            win.nodes.main.append($("<h1>").text("Hello!"));
         });
         
         win.on("hide", function () {
+            // Gets called whenever the window is hidden
             console.log("Bye bye");
         });
         
