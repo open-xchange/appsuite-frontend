@@ -206,19 +206,19 @@ define('io.ox/office/editor/view',
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
-            .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 3, autoExpand: true, label: 'Line Spacing', tooltip: gt('Line Spacing') })
-                .addButton({ type: 'percent', value: 100 }, { label: '1',   tooltip: gt('Single') })
-                .addButton({ type: 'percent', value: 150 }, { label: '1.5', tooltip: gt('One and a Half') })
-                .addButton({ type: 'percent', value: 200 }, { label: '2',   tooltip: gt('Double') })
+            .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 1, autoExpand: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
+                .addButton(Attributes.LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
+                .addButton(Attributes.LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
+                .addButton(Attributes.LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('insert/table', new TableSizeChooser())
             .addSeparator()
-            .addButton('table/insert/row', { icon: 'icon-io-ox-table-insert-row', tooltip: gt('Insert Row') })
-            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
-            .addButton('table/delete/row', { icon: 'icon-io-ox-table-delete-row', tooltip: gt('Delete Row') })
-            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Column') });
+            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Rows') })
+            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Columns') })
+            .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete Rows') })
+            .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('debug', { label: gt('Debug') })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })

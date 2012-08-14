@@ -142,6 +142,9 @@ i.icon-io-ox-italic.de_DE        { background-position: -140px      0; }
 i.icon-io-ox-underline           { background-position: -160px      0; }
 i.icon-io-ox-underline.fr_FR     { background-position: -180px      0; }
 i.icon-io-ox-font-height         { background-position: -200px      0; }
+i.icon-io-ox-line-spacing-1      { background-position: -220px      0; }
+i.icon-io-ox-line-spacing-1-5    { background-position: -240px      0; }
+i.icon-io-ox-line-spacing-2      { background-position: -260px      0; }
 
 i.icon-io-ox-table               { background-position:      0  -20px; }
 i.icon-io-ox-table-insert-row    { background-position:  -20px  -20px; }

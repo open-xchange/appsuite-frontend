@@ -27,6 +27,9 @@ define('io.ox/office/editor/attributes',
 
     // constants ==============================================================
 
+    /**
+     * Predefined values for the 'lineheight' attribute for paragraphs.
+     */
     Attributes.LineHeight = {
 
         SINGLE: { type: 'percent', value: 100 },
@@ -68,7 +71,7 @@ define('io.ox/office/editor/attributes',
 
         // set the CSS formatting
         switch (lineHeight.type) {
-        case 'point':
+        case 'fixed':
             // validate the value
             lineHeight.value = height = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
             break;
@@ -76,6 +79,11 @@ define('io.ox/office/editor/attributes',
             // validate the value
             lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
             height = lineHeight.value + fontSize;
+            break;
+        case 'atleast':
+            // validate the value
+            lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+            height = Math.max(lineHeight.value, fontSize);
             break;
         default:
             // validate the type and percentage value
