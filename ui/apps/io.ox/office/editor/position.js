@@ -364,7 +364,7 @@ define('io.ox/office/editor/position',
         while (oxoPos.length > 0) {
 
             var valueSave = oxoPos.shift(),
-                returnObj = this.getNextChildNode(node, valueSave);
+                returnObj = Position.getNextChildNode(node, valueSave);
 
             counter++;
 
@@ -921,6 +921,393 @@ define('io.ox/office/editor/position',
         }
 
         return isCellEndPosition;
+    };
+
+    /**
+     * Checks, if two logical positions reference a position
+     * inside the same paragraph. Both logical positions must
+     * be 'complete'. They must contain the character position
+     * as last value. Only this value can be different.
+     *
+     * @param {OXOPam.oxoPosition} posA
+     *  The logical position.
+     *
+     * @param {OXOPam.oxoPosition} posB
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if both positions reference a position within
+     *  the same paragraph. Otherwise false is returned.
+     */
+    Position.isSameParagraph = function (posA, posB) {
+        // Assuming that the position is complete, only the last parameter
+        // is allowed to be different.
+
+        var isSamePara = true;
+
+        if (posA.length === posB.length) {
+            var max = posA.length - 1;  // excluding position
+            for (var i = 0; i < max; i++) {
+                if (posA[i] !== posB[i]) {
+                    isSamePara = false;
+                    break;
+                }
+            }
+        } else {
+            isSamePara = false;
+        }
+
+        return isSamePara;
+    };
+
+    /**
+     * Checks, if two logical positions reference two positions
+     * inside two adjacent paragraphs. Both logical positions must
+     * be 'complete'. They must contain the character position
+     * as last value. Only the last two values in the array
+     * representing the paragraph and the character position
+     * can be different.
+     *
+     * @param {OXOPam.oxoPosition} posA
+     *  The logical position.
+     *
+     * @param {OXOPam.oxoPosition} posB
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the positions reference positions within
+     *  two adjacent paragraphs. Otherwise false is returned.
+     */
+    Position.isSameParagraphLevel = function (posA, posB) {
+        // Assuming that the position is complete, only the two last parameters
+        // are allowed to be different.
+        var isSameLevel = true;
+
+        if (posA.length === posB.length) {
+            var max = posA.length - 2;  // excluding position and paragraph
+            for (var i = 0; i < max; i++) {
+                if (posA[i] !== posB[i]) {
+                    isSameLevel = false;
+                    break;
+                }
+            }
+        } else {
+            isSameLevel = false;
+        }
+
+        return isSameLevel;
+    };
+
+    /**
+     * Checks, if two logical positions of the same length
+     * reference two positions inside the same table. All
+     * values inside the logical position of representing the
+     * table node, must be identical.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+
+     * @param {OXOPam.oxoPosition} posA
+     *  The logical position.
+     *
+     * @param {OXOPam.oxoPosition} posB
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the positions have the same length and
+     *  reference positions within the same table.
+     *  Otherwise false is returned.
+     */
+    Position.isSameTableLevel = function (startnode, posA, posB) {
+        // If both position are in the same table, but in different cells (this
+        // can happen in Chrome, but not in Firefox. In Firefox the complete cells
+        // are selected.
+        var isSameTableLevel = true;
+
+        if (posA.length === posB.length) {
+            var tableA = Position.getLastPositionFromPositionByNodeName(startnode, posA, 'TABLE'),
+                tableB = Position.getLastPositionFromPositionByNodeName(startnode, posB, 'TABLE');
+
+            // Both have to be identical
+            if (tableA.length === tableB.length) {
+                var max = tableA.length - 1;
+                for (var i = 0; i <= max; i++) {
+                    if (tableA[i] !== tableB[i]) {
+                        isSameTableLevel = false;
+                        break;
+                    }
+                }
+            } else {
+                isSameTableLevel = false;
+            }
+        } else {
+            isSameTableLevel = false;
+        }
+
+        return isSameTableLevel;
+    };
+
+    /**
+     * Checks, if two logical positions represent a cell selection.
+     * This means, that the logical position was calculated from a
+     * dom node, that was a table row. Therefore 'selectedNodeName'
+     * is saved in the OXOPaM object next to OXOPaM.oxoPosition.
+     * selectedNodeName === 'TR' is at the moment only supported
+     * from Firefox.
+     *
+     * @param {OXOPam} startPaM
+     *  The OXOPaM object containing the logical position.
+     *
+     * @param {OXOPam} endPaM
+     *  The OXOPaM object containing the logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if both positions were calculated from dom
+     *  nodes with the nodeName property set to 'TR'.
+     *  Otherwise false is returned.
+     */
+    Position.isCellSelection = function (startPaM, endPaM) {
+        // If cells in a table are selected, both positions must have the selectedNodeName 'tr'.
+        // This is valid only in Firefox.
+        return (startPaM.selectedNodeName === 'TR' && endPaM.selectedNodeName === 'TR');
+    };
+
+    /**
+     * Calculating the last logical position inside a paragraph or a
+     * table. In a table the last cell can again be filled with a table.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} paragraph
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the last logical position inside a paragraph or
+     *  a table. If the parameter 'paragraph' is a logical position, that
+     *  is not located inside a table or paragraph, null is returned.
+     */
+    Position.getLastPositionInParagraph = function (startnode, paragraph) {
+
+        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'P, TABLE');
+
+        if ((paraPosition) && (paraPosition.length > 0)) {
+
+            while (Position.getDOMPosition(startnode, paraPosition).node.nodeName === 'TABLE') {
+                paraPosition.push(Position.getLastRowIndexInTable(startnode, paraPosition));
+                paraPosition.push(Position.getLastColumnIndexInTable(startnode, paraPosition));
+                paraPosition.push(Position.getLastParaIndexInCell(startnode, paraPosition));
+            }
+
+            paraPosition.push(Position.getParagraphLength(startnode, paraPosition));
+        }
+
+        return paraPosition;
+    };
+
+    /**
+     * Calculating the first logical position inside a paragraph or a
+     * table. In a table the first cell can again be filled with a table.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} paragraph
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the first logical position inside a paragraph or
+     *  a table. If the parameter 'paragraph' is a logical position, that
+     *  is not located inside a table or paragraph, null is returned.
+     */
+    Position.getFirstPositionInParagraph = function (startnode, paragraph) {
+
+        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'P, TABLE');
+
+        if ((paraPosition) && (paraPosition.length > 0)) {
+
+            while (Position.getDOMPosition(startnode, paraPosition).node.nodeName === 'TABLE') {
+                paraPosition.push(0);  // row
+                paraPosition.push(0);  // column
+                paraPosition.push(0);  // paragraph
+            }
+
+            paraPosition.push(0);
+        }
+
+        return paraPosition;
+    };
+
+    /**
+     * Calculating the first logical position of a following table
+     * cell. Following means, from left to right. If the last cell in
+     * a row is reached, the first cell in the following row is used.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} paragraph
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition, Boolean}
+     *  Returns the first logical position inside a following cell. If the
+     *  end of the table is reached, the value for 'endOfTable' is set to
+     *  true. Otherwise it is false.
+     */
+    Position.getFirstPositionInNextCell = function (startnode, paragraph) {
+
+        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
+            endOfTable = false;
+
+        if ((paragraph) && (paragraph.length > 0)) {
+
+            var column = paragraph.pop(),
+                row = paragraph.pop(),
+                lastRow = Position.getLastRowIndexInTable(startnode, paragraph),
+                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+
+            if (column < lastColumn) {
+                column += 1;
+            } else {
+                if (row < lastRow) {
+                    row += 1;
+                    column = 0;
+                } else {
+                    endOfTable = true;
+                }
+            }
+
+            if (! endOfTable) {
+                paragraph.push(row);
+                paragraph.push(column);
+                paragraph.push(0);  // first paragraph
+                paragraph = Position.getFirstPositionInParagraph(startnode, paragraph);
+            }
+        }
+
+        return {position: paragraph, endOfTable: endOfTable};
+    };
+
+    /**
+     * Calculating the last logical position of a previous table
+     * cell. Previous means, from right to left. If the first cell in
+     * a row is reached, the last cell in the previous row is used.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} paragraph
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition, Boolean}
+     *  Returns the last logical position inside a previous cell. If the
+     *  begin of the table is reached, the value for 'beginOfTable' is set to
+     *  true. Otherwise it is false.
+     */
+    Position.getLastPositionInPrevCell = function (startnode, paragraph) {
+
+        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
+            beginOfTable = false;
+
+        if ((paragraph) && (paragraph.length > 0)) {
+
+            var column = paragraph.pop(),
+                row = paragraph.pop(),
+                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+
+            if (column > 0) {
+                column -= 1;
+            } else {
+                if (row > 0) {
+                    row -= 1;
+                    column = lastColumn;
+                } else {
+                    beginOfTable = true;
+                }
+            }
+
+            if (! beginOfTable) {
+                paragraph.push(row);
+                paragraph.push(column);
+                paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
+                paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
+            }
+        }
+
+        return {position: paragraph, beginOfTable: beginOfTable};
+    };
+
+    /**
+     * Calculating the first logical position of a table cell
+     * specified by the parameter 'cellPosition'.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} cellPosition
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the first logical position inside the specified cell.
+     */
+    Position.getFirstPositionInCurrentCell = function (startnode, cellPosition) {
+
+        var position = _.copy(cellPosition, true);
+
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
+        position.push(0);  // first paragraph or table
+        position = Position.getFirstPositionInParagraph(startnode, position);
+
+        return position;
+    };
+
+    /**
+     * Calculating the last logical position of a table cell
+     * specified by the parameter 'cellPosition'.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} cellPosition
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the last logical position inside the specified cell.
+     */
+    Position.getLastPositionInCurrentCell = function (startnode, cellPosition) {
+
+        var position = _.copy(cellPosition, true);
+
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
+        position.push(Position.getLastParaIndexInCell(startnode, position));  // last paragraph or table
+        position = Position.getLastPositionInParagraph(startnode, position);
+
+        return position;
+    };
+
+    /**
+     * Calculating the last logical position of the document.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the last logical position inside the document.
+     */
+    Position.getLastPositionInDocument = function (startnode) {
+
+        var lastPara = startnode.length - 1,
+            oxoPosition = Position.getLastPositionInParagraph(startnode, [lastPara]);
+
+        return oxoPosition;
     };
 
 
