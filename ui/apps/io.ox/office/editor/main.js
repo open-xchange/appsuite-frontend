@@ -235,8 +235,8 @@ define('io.ox/office/editor/main',
 
             // create controller and register editors
             controller = new Controller(app)
-                .registerEditor(editors[Editor.TextMode.RICH], null)
-                .registerEditor(editors[Editor.TextMode.PLAIN], /^format\//);
+                .registerEditor(editors.rich, null)
+                .registerEditor(editors.plain, /^format\//);
 
             // editor view
             view = new View(win, controller, editors);
@@ -717,7 +717,7 @@ define('io.ox/office/editor/main',
         // initialization -----------------------------------------------------
 
         // create the rich-text and plain-text editor
-        _(Editor.TextMode).each(function (textMode) {
+        _(['rich', 'plain']).each(function (textMode) {
             var // class names for the editor
                 classes = 'io-ox-office-editor user-select-text ' + textMode,
                 // the editor root node
@@ -745,7 +745,7 @@ define('io.ox/office/editor/main',
         };
 
         // primary editor for global operations (e.g. save)
-        editor = editors[Editor.TextMode.RICH];
+        editor = editors.rich;
 
         // listen to operations and deliver them to editors and output console
         _(editors).each(function (editor) {

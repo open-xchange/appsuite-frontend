@@ -429,6 +429,11 @@ define('io.ox/office/editor/editor',
         // Maybe only applyOperation_s_, where param might be operation or operation[] ?
         this.applyOperation = function (operation, bRecord, bNotify) {
 
+            if (!_(operation).isObject()) {
+                Utils.error('Editor.applyOperation(): expecting operation object');
+                return;
+            }
+
             if (blockOperations) {
                 // This can only happen if someone tries to apply new operation in the operation notify.
                 // This is not allowed because a document manipulation method might be split into multiple operations, following operations would have invalid positions then.
@@ -437,6 +442,9 @@ define('io.ox/office/editor/editor',
             }
 
             blockOperations = true;
+
+            // remove highlighting before changing the DOM which invalidates the positions in highlightRanges
+            this.removeHighlighting();
 
             // Clone operation now, because undo might manipulate it when merging with previous one...
             var notifyOperation = _.clone(operation, true);
@@ -470,7 +478,8 @@ define('io.ox/office/editor/editor',
                 this.implDeleteText(operation.start, operation.end);
             }
             else if (operation.name === OP_ATTR_SET) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo() && _.isBoolean(operation.value)) {
+                    // TODO: non-boolean attributes
                     // Hack - this is not the correct Undo - but the attr toggle from the browser will have the effect we want to see ;)
                     var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
@@ -589,10 +598,8 @@ define('io.ox/office/editor/editor',
         this.applyOperations = function (theOperations, bRecord, notify) {
 
             if (_(theOperations).isArray()) {
-                _(theOperations).each(function (operation, i) {
-                    if (_(operation).isObject()) {
-                        this.applyOperation(operation, bRecord, notify);
-                    }
+                _(theOperations).each(function (operation) {
+                    this.applyOperation(operation, bRecord, notify);
                 }, this);
             }
         };
@@ -649,9 +656,9 @@ define('io.ox/office/editor/editor',
             }
 
             // find the first or last text node contained in the element
-            var textNode = null;
-            if (localNode) {
-                textNode = Utils.isTextNode(localNode) ? localNode : Utils.findDescendantNode(localNode, Utils.isTextNode, this, { reverse: !useFirstTextNode });
+            var textNode = localNode;
+            if (localNode && (localNode.nodeType !== 3)) {
+                textNode = Utils.findDescendantNode(localNode, Utils.JQ_TEXTNODE_SELECTOR, { reverse: !useFirstTextNode });
             }
 
             if (! textNode) {
@@ -668,8 +675,9 @@ define('io.ox/office/editor/editor',
 
             var node = position.node,
                 offset = position.offset,
-                selectedNodeName = node.nodeName,
-                isEndPoint = isEndPoint ? true : false;
+                selectedNodeName = node.nodeName;
+
+            isEndPoint = isEndPoint ? true : false;
 
             // check input values
             if (! node) {
@@ -916,83 +924,111 @@ define('io.ox/office/editor/editor',
             return undomgr.hasRedo();
         };
 
-        function removeHighlightedRanges() {
-            Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: false });
-            highlightRanges = [];
-        }
+        /**
+         * Returns whether the document contains any highlighted ranges.
+         */
+        this.hasHighlighting = function () {
+            return highlightRanges.length > 0;
+        };
 
         /**
-         * Searches the passed text in the entire document, and selects the
-         * first occurence.
+         * Removes all highlighting (e.g. from quick-search) from the document.
+         */
+        this.removeHighlighting = function () {
+            if (highlightRanges.length) {
+                Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: false });
+            }
+            highlightRanges = [];
+        };
+
+        /**
+         * Searches and highlights the passed text in the entire document.
          *
          * @param {String} query
          *  The text that will be searched in the document.
+         *
+         * @returns {Boolean}
+         *  Whether the passed text has been found in the document.
          */
-        this.search = function (query) {
+        this.quickSearch = function (query) {
 
             // remove old highlighting
-            removeHighlightedRanges();
+            this.removeHighlighting();
 
             // check input parameter
             if (!_.isString(query) || !query.length) {
-                return;
+                return false;
             }
+            query = query.toLowerCase();
 
-            // Search in all paragraphs (also in tables, TODO: other elements, e.g. headers, ...?).
-            // _.find() exits if the callback function returns true, use this to escape from the loop.
-            _(editdiv.find('p')).find(function (element) {
+            // search in all paragraphs (TODO: other elements, e.g. headers, ...?)
+            Utils.iterateSelectedDescendantNodes(editdiv, 'p', function (node) {
 
                 var // the concatenated text from all text nodes
-                    elementText = $(element).text().replace(/\s/g, ' ').toLowerCase(),
-                    // first index of query text
-                    textPos = elementText.indexOf(query.toLowerCase()),
-                    // the DOM start and end points containing the query text
-                    start = null, end = null;
+                    elementText = $(node).text().replace(/\s/g, ' ').toLowerCase(),
+                    // all matching ranges of the query text in the element text
+                    offsetRanges = [], offset = 0, index = 0;
 
-                // non-negative position: query text exists in the element
-                if (textPos >= 0) {
+                // find all occurences of the query text in the element
+                while ((offset = elementText.indexOf(query, offset)) >= 0) {
+                    // try to merge with last offset range
+                    if (offsetRanges.length && (_(offsetRanges).last().end >= offset)) {
+                        _(offsetRanges).last().end = offset + query.length;
+                    } else {
+                        offsetRanges.push({ start: offset, end: offset + query.length });
+                    }
+                    // continue at next character (occurences of the query text may overlap)
+                    offset += 1;
+                }
 
-                    // visit all text nodes in the element
-                    Utils.iterateDescendantNodes(element, function (node) {
+                // translate offset ranges to DOM ranges
+                offset = 0;
+                index = 0;
+                Utils.iterateSelectedDescendantNodes(node, Utils.JQ_TEXTNODE_SELECTOR, function (textNode) {
 
-                        var // the text in the current text node
-                            text = null;
+                    // convert as many offset ranges as contained by the current text node
+                    for (var offsetRange; index < offsetRanges.length; index += 1) {
+                        offsetRange = offsetRanges[index];
 
-                        // filter text nodes
-                        if (node.nodeType === 3) {
-                            text = node.nodeValue;
-
-                            // test if text node contains the first character of the query text
-                            if ((0 <= textPos) && (textPos < text.length)) {
-                                start = new DOM.Point(node, textPos);
-                            }
-
-                            // test if text node contains the last character of the query text
-                            if (textPos + query.length <= text.length) {
-                                end = new DOM.Point(node, textPos + query.length);
-                                return Utils.BREAK;
-                            }
-
-                            // skip this text node
-                            textPos -= text.length;
+                        // start point may have been converted in the previous text node
+                        if ((offset <= offsetRange.start) && (offsetRange.start < offset + textNode.length)) {
+                            highlightRanges.push(new DOM.Range.createRange(textNode, offsetRange.start - offset));
                         }
-                    }, this);
 
-                    // position found, select it
-                    if (start && end) {
-                        //this.grabFocus();
-                        //DOM.setBrowserSelection(range);
-                        //currentSelection = null;
-                        //this.implStartCheckEventSelection();
-                        highlightRanges.push(new DOM.Range(start, end));
+                        // try to convert end point (
+                        if (offsetRange.end <= offset + textNode.length) {
+                            _(highlightRanges).last().end = new DOM.Point(textNode, offsetRange.end - offset);
+                        } else {
+                            break; // escape from loop without updating 'index'
+                        }
                     }
 
-                    // return true to exit the outer _.find() loop iterating over all paragraphs
-                    return highlightRanges.length >= 100;
+                    // escape if all offset ranges have been translated
+                    if (index >= offsetRanges.length) { return Utils.BREAK; }
+
+                    // update offset of next text node
+                    offset += textNode.length;
+
+                }, this);
+
+                // exit at a certain number of found ranges (for performance)
+                if (highlightRanges.length >= 100) {
+                    return Utils.BREAK;
                 }
+
             }, this);
 
+            // set the highlighting
             Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: true });
+
+            // make first highlighted text node visible
+            DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
+                Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
+                return Utils.BREAK;
+            }, this);
+
+            // return whether any text in the document matches the passed query text
+            return this.hasHighlighting();
         };
 
         this.processFocus = function (state) {
@@ -1000,12 +1036,8 @@ define('io.ox/office/editor/editor',
             if (focused !== state) {
                 focused = state;
                 if (focused && currentSelection) {
-                    // remove highlighted ranges (e.g. from quick search)
-                    removeHighlightedRanges();
                     // Update Browser Selection, might got lost.
-                    if (currentSelection) {
-                        this.setSelection(currentSelection);
-                    }
+                    this.setSelection(currentSelection);
                 }
                 this.trigger('focus', state);
             }
@@ -2728,7 +2760,7 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position) {
             var domPos = this.getDOMPosition(position),
                 node = domPos ? domPos.node : null;
-            if (node && Utils.isTextNode(node)) {
+            if (node && (node.nodeType === 3)) {
                 // prepend text before offset in a new span (also if position
                 // points to start or end of text, needed to clone formatting)
                 DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
@@ -2785,7 +2817,7 @@ define('io.ox/office/editor/editor',
             // build the DOM text range
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
-            if (textMode !== OXOEditor.TextMode.PLAIN) {
+            if (textMode !== 'plain') {
                 Attributes.setAttributes('paragraph', ranges, editdiv, attributes);
                 Attributes.setAttributes('character', ranges, editdiv, attributes);
             }
@@ -3275,12 +3307,6 @@ define('io.ox/office/editor/editor',
         // this.implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 
     } // end of OXOEditor()
-
-    // static constants, used as map keys, and as CSS class names
-    OXOEditor.TextMode = {
-        RICH: 'rich',
-        PLAIN: 'plain'
-    };
 
     // exports ================================================================
 

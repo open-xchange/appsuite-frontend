@@ -34,8 +34,9 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     enable: function () { return editor.hasRedo(); },
                     set: function () { editor.redo(); }
                 },
-                'action/search': {
-                    set: function (query) { editor.search(query); },
+                'action/search/quick': {
+                    // highlighting goes always to the rich editor
+                    set: function (query) { app.getEditor().quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
 

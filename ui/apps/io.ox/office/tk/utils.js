@@ -469,34 +469,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Returns whether the passed DOM node is an element node.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the DOM node is an element node.
-     */
-    Utils.isElementNode = function (node) {
-        return Utils.getDomNode(node).nodeType === 1;
-    };
-
-    /**
-     * Returns whether the passed DOM node is a text node.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the DOM node is a text node.
-     */
-    Utils.isTextNode = function (node) {
-        return Utils.getDomNode(node).nodeType === 3;
-    };
-
-    /**
      * Returns the lower-case name of a DOM node object.
      *
      * @param {Node|jQuery} node
@@ -608,45 +580,84 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Iterates over all descendant DOM nodes of the specified element, and
-     * returns the first node that passes a truth test using the specified
-     * predicate function.
+     * A jQuery selector that matches all DOM text nodes.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM node referred to by the 'this' symbol is a text node.
+     */
+    Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
+
+    /**
+     * Iterates over selected descendant DOM nodes of the specified element.
      *
      * @param {HTMLElement|jQuery} element
      *  A DOM element object whose descendant nodes will be iterated. If this
      *  object is a jQuery collection, uses the first node it contains.
      *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to decide whether to call the
+     *  iterator function for the current DOM node. The selector will be passed
+     *  to the jQuery method jQuery.is() for each node. See the jQuery API
+     *  documentation at http://api.jquery.com/is for details.
+     *
      * @param {Function} iterator
-     *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the boolean
-     *  value true, the iteration process will be stopped and the current node
-     *  will be returned. If the iterator returns the Utils.BREAK object, the
-     *  iteration process will be stopped immediately, and the value null will
-     *  be returned.
+     *  The iterator function that will be called for every matching node.
+     *  Receives the DOM node object as first parameter. If the iterator
+     *  returns the Utils.BREAK object, the iteration process will be stopped
+     *  immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
      *  'this' will be bound to the context inside the iterator function).
      *
      * @param {Object} [options]
-     *  A map of options to control the iteration. Supports all options also
-     *  supported by the method Utils.iterateDescendantNodes().
+     *  A map of options to control the iteration. Supports all options that
+     *  are supported by the method Utils.iterateDescendantNodes().
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateSelectedDescendantNodes = function (element, selector, iterator, context, options) {
+
+        return Utils.iterateDescendantNodes(element, function (node) {
+            if ($(node).is(selector) && (iterator.call(context, node) === Utils.BREAK)) {
+                return Utils.BREAK;
+            }
+        }, context, options);
+    };
+
+    /**
+     * Returns the first descendant DOM node in the specified element that
+     * passes a truth test using the specified jQuery selector.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant nodes will be searched. If this
+     *  object is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find the DOM node. The selector
+     *  will be passed to the jQuery method jQuery.is() for each node. See the
+     *  jQuery API documentation at http://api.jquery.com/is for details.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports all options that
+     *  are supported by the method Utils.iterateDescendantNodes().
      *
      * @returns {Node|Null}
-     *  The first node the iterator has returned true for. If no matching node
-     *  has been found, returns null.
+     *  The first descendant DOM node that matches the passed selector. If no
+     *  matching node has been found, returns null.
      */
-    Utils.findDescendantNode = function (element, iterator, context, options) {
+    Utils.findDescendantNode = function (element, selector, options) {
 
         var // the node to be returned
             resultNode = null;
 
         // find the first node passing the iterator test
-        Utils.iterateDescendantNodes(element, function (node) {
-            var result = iterator.call(context, node);
-            if (result === true) { resultNode = node; return Utils.BREAK; }
-            if (result === Utils.BREAK) { return Utils.BREAK; }
-        }, context, options);
+        Utils.iterateSelectedDescendantNodes(element, selector, function (node) {
+            resultNode = node;
+            return Utils.BREAK;
+        }, undefined, options);
 
         return resultNode;
     };
@@ -664,8 +675,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.collectTextNodes = function (element) {
         var textNodes = [];
-        Utils.iterateDescendantNodes(element, function (node) {
-            if (node.nodeType === 3) { textNodes.push(node); }
+        Utils.iterateSelectedDescendantNodes(element, Utils.JQ_TEXTNODE_SELECTOR, function (textNode) {
+            textNodes.push(textNode);
         });
         return textNodes;
     };
@@ -673,13 +684,14 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     /**
      * Scrolls a specific child node of a container node into its visible area.
      *
-     * @param {jQuery} scrollableNode
-     *  The container node as jQuery object that contains the specified child
-     *  node.
+     * @param {HTMLElement|jQuery} scrollableNode
+     *  The scrollable DOM element that contains the specified child node. If
+     *  this object is a jQuery collection, uses the first node it contains.
      *
-     * @param {jQuery} childNode
-     *  The node as jQuery object that will be made visible by scrolling the
-     *  container node.
+     * @param {HTMLElement|jQuery} childNode
+     *  The DOM element that will be made visible by scrolling the specified
+     *  scrollable container element. If this object is a jQuery collection,
+     *  uses the first node it contains.
      *
      * @param {Object} [options]
      *  A map of options to control the scroll action. Supports the following
@@ -730,17 +742,21 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
                 // how to position an oversized child node
                 overflow = Utils.getStringOption(options, 'overflow'),
 
+                // the scrollable element, as jQuery collection
+                $scrollableNode = $(scrollableNode).first(),
                 // inner size of the scrollable container node
-                scrollableSize = scrollableNode[names.innerSize](),
+                scrollableSize = $scrollableNode[names.innerSize](),
                 // border size on left/top end of the container node
-                scrollableBorderSize = Utils.convertCssLength(scrollableNode.css(names.offsetBorder), 'px', 0),
+                scrollableBorderSize = Utils.convertCssLength($scrollableNode.css(names.offsetBorder), 'px', 0),
                 // current position of the scrollable container node (inner area, relative to browser window)
-                scrollableOffset = scrollableNode.offset()[names.offset] + scrollableBorderSize,
+                scrollableOffset = $scrollableNode.offset()[names.offset] + scrollableBorderSize,
 
+                // the child node, as jQuery collection
+                $childNode = $(childNode).first(),
                 // current position of the child node (relative to browser window)
-                childOffset = childNode.offset()[names.offset],
+                childOffset = $childNode.offset()[names.offset],
                 // outer size of the child node
-                childSize = childNode[names.outerSize](),
+                childSize = $childNode[names.outerSize](),
                 // maximum possible padding to fit child node into container node
                 maxPadding = Math.min(padding, Math.max(Math.floor((scrollableSize - childSize) / 2), 0)),
                 // minimum offset valid for the child node (with margin from left/top)
@@ -768,7 +784,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             }
 
             // change the current scroll position of the container node by the difference of old and new child offset
-            scrollableNode[names.scroll](scrollableNode[names.scroll]() + childOffset - newChildOffset);
+            $scrollableNode[names.scroll]($scrollableNode[names.scroll]() + childOffset - newChildOffset);
         };
     }());
 
@@ -777,10 +793,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     /**
      * Creates and returns a new form control element.
      *
-     * @param {String} element
+     * @param {String} elementName
      *  The tag name of the DOM element to be created.
      *
-     * @param {Object} [attribs]
+     * @param {Object} [attributes]
      *  A map of attributes to be passed to the element constructor.
      *
      * @param {Object} [options]
@@ -796,10 +812,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  A jQuery object containing the new control element.
      */
-    Utils.createControl = function (element, attribs, options) {
+    Utils.createControl = function (elementName, attributes, options) {
 
         var // create the DOM element
-            control = $('<' + element + '>', attribs),
+            control = $('<' + elementName + '>', attributes),
 
             // CSS formatting attributes
             css = Utils.getObjectOption(options, 'css', {});

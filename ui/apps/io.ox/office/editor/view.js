@@ -19,9 +19,8 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
-     'io.ox/office/editor/editor',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, Editor, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, gt) {
 
     'use strict';
 
@@ -140,12 +139,12 @@ define('io.ox/office/editor/view',
             if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
                 oldSearchQuery = '';
                 $(this).val('');
-                controller.cancel();
+                controller.change('action/search/quick', '').cancel();
                 return;
             }
 
             if (oldSearchQuery !== searchQuery) {
-                controller.change('action/search', searchQuery);
+                controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
             }
         }
@@ -171,7 +170,7 @@ define('io.ox/office/editor/view',
         );
 
         // insert editor into the app pane
-        appWindow.nodes.appPane.append(editors[Editor.TextMode.RICH].getNode());
+        appWindow.nodes.appPane.append(editors.rich.getNode());
 
         // table element containing the debug mode elements
         appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
@@ -181,7 +180,7 @@ define('io.ox/office/editor/view',
             ),
             $('<tr>').append(
                 // add plain-text editor and operations output console to debug table
-                $('<td>').append(editors[Editor.TextMode.PLAIN].getNode()),
+                $('<td>').append(editors.plain.getNode()),
                 $('<td>').append(editors.output.getNode())
             )
         ));

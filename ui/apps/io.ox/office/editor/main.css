@@ -79,6 +79,7 @@
             
             span.highlight {
                 background-color: yellow !important;
+                color: black !important;
             }
         }
 

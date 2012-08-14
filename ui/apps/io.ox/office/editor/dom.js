@@ -79,7 +79,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.Point.prototype.validate = function () {
 
         // element: if offset is missing, take own index and refer to the parent node
-        if (Utils.isElementNode(this.node)) {
+        if (this.node.nodeType === 1) {
             if (_.isNumber(this.offset)) {
                 this.offset = Math.min(Math.max(this.offset, 0), this.node.childNodes.length);
             } else {
@@ -88,7 +88,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             }
 
         // text node: if offset is missing, use zero
-        } else if (Utils.isTextNode(this.node)) {
+        } else if (this.node.nodeType === 3) {
             if (_.isNumber(this.offset)) {
                 this.offset = Math.min(Math.max(this.offset, 0), this.node.nodeValue.length);
             } else {
@@ -264,10 +264,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     DOM.Range.createRangeForNode = function (node) {
         var range = new DOM.Range(DOM.Point.createPointForNode(node));
-        if (Utils.isTextNode(range.end.node)) {
-            range.end.offset = range.end.node.nodeValue.length;
-        } else {
+        if (range.end.node.nodeType === 1) {
             range.end.offset += 1;
+        } else if (range.end.node.nodeType === 3) {
+            range.end.offset = range.end.node.nodeValue.length;
         }
         return range;
     };
@@ -394,17 +394,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.getSiblingTextNode = function (node, next) {
 
         function isTextSpan(span) {
-            return span && (Utils.getNodeName(span) === 'span') && (span.childNodes.length === 1) && Utils.isTextNode(span.firstChild);
+            return span && (Utils.getNodeName(span) === 'span') && (span.childNodes.length === 1) && (span.firstChild.nodeType === 3);
         }
 
         // if the passed node is a text node, get its <span> parent element
         node = Utils.getDomNode(node);
-        if (Utils.isTextNode(node)) {
+        if (node.nodeType === 3) {
             node = isTextSpan(node.parentNode) ? node.parentNode : null;
         }
 
         // go to next or previous sibling of the element
-        if (node && Utils.isElementNode(node)) {
+        if (node && (node.nodeType === 1)) {
             node = next ? node.nextSibling : node.previousSibling;
         }
 
@@ -637,9 +637,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         var // split partly covered the text nodes before visiting them
             split = Utils.getBooleanOption(options, 'split', false),
             // predicate whether to merge sibling text nodes after visiting them
-            merge = Utils.getFunctionOption(options, 'merge'),
-            // last visited text node and range, used in following iteration steps
-            lastTextNode = null, lastRange = null;
+            merge = Utils.getFunctionOption(options, 'merge');
 
         function replaceTextNodeInRanges(ranges, index, next, oldTextNode, newTextNode, offsetDiff) {
 
@@ -691,23 +689,29 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // text in the passed and in the sibling node
                 text = null, siblingText = null;
 
-            if (siblingTextNode && merge.call(context, textNode, siblingTextNode)) {
-                // read texts from both text nodes
-                text = textNode.nodeValue;
-                siblingText = siblingTextNode.nodeValue;
-                // add text of the sibling text node to the passed text node, and update DOM ranges
-                if (next) {
-                    textNode.nodeValue = text + siblingText;
-                    replaceTextNodeInRanges(ranges, index, true, siblingTextNode, textNode, text.length);
-                } else {
-                    textNode.nodeValue = siblingText + text;
-                    replaceTextNodeInRanges(ranges, index, true, textNode, textNode, siblingText.length);
-                    replaceTextNodeInRanges(ranges, index, false, siblingTextNode, textNode, 0, false);
-                }
-                // remove the entire sibling span element
-                $(siblingTextNode.parentNode).remove();
+            // check preconditions
+            if (!siblingTextNode ||
+                    // do not merge with next text node, if it is contained in the current range,
+                    // this prevents unnecessary merge/split (merge will be done in next iteration step)
+                    (next && (DOM.Point.comparePoints(DOM.Point.createPointForNode(siblingTextNode), ranges[index].end) < 0)) ||
+                    // ask callback whether to merge text nodes
+                    !merge.call(context, textNode, siblingTextNode)) {
+                return;
             }
-            return siblingTextNode;
+
+            // add text of the sibling text node to the passed text node, and update DOM ranges
+            text = textNode.nodeValue;
+            siblingText = siblingTextNode.nodeValue;
+            if (next) {
+                textNode.nodeValue = text + siblingText;
+                replaceTextNodeInRanges(ranges, index, true, siblingTextNode, textNode, text.length);
+            } else {
+                textNode.nodeValue = siblingText + text;
+                replaceTextNodeInRanges(ranges, index, true, textNode, textNode, siblingText.length);
+                replaceTextNodeInRanges(ranges, index, false, siblingTextNode, textNode, 0, false);
+            }
+            // remove the entire sibling span element
+            $(siblingTextNode.parentNode).remove();
         }
 
         // iterate over all nodes, and process the text nodes
@@ -722,7 +726,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             function callIterator() {
 
                 var // the result of the iterator call
-                    result = null;
+                    result = null,
+                    // whether to merge with previous or next ndoe
+                    mergePrevious = false, mergeNext = false;
 
                 // split text node if specified
                 if (split) {
@@ -731,39 +737,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                     end = node.nodeValue.length;
                 }
 
+                // check whether to merge, before iterator is called
+                mergePrevious = start === 0;
+                mergeNext = end === node.nodeValue.length;
+
                 // call iterator function
                 result = iterator.call(context, node, start, end, range, index, ranges);
 
                 // merge text node if specified
                 if ((result !== Utils.BREAK) && _.isFunction(merge)) {
-
-                    // try to merge with previous sibling span
-                    if (start === 0) {
+                    if (mergePrevious) {
                         mergeSiblingTextNode(node, false, ranges, index);
                     }
-/*
-                    // try to merge with previous sibling span
-                    if ((start === 0) && (mergeSiblingTextNode(node, start, end, index, false) === lastTextNode)) {
-                        lastTextNode = lastRange = null;
+                    if (mergeNext) {
+                        mergeSiblingTextNode(node, true, ranges, index);
                     }
-
-                    // Try to merge the text node visited in the previous
-                    // iteration step with its next sibling. This cannot be done
-                    // before, otherwise merging with next text node may remove
-                    // nodes from the DOM that are still selected in following
-                    // ranges.
-                    if (lastTextNode) {
-                        mergeSiblingTextNode(lastTextNode, lastRange, true);
-                    }
-
-                    // remember current text node and range for next iteration step
-                    if (end === node.nodeValue.length) {
-                        lastTextNode = node;
-                        lastRange = range;
-                    } else {
-                        lastTextNode = lastRange = null;
-                    }
-*/
                 }
 
                 return result;
@@ -777,27 +765,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
                 // call iterator for the text node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
-            } else if (isCursor && (Utils.getNodeName(node) === 'br')) {
-                // cursor selects a single <br> element, visit last preceding text node instead
-                node = node.previousSibling;
-                if (node && (Utils.getNodeName(node) === 'span')) {
-                    node = node.lastChild;
-                }
-                if (node && Utils.isTextNode(node)) {
-                    // prepare start, end, and current DOM range object
-                    start = range.start.offset = end = range.end.offset = node.nodeValue.length;
-                    range.start.node = range.end.node = node;
-                    // call iterator for the text node, return if iterator returns Utils.BREAK
-                    if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
-                }
+
+            // cursor selects a single <br> element, visit last preceding text node instead
+            } else if (isCursor && (Utils.getNodeName(node) === 'br') && (node = DOM.getSiblingTextNode(node, false))) {
+                // prepare start, end, and current DOM range object
+                start = range.start.offset = end = range.end.offset = node.nodeValue.length;
+                range.start.node = range.end.node = node;
+                // call iterator for the text node, return if iterator returns Utils.BREAK
+                if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
             }
         });
-/*
-        // final merge with following text node
-        if (lastTextNode) {
-            mergeSiblingTextNode(lastTextNode, true);
-        }
-*/
     };
 
     // browser selection ------------------------------------------------------
