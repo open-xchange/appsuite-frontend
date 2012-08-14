@@ -69,12 +69,8 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 id: extension.id,
                 perform: function () {
                     var def = $.Deferred(),
-                        $node = $("<div/>");
-                    new dialogs.SidePopup({modal: true}).show(def, function (popup) {
-                        popup.append(
-                            $('<h4>').text("Hallo Welt")
-                        );
-                    });
+                        $node = $('<div/>');
+
                     extension.invoke('load')
                         .pipe(function () {
                             return (extension.invoke.apply(extension, ['draw', $node].concat($.makeArray(arguments))) || $.Deferred())
@@ -94,11 +90,15 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
             };
         }
 
-        function drawContent(extension) {
+        function drawContent(extension, e) {
             contentQueue.fasttrack(extension.id).done(function (node) {
+                console.log("DrawContent called for " + extension.id);
                 contentSide.children().trigger('onPause').detach();
                 $(node).trigger('onResume');
-                contentSide.append(node);
+                
+                new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                    popup.append(node);
+                });
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
@@ -107,12 +107,14 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
         function makeClickHandler(extension) {
             return function (event) {
+                console.log("MakeClickHandler called for " + extension.id);
                 contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
-                return drawContent(extension);
+                return drawContent(extension, event);
             };
         }
+        
 
         var getKulerIndex = (function () {
 
@@ -260,23 +262,18 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
             app.active = _(ext.point('io.ox/portal/widget').all()).first();
 
-            if (app.active) {
-                contentSide.busy();
-                drawContent(app.active);
-            }
-
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(tileSide);
+                .append(
+                    tileSide,
+                    contentSide,
+                    $('<div class="io-ox-portal-blacksheepwall">'));
 
             ox.on('refresh^', function () {
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
                 initExtensions();
-                if (app.active) {
-                    drawContent(app.active);
-                }
             });
 
             win.show();

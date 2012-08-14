@@ -66,14 +66,14 @@
     margin: 0 auto;
     width: 1132px; // 4* (270 width + 13px margin), needs to depend on screen selector
 }
-.io-ox-portal-content {
+/*.io-ox-portal-content {
     width: 400px;
     background-color: #fff;
     overflow: auto;
     min-height: 95%;
     padding: 13px;
     float: right;
-}
+}*/
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;

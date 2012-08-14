@@ -30,8 +30,7 @@ define(function () {
             core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
             keychain: ['io.ox/oauth/keychain', "io.ox/mail/accounts/keychain"],
-//            portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter'],
-            portal: ['dummy'],
+            portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter'],
             notifications: ['calendar', 'mail'],
             tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
                     "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email", "io.ox/settings"]
