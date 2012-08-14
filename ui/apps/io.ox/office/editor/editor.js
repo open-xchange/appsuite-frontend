@@ -541,6 +541,8 @@ define('io.ox/office/editor/editor',
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 this.implInsertImage(imgurl, operation.position);
+                // TODO: following line is to be removed if counting of images is done correctly
+                this.implInsertText("∑", operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
