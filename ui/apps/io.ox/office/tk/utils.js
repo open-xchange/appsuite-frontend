@@ -93,180 +93,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return object;
     };
 
-    // options object ---------------------------------------------------------
-
-    /**
-     * Extracts an attribute value from the passed object. If the attribute
-     * does not exist, returns the specified default value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute.
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value.
-     */
-    Utils.getOption = function (options, name, def) {
-        return (_.isObject(options) && (name in options)) ? options[name] : def;
-    };
-
-    /**
-     * Extracts a string attribute from the passed object. If the attribute
-     * does not exist, or is not a string, returns the specified default value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the string attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a string. May be any value (not only strings).
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value.
-     */
-    Utils.getStringOption = function (options, name, def) {
-        var value = Utils.getOption(options, name);
-        return _.isString(value) ? value : def;
-    };
-
-    /**
-     * Extracts a boolean attribute from the passed object. If the attribute
-     * does not exist, or is not a boolean value, returns the specified default
-     * value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the boolean attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a boolean value. May be any value (not only booleans).
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value.
-     */
-    Utils.getBooleanOption = function (options, name, def) {
-        var value = Utils.getOption(options, name);
-        return _.isBoolean(value) ? value : def;
-    };
-
-    /**
-     * Extracts an integer attribute from the passed object. If the attribute
-     * does not exist, or is not a number, returns the specified default value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the integer attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not a number. May be any value (not only numbers).
-     *
-     * @param [min]
-     *  If specified and a number, set a lower bound for the returned value. Is
-     *  not used, if neither the attribute nor the passed default are numbers.
-     *
-     * @param [max]
-     *  If specified and a number, set an upper bound for the returned value.
-     *  Is not used, if neither the attribute nor the passed default are
-     *  numbers.
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value, rounded
-     *  down to an integer.
-     */
-    Utils.getIntegerOption = function (options, name, def, min, max) {
-        var value = Utils.getOption(options, name);
-        value = _.isFinite(value) ? value : def;
-        if (_.isFinite(value)) {
-            if (_.isFinite(min) && (value < min)) { value = min; }
-            if (_.isFinite(max) && (value > max)) { value = max; }
-            return Math.floor(value);
-        }
-        return value;
-    };
-
-    /**
-     * Extracts an object attribute from the passed object. If the attribute
-     * does not exist, or is not an object, returns the specified default
-     * value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not an object,
-     *  or if it does not contain the specified attribute, or if the attribute
-     *  is not an object. May be any value (not only objects).
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value.
-     */
-    Utils.getObjectOption = function (options, name, def) {
-        var value = Utils.getOption(options, name);
-        return _.isObject(value) ? value : def;
-    };
-
-    /**
-     * Extracts a function from the passed object. If the attribute does not
-     * exist, or is not a function, returns the specified default value.
-     *
-     * @param {Object|Undefined} options
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {String} name
-     *  The name of the attribute to be returned.
-     *
-     * @param [def]
-     *  The default value returned when the options parameter is not a
-     *  function, or if it does not contain the specified attribute, or if the
-     *  attribute is not an object. May be any value (not only functions).
-     *
-     * @returns
-     *  The value of the specified attribute, or the default value.
-     */
-    Utils.getFunctionOption = function (options, name, def) {
-        var value = Utils.getOption(options, name);
-        return _.isFunction(value) ? value : def;
-    };
-
-    /**
-     * Extends the passed object with the specified attributes.
-     *
-     * @param {Object} [options]
-     *  An object containing some attribute values. May be undefined.
-     *
-     * @param {Object} [extensions]
-     *  Another object whose attributes will be inserted into the former
-     *  object. Will overwrite existing attributes.
-     *
-     * @returns {Object}
-     *  An object containing the attributes of the objects passed to both
-     *  parameters.
-     */
-    Utils.extendOptions = function (options, extensions) {
-        return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
-    };
-
     // attribute conversion ---------------------------------------------------
 
     /**
@@ -450,6 +276,217 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.toggleToken = function (list, token, state, nothing) {
         return Utils[state ? 'addToken' : 'removeToken'](list, token, nothing);
+    };
+
+    // options object ---------------------------------------------------------
+
+    /**
+     * Extracts an attribute value from the passed object. If the attribute
+     * does not exist, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getOption = function (options, name, def) {
+        return (_.isObject(options) && (name in options)) ? options[name] : def;
+    };
+
+    /**
+     * Extracts a string attribute from the passed object. If the attribute
+     * does not exist, or is not a string, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the string attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a string. May be any value (not only strings).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getStringOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isString(value) ? value : def;
+    };
+
+    /**
+     * Extracts a boolean attribute from the passed object. If the attribute
+     * does not exist, or is not a boolean value, returns the specified default
+     * value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the boolean attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a boolean value. May be any value (not only booleans).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getBooleanOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isBoolean(value) ? value : def;
+    };
+
+    /**
+     * Extracts a floating-point attribute from the passed object. If the
+     * attribute does not exist, or is not a number, returns the specified
+     * default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the floating-point attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a number. May be any value (not only numbers).
+     *
+     * @param [min]
+     *  If specified and a number, set a lower bound for the returned value. Is
+     *  not used, if neither the attribute nor the passed default are numbers.
+     *
+     * @param [max]
+     *  If specified and a number, set an upper bound for the returned value.
+     *  Is not used, if neither the attribute nor the passed default are
+     *  numbers.
+     *
+     * @param [digits]
+     *  If specified, the number of digits after the decimal point to round the
+     *  attribute value to.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value, rounded
+     *  down to an integer.
+     */
+    Utils.getNumberOption = function (options, name, def, min, max, digits) {
+        var value = Utils.getOption(options, name);
+        value = _.isFinite(value) ? value : def;
+        if (_.isFinite(value)) {
+            if (_.isFinite(min) && (value < min)) { value = min; }
+            if (_.isFinite(max) && (value > max)) { value = max; }
+            return _.isFinite(digits) ? Utils.roundDigits(value, digits) : value;
+        }
+        return value;
+    };
+
+    /**
+     * Extracts an integer attribute from the passed object. If the attribute
+     * does not exist, or is not a number, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the integer attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not a number. May be any value (not only numbers).
+     *
+     * @param [min]
+     *  If specified and a number, set a lower bound for the returned value. Is
+     *  not used, if neither the attribute nor the passed default are numbers.
+     *
+     * @param [max]
+     *  If specified and a number, set an upper bound for the returned value.
+     *  Is not used, if neither the attribute nor the passed default are
+     *  numbers.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value, rounded
+     *  down to an integer.
+     */
+    Utils.getIntegerOption = function (options, name, def, min, max) {
+        return Utils.getNumberOption(options, name, def, min, max, 0);
+    };
+
+    /**
+     * Extracts an object attribute from the passed object. If the attribute
+     * does not exist, or is not an object, returns the specified default
+     * value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not an object. May be any value (not only objects).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getObjectOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isObject(value) ? value : def;
+    };
+
+    /**
+     * Extracts a function from the passed object. If the attribute does not
+     * exist, or is not a function, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not a
+     *  function, or if it does not contain the specified attribute, or if the
+     *  attribute is not an object. May be any value (not only functions).
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getFunctionOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isFunction(value) ? value : def;
+    };
+
+    /**
+     * Extends the passed object with the specified attributes.
+     *
+     * @param {Object} [options]
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {Object} [extensions]
+     *  Another object whose attributes will be inserted into the former
+     *  object. Will overwrite existing attributes.
+     *
+     * @returns {Object}
+     *  An object containing the attributes of the objects passed to both
+     *  parameters.
+     */
+    Utils.extendOptions = function (options, extensions) {
+        return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
     };
 
     // generic DOM helpers ----------------------------------------------------
@@ -829,7 +866,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * control in the passed jQuery collection. Will be converted from the JSON
      * string to the original value.
      *
-     * @param control
+     * @param {jQuery} control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
@@ -846,7 +883,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * Stores the passed value in the 'data-value' attribute of the control in
      * the passed jQuery collection, after converting it to a JSON string.
      *
-     * @param control
+     * @param {jQuery} control
      *  A jQuery collection containing a control element.
      *
      * @param value

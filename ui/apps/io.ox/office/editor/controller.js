@@ -81,6 +81,11 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     get: function (attributes) { return attributes.alignment; },
                     set: function (align) { editor.setAttribute('alignment', align); }
                 },
+                'format/paragraph/lineheight': {
+                    chain: 'chain/format/paragraph',
+                    get: function (attributes) { return attributes.lineheight; },
+                    set: function (lineHeight) { editor.setAttribute('lineheight', lineHeight); }
+                },
 
                 'chain/table': {
                     enable: function () { return editor.isPositionInTable(); }

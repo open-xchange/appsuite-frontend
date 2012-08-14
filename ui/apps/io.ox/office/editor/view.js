@@ -19,8 +19,9 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
+     'io.ox/office/editor/attributes',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, Attributes, gt) {
 
     'use strict';
 
@@ -103,6 +104,9 @@ define('io.ox/office/editor/view',
         var // tool pane containing all tool bars
             toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show'),
 
+            // tool tip options of the quick-search text field
+            quickSearchTooltip = appWindow.nodes.search.data('tooltip').options,
+
             // old value of the search query field
             oldSearchQuery = '';
 
@@ -136,14 +140,11 @@ define('io.ox/office/editor/view',
             var // current value of the search query
                 searchQuery = $(this).val();
 
+            // ESCAPE key returns to editor
             if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
-                oldSearchQuery = '';
-                $(this).val('');
-                controller.change('action/search/quick', '').cancel();
-                return;
-            }
-
-            if (oldSearchQuery !== searchQuery) {
+                controller.cancel();
+            // always refresh search results if edit fields receives focus
+            } else if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
                 controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
             }
@@ -203,6 +204,12 @@ define('io.ox/office/editor/view',
                 .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
                 .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
                 .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .end()
+            .addSeparator()
+            .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 3, autoExpand: true, label: 'Line Spacing', tooltip: gt('Line Spacing') })
+                .addButton({ type: 'percent', value: 100 }, { label: '1',   tooltip: gt('Single') })
+                .addButton({ type: 'percent', value: 150 }, { label: '1.5', tooltip: gt('One and a Half') })
+                .addButton({ type: 'percent', value: 200 }, { label: '2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
@@ -223,10 +230,14 @@ define('io.ox/office/editor/view',
         // make the format tool bar visible
         toolPane.showToolBar('format');
 
-        // override the limited functionality of the quick-search button
+        // override the limited functionality of the quick-search text field
         appWindow.nodes.search
             .off('keydown search change')
-            .on('input keydown keypress keyup', searchKeyHandler);
+            .on('input keydown keypress keyup focus', searchKeyHandler);
+
+        // change the quick-search tooltip options
+        quickSearchTooltip.title = gt('Quick Search');
+        quickSearchTooltip.trigger = 'hover';
 
     } // class View
 

@@ -20,7 +20,78 @@ define('io.ox/office/editor/attributes',
     'use strict';
 
     var // maps all attribute converters to a unique attribute type
-        converters = {};
+        converters = {},
+
+        // define static class Attributes here to prevent compiler warnings
+        Attributes = {};
+
+    // constants ==============================================================
+
+    Attributes.LineHeight = {
+
+        SINGLE: { type: 'percent', value: 100 },
+
+        ONE_HALF: { type: 'percent', value: 150 },
+
+        DOUBLE: { type: 'percent', value: 200 }
+    };
+
+    // private static functions ===============================================
+
+    /**
+     * Sets or updates the text line height of the specified element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose line height will be updated. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @param {Object} [lineHeight]
+     *  The new line height. If omitted, uses the current line height settings
+     *  stored in the DOM node and updates the CSS line height according to the
+     *  current font size.
+     */
+    function updateLineHeight(node, lineHeight) {
+
+        var // the passed node as jQuery object
+            $node = $(node).first(),
+            // current font size of the element
+            fontSize = Utils.convertCssLength($node.css('font-size'), 'pt'),
+            // effective line height in points
+            height = 1;
+
+        // get the current data attribute if not passed to this function
+        if (!_.isObject(lineHeight)) { lineHeight = $node.data('lineheight'); }
+        if (!_.isObject(lineHeight)) { lineHeight = Attributes.LineHeight.SINGLE; }
+
+        // TODO: support other types
+        lineHeight.type = 'percent';
+
+        // set the CSS formatting
+        switch (lineHeight.type) {
+        case 'point':
+            // validate the value
+            lineHeight.value = height = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+            break;
+        case 'leading':
+            // validate the value
+            lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+            height = lineHeight.value + fontSize;
+            break;
+        default:
+            // validate the type and percentage value
+            lineHeight.type = 'percent';
+            lineHeight.value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
+            // get the font size of the element
+            height = Math.max(Utils.convertCssLength($node.css('font-size'), 'pt'), 1);
+            // this formula simulates the browser's line height 'normal' quite good
+            height = fontSize * (1.0 / fontSize + 1.15);
+            // effective line height according to the specified percentage
+            height = Utils.roundDigits(height * lineHeight.value / 100, 1);
+        }
+
+        // write the effective/corrected line height back to element, and set the CSS line height
+        $node.data('lineheight', lineHeight).css('line-height', height + 'pt');
+    }
 
     // class AttributeConverter ===============================================
 
@@ -184,6 +255,33 @@ define('io.ox/office/editor/attributes',
             set: function (element, value) {
                 $(element).css('text-align', value);
             }
+        },
+
+        // Logically, the line height is a paragraph attribute. But technically
+        // in CSS, the line height must be set separately at every span element
+        // because a relative CSS line-height attribute at the paragraph (e.g.
+        // 200%) will not be derived relatively to the spans, but absolutely
+        // according to the paragraph's font size. Example: The paragraph has a
+        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
+        // value will be derived absolutely to a span with a font size of 6pt,
+        // resulting in a relative line height of 24pt/6pt = 400% instead of
+        // the expected 200%.
+        lineheight: {
+            get: function (element) {
+                var lineHeight = $(element).data('lineheight');
+                return _.isUndefined(lineHeight) ? Attributes.LineHeight.SINGLE : lineHeight;
+            },
+            set: function (element, lineHeight) {
+                var hasSpans = false;
+                updateLineHeight($(element), lineHeight);
+                Utils.iterateSelectedDescendantNodes(element, 'span', function (span) {
+                    hasSpans = true;
+                    updateLineHeight($(span), lineHeight);
+                });
+                if (hasSpans) {
+                    $(element).css({ fontSize: 0, lineHeight: 'normal' });
+                }
+            }
         }
 
     });
@@ -306,23 +404,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, fontSize) {
                 $(element).css('font-size', fontSize + 'pt');
-            }
-        },
-
-        // Logically, the line height is a paragraph attribute. But technically
-        // in CSS, the line height must be set separately at every span element
-        // because a relative CSS line-height attribute at the paragraph (e.g.
-        // 200%) will not be derived relatively to the spans, but absolutely
-        // according to the paragraph's font size. Example: The paragraph has a
-        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
-        // value will be derived to a span with a font size of 6pt, resulting
-        // in a relative line height of 400%.
-        lineheight: {
-            get: function () {
-                return 'normal';
-            },
-            set: function (element) {
-                $(element).css('line-height', 'normal');
+                updateLineHeight($(element));
             }
         },
 
@@ -418,8 +500,6 @@ define('io.ox/office/editor/attributes',
     };
 
     // static class Attributes ================================================
-
-    var Attributes = {};
 
     /**
      * Returns whether the specified attribute converter contains a definition

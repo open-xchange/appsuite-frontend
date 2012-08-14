@@ -298,12 +298,15 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             $(textNode).wrap('<span>');
             parent = textNode.parentNode;
 
-            // Copy the paragraph's font-size to the span, and reset the
-            // font-size of the paragraph, otherwise CSS defines a lower limit
-            // for the line-height of all spans according to the parent
-            // paragraph's font-size.
-            $(parent).css('font-size', $(parent.parentNode).css('font-size'));
-            $(parent.parentNode).css('font-size', '0');
+            // Copy the paragraph's font-size and calculated line height to the
+            // span, and reset the font-size of the paragraph, otherwise CSS
+            // defines a lower limit for the line-height of all spans according
+            // to the parent paragraph's font-size.
+            $(parent).css({
+                fontSize: $(parent.parentNode).css('font-size'),
+                lineHeight: $(parent.parentNode).css('line-height')
+            });
+            $(parent.parentNode).css({ fontSize: 0, lineHeight: 'normal' });
         }
 
         return parent;
