@@ -264,10 +264,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(
-                    tileSide,
-                    contentSide,
-                    $('<div class="io-ox-portal-blacksheepwall">'));
+                .append(tileSide);
 
             ox.on('refresh^', function () {
                 tileSide.empty();
