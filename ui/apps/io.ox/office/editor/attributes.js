@@ -198,7 +198,7 @@ define('io.ox/office/editor/attributes',
                 if (!(name in attributes)) {
                     // initial iteration: store value
                     attributes[name] = value;
-                } else if (value !== attributes[name]) {
+                } else if (!_.isEqual(value, attributes[name])) {
                     // value differs from previous value: ambiguous state
                     attributes[name] = null;
                 }
