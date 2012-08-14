@@ -35,7 +35,8 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     set: function () { editor.redo(); }
                 },
                 'action/search': {
-                    set: function (query) { editor.search(query); }
+                    set: function (query) { editor.search(query); },
+                    done: $.noop // do not focus editor
                 },
 
                 'insert/table': {

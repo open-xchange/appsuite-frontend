@@ -102,7 +102,10 @@ define('io.ox/office/editor/view',
     function View(appWindow, controller, editors) {
 
         var // tool pane containing all tool bars
-            toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show');
+            toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show'),
+
+            // old value of the search query field
+            oldSearchQuery = '';
 
         // private methods ----------------------------------------------------
 
@@ -131,16 +134,19 @@ define('io.ox/office/editor/view',
          */
         function searchKeyHandler(event) {
 
-            var // distinguish between event types (ignore keypress events)
-                keyup = event.type === 'keyup';
+            var // current value of the search query
+                searchQuery = $(this).val();
 
-            switch (event.keyCode) {
-            case KeyCodes.ENTER:
-                if (keyup) { controller.change('action/search', $(this).val()); }
-                return false;
-            case KeyCodes.ESCAPE:
-                if (keyup) { $(this).val(''); controller.cancel(); }
-                return false;
+            if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
+                oldSearchQuery = '';
+                $(this).val('');
+                controller.cancel();
+                return;
+            }
+
+            if (oldSearchQuery !== searchQuery) {
+                controller.change('action/search', searchQuery);
+                oldSearchQuery = searchQuery;
             }
         }
 
@@ -221,7 +227,7 @@ define('io.ox/office/editor/view',
         // override the limited functionality of the quick-search button
         appWindow.nodes.search
             .off('keydown search change')
-            .on('keydown keypress keyup', searchKeyHandler);
+            .on('input keydown keypress keyup', searchKeyHandler);
 
     } // class View
 

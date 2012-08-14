@@ -1375,6 +1375,66 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 */
     };
 
+    // console output ---------------------------------------------------------
+
+    Utils.MIN_LOG_LEVEL = 'log';
+
+    /**
+     * Writes a message to the browser output console.
+     *
+     * @param {String} message
+     *  The message text to be written to the console.
+     *
+     * @param {String} [level='log']
+     *  The log level of the message. The string 'log' will create a generic
+     *  log message, the string 'info' will create an information, the string
+     *  'warn' will create a warning message, and the string 'error' will
+     *  create an error message.
+     */
+    Utils.log = (function () {
+
+        var // supported log levels, sorted by severity
+            LOG_LEVELS = _(['log', 'info', 'warn', 'error']);
+
+        return function (message, level) {
+
+            // validate passed log level and get its index
+            level = LOG_LEVELS.contains(level) ? level : 'log';
+
+            // do not log if index is less than index of configured log level
+            if (LOG_LEVELS.contains(Utils.MIN_LOG_LEVEL) && (LOG_LEVELS.indexOf(Utils.MIN_LOG_LEVEL) <= LOG_LEVELS.indexOf(level))) {
+
+                // check that the browser console supports the operation
+                if (_.isFunction(window.console[level])) {
+                    window.console[level](message);
+                } else {
+                    window.console.log(level.toUppercase() + ': ' + message);
+                }
+            }
+        };
+    }());
+
+    /**
+     * Shortcut for Utils.log(message, 'info').
+     */
+    Utils.info = function (message) {
+        Utils.log(message, 'info');
+    };
+
+    /**
+     * Shortcut for Utils.log(message, 'warn').
+     */
+    Utils.warn = function (message) {
+        Utils.log(message, 'warn');
+    };
+
+    /**
+     * Shortcut for Utils.log(message, 'error').
+     */
+    Utils.error = function (message) {
+        Utils.log(message, 'error');
+    };
+
     // global initialization ==================================================
 
     // get current language: TODO review
