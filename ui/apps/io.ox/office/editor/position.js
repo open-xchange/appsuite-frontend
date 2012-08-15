@@ -258,7 +258,8 @@ define('io.ox/office/editor/position',
         }
 
         if (! textNode) {
-            Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + " : " + localNode.nodeName + ')');
+            var nodeName = localNode ? localNode.nodeName : '';
+            Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + " : " + nodeName + ')');
             return;
         }
 
