@@ -25,82 +25,6 @@ define('io.ox/office/editor/attributes',
         // define static class Attributes here to prevent compiler warnings
         Attributes = {};
 
-    // constants ==============================================================
-
-    /**
-     * Predefined values for the 'lineheight' attribute for paragraphs.
-     */
-    Attributes.LineHeight = {
-
-        SINGLE: { type: 'percent', value: 100 },
-
-        ONE_HALF: { type: 'percent', value: 150 },
-
-        DOUBLE: { type: 'percent', value: 200 }
-    };
-
-    // private static functions ===============================================
-
-    /**
-     * Sets or updates the text line height of the specified element.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  The node whose line height will be updated. If this object is a jQuery
-     *  collection, uses the first DOM node it contains.
-     *
-     * @param {Object} [lineHeight]
-     *  The new line height. If omitted, uses the current line height settings
-     *  stored in the DOM node and updates the CSS line height according to the
-     *  current font size.
-     */
-    function updateLineHeight(node, lineHeight) {
-
-        var // the passed node as jQuery object
-            $node = $(node).first(),
-            // current font size of the element
-            fontSize = Utils.convertCssLength($node.css('font-size'), 'pt'),
-            // effective line height in points
-            height = 1;
-
-        // get the current data attribute if not passed to this function
-        if (!_.isObject(lineHeight)) { lineHeight = $node.data('lineheight'); }
-        if (!_.isObject(lineHeight)) { lineHeight = Attributes.LineHeight.SINGLE; }
-
-        // TODO: support other types
-        lineHeight.type = 'percent';
-
-        // set the CSS formatting
-        switch (lineHeight.type) {
-        case 'fixed':
-            // validate the value
-            lineHeight.value = height = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-            break;
-        case 'leading':
-            // validate the value
-            lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-            height = lineHeight.value + fontSize;
-            break;
-        case 'atleast':
-            // validate the value
-            lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-            height = Math.max(lineHeight.value, fontSize);
-            break;
-        default:
-            // validate the type and percentage value
-            lineHeight.type = 'percent';
-            lineHeight.value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
-            // get the font size of the element
-            height = Math.max(Utils.convertCssLength($node.css('font-size'), 'pt'), 1);
-            // this formula simulates the browser's line height 'normal' quite good
-            height = fontSize * (1.0 / fontSize + 1.15);
-            // effective line height according to the specified percentage
-            height = Utils.roundDigits(height * lineHeight.value / 100, 1);
-        }
-
-        // write the effective/corrected line height back to element, and set the CSS line height
-        $node.data('lineheight', lineHeight).css('line-height', height + 'pt');
-    }
-
     // class AttributeConverter ===============================================
 
     /**
@@ -171,7 +95,7 @@ define('io.ox/office/editor/attributes',
         };
 
         /**
-         * Merges the current values of all supported formatting attribute in
+         * Merges the current values of all supported formatting attributes in
          * the passed DOM element into an existing map of attribute values.
          *
          * @param {Object} attributes
@@ -249,6 +173,121 @@ define('io.ox/office/editor/attributes',
     // paragraph attributes ===================================================
 
     /**
+     * Predefined values for the 'lineheight' attribute for paragraphs.
+     */
+    Attributes.LineHeight = {
+        SINGLE: { type: 'percent', value: 100 },
+        ONE_HALF: { type: 'percent', value: 150 },
+        DOUBLE: { type: 'percent', value: 200 }
+    };
+
+    /**
+     * Returns a valid value for the 'lineheight' attribute.
+     *
+     * @param {Object} lineHeight
+     *  The line height to be validated.
+     *
+     * @returns {Object}
+     *  The valid line height object, containing 'type' and 'value' attributes.
+     */
+    function getValidLineHeight(lineHeight) {
+
+        if (_.isObject(lineHeight)) {
+            switch (lineHeight.type) {
+            case 'fixed':
+                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+                break;
+            case 'leading':
+                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+                break;
+            case 'atleast':
+                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+                break;
+            default: // percent
+                lineHeight.type = 'percent';
+                lineHeight.value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
+            }
+        } else {
+            lineHeight = Attributes.LineHeight.SINGLE;
+        }
+
+        return lineHeight;
+    }
+
+    /**
+     * Sets the text line height of the specified text span.
+     *
+     * @param {HTMLElement|jQuery} span
+     *  The <span> element whose line height will be changed. If this object is
+     *  a jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Object} lineHeight
+     *  The new line height. MUST contain the attributes 'type' and 'value',
+     *  and these attributes MUST contain valid values.
+     */
+    function setLineHeight(span, lineHeight) {
+
+        var // the passed span as jQuery object
+            $span = $(span).first(),
+            // effective line height in points
+            height = 1;
+
+        // Returns the 'normal' line height for the passed span in points.
+        function getNormalLineHeight() {
+
+            var // current font size of the element
+                fontSize = Utils.convertCssLength($span.css('font-size'), 'pt');
+
+            // TODO: This formula simulates the browser's line height 'normal'
+            // for regular fonts quite good, but we need to get the exact line
+            // height, also for exotic fonts with large ascent and descent,
+            // e.g. by inserting a dummy paragraph/span to the document body
+            // with the current font name and size, and reading the calculated
+            // height.
+            return fontSize * (1.0 / fontSize + 1.15);
+        }
+
+        // set the CSS formatting
+        switch (lineHeight.type) {
+        case 'fixed':
+            height = lineHeight.value;
+            break;
+        case 'leading':
+            height = lineHeight.value + getNormalLineHeight();
+            break;
+        case 'atleast':
+            height = Math.max(lineHeight.value, getNormalLineHeight());
+            break;
+        case 'percent':
+            height = Utils.roundDigits(getNormalLineHeight() * lineHeight.value / 100, 1);
+            break;
+        default:
+            Utils.error('setLineHeight(): invalid line height type');
+        }
+        $span.css('line-height', height + 'pt');
+    }
+
+    /**
+     * Updates the text line height of the specified text span according to its
+     * current font settings.
+     *
+     * @param {HTMLElement|jQuery} span
+     *  The <span> element whose line height will be updated. If this object is
+     *  a jQuery collection, uses the first DOM node it contains.
+     */
+    function updateLineHeight(span) {
+
+        var // the passed span as jQuery object
+            $span = $(span).first(),
+            // the current line height in the span
+            lineHeight = getValidLineHeight($span.data('lineheight'));
+
+        // write the effective/corrected line height back to element, and set the CSS line height
+        $span.data('lineheight', lineHeight);
+        setLineHeight(span, lineHeight);
+    }
+
+    /**
      * A converter for paragraph formatting attributes. The CSS formatting will
      * be read from and written to <p> elements.
      */
@@ -277,18 +316,14 @@ define('io.ox/office/editor/attributes',
         lineheight: {
             get: function (element) {
                 var lineHeight = $(element).data('lineheight');
-                return _.isUndefined(lineHeight) ? Attributes.LineHeight.SINGLE : lineHeight;
+                return _.isObject(lineHeight) ? lineHeight : Attributes.LineHeight.SINGLE;
             },
             set: function (element, lineHeight) {
-                var hasSpans = false;
-                updateLineHeight($(element), lineHeight);
+                lineHeight = getValidLineHeight(lineHeight);
+                $(element).data('lineheight', lineHeight);
                 Utils.iterateSelectedDescendantNodes(element, 'span', function (span) {
-                    hasSpans = true;
-                    updateLineHeight($(span), lineHeight);
+                    setLineHeight(span, lineHeight);
                 });
-                if (hasSpans) {
-                    $(element).css({ fontSize: 0, lineHeight: 'normal' });
-                }
             }
         }
 
@@ -402,6 +437,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, fontName) {
                 $(element).css('font-family', Fonts.getCssFontFamily(fontName));
+                updateLineHeight(element);
             }
         },
 
@@ -412,7 +448,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, fontSize) {
                 $(element).css('font-size', fontSize + 'pt');
-                updateLineHeight($(element));
+                updateLineHeight(element);
             }
         },
 
@@ -497,14 +533,10 @@ define('io.ox/office/editor/attributes',
         // the option 'merge' will merge text spans with equal formatting)
         DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
 
-            var // the parent <span> element of the text node
-                span = DOM.wrapTextNode(textNode);
-
-            // set the new formatting attributes at the span element
-            this.setElementAttributes(span, attributes);
+            // set the new formatting attributes at the parent span element
+            this.setElementAttributes(textNode.parentNode, attributes);
 
         }, this, { split: true, merge: hasEqualAttributes });
-
     };
 
     // static class Attributes ================================================

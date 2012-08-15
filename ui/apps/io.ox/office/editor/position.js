@@ -242,7 +242,7 @@ define('io.ox/office/editor/position',
         // find the first or last text node contained in the element
         var textNode = localNode;
         if (localNode && (localNode.nodeType !== 3)) {
-            textNode = Utils.findDescendantNode(localNode, Utils.JQ_TEXTNODE_SELECTOR, { reverse: !useFirstTextNode });
+            textNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
         }
 
         if (! textNode) {

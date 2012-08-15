@@ -27,7 +27,6 @@ define('io.ox/office/editor/editor',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes;
 
-
     var OP_TEXT_INSERT =  'insertText';
     var OP_TEXT_DELETE =  'deleteText';
 
@@ -287,6 +286,119 @@ define('io.ox/office/editor/editor',
         };
     }
 
+    // private static functions ===============================================
+
+    /**
+     * Returns all text nodes contained in the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant text nodes will be returned. If
+     *  this object is a jQuery collection, uses the first node it contains.
+     *
+     * @returns {TextNode[]}
+     *  An array of text nodes contained in the passed element, in the correct
+     *  order.
+     */
+    function collectTextNodes(element) {
+        var textNodes = [];
+        Utils.iterateDescendantTextNodes(element, function (textNode) {
+            textNodes.push(textNode);
+        });
+        return textNodes;
+    }
+
+    /**
+     * Returns all text nodes and images contained in the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant text nodes will be returned. If
+     *  this object is a jQuery collection, uses the first node it contains.
+     *
+     * @returns {Node[]}
+     *  An array of text nodes and image nodes contained in the passed element,
+     *  in the correct order.
+     */
+    function collectTextNodesAndImages(element) {
+        var nodes = [];
+        Utils.iterateSelectedDescendantNodes(element, function () {
+            return (this.nodeType === 3) || (Utils.getNodeName(this) === 'img');
+        }, function (node) {
+            nodes.push(node);
+        });
+        return nodes;
+    }
+
+    /**
+     * Removes empty text nodes from the passed paragraph, checks whether it
+     * needs a trailing <br> element, and converts consecutive white-space
+     * characters.
+     *
+     * @param {HTMLParagraphElement|jQuery} paragraph
+     *  The paragraph element to be validated. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     */
+    function validateParagraphNode(paragraph) {
+
+        var // the number of child nodes in the paragraph
+            childCount = 0,
+            // whether the last child node is the dummy <br> element
+            lastDummy = false,
+            // first and last text node for white-space handling
+            firstTextNode = null, lastTextNode = null;
+
+        // convert parameter to a DOM node
+        paragraph = Utils.getDomNode(paragraph);
+
+        // remove all empty text spans which have sibling text spans
+        $(paragraph).contents().each(function () {
+            if (DOM.isEmptyTextSpan(this) && (DOM.getSiblingTextNode(this, false) || DOM.getSiblingTextNode(this, true))) {
+                $(this).remove();
+            }
+        });
+
+        childCount = paragraph.childNodes.length;
+        lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
+
+        // insert an empty text span if there is no other content (except the dummy <br> element)
+        if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
+            $(paragraph).prepend($('<span>').text(''));
+            childCount += 1;
+        }
+
+        // append dummy <br> if the paragraph contains only an empty text span, or
+        // remove the dummy <br> if there is anything but a single empty text span
+        if ((childCount === 1) && DOM.isEmptyTextSpan(paragraph.firstChild)) {
+            $(paragraph).append($('<br>').data('dummy', true));
+        } else if (lastDummy && ((childCount > 2) || !DOM.isEmptyTextSpan(paragraph.firstChild))) {
+            $(paragraph.lastChild).remove();
+        }
+
+        // Convert consecutive white-space characters to sequences of SPACE/NBSP pairs.
+        // We cannot use the CSS attribute white-space:pre-wrap, because it breaks the
+        // paragraph's CSS attribute text-align:justified (at least in Firefox).
+        // TODO: handle explicit NBSP inserted by the user (when supported)
+        Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
+
+            textNode.nodeValue = textNode.nodeValue
+                // the normalized text (all white-space converted to SPACE)
+                .replace(/\s/g, ' ')
+                // convert SPACE/SPACE pairs to SPACE/NBSP pairs
+                .replace(/ {2}/g, ' \xa0');
+        });
+
+        // the first text node in the paragraph cannot start with a SPACE character
+        if ((firstTextNode = Utils.findFirstTextNode(paragraph))) {
+            firstTextNode.nodeValue = firstTextNode.nodeValue.replace(/^ /, '\xa0');
+        }
+
+        // the last text node in the paragraph cannot end with a SPACE character
+        if ((lastTextNode = Utils.findLastTextNode(paragraph))) {
+            lastTextNode.nodeValue = lastTextNode.nodeValue.replace(/ $/, '\xa0');
+        }
+
+        // TODO: Adjust tabs, ...
+    }
+
     function isSameParagraph(pos1, pos2, includeLastPos) {
         if (pos1.length !== pos2.length)
             return false;
@@ -297,22 +409,6 @@ define('io.ox/office/editor/editor',
             if (pos1[n] !== pos2[n])
                 return false;
         return true;
-    }
-
-    function hasTextContent(element) {
-        for (var child = element.firstChild; child !== null; child = child.nextSibling) {
-            if (child.nodeName === 'BR') {
-                if (!child.dummyBR) // regular line break is content
-                    return true;
-            }
-            if (child.nodeType === 3) {
-                if (child.nodeValue.length)
-                    return true;
-            }
-            else if (child.nodeType === 1)
-                return hasTextContent(child);
-        }
-        return false;
     }
 
     // class OXOEditor ========================================================
@@ -357,9 +453,6 @@ define('io.ox/office/editor/editor',
 
         var blockOperations = false;
         var blockOperationNotifications = false;
-
-        var charcodeSPACE = 32;
-        var charcodeNBSP = 160;
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
@@ -811,7 +904,7 @@ define('io.ox/office/editor/editor',
                 // translate offset ranges to DOM ranges
                 offset = 0;
                 index = 0;
-                Utils.iterateSelectedDescendantNodes(node, Utils.JQ_TEXTNODE_SELECTOR, function (textNode) {
+                Utils.iterateDescendantTextNodes(node, function (textNode) {
 
                     // convert as many offset ranges as contained by the current text node
                     for (var offsetRange; index < offsetRanges.length; index += 1) {
@@ -1838,9 +1931,9 @@ define('io.ox/office/editor/editor',
             if (start === undefined)
                 start = 0;
             if (end === undefined)
-                end = 0xFFFF; // don't need correct len, just a very large value
+                end = 0x7FFFFFFF; // don't need correct len, just a very large value
 
-            textNodes = Utils.collectTextNodes(paragraphs[para]);
+            textNodes = collectTextNodes(paragraphs[para]);
             var node, nodeLen, startpos, endpos;
             var nodes = textNodes.length;
             var nodeStart = 0;
@@ -1866,10 +1959,8 @@ define('io.ox/office/editor/editor',
         };
 
         this.prepareNewParagraph = function (paragraph) {
-            paragraph.appendChild(document.createTextNode(''));
-            var dummyBR = document.createElement('br');
-            dummyBR.dummyBR = true;
-            paragraph.appendChild(dummyBR);
+            // insert an empty <span> with a text node, followed by a dummy <br>
+            $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
 
         // ==================================================================
@@ -2239,61 +2330,14 @@ define('io.ox/office/editor/editor',
         // IMPL METHODS
         // ==================================================================
 
-        this.implParagraphChanged = function (position) {
+        function implParagraphChanged(position) {
 
             // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
-
             var paragraph = Position.getCurrentParagraph(paragraphs, position);
-
             if (paragraph) {
-
-                if (!hasTextContent(paragraph)) {
-                    // We need an empty text node and a br
-                    if (!paragraph.lastChild || !paragraph.lastChild.dummyBR) {
-                        this.prepareNewParagraph(paragraph);
-                    }
-                }
-                else {
-                    // only keep it when inserted by the user
-                    if (paragraph.lastChild.dummyBR) {
-                        paragraph.removeChild(paragraph.lastChild);
-                    }
-
-                    // Browser show multiple spaces in a row as single space, and space at paragraph end is problematic for selection...
-                    var textNodes = Utils.collectTextNodes(paragraph);
-                    var nNode, nChar;
-                    var currChar = 0, prevChar = 0;
-                    var node, nodes = textNodes.length;
-                    for (nNode = 0; nNode < nodes; nNode++) {
-
-                        node = textNodes[nNode];
-
-                        if (!node.nodeValue.length)
-                            continue;
-
-                        for (nChar = 0; nChar < node.nodeValue.length; nChar++) {
-                            currChar = node.nodeValue.charCodeAt(nChar);
-                            if ((currChar === charcodeSPACE) && (prevChar === charcodeSPACE)) { // Space - make sure there is no space before
-                                currChar = charcodeNBSP;
-                                node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
-                            }
-                            else if ((currChar === charcodeNBSP) && (prevChar !== charcodeSPACE)) { // NBSP not needed (until we support them for doc content, then we need to flag them somehow)
-                                currChar = charcodeSPACE;
-                                node.nodeValue = node.nodeValue.slice(0, nChar) + String.fromCharCode(currChar) + node.nodeValue.slice(nChar + 1);
-                            }
-                            prevChar = currChar;
-                        }
-                    }
-
-                    if (prevChar === charcodeSPACE) { // SPACE hat para end is a problem in some browsers
-                        currChar = charcodeNBSP;
-                        node.nodeValue = node.nodeValue.slice(0, node.nodeValue.length - 1) + String.fromCharCode(currChar);
-                    }
-
-                    // TODO: Adjust tabs, ...
-                }
+                validateParagraphNode(paragraph);
             }
-        };
+        }
 
         /* This didn't work - browser doesn't accept the corrected selection, is changing it again immediatly...
         this.implCheckSelection = function () {
@@ -2325,7 +2369,7 @@ define('io.ox/office/editor/editor',
         this.implInitDocument = function () {
             editdiv[0].innerHTML = '<html><p></p></html>';
             paragraphs = editdiv.children();
-            this.implParagraphChanged([0]);
+            implParagraphChanged([0]);
             this.setSelection(new OXOSelection());
             lastOperationEnd = new OXOPaM([0, 0]);
             this.clearUndo();
@@ -2352,7 +2396,7 @@ define('io.ox/office/editor/editor',
                 var posLength = position.length - 1;
                 lastPos[posLength] = position[posLength] + text.length;
                 lastOperationEnd = new OXOPaM(lastPos);
-                this.implParagraphChanged(position);
+                implParagraphChanged(position);
             }
         };
 
@@ -2373,7 +2417,7 @@ define('io.ox/office/editor/editor',
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + 1;
             lastOperationEnd = new OXOPaM(lastPos);
-            this.implParagraphChanged(position);
+            implParagraphChanged(position);
         };
 
         /**
@@ -2447,46 +2491,31 @@ define('io.ox/office/editor/editor',
             lastPos.push(0);
             lastOperationEnd = new OXOPaM(lastPos);
 
-            this.implParagraphChanged(position);
+            implParagraphChanged(position);
         };
 
         this.implInsertTable = function (position, rows, columns) {
 
-            var localPosition = _.copy(position),
-                newTable = $('<table>');
+            var // prototype elements for the table, row, cell, and paragraph
+                paragraph = $('<p>'),
+                cell = $('<td>').append(paragraph),
+                row = $('<tr>').append(cell),
+                table = $('<table>').append(row);
 
-            for (var i = 1; i <= rows; i++) {
-                var newRow = ($('<tr>').attr('valign', 'top'));
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+            // clone the cells in the row element
+            _.times(columns - 1, function () { row.append(cell.clone()); });
+            // clone the rows in the table element
+            _.times(rows - 1, function () { table.append(row.clone()); });
 
-                for (var j = 1; j <= columns; j++) {
-                    newRow.append($('<td><p></p></td>'));
-                }
-
-                newTable.append(newRow);
-            }
-
-            var domParagraph = Position.getDOMPosition(paragraphs, localPosition).node;
-            newTable.insertBefore(domParagraph);
+            // insert the table into the document
+            var domParagraph = Position.getDOMPosition(paragraphs, position).node;
+            table.insertBefore(domParagraph);
             paragraphs = editdiv.children();
 
-            // Filling empty paragraphs in table cells with minimal content.
-            // We need an empty text node and a <br>.
-
-            for (var i = 0; i < rows; i++) {
-                for (var j = 0; j < columns; j++) {
-                    var pos = _.copy(localPosition, true);
-                    pos.push(i);
-                    pos.push(j);
-                    pos.push(0); // first paragraph
-
-                    var paragraph = Position.getCurrentParagraph(paragraphs, pos);
-
-                    this.prepareNewParagraph(paragraph);
-                }
-            }
-
             // Setting cursor into table (unfortunately not visible in Firefox)
-            // var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, localPosition);
+            // var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
             // var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
             // this.setSelection(selection);
 
@@ -2525,8 +2554,8 @@ define('io.ox/office/editor/editor',
             endPosition[posLength - 1] = startPosition[posLength - 1];
             this.implDeleteText(startPosition, endPosition);
 
-            this.implParagraphChanged(position);
-            this.implParagraphChanged(startPosition);
+            implParagraphChanged(position);
+            implParagraphChanged(startPosition);
             lastOperationEnd = new OXOPaM(startPosition);
 
             // DEBUG STUFF
@@ -2587,7 +2616,7 @@ define('io.ox/office/editor/editor',
                     var lastPos = _.copy(position);
                     lastPos.push(oldParaLen);
                     lastOperationEnd = new OXOPaM(lastPos);
-                    this.implParagraphChanged(position);
+                    implParagraphChanged(position);
 
                     // DEBUG STUFF
                     if (paragraphs.size() !== (dbg_oldparacount - 1)) {
@@ -2630,9 +2659,8 @@ define('io.ox/office/editor/editor',
         this.implDeleteParagraphContent = function (position) {
             var paragraph = Position.getDOMPosition(paragraphs, position).node;
             if (paragraph) {
-                $(paragraph).empty();  // removes the content of the paragraph
-                paragraph.removeAttribute("style");  // removes the styles ("font-size 0 pt")
-                this.prepareNewParagraph(paragraph);
+                $(paragraph).empty();
+                validateParagraphNode(paragraph);
             }
         };
 
@@ -2828,7 +2856,7 @@ define('io.ox/office/editor/editor',
             }
 
             var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = Utils.collectTextNodesAndImages(oneParagraph);
+            var searchNodes = collectTextNodesAndImages(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
@@ -2873,7 +2901,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(_.copy(startPosition, true));
             // old:  lastOperationEnd = new OXOPaM([para, start]);
 
-            this.implParagraphChanged(startPosition);
+            implParagraphChanged(startPosition);
         };
 
         function implDbgOutEvent(event) {
@@ -2911,7 +2939,8 @@ define('io.ox/office/editor/editor',
             .on('mouseup', $.proxy(this, 'processMouseUp'))
             .on('dragover', $.proxy(this, 'processDragOver'))
             .on('drop', $.proxy(this, 'processDrop'))
-            .on('contextmenu', $.proxy(this, 'processContextMenu'));
+            .on('contextmenu', $.proxy(this, 'processContextMenu'))
+            .on('cut paste', false);
 
         // this.implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 

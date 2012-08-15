@@ -617,23 +617,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * A jQuery selector that matches all DOM text nodes.
-     *
-     * @returns {Boolean}
-     *  Whether the DOM node referred to by the 'this' symbol is a text node.
-     */
-    Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
-
-    /**
-     * A jQuery selector that matches all DOM text nodes and image nodes.
-     *
-     * @returns {Boolean}
-     *  Whether the DOM node referred to by the 'this' symbol is a text node
-     *  or an image node.
-     */
-    Utils.JQ_TEXTNODE_IMAGE_SELECTOR = function () { return ((this.nodeType === 3) || (this.nodeName === 'IMG')); };
-
-    /**
      * Iterates over selected descendant DOM nodes of the specified element.
      *
      * @param {HTMLElement|jQuery} element
@@ -643,8 +626,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {String|Function|Node|jQuery} selector
      *  A jQuery selector that will be used to decide whether to call the
      *  iterator function for the current DOM node. The selector will be passed
-     *  to the jQuery method jQuery.is() for each node. See the jQuery API
-     *  documentation at http://api.jquery.com/is for details.
+     *  to the jQuery method jQuery.is() for each node. If this selector is a
+     *  function, it will be called with the current DOM node bound to the
+     *  symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every matching node.
@@ -674,6 +659,35 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Iterates over all descendant DOM text nodes in the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose text nodes will be iterated. If this object
+     *  is a jQuery collection, uses the first node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text node. Receives
+     *  the DOM text node object as first parameter. If the iterator returns
+     *  the Utils.BREAK object, the iteration process will be stopped
+     *  immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports all options that
+     *  are supported by the method Utils.iterateDescendantNodes().
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    Utils.iterateDescendantTextNodes = function (element, iterator, context, options) {
+        return Utils.iterateSelectedDescendantNodes(element, function () { return this.nodeType === 3; }, iterator, context, options);
+    };
+
+    /**
      * Returns the first descendant DOM node in the specified element that
      * passes a truth test using the specified jQuery selector.
      *
@@ -683,8 +697,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *
      * @param {String|Function|Node|jQuery} selector
      *  A jQuery selector that will be used to find the DOM node. The selector
-     *  will be passed to the jQuery method jQuery.is() for each node. See the
-     *  jQuery API documentation at http://api.jquery.com/is for details.
+     *  will be passed to the jQuery method jQuery.is() for each node. If this
+     *  selector is a function, it will be called with the current DOM node
+     *  bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
      *
      * @param {Object} [options]
      *  A map of options to control the iteration. Supports all options that
@@ -709,41 +725,33 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Returns all text nodes contained in the specified element.
+     * Returns the first descendant DOM text node in the specified element.
      *
      * @param {HTMLElement|jQuery} element
-     *  A DOM element object whose descendant text nodes will be returned. If
-     *  this object is a jQuery collection, uses the first node it contains.
+     *  A DOM element object whose first text node will be returned. If this
+     *  object is a jQuery collection, uses the first node it contains.
      *
-     * @returns {TextNode[]}
-     *  An array of text nodes contained in the passed element, in the correct
-     *  order.
+     * @returns {Node|Null}
+     *  The first descendant DOM text node of the element. If no text node has
+     *  been found, returns null.
      */
-    Utils.collectTextNodes = function (element) {
-        var textNodes = [];
-        Utils.iterateSelectedDescendantNodes(element, Utils.JQ_TEXTNODE_SELECTOR, function (textNode) {
-            textNodes.push(textNode);
-        });
-        return textNodes;
+    Utils.findFirstTextNode = function (element) {
+        return Utils.findDescendantNode(element, function () { return this.nodeType === 3; });
     };
 
     /**
-     * Returns all text nodes and images contained in the specified element.
+     * Returns the last descendant DOM text node in the specified element.
      *
      * @param {HTMLElement|jQuery} element
-     *  A DOM element object whose descendant text nodes will be returned. If
-     *  this object is a jQuery collection, uses the first node it contains.
+     *  A DOM element object whose last text node will be returned. If this
+     *  object is a jQuery collection, uses the first node it contains.
      *
-     * @returns {Node[]}
-     *  An array of text nodes and image nodes contained in the passed element,
-     *  in the correct order.
+     * @returns {Node|Null}
+     *  The last descendant DOM text node of the element. If no text node has
+     *  been found, returns null.
      */
-    Utils.collectTextNodesAndImages = function (element) {
-        var nodes = [];
-        Utils.iterateSelectedDescendantNodes(element, Utils.JQ_TEXTNODE_IMAGE_SELECTOR, function (node) {
-            nodes.push(node);
-        });
-        return nodes;
+    Utils.findLastTextNode = function (element) {
+        return Utils.findDescendantNode(element, function () { return this.nodeType === 3; }, { reverse: true });
     };
 
     /**

@@ -46,6 +46,7 @@
 
         p {
             margin: 0;
+            font-size: 0;
             line-height: normal;
         }
 
@@ -72,7 +73,7 @@
             margin: 30px auto;
             border: 1px solid gray;
 
-            p {
+            p > span {
                 font-family: 'Times New Roman',Times,serif;
                 font-size: 12pt;
             }
@@ -90,7 +91,7 @@
             overflow-y: auto;
             border: 1px #d5d5d5 solid;
 
-            p {
+            p > span {
                 font-family: 'Courier New',Courier,monospace;
                 font-size: 10pt;
             }

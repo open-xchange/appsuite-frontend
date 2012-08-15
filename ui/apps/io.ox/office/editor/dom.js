@@ -272,57 +272,50 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return range;
     };
 
-    // static functions =======================================================
-
-    // text node manipulation -------------------------------------------------
+    // spans and text nodes ===================================================
 
     /**
-     * Ensures that the passed text node is embedded in its own <span> element.
-     * If the <span> element is missing, it will be inserted into the DOM.
+     * Returns whether the passed node is a <span> element containing a single
+     * text node.
      *
-     * @param {Text} textNode
-     *  The DOM text node to be embedded in a <span> element.
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
      *
-     * @returns {HTMLElement}
-     *  The parent <span> element (already existing or just created) of the
-     *  text node.
+     * @returns {Boolean}
+     *  Whether the passed node is a span element with a text node.
      */
-    DOM.wrapTextNode = function (textNode) {
-
-        var // parent element of the text node
-            parent = textNode.parentNode;
-
-        if (Utils.getNodeName(parent) !== 'span') {
-
-            // put text node into a span element, if not existing
-            $(textNode).wrap('<span>');
-            parent = textNode.parentNode;
-
-            // Copy the paragraph's font-size and calculated line height to the
-            // span, and reset the font-size of the paragraph, otherwise CSS
-            // defines a lower limit for the line-height of all spans according
-            // to the parent paragraph's font-size.
-            $(parent).css({
-                fontSize: $(parent.parentNode).css('font-size'),
-                lineHeight: $(parent.parentNode).css('line-height')
-            });
-            $(parent.parentNode).css({ fontSize: 0, lineHeight: 'normal' });
-        }
-
-        return parent;
+    DOM.isTextSpan = function (node) {
+        var childNodes = Utils.getDomNode(node).childNodes;
+        return (Utils.getNodeName(node) === 'span') && (childNodes.length === 1) && (childNodes[0].nodeType === 3);
     };
 
     /**
-     * Splits the passed text node into two text nodes. Additionally ensures
-     * that both text nodes are embedded in their own <span> elements.
+     * Returns whether the passed node is a <span> element containing an empty
+     * text node.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element with an empty text node.
+     */
+    DOM.isEmptyTextSpan = function (node) {
+        return DOM.isTextSpan(node) && (node.firstChild.nodeValue.length === 0);
+    };
+
+    /**
+     * Splits the passed text node into two text nodes.
      *
      * @param {Text} textNode
      *  The DOM text node to be split.
      *
      * @param {Number} offset
-     *  The character position the text node will be split. If this position is
-     *  at the start or end of the text of the node, an empty text node may be
-     *  inserted if required (see the 'options.createEmpty' option below).
+     *  The character position where the text node will be split. If this
+     *  position is at the start or end of the text of the node, an empty text
+     *  node may be inserted if required (see the 'options.createEmpty' option
+     *  below).
      *
      * @param {Object} [options]
      *  A map of options to control the split operation. Supports the following
@@ -330,13 +323,14 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  @param {Boolean} [options.append]
      *      If set to true, the right part of the text will be inserted after
      *      the passed text node; otherwise the left part of the text will be
-     *      inserted before the passed text node. May be important when
-     *      iterating and manipulating a range of DOM nodes.
+     *      inserted before the passed text node. The position of the new text
+     *      node may be important when iterating and manipulating a range of
+     *      DOM nodes.
      *  @param {Boolean} [options.createEmpty]
-     *      If set to true, creates new text nodes also if the offset points to
-     *      the start or end of the text. The new text node will be empty.
-     *      Otherwise, no new text node will be created in this case, and the
-     *      method returns null.
+     *      If set to true, creates new text nodes also if the passed offset
+     *      points to the start or end of the text. The new text node will be
+     *      empty. Otherwise, no new text node will be created in this case,
+     *      and the method returns null.
      *
      * @returns {Text|Null}
      *  The newly created text node. Will be located before or after the passed
@@ -346,8 +340,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.splitTextNode = function (textNode, offset, options) {
 
-        var // put text node into a span element, if not existing
-            span = DOM.wrapTextNode(textNode),
+        var // parent <span> element of the text node
+            span = textNode.parentNode,
             // the new span for the split text portion, as jQuery object
             newSpan = null,
             // text for the left span
@@ -396,14 +390,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.getSiblingTextNode = function (node, next) {
 
-        function isTextSpan(span) {
-            return span && (Utils.getNodeName(span) === 'span') && (span.childNodes.length === 1) && (span.firstChild.nodeType === 3);
-        }
-
         // if the passed node is a text node, get its <span> parent element
         node = Utils.getDomNode(node);
         if (node.nodeType === 3) {
-            node = isTextSpan(node.parentNode) ? node.parentNode : null;
+            node = DOM.isTextSpan(node.parentNode) ? node.parentNode : null;
         }
 
         // go to next or previous sibling of the element
@@ -412,11 +402,23 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         }
 
         // extract the text node from the sibling element
-        return isTextSpan(node) ? node.firstChild : null;
+        return (node && DOM.isTextSpan(node)) ? node.firstChild : null;
     };
 
-    // range iteration --------------------------------------------------------
+    // range iteration ========================================================
 
+    /**
+     * Validates, sorts, and merges the passed array of DOM ranges. First, the
+     * methods DOM.Range.validate() and DOM.Range.adjust() will be called for
+     * all ranges to update the offsets of the DOM points in the ranges, and to
+     * sort start and end point of each range. Next, all ranges in the array
+     * will be sorted by their start point (DOM order). Last, overlapping
+     * ranges will be merged.
+     *
+     * @param {DOM.Range[]} ranges
+     *  (in/out) The array of ranges to be validated and sorted. All changes
+     *  will be performed inplace.
+     */
     DOM.validateAndSortRanges = function (ranges) {
 
         // validate all ranges, adjust start/end points
@@ -443,13 +445,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *
      * @param {DOM.Range[]} ranges
      *  (in/out) The DOM ranges whose nodes will be iterated. Before iteration
-     *  starts, the DOM ranges in this array will be validated (see method
-     *  DOM.Range.validate() for details) and adjusted (see method
-     *  DOM.Range.adjust() for details). Then, the array will be sorted by the
-     *  starting points of all DOM ranges, and overlapping ranges will be
-     *  merged together. The iterator function may further manipulate this
-     *  array while iterating, see the comments in the description of the
-     *  parameter 'iterator' for details.
+     *  starts, the array will be validated and sorted (see method
+     *  DOM.validateAndSortRanges() for details). The iterator function may
+     *  further manipulate this array while iterating, see the comments in the
+     *  description of the parameter 'iterator' for details.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
@@ -780,7 +779,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         });
     };
 
-    // browser selection ------------------------------------------------------
+    // browser selection ======================================================
 
     /**
      * Returns an array of DOM ranges representing the current browser
