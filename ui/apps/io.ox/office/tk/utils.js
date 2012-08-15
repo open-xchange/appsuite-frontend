@@ -625,6 +625,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
 
     /**
+     * A jQuery selector that matches all DOM text nodes and image nodes.
+     *
+     * @returns {Boolean}
+     *  Whether the DOM node referred to by the 'this' symbol is a text node
+     *  or an image node.
+     */
+    Utils.JQ_TEXTNODE_IMAGE_SELECTOR = function () { return ((this.nodeType === 3) || (this.nodeName === 'IMG')); };
+
+    /**
      * Iterates over selected descendant DOM nodes of the specified element.
      *
      * @param {HTMLElement|jQuery} element
@@ -716,6 +725,25 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             textNodes.push(textNode);
         });
         return textNodes;
+    };
+
+    /**
+     * Returns all text nodes and images contained in the specified element.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose descendant text nodes will be returned. If
+     *  this object is a jQuery collection, uses the first node it contains.
+     *
+     * @returns {Node[]}
+     *  An array of text nodes and image nodes contained in the passed element,
+     *  in the correct order.
+     */
+    Utils.collectTextNodesAndImages = function (element) {
+        var nodes = [];
+        Utils.iterateSelectedDescendantNodes(element, Utils.JQ_TEXTNODE_IMAGE_SELECTOR, function (node) {
+            nodes.push(node);
+        });
+        return nodes;
     };
 
     /**
