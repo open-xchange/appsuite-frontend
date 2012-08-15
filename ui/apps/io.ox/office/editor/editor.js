@@ -2344,6 +2344,14 @@ define('io.ox/office/editor/editor',
 
         this.implInsertText = function (text, position) {
             var domPos = Position.getDOMPosition(paragraphs, position);
+
+            if (domPos.node.nodeName === 'IMG') {
+                // using the following text node
+                var localNode = domPos.node.nextSibling;
+                domPos.node = Utils.findDescendantNode(localNode, Utils.JQ_TEXTNODE_SELECTOR, { reverse: false });
+                domPos.offset = 0;
+            }
+
             var oldText = domPos.node.nodeValue;
             if (oldText !== null) {
                 var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);

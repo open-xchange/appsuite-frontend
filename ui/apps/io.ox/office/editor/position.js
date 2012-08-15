@@ -239,6 +239,12 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
+        // special handling for images, use first following text node instead
+        if (localNode && (Utils.getNodeName(localNode) === 'img')) {
+            localNode = localNode.nextSibling;
+            useFirstTextNode = true;
+        }
+
         // find the first or last text node contained in the element
         var textNode = localNode;
         if (localNode && (localNode.nodeType !== 3)) {
@@ -246,7 +252,7 @@ define('io.ox/office/editor/position',
         }
 
         if (! textNode) {
-            Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + ')');
+            Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + " : " + localNode.nodeName + ')');
             return;
         }
 
