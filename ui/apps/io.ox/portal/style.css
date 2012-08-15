@@ -67,28 +67,28 @@
 
 
 @media all and (min-width: 320px) {
-    .io-ox-portal-tiles { width: 283px;}
+    .io-ox-portal-tiles { width: 272px;}
 }
 @media all and (min-width: 640px) {
-    .io-ox-portal-tiles { width: 566px;}
+    .io-ox-portal-tiles { width: 544px;}
 }
 @media all and (min-width: 960px) {
-    .io-ox-portal-tiles { width: 849px;}
+    .io-ox-portal-tiles { width: 816px;}
 }
 @media all and (min-width: 1280px) {
-    .io-ox-portal-tiles { width: 1132px;}
+    .io-ox-portal-tiles { width: 1088px;}
 }
 @media all and (min-width: 1600px) {
-    .io-ox-portal-tiles { width: 1415px; } // 5* (270 width + 13px margin)
+    .io-ox-portal-tiles { width: 1360px; } // 5* (270 width + 2*1px margin)
 }
 @media all and (min-width: 1920px) {
-    .io-ox-portal-tiles { width: 1698px; } // 6* (270 width + 13px margin)
+    .io-ox-portal-tiles { width: 1672px; }
 }
 @media all and (min-width: 2240px) {
-    .io-ox-portal-tiles { width: 1981px; } // 7* (270 width + 13px margin)
+    .io-ox-portal-tiles { width: 1944px; }
 }
 @media all and (min-width: 2560px) {
-    .io-ox-portal-tiles { width: 2264px; } // 8* (270 width + 13px margin)
+    .io-ox-portal-tiles { width: 2316px; }
 }
 
 .io-ox-portal-widget-tile {
@@ -98,7 +98,7 @@
     overflow: hidden;
     width: 270px;
     height: 180px;
-    margin: 0 2px 2px 0;
+    margin: 1px;
     cursor: pointer;
     color: white;
 }
