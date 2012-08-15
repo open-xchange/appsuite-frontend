@@ -132,7 +132,7 @@ define('io.ox/core/tk/autocomplete', function () {
                             var node = $('<div>')
                                 .addClass('autocomplete-item')
                                 .data('data', data)
-                                .on('click', { index: index, contact: data.contact, email: data.email }, fnSelectItem);
+                                .on('click', { index: index, contact: data.contact, email: data.email, distlistarray: data.data.distribution_list }, fnSelectItem);
                             o.draw.call(node, data, query);
                             node.appendTo(scrollpane);
                         });

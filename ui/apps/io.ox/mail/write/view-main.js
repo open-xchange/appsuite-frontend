@@ -186,7 +186,7 @@ define("io.ox/mail/write/view-main",
                             drawAutoCompleteItem.call(null, this, data, query);
                         },
                         click: function (e) {
-                            copyRecipients.call(self, id, $(this));
+                            copyRecipients.call(self, id, $(this), e);
                         },
                         blur: function (e) {
                             copyRecipients.call(self, id, $(this));
@@ -671,8 +671,27 @@ define("io.ox/mail/write/view-main",
         }
     }
 
-    function copyRecipients(id, node) {
-        var list = mailUtil.parseRecipients(node.val());
+    function createStringOfRecipients(distlistarray) {
+        var string;
+        _.each(distlistarray, function (val) {
+            if (string === '') {
+                string = '"' + val.display_name + '"' + '<' + val.mail + '>';
+            } else {
+                string = string + ', "' + val.display_name + '"' + '<' + val.mail + '>';
+            }
+        });
+        return string;
+    }
+
+    function copyRecipients(id, node, e) {
+        var valBase;
+        if (e && e.data.distlistarray !== null) {
+            valBase = createStringOfRecipients(e.data.distlistarray);
+        }
+         else {
+            valBase = node.val();
+        }
+        var list = mailUtil.parseRecipients(valBase);
         if (list.length) {
             // add
             this.addRecipients(id, list);
