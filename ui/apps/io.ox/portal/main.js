@@ -93,7 +93,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
         function drawContent(extension, e) {
             contentQueue.fasttrack(extension.id).done(function (node) {
-                console.log("DrawContent called for " + extension.id);
                 contentSide.children().trigger('onPause').detach();
                 $(node).trigger('onResume');
 
@@ -110,7 +109,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
         function makeClickHandler(extension) {
             return function (event) {
-                console.log("MakeClickHandler called for " + extension.id);
                 contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
