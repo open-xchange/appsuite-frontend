@@ -683,6 +683,7 @@ define('io.ox/office/editor/editor',
                 domRange = null;
 
             if (domSelection.length) {
+
                 domRange = _(domSelection).last();
 
                 // allowing "special" multiselection for tables (rectangle cell selection)
@@ -711,6 +712,8 @@ define('io.ox/office/editor/editor',
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = this.getCellDOMSelections(oxosel);
+            // } else if (oxosel.hasRange() && (Position.isImageSelection(oxosel.startPaM, oxosel.endPaM))) {
+            //     ranges = this.getImageSelections(oxosel);
             } else {
                 // var oldSelection = this.getSelection();
                 ranges = this.getDOMSelection(oxosel);
@@ -2339,6 +2342,9 @@ define('io.ox/office/editor/editor',
 
             if (domPos.node.nodeName === 'IMG') {
                 // using the following text node
+                // (7,0) is a position before the graphic, getDOMPosition returns a text node.
+                // (7,1) can be a position after first character (text node is returned) or after
+                // an image. In this case the text shall be inserted on the right side of the image.
                 var localNode = domPos.node.nextSibling;
                 domPos.node = Utils.findDescendantNode(localNode, Utils.JQ_TEXTNODE_SELECTOR, { reverse: false });
                 domPos.offset = 0;

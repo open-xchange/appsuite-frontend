@@ -225,6 +225,7 @@ define('io.ox/office/editor/position',
 
         if (Utils.getNodeName(node) === 'img') {
             node = node.nextSibling;  // useless to look for text nodes inside image nodes (must be a span)
+            // node = node.previousSibling;
             offset = 0;
         }
 
@@ -247,7 +248,8 @@ define('io.ox/office/editor/position',
 
         // special handling for images, use first following text node instead
         if (localNode && (Utils.getNodeName(localNode) === 'img')) {
-            localNode = localNode.nextSibling;
+            // localNode = localNode.nextSibling;
+            localNode = localNode.previousSibling; // allows text input at the beginning of the paragraph. (7,0) must return a text node.
             useFirstTextNode = true;
         }
 
@@ -322,6 +324,7 @@ define('io.ox/office/editor/position',
                 var nodeList = node.childNodes;
 
                 for (var i = 0; i < nodeList.length; i++) {
+
                     // Searching the children
                     var currentLength = 0,
                         currentNode = nodeList[i];
@@ -354,6 +357,8 @@ define('io.ox/office/editor/position',
 
             if (! isImage) {
                 offset = pos - textLength;
+            } else {
+                offset = 0;
             }
 
         } else {
@@ -1107,6 +1112,27 @@ define('io.ox/office/editor/position',
         // If cells in a table are selected, both positions must have the selectedNodeName 'tr'.
         // This is valid only in Firefox.
         return (startPaM.selectedNodeName === 'TR' && endPaM.selectedNodeName === 'TR');
+    };
+
+    /**
+     * Checks, if two logical positions represent an image selection.
+     * This means, that the logical position was calculated from a
+     * dom node, that was an image. Therefore 'selectedNodeName'
+     * is saved in the OXOPaM object next to OXOPaM.oxoPosition.
+     *
+     * @param {OXOPam} startPaM
+     *  The OXOPaM object containing the logical position.
+     *
+     * @param {OXOPam} endPaM
+     *  The OXOPaM object containing the logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if both positions were calculated from dom
+     *  nodes with the nodeName property set to 'IMG'.
+     *  Otherwise false is returned.
+     */
+    Position.isImageSelection = function (startPaM, endPaM) {
+        return (startPaM.selectedNodeName === 'IMG' && endPaM.selectedNodeName === 'IMG');
     };
 
     /**
