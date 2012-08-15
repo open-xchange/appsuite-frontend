@@ -41,8 +41,8 @@ define('io.ox/office/editor/editor',
     var OP_CELLRANGE_DELETE = 'deleteCellRange';
     var OP_ROWS_DELETE = 'deleteRows';
     var OP_COLUMNS_DELETE = 'deleteColumns';
-    var OP_ROWS_COPY = 'copyRows';
-    var OP_COLUMNS_COPY = 'copyColumns';
+    var OP_ROW_COPY = 'copyRow';
+    var OP_COLUMN_COPY = 'copyColumn';
 
     var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
@@ -523,11 +523,11 @@ define('io.ox/office/editor/editor',
             else if (operation.name === OP_COLUMNS_DELETE) {
                 this.implDeleteColumns(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_ROWS_COPY) {
-                this.implCopyRows(operation.position, operation.start, operation.end);
+            else if (operation.name === OP_ROW_COPY) {
+                this.implCopyRow(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_COLUMNS_COPY) {
-                this.implCopyColumns(operation.position, operation.start, operation.end);
+            else if (operation.name === OP_COLUMN_COPY) {
+                this.implCopyColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1498,35 +1498,27 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
-        this.copyRows = function () {
+        this.copyRow = function () {
             var selection = this.getSelection(),
                 start = Position.getRowIndexInTable(paragraphs, selection.startPaM.oxoPosition),
-                end = start,
+                end = start + 1,
                 position = _.copy(selection.startPaM.oxoPosition, true);
-
-            if (selection.hasRange()) {
-                end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
-            }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
-            var newOperation = { name: OP_ROWS_COPY, position: tablePos, start: start, end: end };
+            var newOperation = { name: OP_ROW_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
-        this.copyColumns = function () {
+        this.copyColumn = function () {
             var selection = this.getSelection(),
                 start = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
-                end = start,
+                end = start + 1,
                 position = _.copy(selection.startPaM.oxoPosition, true);
-
-            if (selection.hasRange()) {
-                end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
-            }
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
-            var newOperation = { name: OP_COLUMNS_COPY, position: tablePos, start: start, end: end };
+            var newOperation = { name: OP_COLUMN_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
         };
 
@@ -2730,7 +2722,7 @@ define('io.ox/office/editor/editor',
             this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
 
-        this.implCopyRows = function (pos, startRow, endRow) {
+        this.implCopyRow = function (pos, startRow, endRow) {
 
             var localPosition = _.copy(pos, true),
                 lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPosition);
@@ -2740,13 +2732,13 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                selectedRows = $(table).children().children().slice(startRow, endRow + 1),
-                diff = endRow - startRow;
+                selectedRow = $(table).children().children().get(startRow),
+                insertAfter = endRow - 1;
 
-            selectedRows.clone().insertAfter(selectedRows.last());
+            $(selectedRow).clone().insertAfter($(table).children().children().get(insertAfter));
 
             // iterating over all new cells and remove all paragraphs in the cells
-            this.implDeleteCellRange(localPosition, [endRow + 1, 0], [endRow + diff + 1, lastColumn]);
+            this.implDeleteCellRange(localPosition, [endRow, 0], [endRow, lastColumn]);
 
             // Setting cursor
             localPosition.push(endRow);
@@ -2792,7 +2784,7 @@ define('io.ox/office/editor/editor',
             this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
         };
 
-        this.implCopyColumns = function (pos, startCol, endCol) {
+        this.implCopyColumn = function (pos, startCol, endCol) {
 
             var localPosition = _.copy(pos, true),
                 lastRow = Position.getLastRowIndexInTable(paragraphs, localPosition);
@@ -2803,17 +2795,17 @@ define('io.ox/office/editor/editor',
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
                 allRows = $(table).children().children(),
-                diff = endCol - startCol;
+                insertAfter = endCol - 1;
 
             allRows.each(
                 function (i, elem) {
-                    var selectedColumns = $(elem).children().slice(startCol, endCol + 1);
-                    selectedColumns.clone().insertAfter(selectedColumns.last());
+                    var selectedColumn = $(elem).children().get(startCol);
+                    $(selectedColumn).clone().insertAfter($(elem).children().get(insertAfter));
                 }
             );
 
             // iterating over all new cells and remove all paragraphs in the cells
-            this.implDeleteCellRange(localPosition, [0, endCol + 1], [lastRow, endCol + diff + 1]);
+            this.implDeleteCellRange(localPosition, [0, endCol], [lastRow, endCol]);
 
             // Setting cursor to first position in table
             localPosition.push(0);
