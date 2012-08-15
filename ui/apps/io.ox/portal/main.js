@@ -27,6 +27,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+
     return require(plugins).pipe(function () {
 
         // application object
@@ -94,6 +95,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentSide.children().trigger('onPause').detach();
                 $(node).trigger('onResume');
                 contentSide.append(node);
+                $(node).trigger('onAppended');
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
