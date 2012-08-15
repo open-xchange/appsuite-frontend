@@ -65,30 +65,33 @@
     margin: 0 auto;
 }
 
+@tile-margin: 1px;
+@tile-width: 270px;
+@tile-height: 180px;
 
 @media all and (min-width: 320px) {
-    .io-ox-portal-tiles { width: 272px;}
+    .io-ox-portal-tiles { width: 1*(@tile-width + 2*@tile-margin);}
 }
 @media all and (min-width: 640px) {
-    .io-ox-portal-tiles { width: 544px;}
+    .io-ox-portal-tiles { width: 2*(@tile-width + 2*@tile-margin);}
 }
 @media all and (min-width: 960px) {
-    .io-ox-portal-tiles { width: 816px;}
+    .io-ox-portal-tiles { width: 3*(@tile-width + 2*@tile-margin);}
 }
 @media all and (min-width: 1280px) {
-    .io-ox-portal-tiles { width: 1088px;}
+    .io-ox-portal-tiles { width: 4*(@tile-width + 2*@tile-margin);}
 }
 @media all and (min-width: 1600px) {
-    .io-ox-portal-tiles { width: 1360px; } // 5* (270 width + 2*1px margin)
+    .io-ox-portal-tiles { width: 5*(@tile-width + 2*@tile-margin);}
 }
 @media all and (min-width: 1920px) {
-    .io-ox-portal-tiles { width: 1672px; }
+    .io-ox-portal-tiles { width: 6*(@tile-width + 2*@tile-margin); }
 }
 @media all and (min-width: 2240px) {
-    .io-ox-portal-tiles { width: 1944px; }
+    .io-ox-portal-tiles { width: 7*(@tile-width + 2*@tile-margin); }
 }
 @media all and (min-width: 2560px) {
-    .io-ox-portal-tiles { width: 2316px; }
+    .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
 }
 
 .io-ox-portal-widget-tile {
@@ -96,9 +99,9 @@
     float: left;
     padding: 13px;
     overflow: hidden;
-    width: 270px;
-    height: 180px;
-    margin: 1px;
+    width: @tile-width;
+    height: @tile-height;
+    margin: @tile-margin;
     cursor: pointer;
     color: white;
 }
