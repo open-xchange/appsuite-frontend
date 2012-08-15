@@ -551,7 +551,7 @@ define('io.ox/office/editor/editor',
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 this.implInsertImage(imgurl, operation.position);
                 // TODO: following line is to be removed if counting of images is done correctly
-                this.implInsertText("∑", operation.position);
+                // this.implInsertText("∑", operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2345,13 +2345,15 @@ define('io.ox/office/editor/editor',
         this.implInsertText = function (text, position) {
             var domPos = Position.getDOMPosition(paragraphs, position);
             var oldText = domPos.node.nodeValue;
-            var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
-            domPos.node.nodeValue = newText;
-            var lastPos = _.copy(position);
-            var posLength = position.length - 1;
-            lastPos[posLength] = position[posLength] + text.length;
-            lastOperationEnd = new OXOPaM(lastPos);
-            this.implParagraphChanged(position);
+            if (oldText !== null) {
+                var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
+                domPos.node.nodeValue = newText;
+                var lastPos = _.copy(position);
+                var posLength = position.length - 1;
+                lastPos[posLength] = position[posLength] + text.length;
+                lastOperationEnd = new OXOPaM(lastPos);
+                this.implParagraphChanged(position);
+            }
         };
 
         this.implInsertImage = function (url, position) {
@@ -2826,13 +2828,19 @@ define('io.ox/office/editor/editor',
             }
 
             var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var textNodes = Utils.collectTextNodes(oneParagraph);
+            var searchNodes = Utils.collectTextNodesAndImages(oneParagraph);
             var node, nodeLen, delStart, delEnd;
-            var nodes = textNodes.length;
+            var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
-                node = textNodes[i];
-                nodeLen = node.nodeValue.length;
+                var isImage = false;
+                node = searchNodes[i];
+                if (node.nodeName === 'IMG') {
+                    nodeLen = 1;
+                    isImage = true;
+                } else {
+                    nodeLen = node.nodeValue.length;
+                }
                 if ((nodeStart + nodeLen) > start) {
                     delStart = 0;
                     delEnd = nodeLen;
@@ -2845,7 +2853,11 @@ define('io.ox/office/editor/editor',
                     if ((delEnd - delStart) === nodeLen) {
                         // remove element completely.
                         // TODO: Need to take care for empty elements!
-                        node.nodeValue = '';
+                        if (isImage) {
+                            oneParagraph.removeChild(node);
+                        } else {
+                            node.nodeValue = '';
+                        }
                     }
                     else {
                         var oldText = node.nodeValue;

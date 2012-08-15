@@ -118,6 +118,10 @@ define('io.ox/office/editor/position',
             if (evaluateOffset) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     textLength += $(prevNode).text().length;
+                    if (prevNode.nodeName === 'IMG') {
+                        textLength++;
+                    }
+                    // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
                 }
                 offsetEvaluated = true;
             }
@@ -290,8 +294,9 @@ define('io.ox/office/editor/position',
         } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeName === 'DIV')) {
             childNode = $(node).children().get(pos);
         } else if (node.nodeName === 'P') {
-            var textLength = 0;
-            var bFound = false;
+            var textLength = 0,
+                bFound = false,
+                isImage = false;
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
@@ -305,8 +310,18 @@ define('io.ox/office/editor/position',
 
                 for (var i = 0; i < nodeList.length; i++) {
                     // Searching the children
-                    var currentNode = nodeList[i];
-                    var currentLength = $(nodeList[i]).text().length;
+                    var currentLength = 0,
+                        currentNode = nodeList[i];
+
+                    if (nodeList[i].nodeName === 'IMG') {
+                        // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
+                        currentLength = 1;
+                        isImage = true;
+                    } else {
+                        currentLength = $(nodeList[i]).text().length;
+                        isImage = false;
+                    }
+
                     if (textLength + currentLength >= pos) {
                         bFound = true;
                         node = currentNode;
@@ -323,7 +338,10 @@ define('io.ox/office/editor/position',
             }
 
             childNode = node;
-            offset = pos - textLength;
+
+            if (! isImage) {
+                offset = pos - textLength;
+            }
 
         } else {
             Utils.warn('Position.getNextChildNode(): Unknown node: ' + node.nodeName);
@@ -856,6 +874,10 @@ define('io.ox/office/editor/position',
                 var nodeList = paragraph.childNodes;
                 for (var i = 0; i < nodeList.length; i++) {
                     paraLen += $(nodeList[i]).text().length;
+                    if (nodeList[i].nodeName === 'IMG') {
+                        paraLen++;
+                    }
+                    // paraLen += $('IMG', nodeList[i]).length;  // TODO: if IMGs are allowed in spans, ...
                 }
             }
         }
