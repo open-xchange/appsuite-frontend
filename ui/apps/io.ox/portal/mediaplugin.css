@@ -1,0 +1,62 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Markus Bode <markus.bode@open-xchange.com>
+ */
+
+.io-ox-portal-mediaplugin-big {
+	background: #000;
+    padding: 5px;
+    border-radius: 5px 5px 5px 5px;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry {
+    max-width: 450px;
+    clear: both;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry-big {
+    position: relative;
+    width: 100%;
+}
+.io-ox-portal-mediaplugin .mediaplugin-title {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+.io-ox-portal-mediaplugin .mediaplugin-content {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    line-height: 1.2em;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry-big .mediaplugin-title {
+    top: 1.0em;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry-big .mediaplugin-content {
+    bottom: 1.0em;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry-big .mediaplugin-textbackground {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+    background: #000;
+    color: #fff;
+    position: absolute;
+    padding: 0.5em;
+}
+
+.io-ox-portal-mediaplugin .mediaplugin-entry-big img {
+    margin: 0;
+}
+.io-ox-portal-mediaplugin img {
+    border-radius: 5px 5px 5px 5px;
+    margin: 0 1.5em 1em 0;
+    border: 0px none;
+    max-width: 100%;
+}
+.io-ox-portal-mediaplugin .mediaplugin-entry-big-tile {
+	display: none;
+}
