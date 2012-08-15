@@ -114,24 +114,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 return drawContent(extension, event);
             };
         }
-        
-
-        var getKulerIndex = (function () {
-
-            var list = '0123456789'.split(''), pos = 0, tmp = [];
-
-            function randomSort() { return Math.round(Math.random()) - 0.5; }
-
-            return function () {
-                if (tmp.length === 0) {
-                    tmp = list.slice(pos, pos + 5).sort(randomSort);
-                    pos = pos === 0 ? 5 : 0;
-                }
-                return tmp.shift();
-            };
-        }());
 
         function initExtensions() {
+            var count = 0;
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
@@ -139,11 +124,10 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         // experimental
-                        .addClass('tile-color' + getKulerIndex())
+                        .addClass('tile-color' + (count++ % 10))
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
-
                     $node.on('click', makeClickHandler(extension));
 
                     if (!extension.loadTile) {
@@ -271,6 +255,10 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
                 initExtensions();
+                if (app.active) {
+                    //drawContent(app.active, null);
+                    //$('.io-ox-sidepopup-pane .scrollable-pane');
+                }
             });
 
             win.show();
