@@ -3,7 +3,6 @@
 @portal-background: @topbar-background-alt;
 
 .io-ox-portal {
- 
     padding: 13px;
     position: relative;
     height: 100%;
@@ -61,48 +60,48 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-.io-ox-portal-rss .rss-entry {
-    max-width: 450px;
-    clear: both;
-}
-.io-ox-portal-rss .rss-title {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #000;
-    margin: 2em 0 1em 0;
-}
-.io-ox-portal-rss.spiegel .rss-title {
-}
-.io-ox-portal-rss .rss-content {
-    font-family: Verdana, Arial, Helvetica, sans-serif;
-    line-height: 1.2em;
-}
-.io-ox-portal-rss .rss-content img {
-    float: left;
-    margin: 0 1.5em 1em 0;
-    border: 0px none;
-    max-width: 250px;
-}
 .io-ox-portal-tiles {
-    max-width: 840px;
+    text-align: left;
+    margin: 0 auto;
 }
-.io-ox-portal-content {
-    width: 400px;
-    background-color: #fff;
-    overflow: auto;
-    min-height: 95%;
-    padding: 13px;
-    float: right;
+
+@tile-margin: 1px;
+@tile-width: 270px;
+@tile-height: 180px;
+
+@media all and (min-width: 320px) {
+    .io-ox-portal-tiles { width: 1*(@tile-width + 2*@tile-margin);}
 }
+@media all and (min-width: 640px) {
+    .io-ox-portal-tiles { width: 2*(@tile-width + 2*@tile-margin);}
+}
+@media all and (min-width: 960px) {
+    .io-ox-portal-tiles { width: 3*(@tile-width + 2*@tile-margin);}
+}
+@media all and (min-width: 1280px) {
+    .io-ox-portal-tiles { width: 4*(@tile-width + 2*@tile-margin);}
+}
+@media all and (min-width: 1600px) {
+    .io-ox-portal-tiles { width: 5*(@tile-width + 2*@tile-margin);}
+}
+@media all and (min-width: 1920px) {
+    .io-ox-portal-tiles { width: 6*(@tile-width + 2*@tile-margin); }
+}
+@media all and (min-width: 2240px) {
+    .io-ox-portal-tiles { width: 7*(@tile-width + 2*@tile-margin); }
+}
+@media all and (min-width: 2560px) {
+    .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
+}
+
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
     padding: 13px;
     overflow: hidden;
-    width: 270px;
-    height: 180px;
-    margin: 0 2px 2px 0;
+    width: @tile-width;
+    height: @tile-height;
+    margin: @tile-margin;
     cursor: pointer;
     color: white;
 }
@@ -119,7 +118,6 @@
     height: 4em;
 }
 .io-ox-portal-tile-active {
-//    border-left: 4px solid transparent;
 }
 .io-ox-portal .tile-image {
     width: 32px;

@@ -20,8 +20,9 @@ define.async('io.ox/portal/main',
      'io.ox/core/taskQueue',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
+     'io.ox/core/tk/dialogs',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
     'use strict';
 
@@ -69,7 +70,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 id: extension.id,
                 perform: function () {
                     var def = $.Deferred(),
-                        $node = $("<div/>");
+                        $node = $('<div/>');
 
                     extension.invoke('load')
                         .pipe(function () {
@@ -90,12 +91,17 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             };
         }
 
-        function drawContent(extension) {
+        function drawContent(extension, e) {
             contentQueue.fasttrack(extension.id).done(function (node) {
+                console.log("DrawContent called for " + extension.id);
                 contentSide.children().trigger('onPause').detach();
                 $(node).trigger('onResume');
-                contentSide.append(node);
-                $(node).trigger('onAppended');
+
+                new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                    popup.append(node);
+                    $(node).trigger('onAppended');
+                });
+                
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
@@ -104,29 +110,16 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function makeClickHandler(extension) {
             return function (event) {
+                console.log("MakeClickHandler called for " + extension.id);
                 contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
-                return drawContent(extension);
+                return drawContent(extension, event);
             };
         }
 
-        var getKulerIndex = (function () {
-
-            var list = '0123456789'.split(''), pos = 0, tmp = [];
-
-            function randomSort() { return Math.round(Math.random()) - 0.5; }
-
-            return function () {
-                if (tmp.length === 0) {
-                    tmp = list.slice(pos, pos + 5).sort(randomSort);
-                    pos = pos === 0 ? 5 : 0;
-                }
-                return tmp.shift();
-            };
-        }());
-
         function initExtensions() {
+            var count = 0;
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
@@ -134,11 +127,10 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
                         // experimental
-                        .addClass('tile-color' + getKulerIndex())
+                        .addClass('tile-color' + (count++ % 10))
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
-
                     $node.on('click', makeClickHandler(extension));
 
                     if (!extension.loadTile) {
@@ -257,14 +249,9 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
             app.active = _(ext.point('io.ox/portal/widget').all()).first();
 
-            if (app.active) {
-                contentSide.busy();
-                drawContent(app.active);
-            }
-
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(contentSide, tileSide);
+                .append(tileSide);
 
             ox.on('refresh^', function () {
                 tileSide.empty();
@@ -272,7 +259,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentQueue.start();
                 initExtensions();
                 if (app.active) {
-                    drawContent(app.active);
+                    //drawContent(app.active, null);
+                    //$('.io-ox-sidepopup-pane .scrollable-pane');
                 }
             });
 
