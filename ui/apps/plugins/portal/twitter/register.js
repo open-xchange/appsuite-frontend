@@ -142,7 +142,7 @@ define('plugins/portal/twitter/register',
         var newestId = $first.data('entry').id_str;
         $tweets.addClass('pulltorefresh-refreshing');
 
-        loadTweets(0, 0, newestId)
+        $.when(loadTweets(0, 0, newestId), _.wait(500))
             .done(function (j) {
                 console.log("New Tweets: " + j.length);
                 j.reverse();
@@ -225,7 +225,7 @@ define('plugins/portal/twitter/register',
         loadMoreResults: function (finishFn) {
             $busyIndicator.addClass('io-ox-busy');
 
-            loadTweets(loadEntriesPerPage, offset)
+            $.when(loadTweets(loadEntriesPerPage, offset), _.wait(500))
                 .done(function (j) {
                     j = j.slice(1);
                     _(j).each(function (tweet) {
