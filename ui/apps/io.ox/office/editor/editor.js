@@ -1500,9 +1500,9 @@ define('io.ox/office/editor/editor',
 
         this.copyRow = function () {
             var selection = this.getSelection(),
-                start = Position.getRowIndexInTable(paragraphs, selection.startPaM.oxoPosition),
+                start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
                 end = start + 1,
-                position = _.copy(selection.startPaM.oxoPosition, true);
+                position = _.copy(selection.endPaM.oxoPosition, true);
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
@@ -1512,9 +1512,9 @@ define('io.ox/office/editor/editor',
 
         this.copyColumn = function () {
             var selection = this.getSelection(),
-                start = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
+                start = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
                 end = start + 1,
-                position = _.copy(selection.startPaM.oxoPosition, true);
+                position = _.copy(selection.endPaM.oxoPosition, true);
 
             var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
 
