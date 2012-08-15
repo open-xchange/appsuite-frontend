@@ -26,7 +26,7 @@ define('io.ox/portal/mediaplugin',
         var presentation = [];
         var mpext = {};
 
-        var options = {bigPreview: false};
+        var options = {bigPreview: false, elementsPerPage: 20};
 
         var setOptions = function (o) {
             options = $.extend(options, o);
@@ -37,10 +37,15 @@ define('io.ox/portal/mediaplugin',
         };
 
         var loadFeed = function (extension, count, offset) {
-            // TODO count
-//            return $.getJSON(extension.url)
+            var callback = 'mpcb_' + extension.id.replace(/[^a-z0-9]/g, '_') + "_" + new Date().getTime();
 
-            var callback = 'mediapluginCallback_' + extension.id.replace('-', '_');
+            if (count) {
+                callback += "_" + count;
+            }
+
+            if (offset) {
+                callback += "_" + offset;
+            }
 
             var myurl = extension.url + callback;
 
@@ -54,12 +59,12 @@ define('io.ox/portal/mediaplugin',
                 jsonp: false,
                 jsonpCallback: callback
             }).pipe(function (data) {
-                    if (mpext.determineSuccessfulResponse) {
-                        return mpext.determineSuccessfulResponse(data);
-                    } else {
-                        return data;
-                    }
-                });
+                if (mpext.determineSuccessfulResponse) {
+                    return mpext.determineSuccessfulResponse(data);
+                } else {
+                    return data;
+                }
+            });
         };
 
         var drawTile = function (extension, $node, data, counter) {
@@ -68,7 +73,7 @@ define('io.ox/portal/mediaplugin',
         };
 
         var loadTile = function (extension) {
-            return loadFeed(extension, 1);
+            return loadFeed(extension, options.elementsPerPage);
         };
 
         var resizeImage = function ($img, maxWidth, maxHeight) {
@@ -190,6 +195,7 @@ define('io.ox/portal/mediaplugin',
                 var offset = 0;
                 var lastClickedOn = 0;
                 var counter = 0;
+                var dataFromPreview = false;
 
                 ext.point("io.ox/portal/widget").extend({
                     id: extension.id,
@@ -202,6 +208,8 @@ define('io.ox/portal/mediaplugin',
                     preview: function () {
                         var deferred = $.Deferred();
                         loadTile(extension).done(function (j) {
+                            dataFromPreview = j;
+
                             var data = mpext.getDataArray(j);
 
                             if (!data || data && data.length === 0) {
@@ -221,17 +229,21 @@ define('io.ox/portal/mediaplugin',
                     },
 
                     load: function () {
-                        return loadFeed(extension, 20);
+                        if (dataFromPreview !== false) {
+                            var def = new $.Deferred();
+                            def.resolve(dataFromPreview);
+                            return def;
+                        } else {
+                            return loadFeed(extension, options.elementsPerPage);
+                        }
                     },
 
                     loadMoreResults: function (finishFn) {
-                        console.log("loadMoreResults");
-
                         $busyIndicator.addClass('io-ox-busy');
 
                         offset++;
 
-                        $.when(loadFeed(extension, 20, offset), _.wait(1000)).done(function (j) {
+                        $.when(loadFeed(extension, options.elementsPerPage, offset), _.wait(1000)).done(function (j) {
                                 _(mpext.getDataArray(j)).each(function (entry) {
                                     $mediapluginEntries.append(elementPreview(entry, counter++));
                                 });

@@ -32,7 +32,7 @@ define('plugins/portal/tumblr/register',
     mp.init({
         appendLimitOffset: function (myurl, count, offset) {
             if (count) {
-                myurl += "&count=" + count;
+                myurl += "&limit=" + count;
             }
 
             if (offset) {
