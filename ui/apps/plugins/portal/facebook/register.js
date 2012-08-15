@@ -50,11 +50,11 @@ define('plugins/portal/facebook/register',
         index: 150,
         title: 'Facebook',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
-        background: '#3B5998',
+        tileColor: 2,
         color: 'bright',
         preview: function () {
             var deferred = $.Deferred();
-            
+
             proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
@@ -81,12 +81,12 @@ define('plugins/portal/facebook/register',
                         $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
                         $('<div>').text(strings.shorten(message, 100)));
                 }
-                
+
                 deferred.resolve($previewNode);
             }).fail(function () {
                 deferred.resolve(control.CANCEL);
             });
-            
+
             return deferred;
         },
         load: function () {

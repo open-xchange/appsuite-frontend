@@ -1,4 +1,5 @@
 /**
+ * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
  *
@@ -26,6 +27,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+
     return require(plugins).pipe(function () {
 
         // application object
@@ -90,8 +92,10 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function drawContent(extension) {
             contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.children().detach();
+                contentSide.children().trigger('onPause').detach();
+                $(node).trigger('onResume');
                 contentSide.append(node);
+                $(node).trigger('onAppended');
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
@@ -100,12 +104,27 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function makeClickHandler(extension) {
             return function (event) {
-                contentSide.find(":first").detach();
+                contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
                 return drawContent(extension);
             };
         }
+
+        var getKulerIndex = (function () {
+
+            var list = '0123456789'.split(''), pos = 0, tmp = [];
+
+            function randomSort() { return Math.round(Math.random()) - 0.5; }
+
+            return function () {
+                if (tmp.length === 0) {
+                    tmp = list.slice(pos, pos + 5).sort(randomSort);
+                    pos = pos === 0 ? 5 : 0;
+                }
+                return tmp.shift();
+            };
+        }());
 
         function initExtensions() {
             ext.point('io.ox/portal/widget')
@@ -114,6 +133,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
+                        // experimental
+                        .addClass('tile-color' + getKulerIndex())
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
@@ -180,19 +201,24 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                     $node.append(preview);
                                 }
                             });
-                            extension.asyncMetadata("background").done(function (bgColor) {
-                                if (bgColor === control.CANCEL) {
+                            extension.asyncMetadata("tileColor").done(function (color) {
+                                if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.css("background", bgColor);
+                                if (color !== undefined) {
+//                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
+//                                    $node.addClass('tile-color' + color);
+                                }
                             });
                             extension.asyncMetadata("color").done(function (color) {
                                 if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.addClass("tile-" + color);
+                                if (color !== undefined) {
+                                    $node.addClass("tile-" + color);
+                                }
                             });
 
 
@@ -227,11 +253,10 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-
             initExtensions();
 
-
             app.active = _(ext.point('io.ox/portal/widget').all()).first();
+
             if (app.active) {
                 contentSide.busy();
                 drawContent(app.active);

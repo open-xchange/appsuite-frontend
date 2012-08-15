@@ -8,7 +8,8 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author  Tobias Prinz <tobias.prinz@open-xchange.com>
+ * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
 define('plugins/portal/twitter/register',
@@ -16,18 +17,18 @@ define('plugins/portal/twitter/register',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
      'io.ox/core/strings',
+     'io.ox/portal/pulltorefresh',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, gt) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, gt) {
 
     'use strict';
 
     var extensionId = 'twitter';
     var loadEntriesPerPage = 20;
     var offset = 0;
-    var tweets = $('<div>').addClass('twitter');
+    var $tweets = $('<div>').addClass('twitter');
     var $busyIndicator = $('<div>').html('&nbsp;');
-    var $pullToRefresh = $('<div>').addClass('pulltorefresh').text('');
-    
+
     var parseTweet = function (text, entities) {
         var offsets = {};
 
@@ -69,9 +70,24 @@ define('plugins/portal/twitter/register',
 
         return bob;
     };
+    var loadFromTwitter = function (params) {
+        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
+        return def.pipe(function (response) {
+            if (response) {
+                var jsonResponse = JSON.parse(response);
+
+                if (!jsonResponse.error) {
+                    return jsonResponse;
+                } else {
+                    return {};
+                }
+            } else {
+                return {};
+            }
+        });
+    };
     var loadTile = function () {
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: 1, include_entities: true}});
-        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+        return loadFromTwitter({count: 1, include_entities: true});
     };
     var drawTile = function (tweets, $node) {
         if (!tweets) {
@@ -88,7 +104,7 @@ define('plugins/portal/twitter/register',
                 $('<div class="io-ox-portal-preview">').text(strings.shorten(message, 120)));
         }
     };
-    
+
     var loadTweets = function (count, offset, newerThanId) {
         var params = {'include_entities': true};
         if (offset) {
@@ -96,21 +112,20 @@ define('plugins/portal/twitter/register',
             // increment because max_id is inclusive and we're going to ignore the first tweet in our result
             params.count = count + 1;
         }
-        
+
         if (newerThanId) {
             params.since_id = newerThanId;
         } else {
             params.count = count;
         }
-        
-        var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: params});
-        return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+
+        return loadFromTwitter(params);
     };
-    
+
     var showTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-        
+
         return $('<div class="tweet">')
             .data('entry', tweet)
             .append($('<a>', {href: tweetLink, target: '_blank'})
@@ -120,15 +135,38 @@ define('plugins/portal/twitter/register',
                 .append('<br />')
                 .append(parseTweet(tweet.text, tweet.entities)));
     };
-    
+
+    var onPullToRefresh = function () {
+        offset = 0;
+        var $first = $('div.tweet:first');
+        var newestId = $first.data('entry').id_str;
+        $tweets.addClass('pulltorefresh-refreshing');
+
+        $.when(loadTweets(0, 0, newestId), _.wait(500))
+            .done(function (j) {
+                console.log("New Tweets: " + j.length);
+                j.reverse();
+                _(j).each(function (tweet) {
+                    showTweet(tweet).prependTo($tweets);
+                });
+
+                var $o = $('div.window-content');
+                var top = $o.scrollTop() - $o.offset().top + $first.offset().top;
+                $o.animate({scrollTop: top}, 250, 'swing');
+                $tweets.removeClass('pulltorefresh-refreshing');
+            })
+            .fail(function () {
+                $tweets.removeClass('pulltorefresh-refreshing');
+            });
+    };
+
     ext.point('io.ox/portal/widget').extend({
         id: extensionId,
         index: 140,
         tileHeight: 2,
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
-        background: '#49f',
-        color: 'bright',
+        tileColor: 1,
         preview: function () {
             var deferred = $.Deferred();
             loadTile().done(function (tweets) {
@@ -145,93 +183,41 @@ define('plugins/portal/twitter/register',
             });
             return deferred;
         },
-        
+
         load: function () {
-            var def = proxy.request({api: 'twitter', url: 'https://api.twitter.com/1/statuses/home_timeline.json', params: {count: loadEntriesPerPage, include_entities: true}});
-            return def.pipe(function (response) { return (response) ? JSON.parse(response) : null; });
+            return loadFromTwitter({count: loadEntriesPerPage, include_entities: true});
         },
         draw: function (timeline) {
-            var mouseButtonPressed = false,
-                mouseY = -1,
-                refresh = false;
-            
-            $(this).on('mousedown', function (e) {
-                mouseButtonPressed = true;
-                mouseY = -1;
-                refresh = false;
-                $('div.tweet > div.text').addClass('twitter-unselectable');
-                $('div.tweet > div.text > span').addClass('twitter-unselectable');
-                $pullToRefresh.css({'height': '0px', 'padding-top': '0px'}).text('').prependTo(tweets);
+            // Pull to refresh
+            $(this).on('onResume', function () {
+                $(this).on('onPullToRefresh', onPullToRefresh);
+                ptr.attachEvents($('div.window-content'), $(this), $tweets);
+            }).on('onPause', function () {
+                $(this).off('onPullToRefresh', onPullToRefresh);
+                ptr.detachEvents();
+            }).on('onPullToRefreshDown', function () {
+                $('div.tweet > div.text').addClass('pulltorefresh-unselectable');
+                $('div.tweet > div.text > span').addClass('pulltorefresh-unselectable');
+            }).on('onPullToRefreshUp', function () {
+                $('div.tweet > div.text').removeClass('pulltorefresh-unselectable');
+                $('div.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
             });
-            
-            $(this).on('mouseup', function (e) {
-                mouseButtonPressed = false;
-                $pullToRefresh.detach();
-                tweets.animate({'padding-top': 0}, 100, function () {
-                    if (refresh) {
-                        offset = 0;
-                        var $first = $('div.tweet:first');
-                        var newestId = $first.data('entry').id_str;
-                        tweets.addClass('pulltorefreshRefreshing');
-                        
-                        loadTweets(0, 0, newestId)
-                            .done(function (j) {
-                                console.log("New Tweets: " + j.length);
-                                $('div.tweet > div.text').removeClass('twitter-unselectable');
-                                $('div.tweet > div.text > span').removeClass('twitter-unselectable');
-                                j.reverse();
-                                _(j).each(function (tweet) {
-                                    showTweet(tweet).prependTo(tweets);
-                                });
-                                
-                                var $o = $('div.window-content');
-                                console.log($pullToRefresh.height);
-                                var top = $o.scrollTop() - $o.offset().top + $first.offset().top;
-                                $o.animate({scrollTop: top}, 250, 'swing');
-                                tweets.removeClass('pulltorefreshRefreshing');
-                            })
-                            .fail(function () {
-                                tweets.removeClass('pulltorefreshRefreshing');
-                            });
-                    }
-                });
-            });
-            
-            $(this).on('mousemove', function (e) {
-                if (mouseButtonPressed) {
-                    if (mouseY !== -1) {
-                        var distance = mouseY - e.pageY;
-                        if (distance < 0 && distance > -50) {
-                            $pullToRefresh.css('height', (-1 * distance) + 'px');
-//                            tweets.css('padding-top', -1 * distance);
-                        }
-                        if (distance < -40) {
-                            $pullToRefresh.css('padding-top', '20px').text(gt('Pull To Refresh'));
-                            refresh = true;
-                        } else {
-                            $pullToRefresh.css('padding-top', '0px').text('');
-                            refresh = false;
-                        }
-                    } else {
-                        mouseY = e.pageY;
-                    }
-                }
-            });
-            
+
             if (!timeline) {
                 this.remove();
                 return $.Deferred().resolve();
             }
             var self = this;
-            
-            self.append($('<div>').addClass('clear-title').text('Twitter'));
 
-            tweets.appendTo(self);
+            self.empty().append($('<div>').addClass('clear-title').text('Twitter'));
+            $tweets.empty();
+
+            $tweets.appendTo(self);
             $busyIndicator.appendTo(self);
-                        
+
             _(timeline).each(function (tweet) {
                 offset = tweet.id_str;
-                showTweet(tweet).appendTo(tweets);
+                showTweet(tweet).appendTo($tweets);
             });
 
             return $.Deferred().resolve();
@@ -239,12 +225,12 @@ define('plugins/portal/twitter/register',
         loadMoreResults: function (finishFn) {
             $busyIndicator.addClass('io-ox-busy');
 
-            loadTweets(loadEntriesPerPage, offset)
+            $.when(loadTweets(loadEntriesPerPage, offset), _.wait(500))
                 .done(function (j) {
                     j = j.slice(1);
                     _(j).each(function (tweet) {
                         offset = tweet.id_str;
-                        showTweet(tweet).appendTo(tweets);
+                        showTweet(tweet).appendTo($tweets);
                     });
                     finishFn($busyIndicator);
                 })
