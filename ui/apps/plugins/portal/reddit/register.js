@@ -29,11 +29,13 @@ define('plugins/portal/reddit/register',
 
     mp.setOptions({bigPreview: true});
 
-    var extractThumbnail = function (entry) {
+    var extractImage = function (entry) {
         var thumbUrl = "",
             big = mp.getOption('bigPreview');
 
-        if (entry.domain === "imgur.com" || entry.domain === "i.imgur.com") {
+        var directImages = ['whatgifs.com', 'imgur.com', 'i.imgur.com', 'i.minus.com'];
+
+        if (_.include(directImages, entry.domain)) {
             if (big) {
                 if (entry.domain === "imgur.com") {
                     thumbUrl = entry.url.replace(/http:\/\/imgur/g, 'http://i.imgur') + ".jpg";
@@ -43,6 +45,20 @@ define('plugins/portal/reddit/register',
             } else if (entry.thumbnail) {
                 thumbUrl = entry.thumbnail;
             }
+        }
+
+        // urls ends with ".jpg"? Give it a try
+        if (entry.url.match(/\.jpg$|\.png$\.gif$/)) {
+            thumbUrl = entry.url;
+        }
+
+//        TODO
+//        entry.media.oembed.thumbnail_url
+//        entry.media.oembed.thumbnail_width
+//        entry.media.oembed.thumbnail_height
+
+        if (thumbUrl === '' && entry && entry.media && entry.media.oembed && entry.media.oembed.thumbnail_url) {
+            thumbUrl = entry.media.oembed.thumbnail_url;
         }
 
         return thumbUrl;
@@ -67,25 +83,21 @@ define('plugins/portal/reddit/register',
             return j.children;
         },
         elementPreview: function ($node, entry) {
-            var thumbUrl = "",
-                big = mp.getOption('bigPreview');
+            var thumbUrl = '',
+                title = '';
 
             entry = entry.data;
 
-            if (entry.domain === "imgur.com" || entry.domain === "i.imgur.com") {
-                if (big) {
-                    if (entry.domain === "imgur.com") {
-                        thumbUrl = entry.url.replace(/http:\/\/imgur/g, 'http://i.imgur') + ".jpg";
-                    } else {
-                        thumbUrl = entry.url;
-                    }
-                } else if (entry.thumbnail) {
-                    thumbUrl = entry.thumbnail;
-                }
-            } else if (entry.title) {
-                $node.append($("<div>").addClass("mediaplugin-title mediaplugin-textbackground").text(entry.title));
-            } else {
-                $node.append($("<div>").addClass("mediaplugin-title mediaplugin-textbackground").text(gt("No title.")));
+            if (entry.title) {
+                title = entry.title;
+            }
+
+            thumbUrl = extractImage(entry);
+
+            if (!thumbUrl && !title) {
+                $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
+            } else if (title) {
+                $node.append($("<div>").addClass("mediaplugin-title").text(title));
             }
 
             // TODO timezone
@@ -94,70 +106,69 @@ define('plugins/portal/reddit/register',
             if (thumbUrl !== "") {
                 var $img = $('<img/>', {'data-original': thumbUrl});//, height: thumbHeight, width: thumbWidth});
                 return $img;
-//                mp.resizeImage($img, 64, 64);
-//                $node.append($img);
             }
             return false;
         },
         popupContent: function ($popup, entry, $busyIndicator) {
-            var maxWidth = $popup.width();
-            var maxHeight = $popup.height();
-
-            var willDisableBusyIndicator = false;
+            var maxWidth = $popup.width(),
+                maxHeight = $popup.height(),
+                willDisableBusyIndicator = false,
+                title = '';
+            var $node = $('<div>').addClass('io-ox-portal-mediaplugin-portal');
 
             entry = entry.data;
-            console.log(entry);
+//            console.log(entry);
+
 
             if (entry.title) {
-                $popup.append($("<div>").addClass("mediaplugin-title").text(entry.title));
+                title = entry.title;
+            } else {
+                title = gt('No title.');
             }
-//            if (entry.description) {
-//                // TODO xss
-//                var $description = $("<div/>").html(entry.description);
-//                $popup.append($description);
-//                maxHeight -= $description.height();
-//            }
 
-//            if (entry.body) {
-//                // TODO xss
-//                var $body = $("<div/>").html(entry.body);
-//                $popup.append($body);
-//                maxHeight -= $body.height();
-//            }
+            var $title = $("<div>").addClass("mediaplugin-title").text(title).css({width: maxWidth});
+            maxHeight -= $title.height();
+            $title.appendTo($node);
 
-//            if (entry.player) {
-//                $popup.append($("<div/>").html(entry.player[0].embed_code));
-//            } else if (entry.photos) {
-//                willDisableBusyIndicator = true;
-//
-//                _(entry.photos).each(function (p) {
-//                    var photo = p.original_size;
-//                    var $img = $("<img/>", {'src': photo.url, height: photo.height, width: photo.width}).css({display: 'none'})
-//                        .load(function () {
-//                            if ($busyIndicator) {
-//                                $busyIndicator.detach();
-//                                $(this).fadeIn();
-//                            }
-//                        });
-//
-//                    mp.resizeImage($img, maxWidth, maxHeight);
-//                    $popup.append($img);
-//                });
-//            } else {
-//                $popup.append($("<a/>", {href: entry.post_url, target: "_blank"}).text(entry.post_url)
-//                        .on("click", function (e) {
-//                            e.stopPropagation();
-//                        }));
-//            }
-//
-//            if (entry.caption) {
-//                // TODO xss
-//                $popup.append(entry.caption);
-//            }
+            var imageUrl = extractImage(entry);
 
+            if (entry.domain === 'youtube.com') {
+                $('<div>').html($('<span>').html(entry.media_embed.content).text()).appendTo($node);
+            } else  if (imageUrl) {
+                willDisableBusyIndicator = true;
+
+                var $img = $("<img/>", {'src': imageUrl}).css({display: 'none'})
+                    .load(function () {
+                        if ($busyIndicator) {
+                            $busyIndicator.detach();
+                            $(this).fadeIn();
+                        }
+                    });
+
+                // TODO what to do if we don't know the width+height?
+                mp.resizeImage($img, maxWidth, maxHeight);
+                $img.appendTo($node);
+            }
+
+            if (entry.url) {
+                $('<div>').append($('<a>').attr({'href': entry.url}).text(entry.url)).appendTo($node);
+            }
+
+            if (entry.permalink) {
+                $('<a>').attr({'href': 'http://www.reddit.com' + entry.permalink}).text(gt('Comments')).appendTo($node);
+            }
+
+            if (entry.author) {
+                if (entry.permalink) {
+                    $('<span>').text(' | ').appendTo($node);
+                }
+                $('<a>').attr({'href': 'http://www.reddit.com/user/' + entry.author}).text(entry.author).appendTo($node);
+            }
             if ($busyIndicator && !willDisableBusyIndicator) {
                 $busyIndicator.detach();
             }
+
+            $popup.append($node);
         },
         getImagesFromEntry: function (entry, imageCollection) {
             if (entry.photos) {

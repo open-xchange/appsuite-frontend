@@ -342,7 +342,7 @@ define('io.ox/portal/mediaplugin',
             //                            });
             //                        self.append($more);
 
-                                    new dialogs.SidePopup()
+                                    new dialogs.SidePopup({disableCloseByScroll: true})
                                         .delegate(self, options.big ? ".mediaplugin-entry-big" : ".mediaplugin-entry", function (popup) {
                                             lastClickedOn = $(this).attr('data-counter');
                                             console.log("Last clicked on: " + lastClickedOn);
