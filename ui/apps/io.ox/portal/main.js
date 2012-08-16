@@ -100,7 +100,27 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                     popup.append(node);
                     $(node).trigger('onAppended');
                 });
-                
+
+                if (extension.loadMoreResults) {
+                    var $o = $('div.io-ox-sidepopup-pane');
+
+                    $o.bind('scroll', function (event) {
+                        // TODO tidy enough? (loadingMoreResults + active tile)
+                        if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
+                            extension.timer = setTimeout(function () {
+                                // Position + Height + Tolerance
+                                var distance = $o.scrollTop() + $o.height() + 50;
+
+                                if ($('div.scrollable-pane').height() <= distance) {
+                                    extension.isLoadingMoreResults = true;
+                                    extension.loadMoreResults(extension.finishLoadingMoreResults);
+                                }
+                                extension.timer = 0;
+                            }, 250);
+                        }
+                    });
+                }
+
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
@@ -135,28 +155,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
                         };
-                    }
-
-                    if (extension.loadMoreResults) {
-                        var $o = win.nodes.main;
-
-                        $o.bind('scroll',
-                                function () {
-                                    // TODO tidy enough? (loadingMoreResults + active tile)
-                                    if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
-                                        extension.timer = setTimeout(function () {
-                                            // Position + Height + Tolerance
-                                            var distance = $o.scrollTop() + $o.height() + 50;
-
-                                            if ($('div.io-ox-portal-content').height() <= distance) {
-                                                extension.isLoadingMoreResults = true;
-                                                extension.loadMoreResults(extension.finishLoadingMoreResults);
-                                            }
-                                            extension.timer = 0;
-                                        }, 250);
-                                    }
-                                }
-                        );
                     }
 
                     if (!extension.drawTile) {
