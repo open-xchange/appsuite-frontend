@@ -54,12 +54,24 @@ define('plugins/portal/tumblr/register',
             var thumbUrl = "",
                 thumbWidth = 0,
                 thumbHeight = 0,
+                title = "",
                 big = mp.getOption('bigPreview');
 
             if (entry.title) {
-                // TODO xss
-                $node.append($("<div>").addClass("mediaplugin-title").html(entry.title));
-            } else if (entry.photos && entry.photos[0] && entry.photos[0].alt_sizes) {
+                title = entry.title;
+            } else if (entry.body) {
+                title = $('<span>').html(entry.body).text();
+            } else if (entry.text) {
+                title = $('<span>').html(entry.text).text();
+            } else if (entry.description) {
+                title = $('<span>').html(entry.description).text();
+            } else if (entry.caption) {
+                title = $('<span>').html(entry.caption).text();
+            } else if (entry.source_title) {
+                title = $('<span>').html(entry.source_title).text();
+            }
+
+            if (entry.photos && entry.photos[0] && entry.photos[0].alt_sizes) {
                 var sizes = entry.photos[0].alt_sizes;
 
                 _(sizes).each(function (j) {
@@ -77,12 +89,12 @@ define('plugins/portal/tumblr/register',
                         }
                     }
                 });
+            }
 
-                if (thumbUrl === "") {
-                    $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
-                }
-            } else {
+            if (!thumbUrl && !title) {
                 $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
+            } else if (title) {
+                $node.append($("<div>").addClass("mediaplugin-title").text(title));
             }
 
             $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
@@ -90,33 +102,52 @@ define('plugins/portal/tumblr/register',
             if (thumbUrl !== "") {
                 var $img = $('<img/>', {'data-original': thumbUrl, height: thumbHeight, width: thumbWidth});
                 return $img;
-//                mp.resizeImage($img, 64, 64);
-//                $node.append($img);
             }
             return false;
         },
         popupContent: function ($popup, entry, $busyIndicator) {
             var maxWidth = $popup.width();
             var maxHeight = $popup.height();
-
             var willDisableBusyIndicator = false;
+            var title = "";
+            var $node = $('<div>').addClass('io-ox-portal-mediaplugin-portal');
+
+            if (entry.title) {
+                title = entry.title;
+            } else if (entry.body) {
+                title = $('<span>').html(entry.body).text();
+            } else if (entry.text) {
+                title = $('<span>').html(entry.text).text();
+            } else if (entry.description) {
+                title = $('<span>').html(entry.description).text();
+            } else if (entry.caption) {
+                title = $('<span>').html(entry.caption).text();
+            } else if (entry.source_title) {
+                title = $('<span>').html(entry.source_title).text();
+            } else {
+                title = gt('No title.');
+            }
+
+            var $title = $("<div>").addClass("mediaplugin-title").text(title).css({width: maxWidth});
+            maxHeight -= $title.height();
+            $node.append($title);
 
             if (entry.description) {
                 // TODO xss
                 var $description = $("<div/>").html(entry.description);
-                $popup.append($description);
+                $node.append($description);
                 maxHeight -= $description.height();
             }
 
             if (entry.body) {
                 // TODO xss
                 var $body = $("<div/>").html(entry.body);
-                $popup.append($body);
+                $node.append($body);
                 maxHeight -= $body.height();
             }
 
             if (entry.player) {
-                $popup.append($("<div/>").html(entry.player[0].embed_code));
+                $node.append($("<div/>").html(entry.player[0].embed_code));
             } else if (entry.photos) {
                 willDisableBusyIndicator = true;
 
@@ -131,10 +162,10 @@ define('plugins/portal/tumblr/register',
                         });
 
                     mp.resizeImage($img, maxWidth, maxHeight);
-                    $popup.append($img);
+                    $node.append($img);
                 });
             } else {
-                $popup.append($("<a/>", {href: entry.post_url, target: "_blank"}).text(entry.post_url)
+                $node.append($("<a/>", {href: entry.post_url, target: "_blank"}).text(entry.post_url)
                         .on("click", function (e) {
                             e.stopPropagation();
                         }));
@@ -142,12 +173,14 @@ define('plugins/portal/tumblr/register',
 
             if (entry.caption) {
                 // TODO xss
-                $popup.append(entry.caption);
+                $node.append(entry.caption);
             }
 
             if ($busyIndicator && !willDisableBusyIndicator) {
                 $busyIndicator.detach();
             }
+
+            $popup.append($node);
         },
         getImagesFromEntry: function (entry, imageCollection) {
             if (entry.photos) {
