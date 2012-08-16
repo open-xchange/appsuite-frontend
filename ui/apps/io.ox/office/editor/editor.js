@@ -339,27 +339,40 @@ define('io.ox/office/editor/editor',
      */
     function validateParagraphNode(paragraph) {
 
-        var // the number of child nodes in the paragraph
+        var // array of arrays collecting all sequences of sibling text nodes
+            siblingTextNodes = [],
+            // the number of child nodes in the paragraph
             childCount = 0,
             // whether the last child node is the dummy <br> element
-            lastDummy = false,
-            // first and last text node for white-space handling
-            firstTextNode = null, lastTextNode = null;
+            lastDummy = false;
 
         // convert parameter to a DOM node
         paragraph = Utils.getDomNode(paragraph);
 
-        // remove all empty text spans which have sibling text spans
+        // remove all empty text spans which have sibling text spans, and collect
+        // sequences of sibling text spans (needed for white-space handling)
         $(paragraph).contents().each(function () {
-            if (DOM.isEmptyTextSpan(this) && (DOM.getSiblingTextNode(this, false) || DOM.getSiblingTextNode(this, true))) {
-                $(this).remove();
+
+            var isTextSpan = DOM.isTextSpan(this),
+                isPreviousTextSpan = isTextSpan && this.previousSibling && DOM.isTextSpan(this.previousSibling),
+                isNextTextSpan = isTextSpan && this.nextSibling && DOM.isTextSpan(this.nextSibling);
+
+            if (isTextSpan) {
+                if ((this.firstChild.nodeValue.length === 0) && (isPreviousTextSpan || isNextTextSpan)) {
+                    $(this).remove();
+                } else if (isPreviousTextSpan) {
+                    _(siblingTextNodes).last().push(this.firstChild);
+                } else {
+                    siblingTextNodes.push([this.firstChild]);
+                }
             }
         });
 
+        // get current child count and whether last node is the dummy <br> node
         childCount = paragraph.childNodes.length;
         lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
 
-        // insert an empty text span if there is no other content (except the dummy <br> element)
+        // insert an empty text span if there is no other content (except the dummy <br>)
         if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
             $(paragraph).prepend($('<span>').text(''));
             childCount += 1;
@@ -373,28 +386,41 @@ define('io.ox/office/editor/editor',
             $(paragraph.lastChild).remove();
         }
 
-        // Convert consecutive white-space characters to sequences of SPACE/NBSP pairs.
-        // We cannot use the CSS attribute white-space:pre-wrap, because it breaks the
-        // paragraph's CSS attribute text-align:justified (at least in Firefox).
+        // Convert consecutive white-space characters to sequences of SPACE/NBSP
+        // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
+        // it breaks the paragraph's CSS attribute text-align:justify. Process
+        // each sequence of sibling text nodes for its own (the text node
+        // sequences may be interrupted by other elements such as hard line
+        // breaks, images, or other objects).
         // TODO: handle explicit NBSP inserted by the user (when supported)
-        Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
+        _(siblingTextNodes).each(function (textNodes) {
 
-            textNode.nodeValue = textNode.nodeValue
-                // the normalized text (all white-space converted to SPACE)
+            var // the complete text of all sibling text nodes
+                text = '',
+                // offset for final text distribution
+                offset = 0;
+
+            // collect the complete text in all text nodes
+            _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
+
+            // process all white-space contained in the text nodes
+            text = text
+                // normalize white-space (convert to SPACE characters)
                 .replace(/\s/g, ' ')
+                // text in the node sequence cannot start with a SPACE character
+                .replace(/^ /, '\xa0')
                 // convert SPACE/SPACE pairs to SPACE/NBSP pairs
-                .replace(/ {2}/g, ' \xa0');
+                .replace(/ {2}/g, ' \xa0')
+                // text in the node sequence cannot end with a SPACE character
+                .replace(/ $/, '\xa0');
+
+            // distribute converted text to the text nodes
+            _(textNodes).each(function (textNode) {
+                var length = textNode.nodeValue.length;
+                textNode.nodeValue = text.substr(offset, length);
+                offset += length;
+            });
         });
-
-        // the first text node in the paragraph cannot start with a SPACE character
-        if ((firstTextNode = Utils.findFirstTextNode(paragraph))) {
-            firstTextNode.nodeValue = firstTextNode.nodeValue.replace(/^ /, '\xa0');
-        }
-
-        // the last text node in the paragraph cannot end with a SPACE character
-        if ((lastTextNode = Utils.findLastTextNode(paragraph))) {
-            lastTextNode.nodeValue = lastTextNode.nodeValue.replace(/ $/, '\xa0');
-        }
 
         // TODO: Adjust tabs, ...
     }
@@ -859,7 +885,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: false });
+                Attributes.Character.setAttributes(highlightRanges, editdiv, { highlight: false });
             }
             highlightRanges = [];
         };
@@ -942,7 +968,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            Attributes.setAttributes('character', highlightRanges, editdiv, { highlight: true });
+            Attributes.Character.setAttributes(highlightRanges, editdiv, { highlight: true });
 
             // make first highlighted text node visible
             DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1669,10 +1695,10 @@ define('io.ox/office/editor/editor',
             var // the resulting attributes
                 attributes = null;
 
-            if (Attributes.isAttribute('paragraph', attrName)) {
-                attributes = this.getAttributes('paragraph');
-            } else if (Attributes.isAttribute('character', attrName)) {
-                attributes = this.getAttributes('character');
+            if (Attributes.Paragraph.hasAttribute(attrName)) {
+                attributes = this.getParagraphAttributes();
+            } else if (Attributes.Character.hasAttribute(attrName)) {
+                attributes = this.getCharacterAttributes();
             } else {
                 Utils.error('Editor.getAttribute(): no valid attribute specified');
             }
@@ -1681,18 +1707,27 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the values of all formatting attributes of a specific type
-         * in the current selection.
-         *
-         * @param {String} type
-         *  The type of the attributes.
+         * Returns the values of all paragraph formatting attributes in the
+         * current selection.
          *
          * @returns {Object}
-         *  A map of attribute name/value pairs.
+         *  A map of paragraph attribute name/value pairs.
          */
-        this.getAttributes = function (type) {
+        this.getParagraphAttributes = function () {
             var ranges = DOM.getBrowserSelection(editdiv);
-            return Attributes.getAttributes(type, ranges, editdiv);
+            return Attributes.Paragraph.getAttributes(ranges, editdiv);
+        };
+
+        /**
+         * Returns the values of all character formatting attributes in the
+         * current selection.
+         *
+         * @returns {Object}
+         *  A map of character attribute name/value pairs.
+         */
+        this.getCharacterAttributes = function () {
+            var ranges = DOM.getBrowserSelection(editdiv);
+            return Attributes.Character.getAttributes(ranges, editdiv);
         };
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
@@ -1903,7 +1938,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (Attributes.isAnyAttribute('paragraph', attributes)) {
+                else if (Attributes.Paragraph.hasAnyAttribute(attributes)) {
                     var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -2467,8 +2502,8 @@ define('io.ox/office/editor/editor',
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
             if (textMode !== 'plain') {
-                Attributes.setAttributes('paragraph', ranges, editdiv, attributes);
-                Attributes.setAttributes('character', ranges, editdiv, attributes);
+                Attributes.Paragraph.setAttributes(ranges, editdiv, attributes);
+                Attributes.Character.setAttributes(ranges, editdiv, attributes);
             }
         }
 

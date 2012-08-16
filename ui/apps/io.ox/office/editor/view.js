@@ -207,9 +207,9 @@ define('io.ox/office/editor/view',
                 .end()
             .addSeparator()
             .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 1, autoExpand: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
-                .addButton(Attributes.LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
-                .addButton(Attributes.LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addButton(Attributes.LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
+                .addButton(Attributes.Paragraph.LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
+                .addButton(Attributes.Paragraph.LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
+                .addButton(Attributes.Paragraph.LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })

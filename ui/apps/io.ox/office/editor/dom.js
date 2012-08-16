@@ -101,6 +101,19 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     // static methods ---------------------------------------------------------
 
+    /**
+     * Creates and returns a valid DOM.Point instance for the passed DOM node.
+     * If the passed node is a text node, the DOM point will refer to its first
+     * character, otherwise the DOM point will contain the parent node and the
+     * child index of the passed node as offset.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node selected by the created DOM.Point instance. If this object
+     *  is a jQuery collection, uses the first DOM node it contains.
+     *
+     * @returns {DOM.Point}
+     *  A new DOM.Point instance referring to the passed node.
+     */
     DOM.Point.createPointForNode = function (node) {
         return new DOM.Point(node).validate();
     };
@@ -262,6 +275,20 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return new DOM.Range(new DOM.Point(startNode, startOffset), _.isObject(endNode) ? new DOM.Point(endNode, endOffset) : undefined);
     };
 
+    /**
+     * Creates and returns a valid DOM.Range instance for the passed DOM node.
+     * If the passed node is a text node, the DOM range will select its entire
+     * text, otherwise the DOM range will contain the parent node and the
+     * child index of the passed node as start offset, and the next child index
+     * as end offset, effectively selecting the entire node.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node selected by the created DOM.Range instance. If this object
+     *  is a jQuery collection, uses the first DOM node it contains.
+     *
+     * @returns {DOM.Range}
+     *  A new DOM.Range instance referring to the passed node.
+     */
     DOM.Range.createRangeForNode = function (node) {
         var range = new DOM.Range(DOM.Point.createPointForNode(node));
         if (range.end.node.nodeType === 1) {

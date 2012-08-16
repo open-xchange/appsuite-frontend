@@ -44,8 +44,22 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     set: function (size) { editor.insertTable(size); app.getView().getToolPane().showToolBar('table'); }
                 },
 
+                'chain/format/paragraph': {
+                    get: function () { return editor.getParagraphAttributes(); }
+                },
+                'format/paragraph/alignment': {
+                    chain: 'chain/format/paragraph',
+                    get: function (attributes) { return attributes.alignment; },
+                    set: function (align) { editor.setAttribute('alignment', align); }
+                },
+                'format/paragraph/lineheight': {
+                    chain: 'chain/format/paragraph',
+                    get: function (attributes) { return attributes.lineheight; },
+                    set: function (lineHeight) { editor.setAttribute('lineheight', lineHeight); }
+                },
+
                 'chain/format/character': {
-                    get: function () { return editor.getAttributes('character'); }
+                    get: function () { return editor.getCharacterAttributes(); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
@@ -71,20 +85,6 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('underline', state); }
-                },
-
-                'chain/format/paragraph': {
-                    get: function () { return editor.getAttributes('paragraph'); }
-                },
-                'format/paragraph/alignment': {
-                    chain: 'chain/format/paragraph',
-                    get: function (attributes) { return attributes.alignment; },
-                    set: function (align) { editor.setAttribute('alignment', align); }
-                },
-                'format/paragraph/lineheight': {
-                    chain: 'chain/format/paragraph',
-                    get: function (attributes) { return attributes.lineheight; },
-                    set: function (lineHeight) { editor.setAttribute('lineheight', lineHeight); }
                 },
 
                 'chain/table': {

@@ -19,17 +19,12 @@ define('io.ox/office/editor/attributes',
 
     'use strict';
 
-    var // maps all attribute converters to a unique attribute type
-        converters = {},
-
-        // define static class Attributes here to prevent compiler warnings
-        Attributes = {};
-
     // class AttributeConverter ===============================================
 
     /**
      * Converts between formatting attributes of an element's CSS and the
-     * 'setAttribute' operation of the editor's Operations API.
+     * 'setAttribute' operation of the editor's Operations API. Used as base
+     * class for specialized attribute converters.
      *
      * @param {Object} definitions
      *  A map that defines formatting attributes supported by this converter.
@@ -170,19 +165,29 @@ define('io.ox/office/editor/attributes',
 
     } // class AttributeConverter
 
-    // paragraph attributes ===================================================
+    // namespace Attributes ===================================================
+
+    var Attributes = {};
+
+    // singleton Attributes.Paragraph =========================================
+
+    var // predefined values for the 'lineheight' attribute for paragraphs
+        LineHeight = {
+            SINGLE: { type: 'percent', value: 100 },
+            ONE_HALF: { type: 'percent', value: 150 },
+            DOUBLE: { type: 'percent', value: 200 }
+        },
+
+        // caches calculated normal line heights by font family and font sizes
+        lineHeightCache = {},
+
+        // the dummy element used to calculate the 'normal' line height for a specific font
+        lineHeightElement = $('<div style="line-height: normal;"><span>X</span></div>');
+
+    // private methods --------------------------------------------------------
 
     /**
-     * Predefined values for the 'lineheight' attribute for paragraphs.
-     */
-    Attributes.LineHeight = {
-        SINGLE: { type: 'percent', value: 100 },
-        ONE_HALF: { type: 'percent', value: 150 },
-        DOUBLE: { type: 'percent', value: 200 }
-    };
-
-    /**
-     * Returns a valid value for the 'lineheight' attribute.
+     * Returns a valid value for the 'lineheight' paragraph attribute.
      *
      * @param {Object} lineHeight
      *  The line height to be validated.
@@ -208,44 +213,63 @@ define('io.ox/office/editor/attributes',
                 lineHeight.value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
             }
         } else {
-            lineHeight = Attributes.LineHeight.SINGLE;
+            lineHeight = LineHeight.SINGLE;
         }
 
         return lineHeight;
     }
 
     /**
-     * Sets the text line height of the specified text span.
+     * Calculates the 'normal' line height for the font settings in the passed
+     * DOM element in points.
      *
-     * @param {HTMLElement|jQuery} span
-     *  The <span> element whose line height will be changed. If this object is
-     *  a jQuery collection, uses the first DOM node it contains.
+     * @param {HTMLElement} element
+     *  The DOM element containing the font settings needed for the line height
+     *  calculation.
+     *
+     * @returns {Number}
+     *  The 'normal' line height for the font settings in the passed element,
+     *  in points.
+     */
+    function calculateNormalLineHeight(element) {
+
+        var // current font size of the element
+            fontFamily = $(element).css('font-family'),
+            // get or create the cache for the font family
+            fontFamilyCache = lineHeightCache[fontFamily] || (lineHeightCache[fontFamily] = {}),
+            // current font size of the element
+            fontSize = Utils.convertCssLength($(element).css('font-size'), 'pt'),
+            // integer font size used as cache key
+            intFontSize = Math.max(Math.floor(fontSize), 1),
+            // the resulting line height
+            lineHeight = fontFamilyCache[intFontSize];
+
+        // calculate line height if not yet cached
+        if (_.isUndefined(lineHeight)) {
+            $('body').append(lineHeightElement);
+            lineHeightElement.css({ fontFamily: fontFamily, fontSize: intFontSize + 'pt' });
+            lineHeight = fontFamilyCache[intFontSize] = Utils.convertLength(lineHeightElement.height(), 'px', 'pt');
+            lineHeightElement.detach();
+        }
+
+        // interpolate fractional part of the font size
+        return Utils.roundDigits(lineHeight * fontSize / intFontSize, 1);
+    }
+
+    /**
+     * Sets the text line height of the specified element.
+     *
+     * @param {HTMLElement} element
+     *  The DOM element whose line height will be changed.
      *
      * @param {Object} lineHeight
      *  The new line height. MUST contain the attributes 'type' and 'value',
      *  and these attributes MUST contain valid values.
      */
-    function setLineHeight(span, lineHeight) {
+    function setElementLineHeight(element, lineHeight) {
 
-        var // the passed span as jQuery object
-            $span = $(span).first(),
-            // effective line height in points
+        var // effective line height in points
             height = 1;
-
-        // Returns the 'normal' line height for the passed span in points.
-        function getNormalLineHeight() {
-
-            var // current font size of the element
-                fontSize = Utils.convertCssLength($span.css('font-size'), 'pt');
-
-            // TODO: This formula simulates the browser's line height 'normal'
-            // for regular fonts quite good, but we need to get the exact line
-            // height, also for exotic fonts with large ascent and descent,
-            // e.g. by inserting a dummy paragraph/span to the document body
-            // with the current font name and size, and reading the calculated
-            // height.
-            return fontSize * (1.0 / fontSize + 1.15);
-        }
 
         // set the CSS formatting
         switch (lineHeight.type) {
@@ -253,45 +277,44 @@ define('io.ox/office/editor/attributes',
             height = lineHeight.value;
             break;
         case 'leading':
-            height = lineHeight.value + getNormalLineHeight();
+            height = lineHeight.value + calculateNormalLineHeight(element);
             break;
         case 'atleast':
-            height = Math.max(lineHeight.value, getNormalLineHeight());
+            height = Math.max(lineHeight.value, calculateNormalLineHeight(element));
             break;
         case 'percent':
-            height = Utils.roundDigits(getNormalLineHeight() * lineHeight.value / 100, 1);
+            height = Utils.roundDigits(calculateNormalLineHeight(element) * lineHeight.value / 100, 1);
             break;
         default:
-            Utils.error('setLineHeight(): invalid line height type');
+            Utils.error('setElementLineHeight(): invalid line height type');
         }
-        $span.css('line-height', height + 'pt');
+        $(element).css('line-height', height + 'pt');
     }
 
     /**
-     * Updates the text line height of the specified text span according to its
+     * Updates the text line height of the specified element according to its
      * current font settings.
      *
-     * @param {HTMLElement|jQuery} span
-     *  The <span> element whose line height will be updated. If this object is
-     *  a jQuery collection, uses the first DOM node it contains.
+     * @param {HTMLElement} element
+     *  The DOM element whose line height will be updated.
      */
-    function updateLineHeight(span) {
+    function updateElementLineHeight(element) {
 
-        var // the passed span as jQuery object
-            $span = $(span).first(),
-            // the current line height in the span
-            lineHeight = getValidLineHeight($span.data('lineheight'));
+        var // the current line height in the span
+            lineHeight = getValidLineHeight($(element).data('lineheight'));
 
         // write the effective/corrected line height back to element, and set the CSS line height
-        $span.data('lineheight', lineHeight);
-        setLineHeight(span, lineHeight);
+        $(element).data('lineheight', lineHeight);
+        setElementLineHeight(element, lineHeight);
     }
+
+    // singleton instance -----------------------------------------------------
 
     /**
      * A converter for paragraph formatting attributes. The CSS formatting will
      * be read from and written to <p> elements.
      */
-    converters.paragraph = new AttributeConverter({
+    Attributes.Paragraph = new AttributeConverter({
 
         alignment: {
             get: function (element) {
@@ -316,18 +339,23 @@ define('io.ox/office/editor/attributes',
         lineheight: {
             get: function (element) {
                 var lineHeight = $(element).data('lineheight');
-                return _.isObject(lineHeight) ? lineHeight : Attributes.LineHeight.SINGLE;
+                return _.isObject(lineHeight) ? lineHeight : LineHeight.SINGLE;
             },
             set: function (element, lineHeight) {
                 lineHeight = getValidLineHeight(lineHeight);
                 $(element).data('lineheight', lineHeight);
                 Utils.iterateSelectedDescendantNodes(element, 'span', function (span) {
-                    setLineHeight(span, lineHeight);
+                    setElementLineHeight(span, lineHeight);
                 });
             }
         }
 
     });
+
+    /**
+     * Predefined values for the 'lineheight' attribute for paragraphs.
+     */
+    Attributes.Paragraph.LineHeight = LineHeight;
 
     // methods ----------------------------------------------------------------
 
@@ -347,7 +375,7 @@ define('io.ox/office/editor/attributes',
      * @returns {Object}
      *  A map of paragraph attribute name/value pairs.
      */
-    converters.paragraph.getAttributes = function (ranges, rootNode) {
+    Attributes.Paragraph.getAttributes = function (ranges, rootNode) {
 
         var // the attribute values, mapped by name
             attributes = {};
@@ -382,7 +410,7 @@ define('io.ox/office/editor/attributes',
      * @param {Object} attributes
      *  A map of paragraph attribute name/value pairs.
      */
-    converters.paragraph.setAttributes = function (ranges, rootNode, attributes) {
+    Attributes.Paragraph.setAttributes = function (ranges, rootNode, attributes) {
 
         // iterate all paragraph elements and change their formatting
         DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', function (node) {
@@ -390,14 +418,14 @@ define('io.ox/office/editor/attributes',
         }, this);
     };
 
-    // character attributes ===================================================
+    // singleton Attributes.Character =========================================
 
     /**
      * A converter for character formatting attributes. The CSS formatting will
      * be read from and written to <span> elements contained in paragraph <p>
      * elements.
      */
-    converters.character = new AttributeConverter({
+    Attributes.Character = new AttributeConverter({
 
         bold: {
             get: function (element) {
@@ -437,7 +465,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, fontName) {
                 $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                updateLineHeight(element);
+                updateElementLineHeight($(element));
             }
         },
 
@@ -448,7 +476,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, fontSize) {
                 $(element).css('font-size', fontSize + 'pt');
-                updateLineHeight(element);
+                updateElementLineHeight($(element));
             }
         },
 
@@ -461,7 +489,7 @@ define('io.ox/office/editor/attributes',
             }
         }
 
-    }); // converters.character
+    });
 
     // methods ----------------------------------------------------------------
 
@@ -481,7 +509,7 @@ define('io.ox/office/editor/attributes',
      * @returns {Object}
      *  A map of character attribute name/value pairs.
      */
-    converters.character.getAttributes = function (ranges, rootNode) {
+    Attributes.Character.getAttributes = function (ranges, rootNode) {
 
         var // the attribute values, mapped by name
             attributes = {};
@@ -518,7 +546,7 @@ define('io.ox/office/editor/attributes',
      * @param {Object} attributes
      *  A map of character attribute name/value pairs.
      */
-    converters.character.setAttributes = function (ranges, rootNode, attributes) {
+    Attributes.Character.setAttributes = function (ranges, rootNode, attributes) {
 
         var // self reference for local functions
             self = this;
@@ -537,93 +565,6 @@ define('io.ox/office/editor/attributes',
             this.setElementAttributes(textNode.parentNode, attributes);
 
         }, this, { split: true, merge: hasEqualAttributes });
-    };
-
-    // static class Attributes ================================================
-
-    /**
-     * Returns whether the specified attribute converter contains a definition
-     * for the passed formatting attribute.
-     *
-     * @param {String} type
-     *  The type of the attribute converter.
-     *
-     * @param {String} name
-     *  The name of the formatting attribute.
-     *
-     * @returns {Boolean}
-     *  Whether the specified attribute is supported by the converter.
-     */
-    Attributes.isAttribute = function (type, name) {
-        return (type in converters) && converters[type].hasAttribute(name);
-    };
-
-    /**
-     * Returns whether the specified attribute converter contains a definition
-     * for at least one of the passed formatting attributes.
-     *
-     * @param {String} type
-     *  The type of the attribute converter.
-     *
-     * @param {Object} attributes
-     *  A map with formatting attribute values, mapped by the attribute names.
-     *
-     * @returns {Boolean}
-     *  Whether at least one of the specified attributes is supported by the
-     *  converter.
-     */
-    Attributes.isAnyAttribute = function (type, attributes) {
-        return (type in converters) && converters[type].hasAnyAttribute(attributes);
-    };
-
-    /**
-     * Returns the values of all formatting attributes of a specific type in
-     * the specified DOM ranges.
-     *
-     * @param {String} type
-     *  The type of the attribute converter.
-     *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges. May be an array of DOM range objects, or a single DOM
-     *  range object.
-     *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing the text ranges. If this object is a jQuery
-     *  collection, uses the first node it contains.
-     *
-     * @returns {Object}
-     *  A map of attribute name/value pairs.
-     */
-    Attributes.getAttributes = function (type, ranges, rootNode) {
-        return (type in converters) ? converters[type].getAttributes(ranges, rootNode) : null;
-    };
-
-    /**
-     * Changes specific formatting attributes in the specified DOM ranges.
-     *
-     * @param {String} type
-     *  The type of the attribute converter.
-     *
-     * @param {DOM.Range[]|DOM.Range} ranges
-     *  The DOM ranges to be formatted. May be an array of DOM range objects,
-     *  or a single DOM range object.
-     *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing the text ranges. If this object is a jQuery
-     *  collection, uses the first node it contains.
-     *
-     * @param {Object} attributes
-     *  A map of paragraph attribute name/value pairs.
-     */
-    Attributes.setAttributes = function (type, ranges, rootNode, attributes) {
-
-        var // the converter object
-            converter = converters[type];
-
-        // do not iterate over the passed ranges, if no attribute is supported
-        if (converter && converter.hasAnyAttribute(attributes)) {
-            converter.setAttributes(ranges, rootNode, attributes);
-        }
     };
 
     // exports ================================================================

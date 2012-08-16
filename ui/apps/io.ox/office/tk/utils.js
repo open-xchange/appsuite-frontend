@@ -176,8 +176,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             value = 0;
         }
         if (value && (valueAndUnit.length > 2)) {
-            var fromUnit = valueAndUnit.substr(valueAndUnit.length - 2);
-            value = Utils.convertLength(value, fromUnit, toUnit, digits);
+            value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, digits);
         }
         return value;
     };
