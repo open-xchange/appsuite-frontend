@@ -139,7 +139,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
             },
 
             get: function (path, defaultValue) {
-                console.log(arguments);
                 if (!path) { // undefined, null, ''
                     return get(that.settingsPath);
                 } else {

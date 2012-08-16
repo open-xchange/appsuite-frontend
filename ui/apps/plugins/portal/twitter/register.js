@@ -150,7 +150,7 @@ define('plugins/portal/twitter/register',
                     showTweet(tweet).prependTo($tweets);
                 });
 
-                var $o = $('div.window-content');
+                var $o = $('div.io-ox-sidepopup-pane');
                 var top = $o.scrollTop() - $o.offset().top + $first.offset().top;
                 $o.animate({scrollTop: top}, 250, 'swing');
                 $tweets.removeClass('pulltorefresh-refreshing');
@@ -191,7 +191,6 @@ define('plugins/portal/twitter/register',
             // Pull to refresh
             $(this).on('onResume', function () {
                 $(this).on('onPullToRefresh', onPullToRefresh);
-                ptr.attachEvents($('div.window-content'), $(this), $tweets);
             }).on('onPause', function () {
                 $(this).off('onPullToRefresh', onPullToRefresh);
                 ptr.detachEvents();
@@ -201,6 +200,8 @@ define('plugins/portal/twitter/register',
             }).on('onPullToRefreshUp', function () {
                 $('div.tweet > div.text').removeClass('pulltorefresh-unselectable');
                 $('div.tweet > div.text > span').removeClass('pulltorefresh-unselectable');
+            }).on('onAppended', function () {
+                ptr.attachEvents($('div.io-ox-sidepopup-pane'), $(this), $tweets);
             });
 
             if (!timeline) {

@@ -95,7 +95,7 @@ define('io.ox/portal/mediaplugin',
                 });
 
                 // TODO fullscreen is not per mediaplugin
-                if (tempImageCollection.length > 0) {
+                if (false && tempImageCollection.length > 0) {
                     $('<a/>')
                         .addClass('label io-ox-action-link')
                         .css({'cursor': 'pointer', 'float': 'right'})
@@ -159,7 +159,7 @@ define('io.ox/portal/mediaplugin',
                                     .addClass('lazy');
                             }
                             $entry.append($img);
-                            $entry.find('div').css({opacity: 0.7});
+//                            $entry.find('div').css({opacity: 0.7});
                             $entry.addClass("mediaplugin-entry-big");
                         }
                     } else {
@@ -173,7 +173,7 @@ define('io.ox/portal/mediaplugin',
         };
 
         var lazyLoader = function () {
-            $('img.lazy[src!=data-original]').lazyload({container: $('div.window-content'), threshold: 200});
+            $('img.lazy[src!=data-original]').lazyload({container: $('div.io-ox-sidepopup-pane'), threshold: 200});
         };
 
         var init = function (m) {
@@ -200,6 +200,7 @@ define('io.ox/portal/mediaplugin',
                 ext.point("io.ox/portal/widget").extend({
                     id: extension.id,
                     index: extension.index,
+                    tileClass: options.bigPreview ? 'io-ox-portal-widget-phototile' : '',
 
                     title: function () {
                         return extension.description;
@@ -293,7 +294,7 @@ define('io.ox/portal/mediaplugin',
 
                             if (showPopup) {
                                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                                    var $o = $('div.window-content');
+                                    var $o = $('div.io-ox-sidepopup-pane');
                                     var top = $o.scrollTop() - $o.offset().top + event.target.offset().top;
                                     $o.animate({scrollTop: top}, 250, 'swing', function () {
                                         new dialogs.SidePopup({disableCloseByScroll: true}).show(event, function (popup) {
@@ -307,7 +308,8 @@ define('io.ox/portal/mediaplugin',
                         };
 
                         $(this).on('onResume', function () {
-                            $(document).on('keydown', onKeyDown);
+                            // TODO fix
+//                            $(document).on('keydown', onKeyDown);
                         });
 
                         $(this).on('onAppended', function () {
@@ -315,7 +317,8 @@ define('io.ox/portal/mediaplugin',
                         });
 
                         $(this).on('onPause', function () {
-                            $(document).off('keydown', onKeyDown);
+                            // TODO fix
+//                            $(document).off('keydown', onKeyDown);
                         });
 
                         $('<div>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);

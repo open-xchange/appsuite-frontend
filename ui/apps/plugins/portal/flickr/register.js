@@ -55,14 +55,25 @@ define('plugins/portal/flickr/register',
 
             if (entry.title) {
                 // TODO xss
-                var $title = $("<div>").addClass("mediaplugin-title mediaplugin-textbackground").html(entry.title);
+                var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
                 $node.append($title);
             }
-            $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
+            $node.append($("<div>").addClass("mediaplugin-content").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
 
             if (big) {
-                if (entry.url_m && entry.width_m && entry.height_m) {
-                    var $img = $('<img/>', {'data-original': entry.url_m, width: entry.width_m, height: entry.height_m});
+                var foundImage = _.find(imagesizes, function (value) {
+                    if (entry[value]) {
+                        return true;
+                    }
+                    return false;
+                });
+
+                if (foundImage) {
+                    var urlName = foundImage;
+                    var widthName = 'width' + urlName.replace(/url/, ''),
+                        heightName = 'height' + urlName.replace(/url/, '');
+
+                    var $img = $('<img/>', {'data-original': entry[urlName], width: entry[widthName], height: entry[heightName]});
                     return $img;
                 }
             } else {

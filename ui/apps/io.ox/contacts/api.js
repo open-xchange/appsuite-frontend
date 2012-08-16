@@ -41,7 +41,7 @@ define('io.ox/contacts/api',
             },
             search: {
                 action: 'search',
-                columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524',
+                columns: '20,1,500,501,502,505,520,555,556,557,569,602,606,524,592',
                 sort: '609', // magic sort field - ignores asc/desc
                 getData: function (query, autoComplete) {
                     return {

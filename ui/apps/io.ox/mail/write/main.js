@@ -304,7 +304,7 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            return view.sidepanel.find('.fromselect-wrapper select').val().split(/|/);
+            return view.sidepanel.find('.fromselect-wrapper select').val().split(/\|/).reverse();
         };
 
         app.setFrom = function (data) {
