@@ -103,6 +103,13 @@
     box-sizing: border-box;
     border: @padding solid @portal-background;
 }
+.io-ox-portal-widget-phototile {
+    padding: 0 !important;
+}
+.io-ox-portal-widget-phototile h1 {
+	padding: 1.3em 0.5em 0.5em 0.5em;
+    margin: 0 !important;
+}
 
 @media all and (min-width: 0px ) {
     .io-ox-portal-widget-tile { width: 100%; }

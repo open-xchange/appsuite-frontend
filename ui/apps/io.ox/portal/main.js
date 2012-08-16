@@ -149,6 +149,11 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
+
+                    if (extension.tileClass) {
+                        $node.addClass(extension.tileClass);
+                    }
+
                     $node.on('click', makeClickHandler(extension));
 
                     if (!extension.loadTile) {

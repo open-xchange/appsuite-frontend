@@ -58,7 +58,7 @@ define('plugins/portal/tumblr/register',
 
             if (entry.title) {
                 // TODO xss
-                $node.append($("<div>").addClass("mediaplugin-title mediaplugin-textbackground").html(entry.title));
+                $node.append($("<div>").addClass("mediaplugin-title").html(entry.title));
             } else if (entry.photos && entry.photos[0] && entry.photos[0].alt_sizes) {
                 var sizes = entry.photos[0].alt_sizes;
 
@@ -79,13 +79,13 @@ define('plugins/portal/tumblr/register',
                 });
 
                 if (thumbUrl === "") {
-                    $node.append($("<div>").addClass("mediaplugin-title mediaplugin-textbackground").html(gt("No title.")));
+                    $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
                 }
             } else {
-                $node.append($("<div>").addClass("mediaplugin-title mediaplugin-textbackground").html(gt("No title.")));
+                $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
             }
 
-            $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
+            $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
 
             if (thumbUrl !== "") {
                 var $img = $('<img/>', {'data-original': thumbUrl, height: thumbHeight, width: thumbWidth});

@@ -55,10 +55,10 @@ define('plugins/portal/flickr/register',
 
             if (entry.title) {
                 // TODO xss
-                var $title = $("<div>").addClass("mediaplugin-title mediaplugin-textbackground").html(entry.title);
+                var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
                 $node.append($title);
             }
-            $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
+            $node.append($("<div>").addClass("mediaplugin-content").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
 
             if (big) {
                 if (entry.url_m && entry.width_m && entry.height_m) {

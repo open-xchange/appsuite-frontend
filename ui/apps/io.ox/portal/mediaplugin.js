@@ -159,7 +159,7 @@ define('io.ox/portal/mediaplugin',
                                     .addClass('lazy');
                             }
                             $entry.append($img);
-                            $entry.find('div').css({opacity: 0.7});
+//                            $entry.find('div').css({opacity: 0.7});
                             $entry.addClass("mediaplugin-entry-big");
                         }
                     } else {
@@ -200,6 +200,7 @@ define('io.ox/portal/mediaplugin',
                 ext.point("io.ox/portal/widget").extend({
                     id: extension.id,
                     index: extension.index,
+                    tileClass: options.bigPreview ? 'io-ox-portal-widget-phototile' : '',
 
                     title: function () {
                         return extension.description;
