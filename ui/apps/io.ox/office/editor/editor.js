@@ -777,6 +777,10 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
 
+                // for (var i = 0; i < domSelection.length; i++) {
+                //     window.console.log("Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
+                // }
+
                 domRange = _(domSelection).last();
 
                 // allowing "special" multiselection for tables (rectangle cell selection)
@@ -784,11 +788,20 @@ define('io.ox/office/editor/editor',
                     domRange.start = _(domSelection).first().start;
                 }
 
-                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, false), Position.getOXOPosition(domRange.end, editdiv, true));
+                var isPos1Endpoint = false,
+                    isPos2Endpoint = true;
+
+                if ((domRange.start.node === domRange.end.node) && (domRange.start.offset === domRange.end.offset)) {
+                    isPos2Endpoint = false;
+                }
+
+                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isPos1Endpoint), Position.getOXOPosition(domRange.end, editdiv, isPos2Endpoint));
+
+                // window.console.log("Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
                 // this selection need to be changed for some browsers to set selection into end of text node instead
                 // of start of following text node. it also needs to be set after double clicking a word.
-                if (domRange.start.node.nodeType === 3) {
+                if ((domRange.start.node.nodeType === 3) || (domRange.start.node.nodeName === 'IMG')) {
                     this.setSelection(currentSelection);
                 }
 
@@ -805,8 +818,6 @@ define('io.ox/office/editor/editor',
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = this.getCellDOMSelections(oxosel);
-            // } else if (oxosel.hasRange() && (Position.isImageSelection(oxosel.startPaM, oxosel.endPaM))) {
-            //     ranges = this.getImageSelections(oxosel);
             } else {
                 // var oldSelection = this.getSelection();
                 ranges = this.getDOMSelection(oxosel);
@@ -2383,16 +2394,6 @@ define('io.ox/office/editor/editor',
 
         this.implInsertText = function (text, position) {
             var domPos = Position.getDOMPosition(paragraphs, position);
-
-            if (domPos.node.nodeName === 'IMG') {
-                // using the following text node
-                // (7,0) is a position before the graphic, getDOMPosition returns a text node.
-                // (7,1) can be a position after first character (text node is returned) or after
-                // an image. In this case the text shall be inserted on the right side of the image.
-                var localNode = domPos.node.nextSibling;
-                domPos.node = Utils.findDescendantNode(localNode, Utils.JQ_TEXTNODE_SELECTOR, { reverse: false });
-                domPos.offset = 0;
-            }
 
             var oldText = domPos.node.nodeValue;
             if (oldText !== null) {
