@@ -47,6 +47,11 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'chain/format/paragraph': {
                     get: function () { return editor.getParagraphAttributes(); }
                 },
+                'format/paragraph/stylesheet': {
+                    chain: 'chain/format/paragraph',
+                    get: function (attributes) { return attributes.parastyle; },
+                    set: function (style) { editor.setAttribute('parastyle', style); }
+                },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.alignment; },

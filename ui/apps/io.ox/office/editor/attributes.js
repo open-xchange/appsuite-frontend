@@ -14,10 +14,93 @@
 define('io.ox/office/editor/attributes',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
-     'io.ox/office/editor/dom'
-    ], function (Utils, Fonts, DOM) {
+     'io.ox/office/editor/dom',
+     'gettext!io.ox/office/main'
+    ], function (Utils, Fonts, DOM, gt) {
 
     'use strict';
+
+    // style sheets ===========================================================
+
+    var // predefined values for the 'lineheight' attribute for paragraphs
+        LineHeight = {
+            SINGLE: { type: 'percent', value: 100 },
+            ONE_HALF: { type: 'percent', value: 150 },
+            DOUBLE: { type: 'percent', value: 200 }
+        },
+
+        // defaults for the paragraph style sheets
+        ParagraphStyleSheetPool = {
+
+            std: {
+                name: gt('Standard'),
+                parent: null,
+                attributes: {
+                    alignment: 'left',
+                    lineheight: LineHeight.SINGLE,
+                    fontname: 'Times New Roman',
+                    fontsize: 12,
+                    bold: false,
+                    italic: false,
+                    underline: false
+                }
+            },
+
+            title: {
+                name: gt('Title'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 24,
+                    bold: true
+                }
+            },
+
+            subtitle: {
+                name: gt('Subtitle'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontsize: 20,
+                    italic: true
+                }
+            },
+
+            h1: {
+                name: gt('Heading 1'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 20,
+                    bold: true
+                }
+            },
+
+            h2: {
+                name: gt('Heading 2'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 16,
+                    bold: true
+                }
+            },
+
+            h3: {
+                name: gt('Heading 3'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 14,
+                    bold: true
+                }
+            }
+
+        };
 
     // class AttributeConverter ===============================================
 
@@ -25,6 +108,8 @@ define('io.ox/office/editor/attributes',
      * Converts between formatting attributes of an element's CSS and the
      * 'setAttribute' operation of the editor's Operations API. Used as base
      * class for specialized attribute converters.
+     *
+     * @constructor
      *
      * @param {Object} definitions
      *  A map that defines formatting attributes supported by this converter.
@@ -171,14 +256,7 @@ define('io.ox/office/editor/attributes',
 
     // singleton Attributes.Paragraph =========================================
 
-    var // predefined values for the 'lineheight' attribute for paragraphs
-        LineHeight = {
-            SINGLE: { type: 'percent', value: 100 },
-            ONE_HALF: { type: 'percent', value: 150 },
-            DOUBLE: { type: 'percent', value: 200 }
-        },
-
-        // caches calculated normal line heights by font family and font sizes
+    var // caches calculated normal line heights by font family and font sizes
         lineHeightCache = {},
 
         // the dummy element used to calculate the 'normal' line height for a specific font
@@ -316,6 +394,16 @@ define('io.ox/office/editor/attributes',
      */
     Attributes.Paragraph = new AttributeConverter({
 
+        parastyle: {
+            get: function (element) {
+                var value = $(element).data('style');
+                return _.isString(value) ? value : 'std';
+            },
+            set: function (element, style) {
+                $(element).data('style', style);
+            }
+        },
+
         alignment: {
             get: function (element) {
                 var value = $(element).css('text-align');
@@ -343,9 +431,8 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, lineHeight) {
                 lineHeight = getValidLineHeight(lineHeight);
-                $(element).data('lineheight', lineHeight);
-                Utils.iterateSelectedDescendantNodes(element, 'span', function (span) {
-                    setElementLineHeight(span, lineHeight);
+                $(element).data('lineheight', lineHeight).children('span').each(function () {
+                    setElementLineHeight(this, lineHeight);
                 });
             }
         }
@@ -356,6 +443,8 @@ define('io.ox/office/editor/attributes',
      * Predefined values for the 'lineheight' attribute for paragraphs.
      */
     Attributes.Paragraph.LineHeight = LineHeight;
+
+    Attributes.Paragraph.StyleSheetPool = ParagraphStyleSheetPool;
 
     // methods ----------------------------------------------------------------
 
@@ -427,6 +516,28 @@ define('io.ox/office/editor/attributes',
      */
     Attributes.Character = new AttributeConverter({
 
+        fontname: {
+            get: function (element) {
+                var value = $(element).css('font-family');
+                return Fonts.getFontName(value);
+            },
+            set: function (element, fontName) {
+                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
+                updateElementLineHeight(element);
+            }
+        },
+
+        fontsize: {
+            get: function (element) {
+                var value = $(element).css('font-size');
+                return Utils.convertCssLength(value, 'pt');
+            },
+            set: function (element, fontSize) {
+                $(element).css('font-size', fontSize + 'pt');
+                updateElementLineHeight(element);
+            }
+        },
+
         bold: {
             get: function (element) {
                 var value = $(element).css('font-weight');
@@ -434,6 +545,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, state) {
                 $(element).css('font-weight', state ? 'bold' : 'normal');
+                updateElementLineHeight(element);
             }
         },
 
@@ -444,6 +556,7 @@ define('io.ox/office/editor/attributes',
             },
             set: function (element, state) {
                 $(element).css('font-style', state ? 'italic' : 'normal');
+                updateElementLineHeight(element);
             }
         },
 
@@ -455,28 +568,6 @@ define('io.ox/office/editor/attributes',
                 var value = $(element).css('text-decoration');
                 value = Utils.toggleToken(value, 'underline', state, 'none');
                 $(element).css('text-decoration', value);
-            }
-        },
-
-        fontname: {
-            get: function (element) {
-                var value = $(element).css('font-family');
-                return Fonts.getFontName(value);
-            },
-            set: function (element, fontName) {
-                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                updateElementLineHeight($(element));
-            }
-        },
-
-        fontsize: {
-            get: function (element) {
-                var value = $(element).css('font-size');
-                return Utils.convertCssLength(value, 'pt');
-            },
-            set: function (element, fontSize) {
-                $(element).css('font-size', fontSize + 'pt');
-                updateElementLineHeight($(element));
             }
         },
 

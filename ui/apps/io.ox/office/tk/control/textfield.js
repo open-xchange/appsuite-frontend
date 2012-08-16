@@ -271,6 +271,8 @@ define('io.ox/office/tk/control/textfield',
      * Base class for text field validators used to convert between values and
      * field texts, and to validate the text field while editing. Provides a
      * default implementation of all methods that do not restrict editing.
+     *
+     * @constructor
      */
     TextField.Validator = _.makeExtendable(function () {
 
@@ -343,6 +345,10 @@ define('io.ox/office/tk/control/textfield',
      * A validator for text fields that restricts the allowed values according
      * to the passed options.
      *
+     * @constructor
+     *
+     * @extends TextField.Validator
+     *
      * @param {Object} [options]
      *  A map of options to control the properties of the text validator. The
      *  following options are supported:
@@ -376,6 +382,10 @@ define('io.ox/office/tk/control/textfield',
     /**
      * A validator for text fields that restricts the allowed values to
      * floating-point numbers.
+     *
+     * @constructor
+     *
+     * @extends TextField.Validator
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the validator. The

@@ -15,18 +15,49 @@ define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
      'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/attributes',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, Attributes, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, Attributes, gt) {
 
     'use strict';
 
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes;
+
+    // class StyleSheetChooser ================================================
+
+    var StyleSheetChooser = RadioGroup.extend({ constructor: function () {
+
+        var labelCss = {
+                minWidth: '80px',
+                textAlign: 'left'
+            },
+
+            options = {
+                labelCss: labelCss,
+                tooltip: gt('Paragraph Style'),
+                type: 'list',
+                sorted: true
+            };
+
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, options);
+
+        // initialization -----------------------------------------------------
+
+        // add all known style sheets
+
+        _(Attributes.Paragraph.StyleSheetPool).each(function (styleSheet, id) {
+            this.addButton(id, { label: styleSheet.name, labelCss: labelCss });
+        }, this);
+
+    }}); // class FontFamilyChooser
 
     // class FontFamilyChooser ================================================
 
@@ -191,6 +222,8 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser())
+            .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()
             .addGroup('format/character/font/height', new FontHeightChooser())

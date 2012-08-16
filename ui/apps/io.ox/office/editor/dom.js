@@ -31,6 +31,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * and an 'offset' attribute containing an integer offset specifying the
      * position in the contents of the node.
      *
+     * @constructor
+     *
      * @param {Node|jQuery} node
      *  The DOM node selected by this DOM.Point instance. If this object is a
      *  jQuery collection, uses the first DOM node it contains.
@@ -191,6 +193,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * A DOM text range represents a half-open range in the DOM tree. It
      * contains 'start' and 'end' attributes referring to DOM point objects.
+     *
+     * @constructor
      *
      * @param {DOM.Point} start
      *  The DOM point where the range starts.

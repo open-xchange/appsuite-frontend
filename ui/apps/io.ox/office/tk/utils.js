@@ -1064,17 +1064,17 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         var // option values
             icon = Utils.getStringOption(options, 'icon'),
             label = Utils.getStringOption(options, 'label'),
-            labelCss = Utils.getObjectOption(options, 'labelCss', {});
+            labelCss = Utils.getObjectOption(options, 'labelCss');
 
         // remove the old spans
         Utils.removeControlCaption(control);
 
         // prepend the label
-        if (label) {
+        if (_.isString(label) || _.isObject(labelCss)) {
             control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'label')
-                .text(label)
-                .css(labelCss));
+                .text(label || '')
+                .css(labelCss || {}));
         }
 
         // prepend the icon
