@@ -20,88 +20,6 @@ define('io.ox/office/editor/attributes',
 
     'use strict';
 
-    // style sheets ===========================================================
-
-    var // predefined values for the 'lineheight' attribute for paragraphs
-        LineHeight = {
-            SINGLE: { type: 'percent', value: 100 },
-            ONE_HALF: { type: 'percent', value: 150 },
-            DOUBLE: { type: 'percent', value: 200 }
-        },
-
-        // defaults for the paragraph style sheets
-        ParagraphStyleSheetPool = {
-
-            std: {
-                name: gt('Standard'),
-                parent: null,
-                attributes: {
-                    alignment: 'left',
-                    lineheight: LineHeight.SINGLE,
-                    fontname: 'Times New Roman',
-                    fontsize: 12,
-                    bold: false,
-                    italic: false,
-                    underline: false
-                }
-            },
-
-            title: {
-                name: gt('Title'),
-                parent: 'std',
-                attributes: {
-                    alignment: 'center',
-                    fontname: 'Arial',
-                    fontsize: 24,
-                    bold: true
-                }
-            },
-
-            subtitle: {
-                name: gt('Subtitle'),
-                parent: 'std',
-                attributes: {
-                    alignment: 'center',
-                    fontsize: 20,
-                    italic: true
-                }
-            },
-
-            h1: {
-                name: gt('Heading 1'),
-                parent: 'std',
-                attributes: {
-                    alignment: 'center',
-                    fontname: 'Arial',
-                    fontsize: 20,
-                    bold: true
-                }
-            },
-
-            h2: {
-                name: gt('Heading 2'),
-                parent: 'std',
-                attributes: {
-                    alignment: 'center',
-                    fontname: 'Arial',
-                    fontsize: 16,
-                    bold: true
-                }
-            },
-
-            h3: {
-                name: gt('Heading 3'),
-                parent: 'std',
-                attributes: {
-                    alignment: 'center',
-                    fontname: 'Arial',
-                    fontsize: 14,
-                    bold: true
-                }
-            }
-
-        };
-
     // class AttributeConverter ===============================================
 
     /**
@@ -120,10 +38,25 @@ define('io.ox/office/editor/attributes',
      *  formatting. The set() method of a definition object receives the DOM
      *  element object and the value of the formatting attribute, and modifies
      *  the element's CSS formatting.
+     *
+     * @param {Object} styleSheetPool
+     *  Predefined style sheets, mapped by style sheet identifier, referred to
+     *  by the style sheet name attribute.
+     *
+     * @param {String} styleSheetAttribute
+     *  The name of the attribute containing the style sheet name.
      */
-    function AttributeConverter(definitions) {
+    function AttributeConverter(definitions, styleSheetPool, styleSheetAttribute) {
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the static style sheet pool containing the defaults for all
+         * built-in style sheets.
+         */
+        this.getStyleSheetPool = function () {
+            return styleSheetPool;
+        };
 
         /**
          * Returns whether this converter contains a definition for the
@@ -248,6 +181,19 @@ define('io.ox/office/editor/attributes',
             });
         };
 
+        // initialization -----------------------------------------------------
+
+        // add a definition for the style sheet name
+        definitions[styleSheetAttribute] = {
+            get: function (element) {
+                var value = $(element).data(styleSheetAttribute);
+                return _.isString(value) ? value : 'std';
+            },
+            set: function (element, style) {
+                $(element).data(styleSheetAttribute, style);
+            }
+        };
+
     } // class AttributeConverter
 
     // namespace Attributes ===================================================
@@ -256,46 +202,148 @@ define('io.ox/office/editor/attributes',
 
     // singleton Attributes.Paragraph =========================================
 
-    var // caches calculated normal line heights by font family and font sizes
+    var // predefined values for the 'lineheight' attribute for paragraphs
+        LineHeight = {
+            SINGLE: { type: 'percent', value: 100 },
+            ONE_HALF: { type: 'percent', value: 150 },
+            DOUBLE: { type: 'percent', value: 200 }
+        },
+
+        // definitions for all paragraph attributes, mapped by name
+        ParagraphAttributeDefinitions = {
+
+            alignment: {
+                get: function (element) {
+                    var value = $(element).css('text-align');
+                    // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
+                    return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
+                },
+                set: function (element, value) {
+                    $(element).css('text-align', value);
+                }
+            },
+
+            // Logically, the line height is a paragraph attribute. But technically
+            // in CSS, the line height must be set separately at every span element
+            // because a relative CSS line-height attribute at the paragraph (e.g.
+            // 200%) will not be derived relatively to the spans, but absolutely
+            // according to the paragraph's font size. Example: The paragraph has a
+            // font size of 12pt and a line-height of 200%, resulting in 24pt. This
+            // value will be derived absolutely to a span with a font size of 6pt,
+            // resulting in a relative line height of 24pt/6pt = 400% instead of
+            // the expected 200%.
+            lineheight: {
+                get: function (element) {
+                    var lineHeight = $(element).data('lineheight');
+                    return _.isObject(lineHeight) ? lineHeight : LineHeight.SINGLE;
+                },
+                validate: function (lineHeight) {
+                    var type = Utils.getStringOption(lineHeight, 'type'),
+                        value = 0;
+                    switch (type) {
+                    case 'fixed':
+                    case 'leading':
+                    case 'atleast':
+                        value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
+                        break;
+                    case 'percent':
+                        value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
+                        break;
+                    default:
+                        return LineHeight.SINGLE;
+                    }
+                    return { type: type, value: value };
+                },
+                set: function (element, lineHeight) {
+                    lineHeight = this.validate(lineHeight);
+                    $(element).data('lineheight', lineHeight).children('span').each(function () {
+                        updateElementLineHeight(this, lineHeight);
+                    });
+                }
+            }
+
+        },
+
+        // defaults for the paragraph style sheets
+        ParagraphStyleSheetPool = {
+
+            std: {
+                name: gt('Standard'),
+                parent: null,
+                attributes: {
+                    alignment: 'left',
+                    lineheight: LineHeight.SINGLE,
+                    fontname: 'Times New Roman',
+                    fontsize: 12,
+                    bold: false,
+                    italic: false,
+                    underline: false
+                }
+            },
+
+            title: {
+                name: gt('Title'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 24,
+                    bold: true
+                }
+            },
+
+            subtitle: {
+                name: gt('Subtitle'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontsize: 20,
+                    italic: true
+                }
+            },
+
+            h1: {
+                name: gt('Heading 1'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 20,
+                    bold: true
+                }
+            },
+
+            h2: {
+                name: gt('Heading 2'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 16,
+                    bold: true
+                }
+            },
+
+            h3: {
+                name: gt('Heading 3'),
+                parent: 'std',
+                attributes: {
+                    alignment: 'center',
+                    fontname: 'Arial',
+                    fontsize: 14,
+                    bold: true
+                }
+            }
+
+        },
+
+        // caches calculated normal line heights by font family and font sizes
         lineHeightCache = {},
 
         // the dummy element used to calculate the 'normal' line height for a specific font
-        lineHeightElement = $('<div style="line-height: normal;"><span>X</span></div>');
+        lineHeightElement = $('<div style="line-height: normal; padding: 0; border: none;"><span>X</span></div>');
 
     // private methods --------------------------------------------------------
-
-    /**
-     * Returns a valid value for the 'lineheight' paragraph attribute.
-     *
-     * @param {Object} lineHeight
-     *  The line height to be validated.
-     *
-     * @returns {Object}
-     *  The valid line height object, containing 'type' and 'value' attributes.
-     */
-    function getValidLineHeight(lineHeight) {
-
-        if (_.isObject(lineHeight)) {
-            switch (lineHeight.type) {
-            case 'fixed':
-                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-                break;
-            case 'leading':
-                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-                break;
-            case 'atleast':
-                lineHeight.value = Utils.getNumberOption(lineHeight, 'value', 1.0, 1.0, 999.9, 1);
-                break;
-            default: // percent
-                lineHeight.type = 'percent';
-                lineHeight.value = Utils.getIntegerOption(lineHeight, 'value', 100, 20, 500);
-            }
-        } else {
-            lineHeight = LineHeight.SINGLE;
-        }
-
-        return lineHeight;
-    }
 
     /**
      * Calculates the 'normal' line height for the font settings in the passed
@@ -311,22 +359,30 @@ define('io.ox/office/editor/attributes',
      */
     function calculateNormalLineHeight(element) {
 
-        var // current font size of the element
-            fontFamily = $(element).css('font-family'),
-            // get or create the cache for the font family
-            fontFamilyCache = lineHeightCache[fontFamily] || (lineHeightCache[fontFamily] = {}),
-            // current font size of the element
-            fontSize = Utils.convertCssLength($(element).css('font-size'), 'pt'),
-            // integer font size used as cache key
+        var // the passed element, as jQuery object
+            $element = $(element),
+
+            // element font size, exactly and as integer
+            fontSize = Utils.convertCssLength($element.css('font-size'), 'pt'),
             intFontSize = Math.max(Math.floor(fontSize), 1),
-            // the resulting line height
-            lineHeight = fontFamilyCache[intFontSize];
+
+            // relevant font attributes of the element, used as cache key
+            attributes = {
+                fontFamily: $element.css('font-family'),
+                fontWeight: $element.css('font-weight'),
+                fontStyle: $element.css('font-style'),
+                fontSize: intFontSize + 'pt'
+            },
+            cacheKey = JSON.stringify(attributes),
+
+            // the resulting line height from the cache
+            lineHeight = lineHeightCache[cacheKey];
 
         // calculate line height if not yet cached
         if (_.isUndefined(lineHeight)) {
             $('body').append(lineHeightElement);
-            lineHeightElement.css({ fontFamily: fontFamily, fontSize: intFontSize + 'pt' });
-            lineHeight = fontFamilyCache[intFontSize] = Utils.convertLength(lineHeightElement.height(), 'px', 'pt');
+            lineHeightElement.css(attributes);
+            lineHeight = lineHeightCache[cacheKey] = Utils.convertLength(lineHeightElement.height(), 'px', 'pt');
             lineHeightElement.detach();
         }
 
@@ -335,19 +391,26 @@ define('io.ox/office/editor/attributes',
     }
 
     /**
-     * Sets the text line height of the specified element.
+     * Sets or updates the text line height of the specified element.
      *
      * @param {HTMLElement} element
      *  The DOM element whose line height will be changed.
      *
-     * @param {Object} lineHeight
-     *  The new line height. MUST contain the attributes 'type' and 'value',
-     *  and these attributes MUST contain valid values.
+     * @param {Object} [lineHeight]
+     *  The new line height. If specified, MUST contain the attributes 'type'
+     *  and 'value', and these attributes MUST contain valid values. If
+     *  omitted, reads the current line height from the passed element and
+     *  updates the CSS line height according to the current font settings of
+     *  the element. If the element does not contain a line height, defaults to
+     *  LineHeight.SINGLE.
      */
-    function setElementLineHeight(element, lineHeight) {
+    function updateElementLineHeight(element, lineHeight) {
 
         var // effective line height in points
             height = 1;
+
+        // read from element if omitted
+        lineHeight = lineHeight || $(element).data('lineheight') || LineHeight.SINGLE;
 
         // set the CSS formatting
         switch (lineHeight.type) {
@@ -366,24 +429,7 @@ define('io.ox/office/editor/attributes',
         default:
             Utils.error('setElementLineHeight(): invalid line height type');
         }
-        $(element).css('line-height', height + 'pt');
-    }
-
-    /**
-     * Updates the text line height of the specified element according to its
-     * current font settings.
-     *
-     * @param {HTMLElement} element
-     *  The DOM element whose line height will be updated.
-     */
-    function updateElementLineHeight(element) {
-
-        var // the current line height in the span
-            lineHeight = getValidLineHeight($(element).data('lineheight'));
-
-        // write the effective/corrected line height back to element, and set the CSS line height
-        $(element).data('lineheight', lineHeight);
-        setElementLineHeight(element, lineHeight);
+        $(element).data('lineheight', lineHeight).css('line-height', height + 'pt');
     }
 
     // singleton instance -----------------------------------------------------
@@ -392,52 +438,7 @@ define('io.ox/office/editor/attributes',
      * A converter for paragraph formatting attributes. The CSS formatting will
      * be read from and written to <p> elements.
      */
-    Attributes.Paragraph = new AttributeConverter({
-
-        parastyle: {
-            get: function (element) {
-                var value = $(element).data('style');
-                return _.isString(value) ? value : 'std';
-            },
-            set: function (element, style) {
-                $(element).data('style', style);
-            }
-        },
-
-        alignment: {
-            get: function (element) {
-                var value = $(element).css('text-align');
-                // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
-                return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
-            },
-            set: function (element, value) {
-                $(element).css('text-align', value);
-            }
-        },
-
-        // Logically, the line height is a paragraph attribute. But technically
-        // in CSS, the line height must be set separately at every span element
-        // because a relative CSS line-height attribute at the paragraph (e.g.
-        // 200%) will not be derived relatively to the spans, but absolutely
-        // according to the paragraph's font size. Example: The paragraph has a
-        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
-        // value will be derived absolutely to a span with a font size of 6pt,
-        // resulting in a relative line height of 24pt/6pt = 400% instead of
-        // the expected 200%.
-        lineheight: {
-            get: function (element) {
-                var lineHeight = $(element).data('lineheight');
-                return _.isObject(lineHeight) ? lineHeight : LineHeight.SINGLE;
-            },
-            set: function (element, lineHeight) {
-                lineHeight = getValidLineHeight(lineHeight);
-                $(element).data('lineheight', lineHeight).children('span').each(function () {
-                    setElementLineHeight(this, lineHeight);
-                });
-            }
-        }
-
-    });
+    Attributes.Paragraph = new AttributeConverter(ParagraphAttributeDefinitions, ParagraphStyleSheetPool, 'parastyle');
 
     /**
      * Predefined values for the 'lineheight' attribute for paragraphs.
@@ -509,78 +510,94 @@ define('io.ox/office/editor/attributes',
 
     // singleton Attributes.Character =========================================
 
+    var // definitions for all paragraph attributes, mapped by name
+        CharacterAttributeDefinitions = {
+
+            fontname: {
+                get: function (element) {
+                    var value = $(element).css('font-family');
+                    return Fonts.getFontName(value);
+                },
+                set: function (element, fontName) {
+                    $(element).css('font-family', Fonts.getCssFontFamily(fontName));
+                    updateElementLineHeight(element);
+                }
+            },
+
+            fontsize: {
+                get: function (element) {
+                    var value = $(element).css('font-size');
+                    return Utils.convertCssLength(value, 'pt');
+                },
+                set: function (element, fontSize) {
+                    $(element).css('font-size', fontSize + 'pt');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            bold: {
+                get: function (element) {
+                    var value = $(element).css('font-weight');
+                    return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
+                },
+                set: function (element, state) {
+                    $(element).css('font-weight', state ? 'bold' : 'normal');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            italic: {
+                get: function (element) {
+                    var value = $(element).css('font-style');
+                    return (value === 'italic') || (value === 'oblique');
+                },
+                set: function (element, state) {
+                    $(element).css('font-style', state ? 'italic' : 'normal');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            underline: {
+                get: function (element) {
+                    return Utils.containsToken($(element).css('text-decoration'), 'underline');
+                },
+                set: function (element, state) {
+                    var value = $(element).css('text-decoration');
+                    value = Utils.toggleToken(value, 'underline', state, 'none');
+                    $(element).css('text-decoration', value);
+                }
+            },
+
+            highlight: {
+                get: function (element) {
+                    return $(element).hasClass('highlight');
+                },
+                set: function (element, state) {
+                    $(element).toggleClass('highlight', state);
+                }
+            }
+
+        },
+
+        // defaults for the character style sheets
+        CharacterStyleSheetPool = {
+
+            std: {
+                name: gt('Standard'),
+                parent: null,
+                attributes: {} // use settings from current paragraph styles by default
+            }
+
+        };
+
+    // singleton instance -----------------------------------------------------
+
     /**
      * A converter for character formatting attributes. The CSS formatting will
      * be read from and written to <span> elements contained in paragraph <p>
      * elements.
      */
-    Attributes.Character = new AttributeConverter({
-
-        fontname: {
-            get: function (element) {
-                var value = $(element).css('font-family');
-                return Fonts.getFontName(value);
-            },
-            set: function (element, fontName) {
-                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                updateElementLineHeight(element);
-            }
-        },
-
-        fontsize: {
-            get: function (element) {
-                var value = $(element).css('font-size');
-                return Utils.convertCssLength(value, 'pt');
-            },
-            set: function (element, fontSize) {
-                $(element).css('font-size', fontSize + 'pt');
-                updateElementLineHeight(element);
-            }
-        },
-
-        bold: {
-            get: function (element) {
-                var value = $(element).css('font-weight');
-                return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
-            },
-            set: function (element, state) {
-                $(element).css('font-weight', state ? 'bold' : 'normal');
-                updateElementLineHeight(element);
-            }
-        },
-
-        italic: {
-            get: function (element) {
-                var value = $(element).css('font-style');
-                return (value === 'italic') || (value === 'oblique');
-            },
-            set: function (element, state) {
-                $(element).css('font-style', state ? 'italic' : 'normal');
-                updateElementLineHeight(element);
-            }
-        },
-
-        underline: {
-            get: function (element) {
-                return Utils.containsToken($(element).css('text-decoration'), 'underline');
-            },
-            set: function (element, state) {
-                var value = $(element).css('text-decoration');
-                value = Utils.toggleToken(value, 'underline', state, 'none');
-                $(element).css('text-decoration', value);
-            }
-        },
-
-        highlight: {
-            get: function (element) {
-                return $(element).hasClass('highlight');
-            },
-            set: function (element, state) {
-                $(element).toggleClass('highlight', state);
-            }
-        }
-
-    });
+    Attributes.Character = new AttributeConverter(CharacterAttributeDefinitions, CharacterStyleSheetPool, 'charstyle');
 
     // methods ----------------------------------------------------------------
 

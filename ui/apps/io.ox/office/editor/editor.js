@@ -375,6 +375,7 @@ define('io.ox/office/editor/editor',
         // insert an empty text span if there is no other content (except the dummy <br>)
         if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
             $(paragraph).prepend($('<span>').text(''));
+            Attributes.Paragraph.setElementAttributes(paragraph, { parastyle: 'std' });
             childCount += 1;
         }
 

@@ -31,19 +31,18 @@ define('io.ox/office/editor/view',
 
     // class StyleSheetChooser ================================================
 
-    var StyleSheetChooser = RadioGroup.extend({ constructor: function () {
+    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheetPool, options) {
 
         var labelCss = {
                 minWidth: '80px',
                 textAlign: 'left'
-            },
-
-            options = {
-                labelCss: labelCss,
-                tooltip: gt('Paragraph Style'),
-                type: 'list',
-                sorted: true
             };
+
+        options = Utils.extendOptions({
+            labelCss: labelCss,
+            type: 'list',
+            sorted: true
+        }, options);
 
         // base constructor ---------------------------------------------------
 
@@ -53,7 +52,7 @@ define('io.ox/office/editor/view',
 
         // add all known style sheets
 
-        _(Attributes.Paragraph.StyleSheetPool).each(function (styleSheet, id) {
+        _(styleSheetPool).each(function (styleSheet, id) {
             this.addButton(id, { label: styleSheet.name, labelCss: labelCss });
         }, this);
 
@@ -222,7 +221,7 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser())
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(Attributes.Paragraph.getStyleSheetPool(), { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()
