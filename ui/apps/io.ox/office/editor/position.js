@@ -178,7 +178,7 @@ define('io.ox/office/editor/position',
             if (returnObj) {
                 if (returnObj.node) {
                     node = returnObj.node;
-                    if (returnObj.offset) {
+                    if (_(returnObj.offset).isNumber()) {
                         offset = returnObj.offset;
                     }
                 } else {

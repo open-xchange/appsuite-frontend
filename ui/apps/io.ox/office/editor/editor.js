@@ -825,11 +825,8 @@ define('io.ox/office/editor/editor',
 
                 // window.console.log("Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
-                // this selection need to be changed for some browsers to set selection into end of text node instead
-                // of start of following text node. it also needs to be set after double clicking a word.
-                if ((domRange.start.node.nodeType === 3) || (domRange.start.node.nodeName === 'IMG')) {
-                    this.setSelection(currentSelection);
-                }
+                // Keeping selections synchron. Without setting selection now, there are cursor travel problems in Firefox.
+                this.setSelection(currentSelection);
 
                 return  _.copy(currentSelection, true);
             }
