@@ -17,7 +17,7 @@ define("io.ox/tasks/main", function () {
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/tasks' }),
+    var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
         // app window
         win;
     // launcher
