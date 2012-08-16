@@ -72,7 +72,7 @@ define('io.ox/office/editor/position',
         // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
         // These DIVs need to be converted to the correct paragraph first.
         // Also cells in columns have to be converted at this point.
-        if ($(node).is('DIV, P, TR, TD, TH, IMG')) {
+        if ($(node).is('DIV, P, TR, TD, TH')) {
             var newNode = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
             if (newNode) {
                 node = newNode.node;
@@ -221,15 +221,8 @@ define('io.ox/office/editor/position',
     Position.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
 
         var useFirstTextNode = true,  // can be false for final child in a paragraph
-            usePreviousCell = false;
-
-        if (Utils.getNodeName(node) === 'img') {
-            node = node.nextSibling;  // useless to look for text nodes inside image nodes (must be a span)
-            // node = node.previousSibling;
-            offset = 0;
-        }
-
-        var localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
+            usePreviousCell = false,
+            localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
 
         if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
             usePreviousCell = true;
@@ -246,11 +239,15 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // special handling for images, use first following text node instead
+        // special handling for images as children of paragraphs, use text node instead
         if (localNode && (Utils.getNodeName(localNode) === 'img')) {
-            // localNode = localNode.nextSibling;
-            localNode = localNode.previousSibling; // allows text input at the beginning of the paragraph. (7,0) must return a text node.
-            useFirstTextNode = true;
+            if (isEndPoint) {
+                localNode = localNode.nextSibling;
+                useFirstTextNode = true;
+            } else {
+                localNode = localNode.previousSibling;
+                useFirstTextNode = false;
+            }
         }
 
         // find the first or last text node contained in the element
@@ -353,12 +350,22 @@ define('io.ox/office/editor/position',
                 return;
             }
 
-            childNode = node;
-
             if (! isImage) {
+                childNode = node;
+                if (childNode.nodeType !== 3) {
+                    childNode = childNode.firstChild;  // using text node instead of span node
+                }
                 offset = pos - textLength;
             } else {
+                // if the last position is an image, the dom position shall be the following text node
+                childNode = node.nextSibling;
+                childNode = childNode.firstChild;
                 offset = 0;
+            }
+
+            // only text nodes shall be returned, never image nodes
+            if (childNode.nodeType !== 3) {
+                Utils.warn('Position.getNextChildNode(): Failed to get text node at position: ' + pos + '(' + childNode.nodeName + ')');
             }
 
         } else {
@@ -1112,27 +1119,6 @@ define('io.ox/office/editor/position',
         // If cells in a table are selected, both positions must have the selectedNodeName 'tr'.
         // This is valid only in Firefox.
         return (startPaM.selectedNodeName === 'TR' && endPaM.selectedNodeName === 'TR');
-    };
-
-    /**
-     * Checks, if two logical positions represent an image selection.
-     * This means, that the logical position was calculated from a
-     * dom node, that was an image. Therefore 'selectedNodeName'
-     * is saved in the OXOPaM object next to OXOPaM.oxoPosition.
-     *
-     * @param {OXOPam} startPaM
-     *  The OXOPaM object containing the logical position.
-     *
-     * @param {OXOPam} endPaM
-     *  The OXOPaM object containing the logical position.
-     *
-     * @returns {Boolean}
-     *  Returns true, if both positions were calculated from dom
-     *  nodes with the nodeName property set to 'IMG'.
-     *  Otherwise false is returned.
-     */
-    Position.isImageSelection = function (startPaM, endPaM) {
-        return (startPaM.selectedNodeName === 'IMG' && endPaM.selectedNodeName === 'IMG');
     };
 
     /**
