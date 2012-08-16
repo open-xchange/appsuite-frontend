@@ -1,9 +1,9 @@
-
+@padding: 2px;
 @portal-background-alt: @topbar-background;
 @portal-background: @topbar-background-alt;
 
 .io-ox-portal {
-    padding: 13px;
+    padding: @padding;
     position: relative;
     height: 100%;
     overflow: auto;
@@ -62,13 +62,13 @@
 }
 .io-ox-portal-tiles {
     text-align: left;
-    margin: 0 auto;
+//    margin: 0 auto;
 }
 
 @tile-margin: 1px;
 @tile-width: 270px;
 @tile-height: 180px;
-
+/*
 @media all and (min-width: 320px) {
     .io-ox-portal-tiles { width: 1*(@tile-width + 2*@tile-margin);}
 }
@@ -93,15 +93,75 @@
 @media all and (min-width: 2560px) {
     .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
 }
+.io-ox-portal-widget-tile {
+    height: @tile-height;
+    width: @tile-width;
+}
+*/
+.io-ox-portal-widget-tile { 
+    height: @tile-height;
+    box-sizing: border-box;
+    border: @padding solid @portal-background;
+}
 
+@media all and (min-width: 0px ) {
+    .io-ox-portal-widget-tile { width: 100%; }
+}
+@media all and (min-width: 300px) {
+    .io-ox-portal-widget-tile { width: 50%; }
+}
+@media all and (min-width: 600px) {
+    .io-ox-portal-widget-tile { width: 33.33%; }
+}
+@media all and (min-width: 900px) {
+    .io-ox-portal-widget-tile { width: 25%; }
+}
+@media all and (min-width: 1200px) {
+    .io-ox-portal-widget-tile { width: 20%; }
+}
+@media all and (min-width: 1500px) {
+    .io-ox-portal-widget-tile { width: 16.66%; }
+}
+@media all and (min-width: 1800px) {
+    .io-ox-portal-widget-tile { width: 14.28%; }
+}
+@media all and (min-width: 2100px) {
+    .io-ox-portal-widget-tile { width: 12.5%; }
+}
+.io-ox-portal, .io-ox-portal-tiles {
+    height: 100%;
+}
+
+/*@media all and (min-height: 180px) {
+    .io-ox-portal-widget-tile { height: 99%; }
+}
+@media all and (min-height: 360px) {
+    .io-ox-portal-widget-tile { height: 49%; }
+}
+@media all and (min-height: 540px) {
+    .io-ox-portal-widget-tile { height: 32%; }
+}
+@media all and (min-height: 720px) {
+    .io-ox-portal-widget-tile { height: 24%; }
+}
+@media all and (min-height: 900px) {
+    .io-ox-portal-widget-tile { height: 19%; }
+}
+@media all and (min-height: 1080px) {
+    .io-ox-portal-widget-tile { height: 16%; }
+}
+@media all and (min-height: 1260px) {
+    .io-ox-portal-widget-tile { height: 14%; }
+}
+@media all and (min-height: 1440px) {
+    .io-ox-portal-widget-tile { height: 12%; }
+}*/
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
     padding: 13px;
     overflow: hidden;
-    width: @tile-width;
-    height: @tile-height;
-    margin: @tile-margin;
+    margin: 0;
     cursor: pointer;
     color: white;
 }
@@ -126,10 +186,10 @@
     margin: 8px 0 8px 0;
 }
 
-@tile-fix: 5%;
-@tile-hover: 12%;
-@tile-darken: 10%;
-@tile-hover-dark: 15%;
+@tile-fix: 10%;
+@tile-hover: 25%;
+@tile-darken: 20%;
+@tile-hover-dark: 30%;
 
 .io-ox-portal {
 

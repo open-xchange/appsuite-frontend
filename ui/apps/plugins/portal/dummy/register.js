@@ -16,7 +16,7 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
     "use strict";
     
     var load = function () {
-        return $.Deferred();
+        return $.Deferred($('<div>').text("Blablabla"));
     };
     var draw = function (feed) {
         var $node = $('<div class="io-ox-portal-dummy">').appendTo(this).append(
@@ -32,7 +32,7 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
     for (var i = 0; i < 25; i++) {
         ext.point("io.ox/portal/widget").extend({
             id: 'dummy' + i,
-            index: 200,
+            index: 500 + i,
             title: 'Dummy #' + i,
             load: load,
             draw: draw
