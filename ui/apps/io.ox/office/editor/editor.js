@@ -669,9 +669,10 @@ define('io.ox/office/editor/editor',
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
+                // TODO: Remove this ugly fix for Windows servers asap
+                imgurl = imgurl.replace(/\\/g, "/");  // problem of Windows servers
+                imgurl = imgurl.replace(/fragment=\//g, "fragment=");  // problem of Windows servers
                 this.implInsertImage(imgurl, operation.position);
-                // TODO: following line is to be removed if counting of images is done correctly
-                // this.implInsertText("∑", operation.position);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
