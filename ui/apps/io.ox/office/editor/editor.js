@@ -19,8 +19,9 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/attributes'
-    ], function (Events, Utils, DOM, OXOPaM, Position, Attributes) {
+     'io.ox/office/editor/format/characterstyles',
+     'io.ox/office/editor/format/paragraphstyles'
+    ], function (Events, Utils, DOM, OXOPaM, Position, CharacterStyles, ParagraphStyles) {
 
     'use strict';
 
@@ -375,7 +376,6 @@ define('io.ox/office/editor/editor',
         // insert an empty text span if there is no other content (except the dummy <br>)
         if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
             $(paragraph).prepend($('<span>').text(''));
-            Attributes.Paragraph.setElementAttributes(paragraph, { parastyle: 'std' });
             childCount += 1;
         }
 
@@ -461,6 +461,9 @@ define('io.ox/office/editor/editor',
             ]);
 
         var self = this;
+
+        var characterStyles = new CharacterStyles(editdiv);
+        var paragraphStyles = new ParagraphStyles(editdiv);
 
         var currentDocumentURL;
 
@@ -895,7 +898,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                Attributes.Character.setAttributes(highlightRanges, editdiv, { highlight: false });
+                characterStyles.setAttributes(highlightRanges, { highlight: false });
             }
             highlightRanges = [];
         };
@@ -978,7 +981,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            Attributes.Character.setAttributes(highlightRanges, editdiv, { highlight: true });
+            characterStyles.setAttributes(highlightRanges, { highlight: true });
 
             // make first highlighted text node visible
             DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1705,9 +1708,9 @@ define('io.ox/office/editor/editor',
             var // the resulting attributes
                 attributes = null;
 
-            if (Attributes.Paragraph.hasAttribute(attrName)) {
+            if (ParagraphStyles.Formatter.supportsAttribute(attrName)) {
                 attributes = this.getParagraphAttributes();
-            } else if (Attributes.Character.hasAttribute(attrName)) {
+            } else if (CharacterStyles.Formatter.supportsAttribute(attrName)) {
                 attributes = this.getCharacterAttributes();
             } else {
                 Utils.error('Editor.getAttribute(): no valid attribute specified');
@@ -1725,7 +1728,7 @@ define('io.ox/office/editor/editor',
          */
         this.getParagraphAttributes = function () {
             var ranges = DOM.getBrowserSelection(editdiv);
-            return Attributes.Paragraph.getAttributes(ranges, editdiv);
+            return paragraphStyles.getAttributes(ranges);
         };
 
         /**
@@ -1737,7 +1740,7 @@ define('io.ox/office/editor/editor',
          */
         this.getCharacterAttributes = function () {
             var ranges = DOM.getBrowserSelection(editdiv);
-            return Attributes.Character.getAttributes(ranges, editdiv);
+            return characterStyles.getAttributes(ranges);
         };
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
@@ -1948,7 +1951,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (Attributes.Paragraph.hasAnyAttribute(attributes)) {
+                else if (ParagraphStyles.Formatter.supportsAnyAttribute(attributes)) {
                     var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -2502,8 +2505,8 @@ define('io.ox/office/editor/editor',
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
             if (textMode !== 'plain') {
-                Attributes.Paragraph.setAttributes(ranges, editdiv, attributes);
-                Attributes.Character.setAttributes(ranges, editdiv, attributes);
+                paragraphStyles.setAttributes(ranges, attributes);
+                characterStyles.setAttributes(ranges, attributes);
             }
         }
 

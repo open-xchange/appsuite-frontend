@@ -1058,6 +1058,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *      shown.
      *  @param {Object} [options.labelCss]
      *      A map with CSS formatting attributes to be added to the label span.
+     *      Does not have any effect, if no label has been specified.
      */
     Utils.setControlCaption = function (control, options) {
 
@@ -1070,7 +1071,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         Utils.removeControlCaption(control);
 
         // prepend the label
-        if (_.isString(label) || _.isObject(labelCss)) {
+        if (_.isString(label)) {
             control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'label')
                 .text(label || '')

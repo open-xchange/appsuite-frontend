@@ -20,9 +20,9 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
-     'io.ox/office/editor/attributes',
+     'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, Attributes, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, LineHeight, gt) {
 
     'use strict';
 
@@ -39,6 +39,7 @@ define('io.ox/office/editor/view',
             };
 
         options = Utils.extendOptions({
+            label: '', // must pass empty string, otherwise labelCss is ignored
             labelCss: labelCss,
             type: 'list',
             sorted: true
@@ -221,7 +222,7 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(Attributes.Paragraph.getStyleSheetPool(), { tooltip: gt('Paragraph Style') }))
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser({}, { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()
@@ -239,9 +240,9 @@ define('io.ox/office/editor/view',
                 .end()
             .addSeparator()
             .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 1, autoExpand: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
-                .addButton(Attributes.Paragraph.LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
-                .addButton(Attributes.Paragraph.LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addButton(Attributes.Paragraph.LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
+                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
+                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
+                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
