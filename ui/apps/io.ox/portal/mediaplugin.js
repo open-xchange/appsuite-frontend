@@ -77,12 +77,21 @@ define('io.ox/portal/mediaplugin',
         };
 
         var resizeImage = function ($img, maxWidth, maxHeight) {
-            if ($img.width() > maxWidth && $img.width() > $img.height()) {
-                $img.css('width', maxWidth + 'px');
-                $img.css('height', 'auto');
-            } else if ($img.height() > maxHeight) {
-                $img.css('height', maxHeight + 'px');
-                $img.css('width', 'auto');
+            if ($img.width() && $img.height()) {
+                if ($img.width() > maxWidth && $img.width() > $img.height()) {
+                    console.log('zu breit...nun: ' + maxWidth);
+                    $img.css('width', maxWidth + 'px');
+                    $img.css('height', 'auto');
+                } else if ($img.height() > maxHeight) {
+                    console.log('zu hoch...nun: ' + maxHeight);
+                    $img.css('height', maxHeight + 'px');
+                    $img.css('width', 'auto');
+                } else {
+                    $img.attr({
+                        width: $img.width(),
+                        height: $img.height()
+                    });
+                }
             }
         };
 
