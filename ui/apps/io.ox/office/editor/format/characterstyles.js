@@ -22,6 +22,84 @@ define('io.ox/office/editor/format/characterstyles',
 
     'use strict';
 
+    var // default attributes for character style sheets
+        pool = {
+            fontname: 'Times New Roman',
+            fontsize: 12,
+            bold: false,
+            italic: false,
+            underline: false
+        },
+
+        // the CSS formatter for character attributes
+        formatter = new Formatter({
+
+            fontname: {
+                get: function (element) {
+                    var value = $(element).css('font-family');
+                    return Fonts.getFontName(value);
+                },
+                set: function (element, fontName) {
+                    $(element).css('font-family', Fonts.getCssFontFamily(fontName));
+                    updateElementLineHeight(element);
+                }
+            },
+
+            fontsize: {
+                get: function (element) {
+                    var value = $(element).css('font-size');
+                    return Utils.convertCssLength(value, 'pt');
+                },
+                set: function (element, fontSize) {
+                    $(element).css('font-size', fontSize + 'pt');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            bold: {
+                get: function (element) {
+                    var value = $(element).css('font-weight');
+                    return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
+                },
+                set: function (element, state) {
+                    $(element).css('font-weight', state ? 'bold' : 'normal');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            italic: {
+                get: function (element) {
+                    var value = $(element).css('font-style');
+                    return (value === 'italic') || (value === 'oblique');
+                },
+                set: function (element, state) {
+                    $(element).css('font-style', state ? 'italic' : 'normal');
+                    updateElementLineHeight(element);
+                }
+            },
+
+            underline: {
+                get: function (element) {
+                    return Utils.containsToken($(element).css('text-decoration'), 'underline');
+                },
+                set: function (element, state) {
+                    var value = $(element).css('text-decoration');
+                    value = Utils.toggleToken(value, 'underline', state, 'none');
+                    $(element).css('text-decoration', value);
+                }
+            },
+
+            highlight: {
+                get: function (element) {
+                    return $(element).hasClass('highlight');
+                },
+                set: function (element, state) {
+                    $(element).toggleClass('highlight', state);
+                }
+            }
+
+        });
+
     // private static functions ===============================================
 
     /**
@@ -64,7 +142,7 @@ define('io.ox/office/editor/format/characterstyles',
          * formatting.
          */
         function hasEqualAttributes(textNode1, textNode2) {
-            return CharacterStyles.Formatter.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
+            return formatter.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
         }
 
         /**
@@ -92,7 +170,7 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, CharacterStyles.StyleSheetPool, CharacterStyles.Formatter, iterateReadOnly, iterateReadWrite);
+        StyleSheets.call(this, pool, 'charstyle', formatter, iterateReadOnly, iterateReadWrite);
 
     } // class CharacterStyles
 
@@ -101,84 +179,7 @@ define('io.ox/office/editor/format/characterstyles',
     /**
      * Default attributes for character style sheets.
      */
-    CharacterStyles.StyleSheetPool = {
-        fontname: 'Times New Roman',
-        fontsize: 12,
-        bold: false,
-        italic: false,
-        underline: false
-    };
-
-    /**
-     * The CSS formatter for character attributes.
-     */
-    CharacterStyles.Formatter = new Formatter({
-
-        fontname: {
-            get: function (element) {
-                var value = $(element).css('font-family');
-                return Fonts.getFontName(value);
-            },
-            set: function (element, fontName) {
-                $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                updateElementLineHeight(element);
-            }
-        },
-
-        fontsize: {
-            get: function (element) {
-                var value = $(element).css('font-size');
-                return Utils.convertCssLength(value, 'pt');
-            },
-            set: function (element, fontSize) {
-                $(element).css('font-size', fontSize + 'pt');
-                updateElementLineHeight(element);
-            }
-        },
-
-        bold: {
-            get: function (element) {
-                var value = $(element).css('font-weight');
-                return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
-            },
-            set: function (element, state) {
-                $(element).css('font-weight', state ? 'bold' : 'normal');
-                updateElementLineHeight(element);
-            }
-        },
-
-        italic: {
-            get: function (element) {
-                var value = $(element).css('font-style');
-                return (value === 'italic') || (value === 'oblique');
-            },
-            set: function (element, state) {
-                $(element).css('font-style', state ? 'italic' : 'normal');
-                updateElementLineHeight(element);
-            }
-        },
-
-        underline: {
-            get: function (element) {
-                return Utils.containsToken($(element).css('text-decoration'), 'underline');
-            },
-            set: function (element, state) {
-                var value = $(element).css('text-decoration');
-                value = Utils.toggleToken(value, 'underline', state, 'none');
-                $(element).css('text-decoration', value);
-            }
-        },
-
-        highlight: {
-            get: function (element) {
-                return $(element).hasClass('highlight');
-            },
-            set: function (element, state) {
-                $(element).toggleClass('highlight', state);
-            }
-        }
-
-    });
+    CharacterStyles.StyleSheetPool = pool;
 
     // exports ================================================================
 

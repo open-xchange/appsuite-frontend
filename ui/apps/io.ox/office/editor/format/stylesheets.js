@@ -28,6 +28,10 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
      *  A map that defines default values for all formatting attributes that
      *  may occur in a style sheet.
      *
+     * @param {String} styleAttrName
+     *  The name of the attribute that contains the style sheet name for a DOM
+     *  element.
+     *
      * @param {Formatter} formatter
      *  The CSS formatter used to read CSS formatting from DOM elements and to
      *  write CSS formatting to DOM elements.
@@ -48,10 +52,13 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
      *  and a context object used to call the iterator function with.
      *  Compatible with the iterator functions defined in the DOM module.
      */
-    function StyleSheets(pool, formatter, iterateReadOnly, iterateReadWrite) {
+    function StyleSheets(pool, styleAttrName, formatter, iterateReadOnly, iterateReadWrite) {
 
         var // style sheets, mapped by identifier
             styleSheets = {};
+
+        // private methods ----------------------------------------------------
+
 
         // methods ------------------------------------------------------------
 
@@ -62,16 +69,33 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @param {String} name
          *  The user-defined name of of the new style sheet.
          *
-         * @param {String} parent
+         * @param {String|Null} parent
          *  The name of of the parent style sheet the new style sheet will
          *  derive undefined attributes from.
          *
          * @param {Object} attributes
-         *  The formatting attributes contained in the new style sheet.
+         *  The formatting attributes contained in the new style sheet, as
+         *  map of name/value pairs.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this instance.
          */
         this.addStyleSheet = function (name, parent, attributes) {
-            this.removeStyleSheet(name);
-            styleSheets[name] = { parent: styleSheets[parent], attributes: attributes };
+
+            var // get or create a style sheet object
+                styleSheet = styleSheets[name] || (styleSheets[name] = {});
+
+            // set parent of the style sheet
+            // TODO: check circular references
+            styleSheet.parent = styleSheets[parent];
+
+            // set attributes (filter by attributes contained in the pool)
+            styleSheet.attributes = {};
+            _(attributes).each(function (value, name) {
+                if (name in pool) { styleSheet.attributes[name] = value; }
+            });
+
+            return this;
         };
 
         /**
@@ -79,6 +103,9 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *
          * @param {String} name
          *  The user-defined name of of the style sheet to be removed.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this instance.
          */
         this.removeStyleSheet = function (name) {
 
@@ -95,6 +122,73 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                 // remove style sheet from map
                 delete styleSheets[name];
             }
+            return this;
+        };
+
+        /**
+         * Returns the names of all style sheets in a string array.
+         */
+        this.getStyleSheetNames = function () {
+            return _.keys(styleSheets);
+        };
+
+        /**
+         * Returns the merged attributes of the specified style sheet and all
+         * of its ancestors.
+         *
+         * @param {String} name
+         *  The name of of the style sheet.
+         *
+         * @returns {Object}
+         *  The formatting attributes contained in the style sheet and its
+         *  ancestor style sheet up to the pool defaults, as map of name/value
+         *  pairs.
+         */
+        this.getStyleSheetAttributes = function (name) {
+
+            var // the initial style sheet
+                styleSheet = styleSheets[name],
+                // the resulting attributes
+                attributes = {};
+
+            // add attributes of the entire ancestor chain
+            while (styleSheet) {
+                attributes = _(styleSheet.attributes).extend(attributes);
+                styleSheet = styleSheet.parent;
+            }
+
+            // add pool attributes
+            return _(pool).extend(attributes);
+        };
+
+        /**
+         * Returns whether this style sheet container supports the specified
+         * formatting attribute.
+         *
+         * @param {String} name
+         *  The name of the formatting attribute.
+         *
+         * @returns {Boolean}
+         *  Whether the specified attribute is supported by this instance.
+         */
+        this.supportsAttribute = function (name) {
+            return (name === styleAttrName) || formatter.supportsAttribute(name);
+        };
+
+        /**
+         * Returns whether this style sheet container supports at least one of
+         * the specified formatting attributes.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Boolean}
+         *  Whether at least one of the specified attributes is supported by
+         *  this instance.
+         */
+        this.supportsAnyAttribute = function (attributes) {
+            return (styleAttrName in attributes) || formatter.supportsAnyAttribute(attributes);
         };
 
         /**
@@ -109,7 +203,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @returns {Object}
          *  A map of attribute name/value pairs.
          */
-        this.getAttributes = function (ranges) {
+        this.getRangeAttributes = function (ranges) {
 
             var // the attribute values, mapped by name
                 attributes = {};
@@ -118,7 +212,22 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             iterateReadOnly(ranges, function (element) {
 
                 var // merge the existing attributes with the attributes of the new node
-                    hasNonNull = formatter.mergeElementAttributes(attributes, element);
+                    hasNonNull = formatter.mergeElementAttributes(attributes, element),
+                    // get the style sheet name
+                    // TODO: get the real name of the standard style
+                    style = $(element).data('style') || 'Standard';
+
+                // merge the style name into the attributes
+                if (!(styleAttrName in attributes)) {
+                    // initial iteration: store style sheet name
+                    attributes[styleAttrName] = style;
+                } else if (style !== attributes[styleAttrName]) {
+                    // style sheet name differs from previous name: ambiguous state
+                    attributes[styleAttrName] = null;
+                } else {
+                    // style sheet name is still equal: set uniqueness flag
+                    hasNonNull = true;
+                }
 
                 // exit iteration loop if there are no unambiguous attributes left
                 if (!hasNonNull) { return Utils.BREAK; }
@@ -138,10 +247,19 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @param {Object} attributes
          *  A map of attribute name/value pairs.
          */
-        this.setAttributes = function (ranges, attributes) {
+        this.setRangeAttributes = function (ranges, attributes) {
+
+            var // the style sheet name
+                style = Utils.getStringOption(attributes, styleAttrName),
+                // get attributes of the style sheet, if specified
+                styleAttributes = style ? this.getStyleSheetAttributes(style) : null;
 
             // iterate all covered elements and change their formatting
             iterateReadWrite(ranges, function (element) {
+                if (style) {
+                    $(element).data('style', style);
+                    formatter.setElementAttributes(element, styleAttributes);
+                }
                 formatter.setElementAttributes(element, attributes);
             });
         };

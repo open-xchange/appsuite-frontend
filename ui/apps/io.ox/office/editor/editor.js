@@ -465,6 +465,15 @@ define('io.ox/office/editor/editor',
         var characterStyles = new CharacterStyles(editdiv);
         var paragraphStyles = new ParagraphStyles(editdiv);
 
+        // TODO: remove these default styles (or move to a 'newDocument' operation)
+        paragraphStyles
+            .addStyleSheet('Standard', null, {})
+            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
+            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
+            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
+            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Arial', fontsize: 14, bold: true })
+            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Arial', fontsize: 13, bold: true });
+
         var currentDocumentURL;
 
         var focused = false;
@@ -898,7 +907,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.setAttributes(highlightRanges, { highlight: false });
+                characterStyles.setRangeAttributes(highlightRanges, { highlight: false });
             }
             highlightRanges = [];
         };
@@ -981,7 +990,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            characterStyles.setAttributes(highlightRanges, { highlight: true });
+            characterStyles.setRangeAttributes(highlightRanges, { highlight: true });
 
             // make first highlighted text node visible
             DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1723,9 +1732,9 @@ define('io.ox/office/editor/editor',
             var // the resulting attributes
                 attributes = null;
 
-            if (ParagraphStyles.Formatter.supportsAttribute(attrName)) {
+            if (paragraphStyles.supportsAttribute(attrName)) {
                 attributes = this.getParagraphAttributes();
-            } else if (CharacterStyles.Formatter.supportsAttribute(attrName)) {
+            } else if (characterStyles.supportsAttribute(attrName)) {
                 attributes = this.getCharacterAttributes();
             } else {
                 Utils.error('Editor.getAttribute(): no valid attribute specified');
@@ -1743,7 +1752,7 @@ define('io.ox/office/editor/editor',
          */
         this.getParagraphAttributes = function () {
             var ranges = DOM.getBrowserSelection(editdiv);
-            return paragraphStyles.getAttributes(ranges);
+            return paragraphStyles.getRangeAttributes(ranges);
         };
 
         /**
@@ -1755,7 +1764,21 @@ define('io.ox/office/editor/editor',
          */
         this.getCharacterAttributes = function () {
             var ranges = DOM.getBrowserSelection(editdiv);
-            return characterStyles.getAttributes(ranges);
+            return characterStyles.getRangeAttributes(ranges);
+        };
+
+        /**
+         * Returns the paragraph style sheet container.
+         */
+        this.getParagraphStyles = function () {
+            return paragraphStyles;
+        };
+
+        /**
+         * Returns the character style sheet container.
+         */
+        this.getCharacterStyles = function () {
+            return characterStyles;
         };
 
         this.setAttribute = function (attr, value, startPosition, endPosition) {
@@ -1966,7 +1989,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (ParagraphStyles.Formatter.supportsAnyAttribute(attributes)) {
+                else if (paragraphStyles.supportsAnyAttribute(attributes)) {
                     var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -2553,8 +2576,8 @@ define('io.ox/office/editor/editor',
             ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
 
             if (textMode !== 'plain') {
-                paragraphStyles.setAttributes(ranges, attributes);
-                characterStyles.setAttributes(ranges, attributes);
+                paragraphStyles.setRangeAttributes(ranges, attributes);
+                characterStyles.setRangeAttributes(ranges, attributes);
             }
         }
 

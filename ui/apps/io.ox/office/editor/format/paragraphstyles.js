@@ -22,6 +22,51 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
+    var // default attributes for paragraph style sheets (contains all character pool attributes)
+        pool = _.extend(CharacterStyles.StyleSheetPool, {
+            alignment: 'left',
+            lineheight: LineHeight.SINGLE
+        }),
+
+        // the CSS formatter for paragraph attributes
+        formatter = new Formatter({
+
+            alignment: {
+                get: function (element) {
+                    var value = $(element).css('text-align');
+                    // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
+                    return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
+                },
+                set: function (element, value) {
+                    $(element).css('text-align', value);
+                }
+            },
+
+            // Logically, the line height is a paragraph attribute. But technically
+            // in CSS, the line height must be set separately at every span element
+            // because a relative CSS line-height attribute at the paragraph (e.g.
+            // 200%) will not be derived relatively to the spans, but absolutely
+            // according to the paragraph's font size. Example: The paragraph has a
+            // font size of 12pt and a line-height of 200%, resulting in 24pt. This
+            // value will be derived absolutely to a span with a font size of 6pt,
+            // resulting in a relative line height of 24pt/6pt = 400% instead of
+            // the expected 200%.
+            lineheight: {
+                get: function (element) {
+                    var lineHeight = $(element).data('lineheight');
+                    return LineHeight.validateLineHeight(lineHeight);
+                },
+                set: function (element, lineHeight) {
+                    lineHeight = LineHeight.validateLineHeight(lineHeight);
+                    $(element).data('lineheight', lineHeight).children('span').each(function () {
+                        $(this).data('lineheight', lineHeight);
+                        LineHeight.setElementLineHeight(this, lineHeight);
+                    });
+                }
+            }
+
+        });
+
     // class ParagraphStyles ==================================================
 
     /**
@@ -51,9 +96,9 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, ParagraphStyles.StyleSheetPool, ParagraphStyles.Formatter, iterate, iterate);
+        StyleSheets.call(this, pool, 'parastyle', formatter, iterate, iterate);
 
-    }
+    } // class ParagraphStyles
 
     // static fields ----------------------------------------------------------
 
@@ -61,61 +106,7 @@ define('io.ox/office/editor/format/paragraphstyles',
      * Default attributes for paragraph style sheets. Contains all default
      * attributes for characters.
      */
-    ParagraphStyles.StyleSheetPool = _.extend(CharacterStyles.StyleSheetPool, {
-        alignment: 'left',
-        lineheight: LineHeight.SINGLE
-    });
-
-    /**
-     * The CSS formatter for paragraph attributes.
-     */
-    ParagraphStyles.Formatter = new Formatter({
-
-        parastyle: {
-            get: function (element) {
-                var value = $(element).data('style');
-                return _.isString(value) ? value : 'std';
-            },
-            set: function (element, style) {
-                $(element).data('style', style);
-            }
-        },
-
-        alignment: {
-            get: function (element) {
-                var value = $(element).css('text-align');
-                // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
-                return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
-            },
-            set: function (element, value) {
-                $(element).css('text-align', value);
-            }
-        },
-
-        // Logically, the line height is a paragraph attribute. But technically
-        // in CSS, the line height must be set separately at every span element
-        // because a relative CSS line-height attribute at the paragraph (e.g.
-        // 200%) will not be derived relatively to the spans, but absolutely
-        // according to the paragraph's font size. Example: The paragraph has a
-        // font size of 12pt and a line-height of 200%, resulting in 24pt. This
-        // value will be derived absolutely to a span with a font size of 6pt,
-        // resulting in a relative line height of 24pt/6pt = 400% instead of
-        // the expected 200%.
-        lineheight: {
-            get: function (element) {
-                var lineHeight = $(element).data('lineheight');
-                return LineHeight.validateLineHeight(lineHeight);
-            },
-            set: function (element, lineHeight) {
-                lineHeight = LineHeight.validateLineHeight(lineHeight);
-                $(element).data('lineheight', lineHeight).children('span').each(function () {
-                    $(this).data('lineheight', lineHeight);
-                    LineHeight.setElementLineHeight(this, lineHeight);
-                });
-            }
-        }
-
-    });
+    ParagraphStyles.StyleSheetPool = pool;
 
     // exports ================================================================
 

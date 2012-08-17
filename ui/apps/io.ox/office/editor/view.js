@@ -31,7 +31,7 @@ define('io.ox/office/editor/view',
 
     // class StyleSheetChooser ================================================
 
-    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheetPool, options) {
+    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styles, options) {
 
         var labelCss = {
                 minWidth: '80px',
@@ -53,8 +53,8 @@ define('io.ox/office/editor/view',
 
         // add all known style sheets
 
-        _(styleSheetPool).each(function (styleSheet, id) {
-            this.addButton(id, { label: styleSheet.name, labelCss: labelCss });
+        _(styles.getStyleSheetNames()).each(function (name) {
+            this.addButton(name, { label: name, labelCss: labelCss });
         }, this);
 
     }}); // class FontFamilyChooser
@@ -222,7 +222,7 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser({}, { tooltip: gt('Paragraph Style') }))
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getParagraphStyles(), { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()
