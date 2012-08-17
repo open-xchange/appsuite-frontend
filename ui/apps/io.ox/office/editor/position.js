@@ -118,7 +118,7 @@ define('io.ox/office/editor/position',
             if (evaluateOffset) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     textLength += $(prevNode).text().length;
-                    if (prevNode.nodeName === 'IMG') {
+                    if ((prevNode.nodeName === 'IMG') || ((prevNode.firstChild) && (prevNode.firstChild.nodeName === 'IMG'))) {
                         textLength++;
                     }
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
@@ -326,11 +326,11 @@ define('io.ox/office/editor/position',
                     var currentLength = 0,
                         currentNode = nodeList[i];
 
-                    if (nodeList[i].nodeName === 'IMG') {
+                    if ((nodeList[i].nodeName === 'IMG') || ((nodeList[i].firstChild) && (nodeList[i].firstChild.nodeName === 'IMG'))) {
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else {
+                    } else {  // this is a span. it can contain text node or image node
                         currentLength = $(nodeList[i]).text().length;
                         isImage = false;
                     }
@@ -359,6 +359,9 @@ define('io.ox/office/editor/position',
             } else {
                 // if the last position is an image, the dom position shall be the following text node
                 childNode = node.nextSibling;
+                if ((! childNode) && (node.nodeName === 'IMG')) {
+                    childNode = node.parentNode.nextSibling;
+                }
                 childNode = childNode.firstChild;
                 offset = 0;
             }
@@ -572,14 +575,19 @@ define('io.ox/office/editor/position',
 
         while (localPos.length > 0) {
 
-            domNode = Position.getNextChildNode(domNode, localPos.shift()).node;
+            var nextChild = Position.getNextChildNode(domNode, localPos.shift());
 
-            if (domNode) {
-                if (domNode.nodeName === 'TABLE') {
-                    positionInTable = true;
-                    break;
-                } else if (domNode.nodeName === 'P') {
-                    break;
+            if (nextChild) {
+
+                domNode = nextChild.node;
+
+                if (domNode) {
+                    if (domNode.nodeName === 'TABLE') {
+                        positionInTable = true;
+                        break;
+                    } else if (domNode.nodeName === 'P') {
+                        break;
+                    }
                 }
             }
         }

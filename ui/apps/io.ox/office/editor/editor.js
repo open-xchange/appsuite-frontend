@@ -671,7 +671,7 @@ define('io.ox/office/editor/editor',
                 // TODO: Remove this ugly fix for Windows servers asap
                 imgurl = imgurl.replace(/\\/g, "/");  // problem of Windows servers
                 imgurl = imgurl.replace(/fragment=\//g, "fragment=");  // problem of Windows servers
-                this.implInsertImage(imgurl, operation.position);
+                this.implInsertImage(imgurl, operation.position, operation.attrs);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1070,6 +1070,21 @@ define('io.ox/office/editor/editor',
                 else if (c === 'G') {
                     var selection = this.getSelection();
                     var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg"};
+                    this.applyOperation(newOperation, true, true);
+                }
+                else if (c === 'R') {
+                    var selection = this.getSelection();
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px'}};
+                    this.applyOperation(newOperation, true, true);
+                }
+                else if (c === 'S') {
+                    var selection = this.getSelection();
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px'}};
+                    this.applyOperation(newOperation, true, true);
+                }
+                else if (c === 'V') {
+                    var selection = this.getSelection();
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px'}};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -2440,19 +2455,52 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.implInsertImage = function (url, position) {
+        this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
-                node = domPos ? domPos.node : null;
-            if (node && (node.nodeType === 3)) {
-                // prepend text before offset in a new span (also if position
-                // points to start or end of text, needed to clone formatting)
-                DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
-                // insert image before the parent <span> element of the text node
-                node = node.parentNode;
+                node = domPos ? domPos.node : null,
+                anchorType = "AsCharacter";  // default
+
+            if (attributes) {
+                _(attributes).each(function (value, key) {
+                    window.console.log("AAA: Attributes: " + key + " : " + value);
+                });
+
+                if (attributes.anchortype) {
+                    anchorType = attributes.anchortype;
+                }
             }
-            if (node) {
-                $('<img>', { src: url }).insertBefore(node);
+
+            if ((node) && (node.nodeType === 3)) {
+                if (anchorType === 'AsCharacter') {
+                    // prepend text before offset in a new span (also if position
+                    // points to start or end of text, needed to clone formatting)
+                    DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
+                    // insert image before the parent <span> element of the text node
+                    node = node.parentNode;
+                    $('<img>', { src: url }).insertBefore(node);
+                } else if (anchorType === 'ToPage') {
+                    // TODO: This is not a good solution. Adding image to the end of the editdiv,
+                    // does not produce any disorder, but images are not allowed at editdiv.
+                    // A new counting for paragraphs = editdiv.children() is required.
+                    $('<img>', { src: url }).appendTo(editdiv).css(attributes);
+                    attributes.position = 'absolute';
+                    paragraphs = editdiv.children();
+                } else if (anchorType === 'ToParagraph') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+                    attributes.position = 'absolute';
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                } else if (anchorType === 'ToCharacter') {
+                    var textNode = DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
+                    // Creating a new span that will include the graphic. The span must have a position.
+                    // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
+                    var newParent = $('<span>', { position: 'relative' });
+                    newParent.insertAfter(textNode.parentNode);
+                    attributes.position = 'absolute';
+                    $('<img>', { src: url }).appendTo(newParent).css(attributes);
+                }
             }
+
             var lastPos = _.copy(position);
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + 1;
