@@ -19,6 +19,9 @@ define('plugins/portal/reddit/register',
     'use strict';
     var mp = new MediaPlayer();
     var apiUrl = "http://www.reddit.com/r/##subreddit##/new.json?sort=new";
+    apiUrl = "http://www.reddit.com/r/##subreddit##/.json?sort=rising";
+
+    var lastShowedPreview = false;
 
     mp.addFeed({
         id: "reddit-funny",
@@ -48,14 +51,9 @@ define('plugins/portal/reddit/register',
         }
 
         // urls ends with ".jpg"? Give it a try
-        if (entry.url.match(/\.jpg$|\.png$\.gif$/)) {
+        if (entry.url.match(/\.jpg$|\.png$|\.gif$/)) {
             thumbUrl = entry.url;
         }
-
-//        TODO
-//        entry.media.oembed.thumbnail_url
-//        entry.media.oembed.thumbnail_width
-//        entry.media.oembed.thumbnail_height
 
         if (thumbUrl === '' && entry && entry.media && entry.media.oembed && entry.media.oembed.thumbnail_url) {
             thumbUrl = entry.media.oembed.thumbnail_url;
@@ -66,12 +64,13 @@ define('plugins/portal/reddit/register',
 
     mp.init({
         appendLimitOffset: function (myurl, count, offset) {
-            if (count) {
-                myurl += "&limit=" + count;
-            }
+            // &count-param is ignored by reddit
+//            if (count) {
+//                myurl += "&count=" + count;
+//            }
 
             if (offset) {
-                myurl += "&offset=" + count * offset;
+                myurl += "&after=" + lastShowedPreview;
             }
 
             return myurl;
@@ -103,22 +102,24 @@ define('plugins/portal/reddit/register',
             // TODO timezone
             $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.created_utc ? mailUtil.getDateTime(entry.created_utc * 1000) : ""));
 
+            lastShowedPreview = entry.name;
+
             if (thumbUrl !== "") {
-                var $img = $('<img/>', {'data-original': thumbUrl});//, height: thumbHeight, width: thumbWidth});
+                var $img = $('<img/>', {'data-original': thumbUrl});
                 return $img;
             }
+
             return false;
         },
         popupContent: function ($popup, entry, $busyIndicator) {
             var maxWidth = $popup.width(),
                 maxHeight = $popup.height(),
                 willDisableBusyIndicator = false,
-                title = '';
+                title = '',
+                $img = false;
             var $node = $('<div>').addClass('io-ox-portal-mediaplugin-portal');
 
             entry = entry.data;
-//            console.log(entry);
-
 
             if (entry.title) {
                 title = entry.title;
@@ -137,7 +138,7 @@ define('plugins/portal/reddit/register',
             } else  if (imageUrl) {
                 willDisableBusyIndicator = true;
 
-                var $img = $("<img/>", {'src': imageUrl}).css({display: 'none'})
+                $img = $("<img/>", {'src': imageUrl}).css({display: 'none'})
                     .load(function () {
                         if ($busyIndicator) {
                             $busyIndicator.detach();
@@ -145,13 +146,13 @@ define('plugins/portal/reddit/register',
                         }
                     });
 
-                // TODO what to do if we don't know the width+height?
-                mp.resizeImage($img, maxWidth, maxHeight);
                 $img.appendTo($node);
             }
 
             if (entry.url) {
-                $('<div>').append($('<a>').attr({'href': entry.url}).text(entry.url)).appendTo($node);
+                var $url = $('<div>').append($('<a>').attr({'href': entry.url}).text(entry.url));
+                $url.appendTo($node);
+                maxHeight -= $url.height();
             }
 
             if (entry.permalink) {
@@ -162,13 +163,19 @@ define('plugins/portal/reddit/register',
                 if (entry.permalink) {
                     $('<span>').text(' | ').appendTo($node);
                 }
-                $('<a>').attr({'href': 'http://www.reddit.com/user/' + entry.author}).text(entry.author).appendTo($node);
+                var $author = $('<a>').attr({'href': 'http://www.reddit.com/user/' + entry.author}).text(entry.author);
+                $author.appendTo($node);
+                maxHeight -= $author.height();
             }
             if ($busyIndicator && !willDisableBusyIndicator) {
                 $busyIndicator.detach();
             }
 
             $popup.append($node);
+
+            if ($img) {
+                mp.resizeImage($img, maxWidth, maxHeight);
+            }
         },
         getImagesFromEntry: function (entry, imageCollection) {
             if (entry.photos) {
