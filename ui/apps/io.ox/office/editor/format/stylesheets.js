@@ -15,6 +15,17 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
     'use strict';
 
+    // private static functions ===============================================
+
+    function isCircularReference(styleSheet) {
+        var parentStyleSheet = styleSheet.parent;
+        while (parentStyleSheet) {
+            if (parentStyleSheet === styleSheet) { return true; }
+            parentStyleSheet = parentStyleSheet.parent;
+        }
+        return false;
+    }
+
     // class StyleSheets ======================================================
 
     /**
@@ -57,9 +68,6 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
         var // style sheets, mapped by identifier
             styleSheets = {};
 
-        // private methods ----------------------------------------------------
-
-
         // methods ------------------------------------------------------------
 
         /**
@@ -86,8 +94,10 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                 styleSheet = styleSheets[name] || (styleSheets[name] = {});
 
             // set parent of the style sheet
-            // TODO: check circular references
             styleSheet.parent = styleSheets[parent];
+            if (isCircularReference(styleSheet)) {
+                styleSheet.parent = null;
+            }
 
             // set attributes (filter by attributes contained in the pool)
             styleSheet.attributes = {};
