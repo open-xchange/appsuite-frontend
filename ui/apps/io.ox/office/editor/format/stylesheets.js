@@ -211,23 +211,26 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             // get merged attributes from all covered elements
             iterateReadOnly(ranges, function (element) {
 
-                var // merge the existing attributes with the attributes of the new node
-                    hasNonNull = formatter.mergeElementAttributes(attributes, element),
-                    // get the style sheet name
-                    // TODO: get the real name of the standard style
-                    style = $(element).data('style') || 'Standard';
+                var // get the formatting attributes
+                    elementAttributes = formatter.getElementAttributes(element),
+                    // whether any attribute is still unambiguous
+                    hasNonNull = false;
 
-                // merge the style name into the attributes
-                if (!(styleAttrName in attributes)) {
-                    // initial iteration: store style sheet name
-                    attributes[styleAttrName] = style;
-                } else if (style !== attributes[styleAttrName]) {
-                    // style sheet name differs from previous name: ambiguous state
-                    attributes[styleAttrName] = null;
-                } else {
-                    // style sheet name is still equal: set uniqueness flag
-                    hasNonNull = true;
-                }
+                // add the style sheet name
+                // TODO: get the real name of the standard style
+                elementAttributes[styleAttrName] = $(element).data('style') || 'Standard';
+
+                // update all attributes
+                _(elementAttributes).each(function (value, name) {
+                    if (!(name in attributes)) {
+                        // initial iteration: store value
+                        attributes[name] = value;
+                    } else if (!_.isEqual(value, attributes[name])) {
+                        // value differs from previous value: ambiguous state
+                        attributes[name] = null;
+                    }
+                    hasNonNull = hasNonNull || !_.isNull(attributes[name]);
+                });
 
                 // exit iteration loop if there are no unambiguous attributes left
                 if (!hasNonNull) { return Utils.BREAK; }

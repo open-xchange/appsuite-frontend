@@ -11,11 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/format/formatter',
-    ['io.ox/office/tk/utils',
-     'io.ox/office/tk/fonts',
-     'io.ox/office/editor/dom'
-    ], function (Utils, Fonts, DOM) {
+define('io.ox/office/editor/format/formatter', function () {
 
     'use strict';
 
@@ -88,44 +84,6 @@ define('io.ox/office/editor/format/formatter',
                 attributes[name] = definition.get(element);
             });
             return attributes;
-        };
-
-        /**
-         * Merges the current values of all supported formatting attributes in
-         * the passed DOM element into an existing map of attribute values.
-         *
-         * @param {Object} attributes
-         *  (in/out) A map with formatting attribute values, mapped by the
-         *  attribute names. If a formatting attribute of the passed element
-         *  differs from the existing value in this map, the attribute value
-         *  in this map will be set to null, otherwise the attribute value of
-         *  the element will be inserted into this map or remains unchanged.
-         *
-         * @param {HTMLElement} element
-         *  The DOM element object containing CSS formatting.
-         *
-         * @returns {Boolean}
-         *  Whether the attributes map contains any unambiguous attribute
-         *  values (different from the value null) after executing this method.
-         */
-        this.mergeElementAttributes = function (attributes, element) {
-
-            var // whether any attribute is still unambiguous
-                hasNonNull = false;
-
-            // update all attributes
-            _(this.getElementAttributes(element)).each(function (value, name) {
-                if (!(name in attributes)) {
-                    // initial iteration: store value
-                    attributes[name] = value;
-                } else if (!_.isEqual(value, attributes[name])) {
-                    // value differs from previous value: ambiguous state
-                    attributes[name] = null;
-                }
-                hasNonNull = hasNonNull || !_.isNull(attributes[name]);
-            });
-
-            return hasNonNull;
         };
 
         /**
