@@ -907,7 +907,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.setRangeAttributes(highlightRanges, { highlight: false });
+                characterStyles.setRangeAttributes(highlightRanges, { highlight: false }, { special: true });
             }
             highlightRanges = [];
         };
@@ -990,7 +990,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            characterStyles.setRangeAttributes(highlightRanges, { highlight: true });
+            characterStyles.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
 
             // make first highlighted text node visible
             DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1287,15 +1287,15 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'B') {
                     event.preventDefault();
-                    this.setAttribute('bold', !this.getAttribute('bold'));
+                    this.setCharacterAttribute('bold', !this.getCharacterAttributes().bold);
                 }
                 else if (c === 'I') {
                     event.preventDefault();
-                    this.setAttribute('italic', !this.getAttribute('italic'));
+                    this.setCharacterAttribute('italic', !this.getCharacterAttributes().italic);
                 }
                 else if (c === 'U') {
                     event.preventDefault();
-                    this.setAttribute('underline', !this.getAttribute('underline'));
+                    this.setCharacterAttribute('underline', !this.getCharacterAttributes().underline);
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
@@ -1723,36 +1723,13 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
-        /**
-         * Returns the value of a specific formatting attribute in the current
-         * browser selection.
-         */
-        this.getAttribute = function (attrName) {
-
-            var // the resulting attributes
-                attributes = null;
-
-            if (paragraphStyles.supportsAttribute(attrName)) {
-                attributes = this.getParagraphAttributes();
-            } else if (characterStyles.supportsAttribute(attrName)) {
-                attributes = this.getCharacterAttributes();
-            } else {
-                Utils.error('Editor.getAttribute(): no valid attribute specified');
-            }
-
-            return attributes[attrName];
-        };
+        // character attributes -----------------------------------------------
 
         /**
-         * Returns the values of all paragraph formatting attributes in the
-         * current selection.
-         *
-         * @returns {Object}
-         *  A map of paragraph attribute name/value pairs.
+         * Returns the character style sheet container.
          */
-        this.getParagraphAttributes = function () {
-            var ranges = DOM.getBrowserSelection(editdiv);
-            return paragraphStyles.getRangeAttributes(ranges);
+        this.getCharacterStyles = function () {
+            return characterStyles;
         };
 
         /**
@@ -1768,6 +1745,24 @@ define('io.ox/office/editor/editor',
         };
 
         /**
+         * Changes a single character attribute in the current selection.
+         */
+        this.setCharacterAttribute = function (name, value) {
+            this.setCharacterAttributes(Utils.makeSimpleObject(name, value));
+        };
+
+        /**
+         * Changes a multiple character attribute in the current selection.
+         */
+        this.setCharacterAttributes = function (attributes) {
+            // !! TODO !! create operation(s), similar to old setAttributes()
+            var ranges = currentSelection ? this.getDOMSelection(currentSelection) : DOM.getBrowserSelection(editdiv);
+            characterStyles.setRangeAttributes(ranges, attributes);
+        };
+
+        // paragraph attributes -----------------------------------------------
+
+        /**
          * Returns the paragraph style sheet container.
          */
         this.getParagraphStyles = function () {
@@ -1775,16 +1770,35 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Returns the character style sheet container.
+         * Returns the values of all paragraph formatting attributes in the
+         * current selection.
+         *
+         * @returns {Object}
+         *  A map of paragraph attribute name/value pairs.
          */
-        this.getCharacterStyles = function () {
-            return characterStyles;
+        this.getParagraphAttributes = function () {
+            var ranges = DOM.getBrowserSelection(editdiv);
+            return paragraphStyles.getRangeAttributes(ranges);
         };
 
-        this.setAttribute = function (attr, value, startPosition, endPosition) {
-            this.setAttributes(Utils.makeSimpleObject(attr, value), startPosition, endPosition);
+        /**
+         * Changes a single paragraph attribute in the current selection.
+         */
+        this.setParagraphAttribute = function (name, value) {
+            this.setParagraphAttributes(Utils.makeSimpleObject(name, value));
         };
 
+        /**
+         * Changes a multiple paragraph attribute in the current selection.
+         */
+        this.setParagraphAttributes = function (attributes) {
+            // !! TODO !! create operation(s), similar to old setAttributes()
+            var ranges = currentSelection ? this.getDOMSelection(currentSelection) : DOM.getBrowserSelection(editdiv);
+            paragraphStyles.setRangeAttributes(ranges, attributes);
+        };
+
+
+        // DEPRECATED
         this.setAttributes = function (attributes, startPosition, endPosition) {
 
             var para,
@@ -2501,7 +2515,7 @@ define('io.ox/office/editor/editor',
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
                     // points to start or end of text, needed to clone formatting)
-                    DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
+                    DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
                     node = node.parentNode;
                     $('<img>', { src: url }).insertBefore(node);
@@ -2518,7 +2532,7 @@ define('io.ox/office/editor/editor',
                     attributes.position = 'absolute';
                     $('<img>', { src: url }).insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToCharacter') {
-                    var textNode = DOM.splitTextNode(node, domPos.offset, { createEmpty: true });
+                    var textNode = DOM.splitTextNode(node, domPos.offset);
                     // Creating a new span that will include the graphic. The span must have a position.
                     // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
                     var newParent = $('<span>', { position: 'relative' });
@@ -2620,9 +2634,9 @@ define('io.ox/office/editor/editor',
             // insert empty text node into the paragraph
             validateParagraphNode(paragraph);
             // clone the cells in the row element
-            _.times(columns - 1, function () { row.append(cell.clone()); });
+            _.times(columns - 1, function () { row.append(cell.clone(true)); });
             // clone the rows in the table element
-            _.times(rows - 1, function () { table.append(row.clone()); });
+            _.times(rows - 1, function () { table.append(row.clone(true)); });
 
             // insert the table into the document
             var domParagraph = Position.getDOMPosition(paragraphs, position).node;
@@ -2646,7 +2660,7 @@ define('io.ox/office/editor/editor',
                 isTable = Position.isPositionInTable(paragraphs, position) ? true : false;
 
             var dbg_oldparacount = allParagraphs.size();
-            var paraclone = $(allParagraphs[para]).clone();
+            var paraclone = $(allParagraphs[para]).clone(true);
             paraclone.insertAfter(allParagraphs[para]);
 
             // refresh
@@ -2878,7 +2892,7 @@ define('io.ox/office/editor/editor',
                 selectedRow = $(table).children().children().get(startRow),
                 insertAfter = endRow - 1;
 
-            $(selectedRow).clone().insertAfter($(table).children().children().get(insertAfter));
+            $(selectedRow).clone(true).insertAfter($(table).children().children().get(insertAfter));
 
             // iterating over all new cells and remove all paragraphs in the cells
             this.implDeleteCellRange(localPosition, [endRow, 0], [endRow, lastColumn]);
@@ -2943,7 +2957,7 @@ define('io.ox/office/editor/editor',
             allRows.each(
                 function (i, elem) {
                     var selectedColumn = $(elem).children().get(startCol);
-                    $(selectedColumn).clone().insertAfter($(elem).children().get(insertAfter));
+                    $(selectedColumn).clone(true).insertAfter($(elem).children().get(insertAfter));
                 }
             );
 

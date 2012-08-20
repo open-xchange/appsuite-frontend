@@ -162,7 +162,7 @@ define('io.ox/office/tk/dropdown/buttons',
                 // create a new row in the table, and fill it with dummy buttons
                 tableRow = $('<tr>').appendTo(gridNode);
                 _(columns).times(function () {
-                    tableRow.append($('<td>').append(placeholder.clone()));
+                    tableRow.append($('<td>').append(placeholder.clone(true)));
                 });
                 rows += 1;
             } else {

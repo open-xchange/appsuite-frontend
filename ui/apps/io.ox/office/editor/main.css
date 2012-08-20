@@ -47,8 +47,8 @@
 
         p {
             margin: 0;
-            font-size: 0;
-            line-height: normal;
+            font-size: 12pt;
+            line-height: 0;
             position: relative;
         }
 
@@ -79,11 +79,12 @@
             p > span {
                 font-family: 'Times New Roman',Times,serif;
                 font-size: 12pt;
-            }
-            
-            span.highlight {
-                background-color: yellow !important;
-                color: black !important;
+                line-height: normal;
+
+                &.highlight {
+	                background-color: yellow !important;
+	                color: black !important;
+	            }
             }
         }
 
@@ -97,6 +98,7 @@
             p > span {
                 font-family: 'Courier New',Courier,monospace;
                 font-size: 10pt;
+                line-height: normal;
             }
         }
 
@@ -110,6 +112,7 @@
                 border-top: 1px #d5d5d5 dotted;
                 font-family: Arial,sans-serif;
                 font-size: 8pt;
+                line-height: normal;
             }
         }
 

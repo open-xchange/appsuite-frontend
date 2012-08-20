@@ -471,21 +471,24 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Extends the passed object with the specified attributes.
+     * Extends the passed object with the specified attributes. Unlike
+     * underscore's extend() method, does not modify the passed object, but
+     * creates and returns a clone.
      *
      * @param {Object} [options]
-     *  An object containing some attribute values. May be undefined.
+     *  An object containing some attribute values. If undefined, creates and
+     *  extends a new empty object.
      *
      * @param {Object} [extensions]
      *  Another object whose attributes will be inserted into the former
-     *  object. Will overwrite existing attributes.
+     *  object. Will overwrite existing attributes in the clone of the passed
+     *  object.
      *
      * @returns {Object}
-     *  An object containing the attributes of the objects passed to both
-     *  parameters.
+     *  A new clone of the passed object, extended by the new attributes.
      */
     Utils.extendOptions = function (options, extensions) {
-        return _(_.isObject(options) ? options : {}).extend(_.isObject(extensions) ? extensions : {});
+        return _(_.isObject(options) ? _.clone(options) : {}).extend(extensions);
     };
 
     // generic DOM helpers ----------------------------------------------------
@@ -1101,7 +1104,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.cloneControlCaption = function (target, source) {
 
         var // clone the label and the icon from the source control
-            caption = source.first().children('span[data-role="icon"], span[data-role="label"]').clone();
+            caption = source.first().children('span[data-role="icon"], span[data-role="label"]').clone(true);
 
         // remove the old spans, and insert the new caption nodes
         Utils.removeControlCaption(target);

@@ -16,106 +16,64 @@ define('io.ox/office/editor/format/characterstyles',
      'io.ox/office/tk/fonts',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/format/lineheight',
-     'io.ox/office/editor/format/formatter',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, Fonts, DOM, LineHeight, Formatter, StyleSheets) {
+    ], function (Utils, Fonts, DOM, LineHeight, StyleSheets) {
 
     'use strict';
 
-    var // default attributes for character style sheets
-        pool = {
-            fontname: 'Times New Roman',
-            fontsize: 12,
-            bold: false,
-            italic: false,
-            underline: false
-        },
-
-        // the CSS formatter for character attributes
-        formatter = new Formatter({
+    var // definitions for character attributes
+        definitions = {
 
             fontname: {
-                get: function (element) {
-                    var value = $(element).css('font-family');
-                    return Fonts.getFontName(value);
-                },
+                value: 'Times New Roman',
                 set: function (element, fontName) {
-                    $(element).css('font-family', Fonts.getCssFontFamily(fontName));
-                    updateElementLineHeight(element);
+                    element.css('font-family', Fonts.getCssFontFamily(fontName));
+                    LineHeight.updateElementLineHeight(element);
                 }
             },
 
             fontsize: {
-                get: function (element) {
-                    var value = $(element).css('font-size');
-                    return Utils.convertCssLength(value, 'pt');
-                },
+                value: 12,
                 set: function (element, fontSize) {
-                    $(element).css('font-size', fontSize + 'pt');
-                    updateElementLineHeight(element);
+                    element.css('font-size', fontSize + 'pt');
+                    LineHeight.updateElementLineHeight(element);
                 }
             },
 
             bold: {
-                get: function (element) {
-                    var value = $(element).css('font-weight');
-                    return (value === 'bold') || (value === 'bolder') || (parseInt(value, 10) >= 700);
-                },
+                value: false,
                 set: function (element, state) {
-                    $(element).css('font-weight', state ? 'bold' : 'normal');
-                    updateElementLineHeight(element);
+                    element.css('font-weight', state ? 'bold' : 'normal');
+                    LineHeight.updateElementLineHeight(element);
                 }
             },
 
             italic: {
-                get: function (element) {
-                    var value = $(element).css('font-style');
-                    return (value === 'italic') || (value === 'oblique');
-                },
+                value: false,
                 set: function (element, state) {
-                    $(element).css('font-style', state ? 'italic' : 'normal');
-                    updateElementLineHeight(element);
+                    element.css('font-style', state ? 'italic' : 'normal');
+                    LineHeight.updateElementLineHeight(element);
                 }
             },
 
             underline: {
-                get: function (element) {
-                    return Utils.containsToken($(element).css('text-decoration'), 'underline');
-                },
+                value: false,
                 set: function (element, state) {
-                    var value = $(element).css('text-decoration');
+                    var value = element.css('text-decoration');
                     value = Utils.toggleToken(value, 'underline', state, 'none');
-                    $(element).css('text-decoration', value);
+                    element.css('text-decoration', value);
                 }
             },
 
             highlight: {
-                get: function (element) {
-                    return $(element).hasClass('highlight');
-                },
+                value: false,
                 set: function (element, state) {
-                    $(element).toggleClass('highlight', state);
-                }
+                    element.toggleClass('highlight', state);
+                },
+                special: true
             }
 
-        });
-
-    // private static functions ===============================================
-
-    /**
-     * Updates the text line height of the specified element according to its
-     * current font settings.
-     *
-     * @param {HTMLElement} element
-     *  The DOM element whose line height will be updated.
-     */
-    function updateElementLineHeight(element) {
-
-        var // read line height from element
-            lineHeight = $(element).data('lineheight') || LineHeight.SINGLE;
-
-        LineHeight.setElementLineHeight(element, lineHeight);
-    }
+        };
 
     // class CharacterStyles ==================================================
 
@@ -142,7 +100,7 @@ define('io.ox/office/editor/format/characterstyles',
          * formatting.
          */
         function hasEqualAttributes(textNode1, textNode2) {
-            return formatter.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
+            return _.isEqual($(textNode1.parentNode).data('attributes'), $(textNode2.parentNode).data('attributes'));
         }
 
         /**
@@ -163,23 +121,18 @@ define('io.ox/office/editor/format/characterstyles',
          * formatting after calling the iterator.
          */
         function iterateReadWrite(ranges, iterator, context) {
-            return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
-                return iterator.call(context, textNode.parentNode);
+            return DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range) {
+                if (!range.isCollapsed()) {
+                    return iterator.call(context, textNode.parentNode);
+                }
             }, context, { split: true, merge: hasEqualAttributes });
         }
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, pool, 'charstyle', formatter, iterateReadOnly, iterateReadWrite);
+        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite);
 
     } // class CharacterStyles
-
-    // static fields ----------------------------------------------------------
-
-    /**
-     * Default attributes for character style sheets.
-     */
-    CharacterStyles.StyleSheetPool = pool;
 
     // exports ================================================================
 

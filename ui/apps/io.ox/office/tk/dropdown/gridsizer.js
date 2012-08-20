@@ -140,7 +140,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
             } else if (size.height > currSize.height) {
                 // add row elements (clone the entire row instead of single cells)
                 _(size.height - currSize.height).times(function () {
-                    gridButton.append(rows.first().clone());
+                    gridButton.append(rows.first().clone(true));
                 });
             }
 

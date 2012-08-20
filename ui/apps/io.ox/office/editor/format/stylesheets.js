@@ -35,17 +35,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
      *
      * @constructor
      *
-     * @param {Object} pool
-     *  A map that defines default values for all formatting attributes that
-     *  may occur in a style sheet.
-     *
-     * @param {String} styleAttrName
-     *  The name of the attribute that contains the style sheet name for a DOM
-     *  element.
-     *
-     * @param {Formatter} formatter
-     *  The CSS formatter used to read CSS formatting from DOM elements and to
-     *  write CSS formatting to DOM elements.
+     * @param {Object} definitions
      *
      * @param {Function} iterateReadOnly
      *  A function that implements iterating the DOM elements covered by an
@@ -63,10 +53,32 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
      *  and a context object used to call the iterator function with.
      *  Compatible with the iterator functions defined in the DOM module.
      */
-    function StyleSheets(pool, styleAttrName, formatter, iterateReadOnly, iterateReadWrite) {
+    function StyleSheets(definitions, iterateReadOnly, iterateReadWrite) {
 
         var // style sheets, mapped by identifier
-            styleSheets = {};
+            styleSheets = {},
+            // default values for all supported attributes
+            defaultAttributes = {};
+
+        // private methods ----------------------------------------------------
+
+        function getStyleSheetAttributes(styleSheet) {
+
+            var // the resulting attributes
+                attributes = null;
+
+            if (styleSheet) {
+                // call recursively to get the attributes of the ancestor style sheets
+                attributes = getStyleSheetAttributes(styleSheet.parent);
+                // add own attributes
+                _(attributes).extend(styleSheet.attributes);
+            } else {
+                // start with a clone of all default attribute values
+                attributes = _.clone(defaultAttributes);
+            }
+
+            return attributes;
+        }
 
         // methods ------------------------------------------------------------
 
@@ -99,10 +111,13 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                 styleSheet.parent = null;
             }
 
-            // set attributes (filter by attributes contained in the pool)
+            // set attributes (filter by existing non-special attributes)
             styleSheet.attributes = {};
             _(attributes).each(function (value, name) {
-                if (name in pool) { styleSheet.attributes[name] = value; }
+                var definition = definitions[name];
+                if (definition && !definition.special) {
+                    styleSheet.attributes[name] = value;
+                }
             });
 
             return this;
@@ -151,24 +166,11 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
-         *  ancestor style sheet up to the pool defaults, as map of name/value
-         *  pairs.
+         *  ancestor style sheet up to the map of default attributes, as map of
+         *  name/value pairs.
          */
         this.getStyleSheetAttributes = function (name) {
-
-            var // the initial style sheet
-                styleSheet = styleSheets[name],
-                // the resulting attributes
-                attributes = {};
-
-            // add attributes of the entire ancestor chain
-            while (styleSheet) {
-                attributes = _(styleSheet.attributes).extend(attributes);
-                styleSheet = styleSheet.parent;
-            }
-
-            // add pool attributes
-            return _(pool).extend(attributes);
+            return getStyleSheetAttributes(styleSheets[name]);
         };
 
         /**
@@ -182,7 +184,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *  Whether the specified attribute is supported by this instance.
          */
         this.supportsAttribute = function (name) {
-            return (name === styleAttrName) || formatter.supportsAttribute(name);
+            return (name === 'style') || ((name in definitions) && !definitions[name].special);
         };
 
         /**
@@ -198,7 +200,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *  this instance.
          */
         this.supportsAnyAttribute = function (attributes) {
-            return (styleAttrName in attributes) || formatter.supportsAnyAttribute(attributes);
+            return ('style' in attributes) || _(attributes).any(function (value, name) { return (name in definitions) && !definitions[name].special; });
         };
 
         /**
@@ -215,23 +217,25 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          */
         this.getRangeAttributes = function (ranges) {
 
-            var // the attribute values, mapped by name
+            var // the resulting attribute values, mapped by name
                 attributes = {};
 
             // get merged attributes from all covered elements
             iterateReadOnly(ranges, function (element) {
 
-                var // get the formatting attributes
-                    elementAttributes = formatter.getElementAttributes(element),
+                var // get the hard formatting attributes
+                    hardAttributes = $(element).data('attributes'),
+                    // get attributes of the style sheet (invalid style name results in default values)
+                    styleAttributes = getStyleSheetAttributes(hardAttributes ? styleSheets[hardAttributes.style] : null),
                     // whether any attribute is still unambiguous
                     hasNonNull = false;
 
-                // add the style sheet name
-                // TODO: get the real name of the standard style
-                elementAttributes[styleAttrName] = $(element).data('style') || 'Standard';
+                // overwrite style sheet attributes with existing hard attributes
+                styleAttributes.style = '';
+                _(styleAttributes).extend(hardAttributes);
 
-                // update all attributes
-                _(elementAttributes).each(function (value, name) {
+                // update all attributes in the result set
+                _(styleAttributes).each(function (value, name) {
                     if (!(name in attributes)) {
                         // initial iteration: store value
                         attributes[name] = value;
@@ -260,22 +264,63 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @param {Object} attributes
          *  A map of attribute name/value pairs.
          */
-        this.setRangeAttributes = function (ranges, attributes) {
+        this.setRangeAttributes = function (ranges, attributes, options) {
 
             var // the style sheet name
-                style = Utils.getStringOption(attributes, styleAttrName),
-                // get attributes of the style sheet, if specified
-                styleAttributes = style ? this.getStyleSheetAttributes(style) : null;
+                styleName = Utils.getStringOption(attributes, 'style'),
+                // get attributes of the style sheet, if specified (invalid name results in default values)
+                styleAttributes = styleName ? getStyleSheetAttributes(styleSheets[styleName]) : null,
+                // allow special attributes
+                special = Utils.getBooleanOption(options, 'special', false);
 
             // iterate all covered elements and change their formatting
             iterateReadWrite(ranges, function (element) {
-                if (style) {
-                    $(element).data('style', style);
-                    formatter.setElementAttributes(element, styleAttributes);
+
+                var // the element, as jQuery object
+                    $element = $(element),
+                    // hard attributes stored at the element
+                    hardAttributes = null,
+                    // the resulting attributes to be set at each element
+                    cssAttributes = null;
+
+                // change style sheet of the element (remove existing hard attributes)
+                if (styleName) {
+                    hardAttributes = { style: styleName };
+                    cssAttributes = _.clone(styleAttributes);
+                } else {
+                    hardAttributes = $element.data('attributes');
+                    // clone the attributes coming from the element, there may
+                    // be multiple elements pointing to the same data object,
+                    // e.g. after using the $.clone() method.
+                    hardAttributes = hardAttributes ? _.clone(hardAttributes) : {};
+                    cssAttributes = {};
                 }
-                formatter.setElementAttributes(element, attributes);
+
+                // add passed attributes
+                _(attributes).each(function (value, name) {
+                    var definition = definitions[name];
+                    if (definition && (special || !definition.special)) {
+                        hardAttributes[name] = cssAttributes[name] = value;
+                    }
+                });
+
+                // write back hard attributes to the element
+                $element.data('attributes', hardAttributes);
+
+                // change CSS formatting of the element
+                _(cssAttributes).each(function (value, name) {
+                    // cssAttributes contains valid attribute names only
+                    definitions[name].set($element, value);
+                });
             });
         };
+
+        // initialization -----------------------------------------------------
+
+        // build map with default attributes
+        _(definitions).each(function (definition, name) {
+            defaultAttributes[name] = definition.value;
+        });
 
     } // class StyleSheets
 
