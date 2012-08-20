@@ -850,6 +850,8 @@ define('io.ox/office/editor/editor',
 
             var ranges = [];
 
+            // window.console.log("Input of Oxo Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
+
             currentSelection = _.copy(oxosel, true);
 
             // Multi selection for rectangle cell selection in Firefox.
@@ -859,6 +861,10 @@ define('io.ox/office/editor/editor',
                 // var oldSelection = this.getSelection();
                 ranges = this.getDOMSelection(oxosel);
             }
+
+            // for (var i = 0; i < ranges.length; i++) {
+            //     window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
+            // }
 
             if (ranges.length) {
                 DOM.setBrowserSelection(ranges);
@@ -1622,6 +1628,9 @@ define('io.ox/office/editor/editor',
         this.deleteTable = function (position) {
             var newOperation = { name: OP_TABLE_DELETE, start: _.copy(position, true) };
             this.applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.deleteCellRange = function (position, start, end) {
@@ -1651,6 +1660,9 @@ define('io.ox/office/editor/editor',
             }
 
             this.applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.deleteColumns = function () {
@@ -1675,6 +1687,9 @@ define('io.ox/office/editor/editor',
             }
 
             this.applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.copyRow = function () {
@@ -1687,6 +1702,9 @@ define('io.ox/office/editor/editor',
 
             var newOperation = { name: OP_ROW_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.copyColumn = function () {
@@ -1699,6 +1717,9 @@ define('io.ox/office/editor/editor',
 
             var newOperation = { name: OP_COLUMN_COPY, position: tablePos, start: start, end: end };
             this.applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            this.setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.insertParagraph = function (position) {
@@ -1756,6 +1777,9 @@ define('io.ox/office/editor/editor',
                     this.implDeleteParagraph(selection.startPaM.oxoPosition);
                     paragraphs = editdiv.children();
                 }
+
+                // setting the cursor position
+                this.setSelection(new OXOSelection(lastOperationEnd));
             }
         };
 
@@ -2692,9 +2716,7 @@ define('io.ox/office/editor/editor',
 
             // Setting cursor into table (unfortunately not visible in Chrome)
             var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-            this.setSelection(new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition)));
-
-            // lastOperationEnd = new OXOPaM([position, 0]);
+            lastOperationEnd = new OXOPaM(oxoPosition);
         };
 
         this.implSplitParagraph = function (position) {
@@ -2879,8 +2901,9 @@ define('io.ox/office/editor/editor',
             }
             tablePosition.push(para);
             tablePosition.push(Position.getParagraphLength(paragraphs, tablePosition));
+
             lastOperationEnd = new OXOPaM(tablePosition);
-            this.setSelection(new OXOSelection(new OXOPaM(tablePosition), new OXOPaM(tablePosition)));
+
             paragraphs = editdiv.children();
         };
 
@@ -2914,9 +2937,11 @@ define('io.ox/office/editor/editor',
                 }
                 localPosition.push(endRow);
                 localPosition.push(0);
-                this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
+                localPosition.push(0);
+                localPosition.push(0);
             }
 
+            lastOperationEnd = new OXOPaM(localPosition);
         };
 
         this.implCopyRow = function (pos, startRow, endRow) {
@@ -2940,7 +2965,10 @@ define('io.ox/office/editor/editor',
             // Setting cursor
             localPosition.push(endRow);
             localPosition.push(0);
-            this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
+            localPosition.push(0);
+            localPosition.push(0);
+
+            lastOperationEnd = new OXOPaM(localPosition);
         };
 
         this.implDeleteColumns = function (pos, startCol, endCol) {
@@ -2977,9 +3005,11 @@ define('io.ox/office/editor/editor',
                 }
                 localPosition.push(0);
                 localPosition.push(endCol);
+                localPosition.push(0);
+                localPosition.push(0);
             }
 
-            this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
+            lastOperationEnd = new OXOPaM(localPosition);
         };
 
         this.implCopyColumn = function (pos, startCol, endCol) {
@@ -3008,7 +3038,10 @@ define('io.ox/office/editor/editor',
             // Setting cursor to first position in table
             localPosition.push(0);
             localPosition.push(endCol);
-            this.setSelection(new OXOSelection(new OXOPaM(localPosition), new OXOPaM(localPosition)));
+            localPosition.push(0);
+            localPosition.push(0);
+
+            lastOperationEnd = new OXOPaM(localPosition);
         };
 
         this.implDeleteText = function (startPosition, endPosition) {
