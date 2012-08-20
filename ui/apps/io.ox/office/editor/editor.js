@@ -1205,46 +1205,50 @@ define('io.ox/office/editor/editor',
                     }
                     else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        startPosition[lastValue - 1] -= 1;
-                        startPosition.pop();
 
-                        var length = Position.getParagraphLength(paragraphs, startPosition),
-                            domPos = Position.getDOMPosition(paragraphs, startPosition),
-                            prevIsTable = false;
+                        if (! _(startPosition).all(function (value) { return (value === 0); })) {
 
-                        if (domPos) {
-                            if (Position.getDOMPosition(paragraphs, startPosition).node.nodeName === 'TABLE') {
-                                prevIsTable = true;
+                            startPosition[lastValue - 1] -= 1;
+                            startPosition.pop();
+
+                            var length = Position.getParagraphLength(paragraphs, startPosition),
+                                domPos = Position.getDOMPosition(paragraphs, startPosition),
+                                prevIsTable = false;
+
+                            if (domPos) {
+                                if (Position.getDOMPosition(paragraphs, startPosition).node.nodeName === 'TABLE') {
+                                    prevIsTable = true;
+                                }
                             }
-                        }
 
-                        if (startPosition[lastValue - 1] >= 0) {
-                            if (! prevIsTable) {
-                                this.mergeParagraph(startPosition);
+                            if (startPosition[lastValue - 1] >= 0) {
+                                if (! prevIsTable) {
+                                    this.mergeParagraph(startPosition);
+                                }
+                                selection.startPaM.oxoPosition[lastValue - 1] -= 1;
+                                selection.startPaM.oxoPosition.pop();
                             }
-                            selection.startPaM.oxoPosition[lastValue - 1] -= 1;
-                            selection.startPaM.oxoPosition.pop();
-                        }
 
-                        if (prevIsTable) {
-                            selection.startPaM.oxoPosition = Position.getLastPositionInParagraph(paragraphs, selection.startPaM.oxoPosition);
-                        } else {
-                            var isFirstPosition = (startPosition[lastValue - 1] < 0) ? true : false;
-                            if (isFirstPosition) {
-                                if (Position.isPositionInTable(paragraphs, startPosition)) {
-                                    var returnObj = Position.getLastPositionInPrevCell(paragraphs, startPosition);
-                                    selection.startPaM.oxoPosition = returnObj.position;
-                                    var beginOfTable = returnObj.beginOfTable;
-                                    if (beginOfTable) {
-                                        var lastVal = selection.startPaM.oxoPosition.length - 1;
-                                        selection.startPaM.oxoPosition[lastVal] -= 1;
-                                        selection.startPaM.oxoPosition = Position.getLastPositionInParagraph(paragraphs, selection.startPaM.oxoPosition);
+                            if (prevIsTable) {
+                                selection.startPaM.oxoPosition = Position.getLastPositionInParagraph(paragraphs, selection.startPaM.oxoPosition);
+                            } else {
+                                var isFirstPosition = (startPosition[lastValue - 1] < 0) ? true : false;
+                                if (isFirstPosition) {
+                                    if (Position.isPositionInTable(paragraphs, startPosition)) {
+                                        var returnObj = Position.getLastPositionInPrevCell(paragraphs, startPosition);
+                                        selection.startPaM.oxoPosition = returnObj.position;
+                                        var beginOfTable = returnObj.beginOfTable;
+                                        if (beginOfTable) {
+                                            var lastVal = selection.startPaM.oxoPosition.length - 1;
+                                            selection.startPaM.oxoPosition[lastVal] -= 1;
+                                            selection.startPaM.oxoPosition = Position.getLastPositionInParagraph(paragraphs, selection.startPaM.oxoPosition);
+                                        }
+                                    } else {
+                                        selection.startPaM.oxoPosition.push(length);
                                     }
                                 } else {
                                     selection.startPaM.oxoPosition.push(length);
                                 }
-                            } else {
-                                selection.startPaM.oxoPosition.push(length);
                             }
                         }
                     }
