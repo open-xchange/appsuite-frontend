@@ -2641,10 +2641,9 @@ define('io.ox/office/editor/editor',
             table.insertBefore(domParagraph);
             paragraphs = editdiv.children();
 
-            // Setting cursor into table (unfortunately not visible in Firefox)
-            // var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-            // var selection = new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition));
-            // this.setSelection(selection);
+            // Setting cursor into table (unfortunately not visible in Chrome)
+            var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
+            this.setSelection(new OXOSelection(new OXOPaM(oxoPosition), new OXOPaM(oxoPosition)));
 
             // lastOperationEnd = new OXOPaM([position, 0]);
         };
