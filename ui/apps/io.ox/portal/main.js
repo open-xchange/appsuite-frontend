@@ -1,4 +1,5 @@
 /**
+ * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
  * is licensed under a Creative Commons License.
  *
@@ -19,13 +20,15 @@ define.async('io.ox/portal/main',
      'io.ox/core/taskQueue',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
+     'io.ox/core/tk/dialogs',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
     'use strict';
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+
     return require(plugins).pipe(function () {
 
         // application object
@@ -67,7 +70,7 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 id: extension.id,
                 perform: function () {
                     var def = $.Deferred(),
-                        $node = $("<div/>");
+                        $node = $('<div/>');
 
                     extension.invoke('load')
                         .pipe(function () {
@@ -88,10 +91,36 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             };
         }
 
-        function drawContent(extension) {
+        function drawContent(extension, e) {
             contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.children().detach();
-                contentSide.append(node);
+                contentSide.children().trigger('onPause').detach();
+                $(node).trigger('onResume');
+
+                new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                    popup.append(node);
+                    $(node).trigger('onAppended');
+                });
+
+                if (extension.loadMoreResults) {
+                    var $o = $('div.io-ox-sidepopup-pane');
+
+                    $o.bind('scroll', function (event) {
+                        // TODO tidy enough? (loadingMoreResults + active tile)
+                        if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
+                            extension.timer = setTimeout(function () {
+                                // Position + Height + Tolerance
+                                var distance = $o.scrollTop() + $o.height() + 50;
+
+                                if ($('div.scrollable-pane').height() <= distance) {
+                                    extension.isLoadingMoreResults = true;
+                                    extension.loadMoreResults(extension.finishLoadingMoreResults);
+                                }
+                                extension.timer = 0;
+                            }, 250);
+                        }
+                    });
+                }
+
                 $('div[widget-id]').removeClass('io-ox-portal-tile-active');
                 $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
                 contentSide.idle();
@@ -100,23 +129,30 @@ function (ext, config, userAPI, date, tasks, control, gt) {
 
         function makeClickHandler(extension) {
             return function (event) {
-                contentSide.find(":first").detach();
+                contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
-                return drawContent(extension);
+                return drawContent(extension, event);
             };
         }
 
         function initExtensions() {
+            var count = 0;
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
 
                     var $node = $('<div>')
                         .addClass('io-ox-portal-widget-tile')
+                        // experimental
+                        .addClass('tile-color' + (count++ % 10))
                         .attr('widget-id', extension.id)
                         .appendTo(tileSide)
                         .busy();
+
+                    if (extension.tileClass) {
+                        $node.addClass(extension.tileClass);
+                    }
 
                     $node.on('click', makeClickHandler(extension));
 
@@ -124,28 +160,6 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                         extension.loadTile = function () {
                             return $.Deferred().resolve();
                         };
-                    }
-
-                    if (extension.loadMoreResults) {
-                        var $o = win.nodes.main;
-
-                        $o.bind('scroll',
-                                function () {
-                                    // TODO tidy enough? (loadingMoreResults + active tile)
-                                    if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
-                                        extension.timer = setTimeout(function () {
-                                            // Position + Height + Tolerance
-                                            var distance = $o.scrollTop() + $o.height() + 50;
-
-                                            if ($('div.io-ox-portal-content').height() <= distance) {
-                                                extension.isLoadingMoreResults = true;
-                                                extension.loadMoreResults(extension.finishLoadingMoreResults);
-                                            }
-                                            extension.timer = 0;
-                                        }, 250);
-                                    }
-                                }
-                        );
                     }
 
                     if (!extension.drawTile) {
@@ -180,19 +194,24 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                                     $node.append(preview);
                                 }
                             });
-                            extension.asyncMetadata("background").done(function (bgColor) {
-                                if (bgColor === control.CANCEL) {
+                            extension.asyncMetadata("tileColor").done(function (color) {
+                                if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.css("background", bgColor);
+                                if (color !== undefined) {
+//                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
+//                                    $node.addClass('tile-color' + color);
+                                }
                             });
                             extension.asyncMetadata("color").done(function (color) {
                                 if (color === control.CANCEL) {
                                     $node.remove();
                                     return;
                                 }
-                                $node.addClass("tile-" + color);
+                                if (color !== undefined) {
+                                    $node.addClass("tile-" + color);
+                                }
                             });
 
 
@@ -227,19 +246,13 @@ function (ext, config, userAPI, date, tasks, control, gt) {
             updateTitle();
             _.every(1, 'hour', updateTitle);
 
-
             initExtensions();
 
-
             app.active = _(ext.point('io.ox/portal/widget').all()).first();
-            if (app.active) {
-                contentSide.busy();
-                drawContent(app.active);
-            }
 
             win.nodes.main
                 .addClass('io-ox-portal')
-                .append(contentSide, tileSide);
+                .append(tileSide);
 
             ox.on('refresh^', function () {
                 tileSide.empty();
@@ -247,7 +260,8 @@ function (ext, config, userAPI, date, tasks, control, gt) {
                 contentQueue.start();
                 initExtensions();
                 if (app.active) {
-                    drawContent(app.active);
+                    //drawContent(app.active, null);
+                    //$('.io-ox-sidepopup-pane .scrollable-pane');
                 }
             });
 
