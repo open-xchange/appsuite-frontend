@@ -2488,10 +2488,6 @@ define('io.ox/office/editor/editor',
                 anchorType = "AsCharacter";  // default
 
             if (attributes) {
-                _(attributes).each(function (value, key) {
-                    window.console.log("AAA: Attributes: " + key + " : " + value);
-                });
-
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
                 }
