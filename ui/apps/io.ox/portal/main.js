@@ -141,13 +141,12 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
-
-                    var $node = $('<div>')
-                        .addClass('io-ox-portal-widget-tile')
+                    var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
+                    var $node = $('<div class="io-ox-portal-widget-tile">')
                         // experimental
                         .addClass('tile-color' + (count++ % 10))
                         .attr('widget-id', extension.id)
-                        .appendTo(tileSide)
+                        .appendTo($borderBox)
                         .busy();
 
                     if (extension.tileClass) {
