@@ -115,7 +115,7 @@ define('io.ox/core/api/autocomplete',
                     tmp.push({
                         type: obj.type,
                         display_name: obj.data.display_name || '',
-                        email: 'will not be resolved',
+                        email: 'Distribution List',
                         data: obj.data
                     });
                 } else {

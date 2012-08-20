@@ -18,11 +18,16 @@ define('io.ox/contacts/util', [], function () {
     return {
 
         getImage: function (obj) {
-            return obj.image1_url ?
-                obj.image1_url
-                    .replace(/^https?\:\/\/[^\/]+/i, '')
-                    .replace(/\/ajax/, ox.apiRoot) :
-                ox.base + '/apps/themes/default/dummypicture.png';
+            if (obj.mark_as_distributionlist) {
+                return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+            } else {
+                return obj.image1_url ?
+                        obj.image1_url
+                            .replace(/^https?\:\/\/[^\/]+/i, '')
+                            .replace(/\/ajax/, ox.apiRoot) :
+                        ox.base + '/apps/themes/default/dummypicture.png';
+            }
+
         },
 
         getFullName: function (obj) {
