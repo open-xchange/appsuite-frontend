@@ -39,8 +39,16 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         var self = this;
         this.id = simplifyId(service.id);
 
-        function addType(account) {
+        function outgoing(account) {
+            if (!account) {
+                return account;
+            }
             account.accountType = self.id;
+            return account;
+        }
+        
+        function incoming(account) {
+            return account;
         }
         
         function chooseDisplayName() {
@@ -49,15 +57,15 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         
         
         this.getAll = function () {
-            return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).value();
+            return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
         };
         
         this.get = function (id) {
-            return cache[service.id].accounts[id];
+            return outgoing(cache[service.id].accounts[id]);
         };
         
         this.getStandardAccount = function () {
-            return _(this.getAll()).first();
+            return outgoing(_(this.getAll()).first());
         };
         
         this.hasStandardAccount = function () {
@@ -65,6 +73,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
         
         function init(account) {
+            account = incoming(account);
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName());
@@ -123,6 +132,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
         
         this.remove = function (account) {
+            account = incoming(account);
             return http.PUT({
                 module: "oauth/accounts",
                 params: {
@@ -135,6 +145,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
         
         this.update = function (account) {
+            account = incoming(account);
             return http.PUT({
                 module: "oauth/accounts",
                 params: {
@@ -148,6 +159,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
         
         this.reauthorize = function (account) {
+            account = incoming(account);
             return init(account);
         };
     }

@@ -34,6 +34,7 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
                 account.accountType = 'mail';
+                account.displayName = account.primary_address || account.name;
             });
         });
     }
