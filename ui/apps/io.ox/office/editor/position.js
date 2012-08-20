@@ -668,6 +668,37 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Function, that returns the count of all adjacent paragraphs
+     * or tables of a paragraph or table described by the logical
+     * position. The logical position can describe a paragraph (table)
+     * or a text node inside it. If no node is found, '-1' will be
+     *  returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the count of all adjacent paragraphs or tables of
+     *  a paragraph(table) described by the logical position.
+     *  Of no paragraph/table is found, -1 will be returned.
+     */
+    Position.getCountOfAdjacentParagraphsAndTables = function (startnode, position) {
+
+        var lastIndex = -1,
+        node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P, TABLE');
+
+        if (node) {
+            lastIndex = $(node.parentNode).children().length - 1;
+        }
+
+        return lastIndex;
+    };
+
+    /**
      * Collecting all paragraphs inside a table cell that is described
      * by the logical position. If no table cell is found in the logical
      * position, null will be returned.

@@ -1708,16 +1708,41 @@ define('io.ox/office/editor/editor',
 
         this.insertTable = function (size) {
             if (size) {
-                var selection = this.getSelection();
+                var selection = this.getSelection(),
+                    lastPos = selection.startPaM.oxoPosition.length - 1,
+                    deleteTempParagraph = false;
+
                 selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
                 }
 
-                // Splitting paragraph, if the cursor is not at the beginning of the paragraph.
-                if (selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] !== 0) {
+                var length = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
+
+                // Splitting paragraph, if the cursor is not at the beginning or at the end of the paragraph.
+                if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
+                    (selection.startPaM.oxoPosition[lastPos] !== length)) {
                     this.splitParagraph(selection.startPaM.oxoPosition);
-                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 2] += 1;
+                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
+                }
+
+                // Splitting paragraph, if the cursor is at the end of an non empty paragraph and this paragraph is
+                // the last from all .
+                if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
+                    (selection.startPaM.oxoPosition[lastPos] === length)) {
+
+                    var maxIndex = Position.getCountOfAdjacentParagraphsAndTables(paragraphs, selection.startPaM.oxoPosition);
+                    // Is this a position after the final character in the final paragraph?
+                    // -> then the splitting of the paragraph is required, not only temporarely.
+                    if ((selection.startPaM.oxoPosition[lastPos - 1]) === maxIndex) {
+                        this.splitParagraph(selection.startPaM.oxoPosition);
+                        selection.startPaM.oxoPosition[lastPos - 1] += 1;
+                        deleteTempParagraph = false;
+                    } else {
+                        this.implSplitParagraph(selection.startPaM.oxoPosition);  // creating temporarely, to be deleted after table is inserted
+                        selection.startPaM.oxoPosition[lastPos - 1] += 1;
+                        deleteTempParagraph = true;
+                    }
                 }
 
                 selection.startPaM.oxoPosition.pop();
@@ -1725,6 +1750,12 @@ define('io.ox/office/editor/editor',
 
                 var newOperation = {name: OP_TABLE_INSERT, start: _.copy(selection.startPaM.oxoPosition, true), columns: size.width, rows: size.height};
                 this.applyOperation(newOperation, true, true);
+
+                if (deleteTempParagraph) {
+                    selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
+                    this.implDeleteParagraph(selection.startPaM.oxoPosition);
+                    paragraphs = editdiv.children();
+                }
             }
         };
 
