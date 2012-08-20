@@ -209,7 +209,7 @@ define('io.ox/office/tk/control/textfield',
                     restoreFieldState(validationFieldState);
                 } else if (_.isString(result) && (result !== textField.val())) {
                     // insert the validation result and restore the old selection
-                    restoreFieldState(_(validationFieldState).extend({ value: result }));
+                    restoreFieldState(Utils.extendOptions(validationFieldState, { value: result }));
                 }
 
                 // trigger 'validated' event to all listeners, pass old field state

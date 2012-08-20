@@ -15,30 +15,18 @@ define('io.ox/office/editor/format/paragraphstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/format/lineheight',
-     'io.ox/office/editor/format/formatter',
-     'io.ox/office/editor/format/stylesheets',
-     'io.ox/office/editor/format/characterstyles'
-    ], function (Utils, DOM, LineHeight, Formatter, StyleSheets, CharacterStyles) {
+     'io.ox/office/editor/format/stylesheets'
+    ], function (Utils, DOM, LineHeight, StyleSheets) {
 
     'use strict';
 
-    var // default attributes for paragraph style sheets (contains all character pool attributes)
-        pool = _.extend(CharacterStyles.StyleSheetPool, {
-            alignment: 'left',
-            lineheight: LineHeight.SINGLE
-        }),
-
-        // the CSS formatter for paragraph attributes
-        formatter = new Formatter({
+    var // definitions for character attributes
+        definitions = {
 
             alignment: {
-                get: function (element) {
-                    var value = $(element).css('text-align');
-                    // TODO: map 'start'/'end' to 'left'/'right' according to bidi state
-                    return (value === 'start') ? 'left' : (value === 'end') ? 'right' : value;
-                },
+                value: 'left',
                 set: function (element, value) {
-                    $(element).css('text-align', value);
+                    element.css('text-align', value);
                 }
             },
 
@@ -52,20 +40,16 @@ define('io.ox/office/editor/format/paragraphstyles',
             // resulting in a relative line height of 24pt/6pt = 400% instead of
             // the expected 200%.
             lineheight: {
-                get: function (element) {
-                    var lineHeight = $(element).data('lineheight');
-                    return LineHeight.validateLineHeight(lineHeight);
-                },
+                value: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
-                    $(element).data('lineheight', lineHeight).children('span').each(function () {
-                        $(this).data('lineheight', lineHeight);
-                        LineHeight.setElementLineHeight(this, lineHeight);
+                    element.children('span').each(function () {
+                        LineHeight.setElementLineHeight($(this), lineHeight);
                     });
                 }
             }
 
-        });
+        };
 
     // class ParagraphStyles ==================================================
 
@@ -96,17 +80,9 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, pool, 'parastyle', formatter, iterate, iterate);
+        StyleSheets.call(this, definitions, iterate, iterate);
 
     } // class ParagraphStyles
-
-    // static fields ----------------------------------------------------------
-
-    /**
-     * Default attributes for paragraph style sheets. Contains all default
-     * attributes for characters.
-     */
-    ParagraphStyles.StyleSheetPool = pool;
 
     // exports ================================================================
 

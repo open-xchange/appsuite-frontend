@@ -357,47 +357,35 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      inserted before the passed text node. The position of the new text
      *      node may be important when iterating and manipulating a range of
      *      DOM nodes.
-     *  @param {Boolean} [options.createEmpty]
-     *      If set to true, creates new text nodes also if the passed offset
-     *      points to the start or end of the text. The new text node will be
-     *      empty. Otherwise, no new text node will be created in this case,
-     *      and the method returns null.
      *
-     * @returns {Text|Null}
+     * @returns {Text}
      *  The newly created text node. Will be located before or after the passed
-     *  text node, depending on the 'options.append' option. If no text node
-     *  has been created (see the 'options.createEmpty' option above), returns
-     *  null.
+     *  text node, depending on the 'options.append' option.
      */
     DOM.splitTextNode = function (textNode, offset, options) {
 
         var // parent <span> element of the text node
             span = textNode.parentNode,
             // the new span for the split text portion, as jQuery object
-            newSpan = null,
+            newSpan = $(span).clone(true),
             // text for the left span
             leftText = textNode.nodeValue.substr(0, offset),
             // text for the right span
             rightText = textNode.nodeValue.substr(offset);
 
-        // check if a new text node has to be created
-        if (Utils.getBooleanOption(options, 'createEmpty') || (leftText.length && rightText.length)) {
-            // create the new span
-            newSpan = $(span).clone();
-            // insert the span and update the text nodes
-            if (Utils.getBooleanOption(options, 'append')) {
-                newSpan.insertAfter(span);
-                textNode.nodeValue = leftText;
-                newSpan.text(rightText);
-            } else {
-                newSpan.insertBefore(span);
-                newSpan.text(leftText);
-                textNode.nodeValue = rightText;
-            }
+        // insert the span and update the text nodes
+        if (Utils.getBooleanOption(options, 'append')) {
+            newSpan.insertAfter(span);
+            textNode.nodeValue = leftText;
+            newSpan.text(rightText);
+        } else {
+            newSpan.insertBefore(span);
+            newSpan.text(leftText);
+            textNode.nodeValue = rightText;
         }
 
         // return the new text node
-        return newSpan ? newSpan[0].firstChild : null;
+        return newSpan[0].firstChild;
     };
 
     /**
@@ -750,9 +738,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // iterate over all nodes, and process the text nodes
         return DOM.iterateNodesInRanges(ranges, function (node, range, index, ranges) {
 
-            var // cursor instead of selection
-                isCursor = range.isCollapsed(),
-                // start and end offset of covered text in the text node
+            var // start and end offset of covered text in the text node
                 start = 0, end = 0;
 
             // Splits text node, calls iterator function, merges text node.
@@ -790,9 +776,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 return result;
             }
 
-            // call passed iterator for all text nodes, but skip empty text nodes
-            // unless the entire text range consists of this empty text node
-            if ((node.nodeType === 3) && (isCursor || node.nodeValue.length)) {
+            // call passed iterator for all text nodes
+            if (node.nodeType === 3) {
                 // calculate/validate start/end offset in the text node
                 start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
                 end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
@@ -800,7 +785,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
 
             // cursor selects a single <br> element, visit last preceding text node instead
-            } else if (isCursor && (Utils.getNodeName(node) === 'br') && (node = DOM.getSiblingTextNode(node, false))) {
+            } else if (range.isCollapsed() && (Utils.getNodeName(node) === 'br') && (node = DOM.getSiblingTextNode(node, false))) {
                 // prepare start, end, and current DOM range object
                 start = range.start.offset = end = range.end.offset = node.nodeValue.length;
                 range.start.node = range.end.node = node;

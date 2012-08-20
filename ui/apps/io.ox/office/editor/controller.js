@@ -49,18 +49,18 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'format/paragraph/stylesheet': {
                     chain: 'chain/format/paragraph',
-                    get: function (attributes) { return attributes.parastyle; },
-                    set: function (style) { editor.setAttribute('parastyle', style); }
+                    get: function (attributes) { return attributes.style; },
+                    set: function (style) { editor.setParagraphAttribute('style', style); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.alignment; },
-                    set: function (align) { editor.setAttribute('alignment', align); }
+                    set: function (align) { editor.setParagraphAttribute('alignment', align); }
                 },
                 'format/paragraph/lineheight': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.lineheight; },
-                    set: function (lineHeight) { editor.setAttribute('lineheight', lineHeight); }
+                    set: function (lineHeight) { editor.setParagraphAttribute('lineheight', lineHeight); }
                 },
 
                 'chain/format/character': {
@@ -69,27 +69,27 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'format/character/font/family': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontname; },
-                    set: function (fontName) { editor.setAttribute('fontname', fontName); }
+                    set: function (fontName) { editor.setCharacterAttribute('fontname', fontName); }
                 },
                 'format/character/font/height': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontsize; },
-                    set: function (fontSize) { editor.setAttribute('fontsize', fontSize); }
+                    set: function (fontSize) { editor.setCharacterAttribute('fontsize', fontSize); }
                 },
                 'format/character/font/bold': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.bold; },
-                    set: function (state) { editor.setAttribute('bold', state); }
+                    set: function (state) { editor.setCharacterAttribute('bold', state); }
                 },
                 'format/character/font/italic': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.italic; },
-                    set: function (state) { editor.setAttribute('italic', state); }
+                    set: function (state) { editor.setCharacterAttribute('italic', state); }
                 },
                 'format/character/font/underline': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.underline; },
-                    set: function (state) { editor.setAttribute('underline', state); }
+                    set: function (state) { editor.setCharacterAttribute('underline', state); }
                 },
 
                 'chain/table': {

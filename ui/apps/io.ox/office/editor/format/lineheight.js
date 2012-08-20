@@ -27,9 +27,9 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
      * Calculates the 'normal' line height for the font settings in the passed
      * DOM element in points.
      *
-     * @param {HTMLElement} element
-     *  The DOM element containing the font settings needed for the line height
-     *  calculation.
+     * @param {jQuery} element
+     *  The element containing the font settings needed for the line height
+     *  calculation, as jQuery object.
      *
      * @returns {Number}
      *  The 'normal' line height for the font settings in the passed element,
@@ -37,18 +37,15 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
      */
     function calculateNormalLineHeight(element) {
 
-        var // the passed element, as jQuery object
-            $element = $(element),
-
-            // element font size, exactly and as integer
-            fontSize = Math.max(Utils.convertCssLength($element.css('font-size'), 'pt'), 1.0),
+        var // element font size, exactly and as integer
+            fontSize = Math.max(Utils.convertCssLength(element.css('font-size'), 'pt'), 1.0),
             intFontSize = Math.floor(fontSize),
 
             // relevant font attributes of the element, used as cache key
             attributes = {
-                fontFamily: $element.css('font-family'),
-                fontWeight: $element.css('font-weight'),
-                fontStyle: $element.css('font-style'),
+                fontFamily: element.css('font-family'),
+                fontWeight: element.css('font-weight'),
+                fontStyle: element.css('font-style'),
                 fontSize: intFontSize + 'pt'
             },
             cacheKey = JSON.stringify(attributes),
@@ -66,6 +63,42 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
 
         // interpolate fractional part of the font size
         return lineHeight * fontSize / intFontSize;
+    }
+
+    /**
+     * Sets the text line height of the specified element.
+     *
+     * @param {jQuery} element
+     *  The element whose line height will be changed, as jQuery object.
+     *
+     * @param {Object} lineHeight
+     *  The new line height. Must contain the attributes 'type' and 'value'.
+     *  See method LineHeight.validateLineHeight() for details how to get a
+     *  valid line height value for this parameter.
+     */
+    function setElementLineHeight(element, lineHeight) {
+
+        var // effective line height in points (start with passed value, converted from 1/100mm to points)
+            height = Utils.convertLength(lineHeight.value / 100, 'mm', 'pt');
+
+        // set the CSS formatting
+        switch (lineHeight.type) {
+        case 'fixed':
+            // line height as passed
+            break;
+        case 'leading':
+            height += calculateNormalLineHeight(element);
+            break;
+        case 'atleast':
+            height = Math.max(height, calculateNormalLineHeight(element));
+            break;
+        case 'percent':
+            height = calculateNormalLineHeight(element) * lineHeight.value / 100;
+            break;
+        default:
+            Utils.error('LineHeight.setElementLineHeight(): invalid line height type');
+        }
+        element.css('line-height', Utils.roundDigits(height, 1) + 'pt');
     }
 
     // static class LineHeight ================================================
@@ -103,8 +136,8 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
     /**
      * Sets the text line height of the specified element.
      *
-     * @param {HTMLElement} element
-     *  The DOM element whose line height will be changed.
+     * @param {jQuery} element
+     *  The element whose line height will be changed, as jQuery object.
      *
      * @param {Object} lineHeight
      *  The new line height. Must contain the attributes 'type' and 'value'.
@@ -112,28 +145,21 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
      *  valid line height value for this parameter.
      */
     LineHeight.setElementLineHeight = function (element, lineHeight) {
+        setElementLineHeight(element, lineHeight);
+        // store value for updateElementLineHeight()
+        element.data('line-height', lineHeight);
+    };
 
-        var // effective line height in points (start with passed value, converted from 1/100mm to points)
-            height = Utils.convertLength(lineHeight.value / 100, 'mm', 'pt');
-
-        // set the CSS formatting
-        switch (lineHeight.type) {
-        case 'fixed':
-            // line height as passed
-            break;
-        case 'leading':
-            height += calculateNormalLineHeight(element);
-            break;
-        case 'atleast':
-            height = Math.max(height, calculateNormalLineHeight(element));
-            break;
-        case 'percent':
-            height = calculateNormalLineHeight(element) * lineHeight.value / 100;
-            break;
-        default:
-            Utils.error('LineHeight.setElementLineHeight(): invalid line height type');
-        }
-        $(element).css('line-height', Utils.roundDigits(height, 1) + 'pt');
+    /**
+     * Updates the text line height of the specified element according to its
+     * current font settings.
+     *
+     * @param {jQuery} element
+     *  The element whose line height will be updated, as jQuery object.
+     */
+    LineHeight.updateElementLineHeight = function (element) {
+        // read line height from element, stored in setElementLineHeight()
+        setElementLineHeight(element, element.data('line-height') || LineHeight.SINGLE);
     };
 
     // exports ================================================================
