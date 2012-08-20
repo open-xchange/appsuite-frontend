@@ -161,6 +161,8 @@ define('io.ox/core/tk/autocomplete', function () {
                             }
                             break;
                         case 13: // enter
+                            scrollpane.find('.selected').trigger('click');
+                            break;
                         case 9:  // tab
                             e.preventDefault();
                             if (!e.shiftKey) { // ignore back-tab

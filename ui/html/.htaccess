@@ -52,6 +52,7 @@ ExpiresByType audio/mp3 "access plus 6 months"
 <FilesMatch "^(core|signin)$">
     # must be done this way otherwise firefox does not put these files into application cache
     Header set Content-type "text/html"
+    ForceType "text/html"
     ExpiresDefault "access plus 1 seconds"
 </FilesMatch>
 
