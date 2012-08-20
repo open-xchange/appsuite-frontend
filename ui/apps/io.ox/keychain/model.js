@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/keychain/model", function () {
+define("io.ox/keychain/model", ["io.ox/core/extensions"], function (ext) {
     "use strict";
     
     var Account = Backbone.Model.extend();
@@ -28,6 +28,12 @@ define("io.ox/keychain/model", function () {
             accounts.add(thing);
             return accounts;
         }
+        
+        ext.point("io.ox/keychain/model").each(function (extension) {
+            if (extension.accountType === thing.accountType) {
+                return extension.invoke("wrap", extension, thing);
+            }
+        });
         
         return new Account(thing);
     }
