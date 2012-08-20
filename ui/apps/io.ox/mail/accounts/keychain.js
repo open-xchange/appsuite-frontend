@@ -10,26 +10,43 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api/account"], function (ext, accountAPI) {
+define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api/account"], function (ext, accountAPI) {
+    
     "use strict";
+    
+    var moduleDeferred = $.Deferred();
+    
+    require(["io.ox/mail/accounts/model"], function (AccountModel) {
+        ext.point("io.ox/keychain/model").extend({
+            id: 'mail',
+            index: 100,
+            accountType: "mail",
+            wrap: function (thing) {
+                return new AccountModel(thing);
+            }
+        });
+    });
     
     var accounts = {};
     
     function init() {
-        accountAPI.all(function (allAccounts) {
+        return accountAPI.all().done(function (allAccounts) {
             _(allAccounts).each(function (account) {
                 accounts[account.id] = account;
+                account.accountType = 'mail';
             });
         });
     }
     
-    init();
+    init().done(function () {
+        moduleDeferred.resolve({message: 'Loaded mail keychain'});
+    });
     accountAPI.on("account_created refresh.all", init);
     
     ext.point("io.ox/keychain/api").extend({
         id: "mail",
         getAll: function () {
-            _(accounts).map(function (account) { return account; });
+            return _(accounts).map(function (account) { return account; });
         },
         get: function (id) {
             return accounts[id];
@@ -56,4 +73,6 @@ define("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/core/api
             return accountAPI.update(account);
         }
     });
+    
+    return moduleDeferred;
 });

@@ -15,9 +15,9 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
  
-define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
+define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
     "use strict";
-    var def = $.Deferred(),
+    var moduleDeferred = $.Deferred(),
         cache = null,
         point = ext.point("io.ox/keychain/api");
     
@@ -33,10 +33,15 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         return id.substring(id.lastIndexOf(".") + 1);
     }
     
+    
     // Extension
     function OAuthKeychainAPI(service) {
         var self = this;
         this.id = simplifyId(service.id);
+
+        function addType(account) {
+            account.accountType = self.id;
+        }
         
         function chooseDisplayName() {
             return "My " + service.displayName + " account";
@@ -176,89 +181,11 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
             });
     
             // Resolve loading
-            def.resolve({message: "Done with oauth keychain"});
+            moduleDeferred.resolve({message: "Done with oauth keychain"});
         }).fail(function () {
             throw new Error("Could not initialize OAuth keyring!");
         }
     );
     
-    
-    
-    
-    return def;
+    return moduleDeferred;
 });
-
-
-/*
-var metadataCache = null;
-
-
-var metadata = {
-    getAll: function () {
-        var def = $.Deferred();
-        if (metadataCache) {
-            return def.resolve(metadataCache);
-        }
-        
-        http.GET({
-            module: "oauth/services",
-            params: {
-                action: 'all'
-            }
-        }).done(function (response) {
-            metadataCache = response;
-            def.resolve(metadataCache);
-        }).fail(def.reject);
-        
-        return def;
-    }
-};
-
-
-var accountCache = null;
-
-var accounts = {
-    getAll: function () {
-        var def = $.Deferred();
-        if (accountCache) {
-            return def.resolve(accountCache);
-        }
-        
-        http.GET({
-            module: "oauth/accounts",
-            params: {
-                action: 'all'
-            }
-        }).done(function (response) {
-            accountCache = response;
-            def.resolve(response);
-        }).fail(def.reject);
-        
-        return def;
-    },
-    
-    get: function () {
-        
-    }
-};
-
-function getServices() {
-    var def = $.Deferred();
-    $.when(
-        metadata.getAll(),
-        accounts.getAll()
-    ).done(function (services, accounts) {
-        var map = {};
-        _(services).each(function (service) {
-            map[service.id] = $.extend({accounts: {}}, service);
-        });
-        
-        _(accounts).each(function (account) {
-            map[account.serviceId].accounts[account.id] = account;
-        });
-        def.resolve(map);
-    }).fail(def.fail);
-    
-    return def;
-}
-*/
