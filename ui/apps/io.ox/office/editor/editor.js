@@ -907,7 +907,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.setRangeAttributes(highlightRanges, { highlight: false }, { special: true });
+                characterStyles.setRangeAttributes(highlightRanges, { highlight: false }, { smartClear: true, special: true });
             }
             highlightRanges = [];
         };

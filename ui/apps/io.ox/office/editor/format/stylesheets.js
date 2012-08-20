@@ -26,6 +26,14 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
         return false;
     }
 
+    function getElementAttributes(element) {
+        return element.data('attributes') || {};
+    }
+
+    function setElementAttributes(element, attributes) {
+        element.data('attributes', attributes);
+    }
+
     // class StyleSheets ======================================================
 
     /**
@@ -224,7 +232,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             iterateReadOnly(ranges, function (element) {
 
                 var // get the hard formatting attributes
-                    hardAttributes = $(element).data('attributes'),
+                    hardAttributes = getElementAttributes($(element)),
                     // get attributes of the style sheet (invalid style name results in default values)
                     styleAttributes = getStyleSheetAttributes(hardAttributes ? styleSheets[hardAttributes.style] : null),
                     // whether any attribute is still unambiguous
@@ -263,13 +271,27 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *
          * @param {Object} attributes
          *  A map of attribute name/value pairs.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.smartClear=false]
+         *      If set to true, hard attributes that are equal to the
+         *      attributes of the current style sheet will be removed from the
+         *      elements.
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, allows to change special attributes (attributes
+         *      that are marked with the 'special' flag in the attribute
+         *      definitions passed to the constructor).
          */
         this.setRangeAttributes = function (ranges, attributes, options) {
 
             var // the style sheet name
                 styleName = Utils.getStringOption(attributes, 'style'),
-                // get attributes of the style sheet, if specified (invalid name results in default values)
-                styleAttributes = styleName ? getStyleSheetAttributes(styleSheets[styleName]) : null,
+                // get attributes of the style sheet (missing name results in default values)
+                styleAttributes = getStyleSheetAttributes(styleSheets[styleName]),
+                // whether to remove hard attributes equal to style attributes
+                smartClear = Utils.getBooleanOption(options, 'smartClear', false),
                 // allow special attributes
                 special = Utils.getBooleanOption(options, 'special', false);
 
@@ -288,7 +310,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                     hardAttributes = { style: styleName };
                     cssAttributes = _.clone(styleAttributes);
                 } else {
-                    hardAttributes = $element.data('attributes');
+                    hardAttributes = getElementAttributes($element);
                     // clone the attributes coming from the element, there may
                     // be multiple elements pointing to the same data object,
                     // e.g. after using the $.clone() method.
@@ -300,12 +322,17 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                 _(attributes).each(function (value, name) {
                     var definition = definitions[name];
                     if (definition && (special || !definition.special)) {
-                        hardAttributes[name] = cssAttributes[name] = value;
+                        if (smartClear && (styleAttributes[name] === value)) {
+                            delete hardAttributes[name];
+                        } else {
+                            hardAttributes[name] = value;
+                        }
+                        cssAttributes[name] = value;
                     }
                 });
 
                 // write back hard attributes to the element
-                $element.data('attributes', hardAttributes);
+                setElementAttributes($element, hardAttributes);
 
                 // change CSS formatting of the element
                 _(cssAttributes).each(function (value, name) {
@@ -323,6 +350,26 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
         });
 
     } // class StyleSheets
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Returns whether the passed elements contain equal formatting attributes.
+     *
+     * @param {HTMLElement} element1
+     *  The first DOM element whose formatting attributes will be compared with
+     *  the attributes of the other passed element.
+     *
+     * @param {HTMLElement} element2
+     *  The second DOM element whose formatting attributes will be compared
+     *  with the attributes of the other passed element.
+     *
+     * @returns {Boolean}
+     *  Whether both elements contain equal formatting attributes.
+     */
+    StyleSheets.hasEqualAttributes = function (element1, element2) {
+        return _.isEqual(getElementAttributes($(element1)), getElementAttributes($(element2)));
+    };
 
     // exports ================================================================
 

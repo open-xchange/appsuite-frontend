@@ -97,10 +97,10 @@ define('io.ox/office/editor/format/characterstyles',
 
         /**
          * Returns whether the passed text nodes contain equal character
-         * formatting.
+         * formatting attributes.
          */
         function hasEqualAttributes(textNode1, textNode2) {
-            return _.isEqual($(textNode1.parentNode).data('attributes'), $(textNode2.parentNode).data('attributes'));
+            return StyleSheets.hasEqualAttributes(textNode1.parentNode, textNode2.parentNode);
         }
 
         /**
