@@ -1,0 +1,250 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
+ */
+
+.window-content.week-view * {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.window-content.week-view {
+    
+    .week {
+        width: 100%;
+        min-height: 100%;
+        height: 100%;
+        position: relative;
+        display: inline-block;
+        border-right: 1px solid #ccc;
+        overflow: hidden;
+        background-color: #fff;
+        -webkit-transition: background-color 0.4s;
+        -moz-transition: background-color 0.4s;
+        transition: background-color 0.4s;
+    }
+    
+    .header {
+        height: 10%;
+        border-bottom: 1px solid #ccc;
+        overflow: auto;
+        padding-left: 50px;
+    }
+    
+    .scrollpane {
+        overflow: auto;
+        position: absolute;
+        top: 10%; right: 0; bottom: 30px; left: 0;
+    }
+
+    .footer {
+        height: 30px; 
+        line-height: 30px;
+        position: absolute;
+        right: 0; 
+        bottom: 0; 
+        left: 0;
+        border-top: 1px solid #ccc;
+        padding-left: 50px;
+        white-space: nowrap;
+        background-color: white;
+        font-family: @font-light;
+        font-size: 12px;
+    }
+    
+    .container {
+        float: left;
+        padding-left: 50px;
+        width: 100%;
+    }
+    
+    .day {
+        border-left: 1px solid #ccc;
+    }
+    
+    .day.today .timeslot.in { 
+        background-color: #daefFf; background-color: rgba(0, 136, 204, 0.10);
+    }
+
+    .day.today .timeslot.out { 
+        background-color: #daefFf; background-color: rgba(0, 136, 204, 0.20);
+    }
+
+    .day, .lable {
+        position: relative;
+        float: left;
+    }
+
+    .lable {
+        position: absolute;
+    }
+    
+    .timeslot {
+        min-width: 120px;
+        border-bottom: 1px solid #ccc;
+    }
+    
+    .time {
+        width: 50px;
+        position: relative;
+    }
+
+    .time .number {
+        font-family: @font-light;
+        font-size: 12px;
+        position: absolute;
+        right: 5px;
+        bottom: -9px;
+    }
+    
+    .time:last-child .number {
+        display: none;
+    }
+    
+    .timeslot:nth-child(odd) {
+        border-bottom-style: dotted;
+    }
+
+    .timeslot:last-child, .time:last-child {
+        border: none;
+    }
+    
+    .timeslot.out {
+        background-color: #e0e0e0;
+    }
+    
+    .timeslot.in {
+        background-color: #fff;
+    }
+
+    .weekday {
+        display: inline-block;
+        padding-left: 13px;
+    }
+    
+    .appointment {
+        position: absolute;
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        line-height: 13px;
+        background-color: #08c;
+        color: white;
+        margin-bottom: 1px;
+        padding: 2px 7px 2px 7px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        -webkit-transition: background-color, color 0.1s;
+        -moz-transition: background-color, color 0.1s;
+        transition: background-color, color 0.1s;
+    }
+
+    @appointment-reserved: #08c; /* blue */
+    @appointment-temporary: #FFBB00; /* yellow */
+    @appointment-absent: #913F3F; /* red */
+    @appointment-free: #8EB360; /* green */
+    @appointment-private: #555; /* dark grey */
+    @appointment-out: #aaa; /* light grey */
+    
+    @appointment-hover-pct: 15%;
+    @appointment-unconfirmed-alpha: 0.4;
+    
+    .appointment.reserved { background-color: @appointment-reserved; }
+    .appointment.temporary { background-color: @appointment-temporary; }
+    .appointment.absent { background-color: @appointment-absent; }
+    .appointment.free { background-color: @appointment-free; }
+    .appointment.private { background-color: @appointment-private; }
+
+/*    .week {
+        height: 100/6%; might be 6 wweks in a month
+        min-height: 80px;
+        max-height: 160px;
+    }
+    
+    .vertical {
+        font-family: @font-light;
+        font-size: 30px;
+        line-height: 1.1em;
+        color: #aaa;
+        position: absolute;
+        right: 0;
+        width: 12.5%;
+        height: 100/6%;
+        padding: 13px;
+        text-align: right;
+    }
+    
+    .day.out {
+        background-color: #e0e0e0;
+    }
+    
+    .day.out.today {
+        background-color: #f0f0f0;
+    }
+
+    .day .number {
+        position: absolute;
+        color: #aaa;
+        text-align: right;
+        right: 7px;
+        bottom: 5px;
+        z-index: 1;
+        font-size: 11px;
+        line-height: 1em;
+    }
+    
+    .day.out .number {
+        color: #aaa;
+    }
+    
+    .day.weekend .number {
+        color: #a00;
+    }
+    
+    .day.today { background-color: #daefFf; background-color: rgba(0, 136, 204, 0.25); }
+    .day.today .number { color: darken(#08c, 10%); }
+    
+    .day .list {
+        top: 6px; right: 6px; bottom: 6px; left: 6px;
+        z-index: 2;
+    }
+
+    unconfirmed
+    .appointment.reserved.unconfirmed {
+        background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
+    }
+    .appointment.temporary.unconfirmed {
+        background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
+    }
+    .appointment.absent.unconfirmed {
+        background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
+    }
+    .appointment.free.unconfirmed {
+        background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
+    }
+    
+    out
+    .day.out .appointment { background-color: @appointment-out; }
+
+    mouse over
+    .appointment.reserved:hover { background-color: darken(@appointment-reserved, @appointment-hover-pct); }
+    .appointment.temporary:hover { background-color: darken(@appointment-temporary, @appointment-hover-pct); }
+    .appointment.absent:hover { background-color: darken(@appointment-absent, @appointment-hover-pct); }
+    .appointment.free:hover { background-color: darken(@appointment-free, @appointment-hover-pct); }
+    .appointment.private:hover { background-color: darken(@appointment-private, @appointment-hover-pct); }
+    
+    .day.out .appointment:hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
+    
+    .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
+*/
+
+}
