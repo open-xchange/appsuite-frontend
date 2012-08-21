@@ -191,9 +191,6 @@
 .io-ox-sidepopup-pane h1.clear-title {
     margin-bottom: @large-padding;
 }
-.io-ox-sidepopup-pane {
-    padding: @large-padding;
-}
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
 }
