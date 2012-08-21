@@ -1836,8 +1836,8 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family containing the specified
          *  attribute.
          */
-        this.setAttribute = function (family, name, value, startPosition, endPosition) {
-            this.setAttributes(family, Utils.makeSimpleObject(name, value), startPosition, endPosition);
+        this.setAttribute = function (family, name, value) {
+            this.setAttributes(family, Utils.makeSimpleObject(name, value));
         };
 
         /**
@@ -2051,14 +2051,18 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
-                // paragraph attributes also for cursor without selection
+                // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
-                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
+                    startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
+                    endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
+                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                     this.applyOperation(newOperation, true, true);
                 }
             }
             else {
-                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
+                startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
+                endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
+                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 this.applyOperation(newOperation, true, true);
             }
         };
@@ -2628,8 +2632,12 @@ define('io.ox/office/editor/editor',
             start = _.copy(start);
             end = _.copy(end);
 
-            // TODO: get attribute family according to position
-            family = 'character';
+            // get attribute family according to position
+            family = Position.getPositionAssignedFamily(paragraphs, start);
+
+            if (family === null) {
+                Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
+            }
 
             // validate text offset
             if (!_.isFinite(start[startLastIndex]) || (start[startLastIndex] < 0)) {
