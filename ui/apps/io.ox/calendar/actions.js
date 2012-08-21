@@ -38,6 +38,39 @@ define('io.ox/calendar/actions',
             });
         }
     });
+    
+    new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/calendar/week/perspective'], function (perspective) {
+                perspective.setRendered(false);
+                perspective.days = 7;
+                perspective.show(app);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/actions/switch-to-week-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/calendar/week/perspective'], function (perspective) {
+                perspective.setRendered(false);
+                perspective.days = 5;
+                perspective.show(app);
+            });
+        }
+    });
+    
+    new Action('io.ox/calendar/actions/switch-to-day-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/calendar/week/perspective'], function (perspective) {
+                perspective.setRendered(false);
+                perspective.days = 1;
+                perspective.show(app);
+            });
+        }
+    });
 
     new Action('io.ox/calendar/detail/actions/edit', {
         id: 'edit',
@@ -198,6 +231,27 @@ define('io.ox/calendar/actions',
         index: 200,
         label: gt('Month'),
         ref: 'io.ox/calendar/actions/switch-to-month-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'fullweek',
+        index: 200,
+        label: gt('Week'),
+        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'week',
+        index: 200,
+        label: gt('Work Week'),
+        ref: 'io.ox/calendar/actions/switch-to-week-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'day',
+        index: 200,
+        label: gt('Day'),
+        ref: 'io.ox/calendar/actions/switch-to-day-view'
     });
 
     // FIXME: should only be visible if rights are ok

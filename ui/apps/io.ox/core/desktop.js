@@ -567,6 +567,10 @@ define("io.ox/core/desktop",
             };
 
             this.render = $.noop;
+            
+            this.setRendered = function (value) {
+                rendered = value;
+            };
         };
 
         return Perspective;
