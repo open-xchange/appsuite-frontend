@@ -21,7 +21,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
                 account = keychain.get(args.data.id);
             
             
-        }
+        };
     }
     
     _(oauthKeychain.serviceIDs).each(function (serviceId) {
