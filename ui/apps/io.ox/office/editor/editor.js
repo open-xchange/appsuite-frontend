@@ -484,6 +484,7 @@ define('io.ox/office/editor/editor',
         var lastEventSelection;
 
         var currentSelection;
+        var leftCursorStartSelection;
 
         // list of operations
         var operations = [];
@@ -865,7 +866,7 @@ define('io.ox/office/editor/editor',
             }
 
             // for (var i = 0; i < ranges.length; i++) {
-            //     window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
+            //    window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
             // }
 
             if (ranges.length) {
@@ -1323,18 +1324,30 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            var selection = this.getSelection();
-
             this.implCheckEventSelection();
             lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
+
+            var selection = this.getSelection();
+
+            // special handling for left arrow + shift key (works only in Firefox)
+            if ((lastKeyDownEvent.keyCode === KeyCodes.LEFT_ARROW) && (lastKeyDownEvent.shiftKey)) {
+                if (! leftCursorStartSelection) {
+                    leftCursorStartSelection = selection.endPaM.oxoPosition;
+                    leftCursorStartSelection[leftCursorStartSelection.length - 1] += 1;
+                }
+                selection.endPaM.oxoPosition = leftCursorStartSelection;
+                selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] -= 1; // TODO
+                this.setSelection(selection);
+            } else {
+                leftCursorStartSelection = null;
+            }
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
                 // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed
                 return;
             }
-
 
             selection.adjust();
 
