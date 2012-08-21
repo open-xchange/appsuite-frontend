@@ -67,6 +67,28 @@ define("io.ox/files/actions",
             });
         }
     });
+    
+    new Action('io.ox/files/actions/office/newdocument', {
+        id: 'officenew',
+        action: function (app) {
+            $.ajax({
+                type: 'GET',
+                url: ox.apiRoot +
+                '/oxodocumentfilter' +
+                '?action=createdefaultdocument' +
+                '&folder_id=' + app.folder.get() +
+                '&session=' + ox.session +
+                '&uid=' + app.getUniqueId() +
+                '&document_type=text',
+                dataType: 'json'
+            })
+            .done(function (response) {
+                ox.launch('io.ox/office/editor/main', { file: response.data }).done(function () {
+                    this.load();
+                });
+            });
+        }
+    });
 
     new Action('io.ox/files/actions/office/editor', {
         id: 'officeeditor',
@@ -216,6 +238,13 @@ define("io.ox/files/actions",
 
 
     // links
+
+    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+        index: 50,
+        id: "officenew",
+        label: gt("New Document"),
+        ref: "io.ox/files/actions/office/newdocument"
+    }));
 
     ext.point('io.ox/files/links/toolbar').extend(new links.Link({
         index: 100,
