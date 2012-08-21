@@ -19,9 +19,8 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/format/characterstyles',
-     'io.ox/office/editor/format/paragraphstyles'
-    ], function (Events, Utils, DOM, OXOPaM, Position, CharacterStyles, ParagraphStyles) {
+     'io.ox/office/editor/format/documentstyles'
+    ], function (Events, Utils, DOM, OXOPaM, Position, DocumentStyles) {
 
     'use strict';
 
@@ -460,12 +459,17 @@ define('io.ox/office/editor/editor',
                 KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
-        var self = this;
+        var // self reference for local functions
+            self = this,
 
-        var styleSheetsMap = {
-                character: new CharacterStyles(editdiv),
-                paragraph: new ParagraphStyles(editdiv)
-            };
+            // container for all style sheets of all attribute families
+            documentStyles = new DocumentStyles(editdiv),
+
+            // shortcut for character styles
+            characterStyles = documentStyles.getStyleSheets('character'),
+
+            // all highlighted DOM ranges (e.g. in quick search)
+            highlightRanges = [];
 
         var currentDocumentURL;
 
@@ -490,16 +494,10 @@ define('io.ox/office/editor/editor',
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
 
-        // all DOM ranges highlighted (e.g. in quick search)
-        var highlightRanges = [];
-
         var dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
         Events.extend(this);
-
-        // connect character formatting and styles with paragraph styles (which contain character attributes too)
-        //styleSheetsMap.character.registerAncestorStyleSheets(styleSheetsMap.paragraph, function (element) { return element.parentNode; });
 
         // global editor settings ---------------------------------------------
 
@@ -533,6 +531,7 @@ define('io.ox/office/editor/editor',
          */
         this.destroy = function () {
             this.events.destroy();
+            documentStyles.destroy();
         };
 
         // OPERATIONS API
@@ -910,7 +909,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                styleSheetsMap.character.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
+                characterStyles.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
                 editdiv.removeClass('highlight');
             }
             highlightRanges = [];
@@ -996,7 +995,7 @@ define('io.ox/office/editor/editor',
             // set the highlighting
             if (highlightRanges.length) {
                 editdiv.addClass('highlight');
-                styleSheetsMap.character.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
+                characterStyles.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
 
                 // make first highlighted text node visible
                 DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1821,7 +1820,7 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family.
          */
         this.getStyleSheets = function (family) {
-            return (family in styleSheetsMap) ? styleSheetsMap[family] : null;
+            return documentStyles.getStyleSheets(family);
         };
 
         /**

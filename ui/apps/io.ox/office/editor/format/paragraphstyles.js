@@ -66,7 +66,7 @@ define('io.ox/office/editor/format/paragraphstyles',
      *  this container. If this object is a jQuery collection, uses the first
      *  node it contains.
      */
-    function ParagraphStyles(rootNode) {
+    function ParagraphStyles(rootNode, documentStyles) {
 
         // private methods ----------------------------------------------------
 
@@ -80,13 +80,15 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        // TODO: remove this workaround name mapping (makes German DOCX files work)
         StyleSheets.call(this, definitions, iterate, iterate, 'parastyle', {
-            Titel: 'Title',
-            Untertitel: 'Subtitle',
-            berschrift1: 'Heading 1',
-            berschrift2: 'Heading 2',
-            berschrift3: 'Heading 3'
+            // TODO: remove this workaround name mapping (makes German DOCX files work)
+            alternativeStyleNames: {
+                Titel: 'Title',
+                Untertitel: 'Subtitle',
+                berschrift1: 'Heading 1',
+                berschrift2: 'Heading 2',
+                berschrift3: 'Heading 3'
+            }
         });
 
         // initialization -----------------------------------------------------

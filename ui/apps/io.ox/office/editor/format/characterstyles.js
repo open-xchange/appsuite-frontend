@@ -91,7 +91,7 @@ define('io.ox/office/editor/format/characterstyles',
      *  this container. If this object is a jQuery collection, uses the first
      *  node it contains.
      */
-    function CharacterStyles(rootNode) {
+    function CharacterStyles(rootNode, documentStyles) {
 
         // private methods ----------------------------------------------------
 
