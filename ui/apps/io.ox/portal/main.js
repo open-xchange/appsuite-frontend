@@ -255,7 +255,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 .append(tileSide);
 
             ox.on('refresh^', function () {
-                console.log("Refreshing:", app.active, app.activeEvent);
+                //console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();

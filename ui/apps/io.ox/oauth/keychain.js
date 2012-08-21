@@ -179,8 +179,8 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             params: {
                 action: 'all'
             }
-        })
-    ).done(function (services, accounts) {
+        }))
+        .done(function (services, accounts) {
             // build and register extensions
             cache = {};
             _(services[0]).each(function (service) {
@@ -197,12 +197,12 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 message: "Done with oauth keychain",
                 services: services,
                 accounts: accounts,
-                serviceIDs: _(services).map(function (service) {return simplifyId(service.id); })
+                serviceIDs: _(services[0]).map(function (service) {return simplifyId(service.id); })
             });
-        }).fail(function () {
+        })
+        .fail(function () {
             throw new Error("Could not initialize OAuth keyring!");
-        }
-    );
+        });
     
     return moduleDeferred;
 });
