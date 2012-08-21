@@ -60,7 +60,7 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
         },
         createInteractively: function (e) {
             var def = $.Deferred();
-            require(['io.ox/settings/accounts/email/settings'], function (mailSettings) {
+            require(['io.ox/mail/accounts/settings'], function (mailSettings) {
                 // FIXME: This is not very blackboxy
                 mailSettings.mailAutoconfigDialog(e).done(def.resolve).fail(def.reject);
             });

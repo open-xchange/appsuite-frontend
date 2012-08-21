@@ -93,15 +93,21 @@
 @media all and (min-width: 2560px) {
     .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
 }
-.io-ox-portal-widget-tile {
+.io-ox-portal-widget-tile-border {
     height: @tile-height;
     width: @tile-width;
 }
 */
+.io-ox-portal-widget-tile-border {
+    margin: 0;
+    padding: 0 @padding @padding 0;
+    background: transparent;
+    float: left;
+} 
 .io-ox-portal-widget-tile { 
     height: @tile-height;
+    width: 100%;
     box-sizing: border-box;
-    border: @padding solid @portal-background;
 }
 .io-ox-portal-widget-phototile {
     padding: 0 !important;
@@ -112,56 +118,56 @@
 }
 
 @media all and (min-width: 0px ) {
-    .io-ox-portal-widget-tile { width: 100%; }
+    .io-ox-portal-widget-tile-border { width: 100%; }
 }
 @media all and (min-width: 300px) {
-    .io-ox-portal-widget-tile { width: 50%; }
+    .io-ox-portal-widget-tile-border { width: 50%; }
 }
 @media all and (min-width: 600px) {
-    .io-ox-portal-widget-tile { width: 33.33%; }
+    .io-ox-portal-widget-tile-border { width: 33.33%; }
 }
 @media all and (min-width: 900px) {
-    .io-ox-portal-widget-tile { width: 25%; }
+    .io-ox-portal-widget-tile-border { width: 25%; }
 }
 @media all and (min-width: 1200px) {
-    .io-ox-portal-widget-tile { width: 20%; }
+    .io-ox-portal-widget-tile-border { width: 20%; }
 }
 @media all and (min-width: 1500px) {
-    .io-ox-portal-widget-tile { width: 16.66%; }
+    .io-ox-portal-widget-tile-border { width: 16.66%; }
 }
 @media all and (min-width: 1800px) {
-    .io-ox-portal-widget-tile { width: 14.28%; }
+    .io-ox-portal-widget-tile-border { width: 14.28%; }
 }
 @media all and (min-width: 2100px) {
-    .io-ox-portal-widget-tile { width: 12.5%; }
+    .io-ox-portal-widget-tile-border { width: 12.5%; }
 }
 .io-ox-portal, .io-ox-portal-tiles {
     height: 100%;
 }
 
 /*@media all and (min-height: 180px) {
-    .io-ox-portal-widget-tile { height: 99%; }
+    .io-ox-portal-widget-tile-border { height: 99%; }
 }
 @media all and (min-height: 360px) {
-    .io-ox-portal-widget-tile { height: 49%; }
+    .io-ox-portal-widget-tile-border { height: 49%; }
 }
 @media all and (min-height: 540px) {
-    .io-ox-portal-widget-tile { height: 32%; }
+    .io-ox-portal-widget-tile-border { height: 32%; }
 }
 @media all and (min-height: 720px) {
-    .io-ox-portal-widget-tile { height: 24%; }
+    .io-ox-portal-widget-tile-border { height: 24%; }
 }
 @media all and (min-height: 900px) {
-    .io-ox-portal-widget-tile { height: 19%; }
+    .io-ox-portal-widget-tile-border { height: 19%; }
 }
 @media all and (min-height: 1080px) {
-    .io-ox-portal-widget-tile { height: 16%; }
+    .io-ox-portal-widget-tile-border { height: 16%; }
 }
 @media all and (min-height: 1260px) {
-    .io-ox-portal-widget-tile { height: 14%; }
+    .io-ox-portal-widget-tile-border { height: 14%; }
 }
 @media all and (min-height: 1440px) {
-    .io-ox-portal-widget-tile { height: 12%; }
+    .io-ox-portal-widget-tile-border { height: 12%; }
 }*/
 .io-ox-portal-widget-tile {
     background: #cce;

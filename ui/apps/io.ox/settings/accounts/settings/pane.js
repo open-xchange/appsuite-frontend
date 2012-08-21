@@ -24,7 +24,7 @@ define('io.ox/settings/accounts/settings/pane',
        "io.ox/keychain/model",
        'text!io.ox/settings/accounts/email/tpl/account_select.html',
        'text!io.ox/settings/accounts/email/tpl/listbox.html'
-       ], function (ext, View, utils, dialogs, api, forms, email, keychainModel, tmpl, listboxtmpl) {
+       ].concat(ox.serverConfig.plugins.keychainSettings), function (ext, View, utils, dialogs, api, forms, email, keychainModel, tmpl, listboxtmpl) {
 
 
     'use strict';
@@ -32,10 +32,8 @@ define('io.ox/settings/accounts/settings/pane',
     var collection,
 
         createExtpointForSelectedAccount = function (args) {
-            if (args.data.id !== undefined) {
-                require(['io.ox/settings/accounts/email/settings'], function (m) {
-                    ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', args.data.node, args);
-                });
+            if (args.data.id !== undefined && args.data.accountType !== undefined) {
+                ext.point('io.ox/settings/accounts/' + args.data.accountType + '/settings/detail').invoke('draw', args.data.node, args);
             }
         },
 
@@ -74,10 +72,11 @@ define('io.ox/settings/accounts/settings/pane',
             },
             render: function () {
                 var self = this;
-
                 self.$el.empty().append(self.template({
-                    id: this.model.get('id')
+                    id: this.model.get('id'),
+                    accountType: this.model.get('accountType')
                 }));
+                
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
@@ -113,7 +112,7 @@ define('io.ox/settings/accounts/settings/pane',
                     this.template = doT.template(listboxtmpl);
                     _.bindAll(this);
                     this.collection = collection;
-
+                    
                     this.collection.bind('add', this.render);
                     this.collection.bind('remove', this.render);
                 },
@@ -141,8 +140,10 @@ define('io.ox/settings/accounts/settings/pane',
                 },
 
                 onEdit: function (args) {
+                    var selected = this.$el.find('[selected]');
                     args.data = {};
-                    args.data.id = this.$el.find('[selected]').data('id');
+                    args.data.id = selected.data('id');
+                    args.data.accountType = selected.data('accounttype');
                     args.data.node = this.el;
                     createExtpointForSelectedAccount(args);
                 },

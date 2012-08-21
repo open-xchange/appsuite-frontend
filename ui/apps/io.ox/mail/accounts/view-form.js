@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/settings/accounts/email/view-form',
+define('io.ox/mail/accounts/view-form',
     ['io.ox/core/tk/view',
      'text!io.ox/settings/accounts/email/tpl/account_detail.html',
      'gettext!io.ox/settings/settings'

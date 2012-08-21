@@ -474,7 +474,8 @@ define("io.ox/core/tk/dialogs",
 
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
-                    top = my.offset().top + halfHeight - self.nodes.target.offset().top;
+                    targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
+                    top = my.offset().top + halfHeight - targetOffset;
                 arrow.css("top", top);
 
                 // finally, add arrow
