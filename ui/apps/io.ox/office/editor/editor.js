@@ -462,11 +462,13 @@ define('io.ox/office/editor/editor',
 
         var self = this;
 
-        var characterStyles = new CharacterStyles(editdiv);
-        var paragraphStyles = new ParagraphStyles(editdiv);
+        var styleSheetsMap = {
+                character: new CharacterStyles(editdiv),
+                paragraph: new ParagraphStyles(editdiv)
+            };
 
         // TODO: remove these default styles (or move to a 'newDocument' operation)
-        paragraphStyles
+        styleSheetsMap.paragraph
             .addStyleSheet('Standard', null, {})
             .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
             .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
@@ -913,7 +915,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.setRangeAttributes(highlightRanges, { highlight: false }, { smartClear: true, special: true });
+                styleSheetsMap.character.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
             }
             highlightRanges = [];
         };
@@ -996,7 +998,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            characterStyles.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
+            styleSheetsMap.character.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
 
             // make first highlighted text node visible
             DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1297,15 +1299,15 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'B') {
                     event.preventDefault();
-                    this.setCharacterAttribute('bold', !this.getCharacterAttributes().bold);
+                    this.setAttribute('character', 'bold', !this.getAttributes('character').bold);
                 }
                 else if (c === 'I') {
                     event.preventDefault();
-                    this.setCharacterAttribute('italic', !this.getCharacterAttributes().italic);
+                    this.setAttribute('character', 'italic', !this.getAttributes('character').italic);
                 }
                 else if (c === 'U') {
                     event.preventDefault();
-                    this.setCharacterAttribute('underline', !this.getCharacterAttributes().underline);
+                    this.setAttribute('character', 'underline', !this.getAttributes('character').underline);
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
@@ -1798,83 +1800,57 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
-        // character attributes -----------------------------------------------
+        // style sheets and formatting attributes -----------------------------
 
         /**
-         * Returns the character style sheet container.
-         */
-        this.getCharacterStyles = function () {
-            return characterStyles;
-        };
-
-        /**
-         * Returns the values of all character formatting attributes in the
-         * current selection.
+         * Returns the style sheet container for the specified attribute
+         * family.
          *
-         * @returns {Object}
-         *  A map of character attribute name/value pairs.
+         * @param {String} family
+         *  The name of the attribute family.
          */
-        this.getCharacterAttributes = function () {
-            var ranges = DOM.getBrowserSelection(editdiv);
-            return characterStyles.getRangeAttributes(ranges);
+        this.getStyleSheets = function (family) {
+            return (family in styleSheetsMap) ? styleSheetsMap[family] : null;
         };
 
         /**
-         * Changes a single character attribute in the current selection.
-         */
-        this.setCharacterAttribute = function (name, value) {
-            this.setCharacterAttributes(Utils.makeSimpleObject(name, value));
-        };
-
-        /**
-         * Changes a multiple character attribute in the current selection.
-         */
-        this.setCharacterAttributes = function (attributes) {
-            // !! TODO !! create operation(s), similar to old setAttributes()
-            var ranges = currentSelection ? this.getDOMSelection(currentSelection) : DOM.getBrowserSelection(editdiv);
-            characterStyles.setRangeAttributes(ranges, attributes);
-        };
-
-        // paragraph attributes -----------------------------------------------
-
-        /**
-         * Returns the paragraph style sheet container.
-         */
-        this.getParagraphStyles = function () {
-            return paragraphStyles;
-        };
-
-        /**
-         * Returns the values of all paragraph formatting attributes in the
-         * current selection.
+         * Returns the values of all formatting attributes of the specified
+         * attribute family in the current selection.
+         *
+         * @param {String} family
+         *  The name of the attribute family containing all attributes that
+         *  will be collected and returned.
          *
          * @returns {Object}
          *  A map of paragraph attribute name/value pairs.
          */
-        this.getParagraphAttributes = function () {
-            var ranges = DOM.getBrowserSelection(editdiv);
-            return paragraphStyles.getRangeAttributes(ranges);
+        this.getAttributes = function (family) {
+            var styleSheets = this.getStyleSheets(family),
+                ranges = DOM.getBrowserSelection(editdiv);
+            return styleSheets ? styleSheets.getRangeAttributes(ranges) : null;
         };
 
         /**
-         * Changes a single paragraph attribute in the current selection.
+         * Changes a single attribute of the specified attribute family in the
+         * current selection.
+         *
+         * @param {String} family
+         *  The name of the attribute family containing the specified
+         *  attribute.
          */
-        this.setParagraphAttribute = function (name, value) {
-            this.setParagraphAttributes(Utils.makeSimpleObject(name, value));
+        this.setAttribute = function (family, name, value, startPosition, endPosition) {
+            this.setAttributes(family, Utils.makeSimpleObject(name, value), startPosition, endPosition);
         };
 
         /**
-         * Changes a multiple paragraph attribute in the current selection.
+         * Changes multiple attributes of the specified attribute family in the
+         * current selection.
+         *
+         * @param {String} family
+         *  The name of the attribute family containing the specified
+         *  attribute.
          */
-        this.setParagraphAttributes = function (attributes) {
-            // !! TODO !! create operation(s), similar to old setAttributes()
-            var ranges = currentSelection ? this.getDOMSelection(currentSelection) : DOM.getBrowserSelection(editdiv);
-            paragraphStyles.setRangeAttributes(ranges, attributes);
-        };
-
-
-        // DEPRECATED
-        this.setAttributes = function (attributes, startPosition, endPosition) {
+        this.setAttributes = function (family, attributes, startPosition, endPosition) {
 
             var para,
                 start,
@@ -1888,7 +1864,7 @@ define('io.ox/office/editor/editor',
                 end = endPosition[endposLength];
             }
 
-            // TODO
+            // TODO: adjust position according to passed attribute family
             if (para === undefined) {
                 // Set attr to current selection
                 var selection = this.getSelection();
@@ -1898,7 +1874,7 @@ define('io.ox/office/editor/editor',
 
                     if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // Only one paragraph concerned from attribute changes.
-                        this.setAttributes(attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
+                        this.setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
                     } else if (Position.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // The included paragraphs are neighbours.
@@ -1909,7 +1885,7 @@ define('io.ox/office/editor/editor',
                             localendPosition = _.copy(selection.startPaM.oxoPosition, true);
 
                         localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                        this.setAttributes(attributes, selection.startPaM.oxoPosition, localendPosition);
+                        this.setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
 
                         // 2) completly selected paragraphs
                         for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
@@ -1923,12 +1899,12 @@ define('io.ox/office/editor/editor',
                             var isTable = Position.getDOMPosition(paragraphs, localstartPosition).node.nodeName === 'TABLE' ? true : false;
 
                             if (isTable) {
-                                this.setAttributesToCompleteTable(attributes, localstartPosition);
+                                this.setAttributesToCompleteTable(family, attributes, localstartPosition);
                             } else {
                                 localstartPosition.push(pos);
                                 localendPosition = _.copy(localstartPosition, true);
                                 localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                                this.setAttributes(attributes, localstartPosition, localendPosition);
+                                this.setAttributes(family, attributes, localstartPosition, localendPosition);
                             }
                         }
 
@@ -1938,7 +1914,7 @@ define('io.ox/office/editor/editor',
                             localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                             localstartPosition[endposLength] = 0;
 
-                            this.setAttributes(attributes, localstartPosition, selection.endPaM.oxoPosition);
+                            this.setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
                         }
 
                     } else if (Position.isCellSelection(selection.startPaM, selection.endPaM)) {
@@ -1963,7 +1939,7 @@ define('io.ox/office/editor/editor',
                                 position.push(j);
                                 var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, position);
                                 var endPosition = Position.getLastPositionInCurrentCell(paragraphs, position);
-                                this.setAttributes(attributes, startPosition, endPosition);
+                                this.setAttributes(family, attributes, startPosition, endPosition);
                             }
                         }
                     } else if (Position.isSameTableLevel(paragraphs, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
@@ -1979,8 +1955,8 @@ define('io.ox/office/editor/editor',
                             localendPosition = _.copy(selection.startPaM.oxoPosition, true);
 
                         localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                        this.setAttributes(attributes, selection.startPaM.oxoPosition, localendPosition);
-                        this.setAttributesToFollowingParagraphsInCell(attributes, localendPosition);
+                        this.setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
+                        this.setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
 
                         // 2) completely selected cells
                         var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
@@ -2005,7 +1981,7 @@ define('io.ox/office/editor/editor',
                                 startPos[columnIndex] = i;  // column
                                 var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, startPos);
                                 var endPosition = Position.getLastPositionInCurrentCell(paragraphs, startPos);
-                                this.setAttributes(attributes, startPosition, endPosition);
+                                this.setAttributes(family, attributes, startPosition, endPosition);
                             }
                         }
 
@@ -2016,8 +1992,8 @@ define('io.ox/office/editor/editor',
                         localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                         localstartPosition[endposLength] = 0;
 
-                        this.setAttributesToPreviousParagraphsInCell(attributes, selection.endPaM.oxoPosition);
-                        this.setAttributes(attributes, localstartPosition, selection.endPaM.oxoPosition);
+                        this.setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
+                        this.setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
 
                     } else {
 
@@ -2036,12 +2012,12 @@ define('io.ox/office/editor/editor',
                             localendPosition = _.copy(selection.startPaM.oxoPosition, true);
                             if (isTable) {
                                 // Assigning attribute to all following paragraphs in this cell and to all following cells!
-                                this.setAttributesToFollowingCellsInTable(attributes, localendPosition);
-                                this.setAttributesToFollowingParagraphsInCell(attributes, localendPosition);
+                                this.setAttributesToFollowingCellsInTable(family, attributes, localendPosition);
+                                this.setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
                             }
                             localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
                         }
-                        this.setAttributes(attributes, selection.startPaM.oxoPosition, localendPosition);
+                        this.setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
 
                         // 2) completly selected paragraphs
                         for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
@@ -2052,11 +2028,11 @@ define('io.ox/office/editor/editor',
                             isTable = Position.isPositionInTable(paragraphs, localstartPosition);
 
                             if (isTable) {
-                                this.setAttributesToCompleteTable(attributes, localstartPosition);
+                                this.setAttributesToCompleteTable(family, attributes, localstartPosition);
                             } else {
                                 localendPosition = _.copy(localstartPosition, true);
                                 localendPosition[1] = Position.getParagraphLength(paragraphs, localendPosition);
-                                this.setAttributes(attributes, localstartPosition, localendPosition);
+                                this.setAttributes(family, attributes, localstartPosition, localendPosition);
                             }
                         }
 
@@ -2070,15 +2046,15 @@ define('io.ox/office/editor/editor',
 
                             if (isTable) {
                                 // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
-                                this.setAttributesToPreviousCellsInTable(attributes, selection.endPaM.oxoPosition);
-                                this.setAttributesToPreviousParagraphsInCell(attributes, selection.endPaM.oxoPosition);
+                                this.setAttributesToPreviousCellsInTable(family, attributes, selection.endPaM.oxoPosition);
+                                this.setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
                             }
-                            this.setAttributes(attributes, localstartPosition, selection.endPaM.oxoPosition);
+                            this.setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
                         }
                     }
                 }
                 // paragraph attributes also for cursor without selection
-                else if (paragraphStyles.supportsAnyAttribute(attributes)) {
+                else if (family === 'paragraph') {
                     var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
                     this.applyOperation(newOperation, true, true);
                 }
@@ -2316,7 +2292,7 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.setAttributesToPreviousCellsInTable = function (attributes, position) {
+        this.setAttributesToPreviousCellsInTable = function (family, attributes, position) {
 
             var localPos = _.copy(position, true),
                 isInTable = Position.isPositionInTable(paragraphs, localPos);
@@ -2349,14 +2325,14 @@ define('io.ox/office/editor/editor',
                             localPos[columnIndex] = i;  // column
                             var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, localPos);
                             var endPosition = Position.getLastPositionInCurrentCell(paragraphs, localPos);
-                            this.setAttributes(attributes, startPosition, endPosition);
+                            this.setAttributes(family, attributes, startPosition, endPosition);
                         }
                     }
                 }
             }
         };
 
-        this.setAttributesToFollowingCellsInTable = function (attributes, position) {
+        this.setAttributesToFollowingCellsInTable = function (family, attributes, position) {
 
             var localPos = _.copy(position, true),
                 isInTable = Position.isPositionInTable(paragraphs, localPos);
@@ -2383,13 +2359,13 @@ define('io.ox/office/editor/editor',
                         localPos[columnIndex] = i;  // column
                         var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, localPos);
                         var endPosition = Position.getLastPositionInCurrentCell(paragraphs, localPos);
-                        this.setAttributes(attributes, startPosition, endPosition);
+                        this.setAttributes(family, attributes, startPosition, endPosition);
                     }
                 }
             }
         };
 
-        this.setAttributesToPreviousParagraphsInCell = function (attributes, position) {
+        this.setAttributesToPreviousParagraphsInCell = function (family, attributes, position) {
 
             var localPos = _.copy(position, true),
                 isInTable = Position.isPositionInTable(paragraphs, localPos);
@@ -2410,15 +2386,15 @@ define('io.ox/office/editor/editor',
 
                     // it can be a table next to a paragraph
                     if (Position.getDOMPosition(paragraphs, paragraphPosition).node.nodeName === 'TABLE') {
-                        this.setAttributesToCompleteTable(attributes, localPos);
+                        this.setAttributesToCompleteTable(family, attributes, localPos);
                     } else {
-                        this.setAttributesToParagraphInCell(attributes, localPos);
+                        this.setAttributesToParagraphInCell(family, attributes, localPos);
                     }
                 }
             }
         };
 
-        this.setAttributesToFollowingParagraphsInCell = function (attributes, position) {
+        this.setAttributesToFollowingParagraphsInCell = function (family, attributes, position) {
 
             var localPos = _.copy(position, true),
                 isInTable = Position.isPositionInTable(paragraphs, localPos);
@@ -2440,15 +2416,15 @@ define('io.ox/office/editor/editor',
 
                     // it can be a table next to a paragraph
                     if (Position.getDOMPosition(paragraphs, paragraphPosition).node.nodeName === 'TABLE') {
-                        this.setAttributesToCompleteTable(attributes, localPos);
+                        this.setAttributesToCompleteTable(family, attributes, localPos);
                     } else {
-                        this.setAttributesToParagraphInCell(attributes, localPos);
+                        this.setAttributesToParagraphInCell(family, attributes, localPos);
                     }
                 }
             }
         };
 
-        this.setAttributesToCompleteTable = function (attributes, position) {
+        this.setAttributesToCompleteTable = function (family, attributes, position) {
 
             var localPos = _.copy(position),
                 tableIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'TABLE'),
@@ -2475,12 +2451,12 @@ define('io.ox/office/editor/editor',
                     localPos[columnIndex] = i;  // column
                     var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, localPos);
                     var endPosition = Position.getLastPositionInCurrentCell(paragraphs, localPos);
-                    this.setAttributes(attributes, startPosition, endPosition);
+                    this.setAttributes(family, attributes, startPosition, endPosition);
                 }
             }
         };
 
-        this.setAttributesToParagraphInCell = function (attributes, position) {
+        this.setAttributesToParagraphInCell = function (family, attributes, position) {
 
             var startPosition = _.copy(position, true),
                 endPosition = _.copy(position, true),
@@ -2492,7 +2468,7 @@ define('io.ox/office/editor/editor',
                 startPosition[paraIndex + 1] = 0;
                 endPosition[paraIndex + 1] = Position.getParagraphLength(paragraphs, position);
 
-                this.setAttributes(attributes, startPosition, endPosition);
+                this.setAttributes(family, attributes, startPosition, endPosition);
             }
         };
 
@@ -2621,13 +2597,17 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Changes a specific formatting attribute of the specified text range.
+         * Changes a specific formatting attribute of the specified element or
+         * text range. The type of the attributes will be determined from the
+         * specified range.
          *
          * @param {Number[]} start
-         *  The logical start position of the text range to be formatted.
+         *  The logical start position of the element or text range to be
+         *  formatted.
          *
          * @param {Number[]} end
-         *  The logical end position of the text range to be formatted.
+         *  The logical end position of the element or text range to be
+         *  formatted.
          *
          * @param {Object} attributes
          *  A map with formatting attribute values, mapped by the attribute
@@ -2640,11 +2620,18 @@ define('io.ox/office/editor/editor',
                 // last index in the end position array
                 endLastIndex = end.length - 1,
                 // the DOM text range to be formatted
-                ranges = null;
+                ranges = null,
+                // the attribute family according to the passed range address
+                family = null,
+                // the style sheet container of the specified attribute family
+                styleSheets = null;
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
             end = _.copy(end);
+
+            // TODO: get attribute family according to position
+            family = 'character';
 
             // validate text offset
             if (!_.isFinite(start[startLastIndex]) || (start[startLastIndex] < 0)) {
@@ -2657,12 +2644,11 @@ define('io.ox/office/editor/editor',
             // store last position
             lastOperationEnd = new OXOPaM(end);
 
-            // build the DOM text range
-            ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-
-            if (textMode !== 'plain') {
-                paragraphStyles.setRangeAttributes(ranges, attributes);
-                characterStyles.setRangeAttributes(ranges, attributes);
+            // build the DOM text range and set the formatting attributes
+            styleSheets = self.getStyleSheets(family);
+            if (styleSheets && (textMode !== 'plain')) {
+                ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
+                styleSheets.setRangeAttributes(ranges, attributes);
             }
         }
 
