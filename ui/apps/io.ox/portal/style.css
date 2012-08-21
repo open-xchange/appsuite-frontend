@@ -1,7 +1,7 @@
 @padding: 2px;
 @large-padding: 13px;
-@portal-background-alt: @topbar-background;
-@portal-background: @topbar-background-alt;
+@portal-background-alt: #050505;
+@portal-background: #222;
 
 .io-ox-portal {
     padding: @large-padding;
