@@ -169,14 +169,14 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
                             extension.asyncMetadata("title").done(function (title) {
                                 if (title === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 $node.find(".tile-heading").text(title);
                             });
                             extension.asyncMetadata("icon").done(function (icon) {
                                 if (icon === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (icon) {
@@ -187,7 +187,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("preview").done(function (preview) {
                                 if (preview === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (preview) {
@@ -196,7 +196,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("tileColor").done(function (color) {
                                 if (color === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (color !== undefined) {
@@ -206,7 +206,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("color").done(function (color) {
                                 if (color === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (color !== undefined) {

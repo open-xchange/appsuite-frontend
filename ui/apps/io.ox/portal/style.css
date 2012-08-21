@@ -100,7 +100,7 @@
 */
 .io-ox-portal-widget-tile-border {
     margin: 0;
-    padding: @padding;
+    padding: 0 @padding @padding 0;
     background: transparent;
     float: left;
 } 
