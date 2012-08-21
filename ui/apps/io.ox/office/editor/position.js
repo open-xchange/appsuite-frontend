@@ -1296,12 +1296,53 @@ define('io.ox/office/editor/position',
      *  begin of the table is reached, the value for 'beginOfTable' is set to
      *  true. Otherwise it is false.
      */
+//    Position._getLastPositionInPrevCell = function (startnode, paragraph) {
+//
+//        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
+//            beginOfTable = false;
+//
+//        if ((paragraph) && (paragraph.length > 0)) {
+//
+//            var column = paragraph.pop(),
+//                row = paragraph.pop(),
+//                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+//
+//            if (column > 0) {
+//                column -= 1;
+//            } else {
+//                if (row > 0) {
+//                    row -= 1;
+//                    column = lastColumn;
+//                } else {
+//                    beginOfTable = true;
+//                }
+//            }
+//
+//            if (! beginOfTable) {
+//                paragraph.push(row);
+//                paragraph.push(column);
+//                paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
+//                paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
+//            } else {
+//                if (paragraph.length > 3) {
+//                    paragraph.pop();  // table position
+//                    if (Position.isPositionInTable(startnode, paragraph)) {
+//                        column = paragraph.pop();
+//                        row = paragraph.pop();
+//                }
+//            }
+//        }
+//
+//        return {position: paragraph, beginOfTable: beginOfTable};
+//    };
+
     Position.getLastPositionInPrevCell = function (startnode, paragraph) {
 
         var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
-            beginOfTable = false;
+            beginOfTable = false,
+            continueSearch = true;
 
-        if ((paragraph) && (paragraph.length > 0)) {
+        while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
 
             var column = paragraph.pop(),
                 row = paragraph.pop(),
@@ -1323,6 +1364,25 @@ define('io.ox/office/editor/position',
                 paragraph.push(column);
                 paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
                 paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
+                continueSearch = false;
+            } else {
+                // column and row are 0. So there is no previous cell,
+                // or the previous cell is inside an outer table.
+
+                // is there a paragraph/table directly before this first cell?
+                if (paragraph[paragraph.length - 1] === 0) {  // <- this is the first paragraph/table
+                    var localParagraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
+                    if ((localParagraph) && (localParagraph.length > 0)) {
+                        paragraph = localParagraph;
+                        beginOfTable = false;
+                    } else {
+                        continueSearch = false;
+                    }
+                } else {
+                    // simply jump into preceeding paragraph/table
+                    beginOfTable = true;
+                    continueSearch = false;
+                }
             }
         }
 
