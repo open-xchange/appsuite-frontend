@@ -557,8 +557,8 @@ define('io.ox/office/editor/editor',
             // remove highlighting before changing the DOM which invalidates the positions in highlightRanges
             this.removeHighlighting();
 
-            // Clone operation now, because undo might manipulate it when merging with previous one...
-            var notifyOperation = _.clone(operation, true);
+            // Copy operation now, because undo might manipulate it when merging with previous one...
+            var notifyOperation = _.copy(operation, true);
 
             implDbgOutObject({type: 'operation', value: operation});
 
@@ -3027,9 +3027,9 @@ define('io.ox/office/editor/editor',
 
         this.implDeleteText = function (startPosition, endPosition) {
 
-            var lastValue = startPosition.length - 1;
-            var start = startPosition[lastValue];
-            var end = endPosition[lastValue];
+            var lastValue = startPosition.length - 1,
+                start = startPosition[lastValue],
+                end = endPosition[lastValue];
 
             if (end === -1) {
                 end = Position.getParagraphLength(paragraphs, startPosition);
