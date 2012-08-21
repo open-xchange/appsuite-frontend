@@ -117,7 +117,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @returns {Boolean}
          *  Whether the attribute is supported.
          */
-        function isAttribute(name, special) {
+        function isRegisteredAttribute(name, special) {
             return (name in definitions) && (special || (definitions[name].special !== true));
         }
 
@@ -279,15 +279,15 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
                 var // the current element, as jQuery object
                     $element = $(element),
-                    // get the hard formatting attributes
-                    hardAttributes = getElementAttributes($element),
+                    // get the element attributes
+                    elementAttributes = getElementAttributes($element),
                     // get attributes of the style sheet
-                    styleAttributes = getStyleAttributes(element, hardAttributes[styleAttrName]),
+                    styleAttributes = getStyleAttributes(element, elementAttributes[styleAttrName]),
                     // whether any attribute is still unambiguous
                     hasNonNull = false;
 
-                // overwrite style sheet attributes with existing hard attributes
-                _(styleAttributes).extend(hardAttributes);
+                // overwrite style sheet attributes with existing element attributes
+                _(styleAttributes).extend(elementAttributes);
 
                 // update all attributes in the result set
                 _(styleAttributes).each(function (value, name) {
@@ -324,7 +324,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *  A map of options controlling the operation. Supports the following
          *  options:
          *  @param {Boolean} [options.clear=false]
-         *      If set to true, hard formatting attributes that are equal to
+         *      If set to true, explicit element attributes that are equal to
          *      the attributes of the current style sheet will be removed from
          *      the elements.
          *  @param {Boolean} [options.special=false]
@@ -336,7 +336,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
             var // the style sheet name
                 styleName = Utils.getStringOption(attributes, styleAttrName),
-                // whether to remove hard attributes equal to style attributes
+                // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // allow special attributes
                 special = Utils.getBooleanOption(options, 'special', false);
@@ -351,44 +351,43 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
                 var // the element, as jQuery object
                     $element = $(element),
-                    // hard attributes stored at the element
-                    hardAttributes = null,
+                    // explicit element attributes
+                    elementAttributes = null,
                     // attributes of the current or new style sheet
                     styleAttributes = null,
                     // the attributes whose CSS needs to be changed
                     cssAttributes = null;
 
                 if (styleName) {
-                    // change style sheet of the element: remove existing hard
-                    // attributes, set CSS formatting of all attributes
+                    // change style sheet of the element: remove existing
+                    // element attributes, set CSS formatting of all attributes
                     // according to the new style sheet
-                    hardAttributes = Utils.makeSimpleObject(styleAttrName, styleName);
+                    elementAttributes = Utils.makeSimpleObject(styleAttrName, styleName);
                     styleAttributes = getStyleAttributes(element, styleName);
                     cssAttributes = _.clone(styleAttributes);
-                    delete cssAttributes[styleAttrName];
                 } else {
                     // clone the attributes coming from the element, there may
                     // be multiple elements pointing to the same data object,
                     // e.g. after using the $.clone() method.
-                    hardAttributes = getElementAttributes($element, true);
-                    styleAttributes = getStyleAttributes(element, hardAttributes[styleAttrName]);
+                    elementAttributes = getElementAttributes($element, true);
+                    styleAttributes = getStyleAttributes(element, elementAttributes[styleAttrName]);
                     cssAttributes = {};
                 }
 
                 // add passed attributes
                 _(attributes).each(function (value, name) {
-                    if (isAttribute(name, special)) {
+                    if (isRegisteredAttribute(name, special)) {
                         if (clear && (styleAttributes[name] === value)) {
-                            delete hardAttributes[name];
+                            delete elementAttributes[name];
                         } else {
-                            hardAttributes[name] = value;
+                            elementAttributes[name] = value;
                         }
                         cssAttributes[name] = value;
                     }
                 });
 
-                // write back hard attributes to the element
-                setElementAttributes($element, hardAttributes);
+                // write back element attributes to the element
+                setElementAttributes($element, elementAttributes);
 
                 // change CSS formatting of the element
                 _(cssAttributes).each(function (value, name) {
@@ -411,7 +410,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          * @param {String|String[]} [attributeNames]
          *  A single attribute name, or an an array of attribute names. It is
          *  not possible to clear the style sheet name. If omitted, clears all
-         *  hard formatting attributes.
+         *  explicit element formatting attributes.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
@@ -436,32 +435,33 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
                 var // the element, as jQuery object
                     $element = $(element),
-                    // hard attributes stored at the element
-                    hardAttributes = getElementAttributes($element, true),
+                    // explicit element attributes
+                    elementAttributes = getElementAttributes($element, true),
                     // get attributes of the style sheet
-                    styleAttributes = getStyleAttributes(element, hardAttributes[styleAttrName]),
+                    styleAttributes = getStyleAttributes(element, elementAttributes[styleAttrName]),
                     // the resulting attributes to be changed at each element
                     cssAttributes = {};
 
-                // remove all or specified attributes from map of element attributes
                 if (attributeNames.length) {
+                    // remove specified attributes
                     _(attributeNames).each(function (name) {
-                        if (isAttribute(name, special) && (name in hardAttributes)) {
-                            delete hardAttributes[name];
+                        if (isRegisteredAttribute(name, special) && (name in elementAttributes)) {
+                            delete elementAttributes[name];
                             cssAttributes[name] = styleAttributes[name];
                         }
                     });
                 } else {
-                    _(hardAttributes).each(function (value, name) {
-                        if (isAttribute(name, special) && (name !== styleAttrName)) {
-                            delete hardAttributes[name];
+                    // remove all attributes except style name
+                    _(elementAttributes).each(function (value, name) {
+                        if (isRegisteredAttribute(name, special)) {
+                            delete elementAttributes[name];
                             cssAttributes[name] = styleAttributes[name];
                         }
                     });
                 }
 
-                // write back hard attributes to the element
-                setElementAttributes($element, hardAttributes);
+                // write back element attributes to the element
+                setElementAttributes($element, elementAttributes);
 
                 // change CSS formatting of the element
                 _(cssAttributes).each(function (value, name) {
