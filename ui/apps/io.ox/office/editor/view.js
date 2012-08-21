@@ -222,7 +222,7 @@ define('io.ox/office/editor/view',
             .addGroup('insert/table', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getParagraphStyles(), { tooltip: gt('Paragraph Style') }))
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()

@@ -41,55 +41,55 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
 
                 'insert/table': {
-                    set: function (size) { editor.insertTable(size); app.getView().getToolPane().showToolBar('table'); }
+                    set: function (size) { editor.insertTable(size); }
                 },
 
                 'chain/format/paragraph': {
-                    get: function () { return editor.getParagraphAttributes(); }
+                    get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/stylesheet': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.style; },
-                    set: function (style) { editor.setParagraphAttribute('style', style); }
+                    set: function (styleName) { editor.setAttribute('paragraph', 'style', styleName); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.alignment; },
-                    set: function (align) { editor.setParagraphAttribute('alignment', align); }
+                    set: function (alignment) { editor.setAttribute('paragraph', 'alignment', alignment); }
                 },
                 'format/paragraph/lineheight': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.lineheight; },
-                    set: function (lineHeight) { editor.setParagraphAttribute('lineheight', lineHeight); }
+                    set: function (lineHeight) { editor.setAttribute('paragraph', 'lineheight', lineHeight); }
                 },
 
                 'chain/format/character': {
-                    get: function () { return editor.getCharacterAttributes(); }
+                    get: function () { return editor.getAttributes('character'); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontname; },
-                    set: function (fontName) { editor.setCharacterAttribute('fontname', fontName); }
+                    set: function (fontName) { editor.setAttribute('character', 'fontname', fontName); }
                 },
                 'format/character/font/height': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.fontsize; },
-                    set: function (fontSize) { editor.setCharacterAttribute('fontsize', fontSize); }
+                    set: function (fontSize) { editor.setAttribute('character', 'fontsize', fontSize); }
                 },
                 'format/character/font/bold': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.bold; },
-                    set: function (state) { editor.setCharacterAttribute('bold', state); }
+                    set: function (state) { editor.setAttribute('character', 'bold', state); }
                 },
                 'format/character/font/italic': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.italic; },
-                    set: function (state) { editor.setCharacterAttribute('italic', state); }
+                    set: function (state) { editor.setAttribute('character', 'italic', state); }
                 },
                 'format/character/font/underline': {
                     chain: 'chain/format/character',
                     get: function (attributes) { return attributes.underline; },
-                    set: function (state) { editor.setCharacterAttribute('underline', state); }
+                    set: function (state) { editor.setAttribute('character', 'underline', state); }
                 },
 
                 'chain/table': {
