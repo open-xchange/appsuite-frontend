@@ -1,9 +1,10 @@
 @padding: 2px;
+@large-padding: 13px;
 @portal-background-alt: @topbar-background;
 @portal-background: @topbar-background-alt;
 
 .io-ox-portal {
-    padding: @padding;
+    padding: @large-padding;
     position: relative;
     height: 100%;
     overflow: auto;
@@ -172,7 +173,7 @@
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
-    padding: 13px;
+    padding: @large-padding;
     overflow: hidden;
     margin: 0;
     cursor: pointer;
@@ -188,10 +189,10 @@
     margin: 0.7em 0 1em 0;
 }
 .io-ox-sidepopup-pane h1.clear-title {
-    margin-bottom: 13px;
+    margin-bottom: @large-padding;
 }
 .io-ox-sidepopup-pane {
-    padding: 13px;
+    padding: @large-padding;
 }
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
