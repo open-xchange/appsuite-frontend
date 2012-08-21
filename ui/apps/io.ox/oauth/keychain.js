@@ -193,7 +193,12 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             });
     
             // Resolve loading
-            moduleDeferred.resolve({message: "Done with oauth keychain"});
+            moduleDeferred.resolve({
+                message: "Done with oauth keychain",
+                services: services,
+                accounts: accounts,
+                serviceIDs: _(services).map(function (service) {return simplifyId(service.id); })
+            });
         }).fail(function () {
             throw new Error("Could not initialize OAuth keyring!");
         }
