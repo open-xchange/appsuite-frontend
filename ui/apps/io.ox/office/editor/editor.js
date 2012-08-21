@@ -2643,7 +2643,10 @@ define('io.ox/office/editor/editor',
             styleSheets = self.getStyleSheets(family);
             if (styleSheets && (textMode !== 'plain')) {
                 ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                styleSheets.setRangeAttributes(ranges, attributes);
+                // TODO: activate next line, delete following lines
+                // styleSheets.setRangeAttributes(ranges, attributes);
+                styleSheetsMap.paragraph.setRangeAttributes(ranges, attributes);
+                styleSheetsMap.character.setRangeAttributes(ranges, attributes);
             }
         }
 

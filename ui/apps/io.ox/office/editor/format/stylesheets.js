@@ -233,7 +233,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             var // the name of the style sheet
                 styleName = name || defaultStyleSheetName,
                 // the attributes of the style sheet and its ancestors
-                attributes = getStyleSheetAttributes(styleName);
+                attributes = getStyleSheetAttributes(styleSheets[styleName]);
 
             // add style sheet name to attributes
             attributes[styleAttrName] = styleName;

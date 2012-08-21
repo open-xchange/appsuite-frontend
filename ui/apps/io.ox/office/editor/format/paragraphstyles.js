@@ -92,7 +92,7 @@ define('io.ox/office/editor/format/paragraphstyles',
         // initialization -----------------------------------------------------
 
         // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('Standard', null, {}, true)
+        this.addStyleSheet('Standard', null, { fontname: 'Times New Roman', fontsize: 12 }, true)
             .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
             .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
             .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
