@@ -467,15 +467,6 @@ define('io.ox/office/editor/editor',
                 paragraph: new ParagraphStyles(editdiv)
             };
 
-        // TODO: remove these default styles (or move to a 'newDocument' operation)
-        styleSheetsMap.paragraph
-            .addStyleSheet('Standard', null, {})
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
-            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
-            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Arial', fontsize: 14, bold: true })
-            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Arial', fontsize: 13, bold: true });
-
         var currentDocumentURL;
 
         var focused = false;
@@ -506,6 +497,9 @@ define('io.ox/office/editor/editor',
 
         // add event hub
         Events.extend(this);
+
+        // connect character formatting and styles with paragraph styles (which contain character attributes too)
+        //styleSheetsMap.character.registerAncestorStyleSheets(styleSheetsMap.paragraph, function (element) { return element.parentNode; });
 
         // global editor settings ---------------------------------------------
 
@@ -917,6 +911,7 @@ define('io.ox/office/editor/editor',
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
                 styleSheetsMap.character.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
+                editdiv.removeClass('highlight');
             }
             highlightRanges = [];
         };
@@ -999,13 +994,16 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            styleSheetsMap.character.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
+            if (highlightRanges.length) {
+                editdiv.addClass('highlight');
+                styleSheetsMap.character.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
 
-            // make first highlighted text node visible
-            DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
-                Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
-                return Utils.BREAK;
-            }, this);
+                // make first highlighted text node visible
+                DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
+                    Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
+                    return Utils.BREAK;
+                }, this);
+            }
 
             // return whether any text in the document matches the passed query text
             return this.hasHighlighting();

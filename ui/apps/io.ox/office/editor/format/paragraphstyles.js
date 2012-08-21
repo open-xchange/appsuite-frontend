@@ -20,11 +20,11 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
-    var // definitions for character attributes
+    var // definitions for paragraph attributes
         definitions = {
 
             alignment: {
-                value: 'left',
+                def: 'left',
                 set: function (element, value) {
                     element.css('text-align', value);
                 }
@@ -40,7 +40,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // resulting in a relative line height of 24pt/6pt = 400% instead of
             // the expected 200%.
             lineheight: {
-                value: LineHeight.SINGLE,
+                def: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
                     element.children('span').each(function () {
@@ -80,7 +80,24 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, definitions, iterate, iterate);
+        // TODO: remove this workaround name mapping (makes German DOCX files work)
+        StyleSheets.call(this, definitions, iterate, iterate, 'parastyle', {
+            Titel: 'Title',
+            Untertitel: 'Subtitle',
+            berschrift1: 'Heading 1',
+            berschrift2: 'Heading 2',
+            berschrift3: 'Heading 3'
+        });
+
+        // initialization -----------------------------------------------------
+
+        // TODO: move these default styles to a 'newDocument' operation
+        this.addStyleSheet('Standard', null, { fontname: 'Times New Roman', fontsize: 12 }, true)
+            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
+            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
+            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
+            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Arial', fontsize: 14, bold: true })
+            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Arial', fontsize: 13, bold: true });
 
     } // class ParagraphStyles
 
