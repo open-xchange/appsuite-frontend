@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/characterstyles',
         definitions = {
 
             fontname: {
-                value: 'Times New Roman',
+                value: 'serif',
                 set: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
                     LineHeight.updateElementLineHeight(element);
@@ -130,7 +130,7 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite);
+        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite, 'charstyle');
 
     } // class CharacterStyles
 
