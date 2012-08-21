@@ -132,6 +132,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
+                app.activeEvent = event;
                 return drawContent(extension, event);
             };
         }
@@ -254,13 +255,13 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 .append(tileSide);
 
             ox.on('refresh^', function () {
+                console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
                 initExtensions();
-                if (app.active) {
-                    //drawContent(app.active, null);
-                    //$('.io-ox-sidepopup-pane .scrollable-pane');
+                if (app.activeEvent) {
+                    drawContent(app.active, app.activeEvent);
                 }
             });
 
