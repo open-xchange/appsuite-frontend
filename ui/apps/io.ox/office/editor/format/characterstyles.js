@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/characterstyles',
         definitions = {
 
             fontname: {
-                value: 'serif',
+                def: 'serif',
                 set: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
                     LineHeight.updateElementLineHeight(element);
@@ -33,7 +33,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             fontsize: {
-                value: 12,
+                def: 12,
                 set: function (element, fontSize) {
                     element.css('font-size', fontSize + 'pt');
                     LineHeight.updateElementLineHeight(element);
@@ -41,7 +41,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             bold: {
-                value: false,
+                def: false,
                 set: function (element, state) {
                     element.css('font-weight', state ? 'bold' : 'normal');
                     LineHeight.updateElementLineHeight(element);
@@ -49,7 +49,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             italic: {
-                value: false,
+                def: false,
                 set: function (element, state) {
                     element.css('font-style', state ? 'italic' : 'normal');
                     LineHeight.updateElementLineHeight(element);
@@ -57,7 +57,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             underline: {
-                value: false,
+                def: false,
                 set: function (element, state) {
                     var value = element.css('text-decoration');
                     value = Utils.toggleToken(value, 'underline', state, 'none');
@@ -66,7 +66,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             highlight: {
-                value: false,
+                def: false,
                 set: function (element, state) {
                     element.toggleClass('highlight', state);
                 },
@@ -100,7 +100,7 @@ define('io.ox/office/editor/format/characterstyles',
          * formatting attributes.
          */
         function hasEqualAttributes(textNode1, textNode2) {
-            return StyleSheets.hasEqualAttributes(textNode1.parentNode, textNode2.parentNode);
+            return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
         }
 
         /**

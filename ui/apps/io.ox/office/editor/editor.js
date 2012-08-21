@@ -497,6 +497,9 @@ define('io.ox/office/editor/editor',
         // add event hub
         Events.extend(this);
 
+        // connect character formatting and styles with paragraph styles (which contain character attributes too)
+        //styleSheetsMap.character.registerAncestorStyleSheets(styleSheetsMap.paragraph, function (element) { return element.parentNode; });
+
         // global editor settings ---------------------------------------------
 
         /**

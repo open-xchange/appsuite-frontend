@@ -20,11 +20,11 @@ define('io.ox/office/editor/format/paragraphstyles',
 
     'use strict';
 
-    var // definitions for character attributes
+    var // definitions for paragraph attributes
         definitions = {
 
             alignment: {
-                value: 'left',
+                def: 'left',
                 set: function (element, value) {
                     element.css('text-align', value);
                 }
@@ -40,7 +40,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // resulting in a relative line height of 24pt/6pt = 400% instead of
             // the expected 200%.
             lineheight: {
-                value: LineHeight.SINGLE,
+                def: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
                     element.children('span').each(function () {
