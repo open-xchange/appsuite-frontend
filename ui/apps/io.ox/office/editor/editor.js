@@ -19,9 +19,8 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/format/characterstyles',
-     'io.ox/office/editor/format/paragraphstyles'
-    ], function (Events, Utils, DOM, OXOPaM, Position, CharacterStyles, ParagraphStyles) {
+     'io.ox/office/editor/format/documentstyles'
+    ], function (Events, Utils, DOM, OXOPaM, Position, DocumentStyles) {
 
     'use strict';
 
@@ -460,21 +459,17 @@ define('io.ox/office/editor/editor',
                 KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
             ]);
 
-        var self = this;
+        var // self reference for local functions
+            self = this,
 
-        var styleSheetsMap = {
-                character: new CharacterStyles(editdiv),
-                paragraph: new ParagraphStyles(editdiv)
-            };
+            // container for all style sheets of all attribute families
+            documentStyles = new DocumentStyles(editdiv),
 
-        // TODO: remove these default styles (or move to a 'newDocument' operation)
-        styleSheetsMap.paragraph
-            .addStyleSheet('Standard', null, {})
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
-            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
-            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Arial', fontsize: 14, bold: true })
-            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Arial', fontsize: 13, bold: true });
+            // shortcut for character styles
+            characterStyles = documentStyles.getStyleSheets('character'),
+
+            // all highlighted DOM ranges (e.g. in quick search)
+            highlightRanges = [];
 
         var currentDocumentURL;
 
@@ -484,6 +479,7 @@ define('io.ox/office/editor/editor',
         var lastEventSelection;
 
         var currentSelection;
+        var leftCursorStartSelection;
 
         // list of operations
         var operations = [];
@@ -497,9 +493,6 @@ define('io.ox/office/editor/editor',
 
         // list of paragraphs as jQuery object
         var paragraphs = editdiv.children();
-
-        // all DOM ranges highlighted (e.g. in quick search)
-        var highlightRanges = [];
 
         var dbgoutEvents = false, dbgoutObjects = false;
 
@@ -538,6 +531,7 @@ define('io.ox/office/editor/editor',
          */
         this.destroy = function () {
             this.events.destroy();
+            documentStyles.destroy();
         };
 
         // OPERATIONS API
@@ -865,7 +859,7 @@ define('io.ox/office/editor/editor',
             }
 
             // for (var i = 0; i < ranges.length; i++) {
-            //     window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
+            //    window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
             // }
 
             if (ranges.length) {
@@ -915,7 +909,8 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                styleSheetsMap.character.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
+                characterStyles.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
+                editdiv.removeClass('highlight');
             }
             highlightRanges = [];
         };
@@ -998,13 +993,16 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            styleSheetsMap.character.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
+            if (highlightRanges.length) {
+                editdiv.addClass('highlight');
+                characterStyles.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
 
-            // make first highlighted text node visible
-            DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
-                Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
-                return Utils.BREAK;
-            }, this);
+                // make first highlighted text node visible
+                DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
+                    Utils.scrollToChildNode(editdiv.parent(), textNode.parentNode, { padding: 30 });
+                    return Utils.BREAK;
+                }, this);
+            }
 
             // return whether any text in the document matches the passed query text
             return this.hasHighlighting();
@@ -1323,18 +1321,30 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            var selection = this.getSelection();
-
             this.implCheckEventSelection();
             lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
+
+            var selection = this.getSelection();
+
+            // special handling for left arrow + shift key (works only in Firefox)
+            if ((lastKeyDownEvent.keyCode === KeyCodes.LEFT_ARROW) && (lastKeyDownEvent.shiftKey)) {
+                if (! leftCursorStartSelection) {
+                    leftCursorStartSelection = selection.endPaM.oxoPosition;
+                    leftCursorStartSelection[leftCursorStartSelection.length - 1] += 1;
+                }
+                selection.endPaM.oxoPosition = leftCursorStartSelection;
+                selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] -= 1; // TODO
+                this.setSelection(selection);
+            } else {
+                leftCursorStartSelection = null;
+            }
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
                 // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed
                 return;
             }
-
 
             selection.adjust();
 
@@ -1810,7 +1820,7 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family.
          */
         this.getStyleSheets = function (family) {
-            return (family in styleSheetsMap) ? styleSheetsMap[family] : null;
+            return documentStyles.getStyleSheets(family);
         };
 
         /**
@@ -1838,8 +1848,8 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family containing the specified
          *  attribute.
          */
-        this.setAttribute = function (family, name, value, startPosition, endPosition) {
-            this.setAttributes(family, Utils.makeSimpleObject(name, value), startPosition, endPosition);
+        this.setAttribute = function (family, name, value) {
+            this.setAttributes(family, Utils.makeSimpleObject(name, value));
         };
 
         /**
@@ -2053,14 +2063,18 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
-                // paragraph attributes also for cursor without selection
+                // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
-                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(selection.startPaM.oxoPosition, true), end: _.copy(selection.endPaM.oxoPosition, true)};
+                    startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
+                    endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
+                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                     this.applyOperation(newOperation, true, true);
                 }
             }
             else {
-                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: _.copy(startPosition, true), end: _.copy(endPosition, true)};
+                startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
+                endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
+                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 this.applyOperation(newOperation, true, true);
             }
         };
@@ -2630,8 +2644,12 @@ define('io.ox/office/editor/editor',
             start = _.copy(start);
             end = _.copy(end);
 
-            // TODO: get attribute family according to position
-            family = 'character';
+            // get attribute family according to position
+            family = Position.getPositionAssignedFamily(paragraphs, start);
+
+            if (family === null) {
+                Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
+            }
 
             // validate text offset
             if (!_.isFinite(start[startLastIndex]) || (start[startLastIndex] < 0)) {

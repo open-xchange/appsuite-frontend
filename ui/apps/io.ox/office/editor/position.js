@@ -1299,9 +1299,10 @@ define('io.ox/office/editor/position',
     Position.getLastPositionInPrevCell = function (startnode, paragraph) {
 
         var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
-            beginOfTable = false;
+            beginOfTable = false,
+            continueSearch = true;
 
-        if ((paragraph) && (paragraph.length > 0)) {
+        while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
 
             var column = paragraph.pop(),
                 row = paragraph.pop(),
@@ -1323,6 +1324,25 @@ define('io.ox/office/editor/position',
                 paragraph.push(column);
                 paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
                 paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
+                continueSearch = false;
+            } else {
+                // column and row are 0. So there is no previous cell,
+                // or the previous cell is inside an outer table.
+
+                // is there a paragraph/table directly before this first cell?
+                if (paragraph[paragraph.length - 1] === 0) {  // <- this is the first paragraph/table
+                    var localParagraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
+                    if ((localParagraph) && (localParagraph.length > 0)) {
+                        paragraph = localParagraph;
+                        beginOfTable = false;
+                    } else {
+                        continueSearch = false;
+                    }
+                } else {
+                    // simply jump into preceeding paragraph/table
+                    beginOfTable = true;
+                    continueSearch = false;
+                }
             }
         }
 
@@ -1395,6 +1415,81 @@ define('io.ox/office/editor/position',
             oxoPosition = Position.getLastPositionInParagraph(startnode, [lastPara]);
 
         return oxoPosition;
+    };
+
+    /**
+     * Calculating the correct logical position that fits to the
+     * family. Allowed values for family are 'paragraph' and
+     * 'character'. So the logical position has to describe
+     * the position of a paragraph or character.
+     *
+     * @param {String} family
+     *  The string describing the 'family'.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the logical position inside the document or null,
+     *  if no correct assignment can be made
+     */
+    Position.getFamilyAssignedPosition = function (family, startnode, position) {
+
+        var assignedPos = null,
+            node = Position.getDOMPosition(startnode, position).node;
+
+        switch (family) {
+        case "character":
+            assignedPos = (node.nodeType === 3) ? position : null;
+            break;
+        case "paragraph":
+            assignedPos = (node.nodeName === 'P') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'P');
+            break;
+        default:
+            Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
+        }
+
+        return assignedPos;
+    };
+
+    /**
+     * Calculating the correct family that fits to the logical
+     * position. Allowed values for family are 'paragraph' and
+     * 'character'. So the family has to fit to the node, that
+     * is described by the logical position.
+     *
+     * @param {String} family
+     *  The string describing the 'family'.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {String}
+     *  Returns the family that fits to the logical position or null,
+     *  if no correct assignment can be made
+     */
+    Position.getPositionAssignedFamily = function (startnode, position) {
+
+        var family = null,
+            node = Position.getDOMPosition(startnode, position).node;
+
+        if (node.nodeType === 3) {
+            family = 'character';
+        } else if (node.nodeName === 'P') {
+            family = 'paragraph';
+        } else {
+            Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + position);
+        }
+
+        return family;
     };
 
 
