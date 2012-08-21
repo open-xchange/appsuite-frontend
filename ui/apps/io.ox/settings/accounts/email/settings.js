@@ -17,7 +17,7 @@ define('io.ox/settings/accounts/email/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
        'io.ox/core/api/account',
-       'io.ox/settings/accounts/email/model',
+       "io.ox/mail/accounts/model",
        'io.ox/settings/accounts/email/view-form',
        'io.ox/core/tk/dialogs',
        'gettext!io.ox/settings/settings'

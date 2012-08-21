@@ -15,9 +15,9 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
  
-define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
+define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
     "use strict";
-    var def = $.Deferred(),
+    var moduleDeferred = $.Deferred(),
         cache = null,
         point = ext.point("io.ox/keychain/api");
     
@@ -33,10 +33,23 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         return id.substring(id.lastIndexOf(".") + 1);
     }
     
+    
     // Extension
     function OAuthKeychainAPI(service) {
         var self = this;
         this.id = simplifyId(service.id);
+
+        function outgoing(account) {
+            if (!account) {
+                return account;
+            }
+            account.accountType = self.id;
+            return account;
+        }
+        
+        function incoming(account) {
+            return account;
+        }
         
         function chooseDisplayName() {
             return "My " + service.displayName + " account";
@@ -44,15 +57,15 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         
         
         this.getAll = function () {
-            return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).value();
+            return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
         };
         
         this.get = function (id) {
-            return cache[service.id].accounts[id];
+            return outgoing(cache[service.id].accounts[id]);
         };
         
         this.getStandardAccount = function () {
-            return _(this.getAll()).first();
+            return outgoing(_(this.getAll()).first());
         };
         
         this.hasStandardAccount = function () {
@@ -60,6 +73,7 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         };
         
         function init(account) {
+            account = incoming(account);
             var def = $.Deferred();
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName());
@@ -118,6 +132,7 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         };
         
         this.remove = function (account) {
+            account = incoming(account);
             return http.PUT({
                 module: "oauth/accounts",
                 params: {
@@ -130,6 +145,7 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         };
         
         this.update = function (account) {
+            account = incoming(account);
             return http.PUT({
                 module: "oauth/accounts",
                 params: {
@@ -143,6 +159,7 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
         };
         
         this.reauthorize = function (account) {
+            account = incoming(account);
             return init(account);
         };
     }
@@ -176,89 +193,11 @@ define("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], fun
             });
     
             // Resolve loading
-            def.resolve({message: "Done with oauth keychain"});
+            moduleDeferred.resolve({message: "Done with oauth keychain"});
         }).fail(function () {
             throw new Error("Could not initialize OAuth keyring!");
         }
     );
     
-    
-    
-    
-    return def;
+    return moduleDeferred;
 });
-
-
-/*
-var metadataCache = null;
-
-
-var metadata = {
-    getAll: function () {
-        var def = $.Deferred();
-        if (metadataCache) {
-            return def.resolve(metadataCache);
-        }
-        
-        http.GET({
-            module: "oauth/services",
-            params: {
-                action: 'all'
-            }
-        }).done(function (response) {
-            metadataCache = response;
-            def.resolve(metadataCache);
-        }).fail(def.reject);
-        
-        return def;
-    }
-};
-
-
-var accountCache = null;
-
-var accounts = {
-    getAll: function () {
-        var def = $.Deferred();
-        if (accountCache) {
-            return def.resolve(accountCache);
-        }
-        
-        http.GET({
-            module: "oauth/accounts",
-            params: {
-                action: 'all'
-            }
-        }).done(function (response) {
-            accountCache = response;
-            def.resolve(response);
-        }).fail(def.reject);
-        
-        return def;
-    },
-    
-    get: function () {
-        
-    }
-};
-
-function getServices() {
-    var def = $.Deferred();
-    $.when(
-        metadata.getAll(),
-        accounts.getAll()
-    ).done(function (services, accounts) {
-        var map = {};
-        _(services).each(function (service) {
-            map[service.id] = $.extend({accounts: {}}, service);
-        });
-        
-        _(accounts).each(function (account) {
-            map[account.serviceId].accounts[account.id] = account;
-        });
-        def.resolve(map);
-    }).fail(def.fail);
-    
-    return def;
-}
-*/

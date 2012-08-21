@@ -18,13 +18,13 @@ define('io.ox/settings/accounts/settings/pane',
        'io.ox/core/tk/view',
        'io.ox/settings/utils',
        'io.ox/core/tk/dialogs',
-       'io.ox/core/api/account',
+       "io.ox/keychain/api",
        'io.ox/core/tk/forms',
        'io.ox/settings/accounts/email/settings',
-       'io.ox/settings/accounts/email/model',
+       "io.ox/keychain/model",
        'text!io.ox/settings/accounts/email/tpl/account_select.html',
        'text!io.ox/settings/accounts/email/tpl/listbox.html'
-       ], function (ext, View, utils, dialogs, api, forms, email, AccountModel, tmpl, listboxtmpl) {
+       ], function (ext, View, utils, dialogs, api, forms, email, keychainModel, tmpl, listboxtmpl) {
 
 
     'use strict';
@@ -95,73 +95,68 @@ define('io.ox/settings/accounts/settings/pane',
                 this.$el.find('.deletable-item').attr('selected', 'selected');
             }
 
-        }),
-
-        Collection = Backbone.Collection.extend({
-
-            model: AccountModel
         });
+
 
     ext.point("io.ox/settings/accounts/settings/detail").extend({
         index: 200,
         id: "accountssettings",
         draw: function (data) {
-            var  that = this;
-            api.all().done(function (allAccounts) {
+            var  that = this,
+                 allAccounts = api.getAll();
+                 
+            collection = keychainModel.wrap(allAccounts);
 
-                collection = new Collection(allAccounts);
+            var AccountsView = Backbone.View.extend({
 
-                var AccountsView = Backbone.View.extend({
+                initialize: function () {
+                    this.template = doT.template(listboxtmpl);
+                    _.bindAll(this);
+                    this.collection = collection;
 
-                    initialize: function () {
-                        this.template = doT.template(listboxtmpl);
-                        _.bindAll(this);
-                        this.collection = collection;
+                    this.collection.bind('add', this.render);
+                    this.collection.bind('remove', this.render);
+                },
+                render: function () {
+                    var self = this;
+                    self.$el.empty().append(self.template({}));
 
-                        this.collection.bind('add', this.render);
-                        this.collection.bind('remove', this.render);
-                    },
-                    render: function () {
-                        var self = this;
-                        self.$el.empty().append(self.template({}));
+                    this.collection.each(function (item) {
+                        self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
+                    });
 
-                        this.collection.each(function (item) {
-                            self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
-                        });
+                    return this;
+                },
 
-                        return this;
-                    },
+                events: {
+                    'click [data-action="add"]': 'onAdd',
+                    'click [data-action="edit"]': 'onEdit',
+                    'click [data-action="delete"]': 'onDelete'
+                },
 
-                    events: {
-                        'click [data-action="add"]': 'onAdd',
-                        'click [data-action="edit"]': 'onEdit',
-                        'click [data-action="delete"]': 'onDelete'
-                    },
+                onAdd: function (args) {
+                    email.mailAutoconfigDialog(args, {
+                        collection: collection
+                    });
+                },
 
-                    onAdd: function (args) {
-                        email.mailAutoconfigDialog(args, {
-                            collection: collection
-                        });
-                    },
+                onEdit: function (args) {
+                    args.data = {};
+                    args.data.id = this.$el.find('[selected]').data('id');
+                    args.data.node = this.el;
+                    createExtpointForSelectedAccount(args);
+                },
+                onDelete: function () {
+                    var id = this.$el.find('[selected]').data('id');
+                    removeSelectedItem(id);
+                }
 
-                    onEdit: function (args) {
-                        args.data = {};
-                        args.data.id = this.$el.find('[selected]').data('id');
-                        args.data.node = this.el;
-                        createExtpointForSelectedAccount(args);
-                    },
-                    onDelete: function () {
-                        var id = this.$el.find('[selected]').data('id');
-                        removeSelectedItem(id);
-                    }
-
-                });
-
-                var accountsList = new AccountsView();
-
-                that.append(accountsList.render().el);
             });
 
+            var accountsList = new AccountsView();
+
+            that.append(accountsList.render().el);
+    
         },
         save: function () {
             console.log('now accounts get saved?');
