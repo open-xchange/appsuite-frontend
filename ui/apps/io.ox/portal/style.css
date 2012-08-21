@@ -187,6 +187,12 @@
     line-height: 1em;
     margin: 0.7em 0 1em 0;
 }
+.io-ox-sidepopup-pane h1.clear-title {
+    margin-bottom: 13px;
+}
+.io-ox-sidepopup-pane {
+    padding: 13px;
+}
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
 }

@@ -152,7 +152,7 @@ define("plugins/portal/linkedin/register",
             $node.addClass("linkedin-content");
 
             $node.append(
-                    $("<div/>").addClass("clear-title")
+                    $("<h1>").addClass("clear-title")
                     .text(gt("LinkedIn Network Updates"))
                 );
 

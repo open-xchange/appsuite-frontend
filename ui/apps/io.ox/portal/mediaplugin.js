@@ -330,7 +330,7 @@ define('io.ox/portal/mediaplugin',
 //                            $(document).off('keydown', onKeyDown);
                         });
 
-                        $('<div>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
+                        $('<h1>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
                         $mediapluginEntries.appendTo(self);
                         $busyIndicator.appendTo(self);
 
