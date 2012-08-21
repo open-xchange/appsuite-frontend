@@ -20,29 +20,40 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
         this.draw = function (args) {
             var $form,
                 account = keychain.get(serviceId, args.data.id),
-                $displayNameField;
-                
+                $displayNameField,
+                dialog;
+            
+            function closeDialog() {
+                if (dialog) {
+                    dialog.close();
+                    dialog = null;
+                }
+            }
+            
             function displaySuccess(msg) {
                 return function () {
-                    console.log(msg, arguments);
+                    // TODO: Once we know how to notify user about results
                 };
             }
             
             function displayError(msg) {
                 return function () {
-                    console.log(msg, arguments);
+                    // TODO: Once we know how to notify user about results
                 };
             }
             
             function doSave() {
                 if (account.displayName !== $displayNameField.val()) {
                     account.displayName = $displayNameField.val();
-                    keychain.update(serviceId, account).done(displaySuccess("Changes have been saved.")).fail(displayError("Something went wrong saving your changes."));
+                    keychain.update(account).done(displaySuccess("Changes have been saved.")).fail(displayError("Something went wrong saving your changes."));
                 }
+                closeDialog();
             }
             
             function doReauthorize() {
+                account.displayName = $displayNameField.val();
                 keychain.submodules[serviceId].reauthorize(account.toJSON()).done(displaySuccess("You have reauthorized this account.")).fail(displayError("Something went wrong reauthorizing the account."));
+                closeDialog();
             }
             
             $form = $('<div class="settings-detail-pane">').append(
@@ -59,7 +70,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
                 ) // End form
             ); // End detail-pane
             
-            new dialogs.SidePopup('800').show(args, function (pane) {
+            dialog = new dialogs.SidePopup('800').show(args, function (pane) {
                 pane.append($form);
             });
             
