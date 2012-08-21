@@ -30,8 +30,8 @@ define('plugins/portal/reddit/register',
 
     if (!subreddits) {
         subreddits = [{subreddit: 'funny', mode: 'hot'}, {subreddit: 'pics', mode: 'hot'}];
-        settings.set('subreddits', subreddits);
-        settings.save();
+//        settings.set('subreddits', subreddits);
+//        settings.save();
     }
 
     _.each(subreddits, function (v) {
