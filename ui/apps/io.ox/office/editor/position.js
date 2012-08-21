@@ -1296,46 +1296,6 @@ define('io.ox/office/editor/position',
      *  begin of the table is reached, the value for 'beginOfTable' is set to
      *  true. Otherwise it is false.
      */
-//    Position._getLastPositionInPrevCell = function (startnode, paragraph) {
-//
-//        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
-//            beginOfTable = false;
-//
-//        if ((paragraph) && (paragraph.length > 0)) {
-//
-//            var column = paragraph.pop(),
-//                row = paragraph.pop(),
-//                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
-//
-//            if (column > 0) {
-//                column -= 1;
-//            } else {
-//                if (row > 0) {
-//                    row -= 1;
-//                    column = lastColumn;
-//                } else {
-//                    beginOfTable = true;
-//                }
-//            }
-//
-//            if (! beginOfTable) {
-//                paragraph.push(row);
-//                paragraph.push(column);
-//                paragraph.push(Position.getLastParaIndexInCell(startnode, paragraph));  // last paragraph
-//                paragraph = Position.getLastPositionInParagraph(startnode, paragraph);
-//            } else {
-//                if (paragraph.length > 3) {
-//                    paragraph.pop();  // table position
-//                    if (Position.isPositionInTable(startnode, paragraph)) {
-//                        column = paragraph.pop();
-//                        row = paragraph.pop();
-//                }
-//            }
-//        }
-//
-//        return {position: paragraph, beginOfTable: beginOfTable};
-//    };
-
     Position.getLastPositionInPrevCell = function (startnode, paragraph) {
 
         var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
