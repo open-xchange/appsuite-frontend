@@ -274,6 +274,7 @@ define('io.ox/core/api/account',
         }).done(function () {
             accountsAllCache.remove(data);
             api.trigger('refresh.all');
+            api.trigger('delete');
         });
     };
 
@@ -329,6 +330,7 @@ define('io.ox/core/api/account',
         }).done(function () {
             accountsAllCache.merge(data, _.now());
             api.trigger('refresh.all');
+            api.trigger('update', data);
         });
     };
 

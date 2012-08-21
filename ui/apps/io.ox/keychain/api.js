@@ -61,7 +61,9 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].conca
                 extension.on("triggered", function () {
                     var args = $.makeArray(arguments);
                     args.shift();
-                    args[1].accountType = extension.id;
+                    if (args.length > 1) {
+                        args[1].accountType = extension.id;
+                    }
                     api.trigger.apply(api, args);
                 });
             }
