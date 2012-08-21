@@ -205,13 +205,10 @@
     margin: 8px 0 8px 0;
 }
 
-@tile-fix: 10%;
-@tile-hover: 25%;
-@tile-darken: 20%;
-@tile-hover-dark: 30%;
+
+
 
 .io-ox-portal {
-
     .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
     .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
     .tile-color1 { background-color: darken(@tile-color-1, @tile-fix); }
