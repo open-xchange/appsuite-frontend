@@ -38,7 +38,7 @@ define('io.ox/calendar/actions',
             });
         }
     });
-    
+
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
         requires: true,
         action: function (app) {
@@ -60,7 +60,7 @@ define('io.ox/calendar/actions',
             });
         }
     });
-    
+
     new Action('io.ox/calendar/actions/switch-to-day-view', {
         requires: true,
         action: function (app) {
