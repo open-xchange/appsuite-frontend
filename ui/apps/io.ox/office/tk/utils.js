@@ -494,6 +494,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // generic DOM helpers ----------------------------------------------------
 
     /**
+     * A jQuery selector that returns true if the DOM node bound to the 'this'
+     * symbol is a text node. Can be used in all helper functions that expect a
+     * jQuery selector.
+     *
+     * @constant
+     */
+    Utils.JQ_TEXTNODE_SELECTOR = function () { return this.nodeType === 3; };
+
+    /**
      * Converts the passed object to a DOM node object.
      *
      * @param {Node|jQuery} node
@@ -771,7 +780,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
     Utils.iterateDescendantTextNodes = function (element, iterator, context, options) {
-        return Utils.iterateSelectedDescendantNodes(element, function () { return this.nodeType === 3; }, iterator, context, options);
+        return Utils.iterateSelectedDescendantNodes(element, Utils.JQ_TEXTNODE_SELECTOR, iterator, context, options);
     };
 
     /**
@@ -823,7 +832,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  been found, returns null.
      */
     Utils.findFirstTextNode = function (element) {
-        return Utils.findDescendantNode(element, function () { return this.nodeType === 3; });
+        return Utils.findDescendantNode(element, Utils.JQ_TEXTNODE_SELECTOR);
     };
 
     /**
@@ -838,7 +847,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  been found, returns null.
      */
     Utils.findLastTextNode = function (element) {
-        return Utils.findDescendantNode(element, function () { return this.nodeType === 3; }, { reverse: true });
+        return Utils.findDescendantNode(element, Utils.JQ_TEXTNODE_SELECTOR, { reverse: true });
     };
 
     /**
