@@ -65,7 +65,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
                             $displayNameField = $('<input type="text" name="displayName">').val(account.displayName)
                         ) // End controls
                     ), // End control-group
-                    $('<button class="btn">').text("Save").on('click', doSave),
+                    $('<button class="btn btn-primary">').text("Save").on('click', doSave),
                     $('<button class="btn">').text("Reauthorize").on('click', doReauthorize)
                 ) // End form
             ); // End detail-pane
