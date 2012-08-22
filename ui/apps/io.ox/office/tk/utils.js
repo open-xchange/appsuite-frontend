@@ -546,8 +546,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Returns the DOM node that follows the passed node in DOM tree order.
-     * If the node is an element with children, returns its first child node.
+     * Returns the DOM node that follows the passed node in DOM tree order. If
+     * the node is an element with children, returns its first child node.
      * Otherwise, tries to return the next sibling of the node. If the node is
      * the last sibling, goes up to the parent node(s) and tries to return
      * their next sibling.
@@ -556,15 +556,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The DOM node whose successor will be returned. If this object is a
      *  jQuery collection, uses the first node it contains.
      *
-     * @returns {Node|Undefined}
-     *  The next node in the DOM tree, or undefined, if the passed node is the
-     *  very last leaf in the DOM tree.
+     * @returns {Node|Null}
+     *  The next node in the DOM tree; or null, if the passed node is the very
+     *  last leaf in the DOM tree.
      */
     Utils.getNextNodeInTree = function (node) {
+        node = Utils.getDomNode(node);
 
         // node is an element with child nodes, return its first child
-        node = Utils.getDomNode(node);
-        if ((node.nodeType === 1) && node.firstChild) {
+        if (node.firstChild) {
             return node.firstChild;
         }
 
@@ -573,6 +573,91 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             node = node.parentNode;
         }
         return node && node.nextSibling;
+    };
+
+    /**
+     * Finds a DOM node that follows the passed node in DOM tree order and that
+     * matches a jQuery selector.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose successor will be returned. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find a DOM node. The selector
+     *  will be passed to the jQuery method jQuery.is() for each node. If this
+     *  selector is a function, it will be called with the current DOM node
+     *  bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @returns {Node|Null}
+     *  The first node in the DOM tree, that follows the passed node and
+     *  matches the selector; or null, no node has been found.
+     */
+    Utils.findNextNodeInTree = function (node, selector) {
+        node = Utils.getNextNodeInTree(node);
+        while (node && !$(node).is(selector)) {
+            node = Utils.getNextNodeInTree(node);
+        }
+        return node;
+    };
+
+    /**
+     * Returns the DOM node that precedes the passed node in DOM tree order. If
+     * the node is an element with children, returns its first child node.
+     * Otherwise, tries to return the next sibling of the node. If the node is
+     * the last sibling, goes up to the parent node(s) and tries to return
+     * their next sibling.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose predecessor will be returned. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @returns {Node|Null}
+     *  The previous node in the DOM tree, or null, if the passed node is the
+     *  root node of the DOM tree.
+     */
+    Utils.getPreviousNodeInTree = function (node) {
+        node = Utils.getDomNode(node);
+
+        // if node has a previous sibling, return its last leaf
+        if (node.previousSibling) {
+            node = node.previousSibling;
+            while (node.lastChild) {
+                node = node.lastChild;
+            }
+            return node;
+        }
+
+        // otherwise, return the parent node (will return null for the root node)
+        return node.parentNode;
+    };
+
+    /**
+     * Finds a DOM node that precedes the passed node in DOM tree order and
+     * that matches a jQuery selector.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node whose predecessor will be returned. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to find a DOM node. The selector
+     *  will be passed to the jQuery method jQuery.is() for each node. If this
+     *  selector is a function, it will be called with the current DOM node
+     *  bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @returns {Node|Null}
+     *  The first node in the DOM tree, that precedes the passed node and that
+     *  matches the selector; or null, no node has been found.
+     */
+    Utils.findPreviousNodeInTree = function (node, selector) {
+        node = Utils.getPreviousNodeInTree(node);
+        while (node && !$(node).is(selector)) {
+            node = Utils.getPreviousNodeInTree(node);
+        }
+        return node;
     };
 
     /**
