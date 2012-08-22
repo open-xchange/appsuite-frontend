@@ -188,7 +188,7 @@ div.io-ox-toolbar {
     padding: 4px 13px;
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
-    text-align: center;
+    text-align: left;
 
     > span {
         display: inline-block;
@@ -577,7 +577,10 @@ div.io-ox-toolbar {
 /* tab bars ================================================================ */
 
 div.io-ox-toolbar.tabs {
-    padding-bottom: 0;
+    position: absolute;
+    left: 300px;
+    bottom: -1px;
+    padding: 0;
 
     > span {
         > .group {
@@ -617,28 +620,6 @@ div.io-ox-toolbar.tabs {
                         border-bottom-color: transparent;
                     }
                 }
-            }
-        }
-
-        > span.separator {
-            display: inline-block;
-            position: absolute;
-            width: 75%;
-            height: 1px;
-            bottom: 0;
-            font-size: 1px;
-            line-height: 0;
-
-            &.left {
-                right: 100%;
-                margin-right: -1px;
-                .horizontal-gradient(fade(@pane-border-color, 0%), @pane-border-color, @pane-fill-color, @pane-border-color);
-            }
-
-            &.right {
-                left: 100%;
-                margin-left: -1px;
-                .horizontal-gradient(@pane-border-color, fade(@pane-border-color, 0%), @pane-border-color, @pane-fill-color);
             }
         }
     }

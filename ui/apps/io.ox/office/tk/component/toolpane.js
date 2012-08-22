@@ -50,7 +50,7 @@ define('io.ox/office/tk/component/toolpane',
             tabBar = new ToolBar(appWindow),
 
             // the tab buttons to select the tool bars
-            radioGroup = tabBar.addRadioGroup(key, { type: 'list', autoExpand: true }),
+            radioGroup = tabBar.addRadioGroup(key),
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
@@ -188,13 +188,7 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // insert the tool bar selector and a separator line into the tool pane
-        tabBar.getNode()
-            .appendTo(node)
-            .addClass('tabs')
-            .children().first().append(
-                $('<span>').addClass('separator left'),
-                $('<span>').addClass('separator right')
-            );
+        tabBar.getNode().addClass('tabs').appendTo(appWindow.nodes.head);
 
         // prepare the controller
         controller
