@@ -70,7 +70,10 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
                 ) // End form
             ); // End detail-pane
             
-            dialog = new dialogs.SidePopup('800').show(args, function (pane) {
+            dialog = new dialogs.SidePopup({
+                modal: true,
+                arrow: false
+            }).show(args, function (pane) {
                 pane.append($form);
             });
             

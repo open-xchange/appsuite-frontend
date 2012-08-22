@@ -86,7 +86,6 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
             require(['io.ox/mail/accounts/settings'], function (mailSettings) {
                 // FIXME: This is not very blackboxy
                 mailSettings.mailAutoconfigDialog(e).done(function () {
-                    
                     def.resolve();
                 }).fail(def.reject);
             });
