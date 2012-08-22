@@ -64,9 +64,7 @@ define('io.ox/mail/accounts/settings',
 
         createExtpointForNewAccount = function (args) {
             var node = $('<div>');
-            require(['io.ox/settings/accounts/email/settings'], function (m) {
-                ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', node, args);
-            });
+            ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', node, args);
         },
 
         drawAlert = function (alertPlaceholder, message) {

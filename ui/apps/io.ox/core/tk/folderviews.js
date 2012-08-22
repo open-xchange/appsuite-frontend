@@ -649,7 +649,7 @@ define('io.ox/core/tk/folderviews',
                     .addClass('action-link')
                     .text('Add mail account ...')
                     .on('click', function (e) {
-                        require(['io.ox/settings/accounts/email/settings'], function (m) {
+                        require(['io.ox/mail/accounts/settings'], function (m) {
                             m.mailAutoconfigDialog(e);
                         });
                     })

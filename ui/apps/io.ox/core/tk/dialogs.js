@@ -89,7 +89,9 @@ define("io.ox/core/tk/dialogs",
                     close();
                 }
 
-                e.preventDefault();
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -351,6 +353,9 @@ define("io.ox/core/tk/dialogs",
 
         pane = pane.scrollable();
 
+        // add event hub
+        Events.extend(this);
+
         if (options.modal) {
             overlay = $("<div>").addClass("io-ox-sidepopup-overlay abs").append(popup, arrow);
         }
@@ -403,6 +408,7 @@ define("io.ox/core/tk/dialogs",
                     popup.detach();
                 }
                 pane.empty();
+                self.trigger('close');
             }, 100);
         };
 
@@ -485,6 +491,8 @@ define("io.ox/core/tk/dialogs",
                 if (!options.modal) {
                     self.nodes.target.append(arrow);
                 }
+
+                self.trigger('show');
             }
         };
 
