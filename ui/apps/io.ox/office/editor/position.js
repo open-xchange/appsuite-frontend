@@ -1492,6 +1492,108 @@ define('io.ox/office/editor/position',
         return family;
     };
 
+    /**
+     * Calculating the logical position of a character in a text node
+     * that preceds the logical position of the input parameter.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {jQuery} maindiv
+     *  The jQuery object of a DIV node, that is the frame for the complete
+     *  search and calculation process. No dom position outside of this
+     *  maindiv can be calculated.
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position. It must be the position of a character in
+     *  a textnode.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the preceding position. If there is no paragraph preceding
+     *  the paragraph of the input position, the input position itself is
+     *  returned. This can be expanded to tables in the future.
+     */
+    Position.getPreviousTextNodePosition = function (startnode, maindiv, position) {
+
+        var precedingPos = _.copy(position, true),
+            foundPos = false,
+            characterVal = precedingPos.pop();
+
+        if (characterVal > 0) {
+            characterVal -= 1;
+            precedingPos.push(characterVal);
+            foundPos = true;
+        } else {
+            var node = Position.getDOMPosition(startnode, precedingPos).node,
+                textNode = Utils.findPreviousNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR),
+                offset = textNode.nodeValue.length;
+
+            if (maindiv.get(0).contains(textNode)) {
+                precedingPos = Position.getOXOPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
+                foundPos = true;
+            }
+        }
+
+        if (! foundPos) {
+            precedingPos = _.copy(position, true);
+        }
+
+        return precedingPos;
+    };
+
+    /**
+     * Calculating the logical position of a character in a text node
+     * that follows the logical position of the input parameter.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {jQuery} maindiv
+     *  The jQuery object of a DIV node, that is the frame for the complete
+     *  search and calculation process. No dom position outside of this
+     *  maindiv can be calculated.
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position. It must be the position of a character in
+     *  a textnode.
+     *
+     * @returns {OXOPaM.oxoPosition}
+     *  Returns the preceding position. If there is no paragraph preceding
+     *  the paragraph of the input position, the input position itself is
+     *  returned. This can be expanded to tables in the future.
+     */
+    Position.getFollowingTextNodePosition = function (startnode, maindiv, position) {
+
+        var followingPos = _.copy(position, true),
+            foundPos = false,
+            maxLength = Position.getDOMPosition(startnode, followingPos).node.nodeValue.length,
+            characterVal = followingPos.pop();
+
+        if (characterVal < maxLength) {
+            characterVal += 1;
+            followingPos.push(characterVal);
+            foundPos = true;
+        } else {
+            followingPos.push(characterVal);
+
+            var node = Position.getDOMPosition(startnode, followingPos).node,
+                textNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR),
+                offset = 0;
+
+            if (maindiv.get(0).contains(textNode)) {
+                followingPos = Position.getOXOPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
+                foundPos = true;
+            }
+        }
+
+        if (! foundPos) {
+            followingPos = _.copy(position, true);
+        }
+
+        return followingPos;
+    };
 
     return Position;
 
