@@ -89,15 +89,13 @@ define('io.ox/portal/settings/pane',
                 'click .save': 'onSave'
             },
             onSave: function () {
-                // Save Active-State
-                console.log("ox.ui.running ->");
-                console.log(ox.ui.running);
-                console.log("ox.ui.running <-");
                 if (this.$el.find('input#plugin-active').is(':checked')) {
                     activePlugins.push(this.plugin.get('id'));
                     activePlugins = _.uniq(activePlugins);
+                    this.plugin.set('active', true);
                 } else {
                     activePlugins = _.without(activePlugins, this.plugin.get('id'));
+                    this.plugin.set('active', false);
                 }
                 this.dialog.close();
                 settings.set('activePlugins', activePlugins);
@@ -109,8 +107,6 @@ define('io.ox/portal/settings/pane',
 
                 // Load all active plugins
                 require(plugins).pipe(function () {
-//                    ext.point("io.ox/portal/widget").disable("flickr-id1");
-
                     // Disable all deactivated plugins
                     ext.point('io.ox/portal/widget')
                         .each(function (extension) {
@@ -122,7 +118,6 @@ define('io.ox/portal/settings/pane',
                             });
 
                             if (!isActive) {
-                                console.log("Disable " + eid);
                                 ext.point("io.ox/portal/widget").disable(eid);
                             }
                         }
@@ -146,9 +141,6 @@ define('io.ox/portal/settings/pane',
                     this.template = doT.template(tmplListBox);
                     _.bindAll(this);
                     this.collection = collection;
-
-                    this.collection.bind('add', this.render);
-                    this.collection.bind('remove', this.render);
                 },
                 render: function () {
                     var self = this;
@@ -160,11 +152,9 @@ define('io.ox/portal/settings/pane',
 
                     return this;
                 },
-
                 events: {
                     'click [data-action="prop"]': 'onShowProperties'
                 },
-
                 onShowProperties: function (e) {
                     var $sel = this.$el.find('[selected]');
 
