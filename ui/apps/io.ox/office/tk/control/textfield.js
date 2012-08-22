@@ -273,6 +273,7 @@ define('io.ox/office/tk/control/textfield',
                 if ((readOnly = state)) {
                     textField
                         .addClass('readonly')
+                        .removeClass(Group.FOCUSABLE_CLASS)
                         .on('mousedown dragover drop contextmenu', function (event) {
                             event.preventDefault();
                             self.trigger('cancel');
@@ -280,6 +281,7 @@ define('io.ox/office/tk/control/textfield',
                 } else {
                     textField
                         .removeClass('readonly')
+                        .addClass(Group.FOCUSABLE_CLASS)
                         .off('mousedown dragover drop contextmenu');
                 }
                 // trigger listeners
