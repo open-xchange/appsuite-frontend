@@ -58,7 +58,10 @@ define('io.ox/office/tk/dropdown/menu',
             menuButton = Utils.createButton(options),
 
             // the drop-down menu element
-            menuNode = $('<div>').addClass('dropdown-menu');
+            menuNode = $('<div>').addClass('dropdown-menu'),
+
+            // additional controls that toggle the drop-down menu
+            menuToggleControls = $();
 
         // private methods ----------------------------------------------------
 
@@ -106,7 +109,7 @@ define('io.ox/office/tk/dropdown/menu',
         }
 
         /**
-         * Handles click events from the drop-down button, triggering the
+         * Handles click events from the drop-down button, toggles the
          * drop-down menu.
          */
         function menuButtonClickHandler() {
@@ -144,7 +147,7 @@ define('io.ox/office/tk/dropdown/menu',
 
             // Close the menu unless a 'mousedown' event occurred inside the
             // menu node or on the drop-down button.
-            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode))) {
+            if ((event.type !== 'mousedown') || !isTargetIn(menuButton.add(menuNode).add(menuToggleControls))) {
                 toggleMenu(false);
             }
         }
@@ -253,6 +256,16 @@ define('io.ox/office/tk/dropdown/menu',
          * element. Intended to be overwritten by derived classes.
          */
         group.grabMenuFocus = function () {
+        };
+
+        group.addMenuToggleControls = function (controls) {
+            controls.css('cursor', 'pointer').on('click', menuButtonClickHandler);
+            menuToggleControls = menuToggleControls.add(controls);
+        };
+
+        group.removeMenuToggleControls = function (controls) {
+            controls.css('cursor', 'inherit').off('click', menuButtonClickHandler);
+            menuToggleControls = menuToggleControls.not(controls);
         };
 
         // initialization -----------------------------------------------------
