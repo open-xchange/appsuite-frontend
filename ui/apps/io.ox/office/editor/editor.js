@@ -649,19 +649,29 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localPos = _.copy(operation.position, true),
-                        columns = Position.getLastColumnIndexInTable(paragraphs, localPos) + 1,
-                        undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns};
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.startGroup();
+                    for (var i = operation.start; i <= operation.end; i++) {
+                        var localPos = _.copy(operation.position, true),
+                            localRow = _.copy(localPos, true);
+                        localRow.push(i);
+                        var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
+                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns};
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    }
+                    undomgr.endGroup();
                 }
                 this.implDeleteRows(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_COLUMNS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localPos = _.copy(operation.position, true),
-                        rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                        undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.startGroup();
+                    for (var i = operation.start; i <= operation.end; i++) {
+                        var localPos = _.copy(operation.position, true),
+                            rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
+                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    }
+                    undomgr.endGroup();
                 }
                 this.implDeleteColumns(operation.position, operation.start, operation.end);
             }
