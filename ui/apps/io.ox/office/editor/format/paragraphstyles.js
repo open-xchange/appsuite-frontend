@@ -122,7 +122,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             .addStyleSheet('Heading 5', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true })
             .addStyleSheet('Heading 6', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true, italic: true })
             .addStyleSheet('Quote', 'Standard', { italic: true })
-            .addStyleSheet('Intense Quote', 'Citation', { bold: true });
+            .addStyleSheet('Intense Quote', 'Quote', { bold: true });
 
     } // class ParagraphStyles
 

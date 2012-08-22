@@ -43,7 +43,6 @@ define('io.ox/office/editor/editor',
     var OP_ROW_COPY = 'copyRow';
     var OP_COLUMN_COPY = 'copyColumn';
 
-    var OP_ATTR_SET =     'setAttribute';   // Should better be insertAttribute?
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
     var OP_IMAGE_INSERT = 'insertImage';
@@ -591,19 +590,10 @@ define('io.ox/office/editor/editor',
                 }
                 this.implDeleteText(operation.start, operation.end);
             }
-            else if (operation.name === OP_ATTR_SET) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo() && _.isBoolean(operation.value)) {
-                    // TODO: non-boolean attributes
-                    // Hack - this is not the correct Undo - but the attr toggle from the browser will have the effect we want to see ;)
-                    var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
-                implSetAttributes(operation.start, operation.end, Utils.makeSimpleObject(operation.attr, operation.value));
-            }
             else if (operation.name === OP_ATTRS_SET) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
-                    // var undoOperation = {name: OP_ATTR_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
+                    // var undoOperation = {name: OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
                     // undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 implSetAttributes(operation.start, operation.end, operation.attrs);
