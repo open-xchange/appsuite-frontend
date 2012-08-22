@@ -108,7 +108,7 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
             account = account.toJSON();
         }
         
-        return invokeExtension(account.accountType, "remove");
+        return invokeExtension(account.accountType, "remove", account);
     };
     
     api.update = function (account) {
@@ -116,7 +116,7 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
             account = account.toJSON();
         }
         
-        return invokeExtension(account.accountType, "update");
+        return invokeExtension(account.accountType, "update", account);
     };
     
     api.isEnabled = function (accountType) {
