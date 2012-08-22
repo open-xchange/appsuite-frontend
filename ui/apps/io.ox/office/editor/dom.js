@@ -816,6 +816,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             ranges = [],
             // a single range object
             range = null,
+            // an adjusted clone of the range
+            adjustedRange = null,
             // the limiting point for valid ranges (next sibling of root node)
             globalEndPos = null;
 
@@ -835,8 +837,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             // translate to the internal text range representation
             range = DOM.Range.createRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 
-            // check that the nodes are inside the root node
-            if (rootNode.contains(range.start.node) && (DOM.Point.comparePoints(range.end, globalEndPos) <= 0)) {
+            // check that the nodes are inside the root node (with adjusted clone of the range)
+            adjustedRange = range.clone().adjust();
+            if (rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0)) {
                 ranges.push(range);
             }
         }

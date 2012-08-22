@@ -87,8 +87,8 @@
             border: 1px solid gray;
 
             p > span {
-                font-family: serif;
-                font-size: 12pt;
+                font-family: sans-serif;
+                font-size: 11pt;
                 line-height: normal;
 
                 &.highlight {

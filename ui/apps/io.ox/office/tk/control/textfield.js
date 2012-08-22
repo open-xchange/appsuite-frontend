@@ -45,6 +45,8 @@ define('io.ox/office/tk/control/textfield',
      *  @param {Number} [options.width=200]
      *      The fixed inner width of the editing area (without any padding), in
      *      pixels.
+     *  @param {Boolean} [options.readOnly=false]
+     *      If set to true, the text in the text field cannot be edited.
      *  @param {TextField.Validator} [options.validator]
      *      A text validator that will be used to convert the values from
      *      'update' events to the text representation used in this text field,
@@ -55,8 +57,14 @@ define('io.ox/office/tk/control/textfield',
      */
     function TextField(options) {
 
-        var // create the text field
+        var // self reference
+            self = this,
+
+            // create the text field
             textField = Utils.createTextField(options),
+
+            // read-only mode
+            readOnly = false,
 
             // the caption (icon and text label) for the text field
             caption = Utils.createLabel(options).addClass('input-caption'),
@@ -107,8 +115,10 @@ define('io.ox/office/tk/control/textfield',
                 width = Utils.getIntegerOption(options, 'width', 200, 1),
                 // the width including the padding of the text field
                 paddedWidth = width + 2 * FIELD_PADDING,
+                // whether the text field has an icon and/or a label
+                hasCaption = Utils.hasControlCaption(caption),
                 // the current width of the caption element
-                captionWidth = caption.outerWidth();
+                captionWidth = hasCaption ? caption.outerWidth() : 0;
 
             // expand the text field by the size of the overlay caption
             textField
@@ -117,6 +127,9 @@ define('io.ox/office/tk/control/textfield',
 
             // set the size of the white background area
             backgroundNode.width(paddedWidth).height(textField.height());
+
+            // remove caption if empty
+            if (!hasCaption) { caption.remove(); }
         }
 
         /**
@@ -234,6 +247,39 @@ define('io.ox/office/tk/control/textfield',
         };
 
         /**
+         * Returns whether the text field is in read-only mode.
+         */
+        this.isReadOnly = function () {
+            return readOnly;
+        };
+
+        /**
+         * Enters or leaves the read-only mode.
+         *
+         * @param {Boolean} [state]
+         *  If omitted or set to true, the text field will be set to read-only
+         *  mode. Otherwise, the text field will be made editable.
+         *
+         * @returns {TextField}
+         *  A reference to this instance.
+         */
+        this.setReadOnly = function (state) {
+            if ((readOnly = _.isUndefined(state) || (state === true))) {
+                textField
+                    .addClass('readonly')
+                    .on('mousedown dragover drop contextmenu', function (event) {
+                        event.preventDefault();
+                        self.trigger('cancel');
+                    });
+            } else {
+                textField
+                    .removeClass('readonly')
+                    .off('mousedown dragover drop contextmenu');
+            }
+            return this;
+        };
+
+        /**
          * Converts the passed value to a text using the current validator.
          */
         this.valueToText = function (value) {
@@ -262,6 +308,9 @@ define('io.ox/office/tk/control/textfield',
             // characters, use key events as a workaround. This is still not perfect,
             // as it misses cut/delete from context menu, drag&drop, etc.
             .on('input keydown keyup', fieldInputHandler);
+
+        // prevent edit mode/actions in read-only mode
+        this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
 
     } // class TextField
 

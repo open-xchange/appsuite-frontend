@@ -15,14 +15,13 @@ define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
      'io.ox/office/tk/control/button',
-     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, LineHeight, gt) {
 
     'use strict';
 
@@ -31,30 +30,22 @@ define('io.ox/office/editor/view',
 
     // class StyleSheetChooser ================================================
 
-    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styles, options) {
-
-        var labelCss = {
-                minWidth: '80px',
-                textAlign: 'left'
-            };
-
-        options = Utils.extendOptions({
-            label: '', // must pass empty string, otherwise labelCss is ignored
-            labelCss: labelCss,
-            type: 'list',
-            sorted: true
-        }, options);
+    var StyleSheetChooser = ComboField.extend({ constructor: function (styleSheets, options) {
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, options);
+        ComboField.call(this, Utils.extendOptions({
+            width: 100,
+            sorted: true,
+            readOnly: true
+        }, options));
 
         // initialization -----------------------------------------------------
 
         // add all known style sheets
 
-        _(styles.getStyleSheetNames()).each(function (name) {
-            this.addButton(name, { label: name, labelCss: labelCss });
+        _(styleSheets.getStyleSheetNames()).each(function (name) {
+            this.addListEntry(name);
         }, this);
 
     }}); // class FontFamilyChooser
@@ -63,17 +54,14 @@ define('io.ox/office/editor/view',
 
     var FontFamilyChooser = ComboField.extend({ constructor: function () {
 
-        var options = {
-                width: 150,
-                icon: 'icon-font',
-                tooltip: gt('Font Name'),
-                sorted: true,
-                typeAhead: true
-            };
-
         // base constructor ---------------------------------------------------
 
-        ComboField.call(this, options);
+        ComboField.call(this, {
+            width: 150,
+            tooltip: gt('Font Name'),
+            sorted: true,
+            typeAhead: true
+        });
 
         // initialization -----------------------------------------------------
 
@@ -88,17 +76,14 @@ define('io.ox/office/editor/view',
 
     var FontHeightChooser = ComboField.extend({ constructor: function () {
 
-        var options = {
-                width: 30,
-                icon: 'icon-io-ox-font-height',
-                tooltip: gt('Font Size'),
-                css: { textAlign: 'right' },
-                validator: new TextField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
-            };
-
         // base constructor ---------------------------------------------------
 
-        ComboField.call(this, options);
+        ComboField.call(this, {
+            width: 30,
+            tooltip: gt('Font Size'),
+            css: { textAlign: 'right' },
+            validator: new TextField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
+        });
 
         // initialization -----------------------------------------------------
 

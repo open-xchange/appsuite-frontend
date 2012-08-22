@@ -49,6 +49,20 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             }
 
+        },
+
+        // TODO: remove this workaround name mapping (makes German DOCX files work)
+        alternativeStyleNames = {
+            titel: 'Title',
+            untertitel: 'Subtitle',
+            berschrift1: 'Heading 1',
+            berschrift2: 'Heading 2',
+            berschrift3: 'Heading 3',
+            berschrift4: 'Heading 4',
+            berschrift5: 'Heading 5',
+            berschrift6: 'Heading 6',
+            zitat: 'Quote',
+            intensiveszitat: 'Intense Quote'
         };
 
     // class ParagraphStyles ==================================================
@@ -78,28 +92,37 @@ define('io.ox/office/editor/format/paragraphstyles',
             return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', iterator, context);
         }
 
+        /**
+         * Updates the CSS formatting of the text spans in a paragraph when the
+         * paragraph style sheet has been changed.
+         */
+        function updateDescendantStyleAttributes(paragraph) {
+            var characterStyles = documentStyles.getStyleSheets('character'),
+                ranges = [DOM.Range.createRangeForNode(paragraph)];
+            characterStyles.updateFormattingInRanges(ranges);
+        }
+
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, definitions, iterate, iterate, 'parastyle', {
-            // TODO: remove this workaround name mapping (makes German DOCX files work)
-            alternativeStyleNames: {
-                Titel: 'Title',
-                Untertitel: 'Subtitle',
-                berschrift1: 'Heading 1',
-                berschrift2: 'Heading 2',
-                berschrift3: 'Heading 3'
-            }
+            alternativeStyleNames: alternativeStyleNames,
+            updateDescendantStyleAttributes: updateDescendantStyleAttributes
         });
 
         // initialization -----------------------------------------------------
 
         // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('Standard', null, { fontname: 'Times New Roman', fontsize: 12 }, true)
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 18, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Arial', fontsize: 14, italic: true })
-            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Arial', fontsize: 16, bold: true })
-            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Arial', fontsize: 14, bold: true })
-            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Arial', fontsize: 13, bold: true });
+        this.addStyleSheet('Standard', null, { fontname: 'Open Sans', fontsize: 11 }, true)
+            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Book Antiqua', fontsize: 26, bold: true })
+            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Book Antiqua', fontsize: 12, italic: true })
+            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Book Antiqua', fontsize: 16, bold: true })
+            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Book Antiqua', fontsize: 14, bold: true })
+            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Book Antiqua', fontsize: 13, bold: true })
+            .addStyleSheet('Heading 4', 'Standard', { fontname: 'Book Antiqua', fontsize: 13, bold: true, italic: true })
+            .addStyleSheet('Heading 5', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true })
+            .addStyleSheet('Heading 6', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true, italic: true })
+            .addStyleSheet('Quote', 'Standard', { italic: true })
+            .addStyleSheet('Intense Quote', 'Quote', { bold: true });
 
     } // class ParagraphStyles
 

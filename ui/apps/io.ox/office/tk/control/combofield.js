@@ -55,7 +55,9 @@ define('io.ox/office/tk/control/combofield',
          * Handles 'menuopen' events and moves the focus to the text field.
          */
         function menuOpenHandler() {
-            self.getTextField().focus();
+            if (!self.isReadOnly()) {
+                self.getTextField().focus();
+            }
         }
 
         /**

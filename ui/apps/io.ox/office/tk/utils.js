@@ -16,7 +16,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     'use strict';
 
     var // the ISO code of the language used by gettext
-        language = null;
+        language = null,
+
+        // selector for <span> elements in a control caption
+        CAPTION_SELECTOR = 'span[data-role="icon"], span[data-role="label"]';
 
     // static class Utils =====================================================
 
@@ -1128,13 +1131,24 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     // control captions -------------------------------------------------------
 
     /**
+     * Returns whether the passed form control contains an icon and/or a text
+     * label.
+     *
+     * @param {jQuery} control
+     *  The control, as jQuery collection.
+     */
+    Utils.hasControlCaption = function (control) {
+        return control.children(CAPTION_SELECTOR).length > 0;
+    };
+
+    /**
      * Removes the icon and the text label from the passed form control.
      *
      * @param {jQuery} control
      *  The control to be manipulated, as jQuery collection.
      */
     Utils.removeControlCaption = function (control) {
-        control.children('span[data-role="icon"], span[data-role="label"]').remove();
+        control.children(CAPTION_SELECTOR).remove();
         control.addClass('narrow-padding');
     };
 
@@ -1198,7 +1212,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     Utils.cloneControlCaption = function (target, source) {
 
         var // clone the label and the icon from the source control
-            caption = source.first().children('span[data-role="icon"], span[data-role="label"]').clone(true);
+            caption = source.first().children(CAPTION_SELECTOR).clone(true);
 
         // remove the old spans, and insert the new caption nodes
         Utils.removeControlCaption(target);
