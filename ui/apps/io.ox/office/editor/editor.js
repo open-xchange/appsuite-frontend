@@ -42,6 +42,8 @@ define('io.ox/office/editor/editor',
     var OP_COLUMNS_DELETE = 'deleteColumns';
     var OP_ROW_COPY = 'copyRow';
     var OP_COLUMN_COPY = 'copyColumn';
+    var OP_ROW_INSERT = 'insertRow';
+    var OP_COLUMN_INSERT = 'insertColumn';
 
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
@@ -644,19 +646,57 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_ROW_COPY, start: _.copy(operation.start, true), end: _.copy(operation.end, true) };
+                    var localPos = _.copy(operation.position, true),
+                        columns = Position.getLastColumnIndexInTable(paragraphs, localPos) + 1,
+                        undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns};
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implDeleteRows(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_COLUMNS_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var localPos = _.copy(operation.position, true),
+                        rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
+                        undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implDeleteColumns(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_ROW_COPY) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var start = operation.end,
+                        end = start,
+                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implCopyRow(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_COLUMN_COPY) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var start = operation.end,
+                        end = start,
+                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implCopyColumn(operation.position, operation.start, operation.end);
+            }
+            else if (operation.name === OP_ROW_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var start = operation.end,
+                        end = start,
+                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                this.implInsertRow(operation.position, operation.start, operation.columns);
+            }
+            else if (operation.name === OP_COLUMN_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var start = operation.end,
+                        end = start,
+                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                this.implInsertColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2940,6 +2980,41 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         };
 
+        this.implInsertRow = function (pos, startRow, columns) {
+
+            var localPosition = _.copy(pos, true);
+
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
+                return;
+            }
+
+            var table = Position.getDOMPosition(paragraphs, localPosition).node,
+                insertAfter = startRow - 1,
+                // prototype elements for row, cell, and paragraph
+                paragraph = $('<p>'),
+                cell = $('<td>').append(paragraph),
+                row = $('<tr>').append(cell);
+
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+            // clone the cells in the row element
+            _.times(columns - 1, function () { row.append(cell.clone(true)); });
+
+            if (insertAfter === -1) {
+                row.insertBefore($(table).children().children().get(0));
+            } else {
+                row.insertAfter($(table).children().children().get(insertAfter));
+            }
+
+            // Setting cursor
+            localPosition.push(insertAfter + 1);
+            localPosition.push(0);
+            localPosition.push(0);
+            localPosition.push(0);
+
+            lastOperationEnd = new OXOPaM(localPosition);
+        };
+
         this.implDeleteColumns = function (pos, startCol, endCol) {
 
             var localPosition = _.copy(pos, true),
@@ -3012,6 +3087,45 @@ define('io.ox/office/editor/editor',
 
             lastOperationEnd = new OXOPaM(localPosition);
         };
+
+        this.implInsertColumn = function (pos, startRow, rows) {
+
+            var localPosition = _.copy(pos, true);
+
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
+                return;
+            }
+
+            var table = Position.getDOMPosition(paragraphs, localPosition).node,
+                allRows = $(table).children().children(),
+                insertAfter = startRow - 1,
+                // prototype elements for cell and paragraph
+                paragraph = $('<p>'),
+                cell = $('<td>').append(paragraph);
+
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+
+            allRows.each(
+                function (i, elem) {
+                    var cellClone = cell.clone(true);
+                    if (insertAfter === -1) {
+                        cellClone.insertBefore($(elem).children().get(0));
+                    } else {
+                        cellClone.insertAfter($(elem).children().get(insertAfter));
+                    }
+                }
+            );
+
+            // Setting cursor to first position in table
+            localPosition.push(0);
+            localPosition.push(insertAfter + 1);
+            localPosition.push(0);
+            localPosition.push(0);
+
+            lastOperationEnd = new OXOPaM(localPosition);
+        };
+
 
         this.implDeleteText = function (startPosition, endPosition) {
 
