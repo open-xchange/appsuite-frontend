@@ -227,8 +227,8 @@ define('io.ox/core/api/account',
             data: data
         })
         .done(function (d) {
-            api.trigger('account_created', {id: d.id, email: d.primary_address});
             accountsAllCache.add(d, _.now());
+            api.trigger('account_created', {id: d.id, email: d.primary_address});
         });
     };
 

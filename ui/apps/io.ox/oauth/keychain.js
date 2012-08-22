@@ -56,7 +56,18 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         }
         
         function chooseDisplayName() {
-            return "My " + service.displayName + " account";
+            var names = {}, name, counter = 0;
+            _(cache[service.id].accounts).each(function (account) {
+                names[account.displayName] = 1;
+            });
+            
+            name = "My " + service.displayName + " account";
+            
+            while (names[name]) {
+                counter++;
+                name = "My " + service.displayName + " account (" + counter + ")";
+            }
+            return name;
         }
         
         
@@ -77,20 +88,15 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
                 
         this.createInteractively = function () {
-            var account = incoming(account);
-            var def = $.Deferred();
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName());
-                new dialogs.ModalDialog({
-                    width: 400,
-                    easyOut: true
-                })
-                .header($("<h4>").text("Please sign into your " + service.displayName + " account"))
-                .append($('<label for="name">').text("Account Name"))
-                .append($displayNameField)
-                .addButton('cancel', 'Cancel')
-                .addPrimaryButton('add', 'Sign in')
-                .on("add", function () {
+            var account = incoming(account),
+                def = $.Deferred();
+
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/keys"], function (dialogs, KeyListener) {
+                var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName()),
+                    dialog,
+                    suppressCancel = false;
+                
+                function callInit() {
                     var callbackName = "oauth" + generateId();
                     require(["io.ox/core/http"], function (http) {
                         var params = {
@@ -115,18 +121,43 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                                 popupWindow.close();
                                 self.trigger("create", response.data);
                                 self.trigger("refresh.all refresh.list");
+                                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                                    new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
+                                });
                             };
                             popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
                             
                         })
                         .fail(def.reject);
                     });
-                })
+                }
+                
+                new KeyListener($displayNameField).on("enter", function () {
+                    
+                    callInit();
+                    suppressCancel = true;
+                    dialog.close();
+                    
+                }).include();
+                
+                dialog = new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true
+                });
+                
+                dialog.header($("<h4>").text("Please sign into your " + service.displayName + " account"))
+                .append($('<label for="name">').text("Account Name"))
+                .append($displayNameField)
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Sign in')
+                .on("add", callInit)
                 .on("cancel", function () {
-                    def.resolve();
+                    if (!suppressCancel) {
+                        def.resolve();
+                    }
                 })
                 .show(function () {
-                    $displayNameField.focus(); // Why, oh why, doesn't this work ?!?
+                    $displayNameField.focus();
                 });
             });
             

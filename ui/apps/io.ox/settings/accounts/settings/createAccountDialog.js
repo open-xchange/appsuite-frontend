@@ -30,7 +30,9 @@ define("io.ox/settings/accounts/settings/createAccountDialog", ["io.ox/core/tk/d
         
         _(keychain.submodules).each(function (submodule) {
             if (newRow === 0) {
-                $currentRow = $('<div class="row-fluid">').appendTo($servicesPane);
+                $currentRow = $('<div class="row-fluid">').css({
+                    padding: "10px"
+                }).appendTo($servicesPane);
             }
             
             newRow = (newRow + 1) % 2;
@@ -42,7 +44,9 @@ define("io.ox/settings/accounts/settings/createAccountDialog", ["io.ox/core/tk/d
             easyOut: true
         });
         dialog.header($("<h4>").text("Add an account"));
-        dialog.append($servicesPane).addButton("cancel", "Cancel").show().done(function () {
+        dialog.append($servicesPane).addButton("cancel", "Cancel").show(function () {
+            $servicesPane.find("a:first").focus();
+        }).done(function () {
             def.resolve();
         });
         

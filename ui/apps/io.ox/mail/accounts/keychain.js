@@ -42,13 +42,14 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
                 evt = evt.namespace ? evt.type + "." + evt.namespace : evt.type;
                 if (evt === 'account_created') {
                     extension.trigger('create');
+                    extension.trigger('refresh.all');
                     return;
                 }
                 extension.trigger(evt);
             }
-            
         });
     }
+    
     
     init().done(function () {
         moduleDeferred.resolve({message: 'Loaded mail keychain'});

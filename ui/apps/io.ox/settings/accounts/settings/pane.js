@@ -43,7 +43,7 @@ define('io.ox/settings/accounts/settings/pane',
             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                 new dialogs.ModalDialog()
                     .text("Do you really want to delete this account?")
-                    .addPrimaryButton("delete", 'delete account')
+                    .addPrimaryButton("delete", 'Delete account')
                     .addButton("cancel", 'Cancel')
                     .show()
                     .done(function (action) {
@@ -101,6 +101,7 @@ define('io.ox/settings/accounts/settings/pane',
             var  that = this;
                  
             function redraw() {
+                
                 that.empty();
                 var allAccounts = api.getAll();
                 
