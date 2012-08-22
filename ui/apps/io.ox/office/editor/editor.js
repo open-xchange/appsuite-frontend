@@ -634,7 +634,10 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TABLE_INSERT, start: _.copy(operation.start, true) };
+                    var localStart = _.copy(operation.start, true),
+                        columns = Position.getLastColumnIndexInTable(paragraphs, localStart) + 1,
+                        rows = Position.getLastRowIndexInTable(paragraphs, localStart) + 1,
+                        undoOperation = { name: OP_TABLE_INSERT, start: localStart, columns: columns, rows: rows};
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implDeleteTable(operation.start);
