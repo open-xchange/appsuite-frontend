@@ -20,11 +20,10 @@ define('io.ox/settings/accounts/settings/pane',
        'io.ox/core/tk/dialogs',
        "io.ox/keychain/api",
        'io.ox/core/tk/forms',
-       'io.ox/settings/accounts/email/settings',
        "io.ox/keychain/model",
        'text!io.ox/settings/accounts/email/tpl/account_select.html',
        'text!io.ox/settings/accounts/email/tpl/listbox.html'
-       ].concat(ox.serverConfig.plugins.keychainSettings), function (ext, View, utils, dialogs, api, forms, email, keychainModel, tmpl, listboxtmpl) {
+       ].concat(ox.serverConfig.plugins.keychainSettings), function (ext, View, utils, dialogs, api, forms, keychainModel, tmpl, listboxtmpl) {
 
 
     'use strict';
@@ -50,7 +49,7 @@ define('io.ox/settings/accounts/settings/pane',
                         if (action === 'delete') {
                             def.resolve();
                             api.remove(account);
-                            
+
                         } else {
                             def.reject();
                         }
@@ -73,7 +72,7 @@ define('io.ox/settings/accounts/settings/pane',
                     id: this.model.get('id'),
                     accountType: this.model.get('accountType')
                 }));
-                
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
@@ -99,12 +98,12 @@ define('io.ox/settings/accounts/settings/pane',
         id: "accountssettings",
         draw: function (data) {
             var  that = this;
-                 
+
             function redraw() {
-                
+
                 that.empty();
                 var allAccounts = api.getAll();
-                
+
                 collection = keychainModel.wrap(allAccounts);
 
                 var AccountsView = Backbone.View.extend({
@@ -163,9 +162,9 @@ define('io.ox/settings/accounts/settings/pane',
 
                 that.append(accountsList.render().el);
             }
-            
+
             redraw();
-            
+
             api.on("refresh.all refresh.list", redraw);
             that.on("dispose", function () {
                 api.off("refresh.all refresh.list", redraw);
