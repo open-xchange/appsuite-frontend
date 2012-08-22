@@ -146,7 +146,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 });
                 
                 dialog.header($("<h4>").text("Please sign into your " + service.displayName + " account"))
-                .append($('<label for="name">').text("Account Name"))
+                .append($('<label for="name">').text("Please enter the name of the account"))
                 .append($displayNameField)
                 .addButton('cancel', 'Cancel')
                 .addPrimaryButton('add', 'Sign in')
