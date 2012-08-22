@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/characterstyles',
         definitions = {
 
             fontname: {
-                def: 'serif',
+                def: 'sans-serif',
                 set: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
                     LineHeight.updateElementLineHeight(element);
@@ -73,6 +73,14 @@ define('io.ox/office/editor/format/characterstyles',
                 special: true
             }
 
+        },
+
+        // TODO: remove this workaround name mapping (makes German DOCX files work)
+        alternativeStyleNames = {
+            schwachehervorhebung: 'Subtle Emphasis',
+            hervorhebung: 'Emphasis',
+            intensivehervorhebung: 'Intense Emphasis',
+            fett: 'Bold'
         };
 
     // class CharacterStyles ==================================================
@@ -128,9 +136,30 @@ define('io.ox/office/editor/format/characterstyles',
             }, context, { split: true, merge: hasEqualAttributes });
         }
 
+        /**
+         * Collects character styles specified in the paragraph style sheet of
+         * the parent paragraph element of the passed text span.
+         */
+        function collectAncestorStyleAttributes(span) {
+            var paragraphStyles = documentStyles.getStyleSheets('paragraph');
+            return paragraphStyles.getElementStyleAttributes(span.parentNode);
+        }
+
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite, 'charstyle');
+        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite, 'charstyle', {
+            alternativeStyleNames: alternativeStyleNames,
+            collectAncestorStyleAttributes: collectAncestorStyleAttributes
+        });
+
+        // initialization -----------------------------------------------------
+
+        // TODO: move these default styles to a 'newDocument' operation
+        this.addStyleSheet('Standard', null, null, true)
+            .addStyleSheet('Emphasis', 'Standard', { italic: true })
+            .addStyleSheet('Subtle Emphasis', 'Emphasis', null)
+            .addStyleSheet('Intense Emphasis', 'Emphasis', { bold: true })
+            .addStyleSheet('Bold', 'Standard', { bold: true });
 
     } // class CharacterStyles
 

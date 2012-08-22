@@ -373,6 +373,10 @@ div.io-ox-toolbar {
                         background-color: @input-fill-color;
                     }
                 }
+                
+                &.readonly {
+                    cursor: default;
+                }
             }
 
             /* drop-down groups -------------------------------------------- */

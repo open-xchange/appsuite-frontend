@@ -909,7 +909,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.clearRangeAttributes(highlightRanges, 'highlight', { special: true });
+                characterStyles.clearAttributesInRanges(highlightRanges, 'highlight', { special: true });
                 editdiv.removeClass('highlight');
             }
             highlightRanges = [];
@@ -995,7 +995,7 @@ define('io.ox/office/editor/editor',
             // set the highlighting
             if (highlightRanges.length) {
                 editdiv.addClass('highlight');
-                characterStyles.setRangeAttributes(highlightRanges, { highlight: true }, { special: true });
+                characterStyles.setAttributesInRanges(highlightRanges, { highlight: true }, { special: true });
 
                 // make first highlighted text node visible
                 DOM.iterateTextPortionsInRanges(highlightRanges, function (textNode) {
@@ -1837,7 +1837,7 @@ define('io.ox/office/editor/editor',
         this.getAttributes = function (family) {
             var styleSheets = this.getStyleSheets(family),
                 ranges = DOM.getBrowserSelection(editdiv);
-            return styleSheets ? styleSheets.getRangeAttributes(ranges) : null;
+            return styleSheets ? styleSheets.getAttributesInRanges(ranges) : null;
         };
 
         /**
@@ -2666,7 +2666,7 @@ define('io.ox/office/editor/editor',
             styleSheets = self.getStyleSheets(family);
             if (styleSheets && (textMode !== 'plain')) {
                 ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                styleSheets.setRangeAttributes(ranges, attributes);
+                styleSheets.setAttributesInRanges(ranges, attributes);
             }
         }
 

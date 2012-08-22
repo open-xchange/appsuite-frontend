@@ -97,7 +97,11 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             // map alternative style sheet names to built-in style sheet names
             altStyleNames = Utils.getObjectOption(options, 'alternativeStyleNames', {}),
             // default values for all supported attributes
-            defaultAttributes = {};
+            defaultAttributes = {},
+            // collector for style attributes from ancestor elements
+            collectAncestorStyleAttributesHandler = Utils.getFunctionOption(options, 'collectAncestorStyleAttributes'),
+            // collector for style attributes from ancestor elements
+            updateDescendantStyleAttributesHandler = Utils.getFunctionOption(options, 'updateDescendantStyleAttributes');
 
         // private methods ----------------------------------------------------
 
@@ -148,8 +152,12 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                     // add own attributes
                     _(attributes).extend(styleSheet.attributes);
                 } else {
-                    // no more parent style sheets, try styles from ancestor elements
+                    // no more parent style sheets: start with default values from definitions
                     attributes = _.clone(defaultAttributes);
+                    // collect styles from ancestor elements if specified
+                    if (_.isFunction(collectAncestorStyleAttributesHandler)) {
+                        _(attributes).extend(collectAncestorStyleAttributesHandler(element));
+                    }
                 }
             }
 
@@ -252,9 +260,22 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             return _.keys(styleSheets);
         };
 
+        /**
+         * Returns the formatting attributes from the current style sheet of
+         * the specified DOM element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The element referring to a style sheet whose attributes will be
+         *  returned. If this object is a jQuery collection, uses the first DOM
+         *  node it contains.
+         *
+         * @returns {Object}
+         *  A map of name/value pairs containing the attributes of the style
+         *  sheet referred by the passed element.
+         */
         this.getElementStyleAttributes = function (element) {
-            var styleName = getElementAttributes($(element))[styleAttrName];
-            return getStyleAttributes(element, styleName);
+            element = Utils.getDomNode(element);
+            return getStyleAttributes(element, getElementAttributes($(element))[styleAttrName]);
         };
 
         /**
@@ -266,13 +287,23 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *  and sorted before iteration starts (see method
          *  DOM.iterateNodesInRanges() for details).
          *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, includes special attributes (attributes that
+         *      are marked with the 'special' flag in the attribute definitions
+         *      passed to the constructor) to the result map.
+         *
          * @returns {Object}
          *  A map of attribute name/value pairs.
          */
-        this.getRangeAttributes = function (ranges) {
+        this.getAttributesInRanges = function (ranges, options) {
 
             var // the resulting attribute values, mapped by name
-                attributes = {};
+                attributes = {},
+                // allow special attributes
+                special = Utils.getBooleanOption(options, 'special', false);
 
             // get merged attributes from all covered elements
             iterateReadOnly(ranges, function (element) {
@@ -281,13 +312,20 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                     $element = $(element),
                     // get the element attributes
                     elementAttributes = getElementAttributes($element),
-                    // get attributes of the style sheet
+                    // get attributes of the style sheets
                     styleAttributes = getStyleAttributes(element, elementAttributes[styleAttrName]),
                     // whether any attribute is still unambiguous
                     hasNonNull = false;
 
                 // overwrite style sheet attributes with existing element attributes
                 _(styleAttributes).extend(elementAttributes);
+
+                // filter by supported attributes (styles may contain other attributes)
+                _(styleAttributes).each(function (value, name)  {
+                    if ((name !== styleAttrName) && !isRegisteredAttribute(name, special)) {
+                        delete styleAttributes[name];
+                    }
+                });
 
                 // update all attributes in the result set
                 _(styleAttributes).each(function (value, name) {
@@ -332,7 +370,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
          */
-        this.setRangeAttributes = function (ranges, attributes, options) {
+        this.setAttributesInRanges = function (ranges, attributes, options) {
 
             var // the style sheet name
                 styleName = Utils.getStringOption(attributes, styleAttrName),
@@ -342,8 +380,8 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                 special = Utils.getBooleanOption(options, 'special', false);
 
             // re-map to alternative style name
-            if (styleName in altStyleNames) {
-                styleName = altStyleNames[styleName];
+            if (_.isString(styleName) && (styleName.toLowerCase() in altStyleNames)) {
+                styleName = altStyleNames[styleName.toLowerCase()];
             }
 
             // iterate all covered elements and change their formatting
@@ -396,6 +434,11 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
                     }
                 });
 
+                // update CSS formatting of descendant elements, if style sheet has changed
+                if (styleName && _.isFunction(updateDescendantStyleAttributesHandler)) {
+                    updateDescendantStyleAttributesHandler(element);
+                }
+
             }, this);
         };
 
@@ -420,7 +463,7 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
          */
-        this.clearRangeAttributes = function (ranges, attributeNames, options) {
+        this.clearAttributesInRanges = function (ranges, attributeNames, options) {
 
             var // allow special attributes
                 special = Utils.getBooleanOption(options, 'special', false);
@@ -462,6 +505,30 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
 
                 // write back element attributes to the element
                 setElementAttributes($element, elementAttributes);
+
+                // change CSS formatting of the element
+                _(cssAttributes).each(function (value, name) {
+                    if (name in definitions) {
+                        definitions[name].set($element, value);
+                    }
+                });
+
+            }, this);
+        };
+
+        this.updateFormattingInRanges = function (ranges) {
+
+            // iterate all covered elements and change their formatting
+            iterateReadWrite(ranges, function (element) {
+
+                var // the element, as jQuery object
+                    $element = $(element),
+                    // explicit element attributes
+                    elementAttributes = getElementAttributes($element),
+                    // get attributes of the style sheet
+                    styleAttributes = getStyleAttributes(element, elementAttributes[styleAttrName]),
+                    // the resulting attributes to be updated at each element
+                    cssAttributes = _({}).extend(styleAttributes, elementAttributes);
 
                 // change CSS formatting of the element
                 _(cssAttributes).each(function (value, name) {
