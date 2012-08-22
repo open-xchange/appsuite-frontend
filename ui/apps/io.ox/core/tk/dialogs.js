@@ -88,7 +88,7 @@ define("io.ox/core/tk/dialogs",
                     deferred.resolve(action, data, self.getContentNode().get(0));
                     close();
                 }
-                
+
                 e.preventDefault();
             };
 
@@ -360,7 +360,9 @@ define("io.ox/core/tk/dialogs",
         this.lastTrigger = null;
 
         processEvent = function (e) {
-            e.preventDefault();
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true')) {
+                e.preventDefault();
+            }
         };
 
         isProcessed = function (e) {
@@ -380,7 +382,7 @@ define("io.ox/core/tk/dialogs",
         };
 
         closeByClick = function (e) {
-            if (!isProcessed(e)) {
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true') && !isProcessed(e)) {
                 processEvent(e);
                 close(e);
             }
