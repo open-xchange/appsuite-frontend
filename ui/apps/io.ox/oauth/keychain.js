@@ -41,6 +41,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         Events.extend(this);
         
         this.id = simplifyId(service.id);
+        this.displayName = service.displayName;
 
         function outgoing(account) {
             if (!account) {
@@ -122,7 +123,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                     });
                 })
                 .on("cancel", function () {
-                    alert("Cancel");
+                    def.resolve();
                 })
                 .show(function () {
                     $displayNameField.focus(); // Why, oh why, doesn't this work ?!?

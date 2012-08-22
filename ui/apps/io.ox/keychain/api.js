@@ -14,6 +14,7 @@
  /**
  ext.point("io.ox/keychain/api").extend({
     id: ...,
+    displayName: ...,
     getAll: function () {
         // synchronously load all accounts of the given type
     },

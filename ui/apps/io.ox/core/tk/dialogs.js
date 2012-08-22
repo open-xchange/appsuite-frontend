@@ -88,8 +88,10 @@ define("io.ox/core/tk/dialogs",
                     deferred.resolve(action, data, self.getContentNode().get(0));
                     close();
                 }
-
-                e.preventDefault();
+                
+                if (e.preventDefault) {
+                    e.preventDefault();
+                }
             };
 
         _(['header', 'body', 'footer']).each(function (part) {

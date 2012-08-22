@@ -134,8 +134,8 @@ define('io.ox/settings/accounts/settings/pane',
                     },
 
                     onAdd: function (args) {
-                        email.mailAutoconfigDialog(args, {
-                            collection: collection
+                        require(["io.ox/settings/accounts/settings/createAccountDialog"], function (accountDialog) {
+                            accountDialog.createAccountInteractively(args);
                         });
                     },
 

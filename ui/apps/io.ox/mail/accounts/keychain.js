@@ -67,6 +67,7 @@ define.async("io.ox/mail/accounts/keychain", ["io.ox/core/extensions", "io.ox/co
     
     extension = {
         id: "mail",
+        displayName: "Mail Account",
         getAll: function () {
             return _(accounts).map(function (account) { return account; });
         },
