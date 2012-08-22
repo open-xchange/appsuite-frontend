@@ -731,8 +731,6 @@ define('io.ox/office/editor/editor',
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
-                // TODO: Remove this ugly fix for Windows servers asap
-                imgurl = imgurl.replace(/fragment=\//g, "fragment=");  // problem of Windows servers
                 this.implInsertImage(imgurl, operation.position, operation.attrs);
             }
             else if (operation.name === OP_PARA_MERGE) {
