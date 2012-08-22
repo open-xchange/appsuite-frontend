@@ -59,10 +59,7 @@ define('io.ox/calendar/week/view',
         },
 
         render: function () {
-//            console.log('v.render', this);
-                
             // create scaffold
-//            console.log(date);
             var days = date.locale.days;
             days = days.slice(this.startDay).concat(days.slice(0, this.startDay)).slice(0, this.columns);
 
@@ -139,97 +136,123 @@ define('io.ox/calendar/week/view',
             // clear all first
             this.$el.find('.appointment').remove();
             
-            // loop over all appointments
+            var draw = {};
+            
+            // loop over all appointments to split and create divs
             this.collection.each(function (model) {
-                console.log('Termin', model);
                 
                 var startDate = new Date(model.get('start_date')),
                     endDate = new Date(model.get('end_date') - 1),
                     start = formatDate(startDate),
                     end = formatDate(endDate),
-                    copy = _.copy(model.attributes, true);
+                    maxCount = 7;
 
                 if (model.get('start_date') < 0) {
                     console.error('FIXME: start_date should not be negative');
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                // FIXE ME: just to make it work and safe
-                var maxCount = 7;
                 // draw across multiple days
+                // FIXE ME: just to make it work and safe
                 while (true && maxCount) {
+                    
                     maxCount--;
+                    
+                    // if
                     if (start !== end) {
-                        endDate = new Date(copy.start_date);
+                        endDate = new Date(startDate.getTime());
                         endDate.setUTCHours(23, 59, 59, 999);
                     } else {
-                        endDate = new Date(copy.end_date);
+                        endDate = new Date(model.get('end_date') - 1);
                     }
                     
-                    var vPos = this.calcVPos(startDate, endDate),
-                        hPos = this.calcHPos(model.id, copy.start_date, endDate.getTime()),
-                        width = (this.appWith / hPos.fragmentation),
-                        appointment = this
-                            .renderAppointment(copy)
-                            .css({
-                                top: vPos.start + '%',
-                                minHeight: this.cellHeight + 'px',
-                                maxWidth: this.appWith + '%',
-                                left: ((width - (width * this.overlap)) * (hPos.index)) + '%'
-                            })
-                            .height(vPos.lenght + '%')
-                            .width((width + (width * this.overlap)) + '%');
+                    var app = this.renderAppointment(model.attributes),
+                        sel = '[date="' + start + '"]';
                     
-                    console.log('frag / index / start / lenght', hPos.fragmentation, hPos.index, vPos.start, vPos.lenght, width);
+                    app.pos = {
+                        id: model.id,
+                        start: startDate.getTime(),
+                        end: endDate.getTime(),
+                        col: 0
+                    };
                     
-                    this
-                        .$('[date="' + start + '"]')
-                        .append(appointment);
+                    if (!draw[sel]) {
+                        draw[sel] = [];
+                    }
+                    draw[sel].push(app);
                     
                     // inc date
                     if (start !== end) {
-                        copy.start_date += date.DAY;
-                        var d = new Date(copy.start_date);
-                        d.setUTCHours(0, 0, 0, 0);
-                        copy.start_date = d.getTime();
-                        startDate = d;
-                        start = formatDate(d);
+                        startDate.setUTCDate(startDate.getUTCDate() + 1);
+                        startDate.setUTCHours(0, 0, 0, 0);
+                        start = formatDate(startDate);
                     } else {
                         break;
                     }
                 }
+                
             }, this);
+            
+            var that = this;
+            // loop over all single days
+            $.each(draw, function (i, e) {
+                // init position Array
+                var colPos = [0];
+
+                // loop over all appointments to calculate position
+                for (var j = 0; j < e.length; j++) {
+                    
+                    var found = false;
+                    
+                    // loop over all column positions
+                    for (var k = 0; k < colPos.length; k++) {
+                        if  (colPos[k] <= e[j].pos.start) {
+                            colPos[k] = e[j].pos.end;
+                            e[j].pos.index = k;
+                            found = true;
+                        }
+                    }
+                    
+                    if (!found) {
+                        colPos.push(e[j].pos.end);
+                        e[j].pos.index = colPos.length - 1;
+                    }
+                }
+                
+                var width = (that.appWith / colPos.length),
+                    elWidth = Math.min(width * (1 + that.overlap), that.appWith);
+
+                // loop over all appointments to draw them
+                for (var j = 0; j < e.length; j++) {
+                    var pos = that.calcPos(e[j]),
+                        leftWidth = ((that.appWith - elWidth) / (colPos.length - 1)) * e[j].pos.index;
+                    
+                    e[j].css({
+                        top: pos.start + '%',
+                        minHeight: that.cellHeight + 'px',
+                        maxWidth: that.appWith + '%',
+                        left: leftWidth + '%'
+                    })
+                    .height(pos.lenght + '%')
+                    .width(elWidth + '%');
+                }
+                that.$(i).append(e);
+                
+            });
+            
         },
         
-        calcVPos: function (d1, d2) {
-            var calc = function (d) {
+        calcPos: function (ap) {
+            var start = new Date(ap.pos.start),
+                end = new Date(ap.pos.end),
+                calc = function (d) {
                     return (d.getUTCHours() * 60 + d.getUTCMinutes()) / (24 * 60) * 100;
                 },
-                s = calc(d1);
+                s = calc(start);
+            
             return {
                 start: s,
-                lenght: calc(d2) - s
-            };
-        },
-        
-        calcHPos: function (id, as, ae) {
-            var frag = 1,
-                index = 0;
-            this.collection.each(function (m, i) {
-                if (id !== m.id) {
-                    var ms = m.get('start_date'),
-                        me = m.get('end_date');
-                    //console.log(m, i, id, new Date(as), new Date(ae), (as >= ms && as <= me), (ae >= ms && ae <= me), (as <= ms && ae >= me), (as >= ms && as <= me) || (ae >= ms && ae <= me) || (as <= ms && ae >= me));
-                    if ((as >= ms && as <= me) || (ae >= ms && ae <= me) || (as <= ms && ae >= me)) {
-                        frag++;
-                    }
-                } else {
-                    index = frag - 1;
-                }
-            }, this);
-            return {
-                fragmentation: frag,
-                index: index
+                lenght: calc(end) - s
             };
         }
         
