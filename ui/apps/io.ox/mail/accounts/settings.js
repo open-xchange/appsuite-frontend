@@ -39,7 +39,7 @@ define('io.ox/mail/accounts/settings',
                     myViewNode = $("<div>").addClass("accountDetail");
                     myModel = new AccountModel(data);
                     myView = new AccountDetailView({model: myModel, node: myViewNode});
-                    myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                    myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
                         pane.append(myView.render().el);
                     });
                     return myView.node;
@@ -48,7 +48,7 @@ define('io.ox/mail/accounts/settings',
                 myViewNode = $("<div>").addClass("accountDetail");
                 myModel = new AccountModel(evt.data);
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
-                myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
                     pane.append(myView.render().el);
                 });
                 myView.succes = successDialog;
@@ -64,7 +64,7 @@ define('io.ox/mail/accounts/settings',
 
         createExtpointForNewAccount = function (args) {
             var node = $('<div>');
-            ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', node, args);
+            ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', node, args);
         },
 
         drawAlert = function (alertPlaceholder, message) {

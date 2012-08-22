@@ -131,7 +131,6 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].conca
         
         return invokeExtension(account.accountType, "update", account);
     };
-    
     api.isEnabled = function (accountType) {
         return !!api.submodules[accountType];
     };

@@ -150,7 +150,7 @@ define('io.ox/settings/main',
                 icon: '',
                 id: 'io.ox/settings/accounts',
                 settings: true,
-                title: 'Accounts'
+                title: 'Keyring'
             });
             console.log('listing apps');
             console.log(apps);
