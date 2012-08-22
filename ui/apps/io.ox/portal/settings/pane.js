@@ -28,10 +28,7 @@ define('io.ox/portal/settings/pane',
         SAVE:            gt('Save'),
         PORTAL:          gt('Portal'),
         PORTAL_PLUGINS:  gt('Portal Plugins'),
-        PROPERTIES:      gt('Properties'),
-        ADD:             gt('Add'),
-        EDIT:            gt('Edit'),
-        DELETE:          gt('Delete')
+        PROPERTIES:      gt('Properties')
     };
 
     var plugins = [];
@@ -89,30 +86,18 @@ define('io.ox/portal/settings/pane',
                 var that = this;
                 var req = ['text!io.ox/portal/settings/tpl/pluginsettings.html'];
                 var response = $.ajax({
-                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/tpl/pluginsettings.html',
+                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/plugin.js',
                     type: 'HEAD',
                     async: false
                 }).status;
 
                 if (response === 200) {
-                    req.push('text!plugins/portal/' + this.plugin.id + '/settings/tpl/pluginsettings.html');
                     req.push('plugins/portal/' + this.plugin.id + '/settings/plugin');
                 }
 
-                require(req, function (tmplPluginSettings, addTmplPluginSettings, pluginFeatures) {
-                    if (addTmplPluginSettings) {
-                        that.template = doT.template(tmplPluginSettings + addTmplPluginSettings);
-                    } else {
-                        that.template = doT.template(tmplPluginSettings);
-                    }
-
+                require(req, function (tmplPluginSettings, pluginFeatures) {
+                    that.template = doT.template(tmplPluginSettings);
                     that.pluginFeatures = pluginFeatures;
-
-                    if (pluginFeatures) {
-                        if (pluginFeatures.staticStrings) {
-                            _.extend(that.strings, pluginFeatures.staticStrings);
-                        }
-                    }
                     that.deferred.resolve();
                 });
             },
@@ -128,7 +113,7 @@ define('io.ox/portal/settings/pane',
 
                     if (that.pluginFeatures) {
                         if (that.pluginFeatures.renderSettings) {
-                            that.$el.find('.listbox').append(that.pluginFeatures.renderSettings());
+                            that.$el.append(that.pluginFeatures.renderSettings());
                         }
                     }
                 });
