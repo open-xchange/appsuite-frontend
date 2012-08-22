@@ -585,7 +585,11 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: this.getParagraphText(operation.start[0], operation.start[1], operation.end[1]) };
+                    var localStart = _.copy(operation.start, true),
+                        localEnd = _.copy(operation.end, true),
+                        startLastVal = localStart.pop(),
+                        endLastVal = localEnd.pop(),
+                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implDeleteText(operation.start, operation.end);
@@ -612,9 +616,9 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_PARA_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_PARA_INSERT, start: _.copy(operation.start, true), text: this.getParagraphText(operation.start[0]) }; // HACK: Text is not part of the official operation, but I need it for Undo. Can be changed once we can have multiple undos for one operation.
+                    var localStart = _.copy(operation.start, true),
+                        undoOperation = { name: OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-
                 }
                 this.implDeleteParagraph(operation.start);
             }
@@ -636,6 +640,10 @@ define('io.ox/office/editor/editor',
                 this.implDeleteCellRange(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_ROWS_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_ROW_COPY, start: _.copy(operation.start, true), end: _.copy(operation.end, true) };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
                 this.implDeleteRows(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_COLUMNS_DELETE) {
@@ -2070,41 +2078,6 @@ define('io.ox/office/editor/editor',
 
         this.getParagraphCount = function () {
             return paragraphs.size();
-        };
-
-        this.getParagraphText = function (para, start, end) {
-
-            var text = '',
-                textNodes = null;
-
-            if (start === undefined)
-                start = 0;
-            if (end === undefined)
-                end = 0x7FFFFFFF; // don't need correct len, just a very large value
-
-            textNodes = collectTextNodes(paragraphs[para]);
-            var node, nodeLen, startpos, endpos;
-            var nodes = textNodes.length;
-            var nodeStart = 0;
-            for (var i = 0; i < nodes; i++) {
-                node = textNodes[i];
-                nodeLen = node.nodeValue.length;
-                if ((nodeStart + nodeLen) > start) {
-                    startpos = 0;
-                    endpos = nodeLen;
-                    if (nodeStart <= start) { // node matching startPaM
-                        startpos = start - nodeStart;
-                    }
-                    if ((nodeStart + nodeLen) >= end) { // node matching endPaM
-                        endpos = end - nodeStart;
-                    }
-                    text = text + node.nodeValue.slice(startpos, endpos);
-                }
-                nodeStart += nodeLen;
-                if (nodeStart >= end)
-                    break;
-            }
-            return text;
         };
 
         this.prepareNewParagraph = function (paragraph) {

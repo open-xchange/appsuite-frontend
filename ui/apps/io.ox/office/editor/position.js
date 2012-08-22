@@ -950,6 +950,58 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Returning the text content of the text nodes of the current
+     * paragraph specified by the logical position.
+     * If no paragraph is defined by the logical position, an empty
+     * string is returned.
+     * If the optional parameter start end end are defined, a
+     * substring is returned. The position 'end' is not included
+     * into the substring.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @param {Number} start (optional)
+     *  An integer value for the start of an substring.
+     *
+     * @param {Number} end (optional)
+     *  An integer value for the end of an substring. The character
+     *  at this position is not included into the substring.
+     *
+     * @returns {String}
+     *  Returns the text of all text nodes inside the paragraph or
+     *  empty string, if the logical position does not contain a
+     *  paragraph.
+     */
+    Position.getParagraphText = function (startnode, position, start, end) {
+
+        var paraText = '',
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+
+        if (paragraph) {
+            if (paragraph.hasChildNodes()) {
+                var nodeList = paragraph.childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    paraText += $(nodeList[i]).text();
+                    if (nodeList[i].nodeName === 'IMG') {
+                        paraText += 'I';  // placeholder for an image
+                    }
+                }
+            }
+        }
+
+        if ((paraText !== '') && _.isNumber(start) && _.isNumber(end)) {
+            paraText = paraText.substring(start, end);
+        }
+
+        return paraText;
+    };
+
+    /**
      * Checks, if a specified position is the first position
      * inside a text node in a cell in a table.
      *
@@ -1247,8 +1299,9 @@ define('io.ox/office/editor/position',
      */
     Position.getFirstPositionInNextCell = function (startnode, paragraph) {
 
-        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
-            endOfTable = false;
+        var endOfTable = false;
+
+        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
 
         if ((paragraph) && (paragraph.length > 0)) {
 
@@ -1298,9 +1351,10 @@ define('io.ox/office/editor/position',
      */
     Position.getLastPositionInPrevCell = function (startnode, paragraph) {
 
-        var paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD'),
-            beginOfTable = false,
+        var beginOfTable = false,
             continueSearch = true;
+
+        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
 
         while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
 
