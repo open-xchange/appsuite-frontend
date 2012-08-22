@@ -113,14 +113,14 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // TODO: move these default styles to a 'newDocument' operation
         this.addStyleSheet('Standard', null, { fontname: 'Open Sans', fontsize: 11 }, true)
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Book Antiqua', fontsize: 26, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Book Antiqua', fontsize: 12, italic: true })
-            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Book Antiqua', fontsize: 16, bold: true })
-            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Book Antiqua', fontsize: 14, bold: true })
-            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Book Antiqua', fontsize: 13, bold: true })
-            .addStyleSheet('Heading 4', 'Standard', { fontname: 'Book Antiqua', fontsize: 13, bold: true, italic: true })
-            .addStyleSheet('Heading 5', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true })
-            .addStyleSheet('Heading 6', 'Standard', { fontname: 'Book Antiqua', fontsize: 12, bold: true, italic: true })
+            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Georgia', fontsize: 26, bold: true })
+            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Georgia', fontsize: 12, italic: true })
+            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Georgia', fontsize: 16, bold: true })
+            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Georgia', fontsize: 14, bold: true })
+            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Georgia', fontsize: 13, bold: true })
+            .addStyleSheet('Heading 4', 'Standard', { fontname: 'Georgia', fontsize: 13, bold: true, italic: true })
+            .addStyleSheet('Heading 5', 'Standard', { fontname: 'Georgia', fontsize: 12, bold: true })
+            .addStyleSheet('Heading 6', 'Standard', { fontname: 'Georgia', fontsize: 12, bold: true, italic: true })
             .addStyleSheet('Quote', 'Standard', { italic: true })
             .addStyleSheet('Intense Quote', 'Quote', { bold: true });
 

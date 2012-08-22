@@ -27,6 +27,16 @@ define('io.ox/office/editor/editor',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes;
 
+    // key codes of navigation keys that will be passed directly to the browser
+    var NAVIGATION_KEYS = _([
+//          KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
+//          KeyCodes.CAPS_LOCK,
+            KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
+            KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
+            KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
+            KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
+        ]);
+
     var OP_TEXT_INSERT =  'insertText';
     var OP_TEXT_DELETE =  'deleteText';
 
@@ -329,103 +339,6 @@ define('io.ox/office/editor/editor',
         return nodes;
     }
 
-    /**
-     * Removes empty text nodes from the passed paragraph, checks whether it
-     * needs a trailing <br> element, and converts consecutive white-space
-     * characters.
-     *
-     * @param {HTMLParagraphElement|jQuery} paragraph
-     *  The paragraph element to be validated. If this object is a jQuery
-     *  collection, uses the first DOM node it contains.
-     */
-    function validateParagraphNode(paragraph) {
-
-        var // array of arrays collecting all sequences of sibling text nodes
-            siblingTextNodes = [],
-            // the number of child nodes in the paragraph
-            childCount = 0,
-            // whether the last child node is the dummy <br> element
-            lastDummy = false;
-
-        // convert parameter to a DOM node
-        paragraph = Utils.getDomNode(paragraph);
-
-        // remove all empty text spans which have sibling text spans, and collect
-        // sequences of sibling text spans (needed for white-space handling)
-        $(paragraph).contents().each(function () {
-
-            var isTextSpan = DOM.isTextSpan(this),
-                isPreviousTextSpan = isTextSpan && this.previousSibling && DOM.isTextSpan(this.previousSibling),
-                isNextTextSpan = isTextSpan && this.nextSibling && DOM.isTextSpan(this.nextSibling);
-
-            if (isTextSpan) {
-                if ((this.firstChild.nodeValue.length === 0) && (isPreviousTextSpan || isNextTextSpan)) {
-                    $(this).remove();
-                } else if (isPreviousTextSpan) {
-                    _(siblingTextNodes).last().push(this.firstChild);
-                } else {
-                    siblingTextNodes.push([this.firstChild]);
-                }
-            }
-        });
-
-        // get current child count and whether last node is the dummy <br> node
-        childCount = paragraph.childNodes.length;
-        lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
-
-        // insert an empty text span if there is no other content (except the dummy <br>)
-        if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
-            $(paragraph).prepend($('<span>').text(''));
-            childCount += 1;
-        }
-
-        // append dummy <br> if the paragraph contains only an empty text span, or
-        // remove the dummy <br> if there is anything but a single empty text span
-        if ((childCount === 1) && DOM.isEmptyTextSpan(paragraph.firstChild)) {
-            $(paragraph).append($('<br>').data('dummy', true));
-        } else if (lastDummy && ((childCount > 2) || !DOM.isEmptyTextSpan(paragraph.firstChild))) {
-            $(paragraph.lastChild).remove();
-        }
-
-        // Convert consecutive white-space characters to sequences of SPACE/NBSP
-        // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
-        // it breaks the paragraph's CSS attribute text-align:justify. Process
-        // each sequence of sibling text nodes for its own (the text node
-        // sequences may be interrupted by other elements such as hard line
-        // breaks, images, or other objects).
-        // TODO: handle explicit NBSP inserted by the user (when supported)
-        _(siblingTextNodes).each(function (textNodes) {
-
-            var // the complete text of all sibling text nodes
-                text = '',
-                // offset for final text distribution
-                offset = 0;
-
-            // collect the complete text in all text nodes
-            _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
-
-            // process all white-space contained in the text nodes
-            text = text
-                // normalize white-space (convert to SPACE characters)
-                .replace(/\s/g, ' ')
-                // text in the node sequence cannot start with a SPACE character
-                .replace(/^ /, '\xa0')
-                // convert SPACE/SPACE pairs to SPACE/NBSP pairs
-                .replace(/ {2}/g, ' \xa0')
-                // text in the node sequence cannot end with a SPACE character
-                .replace(/ $/, '\xa0');
-
-            // distribute converted text to the text nodes
-            _(textNodes).each(function (textNode) {
-                var length = textNode.nodeValue.length;
-                textNode.nodeValue = text.substr(offset, length);
-                offset += length;
-            });
-        });
-
-        // TODO: Adjust tabs, ...
-    }
-
     function isSameParagraph(pos1, pos2, includeLastPos) {
         if (pos1.length !== pos2.length)
             return false;
@@ -449,16 +362,6 @@ define('io.ox/office/editor/editor',
      * - 'selectionChanged': When the selection has been changed.
      */
     function OXOEditor(editdiv, textMode) {
-
-        // key codes of navigation keys that will be passed directly to the browser
-        var NAVIGATION_KEYS = _([
-//              KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
-//              KeyCodes.CAPS_LOCK,
-                KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
-                KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
-                KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
-                KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
-            ]);
 
         var // self reference for local functions
             self = this,
@@ -499,6 +402,106 @@ define('io.ox/office/editor/editor',
 
         // add event hub
         Events.extend(this);
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Removes empty text nodes from the passed paragraph, checks whether it
+         * needs a trailing <br> element, and converts consecutive white-space
+         * characters.
+         *
+         * @param {HTMLParagraphElement|jQuery} paragraph
+         *  The paragraph element to be validated. If this object is a jQuery
+         *  collection, uses the first DOM node it contains.
+         */
+        function validateParagraphNode(paragraph) {
+
+            var // array of arrays collecting all sequences of sibling text nodes
+                siblingTextNodes = [],
+                // the number of child nodes in the paragraph
+                childCount = 0,
+                // whether the last child node is the dummy <br> element
+                lastDummy = false;
+
+            // convert parameter to a DOM node
+            paragraph = Utils.getDomNode(paragraph);
+
+            // remove all empty text spans which have sibling text spans, and collect
+            // sequences of sibling text spans (needed for white-space handling)
+            $(paragraph).contents().each(function () {
+
+                var isTextSpan = DOM.isTextSpan(this),
+                    isPreviousTextSpan = isTextSpan && this.previousSibling && DOM.isTextSpan(this.previousSibling),
+                    isNextTextSpan = isTextSpan && this.nextSibling && DOM.isTextSpan(this.nextSibling);
+
+                if (isTextSpan) {
+                    if ((this.firstChild.nodeValue.length === 0) && (isPreviousTextSpan || isNextTextSpan)) {
+                        $(this).remove();
+                    } else if (isPreviousTextSpan) {
+                        _(siblingTextNodes).last().push(this.firstChild);
+                    } else {
+                        siblingTextNodes.push([this.firstChild]);
+                    }
+                }
+            });
+
+            // get current child count and whether last node is the dummy <br> node
+            childCount = paragraph.childNodes.length;
+            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
+
+            // insert an empty text span if there is no other content (except the dummy <br>)
+            if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
+                $(paragraph).prepend($('<span>').text(''));
+                characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                childCount += 1;
+            }
+
+            // append dummy <br> if the paragraph contains only an empty text span, or
+            // remove the dummy <br> if there is anything but a single empty text span
+            if ((childCount === 1) && DOM.isEmptyTextSpan(paragraph.firstChild)) {
+                $(paragraph).append($('<br>').data('dummy', true));
+            } else if (lastDummy && ((childCount > 2) || !DOM.isEmptyTextSpan(paragraph.firstChild))) {
+                $(paragraph.lastChild).remove();
+            }
+
+            // Convert consecutive white-space characters to sequences of SPACE/NBSP
+            // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
+            // it breaks the paragraph's CSS attribute text-align:justify. Process
+            // each sequence of sibling text nodes for its own (the text node
+            // sequences may be interrupted by other elements such as hard line
+            // breaks, images, or other objects).
+            // TODO: handle explicit NBSP inserted by the user (when supported)
+            _(siblingTextNodes).each(function (textNodes) {
+
+                var // the complete text of all sibling text nodes
+                    text = '',
+                    // offset for final text distribution
+                    offset = 0;
+
+                // collect the complete text in all text nodes
+                _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
+
+                // process all white-space contained in the text nodes
+                text = text
+                    // normalize white-space (convert to SPACE characters)
+                    .replace(/\s/g, ' ')
+                    // text in the node sequence cannot start with a SPACE character
+                    .replace(/^ /, '\xa0')
+                    // convert SPACE/SPACE pairs to SPACE/NBSP pairs
+                    .replace(/ {2}/g, ' \xa0')
+                    // text in the node sequence cannot end with a SPACE character
+                    .replace(/ $/, '\xa0');
+
+                // distribute converted text to the text nodes
+                _(textNodes).each(function (textNode) {
+                    var length = textNode.nodeValue.length;
+                    textNode.nodeValue = text.substr(offset, length);
+                    offset += length;
+                });
+            });
+
+            // TODO: Adjust tabs, ...
+        }
 
         // global editor settings ---------------------------------------------
 
