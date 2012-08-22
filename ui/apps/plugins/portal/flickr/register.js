@@ -21,7 +21,7 @@ define('plugins/portal/flickr/register',
 
     // order of elements is the crucial factor of presenting the image in the sidepopups
     var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
-    var apiUrl = "http://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update," + imagesizes.join(',');
+    var apiUrl = "https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update," + imagesizes.join(',');
 
     mp.addFeed({
         id: "flickr-id1",
