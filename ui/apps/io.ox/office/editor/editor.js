@@ -452,7 +452,9 @@ define('io.ox/office/editor/editor',
             // insert an empty text span if there is no other content (except the dummy <br>)
             if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
-                characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                if (textMode === 'rich') {
+                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                }
                 childCount += 1;
             }
 
@@ -2672,7 +2674,7 @@ define('io.ox/office/editor/editor',
 
             // build the DOM text range and set the formatting attributes
             styleSheets = self.getStyleSheets(family);
-            if (styleSheets && (textMode !== 'plain')) {
+            if (styleSheets && (textMode === 'rich')) {
                 ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
                 styleSheets.setAttributesInRanges(ranges, attributes);
             }
