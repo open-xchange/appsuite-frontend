@@ -266,7 +266,7 @@ define('io.ox/office/tk/dropdown/menu',
          *  The controls to be registered as menu toggle controls.
          */
         group.addMenuToggleControls = function (controls) {
-            controls.css('cursor', 'pointer')
+            controls
                 .on('click', menuButtonClickHandler)
                 .on('keydown keypress keyup', menuButtonKeyHandler);
             menuToggleControls = menuToggleControls.add(controls);
@@ -280,7 +280,7 @@ define('io.ox/office/tk/dropdown/menu',
          *  The controls to be unregistered as menu toggle controls.
          */
         group.removeMenuToggleControls = function (controls) {
-            controls.css('cursor', 'inherit')
+            controls
                 .off('click', menuButtonClickHandler)
                 .off('keydown keypress keyup', menuButtonKeyHandler);
             menuToggleControls = menuToggleControls.not(controls);
