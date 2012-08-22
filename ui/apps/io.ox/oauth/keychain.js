@@ -15,7 +15,7 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
  
-define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
+define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http", "io.ox/core/event"], function (ext, http, Events) {
     "use strict";
     var moduleDeferred = $.Deferred(),
         cache = null,
@@ -37,7 +37,11 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
     // Extension
     function OAuthKeychainAPI(service) {
         var self = this;
+        
+        Events.extend(this);
+        
         this.id = simplifyId(service.id);
+        this.displayName = service.displayName;
 
         function outgoing(account) {
             if (!account) {
@@ -52,7 +56,18 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         }
         
         function chooseDisplayName() {
-            return "My " + service.displayName + " account";
+            var names = {}, name, counter = 0;
+            _(cache[service.id].accounts).each(function (account) {
+                names[account.displayName] = 1;
+            });
+            
+            name = "My " + service.displayName + " account";
+            
+            while (names[name]) {
+                counter++;
+                name = "My " + service.displayName + " account (" + counter + ")";
+            }
+            return name;
         }
         
         
@@ -71,22 +86,17 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         this.hasStandardAccount = function () {
             return this.getAll().length > 0;
         };
-        
-        function init(account) {
-            account = incoming(account);
-            var def = $.Deferred();
-            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName());
-                new dialogs.ModalDialog({
-                    width: 400,
-                    easyOut: true
-                })
-                .header($("<h4>").text("Please sign into your " + service.displayName + " account"))
-                .append($('<label for="name">').text("Account Name"))
-                .append($displayNameField)
-                .addButton('cancel', 'Cancel')
-                .addPrimaryButton('add', 'Sign in')
-                .on("add", function () {
+                
+        this.createInteractively = function () {
+            var account = incoming(account),
+                def = $.Deferred();
+
+            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/keys"], function (dialogs, KeyListener) {
+                var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName()),
+                    dialog,
+                    suppressCancel = false;
+                
+                function callInit() {
                     var callbackName = "oauth" + generateId();
                     require(["io.ox/core/http"], function (http) {
                         var params = {
@@ -109,26 +119,49 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                                 def.resolve(response.data);
                                 delete window["callback_" + callbackName];
                                 popupWindow.close();
+                                self.trigger("create", response.data);
+                                self.trigger("refresh.all refresh.list");
+                                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                                    new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
+                                });
                             };
                             popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
                             
                         })
                         .fail(def.reject);
                     });
-                })
+                }
+                
+                new KeyListener($displayNameField).on("enter", function () {
+                    
+                    callInit();
+                    suppressCancel = true;
+                    dialog.close();
+                    
+                }).include();
+                
+                dialog = new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true
+                });
+                
+                dialog.header($("<h4>").text("Please sign into your " + service.displayName + " account"))
+                .append($('<label for="name">').text("Account Name"))
+                .append($displayNameField)
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('add', 'Sign in')
+                .on("add", callInit)
                 .on("cancel", function () {
-                    alert("Cancel");
+                    if (!suppressCancel) {
+                        def.resolve();
+                    }
                 })
                 .show(function () {
-                    $displayNameField.focus(); // Why, oh why, doesn't this work ?!?
+                    $displayNameField.focus();
                 });
             });
             
             return def;
-        }
-        
-        this.createInteractively = function () {
-            return init();
         };
         
         this.remove = function (account) {
@@ -141,6 +174,8 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 }
             }).done(function (response) {
                 delete cache[service.id].accounts[account.id];
+                self.trigger("delete", account);
+                self.trigger("refresh.all refresh.list", account);
             });
         };
         
@@ -155,12 +190,44 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 data: {displayName: account.displayName}
             }).done(function (response) {
                 cache[service.id].accounts[account.id] = account;
+                self.trigger("update", account);
+                self.trigger("refresh.list", account);
             });
         };
         
         this.reauthorize = function (account) {
-            account = incoming(account);
-            return init(account);
+            var def = $.Deferred();
+            var callbackName = "oauth" + generateId();
+            require(["io.ox/core/http"], function (http) {
+                var params = {
+                    action: "init",
+                    serviceId: service.id,
+                    displayName: account.displayName,
+                    cb: callbackName
+                };
+                if (account) {
+                    params.id = account.id;
+                }
+                http.GET({
+                    module: "oauth/accounts",
+                    params: params
+                })
+                .done(function (interaction) {
+                    var popupWindow = null;
+                    window["callback_" + callbackName] = function (response) {
+                        cache[service.id].accounts[response.data.id] = response.data;
+                        def.resolve(response.data);
+                        delete window["callback_" + callbackName];
+                        popupWindow.close();
+                        self.trigger("update", response.data);
+                    };
+                    popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
+                    
+                })
+                .fail(def.reject);
+            });
+            
+            return def;
         };
     }
     

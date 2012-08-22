@@ -21,16 +21,18 @@ define.async('io.ox/portal/main',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'io.ox/core/tk/dialogs',
+     'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
 
     'use strict';
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+    var activePlugins = _.map(settings.get('activePlugins') || [], function (value) { return 'plugins/portal/' + value + '/register'; });
+    plugins = _.intersection(plugins, activePlugins);
 
     return require(plugins).pipe(function () {
-
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -244,7 +246,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
             }));
 
             updateTitle();
-            _.every(1, 'hour', updateTitle);
+            _.tick(1, 'hour', updateTitle);
 
             initExtensions();
 

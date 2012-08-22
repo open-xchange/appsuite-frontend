@@ -18,7 +18,7 @@ define('plugins/portal/tumblr/register',
 
     'use strict';
     var mp = new MediaPlayer();
-    var apiUrl = "http://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
+    var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
 
     mp.addFeed({
         id: "tumblr-icr",

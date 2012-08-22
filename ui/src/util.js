@@ -404,7 +404,7 @@
         },
 
         // call function 'every' 1 hour or 5 seconds
-        every: function (num, type, fn) {
+        tick: function (num, type, fn) {
             var interval = 1000;
             if (type === "hour") {
                 interval *= 3600;

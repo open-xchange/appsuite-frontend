@@ -21,7 +21,7 @@ define('plugins/portal/flickr/register',
 
     // order of elements is the crucial factor of presenting the image in the sidepopups
     var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
-    var apiUrl = "http://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update," + imagesizes.join(',');
+    var apiUrl = "https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update," + imagesizes.join(',');
 
     mp.addFeed({
         id: "flickr-id1",
@@ -69,7 +69,7 @@ define('plugins/portal/flickr/register',
                 });
 
                 if (foundImage) {
-                    var urlName = foundImage;
+                    var urlName = foundImage.replace(/^http:\/\//i, 'https://');
                     var widthName = 'width' + urlName.replace(/url/, ''),
                         heightName = 'height' + urlName.replace(/url/, '');
 
@@ -95,7 +95,7 @@ define('plugins/portal/flickr/register',
                         heightName = 'height' + urlName.replace(/url/, '');
 
                     if (entry[urlName] && entry[widthName] && entry[heightName]) {
-                        var $img = $('<img/>', {src: entry[urlName], width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
+                        var $img = $('<img/>', {src: entry[urlName].replace(/^http:\/\//i, 'https://'), width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
                             .load(function () {
                                 if ($busyIndicator) {
                                     $busyIndicator.detach();

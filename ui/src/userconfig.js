@@ -24,7 +24,7 @@ define(function () {
                 company: "Open-Xchange",
                 icon: "portal.png",
                 category: "Productivity",
-                settings: false
+                settings: true
             },
 
             "io.ox/mail": {

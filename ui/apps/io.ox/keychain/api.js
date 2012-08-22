@@ -14,6 +14,7 @@
  /**
  ext.point("io.ox/keychain/api").extend({
     id: ...,
+    displayName: ...,
     getAll: function () {
         // synchronously load all accounts of the given type
     },
@@ -45,16 +46,28 @@
  also add your plugin to serverConfig.plugins.keychain
  **/
 
-define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.plugins.keychain || []), function (ext) {
+define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].concat(ox.serverConfig.plugins.keychain || []), function (ext, Events) {
     "use strict";
     
     var api = {};
+    
+    Events.extend(api);
         
     function initExtensions() {
         api.submodules = {};
         ext.point("io.ox/keychain/api").each(function (extension) {
             api.submodules[extension.id] = extension;
             extension.invoke("init");
+            if (extension.on) {
+                extension.on("triggered", function () {
+                    var args = $.makeArray(arguments);
+                    args.shift();
+                    if (args.length > 1) {
+                        args[1].accountType = extension.id;
+                    }
+                    api.trigger.apply(api, args);
+                });
+            }
         });
     }
     
@@ -108,7 +121,7 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
             account = account.toJSON();
         }
         
-        return invokeExtension(account.accountType, "remove");
+        return invokeExtension(account.accountType, "remove", account);
     };
     
     api.update = function (account) {
@@ -116,7 +129,7 @@ define("io.ox/keychain/api", ["io.ox/core/extensions"].concat(ox.serverConfig.pl
             account = account.toJSON();
         }
         
-        return invokeExtension(account.accountType, "update");
+        return invokeExtension(account.accountType, "update", account);
     };
     
     api.isEnabled = function (accountType) {

@@ -14,7 +14,7 @@
 define('plugins/portal/reddit/register',
     ['io.ox/portal/mediaplugin',
      'io.ox/mail/util',
-     'settings!io.ox/portal/plugins/reddit',
+     'settings!plugins/portal/reddit',
      'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
 
     'use strict';
@@ -28,17 +28,11 @@ define('plugins/portal/reddit/register',
 
     var subreddits = settings.get('subreddits');
 
-    if (!subreddits) {
-        subreddits = [{subreddit: 'funny', mode: 'hot'}, {subreddit: 'pics', mode: 'hot'}];
-        settings.set('subreddits', subreddits);
-        settings.save();
-    }
-
     _.each(subreddits, function (v) {
         // TODO index
         if (apiUrl[v.mode]) {
             mp.addFeed({
-                id: "reddit-" + v.subreddit.replace(/[^a-z0-9]/g, '_') + "_" + new Date().getTime(),
+                id: "reddit-" + v.subreddit.replace(/[^a-z0-9]/g, '_'),
                 description: v.subreddit,
                 url: apiUrl[v.mode].split("##subreddit##").join(v.subreddit) + "&jsonp=",
                 index: 110

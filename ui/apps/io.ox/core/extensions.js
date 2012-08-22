@@ -120,7 +120,7 @@ define("io.ox/core/extensions",
                     busyIndicator.removeClass('io-ox-busy');
                 }
             };
-            
+
             // skip duplicates (= same id)
             if (!has(extension.id)) {
 
@@ -145,7 +145,7 @@ define("io.ox/core/extensions",
                         return undefined;
                     };
                 }
-                
+
                 if (!extension.asyncMetadata) {
                     extension.asyncMetadata = function (name, args) {
                         return async.defer(extension.metadata(name, args));
@@ -271,13 +271,14 @@ define("io.ox/core/extensions",
             var o = _.extend({
                     name: ox.signin ? 'signin' : 'core',
                     prefix: 'plugins/',
-                    suffix: 'register'
+                    suffix: 'register',
+                    nameOnly : false
                 }, options),
                 // all plugins
                 plugins = ox.serverConfig.plugins || {};
             // transform to proper URLs
             return _(plugins[o.name] || []).map(function (i) {
-                    return o.prefix + i + '/' + o.suffix;
+                    return o.nameOnly ? i : o.prefix + i + '/' + o.suffix;
                 });
         },
 
