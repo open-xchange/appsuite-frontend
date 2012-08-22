@@ -235,7 +235,7 @@ define('io.ox/mail/accounts/settings',
                     }
                 });
             });
-            
+
             return def;
         },
 

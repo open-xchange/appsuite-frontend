@@ -107,7 +107,7 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.jpg', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
+                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.png', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
@@ -152,7 +152,7 @@ define("plugins/portal/linkedin/register",
             $node.addClass("linkedin-content");
 
             $node.append(
-                    $("<div/>").addClass("clear-title")
+                    $("<h1>").addClass("clear-title")
                     .text(gt("LinkedIn Network Updates"))
                 );
 

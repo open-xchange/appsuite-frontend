@@ -108,7 +108,7 @@ define('plugins/portal/facebook/register',
                 return $.Deferred().resolve();
             }
 
-            this.append($('<div>').addClass('clear-title').text('Facebook'));
+            this.append($('<h1>').addClass('clear-title').text('Facebook'));
             _(wall).each(function (post) {
                 var profile = getProfile(profiles, post.actor_id);
                 var entry_id = 'facebook-' + post.post_id;

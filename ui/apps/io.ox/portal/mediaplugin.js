@@ -155,11 +155,17 @@ define('io.ox/portal/mediaplugin',
                         if (extension && extension.id) {
                             $('div[widget-id="' + extension.id + '"]').css({
                                 'background-image': 'url(' + $img.attr('data-original') + ')',
-                                'background-size': '100% auto',
-                                'background-repeat': 'no-repeat'
+                                'background-size': 'cover',
+                                'background-repeat': 'no-repeat',
+                                'position': 'relative'
                             });
 
-                            $('div[widget-id="' + extension.id + '"] > h1').addClass("io-ox-portal-mediaplugin-big").css({opacity: 0.7});
+                            $('div[widget-id="' + extension.id + '"] > h1').addClass("io-ox-portal-mediaplugin-big").css({
+                                opacity: 0.7,
+                                position: "absolute",
+                                bottom: "0px",
+                                width: "100%"
+                            });
                             $entry.addClass("mediaplugin-entry-big-tile").css({opacity: 0.7});
                         } else {
                             $img.css({height: 'auto'});
@@ -330,7 +336,7 @@ define('io.ox/portal/mediaplugin',
 //                            $(document).off('keydown', onKeyDown);
                         });
 
-                        $('<div>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
+                        $('<h1>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
                         $mediapluginEntries.appendTo(self);
                         $busyIndicator.appendTo(self);
 

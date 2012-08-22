@@ -1,9 +1,10 @@
 @padding: 2px;
-@portal-background-alt: @topbar-background;
-@portal-background: @topbar-background-alt;
+@large-padding: 13px;
+@portal-background-alt: #050505;
+@portal-background: #222;
 
 .io-ox-portal {
-    padding: @padding;
+    padding: @large-padding;
     position: relative;
     height: 100%;
     overflow: auto;
@@ -172,7 +173,7 @@
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
-    padding: 13px;
+    padding: @large-padding;
     overflow: hidden;
     margin: 0;
     cursor: pointer;
@@ -187,6 +188,9 @@
     line-height: 1em;
     margin: 0.7em 0 1em 0;
 }
+.io-ox-sidepopup-pane h1.clear-title {
+    margin-bottom: @large-padding;
+}
 .io-ox-portal-content .vgrid-cell.mail {
     height: 4em;
 }
@@ -199,13 +203,10 @@
     margin: 8px 0 8px 0;
 }
 
-@tile-fix: 10%;
-@tile-hover: 25%;
-@tile-darken: 20%;
-@tile-hover-dark: 30%;
+
+
 
 .io-ox-portal {
-
     .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
     .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
     .tile-color1 { background-color: darken(@tile-color-1, @tile-fix); }
