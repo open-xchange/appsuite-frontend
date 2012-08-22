@@ -455,13 +455,18 @@ define('io.ox/office/editor/main',
          *  A deferred that will be resolved or rejected when the AJAX request
          *  has returned.
          */
-        var sendOperations = (function () {
-            // local scope for 'def' variable used in original and fall-back function
+        var sendOperations = (function () { // local scope for the deferred
 
-            var // the result deferred (created when called initially, used when called recursively)
+            var // the result deferred
                 def = null;
 
-            return AppHelper.makeNoRecursionGuard(function (silent) {
+            // create and return the actual sendOperations() function
+            return function (silent) {
+
+                // return existing deferred if the AJAX request is still running
+                if (def && (def.state() === 'pending')) {
+                    return def;
+                }
 
                 var // deep copy of the current buffer
                     sendOps = _.copy(operationsBuffer, true),
@@ -470,7 +475,7 @@ define('io.ox/office/editor/main',
                     // a deferred that will cause the quit handler to wait for the AJAX request
                     quitDelay = (silent === true) ? null : createQuitDelay();
 
-                // the result deferred
+                // create a new result deferred
                 def = $.Deferred();
 
                 // We might receive new operations while sending the current ones...
@@ -503,18 +508,22 @@ define('io.ox/office/editor/main',
                 });
 
                 return def;
-            },
-            function () { return def; }); // fall-back function for recursive calls
+            };
 
         }());
 
-        var receiveAndSendOperations = (function () {
-            // local scope for 'def' variable used in original and fall-back function
+        var receiveAndSendOperations = (function () { // local scope for the deferred
 
-            var // the result deferred (created when called initially, used when called recursively)
+            var // the result deferred
                 def = null;
 
-            return AppHelper.makeNoRecursionGuard(function () {
+            // create and return the actual receiveAndSendOperations() function
+            return function () {
+
+                // return existing deferred if the AJAX request is still running
+                if (def && (def.state() === 'pending')) {
+                    return def;
+                }
 
                 var // a deferred that will cause the quit handler to wait for the AJAX request
                     quitDelay = createQuitDelay(),
@@ -549,6 +558,8 @@ define('io.ox/office/editor/main',
                             function () { sendDef.reject(); }
                         );
                     } else {
+                        // nothing to send, but the deferred must be resolved
+                        sendDef.resolve();
                         startOperationsTimer();
                     }
                     getDef.resolve(response);
@@ -562,8 +573,7 @@ define('io.ox/office/editor/main',
                 });
 
                 return def;
-            },
-            function () { return def; }); // fall-back function for recursive calls
+            };
 
         }());
 
