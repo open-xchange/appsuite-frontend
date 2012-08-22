@@ -138,6 +138,12 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                 return drawContent(extension, event);
             };
         }
+        
+        function makeCreationDialog(extension) {
+            return function (event) {
+                return alert("Need to create " + extension.id);
+            };
+        }
 
         function initExtensions() {
             var count = 0;
@@ -151,12 +157,17 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                         .attr('widget-id', extension.id)
                         .appendTo($borderBox)
                         .busy();
-
+                    var requiresSetUp = false;
+                    
                     if (extension.tileClass) {
                         $node.addClass(extension.tileClass);
                     }
 
-                    $node.on('click', makeClickHandler(extension));
+                    if (requiresSetUp) {
+                        $node.on('click', makeCreationDialog(extension));
+                    } else {
+                        $node.on('click', makeClickHandler(extension));
+                    }
 
                     if (!extension.loadTile) {
                         extension.loadTile = function () {
@@ -220,7 +231,17 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                             return $.when();
                         };
                     }
-
+                    if (requiresSetUp) {
+                        return (extension.invoke.apply(extension, ['drawCreationDialog', $node].concat($.makeArray(arguments))) || $.Deferred())
+                            .done(function () {
+                                $node.idle();
+                                extension.invoke('postTile', $node, extension);
+                            })
+                            .fail(function (e) {
+                                $node.idle().remove();
+                            });
+                    }
+                    
                     return extension.invoke('loadTile')
                         .pipe(function (a1, a2) {
                             return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
