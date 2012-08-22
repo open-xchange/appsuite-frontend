@@ -15,20 +15,22 @@ define('io.ox/portal/settings/pane',
        'io.ox/settings/utils',
        'io.ox/portal/settings/plugin/model',
        'io.ox/core/tk/dialogs',
-       'settings!io.ox/portal/plugins',
+       'settings!io.ox/portal',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
        'text!io.ox/portal/settings/tpl/pluginsettings.html',
        'gettext!io.ox/portal/settings'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, tmplPluginSettings, gt) {
 
     'use strict';
-    var plugins = [];
-    settings.remove('activePlugins');
-    var activePlugins = settings.get('activePlugins') || [];
 
-    console.log("activePlugins ->");
-    console.log(activePlugins);
-    console.log("activePlugins <-");
+    var staticStrings =  {
+        ACTIVATE_PLUGIN: gt('Activate Plugin'),
+        PLUGIN_SETTINGS: gt('Properties')
+    };
+
+    var plugins = [];
+
+    var activePlugins = settings.get('activePlugins') || [];
 
     _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
         var isActive = _.include(activePlugins, pluginName);
@@ -62,12 +64,6 @@ define('io.ox/portal/settings/pane',
                 'click .deletable-item': 'onSelect'
             },
             onSelect: function () {
-
-                settings.remove('activePlugins');
-                settings.remove('subreddits');
-                settings.remove('test');
-
-
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
                 this.$el.find('.deletable-item').attr('selected', 'selected');
             }
@@ -83,7 +79,8 @@ define('io.ox/portal/settings/pane',
 
                 self.$el.empty().append(self.template({
                     active: this.plugin.get('active'),
-                    id: this.plugin.get('id')
+                    id: this.plugin.get('id'),
+                    strings: staticStrings
                 }));
 
                 return self;
@@ -92,36 +89,19 @@ define('io.ox/portal/settings/pane',
                 'click .save': 'onSave'
             },
             onSave: function () {
-                console.log("PluginSettingsView save");
-
                 // Save Active-State
+                console.log("ox.ui.running ->");
+                console.log(ox.ui.running);
+                console.log("ox.ui.running <-");
                 if (this.$el.find('input#plugin-active').is(':checked')) {
-                    console.log("checked");
                     activePlugins.push(this.plugin.get('id'));
                     activePlugins = _.uniq(activePlugins);
                 } else {
-                    console.log("not checked");
                     activePlugins = _.without(activePlugins, this.plugin.get('id'));
                 }
-
+                this.dialog.close();
                 settings.set('activePlugins', activePlugins);
                 settings.save();
-
-//                activePlugins
-
-
-//                var self = this,
-//                    deferedSave = $.Deferred();
-//                this.model.save(false, deferedSave);
-//                deferedSave.done(function (data) {
-//                    self.dialog.close();
-//                    if (self.collection) {
-//                        self.collection.add([data]);
-//                    }
-//                    if (self.model.isNew()) {
-//                        self.succes();
-//                    }
-//                });
             }
         });
 
@@ -163,8 +143,8 @@ define('io.ox/portal/settings/pane',
                     e.data = {id: $sel.data('id'), node: this.el};
                     e.target = $sel;
 
-                    new dialogs.SidePopup().show(e, function (popup) {
-                        var view = new PluginSettingsView({plugin: collection.get([e.data.id])});
+                    var view = new PluginSettingsView({plugin: collection.get([e.data.id])});
+                    view.dialog = new dialogs.SidePopup().show(e, function (popup) {
                         popup.append(view.render().el);
                     });
                 }

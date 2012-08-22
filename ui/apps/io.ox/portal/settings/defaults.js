@@ -17,7 +17,7 @@ define('io.ox/portal/settings/defaults',
     'use strict';
 
     var settingsDefaults = {
-        'activePlugins': ['mail', 'reddit', 'appointments']
+        'activePlugins': ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter', 'tumblr', 'flickr']
     };
 
     return settingsDefaults;
