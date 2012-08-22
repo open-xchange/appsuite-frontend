@@ -64,12 +64,12 @@ define('io.ox/office/tk/control/textfield',
             textField = Utils.createTextField(options),
 
             // read-only mode
-            readOnly = false,
+            readOnly = null,
 
             // the caption (icon and text label) for the text field
             caption = Utils.createLabel(options).addClass('input-caption'),
 
-            // the caption (icon and text label) for the text field
+            // the white background for the text field
             backgroundNode = $('<div>'),
 
             // the overlay container for the caption and the background
@@ -129,7 +129,7 @@ define('io.ox/office/tk/control/textfield',
             backgroundNode.width(paddedWidth).height(textField.height());
 
             // remove caption if empty
-            if (!hasCaption) { caption.remove(); }
+            if (!hasCaption) { caption.hide(); }
         }
 
         /**
@@ -144,7 +144,7 @@ define('io.ox/office/tk/control/textfield',
          * The action handler for this text field.
          */
         function commitHandler() {
-            var value = validator.textToValue(textField.val());
+            var value = readOnly ? null : validator.textToValue(textField.val());
             if (!_.isNull(value)) {
                 initialText = null;
             }
@@ -264,17 +264,28 @@ define('io.ox/office/tk/control/textfield',
          *  A reference to this instance.
          */
         this.setReadOnly = function (state) {
-            if ((readOnly = _.isUndefined(state) || (state === true))) {
-                textField
-                    .addClass('readonly')
-                    .on('mousedown dragover drop contextmenu', function (event) {
-                        event.preventDefault();
-                        self.trigger('cancel');
-                    });
-            } else {
-                textField
-                    .removeClass('readonly')
-                    .off('mousedown dragover drop contextmenu');
+
+            // validate the new read-only state
+            state = _.isUndefined(state) || (state === true);
+
+            if (readOnly !== state) {
+                // initialize the text field
+                if ((readOnly = state)) {
+                    textField
+                        .addClass('readonly')
+                        .removeClass(Group.FOCUSABLE_CLASS)
+                        .on('mousedown dragover drop contextmenu', function (event) {
+                            event.preventDefault();
+                            self.trigger('cancel');
+                        });
+                } else {
+                    textField
+                        .removeClass('readonly')
+                        .addClass(Group.FOCUSABLE_CLASS)
+                        .off('mousedown dragover drop contextmenu');
+                }
+                // trigger listeners
+                textField.trigger('readonly', readOnly);
             }
             return this;
         };
@@ -309,7 +320,7 @@ define('io.ox/office/tk/control/textfield',
             // as it misses cut/delete from context menu, drag&drop, etc.
             .on('input keydown keyup', fieldInputHandler);
 
-        // prevent edit mode/actions in read-only mode
+        // initialize read-only mode
         this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
 
     } // class TextField

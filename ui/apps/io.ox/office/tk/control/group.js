@@ -26,10 +26,7 @@ define('io.ox/office/tk/control/group',
         HIDDEN_CLASS = 'hidden',
 
         // CSS class for disabled groups
-        DISABLED_CLASS = 'disabled',
-
-        // CSS class for focusable controls
-        FOCUSABLE_CLASS = 'focusable';
+        DISABLED_CLASS = 'disabled';
 
     // class Group ============================================================
 
@@ -192,7 +189,7 @@ define('io.ox/office/tk/control/group',
          *  A reference to this group.
          */
         this.addFocusableControl = function (control) {
-            groupNode.append(control.addClass(FOCUSABLE_CLASS));
+            groupNode.append(control.addClass(Group.FOCUSABLE_CLASS));
             return this;
         };
 
@@ -335,11 +332,18 @@ define('io.ox/office/tk/control/group',
     // constants --------------------------------------------------------------
 
     /**
+     * CSS class for focusable control elements in this group.
+     *
+     * @constant
+     */
+    Group.FOCUSABLE_CLASS = 'focusable';
+
+    /**
      * CSS selector for focusable control elements in this group.
      *
      * @constant
      */
-    Group.FOCUSABLE_SELECTOR = '.' + FOCUSABLE_CLASS;
+    Group.FOCUSABLE_SELECTOR = '.' + Group.FOCUSABLE_CLASS;
 
     // exports ================================================================
 
