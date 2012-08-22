@@ -33,6 +33,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
             function displaySuccess(msg) {
                 return function () {
                     // TODO: Once we know how to notify user about results
+                    closeDialog();
                 };
             }
             
@@ -52,8 +53,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
             
             function doReauthorize() {
                 account.displayName = $displayNameField.val();
-                keychain.submodules[serviceId].reauthorize(account.toJSON()).done(displaySuccess("You have reauthorized this account.")).fail(displayError("Something went wrong reauthorizing the account."));
-                closeDialog();
+                keychain.submodules[serviceId].reauthorize(account).done(displaySuccess("You have reauthorized this account.")).fail(displayError("Something went wrong reauthorizing the account."));
             }
             
             $form = $('<div class="settings-detail-pane">').append(
