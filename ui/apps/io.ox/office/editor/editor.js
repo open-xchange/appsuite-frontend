@@ -678,7 +678,6 @@ define('io.ox/office/editor/editor',
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 // TODO: Remove this ugly fix for Windows servers asap
-                imgurl = imgurl.replace(/\\/g, "/");  // problem of Windows servers
                 imgurl = imgurl.replace(/fragment=\//g, "fragment=");  // problem of Windows servers
                 this.implInsertImage(imgurl, operation.position, operation.attrs);
             }
