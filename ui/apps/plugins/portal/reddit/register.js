@@ -32,7 +32,7 @@ define('plugins/portal/reddit/register',
         // TODO index
         if (apiUrl[v.mode]) {
             mp.addFeed({
-                id: "reddit-" + v.subreddit.replace(/[^a-z0-9]/g, '_') + "_" + new Date().getTime(),
+                id: "reddit-" + v.subreddit.replace(/[^a-z0-9]/g, '_'),
                 description: v.subreddit,
                 url: apiUrl[v.mode].split("##subreddit##").join(v.subreddit) + "&jsonp=",
                 index: 110

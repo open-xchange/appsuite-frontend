@@ -102,6 +102,34 @@ define('io.ox/portal/settings/pane',
                 this.dialog.close();
                 settings.set('activePlugins', activePlugins);
                 settings.save();
+
+                var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+                var allActivePlugins = _.map(activePlugins || [], function (value) { return 'plugins/portal/' + value + '/register'; });
+                plugins = _.intersection(plugins, allActivePlugins);
+
+                // Load all active plugins
+                require(plugins).pipe(function () {
+//                    ext.point("io.ox/portal/widget").disable("flickr-id1");
+
+                    // Disable all deactivated plugins
+                    ext.point('io.ox/portal/widget')
+                        .each(function (extension) {
+                            var eid = extension.id;
+
+                            var isActive = _.find(activePlugins, function (plugin) {
+                                var pluginLength = plugin.length;
+                                return (eid.length >= pluginLength && eid.substring(0, pluginLength) === plugin);
+                            });
+
+                            if (!isActive) {
+                                console.log("Disable " + eid);
+                                ext.point("io.ox/portal/widget").disable(eid);
+                            }
+                        }
+                    );
+
+                    ox.trigger("refresh^");
+                });
             }
         });
 
