@@ -69,7 +69,7 @@ define('plugins/portal/flickr/register',
                 });
 
                 if (foundImage) {
-                    var urlName = foundImage;
+                    var urlName = foundImage.replace(/^http:\/\//i, 'https://');
                     var widthName = 'width' + urlName.replace(/url/, ''),
                         heightName = 'height' + urlName.replace(/url/, '');
 
@@ -95,7 +95,7 @@ define('plugins/portal/flickr/register',
                         heightName = 'height' + urlName.replace(/url/, '');
 
                     if (entry[urlName] && entry[widthName] && entry[heightName]) {
-                        var $img = $('<img/>', {src: entry[urlName], width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
+                        var $img = $('<img/>', {src: entry[urlName].replace(/^http:\/\//i, 'https://'), width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
                             .load(function () {
                                 if ($busyIndicator) {
                                     $busyIndicator.detach();
