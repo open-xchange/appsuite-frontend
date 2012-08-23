@@ -12,7 +12,7 @@ CACHE:
 # core - bootstrap
 @base@/bootstrap.js
 @base@/apps/io.ox/core/bootstrap/basics.js
-@base@/apps/io.ox/core/bootstrap/less/bootstrap.less
+@base@/apps/io.ox/core/bootstrap/less/bootstrap-all.less
 @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
 @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme

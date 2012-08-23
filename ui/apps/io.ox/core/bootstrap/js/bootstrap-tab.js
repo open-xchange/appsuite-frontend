@@ -1,6 +1,6 @@
 // NOJSHINT
 /* ========================================================
- * bootstrap-tab.js v2.0.0
+ * bootstrap-tab.js v2.1.0
  * http://twitter.github.com/bootstrap/javascript.html#tabs
  * ========================================================
  * Copyright 2012 Twitter, Inc.
@@ -19,14 +19,15 @@
  * ======================================================== */
 
 
-!function( $ ){
+!function ($) {
 
-  "use strict"
+  "use strict"; // jshint ;_;
+
 
  /* TAB CLASS DEFINITION
   * ==================== */
 
-  var Tab = function ( element ) {
+  var Tab = function (element) {
     this.element = $(element)
   }
 
@@ -40,6 +41,7 @@
         , selector = $this.attr('data-target')
         , previous
         , $target
+        , e
 
       if (!selector) {
         selector = $this.attr('href')
@@ -50,10 +52,13 @@
 
       previous = $ul.find('.active a').last()[0]
 
-      $this.trigger({
-        type: 'show'
-      , relatedTarget: previous
+      e = $.Event('show', {
+        relatedTarget: previous
       })
+
+      $this.trigger(e)
+
+      if (e.isDefaultPrevented()) return
 
       $target = $(selector)
 
@@ -128,4 +133,4 @@
     })
   })
 
-}( window.jQuery )
+}(window.jQuery);
