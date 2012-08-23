@@ -30,9 +30,6 @@ define('plugins/portal/reddit/register',
 
         var subreddits = settings.get('subreddits');
 
-        console.log("reloading reddit...");
-        console.log(subreddits);
-
         _.each(subreddits, function (v) {
             // TODO index
             if (apiUrl[v.mode]) {
