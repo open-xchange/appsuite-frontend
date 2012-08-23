@@ -30,7 +30,7 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
         fulltimeHeight: 20,     // height of fulltime appointments
-        appWidth:        97,     // max width of an appointment in %
+        appWidth:       97,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
         workEnd:        18,     // full hour for end position of worktime marker
@@ -164,7 +164,8 @@ define('io.ox/calendar/week/view',
             // clear all first
             this.$el.find('.appointment').remove();
             
-            var draw = {};
+            var draw = {},
+                fulltimeColPos = [0];
             
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
@@ -182,14 +183,33 @@ define('io.ox/calendar/week/view',
 
                 if (model.get('full_time')) {
                     var app = this.renderAppointment(model.attributes),
-                        row = 0;
+                        found = false,
+                        row = 0,
+                        fulltimePos = startDate.getDay() - 1,
+                        fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY;
                     
-                    console.log((model.get('end_date') - model.get('start_date')) / date.DAY);
+                    // loop over all column positions
+                    for (var k = 0; k < fulltimeColPos.length; k++) {
+                        console.log('Vergleich: ', fulltimeColPos[k], model.get('start_date'), fulltimeColPos[k] <= model.get('start_date'));
+                        if  (fulltimeColPos[k] <= model.get('start_date')) {
+                            fulltimeColPos[k] = model.get('end_date');
+                            row = k;
+                            found = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!found) {
+                        row = fulltimeColPos.length;
+                        fulltimeColPos.push(model.get('end_date'));
+                    }
+                    
+                    console.log(model.get('start_date'), row, fulltimeColPos);
                     
                     app.css({
                         height: 20,
-                        width: (100 / this.columns * ((model.get('end_date') - model.get('start_date')) / date.DAY)) + '%',
-                        left: (100 / this.columns) + '%',
+                        width: (100 / this.columns * Math.min(fulltimeWidth, this.columns - fulltimePos)) + '%',
+                        left: (100 / this.columns) * fulltimePos + '%',
                         top: row * this.fulltimeHeight
                     });
                     
@@ -256,12 +276,13 @@ define('io.ox/calendar/week/view',
                             colPos[k] = e[j].pos.end;
                             e[j].pos.index = k;
                             found = true;
+                            break;
                         }
                     }
                     
                     if (!found) {
+                        e[j].pos.index = colPos.length;
                         colPos.push(e[j].pos.end);
-                        e[j].pos.index = colPos.length - 1;
                     }
                 }
                 
