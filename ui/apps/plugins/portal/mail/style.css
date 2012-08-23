@@ -13,7 +13,6 @@
 .mail-portal-tile {
     padding: 13px;
     position: relative;
-    overflow: auto;
 }
 
 .mail-portal-tile h1 {

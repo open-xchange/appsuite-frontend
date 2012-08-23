@@ -231,7 +231,6 @@ define("io.ox/core/extensions",
 
         this.disable = function (id) {
             disabled[id] = true;
-            console.log(disabled);
             return this;
         };
 
@@ -246,6 +245,20 @@ define("io.ox/core/extensions",
 
         this.inspect = function () {
             console.debug('Extension point', this.id, JSON.stringify(this.all()));
+        };
+
+        this.count = function () {
+            return list().value().length;
+        };
+
+        function randomSort() { return Math.round(Math.random()) - 0.5; }
+
+        this.shuffle = function () {
+            extensions.sort(randomSort);
+            _(extensions).each(function (ext, index) {
+                ext.index = 100 + 100 * index;
+            });
+            return this;
         };
     };
 
