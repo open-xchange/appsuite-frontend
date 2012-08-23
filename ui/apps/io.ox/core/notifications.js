@@ -26,21 +26,21 @@ define('io.ox/core/notifications',
             return this;
         },
         onChange: function () {
-            this.$el.addClass('badge-error');
+            this.$el.addClass('badge-important');
             this.$el.text(this.model.get('count'));
         },
         setNotifier: function (b) {
             if (b) {
-                this.$el.addClass('badge-error');
+                this.$el.addClass('badge-important');
             } else {
-                this.$el.removeClass('badge-error');
+                this.$el.removeClass('badge-important');
             }
         },
         setCount: function (count) {
             this.model.set('count', count);
         }
     });
-    
+
     var FaviconBadge = Backbone.Model.extend({
         initialize: function (options) {
             this.on('change', _.bind(this.onChange, this));
@@ -118,7 +118,7 @@ define('io.ox/core/notifications',
                 })
             );
             this.badges.push(badgeView);
-            
+
             // invoke plugins
             var plugins = ext.getPlugins({name: 'notifications', prefix: 'plugins/notifications/'});
             require(plugins).done(function () {

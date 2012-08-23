@@ -367,7 +367,7 @@ define("io.ox/mail/main",
             app.folder.getData().done(function (data) {
                 var unread = data.unread, badge;
                 if ((badge = win.nodes.title.find('.badge')).length === 0) {
-                    badge = $('<span class="badge badge-error">').appendTo(win.nodes.title);
+                    badge = $('<span class="badge badge-important">').appendTo(win.nodes.title);
                 }
                 if (unread > 0) {
                     badge.text(unread).show();
