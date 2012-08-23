@@ -2591,11 +2591,23 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                anchorType = "AsCharacter";  // default
+                anchorType = "AsCharacter",  // default
+                inline = true;  // image is in line with text, default is 'true'
 
             if (attributes) {
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
+                }
+                if (attributes.inline) {
+                    inline = attributes.inline;
+                }
+                if (attributes.width) {
+                    attributes.width /= 100;  // converting to mm
+                    attributes.width += 'mm';
+                }
+                if (attributes.height) {
+                    attributes.height /= 100;  // converting to mm
+                    attributes.height += 'mm';
                 }
             }
 
@@ -2606,7 +2618,7 @@ define('io.ox/office/editor/editor',
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
                     node = node.parentNode;
-                    $('<img>', { src: url }).insertBefore(node);
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToPage') {
                     // TODO: This is not a good solution. Adding image to the end of the editdiv,
                     // does not produce any disorder, but images are not allowed at editdiv.
