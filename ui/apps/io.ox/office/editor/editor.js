@@ -656,8 +656,9 @@ define('io.ox/office/editor/editor',
                             localRow = _.copy(localPos, true);
                         localRow.push(i);
                         var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
-                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns};
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns},
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one row in redo!
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -669,8 +670,9 @@ define('io.ox/office/editor/editor',
                     for (var i = operation.start; i <= operation.end; i++) {
                         var localPos = _.copy(operation.position, true),
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows},
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one column in redo!
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -695,21 +697,23 @@ define('io.ox/office/editor/editor',
                 this.implCopyColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_ROW_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var start = operation.end,
-                        end = start,
-                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
+                // OP_ROW_INSERT is only called as undo for OP_ROWS_DELETE
+                // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                //     var start = operation.end,
+                //         end = start,
+                //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                // }
                 this.implInsertRow(operation.position, operation.start, operation.columns);
             }
             else if (operation.name === OP_COLUMN_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var start = operation.end,
-                        end = start,
-                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
+                // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
+                // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                //     var start = operation.end,
+                //         end = start,
+                //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                // }
                 this.implInsertColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
