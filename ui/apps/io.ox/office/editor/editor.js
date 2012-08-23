@@ -383,7 +383,6 @@ define('io.ox/office/editor/editor',
         var lastEventSelection;
 
         var currentSelection;
-        var leftCursorStartSelection;
 
         // list of operations
         var operations = [];
@@ -1121,6 +1120,14 @@ define('io.ox/office/editor/editor',
             implDbgOutEvent(event);
             // this.implCheckSelection();
 
+            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+                // Do absolutely nothing for cursor navigation keys with pressed shift key.
+                // Do nothing in processKeyDown and not in the following processKeyPressed.
+                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
+                lastKeyDownEvent = event;
+                return;
+            }
+
             this.implCheckEventSelection();
 
             // TODO: How to strip away debug code?
@@ -1374,28 +1381,22 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
+            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+                // Do absolutely nothing for cursor navigation keys with pressed shift key.
+                return;
+            }
+
             this.implCheckEventSelection();
             lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
 
             var selection = this.getSelection();
 
-            // special handling for left arrow + shift key (works only in Firefox)
-            if ((lastKeyDownEvent.keyCode === KeyCodes.LEFT_ARROW) && (lastKeyDownEvent.shiftKey)) {
-
-                if (! leftCursorStartSelection) {
-                    leftCursorStartSelection = Position.getFollowingTextNodePosition(paragraphs, editdiv, selection.startPaM.oxoPosition);
-                }
-                selection.endPaM.oxoPosition = leftCursorStartSelection;
-                selection.startPaM.oxoPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, selection.startPaM.oxoPosition);
-                this.setSelection(selection);
-            } else {
-                leftCursorStartSelection = null;
-            }
-
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
-                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed
+                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
+                // Some adjustments in getSelection/setSelection are also necessary for cursor navigation keys. Therefore this
+                // 'return' must be behind getSelection() .
                 return;
             }
 
