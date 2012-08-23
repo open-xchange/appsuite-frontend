@@ -29,7 +29,8 @@ define('io.ox/calendar/week/view',
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
-        appWith:        97,     // max width of an appointment in %
+        fulltimeHeight: 20,     // height of fulltime appointments
+        appWidth:        97,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
         workEnd:        18,     // full hour for end position of worktime marker
@@ -75,7 +76,7 @@ define('io.ox/calendar/week/view',
         render: function () {
             // create scaffold
             var days = date.locale.days;
-            days = days.slice(this.startDay).concat(days.slice(0, this.startDay)).slice(0, this.columns);
+            days = days.slice(util.getFirstWeekDay()).concat(days.slice(0, util.getFirstWeekDay())).slice(0, this.columns);
 
             var scaffold = tmpl.render('scaffold', {days: days, width: 100 / this.columns + '%'});
             this.pane = scaffold.find('.scrollpane');
@@ -135,7 +136,7 @@ define('io.ox/calendar/week/view',
 
         renderTimeline: function (tl) {
             var d = new date.Local();
-            tl.css({ top: ((d.getHours() * 60 + d.getMinutes()) / (24 * 60) * 100) + '%'});
+            tl.css({ top: ((d.getHours() / 24 + d.getMinutes() / 1440) * 100) + '%'});
         },
         
         renderAppointment: function (a) {
@@ -180,9 +181,16 @@ define('io.ox/calendar/week/view',
                 }
 
                 if (model.get('full_time')) {
-                    var app = this.renderAppointment(model.attributes);
+                    var app = this.renderAppointment(model.attributes),
+                        row = 0;
+                    
+                    console.log((model.get('end_date') - model.get('start_date')) / date.DAY);
+                    
                     app.css({
-                        width: (100 / this.columns * 3) + '%'
+                        height: 20,
+                        width: (100 / this.columns * ((model.get('end_date') - model.get('start_date')) / date.DAY)) + '%',
+                        left: (100 / this.columns) + '%',
+                        top: row * this.fulltimeHeight
                     });
                     
                     this.fulltimePane.append(app);
@@ -257,18 +265,18 @@ define('io.ox/calendar/week/view',
                     }
                 }
                 
-                var width = (that.appWith / colPos.length),
-                    elWidth = Math.min(width * (1 + (that.overlap * (colPos.length - 1))), that.appWith);
+                var width = (that.appWidth / colPos.length),
+                    elWidth = Math.min(width * (1 + (that.overlap * (colPos.length - 1))), that.appWidth);
 
                 // loop over all appointments to draw them
                 for (var j = 0; j < e.length; j++) {
                     var pos = that.calcPos(e[j]),
-                        leftWidth = ((that.appWith - elWidth) / (colPos.length - 1)) * e[j].pos.index;
+                        leftWidth = ((that.appWidth - elWidth) / (colPos.length - 1)) * e[j].pos.index;
                     
                     e[j].css({
                         top: pos.start + '%',
                         minHeight: that.cellHeight + 'px',
-                        maxWidth: that.appWith + '%',
+                        maxWidth: that.appWidth + '%',
                         left: leftWidth + '%'
                     })
                     .height(pos.lenght + '%')
@@ -284,7 +292,7 @@ define('io.ox/calendar/week/view',
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
                 calc = function (d) {
-                    return (d.getHours() * 60 + d.getMinutes()) / (24 * 60) * 100;
+                    return (d.getHours() / 24 + d.getMinutes() / 1440) * 100;
                 },
                 s = calc(start);
             
