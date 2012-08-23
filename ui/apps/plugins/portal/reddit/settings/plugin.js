@@ -12,12 +12,13 @@
  */
 
 define('plugins/portal/reddit/settings/plugin',
-       ['text!plugins/portal/reddit/settings/tpl/subreddit.html',
+       ['io.ox/core/extensions',
+        'io.ox/core/tk/dialogs',
+        'text!plugins/portal/reddit/settings/tpl/subreddit.html',
         'text!plugins/portal/reddit/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/reddit',
-        'gettext!io.ox/portal/reddit',
-        'io.ox/core/tk/dialogs'
-        ], function (subredditSelectTemplate, pluginSettingsTemplate, settings, gt, dialogs) {
+        'gettext!io.ox/portal/reddit'
+        ], function (ext, dialogs, subredditSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';
 
@@ -40,6 +41,7 @@ define('plugins/portal/reddit/settings/plugin',
 
                 self.$el.empty().append(self.template({
                     subreddit: this.model.get('subreddit'),
+                    mode: this.model.get('mode'),
                     strings: staticStrings
                 }));
 
@@ -86,7 +88,7 @@ define('plugins/portal/reddit/settings/plugin',
             },
             events: {
                 'click [data-action="add"]': 'onAdd',
-//                'click [data-action="edit"]': 'onEdit',
+                'click [data-action="edit"]': 'onEdit',
                 'click [data-action="del"]': 'onDelete'
             },
 
@@ -109,8 +111,8 @@ define('plugins/portal/reddit/settings/plugin',
                     .append($subreddit)
                     .append($mode)
                     .append($error)
-                    .addButton('add', 'Add', null, {classes: 'btn-primary'})
                     .addButton('cancel', 'Cancel')
+                    .addButton('add', 'Add', null, {classes: 'btn-primary'})
                     .show();
 
                 dialog.on('add', function (e) {
@@ -143,8 +145,94 @@ define('plugins/portal/reddit/settings/plugin',
                         subreddits.push({subreddit: subreddit, mode: $mode.val()});
                         settings.set('subreddits', subreddits);
                         settings.save();
-                        that.trigger('redraw');
-                        dialog.close();
+
+                        var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
+                        ext.point("io.ox/portal/widget").enable(extId);
+
+                        require(['plugins/portal/reddit/register'], function (reddit) {
+                            reddit.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                            dialog.close();
+                        });
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            },
+            onEdit: function (args) {
+                var dialog = new dialogs.ModalDialog({
+                    easyOut: true,
+                    async: true
+                });
+
+                var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
+                    oldMode = this.$el.find('[selected]').data('mode');
+
+                var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                var $mode = $('<select>')
+                    .append($('<option>').attr('value', 'hot').text(gt('hot')))
+                    .append($('<option>').attr('value', 'new').text(gt('new')))
+                    .val(oldMode);
+
+                dialog.header($("<h4>").text(gt('Edit an Subreddit')))
+                    .append($subreddit)
+                    .append($mode)
+                    .append($error)
+                    .addButton('cancel', 'Cancel')
+                    .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('edit', function (e) {
+                    $error.hide();
+
+                    var subreddit = $.trim($subreddit.val()),
+                        mode = $mode.val(),
+                        deferred = $.Deferred();
+
+                    if (subreddit.length === 0) {
+                        $error.text(gt('Please enter a subreddit.'));
+                        deferred.reject();
+                    } else {
+                        $.ajax({
+                            url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                            type: 'HEAD',
+                            dataType: 'jsonp',
+                            jsonp: false,
+                            jsonpCallback: 'testcallback',
+                            success: function () {
+                                deferred.resolve();
+                            },
+                            error: function () {
+                                $error.text(gt('Unknown error while checking subreddit.'));
+                                deferred.reject();
+                            }
+                        });
+                    }
+
+                    deferred.done(function () {
+                        ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode);
+
+                        subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
+
+                        subreddits.push({subreddit: subreddit, mode: mode});
+                        settings.set('subreddits', subreddits);
+                        settings.save();
+
+                        ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode);
+
+                        require(['plugins/portal/reddit/register'], function (reddit) {
+                            reddit.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                            dialog.close();
+                        });
                     });
 
                     deferred.fail(function () {
@@ -154,41 +242,60 @@ define('plugins/portal/reddit/settings/plugin',
                 });
             },
             onDelete: function (args) {
-                console.log("onDelete");
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
 
-                var subreddit = this.$el.find('[selected]').data('subreddit');
+                var subreddit = this.$el.find('[selected]').data('subreddit'),
+                    mode = this.$el.find('[selected]').data('mode');
 
                 if (subreddit) {
                     var that = this;
 
                     dialog.header($("<h4>").text(gt('Delete an Subreddit')))
                         .append($('<span>').text(gt('Do you really want to delete the following subreddit(s)?')))
-                        .append($('<ul>').append($('<li>').text(subreddit)))
-                        .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
+                        .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
                         .addButton('cancel', 'Cancel')
+                        .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
                                 var newSubreddits = [];
                                 _.each(subreddits, function (sub) {
-                                    if (sub.subreddit !== subreddit) {
+                                    if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
                                         newSubreddits.push(sub);
                                     }
                                 });
 
-                                subreddits = newSubreddits;
+                                subreddits = removeSubReddit(subreddits, subreddit, mode);
                                 settings.set('subreddits', subreddits);
                                 settings.save();
-                                that.trigger('redraw');
+
+                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode;
+
+                                ext.point("io.ox/portal/widget").disable(extId);
+
+                                require(['plugins/portal/reddit/register'], function (reddit) {
+                                    reddit.reload();
+                                    that.trigger('redraw');
+                                    ox.trigger("refresh^");
+                                });
                             }
                             return false;
                         });
                 }
             }
         }),
+
+        removeSubReddit = function (subreddits, subreddit, mode) {
+            var newSubreddits = [];
+            _.each(subreddits, function (sub) {
+                if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
+                    newSubreddits.push(sub);
+                }
+            });
+            return newSubreddits;
+        },
 
         renderSettings = function () {
             return new PluginSettingsView().render().el;

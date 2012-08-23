@@ -27,7 +27,6 @@ define('io.ox/portal/settings/plugin/model',
 
         save: function () {
             console.log("save in model.js");
-            console.log(this.attributes);
         },
 
         destroy: function () {

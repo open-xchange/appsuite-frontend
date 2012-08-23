@@ -46,10 +46,6 @@ define('io.ox/portal/settings/pane',
     });
 
     var collection,
-//        Collection = Backbone.Collection.extend({
-//            model: PluginModel
-//        }),
-
         PluginSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
@@ -132,12 +128,8 @@ define('io.ox/portal/settings/pane',
                     activePlugins = _.without(activePlugins, this.plugin.get('id'));
                     this.plugin.set('active', false);
                 }
-                this.dialog.close();
                 settings.set('activePlugins', activePlugins);
                 settings.save();
-
-                this.plugin.save();
-
 
                 var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
                 var allActivePlugins = _.map(activePlugins || [], function (value) { return 'plugins/portal/' + value + '/register'; });
@@ -145,9 +137,9 @@ define('io.ox/portal/settings/pane',
 
                 // Load all active plugins
                 require(plugins).pipe(function () {
-                    // Disable all deactivated plugins
-                    ext.point('io.ox/portal/widget')
-                        .each(function (extension) {
+                    // Enable or Disable all plugins
+                    var extensions = ext.point('io.ox/portal/widget').all();
+                    _.chain(extensions).each(function (extension) {
                             var eid = extension.id;
 
                             var isActive = _.find(activePlugins, function (plugin) {
@@ -157,12 +149,16 @@ define('io.ox/portal/settings/pane',
 
                             if (!isActive) {
                                 ext.point("io.ox/portal/widget").disable(eid);
+                            } else {
+                                ext.point("io.ox/portal/widget").enable(eid);
                             }
                         }
                     );
 
                     ox.trigger("refresh^");
                 });
+
+                this.dialog.close();
             }
         });
 
