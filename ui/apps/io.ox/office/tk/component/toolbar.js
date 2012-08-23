@@ -223,7 +223,7 @@ define('io.ox/office/tk/component/toolbar',
         // initialization -----------------------------------------------------
 
         // prepare component root node
-        this.getNode().addClass('io-ox-toolbar').append(containerNode);
+        this.getNode().addClass('toolbar').append(containerNode);
 
         // listen to browser window resize events when the OX window is visible
         Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);

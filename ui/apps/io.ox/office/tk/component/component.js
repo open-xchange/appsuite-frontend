@@ -59,7 +59,7 @@ define('io.ox/office/tk/component/component',
             self = this,
 
             // create the DOM root element representing the view component
-            node = $('<div>'),
+            node = $('<div>').addClass('io-ox-view-component'),
 
             // all control groups, as plain array
             groups = [],

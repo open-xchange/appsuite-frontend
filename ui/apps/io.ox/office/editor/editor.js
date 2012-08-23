@@ -367,10 +367,10 @@ define('io.ox/office/editor/editor',
             self = this,
 
             // container for all style sheets of all attribute families
-            documentStyles = new DocumentStyles(editdiv),
+            documentStyles = (textMode === 'rich') ? new DocumentStyles(editdiv) : null,
 
             // shortcut for character styles
-            characterStyles = documentStyles.getStyleSheets('character'),
+            characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
 
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [];
@@ -451,7 +451,7 @@ define('io.ox/office/editor/editor',
             // insert an empty text span if there is no other content (except the dummy <br>)
             if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
-                if (textMode === 'rich') {
+                if (characterStyles) {
                     characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
                 }
                 childCount += 1;
@@ -536,7 +536,10 @@ define('io.ox/office/editor/editor',
          */
         this.destroy = function () {
             this.events.destroy();
-            documentStyles.destroy();
+            if (documentStyles) {
+                documentStyles.destroy();
+                documentStyles = characterStyles = null;
+            }
         };
 
         // OPERATIONS API
@@ -963,7 +966,7 @@ define('io.ox/office/editor/editor',
          * Removes all highlighting (e.g. from quick-search) from the document.
          */
         this.removeHighlighting = function () {
-            if (highlightRanges.length) {
+            if (characterStyles && highlightRanges.length) {
                 characterStyles.clearAttributesInRanges(highlightRanges, 'highlight', { special: true });
                 editdiv.removeClass('highlight');
             }
@@ -1048,7 +1051,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            if (highlightRanges.length) {
+            if (characterStyles && highlightRanges.length) {
                 editdiv.addClass('highlight');
                 characterStyles.setAttributesInRanges(highlightRanges, { highlight: true }, { special: true });
 
@@ -1882,7 +1885,7 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family.
          */
         this.getStyleSheets = function (family) {
-            return documentStyles.getStyleSheets(family);
+            return documentStyles ? documentStyles.getStyleSheets(family) : null;
         };
 
         /**
@@ -2703,7 +2706,7 @@ define('io.ox/office/editor/editor',
 
             // build the DOM text range and set the formatting attributes
             styleSheets = self.getStyleSheets(family);
-            if (styleSheets && (textMode === 'rich')) {
+            if (styleSheets) {
                 ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
                 styleSheets.setAttributesInRanges(ranges, attributes);
             }
