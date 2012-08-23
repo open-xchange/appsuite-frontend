@@ -718,7 +718,9 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_PARA_MERGE, start: _.copy(operation.start, true) };
+                    var localStart = _.copy(operation.start, true);
+                    localStart.pop();
+                    var undoOperation = { name: OP_PARA_MERGE, start: localStart };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implSplitParagraph(operation.start);
@@ -1799,6 +1801,9 @@ define('io.ox/office/editor/editor',
 
         this.insertTable = function (size) {
             if (size) {
+
+                undomgr.startGroup();  // necessary because of paragraph split
+
                 var selection = this.getSelection(),
                     lastPos = selection.startPaM.oxoPosition.length - 1,
                     deleteTempParagraph = false;
@@ -1850,6 +1855,8 @@ define('io.ox/office/editor/editor',
 
                 // setting the cursor position
                 this.setSelection(new OXOSelection(lastOperationEnd));
+
+                undomgr.endGroup();  // necessary because of paragraph split
             }
         };
 
