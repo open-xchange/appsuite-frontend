@@ -718,20 +718,19 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_PARA_MERGE, start: _.copy(operation.start, true) };
+                    var localStart = _.copy(operation.start, true);
+                    localStart.pop();
+                    var undoOperation = { name: OP_PARA_MERGE, start: localStart };
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implSplitParagraph(operation.start);
             }
             else if (operation.name === OP_IMAGE_INSERT) {
-                // TODO..  now only "*" placeholders are created for images
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.postition, true), end: endPos };
-                    var undoAction = new OXOUndoAction(undoOperation, _.copy(operation, true));
-                    undoAction.allowMerge = true;
-                    undomgr.addUndo(undoAction);
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
@@ -1799,6 +1798,9 @@ define('io.ox/office/editor/editor',
 
         this.insertTable = function (size) {
             if (size) {
+
+                undomgr.startGroup();  // necessary because of paragraph split
+
                 var selection = this.getSelection(),
                     lastPos = selection.startPaM.oxoPosition.length - 1,
                     deleteTempParagraph = false;
@@ -1850,6 +1852,8 @@ define('io.ox/office/editor/editor',
 
                 // setting the cursor position
                 this.setSelection(new OXOSelection(lastOperationEnd));
+
+                undomgr.endGroup();  // necessary because of paragraph split
             }
         };
 
@@ -2587,11 +2591,23 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                anchorType = "AsCharacter";  // default
+                anchorType = "AsCharacter",  // default
+                inline = true;  // image is in line with text, default is 'true'
 
             if (attributes) {
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
+                }
+                if (attributes.inline) {
+                    inline = attributes.inline;
+                }
+                if (attributes.width) {
+                    attributes.width /= 100;  // converting to mm
+                    attributes.width += 'mm';
+                }
+                if (attributes.height) {
+                    attributes.height /= 100;  // converting to mm
+                    attributes.height += 'mm';
                 }
             }
 
@@ -2602,7 +2618,7 @@ define('io.ox/office/editor/editor',
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
                     node = node.parentNode;
-                    $('<img>', { src: url }).insertBefore(node);
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToPage') {
                     // TODO: This is not a good solution. Adding image to the end of the editdiv,
                     // does not produce any disorder, but images are not allowed at editdiv.
