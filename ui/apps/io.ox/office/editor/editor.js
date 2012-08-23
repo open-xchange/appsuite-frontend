@@ -726,14 +726,11 @@ define('io.ox/office/editor/editor',
                 this.implSplitParagraph(operation.start);
             }
             else if (operation.name === OP_IMAGE_INSERT) {
-                // TODO..  now only "*" placeholders are created for images
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.postition, true), end: endPos };
-                    var undoAction = new OXOUndoAction(undoOperation, _.copy(operation, true));
-                    undoAction.allowMerge = true;
-                    undomgr.addUndo(undoAction);
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
