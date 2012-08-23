@@ -40,7 +40,7 @@ define('io.ox/office/tk/dropdown/list',
      *  A map of options to control the properties of the list. Supports all
      *  options of the DropDown base class. Additionally, the following options
      *  are supported:
-     *  @param {Boolean} [options.sorted]
+     *  @param {Boolean} [options.sorted=false]
      *      If set to true, the list items will be inserted ordered according
      *      to the registered sort functor (see 'option.sortFunctor').
      *      Otherwise, list items will be appended to the list.
@@ -84,7 +84,7 @@ define('io.ox/office/tk/dropdown/list',
                 buttons = self.getListItems(),
                 // width of the drop-down group buttons (used as min-width of the menu)
                 minWidth = self.getNode().width(),
-                // width of the scrollbar in pixels
+                // width of the scroll bar in pixels
                 scrollBarWidth = 0;
 
             // set maximum height of the drop-down menu, depending on window height
