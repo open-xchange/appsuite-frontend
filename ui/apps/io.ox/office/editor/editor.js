@@ -383,7 +383,6 @@ define('io.ox/office/editor/editor',
         var lastEventSelection;
 
         var currentSelection;
-        var leftCursorStartSelection;
 
         // list of operations
         var operations = [];
@@ -657,8 +656,9 @@ define('io.ox/office/editor/editor',
                             localRow = _.copy(localPos, true);
                         localRow.push(i);
                         var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
-                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns};
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns},
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one row in redo!
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -670,8 +670,9 @@ define('io.ox/office/editor/editor',
                     for (var i = operation.start; i <= operation.end; i++) {
                         var localPos = _.copy(operation.position, true),
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows},
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one column in redo!
+                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -696,21 +697,23 @@ define('io.ox/office/editor/editor',
                 this.implCopyColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_ROW_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var start = operation.end,
-                        end = start,
-                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
+                // OP_ROW_INSERT is only called as undo for OP_ROWS_DELETE
+                // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                //     var start = operation.end,
+                //         end = start,
+                //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                // }
                 this.implInsertRow(operation.position, operation.start, operation.columns);
             }
             else if (operation.name === OP_COLUMN_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var start = operation.end,
-                        end = start,
-                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
-                }
+                // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
+                // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                //     var start = operation.end,
+                //         end = start,
+                //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                // }
                 this.implInsertColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === OP_PARA_SPLIT) {
@@ -1121,6 +1124,14 @@ define('io.ox/office/editor/editor',
             implDbgOutEvent(event);
             // this.implCheckSelection();
 
+            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+                // Do absolutely nothing for cursor navigation keys with pressed shift key.
+                // Do nothing in processKeyDown and not in the following processKeyPressed.
+                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
+                lastKeyDownEvent = event;
+                return;
+            }
+
             this.implCheckEventSelection();
 
             // TODO: How to strip away debug code?
@@ -1374,28 +1385,22 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
+            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+                // Do absolutely nothing for cursor navigation keys with pressed shift key.
+                return;
+            }
+
             this.implCheckEventSelection();
             lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
 
             var selection = this.getSelection();
 
-            // special handling for left arrow + shift key (works only in Firefox)
-            if ((lastKeyDownEvent.keyCode === KeyCodes.LEFT_ARROW) && (lastKeyDownEvent.shiftKey)) {
-
-                if (! leftCursorStartSelection) {
-                    leftCursorStartSelection = Position.getFollowingTextNodePosition(paragraphs, editdiv, selection.startPaM.oxoPosition);
-                }
-                selection.endPaM.oxoPosition = leftCursorStartSelection;
-                selection.startPaM.oxoPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, selection.startPaM.oxoPosition);
-                this.setSelection(selection);
-            } else {
-                leftCursorStartSelection = null;
-            }
-
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
-                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed
+                // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
+                // Some adjustments in getSelection/setSelection are also necessary for cursor navigation keys. Therefore this
+                // 'return' must be behind getSelection() .
                 return;
             }
 
