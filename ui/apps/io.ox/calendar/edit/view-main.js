@@ -307,7 +307,8 @@ define('io.ox/calendar/edit/view-main',
         },
         onAddParticipant: function (data) {
             var participants = this.model.get('participants'),
-                notIn = true, obj;
+                notIn = true, obj,
+                that = this;
 
             notIn = !_(participants).any(function (item) {
                 if (data.type === 5) {
@@ -319,9 +320,23 @@ define('io.ox/calendar/edit/view-main',
 
             if (notIn) {
                 if (data.type !== 5) {
-                    obj = {id: data.id, type: data.type};
-                    this.subviews.participants.collection.add(obj);
-                    participants.push(obj);
+
+                    if (data.mark_as_distributionlist) {
+                        _.each(data.distribution_list, function (val) {
+                            if (val.folder_id === 6) {
+                                obj = {display_name: val.display_name, id: val.id, type: 6};
+                            } else {
+                                obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                            }
+                            that.subviews.participants.collection.add(obj);
+                            participants.push(obj);
+                        });
+                    } else {
+                        obj = {id: data.id, type: data.type};
+                        this.subviews.participants.collection.add(obj);
+                        participants.push(obj);
+                    }
+
                 } else {
                     obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
                     participants.push(obj);

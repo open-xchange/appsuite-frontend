@@ -50,6 +50,7 @@ define('io.ox/calendar/edit/module-participants',
         TYPE_RESOURCE: 3,
         TYPE_RESOURCE_GROUP: 4,
         TYPE_EXTERNAL_USER: 5,
+        TYPE_DISTLIST_USER: 6,
 
         defaults: {
             display_name: '...',
@@ -109,6 +110,14 @@ define('io.ox/calendar/edit/module-participants',
                     df.resolve();
                 });
                 break;
+            case self.TYPE_DISTLIST_USER:
+                //fetch user contact
+                contactAPI.get({id: self.get('id'), folder: 6}).done(function (user) {
+                    self.set(user);
+                    self.trigger('change', self);
+                    df.resolve();
+                });
+                break;
             default:
                 self.set({display_name: 'unknown'});
                 self.trigger('change', self);
@@ -153,6 +162,8 @@ define('io.ox/calendar/edit/module-participants',
                 return this.renderResource();
             case this.model.TYPE_EXTERNAL_USER:
                 return this.renderExternalUser();
+            case this.model.TYPE_DISTLIST_USER:
+                return this.renderDistlistUser();
             }
 
             return this;
@@ -221,6 +232,22 @@ define('io.ox/calendar/edit/module-participants',
                 this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
                 bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
             }
+            this._modelBinder.bind(self.model, this.el, bindings);
+            return self;
+        },
+        renderDistlistUser: function () {
+            var self = this;
+
+            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
+            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
+
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
         },

@@ -11,37 +11,37 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('plugins/portal/reddit/settings/plugin',
+define('plugins/portal/tumblr/settings/plugin',
        ['io.ox/core/extensions',
         'io.ox/core/tk/dialogs',
-        'text!plugins/portal/reddit/settings/tpl/subreddit.html',
-        'text!plugins/portal/reddit/settings/tpl/pluginsettings.html',
-        'settings!plugins/portal/reddit',
-        'gettext!io.ox/portal/reddit'
-        ], function (ext, dialogs, subredditSelectTemplate, pluginSettingsTemplate, settings, gt) {
+        'text!plugins/portal/tumblr/settings/tpl/blog.html',
+        'text!plugins/portal/tumblr/settings/tpl/pluginsettings.html',
+        'settings!plugins/portal/tumblr',
+        'gettext!io.ox/portal/tumblr'
+        ], function (ext, dialogs, blogSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';
 
-    var subreddits = settings.get('subreddits'),
+    var blogs = settings.get('blogs'),
         staticStrings = {
-            SUBREDDITS: gt('Subreddits'),
-            ADD:        gt('Add'),
-            EDIT:       gt('Edit'),
-            DELETE:     gt('Delete')
+            TUMBLRBLOGS: gt('Tumblr-Blogs'),
+            ADD:         gt('Add'),
+            EDIT:        gt('Edit'),
+            DELETE:      gt('Delete')
         },
 
-        SubredditSelectView = Backbone.View.extend({
+        BlogSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
-                this.template = doT.template(subredditSelectTemplate);
+                this.template = doT.template(blogSelectTemplate);
                 this._modelBinder = new Backbone.ModelBinder();
             },
             render: function () {
                 var self = this;
 
                 self.$el.empty().append(self.template({
-                    subreddit: this.model.get('subreddit'),
-                    mode: this.model.get('mode'),
+                    url: this.model.get('url'),
+                    description: this.model.get('description'),
                     strings: staticStrings
                 }));
 
@@ -72,11 +72,11 @@ define('plugins/portal/reddit/settings/plugin',
 
                 function redraw() {
                     var $listbox = that.$el.find('.listbox');
-                    var collection = new Backbone.Collection(subreddits);
+                    var collection = new Backbone.Collection(blogs);
                     $listbox.empty();
 
                     collection.each(function (item) {
-                        $listbox.append(new SubredditSelectView({ model: item }).render().el);
+                        $listbox.append(new BlogSelectView({ model: item }).render().el);
                     });
                 }
 
@@ -98,18 +98,14 @@ define('plugins/portal/reddit/settings/plugin',
                     async: true
                 });
 
-                var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'});
-                var $mode = $('<select>')
-                    .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                    .append($('<option>').attr('value', 'new').text(gt('new')));
+                var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
 
-                var $error = $('<div>').addClass('alert alert-error').hide();
-
-                var that = this;
-
-                dialog.header($("<h4>").text(gt('Add an Subreddit')))
-                    .append($subreddit)
-                    .append($mode)
+                dialog.header($("<h4>").text(gt('Add a blog')))
+                    .append($url)
+                    .append($description)
                     .append($error)
                     .addButton('cancel', 'Cancel')
                     .addButton('add', 'Add', null, {classes: 'btn-primary'})
@@ -118,44 +114,53 @@ define('plugins/portal/reddit/settings/plugin',
                 dialog.on('add', function (e) {
                     $error.hide();
 
-                    var subreddit = $.trim($subreddit.val()),
+                    var url = $.trim($url.val()),
+                        description = $.trim($description.val()),
                         deferred = $.Deferred();
 
                     // No dot and url does not end with tumblr.com? Append it!
-                    if (subreddit.match(/^r\//)) {
-                        subreddit = subreddit.substring(2);
+                    if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
+                        url = url + '.tumblr.com';
                     }
 
-                    if (subreddit.length === 0) {
-                        $error.text(gt('Please enter a subreddit.'));
+                    if (url.length === 0) {
+                        $error.text(gt('Please enter an blog-url.'));
+                        deferred.reject();
+                    } else if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
                         deferred.reject();
                     } else {
                         $.ajax({
-                            url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                            url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
                             type: 'HEAD',
                             dataType: 'jsonp',
                             jsonp: false,
                             jsonpCallback: 'testcallback',
-                            success: function () {
-                                deferred.resolve();
+                            success: function (data) {
+                                if (data.meta && data.meta.status && data.meta.status === 200) {
+                                    deferred.resolve();
+                                } else {
+                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    deferred.reject();
+                                }
                             },
                             error: function () {
-                                $error.text(gt('Unknown error while checking subreddit.'));
+                                $error.text(gt('Unknown error while checking tumblr-blog.'));
                                 deferred.reject();
                             }
                         });
                     }
 
                     deferred.done(function () {
-                        subreddits.push({subreddit: subreddit, mode: $mode.val()});
-                        settings.set('subreddits', subreddits);
+                        blogs.push({url: url, description: description});
+                        settings.set('blogs', blogs);
                         settings.save();
 
-                        var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + $mode.val();
+                        var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
                         ext.point("io.ox/portal/widget").enable(extId);
 
-                        require(['plugins/portal/reddit/register'], function (reddit) {
-                            reddit.reload();
+                        require(['plugins/portal/tumblr/register'], function (tumblr) {
+                            tumblr.reload();
                             that.trigger('redraw');
                             ox.trigger("refresh^");
                             dialog.close();
@@ -174,21 +179,17 @@ define('plugins/portal/reddit/settings/plugin',
                     async: true
                 });
 
-                var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
-                    oldMode = this.$el.find('[selected]').data('mode');
+                var oldUrl = this.$el.find('[selected]').data('url'),
+                    oldDescription = this.$el.find('[selected]').data('description');
 
-                var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
+                var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
 
-                var $mode = $('<select>')
-                    .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                    .append($('<option>').attr('value', 'new').text(gt('new')))
-                    .val(oldMode);
-
-                dialog.header($("<h4>").text(gt('Edit an Subreddit')))
-                    .append($subreddit)
-                    .append($mode)
+                dialog.header($("<h4>").text(gt('Edit a blog')))
+                    .append($url)
+                    .append($description)
                     .append($error)
                     .addButton('cancel', 'Cancel')
                     .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
@@ -197,48 +198,59 @@ define('plugins/portal/reddit/settings/plugin',
                 dialog.on('edit', function (e) {
                     $error.hide();
 
-                    var subreddit = $.trim($subreddit.val()),
-                        mode = $mode.val(),
+                    var url = $.trim($url.val()),
+                        description = $.trim($description.val()),
                         deferred = $.Deferred();
 
                     // No dot and url does not end with tumblr.com? Append it!
-                    if (subreddit.match(/^r\//)) {
-                        subreddit = subreddit.substring(2);
+                    if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
+                        url = url + '.tumblr.com';
                     }
 
-                    if (subreddit.length === 0) {
-                        $error.text(gt('Please enter a subreddit.'));
+                    if (url.length === 0) {
+                        $error.text(gt('Please enter an blog-url.'));
+                        deferred.reject();
+                    } else if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
                         deferred.reject();
                     } else {
                         $.ajax({
-                            url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                            url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
                             type: 'HEAD',
                             dataType: 'jsonp',
                             jsonp: false,
                             jsonpCallback: 'testcallback',
-                            success: function () {
-                                deferred.resolve();
+                            success: function (data) {
+                                if (data.meta && data.meta.status && data.meta.status === 200) {
+                                    deferred.resolve();
+                                } else {
+                                    $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                    deferred.reject();
+                                }
                             },
                             error: function () {
-                                $error.text(gt('Unknown error while checking subreddit.'));
+                                $error.text(gt('Unknown error while checking tumblr-blog.'));
                                 deferred.reject();
                             }
                         });
                     }
 
                     deferred.done(function () {
-                        ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode);
+                        console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
 
-                        subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
+                        ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
 
-                        subreddits.push({subreddit: subreddit, mode: mode});
-                        settings.set('subreddits', subreddits);
+                        blogs = removeBlog(blogs, oldUrl);
+
+                        blogs.push({url: url, description: description});
+                        settings.set('blogs', blogs);
                         settings.save();
 
-                        ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode);
+                        console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+                        ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
 
-                        require(['plugins/portal/reddit/register'], function (reddit) {
-                            reddit.reload();
+                        require(['plugins/portal/tumblr/register'], function (tumblr) {
+                            tumblr.reload();
                             that.trigger('redraw');
                             ox.trigger("refresh^");
                             dialog.close();
@@ -252,41 +264,42 @@ define('plugins/portal/reddit/settings/plugin',
                 });
             },
             onDelete: function (args) {
+                console.log("onDelete");
+
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
 
-                var subreddit = this.$el.find('[selected]').data('subreddit'),
-                    mode = this.$el.find('[selected]').data('mode');
+                var url = this.$el.find('[selected]').data('url');
 
-                if (subreddit) {
+                if (url) {
                     var that = this;
 
-                    dialog.header($("<h4>").text(gt('Delete an Subreddit')))
-                        .append($('<span>').text(gt('Do you really want to delete the following subreddit(s)?')))
-                        .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
+                    dialog.header($("<h4>").text(gt('Delete a Blog')))
+                        .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
+                        .append($('<ul>').append($('<li>').text(url)))
                         .addButton('cancel', 'Cancel')
                         .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {
-                                var newSubreddits = [];
-                                _.each(subreddits, function (sub) {
-                                    if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
-                                        newSubreddits.push(sub);
+                                var newblogs = [];
+                                _.each(blogs, function (sub) {
+                                    if (sub.url !== url) {
+                                        newblogs.push(sub);
                                     }
                                 });
 
-                                subreddits = removeSubReddit(subreddits, subreddit, mode);
-                                settings.set('subreddits', subreddits);
+                                blogs = removeBlog(blogs, url);
+                                settings.set('blogs', blogs);
                                 settings.save();
 
-                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode;
+                                var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
 
                                 ext.point("io.ox/portal/widget").disable(extId);
 
-                                require(['plugins/portal/reddit/register'], function (reddit) {
-                                    reddit.reload();
+                                require(['plugins/portal/tumblr/register'], function (tumblr) {
+                                    tumblr.reload();
                                     that.trigger('redraw');
                                     ox.trigger("refresh^");
                                 });
@@ -297,14 +310,14 @@ define('plugins/portal/reddit/settings/plugin',
             }
         }),
 
-        removeSubReddit = function (subreddits, subreddit, mode) {
-            var newSubreddits = [];
-            _.each(subreddits, function (sub) {
-                if (sub.subreddit !== subreddit || sub.subreddit === subreddit && sub.mode !== mode) {
-                    newSubreddits.push(sub);
+        removeBlog = function (blogs, url) {
+            var newblogs = [];
+            _.each(blogs, function (sub) {
+                if (sub.url !== url) {
+                    newblogs.push(sub);
                 }
             });
-            return newSubreddits;
+            return newblogs;
         },
 
         renderSettings = function () {
