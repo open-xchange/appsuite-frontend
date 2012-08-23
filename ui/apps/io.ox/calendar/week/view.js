@@ -20,10 +20,6 @@ define('io.ox/calendar/week/view',
 
     'use strict';
 
-    function formatDate(d) {
-        return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
-    }
-
     var myself = null;
 
     var View = Backbone.View.extend({
@@ -105,7 +101,7 @@ define('io.ox/calendar/week/view',
             for (var d = 0; d < this.columns; d++) {
                 
                 var dayInfo = this.week[d],
-                    day = $('<div>').addClass('day').width(100 / this.columns + '%').attr('date', dayInfo.year + '-' + dayInfo.month + '-' + dayInfo.date);
+                    day = $('<div>').addClass('day').width(100 / this.columns + '%').attr('date', dayInfo.year + '-' + (dayInfo.month + 1) + '-' + dayInfo.date);
                 
                 if (dayInfo.isToday) {
                     day.addClass('today');
@@ -138,7 +134,7 @@ define('io.ox/calendar/week/view',
         },
 
         renderTimeline: function (tl) {
-            var d = new Date();
+            var d = new date.Local();
             tl.css({ top: ((d.getHours() * 60 + d.getMinutes()) / (24 * 60) * 100) + '%'});
         },
         
@@ -172,13 +168,11 @@ define('io.ox/calendar/week/view',
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                var startDate = new Date(model.get('start_date')),
-                    endDate = new Date(model.get('end_date') - 1),
-                    start = formatDate(startDate),
-                    end = formatDate(endDate),
-                    fulltime = model.get('full_time'),
+                var startDate = new date.Local(date.Local.utc(model.get('start_date'))),
+                    endDate = new date.Local(date.Local.utc(model.get('end_date') - 1)),
+                    start = startDate.format('y-M-d'),
+                    end = endDate.format('y-M-d'),
                     maxCount = 7;
-                console.log(fulltime);
 
                 if (model.get('start_date') < 0) {
                     console.error('FIXME: start_date should not be negative');
@@ -187,10 +181,10 @@ define('io.ox/calendar/week/view',
 
                 if (model.get('full_time')) {
                     var app = this.renderAppointment(model.attributes);
-                    
                     app.css({
                         width: (100 / this.columns * 3) + '%'
                     });
+                    
                     this.fulltimePane.append(app);
                 } else {
 
@@ -202,10 +196,10 @@ define('io.ox/calendar/week/view',
                         
                         // if
                         if (start !== end) {
-                            endDate = new Date(startDate.getTime());
-                            endDate.setUTCHours(23, 59, 59, 999);
+                            endDate = new date.Local(startDate.getTime());
+                            endDate.setHours(23, 59, 59, 999);
                         } else {
-                            endDate = new Date(model.get('end_date') - 1);
+                            endDate = new date.Local(date.Local.utc(model.get('end_date') - 1));
                         }
                         
                         var app = this.renderAppointment(model.attributes),
@@ -225,9 +219,9 @@ define('io.ox/calendar/week/view',
                         
                         // inc date
                         if (start !== end) {
-                            startDate.setUTCDate(startDate.getUTCDate() + 1);
-                            startDate.setUTCHours(0, 0, 0, 0);
-                            start = formatDate(startDate);
+                            startDate.setDate(startDate.getDate() + 1);
+                            startDate.setHours(0, 0, 0, 0);
+                            start = startDate.format('y-M-d');
                         } else {
                             break;
                         }
@@ -287,10 +281,10 @@ define('io.ox/calendar/week/view',
         },
         
         calcPos: function (ap) {
-            var start = new Date(ap.pos.start),
-                end = new Date(ap.pos.end),
+            var start = new date.Local(ap.pos.start),
+                end = new date.Local(ap.pos.end),
                 calc = function (d) {
-                    return (d.getUTCHours() * 60 + d.getUTCMinutes()) / (24 * 60) * 100;
+                    return (d.getHours() * 60 + d.getMinutes()) / (24 * 60) * 100;
                 },
                 s = calc(start);
             
