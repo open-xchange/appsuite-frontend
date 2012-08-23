@@ -83,9 +83,8 @@ define('io.ox/contacts/distrib/create-dist-view',
             var data = options.node.find('[data-holder="data-holder"]').data(),
                 mailValue = options.node.find('input#mail').val(),
                 nameValue = options.node.find('input#name').val();
-
-            if (data.contact) {
-                copyContact(options, data.contact, data.email);
+            if (data.data) {
+                copyContact(options, data.data, data.email);
             } else {
                 if (mailValue !== '') {
                     copyContact(options, nameValue, mailValue);
