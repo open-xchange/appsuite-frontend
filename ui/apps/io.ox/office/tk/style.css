@@ -177,7 +177,7 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 @input-fill-color: white;
 
 /* fill color for tool bar tab buttons */
-@tab-fill-color: #555555;
+@tab-fill-color: #757575;
 
 /* text color for tool bar tab buttons */
 @tab-text-color: white;
