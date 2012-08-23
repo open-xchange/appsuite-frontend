@@ -18,6 +18,16 @@
 
 .window-content.week-view {
     
+    @appointment-reserved: #08c ; /* blue */ 
+    @appointment-temporary: #FFBB00 ; /* yellow */ 
+    @appointment-absent: #913F3F ; /* red */ 
+    @appointment-free: #8EB360 ; /* green */ 
+    @appointment-private: #555 ; /* dark grey */ 
+    @appointment-out: #aaa ; /* light grey */ 
+    @appointment-hover-pct: 15%; 
+    @appointment-unconfirmed-alpha: 0.4 ;
+    @weekview-time-with: 42px;
+    
     .week {
         width: 100%;
         min-height: 100%;
@@ -36,7 +46,7 @@
         height: 10%;
         border-bottom: 1px solid #ccc;
         overflow: auto;
-        left: 42px;
+        left: @weekview-time-with;
         right: 0;
         position: absolute;
     }
@@ -53,9 +63,8 @@
         position: absolute;
         right: 0; 
         bottom: 0; 
-        left: 0;
+        left: @weekview-time-with;
         border-top: 1px solid #ccc;
-        padding-left: 50px;
         white-space: nowrap;
         background-color: white;
         font-family: @font-light;
@@ -63,7 +72,7 @@
     }
     
     .weekcontainer {
-        left: 42px;
+        left: @weekview-time-with;
         right: 0;
         position: absolute;
     }
@@ -73,11 +82,13 @@
     }
     
     .day.today .timeslot.in { 
-        background-color: #daefFf; background-color: rgba(0, 136, 204, 0.10);
+        background-color: #daefFf; 
+        background-color: rgba(0, 136, 204, 0.10);
     }
 
     .day.today .timeslot.out { 
-        background-color: #daefFf; background-color: rgba(0, 136, 204, 0.20);
+        background-color: #daefFf; 
+        background-color: rgba(0, 136, 204, 0.20);
     }
 
     .day, .lable {
@@ -95,7 +106,7 @@
     }
     
     .time {
-        width: 42px;
+        width: @weekview-time-with;
         position: relative;
     }
 
@@ -184,22 +195,26 @@
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
     }
-
-    @appointment-reserved: #08c; /* blue */
-    @appointment-temporary: #FFBB00; /* yellow */
-    @appointment-absent: #913F3F; /* red */
-    @appointment-free: #8EB360; /* green */
-    @appointment-private: #555; /* dark grey */
-    @appointment-out: #aaa; /* light grey */
+  
+    .appointment.reserved {
+        background-color: @appointment-reserved;
+    }
     
-    @appointment-hover-pct: 15%;
-    @appointment-unconfirmed-alpha: 0.4;
+    .appointment.temporary {
+        background-color: @appointment-temporary;
+    }
     
-    .appointment.reserved { background-color: @appointment-reserved; }
-    .appointment.temporary { background-color: @appointment-temporary; }
-    .appointment.absent { background-color: @appointment-absent; }
-    .appointment.free { background-color: @appointment-free; }
-    .appointment.private { background-color: @appointment-private; }
+    .appointment.absent {
+        background-color: @appointment-absent;
+    }
+    
+    .appointment.free {
+        background-color: @appointment-free;
+    }
+    
+    .appointment.private {
+        background-color: @appointment-private;
+    }
 
 /*    .week {
         height: 100/6%; might be 6 wweks in a month
@@ -282,6 +297,4 @@
     .day.out .appointment:hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
     
     .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
-*/
-
-}
+*/}
