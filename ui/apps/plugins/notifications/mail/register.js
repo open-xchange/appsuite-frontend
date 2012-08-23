@@ -120,9 +120,9 @@ define('plugins/notifications/mail/register',
             $badge.text(unread);
 
             if (unread > 0) {
-                $badge.addClass('badge-error');
+                $badge.addClass('badge-important');
             } else {
-                $badge.removeClass('badge-error');
+                $badge.removeClass('badge-important');
             }
         },*/
         onOpenApp: function () {
