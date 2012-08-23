@@ -1150,22 +1150,22 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'G') {
                     var selection = this.getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg"};
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === 'R') {
                     var selection = this.getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px'}};
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === 'S') {
                     var selection = this.getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px'}};
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === 'V') {
                     var selection = this.getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px'}};
+                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -2590,7 +2590,7 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                anchorType = "AsCharacter",  // default
+                anchorType = null,
                 inline = true;  // image is in line with text, default is 'true'
 
             if (attributes) {
@@ -2615,8 +2615,12 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            if (! inline) {
-                anchorType = "FloatLeft";
+            if (anchorType === null) {
+                if (! inline) {
+                    anchorType = 'FloatLeft';
+                } else {
+                    anchorType = 'AsCharacter';
+                }
             }
 
             if ((node) && (node.nodeType === 3)) {
