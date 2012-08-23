@@ -63,22 +63,24 @@
     box-shadow: @outset-shadow, inset @inset-shadow;
 }
 
-.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-start-color, @ie-end-color, @ie-gradient-type) {
+.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
     background-color: mix(@start-color, @end-color, 50%);
     background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
     background: -moz-linear-gradient(@start-point, @start-color, @end-color);
     background: -ms-linear-gradient(@start-point, @start-color, @end-color);
     background: -o-linear-gradient(@start-point, @start-color, @end-color);
     background: linear-gradient(@start-point, @start-color, @end-color);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@ie-start-color,@ie-end-color,@ie-gradient-type));
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
 }
 
-.horizontal-gradient(@left-color, @right-color, @ie-left-color, @ie-right-color) {
-    .impl-linear-gradient(left, @left-color, @right-color, @ie-left-color, @ie-right-color, 1);
+.horizontal-gradient(@left-color, @right-color) {
+    .impl-linear-gradient(left, @left-color, @right-color, 1);
+    background-repeat: repeat-y;
 }
 
-.vertical-gradient(@top-color, @bottom-color, @ie-top-color, @ie-bottom-color) {
-    .impl-linear-gradient(top, @top-color, @bottom-color, @ie-top-color, @ie-bottom-color, 0);
+.vertical-gradient(@top-color, @bottom-color) {
+    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
+    background-repeat: repeat-x;
 }
 
 .opacity(@opacity) {
@@ -165,11 +167,23 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 /* base border color for controls */
 @control-border-color: @pane-border-color;
 
+/* base text color for controls */
+@control-text-color: #333333;
+
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
 /* fill color for input controls */
 @input-fill-color: white;
+
+/* fill color for tool bar tab buttons */
+@tab-fill-color: #757575;
+
+/* text color for tool bar tab buttons */
+@tab-text-color: white;
+
+/* fill color for selected tool bar tab buttons */
+@tab-selected-fill-color: white;
 
 /* tool panes ============================================================== */
 
@@ -253,7 +267,7 @@ div.io-ox-toolbar {
                 line-height: 26px;
                 font-size: 13px;
                 font-weight: normal;
-                color: #333333;
+                color: @control-text-color;
                 text-shadow: none;
                 vertical-align: top;
 
@@ -371,6 +385,7 @@ div.io-ox-toolbar {
                         display: inline-block;
                         position: relative;
                         top: 1px;
+                        left: 1px;
                         background-color: @input-fill-color;
                     }
                 }
@@ -421,22 +436,6 @@ div.io-ox-toolbar {
                     background-color: @pane-fill-color;
                     border: 1px solid @control-border-color;
                     .border-radius(0);
-
-                    /* the Buttons mix-in class */
-                    &.buttons > table {
-                        margin: -1px;
-                        border-collapse: collapse;
-                        max-width: none;
-
-                        td {
-                            padding: 0;
-
-                            /* expand width to entire table cell */
-                            > button {
-                                width: 100%;
-                            }
-                        }
-                    }
 
                     /* the List mix-in class */
                     &.list {
@@ -574,11 +573,11 @@ div.io-ox-toolbar {
     }
 }
 
-/* tab bars ================================================================ */
+/* title tab bar =========================================================== */
 
 div.io-ox-toolbar.tabs {
     position: absolute;
-    left: 300px;
+    left: 13px;
     bottom: -1px;
     padding: 0;
 
@@ -587,19 +586,19 @@ div.io-ox-toolbar.tabs {
 
             /* style buttons as tabs */
             > button {
-                height: 24px;
                 padding-left: 12px;
                 padding-right: 12px;
-                border-bottom: 1px solid @pane-border-color;
-                .border-top-left-radius(4px);
-                .border-top-right-radius(4px);
-                line-height: 22px;
+                .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
+                border: none;
+                color: @tab-text-color;
+
+                /* semi-transparency for all contents of the button */
+                &:not(.selected) > * { .opacity(0.7); }
 
                 /* override the default style of selected buttons */
                 &.selected {
-                    background: none;
-                    border: 1px solid @pane-border-color;
-                    border-bottom-color: transparent;
+                    background: @tab-selected-fill-color;
+                    color: @control-text-color;
                     cursor: default;
                 }
             }
@@ -608,16 +607,13 @@ div.io-ox-toolbar.tabs {
             &:not(.disabled) > button {
 
                 &:hover, &:focus, &:active {
-                    border-color: @pane-border-color;
+                    border-color: transparent;
 
-                    &:active {
-                        background-color: fade(@pane-border-color, 25%);
-                    }
+                    /* remove semi-transparency for all contents of the button */
+                    > * { .opacity(1); }
 
                     &.selected {
-                        background: none;
-                        border-color: darken(@pane-border-color, 10%);
-                        border-bottom-color: transparent;
+                        //background: @tab-selected-fill-color;
                     }
                 }
             }

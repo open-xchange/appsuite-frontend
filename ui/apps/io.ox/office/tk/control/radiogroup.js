@@ -14,9 +14,8 @@
 define('io.ox/office/tk/control/radiogroup',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group',
-     'io.ox/office/tk/dropdown/buttons',
      'io.ox/office/tk/dropdown/list'
-    ], function (Utils, Group, Buttons, List) {
+    ], function (Utils, Group, List) {
 
     'use strict';
 
@@ -28,40 +27,29 @@ define('io.ox/office/tk/control/radiogroup',
      * @constructor
      *
      * @extends Group
+     * @extends List
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button and
-     *  menu. Supports all options of the Group base class, of the Buttons
-     *  mix-in class (if 'options.type' is set to 'dropdown'), and of the List
-     *  mix-in class (if 'options.type' is set to 'list'). Additionally, the
-     *  following options are supported:
-     *  @param {String} [options.type='buttons']
-     *      If set to 'buttons' or omitted, the buttons will be inserted
-     *      directly into this group. If set to 'dropdown', a drop-down button
-     *      will be created, showing a tabular button menu. If set to 'list', a
-     *      drop-down button will be created, showing a list.
+     *  menu. Supports all options of the Group base class, and of the List
+     *  mix-in class. Additionally, the following options are supported:
+     *  @param {String} [options.dropDown=false]
+     *      If set to true, a drop-down button will be created, showing a list
+     *      with all option buttons when opened. Otherwise, the option buttons
+     *      will be inserted directly into this group.
      */
     function RadioGroup(options) {
 
         var // self reference
-            self = this,
-
-            // display mode
-            type = Utils.getStringOption(options, 'type', 'buttons');
+            self = this;
 
         // private methods ----------------------------------------------------
 
         /**
          * Returns all option buttons as jQuery collection.
          */
-        function getRadioButtons() {
-            switch (type) {
-            case 'dropdown':
-                return self.getGridButtons();
-            case 'list':
-                return self.getListItems();
-            }
-            return self.getNode().children('button');
+        function getOptionButtons() {
+            return self.hasDropDown ? self.getListItems() : self.getNode().children('button');
         }
 
         /**
@@ -69,7 +57,7 @@ define('io.ox/office/tk/control/radiogroup',
          * or disables the Bootstrap tool tips attached to the option buttons.
          */
         function enableHandler(event, enabled) {
-            getRadioButtons().tooltip(enabled ? 'enable' : 'disable');
+            getOptionButtons().tooltip(enabled ? 'enable' : 'disable');
         }
 
         /**
@@ -82,10 +70,10 @@ define('io.ox/office/tk/control/radiogroup',
         function updateHandler(value) {
 
             var // activate a radio button
-                button = Utils.selectRadioButton(getRadioButtons(), value);
+                button = Utils.selectOptionButton(getOptionButtons(), value);
 
             // update the contents of the drop-down button (use group options if no button is active)
-            if (self.hasMenu) {
+            if (self.hasDropDown) {
                 if (button.length) {
                     Utils.cloneControlCaption(self.getMenuButton(), button.first());
                 } else {
@@ -113,15 +101,9 @@ define('io.ox/office/tk/control/radiogroup',
         // base constructor ---------------------------------------------------
 
         Group.call(this, options);
-        switch (type) {
-        case 'dropdown':
-            Buttons.extend(this, options);
-            break;
-        case 'list':
-            List.extend(this, options);
-            break;
-        default:
-            type = 'buttons';
+        // add drop-down list if specified
+        if (Utils.getBooleanOption(options, 'dropDown')) {
+            List.call(this, options);
         }
 
         // methods ------------------------------------------------------------
@@ -152,16 +134,12 @@ define('io.ox/office/tk/control/radiogroup',
                 // the new button
                 button = null;
 
-            // insert the button depending on the display mode
-            switch (type) {
-            case 'dropdown':
-                button = this.createGridButton(buttonOptions);
-                break;
-            case 'list':
+            // insert the button depending on the drop-down mode
+            if (this.hasDropDown) {
                 button = this.createListItem(buttonOptions);
-                break;
-            default:
-                this.addFocusableControl(button = Utils.createButton(buttonOptions));
+            } else {
+                button = Utils.createButton(buttonOptions);
+                this.addFocusableControl(button);
             }
 
             // add tool tip
@@ -175,7 +153,7 @@ define('io.ox/office/tk/control/radiogroup',
         // register event handlers
         this.on('enable', enableHandler)
             .registerUpdateHandler(updateHandler)
-            .registerActionHandler(this.hasMenu ? this.getMenuNode() : this.getNode(), 'click', 'button', clickHandler);
+            .registerActionHandler(this.hasDropDown ? this.getMenuNode() : this.getNode(), 'click', 'button', clickHandler);
 
     } // class RadioGroup
 

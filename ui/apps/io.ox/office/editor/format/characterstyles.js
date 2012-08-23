@@ -130,9 +130,7 @@ define('io.ox/office/editor/format/characterstyles',
          */
         function iterateReadWrite(ranges, iterator, context) {
             return DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range) {
-                if (!range.isCollapsed()) {
-                    return iterator.call(context, textNode.parentNode);
-                }
+                return iterator.call(context, textNode.parentNode);
             }, context, { split: true, merge: hasEqualAttributes });
         }
 

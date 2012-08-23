@@ -326,7 +326,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * Registers a view component (e.g. a tool bar) that contains form
          * controls used to display item values and trigger item actions.
          *
-         * @param {Object} component
+         * @param {Component} component
          *  The view component to be registered. Must trigger 'change' events
          *  passing the item key and value as parameters, if a control has been
          *  activated in the user interface, or 'cancel' events to return to
@@ -349,7 +349,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
          * Unregisters a view component that has been registered with the
          * method registerViewComponent().
          *
-         * @param {Object} component
+         * @param {Component} component
          *  A view component that has been registered with the method
          *  registerViewComponent() before.
          *
@@ -485,7 +485,7 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
         };
 
         /**
-         * Destructor: Removes this controller from all event sources.
+         * Removes this controller from all event sources.
          */
         this.destroy = function () {
             // unregister from view components

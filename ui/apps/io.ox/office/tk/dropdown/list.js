@@ -13,8 +13,8 @@
 
 define('io.ox/office/tk/dropdown/list',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/menu'
-    ], function (Utils, Menu) {
+     'io.ox/office/tk/dropdown/dropdown'
+    ], function (Utils, DropDown) {
 
     'use strict';
 
@@ -25,22 +25,22 @@ define('io.ox/office/tk/dropdown/list',
 
     /**
      * Extends a Group object with a drop-down button and a drop-down menu
-     * containing a list of items. Extends the Menu mix-in class with
+     * containing a list of items. Extends the DropDown mix-in class with
      * functionality specific to the list drop-down element.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
-     * the class Group or one of its derived classes.
+     * the class Group or one of its derived classes. Expects the symbol 'this'
+     * to be bound to an instance of Group.
      *
-     * @extends Menu
+     * @constructor
      *
-     * @param {Group} group
-     *  The group object to be extended with a drop-down menu.
+     * @extends DropDown
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the list. Supports all
-     *  options of the Menu base class. Additionally, the following options are
-     *  supported:
-     *  @param {Boolean} [options.sorted]
+     *  options of the DropDown base class. Additionally, the following options
+     *  are supported:
+     *  @param {Boolean} [options.sorted=false]
      *      If set to true, the list items will be inserted ordered according
      *      to the registered sort functor (see 'option.sortFunctor').
      *      Otherwise, list items will be appended to the list.
@@ -54,9 +54,12 @@ define('io.ox/office/tk/dropdown/list',
      *      label will be prepended in no special order. This option has no
      *      effect, if sorting is not enabled.
      */
-    function extend(group, options) {
+    function List(options) {
 
-        var // the container element for all list items
+        var // self reference (the Group instance)
+            self = this,
+
+            // the container element for all list items
             listNode = $('<ul>'),
 
             // sorted list items
@@ -76,12 +79,12 @@ define('io.ox/office/tk/dropdown/list',
         function menuOpenHandler() {
 
             var // the outer menu node containing the list element
-                menuNode = group.getMenuNode(),
+                menuNode = self.getMenuNode(),
                 // all list items (button elements)
-                buttons = group.getListItems(),
+                buttons = self.getListItems(),
                 // width of the drop-down group buttons (used as min-width of the menu)
-                minWidth = group.getNode().width(),
-                // width of the scrollbar in pixels
+                minWidth = self.getNode().width(),
+                // width of the scroll bar in pixels
                 scrollBarWidth = 0;
 
             // set maximum height of the drop-down menu, depending on window height
@@ -122,7 +125,7 @@ define('io.ox/office/tk/dropdown/list',
             var // distinguish between event types (ignore keypress events)
                 keydown = event.type === 'keydown',
                 // all list items (button elements)
-                buttons = group.getListItems(),
+                buttons = self.getListItems(),
                 // index of the focused list item
                 index = buttons.index(event.target);
 
@@ -151,23 +154,23 @@ define('io.ox/office/tk/dropdown/list',
 
         // base constructor ---------------------------------------------------
 
-        Menu.extend(group, options);
+        DropDown.call(this, options);
 
         // methods ------------------------------------------------------------
 
         /**
          * Returns all button elements representing the list items.
          */
-        group.getListItems = function () {
+        this.getListItems = function () {
             return listNode.find('button');
         };
 
         /**
          * Sets the focus to the first list item in the drop-down list.
          */
-        group.grabMenuFocus = function () {
+        this.grabMenuFocus = function () {
             if (!Utils.containsFocusedControl(listNode)) {
-                group.getListItems().first().focus();
+                this.getListItems().first().focus();
             }
         };
 
@@ -175,7 +178,7 @@ define('io.ox/office/tk/dropdown/list',
          * Returns the number of list items that can be shown at the same time
          * in the drop-down list, depending on the current screen size.
          */
-        group.getItemCountPerPage = function () {
+        this.getItemCountPerPage = function () {
             return itemsPerPage;
         };
 
@@ -192,7 +195,7 @@ define('io.ox/office/tk/dropdown/list',
          *  The button element representing the new list item, as jQuery
          *  collection.
          */
-        group.createListItem = function (options) {
+        this.createListItem = function (options) {
 
             var // create the button element representing the list item
                 button = Utils.createButton(options),
@@ -203,11 +206,11 @@ define('io.ox/office/tk/dropdown/list',
 
             // find insertion index for sorted lists
             if (sorted) {
-                index = _.chain(group.getListItems().get())
+                index = _.chain(this.getListItems().get())
                     // convert array of button elements to strings returned by sort functor
-                    .map(function (button) { return sortFunctor.call(group, $(button)); })
+                    .map(function (button) { return sortFunctor.call(self, $(button)); })
                     // calculate the insertion index of the new list item
-                    .sortedIndex(sortFunctor.call(group, button))
+                    .sortedIndex(sortFunctor.call(this, button))
                     // exit the call chain, returns result of sortedIndex()
                     .value();
             }
@@ -231,16 +234,17 @@ define('io.ox/office/tk/dropdown/list',
         };
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('list').append(listNode);
+        this.getMenuNode().addClass('list').append(listNode);
 
         // register event handlers
-        group.on('menuopen', menuOpenHandler);
+        this.on('menuopen', menuOpenHandler);
         listNode.on('keydown keypress keyup', listKeyHandler);
 
     } // class List
 
     // exports ================================================================
 
-    return { extend: extend };
+    // derive this class from class DropDown
+    return DropDown.extend({ constructor: List });
 
 });

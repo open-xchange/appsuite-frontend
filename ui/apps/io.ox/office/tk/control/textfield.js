@@ -43,8 +43,8 @@ define('io.ox/office/tk/control/textfield',
      *  options of input fields (see method Utils.createTextField() for
      *  details). Additionally, the following options are supported:
      *  @param {Number} [options.width=200]
-     *      The fixed inner width of the editing area (without any padding), in
-     *      pixels.
+     *      The fixed inner width of the text editing area (without padding),
+     *      in pixels.
      *  @param {Boolean} [options.readOnly=false]
      *      If set to true, the text in the text field cannot be edited.
      *  @param {TextField.Validator} [options.validator]
@@ -115,21 +115,23 @@ define('io.ox/office/tk/control/textfield',
                 width = Utils.getIntegerOption(options, 'width', 200, 1),
                 // the width including the padding of the text field
                 paddedWidth = width + 2 * FIELD_PADDING,
-                // whether the text field has an icon and/or a label
+                // whether the text field has an icon and/or a label at the left side
                 hasCaption = Utils.hasControlCaption(caption),
-                // the current width of the caption element
-                captionWidth = hasCaption ? caption.outerWidth() : 0;
+                // the current width of the left caption element
+                leftMargin = hasCaption ? caption.outerWidth() : 0,
+                // the current width of the right caption element
+                rightMargin = 0;
+
+            // hide the caption element if it is empty, for correct positioning of white background
+            caption.toggle(hasCaption);
 
             // expand the text field by the size of the overlay caption
             textField
-                .width(captionWidth + paddedWidth + 1) // text field has box-sizing: border-box
-                .css({ paddingLeft: (captionWidth - 1 + FIELD_PADDING) + 'px', paddingRight: FIELD_PADDING + 'px' });
+                .width(leftMargin + paddedWidth + rightMargin + 2) // text field has box-sizing: border-box
+                .css({ paddingLeft: (leftMargin + FIELD_PADDING) + 'px', paddingRight: (rightMargin + FIELD_PADDING) + 'px' });
 
             // set the size of the white background area
             backgroundNode.width(paddedWidth).height(textField.height());
-
-            // remove caption if empty
-            if (!hasCaption) { caption.hide(); }
         }
 
         /**
