@@ -67,7 +67,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 /* ipad: better fat finger support */
 
 .touch #io-ox-topbar { height: 40px; }
-.touch #io-ox-topbar .launcher { font-size: 14px; line-height: 35px; padding: 2px 15px 5px 15px; }
+.touch #io-ox-topbar .launcher { font-size: @topbar-font-size + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
 .touch #io-ox-screens { top: 42px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
@@ -79,6 +79,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 /* ------------------------------------- */
 
 #io-ox-topbar .launcher {
+    font-size: @topbar-font-size;
     color: @topbar-launcher-color;
     padding: 0px 12px 0px 12px;
     line-height: 40px;
@@ -360,6 +361,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     left: 0px;
     z-index: 20;
 
+    font-size: @window-head-font-size;
     color: @head-color;
 
     border-bottom: 1px solid #d5d5d5;
@@ -595,6 +597,7 @@ a.button.default-action {
     position: absolute;
     right: 0;
     left: 0;
+    font-size: @vgrid-font-size;
     padding: 8px 13px 8px 13px;
     border-bottom: 1px solid mix(@color, @background, 200%/15);
     color: @color;
@@ -960,6 +963,7 @@ span.hint {
 
 /* inline links */
 .io-ox-inline-links {
+    font-size: @inline-link-font-size;
     text-align: right;
     margin: 0 0 1em 0;
     clear: both;
