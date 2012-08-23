@@ -25,14 +25,12 @@ define('io.ox/portal/settings/plugin/model',
 
         },
 
-        save: function (obj, defered) {
+        save: function () {
             console.log("save in model.js");
-            console.log(obj);
         },
 
-        destroy: function (options) {
+        destroy: function () {
             console.log("destroy in model.js");
-            console.log(options);
         }
 
     });
