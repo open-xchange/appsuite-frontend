@@ -89,9 +89,7 @@ define("io.ox/core/tk/dialogs",
                     close();
                 }
 
-                if (e.preventDefault) {
-                    e.preventDefault();
-                }
+                (e.originalEvent || e).processed = true;
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -366,12 +364,12 @@ define("io.ox/core/tk/dialogs",
 
         processEvent = function (e) {
             if (!(e.target && $(e.target).attr('data-process-event') === 'true')) {
-                e.preventDefault();
+                (e.originalEvent || e).processed = true;
             }
         };
 
         isProcessed = function (e) {
-            return e.isDefaultPrevented();
+            return (e.originalEvent || e).processed === true;
         };
 
         closeByEscapeKey = function (e) {
@@ -459,7 +457,7 @@ define("io.ox/core/tk/dialogs",
                 $(document).on("keydown", closeByEscapeKey);
 
                 // decide for proper side
-                var docWidth = $(document).width(), mode,
+                var docWidth = $('body').width(), mode,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
 
@@ -467,7 +465,7 @@ define("io.ox/core/tk/dialogs",
                 if (/^(left|right)$/.test(options.side)) {
                     mode = options.side;
                 } else {
-                    mode = (firstPopup && my.offset().left > docWidth / 2) ||
+                    mode = (firstPopup && e.pageX > docWidth / 2) ||
                         parentPopup.hasClass("right")  ? 'left' : 'right';
                 }
 
@@ -498,7 +496,7 @@ define("io.ox/core/tk/dialogs",
 
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
-                if (!e.isDefaultPrevented()) {
+                if ((e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });
