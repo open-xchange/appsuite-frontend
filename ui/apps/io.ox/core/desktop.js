@@ -567,6 +567,10 @@ define("io.ox/core/desktop",
             };
 
             this.render = $.noop;
+
+            this.setRendered = function (value) {
+                rendered = value;
+            };
         };
 
         return Perspective;
@@ -1131,7 +1135,7 @@ define("io.ox/core/desktop",
                             placement: 'bottom',
                             trigger: 'focus'
                         })
-                        .addClass('input-large search-query')
+                        .addClass('input-medium search-query')
                         .on({
                             keydown: function (e) {
                                 e.stopPropagation();

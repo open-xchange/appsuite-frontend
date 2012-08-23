@@ -1,10 +1,11 @@
 .io-ox-portal-rss-entry {
-    padding: 13px;
-    margin-bottom: 13px;
+    margin-bottom: 26px;
 }
 
 .io-ox-portal-rss-entry:hover {
    background: #eee;
+   padding: 13px;
+   margin: -13px -13px 13px -13px;
 }
 
 .io-ox-portal-rss-source {
@@ -20,6 +21,7 @@
     line-height: inherit;
     font-size: 24px;
     font-weight: 500;
+    margin-bottom: 13px;
 }
 .io-ox-portal-rss-content {
     

@@ -88,8 +88,8 @@ define("io.ox/core/tk/dialogs",
                     deferred.resolve(action, data, self.getContentNode().get(0));
                     close();
                 }
-                
-                e.preventDefault();
+
+                (e.originalEvent || e).processed = true;
             };
 
         _(['header', 'body', 'footer']).each(function (part) {
@@ -351,6 +351,9 @@ define("io.ox/core/tk/dialogs",
 
         pane = pane.scrollable();
 
+        // add event hub
+        Events.extend(this);
+
         if (options.modal) {
             overlay = $("<div>").addClass("io-ox-sidepopup-overlay abs").append(popup, arrow);
         }
@@ -360,11 +363,13 @@ define("io.ox/core/tk/dialogs",
         this.lastTrigger = null;
 
         processEvent = function (e) {
-            e.preventDefault();
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true')) {
+                (e.originalEvent || e).processed = true;
+            }
         };
 
         isProcessed = function (e) {
-            return e.isDefaultPrevented();
+            return (e.originalEvent || e).processed === true;
         };
 
         closeByEscapeKey = function (e) {
@@ -380,7 +385,7 @@ define("io.ox/core/tk/dialogs",
         };
 
         closeByClick = function (e) {
-            if (!isProcessed(e)) {
+            if (!(e.target && $(e.target).attr('data-process-event') === 'true') && !isProcessed(e)) {
                 processEvent(e);
                 close(e);
             }
@@ -401,6 +406,7 @@ define("io.ox/core/tk/dialogs",
                     popup.detach();
                 }
                 pane.empty();
+                self.trigger('close');
             }, 100);
         };
 
@@ -451,7 +457,7 @@ define("io.ox/core/tk/dialogs",
                 $(document).on("keydown", closeByEscapeKey);
 
                 // decide for proper side
-                var docWidth = $(document).width(), mode,
+                var docWidth = $('body').width(), mode,
                     parentPopup = my.parents(".io-ox-sidepopup").first(),
                     firstPopup = parentPopup.length === 0;
 
@@ -459,7 +465,7 @@ define("io.ox/core/tk/dialogs",
                 if (/^(left|right)$/.test(options.side)) {
                     mode = options.side;
                 } else {
-                    mode = (firstPopup && my.offset().left > docWidth / 2) ||
+                    mode = (firstPopup && e.pageX > docWidth / 2) ||
                         parentPopup.hasClass("right")  ? 'left' : 'right';
                 }
 
@@ -474,7 +480,8 @@ define("io.ox/core/tk/dialogs",
 
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
-                    top = my.offset().top + halfHeight - self.nodes.target.offset().top;
+                    targetOffset = self.nodes.target.offset() ? self.nodes.target.offset().top : 0,
+                    top = my.offset().top + halfHeight - targetOffset;
                 arrow.css("top", top);
 
                 // finally, add arrow
@@ -482,12 +489,14 @@ define("io.ox/core/tk/dialogs",
                 if (!options.modal) {
                     self.nodes.target.append(arrow);
                 }
+
+                self.trigger('show');
             }
         };
 
         this.delegate = function (node, selector, handler) {
             $(node).on("click", selector, function (e) {
-                if (!e.isDefaultPrevented()) {
+                if ((e.originalEvent || e).processed !== true) {
                     open.call(this, e, handler);
                 }
             });

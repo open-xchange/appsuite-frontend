@@ -222,7 +222,7 @@ define("io.ox/core/main",
                     //d.text(new date.Local().format(date.FULL_DATE)); // FIXME: Seems to die on android
                 };
                 update();
-                _.every(1, "minute", update);
+                _.tick(1, "minute", update);
             }
         });
 

@@ -93,15 +93,18 @@ define('plugins/portal/mail/register',
             require(["io.ox/mail/api"], function (mailApi) {
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
+                var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
                 var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100);
                 subject = strings.shorten(subject, 40);
 
                 $node.append(
-                    $('<h1 class="tile-heading">').text(gt("Mail")),
+                    $('<h1 class="tile-heading">').text(gt("Inbox")),
                     $('<div class="io-ox-clear io-ox-mail-preview">').append(
-                        $("<b>").text(subject),
+                        $("<b>").text(from),
                         $('<br>'),
-                        $("<span>").html(mailtext)
+                        $("<span>").text(subject),
+                        $('<br>'),
+                        $("<i>").html(mailtext)
                     )
                 );
                 deferred.resolve();
@@ -130,8 +133,8 @@ define('plugins/portal/mail/register',
             node.empty()
                 .addClass('io-ox-portal-mail')
                 .append(
-                    $('<div>').addClass('clear-title')
-                        .text(gt('New emails'))
+                    $('<h1>').addClass('clear-title')
+                        .text(gt('Recent mails'))
                 );
 
             ext.point('io.ox/portal/widget/mail').invoke('draw', node);
@@ -148,7 +151,7 @@ define('plugins/portal/mail/register',
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
 
-                        new dialogs.SidePopup({ modal: true })
+                        new dialogs.SidePopup({ modal: false })
                         .delegate(node, '.vgrid-cell', function (pane) {
                             var data = $(this).data('object-data');
                             pane.parent().removeClass('default-content-padding');

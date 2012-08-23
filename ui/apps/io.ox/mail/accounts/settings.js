@@ -13,18 +13,18 @@
 /*global
 define: true, _: true
 */
-define('io.ox/settings/accounts/email/settings',
+define('io.ox/mail/accounts/settings',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
        'io.ox/core/api/account',
-       'io.ox/settings/accounts/email/model',
-       'io.ox/settings/accounts/email/view-form',
+       "io.ox/mail/accounts/model",
+       'io.ox/mail/accounts/view-form',
        'io.ox/core/tk/dialogs',
-       'gettext!io.ox/settings/settings'
+       'gettext!io.ox/mail/accounts/settings'
        ], function (ext, utils, api, AccountModel, AccountDetailView, dialogs, gt) {
     'use strict';
 
-    ext.point("io.ox/settings/accounts/email/settings/detail").extend({
+    ext.point("io.ox/settings/accounts/mail/settings/detail").extend({
         index: 200,
         id: "emailaccountssettings",
         draw: function (evt) {
@@ -39,7 +39,7 @@ define('io.ox/settings/accounts/email/settings',
                     myViewNode = $("<div>").addClass("accountDetail");
                     myModel = new AccountModel(data);
                     myView = new AccountDetailView({model: myModel, node: myViewNode});
-                    myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                    myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
                         pane.append(myView.render().el);
                     });
                     return myView.node;
@@ -48,7 +48,7 @@ define('io.ox/settings/accounts/email/settings',
                 myViewNode = $("<div>").addClass("accountDetail");
                 myModel = new AccountModel(evt.data);
                 myView = new AccountDetailView({model: myModel, node: myViewNode});
-                myView.dialog = new dialogs.SidePopup('800').show(evt, function (pane) {
+                myView.dialog = new dialogs.SidePopup({modal: true, arrow: false}).show(evt, function (pane) {
                     pane.append(myView.render().el);
                 });
                 myView.succes = successDialog;
@@ -64,9 +64,7 @@ define('io.ox/settings/accounts/email/settings',
 
         createExtpointForNewAccount = function (args) {
             var node = $('<div>');
-            require(['io.ox/settings/accounts/email/settings'], function (m) {
-                ext.point('io.ox/settings/accounts/email/settings/detail').invoke('draw', node, args);
-            });
+            ext.point('io.ox/settings/accounts/mail/settings/detail').invoke('draw', node, args);
         },
 
         drawAlert = function (alertPlaceholder, message) {
@@ -235,7 +233,7 @@ define('io.ox/settings/accounts/email/settings',
                     }
                 });
             });
-            
+
             return def;
         },
 

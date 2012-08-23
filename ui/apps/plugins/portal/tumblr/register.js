@@ -14,181 +14,196 @@
 define('plugins/portal/tumblr/register',
     ['io.ox/portal/mediaplugin',
      'io.ox/mail/util',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, gt) {
+     'settings!plugins/portal/tumblr',
+     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
 
     'use strict';
-    var mp = new MediaPlayer();
-    var apiUrl = "http://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
 
-    mp.addFeed({
-        id: "tumblr-icr",
-        description: "I Can Read",
-        url: apiUrl.split("##blog##").join("icanread.tumblr.com") + "&jsonp=",
-        index: 110
-    });
+    var reload = function () {
+        var mp = new MediaPlayer();
+        var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
 
-    mp.setOptions({bigPreview: true});
+        var blogs = settings.get('blogs');
 
-    mp.init({
-        appendLimitOffset: function (myurl, count, offset) {
-            if (count) {
-                myurl += "&limit=" + count;
-            }
+        _.each(blogs, function (v) {
+            // TODO index
+            mp.addFeed({
+                id: 'tumblr-' + v.url.replace(/[^a-z0-9]/g, '_'),
+                description: v.description,
+                url: apiUrl.split("##blog##").join(v.url) + "&jsonp=",
+                index: 110
+            });
+        });
 
-            if (offset) {
-                myurl += "&offset=" + count * offset;
-            }
+        mp.setOptions({bigPreview: true});
 
-            return myurl;
-        },
-        determineSuccessfulResponse: function (j) {
-            return j && j.meta && j.response ? j.response : {};
-        },
-        getDataArray: function (j) {
-            return j.posts;
-        },
-        getTitle: function (j) {
-            return j && j.blog && j.blog.title ? j.blog.title.replace(/&gt;/g, '>') : 'Tumblr';
-        },
-        elementPreview: function ($node, entry) {
-            var thumbUrl = "",
-                thumbWidth = 0,
-                thumbHeight = 0,
-                title = "",
-                big = mp.getOption('bigPreview');
+        mp.init({
+            appendLimitOffset: function (myurl, count, offset) {
+                if (count) {
+                    myurl += "&limit=" + count;
+                }
 
-            if (entry.title) {
-                title = entry.title;
-            } else if (entry.body) {
-                title = $('<span>').html(entry.body).text();
-            } else if (entry.text) {
-                title = $('<span>').html(entry.text).text();
-            } else if (entry.description) {
-                title = $('<span>').html(entry.description).text();
-            } else if (entry.caption) {
-                title = $('<span>').html(entry.caption).text();
-            } else if (entry.source_title) {
-                title = $('<span>').html(entry.source_title).text();
-            }
+                if (offset) {
+                    myurl += "&offset=" + count * offset;
+                }
 
-            if (entry.photos && entry.photos[0] && entry.photos[0].alt_sizes) {
-                var sizes = entry.photos[0].alt_sizes;
+                return myurl;
+            },
+            determineSuccessfulResponse: function (j) {
+                return j && j.meta && j.response ? j.response : {};
+            },
+            getDataArray: function (j) {
+                return j.posts;
+            },
+            getTitle: function (j) {
+                return j && j.blog && j.blog.title ? j.blog.title.replace(/&gt;/g, '>') : 'Tumblr';
+            },
+            elementPreview: function ($node, entry) {
+                var thumbUrl = "",
+                    thumbWidth = 0,
+                    thumbHeight = 0,
+                    title = "",
+                    big = mp.getOption('bigPreview');
 
-                _(sizes).each(function (j) {
-                    if (big) {
-                        if (j.width > 250 || thumbWidth === 0) {
-                            thumbUrl = j.url;
-                            thumbWidth = j.width;
-                            thumbHeight = j.height;
-                        }
-                    } else {
-                        if (j.width < thumbWidth || thumbWidth === 0) {
-                            thumbUrl = j.url;
-                            thumbWidth = j.width;
-                            thumbHeight = j.height;
-                        }
-                    }
-                });
-            }
+                if (entry.title) {
+                    title = entry.title;
+                } else if (entry.body) {
+                    title = $('<span>').html(entry.body).text();
+                } else if (entry.text) {
+                    title = $('<span>').html(entry.text).text();
+                } else if (entry.description) {
+                    title = $('<span>').html(entry.description).text();
+                } else if (entry.caption) {
+                    title = $('<span>').html(entry.caption).text();
+                } else if (entry.source_title) {
+                    title = $('<span>').html(entry.source_title).text();
+                }
 
-            if (!thumbUrl && !title) {
-                $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
-            } else if (title) {
-                $node.append($("<div>").addClass("mediaplugin-title").text(title));
-            }
+                if (entry.photos && entry.photos[0] && entry.photos[0].alt_sizes) {
+                    var sizes = entry.photos[0].alt_sizes;
 
-            $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
-
-            if (thumbUrl !== "") {
-                var $img = $('<img/>', {'data-original': thumbUrl, height: thumbHeight, width: thumbWidth});
-                return $img;
-            }
-            return false;
-        },
-        popupContent: function ($popup, entry, $busyIndicator) {
-            var maxWidth = $popup.width();
-            var maxHeight = $popup.height();
-            var willDisableBusyIndicator = false;
-            var title = "";
-            var $node = $('<div>').addClass('io-ox-portal-mediaplugin-portal');
-
-            if (entry.title) {
-                title = entry.title;
-            } else if (entry.body) {
-                title = $('<span>').html(entry.body).text();
-            } else if (entry.text) {
-                title = $('<span>').html(entry.text).text();
-            } else if (entry.description) {
-                title = $('<span>').html(entry.description).text();
-            } else if (entry.caption) {
-                title = $('<span>').html(entry.caption).text();
-            } else if (entry.source_title) {
-                title = $('<span>').html(entry.source_title).text();
-            } else {
-                title = gt('No title.');
-            }
-
-            var $title = $("<div>").addClass("mediaplugin-title").text(title).css({width: maxWidth});
-            maxHeight -= $title.height();
-            $node.append($title);
-
-            if (entry.description) {
-                // TODO xss
-                var $description = $("<div/>").html(entry.description);
-                $node.append($description);
-                maxHeight -= $description.height();
-            }
-
-            if (entry.body) {
-                // TODO xss
-                var $body = $("<div/>").html(entry.body);
-                $node.append($body);
-                maxHeight -= $body.height();
-            }
-
-            if (entry.player) {
-                $node.append($("<div/>").html(entry.player[0].embed_code));
-            } else if (entry.photos) {
-                willDisableBusyIndicator = true;
-
-                _(entry.photos).each(function (p) {
-                    var photo = p.original_size;
-                    var $img = $("<img/>", {'src': photo.url, height: photo.height, width: photo.width}).css({display: 'none'})
-                        .load(function () {
-                            if ($busyIndicator) {
-                                $busyIndicator.detach();
-                                $(this).fadeIn();
+                    _(sizes).each(function (j) {
+                        if (big) {
+                            if (j.width > 250 || thumbWidth === 0) {
+                                thumbUrl = j.url;
+                                thumbWidth = j.width;
+                                thumbHeight = j.height;
                             }
-                        });
+                        } else {
+                            if (j.width < thumbWidth || thumbWidth === 0) {
+                                thumbUrl = j.url;
+                                thumbWidth = j.width;
+                                thumbHeight = j.height;
+                            }
+                        }
+                    });
+                }
 
-                    mp.resizeImage($img, maxWidth, maxHeight);
-                    $node.append($img);
-                });
-            } else {
-                $node.append($("<a/>", {href: entry.post_url, target: "_blank"}).text(entry.post_url)
-                        .on("click", function (e) {
-                            e.stopPropagation();
-                        }));
-            }
+                if (!thumbUrl && !title) {
+                    $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
+                } else if (title) {
+                    $node.append($("<div>").addClass("mediaplugin-title").text(title));
+                }
 
-            if (entry.caption) {
-                // TODO xss
-                $node.append(entry.caption);
-            }
+                $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
 
-            if ($busyIndicator && !willDisableBusyIndicator) {
-                $busyIndicator.detach();
-            }
+                if (thumbUrl !== "") {
+                    var $img = $('<img/>', {'data-original': thumbUrl, height: thumbHeight, width: thumbWidth});
+                    return $img;
+                }
+                return false;
+            },
+            popupContent: function ($popup, entry, $busyIndicator) {
+                var maxWidth = $popup.width();
+                var maxHeight = $popup.height();
+                var willDisableBusyIndicator = false;
+                var title = "";
+                var $node = $('<div>').addClass('io-ox-portal-mediaplugin-portal');
 
-            $popup.append($node);
-        },
-        getImagesFromEntry: function (entry, imageCollection) {
-            if (entry.photos) {
-                _(entry.photos).each(function (p) {
-                    var photo = p.original_size;
-                    imageCollection.push(photo.url);
-                });
+                if (entry.title) {
+                    title = entry.title;
+                } else if (entry.body) {
+                    title = $('<span>').html(entry.body).text();
+                } else if (entry.text) {
+                    title = $('<span>').html(entry.text).text();
+                } else if (entry.description) {
+                    title = $('<span>').html(entry.description).text();
+                } else if (entry.caption) {
+                    title = $('<span>').html(entry.caption).text();
+                } else if (entry.source_title) {
+                    title = $('<span>').html(entry.source_title).text();
+                } else {
+                    title = gt('No title.');
+                }
+
+                var $title = $("<div>").addClass("mediaplugin-title").text(title).css({width: maxWidth});
+                maxHeight -= $title.height();
+                $node.append($title);
+
+                if (entry.description) {
+                    // TODO xss
+                    var $description = $("<div/>").html(entry.description);
+                    $node.append($description);
+                    maxHeight -= $description.height();
+                }
+
+                if (entry.body) {
+                    // TODO xss
+                    var $body = $("<div/>").html(entry.body);
+                    $node.append($body);
+                    maxHeight -= $body.height();
+                }
+
+                if (entry.player) {
+                    $node.append($("<div/>").html(entry.player[0].embed_code));
+                } else if (entry.photos) {
+                    willDisableBusyIndicator = true;
+
+                    _(entry.photos).each(function (p) {
+                        var photo = p.original_size;
+                        var $img = $("<img/>", {'src': photo.url, height: photo.height, width: photo.width}).css({display: 'none'})
+                            .load(function () {
+                                if ($busyIndicator) {
+                                    $busyIndicator.detach();
+                                    $(this).fadeIn();
+                                }
+                            });
+
+                        mp.resizeImage($img, maxWidth, maxHeight);
+                        $node.append($img);
+                    });
+                } else {
+                    $node.append($("<a/>", {href: entry.post_url, target: "_blank"}).text(entry.post_url)
+                            .on("click", function (e) {
+                                e.stopPropagation();
+                            }));
+                }
+
+                if (entry.caption) {
+                    // TODO xss
+                    $node.append(entry.caption);
+                }
+
+                if ($busyIndicator && !willDisableBusyIndicator) {
+                    $busyIndicator.detach();
+                }
+
+                $popup.append($node);
+            },
+            getImagesFromEntry: function (entry, imageCollection) {
+                if (entry.photos) {
+                    _(entry.photos).each(function (p) {
+                        var photo = p.original_size;
+                        imageCollection.push(photo.url);
+                    });
+                }
             }
-        }
-    });
+        });
+    };
+
+    reload();
+
+    return {
+        reload: reload
+    };
 });

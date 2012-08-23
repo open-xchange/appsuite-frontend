@@ -21,16 +21,18 @@ define.async('io.ox/portal/main',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'io.ox/core/tk/dialogs',
+     'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
 
     'use strict';
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+    var activePlugins = _.map(settings.get('activePlugins') || [], function (value) { return 'plugins/portal/' + value + '/register'; });
+    plugins = _.intersection(plugins, activePlugins);
 
     return require(plugins).pipe(function () {
-
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -132,6 +134,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 contentSide.find(":first").trigger('onPause').detach();
                 contentSide.busy();
                 app.active = extension;
+                app.activeEvent = event;
                 return drawContent(extension, event);
             };
         }
@@ -141,13 +144,12 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
                     contentQueue.enqueue(createContentTask(extension));
-
-                    var $node = $('<div>')
-                        .addClass('io-ox-portal-widget-tile')
+                    var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
+                    var $node = $('<div class="io-ox-portal-widget-tile">')
                         // experimental
                         .addClass('tile-color' + (count++ % 10))
                         .attr('widget-id', extension.id)
-                        .appendTo(tileSide)
+                        .appendTo($borderBox)
                         .busy();
 
                     if (extension.tileClass) {
@@ -169,14 +171,14 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
 
                             extension.asyncMetadata("title").done(function (title) {
                                 if (title === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 $node.find(".tile-heading").text(title);
                             });
                             extension.asyncMetadata("icon").done(function (icon) {
                                 if (icon === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (icon) {
@@ -187,7 +189,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("preview").done(function (preview) {
                                 if (preview === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (preview) {
@@ -196,7 +198,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("tileColor").done(function (color) {
                                 if (color === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (color !== undefined) {
@@ -206,7 +208,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                             });
                             extension.asyncMetadata("color").done(function (color) {
                                 if (color === control.CANCEL) {
-                                    $node.remove();
+                                    $borderBox.remove();
                                     return;
                                 }
                                 if (color !== undefined) {
@@ -244,7 +246,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
             }));
 
             updateTitle();
-            _.every(1, 'hour', updateTitle);
+            _.tick(1, 'hour', updateTitle);
 
             initExtensions();
 
@@ -255,13 +257,13 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs) {
                 .append(tileSide);
 
             ox.on('refresh^', function () {
+                //console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
                 initExtensions();
-                if (app.active) {
-                    //drawContent(app.active, null);
-                    //$('.io-ox-sidepopup-pane .scrollable-pane');
+                if (app.activeEvent) {
+                    drawContent(app.active, app.activeEvent);
                 }
             });
 

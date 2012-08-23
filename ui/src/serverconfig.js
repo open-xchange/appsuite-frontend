@@ -29,7 +29,9 @@ define(function () {
             signin: [],
             core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
-            keychain: ['io.ox/oauth/keychain', "io.ox/mail/accounts/keychain"],
+            keychain: ["io.ox/mail/accounts/keychain", 'io.ox/oauth/keychain'],
+            keychainSettings: ['io.ox/mail/accounts/settings', 'io.ox/oauth/settings'],
+            // All available plugins - default-plugins moved to io.ox/portal/settings/defaults.js:
             portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter', 'tumblr', 'flickr', 'reddit'],
             notifications: ['calendar', 'mail'],
             tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",

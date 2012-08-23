@@ -78,7 +78,7 @@ define("plugins/portal/appointments/register", [
             var nextApp = appointments[0];
             var deltaT = timespan(nextApp.start_date, new Date().getTime());
             $node.append(
-                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
+//                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
                 $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title || ""), 100),
                 $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location || ""), 100)
             );
@@ -122,7 +122,7 @@ define("plugins/portal/appointments/register", [
 
             $node.addClass("io-ox-portal-appointments")
                 .append(
-                    $("<div/>").addClass("clear-title").text("Appointments")
+                    $("<h1>").addClass("clear-title").text("Appointments")
                 );
 
             if (appointments.length === 0) {
@@ -135,7 +135,7 @@ define("plugins/portal/appointments/register", [
 
                         viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
-                        new dialogs.SidePopup({ modal: true })
+                        new dialogs.SidePopup({ modal: false })
                             .delegate($node, ".vgrid-cell", function (popup) {
                                 var data = $(this).data("appointment");
                                 require(["io.ox/calendar/view-detail"], function (view) {

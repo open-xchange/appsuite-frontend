@@ -10,6 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
 define("settings", ['io.ox/core/http', 'io.ox/core/cache',
@@ -20,18 +21,25 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
     var settingsWrapper = function () {
 
         var settings = {},
-            settingsCache,
-            settingsDefaults;
+            settingsCache;
 
-        var settingsInitial = function (settings, path) {
-            require(['io.ox/' + path + '/settings/defaults'], function (u) {
-                settingsDefaults = u;
-            });
-            _.each(settingsDefaults, function (value, key) {
-                if (settings[key] === undefined) {
-                    settings[key] = settingsDefaults[key];
+        var settingsInitial = function (settings, path, settingsBase, callback) {
+            var deferred = $.Deferred();
+
+            require([settingsBase + '/' + path + '/settings/defaults'], function (u) {
+                _.each(u, function (value, key) {
+                    if (settings[key] === undefined) {
+                        settings[key] = value;
+                    }
+                });
+
+                if (_.isFunction(callback)) {
+                    callback();
                 }
+
+                deferred.resolve();
             });
+            return deferred;
         };
 
         var get = function (key) {
@@ -131,6 +139,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
         var that = {
 
             settingsPath: null,
+            settingsBase: null,
 
             createModel: function (ModelClass) {
 
@@ -142,7 +151,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                 if (!path) { // undefined, null, ''
                     return get(that.settingsPath);
                 } else {
-                    console.log('getting: ' + path);
                     if (defaultValue === undefined) {
                         return get(path);
                     } else {
@@ -154,7 +162,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
             set: function (path, value) {
                 if (path) {
                     var orgpath = path;
-                    console.log(path);
                     set(path, value);
                 }
             },
@@ -179,9 +186,12 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                         params: {
                             action: 'list'
                         },
-                        data: ['apps/io.ox/' + that.settingsPath]
+                        data: ['apps/' + that.settingsBase + '/' + that.settingsPath]
                     }).done(function (data) {
                             settings = data[0].tree;
+                        }).pipe(function () {
+                            return settingsInitial(settings, that.settingsPath, that.settingsBase);
+                        }).done(function () {
                             settingsCache.add(that.settingsPath, settings);
                         });
                 };
@@ -194,7 +204,6 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                     .pipe(function (data) {
                         if (data !== null) {
                             settings = data;
-                            load();
                             return settings;
                         } else {
                             return load();
@@ -202,17 +211,18 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                     });
             },
             save: function () {
-                settingsInitial(settings, [that.settingsPath]);
+//                settingsInitial(settings, that.settingsPath, that.settingsBase, function () {
                 settingsCache.add(that.settingsPath, settings);
-                console.log(settings);
-                return http.PUT({
+
+                http.PUT({
                     module: 'jslob',
                     params: {
-                        action: 'update',
-                        id: 'apps/io.ox/' + that.settingsPath //id
+                        action: 'set',
+                        id: 'apps/' + that.settingsBase + '/' + that.settingsPath //id
                     },
                     data: settings
                 });
+//                });
             }
         };
         return that;
@@ -222,7 +232,9 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
         load: function (name, req, load, config) {
             var mywrapper = settingsWrapper();
             name = name.split('/');
-            mywrapper.settingsPath = name[1]; //encodeURIComponent(name);
+            mywrapper.settingsBase = name[0];
+            name = _.rest(name).join('/');
+            mywrapper.settingsPath = name;
             mywrapper.load()
                 .done(function () {
                     load(mywrapper);

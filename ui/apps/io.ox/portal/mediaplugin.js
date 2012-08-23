@@ -96,44 +96,44 @@ define('io.ox/portal/mediaplugin',
         };
 
         var popupContent = function ($popup, entry, lastClickedOn) {
-            if (mpext.getImagesFromEntry) {
-                var tempImageCollection = [];
-                $('div.io-ox-portal-mediaplugin > div.mediaplugin-entry').each(function (key, val) {
-                    var entry = $(val).data("entry");
-                    mpext.getImagesFromEntry(entry, tempImageCollection);
-                });
-
-                // TODO fullscreen is not per mediaplugin
-                if (false && tempImageCollection.length > 0) {
-                    $('<a/>')
-                        .addClass('label io-ox-action-link')
-                        .css({'cursor': 'pointer', 'float': 'right'})
-                        .text(gt('Fullscreen'))
-                        .appendTo($popup)
-                        .on('click', function () {
-                                var i = lastClickedOn - 1;
-
-                                // Push visible and all following images to our collection
-                                presentation = tempImageCollection.splice(i);
-
-                                // Push already seen images to the collection for cycling through all images
-                                if (lastClickedOn > 0) {
-                                    // TODO fix mixed (photos, videos, text) blogs
-                                    presentation = presentation.concat(tempImageCollection.splice(0, i));
-                                }
-
-                                $.fancybox(presentation,
-                                {
-                                    'cyclic': true,
-                                    'type': 'image',
-                                    'autoDimensions': true,
-                                    'transitionIn': 'none',
-                                    'transitionOut': 'none',
-                                    'overlayOpacity': '0.9'
-                                });
-                            });
-                }
-            }
+//            if (mpext.getImagesFromEntry) {
+//                var tempImageCollection = [];
+//                $('div.io-ox-portal-mediaplugin > div.mediaplugin-entry').each(function (key, val) {
+//                    var entry = $(val).data("entry");
+//                    mpext.getImagesFromEntry(entry, tempImageCollection);
+//                });
+//
+//                // TODO fullscreen is not per mediaplugin
+//                if (false && tempImageCollection.length > 0) {
+//                    $('<a/>')
+//                        .addClass('label io-ox-action-link')
+//                        .css({'cursor': 'pointer', 'float': 'right'})
+//                        .text(gt('Fullscreen'))
+//                        .appendTo($popup)
+//                        .on('click', function () {
+//                                var i = lastClickedOn - 1;
+//
+//                                // Push visible and all following images to our collection
+//                                presentation = tempImageCollection.splice(i);
+//
+//                                // Push already seen images to the collection for cycling through all images
+//                                if (lastClickedOn > 0) {
+//                                    // TODO fix mixed (photos, videos, text) blogs
+//                                    presentation = presentation.concat(tempImageCollection.splice(0, i));
+//                                }
+//
+//                                $.fancybox(presentation,
+//                                {
+//                                    'cyclic': true,
+//                                    'type': 'image',
+//                                    'autoDimensions': true,
+//                                    'transitionIn': 'none',
+//                                    'transitionOut': 'none',
+//                                    'overlayOpacity': '0.9'
+//                                });
+//                            });
+//                }
+//            }
 
             var $busyIndicator = $('<div/>').html('&nbsp;').addClass('io-ox-busy');
             $popup.append($busyIndicator);
@@ -155,11 +155,17 @@ define('io.ox/portal/mediaplugin',
                         if (extension && extension.id) {
                             $('div[widget-id="' + extension.id + '"]').css({
                                 'background-image': 'url(' + $img.attr('data-original') + ')',
-                                'background-size': '100% auto',
-                                'background-repeat': 'no-repeat'
+                                'background-size': 'cover',
+                                'background-repeat': 'no-repeat',
+                                'position': 'relative'
                             });
 
-                            $('div[widget-id="' + extension.id + '"] > h1').addClass("io-ox-portal-mediaplugin-big").css({opacity: 0.7});
+                            $('div[widget-id="' + extension.id + '"] > h1').addClass("io-ox-portal-mediaplugin-big").css({
+                                opacity: 0.7,
+                                position: "absolute",
+                                bottom: "0px",
+                                width: "100%"
+                            });
                             $entry.addClass("mediaplugin-entry-big-tile").css({opacity: 0.7});
                         } else {
                             $img.css({height: 'auto'});
@@ -330,7 +336,7 @@ define('io.ox/portal/mediaplugin',
 //                            $(document).off('keydown', onKeyDown);
                         });
 
-                        $('<div>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
+                        $('<h1>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
                         $mediapluginEntries.appendTo(self);
                         $busyIndicator.appendTo(self);
 

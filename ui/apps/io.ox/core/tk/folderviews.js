@@ -18,9 +18,8 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
-     'io.ox/core/config',
-     'io.ox/settings/accounts/email/settings'
-    ], function (Selection, api, account, userAPI, ext, Events, config, emailsettings) {
+     'io.ox/core/config'
+    ], function (Selection, api, account, userAPI, ext, Events, config) {
 
     'use strict';
 
@@ -112,7 +111,7 @@ define('io.ox/core/tk/folderviews',
                 var image = hasChildren() ? (isOpen() ? CLOSE : OPEN) : 'none';
                 nodes.arrow.css('backgroundImage', image);
             },
-            
+
             hideArrow = function () {
                 nodes.arrow.css('backgroundImage', 'none');
             },
@@ -649,7 +648,11 @@ define('io.ox/core/tk/folderviews',
                     $('<a>', { href: '#' })
                     .addClass('action-link')
                     .text('Add mail account ...')
-                    .on('click', emailsettings.mailAutoconfigDialog)
+                    .on('click', function (e) {
+                        require(['io.ox/mail/accounts/settings'], function (m) {
+                            m.mailAutoconfigDialog(e);
+                        });
+                    })
                 )
             );
         }
