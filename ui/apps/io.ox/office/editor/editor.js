@@ -1117,7 +1117,6 @@ define('io.ox/office/editor/editor',
             event.preventDefault();
         };
 
-
         this.processKeyDown = function (event) {
 
             implDbgOutEvent(event);
@@ -2595,10 +2594,15 @@ define('io.ox/office/editor/editor',
                 inline = true;  // image is in line with text, default is 'true'
 
             if (attributes) {
+
+                // _(attributes).each(function (element, i) {
+                //     window.console.log("Attribute: " + i + " : " + element);
+                // });
+
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
                 }
-                if (attributes.inline) {
+                if (attributes.inline !== undefined) {
                     inline = attributes.inline;
                 }
                 if (attributes.width) {
@@ -2609,6 +2613,10 @@ define('io.ox/office/editor/editor',
                     attributes.height /= 100;  // converting to mm
                     attributes.height += 'mm';
                 }
+            }
+
+            if (! inline) {
+                anchorType = "FloatLeft";
             }
 
             if ((node) && (node.nodeType === 3)) {
@@ -2639,6 +2647,16 @@ define('io.ox/office/editor/editor',
                     newParent.insertAfter(textNode.parentNode);
                     attributes.position = 'absolute';
                     $('<img>', { src: url }).appendTo(newParent).css(attributes);
+                } else if (anchorType === 'FloatLeft') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+                    attributes.float = 'left';
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                } else if (anchorType === 'FloatRight') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+                    attributes.float = 'right';
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
                 }
             }
 
