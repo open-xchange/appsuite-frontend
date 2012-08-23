@@ -22,7 +22,7 @@ define('io.ox/office/editor/main',
      'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
      'io.ox/office/editor/actions',
-     'less!io.ox/office/editor/main.css'
+     'less!io.ox/office/editor/style.css'
     ], function (filesApi, Utils, AppHelper, Editor, View, Controller, gt) {
 
     'use strict';

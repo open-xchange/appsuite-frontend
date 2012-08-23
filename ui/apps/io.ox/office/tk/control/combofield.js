@@ -31,6 +31,7 @@ define('io.ox/office/tk/control/combofield',
      * @constructor
      *
      * @extends TextField
+     * @extends List
      *
      * @param {Object} options
      *  A map of options to control the properties of the control. Supports all
@@ -66,7 +67,7 @@ define('io.ox/office/tk/control/combofield',
         function updateHandler(value) {
 
             var // activate a button representing a list item
-                button = Utils.selectRadioButton(self.getListItems(), value);
+                button = Utils.selectOptionButton(self.getListItems(), value);
 
             // scroll to make the element visible
             if (button.length && self.isMenuVisible()) {
@@ -185,11 +186,11 @@ define('io.ox/office/tk/control/combofield',
             updateHandler((button.length && (textField.val() === Utils.getControlLabel(button))) ? Utils.getControlValue(button) : null);
         }
 
-        // base constructor ---------------------------------------------------
+        // base constructors --------------------------------------------------
 
         TextField.call(this, options);
         // no caption for the drop-down button
-        List.extend(this, Utils.extendOptions(options, { ignoreCaption: true }));
+        List.call(this, Utils.extendOptions(options, { ignoreCaption: true }));
 
         // methods ------------------------------------------------------------
 

@@ -11,7 +11,7 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/dropdown/menu',
+define('io.ox/office/tk/dropdown/dropdown',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/control/group'
     ], function (Utils, Group) {
@@ -24,7 +24,7 @@ define('io.ox/office/tk/dropdown/menu',
         // CSS class for the group node, if drop-down menu is opened
         MENUOPEN_CLASS = 'menu-open';
 
-    // class Menu =============================================================
+    // class DropDown =========================================================
 
     /**
      * Extends a Group object with a drop-down menu. Creates a new drop-down
@@ -35,10 +35,10 @@ define('io.ox/office/tk/dropdown/menu',
      * drop-down button and menu.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
-     * the class Group or one of its derived classes.
+     * the class Group or one of its derived classes. Expects the symbol 'this'
+     * to be bound to an instance of Group.
      *
-     * @param {Group} group
-     *  The group object to be extended with a drop-down menu.
+     * @constructor
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the drop-down button.
@@ -49,10 +49,13 @@ define('io.ox/office/tk/dropdown/menu',
      *      If set to true, the drop-down button will not contain a caption,
      *      regardless of the other settings in the options object.
      */
-    function extend(group, options) {
+    function DropDown(options) {
 
-        var // the root node of the group object
-            groupNode = group.getNode(),
+        var // self reference (the Group instance)
+            self = this,
+
+            // the root node of the group object
+            groupNode = this.getNode(),
 
             // the drop-down button
             menuButton = Utils.createButton(options),
@@ -77,11 +80,11 @@ define('io.ox/office/tk/dropdown/menu',
         function toggleMenu(state) {
 
             var // whether to show or hide the menu
-                show = (state === true) || ((state !== false) && !group.isMenuVisible());
+                show = (state === true) || ((state !== false) && !self.isMenuVisible());
 
-            if (show && !group.isMenuVisible()) {
+            if (show && !self.isMenuVisible()) {
                 groupNode.addClass(MENUOPEN_CLASS);
-                group.trigger('menuopen');
+                self.trigger('menuopen');
                 // Add a global click handler to close the menu automatically
                 // when clicking somewhere in the page. Listeining to the
                 // 'mousedown' event will catch all real mouse clicks and close
@@ -97,13 +100,13 @@ define('io.ox/office/tk/dropdown/menu',
                 window.setTimeout(function () {
                     $(document).on('mousedown click', globalClickHandler);
                 }, 0);
-            } else if (!show && group.isMenuVisible()) {
+            } else if (!show && self.isMenuVisible()) {
                 // move focus to drop-down button, if drop-down menu is focused
                 if (Utils.containsFocusedControl(menuNode)) {
                     menuButton.focus();
                 }
                 groupNode.removeClass(MENUOPEN_CLASS);
-                group.trigger('menuclose');
+                self.trigger('menuclose');
                 $(document).off('mousedown click', globalClickHandler);
             }
         }
@@ -115,7 +118,7 @@ define('io.ox/office/tk/dropdown/menu',
         function menuButtonClickHandler() {
 
             // do nothing (but the 'cancel' event) if the group is disabled
-            if (group.isEnabled()) {
+            if (self.isEnabled()) {
 
                 // WebKit does not focus the clicked button, which is needed to
                 // get keyboard control in the drop-down menu
@@ -128,8 +131,8 @@ define('io.ox/office/tk/dropdown/menu',
             }
 
             // trigger 'cancel' event, if menu has been closed with mouse click
-            if (!group.isMenuVisible()) {
-                group.trigger('cancel');
+            if (!self.isMenuVisible()) {
+                self.trigger('cancel');
             }
         }
 
@@ -162,7 +165,7 @@ define('io.ox/office/tk/dropdown/menu',
 
             switch (event.keyCode) {
             case KeyCodes.DOWN_ARROW:
-                if (keydown) { toggleMenu(true); group.grabMenuFocus(); }
+                if (keydown) { toggleMenu(true); self.grabMenuFocus(); }
                 return false;
             case KeyCodes.UP_ARROW:
                 if (keydown) { toggleMenu(false); }
@@ -183,8 +186,8 @@ define('io.ox/office/tk/dropdown/menu',
             case KeyCodes.ENTER:
                 if (keyup) {
                     toggleMenu(null);
-                    if (group.isMenuVisible()) {
-                        group.grabMenuFocus();
+                    if (self.isMenuVisible()) {
+                        self.grabMenuFocus();
                     }
                 }
                 return false;
@@ -214,40 +217,40 @@ define('io.ox/office/tk/dropdown/menu',
          * A simple boolean marker to test whether the group contains a
          * drop-down menu.
          */
-        group.hasMenu = true;
+        this.hasDropDown = true;
 
         /**
          * Returns the drop-down button added to the group.
          */
-        group.getMenuButton = function () {
+        this.getMenuButton = function () {
             return menuButton;
         };
 
         /**
          * Returns the drop-down menu element added to the group.
          */
-        group.getMenuNode = function () {
+        this.getMenuNode = function () {
             return menuNode;
         };
 
         /**
          * Returns whether the drop-down menu is currently visible.
          */
-        group.isMenuVisible = function () {
+        this.isMenuVisible = function () {
             return groupNode.hasClass(MENUOPEN_CLASS);
         };
 
         /**
          * Shows the drop-down menu.
          */
-        group.showMenu = function () {
+        this.showMenu = function () {
             toggleMenu(true);
         };
 
         /**
          * Shows the drop-down menu.
          */
-        group.hideMenu = function () {
+        this.hideMenu = function () {
             toggleMenu(false);
         };
 
@@ -255,7 +258,7 @@ define('io.ox/office/tk/dropdown/menu',
          * Sets the focus into the first control element of the drop-down menu
          * element. Intended to be overwritten by derived classes.
          */
-        group.grabMenuFocus = function () {
+        this.grabMenuFocus = function () {
         };
 
         /**
@@ -265,7 +268,7 @@ define('io.ox/office/tk/dropdown/menu',
          * @param {jQuery} controls
          *  The controls to be registered as menu toggle controls.
          */
-        group.addMenuToggleControls = function (controls) {
+        this.addMenuToggleControls = function (controls) {
             controls
                 .on('click', menuButtonClickHandler)
                 .on('keydown keypress keyup', menuButtonKeyHandler);
@@ -279,7 +282,7 @@ define('io.ox/office/tk/dropdown/menu',
          * @param {jQuery} controls
          *  The controls to be unregistered as menu toggle controls.
          */
-        group.removeMenuToggleControls = function (controls) {
+        this.removeMenuToggleControls = function (controls) {
             controls
                 .off('click', menuButtonClickHandler)
                 .off('keydown keypress keyup', menuButtonKeyHandler);
@@ -292,7 +295,7 @@ define('io.ox/office/tk/dropdown/menu',
         groupNode.addClass('dropdown-group');
 
         // append menu button and menu to the group container
-        group.addFocusableControl(menuButton).addChildNodes(menuNode);
+        this.addFocusableControl(menuButton).addChildNodes(menuNode);
 
         // prepare drop-down button
         if (Utils.getBooleanOption(options, 'ignoreCaption')) {
@@ -301,8 +304,8 @@ define('io.ox/office/tk/dropdown/menu',
         menuButton.append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')));
 
         // register event handlers, prepare drop-down button
-        group.on('change cancel', function () { toggleMenu(false); });
-        group.getNode()
+        this.on('change cancel', function () { toggleMenu(false); });
+        groupNode
             .on('keydown keypress keyup', groupKeyHandler)
             .on('blur:key', Group.FOCUSABLE_SELECTOR, function () { toggleMenu(false); });
         menuButton
@@ -310,10 +313,10 @@ define('io.ox/office/tk/dropdown/menu',
             .on('keydown keypress keyup', menuButtonKeyHandler);
         menuNode.on('keydown keypress keyup', menuKeyHandler);
 
-    } // class Menu
+    } // class DropDown
 
     // exports ================================================================
 
-    return { extend: extend };
+    return _.makeExtendable(DropDown);
 
 });

@@ -746,7 +746,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
                 var // the result of the iterator call
                     result = null,
-                    // whether to merge with previous or next ndoe
+                    // whether to merge with previous or next node
                     mergePrevious = false, mergeNext = false;
 
                 // split text node if specified

@@ -1343,7 +1343,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
-     * Activates a button from the passed collection of buttons, after
+     * Activates a single button from the passed collection of buttons, after
      * deactivating all buttons in the collection.
      *
      * @param {jQuery} buttons
@@ -1357,7 +1357,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @returns {jQuery}
      *  The activated button, if existing, otherwise an empty jQuery object.
      */
-    Utils.selectRadioButton = function (buttons, value) {
+    Utils.selectOptionButton = function (buttons, value) {
 
         var // find the button to be activated
             button = _.isNull(value) ? $() : buttons.filter(function () { return _.isEqual(value, Utils.getControlValue($(this))); });

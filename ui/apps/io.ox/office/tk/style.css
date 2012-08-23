@@ -63,22 +63,24 @@
     box-shadow: @outset-shadow, inset @inset-shadow;
 }
 
-.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-start-color, @ie-end-color, @ie-gradient-type) {
+.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
     background-color: mix(@start-color, @end-color, 50%);
     background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
     background: -moz-linear-gradient(@start-point, @start-color, @end-color);
     background: -ms-linear-gradient(@start-point, @start-color, @end-color);
     background: -o-linear-gradient(@start-point, @start-color, @end-color);
     background: linear-gradient(@start-point, @start-color, @end-color);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@ie-start-color,@ie-end-color,@ie-gradient-type));
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
 }
 
-.horizontal-gradient(@left-color, @right-color, @ie-left-color, @ie-right-color) {
-    .impl-linear-gradient(left, @left-color, @right-color, @ie-left-color, @ie-right-color, 1);
+.horizontal-gradient(@left-color, @right-color) {
+    .impl-linear-gradient(left, @left-color, @right-color, 1);
+    background-repeat: repeat-y;
 }
 
-.vertical-gradient(@top-color, @bottom-color, @ie-top-color, @ie-bottom-color) {
-    .impl-linear-gradient(top, @top-color, @bottom-color, @ie-top-color, @ie-bottom-color, 0);
+.vertical-gradient(@top-color, @bottom-color) {
+    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
+    background-repeat: repeat-x;
 }
 
 .opacity(@opacity) {
@@ -153,11 +155,14 @@ i.icon-io-ox-table-delete-row    { background-position:  -60px  -20px; }
 i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 
 /* ========================================================================= */
-/* panes and tool bars                                                       */
+/* panes and view components                                                 */
 /* ========================================================================= */
 
 /* background color for panes */
 @pane-fill-color: #f5f5f5;
+
+/* second color for tool bar background gradient */
+@toolbar-accented-color: #ffffff;
 
 /* border color for panes */
 @pane-border-color: #d5d5d5;
@@ -165,11 +170,23 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 /* base border color for controls */
 @control-border-color: @pane-border-color;
 
+/* base text color for controls */
+@control-text-color: #333333;
+
 /* border color for selected controls */
 @selected-border-color: #b5b5ff;
 
 /* fill color for input controls */
 @input-fill-color: white;
+
+/* fill color for tool bar tab buttons */
+@tab-fill-color: #757575;
+
+/* text color for tool bar tab buttons */
+@tab-text-color: white;
+
+/* fill color for selected tool bar tab buttons */
+@tab-selected-fill-color: @toolbar-accented-color;
 
 /* tool panes ============================================================== */
 
@@ -182,444 +199,439 @@ div.io-ox-toolpane {
     &.right { border-left: 1px solid @pane-border-color; }
 }
 
-/* tool bars =============================================================== */
+/* view components ========================================================= */
 
-div.io-ox-toolbar {
+div.io-ox-view-component {
     padding: 4px 13px;
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
     text-align: left;
 
-    > span {
-        display: inline-block;
+    /* disabled style for any element marked with the 'disabled' class */
+    .disabled {
+        .opacity(0.5);
+        cursor: default;
+    }
+
+    /* groups (container elements for controls) ---------------------------- */
+
+    .group {
+        /* relative position is essential for drop-down menu positioning */
         position: relative;
 
-        /* disabled style for any element marked with the 'disabled' class */
-        .disabled {
-            .opacity(0.5);
-            cursor: default;
+        /* hidden groups ('important' to overrule display modes from other rules) */
+        &.hidden {
+            display: none !important;
         }
 
-        /* groups (container elements for controls) ------------------------ */
-
-        > .group {
-            display: inline-block;
-            /* relative position is essential for drop-down menu positioning */
-            position: relative;
-
-            /* hidden groups */
-            &.hidden {
-                display: none;
-            }
-
-            /* collapse borders of top-level control elements inside group */
-            > label, > button, > input {
-                ~ label, ~ button, ~ input {
-                    margin-left: -1px;
-                }
-            }
-
-            /* reset mouse pointer for controls embedded in a disabled group */
-            &.disabled {
-                label, button, input {
-                    cursor: default;
-                }
-            }
-
-            /* group spacing ----------------------------------------------- */
-
-            + .group {
+        /* collapse borders of top-level control elements inside group */
+        > label, > button, > input {
+            ~ label, ~ button, ~ input {
                 margin-left: -1px;
             }
+        }
 
-            &.separator {
-                width: 10px;
-            }
-
-            /* common controls --------------------------------------------- */
-
+        /* reset mouse pointer for controls embedded in a disabled group */
+        &.disabled {
             label, button, input {
+                cursor: default;
+            }
+        }
+
+        /* common controls ------------------------------------------------- */
+
+        label, button, input {
+            display: inline-block;
+            position: relative;
+            .box-sizing(border-box);
+            height: 28px;
+            margin: 0;
+            padding: 0;
+            background: none;
+            /* reserve space for border */
+            border: 1px solid transparent;
+            .border-radius(0);
+            white-space: nowrap;
+            line-height: 26px;
+            font-size: 13px;
+            font-weight: normal;
+            color: @control-text-color;
+            text-shadow: none;
+            vertical-align: top;
+
+            /* prevent dotted focus rectangle around the control */
+            &:focus, &:active {
+                outline: none;
+            }
+        }
+
+        /* control caption elements (always spans as children) */
+        label, button {
+            > span {
                 display: inline-block;
-                position: relative;
-                .box-sizing(border-box);
-                height: 28px;
-                margin: 0;
-                padding: 0;
-                background: none;
-                /* reserve space for border */
-                border: 1px solid transparent;
-                .border-radius(0);
-                white-space: nowrap;
-                line-height: 26px;
-                font-size: 13px;
-                font-weight: normal;
-                color: #333333;
-                text-shadow: none;
                 vertical-align: top;
 
-                /* prevent dotted focus rectangle around the control */
-                &:focus, &:active {
-                    outline: none;
-                }
-            }
-
-            /* control caption elements (always spans as children) */
-            label, button {
-                > span {
-                    display: inline-block;
-                    vertical-align: top;
-
-                    > i[class^="icon-"] {
-                        vertical-align: center;
-                    }
-
-                    + span {
-                        margin-left: 5px;
-                    }
-                }
-            }
-
-            /* mouse and keyboard effects for buttons and text fields */
-            &:not(.disabled) {
-                button, input {
-                    &:not(.disabled) {
-
-                        /* mouse/keyboard effects */
-                        &:hover, &:focus, &:active {
-                            z-index: 2;
-                            border-color: @control-border-color;
-                        }
-
-                        /* active effect (control currently clicked) */
-                        &:active {
-                            z-index: 4;
-                        }
-                    }
-                }
-            }
-
-            /* labels ------------------------------------------------------ */
-
-            label {
-                text-align: center;
-            }
-
-            /* buttons ----------------------------------------------------- */
-
-            button {
-                padding-left: 8px;
-                padding-right: 8px;
-                text-align: center;
-
-                /* selected toggle/radio buttons */
-                &.selected {
-                    z-index: 20;
-                    background-color: fade(@selected-border-color, 50%);
-                    border-color: @selected-border-color;
-                }
-            }
-
-            /* more keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) button:not(.disabled) {
-
-                /* active effect (control currently clicked) */
-                &:active {
-                    background-color: fade(@control-border-color, 25%);
+                > i[class^="icon-"] {
+                    vertical-align: center;
                 }
 
-                /* selected toggle/radio buttons */
-                &.selected {
+                + span {
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        /* mouse and keyboard effects for buttons and text fields */
+        &:not(.disabled) {
+            button, input {
+                &:not(.disabled) {
 
                     /* mouse/keyboard effects */
                     &:hover, &:focus, &:active {
-                        z-index: 22;
-                        border-color: darken(@selected-border-color, 10%);
+                        z-index: 2;
+                        border-color: @control-border-color;
                     }
 
-                    /* active effect (button currently clicked) */
+                    /* active effect (control currently clicked) */
                     &:active {
-                        z-index: 24;
-                        background-color: fade(@selected-border-color, 75%);
+                        z-index: 4;
                     }
                 }
             }
+        }
 
-            /* text fields ------------------------------------------------- */
+        /* labels ---------------------------------------------------------- */
 
-            input {
-                width: 150px;
-                z-index: 1;
-                padding-left: 4px;
-                padding-right: 4px;
-                .box-shadow(none);
-                .transition(none);
-                line-height: 18px;
-                cursor: text;
+        label {
+            text-align: center;
+        }
 
-                + div.input-overlay {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    z-index: 0;
+        /* buttons --------------------------------------------------------- */
 
-                    > label {
-                        padding-left: 4px;
-                        padding-right: 4px;
-                    }
+        button {
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: center;
 
-                    > div {
-                        display: inline-block;
-                        position: relative;
-                        top: 1px;
-                        background-color: @input-fill-color;
-                    }
-                }
-                
-                &.readonly {
-                    cursor: default;
-                }
+            /* selected toggle/radio buttons */
+            &.selected {
+                z-index: 20;
+                background-color: fade(@selected-border-color, 50%);
+                border-color: @selected-border-color;
+            }
+        }
+
+        /* more keyboard/mouse effects (not for disabled buttons) */
+        &:not(.disabled) button:not(.disabled) {
+
+            /* active effect (control currently clicked) */
+            &:active {
+                background-color: fade(@control-border-color, 25%);
             }
 
-            /* drop-down groups -------------------------------------------- */
+            /* selected toggle/radio buttons */
+            &.selected {
 
-            &.dropdown-group {
+                /* mouse/keyboard effects */
+                &:hover, &:focus, &:active {
+                    z-index: 22;
+                    border-color: darken(@selected-border-color, 10%);
+                }
 
-                /* adjust margins for caret buttons in drop-down split mode */
-                > button.narrow-padding {
+                /* active effect (button currently clicked) */
+                &:active {
+                    z-index: 24;
+                    background-color: fade(@selected-border-color, 75%);
+                }
+            }
+        }
+
+        /* text fields ----------------------------------------------------- */
+
+        input {
+            width: 150px;
+            z-index: 1;
+            padding-left: 4px;
+            padding-right: 4px;
+            .box-shadow(none);
+            .transition(none);
+            line-height: 18px;
+            cursor: text;
+
+            + div.input-overlay {
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: 0;
+
+                > label {
                     padding-left: 4px;
                     padding-right: 4px;
                 }
 
-                &:not(.disabled) {
+                > div {
+                    display: inline-block;
+                    position: relative;
+                    top: 1px;
+                    left: 1px;
+                    background-color: @input-fill-color;
+                }
+            }
+            
+            &.readonly {
+                cursor: default;
+            }
+        }
 
-                    /* show drop-down menu element */
-                    &.menu-open > .dropdown-menu {
-                        display: block;
+        /* drop-down groups ------------------------------------------------ */
+
+        &.dropdown-group {
+
+            /* adjust margins for caret buttons in drop-down split mode */
+            > button.narrow-padding {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+
+            &:not(.disabled) {
+
+                /* show drop-down menu element */
+                &.menu-open > .dropdown-menu {
+                    display: block;
+                }
+
+                /* set border to all controls in the group when hovered or opened (split mode) */
+                &.menu-open, &:hover {
+                    > button, > input {
+                        &:not(:focus):not(:active) {
+                            border-color: @control-border-color;
+                        }
                     }
+                }
+            }
 
-                    /* set border to all controls in the group when hovered or opened (split mode) */
-                    &.menu-open, &:hover {
-                        > button, > input {
-                            &:not(:focus):not(:active) {
-                                border-color: @control-border-color;
+            /* the drop-down menu element */
+            > .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                min-width: 0;
+                max-width: none;
+                z-index: 1000;
+                margin: 1px 0 0 0;
+                padding: 0;
+                background-color: @pane-fill-color;
+                border: 1px solid @control-border-color;
+                .border-radius(0);
+
+                /* the List mix-in class */
+                &.list {
+                    overflow-y: auto;
+
+                    > ul {
+                        display: inline-block;
+                        margin: 0;
+                        padding: 0;
+                        list-style: none;
+
+                        > li {
+                            margin: 0;
+                            padding: 0;
+
+                            > button {
+                                width: 100%;
+                                height: 26px;
+                                border-color: transparent;
+                                line-height: 24px;
+                                text-align: left;
+
+                                /* mouse hover and focus effect */
+                                &:hover:not(:active), &:focus:not(:active) {
+                                    background-color: fade(@control-border-color, 25%);
+                                }
+
+                                /* active effect (button currently clicked) */
+                                &:active {
+                                    background-color: fade(@control-border-color, 50%);
+                                }
+
+                                &.selected {
+                                    background-color: fade(@selected-border-color, 50%);
+
+                                    /* mouse hover and focus effect */
+                                    &:hover:not(:active), &:focus:not(:active) {
+                                        background-color: fade(@selected-border-color, 75%);
+                                        border-color: transparent;
+                                    }
+
+                                    /* active effect (button currently clicked) */
+                                    &:active {
+                                        background-color: @selected-border-color;
+                                        border-color: transparent;
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
-                /* the drop-down menu element */
-                > .dropdown-menu {
-                    display: none;
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    min-width: 0;
-                    max-width: none;
-                    z-index: 1000;
-                    margin: 1px 0 0 0;
-                    padding: 0;
-                    background-color: @pane-fill-color;
-                    border: 1px solid @control-border-color;
-                    .border-radius(0);
+                /* the GridSizer mix-in class */
+                &.grid-sizer {
 
-                    /* the Buttons mix-in class */
-                    &.buttons > table {
-                        margin: -1px;
-                        border-collapse: collapse;
-                        max-width: none;
+                    /* inner size (pixels between grid lines) of one cell in the size chooser */
+                    @cell-width: 18px;
+                    @cell-height: 16px;
 
-                        td {
-                            padding: 0;
+                    /* minimum dimensions for the outer container (in cells) */
+                    min-width: 5 * (@cell-width + 1px) + 1px;
+                    min-height: 3 * (@cell-height + 1px) + 1px;
+                    background-color: white;
+                    text-align: left;
 
-                            /* expand width to entire table cell */
-                            > button {
-                                width: 100%;
-                            }
-                        }
-                    }
+                    > div {
+                        display: inline-block;
+                        position: relative;
+                        vertical-align: top;
+                        font-size: 1px;
+                        line-height: 1px;
 
-                    /* the List mix-in class */
-                    &.list {
-                        overflow-y: auto;
-
-                        > ul {
-                            display: inline-block;
+                        /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
+                        > button {
+                            height: auto;
                             margin: 0;
                             padding: 0;
-                            list-style: none;
+                            background-color: @pane-fill-color;
 
-                            > li {
-                                margin: 0;
-                                padding: 0;
+                            /* always show the same border */
+                            &, &:hover, &:focus, &:active {
+                                border: 1px solid @control-border-color;
+                            }
 
-                                > button {
-                                    width: 100%;
-                                    height: 26px;
-                                    border-color: transparent;
-                                    line-height: 24px;
-                                    text-align: left;
+                            /* a row in the grid */
+                            > div {
+                                /* need to set height explicitly for Firefox */
+                                height: @cell-height + 1px;
 
-                                    /* mouse hover and focus effect */
-                                    &:hover:not(:active), &:focus:not(:active) {
-                                        background-color: fade(@control-border-color, 25%);
+                                /* a cell in the grid */
+                                > div {
+                                    display: inline-block;
+                                    width: @cell-width;
+                                    height: @cell-height;
+                                    vertical-align: top;
+
+                                    &:not(:last-child) {
+                                        border-right: 1px solid @control-border-color;
                                     }
+                                }
 
-                                    /* active effect (button currently clicked) */
-                                    &:active {
-                                        background-color: fade(@control-border-color, 50%);
-                                    }
+                                &:not(:last-child) > div {
+                                    border-bottom: 1px solid @control-border-color;
+                                }
 
-                                    &.selected {
-                                        background-color: fade(@selected-border-color, 50%);
-
-                                        /* mouse hover and focus effect */
-                                        &:hover:not(:active), &:focus:not(:active) {
-                                            background-color: fade(@selected-border-color, 75%);
-                                            border-color: transparent;
-                                        }
-
-                                        /* active effect (button currently clicked) */
-                                        &:active {
-                                            background-color: @selected-border-color;
-                                            border-color: transparent;
-                                        }
-                                    }
+                                /* height for last row (again, especially for Firefox) */
+                                &:last-child {
+                                    height: @cell-height;
                                 }
                             }
                         }
-                    }
 
-                    /* the GridSizer mix-in class */
-                    &.grid-sizer {
-
-                        /* inner size (pixels between grid lines) of one cell in the size chooser */
-                        @cell-width: 18px;
-                        @cell-height: 16px;
-
-                        /* minimum dimensions for the outer container (in cells) */
-                        min-width: 5 * (@cell-width + 1px) + 1px;
-                        min-height: 3 * (@cell-height + 1px) + 1px;
-                        background-color: white;
-                        text-align: left;
-
-                        > div {
-                            display: inline-block;
-                            position: relative;
-                            vertical-align: top;
-                            font-size: 1px;
-                            line-height: 1px;
-
-                            /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
-                            > button {
-                                height: auto;
-                                margin: 0;
-                                padding: 0;
-                                background-color: @pane-fill-color;
-
-                                /* always show the same border */
-                                &, &:hover, &:focus, &:active {
-                                    border: 1px solid @control-border-color;
-                                }
-
-                                /* a row in the grid */
-                                > div {
-                                    /* need to set height explicitly for Firefox */
-                                    height: @cell-height + 1px;
-
-                                    /* a cell in the grid */
-                                    > div {
-                                        display: inline-block;
-                                        width: @cell-width;
-                                        height: @cell-height;
-                                        vertical-align: top;
-
-                                        &:not(:last-child) {
-                                            border-right: 1px solid @control-border-color;
-                                        }
-                                    }
-
-                                    &:not(:last-child) > div {
-                                        border-bottom: 1px solid @control-border-color;
-                                    }
-
-                                    /* height for last row (again, especially for Firefox) */
-                                    &:last-child {
-                                        height: @cell-height;
-                                    }
-                                }
-                            }
-
-                            /* the badge labels showing the width and height of the grid */
-                            > span {
-                                position: absolute;
-                                top: 100%;
-                                right: @cell-width;
-                                z-index: 1020;
-                                margin: 5px 0 0 0;
-                                padding: 4px 6px;
-                                background-color: black;
-                                .opacity(0.8);
-                                .border-radius(9px);
-                                .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
-                                font-size: 11px;
-                                line-height: 100%;
-                                color: white;
-                                text-shadow: none;
-                            }
+                        /* the badge labels showing the width and height of the grid */
+                        > span {
+                            position: absolute;
+                            top: 100%;
+                            right: @cell-width;
+                            z-index: 1020;
+                            margin: 5px 0 0 0;
+                            padding: 4px 6px;
+                            background-color: black;
+                            .opacity(0.8);
+                            .border-radius(9px);
+                            .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+                            font-size: 11px;
+                            line-height: 100%;
+                            color: white;
+                            text-shadow: none;
                         }
                     }
                 }
             }
         }
     }
+    
+    /* tool bar ------------------------------------------------------------ */
+    
+    &.toolbar {
+        .vertical-gradient(@toolbar-accented-color, @pane-fill-color);
+	
+        > span {
+            display: inline-block;
+            position: relative;
+
+            /* show groups in a horizontal bar */
+            > .group {
+                display: inline-block;
+
+	            /* group spacing */
+		        + .group {
+		            margin-left: -1px;
+		        }
+
+                &.separator {
+                    width: 10px;
+                }
+            }
+        }
+    }
+
+    /* menu box ------------------------------------------------------------ */
+    
+    &.menubox {
+
+        /* group spacing */
+        > .group.separator {
+            height: 6px;
+        }
+    }
 }
 
-/* tab bars ================================================================ */
+/* title tab bar =========================================================== */
 
-div.io-ox-toolbar.tabs {
+div.io-ox-view-component.toolbar.tabs {
     position: absolute;
-    left: 300px;
+    left: 13px;
     bottom: -1px;
     padding: 0;
 
-    > span {
-        > .group {
+    .group {
 
-            /* style buttons as tabs */
-            > button {
-                height: 24px;
-                padding-left: 12px;
-                padding-right: 12px;
-                border-bottom: 1px solid @pane-border-color;
-                .border-top-left-radius(4px);
-                .border-top-right-radius(4px);
-                line-height: 22px;
+        /* style buttons as tabs */
+        > button {
+            padding-left: 12px;
+            padding-right: 12px;
+            .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
+            border: none;
+            color: @tab-text-color;
 
-                /* override the default style of selected buttons */
-                &.selected {
-                    background: none;
-                    border: 1px solid @pane-border-color;
-                    border-bottom-color: transparent;
-                    cursor: default;
-                }
+            /* semi-transparency for all contents of the button */
+            &:not(.selected) > * { .opacity(0.7); }
+
+            /* override the default style of selected buttons */
+            &.selected {
+                background: @tab-selected-fill-color;
+                color: @control-text-color;
+                cursor: default;
             }
+        }
 
-            /* mouse/keyboard effects (not for disabled group) */
-            &:not(.disabled) > button {
+        /* mouse/keyboard effects (not for disabled group) */
+        &:not(.disabled) > button {
 
-                &:hover, &:focus, &:active {
-                    border-color: @pane-border-color;
+            &:hover, &:focus, &:active {
+                border-color: transparent;
 
-                    &:active {
-                        background-color: fade(@pane-border-color, 25%);
-                    }
-
-                    &.selected {
-                        background: none;
-                        border-color: darken(@pane-border-color, 10%);
-                        border-bottom-color: transparent;
-                    }
-                }
+                /* remove semi-transparency for all contents of the button */
+                > * { .opacity(1); }
             }
         }
     }

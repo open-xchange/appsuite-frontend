@@ -104,12 +104,12 @@ define('io.ox/office/editor/view',
                 maxSize: { width: 15, height: 15 }
             };
 
-        // base constructor ---------------------------------------------------
+        // base constructors --------------------------------------------------
 
         // create the default button (set value to default size, will be returned by click handler)
         Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
         // create the grid sizer
-        GridSizer.extend(this, Utils.extendOptions(options, { ignoreCaption: true }));
+        GridSizer.call(this, Utils.extendOptions(options, { ignoreCaption: true }));
 
     }}); // class TableSizeChooser
 
@@ -119,9 +119,6 @@ define('io.ox/office/editor/view',
 
         var // tool pane containing all tool bars
             toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show'),
-
-            // tool tip options of the quick-search text field
-            quickSearchTooltip = appWindow.nodes.search.data('tooltip').options,
 
             // old value of the search query field
             oldSearchQuery = '';
@@ -217,17 +214,17 @@ define('io.ox/office/editor/view',
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addRadioGroup('format/paragraph/alignment', { type: 'dropdown', columns: 2, autoExpand: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+            .addRadioGroup('format/paragraph/alignment', { auto: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
+                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left'),    css: { textAlign: 'center' }  })
+                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center'),  css: { textAlign: 'center' } })
+                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right'),   css: { textAlign: 'center' } })
+                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify'), css: { textAlign: 'center' } })
                 .end()
             .addSeparator()
-            .addRadioGroup('format/paragraph/lineheight', { type: 'dropdown', columns: 1, autoExpand: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
-                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
-                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
+            .addRadioGroup('format/paragraph/lineheight', { auto: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
+                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single'),         css: { textAlign: 'center' } })
+                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half'), css: { textAlign: 'center' } })
+                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double'),         css: { textAlign: 'center' } })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
@@ -251,11 +248,11 @@ define('io.ox/office/editor/view',
         // override the limited functionality of the quick-search text field
         appWindow.nodes.search
             .off('keydown search change')
-            .on('input keydown keypress keyup focus', searchKeyHandler);
+            .on('input keydown keypress keyup focus', searchKeyHandler)
+            .data('tooltip', null); // remove old tooltip
 
-        // change the quick-search tooltip options
-        quickSearchTooltip.title = gt('Quick Search');
-        quickSearchTooltip.trigger = 'hover';
+        // set the quick-search tooltip
+        Utils.setControlTooltip(appWindow.nodes.search, gt('Quick Search'), 'bottom');
 
     } // class View
 
