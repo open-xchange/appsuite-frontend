@@ -30,18 +30,21 @@ define('io.ox/calendar/week/view',
 
         className:      'week',
         
-        columns:        7,      // day columns
+        columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
         appWith:        97,     // max width of an appointment in %
-        overlap:        0.3,    // visual overlap of appointments
+        overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
         workEnd:        18,     // full hour for end position of worktime marker
         startDay:       1,      // weekday starting with 0 sunday
         slots:          24,     // amount of shown timeslots
         
         pane:           $(),    // main scroll pane
+        fulltimePane:   $(),    // fulltime appointments pane
         week:           [],     // week scaffold
+        timeline:       $(),    // timeline
+        tlInterval:     {},     // timeline interval
         
         events: {
             'click .appointment': 'onClickAppointment'
@@ -51,10 +54,25 @@ define('io.ox/calendar/week/view',
             this.columns = options.columns;
             this.week = util.getWeekScaffold(options.startDate);
             this.collection.on('reset', this.renderAppointments, this);
+            
+//            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-detail"])
+//                .done(function (dialogs, view) {
+//                    new dialogs.SidePopup({ modal: true })
+//                        .delegate(this.$el, ".appointment", function (popup) {
+//                            var data = $(this).data("appointment");
+//                            popup.append(view.draw(data));
+//                            data = null;
+//                        });
+//                });
         },
 
         onClickAppointment: function (e) {
-            var obj = _.cid($(e.currentTarget).attr('data-cid'));
+            var target = $(e.currentTarget),
+                cid = target.attr('data-cid'),
+                obj = _.cid(target.attr('data-cid'));
+            this.$el.find('.appointment').addClass('opac');
+            this.$el.find('.appointment.current').removeClass('current');
+            $('[data-cid="' + cid + '"]').removeClass('opac').addClass('current');
             this.trigger('showAppoinment', e, obj);
         },
 
@@ -65,6 +83,7 @@ define('io.ox/calendar/week/view',
 
             var scaffold = tmpl.render('scaffold', {days: days, width: 100 / this.columns + '%'});
             this.pane = scaffold.find('.scrollpane');
+            this.fulltimePane = scaffold.find('.fulltime');
             
             // create timelabels
             var timeLabel = $('<div>').addClass('lable');
@@ -73,14 +92,20 @@ define('io.ox/calendar/week/view',
             }
             this.pane.append(timeLabel);
             
-            // create days
-            var container = $('<div>').addClass('container');
+            // create days container
+            var container = $('<div>').addClass('weekcontainer');
             
+            // create and animate timeline
+            this.timeline = $('<div>').addClass('timeline').append($('<div>').addClass('glow'));
+            this.renderTimeline(this.timeline);
+            this.tlInterval = setInterval(this.renderTimeline, 60000, this.timeline);
+            container.append(this.timeline);
+            
+            // create days
             for (var d = 0; d < this.columns; d++) {
                 
-                var dayInfo = this.week[d];
-                
-                var day = $('<div>').addClass('day').width(100 / this.columns + '%').attr('date', dayInfo.year + '-' + dayInfo.month + '-' + dayInfo.date);
+                var dayInfo = this.week[d],
+                    day = $('<div>').addClass('day').width(100 / this.columns + '%').attr('date', dayInfo.year + '-' + dayInfo.month + '-' + dayInfo.date);
                 
                 if (dayInfo.isToday) {
                     day.addClass('today');
@@ -95,6 +120,7 @@ define('io.ox/calendar/week/view',
 
                 container.append(day);
             }
+            
             this.pane.append(container);
 
             this.$el.append(scaffold);
@@ -111,6 +137,11 @@ define('io.ox/calendar/week/view',
             return workStartPos - newPos;
         },
 
+        renderTimeline: function (tl) {
+            var d = new Date();
+            tl.css({ top: ((d.getHours() * 60 + d.getMinutes()) / (24 * 60) * 100) + '%'});
+        },
+        
         renderAppointment: function (a) {
 
             myself = myself || config.get('identifier');
@@ -140,55 +171,68 @@ define('io.ox/calendar/week/view',
             
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
-                
+
                 var startDate = new Date(model.get('start_date')),
                     endDate = new Date(model.get('end_date') - 1),
                     start = formatDate(startDate),
                     end = formatDate(endDate),
+                    fulltime = model.get('full_time'),
                     maxCount = 7;
+                console.log(fulltime);
 
                 if (model.get('start_date') < 0) {
                     console.error('FIXME: start_date should not be negative');
                     throw 'FIXME: start_date should not be negative';
                 }
 
-                // draw across multiple days
-                // FIXE ME: just to make it work and safe
-                while (true && maxCount) {
+                if (model.get('full_time')) {
+                    var app = this.renderAppointment(model.attributes);
                     
-                    maxCount--;
-                    
-                    // if
-                    if (start !== end) {
-                        endDate = new Date(startDate.getTime());
-                        endDate.setUTCHours(23, 59, 59, 999);
-                    } else {
-                        endDate = new Date(model.get('end_date') - 1);
+                    app.css({
+                        width: (100 / this.columns * 3) + '%'
+                    });
+                    this.fulltimePane.append(app);
+                } else {
+
+                    // draw across multiple days
+                    // FIXE ME: just to make it work and safe
+                    while (true && maxCount) {
+                        
+                        maxCount--;
+                        
+                        // if
+                        if (start !== end) {
+                            endDate = new Date(startDate.getTime());
+                            endDate.setUTCHours(23, 59, 59, 999);
+                        } else {
+                            endDate = new Date(model.get('end_date') - 1);
+                        }
+                        
+                        var app = this.renderAppointment(model.attributes),
+                            sel = '[date="' + start + '"]';
+                        
+                        app.pos = {
+                                id: model.id,
+                                start: startDate.getTime(),
+                                end: endDate.getTime(),
+                                col: 0
+                            };
+                        
+                        if (!draw[sel]) {
+                            draw[sel] = [];
+                        }
+                        draw[sel].push(app);
+                        
+                        // inc date
+                        if (start !== end) {
+                            startDate.setUTCDate(startDate.getUTCDate() + 1);
+                            startDate.setUTCHours(0, 0, 0, 0);
+                            start = formatDate(startDate);
+                        } else {
+                            break;
+                        }
                     }
                     
-                    var app = this.renderAppointment(model.attributes),
-                        sel = '[date="' + start + '"]';
-                    
-                    app.pos = {
-                        id: model.id,
-                        start: startDate.getTime(),
-                        end: endDate.getTime(),
-                        col: 0
-                    };
-                    
-                    if (!draw[sel]) {
-                        draw[sel] = [];
-                    }
-                    draw[sel].push(app);
-                    
-                    // inc date
-                    if (start !== end) {
-                        startDate.setUTCDate(startDate.getUTCDate() + 1);
-                        startDate.setUTCHours(0, 0, 0, 0);
-                        start = formatDate(startDate);
-                    } else {
-                        break;
-                    }
                 }
                 
             }, this);
@@ -220,7 +264,7 @@ define('io.ox/calendar/week/view',
                 }
                 
                 var width = (that.appWith / colPos.length),
-                    elWidth = Math.min(width * (1 + that.overlap), that.appWith);
+                    elWidth = Math.min(width * (1 + (that.overlap * (colPos.length - 1))), that.appWith);
 
                 // loop over all appointments to draw them
                 for (var j = 0; j < e.length; j++) {

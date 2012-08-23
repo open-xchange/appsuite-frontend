@@ -32,11 +32,13 @@
         transition: background-color 0.4s;
     }
     
-    .header {
+    .fulltime {
         height: 10%;
         border-bottom: 1px solid #ccc;
         overflow: auto;
-        padding-left: 50px;
+        left: 42px;
+        right: 0;
+        position: absolute;
     }
     
     .scrollpane {
@@ -60,10 +62,10 @@
         font-size: 12px;
     }
     
-    .container {
-        float: left;
-        padding-left: 50px;
-        width: 100%;
+    .weekcontainer {
+        left: 42px;
+        right: 0;
+        position: absolute;
     }
     
     .day {
@@ -93,7 +95,7 @@
     }
     
     .time {
-        width: 50px;
+        width: 42px;
         position: relative;
     }
 
@@ -109,11 +111,34 @@
         display: none;
     }
     
-    .timeslot:nth-child(odd) {
+    .timeline {
+        position: absolute;
+        height: 1px;
+        width: 100%;
+        background-color: red;
+        z-index: 2;
+    }
+    
+    .timeline .glow {
+        position: relative;
+        top: -2px;
+        left: -2px;
+        width: 5px;
+        height: 5px;
+        background-color: blue;
+        border-radius: 2px;
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        box-shadow: 0 0 5px rgba(0, 0, 255, 1);
+        -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+        -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
+    }
+    
+    .day .timeslot:nth-child(2n+1) {
         border-bottom-style: dotted;
     }
 
-    .timeslot:last-child, .time:last-child {
+    .day .timeslot:last-child, .time:last-child {
         border: none;
     }
     
@@ -146,6 +171,18 @@
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
         transition: background-color, color 0.1s;
+    }
+    
+    .appointment.current {
+        z-index: 1;
+    }
+        
+    .appointment.opac {
+        opacity: 0.5;
+        -moz-transition: opacity 0.2s;
+        -webkit-transition: opacity 0.2s;
+        -o-transition: opacity 0.2s;
+        transition: opacity 0.2s;
     }
 
     @appointment-reserved: #08c; /* blue */
