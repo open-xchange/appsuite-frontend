@@ -13,9 +13,9 @@
 
 define('io.ox/office/tk/dropdown/gridsizer',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/menu',
+     'io.ox/office/tk/dropdown/dropdown',
      'gettext!io.ox/office/tk/main'
-    ], function (Utils, Menu, gt) {
+    ], function (Utils, DropDown, gt) {
 
     'use strict';
 
@@ -36,21 +36,21 @@ define('io.ox/office/tk/dropdown/gridsizer',
     /**
      * Extends a Group object with a drop-down button and a drop-down menu
      * containing a resizeable grid allowing to select a specific size. Extends
-     * the Menu mix-in class with functionality specific to the sizer drop-down
+     * the DropDown mix-in class with functionality specific to the sizer drop-down
      * element.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
-     * the class Group or one of its derived classes.
+     * the class Group or one of its derived classes. Expects the symbol 'this'
+     * to be bound to an instance of Group.
      *
-     * @extends Menu
+     * @constructor
      *
-     * @param {Group} group
-     *  The group object to be extended with a drop-down menu.
+     * @extends DropDown
      *
      * @param {Object} options
      *  A map of options to control the properties of the sizer. Supports all
-     *  options of the Menu base class. Additionally, the following options are
-     *  supported:
+     *  options of the DropDown base class. Additionally, the following options
+     *  are supported:
      *  @param {Object} [options.minSize={width: 1, height: 1}]
      *      Minimum size allowed to choose. Either width or height may be
      *      omitted. Values but must be positive integers if specified.
@@ -65,7 +65,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
      *      will be opened. Must be positive integers if specified. Omitted
      *      values will be set to the minimum width and/or height.
      */
-    function extend(group, options) {
+    function GridSizer(options) {
 
         var // build a table of embedded div elements used to show the grid
             // (do not use a table element because grid flickers in different browsers...)
@@ -247,24 +247,24 @@ define('io.ox/office/tk/dropdown/gridsizer',
 
         // base constructor ---------------------------------------------------
 
-        Menu.extend(group, options);
+        DropDown.call(this, options);
 
         // methods ------------------------------------------------------------
 
         /**
          * Sets the focus to the button element in the sizer drop-down menu.
          */
-        group.grabMenuFocus = function () {
+        this.grabMenuFocus = function () {
             gridButton.focus();
         };
 
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        group.getMenuNode().addClass('grid-sizer').append(gridNode);
+        this.getMenuNode().addClass('grid-sizer').append(gridNode);
 
         // register event handlers
-        group.registerActionHandler(gridButton, 'click', getGridSize)
+        this.registerActionHandler(gridButton, 'click', getGridSize)
             .on('menuopen', menuOpenHandler)
             .on('menuclose', menuCloseHandler);
         gridButton.on('keydown keypress keyup', gridKeyHandler);
@@ -273,6 +273,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
 
     // exports ================================================================
 
-    return { extend: extend };
+    // derive this class from class DropDown
+    return DropDown.extend({ constructor: GridSizer });
 
 });

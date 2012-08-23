@@ -422,22 +422,6 @@ div.io-ox-toolbar {
                     border: 1px solid @control-border-color;
                     .border-radius(0);
 
-                    /* the Buttons mix-in class */
-                    &.buttons > table {
-                        margin: -1px;
-                        border-collapse: collapse;
-                        max-width: none;
-
-                        td {
-                            padding: 0;
-
-                            /* expand width to entire table cell */
-                            > button {
-                                width: 100%;
-                            }
-                        }
-                    }
-
                     /* the List mix-in class */
                     &.list {
                         overflow-y: auto;
@@ -574,7 +558,7 @@ div.io-ox-toolbar {
     }
 }
 
-/* tab bars ================================================================ */
+/* title tab bar =========================================================== */
 
 div.io-ox-toolbar.tabs {
     position: absolute;
