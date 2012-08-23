@@ -92,73 +92,39 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 def = $.Deferred();
 
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/keys"], function (dialogs, KeyListener) {
-                var $displayNameField = $('<input type="text" name="name">').val(chooseDisplayName()),
-                    dialog,
-                    suppressCancel = false;
-                
-                function callInit() {
-                    var callbackName = "oauth" + generateId();
-                    require(["io.ox/core/http"], function (http) {
-                        var params = {
-                            action: "init",
-                            serviceId: service.id,
-                            displayName: $displayNameField.val(),
-                            cb: callbackName
-                        };
-                        if (account) {
-                            params.id = account.id;
-                        }
-                        http.GET({
-                            module: "oauth/accounts",
-                            params: params
-                        })
-                        .done(function (interaction) {
-                            var popupWindow = null;
-                            window["callback_" + callbackName] = function (response) {
-                                cache[service.id].accounts[response.data.id] = response.data;
-                                def.resolve(response.data);
-                                delete window["callback_" + callbackName];
-                                popupWindow.close();
-                                self.trigger("create", response.data);
-                                self.trigger("refresh.all refresh.list");
-                                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                                    new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
-                                });
-                            };
-                            popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
-                            
-                        })
-                        .fail(def.reject);
-                    });
-                }
-                
-                new KeyListener($displayNameField).on("enter", function () {
-                    
-                    callInit();
-                    suppressCancel = true;
-                    dialog.close();
-                    
-                }).include();
-                
-                dialog = new dialogs.ModalDialog({
-                    width: 400,
-                    easyOut: true
-                });
-                
-                dialog.header($("<h4>").text("Please sign into your " + service.displayName + " account"))
-                .append($('<label for="name">').text("Account Name"))
-                .append($displayNameField)
-                .addButton('cancel', 'Cancel')
-                .addPrimaryButton('add', 'Sign in')
-                .on("add", callInit)
-                .on("cancel", function () {
-                    if (!suppressCancel) {
-                        def.resolve();
+                var callbackName = "oauth" + generateId();
+                require(["io.ox/core/http"], function (http) {
+                    var params = {
+                        action: "init",
+                        serviceId: service.id,
+                        displayName: chooseDisplayName(),
+                        cb: callbackName
+                    };
+                    if (account) {
+                        params.id = account.id;
                     }
-                })
-                .show(function () {
-                    $displayNameField.focus();
+                    http.GET({
+                        module: "oauth/accounts",
+                        params: params
+                    })
+                    .done(function (interaction) {
+                        var popupWindow = null;
+                        window["callback_" + callbackName] = function (response) {
+                            cache[service.id].accounts[response.data.id] = response.data;
+                            def.resolve(response.data);
+                            delete window["callback_" + callbackName];
+                            popupWindow.close();
+                            self.trigger("create", response.data);
+                            self.trigger("refresh.all refresh.list");
+                            require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                                new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
+                            });
+                        };
+                        popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
+                        
+                    }).fail(def.reject);
                 });
+                
             });
             
             return def;

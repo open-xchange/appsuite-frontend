@@ -33,6 +33,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
             function displaySuccess(msg) {
                 return function () {
                     // TODO: Once we know how to notify user about results
+                    closeDialog();
                 };
             }
             
@@ -52,8 +53,7 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
             
             function doReauthorize() {
                 account.displayName = $displayNameField.val();
-                keychain.submodules[serviceId].reauthorize(account.toJSON()).done(displaySuccess("You have reauthorized this account.")).fail(displayError("Something went wrong reauthorizing the account."));
-                closeDialog();
+                keychain.submodules[serviceId].reauthorize(account).done(displaySuccess("You have reauthorized this account.")).fail(displayError("Something went wrong reauthorizing the account."));
             }
             
             $form = $('<div class="settings-detail-pane">').append(
@@ -65,12 +65,20 @@ define("io.ox/oauth/settings", ["io.ox/core/extensions", "io.ox/oauth/keychain",
                             $displayNameField = $('<input type="text" name="displayName">').val(account.displayName)
                         ) // End controls
                     ), // End control-group
-                    $('<button class="btn">').text("Save").on('click', doSave),
-                    $('<button class="btn">').text("Reauthorize").on('click', doReauthorize)
+                    
+                    $('<div class="control-group">').append(
+                        $('<div class="controls">').append(
+                            $('<button class="btn btn-primary">').text("Save").on('click', doSave),
+                            $('<button class="btn">').text("Reauthorize").on('click', doReauthorize)
+                        ) // End controls
+                    ) // End control-group
                 ) // End form
             ); // End detail-pane
             
-            dialog = new dialogs.SidePopup('800').show(args, function (pane) {
+            dialog = new dialogs.SidePopup({
+                modal: true,
+                arrow: false
+            }).show(args, function (pane) {
                 pane.append($form);
             });
             
