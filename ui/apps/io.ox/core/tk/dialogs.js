@@ -160,7 +160,7 @@ define("io.ox/core/tk/dialogs",
 
         this.addButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
-            nodes.footer.append(button);
+            nodes.footer.prepend(button);
             return this;
         };
 
@@ -185,7 +185,7 @@ define("io.ox/core/tk/dialogs",
         this.addPrimaryButton = function (action, label, dataaction, options) {
             var button = addButton(action, label, dataaction, options);
             button.addClass('btn-primary');
-            nodes.footer.prepend(button);
+            nodes.footer.append(button);
             return this;
         };
 

@@ -592,8 +592,6 @@ define('io.ox/core/tk/folderviews',
                 isExpandable = !!data.subfolders,
                 isSelectable = hasProperType && isReadable;
 
-            console.log('check', data.title, data, options, '->', isSelectable);
-
             if (isExpandable) {
                 this.addClass('expandable');
             }
