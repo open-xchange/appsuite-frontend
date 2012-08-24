@@ -28,6 +28,19 @@
     background-color: @fill-color;
 }
 
+.io-ox-office-title {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    
+    &:hover {
+        border-color: #d5d5d5;
+    }
+}
+
 .io-ox-office-main {
     margin: 0;
     padding: 0;

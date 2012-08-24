@@ -27,14 +27,19 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
             // all the little controller items
             items = {
                 'action/export': {
-                    set: function (query) { app.save(); }
+                    set: function () { app.save(); }
                 },
                 'action/flush': {
-                    set: function (query) { app.flush(); }
+                    set: function () { app.flush(); }
                 },
                 'action/print': {
-                    set: function (query) { app.print(); }
+                    set: function () { app.print(); }
                 },
+                'action/rename': {
+                    get: function () { return app.getWindow().getTitle(); },
+                    set: function (name) { app.rename(name); }
+                },
+
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
                     set: function () { editor.undo(); }

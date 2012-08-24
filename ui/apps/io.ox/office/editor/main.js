@@ -21,7 +21,6 @@ define('io.ox/office/editor/main',
      'io.ox/office/editor/view',
      'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
-     'io.ox/office/editor/actions',
      'less!io.ox/office/editor/style.css'
     ], function (filesApi, Utils, AppHelper, Editor, View, Controller, gt) {
 
@@ -594,7 +593,7 @@ define('io.ox/office/editor/main',
                 }, timeout || 1000);
             }
         }
-        
+
         // methods ------------------------------------------------------------
 
         /**
@@ -657,6 +656,12 @@ define('io.ox/office/editor/main',
         };
 
         app.print = print;
+
+        app.rename = function (name) {
+            // TODO: rename in infostore, update file descriptor
+            app.setTitle(name);
+            win.setTitle(name);
+        };
 
         app.failSave = function () {
             var point = {

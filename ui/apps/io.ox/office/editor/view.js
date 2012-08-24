@@ -154,10 +154,10 @@ define('io.ox/office/editor/view',
             var // the left position of the editor node
                 editorLeft = Math.floor(editors.rich.getNode().offset().left),
                 // width of the document title label
-                titleWidth = Math.floor(appWindow.nodes.title.width());
+                titleWidth = Math.floor(appWindow.nodes.title.outerWidth(true));
 
             // position the tab bar
-            appWindow.nodes.tabBar.getNode().css('left', Math.max(editorLeft, titleWidth + 13) + 'px');
+            appWindow.nodes.tabBar.getNode().css('left', Math.max(editorLeft, titleWidth) + 'px');
 
             // set a left padding to the tool pane to align the tool bars with the editor node
             toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
@@ -182,7 +182,7 @@ define('io.ox/office/editor/view',
                 oldSearchQuery = searchQuery;
             }
         }
-        
+
         /**
          * Shows a modal dialog to rename the current document
          */
@@ -193,16 +193,16 @@ define('io.ox/office/editor/view',
                     easyOut: true
                 })
                 .header(
-                    $('<h4>').text('Rename Document')
+                    $('<h4>').text(gt('Rename Document'))
                 )
                 .append(
-                    $('<input>', { placeholder: 'Document name', value: '' })
+                    $('<input>', { placeholder: gt('Document name'), value: '' })
                     .addClass('nice-input')
                     .attr('data-property', 'docname')
-                    .val(appWindow.getTitle())
+                    .val(controller.get('action/rename'))
                 )
-                .addButton('cancel', 'Cancel')
-                .addPrimaryButton('rename', 'Rename')
+                .addButton('cancel', gt('Cancel'))
+                .addPrimaryButton('rename', gt('Rename'))
                 .show(function () {
                     this.find('input').focus();
                 })
@@ -210,8 +210,13 @@ define('io.ox/office/editor/view',
                     var val = $.trim($(node).find('[data-property="docname"]').val());
 
                     if (action === 'rename') {
-                        appWindow.setTitle(val);
+                        controller.change('action/rename', val);
                     }
+
+                    // call controller.done() again to set focus to editor
+                    // after dialog has been closed
+                    // TODO: better solution?
+                    window.setTimeout(function () { controller.done(); }, 0);
                 });
             });
         }
@@ -305,23 +310,16 @@ define('io.ox/office/editor/view',
         // listen to browser window resize events when the OX window is visible
         Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
 
+        // add 'rename document' functionality to title field
+        appWindow.nodes.title
+            .addClass('io-ox-office-title')
+            .click(renameDocumentHandler);
+
         // override the limited functionality of the quick-search text field
         appWindow.nodes.search
             .off('keydown search change')
             .on('input keydown keypress keyup focus', searchKeyHandler)
             .data('tooltip', null); // remove old tooltip
-        
-        appWindow.nodes.title
-            .css("border", "thin solid transparent")
-            .mouseover(function () {
-                $(this).css("border-color", "LightGrey");
-            })
-            .mouseout(function () {
-                $(this).css("border-color", "transparent");
-            })
-            .click(function () {
-                renameDocumentHandler();
-            });
 
         // set the quick-search tooltip
         Utils.setControlTooltip(appWindow.nodes.search, gt('Quick Search'), 'bottom');
