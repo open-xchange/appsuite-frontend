@@ -21,9 +21,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'io.ox/core/tk/dialogs',
+     'io.ox/keychain/api',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
     'use strict';
 
@@ -138,6 +139,12 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                 return drawContent(extension, event);
             };
         }
+        
+        function makeCreationDialog(extension) {
+            return function () {
+                return keychain.createInteractively(extension.id);
+            };
+        }
 
         var getKulerIndex = (function () {
 
@@ -171,7 +178,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
         }
 
         function initExtensions() {
-
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
                 count = point.count(),
@@ -181,6 +187,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
             point.shuffle();
 
             point.each(function (extension) {
+                if (!extension.isEnabled) {
+                    extension.isEnabled = function () { return true; };
+                }
+                if (!extension.isEnabled()) {
+                    return;
+                }
+                if (!extension.requiresSetUp) {
+                    extension.requiresSetUp = function () { return false; };
+                }
+
                 contentQueue.enqueue(createContentTask(extension));
                 var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
                 var $node = $('<div class="io-ox-portal-widget-tile">')
@@ -253,23 +269,32 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                                 $node.addClass("tile-" + color);
                             }
                         });
-
-
-                        return $.when();
                     };
-                }
+                } //END of if missing draw workaround bullshit
 
+                if (extension.requiresSetUp()) {
+                    $node.addClass("io-ox-portal-createMe");
+                    return (extension.invoke.apply(extension, ['drawCreationDialog', $node].concat($.makeArray(arguments))) || $.Deferred())
+                        .done(function () {
+                            $node.idle();
+                            extension.invoke('postTile', $node, extension);
+                        })
+                        .fail(function (e) {
+                            $node.idle().remove();
+                        });
+                }
+            
                 return extension.invoke('loadTile')
-                    .pipe(function (a1, a2) {
-                        return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
-                            .done(function () {
-                                $node.idle();
-                                extension.invoke('postTile', $node, extension);
-                            });
-                    })
-                    .fail(function (e) {
-                        $node.idle().remove();
-                    });
+                .pipe(function (a1, a2) {
+                    return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
+                        .done(function () {
+                            $node.idle();
+                            extension.invoke('postTile', $node, extension);
+                        });
+                })
+                .fail(function (e) {
+                    $node.idle().remove();
+                });
             });
         }
 

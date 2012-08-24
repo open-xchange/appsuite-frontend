@@ -16,8 +16,9 @@ define("plugins/portal/linkedin/register",
      'io.ox/core/http',
      'io.ox/oauth/proxy',
      'io.ox/core/strings',
+     'io.ox/keychain/api',
      'gettext!plugins/portal/linkedin',
-     'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, gt) {
+     'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, keychain, gt) {
 
     "use strict";
     function fnClick(e) {
@@ -97,6 +98,12 @@ define("plugins/portal/linkedin/register",
     var updatesPortal = {
         id: "linkedinUpdates",
         index: 200,
+        isEnabled: function () {
+            return keychain.isEnabled('linkedin');
+        },
+        requiresSetUp: function () {
+            return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
+        },
         loadTile: function () {
             return proxy.request({
                 api: 'linkedin',
@@ -177,8 +184,14 @@ define("plugins/portal/linkedin/register",
                 });
             }
 
-
             return drawing.resolve();
+        },
+        drawCreationDialog: function () {
+            var $node = $(this);
+            $node.append(
+                $('<h1>').text('LinkedIn'),
+                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'LinkedIn'))
+            );
         }
     };
 

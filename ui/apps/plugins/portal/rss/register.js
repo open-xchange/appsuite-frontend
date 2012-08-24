@@ -17,7 +17,8 @@ define("plugins/portal/rss/register",
     "io.ox/messaging/accounts/api",
     "io.ox/messaging/services/api",
     "io.ox/messaging/messages/api",
-    'less!plugins/portal/rss/style.css'], function (ext, strings, accountApi, serviceApi, messageApi) {
+    'io.ox/keychain/api',
+    'less!plugins/portal/rss/style.css'], function (ext, strings, accountApi, serviceApi, messageApi, keychain) {
 
     "use strict";
     
@@ -27,7 +28,6 @@ define("plugins/portal/rss/register",
         id: 'rss',
         index: 100,
         title: 'RSS',
-        
         load: function () {
             var def = $.Deferred();
             var requests = [];
