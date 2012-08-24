@@ -185,7 +185,7 @@
         overflow: hidden;
         text-overflow: ellipsis;
         cursor: pointer;
-        border: 1px solid #ccc;
+        border: 1px solid rgba(255, 255, 255, 0.4);
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
         transition: background-color, color 0.1s;
@@ -223,61 +223,26 @@
         background-color: @appointment-private;
     }
 
-/*    .week {
-        height: 100/6%; might be 6 wweks in a month
-        min-height: 80px;
-        max-height: 160px;
+    .appointment.reserved:hover {
+        background-color: darken(@appointment-reserved, @appointment-hover-pct);
     }
     
-    .vertical {
-        font-family: @font-light;
-        font-size: 30px;
-        line-height: 1.1em;
-        color: #aaa;
-        position: absolute;
-        right: 0;
-        width: 12.5%;
-        height: 100/6%;
-        padding: 13px;
-        text-align: right;
+    .appointment.temporary:hover {
+        background-color: darken(@appointment-temporary, @appointment-hover-pct);
     }
     
-    .day.out {
-        background-color: #e0e0e0;
+    .appointment.absent:hover {
+        background-color: darken(@appointment-absent, @appointment-hover-pct);
     }
     
-    .day.out.today {
-        background-color: #f0f0f0;
-    }
-
-    .day .number {
-        position: absolute;
-        color: #aaa;
-        text-align: right;
-        right: 7px;
-        bottom: 5px;
-        z-index: 1;
-        font-size: 11px;
-        line-height: 1em;
+    .appointment.free:hover {
+        background-color: darken(@appointment-free, @appointment-hover-pct);
     }
     
-    .day.out .number {
-        color: #aaa;
+    .appointment.private:hover {
+        background-color: darken(@appointment-private, @appointment-hover-pct);
     }
     
-    .day.weekend .number {
-        color: #a00;
-    }
-    
-    .day.today { background-color: #daefFf; background-color: rgba(0, 136, 204, 0.25); }
-    .day.today .number { color: darken(#08c, 10%); }
-    
-    .day .list {
-        top: 6px; right: 6px; bottom: 6px; left: 6px;
-        z-index: 2;
-    }
-
-    unconfirmed
     .appointment.reserved.unconfirmed {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
     }
@@ -290,18 +255,26 @@
     .appointment.free.unconfirmed {
         background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
     }
-    
-    out
-    .day.out .appointment { background-color: @appointment-out; }
 
-    mouse over
-    .appointment.reserved:hover { background-color: darken(@appointment-reserved, @appointment-hover-pct); }
-    .appointment.temporary:hover { background-color: darken(@appointment-temporary, @appointment-hover-pct); }
-    .appointment.absent:hover { background-color: darken(@appointment-absent, @appointment-hover-pct); }
-    .appointment.free:hover { background-color: darken(@appointment-free, @appointment-hover-pct); }
-    .appointment.private:hover { background-color: darken(@appointment-private, @appointment-hover-pct); }
-    
+    .appointment .location {
+        color: #ccc;
+        color: rgba(255, 255, 255, 0.6);
+    }
+/*
+    .vertical {
+        font-family: @font-light;
+        font-size: 30px;
+        line-height: 1.1em;
+        color: #aaa;
+        position: absolute;
+        right: 0;
+        width: 12.5%;
+        height: 100/6%;
+        padding: 13px;
+        text-align: right;
+    }
+    .day.out .appointment { background-color: @appointment-out; }
     .day.out .appointment:hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
     
-    .appointment .location { color: #ccc; color: rgba(255, 255, 255, 0.6); }
-*/}
+*/
+}
