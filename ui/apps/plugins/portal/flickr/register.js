@@ -24,8 +24,11 @@ define('plugins/portal/flickr/register',
         // order of elements is the crucial factor of presenting the image in the sidepopups
         var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
 
+        var baseUrl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update,' + imagesizes.join(',');
+
         var apiUrl = {
-                'flickr.photos.search': 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update,' + imagesizes.join(',') + '&method=flickr.photos.search&text='
+                'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
+                'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
             };
 
         var streams = settings.get('streams');
@@ -33,10 +36,18 @@ define('plugins/portal/flickr/register',
         _.each(streams, function (v) {
             // TODO index
             if (apiUrl[v.method]) {
+                var myurl;
+
+                if (v.method === 'flickr.people.getPublicPhotos') {
+                    myurl = apiUrl[v.method] + v.nsid + '&jsoncallback=';
+                } else {
+                    myurl = apiUrl[v.method] + v.q + '&jsoncallback=';
+                }
+
                 mp.addFeed({
                     id: 'flickr-' + v.q.replace(/[^a-z0-9]/g, '_') + '-' + v.method.replace(/[^a-z0-9]/g, '_'),
                     description: v.description,
-                    url: apiUrl[v.method] + v.q + '&jsoncallback=',
+                    url: myurl,
                     index: 100
                 });
             }
