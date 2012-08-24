@@ -97,7 +97,7 @@ define('io.ox/office/editor/main',
             });
         });
     }
-    
+
     // initializeApplication() ================================================
 
     function initializeApplication(app, options) {
@@ -221,7 +221,7 @@ define('io.ox/office/editor/main',
             var file = app.getFileDescriptor(),
                 fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             app.setTitle(fileName);
-            win.setTitle(gt('Editor') + ' - ' + fileName);
+            win.setTitle(fileName);
         }
 
         /**
@@ -323,6 +323,13 @@ define('io.ox/office/editor/main',
 
                 var // each deferred returns its result as a boolean
                     resolved = _(arguments).all(_.identity);
+
+                // TODO: one-way call, alternative to GET?
+                $.ajax({
+                    type: 'GET',
+                    url: AppHelper.getDocumentFilterUrl(app, 'closedocument'),
+                    dataType: 'json'
+                });
 
                 win.idle();
                 if (resolved) { def.resolve(); } else { def.reject(); }
