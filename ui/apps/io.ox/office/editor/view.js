@@ -165,13 +165,28 @@ define('io.ox/office/editor/view',
             toolPane.refresh();
         }
 
+        function searchUpdateHandler(hasMatches) {
+
+            var // the quick-search text field
+                searchField = appWindow.nodes.search,
+                // no matches for existing search text
+                noMatches = searchField.val().length && !hasMatches;
+
+            // update serach field background
+            searchField.css('background-color', noMatches ? '#fee' : '');
+        }
+
         /**
          * Handles keyboard events in the quick-search text field.
          */
         function searchKeyHandler(event) {
 
-            var // current value of the search query
-                searchQuery = $(this).val();
+            var // the quick-search text field
+                searchField = $(this),
+                // current value of the search query
+                searchQuery = searchField.val(),
+                // any matches found in document
+                matches = false;
 
             // ESCAPE key returns to editor
             if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
@@ -180,6 +195,8 @@ define('io.ox/office/editor/view',
             } else if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
                 controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
+                matches = !searchQuery.length || controller.get('action/search/quick');
+                searchField.css('background-color', matches ? '' : '#fee');
             }
         }
 
@@ -302,9 +319,6 @@ define('io.ox/office/editor/view',
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
-        // update all view components
-        controller.update();
-
         // make the format tool bar visible
         toolPane.showToolBar('format');
 
@@ -315,6 +329,7 @@ define('io.ox/office/editor/view',
         appWindow.nodes.title
             .addClass('io-ox-office-title')
             .click(renameDocumentHandler);
+        Utils.setControlTooltip(appWindow.nodes.title, gt('Rename Document'), 'bottom');
 
         // override the limited functionality of the quick-search text field
         appWindow.nodes.search
@@ -324,6 +339,9 @@ define('io.ox/office/editor/view',
 
         // set the quick-search tooltip
         Utils.setControlTooltip(appWindow.nodes.search, gt('Quick Search'), 'bottom');
+
+        // update all view components
+        controller.update();
 
     } // class View
 

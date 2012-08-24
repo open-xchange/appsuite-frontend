@@ -347,11 +347,11 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
 
         /**
          * Unregisters a view component that has been registered with the
-         * method registerViewComponent().
+         * method Controller.registerViewComponent().
          *
          * @param {Component} component
          *  A view component that has been registered with the method
-         *  registerViewComponent() before.
+         *  Controller.registerViewComponent() before.
          *
          * @returns {Controller}
          *  A reference to this controller instance.

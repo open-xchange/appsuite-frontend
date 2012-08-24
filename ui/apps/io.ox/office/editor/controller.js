@@ -53,6 +53,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'action/search/quick': {
                     // highlighting goes always to the rich editor
+                    get: function () { return app.getEditor().hasHighlighting(); },
                     set: function (query) { app.getEditor().quickSearch(query); },
                     done: $.noop // do not focus editor
                 },

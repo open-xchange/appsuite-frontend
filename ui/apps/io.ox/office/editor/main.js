@@ -423,16 +423,13 @@ define('io.ox/office/editor/main',
             return def;
         }
 
-        function download() {
-        }
-
         /**
-         * Creates a PDF preview for printing.
+         * Downloads the document in the specified format.
          *
          * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the operation.
          */
-        function print() {
+        function download(format) {
 
             // the deferred to be returned
             var def = $.Deferred().always(function () {
@@ -449,8 +446,7 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                // load the PDF file into appropriate PDF Viewer for printing
-                window.open(app.getDocumentFilterUrl('getfile', 'pdf'), app.getFileDescriptor().title || 'file');
+                window.open(app.getDocumentFilterUrl('getfile', format), app.getFileDescriptor().title || 'file');
                 def.resolve();
             })
             .fail(function () {
@@ -664,9 +660,13 @@ define('io.ox/office/editor/main',
             return saveOrFlush('savedocument');
         };
 
-        app.download = download;
+        app.download = function () {
+            return download();
+        };
 
-        app.print = print;
+        app.print = function () {
+            return download('pdf');
+        };
 
         app.rename = function (name) {
             // TODO: rename in infostore, update file descriptor

@@ -239,7 +239,7 @@ div.io-ox-view-component {
         /* reset mouse pointer for controls embedded in a disabled group */
         &.disabled {
             label, button, input {
-                cursor: default;
+                cursor: default !important;
             }
         }
 
