@@ -8,8 +8,7 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
- * @author Francisco Laguna <francisco.laguna@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
 define("io.ox/tasks/main", function () {
@@ -32,14 +31,11 @@ define("io.ox/tasks/main", function () {
         
         app.setWindow(win);
         
-        
-        // This appends a node into our window
-        win.nodes.main.append($("<h1>").text("Hello!"));
-        
-        
+        var content = win.nodes.main;
+        content.append("div").text("This is just a placeholder taskapp");
+
         // Let's define some event handlers on our window
         win.on("show", function () {
-            // Gets called whenever the window is shown
             console.log("Wow! I'm here!");
         });
         

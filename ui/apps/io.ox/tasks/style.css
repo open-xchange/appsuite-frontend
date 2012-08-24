@@ -1,0 +1,67 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+
+//currently not in use
+.taskPopupHeader
+{
+ 	background-color: #333333;
+}
+ 
+//currently not in use
+.taskPopupTitle
+{
+ 	color: #FFFFFF;
+ 	text-align: center;
+}
+
+.vgrid-cell.tasks .status {
+    color: #777;
+    font-weight: 200;
+    display: inline-block;
+    float: right;
+}
+
+.vgrid-cell.tasks .end_date {
+    margin-left: 1em;
+    float: right;
+    position: absolute;
+    left: 75%
+}
+
+.vgrid-cell.tasks .priority,
+.io-ox-task-preview .priority {
+    color: #999;
+    min-width: 1em;
+    font-weight: normal;
+    padding: 0 0.5em 0 0.5em;
+    margin-left: 1em;
+    display: inline-block;
+    float: right;
+    position: relative;
+    z-index: 2;
+}
+.vgrid-cell.tasks .priority i.icon-star { display: inline-block;}
+
+.vgrid-cell.tasks .title{
+    color: black;
+    font-weight: 500;
+    width: 75%;
+}
+
+.vgrid-cell.tasks .note{
+	width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
+}
+
+.vgrid-cell.tasks .note span{
+
+}
