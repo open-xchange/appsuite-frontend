@@ -296,6 +296,7 @@ define('io.ox/office/editor/view',
         createToolBar('debug', { label: gt('Debug') })
             .addButton('action/export', { icon: 'icon-share', tooltip: 'Export' })
             .addButton('action/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })
+            .addButton('action/download', { icon: 'icon-download', tooltip: 'Download' })
             .addButton('action/print', { icon: 'icon-print', tooltip: 'Print' })
             .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })

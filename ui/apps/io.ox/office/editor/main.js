@@ -423,6 +423,9 @@ define('io.ox/office/editor/main',
             return def;
         }
 
+        function download() {
+        }
+
         /**
          * Creates a PDF preview for printing.
          *
@@ -444,9 +447,15 @@ define('io.ox/office/editor/main',
 
             win.busy();
 
-            // load the PDF file into appropriate PDF Viewer for printing
-            window.open(app.getDocumentFilterUrl('getfile', 'pdf'), app.getFileDescriptor().title || 'file');
-            def.resolve();
+            receiveAndSendOperations()
+            .done(function () {
+                // load the PDF file into appropriate PDF Viewer for printing
+                window.open(app.getDocumentFilterUrl('getfile', 'pdf'), app.getFileDescriptor().title || 'file');
+                def.resolve();
+            })
+            .fail(function () {
+                def.reject();
+            });
 
             return def;
         }
@@ -654,6 +663,8 @@ define('io.ox/office/editor/main',
         app.flush = function () {
             return saveOrFlush('savedocument');
         };
+
+        app.download = download;
 
         app.print = print;
 

@@ -67,10 +67,13 @@ define('io.ox/office/tk/control/textfield',
             readOnly = null,
 
             // the caption (icon and text label) for the text field
-            caption = Utils.createLabel(options).addClass('input-caption'),
+            caption = Utils.createLabel(options).addClass('caption-overlay'),
 
             // the white background for the text field
             backgroundNode = $('<div>').addClass('background-overlay'),
+
+            // additional node added right of the input area
+            rightOverlayNode = null,
 
             // the overlay container for the caption and the background
             overlayNode = $('<div>').addClass('input-overlay').append(caption, backgroundNode),
@@ -118,9 +121,9 @@ define('io.ox/office/tk/control/textfield',
                 // whether the text field has an icon and/or a label at the left side
                 hasCaption = Utils.hasControlCaption(caption),
                 // the current width of the left caption element
-                leftMargin = hasCaption ? caption.outerWidth() : 0,
-                // the current width of the right caption element
-                rightMargin = 0;
+                leftMargin = hasCaption ? (caption.outerWidth() - 1) : 0,
+                // the current width of the right overlay node
+                rightMargin = rightOverlayNode ? (rightOverlayNode.outerWidth() - 1) : 0;
 
             // hide the caption element if it is empty, for correct positioning of white background
             caption.toggle(hasCaption);
@@ -131,7 +134,7 @@ define('io.ox/office/tk/control/textfield',
                 .css({ paddingLeft: (leftMargin + FIELD_PADDING) + 'px', paddingRight: (rightMargin + FIELD_PADDING) + 'px' });
 
             // set the size of the white background area
-            backgroundNode.width(paddedWidth).height(textField.height());
+            backgroundNode.css({ width: paddedWidth + 'px', height: textField.height() + 'px', left: (hasCaption ? 0 : '1px') });
         }
 
         /**
@@ -240,6 +243,11 @@ define('io.ox/office/tk/control/textfield',
         Group.call(this, options);
 
         // methods ------------------------------------------------------------
+
+        this.registerRightOverlayNode = function (node) {
+            rightOverlayNode = node.first().css({ position: 'absolute', right: 0, leftMargin: 0, zIndex: 5 });
+            return this;
+        };
 
         /**
          * Returns the text control element, as jQuery object.

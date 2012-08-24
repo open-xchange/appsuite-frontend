@@ -214,8 +214,9 @@ define('io.ox/office/tk/control/combofield',
 
         // initialization -----------------------------------------------------
 
-        // register event handlers
-        this.on('menuopen', menuOpenHandler)
+        // prepare group and register event handlers
+        this.registerRightOverlayNode(this.getMenuButton())
+            .on('menuopen', menuOpenHandler)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);
         this.getTextField()

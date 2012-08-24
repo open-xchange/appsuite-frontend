@@ -32,6 +32,9 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'action/flush': {
                     set: function () { app.flush(); }
                 },
+                'action/download': {
+                    set: function () { app.download(); }
+                },
                 'action/print': {
                     set: function () { app.print(); }
                 },

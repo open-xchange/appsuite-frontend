@@ -1901,7 +1901,7 @@ define('io.ox/office/editor/editor',
         this.getAttributes = function (family) {
             var styleSheets = this.getStyleSheets(family),
                 ranges = DOM.getBrowserSelection(editdiv);
-            return styleSheets ? styleSheets.getAttributesInRanges(ranges) : null;
+            return styleSheets ? styleSheets.getAttributesInRanges(ranges) : {};
         };
 
         /**

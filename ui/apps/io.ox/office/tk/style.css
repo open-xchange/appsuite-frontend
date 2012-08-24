@@ -305,6 +305,12 @@ div.io-ox-view-component {
                 background-color: fade(@selected-border-color, 50%);
                 border-color: @selected-border-color;
             }
+
+            /* adjust margins for e.g. caret buttons in drop-down split mode */
+            &.narrow-padding {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
         }
 
         /* keyboard/mouse effects (not for disabled buttons) */
@@ -359,7 +365,7 @@ div.io-ox-view-component {
                 left: 0;
                 z-index: 0;
 
-                > label.input-caption {
+                > label.caption-overlay {
                     padding-left: 4px;
                     padding-right: 4px;
                 }
@@ -368,7 +374,6 @@ div.io-ox-view-component {
                     display: inline-block;
                     position: relative;
                     top: 1px;
-                    left: 1px;
                     background-color: @input-fill-color;
                 }
             }
@@ -378,23 +383,9 @@ div.io-ox-view-component {
             }
         }
 
-        /* keyboard/mouse effects (not for disabled fields) */
-        &:not(.disabled) input:not(.disabled) {
-            &:hover, &:focus, &:active {
-                z-index: 5;
-            }
-        }
-
         /* drop-down groups ------------------------------------------------ */
 
         &.dropdown-group {
-
-            /* adjust margins for caret buttons in drop-down split mode */
-            > button.narrow-padding {
-                padding-left: 4px;
-                padding-right: 4px;
-            }
-
             &:not(.disabled) {
 
                 /* show drop-down menu element */
