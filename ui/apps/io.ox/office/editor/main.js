@@ -130,14 +130,14 @@ define('io.ox/office/editor/main',
             debugMode = false,
 
             // if true, editor synchronizes operations with backend server
-            syncMode = false;
+            syncMode = true;
 
         // private methods ----------------------------------------------------
 
         function initializeApp(options) {
             app.setFileDescriptor(options);
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
-            syncMode = Utils.getBooleanOption(options, 'syncMode', false);
+            syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
 
         /**
