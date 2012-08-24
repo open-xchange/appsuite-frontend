@@ -79,12 +79,12 @@ define("io.ox/calendar/util",
 
         getDaysInMonth: function (year, month) {
             // trick: month + 1 & day = zero -> last day in month
-            return new Date(year, month + 1, 0).getDate();
+            return new date.Local(year, month + 1, 0).getDate();
         },
 
         isToday: function (timestamp) {
             return Math.floor(timestamp / DAY) ===
-                Math.floor(date.Local.localTime((new Date()).getTime()) / DAY);
+                Math.floor(new date.Local().getTime() / DAY);
         },
 
         floor: function (timestamp, step) {
@@ -97,7 +97,7 @@ define("io.ox/calendar/util",
             } else {
                 if (step === "week") {
                     // get current date
-                    var d = new Date(timestamp),
+                    var d = new date.Local(timestamp),
                         // get work day TODO: consider custom week start
                         day = d.getDay(),
                         // subtract
@@ -110,13 +110,13 @@ define("io.ox/calendar/util",
 
 // OLD STUFF - looks nice
         getTime: function (timestamp) {
-            var d = new Date(timestamp);
-            return _.pad(d.getUTCHours(), 2) + ":" + _.pad(d.getUTCMinutes(), 2);
+            var d = new date.Local(timestamp);
+            return _.pad(d.getHours(), 2) + ":" + _.pad(d.getMinutes(), 2);
         },
 
         getDate: function (timestamp) {
-            var d = timestamp !== undefined ? new Date(timestamp) : new Date();
-            return n_dayShort[d.getUTCDay()] + ", " + _.pad(d.getUTCDate(), 2) + "." + _.pad(d.getUTCMonth() + 1, 2) + "." + d.getUTCFullYear();
+            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local();
+            return n_dayShort[d.getDay()] + ", " + _.pad(d.getDate(), 2) + "." + _.pad(d.getMonth() + 1, 2) + "." + d.getYear();
         },
 
 // NEW STUFF - not yet done
@@ -134,15 +134,15 @@ define("io.ox/calendar/util",
 
         getSmartDate: function (timestamp) {
 
-            var d = timestamp !== undefined ? new Date(timestamp) : new Date(),
-                now = new Date(),
+            var d = timestamp !== undefined ? new date.Local(timestamp) : new date.Local(),
+                now = new date.Local(),
                 weekStart = this.floor(now.getTime(), "week"),
                 diff = 0,
                 diffWeek = 0;
 
             // normalize
-            d.setUTCHours(0, 0, 0, 0);
-            now.setUTCHours(0, 0, 0, 0);
+            d.setHours(0, 0, 0, 0);
+            now.setHours(0, 0, 0, 0);
 
             // get difference
             diff = d - now;
@@ -162,14 +162,14 @@ define("io.ox/calendar/util",
                 } else if (diff < 2 * DAY) {
                     return "Tomorrow";
                 } else if (diffWeek < 7 * DAY) {
-                    return n_day[d.getUTCDay()]; // this week
+                    return n_day[d.getDay()]; // this week
                 } else if (diffWeek >= 7 * DAY && diffWeek < 14 * DAY) {
                     return "Next week";
                 }
             }
 
             // any other month
-            return n_month[d.getUTCMonth()] + " " + d.getUTCFullYear();
+            return n_month[d.getMonth()] + " " + d.getYear();
         },
 
         getDateInterval: function (data) {
@@ -183,7 +183,7 @@ define("io.ox/calendar/util",
         },
 
         onSameDay: function (t1, t2) {
-            return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
+            return new date.Local(t1).setHours(0, 0, 0, 0) === new date.Local(t2).setHours(0, 0, 0, 0);
         },
 
         getTimeInterval: function (data, D) {
@@ -195,8 +195,8 @@ define("io.ox/calendar/util",
                     //#. %d is the number of days
                     gettext.ngettext('%d day', '%d days', length), length);
             } else {
-                start = D.localTime(date.Local.utc(data.start_date));
-                end = D.localTime(date.Local.utc(data.end_date));
+                start = new date.Local(data.start_date);
+                end = new date.Local(data.end_date);
                 suffix = this.onSameDay(data.start_date, data.end_date) ? '' : ' ' + this.getDate(data.end_date);
                 return that.getTime(start) + " \u2013 " + that.getTime(end) + suffix;
             }
@@ -379,7 +379,7 @@ define("io.ox/calendar/util",
 
             var firstDayOfMonth = Date.UTC(year, month, 1),
                 // apply week day shift
-                shift = (7 + (new Date(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
+                shift = (7 + (new date.Local(firstDayOfMonth)).getDay() - that.getFirstWeekDay()) % 7,
                 day = firstDayOfMonth - DAY * shift,
                 // loop
                 rows = [], row, obj, d;
@@ -395,12 +395,12 @@ define("io.ox/calendar/util",
                         row = [];
                         rows.push(row);
                     }
-                    d = new Date(day);
+                    d = new date.Local(day);
                     row.push(obj = {
-                        year: d.getUTCFullYear(),
-                        month: d.getUTCMonth(),
-                        date: d.getUTCDate(),
-                        day: d.getUTCDay(),
+                        year: d.getYear(),
+                        month: d.getMonth(),
+                        date: d.getDate(),
+                        day: d.getDay(),
                         timestamp: day,
                         isToday: that.isToday(day),
                         col: i % 7,
@@ -433,9 +433,9 @@ define("io.ox/calendar/util",
 
             timestamp = ((timestamp || _.now()) / DAY >> 0) * DAY;
 
-            var d = new Date(timestamp),
+            var d = new date.Local(timestamp),
                 // apply week day shift
-                shift = (7 + d.getUTCDay() - this.getFirstWeekDay()) % 7;
+                shift = (7 + d.getDay() - this.getFirstWeekDay()) % 7;
 
             return d.getTime() - DAY * shift;
         },
@@ -446,19 +446,19 @@ define("io.ox/calendar/util",
                 i = 0, d, obj, days = [];
 
             for (; i < 7; i += 1, day += DAY) {
-                d = new Date(day);
+                d = new date.Local(day);
                 days.push(obj = {
-                    year: d.getUTCFullYear(),
-                    month: d.getUTCMonth(),
-                    date: d.getUTCDate(),
-                    day: d.getUTCDay(),
+                    year: d.getYear(),
+                    month: d.getMonth(),
+                    date: d.getDate(),
+                    day: d.getDay(),
                     timestamp: day,
                     isToday: that.isToday(day),
                     col: i % 7
                 });
                 // is weekend?
                 obj.isWeekend = obj.day === 0 || obj.day === 6;
-                obj.isFirst = d.getUTCDate() === 1;
+                obj.isFirst = d.getDate() === 1;
             }
 
             return days;

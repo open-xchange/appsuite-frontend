@@ -11,14 +11,16 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('io.ox/portal/settings/defaults',
+define('plugins/portal/flickr/settings/defaults',
        [], function () {
 
     'use strict';
 
     var settingsDefaults = {
-        'activePlugins': ['mail', 'twitter', 'linkedIn', 'facebook', 'tasks']
-    };
+            streams: [
+                {q: 'open-xchange', method: 'flickr.photos.search', description: 'Open-Xchange'}
+            ]
+        };
 
     return settingsDefaults;
 });

@@ -374,41 +374,6 @@
 .flag_9  { background-color:  lighten(#049cdb, 25%); } /* light blue */
 .flag_10 { background-color:  #ffc40d; } /* yellow */
 
-/* reading lamp */
-
-.spotlight .window-head, .spotlight .leftside { opacity: 0.3; }
-.spotlight .window-content, .spotlight .window-container-center { background-color: #000; }
-.spotlight .mail-detail-pane { background-color: #444; }
-.spotlight .scrollable-pane { max-width: 900px; min-height: 100%; background-color: white; }
-
-.spotlight .mail-detail { border-color: #444; border-width: 5px; background-color: #eee; min-height: 400px; }
-.spotlight .content { background-color: white; max-width: 100%; padding: 30px 110px 30px 40px !important; margin: 0 -40px -30px -40px; min-height: 300px; }
-.spotlight .mail-detail .content.plain-text { max-width: 100%; }
-.spotlight .subject { color: #555; }
-.spotlight .person-link { color: #bbb; font-weight: 200; }
-.spotlight .io-ox-inline-links a,
-.spotlight .view:hover .io-ox-inline-links a { color: #bbb; font-weight: 200; }
-.spotlight .contact-picture { opacity: 0.50; }
-.spotlight .contact-picture.default-picture { display: none; }
-
-.spotlight-icon {
-    position: absolute;
-    top: -10px;
-    right: -10px;
-    width: 60px;
-    height: 60px;
-    border-radius: 30px;
-    display: none;
-    background-repeat: no-repeat;
-    background-position: 20px 18px;
-    background-color: #CCC;
-    background-color: rgba(255, 192, 0, 0.8);
-    cursor: pointer;
-}
-
-.spotlight-icon:hover { background-color: rgba(200, 200, 200, 0.5); }
-.spotlight .spotlight-icon { display: block; z-index: 30; }
-
 /* attachment preview */
 
 h4.mail-attachment-preview {

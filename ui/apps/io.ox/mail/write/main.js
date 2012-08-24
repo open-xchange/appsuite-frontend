@@ -24,10 +24,11 @@ define('io.ox/mail/write/main',
      'io.ox/core/tk/upload',
      'io.ox/mail/model',
      'io.ox/mail/write/view-main',
+     'io.ox/core/notifications',
      'settings!io.ox/mail',
      'gettext!io.ox/mail/mail',
      'less!io.ox/mail/style.css',
-     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, settings, gt) {
+     'less!io.ox/mail/write/style.css'], function (mailAPI, mailUtil, ext, config, contactsAPI, contactsUtil, userAPI, accountAPI, upload, MailModel, WriteView, notifications, settings, gt) {
 
     'use strict';
 
@@ -638,27 +639,6 @@ define('io.ox/mail/write/main',
         };
 
         /**
-         * Proof read view
-         */
-        app.proofread = function () {
-            // create reader
-            var reader = $('<div>').addClass('abs io-ox-mail-proofread');
-            // load detail view
-            require(['io.ox/mail/view-detail'], function (view) {
-                // get data
-                var mail = app.getMail();
-                // add missing data
-                _.extend(mail.data, {
-                    folder_id: 'default0/INBOX',
-                    received_date: _.now()
-                });
-                // draw mail
-                reader.append(view.draw(mail.data))
-                    .appendTo('body');
-            });
-        };
-
-        /**
          * Get mail
          */
         app.getMail = function () {
@@ -794,8 +774,10 @@ define('io.ox/mail/write/main',
                     if (result.error) {
                         console.error(result);
                         win.idle().show();
-                        alert(gt('Server error - see console :('));
+                        // TODO: check if backend just says "A severe error occured"
+                        notifications.yell(result);
                     } else {
+                        notifications.yell('success', 'Mail has been sent');
                         app.quit();
                     }
                 });

@@ -18,14 +18,17 @@ define('io.ox/portal/settings/pane',
        'settings!io.ox/portal',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
-       'text!io.ox/portal/settings/tpl/pluginsettings.html',
-       'gettext!io.ox/portal/settings'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, tmplPluginSettings, gt) {
+       'gettext!io.ox/portal/settings'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
 
     'use strict';
 
     var staticStrings =  {
         ACTIVATE_PLUGIN: gt('Activate Plugin'),
-        PLUGIN_SETTINGS: gt('Properties')
+        PLUGIN_SETTINGS: gt('Properties'),
+        SAVE:            gt('Save'),
+        PORTAL:          gt('Portal'),
+        PORTAL_PLUGINS:  gt('Portal Plugins'),
+        PROPERTIES:      gt('Properties')
     };
 
     var plugins = [];
@@ -34,14 +37,15 @@ define('io.ox/portal/settings/pane',
 
     _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
         var isActive = _.include(activePlugins, pluginName);
-        plugins.push({id: pluginName, name: gt(pluginName), active: isActive});
+        var plugin = {id: pluginName, name: gt(pluginName), active: isActive};
+
+        if (pluginName === 'reddit') {
+            plugin.subreddits = 'foo';
+        }
+        plugins.push(plugin);
     });
 
     var collection,
-        Collection = Backbone.Collection.extend({
-            model: PluginModel
-        }),
-
         PluginSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
@@ -72,18 +76,45 @@ define('io.ox/portal/settings/pane',
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
                 this.plugin = options.plugin;
-                this.template = doT.template(tmplPluginSettings);
+                this.deferred = new $.Deferred();
+                this.strings = staticStrings;
+
+                var that = this;
+                var req = ['text!io.ox/portal/settings/tpl/pluginsettings.html'];
+                var response = $.ajax({
+                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/plugin.js',
+                    type: 'HEAD',
+                    async: false
+                }).status;
+
+                if (response === 200) {
+                    req.push('plugins/portal/' + this.plugin.id + '/settings/plugin');
+                }
+
+                require(req, function (tmplPluginSettings, pluginFeatures) {
+                    that.template = doT.template(tmplPluginSettings);
+                    that.pluginFeatures = pluginFeatures;
+                    that.deferred.resolve();
+                });
             },
             render: function () {
-                var self = this;
+                var that = this;
 
-                self.$el.empty().append(self.template({
-                    active: this.plugin.get('active'),
-                    id: this.plugin.get('id'),
-                    strings: staticStrings
-                }));
+                this.deferred.done(function () {
+                    that.$el.empty().append(that.template({
+                        active: that.plugin.get('active'),
+                        id: that.plugin.get('id'),
+                        strings: that.strings
+                    }));
 
-                return self;
+                    if (that.pluginFeatures) {
+                        if (that.pluginFeatures.renderSettings) {
+                            that.$el.append(that.pluginFeatures.renderSettings());
+                        }
+                    }
+                });
+
+                return that;
             },
             events: {
                 'click .save': 'onSave'
@@ -97,7 +128,6 @@ define('io.ox/portal/settings/pane',
                     activePlugins = _.without(activePlugins, this.plugin.get('id'));
                     this.plugin.set('active', false);
                 }
-                this.dialog.close();
                 settings.set('activePlugins', activePlugins);
                 settings.save();
 
@@ -107,9 +137,9 @@ define('io.ox/portal/settings/pane',
 
                 // Load all active plugins
                 require(plugins).pipe(function () {
-                    // Disable all deactivated plugins
-                    ext.point('io.ox/portal/widget')
-                        .each(function (extension) {
+                    // Enable or Disable all plugins
+                    var extensions = ext.point('io.ox/portal/widget').all();
+                    _.chain(extensions).each(function (extension) {
                             var eid = extension.id;
 
                             var isActive = _.find(activePlugins, function (plugin) {
@@ -119,12 +149,16 @@ define('io.ox/portal/settings/pane',
 
                             if (!isActive) {
                                 ext.point("io.ox/portal/widget").disable(eid);
+                            } else {
+                                ext.point("io.ox/portal/widget").enable(eid);
                             }
                         }
                     );
 
                     ox.trigger("refresh^");
                 });
+
+                this.dialog.close();
             }
         });
 
@@ -134,7 +168,7 @@ define('io.ox/portal/settings/pane',
         draw: function (data) {
             var that = this;
 
-            collection = new Collection(plugins);
+            collection = new Backbone.Collection(plugins);
 
             var PluginsView = Backbone.View.extend({
                 initialize: function () {
@@ -144,7 +178,7 @@ define('io.ox/portal/settings/pane',
                 },
                 render: function () {
                     var self = this;
-                    self.$el.empty().append(self.template({}));
+                    self.$el.empty().append(self.template({strings: staticStrings}));
 
                     this.collection.each(function (item) {
                         self.$el.find('.listbox').append(new PluginSelectView({ model: item }).render().el);
@@ -161,7 +195,10 @@ define('io.ox/portal/settings/pane',
                     e.data = {id: $sel.data('id'), node: this.el};
                     e.target = $sel;
 
-                    var view = new PluginSettingsView({plugin: collection.get([e.data.id])});
+                    var view = new PluginSettingsView({
+                        plugin: collection.get([e.data.id])
+                    });
+
                     view.dialog = new dialogs.SidePopup().show(e, function (popup) {
                         popup.append(view.render().el);
                     });
@@ -175,4 +212,3 @@ define('io.ox/portal/settings/pane',
 
     return {};
 });
-

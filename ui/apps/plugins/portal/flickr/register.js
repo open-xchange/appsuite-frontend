@@ -14,118 +14,148 @@
 define('plugins/portal/flickr/register',
     ['io.ox/portal/mediaplugin',
      'io.ox/mail/util',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, gt) {
+     'settings!plugins/portal/flickr',
+     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
 
     'use strict';
-    var mp = new MediaPlayer();
+    var reload = function () {
+        var mp = new MediaPlayer();
 
-    // order of elements is the crucial factor of presenting the image in the sidepopups
-    var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
-    var apiUrl = "https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update," + imagesizes.join(',');
+        // order of elements is the crucial factor of presenting the image in the sidepopups
+        var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
 
-    mp.addFeed({
-        id: "flickr-id1",
-        description: "Flickr OX",
-        url: apiUrl + "&method=flickr.photos.search&text=open-xchange&jsoncallback=",
-        index: 100
-    });
+        var baseUrl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update,' + imagesizes.join(',');
 
-    mp.setOptions({bigPreview: true});
+        var apiUrl = {
+                'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
+                'flickr.people.getPublicPhotos': baseUrl + '&method=flickr.people.getPublicPhotos&user_id='
+            };
 
-    mp.init({
-        appendLimitOffset: function (myurl, count, offset) {
-            if (count) {
-                myurl += "&per_page=" + count;
+        var streams = settings.get('streams');
+
+        _.each(streams, function (v) {
+            // TODO index
+            if (apiUrl[v.method]) {
+                var myurl;
+
+                if (v.method === 'flickr.people.getPublicPhotos') {
+                    myurl = apiUrl[v.method] + v.nsid + '&jsoncallback=';
+                } else {
+                    myurl = apiUrl[v.method] + v.q + '&jsoncallback=';
+                }
+
+                mp.addFeed({
+                    id: 'flickr-' + v.q.replace(/[^a-z0-9]/g, '_') + '-' + v.method.replace(/[^a-z0-9]/g, '_'),
+                    description: v.description,
+                    url: myurl,
+                    index: 100
+                });
             }
+        });
 
-            if (offset) {
-                myurl += "&page=" + (offset + 1);
-            }
+        mp.setOptions({bigPreview: true});
 
-            return myurl;
-        },
-        determineSuccessfulResponse: function (j) {
-            return j && j.stat && j.stat === "ok" ? j.photos : {};
-        },
-        getDataArray: function (j) {
-            return j.photo;
-        },
-        elementPreview: function ($node, entry) {
-            var big = mp.getOption('bigPreview');
+        mp.init({
+            appendLimitOffset: function (myurl, count, offset) {
+                if (count) {
+                    myurl += "&per_page=" + count;
+                }
 
-            if (entry.title) {
-                // TODO xss
-                var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
-                $node.append($title);
-            }
-            $node.append($("<div>").addClass("mediaplugin-content").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
+                if (offset) {
+                    myurl += "&page=" + (offset + 1);
+                }
 
-            if (big) {
+                return myurl;
+            },
+            determineSuccessfulResponse: function (j) {
+                return j && j.stat && j.stat === "ok" ? j.photos : {};
+            },
+            getDataArray: function (j) {
+                return j.photo;
+            },
+            elementPreview: function ($node, entry) {
+                var big = mp.getOption('bigPreview');
+
+                if (entry.title) {
+                    // TODO xss
+                    var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
+                    $node.append($title);
+                }
+                $node.append($("<div>").addClass("mediaplugin-content").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
+
+                if (big) {
+                    var foundImage = _.find(imagesizes, function (value) {
+                        if (entry[value]) {
+                            return true;
+                        }
+                        return false;
+                    });
+
+                    if (foundImage) {
+                        var urlName = foundImage.replace(/^http:\/\//i, 'https://');
+                        var widthName = 'width' + urlName.replace(/url/, ''),
+                            heightName = 'height' + urlName.replace(/url/, '');
+
+                        var $img = $('<img/>', {'data-original': entry[urlName], width: entry[widthName], height: entry[heightName]});
+                        return $img;
+                    }
+                } else {
+                    if (entry.url_sq && entry.width_sq && entry.height_sq) {
+                        var $img = $('<img/>', {src: entry.url_sq, width: entry.width_sq, height: entry.height_sq});
+                        return $img;
+                    }
+                }
+
+                return false;
+            },
+            popupContent: function ($popup, entry, $busyIndicator) {
+                var maxWidth = $popup.width();
+                var maxHeight = $popup.height();
+
                 var foundImage = _.find(imagesizes, function (value) {
-                    if (entry[value]) {
-                        return true;
+                        var urlName = value;
+                        var widthName = 'width' + urlName.replace(/url/, ''),
+                            heightName = 'height' + urlName.replace(/url/, '');
+
+                        if (entry[urlName] && entry[widthName] && entry[heightName]) {
+                            var $img = $('<img/>', {src: entry[urlName].replace(/^http:\/\//i, 'https://'), width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
+                                .load(function () {
+                                    if ($busyIndicator) {
+                                        $busyIndicator.detach();
+                                        $(this).fadeIn();
+                                    }
+                                });
+
+                            mp.resizeImage($img, maxWidth, maxHeight);
+                            $popup.append($img);
+                            return true;
+                        }
+                        return false;
+                    });
+
+                if (!foundImage) {
+                    $popup.append($("<div>").addClass("flickr-content").text(gt('No picture found.')));
+                    if ($busyIndicator) {
+                        $busyIndicator.detach();
                     }
-                    return false;
-                });
-
-                if (foundImage) {
-                    var urlName = foundImage.replace(/^http:\/\//i, 'https://');
-                    var widthName = 'width' + urlName.replace(/url/, ''),
-                        heightName = 'height' + urlName.replace(/url/, '');
-
-                    var $img = $('<img/>', {'data-original': entry[urlName], width: entry[widthName], height: entry[heightName]});
-                    return $img;
                 }
-            } else {
-                if (entry.url_sq && entry.width_sq && entry.height_sq) {
-                    var $img = $('<img/>', {src: entry.url_sq, width: entry.width_sq, height: entry.height_sq});
-                    return $img;
+
+                if (entry.title) {
+                    // TODO xss
+                    $popup.append($("<div>").addClass("flickr-title").html(entry.title));
+                }
+            },
+            getImagesFromEntry: function (entry, imageCollection) {
+                if (entry.url_l) {
+                    imageCollection.push(entry.url_l);
                 }
             }
+        });
+    };
 
-            return false;
-        },
-        popupContent: function ($popup, entry, $busyIndicator) {
-            var maxWidth = $popup.width();
-            var maxHeight = $popup.height();
+    reload();
 
-            var foundImage = _.find(imagesizes, function (value) {
-                    var urlName = value;
-                    var widthName = 'width' + urlName.replace(/url/, ''),
-                        heightName = 'height' + urlName.replace(/url/, '');
-
-                    if (entry[urlName] && entry[widthName] && entry[heightName]) {
-                        var $img = $('<img/>', {src: entry[urlName].replace(/^http:\/\//i, 'https://'), width: entry[widthName], height: entry[heightName]}).css({display: 'none'})
-                            .load(function () {
-                                if ($busyIndicator) {
-                                    $busyIndicator.detach();
-                                    $(this).fadeIn();
-                                }
-                            });
-
-                        mp.resizeImage($img, maxWidth, maxHeight);
-                        $popup.append($img);
-                        return true;
-                    }
-                    return false;
-                });
-
-            if (!foundImage) {
-                $popup.append($("<div>").addClass("flickr-content").text(gt('No picture found.')));
-                if ($busyIndicator) {
-                    $busyIndicator.detach();
-                }
-            }
-
-            if (entry.title) {
-                // TODO xss
-                $popup.append($("<div>").addClass("flickr-title").html(entry.title));
-            }
-        },
-        getImagesFromEntry: function (entry, imageCollection) {
-            if (entry.url_l) {
-                imageCollection.push(entry.url_l);
-            }
-        }
-    });
+    return {
+        reload: reload
+    };
 });

@@ -18,8 +18,9 @@ define('plugins/portal/twitter/register',
      'io.ox/core/flowControl',
      'io.ox/core/strings',
      'io.ox/portal/pulltorefresh',
+     'io.ox/keychain/api',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, gt) {
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt) {
 
     'use strict';
 
@@ -167,6 +168,12 @@ define('plugins/portal/twitter/register',
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
         tileColor: 1,
+        isEnabled: function () {
+            return keychain.isEnabled(extensionId);
+        },
+        requiresSetUp: function () {
+            return keychain.isEnabled(extensionId) && ! keychain.hasStandardAccount(extensionId);
+        },
         preview: function () {
             var deferred = $.Deferred();
             loadTile().done(function (tweets) {
@@ -238,6 +245,13 @@ define('plugins/portal/twitter/register',
                 .fail(function () {
                     finishFn($busyIndicator);
                 });
+        },
+        drawCreationDialog: function () {
+            var $node = $(this);
+            $node.append(
+                $('<h1>').text('Twitter'),
+                $('<div>').text(gt('%s has not been set up yet, click this box to do so or remove it completely.', 'Twitter'))
+            );
         }
     });
 });

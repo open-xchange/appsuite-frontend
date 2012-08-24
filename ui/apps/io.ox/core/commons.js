@@ -259,9 +259,8 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 fnToggle, toggle, loadTree, initTree;
 
             container = $('<div>')
-                .addClass('abs border-right')
+                .addClass('abs border-right foldertree-sidepanel')
                 .css({
-                    backgroundColor: 'white',
                     right: 'auto',
                     width: options.width + 'px',
                     zIndex: 3
@@ -297,11 +296,13 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 var width;
                 if (permanent) {
                     app.getWindow().nodes.body.css('left', '0px');
-                    container.css('left', '0px');
+                    container.css({ width: container.attr('data-width') + 'px', left: '0px' });
                 } else {
-                    width = container.outerWidth();
+                    // show permanent folder view
+                    container.attr('data-width', container.width());
+                    width = 250; //container.outerWidth();
                     app.getWindow().nodes.body.css('left', width + 'px');
-                    container.css('left', -width + 'px');
+                    container.css({ width: width + 'px', left: -width + 'px' });
                 }
                 permanent = !permanent;
             };

@@ -182,7 +182,7 @@ define('io.ox/mail/accounts/settings',
                 collection = o.collection;
             }
             var labelMail = $('<label>').text(gt('Your mail address')),
-                labelPassword = $('<label>').text(gt('The corresponding password')),
+                labelPassword = $('<label>').text(gt('Your password')),
                 inputFieldMail =  $('<input>', { value: '' }).attr('type', 'text').addClass('input-large'),
                 inputFieldPassword = $('<input>', { value: '' }).attr('type', 'password').addClass('input-large'),
                 alertPlaceholder = $('<div>');

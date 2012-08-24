@@ -9,9 +9,10 @@
  * Mail: info@open-xchange.com
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-define('io.ox/core/notifications',
-      ['io.ox/core/extensions'], function (ext) {
+
+define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
 
     'use strict';
 
@@ -26,21 +27,21 @@ define('io.ox/core/notifications',
             return this;
         },
         onChange: function () {
-            this.$el.addClass('badge-error');
+            this.$el.addClass('badge-important');
             this.$el.text(this.model.get('count'));
         },
         setNotifier: function (b) {
             if (b) {
-                this.$el.addClass('badge-error');
+                this.$el.addClass('badge-important');
             } else {
-                this.$el.removeClass('badge-error');
+                this.$el.removeClass('badge-important');
             }
         },
         setCount: function (count) {
             this.model.set('count', count);
         }
     });
-    
+
     var FaviconBadge = Backbone.Model.extend({
         initialize: function (options) {
             this.on('change', _.bind(this.onChange, this));
@@ -118,7 +119,7 @@ define('io.ox/core/notifications',
                 })
             );
             this.badges.push(badgeView);
-            
+
             // invoke plugins
             var plugins = ext.getPlugins({name: 'notifications', prefix: 'plugins/notifications/'});
             require(plugins).done(function () {
@@ -208,10 +209,68 @@ define('io.ox/core/notifications',
             });
             $('#io-ox-notifications').removeClass('active');
             $('#io-ox-notifications-overlay').empty().removeClass('active');
-        }
+        },
 
+        // type = info | warning | error | success
+        yell: (function () {
+
+            var validType = /^(info|warning|error|success)$/,
+                active = false,
+                container = null,
+                timer = null,
+                TIMEOUT = 10000,
+
+                clear = function () {
+                    if (timer !== null) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                },
+
+                fader = function () {
+                    clear();
+                    $('body').off('click', fader);
+                    active = false;
+                    var node = container.children().first();
+                    node.fadeOut(function () {
+                        node.remove();
+                        node = null;
+                    });
+                };
+
+            return function (type, message) {
+
+                // we have a container?
+                if (container === null) {
+                    $('#io-ox-core').prepend(
+                        container = $('<div id="io-ox-notifications-popups">')
+                    );
+                }
+
+                // catch server error?
+                if (_.isObject(type) && 'error' in type) {
+                    message = type.error;
+                    type = 'error';
+                }
+
+                type = type || 'info';
+
+                // add message
+                if (validType.test(type)) {
+                    container.empty().append(
+                        $('<div class="alert alert-' + type + '">')
+                        .append($('<b>').text(message || ''))
+                    );
+                    if (!active) {
+                        $('body').on('click', fader);
+                    }
+                    active = true;
+                    clear();
+                    timer = setTimeout(fader, TIMEOUT);
+                }
+            };
+        }())
     };
 
     return new NotificationController();
-
 });

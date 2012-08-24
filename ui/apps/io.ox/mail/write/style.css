@@ -297,9 +297,9 @@
 }
 
 .io-ox-mail-write .text-editor {
-    font-family: Monaco, monospace;
-    font-size: 13px;
-    line-height: 18px;
+    font-family: @font-normal;
+    font-size: 14px;
+    line-height: 20px;
     color: black;
     background-color: transparent;
     border: 1px solid #ccc;

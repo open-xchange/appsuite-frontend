@@ -37,7 +37,8 @@ define("io.ox/calendar/api",
             var params = {
                 action: "get",
                 id: o.id,
-                folder: o.folder || o.folder_id
+                folder: o.folder || o.folder_id,
+                timezone: "UTC"
             };
 
             if (o.recurrence_position !== null) {
@@ -69,7 +70,7 @@ define("io.ox/calendar/api",
             // round start & end date
             o.start = (o.start / DAY >> 0) * DAY;
             o.end = (o.end / DAY >> 0) * DAY;
-
+            
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
@@ -82,10 +83,10 @@ define("io.ox/calendar/api",
                     showPrivate: true,
                     recurrence_master: false,
                     sort: "201",
-                    order: "asc"
+                    order: "asc",
+                    timezone: "UTC"
                 };
-
-
+            
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
@@ -108,7 +109,8 @@ define("io.ox/calendar/api",
                 http.PUT({
                     module: "calendar",
                     params: {
-                        action: "list"
+                        action: "list",
+                        timezone: "UTC"
                     },
                     data: http.simplify(ids)
                 })
@@ -121,7 +123,8 @@ define("io.ox/calendar/api",
                     params: {
                         action: "search",
                         sort: "201",
-                        order: "desc" // top-down makes more sense
+                        order: "desc", // top-down makes more sense
+                        timezone: "UTC"
                     },
                     data: {
                         pattern: query
@@ -178,6 +181,7 @@ define("io.ox/calendar/api",
             }
 
         },
+        
         create: function (o) {
             return http.PUT({
                 module: 'calendar',
@@ -273,7 +277,8 @@ define("io.ox/calendar/api",
                     timestamp: o.timestamp,
                     ignore: o.ignore,
                     sort: "201",
-                    order: "asc"
+                    order: "asc",
+                    timezone: "UTC"
                 };
 
             if (o.folder !== undefined) {

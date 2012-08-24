@@ -11,14 +11,16 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('io.ox/portal/settings/defaults',
+define('plugins/portal/tumblr/settings/defaults',
        [], function () {
 
     'use strict';
 
     var settingsDefaults = {
-        'activePlugins': ['mail', 'twitter', 'linkedIn', 'facebook', 'tasks']
-    };
+            blogs: [
+                {url: 'icanread.tumblr.com', description: 'I can read'}
+            ]
+        };
 
     return settingsDefaults;
 });

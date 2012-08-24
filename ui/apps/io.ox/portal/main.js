@@ -21,9 +21,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'io.ox/core/tk/dialogs',
+     'io.ox/keychain/api',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
     'use strict';
 
@@ -138,101 +139,163 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                 return drawContent(extension, event);
             };
         }
+        
+        function makeCreationDialog(extension) {
+            return function () {
+                return keychain.createInteractively(extension.id);
+            };
+        }
+
+        var getKulerIndex = (function () {
+
+            var list = '0123456789'.split(''), pos = 0, tmp = [];
+
+            function randomSort() { return Math.round(Math.random()) - 0.5; }
+
+            return function () {
+                if (tmp.length === 0) {
+                    tmp = list.slice(pos, pos + 5).sort(randomSort);
+                    pos = pos === 0 ? 5 : 0;
+                }
+                return tmp.shift();
+            };
+        }());
+
+        function addFillers(num, start) {
+            var load = function () {
+                    return $.Deferred().resolve($('<div>'));
+                },
+                i = 0;
+            for (; i < num; i++) {
+                ext.point('io.ox/portal/widget').extend({
+                    id: 'filler' + (start + i),
+                    index: 100 * (start + i + 1),
+                    title: '',
+                    tileColor: 'X',
+                    load: load
+                });
+            }
+        }
 
         function initExtensions() {
-            var count = 0;
-            ext.point('io.ox/portal/widget')
-                .each(function (extension) {
-                    contentQueue.enqueue(createContentTask(extension));
-                    var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
-                    var $node = $('<div class="io-ox-portal-widget-tile">')
-                        // experimental
-                        .addClass('tile-color' + (count++ % 10))
-                        .attr('widget-id', extension.id)
-                        .appendTo($borderBox)
-                        .busy();
+            // add dummy widgets
+            var point = ext.point('io.ox/portal/widget'),
+                count = point.count(),
+                fillers = 15 - count;
 
-                    if (extension.tileClass) {
-                        $node.addClass(extension.tileClass);
-                    }
+            addFillers(fillers, count);
+            point.shuffle();
 
-                    $node.on('click', makeClickHandler(extension));
+            point.each(function (extension) {
+                if (!extension.isEnabled) {
+                    extension.isEnabled = function () { return true; };
+                }
+                if (!extension.isEnabled()) {
+                    return;
+                }
+                if (!extension.requiresSetUp) {
+                    extension.requiresSetUp = function () { return false; };
+                }
 
-                    if (!extension.loadTile) {
-                        extension.loadTile = function () {
-                            return $.Deferred().resolve();
-                        };
-                    }
+                contentQueue.enqueue(createContentTask(extension));
+                var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
+                var $node = $('<div class="io-ox-portal-widget-tile">')
+                    // experimental
+                    .addClass('tile-color' + ('tileColor' in extension ? extension.tileColor : getKulerIndex())) //(count++ % 10))
+                    .attr('widget-id', extension.id)
+                    .appendTo($borderBox)
+                    .busy();
 
-                    if (!extension.drawTile) {
-                        extension.drawTile = function () {
-                            var $node = $(this);
-                            $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
+                if (extension.tileClass) {
+                    $node.addClass(extension.tileClass);
+                }
 
-                            extension.asyncMetadata("title").done(function (title) {
-                                if (title === control.CANCEL) {
-                                    $borderBox.remove();
-                                    return;
-                                }
-                                $node.find(".tile-heading").text(title);
-                            });
-                            extension.asyncMetadata("icon").done(function (icon) {
-                                if (icon === control.CANCEL) {
-                                    $borderBox.remove();
-                                    return;
-                                }
-                                if (icon) {
-                                    $node.find(".tile-image").attr("src", icon);
-                                } else {
-                                    $node.find(".tile-image").remove();
-                                }
-                            });
-                            extension.asyncMetadata("preview").done(function (preview) {
-                                if (preview === control.CANCEL) {
-                                    $borderBox.remove();
-                                    return;
-                                }
-                                if (preview) {
-                                    $node.append(preview);
-                                }
-                            });
-                            extension.asyncMetadata("tileColor").done(function (color) {
-                                if (color === control.CANCEL) {
-                                    $borderBox.remove();
-                                    return;
-                                }
-                                if (color !== undefined) {
+                $node.on('click', makeClickHandler(extension));
+
+                if (!extension.loadTile) {
+                    extension.loadTile = function () {
+                        return $.Deferred().resolve();
+                    };
+                }
+
+                if (!extension.drawTile) {
+                    extension.drawTile = function () {
+                        var $node = $(this);
+                        $(this).append('<img class="tile-image"/><h1 class="tile-heading"/>');
+
+                        extension.asyncMetadata("title").done(function (title) {
+                            if (title === control.CANCEL) {
+                                $borderBox.remove();
+                                return;
+                            }
+                            $node.find(".tile-heading").text(title);
+                        });
+                        extension.asyncMetadata("icon").done(function (icon) {
+                            if (icon === control.CANCEL) {
+                                $borderBox.remove();
+                                return;
+                            }
+                            if (icon) {
+                                $node.find(".tile-image").attr("src", icon);
+                            } else {
+                                $node.find(".tile-image").remove();
+                            }
+                        });
+                        extension.asyncMetadata("preview").done(function (preview) {
+                            if (preview === control.CANCEL) {
+                                $borderBox.remove();
+                                return;
+                            }
+                            if (preview) {
+                                $node.append(preview);
+                            }
+                        });
+                        extension.asyncMetadata("tileColor").done(function (color) {
+                            if (color === control.CANCEL) {
+                                $borderBox.remove();
+                                return;
+                            }
+                            if (color !== undefined) {
 //                                    $node[0].className = $node[0].className.replace(/tile-color\d/g, '');
 //                                    $node.addClass('tile-color' + color);
-                                }
-                            });
-                            extension.asyncMetadata("color").done(function (color) {
-                                if (color === control.CANCEL) {
-                                    $borderBox.remove();
-                                    return;
-                                }
-                                if (color !== undefined) {
-                                    $node.addClass("tile-" + color);
-                                }
-                            });
+                            }
+                        });
+                        extension.asyncMetadata("color").done(function (color) {
+                            if (color === control.CANCEL) {
+                                $borderBox.remove();
+                                return;
+                            }
+                            if (color !== undefined) {
+                                $node.addClass("tile-" + color);
+                            }
+                        });
+                    };
+                } //END of if missing draw workaround bullshit
 
-
-                            return $.when();
-                        };
-                    }
-
-                    return extension.invoke('loadTile')
-                        .pipe(function (a1, a2) {
-                            return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
-                                .done(function () {
-                                    $node.idle();
-                                    extension.invoke('postTile', $node, extension);
-                                });
+                if (extension.requiresSetUp()) {
+                    $node.addClass("io-ox-portal-createMe");
+                    return (extension.invoke.apply(extension, ['drawCreationDialog', $node].concat($.makeArray(arguments))) || $.Deferred())
+                        .done(function () {
+                            $node.idle();
+                            extension.invoke('postTile', $node, extension);
                         })
                         .fail(function (e) {
                             $node.idle().remove();
                         });
+                }
+            
+                return extension.invoke('loadTile')
+                .pipe(function (a1, a2) {
+                    return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
+                        .done(function () {
+                            $node.idle();
+                            extension.invoke('postTile', $node, extension);
+                        });
+                })
+                .fail(function (e) {
+                    $node.idle().remove();
                 });
+            });
         }
 
         // launcher

@@ -373,7 +373,7 @@ define("io.ox/core/desktop",
 
             this.launch = function () {
 
-                var deferred;
+                var deferred = $.when();
 
                 // update hash
                 if (opt.name !== _.url.hash('app')) {
@@ -397,7 +397,6 @@ define("io.ox/core/desktop",
                 } else if (win) {
                     // toggle app window
                     win.show();
-                    deferred = $.when();
                     ox.trigger('application:resume', self);
                 }
 
@@ -567,7 +566,7 @@ define("io.ox/core/desktop",
             };
 
             this.render = $.noop;
-            
+
             this.setRendered = function (value) {
                 rendered = value;
             };
@@ -886,7 +885,7 @@ define("io.ox/core/desktop",
                 };
 
                 this.setTitle = function (t) {
-                    title = t;
+                    title = _.isString(t) ? t : '';
                     applyTitle();
                     if (this === currentWindow) {
                         document.title = ox.serverConfig.pageTitle + t;
@@ -1135,7 +1134,7 @@ define("io.ox/core/desktop",
                             placement: 'bottom',
                             trigger: 'focus'
                         })
-                        .addClass('input-large search-query')
+                        .addClass('input-medium search-query')
                         .on({
                             keydown: function (e) {
                                 e.stopPropagation();
