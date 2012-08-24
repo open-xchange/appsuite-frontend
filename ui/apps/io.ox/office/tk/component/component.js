@@ -106,6 +106,14 @@ define('io.ox/office/tk/component/component',
                 });
             }
 
+            // Trigger an 'init' event at the group when the container window
+            // becomes visible the first time. The 'deferredInit' object will
+            // be resolved on the first window 'show' event and will execute
+            // all done handlers attached here. If the window is already
+            // visible when calling this method, the deferred is resolved and
+            // will execute the new done handler immediately.
+            deferredInit.done(function () { group.trigger('init'); });
+
             // insert the group into this view component
             if (_.isFunction(insertGroupHandler)) {
                 insertGroupHandler.call(self, group.getNode());
