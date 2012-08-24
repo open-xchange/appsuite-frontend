@@ -326,11 +326,13 @@ define('io.ox/office/editor/main',
 
                     // notify server about quitting the application
                     // TODO: one-way call, alternative to GET?
-                    $.ajax({
-                        type: 'GET',
-                        url: app.getDocumentFilterUrl('closedocument'),
-                        dataType: 'json'
-                    });
+                    if (app.hasFileDescriptor()) {
+                        $.ajax({
+                            type: 'GET',
+                            url: app.getDocumentFilterUrl('closedocument'),
+                            dataType: 'json'
+                        });
+                    }
 
                     win.idle();
                     def[resolved ? 'resolve' : 'reject']();

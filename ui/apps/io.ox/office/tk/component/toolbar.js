@@ -225,8 +225,10 @@ define('io.ox/office/tk/component/toolbar',
         // prepare component root node
         this.getNode().addClass('toolbar').append(containerNode);
 
-        // listen to browser window resize events when the OX window is visible
+        // listen to browser window resize events when the OX window is visible,
+        // and to 'refresh' events triggered directly at the tool bar
         Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
+        this.on('refresh', windowResizeHandler);
 
     } // class ToolBar
 
