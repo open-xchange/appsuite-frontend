@@ -337,7 +337,7 @@ define('io.ox/portal/mediaplugin',
                         });
 
                         $('<h1>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
-                        $mediapluginEntries.appendTo(self);
+                        $mediapluginEntries.empty().appendTo(self);
                         $busyIndicator.appendTo(self);
 
                         var deferred = new $.Deferred();
