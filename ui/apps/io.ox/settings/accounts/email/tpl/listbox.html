@@ -1,16 +1,17 @@
 <div>
 	<div>
-		<div class="clear-title">Accounts</div>
-		<div class="settings sectiondelimiter"></div>
+		<div class="clear-title" style="margin-bottom: 1em">Keyring</div>
 	</div>
 	<div class="section">
-		<legend class="sectiontitle">Accounts</legend>
-		<div class="listbox"></div>
+		<div class="listbox" style="min-height: 250px;"></div>
 		<div class="sectioncontent">
-			<button class="btn" data-action="add" style="margin-right: 15px; ">Add ...</button>
-			<button class="btn" data-action="edit" style="margin-right: 15px; ">Edit ...</button>
-			<button class="btn" data-action="delete">Delete ...</button>
+			<div class="dropdown">
+				<ul class="dropdown-menu" style="bottom: 105%; top: auto;">
+				</ul>
+				<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" data-action="add" style="margin-right: 15px; ">Add ...</button>
+				<button class="btn" data-action="edit" style="margin-right: 15px; ">Edit ...</button>
+				<button class="btn" data-action="delete">Delete ...</button>
+			</div>
 		</div>
-		<div class="settings sectiondelimiter"></div>
 	</div>
 </div>

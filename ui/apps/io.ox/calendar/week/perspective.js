@@ -43,10 +43,8 @@ define('io.ox/calendar/week/perspective',
             // fetch appointments
             var self = this,
                 collection = self.collection;
-//            console.log('p.getAppointments', start, end, collection);
             if (collection) {
                 api.getAll({ start: start, end: end }).done(function (list) {
-//                    console.log('list', list);
                     collection.reset(_(list).map(function (obj) {
                         var m = new Backbone.Model(obj);
                         m.id = _.cid(obj);
@@ -58,7 +56,6 @@ define('io.ox/calendar/week/perspective',
         },
         
         updateData: function () {
-//            console.log('p.update');
             // FIXME: replace 'startDate' with calendar logic
             this.startDate = util.getWeekStart();
             
@@ -66,7 +63,6 @@ define('io.ox/calendar/week/perspective',
         },
         
         refresh: function () {
-//            console.log('p.refresh', this);
             this.collection = new Backbone.Collection([]);
             var weekView = new View({
                 collection: this.collection,
@@ -74,13 +70,13 @@ define('io.ox/calendar/week/perspective',
                 startDate: this.startDate
             });
             weekView.on('showAppoinment', this.showAppointment, this);
+//            this.showAppointment();
             this.main.empty().append(weekView.render().el);
             this.main.find('.scrollpane').scrollTop(weekView.getScrollPos());
             this.updateData();
         },
         
         render: function (app) {
-//            console.log('p.render', app);
             this.main.addClass('week-view').empty();
             
             // watch for api refresh

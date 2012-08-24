@@ -102,7 +102,6 @@ define("plugins/portal/linkedin/register",
             return keychain.isEnabled('linkedin');
         },
         requiresSetUp: function () {
-            console.log("LinkedIn enabled?", keychain.isEnabled('linkedin'), keychain.hasStandardAccount('linkedin'));
             return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
         },
         loadTile: function () {

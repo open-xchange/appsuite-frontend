@@ -135,7 +135,7 @@ define("plugins/portal/appointments/register", [
 
                         viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
-                        new dialogs.SidePopup({ modal: true })
+                        new dialogs.SidePopup({ modal: false })
                             .delegate($node, ".vgrid-cell", function (popup) {
                                 var data = $(this).data("appointment");
                                 require(["io.ox/calendar/view-detail"], function (view) {

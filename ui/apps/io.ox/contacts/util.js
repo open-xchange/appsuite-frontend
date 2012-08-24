@@ -19,7 +19,7 @@ define('io.ox/contacts/util', [], function () {
 
         getImage: function (obj) {
             if (obj.mark_as_distributionlist) {
-                return ox.base + '/apps/themes/default/dummypicture_resource.xpng';
+                return ox.base + '/apps/themes/default/dummypicture_group.xpng';
             } else {
                 return obj.image1_url ?
                         obj.image1_url
