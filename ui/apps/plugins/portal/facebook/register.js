@@ -17,8 +17,9 @@ define('plugins/portal/facebook/register',
      'io.ox/oauth/proxy',
      'io.ox/core/flowControl',
      'io.ox/core/strings',
+     'io.ox/keychain/api',
      'gettext!plugins/portal/facebook',
-     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, strings, gt) {
+     'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, strings, keychain, gt) {
 
     'use strict';
 
@@ -52,6 +53,12 @@ define('plugins/portal/facebook/register',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
         tileColor: 2,
         color: 'bright',
+        isEnabled: function () {
+            return keychain.isEnabled('facebook');
+        },
+        requiresSetUp: function () {
+            return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
+        },
         preview: function () {
             var deferred = $.Deferred();
 
@@ -157,6 +164,14 @@ define('plugins/portal/facebook/register',
             }, this);
 
             return $.when();
+        },
+        
+        drawCreationDialog: function () {
+            var $node = $(this);
+            $node.append(
+                $('<h1>').text('Facebook'),
+                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'Facebook'))
+            );
         }
     });
 

@@ -21,9 +21,10 @@ define.async('io.ox/portal/main',
      'io.ox/core/flowControl',
      'gettext!io.ox/portal/portal',
      'io.ox/core/tk/dialogs',
+     'io.ox/keychain/api',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
+function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
     'use strict';
 
@@ -140,8 +141,8 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
         }
         
         function makeCreationDialog(extension) {
-            return function (event) {
-                return alert("Need to create " + extension.id);
+            return function () {
+                return keychain.createInteractively(extension.id);
             };
         }
 
@@ -149,6 +150,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
             var count = 0;
             ext.point('io.ox/portal/widget')
                 .each(function (extension) {
+                    if (extension.isEnabled && !extension.isEnabled()) {
+                        return;
+                    }
                     contentQueue.enqueue(createContentTask(extension));
                     var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
                     var $node = $('<div class="io-ox-portal-widget-tile">')
@@ -157,13 +161,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                         .attr('widget-id', extension.id)
                         .appendTo($borderBox)
                         .busy();
-                    var requiresSetUp = false;
                     
                     if (extension.tileClass) {
                         $node.addClass(extension.tileClass);
                     }
-
-                    if (requiresSetUp) {
+                    
+                    if (!extension.requiresSetUp) {
+                        extension.requiresSetUp = function () { return false; };
+                    }
+                    
+                    if (extension.requiresSetUp()) {
                         $node.on('click', makeCreationDialog(extension));
                     } else {
                         $node.on('click', makeClickHandler(extension));
@@ -231,7 +238,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, settings) {
                             return $.when();
                         };
                     }
-                    if (requiresSetUp) {
+                    
+                    if (extension.requiresSetUp()) {
+                        $node.addClass("io-ox-portal-createMe");
                         return (extension.invoke.apply(extension, ['drawCreationDialog', $node].concat($.makeArray(arguments))) || $.Deferred())
                             .done(function () {
                                 $node.idle();
