@@ -311,28 +311,30 @@ define('io.ox/office/editor/main',
 
             win.busy();
 
-            // silently send pending operations (no new quit delay, no operations timer)
-            if (operationsBuffer.length) {
-                sendOperations(true);
-            }
-
             // Wait for all registered quit delays ($.when() resolves immediately,
             // if the array is empty). All deferreds will resolve with a boolean
             // result (never reject, see createQuitDelay() function).
             $.when.apply(this, quitDelays).done(function () {
 
                 var // each deferred returns its result as a boolean
-                    resolved = _(arguments).all(_.identity);
+                    resolved = _(arguments).all(_.identity),
+                    // finally send any pending operations (but not in debug offline mode)
+                    sendDef = (syncMode && operationsBuffer.length) ? sendOperations() : $.when();
 
-                // TODO: one-way call, alternative to GET?
-                $.ajax({
-                    type: 'GET',
-                    url: AppHelper.getDocumentFilterUrl(app, 'closedocument'),
-                    dataType: 'json'
+                // wait for the final synchronization
+                sendDef.always(function () {
+
+                    // notify server about quitting the application
+                    // TODO: one-way call, alternative to GET?
+                    $.ajax({
+                        type: 'GET',
+                        url: app.getDocumentFilterUrl('closedocument'),
+                        dataType: 'json'
+                    });
+
+                    win.idle();
+                    def[resolved ? 'resolve' : 'reject']();
                 });
-
-                win.idle();
-                if (resolved) { def.resolve(); } else { def.reject(); }
             });
 
             return def;
@@ -392,13 +394,13 @@ define('io.ox/office/editor/main',
                 // load the file
                 $.ajax({
                     type: 'GET',
-                    url: AppHelper.getDocumentFilterUrl(app, 'importdocument'),
+                    url: app.getDocumentFilterUrl('importdocument'),
                     dataType: 'json'
                 })
                 .pipe(extractOperationsList)
                 .done(function (operations) {
                     if (operations) {
-                        editor.setDocumentURL(AppHelper.getDocumentFilterUrl(app, 'getfile'));
+                        editor.setDocumentURL(app.getDocumentFilterUrl('getfile'));
                         editor.enableUndo(false);
                         applyOperations(operations);
                         editor.enableUndo(true);
@@ -443,7 +445,7 @@ define('io.ox/office/editor/main',
             .done(function () {
                 $.ajax({
                     type: 'GET',
-                    url: AppHelper.getDocumentFilterUrl(app, action),
+                    url: app.getDocumentFilterUrl(action),
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -486,7 +488,7 @@ define('io.ox/office/editor/main',
             win.busy();
 
             // load the PDF file into appropriate PDF Viewer for printing
-            window.open(AppHelper.getDocumentFilterUrl(app, 'getfile', 'pdf'), app.getFileDescriptor().title || 'file');
+            window.open(app.getDocumentFilterUrl('getfile', 'pdf'), app.getFileDescriptor().title || 'file');
             def.resolve();
 
             return def;
@@ -494,12 +496,8 @@ define('io.ox/office/editor/main',
 
         /**
          * Sends all operations contained in the operationsBuffer array to the
-         * server, creates a quit delay object causing the quit handler to wait
-         * for the AJAX request, and starts the operations timer.
-         *
-         * @param {Boolean} [silent]
-         *  If set to true, the AJAX request will be sent silently, without
-         *  creating a quit delay, and without restarting the operations timer.
+         * server, and creates a quit delay object causing the quit handler to
+         * wait for the AJAX request.
          *
          * @returns {jQuery.Deferred}
          *  A deferred that will be resolved or rejected when the AJAX request
@@ -511,7 +509,7 @@ define('io.ox/office/editor/main',
                 def = null;
 
             // create and return the actual sendOperations() function
-            return function (silent) {
+            return function () {
 
                 // return existing deferred if the AJAX request is still running
                 if (def && (def.state() === 'pending')) {
@@ -523,7 +521,7 @@ define('io.ox/office/editor/main',
                     // the data object to be passed to the AJAX request
                     dataObject = { operations: JSON.stringify(sendOps) },
                     // a deferred that will cause the quit handler to wait for the AJAX request
-                    quitDelay = (silent === true) ? null : createQuitDelay();
+                    quitDelay = createQuitDelay();
 
                 // create a new result deferred
                 def = $.Deferred();
@@ -533,7 +531,7 @@ define('io.ox/office/editor/main',
 
                 $.ajax({
                     type: 'POST',
-                    url: AppHelper.getDocumentFilterUrl(app, 'pushoperationupdates'),
+                    url: app.getDocumentFilterUrl('pushoperationupdates'),
                     dataType: 'json',
                     data: dataObject,
                     beforeSend: function (xhr) {
@@ -543,18 +541,15 @@ define('io.ox/office/editor/main',
                     }
                 })
                 .done(function (response) {
-                    if (quitDelay) { quitDelay.resolve(); }
+                    quitDelay.resolve();
                     def.resolve(response);
                 })
                 .fail(function (response) {
                     // Try again later. TODO: NOT TESTED YET!
                     operationsBuffer = $.extend(true, operationsBuffer, sendOps);
                     // TODO: reject? (causing the application to stay alive?)
-                    if (quitDelay) { quitDelay.resolve(); }
+                    quitDelay.resolve();
                     def.reject(response);
-                })
-                .always(function () {
-                    if (silent !== true) { startOperationsTimer(); }
                 });
 
                 return def;
@@ -580,7 +575,7 @@ define('io.ox/office/editor/main',
                     // the deferred waiting for the GET operation
                     getDef = $.Deferred(),
                     // the deferred waiting for sendOperations()
-                    sendDef = $.Deferred();
+                    sendDef = $.Deferred().always(startOperationsTimer);
 
                 // the result deferred
                 def = $.when(getDef, sendDef);
@@ -588,7 +583,7 @@ define('io.ox/office/editor/main',
                 // first, check if the server has new operations for me
                 $.ajax({
                     type: 'GET',
-                    url: AppHelper.getDocumentFilterUrl(app, 'pulloperationupdates'),
+                    url: app.getDocumentFilterUrl('pulloperationupdates'),
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -602,7 +597,7 @@ define('io.ox/office/editor/main',
                     // Then, send our operations in case we have some...
                     if (operationsBuffer.length) {
                         // We might first need to do some "T" here!
-                        // sendOperations() will start the operations timer
+                        // resolving sendDef starts the operations timer
                         sendOperations().then(
                             function () { sendDef.resolve(); },
                             function () { sendDef.reject(); }
@@ -610,7 +605,6 @@ define('io.ox/office/editor/main',
                     } else {
                         // nothing to send, but the deferred must be resolved
                         sendDef.resolve();
-                        startOperationsTimer();
                     }
                     getDef.resolve(response);
                 })

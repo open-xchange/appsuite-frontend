@@ -22,45 +22,6 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
     // document filters -------------------------------------------------------
 
     /**
-     * Returns the URL passed to AJAX calls used to convert a document file
-     * with the 'oxodocumentfilter' service.
-     *
-     * @param {Object} app
-     *  The OX application object.
-     *
-     * @param {String} action
-     *  The name of the action to be passed to the document filter.
-     *
-     * @param {String} [format]
-     *  The file format name, used by specific actions.
-     *
-     * @returns {String}
-     *  The filter URL.
-     */
-    AppHelper.getDocumentFilterUrl = function (app, action, format) {
-
-        var // the descriptor of the file loaded by the application
-            file = app.getFileDescriptor();
-
-        var filterurl = ox.apiRoot +
-            '/oxodocumentfilter' +
-            '?action=' + action +
-            '&id=' + file.id +
-            '&folder_id=' + file.folder_id +
-            '&version=' + file.version +
-            '&session=' + ox.session +
-            '&uid=' + app.getUniqueId();
-
-        if (format)
-            filterurl += '&filter_format=' + format;
-
-        filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers.
-                                                   // Update: fragment identifiers don't work here, so filename doesn't need to be the last param...
-
-        return filterurl;
-    };
-
-    /**
      * Extracts the result data object from the passed response object of
      * an AJAX import request.
      *
@@ -186,6 +147,42 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
             file = null;
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Returns the URL passed to AJAX calls used to convert a document file
+         * with the 'oxodocumentfilter' service.
+         *
+         * @param {String} action
+         *  The name of the action to be passed to the document filter.
+         *
+         * @param {String} [format]
+         *  The file format name, used by specific actions.
+         *
+         * @returns {String}
+         *  The filter URL.
+         */
+        app.getDocumentFilterUrl = function (action, format) {
+
+            var // the descriptor of the file loaded by the application
+                file = app.getFileDescriptor();
+
+            var filterurl = ox.apiRoot +
+                '/oxodocumentfilter' +
+                '?action=' + action +
+                '&id=' + file.id +
+                '&folder_id=' + file.folder_id +
+                '&version=' + file.version +
+                '&session=' + ox.session +
+                '&uid=' + app.getUniqueId();
+
+            if (format)
+                filterurl += '&filter_format=' + format;
+
+            filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers.
+                                                       // Update: fragment identifiers don't work here, so filename doesn't need to be the last param...
+
+            return filterurl;
+        };
 
         app.hasFileDescriptor = function () {
             return _.isObject(file);

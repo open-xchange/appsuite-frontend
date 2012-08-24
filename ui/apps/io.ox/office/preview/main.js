@@ -237,7 +237,7 @@ define('io.ox/office/preview/main',
             // load the file
             $.ajax({
                 type: 'GET',
-                url: AppHelper.getDocumentFilterUrl(app, 'importdocument', 'html'),
+                url: app.getDocumentFilterUrl('importdocument', 'html'),
                 dataType: 'json'
             })
             .pipe(function (response) {
