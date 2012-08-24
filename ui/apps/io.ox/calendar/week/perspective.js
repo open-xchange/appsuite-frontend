@@ -24,7 +24,7 @@ define('io.ox/calendar/week/perspective',
     _.extend(perspective, {
         
         collection: {},
-        columns: 7,
+        days: 7,
         startDate: null,
         
         showAppointment: function (e, obj) {
@@ -34,6 +34,8 @@ define('io.ox/calendar/week/perspective',
                 .done(function (dialogs, detailView) {
                     new dialogs.SidePopup().show(e, function (popup) {
                         popup.append(detailView.draw(data));
+                    }).on('close', function () {
+                        console.log('close');
                     });
                 });
             });
@@ -70,9 +72,11 @@ define('io.ox/calendar/week/perspective',
                 startDate: this.startDate
             });
             weekView.on('showAppoinment', this.showAppointment, this);
-//            this.showAppointment();
-            this.main.empty().append(weekView.render().el);
-            this.main.find('.scrollpane').scrollTop(weekView.getScrollPos());
+            this.main
+                .empty()
+                .append(weekView.render().el)
+                .find('.scrollpane')
+                .scrollTop(weekView.getScrollPos());
             this.updateData();
         },
         
