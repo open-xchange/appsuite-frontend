@@ -124,7 +124,7 @@ define('plugins/portal/reddit/settings/plugin',
                 dialog.on('add', function (e) {
                     $error.hide();
 
-                    var subreddit = $.trim($subreddit.val()),
+                    var subreddit = String($.trim($subreddit.val())),
                         deferred = $.Deferred();
 
                     // No dot and url does not end with tumblr.com? Append it!
@@ -132,6 +132,7 @@ define('plugins/portal/reddit/settings/plugin',
                         subreddit = subreddit.substring(2);
                     }
 
+                    // TODO Check if mode is OK
                     if (subreddit.length === 0) {
                         $error.text(gt('Please enter a subreddit.'));
                         deferred.reject();
@@ -180,7 +181,7 @@ define('plugins/portal/reddit/settings/plugin',
                     async: true
                 });
 
-                var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
+                var oldSubreddit = String(this.$el.find('[selected]').data('subreddit')),
                     oldMode = this.$el.find('[selected]').data('mode');
 
                 if (oldSubreddit) {
@@ -204,7 +205,7 @@ define('plugins/portal/reddit/settings/plugin',
                     dialog.on('edit', function (e) {
                         $error.hide();
 
-                        var subreddit = $.trim($subreddit.val()),
+                        var subreddit = String($.trim($subreddit.val())),
                             mode = $mode.val(),
                             deferred = $.Deferred();
 
@@ -212,6 +213,8 @@ define('plugins/portal/reddit/settings/plugin',
                         if (subreddit.match(/^r\//)) {
                             subreddit = subreddit.substring(2);
                         }
+
+                        // TODO Check if mode is OK
 
                         if (subreddit.length === 0) {
                             $error.text(gt('Please enter a subreddit.'));
@@ -234,7 +237,7 @@ define('plugins/portal/reddit/settings/plugin',
                         }
 
                         deferred.done(function () {
-                            ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode);
+                            ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
 
                             subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
 
@@ -242,7 +245,7 @@ define('plugins/portal/reddit/settings/plugin',
                             settings.set('subreddits', subreddits);
                             settings.save();
 
-                            ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode);
+                            ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_'));
 
                             require(['plugins/portal/reddit/register'], function (reddit) {
                                 reddit.reload();
@@ -264,7 +267,7 @@ define('plugins/portal/reddit/settings/plugin',
                     easyOut: true
                 });
 
-                var subreddit = this.$el.find('[selected]').data('subreddit'),
+                var subreddit = String(this.$el.find('[selected]').data('subreddit')),
                     mode = this.$el.find('[selected]').data('mode');
 
                 if (subreddit) {
@@ -289,7 +292,7 @@ define('plugins/portal/reddit/settings/plugin',
                                 settings.set('subreddits', subreddits);
                                 settings.save();
 
-                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode;
+                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_');
 
                                 ext.point("io.ox/portal/widget").disable(extId);
 
