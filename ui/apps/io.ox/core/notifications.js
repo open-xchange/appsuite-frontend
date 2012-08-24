@@ -215,18 +215,27 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
         yell: (function () {
 
             var validType = /^(info|warning|error|success)$/,
+                active = false,
                 container = null,
-                current = null,
-                fader = function (node) {
-                    setTimeout(function () {
-                        node.fadeOut(function () {
-                            node.remove();
-                            if (node === current) {
-                                current = null;
-                            }
-                            node = null;
-                        });
-                    }, 5000);
+                timer = null,
+                TIMEOUT = 10000,
+
+                clear = function () {
+                    if (timer !== null) {
+                        clearTimeout(timer);
+                        timer = null;
+                    }
+                },
+
+                fader = function () {
+                    clear();
+                    $('body').off('click', fader);
+                    active = false;
+                    var node = container.children().first();
+                    node.fadeOut(function () {
+                        node.remove();
+                        node = null;
+                    });
                 };
 
             return function (type, message) {
@@ -248,15 +257,16 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
 
                 // add message
                 if (validType.test(type)) {
-                    // clear?
-                    if (current !== null) {
-                        current.remove();
-                    }
-                    container.append(
-                        current = $('<div class="alert alert-' + type + '">')
+                    container.empty().append(
+                        $('<div class="alert alert-' + type + '">')
                         .append($('<b>').text(message || ''))
                     );
-                    fader(current);
+                    if (!active) {
+                        $('body').on('click', fader);
+                    }
+                    active = true;
+                    clear();
+                    timer = setTimeout(fader, TIMEOUT);
                 }
             };
         }())
