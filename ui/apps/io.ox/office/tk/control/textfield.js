@@ -70,7 +70,7 @@ define('io.ox/office/tk/control/textfield',
             caption = Utils.createLabel(options).addClass('input-caption'),
 
             // the white background for the text field
-            backgroundNode = $('<div>'),
+            backgroundNode = $('<div>').addClass('background-overlay'),
 
             // the overlay container for the caption and the background
             overlayNode = $('<div>').addClass('input-overlay').append(caption, backgroundNode),
@@ -127,7 +127,7 @@ define('io.ox/office/tk/control/textfield',
 
             // expand the text field by the size of the overlay caption
             textField
-                .width(leftMargin + paddedWidth + rightMargin + 2) // text field has box-sizing: border-box
+                .width(leftMargin + paddedWidth + rightMargin + 2) // add border (text field has box-sizing:border-box)
                 .css({ paddingLeft: (leftMargin + FIELD_PADDING) + 'px', paddingRight: (rightMargin + FIELD_PADDING) + 'px' });
 
             // set the size of the white background area

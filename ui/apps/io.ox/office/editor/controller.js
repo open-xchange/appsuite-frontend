@@ -26,6 +26,15 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
 
             // all the little controller items
             items = {
+                'action/export': {
+                    set: function (query) { app.save(); }
+                },
+                'action/flush': {
+                    set: function (query) { app.flush(); }
+                },
+                'action/print': {
+                    set: function (query) { app.print(); }
+                },
                 'action/undo': {
                     enable: function () { return editor.hasUndo(); },
                     set: function () { editor.undo(); }

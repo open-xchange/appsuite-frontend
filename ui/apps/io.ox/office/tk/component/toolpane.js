@@ -47,7 +47,7 @@ define('io.ox/office/tk/component/toolpane',
             node = $('<div>').addClass('io-ox-pane top toolpane'),
 
             // the top-level tab bar to select tool bars
-            tabBar = new ToolBar(appWindow),
+            tabBar = appWindow.nodes.tabBar = new ToolBar(appWindow),
 
             // the tab buttons to select the tool bars
             radioGroup = tabBar.addRadioGroup(key),
@@ -183,7 +183,9 @@ define('io.ox/office/tk/component/toolpane',
          * Triggers a 'refresh' event at all registered tool bars.
          */
         this.refresh = function () {
+            tabBar.trigger('refresh');
             _(toolBars).invoke('trigger', 'refresh');
+            return this;
         };
 
         this.destroy = function () {

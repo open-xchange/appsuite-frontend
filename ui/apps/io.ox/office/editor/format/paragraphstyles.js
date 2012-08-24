@@ -113,8 +113,8 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // TODO: move these default styles to a 'newDocument' operation
         this.addStyleSheet('Standard', null, { fontname: 'Open Sans', fontsize: 11 }, true)
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', fontname: 'Georgia', fontsize: 26, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', fontname: 'Georgia', fontsize: 12, italic: true })
+            .addStyleSheet('Title', 'Standard', { alignment: 'center', lineheight: LineHeight.DOUBLE, fontname: 'Georgia', fontsize: 26, bold: true })
+            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', lineheight: LineHeight.ONE_HALF, fontname: 'Georgia', fontsize: 12, italic: true })
             .addStyleSheet('Heading 1', 'Standard', { fontname: 'Georgia', fontsize: 16, bold: true })
             .addStyleSheet('Heading 2', 'Standard', { fontname: 'Georgia', fontsize: 14, bold: true })
             .addStyleSheet('Heading 3', 'Standard', { fontname: 'Georgia', fontsize: 13, bold: true })

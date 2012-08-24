@@ -43,7 +43,6 @@ define('io.ox/office/editor/view',
         // initialization -----------------------------------------------------
 
         // add all known style sheets
-
         _(styleSheets.getStyleSheetNames()).each(function (name) {
             this.addListEntry(name);
         }, this);
@@ -148,16 +147,20 @@ define('io.ox/office/editor/view',
         /**
          * Handles resize events of the browser window, and adjusts the left
          * positions of all tool bars in the tool pane according to the current
-         * position of the document page.
+         * position of the editor node.
          */
         function windowResizeHandler(event) {
 
             var // the left position of the editor node
-                editorLeft = Math.floor(editors.rich.getNode().offset().left);
+                editorLeft = Math.floor(editors.rich.getNode().offset().left),
+                // width of the document title label
+                titleWidth = Math.floor(appWindow.nodes.title.width());
+
+            // position the tab bar
+            appWindow.nodes.tabBar.getNode().css('left', Math.max(editorLeft, titleWidth + 13) + 'px');
 
             // set a left padding to the tool pane to align the tool bars with the editor node
-            toolPane.getNode().css('padding-left', Math.max(0, editorLeft - 13) + 'px');
-
+            toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
             // refresh all tool bars (they may resize some controls according to the available space)
             toolPane.refresh();
         }
@@ -253,6 +256,10 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('debug', { label: gt('Debug') })
+            .addButton('debug/export', { icon: 'icon-share', tooltip: 'Export' })
+            .addButton('debug/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })
+            .addButton('debug/print', { icon: 'icon-print', tooltip: 'Print' })
+            .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
