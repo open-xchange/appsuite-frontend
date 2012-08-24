@@ -886,7 +886,7 @@ define("io.ox/core/desktop",
                 };
 
                 this.setTitle = function (t) {
-                    title = t;
+                    title = _.isString(t) ? t : '';
                     applyTitle();
                     if (this === currentWindow) {
                         document.title = ox.serverConfig.pageTitle + t;

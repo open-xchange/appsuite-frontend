@@ -21,7 +21,7 @@ define('io.ox/calendar/month/view',
     'use strict';
 
     function formatDate(d) {
-        return d.getUTCFullYear() + '-' + d.getUTCMonth() + '-' + d.getUTCDate();
+        return d.getYear() + '-' + d.getMonth() + '-' + d.getDate();
     }
 
     var myself = null;
@@ -87,8 +87,8 @@ define('io.ox/calendar/month/view',
             this.$el.find('.appointment').remove();
             // loop over all appointments
             this.collection.each(function (model) {
-                var start = formatDate(new Date(model.get('start_date'))),
-                    end = formatDate(new Date(model.get('end_date') - 1)),
+                var start = formatDate(new date.Local(model.get('start_date'))),
+                    end = formatDate(new date.Local(model.get('end_date') - 1)),
                     copy = _.copy(model.attributes, true),
                     selector, d;
 
@@ -108,8 +108,8 @@ define('io.ox/calendar/month/view',
                     // inc date
                     if (start !== end) {
                         copy.start_date += date.DAY;
-                        d = new Date(copy.start_date);
-                        d.setUTCHours(0, 0, 0, 0);
+                        d = new date.Local(copy.start_date);
+                        d.setHours(0, 0, 0, 0);
                         copy.start_date = d.getTime();
                         start = formatDate(d);
                     } else {

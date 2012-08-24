@@ -20,7 +20,7 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: false});
+    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: true});
 
     var AddParticipantView = Backbone.View.extend({
         events: {
@@ -59,6 +59,8 @@ define('io.ox/calendar/edit/view-addparticipants',
                                 if (obj.data.internal_userid && obj.data.email1 === obj.email) {
                                     obj.data.type = 1; //user
                                     obj.data.id = obj.data.internal_userid;
+                                } else if (obj.data.mark_as_distributionlist) {
+                                    obj.data.type = 7; //distlistunsergroup
                                 } else {
                                     obj.data.type = 5;
                                     // h4ck

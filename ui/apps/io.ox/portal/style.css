@@ -203,9 +203,6 @@
     margin: 8px 0 8px 0;
 }
 
-
-
-
 .io-ox-portal {
     .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
     .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
@@ -228,4 +225,6 @@
     .tile-color8:hover { background-color: darken(@tile-color-3, @tile-hover-dark); }
     .tile-color9 { background-color: darken(@tile-color-4, @tile-darken); }
     .tile-color9:hover { background-color: darken(@tile-color-4, @tile-hover-dark); }
+
+    .tile-colorX { background-color: rgba(255, 255, 255, 0.05); cursor: default; }
 }
