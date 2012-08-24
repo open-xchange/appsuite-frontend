@@ -78,6 +78,12 @@ define('plugins/portal/reddit/settings/plugin',
                     collection.each(function (item) {
                         $listbox.append(new SubredditSelectView({ model: item }).render().el);
                     });
+
+                    if (collection.length === 0) {
+                        $listbox.hide();
+                    } else {
+                        $listbox.show();
+                    }
                 }
 
                 redraw();
@@ -118,7 +124,7 @@ define('plugins/portal/reddit/settings/plugin',
                 dialog.on('add', function (e) {
                     $error.hide();
 
-                    var subreddit = $.trim($subreddit.val()),
+                    var subreddit = String($.trim($subreddit.val())),
                         deferred = $.Deferred();
 
                     // No dot and url does not end with tumblr.com? Append it!
@@ -126,6 +132,7 @@ define('plugins/portal/reddit/settings/plugin',
                         subreddit = subreddit.substring(2);
                     }
 
+                    // TODO Check if mode is OK
                     if (subreddit.length === 0) {
                         $error.text(gt('Please enter a subreddit.'));
                         deferred.reject();
@@ -174,89 +181,93 @@ define('plugins/portal/reddit/settings/plugin',
                     async: true
                 });
 
-                var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
+                var oldSubreddit = String(this.$el.find('[selected]').data('subreddit')),
                     oldMode = this.$el.find('[selected]').data('mode');
 
-                var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
-                    $error = $('<div>').addClass('alert alert-error').hide(),
-                    that = this;
+                if (oldSubreddit) {
+                    var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
+                        $error = $('<div>').addClass('alert alert-error').hide(),
+                        that = this;
 
-                var $mode = $('<select>')
-                    .append($('<option>').attr('value', 'hot').text(gt('hot')))
-                    .append($('<option>').attr('value', 'new').text(gt('new')))
-                    .val(oldMode);
+                    var $mode = $('<select>')
+                        .append($('<option>').attr('value', 'hot').text(gt('hot')))
+                        .append($('<option>').attr('value', 'new').text(gt('new')))
+                        .val(oldMode);
 
-                dialog.header($("<h4>").text(gt('Edit an Subreddit')))
-                    .append($subreddit)
-                    .append($mode)
-                    .append($error)
-                    .addButton('cancel', 'Cancel')
-                    .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
-                    .show();
+                    dialog.header($("<h4>").text(gt('Edit an Subreddit')))
+                        .append($subreddit)
+                        .append($mode)
+                        .append($error)
+                        .addButton('cancel', 'Cancel')
+                        .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                        .show();
 
-                dialog.on('edit', function (e) {
-                    $error.hide();
+                    dialog.on('edit', function (e) {
+                        $error.hide();
 
-                    var subreddit = $.trim($subreddit.val()),
-                        mode = $mode.val(),
-                        deferred = $.Deferred();
+                        var subreddit = String($.trim($subreddit.val())),
+                            mode = $mode.val(),
+                            deferred = $.Deferred();
 
-                    // No dot and url does not end with tumblr.com? Append it!
-                    if (subreddit.match(/^r\//)) {
-                        subreddit = subreddit.substring(2);
-                    }
+                        // No dot and url does not end with tumblr.com? Append it!
+                        if (subreddit.match(/^r\//)) {
+                            subreddit = subreddit.substring(2);
+                        }
 
-                    if (subreddit.length === 0) {
-                        $error.text(gt('Please enter a subreddit.'));
-                        deferred.reject();
-                    } else {
-                        $.ajax({
-                            url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
-                            type: 'HEAD',
-                            dataType: 'jsonp',
-                            jsonp: false,
-                            jsonpCallback: 'testcallback',
-                            success: function () {
-                                deferred.resolve();
-                            },
-                            error: function () {
-                                $error.text(gt('Unknown error while checking subreddit.'));
-                                deferred.reject();
-                            }
+                        // TODO Check if mode is OK
+
+                        if (subreddit.length === 0) {
+                            $error.text(gt('Please enter a subreddit.'));
+                            deferred.reject();
+                        } else {
+                            $.ajax({
+                                url: 'http://www.reddit.com/r/' + subreddit + '/.json?jsonp=testcallback',
+                                type: 'HEAD',
+                                dataType: 'jsonp',
+                                jsonp: false,
+                                jsonpCallback: 'testcallback',
+                                success: function () {
+                                    deferred.resolve();
+                                },
+                                error: function () {
+                                    $error.text(gt('Unknown error while checking subreddit.'));
+                                    deferred.reject();
+                                }
+                            });
+                        }
+
+                        deferred.done(function () {
+                            ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode.replace(/[^a-z0-9]/g, '_'));
+
+                            subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
+
+                            subreddits.push({subreddit: subreddit, mode: mode});
+                            settings.set('subreddits', subreddits);
+                            settings.save();
+
+                            ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_'));
+
+                            require(['plugins/portal/reddit/register'], function (reddit) {
+                                reddit.reload();
+                                that.trigger('redraw');
+                                ox.trigger("refresh^");
+                                dialog.close();
+                            });
                         });
-                    }
 
-                    deferred.done(function () {
-                        ext.point("io.ox/portal/widget").disable('reddit-' + oldSubreddit.replace(/[^a-z0-9]/g, '_') + '-' + oldMode);
-
-                        subreddits = removeSubReddit(subreddits, oldSubreddit, oldMode);
-
-                        subreddits.push({subreddit: subreddit, mode: mode});
-                        settings.set('subreddits', subreddits);
-                        settings.save();
-
-                        ext.point("io.ox/portal/widget").enable('reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode);
-
-                        require(['plugins/portal/reddit/register'], function (reddit) {
-                            reddit.reload();
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                            dialog.close();
+                        deferred.fail(function () {
+                            $error.show();
+                            dialog.idle();
                         });
                     });
-
-                    deferred.fail(function () {
-                        $error.show();
-                        dialog.idle();
-                    });
-                });
+                }
             },
             onDelete: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
 
-                var subreddit = this.$el.find('[selected]').data('subreddit'),
+                var subreddit = String(this.$el.find('[selected]').data('subreddit')),
                     mode = this.$el.find('[selected]').data('mode');
 
                 if (subreddit) {
@@ -281,7 +292,7 @@ define('plugins/portal/reddit/settings/plugin',
                                 settings.set('subreddits', subreddits);
                                 settings.save();
 
-                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode;
+                                var extId = 'reddit-' + subreddit.replace(/[^a-z0-9]/g, '_') + '-' + mode.replace(/[^a-z0-9]/g, '_');
 
                                 ext.point("io.ox/portal/widget").disable(extId);
 

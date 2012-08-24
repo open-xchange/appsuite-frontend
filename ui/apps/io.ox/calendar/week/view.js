@@ -30,6 +30,7 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
         fulltimeHeight: 20,     // height of fulltime appointments
+        fulltimeMax:    5,      // threshold for full-time appointments
         appWidth:       97,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
@@ -39,6 +40,7 @@ define('io.ox/calendar/week/view',
         
         pane:           $(),    // main scroll pane
         fulltimePane:   $(),    // fulltime appointments pane
+        fulltimeCon:    $(),    // fulltime container
         week:           [],     // week scaffold
         timeline:       $(),    // timeline
         tlInterval:     {},     // timeline interval
@@ -80,6 +82,7 @@ define('io.ox/calendar/week/view',
 
             var scaffold = tmpl.render('scaffold', {days: days, width: 100 / this.columns + '%'});
             this.pane = scaffold.find('.scrollpane');
+            this.fulltimeCon = scaffold.find('.fulltime-container');
             this.fulltimePane = scaffold.find('.fulltime');
             
             // create timelabels
@@ -93,7 +96,7 @@ define('io.ox/calendar/week/view',
             var container = $('<div>').addClass('weekcontainer');
             
             // create and animate timeline
-            this.timeline = $('<div>').addClass('timeline').append($('<div>').addClass('glow'));
+            this.timeline = $('<div>').addClass('timeline');
             this.renderTimeline(this.timeline);
             this.tlInterval = setInterval(this.renderTimeline, 60000, this.timeline);
             container.append(this.timeline);
@@ -102,7 +105,9 @@ define('io.ox/calendar/week/view',
             for (var d = 0; d < this.columns; d++) {
                 
                 var dayInfo = this.week[d],
-                    day = $('<div>').addClass('day').width(100 / this.columns + '%').attr('date', dayInfo.year + '-' + (dayInfo.month + 1) + '-' + dayInfo.date);
+                    day = $('<div>')
+                        .addClass('day').width(100 / this.columns + '%')
+                        .attr('date', dayInfo.year + '-' + (dayInfo.month + 1) + '-' + dayInfo.date);
                 
                 if (dayInfo.isToday) {
                     day.addClass('today');
@@ -170,8 +175,8 @@ define('io.ox/calendar/week/view',
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
 
-                var startDate = new date.Local(date.Local.utc(model.get('start_date'))),
-                    endDate = new date.Local(date.Local.utc(model.get('end_date') - 1)),
+                var startDate = new date.Local(model.get('start_date')),
+                    endDate = new date.Local(model.get('end_date') - 1),
                     start = startDate.format('y-M-d'),
                     end = endDate.format('y-M-d'),
                     maxCount = 7;
@@ -190,7 +195,6 @@ define('io.ox/calendar/week/view',
                     
                     // loop over all column positions
                     for (var k = 0; k < fulltimeColPos.length; k++) {
-                        console.log('Vergleich: ', fulltimeColPos[k], model.get('start_date'), fulltimeColPos[k] <= model.get('start_date'));
                         if  (fulltimeColPos[k] <= model.get('start_date')) {
                             fulltimeColPos[k] = model.get('end_date');
                             row = k;
@@ -203,8 +207,6 @@ define('io.ox/calendar/week/view',
                         row = fulltimeColPos.length;
                         fulltimeColPos.push(model.get('end_date'));
                     }
-                    
-                    console.log(model.get('start_date'), row, fulltimeColPos);
                     
                     app.css({
                         height: 20,
@@ -227,7 +229,7 @@ define('io.ox/calendar/week/view',
                             endDate = new date.Local(startDate.getTime());
                             endDate.setHours(23, 59, 59, 999);
                         } else {
-                            endDate = new date.Local(date.Local.utc(model.get('end_date') - 1));
+                            endDate = new date.Local(model.get('end_date') - 1);
                         }
                         
                         var app = this.renderAppointment(model.attributes),
@@ -256,6 +258,11 @@ define('io.ox/calendar/week/view',
                     }
                     
                 }
+                
+                // calculate full-time appointment container height
+                var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * this.fulltimeHeight;
+                this.pane.css({ top: ftHeight + 1 + 'px' });
+                this.fulltimeCon.height(ftHeight);
                 
             }, this);
             
