@@ -146,6 +146,23 @@ define('io.ox/office/editor/view',
         }
 
         /**
+         * Handles resize events of the browser window, and adjusts the left
+         * positions of all tool bars in the tool pane according to the current
+         * position of the document page.
+         */
+        function windowResizeHandler(event) {
+
+            var // the left position of the editor node
+                editorLeft = Math.floor(editors.rich.getNode().offset().left);
+
+            // set a left padding to the tool pane to align the tool bars with the editor node
+            toolPane.getNode().css('padding-left', Math.max(0, editorLeft - 13) + 'px');
+
+            // refresh all tool bars (they may resize some controls according to the available space)
+            toolPane.refresh();
+        }
+
+        /**
          * Handles keyboard events in the quick-search text field.
          */
         function searchKeyHandler(event) {
@@ -213,7 +230,7 @@ define('io.ox/office/editor/view',
         appWindow.nodes.main.addClass('io-ox-office-main').append(
             appWindow.nodes.toolPane = toolPane.getNode(),
             appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
-            appWindow.nodes.debugPane = $('<div>').addClass('io-ox-toolpane bottom')
+            appWindow.nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug')
         );
 
         // insert editor into the app pane
@@ -263,8 +280,8 @@ define('io.ox/office/editor/view',
         createToolBar('table', { label: gt('Table') })
             .addGroup('insert/table', new TableSizeChooser())
             .addSeparator()
-            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Rows') })
-            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Columns') })
+            .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Row') })
+            .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
             .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete Rows') })
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
@@ -277,6 +294,9 @@ define('io.ox/office/editor/view',
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
+
+        // listen to browser window resize events when the OX window is visible
+        Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
 
         // override the limited functionality of the quick-search text field
         appWindow.nodes.search

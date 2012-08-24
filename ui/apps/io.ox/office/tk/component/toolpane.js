@@ -44,7 +44,7 @@ define('io.ox/office/tk/component/toolpane',
             self = this,
 
             // the container element representing the tool pane
-            node = $('<div>').addClass('io-ox-toolpane top'),
+            node = $('<div>').addClass('io-ox-pane top toolpane'),
 
             // the top-level tab bar to select tool bars
             tabBar = new ToolBar(appWindow),
@@ -177,6 +177,13 @@ define('io.ox/office/tk/component/toolpane',
                 toolBars[visibleToolBarId].grabFocus();
             }
             return this;
+        };
+
+        /**
+         * Triggers a 'refresh' event at all registered tool bars.
+         */
+        this.refresh = function () {
+            _(toolBars).invoke('trigger', 'refresh');
         };
 
         this.destroy = function () {
