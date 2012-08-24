@@ -256,9 +256,9 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('debug/export', { icon: 'icon-share', tooltip: 'Export' })
-            .addButton('debug/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })
-            .addButton('debug/print', { icon: 'icon-print', tooltip: 'Print' })
+            .addButton('action/export', { icon: 'icon-share', tooltip: 'Export' })
+            .addButton('action/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })
+            .addButton('action/print', { icon: 'icon-print', tooltip: 'Print' })
             .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
