@@ -42,6 +42,13 @@
         transition: background-color 0.4s;
     }
     
+    .fulltime-lable {
+        height: 10%;
+        border-bottom: 1px solid #ccc;
+        width: @weekview-time-with;
+        position: absolute;
+    }
+    
     .fulltime {
         height: 10%;
         border-bottom: 1px solid #ccc;
