@@ -30,6 +30,7 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
         fulltimeHeight: 20,     // height of fulltime appointments
+        fulltimeMax:    5,      // threshold for full-time appointments
         appWidth:       97,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
@@ -39,6 +40,7 @@ define('io.ox/calendar/week/view',
         
         pane:           $(),    // main scroll pane
         fulltimePane:   $(),    // fulltime appointments pane
+        fulltimeCon:    $(),    // fulltime container
         week:           [],     // week scaffold
         timeline:       $(),    // timeline
         tlInterval:     {},     // timeline interval
@@ -80,6 +82,7 @@ define('io.ox/calendar/week/view',
 
             var scaffold = tmpl.render('scaffold', {days: days, width: 100 / this.columns + '%'});
             this.pane = scaffold.find('.scrollpane');
+            this.fulltimeCon = scaffold.find('.fulltime-container');
             this.fulltimePane = scaffold.find('.fulltime');
             
             // create timelabels
@@ -255,6 +258,11 @@ define('io.ox/calendar/week/view',
                     }
                     
                 }
+                
+                // calculate full-time appointment container height
+                var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * this.fulltimeHeight;
+                this.pane.css({ top: ftHeight + 1 + 'px' });
+                this.fulltimeCon.height(ftHeight);
                 
             }, this);
             
