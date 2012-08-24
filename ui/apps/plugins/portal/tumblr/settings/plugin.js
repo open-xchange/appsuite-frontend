@@ -78,6 +78,12 @@ define('plugins/portal/tumblr/settings/plugin',
                     collection.each(function (item) {
                         $listbox.append(new BlogSelectView({ model: item }).render().el);
                     });
+
+                    if (collection.length === 0) {
+                        $listbox.hide();
+                    } else {
+                        $listbox.show();
+                    }
                 }
 
                 redraw();
@@ -182,86 +188,88 @@ define('plugins/portal/tumblr/settings/plugin',
                 var oldUrl = this.$el.find('[selected]').data('url'),
                     oldDescription = this.$el.find('[selected]').data('description');
 
-                var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
-                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
-                    $error = $('<div>').addClass('alert alert-error').hide(),
-                    that = this;
+                if (oldUrl) {
+                    var $url = $('<input>').attr({type: 'text', placeholder: '.tumblr.com'}).val(oldUrl),
+                        $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
+                        $error = $('<div>').addClass('alert alert-error').hide(),
+                        that = this;
 
-                dialog.header($("<h4>").text(gt('Edit a blog')))
-                    .append($url)
-                    .append($description)
-                    .append($error)
-                    .addButton('cancel', 'Cancel')
-                    .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
-                    .show();
+                    dialog.header($("<h4>").text(gt('Edit a blog')))
+                        .append($url)
+                        .append($description)
+                        .append($error)
+                        .addButton('cancel', 'Cancel')
+                        .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                        .show();
 
-                dialog.on('edit', function (e) {
-                    $error.hide();
+                    dialog.on('edit', function (e) {
+                        $error.hide();
 
-                    var url = $.trim($url.val()),
-                        description = $.trim($description.val()),
-                        deferred = $.Deferred();
+                        var url = $.trim($url.val()),
+                            description = $.trim($description.val()),
+                            deferred = $.Deferred();
 
-                    // No dot and url does not end with tumblr.com? Append it!
-                    if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
-                        url = url + '.tumblr.com';
-                    }
+                        // No dot and url does not end with tumblr.com? Append it!
+                        if (url.indexOf('.') === -1 && !url.match(/\.tumblr\.com$/)) {
+                            url = url + '.tumblr.com';
+                        }
 
-                    if (url.length === 0) {
-                        $error.text(gt('Please enter an blog-url.'));
-                        deferred.reject();
-                    } else if (description.length === 0) {
-                        $error.text(gt('Please enter a description.'));
-                        deferred.reject();
-                    } else {
-                        $.ajax({
-                            url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
-                            type: 'HEAD',
-                            dataType: 'jsonp',
-                            jsonp: false,
-                            jsonpCallback: 'testcallback',
-                            success: function (data) {
-                                if (data.meta && data.meta.status && data.meta.status === 200) {
-                                    deferred.resolve();
-                                } else {
+                        if (url.length === 0) {
+                            $error.text(gt('Please enter an blog-url.'));
+                            deferred.reject();
+                        } else if (description.length === 0) {
+                            $error.text(gt('Please enter a description.'));
+                            deferred.reject();
+                        } else {
+                            $.ajax({
+                                url: 'https://api.tumblr.com/v2/blog/' + url + '/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=&jsonp=testcallback',
+                                type: 'HEAD',
+                                dataType: 'jsonp',
+                                jsonp: false,
+                                jsonpCallback: 'testcallback',
+                                success: function (data) {
+                                    if (data.meta && data.meta.status && data.meta.status === 200) {
+                                        deferred.resolve();
+                                    } else {
+                                        $error.text(gt('Unknown error while checking tumblr-blog.'));
+                                        deferred.reject();
+                                    }
+                                },
+                                error: function () {
                                     $error.text(gt('Unknown error while checking tumblr-blog.'));
                                     deferred.reject();
                                 }
-                            },
-                            error: function () {
-                                $error.text(gt('Unknown error while checking tumblr-blog.'));
-                                deferred.reject();
-                            }
+                            });
+                        }
+
+                        deferred.done(function () {
+                            console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+
+                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+
+                            blogs = removeBlog(blogs, oldUrl);
+
+                            blogs.push({url: url, description: description});
+                            settings.set('blogs', blogs);
+                            settings.save();
+
+                            console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
+
+                            require(['plugins/portal/tumblr/register'], function (tumblr) {
+                                tumblr.reload();
+                                that.trigger('redraw');
+                                ox.trigger("refresh^");
+                                dialog.close();
+                            });
                         });
-                    }
 
-                    deferred.done(function () {
-                        console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
-
-                        ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
-
-                        blogs = removeBlog(blogs, oldUrl);
-
-                        blogs.push({url: url, description: description});
-                        settings.set('blogs', blogs);
-                        settings.save();
-
-                        console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-                        ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-
-                        require(['plugins/portal/tumblr/register'], function (tumblr) {
-                            tumblr.reload();
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                            dialog.close();
+                        deferred.fail(function () {
+                            $error.show();
+                            dialog.idle();
                         });
                     });
-
-                    deferred.fail(function () {
-                        $error.show();
-                        dialog.idle();
-                    });
-                });
+                }
             },
             onDelete: function (args) {
                 console.log("onDelete");
