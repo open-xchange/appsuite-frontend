@@ -165,17 +165,6 @@ define('io.ox/office/editor/view',
             toolPane.refresh();
         }
 
-        function searchUpdateHandler(hasMatches) {
-
-            var // the quick-search text field
-                searchField = appWindow.nodes.search,
-                // no matches for existing search text
-                noMatches = searchField.val().length && !hasMatches;
-
-            // update serach field background
-            searchField.css('background-color', noMatches ? '#fee' : '');
-        }
-
         /**
          * Handles keyboard events in the quick-search text field.
          */
