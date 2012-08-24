@@ -19,9 +19,10 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
+     'io.ox/office/tk/component/menubox',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, gt) {
 
     'use strict';
 
@@ -139,6 +140,13 @@ define('io.ox/office/editor/view',
 
             // create common controls present in all tool bars
             return toolPane.createToolBar(id, options)
+/*                .addMenu(new MenuBox(appWindow)
+                    .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
+                    .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
+                    .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
+                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
+                    { label: gt('File') })*/
+                .addSeparator()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .addSeparator();

@@ -14,9 +14,11 @@
 define('io.ox/office/tk/component/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
+     'io.ox/office/tk/dropdown/dropdown',
+     'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button'
-    ], function (Events, Utils, Label, Button) {
+    ], function (Events, Utils, DropDown, Group, Label, Button) {
 
     'use strict';
 
@@ -86,16 +88,29 @@ define('io.ox/office/tk/component/component',
         }
 
         /**
-         * Inserts the passed root node of a control group into this view
-         * component, either by calling the handler function passed to the
-         * constructor, or by appending the node to the children of the own
-         * root node.
+         * Inserts the passed control group into this view component, either by
+         * calling the handler function passed to the constructor, or by
+         * appending the root node of the group to the children of the own root
+         * node.
          */
-        function insertGroupNode(groupNode) {
+        function insertGroup(group, key) {
+
+            // remember the group object
+            groups.push(group);
+
+            // forward group events to listeners of this view component
+            if (_.isString(key)) {
+                (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
+                group.on('change cancel', function (event, value) {
+                    self.trigger(event.type, key, value);
+                });
+            }
+
+            // insert the group into this view component
             if (_.isFunction(insertGroupHandler)) {
-                insertGroupHandler.call(self, groupNode);
+                insertGroupHandler.call(self, group.getNode());
             } else {
-                node.append(groupNode);
+                node.append(group.getNode());
             }
         }
 
@@ -103,7 +118,7 @@ define('io.ox/office/tk/component/component',
          * Returns all visible and enabled group objects as array.
          */
         function getEnabledGroups() {
-            return _(groups).filter(function (group) { return group.isVisible() && group.isEnabled(); });
+            return _(groups).filter(function (group) { return group.isVisible() && group.isEnabled() && group.hasFocusableControls(); });
         }
 
         /**
@@ -235,7 +250,9 @@ define('io.ox/office/tk/component/component',
          * Adds separation space following the last inserted group.
          */
         this.addSeparator = function () {
-            insertGroupNode($('<div>').addClass('group separator'));
+            var group = new Group();
+            group.getNode().addClass('separator');
+            insertGroup(group);
             return this;
         };
 
@@ -251,27 +268,7 @@ define('io.ox/office/tk/component/component',
          *  The control group object to be inserted.
          */
         this.addGroup = function (key, group) {
-
-            // remember the group object
-            groups.push(group);
-            (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
-
-            // insert its root node into this view component
-            insertGroupNode(group.getNode());
-
-            // Trigger an 'init' event at the group when the container window
-            // becomes visible the first time. The 'deferredInit' object will
-            // be resolved on the first window 'show' event and will execute
-            // all done handlers attached here. If the window is already
-            // visible when calling this method, the deferred is resolved and
-            // will execute the new done handler immediately.
-            deferredInit.done(function () { group.trigger('init'); });
-
-            // forward group events to listeners of this view component
-            group.on('change cancel', function (event, value) {
-                self.trigger(event.type, key, value);
-            });
-
+            insertGroup(group, key);
             return this;
         };
 
@@ -310,6 +307,13 @@ define('io.ox/office/tk/component/component',
          */
         this.addButton = function (key, options) {
             return this.addGroup(key, new Button(options));
+        };
+
+        this.addMenu = function (component, options) {
+            var group = new Group(options);
+            DropDown.call(group, options);
+            insertGroup(group);
+            return this;
         };
 
         /**

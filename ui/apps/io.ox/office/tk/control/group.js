@@ -194,6 +194,13 @@ define('io.ox/office/tk/control/group',
         };
 
         /**
+         * Returns whether this group contains any focusable controls.
+         */
+        this.hasFocusableControls = function () {
+            return groupNode.find(Group.FOCUSABLE_SELECTOR).length > 0;
+        };
+
+        /**
          * Returns all controls from this group that need to be included into
          * keyboard focus navigation.
          */
