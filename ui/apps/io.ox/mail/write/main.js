@@ -638,27 +638,6 @@ define('io.ox/mail/write/main',
         };
 
         /**
-         * Proof read view
-         */
-        app.proofread = function () {
-            // create reader
-            var reader = $('<div>').addClass('abs io-ox-mail-proofread');
-            // load detail view
-            require(['io.ox/mail/view-detail'], function (view) {
-                // get data
-                var mail = app.getMail();
-                // add missing data
-                _.extend(mail.data, {
-                    folder_id: 'default0/INBOX',
-                    received_date: _.now()
-                });
-                // draw mail
-                reader.append(view.draw(mail.data))
-                    .appendTo('body');
-            });
-        };
-
-        /**
          * Get mail
          */
         app.getMail = function () {

@@ -373,7 +373,7 @@ define("io.ox/core/desktop",
 
             this.launch = function () {
 
-                var deferred;
+                var deferred = $.when();
 
                 // update hash
                 if (opt.name !== _.url.hash('app')) {
@@ -397,7 +397,6 @@ define("io.ox/core/desktop",
                 } else if (win) {
                     // toggle app window
                     win.show();
-                    deferred = $.when();
                     ox.trigger('application:resume', self);
                 }
 

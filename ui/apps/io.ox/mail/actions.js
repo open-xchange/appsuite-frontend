@@ -17,7 +17,8 @@ define('io.ox/mail/actions',
      'io.ox/mail/api',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
-     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
+     'io.ox/core/config',
+     'io.ox/core/notifications'], function (ext, links, api, util, gt, config, notifications) {
 
     'use strict';
 
@@ -27,13 +28,6 @@ define('io.ox/mail/actions',
 
 
     // actions
-
-    new Action('io.ox/mail/actions/reader', {
-        id: 'reader',
-        action: function (app) {
-            app.toggleLamp();
-        }
-    });
 
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
@@ -202,7 +196,11 @@ define('io.ox/mail/actions',
                         var selectedFolder = tree.selection.get();
                         if (selectedFolder.length === 1) {
                             // move action
-                            api.copy(mail, selectedFolder[0].id);
+                            api.copy(mail, selectedFolder[0].id)
+                                .done(function () {
+                                    notifications.yell('success', 'Mails have been copied');
+                                })
+                                .fail(notifications.yell);
                         }
                     }
                     tree.destroy();
@@ -320,10 +318,12 @@ define('io.ox/mail/actions',
         id: 'save',
         requires: 'some',
         multiple: function (list) {
-            api.saveAttachments(list).done(function (data) {
-                // TODO: add confirmation
-                console.log('Yep, saved!', data);
-            });
+            notifications.yell('info', 'Attachments will be saved!');
+            api.saveAttachments(list)
+                .done(function (data) {
+                    notifications.yell('success', 'Attachments have been saved!');
+                })
+                .fail(notifications.yell);
         }
     });
 
@@ -343,14 +343,6 @@ define('io.ox/mail/actions',
         label: gt('Compose new mail'),
         ref: 'io.ox/mail/actions/compose'
     }));
-
-    // TODO: reactivate or remove!
-//    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
-//        index: 200,
-//        id: 'reader',
-//        label: gt('Light!'),
-//        ref: 'io.ox/mail/actions/reader'
-//    }));
 
     // inline links
 

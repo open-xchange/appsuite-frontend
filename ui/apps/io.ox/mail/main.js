@@ -403,33 +403,8 @@ define("io.ox/mail/main",
 
         // go!
         commons.addFolderSupport(app, grid, 'mail')
-            .pipe(commons.showWindow(win, grid))
-            .done(function () {
-                if (_.url.hash('lamp') === 'true') {
-                    app.toggleLamp();
-                }
-            });
+            .pipe(commons.showWindow(win, grid));
     });
-
-    app.toggleLamp = (function () {
-        var on = false,
-            init = _.once(function () {
-                var nodes = app.getWindow().nodes;
-                nodes.outer.append(
-                    $('<div>').addClass('spotlight-icon').css({
-                        backgroundImage: 'url(' + ox.base + '/apps/themes/default/glyphicons_064_lightbulb.png)'
-                    })
-                    .on('click', app.toggleLamp)
-                );
-            });
-        return function () {
-            init();
-            var nodes = app.getWindow().nodes;
-            nodes.outer[on ? 'removeClass' : 'addClass']('spotlight');
-            on = !on;
-            _.url.hash('lamp', on ? 'true' : null);
-        };
-    }());
 
     return {
         getApp: app.getInstance
