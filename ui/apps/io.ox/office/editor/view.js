@@ -182,6 +182,39 @@ define('io.ox/office/editor/view',
                 oldSearchQuery = searchQuery;
             }
         }
+        
+        /**
+         * Shows a modal dialog to rename the current document
+         */
+        function renameDocumentHandler() {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                new dialogs.ModalDialog({
+                    width: 400,
+                    easyOut: true
+                })
+                .header(
+                    $('<h4>').text('Rename Document')
+                )
+                .append(
+                    $('<input>', { placeholder: 'Document name', value: '' })
+                    .addClass('nice-input')
+                    .attr('data-property', 'docname')
+                    .val(appWindow.getTitle())
+                )
+                .addButton('cancel', 'Cancel')
+                .addPrimaryButton('rename', 'Rename')
+                .show(function () {
+                    this.find('input').focus();
+                })
+                .done(function (action, data, node) {
+                    var val = $.trim($(node).find('[data-property="docname"]').val());
+
+                    if (action === 'rename') {
+                        appWindow.setTitle(val);
+                    }
+                });
+            });
+        }
 
         // methods ------------------------------------------------------------
 
@@ -277,6 +310,18 @@ define('io.ox/office/editor/view',
             .off('keydown search change')
             .on('input keydown keypress keyup focus', searchKeyHandler)
             .data('tooltip', null); // remove old tooltip
+        
+        appWindow.nodes.title
+            .css("border", "thin solid transparent")
+            .mouseover(function () {
+                $(this).css("border-color", "LightGrey");
+            })
+            .mouseout(function () {
+                $(this).css("border-color", "transparent");
+            })
+            .click(function () {
+                renameDocumentHandler();
+            });
 
         // set the quick-search tooltip
         Utils.setControlTooltip(appWindow.nodes.search, gt('Quick Search'), 'bottom');

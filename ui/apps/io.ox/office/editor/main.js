@@ -67,37 +67,6 @@ define('io.ox/office/editor/main',
         return data.operations;
     }
 
-    // renameFile() ================================================
-
-    function fnRenameDocument(win) {
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({
-                width: 400,
-                easyOut: true
-            })
-            .header(
-                $('<h4>').text('Rename Document')
-            )
-            .append(
-                $('<input>', { placeholder: 'Document name', value: '' })
-                .addClass('nice-input')
-                .attr('data-property', 'docname')
-            )
-            .addButton('cancel', 'Cancel')
-            .addPrimaryButton('rename', 'Rename')
-            .show(function () {
-                this.find('input').focus();
-            })
-            .done(function (action, data, node) {
-                var val = $.trim($(node).find('[data-property="docname"]').val());
-
-                if (action === 'rename') {
-                    win.setTitle(val);
-                }
-            });
-        });
-    }
-
     // initializeApplication() ================================================
 
     function initializeApplication(app, options) {
@@ -275,19 +244,6 @@ define('io.ox/office/editor/main',
 
             // register window event handlers
             Utils.registerWindowResizeHandler(win, windowResizeHandler);
-            win.on('show', function () {
-                controller.done();
-                $(".window-title:visible")
-                    .mouseover(function () {
-                        $(this).css("border", "thin solid LightGrey");
-                    })
-                    .mouseout(function () {
-                        $(this).css("border", "none");
-                    })
-                    .click(function () {
-                        fnRenameDocument(win);
-                    });
-            });
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
@@ -638,7 +594,7 @@ define('io.ox/office/editor/main',
                 }, timeout || 1000);
             }
         }
-
+        
         // methods ------------------------------------------------------------
 
         /**
