@@ -21,8 +21,9 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/menubox',
      'io.ox/office/editor/format/lineheight',
+     'io.ox/files/api',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, FilesAPI, gt) {
 
     'use strict';
 
@@ -198,7 +199,7 @@ define('io.ox/office/editor/view',
         }
 
         /**
-         * Shows a modal dialog to rename the current document
+         * Shows a modal dialog to get the new filename
          */
         function renameDocumentHandler() {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
@@ -221,10 +222,8 @@ define('io.ox/office/editor/view',
                     this.find('input').focus();
                 })
                 .done(function (action, data, node) {
-                    var val = $.trim($(node).find('[data-property="docname"]').val());
-
                     if (action === 'rename') {
-                        controller.change('action/rename', val);
+                        renameDocument($.trim($(node).find('[data-property="docname"]').val()));
                     }
 
                     // call controller.done() again to set focus to editor
@@ -233,6 +232,55 @@ define('io.ox/office/editor/view',
                     window.setTimeout(function () { controller.done(); }, 0);
                 });
             });
+        }
+
+        /**
+         * Do the actual renaming via backend
+         */
+        function renameDocument(newFilename) {
+            var // the file descriptor of the file loaded by the application
+                app = controller.getApp(),
+                file = app.getFileDescriptor();
+
+            // calling the backend with the changed filename
+            // in order to rename the document
+            if (newFilename && newFilename.length && newFilename !== file.filename) {
+                $.ajax({
+                    type: 'GET',
+                    url: ox.apiRoot +
+                    '/oxodocumentfilter?action=renamedocument' +
+                    '&id=' + file.id +
+                    '&folder_id=' + file.folder_id +
+                    '&filename=' + newFilename +
+                    '&session=' + ox.session +
+                    '&uid=' + app.getUniqueId() +
+                    '&version=' + file.version,
+                    dataType: 'json'
+                })
+                .pipe(function (response) {
+                    // TODO clear cachesupdate UI
+                    if (response && response.data) {
+                        return FilesAPI.caches.all.grepRemove(response.data.folder_id + '\t')
+                            .pipe(function () {
+                                FilesAPI.trigger("create.file refresh.all");
+                                return response;
+                            });
+                    } else {
+                        return response;
+                    }
+                })
+                .done(function (response) {
+                    if (response && response.data) {
+                        controller.change('action/rename', response.data.filename);
+
+                        // TODO clear cachesupdate UI
+                        FilesAPI.caches.get.clear();
+                        FilesAPI.caches.versions.clear();
+                        FilesAPI.trigger('refresh.all');
+                        FilesAPI.trigger('update refresh.all', { id: response.data.id, folder: response.data.folder_id });
+                    }
+                });
+            }
         }
 
         // methods ------------------------------------------------------------

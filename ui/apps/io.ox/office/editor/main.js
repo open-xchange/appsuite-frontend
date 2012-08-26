@@ -22,7 +22,7 @@ define('io.ox/office/editor/main',
      'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (filesApi, Utils, AppHelper, Editor, View, Controller, gt) {
+    ], function (FilesAPI, Utils, AppHelper, Editor, View, Controller, gt) {
 
     'use strict';
 
@@ -406,9 +406,9 @@ define('io.ox/office/editor/main',
                     dataType: 'json'
                 })
                 .done(function (response) {
-                    filesApi.caches.get.clear(); // TODO
-                    filesApi.caches.versions.clear();
-                    filesApi.trigger('refresh.all');
+                    FilesAPI.caches.get.clear(); // TODO
+                    FilesAPI.caches.versions.clear();
+                    FilesAPI.trigger('refresh.all');
                     def.resolve();
                 })
                 .fail(function (response) {
