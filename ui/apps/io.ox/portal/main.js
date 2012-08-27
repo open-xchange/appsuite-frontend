@@ -95,14 +95,17 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         function drawContent(extension, e) {
+            var sidepopup;
+            var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                sidepopup = popup.busy();
+            });
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().trigger('onPause').detach();
+                
                 $(node).trigger('onResume');
-
-                var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
-                    popup.append(node);
-                    $(node).trigger('onAppended');
-                });
+                sidepopup.idle();
+                sidepopup.append(node);
+                $(node).trigger('onAppended');
 
                 dialog.on('close', function () {
                     $(node).trigger('onPause');
@@ -214,7 +217,11 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     $node.addClass(extension.tileClass);
                 }
 
-                $node.on('click', makeClickHandler(extension));
+                if (extension.requiresSetUp()) {
+                    $node.on('click', makeCreationDialog(extension));
+                } else {
+                    $node.on('click', makeClickHandler(extension));
+                }
 
                 if (!extension.loadTile) {
                     extension.loadTile = function () {
