@@ -185,20 +185,20 @@ define("io.ox/contacts/main",
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);
-        
+
         api.on("edit", function (evt, updated) {
             if (updated.folder === app.currentContact.folder_id && updated.id === app.currentContact.id) {
                 // Reload
                 showContact(app.currentContact);
             }
         });
-        
+
         app.getGrid = function () {
             return grid;
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts', '6')
+        commons.addFolderSupport(app, grid, 'contacts')
             .done(commons.showWindow(win, grid));
     });
 
