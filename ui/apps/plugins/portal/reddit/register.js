@@ -189,11 +189,9 @@ define('plugins/portal/reddit/register',
                 }
             },
             getImagesFromEntry: function (entry, imageCollection) {
-                if (entry.photos) {
-                    _(entry.photos).each(function (p) {
-                        var photo = p.original_size;
-                        imageCollection.push(photo.url);
-                    });
+                var image = extractImage(entry.data);
+                if (image) {
+                    imageCollection.push(image);
                 }
             }
         });
