@@ -109,6 +109,7 @@
     
     .day {
         border-left: 1px solid #ccc;
+        height: 100%;
     }
     
     .day.today .timeslot.in { 

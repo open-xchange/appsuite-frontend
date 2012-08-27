@@ -35,7 +35,6 @@ define('io.ox/calendar/week/view',
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
         workEnd:        18,     // full hour for end position of worktime marker
-        startDay:       1,      // weekday starting with 0 sunday
         slots:          24,     // amount of shown timeslots
         
         pane:           $(),    // main scroll pane
@@ -82,8 +81,11 @@ define('io.ox/calendar/week/view',
 
         render: function () {
             // create scaffold
-            var days = date.locale.days;
-            days = days.slice(util.getFirstWeekDay()).concat(days.slice(0, util.getFirstWeekDay())).slice(0, this.columns);
+            var days = [];
+            _.each(this.week, function (e) {
+                var tmpDate = new date.Local(e.timestamp);
+                days.push(tmpDate.format(date.DAYOFWEEK_DATE));
+            });
 
             var scaffold = tmpl.render('scaffold', {days: days, width: 100 / this.columns + '%'});
             this.pane = scaffold.find('.scrollpane');
