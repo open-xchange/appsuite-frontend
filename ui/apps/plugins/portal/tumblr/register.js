@@ -15,7 +15,8 @@ define('plugins/portal/tumblr/register',
     ['io.ox/portal/mediaplugin',
      'io.ox/mail/util',
      'settings!plugins/portal/tumblr',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
+     'io.ox/core/date',
+     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, date, gt) {
 
     'use strict';
 
@@ -105,7 +106,7 @@ define('plugins/portal/tumblr/register',
                     $node.append($("<div>").addClass("mediaplugin-title").text(title));
                 }
 
-                $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? mailUtil.getDateTime(entry.timestamp * 1000) : ""));
+                $node.append($("<div>").addClass("mediaplugin-content").html(entry.timestamp ? new date.Local(entry.timestamp * 1000).format(date.DATE_TIME) : ""));
 
                 if (thumbUrl !== "") {
                     var $img = $('<img/>', {'data-original': thumbUrl, height: thumbHeight, width: thumbWidth});
