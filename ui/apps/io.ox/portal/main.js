@@ -95,14 +95,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         function drawContent(extension, e) {
+            var sidepopup;
+            new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                sidepopup = popup.busy();
+            });
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().trigger('onPause').detach();
                 $(node).trigger('onResume');
-
-                new dialogs.SidePopup({modal: true}).show(e, function (popup) {
-                    popup.append(node);
-                    $(node).trigger('onAppended');
-                });
+                sidepopup.idle();
+                sidepopup.append(node);
+                $(node).trigger('onAppended');
 
                 if (extension.loadMoreResults) {
                     var $o = $('div.io-ox-sidepopup-pane');
