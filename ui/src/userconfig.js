@@ -7,7 +7,7 @@ define(function () {
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/conversations",
             "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker",
-            "io.ox/demo"
+            "io.ox/demo", "io.ox/tasks"
         ],
 
         favorites: [
@@ -67,6 +67,14 @@ define(function () {
                 icon: "calendar.png",
                 category: "Productivity",
                 settings: true
+            },
+            
+            "io.ox/tasks": {
+                title: "Tasks",
+                company: "Open-Xchange",
+                icon: "default.png",
+                category: "Productivity",
+                settings: false
             },
 
             "io.ox/files": {

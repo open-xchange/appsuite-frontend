@@ -13,9 +13,9 @@
 
 define('plugins/portal/reddit/register',
     ['io.ox/portal/mediaplugin',
-     'io.ox/mail/util',
      'settings!plugins/portal/reddit',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
+     'io.ox/core/date',
+     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, settings, date, gt) {
 
     'use strict';
 
@@ -111,8 +111,7 @@ define('plugins/portal/reddit/register',
                     $node.append($("<div>").addClass("mediaplugin-title").text(title));
                 }
 
-                // TODO timezone
-                $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.created_utc ? mailUtil.getDateTime(entry.created_utc * 1000) : ""));
+                $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ""));
 
                 lastShowedPreview = entry.name;
 

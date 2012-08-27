@@ -53,25 +53,20 @@ define('io.ox/calendar/week/view',
             this.columns = options.columns;
             this.week = util.getWeekScaffold(options.startDate);
             this.collection.on('reset', this.renderAppointments, this);
-            
-//            require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-detail"])
-//                .done(function (dialogs, view) {
-//                    new dialogs.SidePopup({ modal: true })
-//                        .delegate(this.$el, ".appointment", function (popup) {
-//                            var data = $(this).data("appointment");
-//                            popup.append(view.draw(data));
-//                            data = null;
-//                        });
-//                });
         },
 
         onClickAppointment: function (e) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
             var target = $(e.currentTarget),
                 cid = target.attr('data-cid'),
                 obj = _.cid(target.attr('data-cid'));
-            this.$el.find('.appointment').addClass('opac');
-            this.$el.find('.appointment.current').removeClass('current');
-            $('[data-cid="' + cid + '"]').removeClass('opac').addClass('current');
+            
+            this.$el.find('.appointment')
+                .removeClass('current opac')
+                .not($('[data-cid="' + cid + '"]'))
+                .addClass('opac');
+            $('[data-cid="' + cid + '"]').addClass('current');
             this.trigger('showAppoinment', e, obj);
         },
 
@@ -212,7 +207,7 @@ define('io.ox/calendar/week/view',
                         height: 20,
                         width: (100 / this.columns * Math.min(fulltimeWidth, this.columns - fulltimePos)) + '%',
                         left: (100 / this.columns) * fulltimePos + '%',
-                        top: row * this.fulltimeHeight
+                        top: row * (this.fulltimeHeight - 1) + 1
                     });
                     
                     this.fulltimePane.append(app);
@@ -260,7 +255,7 @@ define('io.ox/calendar/week/view',
                 }
                 
                 // calculate full-time appointment container height
-                var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * this.fulltimeHeight;
+                var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight - 1) + 1;
                 this.pane.css({ top: ftHeight + 1 + 'px' });
                 this.fulltimeCon.height(ftHeight);
                 

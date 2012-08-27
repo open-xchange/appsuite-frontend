@@ -14,8 +14,10 @@ define('io.ox/calendar/week/perspective',
         ['io.ox/calendar/week/view',
          'io.ox/calendar/api',
          'io.ox/calendar/util',
-         'io.ox/core/http'
-         ], function (View, api, util, http) {
+         'io.ox/core/http',
+         'io.ox/core/tk/dialogs',
+         'io.ox/calendar/view-detail'
+         ], function (View, api, util, http, dialogs, detailView) {
 
     'use strict';
 
@@ -23,21 +25,19 @@ define('io.ox/calendar/week/perspective',
     
     _.extend(perspective, {
         
-        collection: {},
-        days: 7,
-        startDate: null,
+        collection:     {},
+        days:           7,
+        startDate:      null,
+        dialog:         $(),
         
         showAppointment: function (e, obj) {
             // open appointment details
+            var that = this;
             api.get(obj).done(function (data) {
-                require(["io.ox/core/tk/dialogs", "io.ox/calendar/view-detail"])
-                .done(function (dialogs, detailView) {
-                    new dialogs.SidePopup().show(e, function (popup) {
+                that.dialog
+                    .show(e, function (popup) {
                         popup.append(detailView.draw(data));
-                    }).on('close', function () {
-                        console.log('close');
                     });
-                });
             });
         },
         
@@ -59,7 +59,7 @@ define('io.ox/calendar/week/perspective',
         
         updateData: function () {
             // FIXME: replace 'startDate' with calendar logic
-            this.startDate = util.getWeekStart();
+            this.startDate = util.getWeekStart() - util.WEEK;
             
             this.getAppointments(this.startDate, this.startDate + util.DAY * this.days);
         },
@@ -83,6 +83,12 @@ define('io.ox/calendar/week/perspective',
         render: function (app) {
             this.main.addClass('week-view').empty();
             
+            this.dialog = new dialogs.SidePopup()
+                .on('close', function () {
+                    console.log('close');
+                    $('.appointment', this.main).removeClass('opac current');
+                });
+
             // watch for api refresh
             api.on('refresh.all', $.proxy(this.refresh, this));
 

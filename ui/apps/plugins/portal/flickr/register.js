@@ -15,7 +15,8 @@ define('plugins/portal/flickr/register',
     ['io.ox/portal/mediaplugin',
      'io.ox/mail/util',
      'settings!plugins/portal/flickr',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, gt) {
+     'io.ox/core/date',
+     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, date, gt) {
 
     'use strict';
     var reload = function () {
@@ -24,7 +25,7 @@ define('plugins/portal/flickr/register',
         // order of elements is the crucial factor of presenting the image in the sidepopups
         var imagesizes = ['url_l', 'url_c', 'url_z', 'url_o', 'url_n', 'url_m', 'url_q', 'url_s', 'url_sq', 'url_t'];
 
-        var baseUrl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=last_update,' + imagesizes.join(',');
+        var baseUrl = 'https://www.flickr.com/services/rest/?api_key=7fcde3ae5ad6ecf2dfc1d3128f4ead81&format=json&extras=date_upload,' + imagesizes.join(',');
 
         var apiUrl = {
                 'flickr.photos.search': baseUrl + '&method=flickr.photos.search&text=',
@@ -81,7 +82,7 @@ define('plugins/portal/flickr/register',
                     var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
                     $node.append($title);
                 }
-                $node.append($("<div>").addClass("mediaplugin-content").html(entry.lastupdate ? mailUtil.getDateTime(entry.lastupdate * 1000) : ""));
+                $node.append($("<div>").addClass("mediaplugin-content").html(entry.dateupload ? new date.Local(entry.dateupload * 1000).format(date.DATE_TIME) : ""));
 
                 if (big) {
                     var foundImage = _.find(imagesizes, function (value) {
