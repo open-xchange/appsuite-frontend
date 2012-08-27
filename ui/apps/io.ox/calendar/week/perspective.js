@@ -66,6 +66,7 @@ define('io.ox/calendar/week/perspective',
         
         refresh: function () {
             this.collection = new Backbone.Collection([]);
+            this.updateData();
             var weekView = new View({
                 collection: this.collection,
                 columns: this.days,
@@ -77,7 +78,6 @@ define('io.ox/calendar/week/perspective',
                 .append(weekView.render().el)
                 .find('.scrollpane')
                 .scrollTop(weekView.getScrollPos());
-            this.updateData();
         },
         
         render: function (app) {

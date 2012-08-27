@@ -228,23 +228,23 @@
         background-color: @appointment-private;
     }
 
-    .appointment.reserved:hover {
+    .appointment.reserved.hover {
         background-color: darken(@appointment-reserved, @appointment-hover-pct);
     }
     
-    .appointment.temporary:hover {
+    .appointment.temporary.hover {
         background-color: darken(@appointment-temporary, @appointment-hover-pct);
     }
     
-    .appointment.absent:hover {
+    .appointment.absent.hover {
         background-color: darken(@appointment-absent, @appointment-hover-pct);
     }
     
-    .appointment.free:hover {
+    .appointment.free.hover {
         background-color: darken(@appointment-free, @appointment-hover-pct);
     }
     
-    .appointment.private:hover {
+    .appointment.private.hover {
         background-color: darken(@appointment-private, @appointment-hover-pct);
     }
     
@@ -279,7 +279,7 @@
         text-align: right;
     }
     .day.out .appointment { background-color: @appointment-out; }
-    .day.out .appointment:hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
+    .day.out .appointment.hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
     
 */
 }

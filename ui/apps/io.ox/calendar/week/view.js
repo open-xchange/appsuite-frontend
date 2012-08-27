@@ -46,7 +46,9 @@ define('io.ox/calendar/week/view',
         tlInterval:     {},     // timeline interval
         
         events: {
-            'click .appointment': 'onClickAppointment'
+            'click .appointment': 'onClickAppointment',
+            'mouseenter .appointment': 'onEnterAppointment',
+            'mouseleave .appointment': 'onLeaveAppointment'
         },
 
         initialize: function (options) {
@@ -68,6 +70,14 @@ define('io.ox/calendar/week/view',
                 .addClass('opac');
             $('[data-cid="' + cid + '"]').addClass('current');
             this.trigger('showAppoinment', e, obj);
+        },
+
+        onEnterAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
+        },
+        
+        onLeaveAppointment: function (e) {
+            $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
         },
 
         render: function () {
