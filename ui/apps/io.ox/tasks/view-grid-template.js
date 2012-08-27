@@ -13,8 +13,7 @@
 
 define('io.ox/tasks/view-grid-template',
     ['io.ox/core/tk/vgrid',
-     'io.ox/core/strings',
-     'less!io.ox/tasks/style.css'], function (VGrid, strings) {
+     'less!io.ox/tasks/style.css'], function (VGrid) {
 
     'use strict';
     
@@ -41,14 +40,14 @@ define('io.ox/tasks/view-grid-template',
                     //sliding animation
                     this.toggle(function ()
                             {
-                        title.parent().animate({height: "+=30"}, "slow");
-                        note.parent().animate({height: "+=100"}, "slow");
+                        title.parent().animate({height: "+=50"}, "slow");
+                        note.parent().animate({height: "+=80"}, "slow");
                         title.css("white-space", "pre-wrap");
                         note.css("white-space", "pre-wrap");
                     }, function ()
                             {
-                        title.parent().animate({height: "-=30"}, "slow");
-                        note.parent().animate({height: "-=100"}, "slow");
+                        title.parent().animate({height: "-=50"}, "slow");
+                        note.parent().animate({height: "-=80"}, "slow");
                         note.css("white-space", "nowrap");
                         title.css("white-space", "nowrap");
                     });
@@ -64,7 +63,7 @@ define('io.ox/tasks/view-grid-template',
                     }
                     
                     fields.status.text($.trim(data.status));
-                    fields.title.text(strings.shorten($.trim(data.title), 70));
+                    fields.title.text($.trim(data.title));
                     fields.end_date.text(data.end_date);
                     fields.note.text($.trim(data.note));
                     this.attr('data-index', index);
