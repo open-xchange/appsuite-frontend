@@ -2598,10 +2598,9 @@ define('io.ox/office/editor/editor',
 
             if (attributes) {
 
-                // AAAA
-                _(attributes).each(function (element, i) {
-                    window.console.log("Attribute: " + i + " : " + element);
-                });
+                // _(attributes).each(function (element, i) {
+                //     window.console.log("Attribute: " + i + " : " + element);
+                // });
 
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
@@ -2616,6 +2615,33 @@ define('io.ox/office/editor/editor',
                 if (attributes.height) {
                     attributes.height /= 100;  // converting to mm
                     attributes.height += 'mm';
+                }
+
+                if ((attributes.marginT) || (attributes.marginR) || (attributes.marginB) || (attributes.marginL)) {
+
+                    var margintop = '0mm',
+                        marginright = '0mm',
+                        marginbottom = '0mm',
+                        marginleft = '0mm';
+
+                    if (attributes.marginT) {
+                        margintop = attributes.marginT / 100;  // converting to mm
+                        margintop += 'mm';
+                    }
+                    if (attributes.marginR) {
+                        marginright = attributes.marginR / 100;  // converting to mm
+                        marginright += 'mm';
+                    }
+                    if (attributes.marginB) {
+                        marginbottom = attributes.marginB / 100;  // converting to mm
+                        marginbottom += 'mm';
+                    }
+                    if (attributes.marginL) {
+                        marginleft = attributes.marginL / 100;  // converting to mm
+                        marginleft += 'mm';
+                    }
+
+                    attributes.margin = margintop + ' ' + marginright + ' ' + marginbottom + ' ' + marginleft;
                 }
             }
 
