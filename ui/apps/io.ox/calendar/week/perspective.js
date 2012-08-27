@@ -59,13 +59,14 @@ define('io.ox/calendar/week/perspective',
         
         updateData: function () {
             // FIXME: replace 'startDate' with calendar logic
-            this.startDate = util.getWeekStart() - util.WEEK;
+            this.startDate = util.getWeekStart();
             
             this.getAppointments(this.startDate, this.startDate + util.DAY * this.days);
         },
         
         refresh: function () {
             this.collection = new Backbone.Collection([]);
+            this.updateData();
             var weekView = new View({
                 collection: this.collection,
                 columns: this.days,
@@ -77,7 +78,6 @@ define('io.ox/calendar/week/perspective',
                 .append(weekView.render().el)
                 .find('.scrollpane')
                 .scrollTop(weekView.getScrollPos());
-            this.updateData();
         },
         
         render: function (app) {

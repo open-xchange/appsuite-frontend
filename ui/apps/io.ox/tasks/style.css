@@ -55,7 +55,7 @@
 .vgrid-cell.tasks .title{
     color: black;
     font-weight: 500;
-    width: 75%;
+    width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note{

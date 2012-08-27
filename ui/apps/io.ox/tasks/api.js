@@ -14,8 +14,6 @@ define("io.ox/tasks/api", ["io.ox/core/http"], function (http) {
     
     "use strict";
     
-    var all_cache;
-    
     var api = { CreateTask: function (task)
             {
                 http.PUT({
@@ -34,10 +32,7 @@ define("io.ox/tasks/api", ["io.ox/core/http"], function (http) {
                             sort: "202",
                             order: "asc"
                         }
-                    })
-                        .done(function (data) {
-                            all_cache = data;
-                        });
+                    });
 
                 }
     };

@@ -20,7 +20,8 @@ define('plugins/portal/twitter/register',
      'io.ox/portal/pulltorefresh',
      'io.ox/keychain/api',
      'gettext!plugins/portal/twitter',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt) {
+     'io.ox/core/notifications',
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt, notifications) {
 
     'use strict';
 
@@ -145,7 +146,6 @@ define('plugins/portal/twitter/register',
 
         $.when(loadTweets(0, 0, newestId), _.wait(500))
             .done(function (j) {
-                console.log("New Tweets: " + j.length);
                 j.reverse();
                 _(j).each(function (tweet) {
                     showTweet(tweet).prependTo($tweets);
@@ -158,6 +158,7 @@ define('plugins/portal/twitter/register',
             })
             .fail(function () {
                 $tweets.removeClass('pulltorefresh-refreshing');
+                notifications.yell('error', gt('Could not load new tweets.'));
             });
     };
 

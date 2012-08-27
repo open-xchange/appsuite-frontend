@@ -96,15 +96,20 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
         function drawContent(extension, e) {
             var sidepopup;
-            new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+            var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
                 sidepopup = popup.busy();
             });
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().trigger('onPause').detach();
+                
                 $(node).trigger('onResume');
                 sidepopup.idle();
                 sidepopup.append(node);
                 $(node).trigger('onAppended');
+
+                dialog.on('close', function () {
+                    $(node).trigger('onPause');
+                });
 
                 if (extension.loadMoreResults) {
                     var $o = $('div.io-ox-sidepopup-pane');
@@ -141,7 +146,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 return drawContent(extension, event);
             };
         }
-        
+
         function makeCreationDialog(extension) {
             return function () {
                 return keychain.createInteractively(extension.id);
@@ -289,7 +294,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                             $node.idle().remove();
                         });
                 }
-            
+
                 return extension.invoke('loadTile')
                 .pipe(function (a1, a2) {
                     return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
