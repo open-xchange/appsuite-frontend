@@ -106,12 +106,12 @@ define('plugins/portal/reddit/register',
                 thumbUrl = extractImage(entry);
 
                 if (!thumbUrl && !title) {
-                    $node.append($("<div>").addClass("mediaplugin-title").html(gt("No title.")));
+                    $node.append($("<div>").addClass("mediaplugin-title").text(gt("No title.")));
                 } else if (title) {
                     $node.append($("<div>").addClass("mediaplugin-title").text(title));
                 }
 
-                $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").html(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ""));
+                $node.append($("<div>").addClass("mediaplugin-content mediaplugin-textbackground").text(entry.created_utc ? new date.Local(entry.created_utc * 1000).format(date.DATE_TIME) : ""));
 
                 lastShowedPreview = entry.name;
 

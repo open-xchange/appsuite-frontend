@@ -32,6 +32,21 @@ define('io.ox/portal/mediaplugin',
             options = $.extend(options, o);
         };
 
+        var escape = function (html) {
+            var newHtml = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            newHtml = html.replace(/<([^>]+)>/g, function (match, contents) {
+                var allowed = ['p', '/p', 'ul', '/ul', 'li', '/li', 'strong', '/strong', 'br', 'br/', 'blockquote', '/blockquote', 'span', '/span', '/a'];
+
+                if (_.include(allowed, contents) || contents.substring(0, 2) === 'a ') {
+                    return '<' + contents + '>';
+                } else {
+                    return '&lt;' + contents + '&gt;';
+                }
+            });
+            console.log(newHtml);
+            return newHtml;
+        };
+
         var addFeed = function (data) {
             feeds.push(data);
         };
@@ -385,7 +400,8 @@ define('io.ox/portal/mediaplugin',
             init: init,
             resizeImage: resizeImage,
             setOptions: setOptions,
-            getOption: getOption
+            getOption: getOption,
+            escape: escape
         };
     };
 
