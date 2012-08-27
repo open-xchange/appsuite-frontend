@@ -738,7 +738,7 @@ define('io.ox/office/editor/editor',
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
-                this.implInsertImage(imgurl, operation.position, operation.attrs);
+                this.implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2598,9 +2598,10 @@ define('io.ox/office/editor/editor',
 
             if (attributes) {
 
-                // _(attributes).each(function (element, i) {
-                //     window.console.log("Attribute: " + i + " : " + element);
-                // });
+                // AAAA
+                _(attributes).each(function (element, i) {
+                    window.console.log("Attribute: " + i + " : " + element);
+                });
 
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
