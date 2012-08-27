@@ -17,8 +17,11 @@
             <div class="fulltime"></div>
         </div>
         <div class="scrollpane"></div>
-        <div class="footer">
-            {{~it.days :value:index}}<div class="weekday" style="width:{{=it.width}};">{{=value}}</div>{{~}}<div class="weekday">&nbsp;</div>
+        <div class="footer-container">
+            <div class="footer-lable"></div>
+            <div class="footer">
+                {{~it.days :value:index}}<div class="weekday" style="width:{{=it.width}};">{{=value}}</div>{{~}}<div class="weekday">&nbsp;</div>
+            </div>
         </div>
     </div>
 </part>

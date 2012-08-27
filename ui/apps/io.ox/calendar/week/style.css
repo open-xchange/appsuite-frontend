@@ -27,6 +27,7 @@
     @appointment-hover-pct: 15%; 
     @appointment-unconfirmed-alpha: 0.4 ;
     @weekview-time-with: 42px;
+    @weekview-footer-height: 30px;
     
     .week {
         width: 100%;
@@ -66,17 +67,34 @@
     .scrollpane {
         overflow: auto;
         position: absolute;
-        top: 10%; right: 0; bottom: 30px; left: 0;
+        top: 10%; 
+        right: 0; 
+        bottom: @weekview-footer-height; 
+        left: 0;
     }
 
-    .footer {
-        height: 30px; 
-        line-height: 30px;
+    .footer-container {
         position: absolute;
-        right: 0; 
-        bottom: 0; 
-        left: @weekview-time-with;
+        height: @weekview-footer-height;
         border-top: 1px solid #ccc;
+        right: 0;
+        left: 0;
+        bottom: 0; 
+        width: 100%;
+    }
+    
+    .footer-lable {
+        height: 100%;
+        width: @weekview-time-with;
+        position: absolute;
+    }
+    
+    .footer {
+        position: absolute;
+        height: @weekview-footer-height; 
+        line-height: @weekview-footer-height;
+        right: 0;
+        left: @weekview-time-with;
         white-space: nowrap;
         background-color: white;
         font-family: @font-light;
