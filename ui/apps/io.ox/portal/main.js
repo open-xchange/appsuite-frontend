@@ -212,7 +212,11 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     $node.addClass(extension.tileClass);
                 }
 
-                $node.on('click', makeClickHandler(extension));
+                if (extension.requiresSetUp()) {
+                    $node.on('click', makeCreationDialog(extension));
+                } else {
+                    $node.on('click', makeClickHandler(extension));
+                }
 
                 if (!extension.loadTile) {
                     extension.loadTile = function () {
