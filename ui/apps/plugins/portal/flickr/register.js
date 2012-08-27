@@ -78,11 +78,10 @@ define('plugins/portal/flickr/register',
                 var big = mp.getOption('bigPreview');
 
                 if (entry.title) {
-                    // TODO xss
-                    var $title = $("<div>").addClass("mediaplugin-title").html(entry.title);
+                    var $title = $("<div>").addClass("mediaplugin-title").text(entry.title);
                     $node.append($title);
                 }
-                $node.append($("<div>").addClass("mediaplugin-content").html(entry.dateupload ? new date.Local(entry.dateupload * 1000).format(date.DATE_TIME) : ""));
+                $node.append($("<div>").addClass("mediaplugin-content").text(entry.dateupload ? new date.Local(entry.dateupload * 1000).format(date.DATE_TIME) : ""));
 
                 if (big) {
                     var foundImage = _.find(imagesizes, function (value) {
@@ -142,8 +141,7 @@ define('plugins/portal/flickr/register',
                 }
 
                 if (entry.title) {
-                    // TODO xss
-                    $popup.append($("<div>").addClass("flickr-title").html(entry.title));
+                    $popup.append($("<div>").addClass("flickr-title").text(entry.title));
                 }
             },
             getImagesFromEntry: function (entry, imageCollection) {

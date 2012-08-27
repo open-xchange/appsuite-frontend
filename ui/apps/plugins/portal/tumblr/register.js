@@ -142,15 +142,13 @@ define('plugins/portal/tumblr/register',
                 $node.append($title);
 
                 if (entry.description) {
-                    // TODO xss
-                    var $description = $("<div/>").html(entry.description);
+                    var $description = $("<div/>").html(mp.escape(entry.description));
                     $node.append($description);
                     maxHeight -= $description.height();
                 }
 
                 if (entry.body) {
-                    // TODO xss
-                    var $body = $("<div/>").html(entry.body);
+                    var $body = $("<div/>").html(mp.escape(entry.body));
                     $node.append($body);
                     maxHeight -= $body.height();
                 }
@@ -181,8 +179,7 @@ define('plugins/portal/tumblr/register',
                 }
 
                 if (entry.caption) {
-                    // TODO xss
-                    $node.append(entry.caption);
+                    $node.append(mp.escape(entry.caption));
                 }
 
                 if ($busyIndicator && !willDisableBusyIndicator) {

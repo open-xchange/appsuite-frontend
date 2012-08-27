@@ -22,14 +22,29 @@ define('io.ox/portal/mediaplugin',
     'use strict';
 
     var MediaPlugin = function () {
-        var feeds = [];
-        var presentation = [];
-        var mpext = {};
+        var feeds = [],
+            presentation = [],
+            mpext = {},
+            entrySelector = 'div.scrollable-pane > div > div.io-ox-portal-mediaplugin > div.mediaplugin-entry';
 
         var options = {bigPreview: false, elementsPerPage: 20};
 
         var setOptions = function (o) {
             options = $.extend(options, o);
+        };
+
+        var escape = function (html) {
+            var newHtml = html.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            newHtml = html.replace(/<([^>]+)>/g, function (match, contents) {
+                var allowed = ['p', '/p', 'ul', '/ul', 'li', '/li', 'strong', '/strong', 'br', 'br/', 'blockquote', '/blockquote', 'span', '/span', '/a'];
+
+                if (_.include(allowed, contents) || contents.substring(0, 2) === 'a ') {
+                    return '<' + contents + '>';
+                } else {
+                    return '&lt;' + contents + '&gt;';
+                }
+            });
+            return newHtml;
         };
 
         var addFeed = function (data) {
@@ -79,11 +94,9 @@ define('io.ox/portal/mediaplugin',
         var resizeImage = function ($img, maxWidth, maxHeight) {
             if ($img.width() && $img.height()) {
                 if ($img.width() > maxWidth && $img.width() > $img.height()) {
-                    console.log('zu breit...nun: ' + maxWidth);
                     $img.css('width', maxWidth + 'px');
                     $img.css('height', 'auto');
                 } else if ($img.height() > maxHeight) {
-                    console.log('zu hoch...nun: ' + maxHeight);
                     $img.css('height', maxHeight + 'px');
                     $img.css('width', 'auto');
                 } else {
@@ -96,44 +109,43 @@ define('io.ox/portal/mediaplugin',
         };
 
         var popupContent = function ($popup, entry, lastClickedOn) {
-//            if (mpext.getImagesFromEntry) {
-//                var tempImageCollection = [];
-//                $('div.io-ox-portal-mediaplugin > div.mediaplugin-entry').each(function (key, val) {
-//                    var entry = $(val).data("entry");
-//                    mpext.getImagesFromEntry(entry, tempImageCollection);
-//                });
-//
-//                // TODO fullscreen is not per mediaplugin
-//                if (false && tempImageCollection.length > 0) {
-//                    $('<a/>')
-//                        .addClass('label io-ox-action-link')
-//                        .css({'cursor': 'pointer', 'float': 'right'})
-//                        .text(gt('Fullscreen'))
-//                        .appendTo($popup)
-//                        .on('click', function () {
-//                                var i = lastClickedOn - 1;
-//
-//                                // Push visible and all following images to our collection
-//                                presentation = tempImageCollection.splice(i);
-//
-//                                // Push already seen images to the collection for cycling through all images
-//                                if (lastClickedOn > 0) {
-//                                    // TODO fix mixed (photos, videos, text) blogs
-//                                    presentation = presentation.concat(tempImageCollection.splice(0, i));
-//                                }
-//
-//                                $.fancybox(presentation,
-//                                {
-//                                    'cyclic': true,
-//                                    'type': 'image',
-//                                    'autoDimensions': true,
-//                                    'transitionIn': 'none',
-//                                    'transitionOut': 'none',
-//                                    'overlayOpacity': '0.9'
-//                                });
-//                            });
-//                }
-//            }
+            if (mpext.getImagesFromEntry) {
+                var tempImageCollection = [];
+                $(entrySelector).each(function (key, val) {
+                    var entry = $(val).data("entry");
+                    mpext.getImagesFromEntry(entry, tempImageCollection);
+                });
+
+                if (tempImageCollection.length > 0) {
+                    $('<a/>')
+                        .addClass('label io-ox-action-link')
+                        .css({'cursor': 'pointer', 'float': 'right'})
+                        .text(gt('Fullscreen'))
+                        .appendTo($popup)
+                        .on('click', function () {
+                                var i = lastClickedOn - 1;
+
+                                // Push visible and all following images to our collection
+                                presentation = tempImageCollection.splice(i);
+
+                                // Push already seen images to the collection for cycling through all images
+                                if (lastClickedOn > 0) {
+                                    // TODO fix mixed (photos, videos, text) blogs
+                                    presentation = presentation.concat(tempImageCollection.splice(0, i));
+                                }
+
+                                $.fancybox(presentation,
+                                {
+                                    'cyclic': true,
+                                    'type': 'image',
+                                    'autoDimensions': true,
+                                    'transitionIn': 'none',
+                                    'transitionOut': 'none',
+                                    'overlayOpacity': '0.9'
+                                });
+                            });
+                }
+            }
 
             var $busyIndicator = $('<div/>').html('&nbsp;').addClass('io-ox-busy');
             $popup.append($busyIndicator);
@@ -292,7 +304,7 @@ define('io.ox/portal/mediaplugin',
                             if (showPopup) {
                                 if (lastClickedOn > 0) {
                                     // zero based
-                                    event.target = $('div.mediaplugin-entry:eq(' + (lastClickedOn - 1) + ')');
+                                    event.target = $(entrySelector + ':eq(' + (lastClickedOn - 1) + ')');
                                 } else {
                                     event.target = null;
                                 }
@@ -323,8 +335,8 @@ define('io.ox/portal/mediaplugin',
                         };
 
                         $(this).on('onResume', function () {
-                            // TODO fix
-//                            $(document).on('keydown', onKeyDown);
+                            console.log('onResume');
+                            $(document).on('keydown', onKeyDown);
                         });
 
                         $(this).on('onAppended', function () {
@@ -332,8 +344,8 @@ define('io.ox/portal/mediaplugin',
                         });
 
                         $(this).on('onPause', function () {
-                            // TODO fix
-//                            $(document).off('keydown', onKeyDown);
+                            console.log('onPause');
+                            $(document).off('keydown', onKeyDown);
                         });
 
                         $('<h1>').addClass('clear-title').text(mpext.getTitle ? mpext.getTitle(j) : extension.description || "Media").appendTo(self);
@@ -385,7 +397,8 @@ define('io.ox/portal/mediaplugin',
             init: init,
             resizeImage: resizeImage,
             setOptions: setOptions,
-            getOption: getOption
+            getOption: getOption,
+            escape: escape
         };
     };
 

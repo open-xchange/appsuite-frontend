@@ -68,12 +68,13 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 {
             def.resolve(taskarray);
         });
-        
         return def;
     };
     
+    //change status number to status text. format enddate to presentable string
     var interpretTask = function (task)
     {
+        
         switch (task.status)
         {
         case 2:
@@ -99,7 +100,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     };
     
     var draw = function (tasks) {
-
+        
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
         $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
         
@@ -125,7 +126,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
 
     ext.point("io.ox/portal/widget").extend({
         id: 'tasks',
-        index: 501,
+        index: 300,
         title: gt('Tasks'),
         load: load,
         draw: draw,
