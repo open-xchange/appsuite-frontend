@@ -214,7 +214,6 @@
     .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
     .tile-color4 { background-color: darken(@tile-color-4, @tile-fix); }
     .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
-
     .tile-color5 { background-color: darken(@tile-color-0, @tile-darken); }
     .tile-color5:hover { background-color: darken(@tile-color-0, @tile-hover-dark); }
     .tile-color6 { background-color: darken(@tile-color-1, @tile-darken); }
@@ -225,6 +224,6 @@
     .tile-color8:hover { background-color: darken(@tile-color-3, @tile-hover-dark); }
     .tile-color9 { background-color: darken(@tile-color-4, @tile-darken); }
     .tile-color9:hover { background-color: darken(@tile-color-4, @tile-hover-dark); }
-
     .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
 }
+.io-ox-portal .io-ox-portal-createMe { background-color: #aaa;}
