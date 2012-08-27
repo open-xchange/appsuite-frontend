@@ -59,7 +59,7 @@ define('io.ox/calendar/week/perspective',
         
         updateData: function () {
             // FIXME: replace 'startDate' with calendar logic
-            this.startDate = util.getWeekStart() - util.WEEK;
+            this.startDate = util.getWeekStart();
             
             this.getAppointments(this.startDate, this.startDate + util.DAY * this.days);
         },

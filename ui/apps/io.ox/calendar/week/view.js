@@ -47,7 +47,8 @@ define('io.ox/calendar/week/view',
         events: {
             'click .appointment': 'onClickAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment'
+            'mouseleave .appointment': 'onLeaveAppointment',
+            'dblclick .weekcontainer>.day' : 'onCreateAppointment'
         },
 
         initialize: function (options) {
@@ -77,6 +78,10 @@ define('io.ox/calendar/week/view',
         
         onLeaveAppointment: function (e) {
             $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
+        },
+        
+        onCreateAppointment: function (e) {
+            console.log('dblclick', e, e.offsetY, e.clientY, e.pageY, e.screenY);
         },
 
         render: function () {
