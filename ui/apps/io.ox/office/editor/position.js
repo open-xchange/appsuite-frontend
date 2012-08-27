@@ -242,10 +242,18 @@ define('io.ox/office/editor/position',
         // special handling for images as children of paragraphs, use text node instead
         if (localNode && (Utils.getNodeName(localNode) === 'img')) {
             if (isEndPoint) {
-                localNode = localNode.nextSibling;
+                var _localNode = localNode.nextSibling;
+                if ((_localNode === null) || (_localNode.nodeName !== 'span')) {
+                    _localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+                }
+                localNode = _localNode;
                 useFirstTextNode = true;
-            } else {
-                localNode = localNode.previousSibling;
+            } else {   // only this is used by Chrome and Firefox.
+                var _localNode = localNode.previousSibling;
+                if ((_localNode === null) || (_localNode.nodeName !== 'span')) {
+                    _localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+                }
+                localNode = _localNode;
                 useFirstTextNode = false;
             }
         }
