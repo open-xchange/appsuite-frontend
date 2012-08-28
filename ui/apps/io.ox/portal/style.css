@@ -181,6 +181,9 @@
 }
 .io-ox-portal-preview {
     overflow: hidden;
+    height: 6em; 
+    line-height: 1.5em;
+    text-overflow: ellipsis;
 }
 .io-ox-portal-widget-tile h1 {
     color: #eee;
