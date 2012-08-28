@@ -229,11 +229,6 @@ define('io.ox/office/editor/position',
             usePreviousCell = true;
         }
 
-        if ((Utils.getNodeName(node) === 'p') && (isRtlCursorTravel) && (localNode) && (localNode.previousSibling) && (Utils.getNodeName(localNode.previousSibling) === 'img') && (Position.isFloated(localNode.previousSibling))) {
-            // Special fix for Chrome, to jump over images at paragraph from back to front.
-            usePreviousCell = true;
-        }
-
         if ((! localNode) || (usePreviousCell)) {
             localNode = node.childNodes[offset - 1];
             useFirstTextNode = false;

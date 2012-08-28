@@ -873,7 +873,7 @@ define('io.ox/office/editor/editor',
             if (domSelection.length) {
 
                 // for (var i = 0; i < domSelection.length; i++) {
-                //     window.console.log("Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
+                //     window.console.log("getSelection: Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
                 // }
 
                 domRange = _(domSelection).last();
@@ -892,10 +892,11 @@ define('io.ox/office/editor/editor',
 
                 currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint), Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint));
 
-                // window.console.log("Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
+                // window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
                 // Keeping selections synchron. Without setting selection now, there are cursor travel problems in Firefox.
-                this.setSelection(currentSelection);
+                // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
+                // this.setSelection(currentSelection);
 
                 return  _.copy(currentSelection, true);
             }
@@ -905,7 +906,7 @@ define('io.ox/office/editor/editor',
 
             var ranges = [];
 
-            // window.console.log("Input of Oxo Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
+            // window.console.log("setSelection: Input of Oxo Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
 
             currentSelection = _.copy(oxosel, true);
 
@@ -918,7 +919,7 @@ define('io.ox/office/editor/editor',
             }
 
             // for (var i = 0; i < ranges.length; i++) {
-            //    window.console.log("Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
+            //     window.console.log("setSelection: Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
             // }
 
             if (ranges.length) {
@@ -1125,6 +1126,7 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
             // this.implCheckSelection();
+            this.implCheckEventSelection();
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1139,8 +1141,6 @@ define('io.ox/office/editor/editor',
             } else {
                 isRtlCursorTravel = false;
             }
-
-            this.implCheckEventSelection();
 
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
@@ -1393,16 +1393,14 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
-                // Do absolutely nothing for cursor navigation keys with pressed shift key.
-                return;
-            }
-
             this.implCheckEventSelection();
             lastEventSelection = _.copy(selection, true);
             this.implStartCheckEventSelection();
 
-            var selection = this.getSelection();
+            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+                // Do absolutely nothing for cursor navigation keys with pressed shift key.
+                return;
+            }
 
             if (this.isNavigationKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
@@ -1412,6 +1410,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
+            var selection = this.getSelection();
             selection.adjust();
 
             /*
