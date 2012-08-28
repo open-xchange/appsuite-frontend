@@ -28,6 +28,7 @@ define('io.ox/calendar/week/view',
         
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
+        gridSize:       4,      // grid fragmentation of a hour
         cellHeight:     25,     // height of one single fragment in px
         fulltimeHeight: 20,     // height of fulltime appointments
         fulltimeMax:    5,      // threshold for full-time appointments
@@ -81,7 +82,14 @@ define('io.ox/calendar/week/view',
         },
         
         onCreateAppointment: function (e) {
-            console.log('dblclick', e, e.offsetY, e.clientY, e.pageY, e.screenY);
+            // calculate timestamp for current position
+            var posY = e.target.offsetTop + e.offsetY,
+                height = this.cellHeight * this.slots * this.fragmentation,
+                secPos = date.DAY * posY / height,
+                overhead = secPos % (date.HOUR / this.gridSize),
+                start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').add(secPos - overhead),
+                end = new date.Local(start.getTime() + date.HOUR / this.fragmentation);
+            this.trigger('createAppoinment', e, start, end);
         },
 
         render: function () {

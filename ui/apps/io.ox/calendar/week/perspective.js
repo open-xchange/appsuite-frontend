@@ -41,6 +41,10 @@ define('io.ox/calendar/week/perspective',
             });
         },
         
+        createAppointment: function (e, start, end) {
+            console.log('createAppointment', e, start, end);
+        },
+        
         getAppointments: function (start, end) {
             // fetch appointments
             var self = this,
@@ -57,35 +61,35 @@ define('io.ox/calendar/week/perspective',
             }
         },
         
-        updateData: function () {
+        refresh: function () {
             // FIXME: replace 'startDate' with calendar logic
             this.startDate = util.getWeekStart();
             
             this.getAppointments(this.startDate, this.startDate + util.DAY * this.days);
         },
         
-        refresh: function () {
+        render: function (app) {
             this.collection = new Backbone.Collection([]);
-            this.updateData();
+            this.main.addClass('week-view').empty();
+
             var weekView = new View({
                 collection: this.collection,
                 columns: this.days,
                 startDate: this.startDate
             });
-            weekView.on('showAppoinment', this.showAppointment, this);
+            
+            weekView
+                .on('showAppoinment', this.showAppointment, this)
+                .on('createAppoinment', this.createAppointment, this);
+            
             this.main
                 .empty()
                 .append(weekView.render().el)
                 .find('.scrollpane')
                 .scrollTop(weekView.getScrollPos());
-        },
-        
-        render: function (app) {
-            this.main.addClass('week-view').empty();
             
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
-                    console.log('close');
                     $('.appointment', this.main).removeClass('opac current');
                 });
 
