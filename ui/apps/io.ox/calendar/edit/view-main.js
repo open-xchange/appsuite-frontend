@@ -18,7 +18,8 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/view-addparticipants',
        'io.ox/calendar/edit/module-participants',
        'io.ox/calendar/edit/module-recurrence',
-       'dot!io.ox/calendar/edit/common.html',
+       'io.ox/calendar/edit/template',
+       //'dot!io.ox/calendar/edit/common.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
 
     'use strict';
@@ -223,11 +224,19 @@ define('io.ox/calendar/edit/view-main',
             // pre render it
             staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
 
-            self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
+            // TODO
+            // require a render js file to render the calendar view instead of templates
+            // clear node
+            self.$el.empty();
+            // invoke extensionpoints from template
+            ext.point('io.ox/calendar/edit/section').invoke('draw', self.$el, {uid: self.guid, editmode: !!(self.model.has('id'))});
+
+            /*self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
                 strings: staticStrings,
                 reminderList: reminderListValues,
                 uid: self.guid
             }));
+            */
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
@@ -240,6 +249,7 @@ define('io.ox/calendar/edit/view-main',
             self._modelBinder.bind(self.model, self.el, bindings);
 
             //init date picker
+
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
             self.$('.startsat-time').combobox(comboboxHours);

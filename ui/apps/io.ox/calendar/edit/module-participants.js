@@ -16,8 +16,8 @@ define('io.ox/calendar/edit/module-participants',
        'io.ox/core/api/resource',
        'io.ox/contacts/api',
        'io.ox/core/extensions',
-       'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, tmpl, gt) {
+       //'dot!io.ox/calendar/edit/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, /*tmpl,*/ gt) {
 
     'use strict';
 
@@ -171,7 +171,7 @@ define('io.ox/calendar/edit/module-participants',
         renderUser: function () {
             var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));*/
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
 
             if (Modernizr.backgroundsize) {
@@ -187,9 +187,9 @@ define('io.ox/calendar/edit/module-participants',
         renderUserGroup: function () {
             var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/usergroup', {strings: {
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/usergroup', {strings: {
                 GROUP: gt('Group')
-            }}));
+            }}));*/
 
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             if (Modernizr.backgroundsize) {
@@ -205,10 +205,10 @@ define('io.ox/calendar/edit/module-participants',
         renderResource: function () {
             var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/resource', {strings: {
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/resource', {strings: {
                 RESOURCE: gt('Resource')
             }}));
-
+             */
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             if (Modernizr.backgroundsize) {
                 bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
@@ -223,7 +223,7 @@ define('io.ox/calendar/edit/module-participants',
         renderExternalUser: function () {
             var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));*/
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
 
             if (Modernizr.backgroundsize) {
@@ -235,12 +235,30 @@ define('io.ox/calendar/edit/module-participants',
             this._modelBinder.bind(self.model, this.el, bindings);
             return self;
         },
+
+        renderDistlistUser: function () {
+            var self = this;
+
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));*/
+            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+
+            if (Modernizr.backgroundsize) {
+                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
+            } else {
+                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
+                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
+            }
+
+            this._modelBinder.bind(self.model, this.el, bindings);
+            return self;
+        },
+
         renderDistlistUserGroup: function () {
             var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/distlistusergroup', {strings: {
+            this.$el.empty();/*.append(tmpl.render('io.ox/calendar/edit/particpant/distlistusergroup', {strings: {
                 DISTLISTGROUP: gt('Distribution list')
-            }}));
+            }}));*/
 
             var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
             if (Modernizr.backgroundsize) {

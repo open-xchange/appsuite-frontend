@@ -93,6 +93,7 @@ define('io.ox/calendar/edit/main',
             };
 
             if (data) {
+
                 //hash support
                 self.setState({ folder: data.folder_id, id: data.id});
                 cont(data);
@@ -195,8 +196,9 @@ define('io.ox/calendar/edit/main',
                         }
                     }
                 );
-        },
+        }/*,
         failSave: function () {
+            console.log("fail save", this);
             return {
                 module: 'io.ox/calendar/edit',
                 point: this.model.attributes
@@ -212,7 +214,7 @@ define('io.ox/calendar/edit/main',
             }
             df.resolve();
             return df;
-        }
+        }*/
     };
 
 

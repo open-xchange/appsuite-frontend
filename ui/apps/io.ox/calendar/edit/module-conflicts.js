@@ -16,8 +16,8 @@ define('io.ox/calendar/edit/module-conflicts',
        'io.ox/calendar/api',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',
-       'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, tmpl, gt) {
+       //'dot!io.ox/calendar/edit/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, /*tmpl,*/ gt) {
 
     'use strict';
 
@@ -92,10 +92,10 @@ define('io.ox/calendar/edit/module-conflicts',
 
                     }
                 );
-            this.$el.empty().append(
+            this.$el.empty(); /*.append(
                 conflictList,
                 tmpl.render('io.ox/calendar/edit/conflicts', {})
-            );
+            );*/
 
             // remove buttons, when resources are in the conflicts
             var isResource = this.collection.any(function (conflict) {

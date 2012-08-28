@@ -13,8 +13,8 @@
 define('io.ox/calendar/edit/module-recurrence',
       ['io.ox/calendar/util',
        'io.ox/calendar/edit/binding-util',
-       'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (util, BinderUtils, tmpl, gt) {
+       //'dot!io.ox/calendar/edit/common.html',
+       'gettext!io.ox/calendar/edit/main'], function (util, BinderUtils, /*tmpl,*/ gt) {
 
     'use strict';
 
@@ -72,14 +72,14 @@ define('io.ox/calendar/edit/module-recurrence',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(tmpl('repeatoption', {
+            self.$el.empty(); /*.append(tmpl('repeatoption', {
                 strings: {
                     REPEAT: gt('Repeat'),
                     EDIT: gt('edit')
                 },
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));
-
+            */
             self._modelBinder.bind(self.model, self.el, self.bindings);
             return self;
         },
@@ -205,13 +205,13 @@ define('io.ox/calendar/edit/module-recurrence',
         },
         render: function () {
             var self = this;
-            self.$el.empty().append(tmpl({
+            self.$el.empty();/*.append(tmpl({
                 uid: _.uniqueId('io_ox_calendar_edit_recurrence'),
                 strings: staticStrings,
                 weekDayList: weekDayList,
                 monthList: monthList
             }));
-
+             */
             var bindings = {
                 day_in_month: '[name=day_in_month]',
                 interval: '[name=interval]',
