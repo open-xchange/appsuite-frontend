@@ -80,6 +80,16 @@ define('io.ox/portal/settings/pane',
 
             // Load all active plugins
             require(plugins).pipe(function () {
+                var index = 100;
+
+                // Load plugin with given index (for sub-tiles)
+                _.each(arguments, function (obj) {
+                    if (obj && _.isFunction(obj.reload)) {
+                        obj.reload(index);
+                    }
+                    index += 100;
+                });
+
                 // Enable or Disable all plugins
                 var extensions = ext.point('io.ox/portal/widget').all();
                 _.chain(extensions).each(function (extension) {
@@ -98,7 +108,7 @@ define('io.ox/portal/settings/pane',
                     }
                 );
 
-                ox.trigger("refresh^");
+                ox.trigger("refresh^", [true]);
             });
         },
         PluginSelectView = Backbone.View.extend({
@@ -254,6 +264,8 @@ define('io.ox/portal/settings/pane',
 
                             settings.set('pluginSettings', pluginSettings);
                             settings.save();
+
+                            ox.trigger("refresh^", [true]);
                         }
                     });
 

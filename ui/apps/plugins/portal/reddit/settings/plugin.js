@@ -45,6 +45,9 @@ define('plugins/portal/reddit/settings/plugin',
                     strings: staticStrings
                 }));
 
+                // Used by jquery ui sortable
+                self.$el.attr('id', this.model.get('mode') + '#' + this.model.get('subreddit'));
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
@@ -84,6 +87,25 @@ define('plugins/portal/reddit/settings/plugin',
                     } else {
                         $listbox.show();
                     }
+
+                    $listbox.sortable({
+                        update: function (event, ui) {
+                            subreddits = [];
+
+                            _.each($(this).sortable('toArray'), function (value) {
+                                var i = value.indexOf('#');
+                                var mode = value.substring(0, i),
+                                    subreddit = value.substring(i + 1);
+
+                                subreddits.push({subreddit: subreddit, mode: mode});
+                            });
+
+                            settings.set('subreddits', subreddits);
+                            settings.save();
+
+                            ox.trigger("refresh^", [true]);
+                        }
+                    });
                 }
 
                 redraw();

@@ -74,6 +74,9 @@ define('plugins/portal/flickr/settings/plugin',
                     strings: staticStrings
                 }));
 
+                // Used by jquery ui sortable
+                self.$el.attr('id', this.model.get('method') + '#' + this.model.get('q'));
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
@@ -113,6 +116,31 @@ define('plugins/portal/flickr/settings/plugin',
                     } else {
                         $listbox.show();
                     }
+
+                    $listbox.sortable({
+                        update: function (event, ui) {
+                            var newStreams = [];
+
+                            _.each($(this).sortable('toArray'), function (value) {
+                                var i = value.indexOf('#');
+                                var method = value.substring(0, i),
+                                    q = value.substring(i + 1);
+
+                                newStreams.push({q: q, method: method, description: _.find(streams, function (stream) {
+                                    if (stream.q === q && stream.method === method) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }).description});
+                            });
+                            streams = newStreams;
+                            settings.set('streams', streams);
+                            settings.save();
+
+                            ox.trigger("refresh^", [true]);
+                        }
+                    });
                 }
 
                 redraw();
