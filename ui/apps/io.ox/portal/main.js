@@ -95,14 +95,17 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         function drawContent(extension, e) {
+            var sidepopup;
+            var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
+                sidepopup = popup.busy();
+            });
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().trigger('onPause').detach();
+                
                 $(node).trigger('onResume');
-
-                var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
-                    popup.append(node);
-                    $(node).trigger('onAppended');
-                });
+                sidepopup.idle();
+                sidepopup.append(node);
+                $(node).trigger('onAppended');
 
                 dialog.on('close', function () {
                     $(node).trigger('onPause');
@@ -141,12 +144,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 app.active = extension;
                 app.activeEvent = event;
                 return drawContent(extension, event);
-            };
-        }
-
-        function makeCreationDialog(extension) {
-            return function () {
-                return keychain.createInteractively(extension.id);
             };
         }
 
@@ -214,7 +211,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     $node.addClass(extension.tileClass);
                 }
 
-                $node.on('click', makeClickHandler(extension));
+                if (extension.requiresSetUp()) {
+                    if (extension.performSetUp) {
+                        $node.on('click', extension.performSetUp);
+                    } else {
+                        console.log("Fallback: perform setup", extension.id, extension);
+                        $node.on('click', function () { return keychain.createInteractively(extension.id); });
+                    }
+                } else {
+                    $node.on('click', makeClickHandler(extension));
+                }
 
                 if (!extension.loadTile) {
                     extension.loadTile = function () {

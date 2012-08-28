@@ -11,13 +11,12 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('io.ox/portal/settings/defaults',
-       [], function () {
+define('io.ox/portal/settings/defaults', [], function () {
 
     'use strict';
 
     var settingsDefaults = {
-        'activePlugins': ['mail', 'twitter', 'linkedIn', 'facebook', 'tasks']
+        'activePlugins': ['appointments', 'mail', 'twitter', 'linkedIn', 'facebook', 'tumblr', 'flickr', 'tasks', 'rss']
     };
 
     return settingsDefaults;
