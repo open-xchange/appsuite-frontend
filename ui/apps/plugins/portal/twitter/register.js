@@ -254,7 +254,9 @@ define('plugins/portal/twitter/register',
             var $node = $(this);
             $node.append(
                 $('<h1>').text('Twitter'),
-                $('<div>').text(gt('%s has not been set up yet, click this box to do so or remove it completely.', 'Twitter'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                )
             );
         }
     });

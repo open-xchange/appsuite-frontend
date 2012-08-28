@@ -170,7 +170,9 @@ define('plugins/portal/facebook/register',
             var $node = $(this);
             $node.append(
                 $('<h1>').text('Facebook'),
-                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'Facebook'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                )
             );
         }
     });

@@ -193,7 +193,9 @@ define("plugins/portal/linkedin/register",
             var $node = $(this);
             $node.append(
                 $('<h1>').text('LinkedIn'),
-                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'LinkedIn'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                )
             );
         }
     };

@@ -24,3 +24,7 @@ img.linkedin-logo {
 .linkedin-message.odd {
     background-color: #f4f4f4;
 }
+.centered {
+    vertical-align: middle;
+    text-align: center;
+}
