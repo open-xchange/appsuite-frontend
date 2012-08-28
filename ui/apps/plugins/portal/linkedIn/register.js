@@ -104,6 +104,9 @@ define("plugins/portal/linkedin/register",
         requiresSetUp: function () {
             return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
         },
+        performSetUp: function () {
+            return keychain.createInteractively('linkedin');
+        },
         loadTile: function () {
             return proxy.request({
                 api: 'linkedin',

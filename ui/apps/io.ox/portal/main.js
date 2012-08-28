@@ -147,12 +147,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             };
         }
 
-        function makeCreationDialog(extension) {
-            return function () {
-                return keychain.createInteractively(extension.id);
-            };
-        }
-
         var getKulerIndex = (function () {
 
             var list = '0123456789'.split(''), pos = 0, tmp = [];
@@ -218,7 +212,12 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 }
 
                 if (extension.requiresSetUp()) {
-                    $node.on('click', makeCreationDialog(extension));
+                    if (extension.performSetUp) {
+                        $node.on('click', extension.performSetUp);
+                    } else {
+                        console.log("Fallback: perform setup", extension.id, extension);
+                        $node.on('click', function () { return keychain.createInteractively(extension.id); });
+                    }
                 } else {
                     $node.on('click', makeClickHandler(extension));
                 }
