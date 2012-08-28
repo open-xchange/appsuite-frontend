@@ -55,12 +55,13 @@ define('io.ox/office/editor/position',
      *  The calculated logical position (OXOPaM.oxoPosition) together with
      *  the property nodeName of the dom node parameter.
      */
-    Position.getOXOPosition = function (domposition, maindiv, isEndPoint) {
+    Position.getOXOPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint) {
 
         var node = domposition.node,
             offset = domposition.offset,
             selectedNodeName = node.nodeName;
 
+        isRtlCursorTravel = isRtlCursorTravel ? true : false;
         isEndPoint = isEndPoint ? true : false;
 
         // check input values
@@ -73,7 +74,7 @@ define('io.ox/office/editor/position',
         // These DIVs need to be converted to the correct paragraph first.
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
-            var newNode = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
+            var newNode = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint);
             if (newNode) {
                 node = newNode.node;
                 offset = newNode.offset;
@@ -218,13 +219,18 @@ define('io.ox/office/editor/position',
      *  The text node, that will be used in Position.getOxoPosition
      *  for the calculation of the logical position.
      */
-    Position.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
+    Position.getTextNodeFromCurrentNode = function (node, offset, isRtlCursorTravel, isEndPoint) {
 
         var useFirstTextNode = true,  // can be false for final child in a paragraph
             usePreviousCell = false,
             localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
 
         if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
+            usePreviousCell = true;
+        }
+
+        if ((Utils.getNodeName(node) === 'p') && (isRtlCursorTravel) && (localNode) && (localNode.previousSibling) && (Utils.getNodeName(localNode.previousSibling) === 'img') && (Position.isFloated(localNode.previousSibling))) {
+            // Special fix for Chrome, to jump over images at paragraph from back to front.
             usePreviousCell = true;
         }
 
@@ -239,22 +245,20 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // special handling for images as children of paragraphs, use text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'img')) {
-            if (isEndPoint) {
-                var _localNode = localNode.nextSibling;
-                if ((_localNode === null) || (_localNode.nodeName !== 'span')) {
-                    _localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
-                }
-                localNode = _localNode;
-                useFirstTextNode = true;
-            } else {   // only this is used by Chrome and Firefox.
-                var _localNode = localNode.previousSibling;
-                if ((_localNode === null) || (_localNode.nodeName !== 'span')) {
-                    _localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
-                }
-                localNode = _localNode;
+        // special handling for non-floated images as children of paragraphs, use text node instead
+        if (localNode && (Utils.getNodeName(localNode) === 'img') && (! Position.isFloated(localNode))) {
+            localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
+            useFirstTextNode = false;
+        }
+
+        // special handling for floated images as children of paragraphs, use text node instead
+        if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.isFloated(localNode))) {
+            if (isRtlCursorTravel) {
+                localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
                 useFirstTextNode = false;
+            } else {
+                localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+                useFirstTextNode = true;
             }
         }
 
@@ -1656,6 +1660,24 @@ define('io.ox/office/editor/position',
 
         return followingPos;
     };
+
+    /**
+     * Checks if a specified node has the css property 'float' set to 'left' or 'right'.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A DOM element object or jQuery element, that is checked, if it contains
+     *  the css property 'float' set to 'left' or 'right'.
+     *  If it is a DOM element, it is jQuerified first.
+     *
+     * @returns {Boolean}
+     *  A boolean containing the information, if the specified node has the css
+     *  property 'float' set to 'left' or 'right'.
+     */
+    Position.isFloated = function (node) {
+        var localNode = (node instanceof $) ? node : $(node);
+        return ((localNode.css('float') === 'left') || (localNode.css('float') === 'right'));
+    };
+
 
     return Position;
 

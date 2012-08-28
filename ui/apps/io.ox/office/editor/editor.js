@@ -381,6 +381,7 @@ define('io.ox/office/editor/editor',
 
         var lastKeyDownEvent;
         var lastEventSelection;
+        var isRtlCursorTravel;
 
         var currentSelection;
 
@@ -889,7 +890,7 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isPos1Endpoint), Position.getOXOPosition(domRange.end, editdiv, isPos2Endpoint));
+                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint), Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint));
 
                 // window.console.log("Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
@@ -1131,6 +1132,12 @@ define('io.ox/office/editor/editor',
                 // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
                 lastKeyDownEvent = event;
                 return;
+            }
+
+            if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) {
+                isRtlCursorTravel = true;
+            } else {
+                isRtlCursorTravel = false;
             }
 
             this.implCheckEventSelection();
@@ -2646,10 +2653,11 @@ define('io.ox/office/editor/editor',
             }
 
             if (anchorType === null) {
-                if (! inline) {
-                    anchorType = 'FloatLeft';
-                } else {
+                if (inline) {
                     anchorType = 'AsCharacter';
+                } else {
+                    // anchorType = 'ToParagraph'; // TODO, not always FloatLeft
+                    anchorType = 'FloatLeft'; // TODO, not always FloatLeft
                 }
             }
 
@@ -2660,6 +2668,7 @@ define('io.ox/office/editor/editor',
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
                     node = node.parentNode;
+                    attributes.float = 'none';
                     $('<img>', { src: url }).insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToPage') {
                     // TODO: This is not a good solution. Adding image to the end of the editdiv,
