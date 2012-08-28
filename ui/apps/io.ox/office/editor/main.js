@@ -183,13 +183,16 @@ define('io.ox/office/editor/main',
 
         /**
          * Sets application title (launcher) and window title according to the
-         * current file name.
+         * current file name but without any extension.
          */
         function updateTitles() {
             var file = app.getFileDescriptor(),
-                fileName = (file && file.filename) ? file.filename : gt('Unnamed');
-            app.setTitle(fileName);
-            win.setTitle(fileName);
+                filename = (file && file.filename) ? file.filename : gt('Unnamed'),
+                extensionPos = filename.lastIndexOf('.'),
+                displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename;
+
+            app.setTitle(displayName);
+            win.setTitle(displayName);
         }
 
         /**
@@ -668,10 +671,50 @@ define('io.ox/office/editor/main',
             return download('pdf');
         };
 
-        app.rename = function (name) {
-            // TODO: rename in infostore, update file descriptor
-            app.setTitle(name);
-            win.setTitle(name);
+        /**
+         * Renames the currently edited file and updates the UI accordingly
+         */
+        app.rename = function (newFilename) {
+            var file = app.getFileDescriptor();
+
+            if (newFilename && newFilename.length && file && (newFilename !== file.filename)) {
+                $.ajax({
+                    type: 'GET',
+                    url: ox.apiRoot +
+                    '/oxodocumentfilter?action=renamedocument' +
+                    '&id=' + file.id +
+                    '&folder_id=' + file.folder_id +
+                    '&filename=' + newFilename +
+                    '&session=' + ox.session +
+                    '&uid=' + app.getUniqueId() +
+                    '&version=' + file.version,
+                    dataType: 'json'
+                })
+                .pipe(function (response) {
+                    // TODO clear cachesupdate UI
+                    if (response && response.data) {
+                        FilesAPI.caches.all.grepRemove(response.data.folder_id + '\t')
+                            .pipe(function () { FilesAPI.trigger("create.file refresh.all"); });
+                    }
+
+                    return response;
+                })
+                .done(function (response) {
+                    if (response && response.data && response.data.filename) {
+                        file.filename = response.data.filename;
+
+                        updateTitles();
+
+                        // TODO clear cachesupdate UI
+                        FilesAPI.caches.get.clear();
+                        FilesAPI.caches.versions.clear()
+                            .pipe(function () {
+                                FilesAPI.trigger('refresh.all');
+                                FilesAPI.trigger('update refresh.all', { id: response.data.id, folder: response.data.folder_id });
+                            });
+                    }
+                });
+            }
         };
 
         app.failSave = function () {

@@ -39,8 +39,11 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     set: function () { app.print(); }
                 },
                 'action/rename': {
-                    get: function () { return app.getWindow().getTitle(); },
-                    set: function (name) { app.rename(name); app.getFileDescriptor().filename = name; }
+                    get: function () {
+                        var fileDesc = app.getFileDescriptor();
+                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : 'unnamed';
+                    },
+                    set: function (fileName) { app.rename(fileName); }
                 },
 
                 'action/undo': {
@@ -157,10 +160,6 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
         BaseController.call(this, items, doneHandler);
 
         // methods ------------------------------------------------------------
-
-        this.getApp = function () {
-            return app;
-        };
 
         /**
          * Registers a new editor instance. If the editor has the browser
