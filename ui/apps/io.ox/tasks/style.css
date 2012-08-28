@@ -21,32 +21,35 @@
 .vgrid-cell.tasks .status {
     margin-left: 1em;
     float: right;
-    position: absolute;
-    left: 75%
+	index: 2;
 }
 
 .vgrid-cell.tasks .priority,
 .io-ox-task-preview .priority {
-    color: #999;
+    color: #FFCC00;
     min-width: 1em;
-    font-weight: normal;
+    font-size: 16;
+    font-weight: bold;
     padding: 0 0.5em 0 0.5em;
     margin-left: 1em;
     display: inline-block;
     float: right;
     position: relative;
-    z-index: 2;
+    
 }
-.vgrid-cell.tasks .priority i.icon-star { display: inline-block;}
+.vgrid-cell.tasks .priority i.icon-star { 
+	display: inline-block;
+	
+}
 
 .vgrid-cell.tasks .title{
     color: black;
     font-weight: 500;
-    width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
+    width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note{
-	width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
+	width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note span{
