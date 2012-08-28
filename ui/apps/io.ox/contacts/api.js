@@ -153,6 +153,8 @@ define('io.ox/contacts/api',
                 });
         }
     };
+    
+    api.update = api.edit;
 
     api.editNewImage = function (o, changes, file) {
 

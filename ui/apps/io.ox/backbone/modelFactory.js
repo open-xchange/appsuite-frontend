@@ -15,19 +15,23 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
     
     
     function ValidationErrors() {
-        var errors = {};
+        this.errors = {};
         
         this.add = function (attribute, error) {
-            (errors[attribute] || (errors[attribute] = [])).push(error);
+            (this.errors[attribute] || (this.errors[attribute] = [])).push(error);
             return this;
         };
         
         this.hasErrors = function () {
-            return _.isEmpty(errors);
+            return !_.isEmpty(this.errors);
+        };
+        
+        this.errorsFor = function (attribute) {
+            return this.errors[attribute];
         };
         
         this.each = function () {
-            var wrapped = _(errors);
+            var wrapped = _(this.errors);
             return wrapped.each.apply(wrapped, $.makeArray(arguments));
         };
     }
@@ -37,6 +41,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         initialize: function (obj) {
             this.factory = this.get('_factory');
             this.realm = this.get('_realm');
+            delete this.attributes._factory;
+            delete this.attributes._realm;
+            
         },
         validate: function (attributes) {
             var self = this,
@@ -44,44 +51,117 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             
             this.factory.point("validation").invoke("validate", errors, attributes, errors);
             
-            if (!_.isEmpty(errors)) {
+            if (errors.hasErrors()) {
                 errors.each(function (messages, attribute) {
                     self.trigger("invalid:" + attribute, messages, errors, self);
                 });
                 return errors;
             }
         },
-        sync: function () {
-            return this.factory.point("sync").invoke("sync", this, $.makeArray(arguments));
+        sync: function (action, model, callbacks) {
+            // action is one of 'update', 'create', 'delete' or 'read'
+            if (action === 'delete') {
+                action = 'destroy';
+            }
+            this.factory.internal[action].call(this.factory.internal, model).done(callbacks.success).fail(callbacks.error);
+        },
+        
+        changedSinceLoading: function () {
+            var self = this;
+            var oldAttributes = this.realm.internal.cachedServerAttributes(this.id);
+            var changedKeys = _(this.changedAttributes(oldAttributes)).keys();
+            
+            var retval = {};
+            _(changedKeys).each(function (key) {
+                retval[key] = self.get(key);
+            });
+            
+            return retval;
         }
     });
 
     function ModelRealm(name, factory) {
-        var models = {};
+        var models = {},
+            serverAttributes = {},
+            self = this;
+        
+        this.internal = {
+            cachedServerAttributes: function (uid) {
+                return serverAttributes[uid] || {};
+            }
+        };
         
         this.get = function () {
             var args = $.makeArray(arguments);
-            var uid = factory.toUniqueIdFromGet.apply(factory, args);
+            var uid = factory.internal.toUniqueIdFromGet.apply(factory, args);
             if (models[uid]) {
-                return $.Deferred().done(models[uid]);
+                return $.Deferred().resolve(models[uid]);
             }
             
             var def = $.Deferred();
             
-            factory.load.apply(factory, args).done(function (data) {
-                data._realm = name;
+            factory.internal.load.apply(factory.internal, args).done(function (data) {
+                data._realm = self;
 
                 var loaded = factory.create(data);
                 models[loaded.id] = loaded;
+                serverAttributes[loaded.id] = loaded.toJSON();
                 def.resolve(loaded);
+            }).fail(def.reject);
+            
+            return def;
+        };
+        
+        this.getAll = function () {
+            var def = $.Deferred();
+            factory.internal.loadAll.apply(factory.internal, $.makeArray(arguments)).done(function () {
+                self.getList.apply(self, $.makeArray(arguments)).done(def.resolve).fail(def.reject);
+            }).fail(def.reject);
+            return def;
+        };
+        
+        this.getList = function () {
+            var def = $.Deferred();
+            var uidIdList = factory.internal.componentizeList.apply(factory.internal, $.makeArray(arguments));
+            var idsToLoad = [];
+            
+            _(uidIdList).each(function (tuple) {
+                if (!models[tuple.uid]) {
+                    idsToLoad.push(tuple.id);
+                }
             });
+            
+            function resolveResult() {
+                var allModels = _(uidIdList).map(function (tuple) {
+                    return models[tuple.uid];
+                });
+                def.resolve(allModels);
+            }
+            
+            if (_.isEmpty(idsToLoad)) {
+                resolveResult();
+                return def;
+            }
+            
+            factory.internal.loadBulk(idsToLoad).done(function (result) {
+                _(result).each(function (data) {
+                    data._realm = self;
+                    
+                    var loaded = factory.create(data);
+                    models[loaded.id] = loaded;
+                    serverAttributes[loaded.id] = loaded.toJSON();
+                });
+                resolveResult();
+                
+            }).fail(def.reject);
             
             return def;
         };
         
         this.refresh = function (uid, data) {
             if (models[uid]) {
-                models.set(data);
+                models[uid].set(data);
+                serverAttributes[uid] = models[uid].toJSON();
             }
         };
         
@@ -97,10 +177,14 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             models = {};
         };
         
+        factory.point('realm').invoke('extend', this);
+        
     }
     
     function ModelFactory(delegate) {
-        _.extend(this, delegate);
+        
+        this.internal = {};
+        
         var self = this;
         
         var realms = {};
@@ -112,7 +196,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             return realms[name] || (realms[name] = new ModelRealm(name, this));
         };
         
-        this.model = OXModel.extend(delegate.model);
+        this.model = OXModel.extend(delegate.model || {});
         this.collection = Backbone.Collection.extend({
             model: this.model,
             sync: function () {
@@ -120,26 +204,82 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             }
         });
         
-        this.load = this.load || function () {
+        this.api = delegate.api;
+        this.extensionNamespace = delegate.extensionNamespace;
+        
+        function processLoaded(loaded) {
+            var uid = self.internal.toUniqueIdFromObject(loaded);
+            loaded._uid = uid;
+            loaded._factory = self;
+            return loaded;
+        }
+        
+        this.internal.load = delegate.load || function () {
             var args = $.makeArray(arguments);
             
-            return this.api.get.apply(this.api, args).pipe(function (loaded) {
-                loaded._uid = this.toUniqueIdFromGet.apply(this, args);
-                loaded._factory = self;
-                return loaded;
+            return self.api.get.apply(self.api, args).pipe(processLoaded);
+        };
+        
+        this.internal.loadAll = delegate.loadAll || function () {
+            return self.api.getAll.apply(self.api, $.makeArray(arguments));
+        };
+        
+        this.internal.loadBulk = delegate.loadBulk || function (idsToLoad) {
+            return self.api.getList(idsToLoad).pipe(function (result) {
+                _(result).each(processLoaded);
+                return result;
             });
         };
         
-        this.toUniqueId = this.toUniqueId || function (options) {
+        this.internal.create = delegate.create || function (model) {
+            return self.api.create(model.toJSON());
+        };
+        
+        this.internal.read = delegate.read || function (model) {
+            return self.api.get({id: model.get('id'), folder: model.get('folder')}).done(function (data) {
+                model.realm.refresh(this.internal.toUniqueIdFromObject(data), data);
+            });
+        };
+        
+        this.internal.update = delegate.update || function (model) {
+            var attributesToSave = null;
+            if (delegate.getUpdatedAttributes) {
+                attributesToSave = delegate.getUpdatedAttributes(model);
+            } else {
+                attributesToSave = model.changedSinceLoading();
+                attributesToSave.id = model.id;
+                if (!attributesToSave.folder) {
+                    attributesToSave.folder = model.get('folder') || model.get('folder_id');
+                }
+            }
+            
+            return self.api.update(attributesToSave);
+        };
+        
+        this.internal.destroy = delegate.destroy || function (model) {
+            return self.api.remove({id: model.id, folder: model.get('folder_id') || model.get('folder')});
+        };
+        
+        this.internal.toUniqueId = delegate.toUniqueId || function (options) {
             return options.id;
         };
         
-        this.toUniqueIdFromGet = this.toUniqueIdFromGet || this.toUniqueId;
-        this.toUniqueIdFromObject = this.toUniqueIdFromObject || this.toUniqueId;
+        this.internal.toUniqueIdFromGet = delegate.toUniqueIdFromGet || this.internal.toUniqueId;
+        this.internal.toUniqueIdFromObject = delegate.toUniqueIdFromObject || this.internal.toUniqueId;
         
-        this.eventToGetArguments = this.eventToGetArguments || function (evt) {
+        this.internal.eventToGetArguments = delegate.eventToGetArguments || function (evt) {
             return [{id: evt.id, folder: evt.folder_id}];
         };
+        
+        this.internal.componentizeList = delegate.componentizeList || function (entities) {
+            return _(entities).map(function (entity) {
+                return {
+                    uid: self.internal.toUniqueIdFromObject(entity),
+                    id: entity
+                };
+            });
+        };
+        
         if (!/\/$/.test(this.extensionNamespace)) {
             this.extensionNamespace = this.extensionNamespace + "/";
         }
@@ -154,25 +294,36 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             var realm = this.realm('default');
             return realm.get.apply(realm, $.makeArray(arguments));
         };
+
+        this.getAll = this.getAll || function () {
+            var realm = this.realm('default');
+            return realm.getAll.apply(realm, $.makeArray(arguments));
+        };
+
+        this.getList = this.getList || function () {
+            var realm = this.realm('default');
+            return realm.getList.apply(realm, $.makeArray(arguments));
+        };
         
         this.create = this.create || function (options) {
+            options._factory = self;
             return new this.model(options);
         };
         
-        this.createCollection = this.createCollection || function () {
-            return new this.collection();
+        this.createCollection = this.createCollection || function (initial) {
+            return new this.collection(initial);
         };
         
         // catch the typical events of the api and propagate them onto cached backbone models
         
-        this.updateEvents = this.updateEvents || ['update'];
-        this.destroyEvents = this.destroyEvents || ['delete'];
+        this.internal.updateEvents = delegate.updateEvents || ['update'];
+        this.internal.destroyEvents = delegate.destroyEvents || ['delete'];
         
-        _(this.updateEvents).each(function (eventName) {
+        _(this.internal.updateEvents).each(function (eventName) {
             
-            this.api.on(eventName, function () {
-                var args = self.eventToGetArguments.apply(self, $.makeArray(arguments)),
-                    uid = self.toUniqueIdFromGet.apply(self, args);
+            self.api.on(eventName, function () {
+                var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
+                    uid = self.internal.toUniqueIdFromGet.apply(self, args);
                 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
@@ -183,11 +334,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         });
         
         
-        _(this.destroyEvents).each(function (eventName) {
+        _(this.internal.destroyEvents).each(function (eventName) {
             
-            this.api.on(eventName, function () {
-                var args = self.eventToGetArguments.apply(self, $.makeArray(arguments)),
-                    uid = self.toUniqueIdFromGet.apply(self, args);
+            self.api.on(eventName, function () {
+                var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
+                    uid = self.internal.toUniqueIdFromGet.apply(self, args);
                 
                 _(realms).each(function (realm) {
                     realm.markDestroyed(uid);
@@ -199,28 +350,36 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         // Register the extension that calls subextensions under the namespace + attribute name
         // For example to check the display_name attribute in the model registered in the extension namespace 'io.ox/contacts/model'
         // It would invoke 'validate' on 'io.ox/contacts/model/validation/display_name'
-        ext.point("validation").extend({
+        this.point("validation").extend({
             id: 'generic',
             validate: function (attributes, errors) {
                 _(attributes).each(function (value, key) {
-                    var analysis = ext.point(self.extensionNamespace + key).invoke('validate', errors, value, errors, attributes, key);
+                    var analysisisis = self.point('validation/' + key).invoke('validate', errors, value, errors, attributes, key).value(); // What's the plural of analysis again?
                     // If the extension returned a falsy value, we assume everything is correct
                     // If the value is truthy, it can be either an array or another object (typically a string)
                     // the array elements are passed as individual errors to the error collection for this attribute
                     // a different message is passed as is
-
-                    if (analysis) {
-                        if (_.isArray(analysis) && !_.isEmpty(analysis)) {
-                            _(analysis).each(function (message) {
-                                errors.add(key, message);
-                            });
-                        } else {
-                            errors.add(key, analysis);
+                    _(analysisisis).each(function (analysis) {
+                        if (analysis) {
+                            if (_.isArray(analysis)) {
+                                _(analysis).each(function (message) {
+                                    errors.add(key, message);
+                                });
+                            } else {
+                                errors.add(key, analysis);
+                            }
                         }
-                    }
+                    });
                 });
             }
         });
+        
+        
+        
+        _($.makeArray(arguments).splice(1)).each(function (mixin) {
+            _.extend(self, mixin);
+        });
+        
     }
     
     return ModelFactory;

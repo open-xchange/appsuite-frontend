@@ -68,7 +68,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
             // We'll register validation extensions according to the validationDefinitions
             _(validationDefinitions).each(function (definition, attribute) {
                 ext.point(validationNamespace + '/' + attribute).extend({
-                    id: definition.id,
+                    id: definition.id || attribute,
                     validate: function (value, errors, attributes) {
                         var analysis = [];
                         
@@ -82,7 +82,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                         if (definition.fn) {
                             var messages = definition.fn.apply(errors, value, errors, attributes, attribute);
                             if (messages) {
-                                if (_.isArray(messages) && !_.isEmpty(messages)) {
+                                if (_.isArray(messages)) {
                                     _(messages).each(function (message) {
                                         analysis.push(message);
                                     });
@@ -97,7 +97,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                                 analysis.push('Please enter a value');
                             }
                         }
-                        
+                                                
                         return analysis;
                     }
                 });
