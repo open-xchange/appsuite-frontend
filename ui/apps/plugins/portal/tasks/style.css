@@ -1,0 +1,5 @@
+.io-ox-task-preview {
+    height: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

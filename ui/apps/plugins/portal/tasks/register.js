@@ -16,7 +16,6 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          'gettext!plugins/portal/tasks',
                                          'io.ox/core/strings',
                                          'io.ox/tasks/util'], function (ext, taskApi, gt, strings, util) {
-
     "use strict";
     
     var loadTile = function ()
@@ -38,7 +37,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             task = util.interpretTask(task);
         
             $node.append(
-                    $('<div class="io-ox-clear io-ox-task-preview">').append(
+                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
                             $("<span>").text(gt("You have ") + taskarray.length + gt(" tasks")),
                             $("<br>"),
                             $("<b>").text(strings.shorten(task.title, 40)),
@@ -57,7 +56,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             }
         } else
             {
-            $node.append($('<div class="io-ox-clear io-ox-task-preview">').text(gt("You don't have any tasks.")));
+            $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
         }
         
     };

@@ -17,3 +17,8 @@
 
 .mail-portal-tile h1 {
 }
+.io-ox-mail-preview {
+    height: 6em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
