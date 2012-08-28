@@ -20,19 +20,22 @@ define('plugins/portal/tumblr/register',
 
     'use strict';
 
-    var reload = function () {
+    var drawPlugin = function (index) {
+        if (!index) {
+            index = 100;
+        }
+
         var mp = new MediaPlayer();
         var apiUrl = "https://api.tumblr.com/v2/blog/##blog##/posts/?api_key=gC1vGCCmPq4ESX3rb6aUZkaJnQ5Ok09Y8xrE6aYvm6FaRnrNow&notes_info=&filter=";
 
         var blogs = settings.get('blogs');
 
         _.each(blogs, function (v) {
-            // TODO index
             mp.addFeed({
                 id: 'tumblr-' + v.url.replace(/[^a-z0-9]/g, '_'),
                 description: v.description,
                 url: apiUrl.split("##blog##").join(v.url) + "&jsonp=",
-                index: 110
+                index: index++
             });
         });
 
@@ -199,9 +202,7 @@ define('plugins/portal/tumblr/register',
         });
     };
 
-    reload();
-
     return {
-        reload: reload
+        reload: drawPlugin
     };
 });

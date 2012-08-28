@@ -19,7 +19,11 @@ define('plugins/portal/reddit/register',
 
     'use strict';
 
-    var reload = function () {
+    var drawPlugin = function (index) {
+        if (!index) {
+            index = 100;
+        }
+
         var mp = new MediaPlayer();
         var apiUrl = {
                 'new': 'http://www.reddit.com/r/##subreddit##/new.json?sort=new',
@@ -31,13 +35,12 @@ define('plugins/portal/reddit/register',
         var subreddits = settings.get('subreddits');
 
         _.each(subreddits, function (v) {
-            // TODO index
             if (apiUrl[v.mode]) {
                 mp.addFeed({
                     id: 'reddit-' + v.subreddit.replace(/[^a-z0-9]/g, '_') + '-' + v.mode.replace(/[^a-z0-9]/g, '_'),
                     description: v.subreddit,
                     url: apiUrl[v.mode].split("##subreddit##").join(v.subreddit) + "&jsonp=",
-                    index: 110
+                    index: index++
                 });
             }
         });
@@ -196,9 +199,8 @@ define('plugins/portal/reddit/register',
             }
         });
     };
-    reload();
 
     return {
-        reload: reload
+        reload: drawPlugin
     };
 });

@@ -30,10 +30,43 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
     // wait for plugin dependencies
     var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
-    var activePlugins = _.map(settings.get('activePlugins') || [], function (value) { return 'plugins/portal/' + value + '/register'; });
-    plugins = _.intersection(plugins, activePlugins);
+    var pluginSettings = settings.get('pluginSettings') || {};
+
+    pluginSettings = _.sortBy(pluginSettings, function (obj) {
+        return obj.index;
+    });
+
+    var allActivePluginIds = {};
+    _.each(pluginSettings, function (obj) {
+        if (obj.active) {
+            allActivePluginIds[obj.id] = obj;
+        }
+    });
+
+    var allActivePlugins = _.map(allActivePluginIds, function (obj) {
+        return 'plugins/portal/' + obj.id + '/register';
+    });
+
+    plugins = _.intersection(allActivePlugins, plugins);
 
     return require(plugins).pipe(function () {
+        var index = 100;
+
+        // Load plugin with given index (for sub-tiles)
+        _.each(arguments, function (obj) {
+            if (obj && _.isFunction(obj.reload)) {
+                obj.reload(index);
+            }
+            index += 100;
+        });
+
+        // Apply index to normal portal-plugins
+        ext.point('io.ox/portal/widget').each(function (extension) {
+            if (allActivePluginIds[extension.id]) {
+                extension.index = allActivePluginIds[extension.id].index;
+            }
+        });
+
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
@@ -188,7 +221,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 fillers = 15 - count;
 
             addFillers(fillers, count);
-            point.shuffle();
+//            point.shuffle();
 
             point.each(function (extension) {
                 if (!extension.isEnabled) {

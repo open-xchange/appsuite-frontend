@@ -19,7 +19,11 @@ define('plugins/portal/flickr/register',
      'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, date, gt) {
 
     'use strict';
-    var reload = function () {
+    var drawPlugin = function (index) {
+        if (!index) {
+            index = 100;
+        }
+
         var mp = new MediaPlayer();
 
         // order of elements is the crucial factor of presenting the image in the sidepopups
@@ -35,7 +39,6 @@ define('plugins/portal/flickr/register',
         var streams = settings.get('streams');
 
         _.each(streams, function (v) {
-            // TODO index
             if (apiUrl[v.method]) {
                 var myurl;
 
@@ -49,7 +52,7 @@ define('plugins/portal/flickr/register',
                     id: 'flickr-' + v.q.replace(/[^a-z0-9]/g, '_') + '-' + v.method.replace(/[^a-z0-9]/g, '_'),
                     description: v.description,
                     url: myurl,
-                    index: 100
+                    index: index++
                 });
             }
         });
@@ -152,9 +155,7 @@ define('plugins/portal/flickr/register',
         });
     };
 
-    reload();
-
     return {
-        reload: reload
+        reload: drawPlugin
     };
 });
