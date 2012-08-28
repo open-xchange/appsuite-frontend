@@ -44,12 +44,16 @@ define('io.ox/calendar/week/view',
         week:           [],     // week scaffold
         timeline:       $(),    // timeline
         tlInterval:     {},     // timeline interval
+        clickTimer:     null,   // timer to separate single and double click
+        clicks:         0,      // click counter
         
         events: {
             'click .appointment': 'onClickAppointment',
+            'dblclick .weekcontainer>.day' : 'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
-            'mouseleave .appointment': 'onLeaveAppointment',
-            'dblclick .weekcontainer>.day' : 'onCreateAppointment'
+            'mouseleave .appointment': 'onLeaveAppointment'
+//            'mousedown .weekcontainer>.day' : function (e) {console.log('mousedown', e); },
+//            'mouseup .weekcontainer>.day' : function (e) {console.log('mouseup', e); }
         },
 
         initialize: function (options) {
@@ -59,20 +63,36 @@ define('io.ox/calendar/week/view',
         },
 
         onClickAppointment: function (e) {
-            e.stopImmediatePropagation();
-            e.preventDefault();
-            var target = $(e.currentTarget),
-                cid = target.attr('data-cid'),
-                obj = _.cid(target.attr('data-cid'));
-            
-            this.$el.find('.appointment')
-                .removeClass('current opac')
-                .not($('[data-cid="' + cid + '"]'))
-                .addClass('opac');
-            $('[data-cid="' + cid + '"]').addClass('current');
-            this.trigger('showAppoinment', e, obj);
+            if ($(e.target).is('.appointment')) {
+                var target = $(e.currentTarget),
+                    cid = target.attr('data-cid'),
+                    obj = _.cid(target.attr('data-cid')),
+                    that = this;
+                
+                if (this.clickTimer === null) {
+                    this.clickTimer = setTimeout(function () {
+                        that.clicks = 0;
+                        that.clickTimer = null;
+                        
+                        that.$el.find('.appointment')
+                            .removeClass('current opac')
+                            .not($('[data-cid="' + cid + '"]'))
+                            .addClass('opac');
+                        $('[data-cid="' + cid + '"]').addClass('current');
+                        that.trigger('showAppointment', e, obj);
+                    }, 250);
+                }
+    
+                if (this.clicks === 1) {
+                    clearTimeout(this.clickTimer);
+                    this.clickTimer = null;
+                    this.clicks = -1;
+                    that.trigger('editAppointment', e, obj);
+                }
+                this.clicks++;
+            }
         },
-
+        
         onEnterAppointment: function (e) {
             $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
         },
@@ -82,14 +102,16 @@ define('io.ox/calendar/week/view',
         },
         
         onCreateAppointment: function (e) {
-            // calculate timestamp for current position
-            var posY = e.target.offsetTop + e.offsetY,
-                height = this.cellHeight * this.slots * this.fragmentation,
-                secPos = date.DAY * posY / height,
-                overhead = secPos % (date.HOUR / this.gridSize),
-                start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').add(secPos - overhead),
-                end = new date.Local(start.getTime() + date.HOUR / this.fragmentation);
-            this.trigger('createAppoinment', e, start, end);
+            if ($(e.target).is('.timeslot')) {
+                // calculate timestamp for current position
+                var posY = e.target.offsetTop + e.offsetY,
+                    height = this.cellHeight * this.slots * this.fragmentation,
+                    secPos = date.DAY * posY / height,
+                    overhead = secPos % (date.HOUR / this.gridSize),
+                    start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').add(secPos - overhead),
+                    end = new date.Local(start.getTime() + date.HOUR);
+                this.trigger('createAppointment', e, start, end);
+            }
         },
 
         render: function () {
@@ -348,6 +370,10 @@ define('io.ox/calendar/week/view',
                 start: s,
                 lenght: calc(end) - s
             };
+        },
+        
+        calcTime: function (pos) {
+            
         }
         
     });

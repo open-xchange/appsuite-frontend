@@ -42,7 +42,13 @@ define('io.ox/calendar/week/perspective',
         },
         
         createAppointment: function (e, start, end) {
-            console.log('createAppointment', e, start, end);
+            console.log('createAppointment', e, start.toString(), end.toString());
+        },
+        
+        editAppointment: function (e, obj) {
+            require('io.ox/core/extensions')
+                .point('io.ox/calendar/detail/actions/edit')
+                .invoke('action', this, obj);
         },
         
         getAppointments: function (start, end) {
@@ -79,8 +85,9 @@ define('io.ox/calendar/week/perspective',
             });
             
             weekView
-                .on('showAppoinment', this.showAppointment, this)
-                .on('createAppoinment', this.createAppointment, this);
+                .on('showAppointment', this.showAppointment, this)
+                .on('createAppointment', this.createAppointment, this)
+                .on('editAppointment', this.editAppointment, this);
             
             this.main
                 .empty()
