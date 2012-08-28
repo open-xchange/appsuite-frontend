@@ -24,7 +24,6 @@ define("io.ox/mail/main",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
      "io.ox/mail/actions",
-     "io.ox/tasks/actions",
      "less!io.ox/mail/style.css"
     ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd) {
 

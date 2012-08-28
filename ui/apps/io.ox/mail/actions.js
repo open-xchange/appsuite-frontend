@@ -9,6 +9,7 @@
  * Mail: info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
 define('io.ox/mail/actions',
@@ -334,6 +335,76 @@ define('io.ox/mail/actions',
             window.open(api.getUrl(data, 'eml'));
         }
     });
+    
+    new Action('io.ox/mail/actions/reminder', {
+        id: 'reminder',
+        action: function (data) {
+            require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
+                    function (dialogs, taskApi, util)
+                    {
+                        //create popup dialog
+                        var popup = new dialogs.ModalDialog()
+                            .addPrimaryButton('create', gt('Create reminder'))
+                            .addButton('cancel', gt('Cancel'));
+                        
+                        //Header
+                        popup.getHeader()
+                            .append($("<h4>")
+                                    .text(gt('Remind me')));
+                        
+                        //fill popup body
+                        var popupBody = popup.getBody();
+                        popupBody.append("<div>" + gt('Subject') + "</div>");
+                        var titleInput = $('<input>', { type: 'text', value: data.subject, width: '90%' })
+                        .appendTo(popupBody);
+                        
+                        popupBody.append("<div>" + gt('Remind me') + "</div>");
+                        var dateSelector = $('<select>', {name: "dateselect"})
+                        .appendTo(popupBody);
+                        dateSelector.append("<option>" + gt('in five minutes') + "</option>" +
+                                "<option>" + gt('in fifteen minutes') + "</option>" +
+                                "<option>" + gt('in thirty minutes') + "</option>" +
+                                "<option>" + gt('in one hour') + "</option>" +
+                                "<option>" + gt('in three hours') + "</option>" +
+                                "<option>" + gt('in six hours') + "</option>" +
+                                "<option>" + gt('in one day') + "</option>" +
+                                "<option>" + gt('in three days') + "</option>" +
+                                "<option>" + gt('in one week') + "</option>" +
+                                "<option>" + gt('tomorrow') + "</option>" +
+                                "<option>" + gt('next monday') + "</option>" +
+                                "<option>" + gt('nex friday') + "</option>");
+                        
+                        //ready for work
+                        popup.show()
+                            .done(function (action) {
+                                
+                                if (action === "create")
+                                    {
+                                    
+                                    //Calculate the right time
+                                    var endDate = new Date();
+                                    endDate = util.computePopupTime(endDate, dateSelector.prop("selectedIndex"));
+                                    
+                                    //notification one minute before task expires or no notification at all
+                                    var alarmTime = endDate.getTime() - 60000;
+                                    
+                                    taskApi.create({title: gt('Mail reminder') + ": " + titleInput.val(),
+                                        folder_id: config.get('folder.tasks'),
+                                        end_date: endDate.getTime(),
+                                        start_date: endDate.getTime(),
+                                        alarm: endDate.getTime(),
+                                        note: gt('Mail reminder for') + ": " + data.subject + " \n" +
+                                        gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1]
+                                        })
+                                        .done(function () {
+                                            notifications.yell('success', 'Reminder has been created!');
+                                        });
+                                }
+                            });
+                    });
+            
+        }
+    });
 
     // toolbar
 
@@ -480,9 +551,17 @@ define('io.ox/mail/actions',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete'
     }));
-
+    
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
+        prio: 'hi',
+        id: 'reminder',
+        label: gt("Reminder"),
+        ref: 'io.ox/mail/actions/reminder'
+    }));
+
+    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+        index: 1200,
         prio: 'lo',
         id: 'saveEML',
         label: gt('Save as EML'),
