@@ -16,7 +16,15 @@ define('io.ox/portal/settings/defaults', [], function () {
     'use strict';
 
     var settingsDefaults = {
-        'activePlugins': ['appointments', 'mail', 'twitter', 'linkedIn', 'facebook', 'tumblr', 'flickr', 'tasks', 'rss']
+        'pluginSettings': [
+            {id: 'mail', active: true, index: 100},
+            {id: 'twitter', active: true, index: 200},
+            {id: 'linkedIn', active: true, index: 300},
+            {id: 'facebook', active: true, index: 400},
+            {id: 'tasks', active: true, index: 500},
+            {id: 'appointments', active: true, index: 600},
+            {id: 'rss', active: true, index: 700}
+        ]
     };
 
     return settingsDefaults;

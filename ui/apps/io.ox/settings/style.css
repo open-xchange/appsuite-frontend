@@ -73,7 +73,8 @@
 
 .settings-detail-pane .listbox {
 	width: 540px;
-  	overflow: auto;
+	overflow-x: hidden;
+  	overflow-y: auto;
   	position: relative;
   	border: 1px solid #D9D9D9;
   	border-radius: 2px;

@@ -19,7 +19,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
                               "less!io.ox/tasks/style.css"], function (ext, links, api, gt, conf) {
 
     "use strict";
-    
+    //File not in use right now code copied to mail/actions.js
     var Action = links.Action;
     
     new Action('io.ox/tasks/actions/reminder', {
@@ -95,7 +95,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
                                     if (alarmbox.attr("checked"))
                                         alarmTime = endDate.getTime() - 60000;
 
-                                    api.CreateTask({title: gt('Email reminder') + ": " + titleInput.val(),
+                                    api.create({title: gt('Email reminder') + ": " + titleInput.val(),
                                         folder_id: conf.get('folder.tasks'),
                                         end_date: endDate.getTime(),
                                         start_date: endDate.getTime(),

@@ -10,13 +10,14 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/tasks/api", ["io.ox/core/http"], function (http) {
+define("io.ox/tasks/api", ["io.ox/core/http",
+                           "io.ox/core/event"], function (http, Events) {
     
     "use strict";
     
-    var api = { CreateTask: function (task)
+    var api = { create: function (task)
             {
-                http.PUT({
+                return http.PUT({
                     module: "tasks",
                     params: {action: 'new'},
                     data: task
@@ -37,6 +38,37 @@ define("io.ox/tasks/api", ["io.ox/core/http"], function (http) {
                 }
     };
             
+    Events.extend(api);
    
+
+    
+    api.getTasks = function ()
+    {
+/*
+        return userAPI.get().pipe(function (user) {
+            api.getUpdates({
+                start: start,
+                end: start + 28 * 5 * DAY, //next four month?!?
+                timestamp: 0,
+                recurrence_master: true
+            })
+            .pipe(function (list) {
+                // sort by start_date & look for unconfirmed appointments
+                var invites = _.chain(list)
+                    .filter(function (item) {
+                        return _(item.users).any(function (item_user) {
+                            return (item_user.id === user.id && (item_user.confirmation === 0));
+                        });
+                    })
+                    .sortBy('start_date')
+                    .value();
+                if (invites.length > 0) {
+                    api.trigger('new-invites', invites);
+                }
+                return invites;
+            });
+        });*/
+    };
+    
     return api;
 });

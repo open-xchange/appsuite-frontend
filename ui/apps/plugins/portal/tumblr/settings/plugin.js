@@ -45,6 +45,9 @@ define('plugins/portal/tumblr/settings/plugin',
                     strings: staticStrings
                 }));
 
+                // Used by jquery ui sortable
+                self.$el.attr('id', this.model.get('url'));
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
@@ -84,6 +87,27 @@ define('plugins/portal/tumblr/settings/plugin',
                     } else {
                         $listbox.show();
                     }
+
+                    $listbox.sortable({
+                        update: function (event, ui) {
+                            var newBlogs = [];
+
+                            _.each($(this).sortable('toArray'), function (url) {
+                                newBlogs.push({url: url, description: _.find(blogs, function (blog) {
+                                    if (blog.url === url) {
+                                        return true;
+                                    } else {
+                                        return false;
+                                    }
+                                }).description});
+                            });
+                            blogs = newBlogs;
+                            settings.set('blogs', blogs);
+                            settings.save();
+
+                            ox.trigger("refresh^", [true]);
+                        }
+                    });
                 }
 
                 redraw();

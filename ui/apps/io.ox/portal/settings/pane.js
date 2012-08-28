@@ -18,7 +18,8 @@ define('io.ox/portal/settings/pane',
        'settings!io.ox/portal',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
-       'gettext!io.ox/portal/settings'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
+       'gettext!io.ox/portal/settings',
+       'apps/io.ox/core/jqueryui/jquery-ui-1.8.23.interactions.min.js'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
 
     'use strict';
 
@@ -33,24 +34,98 @@ define('io.ox/portal/settings/pane',
 
     var plugins = [];
 
-    var activePlugins = settings.get('activePlugins') || [];
+    var pluginSettings = settings.get('pluginSettings') || {};
 
     _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
-        var isActive = _.include(activePlugins, pluginName);
-        var plugin = {id: pluginName, name: gt(pluginName), active: isActive};
+        var index = 9999;
+        var isActive = false;
+        if (pluginSettings[pluginName]) {
+            if (!pluginSettings[pluginName].index) {
+                pluginSettings[pluginName].index = 9999;
+            }
 
-        if (pluginName === 'reddit') {
-            plugin.subreddits = 'foo';
+            if (!pluginSettings[pluginName].id) {
+                pluginSettings[pluginName].id = pluginName;
+            }
+
+            if (!pluginSettings[pluginName].isActive) {
+                pluginSettings[pluginName].isActive = false;
+            }
+
+            index = pluginSettings[pluginName].index;
+            isActive = pluginSettings[pluginName].active;
         }
+        var plugin = {id: pluginName, name: gt(pluginName), active: isActive, index: index};
         plugins.push(plugin);
     });
 
+    plugins.sort(function (a, b) {
+        return a.index - b.index;
+    });
+
     var collection,
+        changePluginState = function (id, state) {
+            pluginSettings[id].active = state;
+
+            settings.set('pluginSettings', pluginSettings);
+            settings.save();
+
+            var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
+            var activePlugins = _.filter(pluginSettings || {}, function (obj) { return obj.active; });
+            var allActivePlugins = _.map(activePlugins, function (obj) {
+                return 'plugins/portal/' + obj.id + '/register';
+            });
+
+            plugins = _.intersection(plugins, allActivePlugins);
+
+            // Load all active plugins
+            require(plugins).pipe(function () {
+                var index = 100;
+
+                // Load plugin with given index (for sub-tiles)
+                _.each(arguments, function (obj) {
+                    if (obj && _.isFunction(obj.reload)) {
+                        obj.reload(index);
+                    }
+                    index += 100;
+                });
+
+                // Enable or Disable all plugins
+                var extensions = ext.point('io.ox/portal/widget').all();
+                _.chain(extensions).each(function (extension) {
+                        var eid = extension.id;
+
+                        var isActive = _.find(activePlugins, function (plugin) {
+                            var pluginLength = plugin.id.length;
+                            return (eid.length >= pluginLength && eid.substring(0, pluginLength) === plugin.id);
+                        });
+
+                        if (!isActive) {
+                            ext.point("io.ox/portal/widget").disable(eid);
+                        } else {
+                            ext.point("io.ox/portal/widget").enable(eid);
+                        }
+                    }
+                );
+
+                ox.trigger("refresh^", [true]);
+            });
+        },
         PluginSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
                 this.template = doT.template(tmplPlugin);
                 this._modelBinder = new Backbone.ModelBinder();
+            },
+            renderState: function () {
+                var star = this.$el.find('#state');
+                if (star) {
+                    if (this.model.get('active')) {
+                        star.attr('class', 'icon-star');
+                    } else {
+                        star.attr('class', 'icon-star-empty');
+                    }
+                }
             },
             render: function () {
                 var self = this;
@@ -59,13 +134,26 @@ define('io.ox/portal/settings/pane',
                     id: this.model.get('id')
                 }));
 
+                this.renderState();
+
+                // Used by jquery ui sortable
+                self.$el.attr('id', this.model.get('id'));
+
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
                 return self;
             },
             events: {
-                'click .deletable-item': 'onSelect'
+                'click .deletable-item': 'onSelect',
+                'click #state': 'changeState'
+            },
+            changeState: function (e) {
+                var active = !this.model.get('active');
+                this.model.set('active', active);
+                changePluginState(this.model.get('id'), active);
+                this.renderState();
+                e.stopPropagation();
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
@@ -120,44 +208,9 @@ define('io.ox/portal/settings/pane',
                 'click .save': 'onSave'
             },
             onSave: function () {
-                if (this.$el.find('input#plugin-active').is(':checked')) {
-                    activePlugins.push(this.plugin.get('id'));
-                    activePlugins = _.uniq(activePlugins);
-                    this.plugin.set('active', true);
-                } else {
-                    activePlugins = _.without(activePlugins, this.plugin.get('id'));
-                    this.plugin.set('active', false);
-                }
-                settings.set('activePlugins', activePlugins);
-                settings.save();
-
-                var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
-                var allActivePlugins = _.map(activePlugins || [], function (value) { return 'plugins/portal/' + value + '/register'; });
-                plugins = _.intersection(plugins, allActivePlugins);
-
-                // Load all active plugins
-                require(plugins).pipe(function () {
-                    // Enable or Disable all plugins
-                    var extensions = ext.point('io.ox/portal/widget').all();
-                    _.chain(extensions).each(function (extension) {
-                            var eid = extension.id;
-
-                            var isActive = _.find(activePlugins, function (plugin) {
-                                var pluginLength = plugin.length;
-                                return (eid.length >= pluginLength && eid.substring(0, pluginLength) === plugin);
-                            });
-
-                            if (!isActive) {
-                                ext.point("io.ox/portal/widget").disable(eid);
-                            } else {
-                                ext.point("io.ox/portal/widget").enable(eid);
-                            }
-                        }
-                    );
-
-                    ox.trigger("refresh^");
-                });
-
+                var active = this.$el.find('input#plugin-active').is(':checked');
+                this.plugin.set('active', active);
+                changePluginState(this.plugin.get('id'), active);
                 this.dialog.close();
             }
         });
@@ -176,12 +229,44 @@ define('io.ox/portal/settings/pane',
                     _.bindAll(this);
                     this.collection = collection;
                 },
-                render: function () {
-                    var self = this;
-                    self.$el.empty().append(self.template({strings: staticStrings}));
+                redraw: function ($listbox) {
+                    if (!$listbox) {
+                        $listbox = this.$el.find('.listbox');
+                    }
+                    $listbox.empty();
 
                     this.collection.each(function (item) {
-                        self.$el.find('.listbox').append(new PluginSelectView({ model: item }).render().el);
+                        $listbox.append(new PluginSelectView({ model: item }).render().el);
+                    });
+                },
+                render: function () {
+                    var self = this,
+                        $listbox;
+
+                    self.$el.empty().append(self.template({strings: staticStrings}));
+
+                    $listbox = self.$el.find('.listbox');
+
+                    this.redraw($listbox);
+
+                    $listbox.sortable({
+                        update: function (event, ui) {
+                            var index = 100;
+
+                            _.each($(this).sortable('toArray'), function (value) {
+                                if (!pluginSettings[value]) {
+                                    pluginSettings[value] = {};
+                                }
+
+                                pluginSettings[value].index = index;
+                                index += 100;
+                            });
+
+                            settings.set('pluginSettings', pluginSettings);
+                            settings.save();
+
+                            ox.trigger("refresh^", [true]);
+                        }
                     });
 
                     return this;
@@ -199,8 +284,13 @@ define('io.ox/portal/settings/pane',
                         plugin: collection.get([e.data.id])
                     });
 
-                    view.dialog = new dialogs.SidePopup().show(e, function (popup) {
+                    var d = view.dialog = new dialogs.SidePopup().show(e, function (popup) {
                         popup.append(view.render().el);
+                    });
+
+                    var self = this;
+                    d.on('close', function () {
+                        self.redraw();
                     });
                 }
             });
