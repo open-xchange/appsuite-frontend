@@ -83,6 +83,47 @@
   	-moz-border-radius: 3px;
 }
 
+.settings-detail-pane .listbox .disabled {
+	background-color: @disabled-background !important;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, lighten(@disabled-background, 20%)),
+        color-stop(1, darken(@disabled-background, 5%))
+    ) !important;
+    background-image: -o-linear-gradient(top, lighten(@disabled-background, 20%) 0%, darken(@disabled-background, 5%) 100%) !important;
+    background-image: -moz-linear-gradient(
+        center top,
+        lighten(@disabled-background, 20%) 0%,
+        darken(@disabled-background, 5%) 100%
+    ) !important;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@disabled-background, 20%)", endColorstr="darken(@disabled-background, 5%)~")";
+    border-bottom-color: black;
+    color: @disabled-color;
+}
+
+.settings-detail-pane .listbox .enabled {
+	cursor: move;
+	background-color: @enabled-background !important;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, lighten(@enabled-background, 20%)),
+        color-stop(1, darken(@enabled-background, 5%))
+    ) !important;
+    background-image: -o-linear-gradient(top, lighten(@enabled-background, 20%) 0%, darken(@enabled-background, 5%) 100%) !important;
+    background-image: -moz-linear-gradient(
+        center top,
+        lighten(@enabled-background, 20%) 0%,
+        darken(@enabled-background, 5%) 100%
+    ) !important;
+    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="lighten(@enabled-background, 20%)", endColorstr="darken(@enabled-background, 5%)~")";
+    border-bottom-color: black;
+    color: @enabled-color;
+}
+
 .settings-detail-pane .listbox:focus {
   border-color: hsl(214, 91%, 65%);
   z-index: 2;
@@ -126,6 +167,11 @@
   	overflow: hidden;
   	visibility: hidden;
   	margin: 0;
+}
+
+.settings-detail-pane .listbox .sortable-item {
+	padding: 15px 5px 15px 10px;
+	vertical-align:middle;
 }
 
 .settings-detail-pane .listbox .deletable-item {

@@ -32,38 +32,42 @@ define('io.ox/portal/settings/pane',
         PROPERTIES:      gt('Properties')
     };
 
-    var plugins = [];
-
     var pluginSettings = settings.get('pluginSettings') || {};
 
-    _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
-        var index = 9999;
-        var isActive = false;
-        if (pluginSettings[pluginName]) {
-            if (!pluginSettings[pluginName].index) {
-                pluginSettings[pluginName].index = 9999;
+    var getPlugins = function () {
+        var plugins = [];
+        _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
+            var index = 9999;
+            var isActive = false;
+            if (pluginSettings[pluginName]) {
+                if (!pluginSettings[pluginName].index) {
+                    pluginSettings[pluginName].index = 9999;
+                }
+
+                if (!pluginSettings[pluginName].id) {
+                    pluginSettings[pluginName].id = pluginName;
+                }
+
+                if (!pluginSettings[pluginName].isActive) {
+                    pluginSettings[pluginName].isActive = false;
+                }
+
+                index = pluginSettings[pluginName].index;
+                isActive = pluginSettings[pluginName].active;
             }
+            var plugin = {id: pluginName, name: gt(pluginName), active: isActive, index: index};
+            plugins.push(plugin);
+        });
 
-            if (!pluginSettings[pluginName].id) {
-                pluginSettings[pluginName].id = pluginName;
-            }
+        plugins.sort(function (a, b) {
+            return a.index - b.index;
+        });
 
-            if (!pluginSettings[pluginName].isActive) {
-                pluginSettings[pluginName].isActive = false;
-            }
-
-            index = pluginSettings[pluginName].index;
-            isActive = pluginSettings[pluginName].active;
-        }
-        var plugin = {id: pluginName, name: gt(pluginName), active: isActive, index: index};
-        plugins.push(plugin);
-    });
-
-    plugins.sort(function (a, b) {
-        return a.index - b.index;
-    });
+        return plugins;
+    };
 
     var collection,
+        plugins,
         changePluginState = function (id, state) {
             pluginSettings[id].active = state;
 
@@ -121,9 +125,11 @@ define('io.ox/portal/settings/pane',
                 var star = this.$el.find('#state');
                 if (star) {
                     if (this.model.get('active')) {
-                        star.attr('class', 'icon-star');
+                        star.text(gt('Deaktivieren'));
+                        this.$el.removeClass('disabled').addClass('enabled');
                     } else {
-                        star.attr('class', 'icon-star-empty');
+                        star.text(gt('Aktivieren'));
+                        this.$el.removeClass('enabled').addClass('disabled');
                     }
                 }
             },
@@ -145,7 +151,7 @@ define('io.ox/portal/settings/pane',
                 return self;
             },
             events: {
-                'click .deletable-item': 'onSelect',
+                'click .sortable-item': 'onSelect',
                 'click #state': 'changeState'
             },
             changeState: function (e) {
@@ -157,7 +163,7 @@ define('io.ox/portal/settings/pane',
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.deletable-item').attr('selected', 'selected');
+                this.$el.find('.sortable-item').attr('selected', 'selected');
             }
         }),
 
@@ -220,7 +226,7 @@ define('io.ox/portal/settings/pane',
         id: "portalsettings",
         draw: function (data) {
             var that = this;
-
+            plugins = getPlugins();
             collection = new Backbone.Collection(plugins);
 
             var PluginsView = Backbone.View.extend({
@@ -250,6 +256,8 @@ define('io.ox/portal/settings/pane',
                     this.redraw($listbox);
 
                     $listbox.sortable({
+                        axis: 'y',
+                        items: 'div.enabled',
                         update: function (event, ui) {
                             var index = 100;
 

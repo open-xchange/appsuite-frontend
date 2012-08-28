@@ -126,17 +126,10 @@ define('plugins/portal/flickr/settings/plugin',
                                 var method = value.substring(0, i),
                                     q = value.substring(i + 1);
 
-                                var newStream = {q: q, method: method};
-                                var oldData = _.find(streams, function (stream) {
-                                    if (stream.q === q && stream.method === method) {
-                                        return true;
-                                    } else {
-                                        return false;
-                                    }
-                                });
+                                var oldData = _.find(streams, function (stream) { return (stream.q === q && stream.method === method); });
 
                                 if (oldData) {
-                                    newStreams.push({q: q, method: method, description: oldData.description, nsid: oldData.nsid});
+                                    newStreams.push(oldData);
                                 }
                             });
                             streams = newStreams;

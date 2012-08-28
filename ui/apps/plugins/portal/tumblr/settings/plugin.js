@@ -93,13 +93,11 @@ define('plugins/portal/tumblr/settings/plugin',
                             var newBlogs = [];
 
                             _.each($(this).sortable('toArray'), function (url) {
-                                newBlogs.push({url: url, description: _.find(blogs, function (blog) {
-                                    if (blog.url === url) {
-                                        return true;
-                                    } else {
-                                        return false;
-                                    }
-                                }).description});
+                                var oldData = _.find(blogs, function (blog) { return (blog.url === url); });
+
+                                if (oldData) {
+                                    newBlogs.push(oldData);
+                                }
                             });
                             blogs = newBlogs;
                             settings.set('blogs', blogs);
