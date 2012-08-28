@@ -11,27 +11,14 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-//currently not in use
-.taskPopupHeader
-{
- 	background-color: #333333;
-}
- 
-//currently not in use
-.taskPopupTitle
-{
- 	color: #FFFFFF;
- 	text-align: center;
-}
-
-.vgrid-cell.tasks .status {
+.vgrid-cell.tasks .end_date {
     color: #777;
     font-weight: 200;
     display: inline-block;
     float: right;
 }
 
-.vgrid-cell.tasks .end_date {
+.vgrid-cell.tasks .status {
     margin-left: 1em;
     float: right;
     position: absolute;
