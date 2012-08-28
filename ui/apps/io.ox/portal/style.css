@@ -231,4 +231,5 @@
     .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
 
     .io-ox-portal-createMe { background-color: #777; }
+    .io-ox-portal-createMe:hover { background-color: #555; }
 }
