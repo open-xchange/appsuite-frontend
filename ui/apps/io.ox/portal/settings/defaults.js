@@ -11,8 +11,7 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define('io.ox/portal/settings/defaults',
-       [], function () {
+define('io.ox/portal/settings/defaults', [], function () {
 
     'use strict';
 
@@ -22,7 +21,9 @@ define('io.ox/portal/settings/defaults',
             {id: 'twitter', active: true, index: 200},
             {id: 'linkedIn', active: true, index: 300},
             {id: 'facebook', active: true, index: 400},
-            {id: 'tasks', active: true, index: 500}
+            {id: 'tasks', active: true, index: 500},
+            {id: 'appointments', active: true, index: 600},
+            {id: 'rss', active: true, index: 700}
         ]
     };
 
