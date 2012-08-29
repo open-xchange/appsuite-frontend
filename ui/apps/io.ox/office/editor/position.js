@@ -241,13 +241,13 @@ define('io.ox/office/editor/position',
         }
 
         // special handling for non-floated images as children of paragraphs, use text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'img') && (! Position.isFloated(localNode))) {
+        if (localNode && (Utils.getNodeName(localNode) === 'img') && (! Position.hasFloatProperty(localNode))) {
             localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
             useFirstTextNode = false;
         }
 
         // special handling for floated images as children of paragraphs, use text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.isFloated(localNode))) {
+        if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.hasFloatProperty(localNode))) {
             if (isRtlCursorTravel) {
                 localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
                 useFirstTextNode = false;
@@ -1673,6 +1673,24 @@ define('io.ox/office/editor/position',
         return ((localNode.css('float') === 'left') || (localNode.css('float') === 'right'));
     };
 
+    /**
+     * Checks if a specified node has the css property 'float' set to 'left' or 'right' or 'none'.
+     * Property 'none' is required for images without any text around it. Images that are inline
+     * should not use property float set to 'none'.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A DOM element object or jQuery element, that is checked, if it contains
+     *  the css property 'float' set to 'left' or 'right' or 'none'.
+     *  If it is a DOM element, it is jQuerified first.
+     *
+     * @returns {Boolean}
+     *  A boolean containing the information, if the specified node has the css
+     *  property 'float' set to 'left' or 'right' or 'none'.
+     */
+    Position.hasFloatProperty = function (node) {
+        var localNode = (node instanceof $) ? node : $(node);
+        return ((localNode.css('float') === 'left') || (localNode.css('float') === 'right') || (localNode.css('float') === 'none'));
+    };
 
     return Position;
 

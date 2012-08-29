@@ -2615,39 +2615,40 @@ define('io.ox/office/editor/editor',
                     inline = attributes.inline;
                 }
                 if (attributes.width) {
-                    attributes.width /= 100;  // converting to mm
-                    attributes.width += 'mm';
+                    attributes.width = attributes.width / 100 + 'mm';  // converting to mm
                 }
                 if (attributes.height) {
-                    attributes.height /= 100;  // converting to mm
-                    attributes.height += 'mm';
+                    attributes.height = attributes.height / 100 + 'mm';  // converting to mm
+                }
+                if (attributes.marginT) {
+                    attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
+                }
+                if (attributes.marginR) {
+                    attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
+                }
+                if (attributes.marginB) {
+                    attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
+                }
+                if (attributes.marginL) {
+                    attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
+                }
+                if (attributes.anchorhbase) {
+                    attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
                 }
 
-                if ((attributes.marginT) || (attributes.marginR) || (attributes.marginB) || (attributes.marginL)) {
+                if (attributes.textwrapmode !== undefined) {
 
-                    var margintop = '0mm',
-                        marginright = '0mm',
-                        marginbottom = '0mm',
-                        marginleft = '0mm';
-
-                    if (attributes.marginT) {
-                        margintop = attributes.marginT / 100;  // converting to mm
-                        margintop += 'mm';
+                    if (attributes.textwrapmode === 'topandbottom') {
+                        anchorType = 'FloatNone';
+                    } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
+                        if (attributes.textwrapside !== undefined) {
+                            if (attributes.textwrapside === 'right')  {
+                                anchorType = 'FloatLeft';
+                            } else if (attributes.textwrapside === 'left') {
+                                anchorType = 'FloatRight';
+                            }
+                        }
                     }
-                    if (attributes.marginR) {
-                        marginright = attributes.marginR / 100;  // converting to mm
-                        marginright += 'mm';
-                    }
-                    if (attributes.marginB) {
-                        marginbottom = attributes.marginB / 100;  // converting to mm
-                        marginbottom += 'mm';
-                    }
-                    if (attributes.marginL) {
-                        marginleft = attributes.marginL / 100;  // converting to mm
-                        marginleft += 'mm';
-                    }
-
-                    attributes.margin = margintop + ' ' + marginright + ' ' + marginbottom + ' ' + marginleft;
                 }
             }
 
@@ -2655,8 +2656,7 @@ define('io.ox/office/editor/editor',
                 if (inline) {
                     anchorType = 'AsCharacter';
                 } else {
-                    // anchorType = 'ToParagraph'; // TODO, not always FloatLeft
-                    anchorType = 'FloatLeft'; // TODO, not always FloatLeft
+                    anchorType = 'FloatNone';
                 }
             }
 
@@ -2666,8 +2666,9 @@ define('io.ox/office/editor/editor',
                     // points to start or end of text, needed to clone formatting)
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
+                    // Do not set the 'float' property to 'none'. That is used in
+                    // anchorType 'FloatNone'.
                     node = node.parentNode;
-                    attributes.float = 'none';
                     $('<img>', { src: url }).insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToPage') {
                     // TODO: This is not a good solution. Adding image to the end of the editdiv,
@@ -2698,6 +2699,37 @@ define('io.ox/office/editor/editor',
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
+                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                } else if (anchorType === 'FloatNone') {
+                    // insert image before the first span in the paragraph
+                    var paragraph = node.parentNode.parentNode,
+                        paraWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2),
+                        imageWidth = 0,
+                        leftMarginWidth = 0,
+                        anchorhoffset = 0;
+
+                    if (attributes.width) {
+                        imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
+                    }
+                    if (attributes['margin-left']) {
+                        leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
+                    }
+
+                    if (attributes.anchorhoffset) {
+                        anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
+                        attributes['margin-left'] = anchorhoffset + leftMarginWidth;
+                        attributes['margin-right'] = paraWidth - imageWidth - attributes['margin-left'];
+                        attributes['margin-left'] += 'mm';
+                        attributes['margin-right'] += 'mm';
+                    } else {
+                        // Centering the image
+                        var marginWidth = (paraWidth - imageWidth) / 2 + 'mm';
+                        attributes['margin-left'] = marginWidth;
+                        attributes['margin-right'] = marginWidth;
+                    }
+
+                    node = paragraph.firstChild;
+                    attributes.float = 'none';
                     $('<img>', { src: url }).insertBefore(node).css(attributes);
                 }
             }
