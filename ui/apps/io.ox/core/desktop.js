@@ -994,7 +994,8 @@ define("io.ox/core/desktop",
                             $("<div class='css-table-cell cell-33'>").append(
                                 // title
                                 win.nodes.title = $('<h1 class="window-title">')
-                                .css('width', opt.titleWidth).append($("<span>"))
+                                //.css('width', opt.titleWidth)
+                                .append($("<span>"))
                             ),
                             $("<div class='css-table-cell cell-33 cell-center window-toolbar'>").append(
                                 // toolbar
