@@ -11,7 +11,13 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/create/view', ['io.ox/contacts/model', 'io.ox/backbone/views', 'io.ox/backbone/forms', 'io.ox/core/tk/dialogs', 'gettext!io.ox/contacts/contacts'], function (model, views, forms, dialogs, gt) {
+define('io.ox/contacts/create/view', 
+    ['io.ox/contacts/model',
+     'io.ox/backbone/views',
+      'io.ox/backbone/forms',
+      'io.ox/core/tk/dialogs',
+      'io.ox/contacts/widgets/pictureUpload',
+      'gettext!io.ox/contacts/contacts'], function (model, views, forms, dialogs, PictureUpload, gt) {
     "use strict";
     
     var point = views.point('io.ox/contacts/create/view'),
