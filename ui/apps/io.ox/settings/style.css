@@ -170,8 +170,29 @@
 }
 
 .settings-detail-pane .listbox .sortable-item {
-	padding: 15px 5px 15px 10px;
-	vertical-align:middle;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    
+    width: 100%; 
+	padding: 15px 5px 15px 5px;
+    position: relative;
+}
+
+.settings-detail-pane .listbox .sortable-item button {
+	position: absolute;
+	top: 50%;
+	right: 15px;
+	width: 120px;
+}
+
+.settings-detail-pane .listbox .sortable-item #state {
+	margin: -25% 0 0 0;
+}
+
+.settings-detail-pane .listbox .sortable-item #prop {
+	margin: -25% 135px 0 0;
 }
 
 .settings-detail-pane .listbox .deletable-item {

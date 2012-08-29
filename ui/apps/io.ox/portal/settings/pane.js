@@ -137,7 +137,8 @@ define('io.ox/portal/settings/pane',
                 var self = this;
 
                 self.$el.empty().append(self.template({
-                    id: this.model.get('id')
+                    id: this.model.get('id'),
+                    strings: staticStrings
                 }));
 
                 this.renderState();
@@ -148,6 +149,18 @@ define('io.ox/portal/settings/pane',
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
+                this.$el.find('button#prop').hide();
+
+                if (_.include(ox.serverConfig.portalPluginEditable, this.model.get('id'))) {
+                    this.$el.find('div.sortable-item').hover(
+                            function () {
+                                self.$el.find('button#prop').show();
+                            },
+                            function () {
+                                self.$el.find('button#prop').hide();
+                            }
+                    );
+                }
                 return self;
             },
             events: {
@@ -174,19 +187,26 @@ define('io.ox/portal/settings/pane',
                 this.strings = staticStrings;
 
                 var that = this;
-                var req = ['text!io.ox/portal/settings/tpl/pluginsettings.html'];
-                var response = $.ajax({
-                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/plugin.js',
-                    type: 'HEAD',
-                    async: false
-                }).status;
 
-                if (response === 200) {
-                    req.push('plugins/portal/' + this.plugin.id + '/settings/plugin');
-                }
-
-                require(req, function (tmplPluginSettings, pluginFeatures) {
-                    that.template = doT.template(tmplPluginSettings);
+                // Show activation-checkbox in pane?
+                // This is some old code - should be removed
+//                var req = ['text!io.ox/portal/settings/tpl/pluginsettings.html'];
+//                var response = $.ajax({
+//                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/plugin.js',
+//                    type: 'HEAD',
+//                    async: false
+//                }).status;
+//
+//                if (response === 200) {
+//                    req.push('plugins/portal/' + this.plugin.id + '/settings/plugin');
+//                }
+//
+//                require(req, function (tmplPluginSettings, pluginFeatures) {
+//                    that.template = doT.template(tmplPluginSettings);
+//                    that.pluginFeatures = pluginFeatures;
+//                    that.deferred.resolve();
+//                });
+                require(['plugins/portal/' + this.plugin.id + '/settings/plugin'], function (pluginFeatures) {
                     that.pluginFeatures = pluginFeatures;
                     that.deferred.resolve();
                 });
@@ -195,11 +215,7 @@ define('io.ox/portal/settings/pane',
                 var that = this;
 
                 this.deferred.done(function () {
-                    that.$el.empty().append(that.template({
-                        active: that.plugin.get('active'),
-                        id: that.plugin.get('id'),
-                        strings: that.strings
-                    }));
+                    that.$el.empty();
 
                     if (that.pluginFeatures) {
                         if (that.pluginFeatures.renderSettings) {
