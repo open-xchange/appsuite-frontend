@@ -2797,13 +2797,14 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(position);
         };
 
-        this.implInsertTable = function (position, rows, columns) {
+        this.implInsertTable = function (pos, rows, columns) {
 
             var // prototype elements for the table, row, cell, and paragraph
                 paragraph = $('<p>'),
                 cell = $('<td>').append(paragraph),
                 row = $('<tr>').append(cell),
-                table = $('<table>').append(row);
+                table = $('<table>').append(row),
+                position = _.copy(pos, true);
 
             // insert empty text node into the paragraph
             validateParagraphNode(paragraph);
@@ -2813,13 +2814,36 @@ define('io.ox/office/editor/editor',
             _.times(rows - 1, function () { table.append(row.clone(true)); });
 
             // insert the table into the document
-            var domParagraph = Position.getDOMPosition(paragraphs, position).node;
-            table.insertBefore(domParagraph);
-            paragraphs = editdiv.children();
+            var domPosition = Position.getDOMPosition(paragraphs, position),
+                domParagraph = null,
+                insertBefore = true;
 
-            // Setting cursor into table (unfortunately not visible in Chrome)
-            var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-            lastOperationEnd = new OXOPaM(oxoPosition);
+            if (domPosition) {
+                domParagraph = domPosition.node;
+            } else {
+                position[position.length - 1] -= 1; // inserting table at the end
+                domPosition = Position.getDOMPosition(paragraphs, position);
+                if (domPosition) {
+                    domParagraph = domPosition.node;
+                    if ($(domParagraph).parent().children().length === position[position.length - 1] + 1) {
+                        insertBefore = false;  // inserting after the last paragraph/table
+                    }
+                }
+            }
+
+            if (domParagraph !== null) {
+                if (insertBefore) {
+                    table.insertBefore(domParagraph);
+                } else {
+                    table.insertAfter(domParagraph);
+                }
+
+                paragraphs = editdiv.children();
+
+                // Setting cursor into table (unfortunately not visible in Chrome)
+                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
+                lastOperationEnd = new OXOPaM(oxoPosition);
+            }
         };
 
         this.implSplitParagraph = function (position) {
