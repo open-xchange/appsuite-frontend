@@ -20,10 +20,30 @@ define('io.ox/contacts/model',
         api: api,
         extensionNamespace: 'io.ox/contacts/model',
         update: function (model) {
+            // Some special handling for profile pictures
             var data = model.changedSinceLoading();
-            return api.edit({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified'), data: data});
+            var file = data.pictureFile;
+            if (file) {
+                delete data.pictureFile;
+                return api.editNewImage({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified')}, data, file);
+            } else {
+                return api.edit({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified'), data: data});
+            }
         },
         updateEvents: ['edit'],
+        create: function (model) {
+            // Some special handling for profile pictures
+            var json, file;
+            if (model.attributes.pictureFile) {
+                file = model.get("pictureFile");
+                json = model.toJSON();
+                delete json.pictureFile;
+            } else {
+                json = model.toJSON();
+            }
+            
+            return api.create(json, file);
+        },
         destroy: function (model) {
             return api.remove({id: model.id, folder_id: model.get('folder_id')});
         }

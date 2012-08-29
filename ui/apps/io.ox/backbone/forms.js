@@ -54,7 +54,9 @@ define('io.ox/backbone/forms', ['gettext!io.ox/backbone/forms'], function (gt) {
         this.tagName = 'div';
         this.className = 'control-group';
         
-        this.nodes = {};
+        this.init = function () {
+            this.nodes = {};
+        };
         
         this.buildControlGroup = function () {
             this.buildControls();

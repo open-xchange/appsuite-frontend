@@ -9,54 +9,56 @@
  * Copyright (C) Open-Xchange Inc., 2006-2011
  * Mail: info@open-xchange.com
  *
- * @author Tobias Prinz <tobias.prinz@open-xchange.com>
+ * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  *
  */
 
 define('io.ox/contacts/create/main',
-    ['io.ox/contacts/api',
-     'io.ox/contacts/model',
-     'io.ox/contacts/create/view'
-    ], function (api, ContactModel, create) {
+    ['io.ox/contacts/model',
+     'io.ox/contacts/create/view',
+     'io.ox/contacts/util',
+     'io.ox/core/extensions'
+    ], function (model, view, util, ext) {
 
     'use strict';
-
-    function getImage(set) {
-        return set && set.files && set.files[0] ? set.files[0] : void(0);
-    }
-
+    
     var show = function (app) {
-
-        var // create model & view
-            model = new ContactModel(),
-            view = new create.View({ model: model }),
-            // popup
-            pane = create.getPopup(view),
-            // return value
-            def = $.Deferred();
-
-        model.store = function (data) {
-            // add folder id
-            data.folder_id = app.folder.get();
-            // has file?
-            var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
-            return api.create(data, getImage(image));
-        };
-
-        model.on('save:done', function (e, data) {
-            def.resolve(data);
+        
+        var pane,
+            def = $.Deferred(),
+            contact = model.factory.create({
+                folder_id: app.folder.get()
+            });
+        
+        pane = view.getPopup(contact);
+        pane.on('save', function (action) {
+            contact.save().done(function (result) {
+                pane.close();
+                def.resolve(result);
+            }).fail(function (result) {
+                pane.idle();
+            });
         });
-
-        pane.on('save', { model: model }, function (e) {
-                e.data.model.save()
-                    .done(this.close)
-                    .fail(this.idle);
-            })
-            .show();
-
+        pane.on('cancel', function () {
+            def.resolve();
+        });
+        
+        ext.point('io.ox/contacts/create/main/model').invoke('customizeModel', contact, contact);
+        
+        pane.show();
+        
         return def;
     };
-
+    
+    ext.point('io.ox/contacts/create/main/model').extend({
+        id: 'io.ox/contacts/create/main/model/auto_display_name',
+        customizeModel: function (contact) {
+            contact.on('change:first_name change:last_name', function () {
+                contact.set('display_name', util.getFullName(contact.toJSON()));
+            });
+        }
+    });
+    
     return {
         show: show
     };

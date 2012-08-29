@@ -61,7 +61,7 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
                     $('<input type="file" name="picture" accepts="image/*">').css({visibility: 'hidden'})
                         .on('change', function (e) {
                             self.handleFileSelect(e);
-                        });
+                        })
                 );
                 
                 this.$el.append($('<div>').css({clear: 'both'}));
