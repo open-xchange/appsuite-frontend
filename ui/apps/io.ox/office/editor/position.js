@@ -183,11 +183,11 @@ define('io.ox/office/editor/position',
                         offset = returnObj.offset;
                     }
                 } else {
-                    Utils.warn('Position.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
+                    Utils.warn('Position.getDOMPosition() (1): Failed to determine node for position: ' + oxoPosition);
                     return;
                 }
             } else {
-                Utils.warn('Position.getDOMPosition(): Failed to determine child node for node: ' + node.nodeName);
+                Utils.warn('Position.getDOMPosition() (2): Failed to determine node for position: ' + oxoPosition);
                 return;
             }
         }
@@ -302,7 +302,7 @@ define('io.ox/office/editor/position',
 
         if (node instanceof $) {  // true for jQuery objects
             if (pos > node.length - 1) {
-                Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + node.length - 1);
+                Utils.warn('Position.getNextChildNode(): Array ' + pos + ' is out of range. Last paragraph: ' + (node.length - 1));
                 return;
             }
             childNode = node.get(pos);

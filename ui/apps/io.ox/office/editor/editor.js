@@ -2825,7 +2825,7 @@ define('io.ox/office/editor/editor',
                 domPosition = Position.getDOMPosition(paragraphs, position);
                 if (domPosition) {
                     domParagraph = domPosition.node;
-                    if ($(domParagraph).parent().children().length === position[position.length - 1] + 1) {
+                    if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
                         insertBefore = false;  // inserting after the last paragraph/table
                     }
                 }
