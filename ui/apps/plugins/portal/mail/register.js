@@ -94,17 +94,16 @@ define('plugins/portal/mail/register',
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
                 var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100);
-                subject = strings.shorten(subject, 40);
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 999);
 
                 $node.append(
                     $('<h1 class="tile-heading">').text(gt("Inbox")),
-                    $('<div class="io-ox-clear io-ox-mail-preview">').append(
-                        $("<b>").text(from),
-                        $('<br>'),
-                        $("<span>").text(subject),
-                        $('<br>'),
-                        $("<i>").html(mailtext)
+                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
+                        $('<span class="io-ox-mail-preview-from">').text(from),
+                        ' ',
+                        $('<span class="io-ox-mail-preview-subject">').text(subject),
+                        ' ',
+                        $('<span class="io-ox-mail-preview-text">').html(mailtext)
                     )
                 );
                 deferred.resolve();

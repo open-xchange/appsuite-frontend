@@ -117,7 +117,9 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.png', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
+//                $('<img class="linkedin-logo">').attr({src: 'apps/io.ox/core/bootstrap/img/glyphicons_377_linked_in'}),
+                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedin/in25.png'}),
+                $('<h1 class="tile-heading">').text('LinkedIn')
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
@@ -193,7 +195,9 @@ define("plugins/portal/linkedin/register",
             var $node = $(this);
             $node.append(
                 $('<h1>').text('LinkedIn'),
-                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'LinkedIn'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                )
             );
         }
     };

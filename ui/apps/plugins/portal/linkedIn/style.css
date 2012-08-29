@@ -18,9 +18,13 @@
     padding-bottom: 1em;
 }
 img.linkedin-logo {
-    display: block;
+    float: right;
 }
 
 .linkedin-message.odd {
     background-color: #f4f4f4;
+}
+.centered {
+    vertical-align: middle;
+    text-align: center;
 }

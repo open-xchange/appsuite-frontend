@@ -60,6 +60,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
         // Apply index to normal portal-plugins
         ext.point('io.ox/portal/widget').each(function (extension) {
+            console.log("Ordering", extension.id, extension.index);
             if (allActivePluginIds[extension.id]) {
                 extension.index = allActivePluginIds[extension.id].index;
             } else {
@@ -265,6 +266,10 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     }
                 } else {
                     $node.on('click', makeClickHandler(extension));
+                }
+                
+                if (/^filler/.test(extension.id)) {
+                    $node.off('click');
                 }
 
                 if (!extension.loadTile) {
