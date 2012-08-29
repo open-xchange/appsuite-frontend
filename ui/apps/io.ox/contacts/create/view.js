@@ -11,7 +11,7 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/contacts/create/view', 
+define('io.ox/contacts/create/view',
     ['io.ox/contacts/model',
      'io.ox/backbone/views',
       'io.ox/backbone/forms',
@@ -25,6 +25,19 @@ define('io.ox/contacts/create/view',
             tagName: 'form',
             className: 'form-horizontal create-contact'
         });
+    
+    // Picture Magic
+    point.extend(new PictureUpload({
+        id: 'io.ox/contacts/create/view/picture',
+        index: 100
+    }));
+    
+    
+    // Show backend errors
+    point.extend(new forms.ErrorAlert({
+        id: 'io.ox/contacts/create/view/backendErrors',
+        index: 200
+    }));
     
     // Let's do some metaprogramming here
     var index = 300;

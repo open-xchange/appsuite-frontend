@@ -10,9 +10,43 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/forms', function () {
+define('io.ox/backbone/forms', ['gettext!io.ox/backbone/forms'], function (gt) {
     
     "use strict";
+    
+    // Error Alert
+    
+    function ErrorAlert(options) {
+        _.extend(this, {
+            
+            tagName: 'div',
+            className: 'error-alerts',
+            
+            init: function () {
+                var self = this;
+                
+                function showBackendError(error) {
+                    var alert = $.alert(self.errorTitle, self.formatError(error));
+                    self.$el.append(alert);
+                    
+                    alert.find('.close').on('click', function () {
+                        alert.remove();
+                    });
+                }
+                
+                this.model.on('backendError', showBackendError);
+                this.$el.on('dispose', function () {
+                    self.model.off('backendError', showBackendError);
+                });
+            },
+            
+            errorTitle: gt('An error occurred'),
+            
+            formatError: function (error) {
+                return gt("An error occurred. Please try again later");
+            }
+        }, options || {});
+    }
         
     // Control Group
     function ControlGroup(options) {
@@ -100,6 +134,7 @@ define('io.ox/backbone/forms', function () {
     // Save Action
     
     return {
+        ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup
     };
     

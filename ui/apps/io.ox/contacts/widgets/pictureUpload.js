@@ -40,7 +40,7 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
                     target: target
                 })
                 .append(
-                    fileField = $('<input type="file" name="picture" accept="image/*">')
+                    $('<input type="file" name="picture" accept="image/*">')
                 )
                 .append(
                     $('<iframe>', {
@@ -49,10 +49,10 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
                     }).hide()
                 ).appendTo(this.$el);
             
-                model.$el.css({
+                this.$el.css({
                     backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)',
                     marginRight: '15px'
-                };
+                });
                 
             }
             
