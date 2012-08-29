@@ -60,11 +60,20 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             }
         },
         sync: function (action, model, callbacks) {
+            var self = this;
+            
             // action is one of 'update', 'create', 'delete' or 'read'
             if (action === 'delete') {
                 action = 'destroy';
             }
-            this.factory.internal[action].call(this.factory.internal, model).done(callbacks.success).fail(callbacks.error);
+            return this.factory.internal[action].call(this.factory.internal, model)
+                .done(function (response) {
+                    callbacks.success(model, response);
+                })
+                .fail(function (response) {
+                    callbacks.error(model, response);
+                    self.trigger('backendError', response);
+                });
         },
         
         changedSinceLoading: function () {
@@ -160,6 +169,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         };
         
         this.refresh = function (uid, data) {
+            // TODO: Implement non-destructive refresh, i.e. keep changes in the model and only update unchanged fields, throw a conflict event for other fields
             if (models[uid]) {
                 models[uid].set(data);
                 serverAttributes[uid] = models[uid].toJSON();
@@ -307,6 +317,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         };
         
         this.create = this.create || function (options) {
+            options = options || {};
             options._factory = self;
             return new this.model(options);
         };
@@ -375,7 +386,18 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             }
         });
         
-        
+        this.wrap = function (thing) {
+            if (arguments.length > 1) {
+                return this.createCollection(_(arguments).map(function (arg) { return self.wrap(arg); }));
+            }
+            
+            if (thing.attributes && thing.factory === this) {
+                return thing;
+            }
+            
+            return this.create(thing);
+            
+        };
         
         _($.makeArray(arguments).splice(1)).each(function (mixin) {
             _.extend(self, mixin);

@@ -80,6 +80,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
         this.createView = function (options) {
             options.render = options.render || function () {
                 this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model}]));
+                return this;
             };
             
             options.point = options.point || ext.point(name);
@@ -102,7 +103,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
     return {
         
         point: function (name) {
-            new ViewExtensionPoint(name);
+            return new ViewExtensionPoint(name);
         },
         
         BasicView: BasicView
