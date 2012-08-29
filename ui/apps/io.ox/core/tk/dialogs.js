@@ -509,7 +509,9 @@ define("io.ox/core/tk/dialogs",
         };
 
         this.show = function (e, handler) {
-            open.call(e.target, e, handler);
+            setTimeout(function () {
+                open.call(e.target, e, handler);
+            }, 0);
             return this;
         };
 

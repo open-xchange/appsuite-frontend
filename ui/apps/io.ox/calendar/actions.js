@@ -225,24 +225,10 @@ define('io.ox/calendar/actions',
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'list',
+        id: 'day',
         index: 100,
-        label: gt('List'),
-        ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
-
-    new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'month',
-        index: 200,
-        label: gt('Month'),
-        ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
-
-    new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'fullweek',
-        index: 200,
-        label: gt('Week'),
-        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
+        label: gt('Day'),
+        ref: 'io.ox/calendar/actions/switch-to-day-view'
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
@@ -253,10 +239,24 @@ define('io.ox/calendar/actions',
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'day',
-        index: 200,
-        label: gt('Day'),
-        ref: 'io.ox/calendar/actions/switch-to-day-view'
+        id: 'fullweek',
+        index: 300,
+        label: gt('Week'),
+        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'month',
+        index: 400,
+        label: gt('Month'),
+        ref: 'io.ox/calendar/actions/switch-to-month-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'list',
+        index: 500,
+        label: gt('List'),
+        ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
     // FIXME: should only be visible if rights are ok
