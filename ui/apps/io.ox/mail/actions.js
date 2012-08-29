@@ -344,7 +344,7 @@ define('io.ox/mail/actions',
                     {
                         //create popup dialog
                         var popup = new dialogs.ModalDialog()
-                            .addPrimaryButton('create', gt('Create reminder'))
+                            .addButton('create', gt('Create reminder'))
                             .addButton('cancel', gt('Cancel'));
                         
                         //Header
@@ -355,46 +355,50 @@ define('io.ox/mail/actions',
                         //fill popup body
                         var popupBody = popup.getBody();
                         popupBody.append("<div>" + gt('Subject') + "</div>");
-                        var titleInput = $('<input>', { type: 'text', value: data.subject, width: '90%' })
-                        .appendTo(popupBody);
+                        var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ": " + data.subject, width: '90%' })
+                            .focus(function ()
+                                    {
+                                    this.select();
+                                })
+                            .appendTo(popupBody);
+                        
+                        popupBody.append("<div>" + gt('Note') + "</div>");
+                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
+                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                            .focus(function ()
+                                    {
+                                    this.select();
+                                })
+                            .appendTo(popupBody);
+                        
                         
                         popupBody.append("<div>" + gt('Remind me') + "</div>");
                         var dateSelector = $('<select>', {name: "dateselect"})
                         .appendTo(popupBody);
-                        dateSelector.append("<option>" + gt('in five minutes') + "</option>" +
-                                "<option>" + gt('in fifteen minutes') + "</option>" +
-                                "<option>" + gt('in thirty minutes') + "</option>" +
-                                "<option>" + gt('in one hour') + "</option>" +
-                                "<option>" + gt('in three hours') + "</option>" +
-                                "<option>" + gt('in six hours') + "</option>" +
-                                "<option>" + gt('in one day') + "</option>" +
-                                "<option>" + gt('in three days') + "</option>" +
-                                "<option>" + gt('in one week') + "</option>" +
-                                "<option>" + gt('tomorrow') + "</option>" +
-                                "<option>" + gt('next monday') + "</option>" +
-                                "<option>" + gt('nex friday') + "</option>");
+                        var endDate = new Date();
+                        dateSelector.append(util.buildDropdownMenu(endDate));
+                        
                         
                         //ready for work
-                        popup.show()
-                            .done(function (action) {
+                        var def = popup.show();
+                        titleInput.focus();
+                        def.done(function (action) {
                                 
                                 if (action === "create")
                                     {
                                     
                                     //Calculate the right time
-                                    var endDate = new Date();
-                                    endDate = util.computePopupTime(endDate, dateSelector.prop("selectedIndex"));
+                                    endDate = util.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
                                     
-                                    //notification one minute before task expires or no notification at all
-                                    var alarmTime = endDate.getTime() - 60000;
-                                    
-                                    taskApi.create({title: gt('Mail reminder') + ": " + titleInput.val(),
+                                    taskApi.create({title: titleInput.val(),
                                         folder_id: config.get('folder.tasks'),
                                         end_date: endDate.getTime(),
                                         start_date: endDate.getTime(),
                                         alarm: endDate.getTime(),
-                                        note: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                                        gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1]
+                                        note: noteInput.val(),
+                                        status: 1,
+                                        recurrence_type: 0,
+                                        percent_completed: 0
                                         })
                                         .done(function () {
                                             notifications.yell('success', 'Reminder has been created!');

@@ -11,55 +11,43 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-//currently not in use
-.taskPopupHeader
-{
- 	background-color: #333333;
-}
- 
-//currently not in use
-.taskPopupTitle
-{
- 	color: #FFFFFF;
- 	text-align: center;
-}
-
-.vgrid-cell.tasks .status {
+.vgrid-cell.tasks .end_date {
     color: #777;
     font-weight: 200;
     display: inline-block;
     float: right;
 }
 
-.vgrid-cell.tasks .end_date {
-    margin-left: 1em;
+.vgrid-cell.tasks .status {
+    margin-left: 0.5em;
     float: right;
-    position: absolute;
-    left: 75%
+	index: 2;
 }
 
 .vgrid-cell.tasks .priority,
 .io-ox-task-preview .priority {
-    color: #999;
-    min-width: 1em;
-    font-weight: normal;
+    color: #FFCC00;
+    font-size: 16;
+    font-weight: bold;
     padding: 0 0.5em 0 0.5em;
-    margin-left: 1em;
     display: inline-block;
     float: right;
     position: relative;
-    z-index: 2;
+    
 }
-.vgrid-cell.tasks .priority i.icon-star { display: inline-block;}
+.vgrid-cell.tasks .priority i.icon-star { 
+	display: inline-block;
+	
+}
 
 .vgrid-cell.tasks .title{
     color: black;
     font-weight: 500;
-    width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
+    width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note{
-	width: 400px;//needed for correct text-overflow hidden. No clue why it behaves like this
+	width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note span{

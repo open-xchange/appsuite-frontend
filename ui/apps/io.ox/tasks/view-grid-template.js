@@ -26,12 +26,12 @@ define('io.ox/tasks/view-grid-template',
                     var title, status, priority, note, end_date;
                     this.addClass('tasks').append(
                         $('<div>').append(
-                            status = $('<span>').addClass('status'),
+                            end_date = $('<span>').addClass('end_date'),
                             title = $('<div>').addClass('title')
                         ),
                         $('<div>').append(
+                            status = $('<span>').addClass('status'),
                             priority = $('<span>').addClass('priority'),
-                            end_date = $('<span>').addClass('end_date'),
                             $('<div>').addClass('note')
                                 .append(note = $('<span>'))
                         )
@@ -57,9 +57,28 @@ define('io.ox/tasks/view-grid-template',
                 
                 set: function (data, fields, index) {
                     
-                    for (var i = 0; i < data.priority; i++)
+                    if (data.priority === 3)
                         {
-                        fields.priority.append($('<i>').addClass('icon-star'));
+                        fields.priority.text("\u2605\u2605\u2605");
+                    }
+                    //set badgecolor
+                    switch (data.color)
+                    {
+                    case "grey":
+                        fields.status.addClass("badge");
+                        break;
+                    case "green":
+                        fields.status.addClass("badge badge-success");
+                        break;
+                    case "yellow":
+                        fields.status.addClass("badge badge-warning");
+                        break;
+                    case "blue":
+                        fields.status.addClass("badge badge-info");
+                        break;
+                    case "red":
+                        fields.status.addClass("badge badge-important");
+                        break;
                     }
                     
                     fields.status.text($.trim(data.status));
@@ -92,6 +111,5 @@ define('io.ox/tasks/view-grid-template',
                 return $div;
             }
         };
-    
     return gridTemplate;
 });

@@ -51,9 +51,9 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             );
             var prio = $node.find(".priority");
         
-            for (var i = 0; i < task.priority; i++)
+            if (task.priority === 3)
             {
-                prio.append($('<i>').addClass('icon-star icon-white'));
+                prio.text("\u2605\u2605\u2605");
             }
         } else
             {
@@ -74,27 +74,36 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     //change status number to status text. format enddate to presentable string
     var interpretTask = function (task)
     {
-        
         switch (task.status)
         {
         case 2:
             task.status = gt("In progress");
+            task.color = "yellow";
             break;
         case 3:
             task.status = gt("Done");
+            task.color = "green";
             break;
         case 4:
             task.status = gt("Waiting");
+            task.color = "grey";
             break;
         case 5:
             task.status = gt("Deferred");
+            task.color = "blue";
             break;
         default:
             task.status = gt("Not started");
+            task.color = "grey";
             break;
         }
+        var now = new Date();
+        if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
+            {
+            task.color = "red";
+        }
         
-        task.end_date = new date.Local(task.end_date).format(date.DATE);
+        task.end_date = new date.Local(task.end_date).format();
         
         return task;
     };
