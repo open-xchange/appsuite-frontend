@@ -117,6 +117,8 @@ define('io.ox/portal/settings/pane',
         },
         PluginSelectView = Backbone.View.extend({
             _modelBinder: undefined,
+            isEditable: false,
+            isSelected: false,
             initialize: function (options) {
                 this.template = doT.template(tmplPlugin);
                 this._modelBinder = new Backbone.ModelBinder();
@@ -126,9 +128,11 @@ define('io.ox/portal/settings/pane',
                 if (star) {
                     if (this.model.get('active')) {
                         star.text(gt('Deaktivieren'));
+                        star.removeClass('btn-inverse').addClass('btn');
                         this.$el.removeClass('disabled').addClass('enabled');
                     } else {
                         star.text(gt('Aktivieren'));
+                        star.removeClass('btn').addClass('btn-inverse');
                         this.$el.removeClass('enabled').addClass('disabled');
                     }
                 }
@@ -152,12 +156,18 @@ define('io.ox/portal/settings/pane',
                 this.$el.find('button#prop').hide();
 
                 if (_.include(ox.serverConfig.portalPluginEditable, this.model.get('id'))) {
+                    this.isEditable = true;
                     this.$el.find('div.sortable-item').hover(
                             function () {
+                                if (!self.$el.find('.sortable-item').attr('selected')) {
+                                    self.isSelected = false;
+                                }
                                 self.$el.find('button#prop').show();
                             },
                             function () {
-                                self.$el.find('button#prop').hide();
+                                if (!self.isSelected) {
+                                    self.$el.find('button#prop').hide();
+                                }
                             }
                     );
                 }
@@ -176,7 +186,13 @@ define('io.ox/portal/settings/pane',
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
+                $('button#prop').hide();
                 this.$el.find('.sortable-item').attr('selected', 'selected');
+                if (this.isEditable) {
+                    this.$el.find('.sortable-item').find('button#prop').show();
+                    this.isSelected = true;
+                }
+
             }
         }),
 

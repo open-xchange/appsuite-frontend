@@ -43,7 +43,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         return 'plugins/portal/' + obj.id + '/register';
     });
 
-    plugins = _.intersection(allActivePlugins, plugins);
+    var reqPlugins = _.intersection(allActivePlugins, plugins);
 
     var setOrder = function (extensions) {
         var index = 100;
@@ -56,18 +56,28 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             index += 100;
         });
 
+        var indices = {};
+
         // Apply index to normal portal-plugins
         ext.point('io.ox/portal/widget').each(function (extension) {
             if (allActivePluginIds[extension.id]) {
                 extension.index = allActivePluginIds[extension.id].index;
+            } else {
+                var i = extension.id.indexOf('-');
+                if (i !== -1) {
+                    var extensionName = extension.id.substring(0, i);
+                    if (!indices[extensionName]) {
+                        indices[extensionName] = allActivePluginIds[extensionName].index;
+                    }
+                    extension.index = indices[extensionName]++;
+                }
             }
         });
         ext.point('io.ox/portal/widget').sort();
     };
 
-    return require(plugins).pipe(function () {
-        var requiredExtensions = arguments;
-        setOrder(requiredExtensions);
+    return require(reqPlugins).pipe(function () {
+        setOrder(arguments);
 
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
@@ -374,7 +384,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                             allActivePluginIds[obj.id] = obj;
                         }
                     });
-                    setOrder({});
+
+                    allActivePlugins = _.map(allActivePluginIds, function (obj) {
+                        return 'plugins/portal/' + obj.id + '/register';
+                    });
+
+                    reqPlugins = _.intersection(allActivePlugins, plugins);
+
+                    require(reqPlugins).pipe(function () {
+                        setOrder(arguments);
+                    });
 
                     app.active = null;
                     app.activeEvent = null;

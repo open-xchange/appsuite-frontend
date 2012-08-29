@@ -10,7 +10,8 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/tasks/util", ['gettext!io.ox/tasks/util'], function (gt) {
+define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
+                            "io.ox/core/date"], function (gt, date) {
     
     "use strict";
     
@@ -177,7 +178,62 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util'], function (gt) {
                 }
                 
                 return appendString;
+            },
+            
+            //change status number to status text. format enddate to presentable string
+            interpretTask: function (task)
+            {
+
+                switch (task.status)
+                {
+                case 2:
+                    task.status = gt("In progress");
+                    task.badge = "badge badge-warning";
+                    break;
+                case 3:
+                    task.status = gt("Done");
+                    task.badge = "badge badge-success";
+                    break;
+                case 4:
+                    task.status = gt("Waiting");
+                    task.badge = "badge";
+                    break;
+                case 5:
+                    task.status = gt("Deferred");
+                    task.badge = "badge badge-info";
+                    break;
+                default:
+                    task.status = gt("Not started");
+                    task.badge = "badge";
+                    break;
+                }
+                var now = new Date();
+                if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
+                    {
+                    task.badge = "badge badge-important";
+                }
+                
+                if (task.title === null)
+                {
+                    task.title = gt("No title");
+                }
+                
+                if (task.note === null)
+                {
+                    task.note = gt("No note");
+                }
+                if (task.end_date !== null)
+                    {
+                    task.end_date = new date.Local(task.end_date).format();
+                } else
+                    {
+                    task.end_date = gt("No date");
+                }
+                
+                return task;
             }
+            
+            
         };
         
     var prepareTime = function (time)

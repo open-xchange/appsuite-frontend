@@ -182,11 +182,16 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: 'one create',
-        action: function (app) {
+        action: function (app, obj) {
+            obj = obj || {};
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
-                    this.create({folder_id: app.folder.get(), participants: []});
+                    _.extend(obj, {
+                        folder_id: app.folder.get(),
+                        participants: []
+                    });
+                    this.create(obj);
                 });
             });
 
