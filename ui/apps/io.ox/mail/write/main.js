@@ -153,8 +153,8 @@ define('io.ox/mail/write/main',
             ed.focus();
         };
 
-        function showMessage(msg, header, sticky) {
-            $('#myGrowl').jGrowl(msg, {header: header, sticky: sticky});
+        function focus(name) {
+            app.getWindowNode().find('input[name=' + name + ']').focus().select();
         }
 
         // launcher
@@ -564,9 +564,9 @@ define('io.ox/mail/write/main',
                     if (mailto) {
                         app.getEditor().focus();
                     } else if (data && data.to) {
-                        app.getWindowNode().find('input[name=subject]').focus().select();
+                        focus('subject');
                     } else {
-                        app.getWindowNode().find('input[data-type=to]').focus().select();
+                        focus('to');
                     }
                     win.idle();
                     def.resolve();
@@ -629,7 +629,7 @@ define('io.ox/mail/write/main',
                     data.sendtype = mailAPI.SENDTYPE.FORWARD;
                     app.setMail({ data: data, mode: 'forward', initial: true })
                     .done(function () {
-                        app.getWindowNode().find('input[data-type=to]').focus().select();
+                        focus('to');
                         win.idle();
                         def.resolve();
                     });
@@ -750,7 +750,7 @@ define('io.ox/mail/write/main',
          */
         app.send = function () {
             // get mail
-            var mail = this.getMail();
+            var mail = this.getMail(), def = $.Deferred();
             // get flat ids for data.infostore_ids
             if (mail.data.infostore_ids) {
                 mail.data.infostore_ids = _(mail.data.infostore_ids).pluck('id');
@@ -765,22 +765,52 @@ define('io.ox/mail/write/main',
                 });
             });
             delete mail.data.nested_msgs;
-            // close window now (!= quit / might be reopened)
-            app.markClean();
-            win.busy().preQuit();
-            // send!
-            mailAPI.send(mail.data, mail.files)
-                .always(function (result) {
-                    if (result.error) {
-                        console.error(result);
-                        win.idle().show();
-                        // TODO: check if backend just says "A severe error occured"
-                        notifications.yell(result);
-                    } else {
-                        notifications.yell('success', 'Mail has been sent');
-                        app.quit();
-                    }
+
+            function cont() {
+                // close window now (!= quit / might be reopened)
+                app.markClean();
+                win.busy().preQuit();
+                // send!
+                mailAPI.send(mail.data, mail.files)
+                    .always(function (result) {
+                        if (result.error) {
+                            console.error(result);
+                            win.idle().show();
+                            // TODO: check if backend just says "A severe error occured"
+                            notifications.yell(result);
+                        } else {
+                            notifications.yell('success', 'Mail has been sent');
+                            app.quit();
+                        }
+                        def.resolve(result);
+                    });
+            }
+
+            // ask for empty subject
+            if ($.trim(mail.data.subject) === '') {
+                // show dialog
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Mail has empty subject. Send it anyway?"))
+                        .addPrimaryButton("send", gt('Yes, send without subject'))
+                        .addButton("subject", gt('Add subject'))
+                        .show(function () {
+                            def.notify('empty subject');
+                        })
+                        .done(function (action) {
+                            if (action === 'send') {
+                                cont();
+                            } else {
+                                focus('subject');
+                                def.reject();
+                            }
+                        });
                 });
+            } else {
+                cont();
+            }
+
+            return def;
         };
 
         app.saveDraft = function () {
@@ -799,13 +829,12 @@ define('io.ox/mail/write/main',
             mailAPI.send(mail.data, mail.files)
                 .always(function (result) {
                     if (result.error) {
-                        console.error(result);
-                        def.reject(gt('Server error - see console :('));
-                        showMessage(gt('Mail is NOT saved'), gt('Mail Error'), true);
+                        notifications.yell(result);
+                        def.reject(result);
                     } else {
-                        showMessage(gt('Mail is saved'), gt('Mail'), false);
-                        def.resolve(result);
+                        notifications.yell('success', gt('Mail saved as draft'));
                         app.markClean();
+                        def.resolve(result);
                     }
                 });
 

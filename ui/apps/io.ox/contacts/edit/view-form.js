@@ -17,8 +17,9 @@ define('io.ox/contacts/edit/view-form',
      'io.ox/contacts/util',
      'io.ox/contacts/api',
      'io.ox/core/tk/view',
-     'io.ox/core/tk/model'
-    ], function (ext, gt, util, api, View, Model) {
+     'io.ox/core/tk/model',
+     'io.ox/core/notifications'
+    ], function (ext, gt, util, api, View, Model, notifications) {
 
     'use strict';
 
@@ -417,11 +418,8 @@ define('io.ox/contacts/edit/view-form',
 
                 ext.point('io.ox/contacts/edit/form').invoke('draw', this.node, { view: this });
 
-                this.node.append($('<div>', { id: 'myGrowl' })
-                    .addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
-
                 model.on('error:invalid', function (e, err) {
-                    $('#myGrowl').jGrowl(e.message, {header: 'Make an educated guess!', sticky: true});
+                    notifications.yell('error', err.message);
                 });
             }
             return this;

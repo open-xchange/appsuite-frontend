@@ -370,10 +370,6 @@ define("io.ox/mail/write/view-main",
                         )
                     )
                 )
-            )
-            .append(
-                $('<div>', {id: 'myGrowl'}).addClass('jGrowl')
-                .css({position: 'absolute', right: '0', top: '0'})
             );
 
             // side panel

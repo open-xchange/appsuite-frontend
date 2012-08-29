@@ -243,6 +243,7 @@ function (ext, contacts, api, config, date) {
                     });
 
                     j.waitsFor(function () {
+                        // TODO: fix this for new yell() notifications
                         alert = formFrame.find('.jGrowl-notification');
                         if (alert[0]) {
                             return true;
