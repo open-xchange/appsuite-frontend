@@ -14,8 +14,8 @@
 define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          "io.ox/tasks/api",
                                          'gettext!plugins/portal/tasks',
-                                         "io.ox/core/date",
-                                         'io.ox/core/strings'], function (ext, taskApi, gt, date, strings) {
+                                         'io.ox/core/strings',
+                                         'io.ox/tasks/util'], function (ext, taskApi, gt, strings, util) {
 
     "use strict";
     
@@ -35,7 +35,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         if (taskarray.length > 0)
             {
             var task = taskarray[0];
-            task = interpretTask(task);
+            task = util.interpretTask(task);
         
             $node.append(
                     $('<div class="io-ox-clear io-ox-task-preview">').append(
@@ -71,43 +71,6 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         return def;
     };
     
-    //change status number to status text. format enddate to presentable string
-    var interpretTask = function (task)
-    {
-        switch (task.status)
-        {
-        case 2:
-            task.status = gt("In progress");
-            task.color = "yellow";
-            break;
-        case 3:
-            task.status = gt("Done");
-            task.color = "green";
-            break;
-        case 4:
-            task.status = gt("Waiting");
-            task.color = "grey";
-            break;
-        case 5:
-            task.status = gt("Deferred");
-            task.color = "blue";
-            break;
-        default:
-            task.status = gt("Not started");
-            task.color = "grey";
-            break;
-        }
-        var now = new Date();
-        if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
-            {
-            task.color = "red";
-        }
-        
-        task.end_date = new date.Local(task.end_date).format();
-        
-        return task;
-    };
-    
     var draw = function (tasks) {
         
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
@@ -119,7 +82,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 //interpret values for status etc
                 for (var i = 0; i < tasks.length; i++)
                 {
-                    tasks[i] = interpretTask(tasks[i]);
+                    tasks[i] = util.interpretTask(tasks[i]);
                 }
                 
                 viewGrid.drawSimpleGrid(tasks).appendTo(node);

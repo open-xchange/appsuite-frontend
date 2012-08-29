@@ -340,7 +340,7 @@ define('io.ox/mail/actions',
         id: 'reminder',
         action: function (data) {
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
-                    function (dialogs, taskApi, util)
+                    function (dialogs, taskApi, tasksUtil)
                     {
                         //create popup dialog
                         var popup = new dialogs.ModalDialog()
@@ -363,7 +363,7 @@ define('io.ox/mail/actions',
                             .appendTo(popupBody);
                         
                         popupBody.append("<div>" + gt('Note') + "</div>");
-                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt("From") + ': ' + util.getFrom(data.from).text() })
                             .focus(function ()
                                     {
                                     this.select();
@@ -375,7 +375,7 @@ define('io.ox/mail/actions',
                         var dateSelector = $('<select>', {name: "dateselect"})
                         .appendTo(popupBody);
                         var endDate = new Date();
-                        dateSelector.append(util.buildDropdownMenu(endDate));
+                        dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
                         
                         
                         //ready for work
@@ -387,7 +387,7 @@ define('io.ox/mail/actions',
                                     {
                                     
                                     //Calculate the right time
-                                    endDate = util.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
+                                    endDate = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
                                     
                                     taskApi.create({title: titleInput.val(),
                                         folder_id: config.get('folder.tasks'),
