@@ -55,6 +55,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
                 errors.each(function (messages, attribute) {
                     self.trigger("invalid:" + attribute, messages, errors, self);
                 });
+                self.trigger('invalid', errors, self);
                 return errors;
             }
         },
@@ -236,8 +237,8 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         };
         
         this.internal.read = delegate.read || function (model) {
-            return self.api.get({id: model.get('id'), folder: model.get('folder')}).done(function (data) {
-                model.realm.refresh(this.internal.toUniqueIdFromObject(data), data);
+            return self.api.get({id: model.get('id'), folder: model.get('folder') || model.get('folder_id')}).done(function (data) {
+                model.realm.refresh(self.internal.toUniqueIdFromObject(data), data);
             });
         };
         
@@ -267,8 +268,8 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         this.internal.toUniqueIdFromGet = delegate.toUniqueIdFromGet || this.internal.toUniqueId;
         this.internal.toUniqueIdFromObject = delegate.toUniqueIdFromObject || this.internal.toUniqueId;
         
-        this.internal.eventToGetArguments = delegate.eventToGetArguments || function (evt) {
-            return [{id: evt.id, folder: evt.folder_id}];
+        this.internal.eventToGetArguments = delegate.eventToGetArguments || function (evt, obj) {
+            return [{id: obj.id, folder: obj.folder || obj.folder_id}];
         };
         
         this.internal.componentizeList = delegate.componentizeList || function (entities) {
@@ -327,7 +328,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
                 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
-                        realm.refresh(uid);
+                        realm.refresh(uid, loaded);
                     });
                 });
             });
