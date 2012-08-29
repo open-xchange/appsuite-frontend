@@ -344,7 +344,7 @@ define('io.ox/mail/actions',
                     {
                         //create popup dialog
                         var popup = new dialogs.ModalDialog()
-                            .addButton('create', gt('Create reminder'))
+                            .addPrimaryButton('create', gt('Create reminder'))
                             .addButton('cancel', gt('Cancel'));
                         
                         //Header
@@ -363,8 +363,7 @@ define('io.ox/mail/actions',
                             .appendTo(popupBody);
                         
                         popupBody.append("<div>" + gt('Note') + "</div>");
-                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
-                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
                             .focus(function ()
                                     {
                                     this.select();
