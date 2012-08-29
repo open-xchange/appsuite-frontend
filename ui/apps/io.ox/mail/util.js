@@ -88,11 +88,12 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
         },
 
         serializeList: function (data, field) {
+
             field = field || 'from';
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
                 tmp = $('<div>'), node, obj, sender;
-            console.log('serializeList', data, field);
+
             for (; i < $i; i++) {
                 obj = {
                     display_name: this.getDisplayName(list[i]),
