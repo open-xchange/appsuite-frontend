@@ -737,7 +737,6 @@ define('io.ox/mail/view-detail',
             if ('headers' in data) {
                 // TODO: get proper settings here
                 var headers = settings.get('phishing/headers', []), key;
-                console.log('Phishing', headers);
                 for (key in headers) {
                     if (headers[key] in data.headers) {
                         // show phishing warning
