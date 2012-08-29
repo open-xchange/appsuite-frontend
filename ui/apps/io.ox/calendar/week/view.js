@@ -16,7 +16,8 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'io.ox/core/config',
      'gettext!io.ox/calendar/view',
-     'less!io.ox/calendar/week/style.css'], function (util, tmpl, date, config, gt) {
+     'less!io.ox/calendar/week/style.css',
+     'apps/io.ox/core/jqueryui/jquery-ui-1.8.23.interactions.min.js'], function (util, tmpl, date, config, gt) {
 
     'use strict';
 
@@ -29,10 +30,10 @@ define('io.ox/calendar/week/view',
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       4,      // grid fragmentation of a hour
-        cellHeight:     25,     // height of one single fragment in px
-        fulltimeHeight: 20,     // height of fulltime appointments
-        fulltimeMax:    5,      // threshold for full-time appointments
-        appWidth:       97,     // max width of an appointment in %
+        cellHeight:     24,     // height of one single fragment in px
+        fulltimeHeight: 20,     // height of fulltime appointments in px
+        fulltimeMax:    5,      // threshold for visible full-time appointments in header
+        appWidth:       98,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
         workStart:      8,      // full hour for start position of worktime marker
         workEnd:        18,     // full hour for end position of worktime marker
@@ -41,19 +42,22 @@ define('io.ox/calendar/week/view',
         pane:           $(),    // main scroll pane
         fulltimePane:   $(),    // fulltime appointments pane
         fulltimeCon:    $(),    // fulltime container
-        week:           [],     // week scaffold
         timeline:       $(),    // timeline
+        week:           [],     // week scaffold
         tlInterval:     {},     // timeline interval
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
+        lasso:          false,  // lasso object
+        lassoMode:      true,   // is lasso active
+        lassoStart:     0,      // initial lasso Position
         
         events: {
+            'mousemove .weekcontainer>.day' : 'onLasso',
+            'mouseup' : 'onLasso',
             'click .appointment': 'onClickAppointment',
             'dblclick .weekcontainer>.day' : 'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment'
-//            'mousedown .weekcontainer>.day' : function (e) {console.log('mousedown', e); },
-//            'mouseup .weekcontainer>.day' : function (e) {console.log('mouseup', e); }
         },
 
         initialize: function (options) {
@@ -63,7 +67,7 @@ define('io.ox/calendar/week/view',
         },
 
         onClickAppointment: function (e) {
-            if ($(e.target).is('.appointment')) {
+            if ($(e.target).is('.appointment') && this.lasso === false) {
                 var target = $(e.currentTarget),
                     cid = target.attr('data-cid'),
                     obj = _.cid(target.attr('data-cid')),
@@ -104,14 +108,65 @@ define('io.ox/calendar/week/view',
         onCreateAppointment: function (e) {
             if ($(e.target).is('.timeslot')) {
                 // calculate timestamp for current position
-                var posY = e.target.offsetTop + e.offsetY,
-                    height = this.cellHeight * this.slots * this.fragmentation,
-                    secPos = date.DAY * posY / height,
-                    overhead = secPos % (date.HOUR / this.gridSize),
-                    start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').add(secPos - overhead),
-                    end = new date.Local(start.getTime() + date.HOUR);
+                var pos = this.calcTime(e.target.offsetTop + e.offsetY),
+                    start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime() + (pos - pos % (date.HOUR / this.gridSize)),
+                    end = start + date.HOUR;
                 this.trigger('createAppointment', e, start, end);
             }
+        },
+        
+        onLasso: function (e) {
+            if (!this.lassoMode) {
+                return;
+            }
+            var MousePosY = e.target.offsetTop + e.offsetY,
+                gridHeight = this.cellHeight * this.fragmentation / this.gridSize;
+            // normalize to gird size
+            MousePosY -= MousePosY % gridHeight;
+            // switch mouse events
+            switch (e.type) {
+            case 'mousemove':
+                // normal move
+                if (this.lasso && e.which === 1) {
+                    var newHeight = MousePosY - this.lassoStart,
+                        newHeightNorm = Math.abs(newHeight);
+                    this.lasso.css({
+                        height: newHeightNorm,
+                        top: newHeight <= 0 ? this.lassoStart - newHeightNorm : this.lassoStart
+                    });
+                }
+                // first move
+                if (this.lasso === false && e.which === 1 && $(e.target).is('.timeslot')) {
+                    this.lasso = $('<div>')
+                        .addClass('appointment lasso')
+                        .css({
+                            height: this.cellHeight,
+                            minHeight: this.cellHeight,
+                            width: this.appWidth + '%',
+                            top: MousePosY
+                        });
+                    this.lassoStart = MousePosY;
+                    $(e.currentTarget)
+                        .append(this.lasso);
+                } else {
+                    this.trigger('mouseup');
+                }
+                break;
+                
+            case 'mouseup':
+                if (this.lasso !== false && e.which === 1) {
+                    var start = date.Local.parse(this.lasso.parent().attr('date'), 'y-M-d').getTime() + this.calcTime(this.lasso.position().top),
+                        end = start + this.calcTime(this.lasso.outerHeight());
+                    this.lasso.remove();
+                    this.lasso = false;
+                    this.trigger('createAppointment', e, start, end);
+                }
+                break;
+
+            default:
+                break;
+            }
+            return;
         },
 
         render: function () {
@@ -344,25 +399,57 @@ define('io.ox/calendar/week/view',
                         leftWidth = ((that.appWidth - elWidth) / (colPos.length - 1)) * e[j].pos.index;
                     
                     e[j].css({
-                        top: pos.start + '%',
+                        top: pos.start,
                         minHeight: that.cellHeight + 'px',
                         maxWidth: that.appWidth + '%',
                         left: leftWidth + '%'
                     })
-                    .height(pos.lenght + '%')
+                    .height(pos.lenght)
                     .width(elWidth + '%');
                 }
                 that.$(i).append(e);
                 
             });
             
+            $(function () {
+                var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
+                $('.appointment')
+                    .draggable({
+                        grid: [$('.day:first').outerWidth(), gridHeight],
+                        scroll: true,
+                        snap: '.day',
+                        zIndex: 5,
+                        start: function (e, ui) {
+                            that.onEnterAppointment(e);
+                        },
+                        stop: function (e, ui) {
+                            console.log('drag stop', e, ui, that.calcTime(ui.position.top));
+                        },
+                        drag: function () {
+                            
+                        }
+                    })
+                    .resizable({
+                        grid: [1, gridHeight],
+                        handles: "n, s",
+                        distance: 1
+                    });
+                $('.day').droppable({
+                    drop: function (e, ui) {
+                        console.log('drop', e, ui);
+                        $(this).append(ui.draggable.css({left: 0}));
+                    }
+                });
+            }, this);
+            
         },
         
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
+                height = this.cellHeight * this.slots * this.fragmentation,
                 calc = function (d) {
-                    return (d.getHours() / 24 + d.getMinutes() / 1440) * 100;
+                    return (d.getHours() / 24 + d.getMinutes() / 1440) * height;
                 },
                 s = calc(start);
             
@@ -373,7 +460,7 @@ define('io.ox/calendar/week/view',
         },
         
         calcTime: function (pos) {
-            
+            return Math.max(0, pos / (this.cellHeight * this.slots * this.fragmentation) * date.DAY);
         }
         
     });

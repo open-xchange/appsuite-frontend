@@ -29,6 +29,7 @@ define('io.ox/calendar/week/perspective',
         days:           7,
         startDate:      null,
         dialog:         $(),
+        app:            null,
         
         showAppointment: function (e, obj) {
             // open appointment details
@@ -43,6 +44,9 @@ define('io.ox/calendar/week/perspective',
         
         createAppointment: function (e, start, end) {
             console.log('createAppointment', e, start.toString(), end.toString());
+            require('io.ox/core/extensions')
+                .point('io.ox/calendar/detail/actions/create')
+                .invoke('action', this, this.app, {start_date: start, end_date: end});
         },
         
         editAppointment: function (e, obj) {
@@ -75,6 +79,7 @@ define('io.ox/calendar/week/perspective',
         },
         
         render: function (app) {
+            this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
 
