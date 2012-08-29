@@ -136,7 +136,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             });
             contentQueue.fasttrack(extension.id).done(function (node) {
                 contentSide.children().trigger('onPause').detach();
-                
+
                 $(node).trigger('onResume');
                 sidepopup.idle();
                 sidepopup.append(node);
@@ -375,6 +375,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                         }
                     });
                     setOrder({});
+
+                    app.active = null;
+                    app.activeEvent = null;
                 }
 //                console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
