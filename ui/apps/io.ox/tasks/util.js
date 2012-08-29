@@ -22,16 +22,16 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util'], function (gt) {
         lookupDaytimeStrings = ["this morning",
                                 "by noon",
                                 "this afternoon",
-                                "this evening",
-                                "tonight"],
+                                "tonight",
+                                "late in the evening"],
                                 
-        lookupWeekdayStrings = ["Sunday",
-                                 "Monday",
-                                 "Tuesday",
-                                 "Wednesday",
-                                 "Thursday",
-                                 "Friday",
-                                 "Saturday"];
+        lookupWeekdayStrings = ["on Sunday",
+                                 "on Monday",
+                                 "on Tuesday",
+                                 "on Wednesday",
+                                 "on Thursday",
+                                 "on Friday",
+                                 "on Saturday"];
     
     var util = {
             computePopupTime: function (time, finderId)
