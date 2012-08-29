@@ -9,6 +9,11 @@
  *
  * @author Christoph Hellweg <christoph.hellweg@open-xchange.com>
  */
+.ui-resizable { position: relative;}
+.ui-resizable-handle { position: absolute;font-size: 0.1px; display: block; }
+.ui-resizable-disabled .ui-resizable-handle, .ui-resizable-autohide .ui-resizable-handle { display: none; }
+.ui-resizable-n { cursor: n-resize; height: 7px; width: 100%; top: -5px; left: 0; }
+.ui-resizable-s { cursor: s-resize; height: 7px; width: 100%; bottom: -5px; left: 0; }
 
 .window-content.week-view * {
     -webkit-box-sizing: border-box;
@@ -18,14 +23,15 @@
 
 .window-content.week-view {
     
-    @appointment-reserved: #08c ; /* blue */ 
-    @appointment-temporary: #FFBB00 ; /* yellow */ 
-    @appointment-absent: #913F3F ; /* red */ 
-    @appointment-free: #8EB360 ; /* green */ 
-    @appointment-private: #555 ; /* dark grey */ 
-    @appointment-out: #aaa ; /* light grey */ 
+    @appointment-reserved: #08c; /* blue */ 
+    @appointment-temporary: #FFBB00; /* yellow */ 
+    @appointment-absent: #913F3F; /* red */ 
+    @appointment-free: #8EB360; /* green */ 
+    @appointment-private: #555; /* dark grey */ 
+    @appointment-out: #aaa; /* light grey */ 
+    @appointment-lasso: #08c;
     @appointment-hover-pct: 15%; 
-    @appointment-unconfirmed-alpha: 0.4 ;
+    @appointment-unconfirmed-alpha: 0.4;
     @weekview-time-with: 42px;
     @weekview-footer-height: 30px;
     
@@ -245,6 +251,12 @@
     
     .appointment.private {
         background-color: @appointment-private;
+    }
+    
+    .appointment.lasso {
+        background-color: @appointment-lasso;
+        cursor: default;
+        opacity: 0.7;
     }
 
     .appointment.reserved.hover {
