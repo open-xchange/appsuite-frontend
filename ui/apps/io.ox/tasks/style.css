@@ -19,7 +19,7 @@
 }
 
 .vgrid-cell.tasks .status {
-    margin-left: 1em;
+    margin-left: 0.5em;
     float: right;
 	index: 2;
 }
@@ -27,11 +27,9 @@
 .vgrid-cell.tasks .priority,
 .io-ox-task-preview .priority {
     color: #FFCC00;
-    min-width: 1em;
     font-size: 16;
     font-weight: bold;
     padding: 0 0.5em 0 0.5em;
-    margin-left: 1em;
     display: inline-block;
     float: right;
     position: relative;

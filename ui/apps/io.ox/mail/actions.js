@@ -395,7 +395,10 @@ define('io.ox/mail/actions',
                                         end_date: endDate.getTime(),
                                         start_date: endDate.getTime(),
                                         alarm: endDate.getTime(),
-                                        note: noteInput.val()
+                                        note: noteInput.val(),
+                                        status: 1,
+                                        recurrence_type: 0,
+                                        percent_completed: 0
                                         })
                                         .done(function () {
                                             notifications.yell('success', 'Reminder has been created!');

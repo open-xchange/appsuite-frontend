@@ -51,7 +51,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             );
             var prio = $node.find(".priority");
         
-            if (task.priority === 2)
+            if (task.priority === 3)
             {
                 prio.text("\u2605\u2605\u2605");
             }
@@ -96,6 +96,11 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             task.status = gt("Not started");
             task.color = "grey";
             break;
+        }
+        var now = new Date();
+        if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
+            {
+            task.color = "red";
         }
         
         task.end_date = new date.Local(task.end_date).format();

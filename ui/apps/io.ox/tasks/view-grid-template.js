@@ -57,7 +57,7 @@ define('io.ox/tasks/view-grid-template',
                 
                 set: function (data, fields, index) {
                     
-                    if (data.priority === 2)
+                    if (data.priority === 3)
                         {
                         fields.priority.text("\u2605\u2605\u2605");
                     }
@@ -74,10 +74,10 @@ define('io.ox/tasks/view-grid-template',
                         fields.status.addClass("badge badge-warning");
                         break;
                     case "blue":
-                        fields.status.addClass("badge badge-important");
+                        fields.status.addClass("badge badge-info");
                         break;
                     case "red":
-                        fields.status.addClass("badge badge-info");
+                        fields.status.addClass("badge badge-important");
                         break;
                     }
                     
