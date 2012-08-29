@@ -18,7 +18,7 @@
     padding-bottom: 1em;
 }
 img.linkedin-logo {
-    display: block;
+    float: right;
 }
 
 .linkedin-message.odd {

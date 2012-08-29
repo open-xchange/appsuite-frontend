@@ -117,7 +117,8 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.png', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
+                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedIn/in35.png'}),
+                $('<h1 class="tile-heading">').text('LinkedIn')
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
