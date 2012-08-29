@@ -54,11 +54,11 @@ define('plugins/portal/tumblr/settings/plugin',
                 return self;
             },
             events: {
-                'click .deletable-item': 'onSelect'
+                'click .sortable-item': 'onSelect'
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.deletable-item').attr('selected', 'selected');
+                this.$el.find('.sortable-item').attr('selected', 'selected');
             }
         }),
 
@@ -135,8 +135,8 @@ define('plugins/portal/tumblr/settings/plugin',
                     .append($url)
                     .append($description)
                     .append($error)
-                    .addButton('cancel', 'Cancel')
-                    .addButton('add', 'Add', null, {classes: 'btn-primary'})
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
                     .show();
 
                 dialog.on('add', function (e) {
@@ -220,8 +220,8 @@ define('plugins/portal/tumblr/settings/plugin',
                         .append($url)
                         .append($description)
                         .append($error)
-                        .addButton('cancel', 'Cancel')
-                        .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
                         .show();
 
                     dialog.on('edit', function (e) {
@@ -308,8 +308,8 @@ define('plugins/portal/tumblr/settings/plugin',
                     dialog.header($("<h4>").text(gt('Delete a Blog')))
                         .append($('<span>').text(gt('Do you really want to delete the following blog(s)?')))
                         .append($('<ul>').append($('<li>').text(url)))
-                        .addButton('cancel', 'Cancel')
-                        .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

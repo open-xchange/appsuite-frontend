@@ -6709,3 +6709,71 @@ msgstr "Åland-Inseln"
 
 #~ msgid "Invitation"
 #~ msgstr "Einladung"
+
+#: portal-plugins
+msgid "Add a Subreddit"
+msgstr "Ein Subreddit hinzufügen"
+
+msgid "Edit a Subreddit"
+msgstr "Ein Subreddit bearbeiten"
+
+msgid "Delete a Subreddit"
+msgstr "Ein Subreddit löschen"
+
+msgid "Add a blog"
+msgstr "Ein Blog hinzufügen"
+
+msgid "Edit a blog"
+msgstr "Ein Blog bearbeiten"
+
+msgid "Delete a blog"
+msgstr "Ein Blog löschen"
+
+msgid "Add a stream"
+msgstr "Ein Stream hinzufügen"
+
+msgid "Edit a stream"
+msgstr "Ein Stream bearbeiten"
+
+msgid "Delete a stream"
+msgstr "Ein Stream löschen"
+
+msgid "Do you really want to delete the following subreddit(s)?"
+msgstr "Möchten Sie die folgenden Subreddits wirklich löschen?"
+
+msgid "Do you really want to delete the following stream(s)?"
+msgstr "Möchten Sie die folgenden Streams wirklich löschen?"
+
+msgid "Do you really want to delete the following blog(s)?"
+msgstr "Möchten Sie die folgenden Blogs wirklich löschen?"
+
+msgid "hot"
+msgstr "heiß"
+
+msgid "new"
+msgstr "neu"
+
+
+msgid "Please enter a subreddit."
+msgstr "Bitte geben Sie ein Subreddit ein."
+
+msgid "Please enter a description."
+msgstr "Bitte eine Beschreibung eingeben."
+
+msgid "Unknown error while checking tumblr-blog."
+msgstr "Unbekannter Fehler beim Prüfen des angegebenen Blogs."
+
+msgid "Unknown error while checking subreddit."
+msgstr "Unbekannter Fehler beim Prüfen des angegebenen Subreddits."
+
+msgid "Cannot find user with given name."
+msgstr "Der angegebene Benutzer kann nicht gefunden werden."
+
+msgid "flickr.people.getPublicPhotos"
+msgstr "Fotograph"
+
+msgid "flickr.photos.search"
+msgstr "Fotos suchen"
+
+msgid "Please enter a search-query."
+msgstr "Bitte geben Sie einen Suchbegriff ein."
