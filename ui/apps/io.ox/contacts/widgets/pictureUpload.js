@@ -20,9 +20,29 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
         _.extend(this, {
             
             tagName: 'div',
+            modelEvents: {
+                'change:pictureFile': 'displayPictureFile'
+            },
         
             openFileChooser: function (e) {
                 this.$el.find('input').trigger('click');
+            },
+            
+            handleFileSelect: function (e) {
+                var file = e.target.files[0];
+                this.model.set("pictureFile", file);
+            },
+            
+            displayPictureFile: function () {
+                var self = this,
+                    file = this.model.get("pictureFile"),
+                    reader = new FileReader();
+                
+                reader.onload = function (e) {
+                    self.$el.find('.picture-uploader').css('background-image', 'url(' + e.target.result + ')');
+                };
+                
+                reader.readAsDataURL(file);
             },
             
             render: function () {
@@ -39,6 +59,9 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
                 
                 this.$el.append(
                     $('<input type="file" name="picture" accepts="image/*">').css({visibility: 'hidden'})
+                        .on('change', function (e) {
+                            self.handleFileSelect(e);
+                        });
                 );
                 
                 this.$el.append($('<div>').css({clear: 'both'}));
