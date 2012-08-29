@@ -61,26 +61,8 @@ define('io.ox/tasks/view-grid-template',
                         {
                         fields.priority.text("\u2605\u2605\u2605");
                     }
-                    //set badgecolor
-                    switch (data.color)
-                    {
-                    case "grey":
-                        fields.status.addClass("badge");
-                        break;
-                    case "green":
-                        fields.status.addClass("badge badge-success");
-                        break;
-                    case "yellow":
-                        fields.status.addClass("badge badge-warning");
-                        break;
-                    case "blue":
-                        fields.status.addClass("badge badge-info");
-                        break;
-                    case "red":
-                        fields.status.addClass("badge badge-important");
-                        break;
-                    }
                     
+                    fields.status.addClass(data.badge);
                     fields.status.text($.trim(data.status));
                     fields.title.text($.trim(data.title));
                     fields.end_date.text(data.end_date);

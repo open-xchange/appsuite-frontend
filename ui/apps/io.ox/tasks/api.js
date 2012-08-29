@@ -20,7 +20,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 return http.PUT({
                     module: "tasks",
                     params: {action: 'new'},
-                    data: task
+                    data: task,
+                    appendColumns: false
                 });
             },
             getAll: function ()
@@ -35,40 +36,68 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                         }
                     });
 
+                },
+            update: function (timestamp, taskId, modifications)
+            {
+                    return http.PUT({
+                        module: "tasks",
+                        params: {action: 'update',
+                            folder: require('io.ox/core/config').get('folder.tasks'),
+                            id: taskId,
+                            timestamp: timestamp
+                        },
+                        data: modifications,
+                        appendColumns: false
+                    }).done(function ()
+                            {
+                        api.trigger("refresh.all");
+                    });
+
                 }
     };
             
     Events.extend(api);
    
 
-    
+    //for notification view
     api.getTasks = function ()
     {
-/*
-        return userAPI.get().pipe(function (user) {
-            api.getUpdates({
-                start: start,
-                end: start + 28 * 5 * DAY, //next four month?!?
-                timestamp: 0,
-                recurrence_master: true
-            })
-            .pipe(function (list) {
-                // sort by start_date & look for unconfirmed appointments
-                var invites = _.chain(list)
-                    .filter(function (item) {
-                        return _(item.users).any(function (item_user) {
-                            return (item_user.id === user.id && (item_user.confirmation === 0));
-                        });
-                    })
-                    .sortBy('start_date')
-                    .value();
-                if (invites.length > 0) {
-                    api.trigger('new-invites', invites);
+
+        return http.GET({
+            module: "tasks",
+            params: {action: 'all',
+                folder: require('io.ox/core/config').get('folder.tasks'),
+                columns: "1,200,202,203,300,309",
+                sort: "202",
+                order: "asc"
+            }
+        }).pipe(function (list) {
+                // sorted by end_date filter new tasks
+                var now = new Date();
+                var newTasks = [];
+                for (var i = 1; i < list.length; i++)
+                    {
+                    if (list[i].end_date > now.getTime())
+                        {
+                        newTasks.push(list[i]);
+                    }
                 }
-                return invites;
+                if (newTasks.length > 0) {
+                    api.trigger('new-tasks', newTasks);
+                }
+                return list;
             });
-        });*/
+
     };
+    
+ // global refresh
+    api.refresh = function () {
+        api.getTasks().done(function () {
+            // trigger local refresh
+            api.trigger("refresh.all");
+        });
+    };
+
     
     return api;
 });

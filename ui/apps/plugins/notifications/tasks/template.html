@@ -1,0 +1,21 @@
+<part id='plugins/notifications/tasks/new-tasks'>
+    <extension id="list">
+        <legend class='section-title'>{{=it.strings.NEW_TASKS}}</legend>
+        <div class='notifications'>
+
+        </div>
+    </extension>
+</part>
+<part id='plugins/notifications/tasks/taskitem'>
+    <extension id="item">
+        <div class='taskNotification item'>
+          <div data-property='title' class='title'></div>
+          <span data-property='end_date' class='end_date'></span>
+          <span data-property='status' class='status', float: 'right'></span>
+          <div data-property='note' class='note'></div>
+          <div class="actions">
+              <button class="btn btn-primary" data-action='done'><span>Done</span></button>
+          </div>
+        </div>
+    </extension>
+</part>
