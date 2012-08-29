@@ -666,6 +666,7 @@ define('io.ox/mail/write/main',
                             return ['"' + recipient[0] + '"', recipient[1]];
                         });
                 };
+
             data.from = this.getFrom();
 
             // get content

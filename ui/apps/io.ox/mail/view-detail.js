@@ -519,9 +519,10 @@ define('io.ox/mail/view-detail',
                 $('<div>')
                 .addClass('from list')
                 .append(
-                    util.serializeList(data.from, true, function (obj) {
+                    util.serializeList(data, 'from').each(function () {
+                        var node = $(this), obj = node.data('person');
                         if (ox.ui.App.get('io.ox/mail').length) {
-                            this.append(
+                            node.parent().append(
                                 $('<i class="icon-search">').on('click', obj, searchSender)
                                     .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
                             );
@@ -590,11 +591,11 @@ define('io.ox/mail/view-detail',
                         .append(
                             // TO
                             $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
-                            util.serializeList(data.to, true),
+                            util.serializeList(data, 'to'),
                             $.txt(' \u00A0 '),
                             // CC
                             showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
-                            util.serializeList(data.cc, true)
+                            util.serializeList(data, 'cc')
                         )
                 );
             }

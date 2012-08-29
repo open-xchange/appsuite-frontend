@@ -87,28 +87,39 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return list;
         },
 
-        serializeList: function (list, addHandlers, customize) {
-            var i = 0, $i = list.length, tmp = $('<div>'), node, obj;
+        serializeList: function (data, field) {
+            field = field || 'from';
+            var list = data[field] || [['', '']],
+                i = 0, $i = list.length,
+                tmp = $('<div>'), node, obj, sender;
+            console.log('serializeList', data, field);
             for (; i < $i; i++) {
                 obj = {
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                node = $('<a>', { href: '#' }).addClass(addHandlers ? 'person-link' : 'person')
+                node = $('<a>', { href: '#', title: obj.email1 })
+                    .addClass('person-link')
                     .css('whiteSpace', 'nowrap')
                     .text(obj.display_name)
+                    .data('person', obj)
+                    .on('click', obj, fnClickPerson).css('cursor', 'pointer')
                     .appendTo(tmp);
-                if (addHandlers) {
-                    node.on('click', obj, fnClickPerson).css('cursor', 'pointer');
+
+                // add 'on behalf of'?
+                if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
+                    sender = this.parseRecipients(data.headers.Sender);
+                    tmp.prepend(
+                        this.serializeList({ sender: sender }, 'sender'),
+                        $.txt(' on behalf of ')
+                    );
                 }
-                if (customize) {
-                    customize.call(tmp, obj);
-                }
+
                 if (i < $i - 1) {
                     tmp.append($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
                 }
             }
-            return tmp.children();
+            return tmp.contents();
         },
 
         serializeAttachments: function (data, list) {
@@ -135,7 +146,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return tmp;
         },
 
-        getDisplayName: function (pair) {
+        getDisplayName: function (pair, behalf) {
             if (!pair) {
                 return '';
             }
@@ -144,9 +155,10 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return display_name || email;
         },
 
-        getFrom: function (list, prewrap) {
-            list = list || [['', '']];
-            var dn = that.getDisplayName(list[0]);
+        getFrom: function (data, field, prewrap) {
+            field = field || 'from';
+            var list = data[field] || [['', '']],
+                dn = that.getDisplayName(list[0]);
             return $('<span>').addClass('person').text(prewrap ? _.prewrap(dn) : dn);
         },
 
