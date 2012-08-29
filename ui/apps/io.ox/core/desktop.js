@@ -988,37 +988,34 @@ define("io.ox/core/desktop",
                 )
                 .append(
                     // window HEAD
-                    win.nodes.head = $("<div>")
-                    .addClass("window-head")
+                    win.nodes.head = $('<div class="window-head css-table">')
                     .append(
-                        // title
-                        win.nodes.title = $("<h1>")
-                        .css("width", opt.titleWidth)
-                        .addClass("window-title")
-                        .append($("<span>"))
-                    )
-                    .append(
-                        // toolbar
-                        win.nodes.toolbar = $("<div>")
-                        .css("left", opt.titleWidth)
-                        .addClass("window-toolbar")
-                    )
-                    .append(
-                        // controls
-                        win.nodes.controls = $("<div>")
-                        .addClass("window-controls")
+                        $("<div class='css-table-row'>")
                         .append(
-                            // settings
-                            win.nodes.settingsButton = $("<div>").hide()
-                            .addClass("window-control")
-                            .text("\u270E")
-                        )
-                        .append(
-                            // close
-                            win.nodes.closeButton = $("<div>").hide()
-                            .addClass("window-control")
-                            .append(
-                                $('<a class="close">&times;</a>')
+                            $("<div class='css-table-cell cell-33'>").append(
+                                // title
+                                win.nodes.title = $('<h1 class="window-title">')
+                                .css('width', opt.titleWidth).append($("<span>"))
+                            ),
+                            $("<div class='css-table-cell cell-33 cell-center window-toolbar'>").append(
+                                // toolbar
+                                win.nodes.toolbar = $("<div>")
+                            ),
+                            $("<div class='css-table-cell cell-33 window-controls'>").append(
+                                // controls
+                                win.nodes.controls = $("<div>")
+                                .append(
+                                    // settings
+                                    win.nodes.settingsButton = $("<div>").hide()
+                                    .addClass("window-control")
+                                    .text("\u270E"),
+                                    // close
+                                    win.nodes.closeButton = $("<div>").hide()
+                                    .addClass("window-control")
+                                    .append(
+                                        $('<a class="close">&times;</a>')
+                                    )
+                                )
                             )
                         )
                     )

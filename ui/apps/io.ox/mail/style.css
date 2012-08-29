@@ -119,6 +119,7 @@
     position: relative;
     z-index: 2;
     cursor: pointer;
+    overflow: visible;
 }
 
 .borderradius .vgrid-cell.mail .thread-size {

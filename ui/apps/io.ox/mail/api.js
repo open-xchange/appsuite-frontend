@@ -89,6 +89,9 @@ define("io.ox/mail/api",
     // generate basic API
     var api = apiFactory({
         module: "mail",
+        keyGenerator: function (obj) {
+            return obj.folder_id + '.' + obj.id + '.' + (obj.view || 'noimg');
+        },
         requests: {
             all: {
                 folder: "default0/INBOX",
