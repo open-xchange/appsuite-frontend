@@ -20,43 +20,29 @@ define('io.ox/contacts/widgets/pictureUpload', function () {
         _.extend(this, {
             
             tagName: 'div',
-            className: 'picture',
-            events: {
-                'click': 'openFileChooser'
-            },
-            
-            openFileChooser: function () {
+        
+            openFileChooser: function (e) {
                 this.$el.find('input').trigger('click');
             },
             
             render: function () {
+                var self = this;
+                this.$el.append(
+                    $('<div class="picture-uploader">').css({
+                        backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)',
+                        marginRight: '15px',
+                        marginBottom: '15px'
+                    }).on('click', function () {
+                        self.openFileChooser();
+                    })
+                );
                 
+                this.$el.append(
+                    $('<input type="file" name="picture" accepts="image/*">').css({visibility: 'hidden'})
+                );
                 
-                var target = 'picture-upload-' + new Date().getTime();
-                $('<form>', {
-                    'accept-charset': 'UTF-8',
-                    enctype: 'multipart/form-data',
-                    method: 'POST',
-                    target: target
-                })
-                .append(
-                    $('<input type="file" name="picture" accept="image/*">')
-                )
-                .append(
-                    $('<iframe>', {
-                        name: target,
-                        src: 'blank.html'
-                    }).hide()
-                ).appendTo(this.$el);
-            
-                this.$el.css({
-                    backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)',
-                    marginRight: '15px'
-                });
-                
+                this.$el.append($('<div>').css({clear: 'both'}));
             }
-            
-            
         }, options);
     }
     

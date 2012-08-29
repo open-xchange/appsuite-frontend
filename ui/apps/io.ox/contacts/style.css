@@ -179,3 +179,14 @@ input#image1 {
 .contact-detail input {
 	width: 270px;
 }
+
+.picture-uploader {
+    width: 100px;
+    height: 100px;
+    display: inline-block;
+    float: left;
+    background-position: right top;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
