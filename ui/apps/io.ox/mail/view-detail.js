@@ -20,10 +20,11 @@ define('io.ox/mail/view-detail',
      'io.ox/core/config',
      'io.ox/core/http',
      'io.ox/core/api/account',
+     'settings!io.ox/mail',
      'gettext!io.ox/mail/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
-    ], function (ext, links, util, api, config, http, account, gt) {
+    ], function (ext, links, util, api, config, http, account, settings, gt) {
 
     'use strict';
 
@@ -729,8 +730,32 @@ define('io.ox/mail/view-detail',
         ref: 'io.ox/mail/links/inline'
     }));
 
-    // TODO: remove click handler out of inner closure
+    ext.point('io.ox/mail/detail').extend({
+        index: 90,
+        id: 'phishing-warning',
+        draw: function (data) {
+            if ('headers' in data) {
+                // TODO: get proper settings here
+                var headers = settings.get('phishing/headers', []), key;
+                console.log('Phishing', headers);
+                for (key in headers) {
+                    if (headers[key] in data.headers) {
+                        // show phishing warning
+                        this.append(
+                            $('<div class="mail-warning progress progress-warning progress-striped">')
+                            .append(
+                                 $('<div class="bar">')
+                                 .text(gt('Warning: This message might be a phishing or scam mail'))
+                             )
+                        );
+                        break;
+                    }
+                }
+            }
+        }
+    });
 
+    // TODO: remove click handler out of inner closure
     ext.point('io.ox/mail/detail').extend({
         index: 195,
         id: 'externalresources-warning',

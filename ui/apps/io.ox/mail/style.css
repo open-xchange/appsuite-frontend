@@ -422,11 +422,14 @@ h4.mail-attachment-preview {
     cursor: pointer;
 }
 
+.mail-detail .mail-warning {
+    height: auto;
+}
 
-/*NOTIFICATIONS*/
-
-/*
- * #io-ox-notifications-mail {
- */
-
-
+.mail-detail .mail-warning .bar {
+    color: black;
+    width: 100%;
+    padding: 6px 13px 6px 13px;
+    font-weight: bold;
+    text-shadow: 0 0 3px white;
+}
