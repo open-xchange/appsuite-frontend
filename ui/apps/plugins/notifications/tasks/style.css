@@ -14,3 +14,18 @@
  .taskNotification .status{
  float: right;
  }
+ 
+ .tasknote .dateselect{
+ margin-top: 0.5em;
+ width: 100%;
+ }
+ 
+#io-ox-notifications-reminder-tasks .smallertitle{
+	font-size: 18px;
+	line-height: 27px;
+}
+
+.taskremindbtn{
+white-space: nowrap;
+width: 77%;
+}

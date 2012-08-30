@@ -88,7 +88,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         render: function () {
             this.$el.empty().append(templ.render('plugins/notifications/tasks/new-tasks', {
                 strings: {
-                    NEW_TASKS: gt('Over due')
+                    NEW_TASKS: gt('Over due Tasks')
                 }
             }));
             
@@ -100,7 +100,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
     
     ext.point('io.ox/core/notifications/register').extend({
         id: 'dueTasks',
-        index: 300,
+        index: 350,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasks', NotificationsView);
             api.on('new-tasks', function (e, tasks) {
@@ -124,13 +124,18 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         }
     });
     
-    /*
+    /*------------------------------------------
+     *
      * REMINDER TASKS
+     *
+     *------------------------------------------
      */
     var NotificationReminderView = Backbone.View.extend(
             {
         events: {
-            'click [data-action="ok"]': 'setTaskStatus',
+            'click [data-action="ok"]': 'deleteReminder',
+            'click [data-action="remindAgain"]': 'remindAgain',
+            'click [data-action="selector"]': 'selectClicked',
             'click .item': 'onClickItem'
         },
         _modelBinder: undefined,
@@ -143,14 +148,27 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             this._modelBinder.bind(this.model, this.el, bindings);
             this.$el.find(".status").addClass(this.model.attributes.badge);
-            this.$el.find(".btn span").text(gt("Ok"));
+            this.$el.find(".dateselect").append(util.buildDropdownMenu(new Date()));
+            this.$el.find(".taskremindbtn span").text(gt("Remind me again"));
+            this.$el.find(".taskokbtn span").text(gt("Ok"));
             return this;
         },
-        setTaskStatus: function (e)
+        deleteReminder: function (e)
         {
             e.stopPropagation();
             api.deleteReminder(this.model.attributes.reminderId);
             this.close();
+        },
+        selectClicked: function (e)
+        {
+            e.stopPropagation();
+        },
+        remindAgain: function (e)
+        {
+            var endDate = new Date();
+            endDate = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+            api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
+            e.stopPropagation();
         },
         
         onClickItem: function (e) {
@@ -188,7 +206,8 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         render: function () {
             this.$el.empty().append(templ.render('plugins/notifications/tasks/new-reminder-tasks', {
                 strings: {
-                    REMINDER_TASKS: gt('Reminder')
+                    REMINDER: gt('Reminder'),
+                    TASKS: gt('Tasks')
                 }
             }));
             
@@ -200,21 +219,17 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
     
     ext.point('io.ox/core/notifications/register').extend({
         id: 'reminderTasks',
-        index: 350,
+        index: 300,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
             api.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
                 notifications.collection.trigger("reset");
                 api.getAll().done(function (tasks)
                 {
-                    console.log(reminderTaskIds);
-                    console.log(reminderIds);
-                    console.log(tasks);
                     _(tasks).each(function (taskObj) {
                         var index = $.inArray(taskObj.id, reminderTaskIds);
                         if (index !== -1)
                             {
-                            console.log("gefunden");
                             var task = util.interpretTask(taskObj);
                             var inObj = {
                                 badge: task.badge,
@@ -232,7 +247,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             });
             var now = new Date();
-            api.getReminders(now.getTime() + 60000 * 60 * 24 * 7);
+            api.getReminders(now.getTime());
         }
     });
 
