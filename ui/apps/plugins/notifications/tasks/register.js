@@ -169,6 +169,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             endDate = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
             api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
             e.stopPropagation();
+            this.close();
         },
         
         onClickItem: function (e) {

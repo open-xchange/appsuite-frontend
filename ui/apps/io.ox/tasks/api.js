@@ -94,7 +94,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 var dueTasks = [];
                 for (var i = 1; i < list.length; i++)
                     {
-                    if (list[i].end_date < now.getTime() && list[i].status !== 3)
+                    if (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null)
                         {
                         dueTasks.push(list[i]);
                     }
