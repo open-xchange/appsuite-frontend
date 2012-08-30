@@ -141,45 +141,47 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         function drawContent(extension, e) {
-            var sidepopup;
-            var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
-                sidepopup = popup.busy();
-            });
-            contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.children().trigger('onPause').detach();
 
-                $(node).trigger('onResume');
-                sidepopup.idle();
-                sidepopup.append(node);
-                $(node).trigger('onAppended');
+            new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
 
-                dialog.on('close', function () {
-                    $(node).trigger('onPause');
-                });
+                var self = this;
+                popup.busy();
 
-                if (extension.loadMoreResults) {
-                    var $o = $('div.io-ox-sidepopup-pane');
+                contentQueue.fasttrack(extension.id).done(function (node) {
 
-                    $o.bind('scroll', function (event) {
-                        // TODO tidy enough? (loadingMoreResults + active tile)
-                        if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
-                            extension.timer = setTimeout(function () {
-                                // Position + Height + Tolerance
-                                var distance = $o.scrollTop() + $o.height() + 50;
+                    contentSide.children().trigger('onPause').detach();
+                    $(node).trigger('onResume');
+                    popup.idle();
+                    popup.append(node);
+                    $(node).trigger('onAppended');
 
-                                if ($('div.scrollable-pane').height() <= distance) {
-                                    extension.isLoadingMoreResults = true;
-                                    extension.loadMoreResults(extension.finishLoadingMoreResults);
-                                }
-                                extension.timer = 0;
-                            }, 250);
-                        }
+                    self.on('close', function () {
+                        $(node).trigger('onPause');
                     });
-                }
 
-                $('div[widget-id]').removeClass('io-ox-portal-tile-active');
-                $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
-                contentSide.idle();
+                    if (extension.loadMoreResults) {
+                        var $o = $('div.io-ox-sidepopup-pane');
+                        $o.bind('scroll', function (event) {
+                            // TODO tidy enough? (loadingMoreResults + active tile)
+                            if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
+                                extension.timer = setTimeout(function () {
+                                    // Position + Height + Tolerance
+                                    var distance = $o.scrollTop() + $o.height() + 50;
+
+                                    if ($('div.scrollable-pane').height() <= distance) {
+                                        extension.isLoadingMoreResults = true;
+                                        extension.loadMoreResults(extension.finishLoadingMoreResults);
+                                    }
+                                    extension.timer = 0;
+                                }, 250);
+                            }
+                        });
+                    }
+
+                    $('div[widget-id]').removeClass('io-ox-portal-tile-active');
+                    $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
+                    contentSide.idle();
+                });
             });
         }
 
@@ -267,7 +269,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 } else {
                     $node.on('click', makeClickHandler(extension));
                 }
-                
+
                 if (/^filler/.test(extension.id)) {
                     $node.off('click');
                 }
