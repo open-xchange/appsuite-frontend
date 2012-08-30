@@ -59,7 +59,8 @@ define('io.ox/office/editor/position',
 
         var node = domposition.node,
             offset = domposition.offset,
-            selectedNodeName = node.nodeName;
+            selectedNodeName = node.nodeName,
+            imageFloatMode = null;
 
         isRtlCursorTravel = isRtlCursorTravel ? true : false;
         isEndPoint = isEndPoint ? true : false;
@@ -74,7 +75,11 @@ define('io.ox/office/editor/position',
         // These DIVs need to be converted to the correct paragraph first.
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
-            var newNode = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint);
+            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint),
+                newNode = returnObj.domPoint;
+
+            imageFloatMode = returnObj.imageFloatMode;
+
             if (newNode) {
                 node = newNode.node;
                 offset = newNode.offset;
@@ -136,7 +141,7 @@ define('io.ox/office/editor/position',
             Utils.warn('Position.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
         }
 
-        return new OXOPaM(oxoPosition, selectedNodeName);
+        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode);
     };
 
     /**
@@ -215,15 +220,18 @@ define('io.ox/office/editor/position',
      *  of a range. This is important for some calculations, where the
      *  dom node is a row inside a table.
      *
-     * @returns {DOM.Point}
+     * @returns {Object}
      *  The text node, that will be used in Position.getOxoPosition
      *  for the calculation of the logical position.
+     *  And additionally some information about the floating state of an
+     *  image, if the position describes an image.
      */
     Position.getTextNodeFromCurrentNode = function (node, offset, isRtlCursorTravel, isEndPoint) {
 
         var useFirstTextNode = true,  // can be false for final child in a paragraph
             usePreviousCell = false,
-            localNode = node.childNodes[offset]; // offset can be zero for start points but too high for end points
+            localNode = node.childNodes[offset], // offset can be zero for start points but too high for end points
+            imageFloatMode = null;
 
         if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
             usePreviousCell = true;
@@ -242,12 +250,14 @@ define('io.ox/office/editor/position',
 
         // special handling for non-floated images as children of paragraphs, use text node instead
         if (localNode && (Utils.getNodeName(localNode) === 'img') && (! Position.hasFloatProperty(localNode))) {
+            imageFloatMode = 'inline';
             localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
             useFirstTextNode = false;
         }
 
         // special handling for floated images as children of paragraphs, use text node instead
         if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.hasFloatProperty(localNode))) {
+            imageFloatMode = Position.getPropertyValue(localNode, 'float');
             if (isRtlCursorTravel) {
                 localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
                 useFirstTextNode = false;
@@ -271,7 +281,7 @@ define('io.ox/office/editor/position',
 
         var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
 
-        return new DOM.Point(textNode, offset);
+        return {domPoint: new DOM.Point(textNode, offset), imageFloatMode: imageFloatMode};
     };
 
     /**
@@ -402,7 +412,7 @@ define('io.ox/office/editor/position',
      * @param {String} selector
      *  The selector against which the dom node is compared.
      *
-     * @returns {Numnber | Node}
+     * @returns {Number | Node}
      *  The index in the logical position or -1, if no corresponding
      *  dom node can be found.
      */
@@ -561,7 +571,8 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Returns if the logical position is a position inside a table.
+     * Returns 'true' if the logical position is a position inside a
+     * table, otherwise false.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -1692,6 +1703,57 @@ define('io.ox/office/editor/position',
         return ((localNode.css('float') === 'left') || (localNode.css('float') === 'right') || (localNode.css('float') === 'none'));
     };
 
+
+    /**
+     * Checks if a specified node has an undefined css property 'float'.
+     * This are typically Images that are inline.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A DOM element object or jQuery element, that is checked.
+     *  If it is a DOM element, it is jQuerified first.
+     *
+     * @returns {Boolean}
+     *  A boolean containing the information, if the specified node has the css
+     *  property 'float' undefined.
+     */
+    Position.hasNoFloatProperty = function (node) {
+        var localNode = (node instanceof $) ? node : $(node);
+        return (localNode.css('float') === undefined);
+    };
+
+    /**
+     * Checks if a specified node has the css property 'prop' set to 'value'.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A DOM element object or jQuery element, that is checked, if it contains
+     *  the css property 'float' set to 'left' or 'right'.
+     *  If it is a DOM element, it is jQuerified first.
+     *
+     * @returns {Boolean}
+     *  A boolean containing the information, if the specified node has the css
+     *  property 'prop' set to 'value'.
+     */
+    Position.hasPropertyValue = function (node, prop, value) {
+        var localNode = (node instanceof $) ? node : $(node);
+        return (localNode.css(prop) === value);
+    };
+
+    /**
+     * Returns the value of the css property 'prop'.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  A DOM element object or jQuery element, that is checked, if it contains
+     *  the css property 'float' set to 'left' or 'right'.
+     *  If it is a DOM element, it is jQuerified first.
+     *
+     * @returns {String}
+     *  The value of the css property 'prop'.
+     */
+    Position.getPropertyValue = function (node, prop) {
+        var localNode = (node instanceof $) ? node : $(node);
+        return localNode.css(prop);
+    };
+
     /**
      * Counting the number of floated elements at the beginning of a paragraph.
      * Typically the floated elements are images.
@@ -1721,6 +1783,148 @@ define('io.ox/office/editor/position',
 
         return counter;
     };
+
+    /**
+     * Returns 'true' if the logical position is an image, with the
+     * specified floating property, otherwise false.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @param {String} value
+     *  The value, that the property 'float' can have. Typically this are
+     *  'left', 'right' and 'none'.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the logical position describes an image with the
+     *  specified floating property, otherwise false.
+     */
+    Position.isValueFloatedImagePosition = function (startnode, position, value) {
+
+        var correctlyFloatedImage = false,
+            domNode = startnode,
+            localPos = _.copy(position, true);
+
+        while (localPos.length > 0) {
+
+            var nextChild = Position.getNextChildNode(domNode, localPos.shift());
+
+            if (nextChild) {
+
+                domNode = nextChild.node;
+
+                if (domNode) {
+                    if (Utils.getNodeName(domNode) === 'img') {
+
+                        if (Position.hasPropertyValue(domNode, 'float', value)) {
+                            correctlyFloatedImage = true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        return correctlyFloatedImage;
+    };
+
+    /**
+     * Returns 'true' if the logical position is an image, with the
+     * floating property set, otherwise false. This is 'true' for images,
+     * that are not inline.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the logical position describes an image with the
+     *  floating property set, otherwise false.
+     */
+    Position.isFloatedImagePosition = function (startnode, position) {
+
+        var isFloatedImage = false,
+            domNode = startnode,
+            localPos = _.copy(position, true);
+
+        while (localPos.length > 0) {
+
+            var nextChild = Position.getNextChildNode(domNode, localPos.shift());
+
+            if (nextChild) {
+
+                domNode = nextChild.node;
+
+                if (domNode) {
+                    if (Utils.getNodeName(domNode) === 'img') {
+
+                        if (Position.hasFloatProperty(domNode)) {
+                            isFloatedImage = true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        return isFloatedImage;
+    };
+
+    /**
+     * Returns 'true' if the logical position is an image, without the
+     * floating property set, otherwise false. This is 'true' for inline
+     * images.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the logical position describes an image with the
+     *  floating property not set, otherwise false.
+     */
+    Position.isNotFloatedImagePosition = function (startnode, position) {
+
+        var notFloatedImage = false,
+            domNode = startnode,
+            localPos = _.copy(position, true);
+
+        while (localPos.length > 0) {
+
+            var nextChild = Position.getNextChildNode(domNode, localPos.shift());
+
+            if (nextChild) {
+
+                domNode = nextChild.node;
+
+                if (domNode) {
+                    if (Utils.getNodeName(domNode) === 'img') {
+
+                        if (Position.hasNoFloatProperty(domNode)) {
+                            notFloatedImage = true;
+                        }
+
+                        break;
+                    }
+                }
+            }
+        }
+
+        return notFloatedImage;
+    };
+
 
     return Position;
 

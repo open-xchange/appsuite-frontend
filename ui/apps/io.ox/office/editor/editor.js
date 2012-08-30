@@ -1102,6 +1102,13 @@ define('io.ox/office/editor/editor',
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
+//                    window.console.log("AAA0: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.startPaM.selectedNodeName + " : " + currentSelection.startPaM.imageFloatMode);
+//                    window.console.log("AAA1: Left floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'left'));
+//                    window.console.log("AAA2: Right floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'right'));
+//                    window.console.log("AAA3: None floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'none'));
+//                    window.console.log("AAA4: Floated image: " + Position.isFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition));
+//                    window.console.log("AAA5: Not floated image: " + Position.isNotFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition));
+//                    window.console.log("AAA6");
                     this.trigger('selectionChanged');
                 } else if (focused) {
                     // If not focused, browser selection might not be available...
@@ -1268,14 +1275,16 @@ define('io.ox/office/editor/editor',
                 this.setSelection(selection);
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
+                var backspacePos = 0,
+                    paragraphsMerged = false;
+
                 selection.adjust();
                 if (selection.hasRange()) {
                     this.deleteSelected(selection);
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1,
-                        localPos = _.copy(selection.startPaM.oxoPosition, true),
-                        backspacePos = 0;
+                        localPos = _.copy(selection.startPaM.oxoPosition, true);
 
                     localPos.pop();
                     // Getting the first position, that is not a floated image,
@@ -1314,6 +1323,7 @@ define('io.ox/office/editor/editor',
                             if (startPosition[lastValue - 1] >= 0) {
                                 if (! prevIsTable) {
                                     this.mergeParagraph(startPosition);
+                                    paragraphsMerged = true;
                                 }
                                 selection.startPaM.oxoPosition[lastValue - 1] -= 1;
                                 selection.startPaM.oxoPosition.pop();
@@ -1343,6 +1353,11 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
+
+                if ((backspacePos > 0) && (paragraphsMerged)) {
+                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] += backspacePos;
+                }
+
                 selection.endPaM = _.copy(selection.startPaM, true);
                 event.preventDefault();
                 this.setSelection(selection);
@@ -2961,6 +2976,7 @@ define('io.ox/office/editor/editor',
                 if ((thisPara.nodeName === 'P') && (nextPara.nodeName === 'P')) {
 
                     var oldParaLen = 0;
+                    var imageCounter = 0;
                     oldParaLen = Position.getParagraphLength(paragraphs, position);
 
                     var lastCurrentChild = thisPara.lastChild;
@@ -2980,6 +2996,7 @@ define('io.ox/office/editor/editor',
                                 var localChild = thisPara.firstChild;
                                 if (localChild) {
                                     thisPara.insertBefore(child, localChild);  // what about order of images?
+                                    imageCounter++;
                                 } else {
                                     thisPara.appendChild(child);
                                 }
@@ -2997,6 +3014,7 @@ define('io.ox/office/editor/editor',
                     this.implDeleteParagraph(localPosition);
 
                     var lastPos = _.copy(position);
+                    oldParaLen += imageCounter;
                     lastPos.push(oldParaLen);
                     lastOperationEnd = new OXOPaM(lastPos);
                     implParagraphChanged(position);
