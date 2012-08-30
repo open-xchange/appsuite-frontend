@@ -43,7 +43,6 @@ define('io.ox/calendar/week/perspective',
         },
         
         openCreateAppointment: function (e, obj) {
-            console.log('openCreateAppointment', e, obj);
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, this.app, obj);

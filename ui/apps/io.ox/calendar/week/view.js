@@ -106,7 +106,6 @@ define('io.ox/calendar/week/view',
         },
         
         onCreateAppointment: function (e) {
-            console.log($(e.target));
             if ($(e.target).is('.timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.calcTime(e.target.offsetTop + e.offsetY),
@@ -114,6 +113,13 @@ define('io.ox/calendar/week/view',
                 // FIXME: remove localtime
                 startTS = date.Local.localTime(startTS);
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
+            }
+            if ($(e.target).is('.day')) {
+                // calculate timestamp for current position
+                var startTS = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime();
+                // FIXME: remove localtime
+                startTS = date.Local.localTime(startTS);
+                this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
             }
         },
         
@@ -211,6 +217,9 @@ define('io.ox/calendar/week/view',
                 if (dayInfo.isToday) {
                     day.addClass('today');
                 }
+                
+                // add days to fulltime panel
+                this.fulltimePane.append(day.clone());
                 
                 // create timeslots
                 for (var i = 1; i <= this.slots * this.fragmentation; i++) {
@@ -416,7 +425,7 @@ define('io.ox/calendar/week/view',
             $(function () {
                 var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
                 // init drag and resize widget on appointments
-                $('.appointment')
+                $('.day>.appointment')
                     .draggable({
                         grid: [$('.day:first').outerWidth(), gridHeight],
                         scroll: true,
@@ -447,7 +456,7 @@ define('io.ox/calendar/week/view',
                         }
                     });
                 // define drop areas
-                $('.day').droppable({
+                $('.weekcontainer>.day').droppable({
                     drop: function (e, ui) {
                         console.log('drop', e, ui);
                         $(this).append(ui.draggable.css({left: 0}));
