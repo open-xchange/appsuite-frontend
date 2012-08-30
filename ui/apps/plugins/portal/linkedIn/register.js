@@ -117,8 +117,7 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-//                $('<img class="linkedin-logo">').attr({src: 'apps/io.ox/core/bootstrap/img/glyphicons_377_linked_in'}),
-                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedin/in25.png'}),
+                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedin/glyphicons_377_linked_in.png'}),
                 $('<h1 class="tile-heading">').text('LinkedIn')
             ).addClass('io-ox-portal-tile-linkedin');
 
