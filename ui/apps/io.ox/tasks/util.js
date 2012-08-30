@@ -192,7 +192,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 } else
                     {
                     var now = new Date();
-                    if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
+                    if (now.getTime() > task.end_date && task.end_date !== null)//no state for task over time, so manual check is needed
                         {
                         task.status = gt("Over due");
                         task.badge = "badge badge-important";
@@ -218,6 +218,45 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
               
                 
                 return task;
+            },
+            
+            sortTasks: function (tasks) //done tasks last, overduetasks first, same date alphabetical
+            {
+                tasks = _.copy(tasks, true);//make loacl copy
+                var resultArray = [],
+                    alphabetArray = [];
+                
+                for (var i = 0; i < tasks.length; i++)
+                    {
+                    if (tasks[i].status === 3)
+                        {
+                        resultArray.push(tasks[i]);
+                    } else {
+                        alphabetArray.push(tasks[i]);
+                    }
+                }
+                
+                alphabetArray.sort(function (a, b)
+                        {
+                        
+                        if (a.end_date > b.end_date || a.end_date === null)
+                            {
+                            return 1;
+                        } else if (a.end_date < b.end_date || b.end_date === null)
+                            {
+                            return -1;
+                        } else if (a.title > b.title)
+                            {
+                            return 1;
+                        } else
+                            {
+                            return -1;
+                        }
+                    });
+                
+                resultArray.unshift(alphabetArray);
+                return _.flatten(resultArray);
+                
             }
             
             
