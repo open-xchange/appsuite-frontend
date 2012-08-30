@@ -2818,6 +2818,12 @@ define('io.ox/office/editor/editor',
                 para = position[posLength],
                 allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, position);
 
+            if (! allParagraphs) {
+                var pos = _.copy(position, true);
+                pos[pos.length - 1] -= 1; // decreasing last value by 1, if new paragraphs are inserted
+                allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, pos);
+            }
+
             var newPara = $('<p>');
 
             if (para === -1) {
