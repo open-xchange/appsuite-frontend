@@ -214,6 +214,9 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 if (task.end_date !== null)
                     {
                     task.end_date = new date.Local(task.end_date).format();
+                } else
+                    {
+                    task.end_date = '';
                 }
               
                 
