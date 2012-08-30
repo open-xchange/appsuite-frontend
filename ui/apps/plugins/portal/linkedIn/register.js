@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/portal/linkedin/register",
+define("plugins/portal/linkedIn/register",
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/oauth/proxy',
      'io.ox/core/strings',
      'io.ox/keychain/api',
-     'gettext!plugins/portal/linkedin',
+     'gettext!plugins/portal/linkedIn',
      'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, keychain, gt) {
 
     "use strict";
@@ -62,7 +62,7 @@ define("plugins/portal/linkedin/register",
             .on("click", person, fnClick);
     }
 
-    ext.point("portal/linkedin/updates/renderer").extend({
+    ext.point("portal/linkedIn/updates/renderer").extend({
         id: "CONN",
         draw: function (activity) {
 
@@ -117,7 +117,7 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedin/glyphicons_377_linked_in.png'}),
+                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedIn/glyphicons_377_linked_in.png'}),
                 $('<h1 class="tile-heading">').text('LinkedIn')
             ).addClass('io-ox-portal-tile-linkedin');
 
@@ -183,7 +183,7 @@ define("plugins/portal/linkedin/register",
             if (activityFeed.values && activityFeed.values !== 0) {
                 $('<h2 class="linkedin-activities-header">').text(gt("Recent activities:")).appendTo($node);
                 _(activityFeed.values).each(function (activity) {
-                    ext.point("portal/linkedin/updates/renderer")
+                    ext.point("portal/linkedIn/updates/renderer")
                         .invoke("draw", $node, activity);
                 });
             }
