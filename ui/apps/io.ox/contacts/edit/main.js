@@ -12,23 +12,17 @@
  */
 
 define('io.ox/contacts/edit/main',
-    ['io.ox/contacts/api',
-     'io.ox/core/cache',
-     'io.ox/contacts/edit/view-form',
+    ['io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
-     'gettext!io.ox/contacts/contacts',
-     'less!io.ox/contacts/edit/style.css'
-     ], function (api, cache, ContactEditView, ContactModel, gt) {
+     'gettext!io.ox/contacts/contacts'
+     ], function (view, model, gt) {
 
     'use strict';
 
     // multi instance pattern
     function createInstance(data) {
 
-        var app, getDirtyStatus, container,
-            dirtyStatus = {
-            byApi: true
-        };
+        var app, getDirtyStatus, container;
 
         app = ox.ui.createApp({
             name: 'io.ox/contacts/edit',
@@ -50,51 +44,25 @@ define('io.ox/contacts/edit/main',
             container = win.nodes.main
                 .css({ backgroundColor: '#fff' })
                 .scrollable()
-                .css({ width: '600px', margin: '20px auto 20px auto' });
+                .css({ width: '1000px', margin: '20px auto 20px auto' });
 
             var cont = function (data) {
 
                 win.show(function () {
 
                     // create model & view
-                    var model = new ContactModel({ data: data }),
-                        view = new ContactEditView({ model: model });
+                    model.factory.realm('edit').get(data).done(function (contact) {
+                        app.contact = contact;
+                        var editView = new view.ContactEditView({ model: contact });
+                        container.append(editView.render().$el);
+                        container.find('input[type=text]:visible').eq(0).focus();
+                    });
+                        
 
                     getDirtyStatus = function () {
-                        return model.dirty || model.isDirty();
+                        return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
                     };
 
-                    model.store = function (data, changes) {
-                        // TODO: replace image upload with a field in formsjs method
-                        var image = view.node.find('input[name="picture-upload-file"][type="file"]').get(0);
-                        if (image.files && image.files[0]) {
-                            return api.editNewImage(data, changes, image.files[0])
-                                .done(function () {
-                                    dirtyStatus.byApi = false;
-                                    view.destroy();
-                                    app.quit();
-                                })
-                                .fail(function (e) {
-                                    $.alert(gt('Could not save contact'), e.error)
-                                        .insertAfter(view.node.find('.section.formheader'));
-                                });
-                        } else {
-                            return api.edit({
-                                    id: data.id,
-                                    folder: data.folder_id,
-                                    timestamp: _.now(),
-                                    data: changes
-                                })
-                                .done(function () {
-                                    dirtyStatus.byApi = false;
-                                    view.destroy(); // TODO: solving trouble with model
-                                    app.quit();
-                                });
-                        }
-                    };
-
-                    container.append(view.draw(app).node);
-                    container.find('input[type=text]:visible').eq(0).focus();
                 });
             };
 
@@ -103,34 +71,30 @@ define('io.ox/contacts/edit/main',
                 app.setState({ folder: data.folder_id, id: data.id });
                 cont(data);
             } else {
-                api.get(app.getState()).done(cont);
+                cont({folder_id: app.getState().folder, id: app.getState().id});
             }
         });
 
         app.setQuit(function () {
             var def = $.Deferred();
-            dirtyStatus.byModel = getDirtyStatus();
 
-            if (dirtyStatus.byModel === true) {
-                if (dirtyStatus.byApi === true) {
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt("Do you really want to lose your changes?"))
-                            .addPrimaryButton("delete", gt('Lose changes'))
-                            .addButton("cancel", gt('Cancel'))
-                            .show()
-                            .done(function (action) {
-                                console.debug("Action", action);
-                                if (action === 'delete') {
-                                    def.resolve();
-                                } else {
-                                    def.reject();
-                                }
-                            });
-                    });
-                } else {
-                    def.resolve();
-                }
+            if (getDirtyStatus()) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to lose your changes?"))
+                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .addButton("cancel", gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            console.debug("Action", action);
+                            if (action === 'delete') {
+                                def.resolve();
+                                container.find('#myGrowl').jGrowl('shutdown');
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 def.resolve();
             }

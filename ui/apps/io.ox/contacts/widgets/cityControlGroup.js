@@ -42,6 +42,8 @@ define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less
                     self.model.off('change:' + options.zipAttribute, updateZip);
                 });
                 
+                updateZip();
+                
                 return this.nodes.bothElements = $("<span>").append(this.nodes.zipElement, $.txt(" "), this.nodes.element);
             },
             

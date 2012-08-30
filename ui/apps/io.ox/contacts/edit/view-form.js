@@ -22,7 +22,6 @@ define('io.ox/contacts/edit/view-form', [
      
     "use strict";
     
-    // TODO: Separate Address Fields
     var dateField, city;
     
     var meta = {
