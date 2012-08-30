@@ -24,54 +24,6 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
-
-    //strings
-    var reminderListValues = [
-        {value: 0, format: 'minutes'},
-        {value: 15, format: 'minutes'},
-        {value: 30, format: 'minutes'},
-        {value: 45, format: 'minutes'},
-
-        {value: 60, format: 'hours'},
-        {value: 120, format: 'hours'},
-        {value: 240, format: 'hours'},
-        {value: 360, format: 'hours'},
-        {value: 420, format: 'hours'},
-        {value: 720, format: 'hours'},
-
-        {value: 1440, format: 'days'},
-        {value: 2880, format: 'days'},
-        {value: 4320, format: 'days'},
-        {value: 5760, format: 'days'},
-        {value: 7200, format: 'days'},
-        {value: 8640, format: 'days'},
-        {value: 10080, format: 'weeks'},
-        {value: 20160, format: 'weeks'},
-        {value: 30240, format: 'weeks'},
-        {value: 40320, format: 'weeks'}
-    ];
-
-    _.each(reminderListValues, function (item, index) {
-        var i;
-        switch (item.format) {
-        case 'minutes':
-            item.label = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-            break;
-        case 'hours':
-            i = Math.floor(item.value / 60);
-            item.label = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-            break;
-        case 'days':
-            i  = Math.floor(item.value / 60 / 24);
-            item.label = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-            break;
-        case 'weeks':
-            i = Math.floor(item.value / 60 / 24 / 7);
-            item.label = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-            break;
-        }
-    });
-
     var staticStrings = {
         SUBJECT:            gt('Subject'),
         LOCATION:           gt('Location'),
@@ -229,7 +181,10 @@ define('io.ox/calendar/edit/view-main',
             // clear node
             self.$el.empty();
             // invoke extensionpoints from template
-            ext.point('io.ox/calendar/edit/section').invoke('draw', self.$el, {uid: self.guid, editmode: !!(self.model.has('id'))});
+            ext.point('io.ox/calendar/edit/section').invoke('draw', self.$el, {
+                uid: self.guid,
+                editmode: !!(self.model.has('id'))
+            });
 
             /*self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
                 strings: staticStrings,
