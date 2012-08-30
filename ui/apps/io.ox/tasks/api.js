@@ -59,7 +59,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                         data: {id: reminderId}
                     });
 
-                }
+                },
+             remindMeAgain: function (remindDate, reminderId)
+                {
+                        return http.PUT({
+                            module: "reminder",
+                            params: {action: 'remindAgain',
+                                     id: reminderId
+                                     },
+                            data: {alarm: remindDate}
+                        });
+
+                    }
     };
             
     Events.extend(api);

@@ -165,6 +165,9 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         remindAgain: function (e)
         {
+            var endDate = new Date();
+            endDate = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+            api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
             e.stopPropagation();
         },
         
@@ -244,7 +247,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             });
             var now = new Date();
-            api.getReminders(now.getTime() + 60000 * 60 * 24 * 7);
+            api.getReminders(now.getTime());
         }
     });
 
