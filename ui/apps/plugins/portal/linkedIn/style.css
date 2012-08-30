@@ -19,6 +19,7 @@
 }
 img.linkedin-logo {
     float: right;
+    margin-top: 13px;
 }
 
 .linkedin-message.odd {

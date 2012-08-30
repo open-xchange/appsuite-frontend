@@ -74,6 +74,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
         $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
+        tasks = util.sortTasks(tasks);
         
         require(['io.ox/tasks/view-grid-template'], function (viewGrid)
                 {

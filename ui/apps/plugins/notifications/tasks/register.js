@@ -21,10 +21,16 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
     
     "use strict";
     
+    //this file builds to notification views: dueTasks and reminderTasks
+    
+    /*
+     * DUE TASKS
+     */
     var NotificationView = Backbone.View.extend(
             {
         events: {
-            'click [data-action="done"]': 'setTaskStatus'
+            'click [data-action="done"]': 'setTaskStatus',
+            'click .item': 'onClickItem'
         },
         _modelBinder: undefined,
         initialize: function () {
@@ -44,16 +50,27 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             e.stopPropagation();
             var now = new Date();
             api.update(now.getTime(), this.model.attributes.taskId, {status: 3});
-            api.refresh();
-            //this.$el.find(".status").removeClass(this.model.attributes.badge)
-              //                          .addClass("badge badge-success")
-                //                        .text(gt("Done"));
-            
+            this.close();
         },
+        
+        onClickItem: function (e) {
+            var overlay = $('#io-ox-notifications-overlay');
+            
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        // open SidePopup without array
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append("<div> Detailview under construction </div>");
+                            });
+                    });
+
+        },
+        
         close: function ()
         {
-            this.remove();
             this.unbind();
+            this.remove();
         }
     });
     
@@ -71,22 +88,23 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         render: function () {
             this.$el.empty().append(templ.render('plugins/notifications/tasks/new-tasks', {
                 strings: {
-                    NEW_TASKS: gt('New Tasks')
+                    NEW_TASKS: gt('Over due')
                 }
             }));
+            
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
+
             return this;
         }
     });
     
     ext.point('io.ox/core/notifications/register').extend({
-        id: 'tasks',
+        id: 'dueTasks',
         index: 300,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasks', NotificationsView);
-            
             api.on('new-tasks', function (e, tasks) {
-                notifications.collection.reset([]);
+                notifications.collection.trigger("reset");
                 
                 _(tasks).each(function (taskObj) {
                     var task = util.interpretTask(taskObj);
@@ -94,10 +112,8 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                         badge: task.badge,
                         taskId: task.id,
                         title: task.title,
-                        note: task.note,
                         end_date: task.end_date,
-                        status: task.status,
-                        priority: task.priority
+                        status: task.status
                     };
                     notifications.collection.push(inObj);
                 });
@@ -105,6 +121,118 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             
             
             api.getTasks();
+        }
+    });
+    
+    /*
+     * REMINDER TASKS
+     */
+    var NotificationReminderView = Backbone.View.extend(
+            {
+        events: {
+            'click [data-action="ok"]': 'setTaskStatus',
+            'click .item': 'onClickItem'
+        },
+        _modelBinder: undefined,
+        initialize: function () {
+            
+            this._modelBinder = new Backbone.ModelBinder();
+        },
+        render: function () {
+            this.$el.empty().append(templ.render('plugins/notifications/tasks/taskitemReminder', {}));
+            var bindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
+            this._modelBinder.bind(this.model, this.el, bindings);
+            this.$el.find(".status").addClass(this.model.attributes.badge);
+            this.$el.find(".btn span").text(gt("Ok"));
+            return this;
+        },
+        setTaskStatus: function (e)
+        {
+            e.stopPropagation();
+            api.deleteReminder(this.model.attributes.reminderId);
+            this.close();
+        },
+        
+        onClickItem: function (e) {
+            var overlay = $('#io-ox-notifications-overlay');
+            
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                        // open SidePopup without array
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append("<div> Detailview under construction </div>");
+                            });
+                    });
+
+        },
+        
+        close: function ()
+        {
+            this.unbind();
+            this.remove();
+        }
+    });
+    
+    var NotificationsReminderView = Backbone.View.extend({
+        className: 'notifications',
+        id: 'io-ox-notifications-reminder-tasks',
+        _collectionBinder: undefined,
+        initialize: function () {
+            var viewCreator = function (model) {
+                return new NotificationReminderView({model: model});
+            };
+            var elManagerFactory = new Backbone.CollectionBinder.ViewManagerFactory(viewCreator);
+            this._collectionBinder = new Backbone.CollectionBinder(elManagerFactory);
+        },
+        render: function () {
+            this.$el.empty().append(templ.render('plugins/notifications/tasks/new-reminder-tasks', {
+                strings: {
+                    REMINDER_TASKS: gt('Reminder')
+                }
+            }));
+            
+            this._collectionBinder.bind(this.collection, this.$('.notifications'));
+
+            return this;
+        }
+    });
+    
+    ext.point('io.ox/core/notifications/register').extend({
+        id: 'reminderTasks',
+        index: 350,
+        register: function (controller) {
+            var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
+            api.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
+                notifications.collection.trigger("reset");
+                api.getAll().done(function (tasks)
+                {
+                    console.log(reminderTaskIds);
+                    console.log(reminderIds);
+                    console.log(tasks);
+                    _(tasks).each(function (taskObj) {
+                        var index = $.inArray(taskObj.id, reminderTaskIds);
+                        if (index !== -1)
+                            {
+                            console.log("gefunden");
+                            var task = util.interpretTask(taskObj);
+                            var inObj = {
+                                badge: task.badge,
+                                reminderId: reminderIds[index],
+                                taskId: task.id,
+                                title: task.title,
+                                end_date: task.end_date,
+                                status: task.status
+                            };
+                            notifications.collection.push(inObj);
+                        }
+                    });
+                
+                
+                });
+            });
+            var now = new Date();
+            api.getReminders(now.getTime() + 60000 * 60 * 24 * 7);
         }
     });
 
