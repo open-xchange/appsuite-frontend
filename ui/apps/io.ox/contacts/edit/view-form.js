@@ -21,8 +21,8 @@ define('io.ox/contacts/edit/view-form', [
      
     "use strict";
     
-    // TODO: Separate Address Fields, picture
-    var dateField;
+    // TODO: Separate Address Fields
+    var dateField, city;
     
     var meta = {
         sections: {
@@ -40,10 +40,10 @@ define('io.ox/contacts/edit/view-form', [
                       'telephone_primary', 'telephone_radio',
                       'telephone_telex', 'telephone_ttytdd',
                       'telephone_ip', 'telephone_assistant', 'telephone_callback'],
-            home_address: ['street_home', 'postal_code_home', 'city_home', 'state_home', 'country_home'],
-            business_address: ['street_business', 'postal_code_business', 'city_business',
+            home_address: ['street_home', 'city_home', 'state_home', 'country_home'],
+            business_address: ['street_business','city_business',
                                'state_business', 'country_business'],
-            other_address: ['street_other', 'postal_code_other', 'city_other', 'state_other', 'country_other'],
+            other_address: ['street_other', 'city_other', 'state_other', 'country_other'],
             job: ['profession', 'position', 'department', 'company', 'room_number',
                     'employee_type', 'number_of_employees', 'sales_volume', 'tax_id',
                     'commercial_register', 'branches', 'business_category', 'info',
@@ -100,7 +100,10 @@ define('io.ox/contacts/edit/view-form', [
             },
             
             birthday: dateField,
-            anniversary: dateField
+            anniversary: dateField,
+            city_home: city('city_home', 'postal_code_home'),
+            city_business: city('city_business', 'postal_code_business'),
+            city_other: city('city_other', 'postal_code_other')
         }
     };
     
@@ -118,6 +121,21 @@ define('io.ox/contacts/edit/view-form', [
         }), {
             hidden: ! options.isAlwaysVisible
         });
+    }
+    
+    function city(cityAttribute, postalCodeAttribute) {
+        return function (options) {
+            options.point.extend(new forms.ControlGroup({
+                id: options.uid + '/' + cityAttribute,
+                index: options.index,
+                label: model.fields[cityAttribute] + ' ' + model.fields[postalCodeAttribute],
+                control: '<input type="text" class="input-xlarge" name="' + cityAttribute + '">',
+                attribute: cityAttribute,
+                rare: options.isRare,
+            }), {
+                hidden: ! options.isAlwaysVisible
+            });
+        }
     }
      
     var point = views.point('io.ox/contacts/edit/view'),
