@@ -60,7 +60,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
         // Apply index to normal portal-plugins
         ext.point('io.ox/portal/widget').each(function (extension) {
-            console.log("Ordering", extension.id, extension.index);
             if (allActivePluginIds[extension.id]) {
                 extension.index = allActivePluginIds[extension.id].index;
             } else {
@@ -196,11 +195,8 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         var getKulerIndex = (function () {
-
             var list = '0123456789'.split(''), pos = 0, tmp = [];
-
             function randomSort() { return Math.round(Math.random()) - 0.5; }
-
             return function () {
                 if (tmp.length === 0) {
                     tmp = list.slice(pos, pos + 5).sort(randomSort);
@@ -210,30 +206,57 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             };
         }());
 
-        function addFillers(num, start) {
+        function addFillers(num, start, minIndex, maxIndex) {
             var load = function () {
                     return $.Deferred().resolve($('<div>'));
                 },
                 i = 0;
             for (; i < num; i++) {
+                var index = Math.round(Math.random() * (maxIndex - minIndex) + minIndex);
+                console.log("New filler at index %s < %s < %s", minIndex, index, maxIndex);
                 ext.point('io.ox/portal/widget').extend({
                     id: 'filler' + (start + i),
-                    index: 100 * (start + i + 1),
+                    index: index,
                     title: '',
-                    tileColor: 'X',
+                    colorIndex: 'X',
                     load: load
                 });
             }
         }
-
+        
+        function getColorIndex(extension) {
+            if (extension.colorIndex) {
+                return extension.colorIndex;
+            }
+            var haystack = settings.get('pluginSettings');
+            var needle = _(haystack).find(function (prop) {return prop.id === extension.id; });
+            if (!needle) {
+                needle = {id: extension.id};
+                haystack.push(needle);
+                console.log("Created:", needle);
+            }
+            if (!needle.colorIndex) {
+                needle.colorIndex = getKulerIndex();
+                settings.set('pluginProperties', haystack);
+                settings.save();
+            }
+            return needle.colorIndex;
+        }
+        
         function initExtensions() {
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
                 count = point.count(),
-                fillers = 15 - count;
+                fillers = 25 - count,
+                minIndex, maxIndex;
 
-            addFillers(fillers, count);
-//            point.shuffle();
+            point.each(function (extension) { //underscore does not work on this enum...
+                if (!minIndex && extension.index || minIndex > extension.index) { minIndex = extension.index; }
+                if (!maxIndex && extension.index || maxIndex < extension.index) { maxIndex = extension.index; }
+            });
+            
+            addFillers(fillers, count, minIndex, maxIndex);
+            point.sort();
 
             point.each(function (extension) {
                 if (!extension.isEnabled) {
@@ -250,7 +273,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
                 var $node = $('<div class="io-ox-portal-widget-tile">')
                     // experimental
-                    .addClass('tile-color' + ('tileColor' in extension ? extension.tileColor : getKulerIndex())) //(count++ % 10))
+                    .addClass('tile-color' + getColorIndex(extension))
                     .attr('widget-id', extension.id)
                     .appendTo($borderBox)
                     .busy();
@@ -332,7 +355,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                             }
                         });
                     };
-                } //END of if missing draw workaround bullshit
+                } //END of "is draw method missing?"
 
                 if (extension.requiresSetUp()) {
                     $node.addClass("io-ox-portal-createMe");
@@ -375,7 +398,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
             initExtensions();
 
-            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            app.active = null;
 
             win.nodes.main
                 .addClass('io-ox-portal')
@@ -384,9 +407,10 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             ox.on('refresh^', function (event, completeReload) {
                 if (completeReload) {
                     pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
-
+                    console.log("pluginSettings", pluginSettings);
                     allActivePluginIds = {};
                     _.each(pluginSettings, function (obj) {
+                        console.log("Activating ", obj.id);
                         if (obj.active) {
                             allActivePluginIds[obj.id] = obj;
                         }
@@ -405,7 +429,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     app.active = null;
                     app.activeEvent = null;
                 }
-//                console.log("Refreshing:", app.active, app.activeEvent);
+                console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
