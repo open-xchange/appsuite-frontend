@@ -1692,6 +1692,36 @@ define('io.ox/office/editor/position',
         return ((localNode.css('float') === 'left') || (localNode.css('float') === 'right') || (localNode.css('float') === 'none'));
     };
 
+    /**
+     * Counting the number of floated elements at the beginning of a paragraph.
+     * Typically the floated elements are images.
+     *
+     * @param {HTMLElement} node
+     *  A DOM element object.
+     *
+     * @returns {Number}
+     *  The number of the floated elements, that are children of parameter 'node'
+     *  and that are the first children of 'node'.
+     */
+    Position.getNumberOfFloatedImagesInParagraph = function (node) {
+
+        var counter = 0,
+            child = node.firstChild,
+            continue_ = true;
+
+        while ((child !== null) && (continue_)) {
+
+            if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
+                counter++;
+                child = child.nextSibling;
+            } else {
+                continue_ = false;
+            }
+        }
+
+        return counter;
+    };
+
     return Position;
 
 });

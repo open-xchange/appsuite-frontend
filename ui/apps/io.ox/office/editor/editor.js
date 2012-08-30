@@ -1136,7 +1136,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) {
+            if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW) || (event.keyCode === KeyCodes.BACKSPACE)) {
                 isRtlCursorTravel = true;
             } else {
                 isRtlCursorTravel = false;
@@ -1273,8 +1273,20 @@ define('io.ox/office/editor/editor',
                     this.deleteSelected(selection);
                 }
                 else {
-                    var lastValue = selection.startPaM.oxoPosition.length - 1;
-                    if (selection.startPaM.oxoPosition[lastValue] > 0) {
+                    var lastValue = selection.startPaM.oxoPosition.length - 1,
+                        localPos = _.copy(selection.startPaM.oxoPosition, true),
+                        backspacePos = 0;
+
+                    localPos.pop();
+                    // Getting the first position, that is not a floated image,
+                    // because BACKSPACE has to ignore floated images.
+                    var domPos = Position.getDOMPosition(paragraphs, localPos);
+
+                    if (domPos) {
+                        backspacePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                    }
+
+                    if (selection.startPaM.oxoPosition[lastValue] > backspacePos) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         var endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
@@ -2958,7 +2970,16 @@ define('io.ox/office/editor/editor',
                         if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
-                            thisPara.appendChild(child);
+                            if (Utils.getNodeName(child) === 'img') {
+                                var localChild = thisPara.firstChild;
+                                if (localChild) {
+                                    thisPara.insertBefore(child, localChild);  // what about order of images?
+                                } else {
+                                    thisPara.appendChild(child);
+                                }
+                            } else {
+                                thisPara.appendChild(child);
+                            }
                         }
 
                         child = nextChild;
