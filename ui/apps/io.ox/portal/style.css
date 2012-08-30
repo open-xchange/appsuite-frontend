@@ -207,26 +207,28 @@
 }
 
 .io-ox-portal {
-    .tile-color0 { background-color: darken(@tile-color-0, @tile-fix); }
-    .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
-    .tile-color1 { background-color: darken(@tile-color-1, @tile-fix); }
-    .tile-color1:hover { background-color: darken(@tile-color-1, @tile-hover); }
-    .tile-color2 { background-color: darken(@tile-color-2, @tile-fix); }
-    .tile-color2:hover { background-color: darken(@tile-color-2, @tile-hover); }
-    .tile-color3 { background-color: darken(@tile-color-3, @tile-fix); }
-    .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
-    .tile-color4 { background-color: darken(@tile-color-4, @tile-fix); }
-    .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
-    .tile-color5 { background-color: darken(@tile-color-0, @tile-darken); }
-    .tile-color5:hover { background-color: darken(@tile-color-0, @tile-hover-dark); }
-    .tile-color6 { background-color: darken(@tile-color-1, @tile-darken); }
-    .tile-color6:hover { background-color: darken(@tile-color-1, @tile-hover-dark); }
-    .tile-color7 { background-color: darken(@tile-color-2, @tile-darken); }
-    .tile-color8:hover { background-color: darken(@tile-color-2, @tile-hover-dark); }
-    .tile-color8 { background-color: darken(@tile-color-3, @tile-darken); }
-    .tile-color8:hover { background-color: darken(@tile-color-3, @tile-hover-dark); }
-    .tile-color9 { background-color: darken(@tile-color-4, @tile-darken); }
-    .tile-color9:hover { background-color: darken(@tile-color-4, @tile-hover-dark); }
+
+    .tile-color0 { background-color: @tile-color-0; }
+    .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
+    .tile-color1 { background-color: @tile-color-1; }
+    .tile-color1:hover { background-color: darken(@tile-color-1, @tile-hover); }
+    .tile-color2 { background-color: @tile-color-2; }
+    .tile-color2:hover { background-color: darken(@tile-color-2, @tile-hover); }
+    .tile-color3 { background-color: @tile-color-3; }
+    .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
+    .tile-color4 { background-color: @tile-color-4; }
+    .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
+
+    .tile-color5 { background-color: @tile-color-5; }
+    .tile-color5:hover { background-color: darken(@tile-color-5, @tile-hover); }
+    .tile-color6 { background-color: @tile-color-6; }
+    .tile-color6:hover { background-color: darken(@tile-color-6, @tile-hover); }
+    .tile-color7 { background-color: @tile-color-7; }
+    .tile-color8:hover { background-color: darken(@tile-color-7, @tile-hover); }
+    .tile-color8 { background-color: @tile-color-8; }
+    .tile-color8:hover { background-color: darken(@tile-color-8, @tile-hover); }
+    .tile-color9 { background-color: @tile-color-9; }
+    .tile-color9:hover { background-color: darken(@tile-color-9, @tile-hover); }
     
     .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
 

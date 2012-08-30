@@ -197,14 +197,13 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
         var getKulerIndex = (function () {
 
-            var list = '0123456789'.split(''), pos = 0, tmp = [];
+            var list = '0123456789'.split(''), tmp = [];
 
             function randomSort() { return Math.round(Math.random()) - 0.5; }
 
             return function () {
                 if (tmp.length === 0) {
-                    tmp = list.slice(pos, pos + 5).sort(randomSort);
-                    pos = pos === 0 ? 5 : 0;
+                    tmp = list.slice(0, 10).sort(randomSort);
                 }
                 return tmp.shift();
             };

@@ -171,7 +171,6 @@ define('plugins/portal/twitter/register',
         tileHeight: 2,
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
-        tileColor: 1,
         isEnabled: function () {
             return keychain.isEnabled(extensionId);
         },

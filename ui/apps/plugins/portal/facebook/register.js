@@ -51,7 +51,6 @@ define('plugins/portal/facebook/register',
         index: 150,
         title: 'Facebook',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
-        tileColor: 2,
         color: 'bright',
         isEnabled: function () {
             return keychain.isEnabled('facebook');
@@ -165,7 +164,7 @@ define('plugins/portal/facebook/register',
 
             return $.when();
         },
-        
+
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(
