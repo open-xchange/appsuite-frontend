@@ -231,7 +231,7 @@ define("io.ox/mail/api",
             max: 1000 // apply internal limit to build threads fast enough
         });
         var t1, t2;
-        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
+//        console.log('time.pre', 't1', (t1 = _.now()) - ox.t0, new Date(_.now()));
         // use cache?
         if (useCache === 'auto') {
             useCache = (cacheControl[options.folder] !== false);
@@ -249,7 +249,7 @@ define("io.ox/mail/api",
                         threadHash[o] = key;
                     });
                 });
-                console.log('time.post', '#', (response && response.data) ? response.data.length : 'no data', 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
+//                console.log('time.post', '#', (response && response.data) ? response.data.length : 'no data', 't2', (t2 = _.now()) - ox.t0, 'took', t2 - t1);
                 cacheControl[options.folder] = true;
             });
     };
