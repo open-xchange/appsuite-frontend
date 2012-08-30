@@ -13,6 +13,7 @@
 
 .vgrid-cell.tasks .end_date {
     color: #777;
+    margin-left: 0.5em;
     font-weight: 200;
     display: inline-block;
     float: right;
@@ -26,13 +27,13 @@
 
 .vgrid-cell.tasks .priority,
 .io-ox-task-preview .priority {
-    color: #FFCC00;
     font-size: 16;
     font-weight: bold;
     padding: 0 0.5em 0 0.5em;
     display: inline-block;
     float: right;
     position: relative;
+    overflow:visible;
     
 }
 .vgrid-cell.tasks .priority i.icon-star { 
@@ -43,11 +44,9 @@
 .vgrid-cell.tasks .title{
     color: black;
     font-weight: 500;
-    width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note{
-	width: 350px;//needed for correct text-overflow hidden. No clue why it behaves like this
 }
 
 .vgrid-cell.tasks .note span{
