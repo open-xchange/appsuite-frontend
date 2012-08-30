@@ -72,8 +72,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         };
 
         this.buildControls = function () {
-            this.buildElement();
-            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(this.nodes.element));
+            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(this.buildElement()));
         };
         
         this.buildLabel = function () {
@@ -89,6 +88,8 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             this.nodes.element.on('change', function () {
                 self.updateModel();
             });
+            
+            return this.nodes.element;
         };
         
         this.setValueInElement = function (valueFromModel) {

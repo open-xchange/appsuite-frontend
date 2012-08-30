@@ -16,8 +16,9 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/backbone/views',
     'io.ox/backbone/forms',
     'io.ox/contacts/widgets/pictureUpload',
+    'io.ox/contacts/widgets/cityControlGroup',
     'gettext!io.ox/contacts/contacts'
-], function (model, views, forms, PictureUpload, gt) {
+], function (model, views, forms, PictureUpload, CityControlGroup, gt) {
      
     "use strict";
     
@@ -41,7 +42,7 @@ define('io.ox/contacts/edit/view-form', [
                       'telephone_telex', 'telephone_ttytdd',
                       'telephone_ip', 'telephone_assistant', 'telephone_callback'],
             home_address: ['street_home', 'city_home', 'state_home', 'country_home'],
-            business_address: ['street_business','city_business',
+            business_address: ['street_business', 'city_business',
                                'state_business', 'country_business'],
             other_address: ['street_other', 'city_other', 'state_other', 'country_other'],
             job: ['profession', 'position', 'department', 'company', 'room_number',
@@ -125,17 +126,19 @@ define('io.ox/contacts/edit/view-form', [
     
     function city(cityAttribute, postalCodeAttribute) {
         return function (options) {
-            options.point.extend(new forms.ControlGroup({
+            options.point.extend(new CityControlGroup({
                 id: options.uid + '/' + cityAttribute,
                 index: options.index,
-                label: model.fields[cityAttribute] + ' ' + model.fields[postalCodeAttribute],
-                control: '<input type="text" class="input-xlarge" name="' + cityAttribute + '">',
+                label: model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute],
+                zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
+                control: '<input type="text" class="span3" name="' + cityAttribute + '">',
+                zipAttribute: postalCodeAttribute,
                 attribute: cityAttribute,
-                rare: options.isRare,
+                rare: options.isRare
             }), {
                 hidden: ! options.isAlwaysVisible
             });
-        }
+        };
     }
      
     var point = views.point('io.ox/contacts/edit/view'),
