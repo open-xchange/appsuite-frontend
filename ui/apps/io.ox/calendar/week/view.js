@@ -49,13 +49,13 @@ define('io.ox/calendar/week/view',
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         lassoMode:      true,   // is lasso active
-        lassoStart:     0,      // initial lasso Position
         
         events: {
             'mousemove .weekcontainer>.day' : 'onLasso',
             'mouseup' : 'onLasso',
             'click .appointment': 'onClickAppointment',
             'dblclick .weekcontainer>.day' : 'onCreateAppointment',
+            'dblclick .fulltime>.day': 'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment'
         },
@@ -84,14 +84,14 @@ define('io.ox/calendar/week/view',
                             .addClass('opac');
                         $('[data-cid="' + cid + '"]').addClass('current');
                         that.trigger('showAppointment', e, obj);
-                    }, 250);
+                    }, 150);
                 }
     
                 if (this.clicks === 1) {
                     clearTimeout(this.clickTimer);
                     this.clickTimer = null;
                     this.clicks = -1;
-                    that.trigger('editAppointment', e, obj);
+                    that.trigger('openEditAppointment', e, obj);
                 }
                 this.clicks++;
             }
@@ -106,12 +106,14 @@ define('io.ox/calendar/week/view',
         },
         
         onCreateAppointment: function (e) {
+            console.log($(e.target));
             if ($(e.target).is('.timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.calcTime(e.target.offsetTop + e.offsetY),
-                    start = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime() + (pos - pos % (date.HOUR / this.gridSize)),
-                    end = start + date.HOUR;
-                this.trigger('createAppointment', e, start, end);
+                    startTS = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime() + (pos - pos % (date.HOUR / this.gridSize));
+                // FIXME: remove localtime
+                startTS = date.Local.localTime(startTS);
+                this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
             }
         },
         
@@ -119,20 +121,19 @@ define('io.ox/calendar/week/view',
             if (!this.lassoMode) {
                 return;
             }
-            var MousePosY = e.target.offsetTop + e.offsetY,
-                gridHeight = this.cellHeight * this.fragmentation / this.gridSize;
+            var MousePosY = e.target.offsetTop + e.offsetY;
             // normalize to gird size
-            MousePosY -= MousePosY % gridHeight;
+            MousePosY -= MousePosY % (this.cellHeight * this.fragmentation / this.gridSize);
             // switch mouse events
             switch (e.type) {
             case 'mousemove':
                 // normal move
                 if (this.lasso && e.which === 1) {
-                    var newHeight = MousePosY - this.lassoStart,
+                    var newHeight = MousePosY - this.lasso.data('start'),
                         newHeightNorm = Math.abs(newHeight);
                     this.lasso.css({
                         height: newHeightNorm,
-                        top: newHeight <= 0 ? this.lassoStart - newHeightNorm : this.lassoStart
+                        top: this.lasso.data('start') - (newHeight <= 0 ? newHeightNorm : 0)
                     });
                 }
                 // first move
@@ -142,10 +143,9 @@ define('io.ox/calendar/week/view',
                         .css({
                             height: this.cellHeight,
                             minHeight: this.cellHeight,
-                            width: this.appWidth + '%',
                             top: MousePosY
                         });
-                    this.lassoStart = MousePosY;
+                    this.lasso.data('start', MousePosY);
                     $(e.currentTarget)
                         .append(this.lasso);
                 } else {
@@ -154,12 +154,14 @@ define('io.ox/calendar/week/view',
                 break;
                 
             case 'mouseup':
-                if (this.lasso !== false && e.which === 1) {
-                    var start = date.Local.parse(this.lasso.parent().attr('date'), 'y-M-d').getTime() + this.calcTime(this.lasso.position().top),
-                        end = start + this.calcTime(this.lasso.outerHeight());
+                if (this.lasso && e.which === 1) {
+                    var start = date.Local.parse(this.lasso.parent().attr('date'), 'y-M-d').add(this.calcTime(this.lasso.position().top)),
+                        end = new date.Local(start).add(this.calcTime(this.lasso.outerHeight()));
+                    // delete div and reset object
                     this.lasso.remove();
                     this.lasso = false;
-                    this.trigger('createAppointment', e, start, end);
+                    // FIXME: remove localtime
+                    this.trigger('openCreateAppointment', e, {start_date: date.Local.localTime(start.getTime()), end_date: date.Local.localTime(end.getTime())});
                 }
                 break;
 
@@ -413,6 +415,7 @@ define('io.ox/calendar/week/view',
             
             $(function () {
                 var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
+                // init drag and resize widget on appointments
                 $('.appointment')
                     .draggable({
                         grid: [$('.day:first').outerWidth(), gridHeight],
@@ -420,9 +423,11 @@ define('io.ox/calendar/week/view',
                         snap: '.day',
                         zIndex: 5,
                         start: function (e, ui) {
+                            that.lassoMode = false;
                             that.onEnterAppointment(e);
                         },
                         stop: function (e, ui) {
+                            that.lassoMode = true;
                             console.log('drag stop', e, ui, that.calcTime(ui.position.top));
                         },
                         drag: function () {
@@ -432,8 +437,16 @@ define('io.ox/calendar/week/view',
                     .resizable({
                         grid: [1, gridHeight],
                         handles: "n, s",
-                        distance: 1
+                        distance: 1,
+                        start: function () {
+                            that.lassoMode = false;
+                        },
+                        stop: function (e, ui) {
+                            that.lassoMode = true;
+                            console.log('resize stop', e, ui);
+                        }
                     });
+                // define drop areas
                 $('.day').droppable({
                     drop: function (e, ui) {
                         console.log('drop', e, ui);

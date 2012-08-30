@@ -42,14 +42,14 @@ define('io.ox/calendar/week/perspective',
             });
         },
         
-        createAppointment: function (e, start, end) {
-            console.log('createAppointment', e, start.toString(), end.toString());
+        openCreateAppointment: function (e, obj) {
+            console.log('openCreateAppointment', e, obj);
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/create')
-                .invoke('action', this, this.app, {start_date: start, end_date: end});
+                .invoke('action', this, this.app, obj);
         },
         
-        editAppointment: function (e, obj) {
+        openEditAppointment: function (e, obj) {
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, obj);
@@ -91,8 +91,8 @@ define('io.ox/calendar/week/perspective',
             
             weekView
                 .on('showAppointment', this.showAppointment, this)
-                .on('createAppointment', this.createAppointment, this)
-                .on('editAppointment', this.editAppointment, this);
+                .on('openCreateAppointment', this.openCreateAppointment, this)
+                .on('openEditAppointment', this.openEditAppointment, this);
             
             this.main
                 .empty()
