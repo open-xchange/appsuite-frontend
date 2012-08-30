@@ -24,3 +24,8 @@
 	font-size: 18px;
 	line-height: 27px;
 }
+
+.taskremindbtn{
+white-space: nowrap;
+width: 77%;
+}
