@@ -247,7 +247,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
                 count = point.count(),
-                fillers = 25 - count,
+                fillers = 15 - count,
                 minIndex, maxIndex;
 
             point.each(function (extension) { //underscore does not work on this enum...
