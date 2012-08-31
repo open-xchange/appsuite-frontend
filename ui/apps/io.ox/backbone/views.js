@@ -44,9 +44,11 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
                 }
                 
                 if (options.modelEvents) {
-                    _(options.modelEvents).each(function (methodName, evt) {
-                        registerDisposableHandler(evt, function () {
-                            self[methodName].apply(self, $.makeArray(arguments));
+                    _(options.modelEvents).each(function (methodNames, evt) {
+                        _(methodNames.split(" ")).each(function (methodName) {
+                            registerDisposableHandler(evt, function () {
+                                self[methodName].apply(self, $.makeArray(arguments));
+                            });
                         });
                     });
                 }
@@ -75,6 +77,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
                 }
             }, extOptions));
             
+            return this;
         };
         
         this.createView = function (options) {
@@ -98,7 +101,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
             this.render();
         };
     }
-    
+        
     
     return {
         
