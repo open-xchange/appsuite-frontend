@@ -87,19 +87,10 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             tileSide = $('<div class="io-ox-portal-tiles">'),
             contentSide = $('<div class="io-ox-portal-content">'),
             updateTitle = function () {
-                var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
                 intro.empty();
-                intro.append(
-                    $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
-                    $('<span class="io-ox-portal-login">').text(' (' + ox.user + ') '),
-                    $('<span class="io-ox-portal-settings">').append(
-                        $('<a>').text(gt('Settings')).on('click', function (event) {
-                            return require(["io.ox/settings/main"], function (m) {
-                                m.getApp().launch();
-                            });
-                        })
-                    )
-                );
+                ext.point('plugins/portal/intro').each(function (introNode) {
+                    intro.append(introNode.node);
+                });
             };
 
         // time-based greeting phrase
@@ -415,10 +406,8 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             ox.on('refresh^', function (event, completeReload) {
                 if (completeReload) {
                     pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
-                    console.log("pluginSettings", pluginSettings);
                     allActivePluginIds = {};
                     _.each(pluginSettings, function (obj) {
-                        console.log("Activating ", obj.id);
                         if (obj.active) {
                             allActivePluginIds[obj.id] = obj;
                         }
@@ -437,7 +426,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     app.active = null;
                     app.activeEvent = null;
                 }
-                console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
@@ -448,6 +436,25 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             });
 
             win.show();
+        });
+
+
+        ext.point('plugins/portal/intro').extend({
+            id: 'default-intro',
+            node: function () {
+                var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
+                return $('<div>').append(
+                    $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
+                    $('<span class="io-ox-portal-login">').text(' (' + ox.user + ') '),
+                    $('<span class="io-ox-portal-settings">').append(
+                        $('<a>').text(gt('Settings')).on('click', function (event) {
+                            return require(["io.ox/settings/main"], function (m) {
+                                m.getApp().launch();
+                            });
+                        })
+                    )
+                );
+            }
         });
 
         return {
