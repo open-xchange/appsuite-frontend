@@ -445,20 +445,20 @@ define('io.ox/calendar/week/view',
                         // correct position
                         $(this).data('draggable').position.left -= ui.originalPosition.left;
                     }
+                })
+                .resizable({
+                    handles: "n, s",
+                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    start: function (e, ui) {
+                        console.log('resize start', e, ui, $(this));
+                        that.lassoMode = false;
+                        $(this).addClass('opac');
+                    },
+                    stop: function (e, ui) {
+                        console.log('resize stop', e, ui);
+                        that.lassoMode = true;
+                    }
                 });
-//                .resizable({
-//                    handles: "n, s",
-//                    grid: [$('.day:first').outerWidth(), gridHeight],
-//                    start: function (e, ui) {
-//                        console.log('resize start', e, ui, $(this));
-//                        that.lassoMode = false;
-//                        $(this).addClass('opac');
-//                    },
-//                    stop: function (e, ui) {
-//                        console.log('resize stop', e, ui);
-//                        that.lassoMode = true;
-//                    }
-//                });
             // define drop areas
             $('.weekcontainer>.day').droppable({
                 drop: function (e, ui) {

@@ -62,7 +62,7 @@
     margin: 1em 0 1em 4em;
 }
 .io-ox-portal-intro * {
-    color: #fff;
+    color: grey;
     font-weight: 200;
     font-size: 22px;
     line-height: 30px;
@@ -71,9 +71,15 @@
     float: right;
     display: block;
     padding-right: 5px;
+    padding-bottom: 0.5em;
 }
 .io-ox-portal-settings a{
     color: #0AF;
+    font-size: 13px;
+}
+.io-ox-portal-login {
+    font-size: 13px;
+    color: darkgrey;
 }
 .io-ox-portal-tiles {
     clear: both;
