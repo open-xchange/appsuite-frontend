@@ -56,7 +56,8 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                 
                 this.$el.append(
                     $('<div class="picture-uploader">').css({
-                        backgroundImage: 'url(' + imageUrl + ')'
+                        backgroundImage: 'url(' + imageUrl + ')',
+                        cursor: 'pointer'
                     }).on('click', function () {
                         self.openFileChooser();
                     })

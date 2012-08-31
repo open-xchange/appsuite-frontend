@@ -58,8 +58,17 @@ define('io.ox/contacts/edit/main',
                         container.append(editView.render().$el);
                         container.find('input[type=text]:visible').eq(0).focus();
                         
-                        editView.on('save', function () {
+                        editView.on('save:start', function () {
+                            win.busy();
+                        });
+                        
+                        editView.on('save:fail', function () {
+                            win.idle();
+                        });
+                        
+                        editView.on('save:success', function () {
                             considerSaved = true;
+                            win.idle();
                             app.quit();
                         });
                     });

@@ -223,8 +223,11 @@ define('io.ox/contacts/edit/view-form', [
     new actions.Action('io.ox/contacts/actions/edit/save', {
         id: 'save',
         action: function (options) {
+            options.parentView.trigger('save:start');
             options.model.save().done(function () {
-                options.parentView.trigger('save');
+                options.parentView.trigger('save:success');
+            }).fail(function () {
+                options.parentView.trigger('save:fail');
             });
         }
     });
