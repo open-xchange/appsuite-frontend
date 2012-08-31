@@ -2560,7 +2560,7 @@ define('io.ox/office/editor/editor',
                 return false;
             }
 
-            return ((selection.endPaM.imageFloatMode === 'left') || (selection.endPaM.imageFloatMode === 'right') || (selection.endPaM.imageFloatMode === 'none'));
+            return ((selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
         };
 
         this.isLeftFloatedImagePosition = function () {
@@ -2571,7 +2571,7 @@ define('io.ox/office/editor/editor',
                 return false;
             }
 
-            return (selection.endPaM.imageFloatMode === 'left');
+            return (selection.endPaM.imageFloatMode === 'leftFloated');
         };
 
         this.isRightFloatedImagePosition = function () {
@@ -2582,7 +2582,7 @@ define('io.ox/office/editor/editor',
                 return false;
             }
 
-            return (selection.endPaM.imageFloatMode === 'right');
+            return (selection.endPaM.imageFloatMode === 'rightFloated');
         };
 
         this.isNoneFloatedImagePosition = function () {
@@ -2593,7 +2593,7 @@ define('io.ox/office/editor/editor',
                 return false;
             }
 
-            return (selection.endPaM.imageFloatMode === 'none');
+            return (selection.endPaM.imageFloatMode === 'noneFloated');
         };
 
         this.isInlineImagePosition = function () {
@@ -2755,7 +2755,7 @@ define('io.ox/office/editor/editor',
                     // Do not set the 'float' property to 'none'. That is used in
                     // anchorType 'FloatNone'.
                     node = node.parentNode;
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                    $('<img>', { src: url }).data('mode', 'inline').insertBefore(node).css(attributes);
                 } else if (anchorType === 'ToPage') {
                     // TODO: This is not a good solution. Adding image to the end of the editdiv,
                     // does not produce any disorder, but images are not allowed at editdiv.
@@ -2780,12 +2780,12 @@ define('io.ox/office/editor/editor',
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'left';
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                    $('<img>', { src: url }).data('mode', 'leftFloated').insertBefore(node).css(attributes);
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                    $('<img>', { src: url }).data('mode', 'rightFloated').insertBefore(node).css(attributes);
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     var paragraph = node.parentNode.parentNode,
@@ -2816,7 +2816,7 @@ define('io.ox/office/editor/editor',
 
                     node = paragraph.firstChild;
                     attributes.float = 'none';
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
+                    $('<img>', { src: url }).data('mode', 'noneFloated').insertBefore(node).css(attributes);
                 }
             }
 
