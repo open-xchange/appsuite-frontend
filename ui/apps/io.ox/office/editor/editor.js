@@ -1102,12 +1102,12 @@ define('io.ox/office/editor/editor',
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
-//                    window.console.log("AAA0: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.startPaM.selectedNodeName + " : " + currentSelection.startPaM.imageFloatMode);
-//                    window.console.log("AAA1: Left floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'left'));
-//                    window.console.log("AAA2: Right floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'right'));
-//                    window.console.log("AAA3: None floated image: " + Position.isValueFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition, 'none'));
-//                    window.console.log("AAA4: Floated image: " + Position.isFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition));
-//                    window.console.log("AAA5: Not floated image: " + Position.isNotFloatedImagePosition(paragraphs, currentSelection.startPaM.oxoPosition));
+//                    window.console.log("AAA0");
+//                    window.console.log("AAA1: Floated image " + this.isFloatedImagePosition());
+//                    window.console.log("AAA2: Left Floated image " + this.isLeftFloatedImagePosition());
+//                    window.console.log("AAA3: Right Floated image " + this.isRightFloatedImagePosition());
+//                    window.console.log("AAA4: None Floated image " + this.isNoneFloatedImagePosition());
+//                    window.console.log("AAA5: Inline image " + this.isInlineImagePosition());
 //                    window.console.log("AAA6");
                     this.trigger('selectionChanged');
                 } else if (focused) {
@@ -2546,6 +2546,65 @@ define('io.ox/office/editor/editor',
 
                 this.setAttributes(family, attributes, startPosition, endPosition);
             }
+        };
+
+        // ==================================================================
+        // IMAGE METHODS
+        // ==================================================================
+
+        this.isFloatedImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return ((selection.endPaM.imageFloatMode === 'left') || (selection.endPaM.imageFloatMode === 'right') || (selection.endPaM.imageFloatMode === 'none'));
+        };
+
+        this.isLeftFloatedImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return (selection.endPaM.imageFloatMode === 'left');
+        };
+
+        this.isRightFloatedImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return (selection.endPaM.imageFloatMode === 'right');
+        };
+
+        this.isNoneFloatedImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return (selection.endPaM.imageFloatMode === 'none');
+        };
+
+        this.isInlineImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return (selection.endPaM.imageFloatMode === 'inline');
         };
 
         // ==================================================================
