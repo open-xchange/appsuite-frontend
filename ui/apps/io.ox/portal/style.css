@@ -61,10 +61,22 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-.io-ox-portal-intro {
+.io-ox-portal-intro * {
     color: #fff;
+    font-weight: 200;
+    font-size: 22px;
+    line-height: 30px;
+}
+.io-ox-portal-settings {
+    float: right;
+    display: block;
+    padding-right: 5px;
+}
+.io-ox-portal-settings a{
+    color: #0AF;
 }
 .io-ox-portal-tiles {
+    clear: both;
     text-align: left;
 //    margin: 0 auto;
 }
