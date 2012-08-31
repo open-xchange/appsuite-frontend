@@ -42,6 +42,12 @@ define('io.ox/calendar/week/perspective',
             });
         },
         
+        updateAppointment: function (obj) {
+            api.update(obj).done(function (data) {
+//                console.log('updateAppointment result', data);
+            });
+        },
+        
         openCreateAppointment: function (e, obj) {
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/create')
@@ -52,10 +58,6 @@ define('io.ox/calendar/week/perspective',
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, obj);
-        },
-        
-        updateAppointment: function (obj) {
-            
         },
         
         getAppointments: function (start, end) {
@@ -95,7 +97,8 @@ define('io.ox/calendar/week/perspective',
             weekView
                 .on('showAppointment', this.showAppointment, this)
                 .on('openCreateAppointment', this.openCreateAppointment, this)
-                .on('openEditAppointment', this.openEditAppointment, this);
+                .on('openEditAppointment', this.openEditAppointment, this)
+                .on('updateAppointment', this.updateAppointment, this);
             
             this.main
                 .empty()

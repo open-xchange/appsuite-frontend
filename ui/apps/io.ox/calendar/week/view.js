@@ -428,15 +428,21 @@ define('io.ox/calendar/week/view',
                     grid: [$('.day:first').outerWidth(), gridHeight],
                     scroll: true,
                     snap: '.day',
-                    zIndex: 5,
+                    zIndex: 2,
+                    opacity: 0.4,
                     start: function (e, ui) {
                         that.lassoMode = false;
+                        $(this)
+                            .css({width: '100%'});
                         that.onEnterAppointment(e);
                     },
                     stop: function (e, ui) {
                         that.lassoMode = true;
                     },
-                    drag: function () {}
+                    drag: function (e, ui) {
+                        // correct position
+                        $(this).data('draggable').position.left -= ui.originalPosition.left;
+                    }
                 })
                 .resizable({
                     grid: [$('.day:first').outerWidth(), gridHeight],
@@ -456,12 +462,17 @@ define('io.ox/calendar/week/view',
                     that.lassoMode = true;
                     $(this).append(ui.draggable.css({left: 0}));
                     
-                    var d = date.Local.parse($(e.target).attr('date'), 'y-M-d').getTime(),
-                        o = that.calcTime(ui.position.top),
+                    var startTS = date.Local.parse($(e.target).attr('date'), 'y-M-d').getTime() + that.calcTime(ui.position.top),
                         cid = ui.draggable.attr('data-cid'),
+                        app = that.collection.get(cid).attributes,
+                        endTS = startTS + (app.end_date - app.start_date),
                         obj = _.cid(cid);
- 
-                    console.log('drop', obj, new date.Local(d + o).toString(), ui.draggable.outerHeight());
+                    // FIXME remove local time
+                    _.extend(obj, {
+                        start_date: date.Local.localTime(startTS),
+                        end_date: date.Local.localTime(endTS)
+                    });
+                    that.trigger('updateAppointment', obj);
                 }
             });
         },
