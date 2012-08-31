@@ -1,0 +1,7 @@
+body {
+    width: 300px;
+    height: 360px;
+    background-image: url(busy.gif);
+    background-repeat: no-repeat;
+    background-position: center center;
+}
