@@ -24,35 +24,6 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
-    var staticStrings = {
-        SUBJECT:            gt('Subject'),
-        LOCATION:           gt('Location'),
-        STARTS_ON:          gt('Starts on'),
-        ENDS_ON:            gt('Ends on'),
-        ALL_DAY:            gt('All day'),
-        REPEAT:             gt('Repeat'),
-        EDIT:               gt('edit'),
-
-
-        CHANGE_TIMEZONE:    gt('Change timezone'),
-        DESCRIPTION:        gt('Description'),
-        REMINDER:           gt('Reminder'),
-        NO_REMINDER:        gt('No reminder'),
-
-        DISPLAY_AS:         gt('Display as'),
-        RESERVED:           gt('Reserved'),
-        TEMPORARY:          gt('Temporary'),
-        ABSENT:             gt('Absent'),
-        FREE:               gt('Free'),
-        TYPE:               gt('Type'),
-        PARTICIPANTS:       gt('Participants'),
-        PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all participants about this change'),
-        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'),
-        MAIL_TO_ALL :       gt('Send mail to all')
-
-    };
-
 
     // generate source for time-typeahead
     var hours_typeahead = [];
@@ -174,10 +145,11 @@ define('io.ox/calendar/edit/view-main',
             var self = this;
 
             // pre render it
-            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
+//            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
 
             // TODO
             // require a render js file to render the calendar view instead of templates
+
             // clear node
             self.$el.empty();
             // invoke extensionpoints from template
@@ -333,21 +305,6 @@ define('io.ox/calendar/edit/view-main',
                 return true;
             });
             this.model.set('participants', participants);
-        },
-        onSendMail: function () {
-            var participants = this.model.get('participants');
-            var def = $.Deferred();
-            util.createArrayOfRecipients(participants, def);
-
-            def.done(function (arrayOfRecipients) {
-                require(['io.ox/mail/write/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.compose({
-                            to: arrayOfRecipients
-                        });
-                    });
-                });
-            });
         }
     });
 

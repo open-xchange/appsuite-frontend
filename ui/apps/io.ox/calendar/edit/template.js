@@ -319,8 +319,36 @@ define('io.ox/calendar/edit/template',
                                 .attr('for', data.uid + '_notification')
                                 .text(gt('Notify all participants about this change'))))));
         }
+    });/*
+    <div class="row-fluid show-grid" style='margin-top: 10px;'>
+    <span style='text-align: right;' class='span12'>
+        <a class='btn' data-action="cancel">Cancel</a>
+        <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
+    </span>
+</div>
+    */
+    ext.point('io.ox/calendar/edit/conflicts').extend({
+        index: 300,
+        id: 'conflicts',
+        draw: function (data) {
+            this.append($('<div class="row-fluid show-grid>'));
+        }
     });
+
 
     // per default templates return null
     return null;
 });
+
+
+
+/*
+<part id='io.ox/calendar/edit/conflicts'>
+<div class="row-fluid show-grid" style='margin-top: 10px;'>
+    <span style='text-align: right;' class='span12'>
+        <a class='btn' data-action="cancel">Cancel</a>
+        <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
+    </span>
+</div>
+</part>
+*/
