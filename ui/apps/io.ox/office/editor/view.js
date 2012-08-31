@@ -314,6 +314,16 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/row',    { icon: 'icon-io-ox-table-delete-row',    tooltip: gt('Delete Rows') })
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
+        createToolBar('image', { label: gt('Image') })
+            .addButton('image/delete',    { icon: 'icon-trash',    tooltip: gt('Delete Image') })
+            .addSeparator()
+            .addRadioGroup('image/alignment', { auto: true, icon: 'icon-picture', tooltip: gt('Image Alignment') })
+                .addButton('inline',    { icon: 'icon-indent-left',    tooltip: gt('Inline'),    css: { textAlign: 'center' }  })
+                .addButton('leftFloated',  { icon: 'icon-align-left',  tooltip: gt('Left'),  css: { textAlign: 'center' } })
+                .addButton('rightFloated',   { icon: 'icon-align-right',   tooltip: gt('Right'),   css: { textAlign: 'center' } })
+                .addButton('noneFloated', { icon: 'icon-align-center', tooltip: gt('Center'), css: { textAlign: 'center' } })
+                .end();
+
         createToolBar('debug', { label: gt('Debug') })
             .addButton('action/export', { icon: 'icon-share', tooltip: 'Export' })
             .addButton('action/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })

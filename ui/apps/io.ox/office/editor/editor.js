@@ -1102,13 +1102,6 @@ define('io.ox/office/editor/editor',
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
-//                    window.console.log("AAA0");
-//                    window.console.log("AAA1: Floated image " + this.isFloatedImagePosition());
-//                    window.console.log("AAA2: Left Floated image " + this.isLeftFloatedImagePosition());
-//                    window.console.log("AAA3: Right Floated image " + this.isRightFloatedImagePosition());
-//                    window.console.log("AAA4: None Floated image " + this.isNoneFloatedImagePosition());
-//                    window.console.log("AAA5: Inline image " + this.isInlineImagePosition());
-//                    window.console.log("AAA6");
                     this.trigger('selectionChanged');
                 } else if (focused) {
                     // If not focused, browser selection might not be available...
@@ -2552,6 +2545,17 @@ define('io.ox/office/editor/editor',
         // IMAGE METHODS
         // ==================================================================
 
+        this.isImagePosition = function () {
+
+            var selection = this.getSelection();
+
+            if (! selection) {
+                return false;
+            }
+
+            return ((selection.endPaM.imageFloatMode === 'inline') || (selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
+        };
+
         this.isFloatedImagePosition = function () {
 
             var selection = this.getSelection();
@@ -2563,48 +2567,23 @@ define('io.ox/office/editor/editor',
             return ((selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
         };
 
-        this.isLeftFloatedImagePosition = function () {
+        this.getImageFloatMode = function () {
 
             var selection = this.getSelection();
 
             if (! selection) {
-                return false;
+                return null;
             }
 
-            return (selection.endPaM.imageFloatMode === 'leftFloated');
+            return selection.endPaM.imageFloatMode;
         };
 
-        this.isRightFloatedImagePosition = function () {
-
-            var selection = this.getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return (selection.endPaM.imageFloatMode === 'rightFloated');
+        this.setImageFloatMode = function (floatMode) {
+            Utils.info("Selected Float Mode: " + floatMode);
         };
 
-        this.isNoneFloatedImagePosition = function () {
-
-            var selection = this.getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return (selection.endPaM.imageFloatMode === 'noneFloated');
-        };
-
-        this.isInlineImagePosition = function () {
-
-            var selection = this.getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return (selection.endPaM.imageFloatMode === 'inline');
+        this.deleteImage = function () {
+            Utils.info("Deleting image");
         };
 
         // ==================================================================

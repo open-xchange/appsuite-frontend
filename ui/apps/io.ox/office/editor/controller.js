@@ -133,6 +133,20 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     set: function () { editor.deleteColumns(); }
                 },
 
+                'chain/image': {
+                    enable: function () { return editor.isImagePosition(); }
+                },
+                'image/delete': {
+                    chain: 'chain/image',
+                    enable: function (enabled) { return enabled && editor.isFloatedImagePosition(); },
+                    set: function () { editor.deleteImage(); }
+                },
+                'image/alignment': {
+                    chain: 'chain/image',
+                    get: function () { return editor.getImageFloatMode(); },
+                    set: function (alignment) { editor.setImageFloatMode(alignment); }
+                },
+
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
@@ -175,10 +189,10 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     }
                 })
                 .on('operation', function () {
-                    self.update(/^(action|format|table)\//);
+                    self.update(/^(action|format|table|image)\//);
                 })
                 .on('selectionChanged', function () {
-                    self.update(/^(format|table)\//);
+                    self.update(/^(format|table|image)\//);
                 });
             return this;
         };
