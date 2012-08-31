@@ -150,7 +150,7 @@ utils.topLevelTask("default", ["ox.pot"], function() {
 i18n.modules.load("tmp/i18n.json");
 utils.includes.load("tmp/includes.json");
 
-utils.copy(utils.list("html", [".htaccess", "blank.html", "favicon.ico"]));
+utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
 // i18n

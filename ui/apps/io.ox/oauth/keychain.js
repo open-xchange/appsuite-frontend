@@ -10,36 +10,36 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
- 
+
  /**
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
- 
+
 define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http", "io.ox/core/event"], function (ext, http, Events) {
     "use strict";
     var moduleDeferred = $.Deferred(),
         cache = null,
         point = ext.point("io.ox/keychain/api");
-    
+
     var generateId = function () {
         generateId.id = generateId.id + 1;
         return generateId.id;
     };
-    
+
     generateId.id = 1;
-    
-    
+
+
     function simplifyId(id) {
         return id.substring(id.lastIndexOf(".") + 1);
     }
-    
-    
+
+
     // Extension
     function OAuthKeychainAPI(service) {
         var self = this;
-        
+
         Events.extend(this);
-        
+
         this.id = simplifyId(service.id);
         this.displayName = service.displayName;
 
@@ -50,43 +50,43 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             account.accountType = self.id;
             return account;
         }
-        
+
         function incoming(account) {
             return account;
         }
-        
+
         function chooseDisplayName() {
             var names = {}, name, counter = 0;
             _(cache[service.id].accounts).each(function (account) {
                 names[account.displayName] = 1;
             });
-            
+
             name = "My " + service.displayName + " account";
-            
+
             while (names[name]) {
                 counter++;
                 name = "My " + service.displayName + " account (" + counter + ")";
             }
             return name;
         }
-        
-        
+
+
         this.getAll = function () {
             return _(cache[service.id].accounts).chain().map(function (account) {return account; }).sortBy(function (account) {return account.id; }).map(outgoing).value();
         };
-        
+
         this.get = function (id) {
             return outgoing(cache[service.id].accounts[id]);
         };
-        
+
         this.getStandardAccount = function () {
             return outgoing(_(this.getAll()).first());
         };
-        
+
         this.hasStandardAccount = function () {
             return this.getAll().length > 0;
         };
-                
+
         this.createInteractively = function () {
             var account = incoming(account),
                 def = $.Deferred();
@@ -103,12 +103,15 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                     if (account) {
                         params.id = account.id;
                     }
+
+                    var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+
                     http.GET({
                         module: "oauth/accounts",
                         params: params
                     })
                     .done(function (interaction) {
-                        var popupWindow = null;
+
                         window["callback_" + callbackName] = function (response) {
                             cache[service.id].accounts[response.data.id] = response.data;
                             def.resolve(response.data);
@@ -120,16 +123,17 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                                 new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
                             });
                         };
-                        popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
-                        
+
+                        popupWindow.location = interaction.authUrl;
+
                     }).fail(def.reject);
                 });
-                
+
             });
-            
+
             return def;
         };
-        
+
         this.remove = function (account) {
             account = incoming(account);
             return http.PUT({
@@ -144,7 +148,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 self.trigger("refresh.all refresh.list", account);
             });
         };
-        
+
         this.update = function (account) {
             account = incoming(account);
             return http.PUT({
@@ -160,7 +164,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 self.trigger("refresh.list", account);
             });
         };
-        
+
         this.reauthorize = function (account) {
             var def = $.Deferred();
             var callbackName = "oauth" + generateId();
@@ -188,17 +192,17 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         self.trigger("update", response.data);
                     };
                     popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
-                    
+
                 })
                 .fail(def.reject);
             });
-            
+
             return def;
         };
     }
-    
 
-    
+
+
     // Fetch services & accounts
     $.when(
         http.GET({
@@ -224,7 +228,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             _(accounts[0]).each(function (account) {
                 cache[account.serviceId].accounts[account.id] = account;
             });
-    
+
             // Resolve loading
             moduleDeferred.resolve({
                 message: "Done with oauth keychain",
@@ -236,6 +240,6 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         .fail(function () {
             throw new Error("Could not initialize OAuth keyring!");
         });
-    
+
     return moduleDeferred;
 });
