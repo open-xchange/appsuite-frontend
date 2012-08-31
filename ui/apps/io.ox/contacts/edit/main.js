@@ -61,7 +61,6 @@ define('io.ox/contacts/edit/main',
                         editView.on('save', function () {
                             app.quit();
                         });
-                        contact.set('folder_id', null);
                     });
                         
 
