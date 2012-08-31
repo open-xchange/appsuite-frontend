@@ -152,8 +152,6 @@ define('io.ox/settings/main',
                 settings: true,
                 title: 'Keyring'
             });
-            console.log('listing apps');
-            console.log(apps);
 
             return $.Deferred().resolve(apps);
         });
@@ -163,10 +161,8 @@ define('io.ox/settings/main',
                 extPointPart;
             settingsPath = obj.id + '/settings/pane';
             extPointPart = obj.id + '/settings';
-            console.log('load:' + settingsPath);
             right.empty().busy();
             require([ settingsPath ], function (m) {
-                console.log("extpoint:" + extPointPart + '/detail');
                 ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
                 right.idle();

@@ -447,7 +447,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     $('<span class="io-ox-portal-settings">').append(
                         $('<a>').text(gt('Settings')).on('click', function (event) {
                             return require(["io.ox/settings/main"], function (m) {
-                                m.getApp().launch();
+                                var app = m.getApp();
+                                app.launch();
+                                console.log("Testing:", app.getGrid().selection);
                             });
                         })
                     ),
