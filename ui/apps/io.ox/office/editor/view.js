@@ -153,14 +153,16 @@ define('io.ox/office/editor/view',
          */
         function createToolBar(id, options) {
 
-            // create common controls present in all tool bars
-            return toolPane.createToolBar(id, options)
-/*                .addMenu(new MenuBox(appWindow)
+            var // the 'File' drop-down menu
+                fileMenu = new MenuBox(appWindow)
                     .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
                     .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
                     .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
-                    { label: gt('File') })*/
+                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') });
+
+            // create common controls present in all tool bars
+            return toolPane.createToolBar(id, options)
+                .addMenu(fileMenu, { label: gt('File') })
                 .addSeparator()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
@@ -330,11 +332,6 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('action/export', { icon: 'icon-share', tooltip: 'Export' })
-            .addButton('action/flush', { icon: 'icon-share-alt', tooltip: 'Flush' })
-            .addButton('action/download', { icon: 'icon-download', tooltip: 'Download' })
-            .addButton('action/print', { icon: 'icon-print', tooltip: 'Print' })
-            .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 

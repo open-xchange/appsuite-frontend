@@ -154,7 +154,7 @@ define('io.ox/office/tk/dropdown/list',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, options);
+        DropDown.call(this, listNode, options);
 
         // methods ------------------------------------------------------------
 
@@ -234,7 +234,7 @@ define('io.ox/office/tk/dropdown/list',
         };
 
         // initialize the drop-down element
-        this.getMenuNode().addClass('list').append(listNode);
+        this.getMenuNode().addClass('list');
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);

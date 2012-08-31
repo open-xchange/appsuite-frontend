@@ -197,7 +197,7 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // insert the tool bar selector and a separator line into the tool pane
-        tabBar.getNode().addClass('tabs').appendTo(appWindow.nodes.head);
+        tabBar.getNode().removeClass('toolbar').addClass('tabbar').appendTo(appWindow.nodes.head);
 
         // prepare the controller
         controller

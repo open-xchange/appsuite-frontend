@@ -207,7 +207,7 @@ div.io-ox-pane {
 /* view components ========================================================= */
 
 div.io-ox-view-component {
-    padding: 4px 0;
+    padding: 0;
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
     text-align: left;
@@ -299,49 +299,10 @@ div.io-ox-view-component {
             padding-right: 8px;
             text-align: center;
 
-            /* selected toggle/radio buttons */
-            &.selected {
-                z-index: 20;
-                background-color: fade(@selected-border-color, 50%);
-                border-color: @selected-border-color;
-            }
-
             /* adjust margins for e.g. caret buttons in drop-down split mode */
             &.narrow-padding {
                 padding-left: 4px;
                 padding-right: 4px;
-            }
-        }
-
-        /* keyboard/mouse effects (not for disabled buttons) */
-        &:not(.disabled) button:not(.disabled) {
-
-            /* mouse/keyboard effects */
-            &:hover, &:focus, &:active {
-                z-index: 2;
-                border-color: @control-border-color;
-            }
-
-            /* active effect (control currently clicked) */
-            &:active {
-                z-index: 4;
-                background-color: fade(@control-border-color, 25%);
-            }
-
-            /* selected toggle/radio buttons */
-            &.selected {
-
-                /* mouse/keyboard effects */
-                &:hover, &:focus, &:active {
-                    z-index: 22;
-                    border-color: darken(@selected-border-color, 10%);
-                }
-
-                /* active effect (button currently clicked) */
-                &:active {
-                    z-index: 24;
-                    background-color: fade(@selected-border-color, 75%);
-                }
             }
         }
 
@@ -362,7 +323,8 @@ div.io-ox-view-component {
                 background: none;
                 cursor: default;
             }
-            
+
+            /* drop-down button over text field */
             + button {
                 z-index: 1;
             }
@@ -534,75 +496,141 @@ div.io-ox-view-component {
             }
         }
     }
-    
+
     /* tool bar ------------------------------------------------------------ */
-    
-    &.toolbar > span {
-        display: inline-block;
-        position: relative;
 
-        /* show groups in a horizontal bar */
-        > .group {
+    &.toolbar {
+        padding: 4px 0;
+
+        > span {
             display: inline-block;
+            position: relative;
 
-            /* group spacing */
-	        + .group {
-	            margin-left: -1px;
-	        }
+            /* show groups in a horizontal bar */
+            > .group {
+                display: inline-block;
 
-            &.separator {
-                width: 10px;
+                /* group spacing */
+    	        + .group {
+    	            margin-left: -1px;
+    	        }
+
+                &.separator {
+                    width: 10px;
+                }
+
+                /* selected toggle/radio buttons */
+                > button.selected {
+                    z-index: 20;
+                    background-color: fade(@selected-border-color, 50%);
+                    border-color: @selected-border-color;
+                }
+
+                /* keyboard/mouse effects (not for disabled buttons) */
+                &:not(.disabled) > button:not(.disabled) {
+
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
+                        z-index: 2;
+                        border-color: @control-border-color;
+                    }
+
+                    /* active effect (control currently clicked) */
+                    &:active {
+                        z-index: 4;
+                        background-color: fade(@control-border-color, 25%);
+                    }
+
+                    /* selected toggle/radio buttons */
+                    &.selected {
+
+                        /* mouse/keyboard effects */
+                        &:hover, &:focus, &:active {
+                            z-index: 22;
+                            border-color: darken(@selected-border-color, 10%);
+                        }
+
+                        /* active effect (button currently clicked) */
+                        &:active {
+                            z-index: 24;
+                            background-color: fade(@selected-border-color, 75%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* top-level tab bar --------------------------------------------------- */
+
+    &.tabbar {
+        position: absolute;
+        left: 313px;
+        bottom: -1px;
+        padding: 0 1px;
+        .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
+
+        > span {
+            display: inline-block;
+            position: relative;
+
+            > .group {
+                display: inline-block;
+
+                /* style buttons as tabs */
+                > button {
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    border: none;
+                    color: @tab-text-color;
+    
+                    /* semi-transparency for all contents of the button */
+                    &:not(.selected) > * { .opacity(0.7); }
+    
+                    /* override the default style of selected buttons */
+                    &.selected, &.selected:active {
+                        background: @tab-selected-fill-color !important;
+                        color: @control-text-color;
+                        cursor: default;
+                    }
+                }
+    
+                /* mouse/keyboard effects (not for disabled group) */
+                &:not(.disabled) > button:not(.disabled):not(.selected) {
+                    &:hover, &:focus, &:active {
+                        .vertical-gradient(lighten(@tab-fill-color, 15%), lighten(@tab-fill-color, 5%));
+    
+                        /* remove semi-transparency for all contents of the button */
+                        > * { .opacity(1); }
+                    }
+                }
             }
         }
     }
 
     /* menu box ------------------------------------------------------------ */
-    
-    &.menubox {
+
+    &.menubox > .group {
 
         /* group spacing */
-        > .group.separator {
+        &.separator {
             height: 6px;
         }
-    }
-}
 
-/* title tab bar =========================================================== */
-
-div.io-ox-view-component.toolbar.tabs {
-    position: absolute;
-    left: 313px;
-    bottom: -1px;
-    padding: 0 1px;
-    .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
-
-    .group {
-
-        /* style buttons as tabs */
+        /* menu items as buttons */
         > button {
-            padding-left: 12px;
-            padding-right: 12px;
-            border: none;
-            color: @tab-text-color;
+            width: 100%;
+            border-color: transparent;
+            text-align: left;
 
-            /* semi-transparency for all contents of the button */
-            &:not(.selected) > * { .opacity(0.7); }
-
-            /* override the default style of selected buttons */
-            &.selected, &.selected:active {
-                background: @tab-selected-fill-color;
-                color: @control-text-color;
-                cursor: default;
+            /* mouse hover and focus effect */
+            &:hover:not(:active), &:focus:not(:active) {
+                background-color: fade(@control-border-color, 25%);
             }
-        }
 
-        /* mouse/keyboard effects (not for disabled group) */
-        &:not(.disabled) > button:not(.disabled):not(.selected) {
-            &:hover, &:focus, &:active {
-                .vertical-gradient(lighten(@tab-fill-color, 15%), lighten(@tab-fill-color, 5%));
-
-                /* remove semi-transparency for all contents of the button */
-                > * { .opacity(1); }
+            /* active effect (button currently clicked) */
+            &:active {
+                background-color: fade(@control-border-color, 50%);
             }
         }
     }
