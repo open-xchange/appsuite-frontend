@@ -19,7 +19,7 @@ define('io.ox/portal/settings/pane',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
        'gettext!io.ox/portal/settings',
-       'apps/io.ox/core/jqueryui/jquery-ui-1.8.23.interactions.min.js'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
+       'io.ox/core/jqueryui/jquery-ui-1.8.23.interactions.min'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
 
     'use strict';
 
@@ -28,64 +28,68 @@ define('io.ox/portal/settings/pane',
         PLUGIN_SETTINGS: gt('Properties'),
         SAVE:            gt('Save'),
         PORTAL:          gt('Portal'),
-        PORTAL_PLUGINS:  gt('Portal Plugins'),
+        PORTAL_PLUGINS:  gt('Portal Squares'),
         PROPERTIES:      gt('Properties')
     };
 
-    var pluginSettings = settings.get('pluginSettings') || {};
+    var pluginSettings = settings.get('pluginSettings', []),
+
+        MAX_INDEX = 99999;
+
+    function getPluginById(id) {
+        return _(pluginSettings).chain().filter(function (obj) { return obj.id === id; }).first().value();
+    }
 
     var getPlugins = function () {
-        var plugins = [];
-        _.each(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true }), function (pluginName) {
-            var index = 9999;
-            var isActive = false;
-            if (pluginSettings[pluginName]) {
-                if (!pluginSettings[pluginName].index) {
-                    pluginSettings[pluginName].index = 9999;
-                }
-
-                if (!pluginSettings[pluginName].id) {
-                    pluginSettings[pluginName].id = pluginName;
-                }
-
-                if (!pluginSettings[pluginName].isActive) {
-                    pluginSettings[pluginName].isActive = false;
-                }
-
-                index = pluginSettings[pluginName].index;
-                isActive = pluginSettings[pluginName].active;
+        // get plugins
+        var plugins = _(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true })).map(function (id) {
+            // apply defaults
+            var plugin = _.extend({ id: id, name: id, active: false, index: MAX_INDEX }, getPluginById(id));
+            // put disabled plugins to end of list
+            if (!plugin.active) {
+                plugin.index = MAX_INDEX;
             }
-            var plugin = {id: pluginName, name: gt(pluginName), active: isActive, index: index};
-            plugins.push(plugin);
+            return plugin;
         });
-
+        // sort by index
         plugins.sort(function (a, b) {
             return a.index - b.index;
         });
-
         return plugins;
     };
 
     var collection,
         plugins,
-        changePluginState = function (id, state) {
-            pluginSettings[id].active = state;
 
+        changePluginState = function (id, active) {
+
+            // update local settings
+            var plugin = getPluginById(id);
+            if (plugin) {
+                plugin.active = !!active;
+            } else if (active === true) {
+                // add a new one
+                pluginSettings.push({ id: id, name: id, active: true, index: MAX_INDEX });
+            }
+
+            // even if we don't find a plugin we track the change for new plugins
             settings.set('pluginSettings', pluginSettings);
             settings.save();
 
-            var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' });
-            var activePlugins = _.filter(pluginSettings || {}, function (obj) { return obj.active; });
-            var allActivePlugins = _.map(activePlugins, function (obj) {
-                return 'plugins/portal/' + obj.id + '/register';
-            });
+            var plugins = ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal' }),
+                activePlugins = _.filter(pluginSettings, function (obj) { return obj.active; }),
+                allActivePlugins = _.map(activePlugins, function (obj) {
+                    return 'plugins/portal/' + obj.id + '/register';
+                });
+
+            // disable/enable corresponding extension point
+            ext.point("io.ox/portal/widget")[active === true ? 'enable' : 'disable'](id);
 
             plugins = _.intersection(plugins, allActivePlugins);
 
-            // Load all active plugins
+            // Load all active plugins since the portal just relies on existing extension points
             require(plugins).pipe(function () {
                 var index = 100;
-
                 // Load plugin with given index (for sub-tiles)
                 _.each(arguments, function (obj) {
                     if (obj && _.isFunction(obj.reload)) {
@@ -93,28 +97,12 @@ define('io.ox/portal/settings/pane',
                     }
                     index += 100;
                 });
-
-                // Enable or Disable all plugins
-                var extensions = ext.point('io.ox/portal/widget').all();
-                _.chain(extensions).each(function (extension) {
-                        var eid = extension.id;
-
-                        var isActive = _.find(activePlugins, function (plugin) {
-                            var pluginLength = plugin.id.length;
-                            return (eid.length >= pluginLength && eid.substring(0, pluginLength) === plugin.id);
-                        });
-
-                        if (!isActive) {
-                            ext.point("io.ox/portal/widget").disable(eid);
-                        } else {
-                            ext.point("io.ox/portal/widget").enable(eid);
-                        }
-                    }
-                );
-
+                // mmmmh, heavy way to update the portal
+                // TODO: use direct lightweight event
                 ox.trigger("refresh^", [true]);
             });
         },
+
         PluginSelectView = Backbone.View.extend({
             _modelBinder: undefined,
             isEditable: false,
@@ -124,15 +112,13 @@ define('io.ox/portal/settings/pane',
                 this._modelBinder = new Backbone.ModelBinder();
             },
             renderState: function () {
-                var star = this.$el.find('#state');
-                if (star) {
+                var toggle = this.$el.find('.toggle-state');
+                if (toggle) {
                     if (this.model.get('active')) {
-                        star.text(gt('Deaktivieren'));
-                        star.removeClass('btn-inverse').addClass('btn');
+                        toggle.text(gt('Deaktivieren'));//.removeClass('btn-inverse');
                         this.$el.removeClass('disabled').addClass('enabled');
                     } else {
-                        star.text(gt('Aktivieren'));
-                        star.removeClass('btn').addClass('btn-inverse');
+                        toggle.text(gt('Aktivieren'));//.addClass('btn-inverse');
                         this.$el.removeClass('enabled').addClass('disabled');
                     }
                 }
@@ -153,46 +139,25 @@ define('io.ox/portal/settings/pane',
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
 
-                this.$el.find('button#prop').hide();
-
                 if (_.include(ox.serverConfig.portalPluginEditable, this.model.get('id'))) {
                     this.isEditable = true;
-                    this.$el.find('div.sortable-item').hover(
-                            function () {
-                                if (!self.$el.find('.sortable-item').attr('selected')) {
-                                    self.isSelected = false;
-                                }
-                                self.$el.find('button#prop').show();
-                            },
-                            function () {
-                                if (!self.isSelected) {
-                                    self.$el.find('button#prop').hide();
-                                }
-                            }
-                    );
+                    this.$el.find('div.sortable-item').addClass('editable-item');
                 }
                 return self;
             },
             events: {
                 'click .sortable-item': 'onSelect',
-                'click #state': 'changeState'
+                'click .toggle-state': 'changeState'
             },
             changeState: function (e) {
                 var active = !this.model.get('active');
                 this.model.set('active', active);
                 changePluginState(this.model.get('id'), active);
                 this.renderState();
-                e.stopPropagation();
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                $('button#prop').hide();
                 this.$el.find('.sortable-item').attr('selected', 'selected');
-                if (this.isEditable) {
-                    this.$el.find('.sortable-item').find('button#prop').show();
-                    this.isSelected = true;
-                }
-
             }
         }),
 
@@ -260,7 +225,6 @@ define('io.ox/portal/settings/pane',
             var that = this;
             plugins = getPlugins();
             collection = new Backbone.Collection(plugins);
-
             var PluginsView = Backbone.View.extend({
                 initialize: function () {
                     this.template = doT.template(tmplListBox);

@@ -61,39 +61,40 @@
 	margin-left: 170px;
 }
 
-.settings-detail-pane .form-inline  .controls{
+.settings-detail-pane .form-inline .controls {
 	margin-left: 0px;
 	text-align: right;
 	width: 440px;
 }
 
-.settings-detail-pane button{
-	margin-right: 15px;
-}
-
 .settings-detail-pane .listbox {
-	width: 540px;
+	max-width: 540px;
 	overflow-x: hidden;
   	overflow-y: auto;
   	position: relative;
   	border: 1px solid #D9D9D9;
-  	border-radius: 2px;
   	margin-bottom: 10px;
   	-webkit-border-radius: 3px;
   	-moz-border-radius: 3px;
 }
 
-.settings-detail-pane .listbox .disabled {
-	background-color: @disabled-background !important;
-    margin-bottom: 1px;
-    color: @disabled-color;
+.settings-detail-pane .listbox.ui-sortable {
+    border: 0px none;
 }
 
-.settings-detail-pane .listbox .enabled {
-	cursor: move;
-	background-color: @enabled-background !important;
+.settings-detail-pane .listbox .listbox-item {
+    background-color: #eee;
     margin-bottom: 1px;
     color: @enabled-color;
+}
+
+.settings-detail-pane .listbox .listbox-item button {
+    float: right;
+    margin-left: 13px;
+}
+
+.settings-detail-pane .listbox.ui-sortable .enabled .listbox-item {
+    cursor: move;
 }
 
 .settings-detail-pane .listbox:focus {
@@ -101,7 +102,7 @@
   z-index: 2;
 }
 
-.settings-detail-pane .listbox [selected] {
+.settings-detail-pane .listbox .selectable[selected] {
 	background-color: @selected-background !important;
     background-image: -webkit-gradient(
         linear,
@@ -121,17 +122,6 @@
     color: #fff;
 }
 
-.settings-detail-pane .listbox:not([disabled]) > :hover {
-	border-color: hsl(214, 91%, 85%);
-	z-index: 1;
-	background-color: hsl(214, 91%, 97%);
-}
-
-.settings-detail-pane .listbox:focus > [selected] {
-	background-color: hsl(214,91%,89%);
-	border-color: hsl(214, 91%, 65%);
-}
-
 .settings-detail-pane .listbox > .spacer {
 	border: 0;
  	box-sizing: border-box; -moz-box-sizing: border-box;
@@ -146,28 +136,26 @@
     -webkit-box-sizing: border-box;
     -ms-box-sizing: border-box;
     box-sizing: border-box;
-    
-    width: 100%; 
-	padding: 15px 5px 15px 5px;
-    position: relative;
+	padding: 13px;
+    color: #000;
+    background-color: #eee;
 }
 
-.settings-detail-pane .listbox .sortable-item button {
-	position: absolute;
-	top: 50%;
-	right: 15px;
+.settings-detail-pane .listbox .disabled .sortable-item {
+    color: #999;
+    background-color: #ddd;
+    font-weight: 200;
+}
+
+.settings-detail-pane .listbox .requires-enabled { display: none; }
+.settings-detail-pane .listbox .enabled .editable-item .requires-enabled { display: inline-block; }
+
+.settings-detail-pane .listbox .sortable-item div {
+    line-height: 2em;
 }
 
 .settings-detail-pane .listbox .sortable-item span.right {
 	float:right;
-}
-
-.settings-detail-pane .listbox .sortable-item #state {
-	margin: -25% 0 0 0;
-}
-
-.settings-detail-pane .listbox .sortable-item #prop {
-	margin: -25% 135px 0 0;
 }
 
 .settings-detail-pane .listbox .deletable-item {
@@ -175,7 +163,7 @@
 	padding: 12px 5px;
 }
 
-.settings-detail-pane .listbox .deletable-item div{
+.settings-detail-pane .listbox .deletable-item div {
 	width: auto;
 }
 
