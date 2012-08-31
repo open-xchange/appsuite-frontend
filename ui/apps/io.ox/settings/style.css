@@ -147,6 +147,9 @@
     font-weight: 200;
 }
 
+.settings-detail-pane .listbox .sortable-item:hover { background-color: #ccc; }
+.settings-detail-pane .listbox .disabled .sortable-item:hover { background-color: #ddd; }
+
 .settings-detail-pane .listbox .requires-enabled { display: none; }
 .settings-detail-pane .listbox .enabled .editable-item .requires-enabled { display: inline-block; }
 

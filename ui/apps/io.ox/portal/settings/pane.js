@@ -9,7 +9,9 @@
  * Mail: info@open-xchange.com
  *
  * @author Markus Bode <markus.bode@open-xchange.com>
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
+
 define('io.ox/portal/settings/pane',
       ['io.ox/core/extensions',
        'io.ox/settings/utils',
@@ -40,6 +42,10 @@ define('io.ox/portal/settings/pane',
         return _(pluginSettings).chain().filter(function (obj) { return obj.id === id; }).first().value();
     }
 
+    var sortByIndex = function (a, b) {
+        return a.index - b.index;
+    };
+
     var getPlugins = function () {
         // get plugins
         var plugins = _(ext.getPlugins({ prefix: 'plugins/portal/', name: 'portal', nameOnly: true })).map(function (id) {
@@ -52,10 +58,7 @@ define('io.ox/portal/settings/pane',
             return plugin;
         });
         // sort by index
-        plugins.sort(function (a, b) {
-            return a.index - b.index;
-        });
-        return plugins;
+        return plugins.sort(sortByIndex);
     };
 
     var collection,
@@ -165,27 +168,7 @@ define('io.ox/portal/settings/pane',
                 this.plugin = options.plugin;
                 this.deferred = new $.Deferred();
                 this.strings = staticStrings;
-
                 var that = this;
-
-                // Show activation-checkbox in pane?
-                // This is some old code - should be removed
-//                var req = ['text!io.ox/portal/settings/tpl/pluginsettings.html'];
-//                var response = $.ajax({
-//                    url: ox.base + '/apps/plugins/portal/' + this.plugin.id + '/settings/plugin.js',
-//                    type: 'HEAD',
-//                    async: false
-//                }).status;
-//
-//                if (response === 200) {
-//                    req.push('plugins/portal/' + this.plugin.id + '/settings/plugin');
-//                }
-//
-//                require(req, function (tmplPluginSettings, pluginFeatures) {
-//                    that.template = doT.template(tmplPluginSettings);
-//                    that.pluginFeatures = pluginFeatures;
-//                    that.deferred.resolve();
-//                });
                 require(['plugins/portal/' + this.plugin.id + '/settings/plugin'], function (pluginFeatures) {
                     that.pluginFeatures = pluginFeatures;
                     that.deferred.resolve();
@@ -253,22 +236,27 @@ define('io.ox/portal/settings/pane',
                     $listbox.sortable({
                         axis: 'y',
                         items: 'div.enabled',
+                        opacity: 0.5,
                         update: function (event, ui) {
-                            var index = 100;
 
-                            _.each($(this).sortable('toArray'), function (value) {
-                                if (!pluginSettings[value]) {
-                                    pluginSettings[value] = {};
+                            var index = 100, array = $(this).sortable('toArray');
+
+                            _(array).each(function (id) {
+                                var plugin = getPluginById(id);
+                                if (plugin) {
+                                    plugin.index = index;
+                                    ext.point("io.ox/portal/widget").get(id, function (e) {
+                                        e.index = index;
+                                    });
+                                    index += 100;
                                 }
-
-                                pluginSettings[value].index = index;
-                                index += 100;
                             });
 
+                            pluginSettings.sort(sortByIndex);
                             settings.set('pluginSettings', pluginSettings);
                             settings.save();
 
-                            ox.trigger("refresh^", [true]);
+                            ox.trigger('refresh-portal');
                         }
                     });
 
