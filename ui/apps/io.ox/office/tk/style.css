@@ -349,37 +349,22 @@ div.io-ox-view-component {
 
         input {
             width: 150px;
-            z-index: 1;
             padding-left: 4px;
             padding-right: 4px;
+            background-color: @input-fill-color;
             border-color: @control-border-color;
             .box-shadow(none);
             .transition(none);
             line-height: 18px;
             cursor: text;
 
-            /* overlay element for label and background visualization */
-            + div.input-overlay {
-                position: absolute;
-                top: 0;
-                left: 0;
-                z-index: 0;
-
-                > label.caption-overlay {
-                    padding-left: 4px;
-                    padding-right: 4px;
-                }
-
-                > div.background-overlay {
-                    display: inline-block;
-                    position: relative;
-                    top: 1px;
-                    background-color: @input-fill-color;
-                }
+            &.readonly {
+                background: none;
+                cursor: default;
             }
             
-            &.readonly {
-                cursor: default;
+            + button {
+                z-index: 1;
             }
         }
 

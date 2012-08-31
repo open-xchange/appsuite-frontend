@@ -31,6 +31,21 @@ define('io.ox/office/editor/view',
 
     // class StyleSheetChooser ================================================
 
+    /**
+     * A drop-down list control used to select a style sheet from a list. The
+     * drop-down list entries will visualize the formatting attributes of the
+     * style sheet if possible.
+     *
+     * @constructor
+     *
+     * @extends ComboField
+     *
+     * @param {StyleSheets} styleSheets
+     *  A style sheet container.
+     *
+     * @param {Object} [options]
+     *  Additional options passed to the ComboField constructor.
+     */
     var StyleSheetChooser = ComboField.extend({ constructor: function (styleSheets, options) {
 
         // base constructor ---------------------------------------------------

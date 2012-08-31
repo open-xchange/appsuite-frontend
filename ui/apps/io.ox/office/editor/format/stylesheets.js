@@ -11,21 +11,23 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/editor/format/stylesheets',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils'
+    ], function (Events, Utils) {
 
     'use strict';
 
     // private static functions ===============================================
 
     /**
-     * Returns whether the passed style sheet refers to itself in its chain of
-     * ancestors.
+     * Returns whether the passed style sheet is a descendant of the other
+     * passed style sheet.
      */
-    function isCircularReference(styleSheet) {
-        var parentStyleSheet = styleSheet.parent;
-        while (parentStyleSheet) {
-            if (parentStyleSheet === styleSheet) { return true; }
-            parentStyleSheet = parentStyleSheet.parent;
+    function isDescendant(styleSheet, ancestorStyleSheet) {
+        while (styleSheet) {
+            if (styleSheet === ancestorStyleSheet) { return true; }
+            styleSheet = styleSheet.parent;
         }
         return false;
     }
@@ -200,12 +202,16 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
          */
         this.addStyleSheet = function (name, parent, attributes, isDefault) {
 
-            var // get or create a style sheet object
+            var // style sheet exists already
+                exists = name in styleSheets,
+                // old parent of the existing style sheet
+                parent = exists ? styleSheets[name].parent : null,
+                // get or create a style sheet object
                 styleSheet = styleSheets[name] || (styleSheets[name] = {});
 
             // set parent of the style sheet
             styleSheet.parent = styleSheets[parent];
-            if (isCircularReference(styleSheet)) {
+            if (isDescendant(styleSheet.parent, styleSheet)) {
                 styleSheet.parent = null;
             }
 
@@ -215,6 +221,23 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
             // default style sheet
             if (isDefault) {
                 defaultStyleName = name;
+            }
+
+            // notify listeners
+            if (exists) {
+                // existing style sheet has changed
+                this.trigger('changed', name, styleSheet);
+                // descendant style sheets have changed attributes, if parent of this style sheet has changed
+                if (parent !== styleSheet.parent) {
+                    _(styleSheets).each(function (childSheet, name) {
+                        if (isDescendant(childSheet, styleSheet)) {
+                            this.trigger('changed', name, childSheet);
+                        }
+                    }, this);
+                }
+            } else {
+                // new style sheet added, it cannot have children
+                this.trigger('added', name, styleSheet);
             }
 
             return this;
@@ -541,6 +564,9 @@ define('io.ox/office/editor/format/stylesheets', ['io.ox/office/tk/utils'], func
         };
 
         // initialization -----------------------------------------------------
+
+        // add event hub
+        Events.extend(this);
 
         // build map with default attributes
         _(definitions).each(function (definition, name) {
