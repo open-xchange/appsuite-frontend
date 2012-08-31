@@ -15,20 +15,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     
     "use strict";
     
-    var api = { create: function (task)
-            {
+    var api = { create: function (task) {
                 return http.PUT({
                     module: "tasks",
-                    params: {action: 'new'},
+                    params: {action: "new"},
                     data: task,
                     appendColumns: false
                 });
             },
-            getAll: function ()
-            {
+            getAll: function () {
                     return http.GET({
                         module: "tasks",
-                        params: {action: 'all',
+                        params: {action: "all",
                             folder: require('io.ox/core/config').get('folder.tasks'),
                             columns: "1,200,202,203,300,309",
                             sort: "202",
@@ -37,11 +35,10 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     });
 
                 },
-            update: function (timestamp, taskId, modifications)
-            {
+            update: function (timestamp, taskId, modifications) {
                     return http.PUT({
                         module: "tasks",
-                        params: {action: 'update',
+                        params: {action: "update",
                             folder: require('io.ox/core/config').get('folder.tasks'),
                             id: taskId,
                             timestamp: timestamp
@@ -51,20 +48,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     });
 
                 },
-            deleteReminder: function (reminderId)
-            {
+            deleteReminder: function (reminderId) {
                     return http.PUT({
                         module: "reminder",
-                        params: {action: 'delete'},
+                        params: {action: "delete"},
                         data: {id: reminderId}
                     });
 
                 },
-             remindMeAgain: function (remindDate, reminderId)
-                {
+             remindMeAgain: function (remindDate, reminderId) {
                         return http.PUT({
                             module: "reminder",
-                            params: {action: 'remindAgain',
+                            params: {action: "remindAgain",
                                      id: reminderId
                                      },
                             data: {alarm: remindDate}
@@ -77,53 +72,47 @@ define("io.ox/tasks/api", ["io.ox/core/http",
    
 
     //for notification view
-    api.getTasks = function ()
-    {
+    api.getTasks = function () {
 
         return http.GET({
             module: "tasks",
-            params: {action: 'all',
+            params: {action: "all",
                 folder: require('io.ox/core/config').get('folder.tasks'),
                 columns: "1,200,202,203,300,309",
                 sort: "202",
                 order: "asc"
             }
         }).pipe(function (list) {
-                // sorted by end_date filter over due Tasks
-                var now = new Date();
-                var dueTasks = [];
-                for (var i = 1; i < list.length; i++)
-                    {
-                    if (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null)
-                        {
-                        dueTasks.push(list[i]);
-                    }
+            // sorted by end_date filter over due Tasks
+            var now = new Date(),
+                dueTasks = [];
+            for (var i = 1; i < list.length; i++) {
+                var filterOverdue = (list[i].end_date < now.getTime() && list[i].status !== 3 && list[i].end_date !== null);
+                if (filterOverdue) {
+                    dueTasks.push(list[i]);
                 }
-                if (dueTasks.length > 0) {
-                    api.trigger('new-tasks', dueTasks);
-                }
-                return list;
-            });
-
+            }
+            if (dueTasks.length > 0) {
+                api.trigger('new-tasks', dueTasks);
+            }
+            return list;
+        });
     };
     
-    api.getReminders = function (range)
-    {
+    api.getReminders = function (range) {
 
         return http.GET({
             module: "reminder",
-            params: {action: 'range',
+            params: {action: "range",
                 end: range
             }
         }).pipe(function (list) {
             
                 //seperate task reminders from overall reminders
-                var reminderTaskId = [];
-                var reminderId = [];
-                for (var i = 0; i < list.length; i++)
-                    {
-                    if (list[i].module === 4)
-                        {
+                var reminderTaskId = [],
+                    reminderId = [];
+                for (var i = 0; i < list.length; i++) {
+                    if (list[i].module === 4) {
                         reminderTaskId.push(list[i].target_id);
                         reminderId.push(list[i].id);
                     }

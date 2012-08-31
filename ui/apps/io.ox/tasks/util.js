@@ -35,13 +35,11 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                                  "on Saturday"];
     
     var util = {
-            computePopupTime: function (time, finderId)
-            {
+            computePopupTime: function (time, finderId) {
                 var endDate = time;
                 var offset = endDate.getTimezoneOffset() * -1 * 60000;
                 
-                switch (finderId)
-                {
+                switch (finderId) {
                 case "0":
                 case "1":
                 case "2":
@@ -50,8 +48,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     break;
                 default:
                     endDate.setTime(prepareTime(endDate));
-                    switch (finderId)
-                    {
+                    switch (finderId) {
                     case "d0":
                         endDate.setHours(6);
                         break;
@@ -69,8 +66,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                         break;
                     default:
                         endDate.setHours(6);
-                        switch (finderId)
-                        {
+                        switch (finderId) {
                         case "t":
                             endDate.setTime(endDate.getTime() + 60000 * 60 * 24);
                             break;
@@ -121,8 +117,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 return endDate;
             },
     
-            buildDropdownMenu: function (time)
-            {
+            buildDropdownMenu: function (time) {
                 //normal times
                 var appendString = "<option finderId='0'>" + gt('in 5 minutes') + "</option>" +
                 "<option finderId='1'>" + gt('in 15 minutes') + "</option>" +
@@ -130,48 +125,46 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 "<option finderId='3'>" + gt('in one hour') + "</option>";
                 
                 // variable daytimes
-                var i = time.getHours();
+                var i = time.getHours(),
+                    temp;
                 
-                if (i < 6)
-                    {i = 0;
-                } else if (i < 12)
-                    {i = 1;
-                } else if (i < 15)
-                    {i = 2;
-                } else if (i < 18)
-                    {i = 3;
-                } else if (i < 22)
-                    {i = 4;
+                if (i < 6) {
+                    i = 0;
+                } else if (i < 12) {
+                    i = 1;
+                } else if (i < 15) {
+                    i = 2;
+                } else if (i < 18) {
+                    i = 3;
+                } else if (i < 22) {
+                    i = 4;
                 }
                 
-                var temp;
-                while (i < lookupDaytimeStrings.length)
-                    {
+                
+                while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
                     appendString = appendString + "<option finderId='d" + i + "'>" + gt(temp) + "</option>";
                     i++;
                 }
                 
                 //weekdays
-                var circleIncomplete = true;
+                var circleIncomplete = true,
+                    startday = time.getDay();
+                
                 i = (time.getDay() + 2) % 7;
-                var startday = time.getDay();
                 
                 appendString = appendString + "<option finderId='t'>" + gt("tomorrow") + "</option>";
                 
-                while (circleIncomplete)
-                    {
+                while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
                     appendString = appendString + "<option finderId='w" + i + "'>" + gt(temp) + "</option>";
-                    if (i < 6)
-                        {i++;
-                    } else
-                        {
+                    if (i < 6) {
+                        i++;
+                    } else {
                         i = 0;
                     }
                     
-                    if (i === startday)
-                        {
+                    if (i === startday) {
                         appendString = appendString + "<option finderId='ww'>" + gt("in one week") + "</option>";
                         circleIncomplete = false;
                     }
@@ -184,75 +177,57 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             interpretTask: function (task)
             {
                 task = _.copy(task, true);
-                if (task.status === 3)
-                {
+                if (task.status === 3) {
                     task.status = gt("Done");
                     task.badge = "badge badge-success";
                     
-                } else
-                    {
+                } else {
                     var now = new Date();
-                    if (now.getTime() > task.end_date && task.end_date !== null)//no state for task over time, so manual check is needed
-                        {
+                    if (now.getTime() > task.end_date && task.end_date !== null) {//no state for task over time, so manual check is needed
                         task.status = gt("Over due");
                         task.badge = "badge badge-important";
-                    } else
-                        {
+                    } else {
                         task.status = '';
                         task.badge = '';
                     }
                 }
                 
-                
-                
-                if (task.title === null)
-                {
+
+                if (task.title === null) {
                     task.title = '\u2014';
                 }
                 
 
-                if (task.end_date !== null)
-                    {
+                if (task.end_date !== null) {
                     task.end_date = new date.Local(task.end_date).format();
-                } else
-                    {
+                } else {
                     task.end_date = '';
                 }
-              
                 
                 return task;
             },
             
-            sortTasks: function (tasks) //done tasks last, overduetasks first, same date alphabetical
-            {
+            sortTasks: function (tasks) {//done tasks last, overduetasks first, same date alphabetical
                 tasks = _.copy(tasks, true);//make loacl copy
                 var resultArray = [],
                     alphabetArray = [];
                 
-                for (var i = 0; i < tasks.length; i++)
-                    {
-                    if (tasks[i].status === 3)
-                        {
+                for (var i = 0; i < tasks.length; i++) {
+                    if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
                     } else {
                         alphabetArray.push(tasks[i]);
                     }
                 }
                 
-                alphabetArray.sort(function (a, b)
-                        {
-                        
-                        if (a.end_date > b.end_date || a.end_date === null)
-                            {
+                alphabetArray.sort(function (a, b) {
+                        if (a.end_date > b.end_date || a.end_date === null) {
                             return 1;
-                        } else if (a.end_date < b.end_date || b.end_date === null)
-                            {
+                        } else if (a.end_date < b.end_date || b.end_date === null) {
                             return -1;
-                        } else if (a.title > b.title)
-                            {
+                        } else if (a.title > b.title) {
                             return 1;
-                        } else
-                            {
+                        } else {
                             return -1;
                         }
                     });
@@ -265,8 +240,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             
         };
         
-    var prepareTime = function (time)
-    {
+    var prepareTime = function (time) {
         time.setMilliseconds(0);
         time.setSeconds(0);
         time.setMinutes(0);

@@ -31,41 +31,35 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
             search: true
         });
         
-        api.getAll().done(function (alltasks)
-                {
+        api.getAll().done(function (alltasks) {
             fill(alltasks);
         });
         
-        var fill = function (tasks)
-        {
+        var fill = function (tasks) {
             
             var content = win.nodes.main;
-            content.append("div").text("This is just a placeholder taskapp").addClass("default-content-padding abs scrollable");
+            content.append($('div').text("This is just a placeholder taskapp").addClass('default-content-padding abs scrollable'));
             
-            var node = $('<div class="io-ox-portal-tasks">').appendTo(content);
-            $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
+            var node = $('<div>').addClass('io-ox-portal-tasks').appendTo(content);
+            $('<h1>').addClass('clear-title').text(gt('Your tasks')).appendTo(node);
             
             require(['io.ox/tasks/view-grid-template'], function (viewGrid)
-                    {
-                    
-                    //interpret values for status etc
-                    for (var i = 0; i < tasks.length; i++)
-                    {
-                        tasks[i] = interpretTask(tasks[i]);
-                    }
-                    
-                    viewGrid.drawSimpleGrid(tasks).appendTo(node);
-                });
-            
-            if (tasks.length === 0)
                 {
+                    
+                //interpret values for status etc
+                for (var i = 0; i < tasks.length; i++) {
+                    tasks[i] = interpretTask(tasks[i]);
+                }
+                    
+                viewGrid.drawSimpleGrid(tasks).appendTo(node);
+            });
+            
+            if (tasks.length === 0) {
                 $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
             }
         };
         
-        var interpretTask = function (task)
-        {
-            
+        var interpretTask = function (task) {
             switch (task.status)
             {
             case 2:

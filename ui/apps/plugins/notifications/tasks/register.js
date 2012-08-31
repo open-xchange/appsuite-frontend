@@ -26,15 +26,13 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
     /*
      * DUE TASKS
      */
-    var NotificationView = Backbone.View.extend(
-            {
+    var NotificationView = Backbone.View.extend({
         events: {
             'click [data-action="done"]': 'setTaskStatus',
             'click .item': 'onClickItem'
         },
         _modelBinder: undefined,
         initialize: function () {
-            
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
@@ -45,8 +43,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             this.$el.find(".btn span").text(gt("Done"));
             return this;
         },
-        setTaskStatus: function (e)
-        {
+        setTaskStatus: function (e) {
             e.stopPropagation();
             var now = new Date();
             api.update(now.getTime(), this.model.attributes.taskId, {status: 3});
@@ -55,22 +52,20 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         
         onClickItem: function (e) {
             var overlay = $('#io-ox-notifications-overlay');
-            
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        // open SidePopup without array
-                        new dialogs.SidePopup({ arrow: false, side: 'right' })
-                            .setTarget(overlay.empty())
-                            .show(e, function (popup) {
-                                popup.append("<div> Detailview under construction </div>");
-                            });
-                    });
-
+                    // open SidePopup without arrow
+                    new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        .setTarget(overlay.empty())
+                        .show(e, function (popup) {
+                            popup.append("<div> Detailview under construction </div>");
+                        });
+                });
         },
         
-        close: function ()
-        {
+        close: function () {
             this.unbind();
             this.remove();
+            this.model.destroy();
         }
     });
     
@@ -93,7 +88,6 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             }));
             
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
-
             return this;
         }
     });
@@ -103,9 +97,9 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         index: 350,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasks', NotificationsView);
+
             api.on('new-tasks', function (e, tasks) {
                 notifications.collection.trigger("reset");
-                
                 _(tasks).each(function (taskObj) {
                     var task = util.interpretTask(taskObj);
                     var inObj = {
@@ -130,8 +124,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
      *
      *------------------------------------------
      */
-    var NotificationReminderView = Backbone.View.extend(
-            {
+    var NotificationReminderView = Backbone.View.extend({
         events: {
             'click [data-action="ok"]': 'deleteReminder',
             'click [data-action="remindAgain"]': 'remindAgain',
@@ -153,18 +146,15 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             this.$el.find(".taskokbtn span").text(gt("Ok"));
             return this;
         },
-        deleteReminder: function (e)
-        {
+        deleteReminder: function (e) {
             e.stopPropagation();
             api.deleteReminder(this.model.attributes.reminderId);
             this.close();
         },
-        selectClicked: function (e)
-        {
+        selectClicked: function (e) {
             e.stopPropagation();
         },
-        remindAgain: function (e)
-        {
+        remindAgain: function (e) {
             var endDate = new Date();
             endDate = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
             api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
@@ -176,20 +166,20 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             var overlay = $('#io-ox-notifications-overlay');
             
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                        // open SidePopup without array
-                        new dialogs.SidePopup({ arrow: false, side: 'right' })
-                            .setTarget(overlay.empty())
-                            .show(e, function (popup) {
-                                popup.append("<div> Detailview under construction </div>");
-                            });
-                    });
+                    // open SidePopup without array
+                    new dialogs.SidePopup({ arrow: false, side: 'right' })
+                        .setTarget(overlay.empty())
+                        .show(e, function (popup) {
+                            popup.append("<div> Detailview under construction </div>");
+                        });
+                });
 
         },
         
-        close: function ()
-        {
+        close: function () {
             this.unbind();
             this.remove();
+            this.model.destroy();
         }
     });
     
@@ -225,12 +215,10 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
             api.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
                 notifications.collection.trigger("reset");
-                api.getAll().done(function (tasks)
-                {
+                api.getAll().done(function (tasks) {
                     _(tasks).each(function (taskObj) {
                         var index = $.inArray(taskObj.id, reminderTaskIds);
-                        if (index !== -1)
-                            {
+                        if (index !== -1) {
                             var task = util.interpretTask(taskObj);
                             var inObj = {
                                 badge: task.badge,
