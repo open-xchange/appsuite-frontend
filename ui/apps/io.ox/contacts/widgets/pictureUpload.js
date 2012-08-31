@@ -49,9 +49,7 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                 var self = this;
                 this.$el.append(
                     $('<div class="picture-uploader">').css({
-                        backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)',
-                        marginRight: '15px',
-                        marginBottom: '15px'
+                        backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)'
                     }).on('click', function () {
                         self.openFileChooser();
                     })
@@ -63,8 +61,9 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
                             self.handleFileSelect(e);
                         })
                 );
-                
-                this.$el.append($('<div>').css({clear: 'both'}));
+                if (this.clear) {
+                    this.$el.append($('<div>').css({clear: 'both'}));
+                }
             }
         }, options);
     }

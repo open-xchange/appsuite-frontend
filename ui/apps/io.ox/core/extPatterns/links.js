@@ -137,6 +137,14 @@ define("io.ox/core/extPatterns/links",
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
                 multiple = _.isArray(context) && context.length > 1;
+            if (options.attributes) {
+                node.attr(options.attributes);
+            }
+            if (options.classes) {
+                _(options.classes).each(function (cl) {
+                    node.addClass(cl);
+                });
+            }
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
@@ -149,6 +157,9 @@ define("io.ox/core/extPatterns/links",
                         .text('More')
                     );
                     node.children('[data-prio="lo"]').hide();
+                }
+                if (options.customizeNode) {
+                    options.customizeNode(node);
                 }
             });
         };

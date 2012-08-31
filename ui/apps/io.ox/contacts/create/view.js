@@ -25,18 +25,41 @@ define('io.ox/contacts/create/view',
             tagName: 'form',
             className: 'form-horizontal create-contact'
         });
-    
+        
     // Picture Magic
     point.extend(new PictureUpload({
         id: 'io.ox/contacts/create/view/picture',
-        index: 100
+        index: 100,
+        customizeNode: function () {
+            this.$el.css({
+                display: 'inline-block',
+                height: "100px",
+                marginBottom: "15px"
+            }).addClass("span2");
+        }
+    }));
+    
+    point.extend(new views.AttributeView({
+        id: 'io.ox/contacts/create/view/display_name_header',
+        index: 150,
+        tagName: 'span',
+        className: 'clear-title',
+        attribute: 'display_name'
     }));
     
     
+    point.basicExtend({
+        id: 'io.ox/contacts/create/view/headerBreak',
+        index: 200,
+        draw: function () {
+            this.append($('<div>').css({clear: 'both'}));
+        }
+    });
+
     // Show backend errors
     point.extend(new forms.ErrorAlert({
         id: 'io.ox/contacts/create/view/backendErrors',
-        index: 200
+        index: 250
     }));
     
     // Let's do some metaprogramming here

@@ -125,8 +125,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
     function ModelRealm(name, factory) {
         var models = {},
             serverAttributes = {},
-            self = this;
-        
+            self = this,
+            refCount = 0;
+
         this.internal = {
             cachedServerAttributes: function (uid) {
                 return serverAttributes[uid] || {};
@@ -221,6 +222,18 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
                 model.off();
             });
             models = {};
+        };
+        
+        this.retain = function () {
+            refCount++;
+            return this;
+        };
+        
+        this.release = function () {
+            refCount++;
+            if (refCount === 0) {
+                this.destroy();
+            }
         };
         
         factory.point('realm').invoke('extend', this);

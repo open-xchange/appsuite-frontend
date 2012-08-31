@@ -51,11 +51,17 @@ define('io.ox/contacts/edit/main',
                 win.show(function () {
 
                     // create model & view
-                    model.factory.realm('edit').get(data).done(function (contact) {
+                    
+                    model.factory.realm('edit').retain().get(data).done(function (contact) {
                         app.contact = contact;
                         var editView = new view.ContactEditView({ model: contact });
                         container.append(editView.render().$el);
                         container.find('input[type=text]:visible').eq(0).focus();
+                        
+                        editView.on('save', function () {
+                            app.quit();
+                        });
+                        contact.set('folder_id', null);
                     });
                         
 
@@ -89,7 +95,7 @@ define('io.ox/contacts/edit/main',
                             console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
-                                model.factory.realm('edit').destroy();
+                                model.factory.realm('edit').release();
                                 container.find('#myGrowl').jGrowl('shutdown');
                             } else {
                                 def.reject();
@@ -98,7 +104,7 @@ define('io.ox/contacts/edit/main',
                 });
             } else {
                 def.resolve();
-                model.factory.realm('edit').destroy();
+                model.factory.realm('edit').release();
             }
             //clean
             return def;

@@ -308,7 +308,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         
         
     }
-    
+        
     var forms = {
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,

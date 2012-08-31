@@ -10,12 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], function (ext, Events) {
     "use strict";
     
     
     
     function ViewExtensionPoint(name) {
+        
+        this.basicExtend = function (extension) {
+            ext.point(name).extend(extension);
+        };
         
         this.extend = function (options, extOptions) {
             
@@ -56,6 +60,10 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
                 if (options.init) {
                     options.init.apply(this, $.makeArray(arguments));
                 }
+                
+                if (options.customizeNode) {
+                    this.customizeNode();
+                }
             };
             
             options.close = options.close || function () {
@@ -67,7 +75,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
             
             extOptions = extOptions || {};
             
-            ext.point(name).extend(_.extend({}, {
+            this.basicExtend(_.extend({}, {
                 id: options.id,
                 index: options.index,
                 draw: function (options) {
@@ -82,8 +90,15 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
         
         this.createView = function (options) {
             options.render = options.render || function () {
-                this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model}]));
+                this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model, parentView: this}]));
                 return this;
+            };
+            
+            options.initialize = options.initialize || function () {
+                Events.extend(this);
+                if (this.init) {
+                    this.init.apply(this, $.makeArray(arguments));
+                }
             };
             
             options.point = options.point || ext.point(name);
@@ -101,15 +116,57 @@ define('io.ox/backbone/views', ['io.ox/core/extensions'], function (ext) {
             this.render();
         };
     }
-        
     
+    function AttributeView(options) {
+        _.extend(this, {
+            
+            render: function () {
+                var self = this;
+                
+                _([this.attribute]).chain().flatten().each(function (attribute) {
+                    var value = self.model.get(attribute);
+                    if (self.transform && self.transform[attribute]) {
+                        value = self.transform[attribute](value);
+                    } else if (self.transform) {
+                        value = self.transform(value);
+                    }
+                    
+                    if (self.model.isSet(attribute)) {
+                        self.$el.append($.txt(value));
+                    } else if (self.initialValue) {
+                        self.$el.append($.txt(self.initialValue));
+                    }
+                });
+                
+            },
+            
+            updateNode: function () {
+                this.$el.empty();
+                this.render();
+            }
+            
+        });
+        
+        var self = this;
+        this.modelEvents = {};
+        
+        _([options.attribute]).chain().flatten().each(function (attribute) {
+            self.modelEvents['change:' + attribute] = 'updateNode';
+        });
+        
+        _.extend(this, options);
+    }
+
     return {
         
         point: function (name) {
             return new ViewExtensionPoint(name);
         },
         
-        BasicView: BasicView
+        BasicView: BasicView,
+        AttributeView: AttributeView,
+        
+        ext: ext
         
     };
 

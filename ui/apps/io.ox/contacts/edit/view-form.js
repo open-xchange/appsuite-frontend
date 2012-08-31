@@ -15,12 +15,16 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/model',
     'io.ox/backbone/views',
     'io.ox/backbone/forms',
+    'io.ox/core/extPatterns/actions',
+    'io.ox/core/extPatterns/links',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/widgets/cityControlGroup',
     'gettext!io.ox/contacts/contacts'
-], function (model, views, forms, PictureUpload, CityControlGroup, gt) {
+], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
      
     "use strict";
+    
+    // TODO: more compact layout, correct handling of existing images
     
     var dateField, city;
     
@@ -152,21 +156,82 @@ define('io.ox/contacts/edit/view-form', [
             className: 'edit-contact'
         });
     
-    // Picture Magic
     point.extend(new PictureUpload({
         id: 'io.ox/contacts/edit/view/picture',
-        index: 100
+        index: 100,
+        customizeNode: function () {
+            this.$el.css({
+                display: 'inline-block',
+                height: "100px"
+            }).addClass("span2");
+        }
     }));
-
-
+    
+    
+    point.extend(new views.AttributeView({
+        id: 'io.ox/contacts/edit/view/display_name_header',
+        index: 150,
+        tagName: 'span',
+        className: 'clear-title',
+        attribute: 'display_name'
+    }));
+    
+    point.basicExtend({
+        id: 'io.ox/contacts/edit/view/headerBreak',
+        index: 200,
+        draw: function () {
+            this.append($('<div>').css({clear: 'both'}));
+        }
+    });
+    
     // Show backend errors
     point.extend(new forms.ErrorAlert({
         id: 'io.ox/contacts/edit/view/backendErrors',
-        index: 200
+        className: 'span7',
+        index: 250,
+        customizeNode: function () {
+            this.$el.css({
+                marginTop: '15px'
+            });
+        }
+    }));
+
+    // Actions
+    point.basicExtend(new links.InlineLinks({
+        index: 300,
+        id: 'inline-actions',
+        ref: 'io.ox/contacts/edit/view/inline',
+        customizeNode: function ($node) {
+            $node.addClass("span7");
+            $node.css({marginBottom: '20px'});
+        }
     }));
     
+    // Save
     
-    var index = 300;
+    views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
+        id: "save",
+        index: 100,
+        label: gt("Save"),
+        ref: "io.ox/contacts/actions/edit/save",
+        cssClasses: "btn btn-primary",
+        tabIndex: 10
+    }));
+    
+    // Edit Actions
+    
+    new actions.Action('io.ox/contacts/actions/edit/save', {
+        id: 'save',
+        action: function (options) {
+            options.model.save().done(function () {
+                options.parentView.trigger('save');
+            });
+        }
+    });
+    
+    
+    
+    var index = 400;
     
     _(meta.sections).each(function (fields, id) {
         var uid = 'io.px/contacts/edit/' + id,
