@@ -54,6 +54,10 @@ define('io.ox/calendar/week/perspective',
                 .invoke('action', this, obj);
         },
         
+        updateAppointment: function (obj) {
+            
+        },
+        
         getAppointments: function (start, end) {
             // fetch appointments
             var self = this,
