@@ -190,14 +190,18 @@ define('io.ox/settings/main',
             grid.selection.keyboard(false);
         });
 
-
         // go!
         win.show(function () {
             grid.paint();
         });
-        grid.refresh();
 
+        grid.refresh();
     });
+
+    app.getGrid = function () {
+        return grid;
+    };
+
     return {
         getApp: app.getInstance
     };

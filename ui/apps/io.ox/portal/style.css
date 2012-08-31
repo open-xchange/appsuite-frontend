@@ -61,11 +61,20 @@
 .io-ox-portal-linkedin-updates-details {
     margin: 1em 0 1em 4em;
 }
-.io-ox-portal-intro * {
-    color: grey;
-    font-weight: 200;
+.io-ox-portal-intro {
+    margin-bottom: 12px;
+    line-height: 22px;
+}
+.io-ox-portal-greeting {
+    font-family: @font-light;
     font-size: 22px;
-    line-height: 30px;
+    font-weight: 200;
+    color: #ccc;
+}
+.io-ox-portal-login {
+    font-family: @font-light;
+    font-size: 16px;
+    color: #888;
 }
 .io-ox-portal-settings {
     float: right;
@@ -73,13 +82,9 @@
     padding-right: 5px;
     padding-bottom: 0.5em;
 }
-.io-ox-portal-settings a{
+.io-ox-portal-settings a {
     color: #0AF;
     font-size: 13px;
-}
-.io-ox-portal-login {
-    font-size: 13px;
-    color: darkgrey;
 }
 .io-ox-portal-tiles {
     clear: both;

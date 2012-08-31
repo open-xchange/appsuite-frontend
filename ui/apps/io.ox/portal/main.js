@@ -239,7 +239,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             }
             return needle.colorIndex;
         }
-        
+
         function initExtensions() {
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
@@ -254,7 +254,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
             addFillers(fillers, count, minIndex, maxIndex);
             point.sort();
-            addFillers(12, 4, maxIndex, maxIndex + 4);
+            addFillers(4, 12, maxIndex, maxIndex + 4);
 
             point.each(function (extension) {
                 if (!extension.isEnabled) {
@@ -403,9 +403,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 .append(intro)
                 .append(tileSide);
 
-            ox.on('refresh^', function (event, completeReload) {
+            ox.on('refresh^ refresh-portal', function (event, completeReload) {
                 if (completeReload) {
-                    pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
+                    pluginSettings = _.sortBy(settings.get('pluginSettings', []), function (obj) { return obj.index; });
                     allActivePluginIds = {};
                     _.each(pluginSettings, function (obj) {
                         if (obj.active) {
@@ -445,16 +445,16 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
                 return $('<div>').append(
                     $('<span class="io-ox-portal-settings">').append(
-                        $('<a>').text(gt('Settings')).on('click', function (event) {
+                        $('<a>').text(gt('Personalize this page')).on('click', function (event) {
                             return require(["io.ox/settings/main"], function (m) {
-                                var app = m.getApp();
-                                app.launch();
-                                console.log("Testing:", app.getGrid().selection);
+                                m.getApp().launch().done(function () {
+                                    this.getGrid().selection.set({ id: 'io.ox/portal' });
+                                });
                             });
                         })
                     ),
                     $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
-                    $('<span class="io-ox-portal-login">').text(' (' + ox.user + ') ')
+                    $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
                 );
             }
         });

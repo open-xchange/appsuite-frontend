@@ -97,9 +97,8 @@ define('io.ox/portal/settings/pane',
                     }
                     index += 100;
                 });
-                // mmmmh, heavy way to update the portal
-                // TODO: use direct lightweight event
-                ox.trigger("refresh^", [true]);
+                // trigger portal refresh
+                ox.trigger("refresh-portal", [true]);
             });
         },
 
