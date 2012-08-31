@@ -377,6 +377,20 @@ define('io.ox/calendar/edit/template',
                 });
             });
         }
+    });/*
+    <div class="row-fluid show-grid" style='margin-top: 10px;'>
+    <span style='text-align: right;' class='span12'>
+        <a class='btn' data-action="cancel">Cancel</a>
+        <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
+    </span>
+</div>
+    */
+    ext.point('io.ox/calendar/edit/conflicts').extend({
+        index: 300,
+        id: 'conflicts',
+        draw: function (data) {
+            this.append($('<div class="row-fluid show-grid>'));
+        }
     });
 
 
@@ -987,5 +1001,3 @@ define('io.ox/calendar/edit/template',
     // per default templates return null
     return null;
 });
-
-
