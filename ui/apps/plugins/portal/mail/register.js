@@ -151,18 +151,18 @@ define('plugins/portal/mail/register',
                         viewGrid.drawSimpleGrid(list).appendTo(node);
 
                         new dialogs.SidePopup({ modal: false })
-                        .delegate(node, '.vgrid-cell', function (pane) {
-                            var data = $(this).data('object-data');
-                            pane.parent().removeClass('default-content-padding');
-                            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                // get thread
-                                var thread = api.getThread(data);
-                                // get first mail first
-                                api.get(thread[0]).done(function (data) {
-                                    view.drawThread(pane, thread, data);
+                            .delegate(node, '.vgrid-cell', function (pane, e, target) {
+                                var data = target.data('object-data');
+                                pane.parent().removeClass('default-content-padding');
+                                require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
+                                    // get thread
+                                    var thread = api.getThread(data);
+                                    // get first mail first
+                                    api.get(thread[0]).done(function (data) {
+                                        view.drawThread(pane, thread, data);
+                                    });
                                 });
                             });
-                        });
                     }
                 );
             }
