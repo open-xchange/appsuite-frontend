@@ -49,7 +49,7 @@ define('io.ox/contacts/edit/main',
             var cont = function (data) {
 
                 win.show(function () {
-
+                    var considerSaved = false;
                     // create model & view
                     
                     model.factory.realm('edit').retain().get(data).done(function (contact) {
@@ -59,12 +59,16 @@ define('io.ox/contacts/edit/main',
                         container.find('input[type=text]:visible').eq(0).focus();
                         
                         editView.on('save', function () {
+                            considerSaved = true;
                             app.quit();
                         });
                     });
                         
 
                     getDirtyStatus = function () {
+                        if (considerSaved) {
+                            return false;
+                        }
                         return app.contact && !_.isEmpty(app.contact.changedSinceLoading());
                     };
 

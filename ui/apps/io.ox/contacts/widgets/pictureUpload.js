@@ -21,7 +21,8 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
             
             tagName: 'div',
             modelEvents: {
-                'change:pictureFile': 'displayPictureFile'
+                'change:pictureFile': 'displayPictureFile',
+                'change:image1_url': 'displayImageURL'
             },
         
             openFileChooser: function (e) {
@@ -31,6 +32,10 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
             handleFileSelect: function (e) {
                 var file = e.target.files[0];
                 this.model.set("pictureFile", file);
+            },
+            
+            displayImageURL: function (e) {
+                this.$el.find('.picture-uploader').css('background-image', 'url(' + this.model.get('image1_url') + ')');
             },
             
             displayPictureFile: function () {
@@ -47,9 +52,11 @@ define('io.ox/contacts/widgets/pictureUpload', ['less!io.ox/contacts/widgets/wid
             
             render: function () {
                 var self = this;
+                var imageUrl = this.model.get('image1_url') || ox.base + '/apps/themes/default/dummypicture.png';
+                
                 this.$el.append(
                     $('<div class="picture-uploader">').css({
-                        backgroundImage: 'url(' + ox.base + '/apps/themes/default/dummypicture.png)'
+                        backgroundImage: 'url(' + imageUrl + ')'
                     }).on('click', function () {
                         self.openFileChooser();
                     })

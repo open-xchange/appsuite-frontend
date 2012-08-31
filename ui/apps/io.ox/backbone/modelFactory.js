@@ -204,8 +204,15 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         this.refresh = function (uid, data) {
             // TODO: Implement non-destructive refresh, i.e. keep changes in the model and only update unchanged fields, throw a conflict event for other fields
             if (models[uid]) {
-                models[uid].set(data);
-                serverAttributes[uid] = models[uid].toJSON();
+                var model = models[uid];
+                // Unset all
+                _(model.attributes).each(function (value, name) {
+                    if (!/^_/.test(name)) {
+                        model.unset(name, {silent: true});
+                    }
+                });
+                model.set(data);
+                serverAttributes[uid] = model.toJSON();
             }
         };
         

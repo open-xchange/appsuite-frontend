@@ -25,7 +25,7 @@ define('io.ox/contacts/model',
             var file = data.pictureFile;
             if (file) {
                 delete data.pictureFile;
-                return api.editNewImage({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified')}, data, file);
+                return api.editNewImage({id: model.id, folder_id: model.get('folder_id'), timestamp: model.get('last_modified')}, data, file);
             } else {
                 return api.edit({id: model.id, folder: model.get('folder_id'), timestamp: model.get('last_modified'), data: data});
             }
