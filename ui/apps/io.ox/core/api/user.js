@@ -46,7 +46,7 @@ define("io.ox/core/api/user",
             }
         }
     });
-
+    
     api.getTextNode = function (id) {
         var node = document.createTextNode("");
         api.get({ id: id })

@@ -83,30 +83,35 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
+            intro = $('<div class="io-ox-portal-intro">'),
             tileSide = $('<div class="io-ox-portal-tiles">'),
             contentSide = $('<div class="io-ox-portal-content">'),
-            // update window title
             updateTitle = function () {
-                win.setTitle(
-                    $($.txt(getGreetingPhrase()))
-                    .add($.txt(', '))
-                    .add(userAPI.getTextNode(config.get('identifier')))
-                    .add($.txt(' '))
-                    .add($('<small>').addClass('subtitle').text('(' + ox.user + ')'))
+                var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
+                intro.empty();
+                intro.append(
+                    $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
+                    $('<span class="io-ox-portal-login">').text(' (' + ox.user + ') '),
+                    $('<span class="io-ox-portal-settings">').append(
+                        $('<a>').text(gt('Settings')).on('click', function (event) {
+                            return require(["io.ox/settings/main"], function (m) {
+                                m.getApp().launch();
+                            });
+                        })
+                    )
                 );
             };
 
         // time-based greeting phrase
-        function getGreetingPhrase() {
+        function getGreetingPhrase(name) {
             var hour = new date.Local().getHours();
-
             // find proper phrase
             if (hour >= 4 && hour <= 11) {
-                return gt('Good morning');
+                return gt('Good morning, %s', name);
             } else if (hour >= 18 && hour <= 23) {
-                return gt('Good evening');
+                return gt('Good evening, %s', name);
             } else {
-                return gt('Hello');
+                return gt('Hello %s', name);
             }
         }
 
@@ -215,7 +220,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 i = 0;
             for (; i < num; i++) {
                 var index = Math.round(Math.random() * (maxIndex - minIndex) + minIndex);
-                console.log("New filler at index %s < %s < %s", minIndex, index, maxIndex);
                 ext.point('io.ox/portal/widget').extend({
                     id: 'filler' + (start + i),
                     index: index,
@@ -244,7 +248,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             }
             return needle.colorIndex;
         }
-
+        
         function initExtensions() {
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
@@ -405,6 +409,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
             win.nodes.main
                 .addClass('io-ox-portal')
+                .append(intro)
                 .append(tileSide);
 
             ox.on('refresh^', function (event, completeReload) {
