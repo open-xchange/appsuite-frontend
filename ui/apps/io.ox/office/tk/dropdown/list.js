@@ -66,10 +66,7 @@ define('io.ox/office/tk/dropdown/list',
             sorted = Utils.getBooleanOption(options, 'sorted', false),
 
             // functor used to sort the items
-            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor'),
-
-            // number of items to skip for page up/down keys
-            itemsPerPage = 1;
+            sortFunctor = Utils.getFunctionOption(options, 'sortFunctor');
 
         // private methods ----------------------------------------------------
 
@@ -80,17 +77,15 @@ define('io.ox/office/tk/dropdown/list',
 
             var // the outer menu node containing the list element
                 menuNode = self.getMenuNode(),
-                // all list items (button elements)
-                buttons = self.getListItems(),
                 // width of the drop-down group buttons (used as min-width of the menu)
                 minWidth = self.getNode().width(),
                 // width of the scroll bar in pixels
                 scrollBarWidth = 0;
 
             // set maximum height of the drop-down menu, depending on window height
-            menuNode.css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px');
-            itemsPerPage = buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
-            menuNode.scrollTop(0);
+            menuNode
+                .css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px')
+                .scrollTop(0);
 
             // Calculate the width of the drop-down menu. Work around a Firefox
             // bug which displays the menu too narrow (it restricts the width
@@ -138,10 +133,10 @@ define('io.ox/office/tk/dropdown/list',
                 if (keydown && (index >= 0) && (index + 1 < buttons.length)) { buttons.eq(index + 1).focus(); }
                 return false;
             case KeyCodes.PAGE_UP:
-                if (keydown) { buttons.eq(Math.max(0, index - itemsPerPage)).focus(); }
+                if (keydown) { buttons.eq(Math.max(0, index - this.getItemCountPerPage())).focus(); }
                 return false;
             case KeyCodes.PAGE_DOWN:
-                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + itemsPerPage)).focus(); }
+                if (keydown) { buttons.eq(Math.min(buttons.length - 1, index + this.getItemCountPerPage())).focus(); }
                 return false;
             case KeyCodes.HOME:
                 if (keydown) { buttons.first().focus(); }
@@ -154,7 +149,7 @@ define('io.ox/office/tk/dropdown/list',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, options);
+        DropDown.call(this, listNode, options);
 
         // methods ------------------------------------------------------------
 
@@ -179,7 +174,9 @@ define('io.ox/office/tk/dropdown/list',
          * in the drop-down list, depending on the current screen size.
          */
         this.getItemCountPerPage = function () {
-            return itemsPerPage;
+            var menuNode = self.getMenuNode(),
+                buttons = self.getListItems();
+            return buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
         };
 
         /**
@@ -234,7 +231,7 @@ define('io.ox/office/tk/dropdown/list',
         };
 
         // initialize the drop-down element
-        this.getMenuNode().addClass('list').append(listNode);
+        this.getMenuNode().addClass('list');
 
         // register event handlers
         this.on('menuopen', menuOpenHandler);

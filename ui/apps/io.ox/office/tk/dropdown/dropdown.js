@@ -49,7 +49,7 @@ define('io.ox/office/tk/dropdown/dropdown',
      *      If set to true, the drop-down button will not contain a caption,
      *      regardless of the other settings in the options object.
      */
-    function DropDown(options) {
+    function DropDown(contentNode, options) {
 
         var // self reference (the Group instance)
             self = this,
@@ -61,7 +61,7 @@ define('io.ox/office/tk/dropdown/dropdown',
             menuButton = Utils.createButton(options),
 
             // the drop-down menu element
-            menuNode = $('<div>').addClass('dropdown-menu'),
+            menuNode = $('<div>').addClass('dropdown-menu').append(contentNode),
 
             // additional controls that toggle the drop-down menu
             menuToggleControls = $();

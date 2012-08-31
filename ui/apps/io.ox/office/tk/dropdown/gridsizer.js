@@ -247,7 +247,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, options);
+        DropDown.call(this, gridNode, options);
 
         // methods ------------------------------------------------------------
 
@@ -261,7 +261,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
         // initialization -----------------------------------------------------
 
         // initialize the drop-down element
-        this.getMenuNode().addClass('grid-sizer').append(gridNode);
+        this.getMenuNode().addClass('grid-sizer');
 
         // register event handlers
         this.registerActionHandler(gridButton, 'click', getGridSize)

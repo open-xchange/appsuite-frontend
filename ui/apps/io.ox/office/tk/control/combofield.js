@@ -53,6 +53,23 @@ define('io.ox/office/tk/control/combofield',
         // private methods ----------------------------------------------------
 
         /**
+         * Called when the application window will be shown for the first time.
+         */
+        function initHandler() {
+
+            var menuButton = self.getMenuButton(),
+                textField = self.getTextField();
+
+            // move the menu button over the text field, attached to the right border
+            menuButton.css({ position: 'absolute', right: 0 });
+
+            // extend width and right padding of the text field
+            textField
+                .width(textField.outerWidth() + menuButton.outerWidth())
+                .css('padding-right', (menuButton.outerWidth() + TextField.FIELD_PADDING) + 'px');
+        }
+
+        /**
          * Handles 'menuopen' events and moves the focus to the text field.
          */
         function menuOpenHandler() {
@@ -215,7 +232,7 @@ define('io.ox/office/tk/control/combofield',
         // initialization -----------------------------------------------------
 
         // prepare group and register event handlers
-        this.registerRightOverlayNode(this.getMenuButton())
+        this.on('init', initHandler)
             .on('menuopen', menuOpenHandler)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(this.getMenuNode(), 'click', 'button', clickHandler);

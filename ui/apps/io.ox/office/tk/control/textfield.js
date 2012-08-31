@@ -21,9 +21,6 @@ define('io.ox/office/tk/control/textfield',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // left/right padding in the text field, in pixels
-        FIELD_PADDING = 4,
-
         // default validator without any restrictions on the field text
         defaultValidator = null;
 
@@ -66,18 +63,6 @@ define('io.ox/office/tk/control/textfield',
             // read-only mode
             readOnly = null,
 
-            // the caption (icon and text label) for the text field
-            caption = Utils.createLabel(options).addClass('caption-overlay'),
-
-            // the white background for the text field
-            backgroundNode = $('<div>').addClass('background-overlay'),
-
-            // additional node added right of the input area
-            rightOverlayNode = null,
-
-            // the overlay container for the caption and the background
-            overlayNode = $('<div>').addClass('input-overlay').append(caption, backgroundNode),
-
             // the validator used to convert and validate values
             validator = Utils.getObjectOption(options, 'validator', defaultValidator),
 
@@ -104,37 +89,6 @@ define('io.ox/office/tk/control/textfield',
         function restoreFieldState(state) {
             textField.val(state.value);
             Utils.setTextFieldSelection(textField, state);
-        }
-
-        /**
-         * Called when the application window will be shown for the first time.
-         * Initializes the caption overlay. Needs the calculated element sizes
-         * which become available when the window becomes visible and all
-         * elements have been inserted into the DOM.
-         */
-        function initHandler() {
-
-            var // the inner width of the editing area
-                width = Utils.getIntegerOption(options, 'width', 200, 1),
-                // the width including the padding of the text field
-                paddedWidth = width + 2 * FIELD_PADDING,
-                // whether the text field has an icon and/or a label at the left side
-                hasCaption = Utils.hasControlCaption(caption),
-                // the current width of the left caption element
-                leftMargin = hasCaption ? (caption.outerWidth() - 1) : 0,
-                // the current width of the right overlay node
-                rightMargin = rightOverlayNode ? (rightOverlayNode.outerWidth() - 1) : 0;
-
-            // hide the caption element if it is empty, for correct positioning of white background
-            caption.toggle(hasCaption);
-
-            // expand the text field by the size of the overlay caption
-            textField
-                .width(leftMargin + paddedWidth + rightMargin + 2) // add border (text field has box-sizing:border-box)
-                .css({ paddingLeft: (leftMargin + FIELD_PADDING) + 'px', paddingRight: (rightMargin + FIELD_PADDING) + 'px' });
-
-            // set the size of the white background area
-            backgroundNode.css({ width: paddedWidth + 'px', height: textField.height() + 'px', left: (hasCaption ? 0 : '1px') });
         }
 
         /**
@@ -244,11 +198,6 @@ define('io.ox/office/tk/control/textfield',
 
         // methods ------------------------------------------------------------
 
-        this.registerRightOverlayNode = function (node) {
-            rightOverlayNode = node.first().css({ position: 'absolute', right: 0, leftMargin: 0, zIndex: 5 });
-            return this;
-        };
-
         /**
          * Returns the text control element, as jQuery object.
          */
@@ -318,11 +267,11 @@ define('io.ox/office/tk/control/textfield',
 
         // insert the text field into this group, and register event handlers
         this.addFocusableControl(textField)
-            .addChildNodes(overlayNode)
-            .on('init', initHandler)
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(textField, 'commit', commitHandler);
         textField
+            .width(Utils.getIntegerOption(options, 'width', 200, 1) + 2 * TextField.FIELD_PADDING + 2)
+            .css({ paddingLeft: TextField.FIELD_PADDING + 'px', paddingRight: TextField.FIELD_PADDING + 'px' })
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
             // Validation while typing. IE9 does not trigger 'input' when deleting
@@ -334,6 +283,13 @@ define('io.ox/office/tk/control/textfield',
         this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
 
     } // class TextField
+
+    // static fields ----------------------------------------------------------
+
+    /**
+     * Left and right padding in the text field element, in pixels.
+     */
+    TextField.FIELD_PADDING = 4;
 
     // class TextField.Validator ==============================================
 

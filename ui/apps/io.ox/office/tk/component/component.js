@@ -93,18 +93,10 @@ define('io.ox/office/tk/component/component',
          * appending the root node of the group to the children of the own root
          * node.
          */
-        function insertGroup(group, key) {
+        function insertGroup(group) {
 
             // remember the group object
             groups.push(group);
-
-            // forward group events to listeners of this view component
-            if (_.isString(key)) {
-                (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
-                group.on('change cancel', function (event, value) {
-                    self.trigger(event.type, key, value);
-                });
-            }
 
             // Trigger an 'init' event at the group when the container window
             // becomes visible the first time. The 'deferredInit' object will
@@ -120,6 +112,9 @@ define('io.ox/office/tk/component/component',
             } else {
                 node.append(group.getNode());
             }
+
+            // always forward 'cancel' events (e.g. closed drop-down menu)
+            group.on('cancel', function () { self.trigger('cancel'); });
         }
 
         /**
@@ -276,7 +271,16 @@ define('io.ox/office/tk/component/component',
          *  The control group object to be inserted.
          */
         this.addGroup = function (key, group) {
-            insertGroup(group, key);
+
+            // insert the group object into this view component
+            insertGroup(group);
+
+            // forward 'change' events to listeners of this view component
+            (groupsByKey[key] || (groupsByKey[key] = [])).push(group);
+            group.on('change', function (event, value) {
+                self.trigger('change', key, value);
+            });
+
             return this;
         };
 
@@ -318,9 +322,18 @@ define('io.ox/office/tk/component/component',
         };
 
         this.addMenu = function (component, options) {
-            var group = new Group(options);
-            DropDown.call(group, options);
+
+            var // a drop-down button containing the DOM element of the component
+                group = new Group(options);
+
+            DropDown.call(group, component.getNode(), options);
             insertGroup(group);
+
+            // forward all component events to listeners of this view component
+            component.on('change cancel', function (event, key, value) {
+                self.trigger(event.type, key, value);
+            });
+
             return this;
         };
 
