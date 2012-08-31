@@ -368,7 +368,8 @@ define('io.ox/calendar/week/view',
                 
                 // calculate full-time appointment container height
                 var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight - 1) + 1;
-                this.pane.css({ top: ftHeight + 1 + 'px' });
+                ftHeight++;
+                this.pane.css({ top: ftHeight + 'px' });
                 this.fulltimeCon.height(ftHeight);
                 
             }, this);
@@ -438,6 +439,7 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function (e, ui) {
                         that.lassoMode = true;
+                        $(this).busy();
                     },
                     drag: function (e, ui) {
                         // correct position
@@ -445,15 +447,16 @@ define('io.ox/calendar/week/view',
                     }
                 })
                 .resizable({
-                    grid: [$('.day:first').outerWidth(), gridHeight],
                     handles: "n, s",
-                    distance: 1,
-                    start: function () {
+                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    start: function (e, ui) {
+                        console.log('resize start', e, ui, $(this));
                         that.lassoMode = false;
+                        $(this).addClass('opac');
                     },
                     stop: function (e, ui) {
-                        that.lassoMode = true;
                         console.log('resize stop', e, ui);
+                        that.lassoMode = true;
                     }
                 });
             // define drop areas
