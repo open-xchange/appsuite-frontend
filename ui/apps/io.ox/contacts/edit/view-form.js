@@ -95,7 +95,9 @@ define('io.ox/contacts/edit/view-form', [
                     rare: options.isRare,
                     attribute: options.field
                 }), {
-                    hidden: ! options.isAlwaysVisible
+                    hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                        return !model.isSet(options.field);
+                    }
                 });
             },
             
@@ -119,7 +121,9 @@ define('io.ox/contacts/edit/view-form', [
             setValueInElement: forms.utils.controlGroup.date.setValueInElement,
             setValueInModel: forms.utils.controlGroup.date.setValueInModel
         }), {
-            hidden: ! options.isAlwaysVisible
+            hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                return !model.isSet(options.field);
+            }
         });
     }
     
@@ -135,7 +139,9 @@ define('io.ox/contacts/edit/view-form', [
                 attribute: cityAttribute,
                 rare: options.isRare
             }), {
-                hidden: ! options.isAlwaysVisible
+                hidden: options.isAlwaysVisible ? false : options.isRare ? true : function (model) {
+                    return !model.isAnySet(cityAttribute, postalCodeAttribute);
+                }
             });
         };
     }
@@ -201,8 +207,8 @@ define('io.ox/contacts/edit/view-form', [
                     rare: isRare,
                     attribute: field
                 }), {
-                    hidden: isAlwaysVisible ? false : function (model) {
-                        return !model.has(field) || model.get(field) === '';
+                    hidden: isAlwaysVisible ? false : isRare ? true : function (model) {
+                        return !model.isSet(field);
                     }
                 });
             }

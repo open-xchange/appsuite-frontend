@@ -112,7 +112,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         };
         
         this.handleRareModelChange = function () {
-            if (this.model.has(this.attribute) && this.model.get(this.attribute) !== '') {
+            if (this.model.isSet(this.attribute)) {
                 this.nodes.controlGroup.show();
             }
         };
@@ -120,7 +120,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         this.render = function () {
             this.buildControlGroup();
             this.updateElement();
-            if (this.rare && (!this.model.has(this.attribute) || this.model.get(this.attribute) === '')) {
+            if (this.rare && !this.model.isSet(this.attribute)) {
                 this.nodes.controlGroup.hide();
             }
             if (this.rare) {

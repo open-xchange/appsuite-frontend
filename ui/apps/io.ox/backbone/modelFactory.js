@@ -79,14 +79,46 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         changedSinceLoading: function () {
             var self = this;
             var oldAttributes = this.realm.internal.cachedServerAttributes(this.id);
-            var changedKeys = _(this.changedAttributes(oldAttributes)).keys();
+            var currentAttributes = this.attributes;
+            var keys = {};
+            
+            // Collect keys set
+            _(oldAttributes).chain().keys().each(function (key) {
+                keys[key] = 1;
+            });
+
+            _(currentAttributes).chain().keys().each(function (key) {
+                keys[key] = 1;
+            });
             
             var retval = {};
-            _(changedKeys).each(function (key) {
-                retval[key] = self.get(key);
+            
+            _(keys).chain().keys().each(function (key) {
+                
+                var o = oldAttributes[key];
+                var c = currentAttributes[key];
+                
+                if (o !== c) {
+                    retval[key] = c;
+                }
+                
             });
             
             return retval;
+        },
+        
+        isSet: function () {
+            var self = this;
+            return _(arguments).all(function (attribute) {
+                return self.has(attribute) && self.get(attribute) !== '';
+            });
+        },
+        
+        isAnySet: function () {
+            var self = this;
+            return _(arguments).any(function (attribute) {
+                return self.has(attribute) && self.get(attribute) !== '';
+            });
         }
     });
 
@@ -184,7 +216,10 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             }
         };
         
-        this.destroyRealm = function () {
+        this.destroy = function () {
+            _(models).each(function (model) {
+                model.off();
+            });
             models = {};
         };
         

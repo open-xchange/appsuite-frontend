@@ -89,6 +89,7 @@ define('io.ox/contacts/edit/main',
                             console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
+                                model.factory.realm('edit').destroy();
                                 container.find('#myGrowl').jGrowl('shutdown');
                             } else {
                                 def.reject();
@@ -97,6 +98,7 @@ define('io.ox/contacts/edit/main',
                 });
             } else {
                 def.resolve();
+                model.factory.realm('edit').destroy();
             }
             //clean
             return def;
