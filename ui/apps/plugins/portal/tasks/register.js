@@ -18,19 +18,16 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          'io.ox/tasks/util'], function (ext, taskApi, gt, strings, util) {
     "use strict";
     
-    var loadTile = function ()
-    {
+    var loadTile = function () {
         var prevDef = new $.Deferred();
-        taskApi.getAll().done(function (taskarray)
-                {
+        taskApi.getAll().done(function (taskarray) {
                 prevDef.resolve(taskarray);
             });
         
         return prevDef;
-    };
+    },
     
-    var drawTile = function (taskarray, $node)
-    {
+    drawTile = function (taskarray, $node) {
         if (taskarray.length > 0)
             {
             var task = taskarray[0];
@@ -50,46 +47,40 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             );
             var prio = $node.find(".priority");
         
-            if (task.priority === 3)
-            {
+            if (task.priority === 3) {
                 prio.text("\u2605\u2605\u2605");
             }
-        } else
-            {
+        } else {
             $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
         }
         
-    };
+    },
     
-    var load = function () {
+    load = function () {
         var def = new $.Deferred();
-        taskApi.getAll().done(function (taskarray)
-                {
+        taskApi.getAll().done(function (taskarray) {
             def.resolve(taskarray);
         });
         return def;
-    };
+    },
     
-    var draw = function (tasks) {
+    draw = function (tasks) {
         
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
-        $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
+        $('<h1>').addClass('clear-title').text(gt("Your tasks")).appendTo(node);
         tasks = util.sortTasks(tasks);
         
-        require(['io.ox/tasks/view-grid-template'], function (viewGrid)
-                {
+        require(['io.ox/tasks/view-grid-template'], function (viewGrid) {
                 
                 //interpret values for status etc
-                for (var i = 0; i < tasks.length; i++)
-                {
+                for (var i = 0; i < tasks.length; i++) {
                     tasks[i] = util.interpretTask(tasks[i]);
                 }
                 
                 viewGrid.drawSimpleGrid(tasks).appendTo(node);
             });
         
-        if (tasks.length === 0)
-            {
+        if (tasks.length === 0) {
             $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
         }
         

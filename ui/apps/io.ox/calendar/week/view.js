@@ -68,9 +68,8 @@ define('io.ox/calendar/week/view',
 
         onClickAppointment: function (e) {
             if ($(e.target).is('.appointment') && this.lasso === false) {
-                var target = $(e.currentTarget),
-                    cid = target.attr('data-cid'),
-                    obj = _.cid(target.attr('data-cid')),
+                var cid = $(e.currentTarget).attr('data-cid'),
+                    obj = _.cid(cid),
                     that = this;
                 
                 if (this.clickTimer === null) {
@@ -418,52 +417,64 @@ define('io.ox/calendar/week/view',
                     .height(pos.lenght)
                     .width(elWidth + '%');
                 }
-                that.$(i).append(e);
+                that.$('.weekcontainer ' + i).append(e);
                 
             });
             
-            $(function () {
-                var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
-                // init drag and resize widget on appointments
-                $('.day>.appointment')
-                    .draggable({
-                        grid: [$('.day:first').outerWidth(), gridHeight],
-                        scroll: true,
-                        snap: '.day',
-                        zIndex: 5,
-                        start: function (e, ui) {
-                            that.lassoMode = false;
-                            that.onEnterAppointment(e);
-                        },
-                        stop: function (e, ui) {
-                            that.lassoMode = true;
-                            console.log('drag stop', e, ui, that.calcTime(ui.position.top));
-                        },
-                        drag: function () {
-                            
-                        }
-                    })
-                    .resizable({
-                        grid: [1, gridHeight],
-                        handles: "n, s",
-                        distance: 1,
-                        start: function () {
-                            that.lassoMode = false;
-                        },
-                        stop: function (e, ui) {
-                            that.lassoMode = true;
-                            console.log('resize stop', e, ui);
-                        }
-                    });
-                // define drop areas
-                $('.weekcontainer>.day').droppable({
-                    drop: function (e, ui) {
-                        console.log('drop', e, ui);
-                        $(this).append(ui.draggable.css({left: 0}));
+            var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
+            // init drag and resize widget on appointments
+            $('.day>.appointment')
+                .draggable({
+                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    scroll: true,
+                    snap: '.day',
+                    zIndex: 2,
+                    opacity: 0.4,
+                    start: function (e, ui) {
+                        that.lassoMode = false;
+                        $(this)
+                            .css({width: '100%'});
+                        that.onEnterAppointment(e);
+                    },
+                    stop: function (e, ui) {
+                        that.lassoMode = true;
+                    },
+                    drag: function (e, ui) {
+                        // correct position
+                        $(this).data('draggable').position.left -= ui.originalPosition.left;
+                    }
+                })
+                .resizable({
+                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    handles: "n, s",
+                    distance: 1,
+                    start: function () {
+                        that.lassoMode = false;
+                    },
+                    stop: function (e, ui) {
+                        that.lassoMode = true;
+                        console.log('resize stop', e, ui);
                     }
                 });
-            }, this);
-            
+            // define drop areas
+            $('.weekcontainer>.day').droppable({
+                drop: function (e, ui) {
+                    that.lassoMode = true;
+                    $(this).append(ui.draggable.css({left: 0}));
+                    
+                    var startTS = date.Local.parse($(e.target).attr('date'), 'y-M-d').getTime() + that.calcTime(ui.position.top),
+                        cid = ui.draggable.attr('data-cid'),
+                        app = that.collection.get(cid).attributes,
+                        endTS = startTS + (app.end_date - app.start_date),
+                        obj = _.cid(cid);
+                    // FIXME remove local time
+                    _.extend(obj, {
+                        start_date: date.Local.localTime(startTS),
+                        end_date: date.Local.localTime(endTS)
+                    });
+                    that.trigger('updateAppointment', obj);
+                }
+            });
         },
         
         calcPos: function (ap) {
