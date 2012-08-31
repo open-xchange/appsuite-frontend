@@ -87,6 +87,22 @@ define('io.ox/office/editor/position',
                 Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                 return;
             }
+        } else {
+            if ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span'))  {
+                if ($(node).text().length === offset) {
+                    // Checking if an inline image follows
+                    var imageNode = null;
+                    if ((node.parentNode) && (node.parentNode.nextSibling) && (Utils.getNodeName(node.parentNode.nextSibling) === 'img')) {
+                        imageNode = node.parentNode.nextSibling;
+                    } else if ((node.nextSibling) && (Utils.getNodeName(node.nextSibling) === 'img')) {
+                        imageNode = node.nextSibling;
+                    }
+
+                    if (imageNode !== null) {
+                        imageFloatMode = Position.getPropertyValue(imageNode, 'mode'); // must be 'inline' mode
+                    }
+                }
+            }
         }
 
         // Checking offset for text nodes
