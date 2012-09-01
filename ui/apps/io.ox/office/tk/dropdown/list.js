@@ -13,8 +13,8 @@
 
 define('io.ox/office/tk/dropdown/list',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/dropdown'
-    ], function (Utils, DropDown) {
+     'io.ox/office/tk/dropdown/scrollable'
+    ], function (Utils, Scrollable) {
 
     'use strict';
 
@@ -25,7 +25,7 @@ define('io.ox/office/tk/dropdown/list',
 
     /**
      * Extends a Group object with a drop-down button and a drop-down menu
-     * containing a list of items. Extends the DropDown mix-in class with
+     * containing a list of items. Extends the Scrollable mix-in class with
      * functionality specific to the list drop-down element.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
@@ -34,12 +34,12 @@ define('io.ox/office/tk/dropdown/list',
      *
      * @constructor
      *
-     * @extends DropDown
+     * @extends Scrollable
      *
      * @param {Object} [options]
      *  A map of options to control the properties of the list. Supports all
-     *  options of the DropDown base class. Additionally, the following options
-     *  are supported:
+     *  options of the Scrollable base class. Additionally, the following
+     *  options are supported:
      *  @param {Boolean} [options.sorted=false]
      *      If set to true, the list items will be inserted ordered according
      *      to the registered sort functor (see 'option.sortFunctor').
@@ -69,48 +69,6 @@ define('io.ox/office/tk/dropdown/list',
             sortFunctor = Utils.getFunctionOption(options, 'sortFunctor');
 
         // private methods ----------------------------------------------------
-
-        /**
-         * Handles 'menuopen' events and initializes the drop-down menu.
-         */
-        function menuOpenHandler() {
-
-            var // the outer menu node containing the list element
-                menuNode = self.getMenuNode(),
-                // width of the drop-down group buttons (used as min-width of the menu)
-                minWidth = self.getNode().width(),
-                // width of the scroll bar in pixels
-                scrollBarWidth = 0;
-
-            // set maximum height of the drop-down menu, depending on window height
-            menuNode
-                .css('max-height', (window.innerHeight - menuNode.offset().top - 10) + 'px')
-                .scrollTop(0);
-
-            // Calculate the width of the drop-down menu. Work around a Firefox
-            // bug which displays the menu too narrow (it restricts the width
-            // of the drop-down menu to the width of the group element, if the
-            // width of the list items is set to '100%' to give them the same
-            // width). If this is not a bug but a CSS feature, it needs to be
-            // worked around anyway.
-
-            // 1) Set width of menu node and list node to 'auto' to let the
-            // containers shrink together (needed if a scroll bar has been
-            // shown the last time, which is hidden now due to a larger browser
-            // window). Here, Firefox shrinks too much.
-            menuNode.css('width', 'auto');
-            listNode.css('width', 'auto');
-            // 2) Calculate the width of the scroll bar, if existing.
-            scrollBarWidth = menuNode.innerWidth() - listNode.outerWidth();
-            // 3) Expand the width of the outer menu node, this gives the list
-            // node enough space. Then, set it to the calculated width of the
-            // list node. Take the width of the top-level buttons as minimum
-            // width into account.
-            menuNode.width(99999).width(Math.max(minWidth - 2, listNode.outerWidth() + scrollBarWidth));
-            // 4) Expand width of the list node to the menu width (needed in
-            // case minimum width is active).
-            listNode.css('width', '100%');
-        }
 
         /**
          * Handles key events in the open list menu element.
@@ -149,7 +107,7 @@ define('io.ox/office/tk/dropdown/list',
 
         // base constructor ---------------------------------------------------
 
-        DropDown.call(this, listNode, options);
+        Scrollable.call(this, listNode, options);
 
         // methods ------------------------------------------------------------
 
@@ -234,14 +192,13 @@ define('io.ox/office/tk/dropdown/list',
         this.getMenuNode().addClass('list');
 
         // register event handlers
-        this.on('menuopen', menuOpenHandler);
         listNode.on('keydown keypress keyup', listKeyHandler);
 
     } // class List
 
     // exports ================================================================
 
-    // derive this class from class DropDown
-    return DropDown.extend({ constructor: List });
+    // derive this class from class Scrollable
+    return Scrollable.extend({ constructor: List });
 
 });

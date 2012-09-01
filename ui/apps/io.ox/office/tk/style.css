@@ -363,51 +363,52 @@ div.io-ox-view-component {
                 border: 1px solid @control-border-color;
                 .border-radius(0);
 
-                /* the List mix-in class */
-                &.list {
+                /* the Scrollable mix-in class */
+                &.scrollable {
                     overflow-y: auto;
+                }
 
-                    > ul {
-                        display: inline-block;
+                /* the List mix-in class */
+                &.list > ul {
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+
+                    > li {
                         margin: 0;
                         padding: 0;
-                        list-style: none;
 
-                        > li {
-                            margin: 0;
-                            padding: 0;
+                        > button {
+                            width: 100%;
+                            height: 26px;
+                            border-color: transparent;
+                            line-height: 24px;
+                            text-align: left;
 
-                            > button {
-                                width: 100%;
-                                height: 26px;
-                                border-color: transparent;
-                                line-height: 24px;
-                                text-align: left;
+                            /* mouse hover and focus effect */
+                            &:hover:not(:active), &:focus:not(:active) {
+                                background-color: fade(@control-border-color, 25%);
+                            }
+
+                            /* active effect (button currently clicked) */
+                            &:active {
+                                background-color: fade(@control-border-color, 50%);
+                            }
+
+                            &.selected {
+                                background-color: fade(@selected-border-color, 50%);
 
                                 /* mouse hover and focus effect */
                                 &:hover:not(:active), &:focus:not(:active) {
-                                    background-color: fade(@control-border-color, 25%);
+                                    background-color: fade(@selected-border-color, 75%);
+                                    border-color: transparent;
                                 }
 
                                 /* active effect (button currently clicked) */
                                 &:active {
-                                    background-color: fade(@control-border-color, 50%);
-                                }
-
-                                &.selected {
-                                    background-color: fade(@selected-border-color, 50%);
-
-                                    /* mouse hover and focus effect */
-                                    &:hover:not(:active), &:focus:not(:active) {
-                                        background-color: fade(@selected-border-color, 75%);
-                                        border-color: transparent;
-                                    }
-
-                                    /* active effect (button currently clicked) */
-                                    &:active {
-                                        background-color: @selected-border-color;
-                                        border-color: transparent;
-                                    }
+                                    background-color: @selected-border-color;
+                                    border-color: transparent;
                                 }
                             }
                         }
@@ -610,27 +611,32 @@ div.io-ox-view-component {
 
     /* menu box ------------------------------------------------------------ */
 
-    &.menubox > .group {
+    &.menubox {
+        display: inline-block;
+	
+        > .group {
+            display: list-item;
 
-        /* group spacing */
-        &.separator {
-            height: 6px;
-        }
+	        /* group spacing */
+	        &.separator {
+	            height: 6px;
+	        }
 
-        /* menu items as buttons */
-        > button {
-            width: 100%;
-            border-color: transparent;
-            text-align: left;
+	        /* menu items as buttons */
+	        > button {
+	            width: 100%;
+	            border-color: transparent;
+	            text-align: left;
 
-            /* mouse hover and focus effect */
-            &:hover:not(:active), &:focus:not(:active) {
-                background-color: fade(@control-border-color, 25%);
-            }
+	            /* mouse hover and focus effect */
+	            &:hover:not(:active), &:focus:not(:active) {
+	                background-color: fade(@control-border-color, 25%);
+	            }
 
-            /* active effect (button currently clicked) */
-            &:active {
-                background-color: fade(@control-border-color, 50%);
+	            /* active effect (button currently clicked) */
+	            &:active {
+	                background-color: fade(@control-border-color, 50%);
+	            }
             }
         }
     }

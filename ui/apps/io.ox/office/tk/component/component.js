@@ -14,11 +14,11 @@
 define('io.ox/office/tk/component/component',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/tk/dropdown/dropdown',
+     'io.ox/office/tk/dropdown/scrollable',
      'io.ox/office/tk/control/group',
      'io.ox/office/tk/control/label',
      'io.ox/office/tk/control/button'
-    ], function (Events, Utils, DropDown, Group, Label, Button) {
+    ], function (Events, Utils, Scrollable, Group, Label, Button) {
 
     'use strict';
 
@@ -326,7 +326,7 @@ define('io.ox/office/tk/component/component',
             var // a drop-down button containing the DOM element of the component
                 group = new Group(options);
 
-            DropDown.call(group, component.getNode(), options);
+            Scrollable.call(group, component.getNode(), options);
             insertGroup(group);
 
             // forward all component events to listeners of this view component

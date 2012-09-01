@@ -28,11 +28,10 @@ define('io.ox/office/tk/dropdown/dropdown',
 
     /**
      * Extends a Group object with a drop-down menu. Creates a new drop-down
-     * button in the group or reuses an existing button extending it with a
-     * caret sign. Implements mouse and keyboard event handling for the
-     * drop-down button (open, close, automatic close of the drop-down menu on
-     * focus navigation). Adds new methods to the group to control the
-     * drop-down button and menu.
+     * button in the group and extends it with a caret sign. Implements mouse
+     * and keyboard event handling for the drop-down button (open, close,
+     * automatic close of the drop-down menu on focus navigation). Adds new
+     * methods to the group to control the drop-down button and menu.
      *
      * Note: This is a mix-in class supposed to extend an existing instance of
      * the class Group or one of its derived classes. Expects the symbol 'this'
