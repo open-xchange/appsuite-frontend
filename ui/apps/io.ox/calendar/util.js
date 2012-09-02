@@ -214,7 +214,7 @@ define("io.ox/calendar/util",
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     animation: false,
-                    trigger: 'click',
+                    trigger: 'hover',
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
