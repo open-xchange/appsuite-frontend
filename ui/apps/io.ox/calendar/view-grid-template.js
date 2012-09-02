@@ -35,9 +35,13 @@ define("io.ox/calendar/view-grid-template",
                     .append(date = $("<div>").addClass("date"))
                     .append(isPrivate = $("<div>").addClass("private").hide())
                     .append(title = $("<div>").addClass("title"))
-                    .append(location = $("<div>").addClass("location"))
-                    .append(shown_as = $("<div/>").addClass("abs shown_as"))
-                    .append(conflicts = $("<div/>").addClass("conflicts").hide());
+                    .append(
+                        $('<div class="location-row">').append(
+                            shown_as = $('<span class="shown_as label label-info">&nbsp;</span>'),
+                            location = $('<span class="location">')
+                        )
+                    )
+                    .append(conflicts = $("<div>").addClass("conflicts").hide());
                 return { title: title, location: location, time: time, date: date, shown_as: shown_as, conflicts: conflicts, isPrivate: isPrivate };
             },
             set: function (data, fields, index) {
@@ -45,9 +49,9 @@ define("io.ox/calendar/view-grid-template",
                 fields.location.text(data.location || '\u00A0');
                 util.addTimezoneLabel(fields.time.empty(), data);
                 fields.date.text(util.getDateInterval(data));
-                fields.shown_as.get(0).className = "abs shown_as " + util.getShownAsClass(data);
+                fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
                 if (data.conflicting_participants) {
-                    var conflicts = $('<span/>');
+                    var conflicts = $('<span>');
                     fields.conflicts.text(gt('Conflicts:'));
                     fields.conflicts.append(conflicts);
                     data.conflicting_participants.each(function (participant, index, list) {

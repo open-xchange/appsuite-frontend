@@ -30,6 +30,7 @@ define("io.ox/calendar/util",
                      gettext("Absent"), gettext("Free")
                      ],
         shownAsClass = "reserved temporary absent free".split(' '),
+        shownAsLabel = "label-info label-warning label-important label-success".split(' '),
         // confirmation status (none, accepted, declined, tentative)
         n_confirm = ['', '<i class="icon-ok">', '<i class="icon-remove">', '<i class="icon-question-sign">'],
         confirmClass = ["", "accepted", "declined", "tentative"],
@@ -183,7 +184,8 @@ define("io.ox/calendar/util",
         },
 
         onSameDay: function (t1, t2) {
-            return new date.Local(t1).setHours(0, 0, 0, 0) === new date.Local(t2).setHours(0, 0, 0, 0);
+            // don't change this to date.Local; thisis just a simple comparison
+            return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
         },
 
         getTimeInterval: function (data, D) {
@@ -212,6 +214,7 @@ define("io.ox/calendar/util",
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     animation: false,
+                    trigger: 'click',
                     placement: function (tip, element) {
                         var off = $(element).offset(),
                             width = $('body').width() / 2;
@@ -241,6 +244,10 @@ define("io.ox/calendar/util",
 
         getShownAsClass: function (data) {
             return shownAsClass[(data.shown_as || 1) - 1];
+        },
+
+        getShownAsLabel: function (data) {
+            return shownAsLabel[(data.shown_as || 1) - 1];
         },
 
         getShownAs: function (data) {
