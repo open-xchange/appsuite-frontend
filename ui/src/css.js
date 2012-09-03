@@ -22,8 +22,8 @@
     }
 
     function relativeCSS(path, css) {
-        return css.replace(/url\((?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
-                           "url(" + path);
+        return css.replace(/url\((\s*["']?)(?!\/|[A-Za-z][A-Za-z0-9+.-]*\:)/g,
+                           "url($1" + path);
     }
 
     function insert(name, css, selector) {
@@ -70,12 +70,7 @@
             req(['/raw;' + name], load);
         } });
     }());
-/*
-    define("text", { load: function(name, parentRequire, load, config) {
-        name = name.replace(/.*!/, '');
-        $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
-    } });
-*/
+    
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {

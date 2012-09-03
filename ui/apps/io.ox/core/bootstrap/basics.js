@@ -1,14 +1,11 @@
+// NOJSHINT
+//@include ../../../../lib/bootstrap/js/bootstrap.js
 
-(function () {
+define('io.ox/core/bootstrap/basics',
+    ['css!io.ox/core/bootstrap/css/bootstrap.css'], function () {
 
     'use strict';
 
-    define('io.ox/core/bootstrap/basics',
-        [ox.base + '/bootstrap.js',
-         'less!io.ox/core/bootstrap/less/bootstrap-all.less'], function () {
-
-        // fix bootstrap dropdown (close on click)
-        $('body').off('click.dropdown touchstart.dropdown.data-api', '.dropdown');
-    });
-
-}());
+    // fix bootstrap dropdown (close on click)
+    $('body').off('click.dropdown touchstart.dropdown.data-api', '.dropdown');
+});

@@ -252,19 +252,9 @@ utils.concat("pre-core.js",
     ]), { type: "source" }
 );
 
-utils.concat("bootstrap.js",
-    utils.list("apps/io.ox/core/bootstrap/js", [
-        'bootstrap-transition.js',
-        'bootstrap-tooltip.js',
-        'bootstrap-dropdown.js',
-        'bootstrap-button.js',
-        'bootstrap-alert.js',
-        'bootstrap-popover.js',
-        'bootstrap-datepicker.js',
-        'bootstrap-typeahead.js',
-        'bootstrap-combobox.js'
-    ]), { type: "source" }
-);
+//Twitter Bootstrap
+utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.css", "img/*"]),
+    { to: utils.dest("apps/io.ox/core/bootstrap") });
 
 // module dependencies
 
