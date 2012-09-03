@@ -111,7 +111,6 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         params: params
                     })
                     .done(function (interaction) {
-                        console.log("interaction", interaction);
                         window["callback_" + callbackName] = function (response) {
                             cache[service.id].accounts[response.data.id] = response.data;
                             def.resolve(response.data);
