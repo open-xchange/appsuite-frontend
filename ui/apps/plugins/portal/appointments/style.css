@@ -2,12 +2,3 @@
     padding: 6px 13px ;
     height: 63px; //I'd be damned if I knew why 4em doesn't work. Works in the calendar vgrid...
 }
-.io-ox-portal-calendar-timeSpan {
-    color: #e33;
-}
-.io-ox-portal-calendar-nextTitle {
-    font-weight: 500;
-}
-.io-ox-portal-calendar-nextLocation {
-    font-style: italic;
-}
