@@ -16,7 +16,8 @@ define('io.ox/settings/main',
       'io.ox/core/extensions',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
+      'io.ox/core/commons',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons) {
 
     'use strict';
 
@@ -47,12 +48,6 @@ define('io.ox/settings/main',
         }
     };
 
-
-
-
-
-
-
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
@@ -75,8 +70,8 @@ define('io.ox/settings/main',
         }
     }
 
-
     app.setLauncher(function () {
+
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
             toolbar: true,
@@ -88,10 +83,8 @@ define('io.ox/settings/main',
             var settingsID = currentSelection.id + '/settings';
             ext.point(settingsID + '/detail').invoke('save');
         };
+
         win.on('hide', onHideSettingsPane);
-
-
-
 
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
@@ -162,7 +155,8 @@ define('io.ox/settings/main',
             settingsPath = obj.id + '/settings/pane';
             extPointPart = obj.id + '/settings';
             right.empty().busy();
-            require([ settingsPath ], function (m) {
+            require([settingsPath], function (m) {
+                right.empty(); // again, since require makes this async
                 ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
                 right.idle();
@@ -174,8 +168,10 @@ define('io.ox/settings/main',
                 if (!isOpenedTheFirstTime) {
                     onHideSettingsPane();
                 }
-                currentSelection = selection[0];
-                showSettings(currentSelection);
+                if (_.cid(selection[0]) !== _.cid(currentSelection)) {
+                    // show if changed
+                    showSettings(currentSelection = selection[0]);
+                }
             } else {
                 right.empty();
             }
@@ -183,12 +179,7 @@ define('io.ox/settings/main',
 
         grid.setMultiple(false);
 
-        win.on('show', function () {
-            grid.selection.keyboard(true);
-        });
-        win.on('hide', function () {
-            grid.selection.keyboard(false);
-        });
+        commons.wireGridAndWindow(grid, win);
 
         // go!
         win.show(function () {
@@ -197,10 +188,6 @@ define('io.ox/settings/main',
 
         grid.refresh();
     });
-
-    app.getGrid = function () {
-        return grid;
-    };
 
     return {
         getApp: app.getInstance
