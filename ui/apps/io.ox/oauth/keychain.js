@@ -112,6 +112,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                     })
                     .done(function (interaction) {
                         window["callback_" + callbackName] = function (response) {
+                            // TODO handle a possible error object in response
                             cache[service.id].accounts[response.data.id] = response.data;
                             def.resolve(response.data);
                             delete window["callback_" + callbackName];
