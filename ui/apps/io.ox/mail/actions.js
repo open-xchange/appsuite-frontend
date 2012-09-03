@@ -383,13 +383,12 @@ define('io.ox/mail/actions',
                                 {
 
                                 //Calculate the right time
-                                endDate = tasksUtil.computePopupTime(endDate, dateSelector.find(':selected').attr('finderId'));
-
+                                var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(':selected').attr('finderId'));
                                 taskApi.create({title: titleInput.val(),
                                     folder_id: config.get('folder.tasks'),
-                                    end_date: endDate.getTime(),
-                                    start_date: endDate.getTime(),
-                                    alarm: endDate.getTime(),
+                                    end_date: dates.endDate.getTime(),
+                                    start_date: dates.alarmDate.getTime(),
+                                    alarm: dates.alarmDate.getTime(),
                                     note: noteInput.val(),
                                     status: 1,
                                     recurrence_type: 0,

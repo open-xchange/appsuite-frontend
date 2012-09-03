@@ -111,14 +111,13 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         params: params
                     })
                     .done(function (interaction) {
-
                         window["callback_" + callbackName] = function (response) {
                             cache[service.id].accounts[response.data.id] = response.data;
                             def.resolve(response.data);
                             delete window["callback_" + callbackName];
                             popupWindow.close();
                             self.trigger("create", response.data);
-                            self.trigger("refresh.all refresh.list");
+                            self.trigger("refresh.all refresh.list refresh^");
                             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                                 new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
                             });
@@ -126,7 +125,10 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
 
                         popupWindow.location = interaction.authUrl;
 
-                    }).fail(def.reject);
+                    }).fail(function (e) {
+                        popupWindow.close();
+                        def.reject("");
+                    });
                 });
 
             });
@@ -178,23 +180,29 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                 if (account) {
                     params.id = account.id;
                 }
+                var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
                 http.GET({
                     module: "oauth/accounts",
                     params: params
                 })
                 .done(function (interaction) {
-                    var popupWindow = null;
+
                     window["callback_" + callbackName] = function (response) {
                         cache[service.id].accounts[response.data.id] = response.data;
                         def.resolve(response.data);
                         delete window["callback_" + callbackName];
                         popupWindow.close();
                         self.trigger("update", response.data);
+                        self.trigger("refresh^");
                     };
-                    popupWindow = window.open(interaction.authUrl, "_blank", "height=400,width=600");
+                    popupWindow.location = interaction.authUrl;
 
                 })
-                .fail(def.reject);
+                .fail(function () {
+                    popupWindow.close();
+                    def.reject();
+                });
+
             });
 
             return def;

@@ -36,75 +36,77 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
     
     var util = {
             computePopupTime: function (time, finderId) {
-                var endDate = time;
-                var offset = endDate.getTimezoneOffset() * -1 * 60000;
+                var endDate = new Date(time.getTime()),
+                    weekDay = endDate.getDay(),
+                    alarmDate = new Date(time.getTime()),
+                    offset = alarmDate.getTimezoneOffset() * -1 * 60000;
                 
                 switch (finderId) {
                 case "0":
                 case "1":
                 case "2":
                 case "3":
-                    endDate.setTime(endDate.getTime() + lookupArray[finderId]);
+                    alarmDate.setTime(alarmDate.getTime() + lookupArray[finderId]);
                     break;
                 default:
-                    endDate.setTime(prepareTime(endDate));
+                    alarmDate.setTime(prepareTime(alarmDate));
                     switch (finderId) {
                     case "d0":
-                        endDate.setHours(6);
+                        alarmDate.setHours(6);
                         break;
                     case "d1":
-                        endDate.setHours(12);
+                        alarmDate.setHours(12);
                         break;
                     case "d2":
-                        endDate.setHours(15);
+                        alarmDate.setHours(15);
                         break;
                     case "d3":
-                        endDate.setHours(18);
+                        alarmDate.setHours(18);
                         break;
                     case "d4":
-                        endDate.setHours(22);
+                        alarmDate.setHours(22);
                         break;
                     default:
-                        endDate.setHours(6);
+                        alarmDate.setHours(6);
                         switch (finderId) {
                         case "t":
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24);
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24);
                             break;
                         case "ww":
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * 7);
                             break;
                         case "w0":
-                            var day = endDate.getDay() % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = alarmDate.getDay() % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w1":
-                            var day = (((endDate.getDay() - 1) % 7) + 7) % 7;//workaround: javascript modulo operator to stupid to handle negative numbers
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 1) % 7) + 7) % 7;//workaround: javascript modulo operator to stupid to handle negative numbers
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w2":
-                            var day = (((endDate.getDay() - 2) % 7) + 7) % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 2) % 7) + 7) % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w3":
-                            var day = (((endDate.getDay() - 3) % 7) + 7) % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 3) % 7) + 7) % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w4":
-                            var day = (((endDate.getDay() - 4) % 7) + 7) % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 4) % 7) + 7) % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w5":
-                            var day = (((endDate.getDay() - 5) % 7) + 7) % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 5) % 7) + 7) % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         case "w6":
-                            var day = (((endDate.getDay() - 6) % 7) + 7) % 7;
-                            endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - day));
+                            var day = (((alarmDate.getDay() - 6) % 7) + 7) % 7;
+                            alarmDate.setTime(alarmDate.getTime() + 60000 * 60 * 24 * (7 - day));
                             break;
                         default:
                             //cannot identify selector...set time now
                             //maybe errormessage
-                            endDate = new Date();
+                            alarmDate = new Date();
                             break;
                         }
                         break;
@@ -112,9 +114,28 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     break;
                 }
                 
-                endDate.setTime(endDate.getTime() + offset);
                 
-                return endDate;
+                endDate.setTime(prepareTime(endDate));
+                endDate.setHours(6);
+                if (weekDay < 1 || weekDay > 4) {
+                    weekDay = (((endDate.getDay() - 1) % 7) + 7) % 7;
+                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
+                } else {
+                    weekDay = (((endDate.getDay() - 5) % 7) + 7) % 7;
+                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
+                }
+                
+                if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
+                    endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
+                }
+                
+                alarmDate.setTime(alarmDate.getTime() + offset);
+                endDate.setTime(endDate.getTime() + offset);
+                var result = {
+                        endDate: endDate,
+                        alarmDate: alarmDate
+                    };
+                return result;
             },
     
             buildDropdownMenu: function (time) {
