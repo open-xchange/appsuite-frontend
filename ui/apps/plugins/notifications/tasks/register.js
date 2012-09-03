@@ -155,8 +155,10 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             e.stopPropagation();
         },
         remindAgain: function (e) {
-            var endDate = new Date();
-            endDate = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+            var endDate = new Date(),
+                dates;
+            dates = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
+            endDate = dates.alarmDate;
             api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
             e.stopPropagation();
             this.close();

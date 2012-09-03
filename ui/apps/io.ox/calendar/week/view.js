@@ -29,7 +29,7 @@ define('io.ox/calendar/week/view',
         
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
-        gridSize:       4,      // grid fragmentation of a hour
+        gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
         fulltimeHeight: 20,     // height of fulltime appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
@@ -50,6 +50,17 @@ define('io.ox/calendar/week/view',
         lasso:          false,  // lasso object
         lassoMode:      true,   // is lasso active
         
+        // calculate complete height of the grid
+        height: function () {
+            return this.cellHeight * this.slots * this.fragmentation;
+        },
+        
+        // calculate height of a single grid fragment
+        gridHeight: function () {
+            return this.cellHeight * this.fragmentation / this.gridSize;
+        },
+        
+        // define view events
         events: {
             'mousemove .weekcontainer>.day' : 'onLasso',
             'mouseup' : 'onLasso',
@@ -60,14 +71,17 @@ define('io.ox/calendar/week/view',
             'mouseleave .appointment': 'onLeaveAppointment'
         },
 
+        // init values from prespective
         initialize: function (options) {
             this.columns = options.columns;
             this.week = util.getWeekScaffold(options.startDate);
             this.collection.on('reset', this.renderAppointments, this);
         },
 
+        // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
-            if ($(e.target).is('.appointment') && this.lasso === false) {
+            console.log(e);
+            if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
                 var cid = $(e.currentTarget).attr('data-cid'),
                     obj = _.cid(cid),
                     that = this;
@@ -83,7 +97,7 @@ define('io.ox/calendar/week/view',
                             .addClass('opac');
                         $('[data-cid="' + cid + '"]').addClass('current');
                         that.trigger('showAppointment', e, obj);
-                    }, 150);
+                    }, 250);
                 }
     
                 if (this.clicks === 1) {
@@ -96,19 +110,26 @@ define('io.ox/calendar/week/view',
             }
         },
         
+        // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
+            if (this.lassoMode) {
+                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
+            }
         },
         
+        // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
+            if (this.lassoMode) {
+                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
+            }
         },
         
+        // handler for double-click events on grid
         onCreateAppointment: function (e) {
             if ($(e.target).is('.timeslot')) {
                 // calculate timestamp for current position
-                var pos = this.calcTime(e.target.offsetTop + e.offsetY),
-                    startTS = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime() + (pos - pos % (date.HOUR / this.gridSize));
+                var pos = this.getTimeFromPos(e.target.offsetTop + e.offsetY),
+                    startTS = date.Local.parse($(e.currentTarget).attr('date'), 'y-M-d').getTime() + pos;
                 // FIXME: remove localtime
                 startTS = date.Local.localTime(startTS);
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
@@ -126,9 +147,7 @@ define('io.ox/calendar/week/view',
             if (!this.lassoMode) {
                 return;
             }
-            var MousePosY = e.target.offsetTop + e.offsetY;
-            // normalize to gird size
-            MousePosY -= MousePosY % (this.cellHeight * this.fragmentation / this.gridSize);
+            var MousePosY = this.roundToGrid(e.target.offsetTop + e.offsetY);
             // switch mouse events
             switch (e.type) {
             case 'mousemove':
@@ -160,13 +179,17 @@ define('io.ox/calendar/week/view',
                 
             case 'mouseup':
                 if (this.lasso && e.which === 1) {
-                    var start = date.Local.parse(this.lasso.parent().attr('date'), 'y-M-d').add(this.calcTime(this.lasso.position().top)),
-                        end = new date.Local(start).add(this.calcTime(this.lasso.outerHeight()));
+                    var start = date.Local.parse(this.lasso.parent().attr('date'), 'y-M-d').add(this.getTimeFromPos(this.lasso.position().top)),
+                        end = new date.Local(start).add(this.getTimeFromPos(this.lasso.outerHeight())),
+                        newApp = {
+                            start_date: date.Local.localTime(start.getTime()),
+                            end_date: date.Local.localTime(end.getTime())
+                        };
                     // delete div and reset object
                     this.lasso.remove();
                     this.lasso = false;
                     // FIXME: remove localtime
-                    this.trigger('openCreateAppointment', e, {start_date: date.Local.localTime(start.getTime()), end_date: date.Local.localTime(end.getTime())});
+                    this.trigger('openCreateAppointment', e, newApp);
                 }
                 break;
 
@@ -281,7 +304,6 @@ define('io.ox/calendar/week/view',
             
             // loop over all appointments to split and create divs
             this.collection.each(function (model) {
-
                 var startDate = new date.Local(model.get('start_date')),
                     endDate = new date.Local(model.get('end_date') - 1),
                     start = startDate.format('y-M-d'),
@@ -336,7 +358,7 @@ define('io.ox/calendar/week/view',
                             endDate = new date.Local(startDate.getTime());
                             endDate.setHours(23, 59, 59, 999);
                         } else {
-                            endDate = new date.Local(model.get('end_date') - 1);
+                            endDate = new date.Local(model.get('end_date'));
                         }
                         
                         var app = this.renderAppointment(model.attributes),
@@ -408,7 +430,7 @@ define('io.ox/calendar/week/view',
                 for (var j = 0; j < e.length; j++) {
                     var pos = that.calcPos(e[j]),
                         leftWidth = ((that.appWidth - elWidth) / (colPos.length - 1)) * e[j].pos.index;
-                    
+
                     e[j].css({
                         top: pos.start,
                         minHeight: that.cellHeight + 'px',
@@ -422,11 +444,10 @@ define('io.ox/calendar/week/view',
                 
             });
             
-            var gridHeight = that.cellHeight * that.fragmentation / that.gridSize;
             // init drag and resize widget on appointments
             $('.day>.appointment')
                 .draggable({
-                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    grid: [$('.day:first').outerWidth(), that.gridHeight()],
                     scroll: true,
                     snap: '.day',
                     zIndex: 2,
@@ -448,15 +469,40 @@ define('io.ox/calendar/week/view',
                 })
                 .resizable({
                     handles: "n, s",
-                    grid: [$('.day:first').outerWidth(), gridHeight],
+                    grid: [0, that.gridHeight()],
+                    minHeight: that.gridHeight(),
+                    containment: "parent",
                     start: function (e, ui) {
-                        console.log('resize start', e, ui, $(this));
                         that.lassoMode = false;
                         $(this).addClass('opac');
                     },
+                    resize:  function (e, ui) {
+                        // correct size
+                        $(this).width(ui.originalSize.width);
+                    },
                     stop: function (e, ui) {
-                        console.log('resize stop', e, ui);
+                        var el = $(this);
                         that.lassoMode = true;
+                        el.removeClass('opac');
+                        
+                        var obj = _.cid(el.attr('data-cid'));
+                        if (el.position().top !== ui.originalPosition.top) {
+                            // FIXME remove local time
+                            _.extend(obj, {
+                                start_date: date.Local.localTime(date.Local.parse($(this).parent().attr('date'), 'y-M-d').getTime() + that.getTimeFromPos(el.position().top)),
+                                ignore_conflicts: true
+                            });
+                            el.busy();
+                            that.trigger('updateAppointment', obj);
+                        } else if (el.height() !== ui.originalSize.height) {
+                            // FIXME remove local time
+                            _.extend(obj, {
+                                end_date: date.Local.localTime(date.Local.parse($(this).parent().attr('date'), 'y-M-d').getTime() + that.getTimeFromPos(el.position().top + el.height())),
+                                ignore_conflicts: true
+                            });
+                            el.busy();
+                            that.trigger('updateAppointment', obj);
+                        }
                     }
                 });
             // define drop areas
@@ -464,39 +510,41 @@ define('io.ox/calendar/week/view',
                 drop: function (e, ui) {
                     that.lassoMode = true;
                     $(this).append(ui.draggable.css({left: 0}));
-                    
-                    var startTS = date.Local.parse($(e.target).attr('date'), 'y-M-d').getTime() + that.calcTime(ui.position.top),
+                    var startTS = date.Local.parse($(e.target).attr('date'), 'y-M-d').getTime() + that.getTimeFromPos(ui.position.top),
                         cid = ui.draggable.attr('data-cid'),
                         app = that.collection.get(cid).attributes,
-                        endTS = startTS + (app.end_date - app.start_date),
                         obj = _.cid(cid);
                     // FIXME remove local time
                     _.extend(obj, {
                         start_date: date.Local.localTime(startTS),
-                        end_date: date.Local.localTime(endTS)
+                        end_date: date.Local.localTime(startTS + (app.end_date - app.start_date)),
+                        ignore_conflicts: true
                     });
                     that.trigger('updateAppointment', obj);
                 }
             });
         },
+
+        roundToGrid: function (pos) {
+            return pos - pos % this.gridHeight();
+        },
         
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
-                height = this.cellHeight * this.slots * this.fragmentation,
+                that = this,
                 calc = function (d) {
-                    return (d.getHours() / 24 + d.getMinutes() / 1440) * height;
+                    return (d.getHours() / 24 + d.getMinutes() / 1440) * that.height();
                 },
                 s = calc(start);
-            
             return {
                 start: s,
-                lenght: calc(end) - s
+                lenght: Math.max(calc(end) - s, that.gridHeight())
             };
         },
         
-        calcTime: function (pos) {
-            return Math.max(0, pos / (this.cellHeight * this.slots * this.fragmentation) * date.DAY);
+        getTimeFromPos: function (pos) {
+            return Math.max(0, this.roundToGrid(pos) / this.height() * date.DAY);
         }
         
     });

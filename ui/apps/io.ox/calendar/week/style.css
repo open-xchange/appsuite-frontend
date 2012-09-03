@@ -199,18 +199,13 @@
     }
     
     .appointment {
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
         position: absolute;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        line-height: 13px;
-        background-color: #08c;
-        color: white;
         margin-bottom: 1px;
-        padding: 2px 7px 2px 7px;
-        overflow: hidden;
-        text-overflow: ellipsis;
         cursor: pointer;
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
         transition: background-color, color 0.1s;
@@ -219,7 +214,19 @@
         -webkit-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
-}
+    }
+
+    .appointment-content {
+        height: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        line-height: 13px;
+        color: white;
+        padding: 2px 7px 2px 7px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
     
     .appointment.current {
         z-index: 1;
@@ -317,7 +324,7 @@
     cursor: n-resize;
     height: 7px;
     width: 100%;
-    top: 0px;
+    top: -3px;
     left: 0;
 }
 
@@ -325,6 +332,6 @@
     cursor: s-resize;
     height: 7px;
     width: 100%;
-    bottom: 0px;
+    bottom: -3px;
     left: 0;
 }
