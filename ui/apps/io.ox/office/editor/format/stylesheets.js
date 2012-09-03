@@ -21,18 +21,6 @@ define('io.ox/office/editor/format/stylesheets',
     // private static functions ===============================================
 
     /**
-     * Returns whether the passed style sheet is a descendant of the other
-     * passed style sheet.
-     */
-    function isDescendant(styleSheet, ancestorStyleSheet) {
-        while (styleSheet) {
-            if (styleSheet === ancestorStyleSheet) { return true; }
-            styleSheet = styleSheet.parent;
-        }
-        return false;
-    }
-
-    /**
      * Returns the attribute map stored in the passed DOM element.
      *
      * @param {jQuery} element
@@ -106,6 +94,18 @@ define('io.ox/office/editor/format/stylesheets',
         // private methods ----------------------------------------------------
 
         /**
+         * Returns whether the passed style sheet is a descendant of the other
+         * passed style sheet.
+         */
+        function isDescendant(styleSheet, ancestorStyleSheet) {
+            while (styleSheet) {
+                if (styleSheet === ancestorStyleSheet) { return true; }
+                styleSheet = styleSheets[styleSheet.parentId];
+            }
+            return false;
+        }
+
+        /**
          * Returns whether the passed string is the name of a supported
          * attribute.
          *
@@ -148,7 +148,7 @@ define('io.ox/office/editor/format/stylesheets',
             function collectAttributes(styleSheet) {
                 if (styleSheet) {
                     // call recursively to get the attributes of the ancestor style sheets
-                    collectAttributes(styleSheet.parent);
+                    collectAttributes(styleSheets[styleSheet.parentId]);
                     // add own attributes
                     _(attributes).extend(styleSheet.attributes);
                 } else {
@@ -203,19 +203,17 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.addStyleSheet = function (id, name, parentId, attributes, isDefault) {
 
-            var // old parent of the existing style sheet
-                parent = (id in styleSheets) ? styleSheets[id].parent : null,
-                // get or create a style sheet object
+            var // get or create a style sheet object
                 styleSheet = styleSheets[id] || (styleSheets[id] = {});
 
             // set user-defined name of the style sheet
             styleSheet.name = name;
 
             // set parent of the style sheet, check for cyclic references
-            styleSheet.parent = styleSheets[parent];
-            if (isDescendant(styleSheet.parent, styleSheet)) {
+            styleSheet.parentId = parentId;
+            if (isDescendant(styleSheets[styleSheet.parentId], styleSheet)) {
                 Utils.warn('StyleSheets.addStyleSheet(): cyclic reference, cannot set style sheet parent');
-                styleSheet.parent = null;
+                styleSheet.parentId = null;
             }
 
             // set attributes (allow any attribute names, do not restrict to definitions)
@@ -249,8 +247,8 @@ define('io.ox/office/editor/format/stylesheets',
             if (styleSheet) {
                 // update parent of all style sheets referring to the removed style sheet
                 _(styleSheets).each(function (childSheet) {
-                    if (childSheet.parent === styleSheet) {
-                        childSheet.parent = styleSheet.parent;
+                    if (id === childSheet.parentId) {
+                        childSheet.parentId = styleSheet.parentId;
                     }
                 });
 
