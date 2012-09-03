@@ -44,10 +44,10 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         
             $node.append(
                     $('<div class="io-ox-clear io-ox-portal-preview">').append(
-                            $("<span>").text(gt("Next due task")),
-                            $("<div>").text(strings.shorten(task.title, 33)).addClass("io-ox-portal-tasks-preview-title"),
-                            $('<span>').text(gt("Due in") + " " + task.end_date).addClass("io-ox-portal-tasks-preview-date"),
-                            $("<div>").text(strings.shorten(task.note, 100))
+                            $("<span>").text(gt("Next due task") + ': '),
+                            $("<span>").text(strings.shorten(task.title, 50) + ' ').addClass("io-ox-portal-tasks-preview-title"),
+                            $('<span>').text(gt("Due in") + " " + task.end_date + ' ').addClass("io-ox-portal-tasks-preview-date"),
+                            $("<span>").text(strings.shorten(task.note, 100)).addClass("io-ox-portal-tasks-preview-note")
                     )
             );
             
@@ -99,9 +99,9 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         draw: draw,
         preview: function () {
             var deferred = $.Deferred();
-            loadTile().done(function (appointments) {
+            loadTile().done(function (getTasks) {
                 var $node = $('<div>');
-                drawTile(appointments, $node);
+                drawTile(getTasks, $node);
                 deferred.resolve($node);
             });
             return deferred;
