@@ -11,6 +11,9 @@
 -->
 
 <part id="scaffold">
+    <div class="toolbar">
+        <div class=""></div>
+    </div>
     <div class="abs">
         <div class="fulltime-container">
             <div class="fulltime-lable"></div>
@@ -39,7 +42,9 @@
 
 <part id="appointment">
     <div class="appointment {{= it.shownAs }}{{= it.private_flag ? ' private' : '' }}{{= it.unconfirmed ? ' unconfirmed' : '' }}" data-cid="{{= it.cid }}">
-        {{! it.title }}
-        <span class="location">{{= _.fallback(it.location, '') }}</span>
+        <div class="appointment-content">
+            <span class="title">{{! it.title }}</span>
+            <span class="location">{{= _.fallback(it.location, '') }}</span>
+        </div>
     </div>
 </part>
