@@ -118,7 +118,8 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                             delete window["callback_" + callbackName];
                             popupWindow.close();
                             self.trigger("create", response.data);
-                            self.trigger("refresh.all refresh.list refresh^");
+                            self.trigger("refresh.all refresh.list");
+                            ox.trigger("refresh-portal", [true]);
                             require(["io.ox/core/tk/dialogs"], function (dialogs) {
                                 new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
                             });
@@ -194,7 +195,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         delete window["callback_" + callbackName];
                         popupWindow.close();
                         self.trigger("update", response.data);
-                        self.trigger("refresh^");
+                        ox.trigger("refresh-portal", [true]);
                     };
                     popupWindow.location = interaction.authUrl;
 
