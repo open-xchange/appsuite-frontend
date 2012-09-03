@@ -247,6 +247,8 @@ define("gettext", function (gettext) {
     };
 });
 
+define('settings', ['io.ox/core/settings'], function (api) { return api; });
+
 /*
  * dot.js template loader
  */
