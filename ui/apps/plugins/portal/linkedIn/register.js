@@ -105,7 +105,8 @@ define("plugins/portal/linkedIn/register",
             return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
         },
         performSetUp: function () {
-            return keychain.createInteractively('linkedin');
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('linkedin', win);
         },
         loadTile: function () {
             return proxy.request({

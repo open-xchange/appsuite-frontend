@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
- 
+
  /**
  ext.point("io.ox/keychain/api").extend({
     id: ...,
@@ -26,7 +26,7 @@
     },
     hasStandardAccount: function () {
         // return true, if there is a standard account, false otherwise
-        
+
     },
     createInteractively: function (e) { // e := a click event that triggered this dialog
         // Open a dialog or wizard to create an account of this type
@@ -42,17 +42,17 @@
         // After the update #get and #getAll are supposed to return the new state.
     }
  })
- 
+
  also add your plugin to serverConfig.plugins.keychain
  **/
 
 define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].concat(ox.serverConfig.plugins.keychain || []), function (ext, Events) {
     "use strict";
-    
+
     var api = {};
-    
+
     Events.extend(api);
-        
+
     function initExtensions() {
         api.submodules = {};
         ext.point("io.ox/keychain/api").each(function (extension) {
@@ -70,75 +70,75 @@ define("io.ox/keychain/api", ["io.ox/core/extensions", "io.ox/core/event"].conca
             }
         });
     }
-    
+
     initExtensions();
-    
+
     ext.point("io.ox/keychain/api").on("extended", initExtensions);
-    
-    
+
+
     function invokeExtension(accountType, method) {
         var extension = api.submodules[accountType];
-        
+
         if (!extension) {
             throw new Error("I do not know keys of accountType " + accountType + "! I suppose a needed plugin was not registered in the server configuration.");
         }
         return extension.invoke.apply(extension, [method, extension].concat($.makeArray(arguments).slice(2)));
     }
-    
+
     api.getAll = function () {
         var result = [];
         _(api.submodules).each(function (extension) {
             result = result.concat(invokeExtension(extension.id, "getAll"));
         });
-        
+
         return result;
     };
-    
+
     api.get = function (accountType, id) {
         return invokeExtension(accountType, "get", id);
     };
-    
+
     api.getStandardAccount = function (accountType) {
         return invokeExtension(accountType, "getStandardAccount");
     };
-    
+
     api.hasStandardAccount = function (accountType) {
         return invokeExtension(accountType, "hasStandardAccount");
     };
-    
+
     api.getOrCreateStandardAccountInteractively = function (accountType, e) {
         if (!api.hasStandardAccount(accountType)) {
             return api.createInteractively(accountType, e);
         }
     };
-    
-    api.createInteractively = function (accountType, e) {
-        return invokeExtension(accountType, "createInteractively", e);
+
+    api.createInteractively = function (accountType, win) {
+        return invokeExtension(accountType, "createInteractively", win);
     };
-    
+
     api.remove = function (account) {
         if (account.attributes) {
             account = account.toJSON();
         }
-        
+
         return invokeExtension(account.accountType, "remove", account);
     };
-    
+
     api.update = function (account) {
         if (account.attributes) {
             account = account.toJSON();
         }
-        
+
         return invokeExtension(account.accountType, "update", account);
     };
     api.isEnabled = function (accountType) {
         return !!api.submodules[accountType];
     };
-    
+
     api.accountType = function (accountType) {
         return api.submodules[accountType];
     };
-    
+
     return api;
-    
+
 });

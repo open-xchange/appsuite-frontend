@@ -87,7 +87,8 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             return this.getAll().length > 0;
         };
 
-        this.createInteractively = function () {
+        this.createInteractively = function (win) {
+            // TODO: die zeile hier drunter macht nix, oder!?
             var account = incoming(account),
                 def = $.Deferred();
 
@@ -104,7 +105,8 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
                         params.id = account.id;
                     }
 
-                    var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                    // this is far too late not to run into popup blocker
+                    var popupWindow = win || window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
 
                     http.GET({
                         module: "oauth/accounts",
