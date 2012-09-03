@@ -15,7 +15,8 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          "io.ox/tasks/api",
                                          'gettext!plugins/portal/tasks',
                                          'io.ox/core/strings',
-                                         'io.ox/tasks/util'], function (ext, taskApi, gt, strings, util) {
+                                         'io.ox/tasks/util',
+                                         'less!plugins/portal/tasks/style.css'], function (ext, taskApi, gt, strings, util) {
     "use strict";
     
     var loadTile = function () {
@@ -31,24 +32,27 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         if (taskarray.length > 0)
             {
             var task = taskarray[0];
+            
+            for (var i = 0; i < taskarray.length; i++) {
+                if (taskarray[i].end_date !== null) {
+                    task = taskarray[i];
+                    i = taskarray.length;
+                }
+            }
+            
             task = util.interpretTask(task);
         
             $node.append(
                     $('<div class="io-ox-clear io-ox-portal-preview">').append(
-                            $("<span>").text(gt("You have ") + taskarray.length + gt(" tasks")),
-                            $("<br>"),
-                            $("<b>").text(strings.shorten(task.title, 40)),
-                            $('<br>'),
-                            $('<span>').text(task.end_date),
-                            $('<span>').addClass("priority"),
-                            $("<br>"),
-                            $("<span>").text(strings.shorten(task.note, 100))
+                            $("<span>").text(gt("Next due task")),
+                            $("<div>").text(strings.shorten(task.title, 33)).addClass("io-ox-portal-tasks-preview-title"),
+                            $('<span>').text(gt("Due in") + " " + task.end_date).addClass("io-ox-portal-tasks-preview-date"),
+                            $("<div>").text(strings.shorten(task.note, 100))
                     )
             );
-            var prio = $node.find(".priority");
-        
-            if (task.priority === 3) {
-                prio.text("\u2605\u2605\u2605");
+            
+            if (task.end_date === "") {
+                $node.find(".io-ox-portal-tasks-preview-date").remove();
             }
         } else {
             $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
