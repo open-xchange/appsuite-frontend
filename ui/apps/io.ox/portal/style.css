@@ -270,11 +270,12 @@
     
     .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
 
-    .io-ox-portal-createMe { background-color: #555; }
+    .io-ox-portal-createMe { background-color: #444; }
     .io-ox-portal-createMe:hover { background-color: #333; }
     
     .io-ox-portal-createMe .centered {
-        padding-top: 2em;
+        line-height: 6em;
         text-align: center;
+        color: #888;
     }
 }

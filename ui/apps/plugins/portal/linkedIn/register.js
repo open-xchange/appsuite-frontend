@@ -197,7 +197,7 @@ define("plugins/portal/linkedIn/register",
             $node.append(
                 $('<h1>').text('LinkedIn'),
                 $('<div class="io-ox-portal-preview centered">').append(
-                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                    $('<div>').text(gt('Add your account'))
                 )
             );
         }

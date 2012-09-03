@@ -174,7 +174,7 @@ define('plugins/portal/facebook/register',
             $node.append(
                 $('<h1>').text('Facebook'),
                 $('<div class="io-ox-portal-preview centered">').append(
-                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                    $('<div>').text(gt('Add your account'))
                 )
             );
         }

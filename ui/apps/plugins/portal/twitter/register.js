@@ -258,7 +258,7 @@ define('plugins/portal/twitter/register',
             $node.append(
                 $('<h1>').text('Twitter'),
                 $('<div class="io-ox-portal-preview centered">').append(
-                    $('<div class="btn btn-inverse ">').text(gt('Add your account'))
+                    $('<div>').text(gt('Add your account'))
                 )
             );
         }
