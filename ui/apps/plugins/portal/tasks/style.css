@@ -14,3 +14,7 @@
  .io-ox-portal-tasks-preview-title {
     font-weight: bold;
 }
+
+ .io-ox-portal-tasks-preview-note {
+    color: rgba(255, 255, 255, 0.7);
+}
