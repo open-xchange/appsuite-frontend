@@ -132,7 +132,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
             });
-            this.$el.addClass('error');
+            this.nodes.controlGroup.addClass('error');
             this.nodes.controls.append(helpBlock);
             this.nodes.element.select();
         };
