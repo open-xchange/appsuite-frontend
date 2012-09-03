@@ -55,39 +55,25 @@ define('plugins/portal/mail/register',
         tileHeight: 2,
 
         loadTile: function () {
-            var folderLoaded = $.Deferred();
             var mailsLoaded = $.Deferred();
-
-            require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
-                folderApi.get({
-                    folder: folderApi.getDefaultFolder('mail'),
-                    cache: false,
-                    unseen: true
-                })
-                .done(function (folder) {
-                    folderLoaded.resolve(folder);
-                })
-                .fail(folderLoaded.reject);
-
+            require(['io.ox/mail/api'], function (mailApi) {
                 mailApi.getAll({
-                    folder: folderApi.getDefaultFolder('mail'),
+                    folder: mailApi.getDefaultFolder(),
                     cache: false
                 }, false)
                     .done(function (mails) {
                         if (mails.length === 0) {
                             mailsLoaded.resolve(null);
                         } else {
-                            var mail = _.extend({view: "text"}, mails[0]);
-                            mailApi.get(mail).done(function (loadedMail) {
-                                mailsLoaded.resolve(loadedMail);
-                            }).fail(mailsLoaded.reject);
+                            var mail = _.extend({ view: 'text', unseen: true }, mails[0]);
+                            mailApi.get(mail).then(mailsLoaded.resolve, mailsLoaded.reject);
                         }
                     })
                     .fail(mailsLoaded.reject);
             });
-            return $.when(folderLoaded, mailsLoaded);
+            return mailsLoaded;
         },
-        drawTile: function (folder, mail) {
+        drawTile: function (mail) {
             var deferred = $.Deferred();
             var $node = $(this);
             require(["io.ox/mail/api"], function (mailApi) {
