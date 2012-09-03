@@ -11,8 +11,9 @@
  * @author Viktor Pracht <viktor.pracht@open-xchange.com>
  */
 
-define.async('io.ox/core/date', ['io.ox/core/gettext', 'io.ox/core/config'],
-function (gettext, config) {
+define.async('io.ox/core/date',
+['io.ox/core/gettext', 'io.ox/core/config', 'gettext!io.ox/core/date'],
+function (gettext, config, gt) {
     /*jshint white:false */
     
     'use strict';
@@ -46,7 +47,7 @@ function (gettext, config) {
         DATE_TIME_TIMEZONE:  14,
         FULL_DATE:           15,
         
-        getFormat: function(format) {
+        getFormat: function (format) {
             format = format || api.DATE_TIME;
             if (typeof format === 'number') {
                 format = dateTimeFormats[format];
@@ -54,6 +55,113 @@ function (gettext, config) {
                 format = api.locale.formats[format];
             }
             return format;
+        },
+        
+        /**
+         * Formats a duration as a string
+         * @param {Number} t The duration in milliseconds
+         * @param {Boolean} until Specifies whether the returned text should be
+         * in objective case (if true) or in nominative case (if false).
+         * @type String
+         * @return The formatted interval.
+         */
+        formatDuration: function (t, until) {
+            var m = Math.round(t / api.MINUTE);
+            var Week = api.WEEK / api.MINUTE;
+            if (m >= Week && t % Week === 0) {
+                return get_w(Math.round(t / Week));
+            } else {
+                return days(t);
+            }
+            function get_w(w) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X weeks
+                    //#. %d is the number of weeks
+                    //#, c-format
+                    gt.npgettext('in', '%d week', '%d weeks', w) :
+                    //#. General duration (nominative case): X weeks
+                    //#. %d is the number of weeks
+                    //#, c-format
+                    gt.ngettext('%d week', '%d weeks', w),
+                    w);
+            }
+            function days(m) {
+                var Day = api.DAY / api.MIN;
+                if (m < Day) return hours(m);
+                var d = Math.floor(m / Day);
+                m = m % Day;
+                return m ? get_dhm(d, m) : get_d(d);
+            }
+            function get_d(d) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X days
+                    //#. %d is the number of days
+                    //#, c-format
+                    gt.npgettext('in', '%d day', '%d days', d) :
+                    //#. General duration (nominative case): X days
+                    //#. %d is the number of days
+                    //#, c-format
+                    gt.ngettext('%d day', '%d days', d),
+                    d);
+            }
+            function get_dhm(d, m) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X days, Y hours and Z minutes
+                    //#. %1$d is the number of days
+                    //#. %2$s is the text for the remainder of the last day
+                    //#, c-format
+                    gt.npgettext('in', '%1$d day, %2$s', '%1$d days, %2$s', d) :
+                    //#. General duration (nominative case): X days, Y hours and Z minutes
+                    //#. %1$d is the number of days
+                    //#. %2$s is the text for the remainder of the last day
+                    //#, c-format
+                    gt.ngettext('%1$d day, %2$s', '%1$d days, %2$s', d),
+                    d, hours(m));
+            }
+            function hours(m) {
+                if (m < 60) return minutes(m);
+                var h = Math.floor(t / 60);
+                m = m % 60;
+                return m ? get_hm(h, m) : get_h(h);
+            }
+            function get_h(h) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X hours
+                    //#. %d is the number of hours
+                    //#, c-format
+                    gt.npgettext('in', '%d hour', '%d hours', h) :
+                    //#. General duration (nominative case): X hours
+                    //#. %d is the number of hours
+                    //#, c-format
+                    gt.ngettext('%d hour', '%d hours', h),
+                    h);
+            }
+            function get_hm(h, m) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X hours and Y minutes
+                    //#. %1$d is the number of hours
+                    //#. %2$s is the text for the remainder of the last hour
+                    //#, c-format
+                    gt.npgettext('in', '%1$d hour and %2$s', '%1$d hours and %2$s', h) :
+                    //#. General duration (nominative case): X hours and Y minutes
+                    //#. %1$d is the number of hours
+                    //#. %2$s is the text for the remainder of the last hour
+                    //#, c-format
+                    gt.ngettext('%1$d hour and %2$s', '%1$d hours and %2$s', h),
+                    h, minutes(m));
+            }
+            function minutes(m) {
+                return gt.format(until ?
+                    //#. Reminder (objective case): in X minutes
+                    //#. %d is the number of minutes
+                    //#, c-format
+                    gt.npgettext('in', '%d minute', '%d minutes', m) :
+                    //#. General duration (nominative case): X minutes
+                    //#. %d is the number of minutes
+                    //#, c-format
+                    gt.ngettext('%d minute', '%d minutes', m),
+                    m);
+            }
         }
     };
     
@@ -837,7 +945,7 @@ function (gettext, config) {
     };
     
     api.getTimeZone = _.memoize(function (name) {
-        return require(["text!io.ox/core/date/tz/zoneinfo/" + name])
+        return require(["raw!io.ox/core/date/tz/zoneinfo/" + name])
             .pipe(parseTZInfo)
             .pipe(function (D) {
                 D.id = name;
@@ -845,7 +953,7 @@ function (gettext, config) {
                 return D;
             });
     });
-
+    
     var locale = gettext.language.pipe(function (lang) {
         return require(["text!io.ox/core/date/date." + lang + ".json"]);
     }).done(function (locale) {
@@ -855,7 +963,7 @@ function (gettext, config) {
         monthMap = makeMap(api.locale.months, api.locale.monthsShort);
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
-
+    
     // TODO: load the entire locale config
     return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
         .pipe(function (tz) {

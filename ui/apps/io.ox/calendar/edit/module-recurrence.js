@@ -10,7 +10,7 @@
  *
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
-define('io.ox/calendar/edit/recurrence',
+define('io.ox/calendar/edit/module-recurrence',
       ['io.ox/calendar/util',
        'io.ox/calendar/edit/binding-util',
        'dot!io.ox/calendar/edit/common.html',

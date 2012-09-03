@@ -1,4 +1,3 @@
-// NOJSHINT
 /**
  * All content on this website (including text, images, source
  * code and any other original works), unless otherwise noted,
@@ -16,8 +15,8 @@
  * LESS is distributed under the terms of the Apache License, Version 2.0
  */
 
-(function () {
-
+(function() {
+    
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
     }
@@ -33,14 +32,54 @@
             .attr("data-require-src", name).insertBefore($(selector).first());
     }
 
+    // Replace the load function of RequireJS with our own, which fetches
+    // dynamically concatenated files.
+    (function () {
+        var queue = [];
+        var timeout = null;
+        var deps = window.dependencies;
+        window.dependencies = undefined;
+        var req = require, oldload = req.load;
+        req.load = function (context, modulename, url) {
+            var prefix = context.config.baseUrl;
+            if (modulename.charAt(0) !== '/') {
+                if (url.slice(0, prefix.length) !== prefix) {
+                    return oldload.apply(this, arguments);
+                }
+                url = url.slice(prefix.length);
+            }
+            if (timeout === null) timeout = setTimeout(loaded, 0);
+            var next = deps[modulename];
+            if (next && next.length) req(deps[modulename]);
+            queue.push(url);
+            
+            function loaded() {
+                timeout = null;
+                var q = queue;
+                queue = [];
+                oldload(context, modulename,
+                    [ox.apiRoot, '/apps/', ox.base, ',', q.join()].join(''));
+                if (queue.length) console.error('recursive require', queue);
+            }
+        };
+        
+        define('text', { load: function (name, parentRequire, load, config) {
+            req(['/text;' + name], load);
+        } });
+        define('raw', { load: function (name, parentRequire, load, config) {
+            req(['/raw;' + name], load);
+        } });
+    }());
+/*
     define("text", { load: function(name, parentRequire, load, config) {
+        name = name.replace(/.*!/, '');
         $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
     } });
-
+*/
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {
-            require(["text!" + name]).done(function(css) {
+            require(["text!" + name]).done(function (css) {
                 load(insert(config.baseUrl + name, css, "title"));
             });
         }
@@ -52,7 +91,7 @@
 
     var less = (function () {
         var less = { tree: {} }, exports = less;
-        function require (name) {
+        function require(name) {
             return less[name.split("/")[1]];
         }
         (function () {
@@ -197,13 +236,14 @@
             return (currentTheme || '').replace(/:/g, ': ');
         }
     });
-
 }());
 
 define("gettext", function (gettext) {
     return {
         load: function (name, parentRequire, load, config) {
             require(["io.ox/core/gettext"]).pipe(function (gettext) {
+                assert(gettext.language.state() !== 'pending', _.printf(
+                    'Invalid gettext dependency on %s (before login).', name));
                 return gettext.language;
             }).done(function (language) {
                 parentRequire([name + "." + language], load);

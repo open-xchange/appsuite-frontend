@@ -13,8 +13,8 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define("settings", ['io.ox/core/http', 'io.ox/core/cache',
-                    'io.ox/core/tk/model'], function (http, cache, Model) {
+define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache',
+                    'io.ox/core/tk/model', 'io.ox/mail/util'], function (http, cache, Model, util) {
 
     'use strict';
 

@@ -35,10 +35,10 @@ Open-Xchange HTML5 client
 %build
 
 %install
-sh build.sh builddir="%{buildroot}%{docroot}"
+sh build.sh builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 
 %clean
-sh build.sh clean builddir="%{buildroot}%{docroot}"
+sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=%{release}
 
 %files
 %defattr(-,root,root)

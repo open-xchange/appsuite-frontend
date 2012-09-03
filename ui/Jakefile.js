@@ -52,17 +52,33 @@ function jsFilter (data) {
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-
-    var tree = jsp.parse(data, false, true);
+    
+    if (data.slice(-1) !== '\n') data += '\n';
+    
+    try {
+        var tree = jsp.parse(data, false, true);
+    } catch (e) {
+        fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
+        fail('Parse error in ' + this.task.name + ' at ' + e.line + ':' +
+             e.col + '\n' + e.message);
+    }
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
+    
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
+        var filename = self.getSrc(this[0].start.line).name;
+        if (filename.slice(0, 5) === 'apps/' &&
+            (!name || name[1] !== filename.slice(5, -3)))
+        {
+            fail('Invalid module name: ' + (name ? name[1] : "''") +
+                ' should be ' + filename.slice(5, -3));
+        }
         var deps = _.detect(args, ast.is("array"));
         var f = _.detect(args, ast.is("function"));
         if (!name || !deps || !f) return;
@@ -110,6 +126,7 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    regexdash: true,
     shadow: true,
     strict: true,
     trailing: true,
@@ -201,7 +218,9 @@ file(utils.dest("signin.appcache"), ["force"]);
 // js
 
 utils.concat("boot.js",
-    ["src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
+    [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
+     utils.string(";"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
+     "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.concat("boot.js", [
@@ -250,7 +269,7 @@ utils.concat("bootstrap.js",
 // module dependencies
 
 var moduleDeps = {};
-var depsPath = utils.dest("dependencies.json");
+var depsPath = "tmp/dependencies.json";
 
 utils.fileType("module").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner)
@@ -274,9 +293,12 @@ utils.concat("dependencies.json", [{
                 }
             }
         }
-        return JSON.stringify(moduleDeps);
+        return JSON.stringify(moduleDeps, null, 4);
     }
-}], { filter: _.identity }); // prevents binary mode, which erases target before calling getData
+}], {
+    filter: _.identity, // prevents binary mode, which erases target before calling getData
+    to: "tmp"
+});
 
 // apps
 

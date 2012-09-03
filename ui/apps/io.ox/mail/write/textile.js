@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/mail/textile", function () {
+define("io.ox/mail/write/textile", function () {
         
     "use strict";
     
