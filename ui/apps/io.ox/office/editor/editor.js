@@ -55,6 +55,7 @@ define('io.ox/office/editor/editor',
     var OP_ROW_INSERT = 'insertRow';
     var OP_COLUMN_INSERT = 'insertColumn';
 
+    var OP_INSERT_STYLE = 'insertStylesheet';
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
     var OP_IMAGE_INSERT = 'insertImage';
@@ -603,6 +604,12 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implDeleteText(operation.start, operation.end);
+            }
+            else if (operation.name === OP_INSERT_STYLE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    // TODO!!!
+                }
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs);
             }
             else if (operation.name === OP_ATTRS_SET) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2805,6 +2812,36 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
         };
+
+        /**
+         * Inserts a new style sheet into the document.
+         *
+         * @param {String} family
+         *  The name of the attribute family the new style sheet is related to.
+         *
+         * @param {String} id
+         *  The unique identifier of of the new style sheet.
+         *
+         * @param {String} name
+         *  The user-defined name of of the new style sheet.
+         *
+         * @param {String|Null} parentId
+         *  The identifier of of the parent style sheet the new style sheet
+         *  will derive undefined attributes from.
+         *
+         * @param {Object} attributes
+         *  The formatting attributes contained in the new style sheet, as map
+         *  of name/value pairs.
+         */
+        function implInsertStyleSheet(family, id, name, parentId, attributes) {
+
+            var // the style sheet container
+                styleSheets = self.getStyleSheets(family);
+
+            if (styleSheets) {
+                styleSheets.addStyleSheet(id, name, parentId, attributes);
+            }
+        }
 
         /**
          * Changes a specific formatting attribute of the specified element or

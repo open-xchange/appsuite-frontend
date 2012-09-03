@@ -15,6 +15,7 @@ define('io.ox/office/editor/view',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/fonts',
      'io.ox/office/tk/control/button',
+     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/control/textfield',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
@@ -22,7 +23,7 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/component/menubox',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, gt) {
 
     'use strict';
 
@@ -38,7 +39,8 @@ define('io.ox/office/editor/view',
      *
      * @constructor
      *
-     * @extends ComboField
+     * @extends Group
+     * @extends List
      *
      * @param {StyleSheets} styleSheets
      *  A style sheet container.
@@ -46,22 +48,30 @@ define('io.ox/office/editor/view',
      * @param {Object} [options]
      *  Additional options passed to the ComboField constructor.
      */
-    var StyleSheetChooser = ComboField.extend({ constructor: function (styleSheets, options) {
+    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheets, options) {
+
+        var // self reference
+            self = this;
+
+        /**
+         * Fills the drop-down list with all known style names.
+         */
+        function fillList() {
+            self.clearButtons();
+            _(styleSheets.getStyleSheetNames()).each(function (name, id) {
+                self.addButton(id, { label: name });
+            });
+        }
 
         // base constructor ---------------------------------------------------
 
-        ComboField.call(this, Utils.extendOptions({
-            width: 100,
-            sorted: true,
-            readOnly: true
-        }, options));
+        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true }));
 
         // initialization -----------------------------------------------------
 
-        // add all known style sheets
-        _(styleSheets.getStyleSheetNames()).each(function (name) {
-            this.addListEntry(name);
-        }, this);
+        // add all known style sheets, listen to 'change' events
+        fillList();
+        styleSheets.on('change', fillList);
 
     }}); // class StyleSheetChooser
 
@@ -94,7 +104,7 @@ define('io.ox/office/editor/view',
         // base constructor ---------------------------------------------------
 
         ComboField.call(this, {
-            width: 30,
+            width: 35,
             tooltip: gt('Font Size'),
             css: { textAlign: 'right' },
             validator: new TextField.NumberValidator({ min: 1, max: 999.9, digits: 1 })
@@ -124,7 +134,7 @@ define('io.ox/office/editor/view',
         // create the default button (set value to default size, will be returned by click handler)
         Button.call(this, Utils.extendOptions(options, { value: options.defaultSize }));
         // create the grid sizer
-        GridSizer.call(this, Utils.extendOptions(options, { ignoreCaption: true }));
+        GridSizer.call(this, Utils.extendOptions(options, { plainCaret: true }));
 
     }}); // class TableSizeChooser
 
@@ -210,7 +220,7 @@ define('io.ox/office/editor/view',
                 controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
                 matches = !searchQuery.length || controller.get('action/search/quick');
-                searchField.css('background-color', matches ? '' : '#fee');
+                searchField.css('background-color', matches ? '' : '#ffdfdf');
             }
         }
 
@@ -218,43 +228,37 @@ define('io.ox/office/editor/view',
          * Shows a modal dialog to get the new filename
          */
         function renameDocumentHandler() {
-            var filename = controller.get('action/rename'),
+
+            var filename = controller.get('action/rename') || gt('Unnamed'),
                 extensionPos = filename.lastIndexOf('.'),
                 displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename,
                 extension = (displayName.length !== filename.length) ? filename.substring(extensionPos) : '';
 
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                new dialogs.ModalDialog({
-                    width: 400,
-                    easyOut: true
-                })
-                .header(
-                    $('<h4>').text(gt('Rename Document'))
-                )
-                .append(
-                    $('<input>', { placeholder: gt('Document name'), value: '' })
-                    .addClass('nice-input')
-                    .attr('data-property', 'docname')
-                    .val(displayName)
-                )
+
+                var // the text field for the document name
+                    textField = $('<input>', { placeholder: gt('Document name'), value: displayName }).addClass('nice-input');
+
+                new dialogs.ModalDialog({ width: 400, easyOut: true })
+                .header($('<h4>').text(gt('Rename Document')))
+                .append(textField)
                 .addButton('cancel', gt('Cancel'))
                 .addPrimaryButton('rename', gt('Rename'))
                 .show(function () {
-                    this.find('input').focus();
+                    textField.focus();
+                    Utils.setTextFieldSelection(textField, true);
                 })
                 .done(function (action, data, node) {
-                    if (action === 'rename') {
-                        var newName = $.trim($(node).find('[data-property="docname"]').val());
-
+                    var newName = (action === 'rename') ? $.trim(textField.val()) : '';
+                    // defer controller action after dialog has been closed to
+                    // be able to focus the editor. TODO: better solution?
+                    window.setTimeout(function () {
                         if (newName.length > 0) {
                             controller.change('action/rename', newName + extension);
+                        } else {
+                            controller.cancel();
                         }
-                    }
-
-                    // call controller.done() again to set focus to editor
-                    // after dialog has been closed
-                    // TODO: better solution?
-                    window.setTimeout(function () { controller.done(); }, 0);
+                    }, 0);
                 });
             });
         }
@@ -297,7 +301,7 @@ define('io.ox/office/editor/view',
 
         // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
-            .addGroup('insert/table', new TableSizeChooser());
+            .addGroup('table/insert', new TableSizeChooser());
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -311,20 +315,20 @@ define('io.ox/office/editor/view',
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
             .addRadioGroup('format/paragraph/alignment', { auto: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left'),    css: { textAlign: 'center' }  })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center'),  css: { textAlign: 'center' } })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right'),   css: { textAlign: 'center' } })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify'), css: { textAlign: 'center' } })
+                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
             .addRadioGroup('format/paragraph/lineheight', { auto: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
-                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single'),         css: { textAlign: 'center' } })
-                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half'), css: { textAlign: 'center' } })
-                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double'),         css: { textAlign: 'center' } })
+                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
+                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
+                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
-            .addGroup('insert/table', new TableSizeChooser())
+            .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
             .addButton('table/insert/row',    { icon: 'icon-io-ox-table-insert-row',    tooltip: gt('Insert Row') })
             .addButton('table/insert/column', { icon: 'icon-io-ox-table-insert-column', tooltip: gt('Insert Column') })
@@ -332,13 +336,13 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/delete',    { icon: 'icon-trash',    tooltip: gt('Delete Image') })
+            .addButton('image/delete', { icon: 'icon-trash', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/alignment', { auto: true, icon: 'icon-picture', tooltip: gt('Image Alignment') })
-                .addButton('inline',    { icon: 'icon-indent-left',    tooltip: gt('Inline'),    css: { textAlign: 'center' }  })
-                .addButton('leftFloated',  { icon: 'icon-align-left',  tooltip: gt('Left'),  css: { textAlign: 'center' } })
-                .addButton('rightFloated',   { icon: 'icon-align-right',   tooltip: gt('Right'),   css: { textAlign: 'center' } })
-                .addButton('noneFloated', { icon: 'icon-align-center', tooltip: gt('Center'), css: { textAlign: 'center' } })
+            .addRadioGroup('image/alignment', { auto: true, icon: 'icon-picture', tooltip: gt('Alignment') })
+                .addButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
+                .addButton('leftFloated',  { icon: 'icon-align-left',   tooltip: gt('Float Left') })
+                .addButton('rightFloated', { icon: 'icon-align-right',  tooltip: gt('Float Right') })
+                .addButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })

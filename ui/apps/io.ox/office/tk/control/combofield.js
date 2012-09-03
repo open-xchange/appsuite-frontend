@@ -58,7 +58,8 @@ define('io.ox/office/tk/control/combofield',
         function initHandler() {
 
             var menuButton = self.getMenuButton(),
-                textField = self.getTextField();
+                textField = self.getTextField(),
+                paddingRight = Utils.convertCssLength(textField.css('padding-right'), 'px', 0);
 
             // move the menu button over the text field, attached to the right border
             menuButton.css({ position: 'absolute', right: 0 });
@@ -66,7 +67,7 @@ define('io.ox/office/tk/control/combofield',
             // extend width and right padding of the text field
             textField
                 .width(textField.outerWidth() + menuButton.outerWidth())
-                .css('padding-right', (menuButton.outerWidth() + TextField.FIELD_PADDING) + 'px');
+                .css('padding-right', (menuButton.outerWidth() + paddingRight) + 'px');
         }
 
         /**
@@ -207,7 +208,7 @@ define('io.ox/office/tk/control/combofield',
 
         TextField.call(this, options);
         // no caption for the drop-down button
-        List.call(this, Utils.extendOptions(options, { ignoreCaption: true }));
+        List.call(this, Utils.extendOptions(options, { plainCaret: true }));
 
         // methods ------------------------------------------------------------
 
@@ -226,6 +227,8 @@ define('io.ox/office/tk/control/combofield',
          */
         this.addListEntry = function (value, options) {
             this.createListItem(Utils.extendOptions(options, { value: value, label: this.valueToText(value) }));
+            // the inserted list item may match the value in the text field
+            updateHandler(this.getFieldValue());
             return this;
         };
 

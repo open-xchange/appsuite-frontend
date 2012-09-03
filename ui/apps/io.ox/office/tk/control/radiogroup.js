@@ -109,6 +109,17 @@ define('io.ox/office/tk/control/radiogroup',
         // methods ------------------------------------------------------------
 
         /**
+         * Removes all option buttons from this control.
+         */
+        this.clearButtons = function () {
+            if (this.hasDropDown) {
+                this.clearListItems();
+            } else {
+                getOptionButtons().remove();
+            }
+        };
+
+        /**
          * Adds a new option button to this radio group.
          *
          * @param value

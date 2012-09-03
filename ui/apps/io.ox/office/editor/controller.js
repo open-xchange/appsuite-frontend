@@ -41,7 +41,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'action/rename': {
                     get: function () {
                         var fileDesc = app.getFileDescriptor();
-                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : 'unnamed';
+                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : null;
                     },
                     set: function (fileName) { app.rename(fileName); }
                 },
@@ -61,17 +61,13 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                     done: $.noop // do not focus editor
                 },
 
-                'insert/table': {
-                    set: function (size) { editor.insertTable(size); }
-                },
-
                 'chain/format/paragraph': {
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/stylesheet': {
                     chain: 'chain/format/paragraph',
                     get: function (attributes) { return attributes.parastyle; },
-                    set: function (styleName) { editor.setAttribute('paragraph', 'parastyle', styleName); }
+                    set: function (styleId) { editor.setAttribute('paragraph', 'parastyle', styleId); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
@@ -86,6 +82,11 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
 
                 'chain/format/character': {
                     get: function () { return editor.getAttributes('character'); }
+                },
+                'format/character/stylesheet': {
+                    chain: 'chain/format/character',
+                    get: function (attributes) { return attributes.charstyle; },
+                    set: function (styleId) { editor.setAttribute('character', 'charstyle', styleId); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
@@ -115,6 +116,9 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
 
                 'chain/table': {
                     enable: function () { return editor.isPositionInTable(); }
+                },
+                'table/insert': {
+                    set: function (size) { editor.insertTable(size); }
                 },
                 'table/insert/row': {
                     chain: 'chain/table',
@@ -188,11 +192,8 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                         self.enable().disable(disabledItems).update();
                     }
                 })
-                .on('operation', function () {
-                    self.update(/^(action|format|table|image)\//);
-                })
-                .on('selectionChanged', function () {
-                    self.update(/^(format|table|image)\//);
+                .on('operation selectionChanged', function () {
+                    self.update();
                 });
             return this;
         };

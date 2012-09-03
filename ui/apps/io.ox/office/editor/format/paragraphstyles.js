@@ -49,20 +49,6 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             }
 
-        },
-
-        // TODO: remove this workaround name mapping (makes German DOCX files work)
-        alternativeStyleNames = {
-            titel: 'Title',
-            untertitel: 'Subtitle',
-            berschrift1: 'Heading 1',
-            berschrift2: 'Heading 2',
-            berschrift3: 'Heading 3',
-            berschrift4: 'Heading 4',
-            berschrift5: 'Heading 5',
-            berschrift6: 'Heading 6',
-            zitat: 'Quote',
-            intensiveszitat: 'Intense Quote'
         };
 
     // class ParagraphStyles ==================================================
@@ -105,24 +91,23 @@ define('io.ox/office/editor/format/paragraphstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, definitions, iterate, iterate, 'parastyle', {
-            alternativeStyleNames: alternativeStyleNames,
             updateDescendantStyleAttributes: updateDescendantStyleAttributes
         });
 
         // initialization -----------------------------------------------------
 
         // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('Standard', null, { fontname: 'Open Sans', fontsize: 11 }, true)
-            .addStyleSheet('Title', 'Standard', { alignment: 'center', lineheight: LineHeight.DOUBLE, fontname: 'Georgia', fontsize: 26, bold: true })
-            .addStyleSheet('Subtitle', 'Standard', { alignment: 'center', lineheight: LineHeight.ONE_HALF, fontname: 'Georgia', fontsize: 12, italic: true })
-            .addStyleSheet('Heading 1', 'Standard', { fontname: 'Georgia', fontsize: 16, bold: true })
-            .addStyleSheet('Heading 2', 'Standard', { fontname: 'Georgia', fontsize: 14, bold: true })
-            .addStyleSheet('Heading 3', 'Standard', { fontname: 'Georgia', fontsize: 13, bold: true })
-            .addStyleSheet('Heading 4', 'Standard', { fontname: 'Georgia', fontsize: 13, bold: true, italic: true })
-            .addStyleSheet('Heading 5', 'Standard', { fontname: 'Georgia', fontsize: 12, bold: true })
-            .addStyleSheet('Heading 6', 'Standard', { fontname: 'Georgia', fontsize: 12, bold: true, italic: true })
-            .addStyleSheet('Quote', 'Standard', { italic: true })
-            .addStyleSheet('Intense Quote', 'Quote', { bold: true });
+        this.addStyleSheet('standard', 'Standard', null, { fontname: 'Open Sans', fontsize: 11 }, true)
+            .addStyleSheet('title', 'Title', 'standard', { alignment: 'center', lineheight: LineHeight.DOUBLE, fontname: 'Georgia', fontsize: 26, bold: true })
+            .addStyleSheet('subtitle', 'Subtitle', 'standard', { alignment: 'center', lineheight: LineHeight.ONE_HALF, fontname: 'Georgia', fontsize: 12, italic: true })
+            .addStyleSheet('heading1', 'Heading 1', 'standard', { fontname: 'Georgia', fontsize: 16, bold: true })
+            .addStyleSheet('heading2', 'Heading 2', 'standard', { fontname: 'Georgia', fontsize: 14, bold: true })
+            .addStyleSheet('heading3', 'Heading 3', 'standard', { fontname: 'Georgia', fontsize: 13, bold: true })
+            .addStyleSheet('heading4', 'Heading 4', 'standard', { fontname: 'Georgia', fontsize: 13, bold: true, italic: true })
+            .addStyleSheet('heading5', 'Heading 5', 'standard', { fontname: 'Georgia', fontsize: 12, bold: true })
+            .addStyleSheet('heading6', 'Heading 6', 'standard', { fontname: 'Georgia', fontsize: 12, bold: true, italic: true })
+            .addStyleSheet('quote', 'Quote', 'standard', { italic: true })
+            .addStyleSheet('intensequote', 'Intense Quote', 'quote', { bold: true });
 
     } // class ParagraphStyles
 

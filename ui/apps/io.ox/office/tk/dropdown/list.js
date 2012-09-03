@@ -125,6 +125,7 @@ define('io.ox/office/tk/dropdown/list',
             if (!Utils.containsFocusedControl(listNode)) {
                 this.getListItems().first().focus();
             }
+            return this;
         };
 
         /**
@@ -135,6 +136,14 @@ define('io.ox/office/tk/dropdown/list',
             var menuNode = self.getMenuNode(),
                 buttons = self.getListItems();
             return buttons.length ? Math.max(1, Math.floor(menuNode.innerHeight() / buttons.first().outerHeight()) - 1) : 1;
+        };
+
+        /**
+         * Removes all list items from the drop-down menu.
+         */
+        this.clearListItems = function () {
+            listNode.empty();
+            return this;
         };
 
         /**

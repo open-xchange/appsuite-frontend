@@ -92,12 +92,10 @@ define('io.ox/office/editor/format/stylesheets',
      */
     function StyleSheets(definitions, iterateReadOnly, iterateReadWrite, styleAttrName, options) {
 
-        var // style sheets, mapped by name
+        var // style sheets, mapped by identifier
             styleSheets = {},
-            // name of the default style sheet
-            defaultStyleName = '',
-            // map alternative style sheet names to built-in style sheet names
-            altStyleNames = Utils.getObjectOption(options, 'alternativeStyleNames', {}),
+            // identifier of the default style sheet
+            defaultStyleId = '',
             // default values for all supported attributes
             defaultAttributes = {},
             // collector for style attributes from ancestor elements
@@ -134,15 +132,15 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {HTMLElement} element
          *  The DOM element used to resolve ancestor style attributes.
          *
-         * @param {String} styleName
-         *  The name of the style sheet.
+         * @param {String} styleId
+         *  The unique identifier of the style sheet.
          *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
-         *  ancestor style sheet up to the map of default attributes, as map of
-         *  name/value pairs.
+         *  ancestor style sheets up to the map of default attributes, as map
+         *  of name/value pairs.
          */
-        function getStyleAttributes(element, styleName) {
+        function getStyleAttributes(element, styleId) {
 
             var // the attributes of the style sheet and its ancestors
                 attributes = {};
@@ -163,16 +161,16 @@ define('io.ox/office/editor/format/stylesheets',
                 }
             }
 
-            // validate style name (fall-back to default style sheet)
-            if (!(styleName in styleSheets)) {
-                styleName = defaultStyleName;
+            // validate style identifier (fall-back to default style sheet)
+            if (!(styleId in styleSheets)) {
+                styleId = defaultStyleId;
             }
 
-            // collect attributes from style sheet and its ancestors
-            collectAttributes(styleSheets[styleName]);
+            // collect attributes from the style sheet and its ancestors
+            collectAttributes(styleSheets[styleId]);
 
-            // add style sheet name to attributes
-            attributes[styleAttrName] = styleName;
+            // add style sheet identifier to attributes
+            attributes[styleAttrName] = styleId;
             return attributes;
         }
 
@@ -180,18 +178,21 @@ define('io.ox/office/editor/format/stylesheets',
 
         /**
          * Adds a new style sheet to this container. An existing style sheet
-         * with the specified name will be removed before.
+         * with the specified identifier will be replaced.
+         *
+         * @param {String} id
+         *  The unique identifier of of the new style sheet.
          *
          * @param {String} name
          *  The user-defined name of of the new style sheet.
          *
-         * @param {String|Null} parent
-         *  The name of of the parent style sheet the new style sheet will
-         *  derive undefined attributes from.
+         * @param {String|Null} parentId
+         *  The identifier of of the parent style sheet the new style sheet
+         *  will derive undefined attributes from.
          *
          * @param {Object} attributes
-         *  The formatting attributes contained in the new style sheet, as
-         *  map of name/value pairs.
+         *  The formatting attributes contained in the new style sheet, as map
+         *  of name/value pairs.
          *
          * @param {Boolean} [isDefault]
          *  If set to true, the style sheet will be set as default style sheet
@@ -200,18 +201,20 @@ define('io.ox/office/editor/format/stylesheets',
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.addStyleSheet = function (name, parent, attributes, isDefault) {
+        this.addStyleSheet = function (id, name, parentId, attributes, isDefault) {
 
-            var // style sheet exists already
-                exists = name in styleSheets,
-                // old parent of the existing style sheet
-                parent = exists ? styleSheets[name].parent : null,
+            var // old parent of the existing style sheet
+                parent = (id in styleSheets) ? styleSheets[id].parent : null,
                 // get or create a style sheet object
-                styleSheet = styleSheets[name] || (styleSheets[name] = {});
+                styleSheet = styleSheets[id] || (styleSheets[id] = {});
 
-            // set parent of the style sheet
+            // set user-defined name of the style sheet
+            styleSheet.name = name;
+
+            // set parent of the style sheet, check for cyclic references
             styleSheet.parent = styleSheets[parent];
             if (isDescendant(styleSheet.parent, styleSheet)) {
+                Utils.warn('StyleSheets.addStyleSheet(): cyclic reference, cannot set style sheet parent');
                 styleSheet.parent = null;
             }
 
@@ -220,25 +223,11 @@ define('io.ox/office/editor/format/stylesheets',
 
             // default style sheet
             if (isDefault) {
-                defaultStyleName = name;
+                defaultStyleId = id;
             }
 
             // notify listeners
-            if (exists) {
-                // existing style sheet has changed
-                this.trigger('changed', name, styleSheet);
-                // descendant style sheets have changed attributes, if parent of this style sheet has changed
-                if (parent !== styleSheet.parent) {
-                    _(styleSheets).each(function (childSheet, name) {
-                        if (isDescendant(childSheet, styleSheet)) {
-                            this.trigger('changed', name, childSheet);
-                        }
-                    }, this);
-                }
-            } else {
-                // new style sheet added, it cannot have children
-                this.trigger('added', name, styleSheet);
-            }
+            this.trigger('change');
 
             return this;
         };
@@ -246,16 +235,16 @@ define('io.ox/office/editor/format/stylesheets',
         /**
          * Removes an existing style sheet from this container.
          *
-         * @param {String} name
-         *  The user-defined name of of the style sheet to be removed.
+         * @param {String} id
+         *  The unique identifier of of the style sheet to be removed.
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.removeStyleSheet = function (name) {
+        this.removeStyleSheet = function (id) {
 
             var // the style sheet to be removed
-                styleSheet = styleSheets[name];
+                styleSheet = styleSheets[id];
 
             if (styleSheet) {
                 // update parent of all style sheets referring to the removed style sheet
@@ -266,21 +255,27 @@ define('io.ox/office/editor/format/stylesheets',
                 });
 
                 // remove style sheet from map
-                delete styleSheets[name];
+                delete styleSheets[id];
 
                 // remove default style sheet
-                if (name === defaultStyleName) {
-                    defaultStyleName = '';
+                if (id === defaultStyleId) {
+                    defaultStyleId = '';
                 }
+
+                // notify listeners
+                this.trigger('change');
             }
             return this;
         };
 
         /**
-         * Returns the names of all style sheets in a string array.
+         * Returns the names of all style sheets, mapped by the unique
+         * identifier of each style sheet.
          */
         this.getStyleSheetNames = function () {
-            return _.keys(styleSheets);
+            var names = {};
+            _(styleSheets).each(function (styleSheet, id) { names[id] = styleSheet.name; });
+            return names;
         };
 
         /**
@@ -395,17 +390,12 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.setAttributesInRanges = function (ranges, attributes, options) {
 
-            var // the style sheet name
-                styleName = Utils.getStringOption(attributes, styleAttrName),
+            var // the style sheet identifier
+                styleId = Utils.getStringOption(attributes, styleAttrName),
                 // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // allow special attributes
                 special = Utils.getBooleanOption(options, 'special', false);
-
-            // re-map to alternative style name
-            if (_.isString(styleName) && (styleName.toLowerCase() in altStyleNames)) {
-                styleName = altStyleNames[styleName.toLowerCase()];
-            }
 
             // iterate all covered elements and change their formatting
             iterateReadWrite(ranges, function (element) {
@@ -419,12 +409,12 @@ define('io.ox/office/editor/format/stylesheets',
                     // the attributes whose CSS needs to be changed
                     cssAttributes = null;
 
-                if (styleName) {
+                if (styleId) {
                     // change style sheet of the element: remove existing
                     // element attributes, set CSS formatting of all attributes
                     // according to the new style sheet
-                    elementAttributes = Utils.makeSimpleObject(styleAttrName, styleName);
-                    styleAttributes = getStyleAttributes(element, styleName);
+                    elementAttributes = Utils.makeSimpleObject(styleAttrName, styleId);
+                    styleAttributes = getStyleAttributes(element, styleId);
                     cssAttributes = _.clone(styleAttributes);
                 } else {
                     // clone the attributes coming from the element, there may
@@ -458,7 +448,7 @@ define('io.ox/office/editor/format/stylesheets',
                 });
 
                 // update CSS formatting of descendant elements, if style sheet has changed
-                if (styleName && _.isFunction(updateDescendantStyleAttributesHandler)) {
+                if (styleId && _.isFunction(updateDescendantStyleAttributesHandler)) {
                     updateDescendantStyleAttributesHandler(element);
                 }
 

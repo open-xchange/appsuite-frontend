@@ -978,6 +978,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *      A value or object that will be copied to the 'data-value' attribute
      *      of the control. Will be converted to a JSON string. Must not be
      *      null. The undefined value will be ignored.
+     *  @param {Number} [options.width]
+     *      The fixed total width of the control element (including padding and
+     *      border), in pixels. If omitted, the size will be set automatically
+     *      according to the contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -988,11 +992,13 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         var // create the DOM element
             control = $('<' + elementName + '>', attributes),
-
+            // total width of the control
+            width = Utils.getIntegerOption(options, 'width', undefined, 1),
             // CSS formatting attributes
             css = Utils.getObjectOption(options, 'css', {});
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'));
+        if (_.isNumber(width)) { control.width(width); }
         return control.css(css);
     };
 
@@ -1406,9 +1412,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {jQuery} textField
      *  A jQuery object containing a text field element.
      *
-     * @param {Object} selection
+     * @param {Object|Boolean} selection
      *  An object with the attributes 'start' and 'end' containing the start
-     *  and end character offset of the new selection in the text field.
+     *  and end character offset of the new selection in the text field, or a
+     *  boolean value specifying whether to select the entire text (true), or
+     *  to place the cursor behind the text (false).
      */
     Utils.setTextFieldSelection = function (textField, selection) {
         var input = textField.get(0);

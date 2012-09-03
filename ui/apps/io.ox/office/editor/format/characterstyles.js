@@ -73,14 +73,6 @@ define('io.ox/office/editor/format/characterstyles',
                 special: true
             }
 
-        },
-
-        // TODO: remove this workaround name mapping (makes German DOCX files work)
-        alternativeStyleNames = {
-            schwachehervorhebung: 'Subtle Emphasis',
-            hervorhebung: 'Emphasis',
-            intensivehervorhebung: 'Intense Emphasis',
-            fett: 'Bold'
         };
 
     // class CharacterStyles ==================================================
@@ -146,18 +138,17 @@ define('io.ox/office/editor/format/characterstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite, 'charstyle', {
-            alternativeStyleNames: alternativeStyleNames,
             collectAncestorStyleAttributes: collectAncestorStyleAttributes
         });
 
         // initialization -----------------------------------------------------
 
         // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('Standard', null, null, true)
-            .addStyleSheet('Emphasis', 'Standard', { italic: true })
-            .addStyleSheet('Subtle Emphasis', 'Emphasis', null)
-            .addStyleSheet('Intense Emphasis', 'Emphasis', { bold: true })
-            .addStyleSheet('Bold', 'Standard', { bold: true });
+        this.addStyleSheet('standard', 'Standard', null, null, true)
+            .addStyleSheet('emphasis', 'Emphasis', 'standard', { italic: true })
+            .addStyleSheet('subtleemphasis', 'Subtle Emphasis', 'emphasis', null)
+            .addStyleSheet('intenseemphasis', 'Intense Emphasis', 'emphasis', { bold: true })
+            .addStyleSheet('bold', 'Bold', 'standard', { bold: true });
 
     } // class CharacterStyles
 
