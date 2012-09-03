@@ -166,16 +166,20 @@ define('plugins/portal/twitter/register',
     };
 
     ext.point('io.ox/portal/widget').extend({
-        id: extensionId,
+        id: 'twitter',
         index: 140,
         tileHeight: 2,
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
         isEnabled: function () {
-            return keychain.isEnabled(extensionId);
+            return keychain.isEnabled('twitter');
         },
         requiresSetUp: function () {
-            return keychain.isEnabled(extensionId) && ! keychain.hasStandardAccount(extensionId);
+            return keychain.isEnabled('twitter') && ! keychain.hasStandardAccount('twitter');
+        },
+        performSetUp: function () {
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('twitter', win);
         },
         preview: function () {
             var deferred = $.Deferred();

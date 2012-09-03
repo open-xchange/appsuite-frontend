@@ -58,6 +58,10 @@ define('plugins/portal/facebook/register',
         requiresSetUp: function () {
             return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
         },
+        performSetUp: function () {
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('facebook', win);
+        },
         preview: function () {
             var deferred = $.Deferred();
 
