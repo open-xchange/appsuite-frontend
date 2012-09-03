@@ -127,7 +127,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
 
                     }).fail(function (e) {
                         popupWindow.close();
-                        def.reject("");
+                        def.reject();
                     });
                 });
 
