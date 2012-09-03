@@ -449,7 +449,7 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                window.open(app.getDocumentFilterUrl('getfile', format), app.getFileDescriptor().title || 'file');
+                window.open(app.getDocumentFilterUrl('getfile', { filter_format: format }), app.getFileDescriptor().title || 'file');
                 def.resolve();
             })
             .fail(function () {
@@ -680,14 +680,7 @@ define('io.ox/office/editor/main',
             if (newFilename && newFilename.length && file && (newFilename !== file.filename)) {
                 $.ajax({
                     type: 'GET',
-                    url: ox.apiRoot +
-                    '/oxodocumentfilter?action=renamedocument' +
-                    '&id=' + file.id +
-                    '&folder_id=' + file.folder_id +
-                    '&filename=' + newFilename +
-                    '&session=' + ox.session +
-                    '&uid=' + app.getUniqueId() +
-                    '&version=' + file.version,
+                    url: app.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
                     dataType: 'json'
                 })
                 .pipe(function (response) {

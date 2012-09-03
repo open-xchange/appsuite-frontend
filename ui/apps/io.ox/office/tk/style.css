@@ -229,13 +229,6 @@ div.io-ox-view-component {
             display: none !important;
         }
 
-        /* collapse borders of top-level control elements inside group */
-        > label, > button, > input {
-            ~ label, ~ button, ~ input {
-                margin-left: -1px;
-            }
-        }
-
         /* reset mouse pointer for controls embedded in a disabled group */
         &.disabled {
             label, button, input {
@@ -518,6 +511,13 @@ div.io-ox-view-component {
 
                 &.separator {
                     width: 10px;
+                }
+
+                /* collapse borders of top-level control elements inside group */
+                > label, > button, > input {
+                    ~ label, ~ button, ~ input {
+                        margin-left: -1px;
+                    }
                 }
 
                 /* selected toggle/radio buttons */

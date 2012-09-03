@@ -63,7 +63,7 @@ define('io.ox/office/editor/view',
             this.addListEntry(name);
         }, this);
 
-    }}); // class FontFamilyChooser
+    }}); // class StyleSheetChooser
 
     // class FontFamilyChooser ================================================
 

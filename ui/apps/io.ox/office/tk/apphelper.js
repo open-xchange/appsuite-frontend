@@ -155,33 +155,33 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
          * @param {String} action
          *  The name of the action to be passed to the document filter.
          *
-         * @param {String} [format]
-         *  The file format name, used by specific actions.
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the filter URL. Each
+         *  option will be inserted into the URL as name/value pair separated
+         *  by an equality sign. The different options are separated by
+         *  ampersand characters.
          *
          * @returns {String}
          *  The filter URL.
          */
-        app.getDocumentFilterUrl = function (action, format) {
+        app.getDocumentFilterUrl = function (action, options) {
 
             var // the descriptor of the file loaded by the application
                 file = app.getFileDescriptor();
 
-            var filterurl = ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=' + action +
-                '&id=' + file.id +
-                '&folder_id=' + file.folder_id +
-                '&version=' + file.version +
-                '&session=' + ox.session +
-                '&uid=' + app.getUniqueId();
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({
+                action: action,
+                session: ox.session,
+                uid: app.getUniqueId(),
+                id: file.id,
+                folder_id: file.folder_id,
+                filename: file.filename,
+                version: file.version
+            }, options);
 
-            if (format)
-                filterurl += '&filter_format=' + format;
-
-            filterurl += '&filename=' + file.filename; // filename must be the last part, so the editor can easily append document fragment identifiers.
-                                                       // Update: fragment identifiers don't work here, so filename doesn't need to be the last param...
-
-            return filterurl;
+            // build and return the result URL
+            return ox.apiRoot + '/oxodocumentfilter?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
         };
 
         app.hasFileDescriptor = function () {
