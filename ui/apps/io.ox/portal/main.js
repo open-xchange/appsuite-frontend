@@ -230,7 +230,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             if (!needle) {
                 needle = {id: extension.id};
                 haystack.push(needle);
-                console.log("Created:", needle);
             }
             if (!needle.colorIndex) {
                 needle.colorIndex = getKulerIndex();
@@ -284,7 +283,6 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     if (extension.performSetUp) {
                         $node.on('click', extension.performSetUp);
                     } else {
-                        console.log("Fallback: perform setup", extension.id, extension);
                         $node.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
                 } else {

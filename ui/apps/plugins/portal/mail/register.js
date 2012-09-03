@@ -59,15 +59,15 @@ define('plugins/portal/mail/register',
             var mailsLoaded = $.Deferred();
 
             require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
-                folderApi.get(
-                    {
-                        folder: folderApi.getDefaultFolder('mail'),
-                        cache: false
-                    })
-                    .done(function (folder) {
-                        folderLoaded.resolve(folder);
-                    })
-                    .fail(folderLoaded.reject);
+                folderApi.get({
+                    folder: folderApi.getDefaultFolder('mail'),
+                    cache: false,
+                    unseen: true
+                })
+                .done(function (folder) {
+                    folderLoaded.resolve(folder);
+                })
+                .fail(folderLoaded.reject);
 
                 mailApi.getAll({
                     folder: folderApi.getDefaultFolder('mail'),
