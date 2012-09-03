@@ -79,8 +79,9 @@ define("plugins/portal/appointments/register", [
             var deltaT = timespan(nextApp.start_date, new Date().getTime());
             $node.append(
 //                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
-                $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title || ""), 100),
-                $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location || ""), 100)
+                $('<span class="io-ox-portal-preview-firstline">').text(gt('Next appointment') + ": "),
+                $('<span class="io-ox-portal-calendar-nextTitle io-ox-portal-preview-secondline">').text(nextApp.title || "" + " "),
+                $('<span class="io-ox-portal-calendar-nextLocation io-ox-portal-preview-thirdline">').text(nextApp.location || "")
             );
         } else {
             $('<div class="io-ox-portal-calendar-message">').text(gt("You don't have any appointments in the near future.")).appendTo($node);

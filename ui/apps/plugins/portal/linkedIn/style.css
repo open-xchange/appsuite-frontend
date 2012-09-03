@@ -9,11 +9,6 @@
 .linkedin-counter {
     margin-top: .5em;
 }
-
-.linkedin-subject {
-    font-weight: bold;
-}
-
 .linkedin-content .linkedin-message {
     padding-bottom: 1em;
 }
@@ -28,4 +23,7 @@ img.linkedin-logo {
 .centered {
     vertical-align: middle;
     text-align: center;
+}
+.linkedin-subject {
+    font-weight: bold;
 }

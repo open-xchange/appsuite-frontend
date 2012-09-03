@@ -211,6 +211,18 @@
     line-height: 1.5em;
     text-overflow: ellipsis;
 }
+.io-ox-portal-preview-firstline {
+    font-weight: bold;
+    color: white;
+}
+.io-ox-portal-preview-secondline {
+    color: white;
+    font-weight: normal;
+}
+.io-ox-portal-preview-thirdline {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: normal;
+}
 .io-ox-portal-widget-tile h1 {
     color: #eee;
     color: rgba(255, 255, 255, 0.70);

@@ -84,8 +84,8 @@ define('plugins/portal/facebook/register',
                         message = message.substring(0, 150) + '...';
                     }
                     $previewNode.append(
-                        $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
-                        $('<div>').text(strings.shorten(message, 100)));
+                        $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
+                        $('<span class="io-ox-portal-preview-thirdline">').text(strings.shorten(message, 100)));
                 }
 
                 deferred.resolve($previewNode);

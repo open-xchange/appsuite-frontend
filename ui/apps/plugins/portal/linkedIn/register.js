@@ -122,10 +122,11 @@ define("plugins/portal/linkedIn/register",
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
-                $('<div class="linkedin-preview">').append(
-                    $('<div class="linkedin-name">').text(strings.shorten(message.from.person.firstName + " " + message.from.person.lastName, 50)),
-                    $('<div class="linkedin-subject">').text(strings.shorten(message.subject, 50)),
-                    $('<div class="linkedin-body">').text(strings.shorten(message.body, 50))
+                $('<div class="ioox-portal-preview">').append(
+                    $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
+                    $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
+                    $('<span class="">').text(' '),
+                    $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
                 ).appendTo(this);
             }
         },
