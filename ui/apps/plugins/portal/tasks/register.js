@@ -34,7 +34,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             var task = taskarray[0];
             
             for (var i = 0; i < taskarray.length; i++) {
-                if (taskarray[i].end_date !== null) {
+                if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
                     task = taskarray[i];
                     i = taskarray.length;
                 }
