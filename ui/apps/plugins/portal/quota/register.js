@@ -13,7 +13,7 @@
 
 define("plugins/portal/quota/register", ["io.ox/core/extensions",
                                          'gettext!plugins/portal/quota',
-                                         'io.ox/quota/api',
+                                         'io.ox/core/api/quota',
                                          'io.ox/core/strings',
                                          'less!plugins/portal/quota/style.css'], function (ext, gt, api, strings) {
     "use strict";
@@ -36,22 +36,29 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
     drawTile = function (quota, $node) {
         $node.append(
             $('<div class="io-ox-clear io-ox-portal-preview quota-preview">').append(
-                    $("<span>").text(gt("File quota")),
-                    $("<span>").addClass("plugins-portal-quota-memory-file"),
-                    $("<div>").addClass("plugins-portal-quota-filebar"),
-                    $('<span>').text(gt("Mail quota")),
-                    $("<span>").addClass("plugins-portal-quota-memory-mail"),
-                    $("<div>").addClass("plugins-portal-quota-mailbar"),
-                    $('<span>').text(gt("Mailcount quota")),
-                    $("<span>").addClass("plugins-portal-quota-memory-mailcount"),
-                    $("<div>").addClass("plugins-portal-quota-mailcountbar")
+                    $('<div>').append(
+                        $("<span>").text(gt("File quota")),
+                        $("<span>").addClass("plugins-portal-quota-memory-file"),
+                        $("<div>").addClass("plugins-portal-quota-filebar")
+                    ),
+                    $('<div>').append(
+                        $('<span>').text(gt("Mail quota")),
+                        $("<span>").addClass("plugins-portal-quota-memory-mail"),
+                        $("<div>").addClass("plugins-portal-quota-mailbar")
+                    ),
+                    $('<div>').append(
+                        $('<span>').text(gt("Mailcount quota")),
+                        $("<span>").addClass("plugins-portal-quota-memory-mailcount"),
+                        $("<div>").addClass("plugins-portal-quota-mailcountbar")
+                    )
                 )
         );
         
+        //filestorage
         if (quota.filequota.quota < 0) {
             $node.find(".plugins-portal-quota-memory-file")
-            .text(strings.fileSize(quota.filequota.use) + " " + gt("of") + " " + gt("unlimited"));
-            $node.find(".plugins-portal-quota-filebar").text(gt("Unlimited filestorage")).addClass("quota-preview-smalltext");
+            .text(strings.fileSize(quota.filequota.use));
+            $node.find(".plugins-portal-quota-filebar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-file")
             .text(strings.fileSize(quota.filequota.use) + " " + gt("of") + " " + strings.fileSize(quota.filequota.quota));
@@ -62,18 +69,15 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
                 .css('margin-bottom', '0px')
                 .append(buildbar(width));
         }
-        //backend shifts use and quota 10 bits left... no clue why
-        //revert it to originalvalue
-        quota.mailquota.use = quota.mailquota.use >> 10;
-        quota.mailquota.quota = quota.mailquota.quota >> 10;
-            
+        
+        //mailstorage
         if (quota.mailquota.quota < 0) {
             $node.find(".plugins-portal-quota-memory-mail")
-            .text(strings.fileSize(0) + " " + gt("of") + " " + gt("unlimited"));
-            $node.find(".plugins-portal-quota-mailbar").text(gt("Unlimited mailstorage")).addClass("quota-preview-smalltext");
+            .text(strings.fileSize(0));
+            $node.find(".plugins-portal-quota-mailbar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-mail")
-            .text(strings.fileSize(quota.mailquota.use) + " " + gt("of") + " " + strings.fileSize(quota.mailquota.quota));
+            .text(strings.fileSize(quota.mailquota.use / 1024) + " " + gt("of") + " " + strings.fileSize(quota.mailquota.quota));
             
             var width = (quota.mailquota.use / quota.mailquota.quota) * 100;
             $node.find(".plugins-portal-quota-mailbar")
@@ -82,10 +86,11 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
                 .append(buildbar(width));
         }
         
+        //mailcount
         if (quota.mailquota.countquota < 0) {
             $node.find(".plugins-portal-quota-memory-mailcount")
-                .text("0 " + gt("of") + " " + gt("unlimited"));
-            $node.find(".plugins-portal-quota-mailcountbar").text(gt("Unlimited mailcount")).addClass("quota-preview-smalltext");
+                .text("0");
+            $node.find(".plugins-portal-quota-mailcountbar").remove();
             
         } else {
             $node.find(".plugins-portal-quota-memory-mailcount")

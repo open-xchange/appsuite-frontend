@@ -10,7 +10,7 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/quota/api", ["io.ox/core/http"], function (http) {
+define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
     
     "use strict";
     
@@ -25,6 +25,12 @@ define("io.ox/quota/api", ["io.ox/core/http"], function (http) {
             return http.GET({
                 module: "quota",
                 params: {action: "mail"}
+            }).pipe(function (data) {
+                //backend shifts use and quota 10 bits left... no clue why
+                //revert it to originalvalue
+                data.use = data.use / 1024;
+                data.quota = data.quota / 1024;
+                return data;
             });
         }
     };
