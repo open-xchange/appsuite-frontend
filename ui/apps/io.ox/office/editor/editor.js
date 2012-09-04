@@ -1525,7 +1525,9 @@ define('io.ox/office/editor/editor',
         this.deleteSelected = function (_selection) {
 
             // this.implCheckSelection();
+            var buttonEvent = _selection ? false : true;
             var selection = _selection || this.getSelection();
+
             if (selection.hasRange()) {
 
                 undomgr.startGroup();
@@ -1715,9 +1717,10 @@ define('io.ox/office/editor/editor',
 
                 undomgr.endGroup();
             }
-            else if (selection.endPaM.imageFloatMode !== null) {
+            else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-             // deleting images with selection (only workaround until image selection with mouse is possible)
+                // deleting images without selection (only workaround until image selection with mouse is possible)
+                // This deleting of images is only possible with the button, not with an key down event.
 
                 var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                     imageEndPostion = _.copy(imageStartPosition, true);
@@ -1728,7 +1731,12 @@ define('io.ox/office/editor/editor',
 
                 imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
 
-                this.deleteText(imageStartPosition, imageEndPostion);
+                var returnImageNode = true;
+                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
+                // deleting with button is possible.
+                if (Utils.getNodeName(Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node) === 'img') {
+                    this.deleteText(imageStartPosition, imageEndPostion);
+                }
             }
         };
 
@@ -2840,7 +2848,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
         };
-        
+
         /**
          * Defining the correct images attributes for an image.
          *
@@ -2892,7 +2900,12 @@ define('io.ox/office/editor/editor',
 
                     if (attributes.imageFloatMode === 'inline') {
                         // inserting an empty text span before the image, if it is an inline image
-                        $('<span>').text('').insertBefore(imageNode);
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
+                            newTextNode = $(textSpanNode).clone(true);
+
+                        newTextNode.text('');
+                        newTextNode.insertBefore(imageNode);
                     } else {
                         // inserting the image as the first child of the paragraph, before an text node.
                         var parent = imageNode.parentNode,
