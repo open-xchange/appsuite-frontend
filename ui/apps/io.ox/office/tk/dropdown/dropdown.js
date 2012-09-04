@@ -297,7 +297,7 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // initialization -----------------------------------------------------
 
-        // move caret span to right border, if complex drop-down button has manual width
+        // move caret span to right border, if drop-down button has fixed width
         if (!plainCaret && ('width' in options)) {
             caretSpan.css({ position: 'absolute', top: '1px', right: '9px' });
         }
