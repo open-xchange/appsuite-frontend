@@ -107,6 +107,10 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             return retval;
         },
         
+        isDirty: function () {
+            return !_.isEmpty(this.changedSinceLoading());
+        },
+        
         isSet: function () {
             var self = this;
             return _(arguments).all(function (attribute) {

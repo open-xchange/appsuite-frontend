@@ -123,8 +123,6 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             if (this.rare && !this.model.isSet(this.attribute)) {
                 this.nodes.controlGroup.hide();
             }
-            if (this.rare) {
-            }
         };
         
         this.onValidationError = function (messages) {

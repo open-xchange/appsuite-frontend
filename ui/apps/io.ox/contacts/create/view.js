@@ -45,8 +45,7 @@ define('io.ox/contacts/create/view',
         tagName: 'span',
         className: 'clear-title',
         attribute: 'display_name'
-    }));
-    
+    }));    
     
     point.basicExtend({
         id: 'io.ox/contacts/create/view/headerBreak',
@@ -55,7 +54,7 @@ define('io.ox/contacts/create/view',
             this.append($('<div>').css({clear: 'both'}));
         }
     });
-
+    
     // Show backend errors
     point.extend(new forms.ErrorAlert({
         id: 'io.ox/contacts/create/view/backendErrors',

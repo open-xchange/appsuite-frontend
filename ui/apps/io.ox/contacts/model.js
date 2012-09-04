@@ -282,34 +282,3 @@ define('io.ox/contacts/model',
     };
 });
 
-
-/* Some test code
-
-require(['io.ox/contacts/model']);
-
-var model = require('io.ox/contacts/model');
-
-// Create a contact
-
-model.factory.create({
-    folder_id: require('io.ox/core/config').get('folder/contacts'),
-    display_name: "Tester von Testingen"
-}).save();
-
-// Modify a contact
-
-// List the folder contents
-
-// Delete a contact
-
-// List the folder contents again
-
-// Demonstrate update inside the same realm
-
-// Demonstrate update in two realms
-
-
-
-
-
-*/
