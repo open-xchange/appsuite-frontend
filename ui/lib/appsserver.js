@@ -44,13 +44,19 @@ http.createServer(function (request, response) {
     for (var i in list) {
         var m = /^(?:\/(text|raw);)?([\w\/-]+(?:\.[\w\/-]+)*)$/.exec(list[i]);
         if (!m) {
-            console.log('Invalid module name', list[i]);
+            console.log('Invalid module name: ' + list[i]);
+            response.write("console.log('Invalid module name: \"" +
+                           escape(list[i]) + "\"');\n");
             continue;
         }
         var filename = path.join(prefix, m[2]);
         var valid = path.existsSync(filename);
-        console.log(filename, valid ? '' : '(not found)');
-        if (!valid) continue;
+        console.log(filename, valid);
+        if (!valid) {
+            console.log('Could not read', filename);
+            response.write("console.log('Could not read " + filename + "');\n");
+            continue;
+        }
         if (m[1]) {
             if (m[1] === 'raw') {
                 var data = fs.readFileSync(filename), s = [];
