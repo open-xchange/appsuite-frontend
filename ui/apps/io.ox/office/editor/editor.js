@@ -1525,7 +1525,9 @@ define('io.ox/office/editor/editor',
         this.deleteSelected = function (_selection) {
 
             // this.implCheckSelection();
+            var buttonEvent = _selection ? false : true;
             var selection = _selection || this.getSelection();
+
             if (selection.hasRange()) {
 
                 undomgr.startGroup();
@@ -1715,12 +1717,35 @@ define('io.ox/office/editor/editor',
 
                 undomgr.endGroup();
             }
+            else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
+
+                // deleting images without selection (only workaround until image selection with mouse is possible)
+                // This deleting of images is only possible with the button, not with an key down event.
+
+                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                    imageEndPostion = _.copy(imageStartPosition, true);
+
+                if (selection.startPaM.isRtlCursorTravel) {
+                    imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
+                }
+
+                imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
+
+                var returnImageNode = true;
+                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
+                // deleting with button is possible.
+                if (Utils.getNodeName(Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node) === 'img') {
+                    this.deleteText(imageStartPosition, imageEndPostion);
+                }
+            }
         };
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
                 var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
                 this.applyOperation(newOperation, true, true);
+                // setting the cursor position
+                this.setSelection(new OXOSelection(lastOperationEnd));
             }
         };
 
@@ -2160,6 +2185,25 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
+                else if (selection.endPaM.imageFloatMode !== null) {
+
+                    // setting attributes without image selection (only workaround until image selection with mouse is possible)
+                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                        imageEndPostion = _.copy(imageStartPosition, true);
+
+                    if (selection.startPaM.isRtlCursorTravel) {
+                        imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
+                    }
+
+                    imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
+
+                    attributes = defineImageAttributes(attributes);
+
+                    Utils.info("Image selection: " + imageStartPosition + " to " + imageEndPostion);
+                    // this.setAttributes(family, attributes, imageStartPosition, imageEndPostion);
+                    implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes
+
+                }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
                     startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
@@ -2585,14 +2629,6 @@ define('io.ox/office/editor/editor',
             return selection.endPaM.imageFloatMode;
         };
 
-        this.setImageFloatMode = function (floatMode) {
-            Utils.info("Selected Float Mode: " + floatMode);
-        };
-
-        this.deleteImage = function () {
-            Utils.info("Deleting image");
-        };
-
         // ==================================================================
         // IMPL METHODS
         // ==================================================================
@@ -2812,6 +2848,78 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
         };
+
+        /**
+         * Defining the correct images attributes for an image.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function defineImageAttributes(attributes) {
+
+            if (attributes.imageFloatMode === 'rightFloated') {
+                attributes.float = 'right';
+            } else if (attributes.imageFloatMode === 'leftFloated') {
+                attributes.float = 'left';
+            } else {  // 'noneFloated' or 'inline'
+                attributes.float = 'none';
+            }
+
+            return attributes;
+        }
+
+        /**
+         * Changes a formatting attributes of an image node.
+         *
+         * @param {Number[]} start
+         *  The logical start position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Number[]} end
+         *  The logical end position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         */
+        function implSetImageAttributes(start, end, attributes) {
+
+            var returnImageNode = true,
+                imagePosition = Position.getDOMPosition(paragraphs, start, returnImageNode);
+
+            if (imagePosition) {
+                var imageNode = imagePosition.node;
+
+                if (Utils.getNodeName(imageNode) === 'img') {
+                    $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
+
+                    if (attributes.imageFloatMode === 'inline') {
+                        // inserting an empty text span before the image, if it is an inline image
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
+                            newTextNode = $(textSpanNode).clone(true);
+
+                        newTextNode.text('');
+                        newTextNode.insertBefore(imageNode);
+                    } else {
+                        // inserting the image as the first child of the paragraph, before an text node.
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent);
+                        // AAA
+                        if (textSpanNode) {
+                            parent.insertBefore(imageNode, textSpanNode);
+                        } else {
+                            parent.insertBefore(imageNode, parent.firstChild);
+                        }
+                    }
+                }
+            }
+        }
 
         /**
          * Inserts a new style sheet into the document.
