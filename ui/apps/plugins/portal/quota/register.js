@@ -20,15 +20,14 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
     
     var loadTile = function () {
         var def = new $.Deferred();
-        api.getFile().done(function (filequota) {
-            api.getMail().done(function (mailquota) {
-                var quotas = {
-                        filequota: filequota,
-                        mailquota: mailquota
-                    };
-                def.resolve(quotas);
-            });
+        api.pause();
+        api.getFile();
+        api.getMail();
+        api.resume().done(function (filequota) {
+            def.resolve(filequota);
         });
+        
+
         
         return def;
     },
@@ -47,17 +46,17 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
                         $("<div>").addClass("plugins-portal-quota-mailbar")
                     ),
                     $('<div>').append(
-                        $('<span>').text(gt("Mailcount quota")),
+                        $('<span>').text(gt("Mail count quota")),
                         $("<span>").addClass("plugins-portal-quota-memory-mailcount"),
                         $("<div>").addClass("plugins-portal-quota-mailcountbar")
-                    )
+                    ).addClass("plugins-portal-quota-mailcount")
                 )
         );
         
         //filestorage
         if (quota.filequota.quota < 0) {
             $node.find(".plugins-portal-quota-memory-file")
-            .text(strings.fileSize(quota.filequota.use));
+            .text(gt("unlimited"));
             $node.find(".plugins-portal-quota-filebar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-file")
@@ -73,7 +72,7 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
         //mailstorage
         if (quota.mailquota.quota < 0) {
             $node.find(".plugins-portal-quota-memory-mail")
-            .text(strings.fileSize(0));
+            .text(gt("unlimited"));
             $node.find(".plugins-portal-quota-mailbar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-mail")
@@ -88,9 +87,7 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
         
         //mailcount
         if (quota.mailquota.countquota < 0) {
-            $node.find(".plugins-portal-quota-memory-mailcount")
-                .text("0");
-            $node.find(".plugins-portal-quota-mailcountbar").remove();
+            $node.find(".plugins-portal-quota-mailcount").remove();
             
         } else {
             $node.find(".plugins-portal-quota-memory-mailcount")

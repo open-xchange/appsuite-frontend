@@ -15,6 +15,28 @@ define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
     "use strict";
     
     var api = {
+        pause: function () {
+            return http.pause();
+        },
+        resume: function () {
+            return http.resume().pipe(function (data) {
+                //rewrap output
+                var quotas = {
+                        filequota: data[0].data,
+                        mailquota: data[1].data
+                    };
+                //create fake values for testing
+                quotas.filequota.quota = 50 * 1024 * 1024; //50mb limit
+                quotas.filequota.use = 26 * 1024 * 1024; //26mb in use
+                quotas.mailquota.quota = 100 * 1024 * 1024; //100mb limit
+                quotas.mailquota.use = 87 * 1024 * 1024; //87mb in use
+                quotas.mailquota.countquota = 200; //200 limit
+                quotas.mailquota.countuse = 191;  //191 in use
+                
+                return quotas;
+            });
+        },
+                
         getFile: function () {
             return http.GET({
                 module: "quota",
@@ -25,12 +47,6 @@ define("io.ox/core/api/quota", ["io.ox/core/http"], function (http) {
             return http.GET({
                 module: "quota",
                 params: {action: "mail"}
-            }).pipe(function (data) {
-                //backend shifts use and quota 10 bits left... no clue why
-                //revert it to originalvalue
-                data.use = data.use / 1024;
-                data.quota = data.quota / 1024;
-                return data;
             });
         }
     };
