@@ -2847,7 +2847,7 @@ define('io.ox/office/editor/editor',
             if (attributes.marginL) {
                 attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
             }
-            if (attributes.anchorhbase) {
+            if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
                 attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
             }
 
