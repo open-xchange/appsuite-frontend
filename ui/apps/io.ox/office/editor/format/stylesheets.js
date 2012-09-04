@@ -99,10 +99,7 @@ define('io.ox/office/editor/format/stylesheets',
             // style family of ancestor style sheets
             ancestorStyleFamily = Utils.getStringOption(options, 'ancestorStyleFamily'),
             // element resolver for style sheets referred by ancestor DOM elements
-            ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver'),
-
-            // collector for preview button options
-            collectPreviewButtonOptionsHandler = Utils.getFunctionOption(options, 'collectPreviewButtonOptions');
+            ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver');
 
         // private methods ----------------------------------------------------
 
@@ -183,6 +180,11 @@ define('io.ox/office/editor/format/stylesheets',
                 }
             }
 
+            // add style sheet identifier to attributes
+            if (!(id in styleSheets)) {
+                id = 'standard';
+            }
+
             // collect attributes from the style sheet and its ancestors
             if ((family === styleFamily) || _(descendantStyleFamilies).contains(family)) {
                 collectAttributes(styleSheets[id]);
@@ -190,6 +192,7 @@ define('io.ox/office/editor/format/stylesheets',
 
             // add style sheet identifier to attributes
             attributes.style = id;
+
             return attributes;
         }
 
@@ -277,6 +280,11 @@ define('io.ox/office/editor/format/stylesheets',
 
             var // the style sheet to be removed
                 styleSheet = styleSheets[id];
+
+            if (id === 'standard') {
+                Utils.warn('StyleSheets.removeStyleSheet(): cannot remove standard style sheet');
+                styleSheet = null;
+            }
 
             if (styleSheet) {
                 // update parent of all style sheets referring to the removed style sheet
@@ -453,8 +461,8 @@ define('io.ox/office/editor/format/stylesheets',
                     // change style sheet of the element: remove existing
                     // element attributes, set CSS formatting of all attributes
                     // according to the new style sheet
-                    elementAttributes = { style: styleId };
                     styleAttributes = getStyleAttributes(styleId, styleFamily, element);
+                    elementAttributes = { style: styleAttributes.style };
                     cssAttributes = _.clone(styleAttributes);
                 } else {
                     // clone the attributes coming from the element, there may

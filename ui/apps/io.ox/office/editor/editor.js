@@ -370,6 +370,9 @@ define('io.ox/office/editor/editor',
             // container for all style sheets of all attribute families
             documentStyles = (textMode === 'rich') ? new DocumentStyles(editdiv) : null,
 
+            // shortcut for paragraph styles
+            paragraphStyles = documentStyles ? documentStyles.getStyleSheets('paragraph') : null,
+
             // shortcut for character styles
             characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
 
