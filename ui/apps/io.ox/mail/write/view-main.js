@@ -25,8 +25,9 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
+     'io.ox/core/strings',
      'gettext!io.ox/mail/mail'
-    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, gt) {
+    ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, strings, gt) {
 
     'use strict';
 
@@ -570,29 +571,6 @@ define("io.ox/mail/write/view-main",
         return Math.round(num * pow) / pow;
     }
 
-    var n_size = [/*#. Bytes*/      gt('B'),
-                  /*#. Kilobytes*/  gt('KB'),
-                  /*#. Megabytes*/  gt('MB'),
-                  /*#. Gigabytes*/  gt('GB'),
-                  /*#. Terabytes*/  gt('TB'),
-                  /*#. Petabytes*/  gt('PB'),
-                  /*#. Exabytes*/   gt('EB'),
-                  /*#. Zettabytes*/ gt('ZB'),
-                  /*#. Yottabytes*/ gt('YB')];
-
-    function filesize(size) {
-        var i = 0, $i = n_size.length;
-        while (size > 1024 && i < $i) {
-            size = size / 1024;
-            i++;
-        }
-        return (
-            //#. File size
-            //#. %1$d is the number
-            //#. %2$s is the unit (B, KB, MB etc.)
-            gt('%1$d %2$s', Math.round(size, 1), n_size[i]));
-    }
-
     handleFileSelect = function (e, view) {
 
         // look for linked attachments or dropped files
@@ -605,7 +583,8 @@ define("io.ox/mail/write/view-main",
             _(list).each(function (file) {
                 // get size
                 var size = file.size || file.file_size;
-                size = size !== undefined ? filesize(size) + '\u00A0 ' : '';
+                size = size !== undefined ? strings.fileSize(size) + '\u00A0 ' :
+                                            '';
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
