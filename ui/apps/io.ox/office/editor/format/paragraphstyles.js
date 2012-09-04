@@ -104,9 +104,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             .addStyleSheet('heading3', 'Heading 3', 'standard', { character: { fontname: 'Georgia', fontsize: 13, bold: true } })
             .addStyleSheet('heading4', 'Heading 4', 'standard', { character: { fontname: 'Georgia', fontsize: 13, bold: true, italic: true } })
             .addStyleSheet('heading5', 'Heading 5', 'standard', { character: { fontname: 'Georgia', fontsize: 12, bold: true } })
-            .addStyleSheet('heading6', 'Heading 6', 'standard', { character: { fontname: 'Georgia', fontsize: 12, bold: true, italic: true } })
-            .addStyleSheet('quote', 'Quote', 'standard', { character: { italic: true } })
-            .addStyleSheet('intensequote', 'Intense Quote', 'quote', { character: { bold: true } });
+            .addStyleSheet('heading6', 'Heading 6', 'standard', { character: { fontname: 'Georgia', fontsize: 12, bold: true, italic: true } });
 
     } // class ParagraphStyles
 
