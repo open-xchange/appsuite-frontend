@@ -187,23 +187,15 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-screens {
     top: 40px;
     overflow: hidden;
-    transition: all 0.1s;
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
     z-index: 10;
-}
-
-#io-ox-screens.beside {
-    right: 300px;
-    left: -300px;
 }
 
 #io-ox-notifications {
     background-color: #222;
     top: 40px;
-    width: 300px;
+    width: 350px;
     position: absolute;
-    right: -300px;
+    right: -350px;
     bottom: 0px;
     transition: all 0.1s;
     -webkit-transition: all 0.1s;
@@ -211,13 +203,17 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     border-top: 1px solid #000;
     overflow: hidden;
     z-index: 30;
+    -moz-box-shadow: 0 10px 20px 1px black;
+    -webkit-box-shadow: 0 10px 20px 1px black;
+    box-shadow: 0 10px 20px 1px black;
+    display: none;
 }
 
 #io-ox-notifications-overlay {
     background-color: transparent;
     background-color: rgba(255, 255, 255, 0.10);
     top: 40px;
-    right: 300px;
+    right: 350px;
     display: none;
     z-index: 20;
 }
@@ -232,6 +228,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 #io-ox-notifications.active {
     right: 0px;
+    display: block;
 }
 #io-ox-notifications-display {
     padding: 0 13px 0 13px;
@@ -253,7 +250,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-notifications-display .item {
     color: #fff;
     background-color: #333;
-    padding: 7px 13px 7px 13px;
+    padding: 13px;
     margin-bottom: 1px;
     cursor: pointer;
 }
@@ -279,8 +276,8 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 #io-ox-notifications-display .item .content {
     color: #aaa;
-    line-height: 15px;
-    max-height: 5 * 15px; /* 5 rows */
+    line-height: 16px;
+    max-height: 5 * 16px; /* 5 rows */
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: 3px;

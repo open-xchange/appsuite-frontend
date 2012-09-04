@@ -185,14 +185,13 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
         toggleList: function () {
             //create nice listing view of all notifications grouped by
             //their app
-            if ($('#io-ox-screens').hasClass('beside')) {
+            if ($('#io-ox-notifications').hasClass('active')) {
                 this.hideList();
             } else {
                 this.showList();
             }
         },
         showList: function () {
-            $('#io-ox-screens').addClass('beside');
             $('#io-ox-notifications').addClass('active');
             $('#io-ox-notifications-overlay').addClass('active');
             $(document).on('keydown.notification', $.proxy(function (e) {
@@ -203,7 +202,6 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
             }, this));
         },
         hideList: function () {
-            $('#io-ox-screens').removeClass('beside');
             _.each(this.badges, function (badgeView) {
                 badgeView.setNotifier(false);
             });
