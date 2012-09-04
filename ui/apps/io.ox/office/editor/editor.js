@@ -1986,7 +1986,8 @@ define('io.ox/office/editor/editor',
 
             var para,
                 start,
-                end;
+                end,
+                buttonEvent = ((startPosition === undefined) && (endPosition === undefined)) ? true : false;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
@@ -2185,7 +2186,7 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
-                else if (selection.endPaM.imageFloatMode !== null) {
+                else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
                     // setting attributes without image selection (only workaround until image selection with mouse is possible)
                     var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
@@ -2199,10 +2200,11 @@ define('io.ox/office/editor/editor',
 
                     attributes = defineImageAttributes(attributes);
 
-                    Utils.info("Image selection: " + imageStartPosition + " to " + imageEndPostion);
                     // this.setAttributes(family, attributes, imageStartPosition, imageEndPostion);
-                    implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes
+                    implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
 
+                    // setting the cursor position
+                    // this.setSelection(new OXOSelection(lastOperationEnd));
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2759,6 +2761,9 @@ define('io.ox/office/editor/editor',
             }
 
             if ((node) && (node.nodeType === 3)) {
+
+                var floatMode = null;
+
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
                     // points to start or end of text, needed to clone formatting)
@@ -2767,37 +2772,37 @@ define('io.ox/office/editor/editor',
                     // Do not set the 'float' property to 'none'. That is used in
                     // anchorType 'FloatNone'.
                     node = node.parentNode;
-                    $('<img>', { src: url }).data('mode', 'inline').data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
-                } else if (anchorType === 'ToPage') {
-                    // TODO: This is not a good solution. Adding image to the end of the editdiv,
-                    // does not produce any disorder, but images are not allowed at editdiv.
-                    // A new counting for paragraphs = editdiv.children() is required.
-                    $('<img>', { src: url }).appendTo(editdiv).css(attributes);
-                    attributes.position = 'absolute';
-                    paragraphs = editdiv.children();
-                } else if (anchorType === 'ToParagraph') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    attributes.position = 'absolute';
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
-                } else if (anchorType === 'ToCharacter') {
-                    var textNode = DOM.splitTextNode(node, domPos.offset);
-                    // Creating a new span that will include the graphic. The span must have a position.
-                    // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
-                    var newParent = $('<span>', { position: 'relative' });
-                    newParent.insertAfter(textNode.parentNode);
-                    attributes.position = 'absolute';
-                    $('<img>', { src: url }).appendTo(newParent).css(attributes);
+                    floatMode = 'inline';
+                // } else if (anchorType === 'ToPage') {
+                //     // TODO: This is not a good solution. Adding image to the end of the editdiv,
+                //     // does not produce any disorder, but images are not allowed at editdiv.
+                //     // A new counting for paragraphs = editdiv.children() is required.
+                //     $('<img>', { src: url }).appendTo(editdiv).css(attributes);
+                //     attributes.position = 'absolute';
+                //     paragraphs = editdiv.children();
+                // } else if (anchorType === 'ToParagraph') {
+                //     // insert image before the first span in the paragraph
+                //     node = node.parentNode.parentNode.firstChild;
+                //     attributes.position = 'absolute';
+                //     $('<img>', { src: url }).insertBefore(node).css(attributes);
+                // } else if (anchorType === 'ToCharacter') {
+                //     var textNode = DOM.splitTextNode(node, domPos.offset);
+                //     // Creating a new span that will include the graphic. The span must have a position.
+                //     // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
+                //     var newParent = $('<span>', { position: 'relative' });
+                //     newParent.insertAfter(textNode.parentNode);
+                //     attributes.position = 'absolute';
+                //     $('<img>', { src: url }).appendTo(newParent).css(attributes);
                 } else if (anchorType === 'FloatLeft') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'left';
-                    $('<img>', { src: url }).data('mode', 'leftFloated').data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
+                    floatMode = 'leftFloated';
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
-                    $('<img>', { src: url }).data('mode', 'rightFloated').data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
+                    floatMode = 'rightFloated';
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
@@ -2805,7 +2810,11 @@ define('io.ox/office/editor/editor',
                     attributes['margin-left'] = attributes.allMargins.fullLeftMargin;
                     attributes['margin-right'] = attributes.allMargins.fullRightMargin;
                     attributes.float = 'none';
-                    $('<img>', { src: url }).data('mode', 'noneFloated').data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
+                    floatMode = 'noneFloated';
+                }
+
+                if (floatMode !== null) {
+                    $('<img>', { src: url }).data('mode', floatMode).data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
                 }
             }
 
@@ -2972,6 +2981,7 @@ define('io.ox/office/editor/editor',
 
                         newTextNode.text('');
                         newTextNode.insertBefore(imageNode);
+                        imagePosition = Position.getFirstPositionInParagraph(paragraphs, imagePosition);
                     } else {
 
                         if (attributes.imageFloatMode === 'noneFloated') {
@@ -2991,6 +3001,9 @@ define('io.ox/office/editor/editor',
                     }
 
                     $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
+
+                    // store last position
+                    lastOperationEnd = new OXOPaM(imagePosition);
                 }
             }
         }
