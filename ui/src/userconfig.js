@@ -65,10 +65,10 @@ define(function () {
                 title: "Calendar",
                 company: "Open-Xchange",
                 icon: "calendar.png",
-                category: "Productivity",
-                settings: true
+                category: "Productivity"
+                //settings: true
             },
-            
+
             "io.ox/tasks": {
                 title: "Tasks",
                 company: "Open-Xchange",

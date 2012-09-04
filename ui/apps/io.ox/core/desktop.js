@@ -1001,7 +1001,7 @@ define("io.ox/core/desktop",
                                 // toolbar
                                 win.nodes.toolbar = $("<div>")
                             ),
-                            $("<div class='css-table-cell cell-33 window-controls'>").append(
+                            $("<div class='css-table-cell cell-33 cell-right window-controls'>").append(
                                 // controls
                                 win.nodes.controls = $("<div>")
                                 .append(
