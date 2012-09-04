@@ -115,7 +115,8 @@ define('io.ox/office/tk/component/toolpane',
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
          *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.addButton() for details).
+         *  in radio groups (see method RadioGroup.createOptionButton() for
+         *  details).
          *
          * @returns {ToolBar}
          *  The new tool bar object.
@@ -128,7 +129,7 @@ define('io.ox/office/tk/component/toolpane',
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             toolBarIds.push(id);
             node.append(toolBar.getNode());
-            radioGroup.addButton(id, options);
+            radioGroup.addOptionButton(id, options);
             controller.registerViewComponent(toolBar);
             if (toolBarIds.length > 1) {
                 toolBar.hide();

@@ -66,8 +66,8 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'format/paragraph/stylesheet': {
                     chain: 'chain/format/paragraph',
-                    get: function (attributes) { return attributes.parastyle; },
-                    set: function (styleId) { editor.setAttribute('paragraph', 'parastyle', styleId); }
+                    get: function (attributes) { return attributes.style; },
+                    set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
@@ -85,8 +85,8 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'format/character/stylesheet': {
                     chain: 'chain/format/character',
-                    get: function (attributes) { return attributes.charstyle; },
-                    set: function (styleId) { editor.setAttribute('character', 'charstyle', styleId); }
+                    get: function (attributes) { return attributes.style; },
+                    set: function (styleId) { editor.setAttribute('character', 'style', styleId); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',

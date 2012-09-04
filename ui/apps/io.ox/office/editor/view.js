@@ -54,12 +54,14 @@ define('io.ox/office/editor/view',
             self = this;
 
         /**
-         * Fills the drop-down list with all known style names.
+         * Fills the drop-down list with all known style names, and adds
+         * preview CSS formatting to the list items.
          */
         function fillList() {
-            self.clearButtons();
+            self.clearOptionButtons();
             _(styleSheets.getStyleSheetNames()).each(function (name, id) {
-                self.addButton(id, { label: name });
+                var options = styleSheets.getPreviewButtonOptions(id);
+                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' } }));
             });
         }
 
@@ -159,7 +161,8 @@ define('io.ox/office/editor/view',
          * @param {Object} [options]
          *  A map of options to control the properties of the new tab in the
          *  tab bar representing the tool bar. Supports all options for buttons
-         *  in radio groups (see method RadioGroup.addButton() for details).
+         *  in radio groups (see method RadioGroup.createOptionButton() for
+         *  details).
          */
         function createToolBar(id, options) {
 
@@ -314,17 +317,17 @@ define('io.ox/office/editor/view',
             .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addRadioGroup('format/paragraph/alignment', { auto: true, icon: 'icon-align-left', tooltip: gt('Paragraph Alignment') })
-                .addButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+            .addRadioGroup('format/paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, copyMode: 'icon' })
+                .addOptionButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
+                .addOptionButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
+                .addOptionButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
+                .addOptionButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
-            .addRadioGroup('format/paragraph/lineheight', { auto: true, icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing') })
-                .addButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
-                .addButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
-                .addButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
+            .addRadioGroup('format/paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, copyMode: 'icon' })
+                .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
+                .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
+                .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
 
         createToolBar('table', { label: gt('Table') })
@@ -338,11 +341,11 @@ define('io.ox/office/editor/view',
         createToolBar('image', { label: gt('Image') })
             .addButton('image/delete', { icon: 'icon-trash', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/alignment', { auto: true, icon: 'icon-picture', tooltip: gt('Alignment') })
-                .addButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
-                .addButton('leftFloated',  { icon: 'icon-align-left',   tooltip: gt('Float Left') })
-                .addButton('rightFloated', { icon: 'icon-align-right',  tooltip: gt('Float Right') })
-                .addButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
+            .addRadioGroup('image/alignment', { icon: 'icon-picture', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
+                .addOptionButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
+                .addOptionButton('leftFloated',  { icon: 'icon-align-left',   tooltip: gt('Float Left') })
+                .addOptionButton('rightFloated', { icon: 'icon-align-right',  tooltip: gt('Float Right') })
+                .addOptionButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })
