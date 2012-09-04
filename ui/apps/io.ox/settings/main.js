@@ -79,12 +79,14 @@ define('io.ox/settings/main',
             name: 'io.ox/settings'
         }));
 
-        var onHideSettingsPane = function () {
-            var settingsID = currentSelection.id + '/settings';
-            ext.point(settingsID + '/detail').invoke('save');
+        var saveSettings = function () {
+            if (currentSelection !== null) {
+                var settingsID = currentSelection.id + '/settings';
+                ext.point(settingsID + '/detail').invoke('save');
+            }
         };
 
-        win.on('hide', onHideSettingsPane);
+        win.on('hide', saveSettings);
 
         ext.point('io.ox/settings/links/toolbar').extend({
             id: 'io.ox/settings/expertcb',
@@ -102,7 +104,6 @@ define('io.ox/settings/main',
                 );
             }
         });
-
 
         win.addClass('io-ox-settings-main');
 
@@ -149,44 +150,34 @@ define('io.ox/settings/main',
             return $.Deferred().resolve(apps);
         });
 
+        grid.setMultiple(false);
+
         var showSettings = function (obj) {
-            var settingsPath,
-                extPointPart;
-            settingsPath = obj.id + '/settings/pane';
-            extPointPart = obj.id + '/settings';
+            var settingsPath = obj.id + '/settings/pane',
+                extPointPart = obj.id + '/settings';
             right.empty().busy();
             require([settingsPath], function (m) {
-                right.empty(); // again, since require makes this async
+                right.empty().idle(); // again, since require makes this async
                 ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
-                right.idle();
             });
         };
+
+        // trigger auto save
         grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
-                var isOpenedTheFirstTime = (currentSelection === null);
-                if (!isOpenedTheFirstTime) {
-                    onHideSettingsPane();
-                }
-                if (_.cid(selection[0]) !== _.cid(currentSelection)) {
-                    // show if changed
-                    showSettings(currentSelection = selection[0]);
-                }
-            } else {
-                right.empty();
+                saveSettings();
+                currentSelection = selection[0];
             }
         });
 
-        grid.setMultiple(false);
-
+        commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
         commons.wireGridAndWindow(grid, win);
 
         // go!
         win.show(function () {
             grid.paint();
         });
-
-        grid.refresh();
     });
 
     return {
