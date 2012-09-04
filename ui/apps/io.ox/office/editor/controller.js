@@ -143,12 +143,13 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'image/delete': {
                     chain: 'chain/image',
                     enable: function (enabled) { return enabled && editor.isFloatedImagePosition(); },
-                    set: function () { editor.deleteImage(); }
+                    set: function () { editor.deleteSelected(); }
                 },
                 'image/alignment': {
                     chain: 'chain/image',
                     get: function () { return editor.getImageFloatMode(); },
-                    set: function (alignment) { editor.setImageFloatMode(alignment); }
+                    // set: function (floatMode) { editor.setImageFloatMode(floatMode); }
+                    set: function (floatMode) { editor.setAttribute('character', 'imageFloatMode', floatMode); }
                 },
 
                 'debug/toggle': {

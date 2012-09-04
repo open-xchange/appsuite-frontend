@@ -24,10 +24,11 @@ define('io.ox/office/editor/oxopam', ['io.ox/office/tk/utils'], function (Utils)
      * 'nodeName' of the dom node that was used to calculate the logical
      * position. The value of selectedNodeName can be 'DIV', 'TR', ...
      */
-    function OXOPaM(oxoPosition, nodeName, imageFloatMode) {
+    function OXOPaM(oxoPosition, nodeName, imageFloatMode, isRtlCursorTravel) {
         this.oxoPosition = oxoPosition;
         this.selectedNodeName = nodeName ? nodeName : null;
         this.imageFloatMode = imageFloatMode ? imageFloatMode : null;
+        this.isRtlCursorTravel = isRtlCursorTravel ? isRtlCursorTravel : null;
 
         this.toString = function () {
             return oxoPosition.toString();

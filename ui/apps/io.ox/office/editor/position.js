@@ -157,7 +157,7 @@ define('io.ox/office/editor/position',
             Utils.warn('Position.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
         }
 
-        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode);
+        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode, isRtlCursorTravel);
     };
 
     /**
@@ -173,15 +173,22 @@ define('io.ox/office/editor/position',
      * @param {OXOPaM.oxoPosition} oxoPosition
      *  The logical position.
      *
+     * @param {Boolean} returnImageNode
+     *  A boolean value, that needs to be set to 'true' in the special case,
+     *  that an image node shall be returned instead of a text node. Typically
+     *  previous or following siblings are returned, instead of image nodes.
+     *
      * @returns {DOM.Point}
      *  The calculated dom position consisting of dom node and offset.
      *  Offset is only set for text nodes, otherwise it is undefined.
      */
-    Position.getDOMPosition = function (startnode, oxoPosition) {
+    Position.getDOMPosition = function (startnode, oxoPosition, returnImageNode) {
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
             offset = null;
+
+        returnImageNode = returnImageNode ? true : false;
 
         if (oxoPosition === undefined) {
             // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
@@ -195,7 +202,7 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = Position.getNextChildNode(node, oxoPos.shift());
+            var returnObj = Position.getNextChildNode(node, oxoPos.shift(), returnImageNode);
 
             if (returnObj) {
                 if (returnObj.node) {
@@ -321,10 +328,12 @@ define('io.ox/office/editor/position',
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
      */
-    Position.getNextChildNode = function (node, pos) {
+    Position.getNextChildNode = function (node, pos, returnImageNode) {
 
         var childNode,
             offset;
+
+        returnImageNode = returnImageNode ? true : false;
 
         if (node instanceof $) {  // true for jQuery objects
             if (pos > node.length - 1) {
@@ -369,9 +378,23 @@ define('io.ox/office/editor/position',
                     }
 
                     if (textLength + currentLength >= pos) {
+
+                        if ((returnImageNode) && (! isImage) && (textLength === pos)) {
+                            var j = i + 1,
+                                nextNode = nodeList[j];
+
+                            if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
+                                bFound = true;
+                                node = nextNode;
+                                isImage = true;
+                                break;  // leaving the for-loop
+                            }
+                        }
+
                         bFound = true;
                         node = currentNode;
                         break;  // leaving the for-loop
+
                     } else {
                         textLength += currentLength;
                     }
@@ -390,17 +413,21 @@ define('io.ox/office/editor/position',
                 }
                 offset = pos - textLength;
             } else {
-                // if the last position is an image, the dom position shall be the following text node
-                childNode = node.nextSibling;
-                if ((! childNode) && (node.nodeName === 'IMG')) {
-                    childNode = node.parentNode.nextSibling;
+                if (! returnImageNode) {
+                    // if the last position is an image, the dom position shall be the following text node
+                    childNode = node.nextSibling;
+                    if ((! childNode) && (node.nodeName === 'IMG')) {
+                        childNode = node.parentNode.nextSibling;
+                    }
+                    childNode = childNode.firstChild;
+                    offset = 0;
+                } else {
+                    childNode = node;
                 }
-                childNode = childNode.firstChild;
-                offset = 0;
             }
 
-            // only text nodes shall be returned, never image nodes
-            if (childNode.nodeType !== 3) {
+            // only text nodes shall be returned, never image nodes (only, if 'returnImageNode' is set to true)
+            if ((childNode.nodeType !== 3) && (! returnImageNode)) {
                 Utils.warn('Position.getNextChildNode(): Failed to get text node at position: ' + pos + '(' + childNode.nodeName + ')');
             }
 
@@ -1795,6 +1822,33 @@ define('io.ox/office/editor/position',
         }
 
         return counter;
+    };
+
+    /**
+     * Searching for the first text span in a paragraph.
+     *
+     * @param {HTMLElement} node
+     *  A DOM element object, typically a paragraph, in which
+     *  the text span is searched.
+     *
+     * @returns {HTMLElement} node
+     *  The first text span inside the paragraph.
+     */
+    Position.getFirstTextSpanInParagraph = function (node) {
+
+        var child = node.firstChild,
+            continue_ = true;
+
+        while ((child !== null) && (continue_)) {
+
+            if (DOM.isTextSpan(child)) {
+                continue_ = false;
+            } else {
+                child = child.nextSibling;
+            }
+        }
+
+        return child;
     };
 
     return Position;
