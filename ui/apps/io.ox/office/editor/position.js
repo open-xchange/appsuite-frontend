@@ -76,10 +76,6 @@ define('io.ox/office/editor/position',
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
 
-            if (isRtlCursorTravel) {
-                window.console.log("AAA: This is rtlCursorTravel");
-            }
-
             var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint),
                 newNode = returnObj.domPoint;
 
