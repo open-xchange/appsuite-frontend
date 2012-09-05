@@ -24,7 +24,7 @@ define('io.ox/calendar/settings/pane',
                 .append(
                     $("<span>")
                     .addClass("detail")
-                    .append($("<span>").text("I AM A SUPER FINE CALENDARSETTING WHOA"))
+                    .append($("<span>").text("Nothing to configure yet."))
             )
             .append($("<br>"));
             return node;
