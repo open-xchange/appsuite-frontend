@@ -20,7 +20,13 @@ define('io.ox/calendar/edit/view-addparticipants',
 
     'use strict';
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: true});
+    var autocompleteAPI = new AutocompleteAPI({
+        id: 'participants',
+        contacts: true,
+        groups: true,
+        resources: true,
+        distributionlists: true
+    });
 
     var AddParticipantView = Backbone.View.extend({
         events: {

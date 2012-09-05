@@ -144,11 +144,7 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
 
-            // pre render it
-//            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
-
-            // TODO
-            // require a render js file to render the calendar view instead of templates
+            // create or edit, check for self.model.has('id')
 
             // clear node
             self.$el.empty();
@@ -158,13 +154,7 @@ define('io.ox/calendar/edit/view-main',
                 editmode: !!(self.model.has('id'))
             });
 
-            /*self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
-                strings: staticStrings,
-                reminderList: reminderListValues,
-                uid: self.guid
-            }));
-            */
-
+            // TODO remove this, pass model to template and don't use data-property
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
 
@@ -183,8 +173,7 @@ define('io.ox/calendar/edit/view-main',
             self.$('.endsat-time').combobox(comboboxHours);
 
 
-            //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
-
+//            self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
             self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});

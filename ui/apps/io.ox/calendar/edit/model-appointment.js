@@ -14,7 +14,7 @@
 define('io.ox/calendar/edit/model-appointment',
       ['io.ox/calendar/api',
        'io.ox/core/date',
-       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, dateAPI, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (calendar, dateAPI, gt) {
 
     'use strict';
 
@@ -24,7 +24,6 @@ define('io.ox/calendar/edit/model-appointment',
     defStart.setHours(defStart.getHours() + 1);
     defEnd.setMinutes(0);
     defEnd.setHours(defEnd.getHours() + 2);
-
 
     var AppointmentModel = Backbone.Model.extend({
         validation: {
@@ -64,7 +63,7 @@ define('io.ox/calendar/edit/model-appointment',
             var self = this,
                 df = new $.Deferred();
 
-            CalendarAPI.get(options)
+            calendar.get(options)
                 .done(function (data) {
                     self.set(data.data);
                     df.resolve(self, data);
@@ -112,7 +111,7 @@ define('io.ox/calendar/edit/model-appointment',
                 }
             }
 
-            CalendarAPI.update(o)
+            calendar.update(o)
                 .done(function (data) {
                     self._resetDirty();
                     self.attributes = data;
@@ -132,7 +131,7 @@ define('io.ox/calendar/edit/model-appointment',
                 df = new $.Deferred();
 
             o = self.attributes;
-            CalendarAPI.create(o)
+            calendar.create(o)
                 .done(function (data) {
                     self._resetDirty();
                     self.attributes = data;
@@ -164,7 +163,7 @@ define('io.ox/calendar/edit/model-appointment',
 
             o.data.folder = self.get('folder_id');
 
-            CalendarAPI.remove(o)
+            calendar.remove(o)
                 .done(function () {
                     self._resetDirty();
                     df.resolve(true);

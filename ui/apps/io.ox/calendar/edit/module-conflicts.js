@@ -16,8 +16,8 @@ define('io.ox/calendar/edit/module-conflicts',
        'io.ox/calendar/api',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',
-       //'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, /*tmpl,*/ gt) {
+       'io.ox/core/extensions',
+       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, ext, gt) {
 
     'use strict';
 
@@ -77,6 +77,7 @@ define('io.ox/calendar/edit/module-conflicts',
         render: function () {
             var conflictList = vgridtpl.drawSimpleGrid(this.collection.toJSON());
 
+            // show info about conflicting appointment
             require(
                     ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
                     function (dialogs, viewGrid) {
@@ -97,13 +98,17 @@ define('io.ox/calendar/edit/module-conflicts',
                 tmpl.render('io.ox/calendar/edit/conflicts', {})
             );*/
 
+            this.$el.append(conflictList);
+            ext.point('io.ox/calendar/edit/conflicts').invoke('draw', this.$el, {
+              // nothing
+            });
+
             // remove buttons, when resources are in the conflicts
             var isResource = this.collection.any(function (conflict) {
                 return conflict.get('conflicting_participants').any(function (participant) {
                     return (participant.get('type') === participant.TYPE_RESOURCE);
                 });
             });
-
             if (isResource) {
                 this.$('[data-action="cancel"]').hide();
                 this.$('[data-action="ignore"]').hide();
