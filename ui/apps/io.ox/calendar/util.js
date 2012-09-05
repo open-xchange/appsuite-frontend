@@ -435,10 +435,14 @@ define("io.ox/calendar/util",
 
             return rows;
         },
+        
+        getTodayStart: function (timestamp) {
+            return ((timestamp || _.now()) / DAY >> 0) * DAY;
+        },
 
         getWeekStart: function (timestamp) {
 
-            timestamp = ((timestamp || _.now()) / DAY >> 0) * DAY;
+            timestamp = this.getTodayStart(timestamp);
 
             var d = new date.Local(timestamp),
                 // apply week day shift
