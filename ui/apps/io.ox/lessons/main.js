@@ -24,6 +24,8 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
                     app: app,
                     win: win
                 });
+                app.lesson = lesson;
+                app.setState({lesson: lesson.id});
             };
         };
     // launcher
@@ -40,7 +42,20 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
         app.setWindow(win);
 
         win.show(function () {
-            app.tableOfContents();
+            var state = app.getState();
+            if (state && state.lesson) {
+                
+                var lesson = ext.point('io.ox/lessons/lesson').get(state.lesson, function (lesson) {
+                    lesson.start({
+                        app: app,
+                        win: win
+                    });
+                    app.lesson = lesson;
+                });
+            }
+            if (!app.lesson) {
+                app.tableOfContents();
+            }
         });
     });
     

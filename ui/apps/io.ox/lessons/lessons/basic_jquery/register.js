@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 'ace/ace', 'ace/mode/javascript'], function (ext, ace, JavaScript) {
+define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_jquery',
@@ -19,21 +19,20 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
         description: 'In which DOM nodes will be selected and the JQuery API will be explored',
         section: 'Basics',
         start: function (options) {
-            var win = options.win;
+            require(["text!io.ox/lessons/lessons/basic_jquery/lesson.html"], function (html) {
+                var win = options.win;
+                
+                win.nodes.main.empty().append($(html));
+                
+                win.nodes.main.find(".code").each(function (index, element) {
+                    console.log(element);
+                    Editor.highlight(element);
+                });
+                
+            });
             
-            win.nodes.main.empty().append($("<h1>").text("Basic JQuery"));
             
-            var $editor = $("<div>").css({
-                position: 'absolute',
-                width: '500',
-                height: '400',
-                border: "1px solid black"
-            }).appendTo(win.nodes.main);
-            
-            var editor = ace.edit($editor);
-            
-            editor.getSession().setMode(new JavaScript.Mode());
-            editor.setTheme('ace/theme/eclipse');
         }
+    
     });
 });
