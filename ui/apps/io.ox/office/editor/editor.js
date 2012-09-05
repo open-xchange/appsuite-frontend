@@ -59,6 +59,7 @@ define('io.ox/office/editor/editor',
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
     var OP_IMAGE_INSERT = 'insertImage';
+    var OP_FIELD_INSERT = 'insertField';
 
     //    var OP_ATTR_DELETE =  'deleteAttribute';
 
@@ -751,6 +752,16 @@ define('io.ox/office/editor/editor',
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 this.implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
+            else if (operation.name === OP_FIELD_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var endPos = _.clone(operation.position, true);
+                    endPos[endPos.length - 1] += 1;
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
+                this.implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
+            }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var sel = _.copy(operation.start);
@@ -1186,6 +1197,12 @@ define('io.ox/office/editor/editor',
                 else if (c === 'V') {
                     var selection = this.getSelection();
                     var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
+                    this.applyOperation(newOperation, true, true);
+                }
+                else if (c === 'F') {
+                    var selection = this.getSelection();
+                    // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
+                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "05.09.2012"};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -2772,8 +2789,6 @@ define('io.ox/office/editor/editor',
                     // points to start or end of text, needed to clone formatting)
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
-                    // Do not set the 'float' property to 'none'. That is used in
-                    // anchorType 'FloatNone'.
                     node = node.parentNode;
                     floatMode = 'inline';
                 // } else if (anchorType === 'ToPage') {
@@ -2826,6 +2841,19 @@ define('io.ox/office/editor/editor',
             lastPos[posLength] = position[posLength] + 1;
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
+        };
+
+        this.implInsertField = function (position, type, representation) {
+            window.console.log("implInsertField");
+            window.console.log("Parameter: " + position + " : " + type + " : " + representation);
+
+            var domPos = Position.getDOMPosition(paragraphs, position),
+            node = domPos ? domPos.node : null;
+
+            DOM.splitTextNode(node, domPos.offset);
+            // insert field before the parent <span> element of the text node
+            node = node.parentNode;
+            $('<div>').insertBefore(node).text(representation).css('display', 'inline-block');
         };
 
         /**
