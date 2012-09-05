@@ -66,7 +66,7 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
             $node.find(".plugins-portal-quota-mailbar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-mail")
-            .text(strings.fileSize(quota.mail.use / 1024) + " " + gt("of") + " " + strings.fileSize(quota.mail.quota));
+            .text(strings.fileSize(quota.mail.use) + " " + gt("of") + " " + strings.fileSize(quota.mail.quota));
 
             var width = (quota.mail.use / quota.mail.quota) * 100;
             $node.find(".plugins-portal-quota-mailbar")
