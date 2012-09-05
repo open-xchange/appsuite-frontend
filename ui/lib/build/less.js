@@ -136,9 +136,9 @@ function printList(list, separator, prec) {
 
 function printParam(param) {
     return !param.name ? param.value.print() :
-        param.value ? [param.name.print(), ":", param.value.print()] :
-        param.variadic ? [param.name.print(), "..."] :
-            param.name.print();
+        param.value ? [param.name, ":", param.value.print()] :
+        param.variadic ? [param.name, "..."] :
+            param.name;
 }
 
 less.tree.Alpha.prototype.print = function() {
