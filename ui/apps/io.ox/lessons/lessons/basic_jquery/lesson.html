@@ -108,7 +108,52 @@ $('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;').appendTo(this);
 	})
 );</div>
 				</p>
+				<p>
+					You can also reuse the event handler. This might come in handy when you want to react to events on very many elements:
+					
+<div class="node_experiment">function showAlert() {
+	alert("Button was clicked!");
+}
+$('&lt;button class="btn"&gt;').text('Button 1').on("click", showAlert).appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$('&lt;button class="btn"&gt;').text('Button 2').on("click", showAlert).appendTo(this);</div>
+				</p>
+				
+				<p>
+					You may also customize what an event handler does by passing an object to the <code>#on</code> call:
+<div class="node_experiment">function showAlert(e) {
+	alert("Button was clicked: " + e.data.message);
+}
 
+$('&lt;button class="btn"&gt;').text('Button 1').on("click", {message: 'Hello'}, showAlert).appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$("&lt;br&gt;").appendTo(this);
+$('&lt;button class="btn"&gt;').text('Button 2').on("click", {message: 'Namaste'}, showAlert).appendTo(this);</div>
+ 				</p>
+				<p>
+					Sometimes it is also useful to suppress the action the browser would normally take on a certain event. Typically this is used to prevent the browser from following links, when you do something else once the user clicks:
+<div class="node_experiment">$('&lt;a href="#"&gt;').text("A link").on('click', function (e) {
+	e.preventDefault(); // Do not follow the link
+	alert("What trickery is this? The link was clicked, but not followed!");
+}).appendTo(this);</div>
+				</p>
+				
+				<h3>Further Reading</h3>
+				<dl>
+					<dt><a href="http://api.jquery.com/category/events/" target="_blank">JQuery Event API</a></dt>
+					<dd>The complete list of events and event related methods in the jQuery documentation certainly warrants some quality time spent on it.</dd>
+					
+					<dt><a href="http://api.jquery.com/on/">The on() method</a></dt>
+					<dd>
+						Find out everything else the <code>#on</code> method can do (and that's a lot). Wield events with confidence. 
+					</dd>
+				</dl>
+				
+				<h3>Exercises</h3>
+				<div class="manipulation_exercises">
+					
+				</div>
 			</section>
 
 			<section id="selecting_elements">
