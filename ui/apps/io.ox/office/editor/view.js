@@ -304,7 +304,7 @@ define('io.ox/office/editor/view',
 
         // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
-            .addGroup('table/insert', new TableSizeChooser());
+            .addGroup('table/insert', new TableSizeChooser())
             .addButton('image/insert',  { icon: 'icon-picture', tooltip: gt('Insert Image') });
 
         createToolBar('format', { label: gt('Format') })

@@ -21,7 +21,6 @@ define('io.ox/office/dialog/common',
     var CommonDialogs = {};
 
     CommonDialogs.insertImageDialog = function (cbFilename) {
-
         var
             self = this;
 
