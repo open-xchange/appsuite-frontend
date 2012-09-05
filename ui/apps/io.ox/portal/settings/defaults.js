@@ -24,7 +24,8 @@ define('io.ox/portal/settings/defaults', [], function () {
             {id: 'tasks', active: true, index: 500},
             {id: 'appointments', active: true, index: 600},
             {id: 'flickr', active: true, index: 700},
-            {id: 'tumblr', active: true, index: 400}
+            {id: 'tumblr', active: true, index: 400},
+            {id: 'quota', active: true, index: 900}
 //            {id: 'rss', active: true, index: 700}
         ]
     };

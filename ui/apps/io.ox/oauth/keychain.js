@@ -15,7 +15,7 @@
  The keychain plugin. Use io.ox/keychain/api to interact with OAuth accounts
  **/
 
-define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http", "io.ox/core/event"], function (ext, http, Events) {
+define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http", "io.ox/core/event", "io.ox/core/notifications"], function (ext, http, Events, notifications) {
     "use strict";
     var moduleDeferred = $.Deferred(),
         cache = null,
@@ -92,47 +92,45 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             var account = incoming(account),
                 def = $.Deferred();
 
-            require(["io.ox/core/tk/dialogs", "io.ox/core/tk/keys"], function (dialogs, KeyListener) {
+            require(["io.ox/core/tk/keys"], function (KeyListener) {
                 var callbackName = "oauth" + generateId();
-                require(["io.ox/core/http"], function (http) {
-                    var params = {
-                        action: "init",
-                        serviceId: service.id,
-                        displayName: chooseDisplayName(),
-                        cb: callbackName
-                    };
-                    if (account) {
-                        params.id = account.id;
-                    }
+                var params = {
+                    action: "init",
+                    serviceId: service.id,
+                    displayName: chooseDisplayName(),
+                    cb: callbackName
+                };
+                if (account) {
+                    params.id = account.id;
+                }
 
-                    // this is far too late not to run into popup blocker
-                    var popupWindow = win || window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+                // this is far too late not to run into popup blocker
+                var popupWindow = win || window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
 
-                    http.GET({
-                        module: "oauth/accounts",
-                        params: params
-                    })
-                    .done(function (interaction) {
-                        window["callback_" + callbackName] = function (response) {
-                            // TODO handle a possible error object in response
-                            cache[service.id].accounts[response.data.id] = response.data;
-                            def.resolve(response.data);
-                            delete window["callback_" + callbackName];
-                            popupWindow.close();
-                            self.trigger("create", response.data);
-                            self.trigger("refresh.all refresh.list");
-                            ox.trigger("refresh-portal", [true]);
-                            require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                                new dialogs.ModalDialog({easyOut: true}).append($('<div class="alert alert-success">').text("Account added successfully")).addPrimaryButton("Close", "close").show();
-                            });
-                        };
-
-                        popupWindow.location = interaction.authUrl;
-
-                    }).fail(function (e) {
+                http.GET({
+                    module: "oauth/accounts",
+                    params: params
+                })
+                .done(function (interaction) {
+                    window["callback_" + callbackName] = function (response) {
+                        // TODO handle a possible error object in response
+                        cache[service.id].accounts[response.data.id] = response.data;
+                        def.resolve(response.data);
+                        delete window["callback_" + callbackName];
                         popupWindow.close();
-                        def.reject();
-                    });
+                        self.trigger("create", response.data);
+                        self.trigger("refresh.all refresh.list");
+                        ox.trigger("refresh-portal");
+                        notifications.yell("success", "Account added successfully");
+                    };
+
+                    popupWindow.location = interaction.authUrl;
+
+                }).fail(function (e) {
+                    // TODO handle errors
+                    notifications.yell('error', e.error);
+                    popupWindow.close();
+                    def.reject();
                 });
 
             });
@@ -172,41 +170,40 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
         };
 
         this.reauthorize = function (account) {
-            var def = $.Deferred();
-            var callbackName = "oauth" + generateId();
-            require(["io.ox/core/http"], function (http) {
-                var params = {
+            var def = $.Deferred(),
+                callbackName = "oauth" + generateId(),
+                params = {
                     action: "init",
                     serviceId: service.id,
                     displayName: account.displayName,
                     cb: callbackName
                 };
-                if (account) {
-                    params.id = account.id;
-                }
-                var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
-                http.GET({
-                    module: "oauth/accounts",
-                    params: params
-                })
-                .done(function (interaction) {
+            if (account) {
+                params.id = account.id;
+            }
+            var popupWindow = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
 
-                    window["callback_" + callbackName] = function (response) {
-                        cache[service.id].accounts[response.data.id] = response.data;
-                        def.resolve(response.data);
-                        delete window["callback_" + callbackName];
-                        popupWindow.close();
-                        self.trigger("update", response.data);
-                        ox.trigger("refresh-portal", [true]);
-                    };
-                    popupWindow.location = interaction.authUrl;
+            http.GET({
+                module: "oauth/accounts",
+                params: params
+            })
+            .done(function (interaction) {
 
-                })
-                .fail(function () {
+                window["callback_" + callbackName] = function (response) {
+                    cache[service.id].accounts[response.data.id] = response.data;
+                    def.resolve(response.data);
+                    delete window["callback_" + callbackName];
                     popupWindow.close();
-                    def.reject();
-                });
+                    self.trigger("update", response.data);
+                    ox.trigger("refresh-portal");
+                };
+                popupWindow.location = interaction.authUrl;
 
+            })
+            .fail(function (e) {
+                notifications.yell('error', e.error);
+                popupWindow.close();
+                def.reject();
             });
 
             return def;

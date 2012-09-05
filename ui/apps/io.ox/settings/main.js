@@ -88,26 +88,21 @@ define('io.ox/settings/main',
 
         win.on('hide', saveSettings);
 
-        ext.point('io.ox/settings/links/toolbar').extend({
-            id: 'io.ox/settings/expertcb',
-            draw: function (context) {
-                this.append(
-                    forms.createCheckbox({
-                        dataid: 'settings-expertcb',
-                        initialValue: expertmode,
-                        label: 'Expertmode'
-                    })
-                    .on('update.model', function (e, options) {
-                        expertmode = options.value;
-                        updateExpertMode();
-                    })
-                );
-            }
-        });
+        win.nodes.controls.append(
+            forms.createCheckbox({
+                dataid: 'settings-expertcb',
+                initialValue: expertmode,
+                label: 'Expert\u00a0mode' // mmmh, nbsp sucks here
+            })
+            .on('update.model', function (e, options) {
+                expertmode = options.value;
+                updateExpertMode();
+            })
+        );
 
         win.addClass('io-ox-settings-main');
 
-        left = $('<div/>')
+        left = $('<div>')
             .addClass('leftside border-right')
             .css({
                 width: GRID_WIDTH + 'px',
@@ -115,7 +110,7 @@ define('io.ox/settings/main',
             })
             .appendTo(win.nodes.main);
 
-        right = $('<div/>')
+        right = $('<div>')
             .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto' })
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
