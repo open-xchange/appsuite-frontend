@@ -55,6 +55,7 @@ define('io.ox/office/editor/editor',
     var OP_ROW_INSERT = 'insertRow';
     var OP_COLUMN_INSERT = 'insertColumn';
 
+    var OP_INSERT_STYLE = 'insertStylesheet';
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
     var OP_IMAGE_INSERT = 'insertImage';
@@ -369,6 +370,9 @@ define('io.ox/office/editor/editor',
             // container for all style sheets of all attribute families
             documentStyles = (textMode === 'rich') ? new DocumentStyles(editdiv) : null,
 
+            // shortcut for paragraph styles
+            paragraphStyles = documentStyles ? documentStyles.getStyleSheets('paragraph') : null,
+
             // shortcut for character styles
             characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
 
@@ -603,6 +607,12 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
                 }
                 this.implDeleteText(operation.start, operation.end);
+            }
+            else if (operation.name === OP_INSERT_STYLE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    // TODO!!!
+                }
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs);
             }
             else if (operation.name === OP_ATTRS_SET) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1518,7 +1528,9 @@ define('io.ox/office/editor/editor',
         this.deleteSelected = function (_selection) {
 
             // this.implCheckSelection();
+            var buttonEvent = _selection ? false : true;
             var selection = _selection || this.getSelection();
+
             if (selection.hasRange()) {
 
                 undomgr.startGroup();
@@ -1708,12 +1720,35 @@ define('io.ox/office/editor/editor',
 
                 undomgr.endGroup();
             }
+            else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
+
+                // deleting images without selection (only workaround until image selection with mouse is possible)
+                // This deleting of images is only possible with the button, not with an key down event.
+
+                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                    imageEndPostion = _.copy(imageStartPosition, true);
+
+                if (selection.startPaM.isRtlCursorTravel) {
+                    imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
+                }
+
+                imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
+
+                var returnImageNode = true;
+                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
+                // deleting with button is possible.
+                if (Utils.getNodeName(Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node) === 'img') {
+                    this.deleteText(imageStartPosition, imageEndPostion);
+                }
+            }
         };
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
                 var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
                 this.applyOperation(newOperation, true, true);
+                // setting the cursor position
+                this.setSelection(new OXOSelection(lastOperationEnd));
             }
         };
 
@@ -1954,7 +1989,8 @@ define('io.ox/office/editor/editor',
 
             var para,
                 start,
-                end;
+                end,
+                buttonEvent = ((startPosition === undefined) && (endPosition === undefined)) ? true : false;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
@@ -2152,6 +2188,26 @@ define('io.ox/office/editor/editor',
                             this.setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
                         }
                     }
+                }
+                else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
+
+                    // setting attributes without image selection (only workaround until image selection with mouse is possible)
+                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                        imageEndPostion = _.copy(imageStartPosition, true);
+
+                    if (selection.startPaM.isRtlCursorTravel) {
+                        imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
+                    }
+
+                    imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
+
+                    attributes = defineImageAttributes(attributes);
+
+                    // this.setAttributes(family, attributes, imageStartPosition, imageEndPostion);
+                    implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
+
+                    // setting the cursor position
+                    this.setSelection(new OXOSelection(lastOperationEnd));
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2578,14 +2634,6 @@ define('io.ox/office/editor/editor',
             return selection.endPaM.imageFloatMode;
         };
 
-        this.setImageFloatMode = function (floatMode) {
-            Utils.info("Selected Float Mode: " + floatMode);
-        };
-
-        this.deleteImage = function () {
-            Utils.info("Deleting image");
-        };
-
         // ==================================================================
         // IMPL METHODS
         // ==================================================================
@@ -2676,29 +2724,9 @@ define('io.ox/office/editor/editor',
                 if (attributes.anchortype) {
                     anchorType = attributes.anchortype;
                 }
+
                 if (attributes.inline !== undefined) {
                     inline = attributes.inline;
-                }
-                if (attributes.width) {
-                    attributes.width = attributes.width / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.height) {
-                    attributes.height = attributes.height / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.marginT) {
-                    attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.marginR) {
-                    attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.marginB) {
-                    attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.marginL) {
-                    attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
-                }
-                if (attributes.anchorhbase) {
-                    attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
                 }
 
                 if (attributes.textwrapmode !== undefined) {
@@ -2715,6 +2743,16 @@ define('io.ox/office/editor/editor',
                         }
                     }
                 }
+
+                if ((node) && (node.nodeType === 3)) {
+                    var paragraph = node.parentNode.parentNode,
+                        paraWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
+
+                    attributes.paragraphWidth = paraWidth;
+                }
+
+                attributes = convertAttributeSizes(attributes);
+                attributes = calculateImageMargins(attributes); // necessary to switch the text flow around the image.
             }
 
             if (anchorType === null) {
@@ -2726,6 +2764,9 @@ define('io.ox/office/editor/editor',
             }
 
             if ((node) && (node.nodeType === 3)) {
+
+                var floatMode = null;
+
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
                     // points to start or end of text, needed to clone formatting)
@@ -2734,68 +2775,49 @@ define('io.ox/office/editor/editor',
                     // Do not set the 'float' property to 'none'. That is used in
                     // anchorType 'FloatNone'.
                     node = node.parentNode;
-                    $('<img>', { src: url }).data('mode', 'inline').insertBefore(node).css(attributes);
-                } else if (anchorType === 'ToPage') {
-                    // TODO: This is not a good solution. Adding image to the end of the editdiv,
-                    // does not produce any disorder, but images are not allowed at editdiv.
-                    // A new counting for paragraphs = editdiv.children() is required.
-                    $('<img>', { src: url }).appendTo(editdiv).css(attributes);
-                    attributes.position = 'absolute';
-                    paragraphs = editdiv.children();
-                } else if (anchorType === 'ToParagraph') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    attributes.position = 'absolute';
-                    $('<img>', { src: url }).insertBefore(node).css(attributes);
-                } else if (anchorType === 'ToCharacter') {
-                    var textNode = DOM.splitTextNode(node, domPos.offset);
-                    // Creating a new span that will include the graphic. The span must have a position.
-                    // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
-                    var newParent = $('<span>', { position: 'relative' });
-                    newParent.insertAfter(textNode.parentNode);
-                    attributes.position = 'absolute';
-                    $('<img>', { src: url }).appendTo(newParent).css(attributes);
+                    floatMode = 'inline';
+                // } else if (anchorType === 'ToPage') {
+                //     // TODO: This is not a good solution. Adding image to the end of the editdiv,
+                //     // does not produce any disorder, but images are not allowed at editdiv.
+                //     // A new counting for paragraphs = editdiv.children() is required.
+                //     $('<img>', { src: url }).appendTo(editdiv).css(attributes);
+                //     attributes.position = 'absolute';
+                //     paragraphs = editdiv.children();
+                // } else if (anchorType === 'ToParagraph') {
+                //     // insert image before the first span in the paragraph
+                //     node = node.parentNode.parentNode.firstChild;
+                //     attributes.position = 'absolute';
+                //     $('<img>', { src: url }).insertBefore(node).css(attributes);
+                // } else if (anchorType === 'ToCharacter') {
+                //     var textNode = DOM.splitTextNode(node, domPos.offset);
+                //     // Creating a new span that will include the graphic. The span must have a position.
+                //     // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
+                //     var newParent = $('<span>', { position: 'relative' });
+                //     newParent.insertAfter(textNode.parentNode);
+                //     attributes.position = 'absolute';
+                //     $('<img>', { src: url }).appendTo(newParent).css(attributes);
                 } else if (anchorType === 'FloatLeft') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'left';
-                    $('<img>', { src: url }).data('mode', 'leftFloated').insertBefore(node).css(attributes);
+                    floatMode = 'leftFloated';
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
-                    $('<img>', { src: url }).data('mode', 'rightFloated').insertBefore(node).css(attributes);
+                    floatMode = 'rightFloated';
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
-                    var paragraph = node.parentNode.parentNode,
-                        paraWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2),
-                        imageWidth = 0,
-                        leftMarginWidth = 0,
-                        anchorhoffset = 0;
+                    node = node.parentNode.parentNode.firstChild;
 
-                    if (attributes.width) {
-                        imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
-                    }
-                    if (attributes['margin-left']) {
-                        leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
-                    }
-
-                    if (attributes.anchorhoffset) {
-                        anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
-                        attributes['margin-left'] = anchorhoffset + leftMarginWidth;
-                        attributes['margin-right'] = paraWidth - imageWidth - attributes['margin-left'];
-                        attributes['margin-left'] += 'mm';
-                        attributes['margin-right'] += 'mm';
-                    } else {
-                        // Centering the image
-                        var marginWidth = (paraWidth - imageWidth) / 2 + 'mm';
-                        attributes['margin-left'] = marginWidth;
-                        attributes['margin-right'] = marginWidth;
-                    }
-
-                    node = paragraph.firstChild;
+                    attributes['margin-left'] = attributes.allMargins.fullLeftMargin;
+                    attributes['margin-right'] = attributes.allMargins.fullRightMargin;
                     attributes.float = 'none';
-                    $('<img>', { src: url }).data('mode', 'noneFloated').insertBefore(node).css(attributes);
+                    floatMode = 'noneFloated';
+                }
+
+                if (floatMode !== null) {
+                    $('<img>', { src: url }).data('mode', floatMode).data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
                 }
             }
 
@@ -2805,6 +2827,220 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
         };
+
+        /**
+         * Converting the sizes inside the image attributes to 'mm'.
+         * Additionally the names of the css attributes are used.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function convertAttributeSizes(attributes) {
+
+            if (attributes.width) {
+                attributes.width = attributes.width / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.height) {
+                attributes.height = attributes.height / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginT) {
+                attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginR) {
+                attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginB) {
+                attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginL) {
+                attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
+            }
+            if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
+                attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
+            }
+
+            return attributes;
+        }
+
+        /**
+         * Calculating the image margins to be able to change the text flow
+         * around the image. Therefore it is necessary to set the attributes
+         * attributes.fullLeftMargin and attributes.fullRightMargin now.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function calculateImageMargins(attributes) {
+
+            var fullLeftMargin = '0mm',
+                fullRightMargin = '0mm',
+                standardLeftMargin = '0mm',
+                standardRightMargin = '0mm';
+
+            if (attributes.paragraphWidth) {
+
+                var imageWidth = 0,
+                    leftMarginWidth = 0,
+                    anchorhoffset = 0;
+
+                if (attributes.width) {
+                    imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
+                }
+                if (attributes['margin-left']) {
+                    leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
+                    standardLeftMargin = attributes['margin-left'];
+                }
+                if (attributes['margin-right']) {
+                    standardRightMargin = attributes['margin-right'];
+                }
+
+                if (attributes.anchorhoffset) {
+                    anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
+                    fullLeftMargin = anchorhoffset + leftMarginWidth;
+                    fullRightMargin = attributes.paragraphWidth - imageWidth - fullLeftMargin;
+                    fullLeftMargin += 'mm';
+                    fullRightMargin += 'mm';
+                } else {
+                    // Centering the image
+                    var marginWidth = (attributes.paragraphWidth - imageWidth) / 2 + 'mm';
+                    fullLeftMargin = marginWidth;
+                    fullRightMargin = marginWidth;
+                }
+
+            }
+
+            attributes.allMargins = {standardLeftMargin: standardLeftMargin,
+                                     standardRightMargin: standardRightMargin,
+                                     fullLeftMargin: fullLeftMargin,
+                                     fullRightMargin: fullRightMargin};
+
+            return attributes;
+        }
+
+        /**
+         * Defining the correct images attributes for an image.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function defineImageAttributes(attributes) {
+
+            if (attributes.imageFloatMode === 'rightFloated') {
+                attributes.float = 'right';
+            } else if (attributes.imageFloatMode === 'leftFloated') {
+                attributes.float = 'left';
+            } else {  // 'noneFloated' or 'inline'
+                attributes.float = 'none';
+            }
+
+            return attributes;
+        }
+
+        /**
+         * Changes a formatting attributes of an image node.
+         *
+         * @param {Number[]} start
+         *  The logical start position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Number[]} end
+         *  The logical end position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         */
+        function implSetImageAttributes(start, end, attributes) {
+
+            var returnImageNode = true,
+                localStart = _.copy(start, true),
+                imagePosition = Position.getDOMPosition(paragraphs, localStart, returnImageNode);
+
+            if (imagePosition) {
+                var imageNode = imagePosition.node;
+
+                if (Utils.getNodeName(imageNode) === 'img') {
+
+                    attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                    attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+
+                    if (attributes.imageFloatMode === 'inline') {
+                        // inserting an empty text span before the image, if it is an inline image
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
+                            newTextNode = $(textSpanNode).clone(true);
+
+                        newTextNode.text('');
+                        newTextNode.insertBefore(imageNode);
+                        localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
+                    } else {
+
+                        if (attributes.imageFloatMode === 'noneFloated') {
+                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
+                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
+                        }
+
+                        // inserting the image as the first child of the paragraph, before an text node.
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent);
+
+                        if (textSpanNode) {
+                            parent.insertBefore(imageNode, textSpanNode);
+                        } else {
+                            parent.insertBefore(imageNode, parent.firstChild);
+                        }
+                    }
+
+                    $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
+
+                    // store last position
+                    lastOperationEnd = new OXOPaM(localStart);
+                }
+            }
+        }
+
+        /**
+         * Inserts a new style sheet into the document.
+         *
+         * @param {String} family
+         *  The name of the attribute family the new style sheet is related to.
+         *
+         * @param {String} id
+         *  The unique identifier of of the new style sheet.
+         *
+         * @param {String} name
+         *  The user-defined name of of the new style sheet.
+         *
+         * @param {String|Null} parentId
+         *  The identifier of of the parent style sheet the new style sheet
+         *  will derive undefined attributes from.
+         *
+         * @param {Object} attributes
+         *  The formatting attributes contained in the new style sheet, as map
+         *  of name/value pairs.
+         */
+        function implInsertStyleSheet(family, id, name, parentId, attributes) {
+
+            var // the style sheet container
+                styleSheets = self.getStyleSheets(family);
+
+            if (styleSheets) {
+                styleSheets.addStyleSheet(id, name, parentId, attributes);
+            }
+        }
 
         /**
          * Changes a specific formatting attribute of the specified element or

@@ -290,7 +290,7 @@ div.io-ox-view-component {
         button {
             padding-left: 8px;
             padding-right: 8px;
-            text-align: center;
+            text-align: left;
 
             /* adjust margins for e.g. caret buttons in drop-down split mode */
             &.narrow-padding {

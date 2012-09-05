@@ -18,8 +18,15 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     var // the ISO code of the language used by gettext
         language = null,
 
+        // selector for the label <span> element in a control caption
+        ICON_SELECTOR = 'span[data-role="icon"]',
+
+        // selector for the label <span> element in a control caption
+        LABEL_SELECTOR = 'span[data-role="label"]',
+
         // selector for <span> elements in a control caption
-        CAPTION_SELECTOR = 'span[data-role="icon"], span[data-role="label"]';
+        CAPTION_SELECTOR = ICON_SELECTOR + ', ' + LABEL_SELECTOR;
+
 
     // static class Utils =====================================================
 
@@ -476,7 +483,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     /**
      * Extends the passed object with the specified attributes. Unlike
      * underscore's extend() method, does not modify the passed object, but
-     * creates and returns a clone.
+     * creates and returns a clone. Additionally, extends embedded objects
+     * deeply instead of replacing them.
      *
      * @param {Object} [options]
      *  An object containing some attribute values. If undefined, creates and
@@ -491,7 +499,31 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  A new clone of the passed object, extended by the new attributes.
      */
     Utils.extendOptions = function (options, extensions) {
-        return _(_.isObject(options) ? _.clone(options) : {}).extend(extensions);
+
+        function extend(options, extensions) {
+            _(extensions).each(function (value, name) {
+                if (_.isObject(value)) {
+                    // extension value is an object: ensure that the options map contains an embedded object
+                    if (!_.isObject(options[name])) {
+                        options[name] = {};
+                    }
+                    extend(options[name], value);
+                } else {
+                    // extension value is not an object: clear old value, even if it was an object
+                    options[name] = value;
+                }
+            });
+        }
+
+        // create a deep copy of the passed options, or an empty object
+        options = _.isObject(options) ? _.copy(options, true) : {};
+
+        // add all extensions to the clone
+        if (_.isObject(extensions)) {
+            extend(options, extensions);
+        }
+
+        return options;
     };
 
     // generic DOM helpers ----------------------------------------------------
@@ -978,6 +1010,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *      A value or object that will be copied to the 'data-value' attribute
      *      of the control. Will be converted to a JSON string. Must not be
      *      null. The undefined value will be ignored.
+     *  @param {Number} [options.width]
+     *      The fixed total width of the control element (including padding and
+     *      border), in pixels. If omitted, the size will be set automatically
+     *      according to the contents of the control.
      *  @param {Object} [options.css]
      *      A map with CSS formatting attributes to be added to the control.
      *
@@ -988,11 +1024,13 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         var // create the DOM element
             control = $('<' + elementName + '>', attributes),
-
+            // total width of the control
+            width = Utils.getIntegerOption(options, 'width', undefined, 1),
             // CSS formatting attributes
             css = Utils.getObjectOption(options, 'css', {});
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'));
+        if (_.isNumber(width)) { control.width(width); }
         return control.css(css);
     };
 
@@ -1193,30 +1231,26 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         if (icon) {
             control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'icon')
+                .attr('data-icon', icon)
                 .append($('<i>').addClass(icon + ' ' + language))
             );
         }
     };
 
     /**
-     * Clones the caption in the specified source control, and inserts it into
-     * the target control(s).
+     * Returns the class of the caption icon of the first control in the passed
+     * jQuery collection.
      *
-     * @param {jQuery} target
-     *  The target control(s) that will receive a clone of the source control
-     *  caption.
+     * @param {jQuery} control
+     *  A jQuery collection containing a form control.
      *
-     * @param {jQuery} source
-     *  The source control containing a caption element.
+     * @return {String|Undefined}
+     *  The class of the caption icon of the control, if existing, otherwise
+     *  undefined.
      */
-    Utils.cloneControlCaption = function (target, source) {
-
-        var // clone the label and the icon from the source control
-            caption = source.first().children(CAPTION_SELECTOR).clone(true);
-
-        // remove the old spans, and insert the new caption nodes
-        Utils.removeControlCaption(target);
-        target.prepend(caption).toggleClass('narrow-padding', !caption.length);
+    Utils.getControlIcon = function (control) {
+        var icon = control.first().find(ICON_SELECTOR);
+        return icon.length ? icon.attr('data-icon') : undefined;
     };
 
     /**
@@ -1230,7 +1264,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  The text label of the control, if existing, otherwise undefined.
      */
     Utils.getControlLabel = function (control) {
-        var label = control.first().find('[data-role="label"]');
+        var label = control.first().find(LABEL_SELECTOR);
         return label.length ? label.text() : undefined;
     };
 
@@ -1406,9 +1440,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {jQuery} textField
      *  A jQuery object containing a text field element.
      *
-     * @param {Object} selection
+     * @param {Object|Boolean} selection
      *  An object with the attributes 'start' and 'end' containing the start
-     *  and end character offset of the new selection in the text field.
+     *  and end character offset of the new selection in the text field, or a
+     *  boolean value specifying whether to select the entire text (true), or
+     *  to place the cursor behind the text (false).
      */
     Utils.setTextFieldSelection = function (textField, selection) {
         var input = textField.get(0);

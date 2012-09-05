@@ -29,6 +29,9 @@ define('io.ox/office/editor/format/characterstyles',
                 set: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
                     LineHeight.updateElementLineHeight(element);
+                },
+                preview: function (options, fontName) {
+                    options.labelCss.fontFamily = Fonts.getCssFontFamily(fontName);
                 }
             },
 
@@ -37,6 +40,9 @@ define('io.ox/office/editor/format/characterstyles',
                 set: function (element, fontSize) {
                     element.css('font-size', fontSize + 'pt');
                     LineHeight.updateElementLineHeight(element);
+                },
+                preview: function (options, fontSize) {
+                    options.labelCss.fontSize = Math.min(Math.max(fontSize, 8), 24) + 'pt';
                 }
             },
 
@@ -45,6 +51,9 @@ define('io.ox/office/editor/format/characterstyles',
                 set: function (element, state) {
                     element.css('font-weight', state ? 'bold' : 'normal');
                     LineHeight.updateElementLineHeight(element);
+                },
+                preview: function (options, state) {
+                    options.labelCss.fontWeight = state ? 'bold' : 'normal';
                 }
             },
 
@@ -53,6 +62,9 @@ define('io.ox/office/editor/format/characterstyles',
                 set: function (element, state) {
                     element.css('font-style', state ? 'italic' : 'normal');
                     LineHeight.updateElementLineHeight(element);
+                },
+                preview: function (options, state) {
+                    options.labelCss.fontStyle = state ? 'italic' : 'normal';
                 }
             },
 
@@ -60,8 +72,11 @@ define('io.ox/office/editor/format/characterstyles',
                 def: false,
                 set: function (element, state) {
                     var value = element.css('text-decoration');
-                    value = Utils.toggleToken(value, 'underline', state, 'none');
-                    element.css('text-decoration', value);
+                    element.css('text-decoration', Utils.toggleToken(value, 'underline', state, 'none'));
+                },
+                preview: function (options, state) {
+                    var value = options.labelCss.textDecoration;
+                    options.labelCss.textDecoration = Utils.toggleToken(value, 'underline', state, 'none');
                 }
             },
 
@@ -73,14 +88,6 @@ define('io.ox/office/editor/format/characterstyles',
                 special: true
             }
 
-        },
-
-        // TODO: remove this workaround name mapping (makes German DOCX files work)
-        alternativeStyleNames = {
-            schwachehervorhebung: 'Subtle Emphasis',
-            hervorhebung: 'Emphasis',
-            intensivehervorhebung: 'Intense Emphasis',
-            fett: 'Bold'
         };
 
     // class CharacterStyles ==================================================
@@ -98,8 +105,14 @@ define('io.ox/office/editor/format/characterstyles',
      *  The root node containing all elements formatted by the style sheets of
      *  this container. If this object is a jQuery collection, uses the first
      *  node it contains.
+     *
+     * @param {DocumentStyles} documentStyles
+     *  Collection with the style containers of all style families.
      */
     function CharacterStyles(rootNode, documentStyles) {
+
+        var // self reference
+            self = this;
 
         // private methods ----------------------------------------------------
 
@@ -134,30 +147,21 @@ define('io.ox/office/editor/format/characterstyles',
             }, context, { split: true, merge: hasEqualAttributes });
         }
 
-        /**
-         * Collects character styles specified in the paragraph style sheet of
-         * the parent paragraph element of the passed text span.
-         */
-        function collectAncestorStyleAttributes(span) {
-            var paragraphStyles = documentStyles.getStyleSheets('paragraph');
-            return paragraphStyles.getElementStyleAttributes(span.parentNode);
-        }
-
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, definitions, iterateReadOnly, iterateReadWrite, 'charstyle', {
-            alternativeStyleNames: alternativeStyleNames,
-            collectAncestorStyleAttributes: collectAncestorStyleAttributes
+        StyleSheets.call(this, 'character', definitions, documentStyles, iterateReadOnly, iterateReadWrite, {
+            ancestorStyleFamily: 'paragraph',
+            ancestorElementResolver: function (span) { return span.parentNode; }
         });
 
         // initialization -----------------------------------------------------
 
         // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('Standard', null, null, true)
-            .addStyleSheet('Emphasis', 'Standard', { italic: true })
-            .addStyleSheet('Subtle Emphasis', 'Emphasis', null)
-            .addStyleSheet('Intense Emphasis', 'Emphasis', { bold: true })
-            .addStyleSheet('Bold', 'Standard', { bold: true });
+        this.addStyleSheet('standard', 'Standard', null, null)
+            .addStyleSheet('emphasis', 'Emphasis', 'standard', { character: { italic: true } })
+            .addStyleSheet('subtleemphasis', 'Subtle Emphasis', 'emphasis', null)
+            .addStyleSheet('intenseemphasis', 'Intense Emphasis', 'emphasis', { character: { bold: true } })
+            .addStyleSheet('bold', 'Bold', 'standard', { character: { bold: true } });
 
     } // class CharacterStyles
 

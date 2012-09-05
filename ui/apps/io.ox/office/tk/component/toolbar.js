@@ -146,19 +146,19 @@ define('io.ox/office/tk/component/toolbar',
             // methods --------------------------------------------------------
 
             /**
-             * Adds a new button to this radio group.
+             * Adds a new option button to this radio group.
              *
              * @param {String} value
-             *  The unique value associated to this button.
+             *  The unique value associated to the new option button.
              *
              * @param {Object} [options]
              *  A map of options to control the properties of the new button.
-             *  See method Utils.createButton() for details.
+             *  See method RadioGroup.createOptionButton() for details.
              */
-            this.addButton = function (value, options) {
-                radioGroup.addButton(value, options);
+            this.addOptionButton = function (value, options) {
+                radioGroup.createOptionButton(value, options);
                 if (dropDownGroup) {
-                    dropDownGroup.addButton(value, options);
+                    dropDownGroup.createOptionButton(value, options);
                 }
                 return this;
             };

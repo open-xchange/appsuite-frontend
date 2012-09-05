@@ -39,9 +39,6 @@ define('io.ox/office/tk/control/textfield',
      *  Utils.setControlCaption() for details), and all generic formatting
      *  options of input fields (see method Utils.createTextField() for
      *  details). Additionally, the following options are supported:
-     *  @param {Number} [options.width=200]
-     *      The fixed inner width of the text editing area (without padding),
-     *      in pixels.
      *  @param {Boolean} [options.readOnly=false]
      *      If set to true, the text in the text field cannot be edited.
      *  @param {TextField.Validator} [options.validator]
@@ -103,7 +100,7 @@ define('io.ox/office/tk/control/textfield',
          * The action handler for this text field.
          */
         function commitHandler() {
-            var value = readOnly ? null : validator.textToValue(textField.val());
+            var value = readOnly ? null : self.getFieldValue();
             if (!_.isNull(value)) {
                 initialText = null;
             }
@@ -206,6 +203,13 @@ define('io.ox/office/tk/control/textfield',
         };
 
         /**
+         * Returns the value represented by the text in the text control.
+         */
+        this.getFieldValue = function () {
+            return validator.textToValue(textField.val());
+        };
+
+        /**
          * Returns whether the text field is in read-only mode.
          */
         this.isReadOnly = function () {
@@ -270,8 +274,6 @@ define('io.ox/office/tk/control/textfield',
             .registerUpdateHandler(updateHandler)
             .registerActionHandler(textField, 'commit', commitHandler);
         textField
-            .width(Utils.getIntegerOption(options, 'width', 200, 1) + 2 * TextField.FIELD_PADDING + 2)
-            .css({ paddingLeft: TextField.FIELD_PADDING + 'px', paddingRight: TextField.FIELD_PADDING + 'px' })
             .on('focus focus:key blur:key blur', fieldFocusHandler)
             .on('keydown keypress keyup', fieldKeyHandler)
             // Validation while typing. IE9 does not trigger 'input' when deleting
@@ -283,13 +285,6 @@ define('io.ox/office/tk/control/textfield',
         this.setReadOnly(Utils.getBooleanOption(options, 'readOnly', false));
 
     } // class TextField
-
-    // static fields ----------------------------------------------------------
-
-    /**
-     * Left and right padding in the text field element, in pixels.
-     */
-    TextField.FIELD_PADDING = 4;
 
     // class TextField.Validator ==============================================
 

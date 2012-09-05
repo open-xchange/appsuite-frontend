@@ -44,7 +44,7 @@ define('io.ox/office/editor/controller',
                 'action/rename': {
                     get: function () {
                         var fileDesc = app.getFileDescriptor();
-                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : 'unnamed';
+                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : null;
                     },
                     set: function (fileName) { app.rename(fileName); }
                 },
@@ -63,28 +63,13 @@ define('io.ox/office/editor/controller',
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
-
-                'insert/table': {
-                    set: function (size) { editor.insertTable(size); }
-                },
-
-                'insert/image': {
-                    set: function () {
-                        CommonDialogs.insertImageDialog(function (filename) {
-                            if (filename.length() > 0) {
-                                editor.insertImage(filename);
-                            }
-                        });
-                    }
-                },
-
                 'chain/format/paragraph': {
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/stylesheet': {
                     chain: 'chain/format/paragraph',
-                    get: function (attributes) { return attributes.parastyle; },
-                    set: function (styleName) { editor.setAttribute('paragraph', 'parastyle', styleName); }
+                    get: function (attributes) { return attributes.style; },
+                    set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId); }
                 },
                 'format/paragraph/alignment': {
                     chain: 'chain/format/paragraph',
@@ -99,6 +84,11 @@ define('io.ox/office/editor/controller',
 
                 'chain/format/character': {
                     get: function () { return editor.getAttributes('character'); }
+                },
+                'format/character/stylesheet': {
+                    chain: 'chain/format/character',
+                    get: function (attributes) { return attributes.style; },
+                    set: function (styleId) { editor.setAttribute('character', 'style', styleId); }
                 },
                 'format/character/font/family': {
                     chain: 'chain/format/character',
@@ -129,6 +119,9 @@ define('io.ox/office/editor/controller',
                 'chain/table': {
                     enable: function () { return editor.isPositionInTable(); }
                 },
+                'table/insert': {
+                    set: function (size) { editor.insertTable(size); }
+                },
                 'table/insert/row': {
                     chain: 'chain/table',
                     set: function () { editor.copyRow(); }
@@ -149,15 +142,25 @@ define('io.ox/office/editor/controller',
                 'chain/image': {
                     enable: function () { return editor.isImagePosition(); }
                 },
+                'image/insert': {
+                    set: function () {
+                        CommonDialogs.insertImageDialog(function (filename) {
+                            if (filename.length() > 0) {
+                                editor.insertImage(filename);
+                            }
+                        });
+                    }
+                },
                 'image/delete': {
                     chain: 'chain/image',
                     enable: function (enabled) { return enabled && editor.isFloatedImagePosition(); },
-                    set: function () { editor.deleteImage(); }
+                    set: function () { editor.deleteSelected(); }
                 },
                 'image/alignment': {
                     chain: 'chain/image',
                     get: function () { return editor.getImageFloatMode(); },
-                    set: function (alignment) { editor.setImageFloatMode(alignment); }
+                    // set: function (floatMode) { editor.setImageFloatMode(floatMode); }
+                    set: function (floatMode) { editor.setAttribute('character', 'imageFloatMode', floatMode); }
                 },
 
                 'debug/toggle': {
@@ -201,11 +204,8 @@ define('io.ox/office/editor/controller',
                         self.enable().disable(disabledItems).update();
                     }
                 })
-                .on('operation', function () {
-                    self.update(/^(action|format|table|image)\//);
-                })
-                .on('selectionChanged', function () {
-                    self.update(/^(format|table|image)\//);
+                .on('operation selectionChanged', function () {
+                    self.update();
                 });
             return this;
         };

@@ -69,6 +69,9 @@ define('io.ox/office/tk/component/component',
             // all control groups, mapped by key
             groupsByKey = {},
 
+            // child view components inserted into drop-down menus
+            components = [],
+
             // group initializer waiting for the first window 'show' event
             deferredInit = $.Deferred(),
 
@@ -321,6 +324,22 @@ define('io.ox/office/tk/component/component',
             return this.addGroup(key, new Button(options));
         };
 
+        /**
+         * Creates a drop-down button and inserts the passed view component
+         * into its drop-down menu. All events triggered by the passed view
+         * component will be forwarded to the own view component.
+         *
+         * @param {Component} component
+         *  The view component instance whose root node will be inserted into
+         *  the drop-down menu.
+         *
+         * @param {String} [options]
+         *  A map of options to control the properties of the drop-down button.
+         *  Supports all options of the Scrollable class constructor.
+         *
+         * @returns {Component}
+         *  A reference to this view component.
+         */
         this.addMenu = function (component, options) {
 
             var // a drop-down button containing the DOM element of the component
@@ -328,6 +347,9 @@ define('io.ox/office/tk/component/component',
 
             Scrollable.call(group, component.getNode(), options);
             insertGroup(group);
+
+            // remember the child view component
+            components.push(component);
 
             // forward all component events to listeners of this view component
             component.on('change cancel', function (event, key, value) {
@@ -353,6 +375,7 @@ define('io.ox/office/tk/component/component',
         this.enable = function (key, state) {
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('enable', state);
+                _(components).invoke('enable', key, state);
             }
             return this;
         };
@@ -386,6 +409,7 @@ define('io.ox/office/tk/component/component',
         this.update = function (key, value) {
             if (key in groupsByKey) {
                 _(groupsByKey[key]).invoke('update', value);
+                _(components).invoke('update', key, value);
             }
             return this;
         };
@@ -396,8 +420,9 @@ define('io.ox/office/tk/component/component',
          */
         this.destroy = function () {
             this.events.destroy();
+            _(components).invoke('destroy');
             node.off().remove();
-            self = node = groups = groupsByKey = deferredInit = null;
+            self = node = groups = groupsByKey = components = deferredInit = null;
         };
 
         // initialization -----------------------------------------------------

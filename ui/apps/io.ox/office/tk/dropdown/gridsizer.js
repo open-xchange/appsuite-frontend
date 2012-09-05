@@ -256,6 +256,7 @@ define('io.ox/office/tk/dropdown/gridsizer',
          */
         this.grabMenuFocus = function () {
             gridButton.focus();
+            return this;
         };
 
         // initialization -----------------------------------------------------

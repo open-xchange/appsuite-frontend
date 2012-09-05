@@ -44,9 +44,10 @@ define('io.ox/office/tk/dropdown/dropdown',
      *  Supports all generic button formatting options (see method
      *  Utils.createButton() for details). Additionally, the following options
      *  are supported:
-     *  @param {Boolean} [options.ignoreCaption]
-     *      If set to true, the drop-down button will not contain a caption,
-     *      regardless of the other settings in the options object.
+     *  @param {Boolean} [options.plainCaret]
+     *      If set to true, the drop-down button will not contain a caption or
+     *      any other formatting, regardless of the other settings in the
+     *      options object.
      */
     function DropDown(contentNode, options) {
 
@@ -56,8 +57,14 @@ define('io.ox/office/tk/dropdown/dropdown',
             // the root node of the group object
             groupNode = this.getNode(),
 
+            // the drop-down caret
+            caretSpan = $('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')),
+
+            // plain caret button, or button with caption and formatting
+            plainCaret = Utils.getBooleanOption(options, 'plainCaret', false),
+
             // the drop-down button
-            menuButton = Utils.createButton(options),
+            menuButton = Utils.createButton(plainCaret ? {} : options).append(caretSpan),
 
             // the drop-down menu element
             menuNode = $('<div>').addClass('dropdown-menu').append(contentNode),
@@ -290,17 +297,16 @@ define('io.ox/office/tk/dropdown/dropdown',
 
         // initialization -----------------------------------------------------
 
+        // move caret span to right border, if drop-down button has fixed width
+        if (!plainCaret && ('width' in options)) {
+            caretSpan.css({ position: 'absolute', top: '1px', right: '9px' });
+        }
+
         // marker class for extended formatting
         groupNode.addClass('dropdown-group');
 
         // append menu button and menu to the group container
         this.addFocusableControl(menuButton).addChildNodes(menuNode);
-
-        // prepare drop-down button
-        if (Utils.getBooleanOption(options, 'ignoreCaption')) {
-            Utils.removeControlCaption(menuButton);
-        }
-        menuButton.append($('<span>').attr('data-role', 'caret').append($('<i>').addClass('icon-io-ox-caret')));
 
         // register event handlers, prepare drop-down button
         this.on('change cancel', function () { toggleMenu(false); });

@@ -37,11 +37,19 @@ define('io.ox/office/tk/control/radiogroup',
      *      If set to true, a drop-down button will be created, showing a list
      *      with all option buttons when opened. Otherwise, the option buttons
      *      will be inserted directly into this group.
+     *  @param {String} [options.copyMode='all']
+     *      Specifies which parts of the caption of a drop-down list item will
+     *      be copied to the top-level button. If set to 'label', only the
+     *      label text will be copied. If set to 'icon', only the icon will be
+     *      copied. Otherwise, icon and label will be copied.
      */
     function RadioGroup(options) {
 
         var // self reference
-            self = this;
+            self = this,
+
+            // which parts of a list item caption will be copied to the top-level button
+            copyMode = Utils.getStringOption(options, 'copyMode', 'all');
 
         // private methods ----------------------------------------------------
 
@@ -70,15 +78,21 @@ define('io.ox/office/tk/control/radiogroup',
         function updateHandler(value) {
 
             var // activate a radio button
-                button = Utils.selectOptionButton(getOptionButtons(), value);
+                button = Utils.selectOptionButton(getOptionButtons(), value),
+                // the options used to set the caption of the drop-down button
+                captionOptions = options;
 
-            // update the contents of the drop-down button (use group options if no button is active)
+            // update the caption of the drop-down button
             if (self.hasDropDown) {
                 if (button.length) {
-                    Utils.cloneControlCaption(self.getMenuButton(), button.first());
-                } else {
-                    Utils.setControlCaption(self.getMenuButton(), options);
+                    if (copyMode !== 'label') {
+                        captionOptions = Utils.extendOptions(captionOptions, { icon: Utils.getControlIcon(button) });
+                    }
+                    if (copyMode !== 'icon') {
+                        captionOptions = Utils.extendOptions(captionOptions, { label: Utils.getControlLabel(button) });
+                    }
                 }
+                Utils.setControlCaption(self.getMenuButton(), captionOptions);
             }
         }
 
@@ -109,6 +123,17 @@ define('io.ox/office/tk/control/radiogroup',
         // methods ------------------------------------------------------------
 
         /**
+         * Removes all option buttons from this control.
+         */
+        this.clearOptionButtons = function () {
+            if (this.hasDropDown) {
+                this.clearListItems();
+            } else {
+                getOptionButtons().remove();
+            }
+        };
+
+        /**
          * Adds a new option button to this radio group.
          *
          * @param value
@@ -124,10 +149,10 @@ define('io.ox/office/tk/control/radiogroup',
          *  @param {String} [options.tooltip]
          *      Tool tip text shown when the mouse hovers the button.
          *
-         * @returns {RadioGroup}
-         *  A reference to this button group.
+         * @returns {jQuery}
+         *  The new option button, as jQuery object.
          */
-        this.addButton = function (value, options) {
+        this.createOptionButton = function (value, options) {
 
             var // options for the new button, including the passed value
                 buttonOptions = Utils.extendOptions(options, { value: value }),
@@ -145,7 +170,7 @@ define('io.ox/office/tk/control/radiogroup',
             // add tool tip
             Utils.setControlTooltip(button, Utils.getStringOption(options, 'tooltip'), 'bottom');
 
-            return this;
+            return button;
         };
 
         // initialization -----------------------------------------------------
