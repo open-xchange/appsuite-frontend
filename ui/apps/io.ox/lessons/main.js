@@ -38,6 +38,9 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             search: true
         });
         
+        win.nodes.main.css({
+            overflow: 'auto'
+        });
 
         app.setWindow(win);
 

@@ -21,12 +21,20 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript'], function (ace
             el.css({
                 position: 'absolute',
                 width: options.width || el.width(),
-                height: options.height || el.height(),
+                height: options.height || el.height() * 1.8 + (options.padding || 0),
                 border: "1px solid black"
             });
-            el.after($("<div>&nbsp;</div>").css({
-                marginTop: el.height()
+            var placeholder;
+            
+            el.after(placeholder = $("<div>&nbsp;</div>").css({
+                marginTop: el.height() + 14
             }));
+            
+            if (options.run) {
+                placeholder.append($('<button class="btn btn-primary">').text("Try this").on("click", function () {
+                    options.run(editor.getValue());
+                }));
+            }
             
             var editor = ace.edit(el);
             
@@ -36,24 +44,8 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript'], function (ace
             return editor;
         },
         highlight: function (el, options) {
-            el = $(el);
-            options = options || {};
-            el.css({
-                position: 'absolute',
-                width: options.width || el.width(),
-                height: options.height || el.height(),
-                border: "1px solid black"
-            });
-            el.after($("<div>&nbsp;</div>").css({
-                marginTop: el.height()
-            }));
-            
-            var editor = ace.edit(el);
-            
-            editor.getSession().setMode(new JavaScript.Mode());
-            editor.setTheme('ace/theme/eclipse');
+            var editor = this.edit(el, options);
             editor.setReadOnly(true);
-            
             return editor;
         }
     };

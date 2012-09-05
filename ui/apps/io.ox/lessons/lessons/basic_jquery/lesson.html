@@ -20,19 +20,99 @@
 				<h2>Creating a structure </h2>
 				<p>
 					To create a dom node in JQuery simply call the <code>$</code> function with the html text that describes your node:
-					<div class="code"> var theDiv = $("&lt;div&gt;"); </div> 
+					<div class="code">var theDiv =$('&lt;div&gt;');
+var theOtherDiv =$('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;'); </div>
+					
 				</p>
+				<p> 
+					In order for the node to show up on screen it will have to be appended somewhere: 
+					<div class="node_experiment">// var parentNode = ...
+$('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;').appendTo(parentNode);
+</div>
+				</p>
+				<p>
+					<span class="label label-important">Attention</span> Make sure to never leave off the closing tag or the &gt; at the end of the html snippet. Some browsers will just silently ignore the element you are trying to create and you will ask yourself why your element doesn't show up anywhere. Some browsers will at least blurp out an error message into the console.
+					<div class="node_experiment"> $('&lt;div class="someClass"').text("Hello").appendTo(parentNode);</div>
+				</p>
+				<p>
+					Though this may look a bit unusual on first glance, sometimes the node that you should draw stuff into will be passed to you as the <code>this</code> variable, so, reading through our codebase you will often find something like this: 
+					<div class="node_experiment">
+$('&lt;div&gt;Hello, I am a new div!&lt;/div&gt;').appendTo(this);
+</div>
+				</p>
+				<p>
+					To build more complex structures, liberally use the <code>#append</code> method:
+
+<div class="node_experiment"> this.append(
+	$("&lt;div&gt;").append(
+		$('&lt;span class="label label-info"&gt;').text("A Label"),
+		$('&lt;span&gt;').text(" The value")
+	) // End of div
+);</div>
+				</p>
+				<p>
+					You can indeed build very complex nested structures this way. Just make sure, that at least you still understand what is going on, if you write a block like this:
+					
+<div class="node_experiment">this.append(
+	$("&lt;h4&gt;").text("Behold a more complex structure!"),
+	$('&lt;div class="row"&gt;').append(
+		$('&lt;span class="span3"&gt;').append(
+			$("&lt;strong&gt;").text("Lo and behold")
+		), // end of span
+		$('&lt;span class="span9"&gt;').text("This is twitter bootstraps grid system in action.")
+	), // end of row
+	$('&lt;div class="row"&gt;').append(
+		$('&lt;span class="span12"&gt;').text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ")
+	) // end of row
+).addClass("container");// end of this</div>
+				<span class="label label-info">Hint</span> Right-click on the result of these experiments and choose <strong>Inspect element</strong> (or similar) to look at the resulting DOM structure. <br> <span class="label label-info">Hint</span> Modify the code shown above and rerun the examples to experiment yourself!
+				</p>
+				<h3> Some recommendations </h3>
+				<dl>
+					<dt>Always use ampersands instead of quotes for your snippet string</dt>
+					<dd>
+						This way you can directly specify attributes for the element. <code>$('&lt;div class="myClass"&gt;')</code> is much more readable than <code>$("&lt;div class=\"someClass\"&gt;")</code>
+					</dd>
+					
+					<dt>Specify the classes immediately in the html snippet</dt>
+					<dd>Since specifying classes is such a common operation – especially considering twitter bootstrap likes to work with classes a lot – don't bother with <code>#addClass</code> or the <code>#attr</code> method. Just specify them directly: <br/><code>$('&lt;div class="myClass"&gt;')</code> </dd>
+					
+					<dt>Avoid inline styles</dt>
+					<dd>While jQuery allows developers to specify css style information with the <code>#css</code> method, in the interest of branding it is usually better to stow them away in a proper .css file. How css files are loaded is discussed in the RequireJS tutorial.</dd>
+					
+					<dt>Use the <code>#text</code> method for content</dt>
+					<dd>
+						Instead of specifying text for elements inline, or, worse, concatenating a value you've been passed with strings to obtain a snippet ( <code> $('&lt;div&gt;' + myValue + '&lt;/div&gt;')</code>), use the <code>#text</code> method. This won't leave you open to cross-site-scripting attacks. <br><code>$("&lt;div&gt;").text(myValue); </code>
+					</dd>
+				</dl>
+				<h3>Further reading</h3>
+				<dl>
+					<dt><a href="http://api.jquery.com/category/manipulation/" target="_blank">JQuery Manipulation API</a></dt>
+					<dd>We've only glanced at one method used for manipulation of the DOM <code>#append</code>. There are lot's more. Reading through the whole of the JQuery Manipultation API is certainly time well spent.</dd>
+					
+					<dt><a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap</a></dt>
+					<dd>
+						Twitter bootstrap is the lightweight frontend framework used in OX7. It provides beautiful and useful css and html based utilities for building good looking apps. Read through the documentation at least once so you won't need to invent something we already have available via this nice framework.
+					</dd>
+				</dl>
 			</section>
 
-			<section id="structure_experiment">
-				<h3>Let's play'</h3>
+			<section id="event_handling">
+				<h2>Event handling</h2>
+				<p>
+					Being able to draw form controls (like buttons and input fields) is only half the fun. Doing something when a button is clicked or text is changed is the other half. To register an event handler, use jQuerys <code>#on</code> method:
+					
+					<div class="node_experiment">this.append(
+	$('&lt;button class="btn btn-primary"&gt;').text('Open alert').on("click", function () {
+		alert("Button was clicked!");
+	})
+);</div>
+				</p>
+
 			</section>
 
 			<section id="selecting_elements">
 				<h2>Selecting elements</h2>
-			</section>
-
-			<section id="selection_experiment">
 				<h3>Let's play'</h3>
 			</section>
 

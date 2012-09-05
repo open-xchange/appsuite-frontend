@@ -25,8 +25,33 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
                 win.nodes.main.empty().append($(html));
                 
                 win.nodes.main.find(".code").each(function (index, element) {
-                    console.log(element);
                     Editor.highlight(element);
+                });
+
+                win.nodes.main.find(".node_experiment").each(function (index, element) {
+                    var experimentDiv = $("<div>").css({
+                        marginTop: "10px"
+                    });
+                    var firstTime = true;
+                    $(element).after(experimentDiv);
+                    
+                    Editor.edit(element, {
+                        padding: 45,
+                        run: function (jsText) {
+                            experimentDiv.empty();
+                            if (firstTime) {
+                                firstTime = false;
+                                experimentDiv.addClass("well");
+                            }
+                            var parentNode = experimentDiv;
+                            
+                            var runIt = function () {
+                                eval(jsText);
+                            };
+                            
+                            runIt.apply(parentNode);
+                        }
+                    });
                 });
                 
             });
