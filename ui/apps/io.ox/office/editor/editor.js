@@ -2207,7 +2207,7 @@ define('io.ox/office/editor/editor',
                     implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
 
                     // setting the cursor position
-                    // this.setSelection(new OXOSelection(lastOperationEnd));
+                    this.setSelection(new OXOSelection(lastOperationEnd));
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2966,7 +2966,8 @@ define('io.ox/office/editor/editor',
         function implSetImageAttributes(start, end, attributes) {
 
             var returnImageNode = true,
-                imagePosition = Position.getDOMPosition(paragraphs, start, returnImageNode);
+                localStart = _.copy(start, true),
+                imagePosition = Position.getDOMPosition(paragraphs, localStart, returnImageNode);
 
             if (imagePosition) {
                 var imageNode = imagePosition.node;
@@ -2984,7 +2985,7 @@ define('io.ox/office/editor/editor',
 
                         newTextNode.text('');
                         newTextNode.insertBefore(imageNode);
-                        imagePosition = Position.getFirstPositionInParagraph(paragraphs, imagePosition);
+                        localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
                     } else {
 
                         if (attributes.imageFloatMode === 'noneFloated') {
@@ -3006,7 +3007,7 @@ define('io.ox/office/editor/editor',
                     $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
 
                     // store last position
-                    lastOperationEnd = new OXOPaM(imagePosition);
+                    lastOperationEnd = new OXOPaM(localStart);
                 }
             }
         }
