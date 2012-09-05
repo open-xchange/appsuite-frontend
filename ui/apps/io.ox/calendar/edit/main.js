@@ -130,7 +130,6 @@ define('io.ox/calendar/edit/main',
         },
         create: function (data) {
             var self = this;
-
             self.model = appointmentModel.factory.create(data);
             appointmentModel.setDefaultParticipants(self.model).done(function () {
                 self.view = new MainView({model: self.model});
@@ -165,9 +164,7 @@ define('io.ox/calendar/edit/main',
                     self.model.set('participants', [{id: folder.created_by, type: 1}]);
                 }
 
-
             });
-
         },
         onShowWindow: function () {
             console.log('onshowwindow');

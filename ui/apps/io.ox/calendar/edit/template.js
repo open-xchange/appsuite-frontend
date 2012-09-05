@@ -24,13 +24,20 @@ define('io.ox/calendar/edit/template',
     'use strict';
 
     var point = views.point('io.ox/calendar/edit/section');
-
     var convertImageStyle = function (url) {
         if (_.isString(url) && url.length > 1) {
             url = url.replace(/^\/ajax/, ox.apiRoot);
             return 'url("' + url + '")';
         } else {
             return '';
+        }
+    };
+
+    ext.point('io.ox/calendar/edit/section').extend({
+        index: 100,
+        id: 'error',
+        draw: function (data) {
+            this.append($('<div>').addClass('error-display'));
         }
     };
 
@@ -377,19 +384,128 @@ define('io.ox/calendar/edit/template',
                 });
             });
         }
-    });/*
-    <div class="row-fluid show-grid" style='margin-top: 10px;'>
-    <span style='text-align: right;' class='span12'>
-        <a class='btn' data-action="cancel">Cancel</a>
-        <a class='btn btn-danger' data-action="ignore">Ignore conflicts</a>
-    </span>
-</div>
-    */
+    });
+    /**
+     * extpoint
+     * conflicts
+     */
     ext.point('io.ox/calendar/edit/conflicts').extend({
-        index: 300,
+        index: 1,
         id: 'conflicts',
         draw: function (data) {
-            this.append($('<div class="row-fluid show-grid>'));
+            this.append($('<div class="row-fluid show-grid">')
+                .css('margin-top', '10px').append(
+                    $('<span class="span12">').css('text-align', 'right').append(
+                        $('<a class="btn">')
+                            .attr('data-action', 'cancel')
+                            .text(gt('Cancel')),
+                        $('<a class="btn btn-danger">')
+                            .addClass('btn')
+                            .attr('data-action', 'ignore')
+                            .text(gt('Ignore conflicts')))));
+        }
+    });
+    /**
+     * extension point
+     * user drawing in participant view
+     */
+    ext.point('io.ox/calendar/edit/participants/user').extend({
+        index: 1,
+        id: 'participant_user',
+        draw: function (model) {
+
+            this.append(
+                $('<div class="contact-image">')
+                    .css("background-image", convertImageStyle(model.get('image1_url'))),
+                $('<div>').append(
+                    $('<a class="person-link">')
+                        .text(util.getDisplayName(model.toJSON()))
+                ),
+                $('<div class="email">')
+                    .text(util.getMail(model.toJSON())),
+                // only append remove icon if user is removable
+                model.get('ui_removable') !== false ? $('<a class="remove">')
+                    .attr('href', '#').append(
+                        $('<div class="icon">').append('<i class="icon-remove"></i>')
+                    ) : $()
+            );
+        }
+    });
+    /**
+     * extension point
+     * groups in particpant view
+     */
+    ext.point('io.ox/calendar/edit/participants/usergroup').extend({
+        index: 1,
+        id: 'participant_group',
+        draw: function (model) {
+            this.append(
+                $('<div class="group-image">'),
+                $('<div>')
+                     .text(util.getDisplayName(model.toJSON())),
+                gt("Group"),
+                $('<a class="remove">')
+                    .attr('href', '#').append(
+                        $('<div class="icon">').append(
+                            '<i class="icon-remove"></i>')
+                        )
+             );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/participants/resource').extend({
+        index: 1,
+        id: 'resource',
+        draw: function (model) {
+            this.append(
+                $('<div class="resource-image">'),
+                $('<div>')
+                    .text(util.getDisplayName(model.toJSON())),
+                gt("Resource"),
+                $('<a class="remove">')
+                    .attr('href', '#').append(
+                        $('<div class="icon">').append(
+                            '<i class="icon-remove"></i>')
+                        )
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/participants/externaluser').extend({
+        index: 1,
+        id: 'externaluser',
+        draw: function (model) {
+            this.append(
+                $('<div class="external-user-image">'),
+                $('<div>').append(
+                    $('<a class="person-link">')
+                         .text(util.getDisplayName(model.toJSON()))
+                ),
+                $('<div class="email">')
+                    .text(util.getMail(model.toJSON())),
+                $('<a class="remove">').attr('href', '#').append(
+                    $('<div class="icon">').append(
+                        '<i class="icon-remove"></i>')
+                    )
+            );
+        }
+    });
+
+    ext.point('io.ox/calendar/edit/participants/distlistusergroup').extend({
+        index: 1,
+        id: 'distlistgroup',
+        draw: function (model) {
+            this.append(
+                $('<div class="group-image">'),
+                $('<div>')
+                    .text(util.getDisplayName(model.toJSON())),
+                gt("Distribution list"),
+                $('<a class="remove">')
+                    .attr('href', '#').append(
+                        $('<div class="icon">').append(
+                            '<i class="icon-remove"></i>')
+                        )
+            );
         }
     });
 

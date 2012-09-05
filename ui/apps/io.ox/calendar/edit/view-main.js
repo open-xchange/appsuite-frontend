@@ -24,38 +24,6 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
-
-<<<<<<< HEAD
-=======
-    // generate source for time-typeahead
-    var hours_typeahead = [];
-    var filldate = new dateAPI.Local();
-    filldate.setHours(0);
-    filldate.setMinutes(0);
-    for (var i = 0; i < 24; i++) {
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-    }
-
-    var comboboxHours = {
-        source: hours_typeahead,
-        items: 48,
-        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-        sorter: function (items) {
-            items = _(items).sortBy(function (item) {
-                var pd = dateAPI.Local.parse(item, dateAPI.TIME);
-                return pd.getTime();
-            });
-            return items;
-        },
-        autocompleteBehavoir: false
-    };
-
-    /// strings end
->>>>>>> f53ab55... * working on template replacement
-
     //customize datepicker
     //just localize the picker
     $.fn.datepicker.dates.en = {
@@ -181,15 +149,6 @@ define('io.ox/calendar/edit/view-main',
             var self = this;
             // create or edit, check for self.model.has('id')
 
-<<<<<<< HEAD
-=======
-            // pre render it
-//            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
-
-            // TODO
-            // require a render js file to render the calendar view instead of templates
-
->>>>>>> f53ab55... * working on template replacement
             // clear node
             self.$el.empty();
             // invoke extensionpoints from template

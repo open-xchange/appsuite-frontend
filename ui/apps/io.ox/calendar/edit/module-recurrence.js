@@ -19,7 +19,6 @@ define('io.ox/calendar/edit/module-recurrence',
        'io.ox/core/date',
        'io.ox/calendar/edit/binding-util',
        'io.ox/calendar/edit/template'], function (util, BinderUtils, gt, ext, dateAPI, binderUtils) {
-
     'use strict';
 
     var RecurrenceOptionView = Backbone.View.extend({
@@ -91,7 +90,7 @@ define('io.ox/calendar/edit/module-recurrence',
                 },
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));
-            */
+
             self._modelBinder.bind(self.model, self.el, self.bindings);
 
             return self;

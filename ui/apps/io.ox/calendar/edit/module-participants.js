@@ -210,7 +210,6 @@ define('io.ox/calendar/edit/module-participants',
 
             this.$el.empty();
             ext.point('io.ox/calendar/edit/participants/distlistusergroup').invoke('draw', this.$el, this.model);
-
             return this;
         },
         close: function () {
