@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], function (BaseController) {
+define('io.ox/office/editor/controller',
+    ['io.ox/office/tk/controller',
+     'io.ox/office/dialog/common'
+    ], function (BaseController, CommonDialogs) {
 
     'use strict';
 
@@ -56,13 +59,23 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 },
                 'action/search/quick': {
                     // highlighting goes always to the rich editor
-                    get: function () { return app.getEditor().hasHighlighting(); },
-                    set: function (query) { app.getEditor().quickSearch(query); },
+                    get: function () { return editor.hasHighlighting(); },
+                    set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
 
                 'insert/table': {
                     set: function (size) { editor.insertTable(size); }
+                },
+
+                'insert/image': {
+                    set: function () {
+                        CommonDialogs.insertImageDialog(function (filename) {
+                            if (filename.length() > 0) {
+                                editor.insertImage(filename);
+                            }
+                        });
+                    }
                 },
 
                 'chain/format/paragraph': {
@@ -150,7 +163,7 @@ define('io.ox/office/editor/controller', ['io.ox/office/tk/controller'], functio
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
-                    done: function (state) { app.getEditor().grabFocus(); }
+                    done: function (state) { editor.grabFocus(); }
                 },
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },

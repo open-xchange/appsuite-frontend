@@ -297,7 +297,8 @@ define('io.ox/office/editor/view',
 
         // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
-            .addGroup('insert/table', new TableSizeChooser());
+            .addGroup('insert/table',   new TableSizeChooser())
+            .addButton('insert/image',  { icon: 'icon-picture', tooltip: gt('Insert Image') });
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -332,7 +333,8 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/delete',    { icon: 'icon-trash',    tooltip: gt('Delete Image') })
+            .addButton('insert/image',    { icon: 'icon-picture',   tooltip: gt('Insert Image') })
+            .addButton('image/delete',    { icon: 'icon-trash',     tooltip: gt('Delete Image') })
             .addSeparator()
             .addRadioGroup('image/alignment', { auto: true, icon: 'icon-picture', tooltip: gt('Image Alignment') })
                 .addButton('inline',    { icon: 'icon-indent-left',    tooltip: gt('Inline'),    css: { textAlign: 'center' }  })
