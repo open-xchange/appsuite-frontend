@@ -1209,7 +1209,7 @@ define('io.ox/office/editor/editor',
             var selection = this.getSelection();
 
             lastEventSelection = _.copy(selection, true);
-            lastKeyDownEvent = event;   // For some keys we only get keyDown, not keyPressed!
+            lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
             this.implStartCheckEventSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
