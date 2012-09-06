@@ -148,7 +148,8 @@ define("io.ox/calendar/api",
                         action: 'update',
                         id: o.id,
                         folder: o.folder_id,
-                        timestamp: _.now()
+                        timestamp: _.now(),
+                        timezone: "UTC"
                     },
                     data: o
                 })
@@ -186,7 +187,8 @@ define("io.ox/calendar/api",
             return http.PUT({
                 module: 'calendar',
                 params: {
-                    action: 'new'
+                    action: 'new',
+                    timezone: "UTC"
                 },
                 data: o
             })

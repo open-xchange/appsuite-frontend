@@ -29,7 +29,7 @@
     @appointment-unconfirmed-alpha: 0.4;
     @weekview-time-with: 42px;
     @weekview-footer-height: 30px;
-    @weekview-toolbar-height: 37px;
+    @weekview-toolbar-height: 41px;
     
     .toolbar {
         background-color: #FFF; 
@@ -40,20 +40,21 @@
     }
     
     .toolbar .info {
-        position: relative;
+        position: absolute;
         left: 10px;
         float: left;
-        line-height: 28px;
-        
+        line-height: 32px;
+        font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 20px;
     }
 
     .toolbar .pagination {
         margin: 0px;
-        height: 30px;
+        height: 34px;
     }
     
     .toolbar .pagination a {
-        line-height: 28px;
+        line-height: 32px;
     }
     
     .week-view-container {
@@ -191,7 +192,7 @@
         height: 1px;
         width: 100%;
         background-color: red;
-        z-index: 2;
+        z-index: 9999;
     }
     
     .timeline .glow {
@@ -250,7 +251,6 @@
 
     .appointment-content {
         height: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.4);
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
         line-height: 13px;
@@ -260,6 +260,9 @@
         text-overflow: ellipsis;
     }
     
+    .appointment.border {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
     .appointment.current {
         z-index: 999 !important;
     }

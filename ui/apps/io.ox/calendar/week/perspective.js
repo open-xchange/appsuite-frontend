@@ -27,7 +27,7 @@ define('io.ox/calendar/week/perspective',
         
         collection:     {},
         columns:        7,
-        startDate:      null,
+        startTimeUTC:      null,
         dialog:         $(),
         app:            null,
         
@@ -78,7 +78,7 @@ define('io.ox/calendar/week/perspective',
         },
         
         refresh: function () {
-            this.getAppointments(this.startDate, this.startDate + util.DAY * this.columns);
+            this.getAppointments(this.startTimeUTC, this.startTimeUTC + util.DAY * this.columns);
         },
         
         render: function (app) {
@@ -86,16 +86,16 @@ define('io.ox/calendar/week/perspective',
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
             
-            // FIXME: replace 'startDate' with calendar logic
+            // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {
-                this.startDate = util.getTodayStart();
+                this.startTimeUTC = util.getTodayStart();
             } else {
-                this.startDate = util.getWeekStart();
+                this.startTimeUTC = util.getWeekStart();
             }
             var weekView = new View({
                 collection: this.collection,
                 columns: this.columns,
-                startDate: this.startDate
+                startTimeUTC: this.startTimeUTC
             });
             
             weekView
@@ -104,11 +104,11 @@ define('io.ox/calendar/week/perspective',
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
                 .on('onNextView', function (curDate) {
-                    this.startDate = curDate;
+                    this.startTimeUTC = curDate;
                     this.refresh();
                 }, this)
                 .on('onPrevView', function (curDate) {
-                    this.startDate = curDate;
+                    this.startTimeUTC = curDate;
                     this.refresh();
                 }, this);
             
