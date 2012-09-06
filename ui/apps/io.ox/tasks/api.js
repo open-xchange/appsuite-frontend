@@ -57,7 +57,6 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
                 },
             needsRefresh: function (folder) {
-                    console.log(folder);
                     // placeholder
                     return false;//all_cache[folder] !== undefined;
                 },
