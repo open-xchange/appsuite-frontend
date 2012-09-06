@@ -8,195 +8,103 @@
  * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
- * @author Mario Scheliga <mario.scheliga@open-xchange.com>
+ * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-/*global
-define: true, _: true
-*/
-define('io.ox/mail/settings/pane',
-       ['io.ox/core/extensions',
-        'io.ox/core/tk/view',
-        'io.ox/core/tk/model',
-        'gettext!io.ox/mail/mail',
-        'settings!io.ox/mail', 'io.ox/core/api/account'],
 
-function (ext, View, Model, gt, settings, api) {
+define('io.ox/mail/settings/pane',
+       ['settings!io.ox/mail', 'io.ox/mail/settings/model',
+        'dot!io.ox/mail/settings/form.html', 'io.ox/core/extensions',
+        'gettext!io.ox/mail/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, gt, api) {
 
     'use strict';
 
 
 
-
-
-
-    var MailSettingsModel = Model.extend({
-    });
-
-
-    ext.point('io.ox/mail/settings/detail/section').extend({
-        index: 200,
-        id: 'section_common',
-        draw: function (options) {
-            this.append(
-
-                    this.createSectionTitle({ text: gt('Common')}).addClass('expertmode'),
-                    this.createControlGroup().append(
-                        this.createControlGroupLabel(),
-                        this.createControlsWrapper().append(
-                            this.createCheckbox({property: 'removeDeletedPermanently', label: gt('Permanently remove deleted E-Mails?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'contactCollectOnMailTransport', label: gt('Automatically collect contacts in the folder "Collected addresses" while sending?')}).addClass('expertmode'),
-                            this.createCheckbox({property: 'contactCollectOnMailAccess', label: gt('Automatically collect contacts in the folder "Collected addresses" while reading?')}).addClass('expertmode')
-                        )
-                    ),
-                    this.createSectionDelimiter().addClass('expertmode')
-
-            );
-        }
-    });
-
-
-    ext.point('io.ox/mail/settings/detail/section').extend({
-        index: 200,
-        id: 'section_compose',
-        draw: function (options) {
-
-            var that = this;
-            var itemList = {};
-
-            var getAllAccounts = function () {
-
-                api.all().done(function (array) {
-
-                    _.each(array, function (key, value) {
-                        itemList[key.primary_address] = key.primary_address;
-                    });
-
-                    that.append(
-
-                            that.createSectionHorizontalWrapper().append(
-                            that.createControlGroup().append(
-                                that.createControlGroupLabel({text: gt('Compose')}),
-                                that.createControlsWrapper().append(
-                                    that.createCheckbox({property: 'appendVcard', label: gt('Append vcard')}),
-                                    that.createCheckbox({ property: 'appendMailTextOnReply', label: gt('Insert the original E-Mail text to a reply')}).addClass('expertmode')
-                                )
-
-                            ),
-
-
-                            that.createSectionDelimiter().addClass('expertmode'),
-
-
-
-                            that.createControlGroup().addClass('expertmode').append(
-                                    that.createControlGroupLabel({text: gt('Forward E-Mails as:')}),
-                                    that.createControlsWrapper().append(
-                                        that.createRadioButton({property: 'forwardMessageAs', label: gt('Inline'), value: 'Inline'}),
-                                        that.createRadioButton({property: 'forwardMessageAs', label: gt('Attachment'), value: 'Attachment'})
-                                    )
-                            ),
-
-
-
-                            that.createSectionDelimiter(),
-
-                            that.createControlGroup().append(
-                                that.createControlGroupLabel({text: gt('Format E-Mails as:')}),
-                                that.createControlsWrapper().append(
-                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML'), value: 'html'}),
-                                    that.createRadioButton({property: 'messageFormat', label: gt('Plain text'), value: 'text' }),
-                                    that.createRadioButton({property: 'messageFormat', label: gt('HTML and Plain text'), value: 'TEXT/PLAIN'})
-                                )
-                            ),
-
-                            that.createSectionDelimiter(),
-
-                            that.createInlineControlGroup().append(
-                                that.createControlsWrapper().append(
-
-                                    that.createText({ text: gt('Line wrap when sending text mails after: ') }),
-                                    that.createTextField({ property: 'lineWrapAfter', classes: 'span1', label: false}),
-                                    that.createText({ text: ' characters' })
-                                )
-
-                            ).addClass('expertmode'),
-                            that.createControlGroup().append(
-                                that.createControlGroupLabel({text: gt('Default sender address:'), 'for': 'auto'}),
-                                that.createControlsWrapper().append(
-                                    that.createSelectbox({property: 'defaultSendAddress', id: 'last', classes: 'input-xlarge', items: itemList})
-                                )
-                            ),
-                            that.createControlGroup().addClass('expertmode').append(
-                                that.createControlGroupLabel({text: gt('Auto-save Email drafts?'), 'for': 'auto'}),
-                                that.createControlsWrapper().append(
-                                    that.createSelectbox({property: 'autoSafeDraftsAfter', id: 'last', classes: 'input-xlarge', items: {'Disabled': 'disabled', '1 Minute': '1_minute', '3 Minutes': '3_minutes', '5 Minutes': '5_minutes', '10 Minutes': '10_minutes' }})
-                                )
-                            ),
-                            that.createSectionDelimiter()
-                        )
-
-                );
-                }
-
-                );
-            };
-
-            getAllAccounts();
-
-
-        }
-    });
-
-    ext.point('io.ox/mail/settings/detail/section').extend({
-        index: 200,
-        id: 'section_display',
-        draw: function (options) {
-            this.append(
-
-                            this.createSectionTitle({ text: gt('Display')}).addClass('expertmode'),
-                            this.createControlGroup().addClass('expertmode').append(
-                                 this.createControlGroupLabel(),
-                                 this.createControlsWrapper().append(
-                                     this.createCheckbox({property: 'allowHtmlMessages', label: gt('Allow html formatted E-Mails')}),
-                                     this.createCheckbox({property: 'allowHtmlImages', label: gt('Block pre-loading of externally linked images')}),
-                                     this.createCheckbox({property: 'displayEmomticons', label: gt('Display emoticons as graphics in text E-Mails')}),
-                                     this.createCheckbox({property: 'isColorQuoted', label: gt('Color quoted lines')})
-                                 )
-                            ),
-
-                            this.createSectionDelimiter().addClass('expertmode')
-            );
-        }
-    });
-
-    var MailSettingsView = View.extend({
-        draw: function (data) {
-            var self = this;
-            self.node.append(this.createSettingsHead(data));
-            ext.point('io.ox/mail/settings/detail/section').invoke('draw', self);
-            return self;
-        }
-    });
-
-
-    // created on/by
-    ext.point('io.ox/mail/settings/detail').extend({
-        index: 200,
-        id: 'mailsettings',
-        draw: function (data) {
-            var myModel = settings.createModel(MailSettingsModel),
-                myView = new MailSettingsView({model: myModel});
-
-            this.append(myView.draw(data).node.css('max-width', '800px'));
-            return myView.node;
+    var mailSettings =  settings.createModel(mailSettingsModel),
+        staticStrings =  {
+            TITLE_MAIL: gt('Mail'),
+            TITLE_COMMON: gt('Common'),
+            PERMANENT_REMOVE_MAILS: gt('Permanently remove deleted E-Mails?'),
+            COLLECT_CONTACTS_SENDING: gt('Automatically collect contacts in the folder "Collected addresses" while sending?'),
+            COLLECT_CONTACTS_READING: gt('Automatically collect contacts in the folder "Collected addresses" while reading?'),
+            TITLE_COMPOSE: gt('Compose'),
+            APPEND_VCARD: gt('Append vcard'),
+            INSERT_ORG_TO_REPLY: gt('Insert the original E-Mail text to a reply'),
+            FORWARD_EMAIL_AS: gt('Forward E-Mails as:'),
+            INLINE: gt('Inline'),
+            ATTACHEMENT: gt('Attachment'),
+            FORMAT_AS: gt('Format E-Mails as:'),
+            HTML: gt('HTML'),
+            PLAIN: gt('Plain text'),
+            HTML_AND_PLAIN: gt('HTML and Plain text'),
+            LINEWRAP: gt('Line wrap when sending text mails after: '),
+            CHARACTERS: gt(' characters'),
+            DEFAULT_SENDER: gt('Default sender address:'),
+            AUTO_SAVE: gt('Auto-save Email drafts?'),
+            TITLE_DISPLAY: gt('Display'),
+            ALLOW_HTML: gt('Allow html formatted E-Mails'),
+            BLOCK_PRE: gt('Block pre-loading of externally linked images'),
+            DISPLAY_EMOTICONS: gt('Display emoticons as graphics in text E-Mails'),
+            COLOR_QUOTED: gt('Color quoted lines')
         },
-        save: function () {
-            settings.save();
-//            .done(function () {
-//                console.log('saved for email');
-//            });
-        }
+        optionsAutoSave = [gt('disabled'), gt('1_minute'), gt('3_minutes'), gt('5_minutes'), gt('10_minutes')],
+        mailViewSettings;
+
+
+    api.all().done(function (array) {
+        var itemList = [];
+        _.each(array, function (key, value) {
+            itemList.push(key.primary_address);
+        });
+
+
+        var MailSettingsView = Backbone.View.extend({
+            tagName: "div",
+            _modelBinder: undefined,
+            initialize: function (options) {
+                // create template
+                this._modelBinder = new Backbone.ModelBinder();
+
+            },
+            render: function () {
+                var self = this;
+                self.$el.empty().append(tmpl.render('io.ox/mail/settings', {
+                    strings: staticStrings,
+                    optionsAutoSaveMinutes: optionsAutoSave,
+                    optionsAllAccountes: itemList
+                }));
+
+                var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+                self._modelBinder.bind(self.model, self.el, defaultBindings);
+
+                return self;
+            }
+        });
+
+        ext.point('io.ox/mail/settings/detail').extend({
+            index: 200,
+            id: 'mailsettings',
+            draw: function (data) {
+
+                mailViewSettings = new MailSettingsView({model: mailSettings});
+                var holder = $('<div>').css('max-width', '800px');
+                this.append(holder.append(
+                    mailViewSettings.render().el)
+                );
+            },
+
+            save: function () {
+                mailViewSettings.model.save();
+            }
+        });
+
+
     });
 
-    return {}; //whoa return nothing at first
+
+
+
+
+
+
 });

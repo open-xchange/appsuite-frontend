@@ -143,7 +143,7 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
 
             createModel: function (ModelClass) {
 
-                return new ModelClass({ data: settings })
+                return new ModelClass(settings)
                     .on('change', $.proxy(fnChange, this));
             },
 
@@ -210,7 +210,10 @@ define("settings", ['io.ox/core/http', 'io.ox/core/cache',
                         }
                     });
             },
-            save: function () {
+            save: function (external) {
+                if (external !== undefined) {
+                    settings = external;
+                }
 //                settingsInitial(settings, that.settingsPath, that.settingsBase, function () {
                 settingsCache.add(that.settingsPath, settings);
 

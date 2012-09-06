@@ -348,12 +348,12 @@ define('io.ox/mail/actions',
 
                         //Header
                         popup.getHeader()
-                            .append($('<h4>')
-                            .text(gt('Remind me')));
+                            .append($("<h4>")
+                                    .text(gt('Remind me')));
 
                         //fill popup body
                         var popupBody = popup.getBody();
-                        
+
                         popupBody.append($('<div>').text(gt('Subject')));
                         var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
                             .focus(function () {
@@ -361,44 +361,49 @@ define('io.ox/mail/actions',
                                 })
                             .appendTo(popupBody);
 
-                        popupBody.append($('<div>').text(gt('Note')));
-                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('From') + ': ' + util.getFrom(data).text() })
-                            .focus(function () {
+                        popupBody.append("<div>" + gt('Note') + "</div>");
+                        var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
+                            gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
+                            .focus(function ()
+                                    {
                                     this.select();
                                 })
                             .appendTo(popupBody);
-                       
-                        popupBody.append($('<div>').text(gt('Remind me')));
-                        var dateSelector = $('<select>', {name: 'dateselect'})
-                            .appendTo(popupBody),
-                            endDate = new Date();
-                        dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
+
+
+                        popupBody.append("<div>" + gt('Remind me') + "</div>");
+                        var dateSelector = $('<select>', {name: "dateselect"})
+                        .appendTo(popupBody);
+                        var endDate = new Date();
+                        dateSelector.append(util.buildDropdownMenu(endDate));
 
 
                         //ready for work
                         var def = popup.show();
                         titleInput.focus();
                         def.done(function (action) {
-                            if (action === 'create')
-                                {
 
-                                //Calculate the right time
-                                var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(':selected').attr('finderId'));
-                                taskApi.create({title: titleInput.val(),
-                                    folder_id: config.get('folder.tasks'),
-                                    end_date: dates.endDate.getTime(),
-                                    start_date: dates.alarmDate.getTime(),
-                                    alarm: dates.alarmDate.getTime(),
-                                    note: noteInput.val(),
-                                    status: 1,
-                                    recurrence_type: 0,
-                                    percent_completed: 0
-                                    })
-                                    .done(function () {
-                                        notifications.yell('success', 'Reminder has been created!');
-                                    });
-                            }
-                        });
+                                if (action === "create")
+                                    {
+
+                                    //Calculate the right time
+                                    endDate = util.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
+
+                                    taskApi.create({title: titleInput.val(),
+                                        folder_id: config.get('folder.tasks'),
+                                        end_date: endDate.getTime(),
+                                        start_date: endDate.getTime(),
+                                        alarm: endDate.getTime(),
+                                        note: noteInput.val(),
+                                        status: 1,
+                                        recurrence_type: 0,
+                                        percent_completed: 0
+                                        })
+                                        .done(function () {
+                                            notifications.yell('success', 'Reminder has been created!');
+                                        });
+                                }
+                            });
                     });
 
         }
