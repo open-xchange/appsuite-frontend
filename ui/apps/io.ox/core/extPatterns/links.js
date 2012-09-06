@@ -119,7 +119,6 @@ define("io.ox/core/extPatterns/links",
             // add classes to get button style
             this.children('a').addClass('btn btn-primary');
             this.children('.dropdown').children('a').addClass('btn btn-primary');
-            console.log('YEAH', this, context);
         };
     };
 

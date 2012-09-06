@@ -452,7 +452,7 @@ define('io.ox/mail/write/main',
         };
 
         var windowTitles = {
-            compose: gt('Compose new email'),
+            compose: gt('Compose new mail'),
             replyall: gt('Reply all'),
             reply: gt('Reply'),
             forward: gt('Forward')
