@@ -997,13 +997,13 @@ define("io.ox/core/desktop",
                                 //.css('width', opt.titleWidth)
                                 .append($("<span>"))
                             ),
-                            $("<div class='css-table-cell cell-33 cell-center window-toolbar'>").append(
+                            $("<div class='css-table-cell cell-33 cell-center'>").append(
                                 // toolbar
-                                win.nodes.toolbar = $("<div>")
+                                win.nodes.toolbar = $('<div class="window-toolbar">')
                             ),
-                            $("<div class='css-table-cell cell-33 cell-right window-controls'>").append(
+                            $("<div class='css-table-cell cell-33 cell-right'>").append(
                                 // controls
-                                win.nodes.controls = $("<div>")
+                                win.nodes.controls = $('<div class="window-controls">')
                                 .append(
                                     // settings
                                     win.nodes.settingsButton = $("<div>").hide()
