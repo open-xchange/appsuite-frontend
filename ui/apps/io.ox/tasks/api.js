@@ -105,7 +105,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             module: "tasks",
             params: {action: "all",
                 folder: require('io.ox/core/config').get('folder.tasks'),
-                columns: "1,200,202,203,300,309",
+                columns: "1,20,200,202,203,300,309",
                 sort: "202",
                 order: "asc"
             }

@@ -51,15 +51,32 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         
         onClickItem: function (e) {
-            var overlay = $('#io-ox-notifications-overlay');
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    // open SidePopup without arrow
-                    new dialogs.SidePopup({ arrow: false, side: 'right' })
-                        .setTarget(overlay.empty())
-                        .show(e, function (popup) {
-                            popup.append("<div> Detailview under construction </div>");
-                        });
+            var overlay = $('#io-ox-notifications-overlay'),
+                data = {
+                    id: this.model.get('taskId'),
+                    folder_id: this.model.get('folderId')
+                },
+                sidepopup = overlay.prop('sidepopup'),
+                cidthis = data.folder_id + "." + data.id,
+                cid = overlay.find('.tasks-detailview').prop('data-cid');
+            
+            // toggle?
+            if (sidepopup && cid === cidthis) {
+                sidepopup.close();
+            } else {
+                require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
+                    // get task and draw detailview
+                    api.get(data).done(function (taskData) {
+                    
+                        // open SidePopup without arrow
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append(viewDetail.draw(taskData));
+                            });
+                    });
                 });
+            }
         },
         
         close: function () {
@@ -105,6 +122,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                     var inObj = {
                         badge: task.badge,
                         taskId: task.id,
+                        folderId: task.folder_id,
                         title: task.title,
                         end_date: task.end_date,
                         status: task.status
@@ -165,17 +183,32 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         
         onClickItem: function (e) {
-            var overlay = $('#io-ox-notifications-overlay');
-            
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    // open SidePopup without array
-                    new dialogs.SidePopup({ arrow: false, side: 'right' })
-                        .setTarget(overlay.empty())
-                        .show(e, function (popup) {
-                            popup.append("<div> Detailview under construction </div>");
-                        });
+            var overlay = $('#io-ox-notifications-overlay'),
+                data = {
+                    id: this.model.get('taskId'),
+                    folder_id: this.model.get('folderId')
+                },
+                sidepopup = overlay.prop('sidepopup'),
+                cidthis = data.folder_id + "." + data.id,
+                cid = overlay.find('.tasks-detailview').prop('data-cid');
+        
+                // toggle?
+            if (sidepopup && cid === cidthis) {
+                sidepopup.close();
+            } else {
+                require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
+                    // get task and draw detailview
+                    api.get(data).done(function (taskData) {
+                
+                        // open SidePopup without arrow
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay.empty())
+                            .show(e, function (popup) {
+                                popup.append(viewDetail.draw(taskData));
+                            });
+                    });
                 });
-
+            }
         },
         
         close: function () {
@@ -226,6 +259,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                                 badge: task.badge,
                                 reminderId: reminderIds[index],
                                 taskId: task.id,
+                                folderId: task.folder_id,
                                 title: task.title,
                                 end_date: task.end_date,
                                 status: task.status

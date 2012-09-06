@@ -18,12 +18,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
     var taskDetailView = {
         draw: function (data) {
             var task = util.interpretTask(data);
-            console.log("Die Lottozahlen fuer heute sind: ");
-            console.log(data);
-            
-            var node = $('<div>').addClass("tasks-detailview");
-            
-            
+            var node = $('<div>').addClass("tasks-detailview").prop("data-cid", task.folder_id + "." + task.id);
             
             var infoPanel = $('<div>').addClass('info-panel').append(
                 $('<div>').text(task.end_date).addClass("end-date"),
