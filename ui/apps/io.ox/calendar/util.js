@@ -12,7 +12,8 @@
  */
 
 define("io.ox/calendar/util",
-    ["io.ox/core/date", "gettext!io.ox/calendar/calendar"], function (date, gettext) {
+    ["io.ox/core/date", "gettext!io.ox/calendar/calendar",
+     'io.ox/core/api/user', 'io.ox/contacts/api'], function (date, gettext, userAPI, contactAPI) {
 
     "use strict";
 
@@ -462,6 +463,33 @@ define("io.ox/calendar/util",
             }
 
             return days;
+        },
+
+        createArrayOfRecipients: function (participants, def) {
+            var arrayOfRecipients = [],
+                arrayOfIds = [];
+
+            _.each(participants, function (single) {
+                if (single.type === 5) {
+                    arrayOfRecipients.push([single.display_name, single.mail]);
+                } else {
+                    arrayOfIds.push(single.id);
+                }
+            });
+            userAPI.getList(arrayOfIds).done(function (obj) {
+                _.each(obj, function (single) {
+                    arrayOfRecipients.push([single.display_name, single.email1]);
+                });
+                def.resolve(
+                    arrayOfRecipients
+                );
+            });
+        },
+
+        getUserIdByInternalId: function (internal, def) {
+            contactAPI.get({id: internal, folder: 6}).done(function (data) {
+                def.resolve(data.user_id);
+            });
         }
     };
 

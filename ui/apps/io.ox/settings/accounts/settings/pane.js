@@ -115,28 +115,24 @@ define('io.ox/settings/accounts/settings/pane',
 
                         this.collection.bind('add', this.render);
                         this.collection.bind('remove', this.render);
-                        
-                        
-                        
                     },
                     render: function () {
                         var self = this,
                             $dropDown;
                         self.$el.empty().append(self.template({}));
-                        
                         this.collection.each(function (item) {
                             self.$el.find('.listbox').append(new AccountSelectView({ model: item }).render().el);
                         });
-                        
+
                         // Enhance Add... options
                         $dropDown = this.$el.find('.dropdown-menu');
-                        
+
                         _(api.submodules).each(function (submodule) {
                             $('<li>').append($('<a href="#">').text(submodule.displayName).on("click", function (e) {
                                 submodule.createInteractively(e);
                             })).appendTo($dropDown);
                         });
-                        
+
                         return this;
                     },
 

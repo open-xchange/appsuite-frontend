@@ -335,7 +335,7 @@ define('io.ox/mail/actions',
             window.open(api.getUrl(data, 'eml'));
         }
     });
-    
+
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         action: function (data) {
@@ -346,12 +346,12 @@ define('io.ox/mail/actions',
                         var popup = new dialogs.ModalDialog()
                             .addButton('create', gt('Create reminder'))
                             .addButton('cancel', gt('Cancel'));
-                        
+
                         //Header
                         popup.getHeader()
                             .append($("<h4>")
                                     .text(gt('Remind me')));
-                        
+
                         //fill popup body
                         var popupBody = popup.getBody();
                         popupBody.append("<div>" + gt('Subject') + "</div>");
@@ -361,7 +361,7 @@ define('io.ox/mail/actions',
                                     this.select();
                                 })
                             .appendTo(popupBody);
-                        
+
                         popupBody.append("<div>" + gt('Note') + "</div>");
                         var noteInput = $('<textarea>', { width: '90%', rows: "5", value: gt('Mail reminder for') + ": " + data.subject + " \n" +
                             gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1] })
@@ -370,26 +370,26 @@ define('io.ox/mail/actions',
                                     this.select();
                                 })
                             .appendTo(popupBody);
-                        
-                        
+
+
                         popupBody.append("<div>" + gt('Remind me') + "</div>");
                         var dateSelector = $('<select>', {name: "dateselect"})
                         .appendTo(popupBody);
                         var endDate = new Date();
                         dateSelector.append(util.buildDropdownMenu(endDate));
-                        
-                        
+
+
                         //ready for work
                         var def = popup.show();
                         titleInput.focus();
                         def.done(function (action) {
-                                
+
                                 if (action === "create")
                                     {
-                                    
+
                                     //Calculate the right time
                                     endDate = util.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
-                                    
+
                                     taskApi.create({title: titleInput.val(),
                                         folder_id: config.get('folder.tasks'),
                                         end_date: endDate.getTime(),
@@ -406,7 +406,7 @@ define('io.ox/mail/actions',
                                 }
                             });
                     });
-            
+
         }
     });
 
@@ -555,7 +555,7 @@ define('io.ox/mail/actions',
         label: gt('Delete'),
         ref: 'io.ox/mail/actions/delete'
     }));
-    
+
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
         prio: 'hi',

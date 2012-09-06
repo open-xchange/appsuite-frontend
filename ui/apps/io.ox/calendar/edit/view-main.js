@@ -95,7 +95,8 @@ define('io.ox/calendar/edit/view-main',
         PARTICIPANTS:       gt('Participants'),
         PRIVATE:            gt('Private'),
         NOTIFY_ALL:         gt('Notify all participants about this change'),
-        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)')
+        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'),
+        MAIL_TO_ALL :       gt('Send mail to all')
 
     };
 
@@ -171,7 +172,8 @@ define('io.ox/calendar/edit/view-main',
         className: 'io-ox-calendar-edit container',
         subviews: {},
         events: {
-            'click .save': 'onSave'
+            'click .save': 'onSave',
+            'click .sendmail' : 'onSendMail'
         },
         initialize: function () {
             var self = this;
@@ -308,7 +310,8 @@ define('io.ox/calendar/edit/view-main',
         onAddParticipant: function (data) {
             var participants = this.model.get('participants'),
                 notIn = true, obj,
-                that = this;
+                that = this,
+                userId;
 
             notIn = !_(participants).any(function (item) {
                 if (data.type === 5) {
@@ -323,13 +326,20 @@ define('io.ox/calendar/edit/view-main',
 
                     if (data.mark_as_distributionlist) {
                         _.each(data.distribution_list, function (val) {
+                            var def = $.Deferred();
                             if (val.folder_id === 6) {
-                                obj = {display_name: val.display_name, id: val.id, type: 6};
+                                util.getUserIdByInternalId(val.id, def);
+                                def.done(function (id) {
+                                    userId = id;
+                                    obj = {id: userId, type: 1 };
+                                    that.subviews.participants.collection.add(obj);
+                                    participants.push(obj);
+                                });
                             } else {
                                 obj = {type: 5, mail: val.mail, display_name: val.display_name};
+                                that.subviews.participants.collection.add(obj);
+                                participants.push(obj);
                             }
-                            that.subviews.participants.collection.add(obj);
-                            participants.push(obj);
                         });
                     } else {
                         obj = {id: data.id, type: data.type};
@@ -358,6 +368,20 @@ define('io.ox/calendar/edit/view-main',
                 return true;
             });
             this.model.set('participants', participants);
+        },
+        onSendMail: function () {
+            var participants = this.model.get('participants');
+            var def = $.Deferred();
+            util.createArrayOfRecipients(participants, def);
+
+            def.done(function (arrayOfRecipients) {
+                require(['io.ox/mail/write/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.compose();
+                        this.setTo(arrayOfRecipients);
+                    });
+                });
+            });
         }
     });
 

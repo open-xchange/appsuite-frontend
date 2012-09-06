@@ -30,7 +30,7 @@ define("io.ox/core/api/user",
             },
             list: {
                 action: "list",
-                columns: "1,20,500,524"
+                columns: "1,20,500,524,555"
             },
             get: {
                 action: "get"
