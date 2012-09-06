@@ -97,7 +97,6 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         showTask = function (obj) {
             // be busy
             right.busy(true);
-            console.log(obj);
             api.get(obj)
                 .done(_.lfo(drawTask))
                 .fail(_.lfo(drawFail, obj));
