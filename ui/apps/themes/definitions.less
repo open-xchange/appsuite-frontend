@@ -114,12 +114,18 @@
 
 @tile-hover: 8%;
 
-// mixins
+// Copied from boostrap
 
-/*
-.user-select (@type: text) {
-    -webkit-user-select: @type;
-    -moz-user-select: @type;
-    user-select: @type;
+.box-sizing(@boxmodel) {
+  -webkit-box-sizing: @boxmodel;
+     -moz-box-sizing: @boxmodel;
+          box-sizing: @boxmodel;
 }
-*/
+
+.user-select(@select) {
+  -webkit-user-select: @select;
+     -moz-user-select: @select;
+      -ms-user-select: @select;
+       -o-user-select: @select;
+          user-select: @select;
+}
