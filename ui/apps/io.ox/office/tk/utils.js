@@ -856,6 +856,34 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Checks, if a text node is a node inside a 'div', that has a 'p' as parent.
+     *
+     * @param {HTMLElement} element
+     *  A DOM element object whose ancestors are evaluated. If it contains an
+     *  ancestor 'div' that has a parent 'p', this is a text node, that represents
+     *  a field.
+     *
+     * @returns {Boolean}
+     *  If element is a text node, that has an ancestor 'div' with a parent 'p',
+     *  'true' is returned, otherwise false.
+     */
+    Utils.isTextInField = function (element) {
+
+        var isTextInField = false;
+
+        if (element.nodeType === 3) {
+            var divParent = $(element).closest('div');
+
+            if ((divParent.get(0)) && (Utils.getNodeName(divParent.get(0).parentNode) === 'p')) {
+                isTextInField = true;
+            }
+
+        }
+
+        return isTextInField;
+    };
+
+    /**
      * Returns the first descendant DOM text node in the specified element.
      *
      * @param {HTMLElement|jQuery} element

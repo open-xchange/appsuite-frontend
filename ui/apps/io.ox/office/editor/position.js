@@ -141,10 +141,14 @@ define('io.ox/office/editor/position',
             if (evaluateOffset) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     textLength += $(prevNode).text().length;
-                    if ((prevNode.nodeName === 'IMG') || ((prevNode.firstChild) && (prevNode.firstChild.nodeName === 'IMG'))) {
+                    if ((Utils.getNodeName(prevNode) === 'img') || ((prevNode.firstChild) && (Utils.getNodeName(prevNode.firstChild) === 'img'))) {
                         textLength++;
                     }
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
+                    if (Utils.getNodeName(prevNode) === 'div') {
+                        textLength -= $(prevNode).text().length;
+                        textLength++;  // 'div' has only a length of '1'
+                    }
                 }
                 offsetEvaluated = true;
             }
@@ -325,6 +329,14 @@ define('io.ox/office/editor/position',
      *  The one integer number, that determines the child according to the
      *  parent position.
      *
+     * @param {Boolean} returnImageNode
+     *  Typically (in the case of a full complete logical position)
+     *  text nodes and the corresponding offset are returned. But there are
+     *  some cases, in which not the text node, but the image or div, that
+     *  can also be located inside a 'p', shall be returned. In this cases
+     *  returnImageNode has to be set to 'true'. The default is 'false', so
+     *  that text nodes are returned.
+     *
      * @returns {Node | Number}
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
@@ -351,7 +363,8 @@ define('io.ox/office/editor/position',
         } else if (node.nodeName === 'P') {
             var textLength = 0,
                 bFound = false,
-                isImage = false;
+                isImage = false,
+                isField = false;
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
@@ -359,7 +372,7 @@ define('io.ox/office/editor/position',
                 return;
             }
 
-            while (node.hasChildNodes()) {
+            while ((node.hasChildNodes()) && (! bFound)) {
 
                 var nodeList = node.childNodes;
 
@@ -373,14 +386,18 @@ define('io.ox/office/editor/position',
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
+                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                        currentLength = 1;
+                        isField = true;
                     } else {  // this is a span. it can contain text node or image node
                         currentLength = $(nodeList[i]).text().length;
                         isImage = false;
+                        isField = false;
                     }
 
                     if (textLength + currentLength >= pos) {
 
-                        if ((returnImageNode) && (! isImage) && ((textLength + currentLength) === pos)) {
+                        if ((returnImageNode) && (! isField) && (! isImage) && ((textLength + currentLength) === pos)) {
                             var j = i + 1,
                                 nextNode = nodeList[j];
 
@@ -388,6 +405,11 @@ define('io.ox/office/editor/position',
                                 bFound = true;
                                 node = nextNode;
                                 isImage = true;
+                                break;  // leaving the for-loop
+                            } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div')) {
+                                bFound = true;
+                                node = nextNode;
+                                isField = true;
                                 break;  // leaving the for-loop
                             }
                         }
@@ -407,17 +429,11 @@ define('io.ox/office/editor/position',
                 return;
             }
 
-            if (! isImage) {
-                childNode = node;
-                if (childNode.nodeType !== 3) {
-                    childNode = childNode.firstChild;  // using text node instead of span node
-                }
-                offset = pos - textLength;
-            } else {
+            if ((isImage) || (isField)) {
                 if (! returnImageNode) {
-                    // if the last position is an image, the dom position shall be the following text node
+                    // if the last position is an image or field, the dom position shall be the following text node
                     childNode = node.nextSibling;
-                    if ((! childNode) && (node.nodeName === 'IMG')) {
+                    if ((! childNode) && (Utils.getNodeName(node) === 'img')) {
                         childNode = node.parentNode.nextSibling;
                     }
                     childNode = childNode.firstChild;
@@ -425,6 +441,12 @@ define('io.ox/office/editor/position',
                 } else {
                     childNode = node;
                 }
+            } else {
+                childNode = node;
+                if (childNode.nodeType !== 3) {
+                    childNode = childNode.firstChild;  // using text node instead of span node
+                }
+                offset = pos - textLength;
             }
 
             // only text nodes shall be returned, never image nodes (only, if 'returnImageNode' is set to true)
@@ -1000,7 +1022,10 @@ define('io.ox/office/editor/position',
                 var nodeList = paragraph.childNodes;
                 for (var i = 0; i < nodeList.length; i++) {
                     paraLen += $(nodeList[i]).text().length;
-                    if (nodeList[i].nodeName === 'IMG') {
+                    if (Utils.getNodeName(nodeList[i]) === 'img') {
+                        paraLen++;
+                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                        paraLen -= $(nodeList[i]).text().length;
                         paraLen++;
                     }
                     // paraLen += $('IMG', nodeList[i]).length;  // TODO: if IMGs are allowed in spans, ...

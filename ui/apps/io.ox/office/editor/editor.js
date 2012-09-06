@@ -331,10 +331,11 @@ define('io.ox/office/editor/editor',
      *  An array of text nodes and image nodes contained in the passed element,
      *  in the correct order.
      */
-    function collectTextNodesAndImages(element) {
+    function collectTextNodesAndImagesAndFields(element) {
         var nodes = [];
         Utils.iterateSelectedDescendantNodes(element, function () {
-            return (this.nodeType === 3) || (Utils.getNodeName(this) === 'img');
+            // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
+            return ((this.nodeType === 3) && (! Utils.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
         }, function (node) {
             nodes.push(node);
         });
@@ -3639,16 +3640,20 @@ define('io.ox/office/editor/editor',
             }
 
             var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = collectTextNodesAndImages(oneParagraph);
+            var searchNodes = collectTextNodesAndImagesAndFields(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
-                var isImage = false;
+                var isImage = false,
+                    isField = false;
                 node = searchNodes[i];
-                if (node.nodeName === 'IMG') {
+                if (Utils.getNodeName(node) === 'img') {
                     nodeLen = 1;
                     isImage = true;
+                } else if (Utils.getNodeName(node) === 'div') {
+                    nodeLen = 1;
+                    isField = true;
                 } else {
                     nodeLen = node.nodeValue.length;
                 }
@@ -3664,7 +3669,7 @@ define('io.ox/office/editor/editor',
                     if ((delEnd - delStart) === nodeLen) {
                         // remove element completely.
                         // TODO: Need to take care for empty elements!
-                        if (isImage) {
+                        if ((isImage) || (isField)) {
                             oneParagraph.removeChild(node);
                         } else {
                             node.nodeValue = '';
