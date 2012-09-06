@@ -36,6 +36,7 @@
     overflow:visible;
     
 }
+
 .vgrid-cell.tasks .priority i.icon-star { 
 	display: inline-block;
 	
@@ -46,15 +47,6 @@
     font-weight: 500;
 }
 
-.tasks-detailview {
-    background-color: white;
-    border: 1px solid #ddd;
-    padding: 20px 20px 20px 20px;
-    margin: 20px 20px 0px 20px;
-    -webkit-box-shadow: 0px 4px 10px -5px black;
-    -moz-box-shadow: 0px 4px 10px -5px black;
-    box-shadow: 0px 4px 10px -5px black;
-}
 
 .tasks-detailview .info-panel {
     margin-left: 2em;
