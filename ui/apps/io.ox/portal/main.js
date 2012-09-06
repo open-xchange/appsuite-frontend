@@ -43,7 +43,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         return 'plugins/portal/' + obj.id + '/register';
     });
 
-    plugins = _.intersection(allActivePlugins, plugins);
+    var reqPlugins = _.intersection(allActivePlugins, plugins);
 
     var setOrder = function (extensions) {
         var index = 100;
@@ -56,47 +56,53 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             index += 100;
         });
 
+        var indices = {};
+
         // Apply index to normal portal-plugins
         ext.point('io.ox/portal/widget').each(function (extension) {
             if (allActivePluginIds[extension.id]) {
                 extension.index = allActivePluginIds[extension.id].index;
+            } else {
+                var i = extension.id.indexOf('-');
+                if (i !== -1) {
+                    var extensionName = extension.id.substring(0, i);
+                    if (!indices[extensionName]) {
+                        indices[extensionName] = allActivePluginIds[extensionName].index;
+                    }
+                    extension.index = indices[extensionName]++;
+                }
             }
         });
         ext.point('io.ox/portal/widget').sort();
     };
 
-    return require(plugins).pipe(function () {
-        var requiredExtensions = arguments;
-        setOrder(requiredExtensions);
+    return require(reqPlugins).pipe(function () {
+        setOrder(arguments);
 
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/portal' }),
             // app window
             win,
+            intro = $('<div class="io-ox-portal-intro">'),
             tileSide = $('<div class="io-ox-portal-tiles">'),
             contentSide = $('<div class="io-ox-portal-content">'),
-            // update window title
             updateTitle = function () {
-                win.setTitle(
-                    $($.txt(getGreetingPhrase()))
-                    .add($.txt(', '))
-                    .add(userAPI.getTextNode(config.get('identifier')))
-                    .add($.txt(' '))
-                    .add($('<small>').addClass('subtitle').text('(' + ox.user + ')'))
-                );
+                intro.empty();
+                ext.point('plugins/portal/intro').each(function (introNode) {
+                    intro.append(introNode.node);
+                });
             };
 
         // time-based greeting phrase
-        function getGreetingPhrase() {
+        function getGreetingPhrase(name) {
             var hour = new date.Local().getHours();
-
             // find proper phrase
             if (hour >= 4 && hour <= 11) {
-                return gt('Good morning');
+                return gt('Good morning, %s', name);
             } else if (hour >= 18 && hour <= 23) {
-                return gt('Good evening');
+                return gt('Good evening, %s', name);
             } else {
-                return gt('Hello');
+                return gt('Hello %s', name);
             }
         }
 
@@ -130,45 +136,47 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         }
 
         function drawContent(extension, e) {
-            var sidepopup;
-            var dialog = new dialogs.SidePopup({modal: true}).show(e, function (popup) {
-                sidepopup = popup.busy();
-            });
-            contentQueue.fasttrack(extension.id).done(function (node) {
-                contentSide.children().trigger('onPause').detach();
-                
-                $(node).trigger('onResume');
-                sidepopup.idle();
-                sidepopup.append(node);
-                $(node).trigger('onAppended');
 
-                dialog.on('close', function () {
-                    $(node).trigger('onPause');
-                });
+            new dialogs.SidePopup({ modal: true }).show(e, function (popup) {
 
-                if (extension.loadMoreResults) {
-                    var $o = $('div.io-ox-sidepopup-pane');
+                var self = this;
+                popup.busy();
 
-                    $o.bind('scroll', function (event) {
-                        // TODO tidy enough? (loadingMoreResults + active tile)
-                        if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
-                            extension.timer = setTimeout(function () {
-                                // Position + Height + Tolerance
-                                var distance = $o.scrollTop() + $o.height() + 50;
+                contentQueue.fasttrack(extension.id).done(function (node) {
 
-                                if ($('div.scrollable-pane').height() <= distance) {
-                                    extension.isLoadingMoreResults = true;
-                                    extension.loadMoreResults(extension.finishLoadingMoreResults);
-                                }
-                                extension.timer = 0;
-                            }, 250);
-                        }
+                    contentSide.children().trigger('onPause').detach();
+                    $(node).trigger('onResume');
+                    popup.idle();
+                    popup.append(node);
+                    $(node).trigger('onAppended');
+
+                    self.on('close', function () {
+                        $(node).trigger('onPause');
                     });
-                }
 
-                $('div[widget-id]').removeClass('io-ox-portal-tile-active');
-                $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
-                contentSide.idle();
+                    if (extension.loadMoreResults) {
+                        var $o = $('div.io-ox-sidepopup-pane');
+                        $o.bind('scroll', function (event) {
+                            // TODO tidy enough? (loadingMoreResults + active tile)
+                            if (!extension.isLoadingMoreResults && $('div[widget-id="' + extension.id + '"]').hasClass('io-ox-portal-tile-active') && !extension.timer) {
+                                extension.timer = setTimeout(function () {
+                                    // Position + Height + Tolerance
+                                    var distance = $o.scrollTop() + $o.height() + 50;
+
+                                    if ($('div.scrollable-pane').height() <= distance) {
+                                        extension.isLoadingMoreResults = true;
+                                        extension.loadMoreResults(extension.finishLoadingMoreResults);
+                                    }
+                                    extension.timer = 0;
+                                }, 250);
+                            }
+                        });
+                    }
+
+                    $('div[widget-id]').removeClass('io-ox-portal-tile-active');
+                    $('div[widget-id="' + extension.id + '"]').addClass('io-ox-portal-tile-active');
+                    contentSide.idle();
+                });
             });
         }
 
@@ -184,43 +192,68 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
         var getKulerIndex = (function () {
 
-            var list = '0123456789'.split(''), pos = 0, tmp = [];
+            var list = '0123456789'.split(''), tmp = [];
 
             function randomSort() { return Math.round(Math.random()) - 0.5; }
 
             return function () {
                 if (tmp.length === 0) {
-                    tmp = list.slice(pos, pos + 5).sort(randomSort);
-                    pos = pos === 0 ? 5 : 0;
+                    tmp = list.slice(0, 10).sort(randomSort);
                 }
                 return tmp.shift();
             };
         }());
 
-        function addFillers(num, start) {
+        function addFillers(num, start, minIndex, maxIndex) {
             var load = function () {
                     return $.Deferred().resolve($('<div>'));
                 },
                 i = 0;
             for (; i < num; i++) {
+                var index = Math.round(Math.random() * (maxIndex - minIndex) + minIndex);
                 ext.point('io.ox/portal/widget').extend({
                     id: 'filler' + (start + i),
-                    index: 100 * (start + i + 1),
+                    index: index,
                     title: '',
-                    tileColor: 'X',
+                    colorIndex: 'X',
                     load: load
                 });
             }
+        }
+
+        function getColorIndex(extension) {
+            if (extension.colorIndex) {
+                return extension.colorIndex;
+            }
+            var haystack = settings.get('pluginSettings');
+            var needle = _(haystack).find(function (prop) {return prop.id === extension.id; });
+            if (!needle) {
+                needle = {id: extension.id};
+                haystack.push(needle);
+            }
+            if (!needle.colorIndex) {
+                needle.colorIndex = getKulerIndex();
+                settings.set('pluginProperties', haystack);
+                settings.save();
+            }
+            return needle.colorIndex;
         }
 
         function initExtensions() {
             // add dummy widgets
             var point = ext.point('io.ox/portal/widget'),
                 count = point.count(),
-                fillers = 15 - count;
+                fillers = 12 - count,
+                minIndex, maxIndex;
 
-            addFillers(fillers, count);
-//            point.shuffle();
+            point.each(function (extension) { //underscore does not work on this enum...
+                if (!minIndex && extension.index || minIndex > extension.index) { minIndex = extension.index; }
+                if (!maxIndex && extension.index || maxIndex < extension.index) { maxIndex = extension.index; }
+            });
+
+            addFillers(fillers, count, minIndex, maxIndex);
+            point.sort();
+            addFillers(4, 12, maxIndex, maxIndex + 4);
 
             point.each(function (extension) {
                 if (!extension.isEnabled) {
@@ -237,7 +270,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
                 var $node = $('<div class="io-ox-portal-widget-tile">')
                     // experimental
-                    .addClass('tile-color' + ('tileColor' in extension ? extension.tileColor : getKulerIndex())) //(count++ % 10))
+                    .addClass('tile-color' + getColorIndex(extension))
                     .attr('widget-id', extension.id)
                     .appendTo($borderBox)
                     .busy();
@@ -250,11 +283,14 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                     if (extension.performSetUp) {
                         $node.on('click', extension.performSetUp);
                     } else {
-                        console.log("Fallback: perform setup", extension.id, extension);
                         $node.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
                 } else {
                     $node.on('click', makeClickHandler(extension));
+                }
+
+                if (/^filler/.test(extension.id)) {
+                    $node.off('click');
                 }
 
                 if (!extension.loadTile) {
@@ -315,7 +351,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                             }
                         });
                     };
-                } //END of if missing draw workaround bullshit
+                } //END of "is draw method missing?"
 
                 if (extension.requiresSetUp()) {
                     $node.addClass("io-ox-portal-createMe");
@@ -358,25 +394,36 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
 
             initExtensions();
 
-            app.active = _(ext.point('io.ox/portal/widget').all()).first();
+            app.active = null;
 
             win.nodes.main
                 .addClass('io-ox-portal')
+                .append(intro)
                 .append(tileSide);
 
-            ox.on('refresh^', function (event, completeReload) {
+            ox.on('refresh^ refresh-portal', function (event, completeReload) {
                 if (completeReload) {
-                    pluginSettings = _.sortBy(settings.get('pluginSettings') || {}, function (obj) { return obj.index; });
-
+                    pluginSettings = _.sortBy(settings.get('pluginSettings', []), function (obj) { return obj.index; });
                     allActivePluginIds = {};
                     _.each(pluginSettings, function (obj) {
                         if (obj.active) {
                             allActivePluginIds[obj.id] = obj;
                         }
                     });
-                    setOrder({});
+
+                    allActivePlugins = _.map(allActivePluginIds, function (obj) {
+                        return 'plugins/portal/' + obj.id + '/register';
+                    });
+
+                    reqPlugins = _.intersection(allActivePlugins, plugins);
+
+                    require(reqPlugins).pipe(function () {
+                        setOrder(arguments);
+                    });
+
+                    app.active = null;
+                    app.activeEvent = null;
                 }
-//                console.log("Refreshing:", app.active, app.activeEvent);
                 tileSide.empty();
                 contentQueue = new tasks.Queue();
                 contentQueue.start();
@@ -387,6 +434,27 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             });
 
             win.show();
+        });
+
+
+        ext.point('plugins/portal/intro').extend({
+            id: 'default-intro',
+            node: function () {
+                var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
+                return $('<div>').append(
+                    $('<span class="io-ox-portal-settings">').append(
+                        $('<a>').text(gt('Personalize this page')).on('click', function (event) {
+                            return require(["io.ox/settings/main"], function (m) {
+                                m.getApp().launch().done(function () {
+                                    this.getGrid().selection.set({ id: 'io.ox/portal' });
+                                });
+                            });
+                        })
+                    ),
+                    $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
+                    $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
+                );
+            }
         });
 
         return {

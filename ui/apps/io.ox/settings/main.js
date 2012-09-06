@@ -16,7 +16,8 @@ define('io.ox/settings/main',
       'io.ox/core/extensions',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View) {
+      'io.ox/core/commons',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons) {
 
     'use strict';
 
@@ -47,12 +48,6 @@ define('io.ox/settings/main',
         }
     };
 
-
-
-
-
-
-
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/settings' }),
         // app window
@@ -75,8 +70,8 @@ define('io.ox/settings/main',
         }
     }
 
-
     app.setLauncher(function () {
+
         app.setWindow(win = ox.ui.createWindow({
             title: 'Settings',
             toolbar: true,
@@ -84,36 +79,30 @@ define('io.ox/settings/main',
             name: 'io.ox/settings'
         }));
 
-        var onHideSettingsPane = function () {
-            var settingsID = currentSelection.id + '/settings';
-            ext.point(settingsID + '/detail').invoke('save');
-        };
-        win.on('hide', onHideSettingsPane);
-
-
-
-
-        ext.point('io.ox/settings/links/toolbar').extend({
-            id: 'io.ox/settings/expertcb',
-            draw: function (context) {
-                this.append(
-                    forms.createCheckbox({
-                        dataid: 'settings-expertcb',
-                        initialValue: expertmode,
-                        label: 'Expertmode'
-                    })
-                    .on('update.model', function (e, options) {
-                        expertmode = options.value;
-                        updateExpertMode();
-                    })
-                );
+        var saveSettings = function () {
+            if (currentSelection !== null) {
+                var settingsID = currentSelection.id + '/settings';
+                ext.point(settingsID + '/detail').invoke('save');
             }
-        });
+        };
 
+        win.on('hide', saveSettings);
+
+        win.nodes.controls.append(
+            forms.createCheckbox({
+                dataid: 'settings-expertcb',
+                initialValue: expertmode,
+                label: 'Expert\u00a0mode' // mmmh, nbsp sucks here
+            })
+            .on('update.model', function (e, options) {
+                expertmode = options.value;
+                updateExpertMode();
+            })
+        );
 
         win.addClass('io-ox-settings-main');
 
-        left = $('<div/>')
+        left = $('<div>')
             .addClass('leftside border-right')
             .css({
                 width: GRID_WIDTH + 'px',
@@ -121,7 +110,7 @@ define('io.ox/settings/main',
             })
             .appendTo(win.nodes.main);
 
-        right = $('<div/>')
+        right = $('<div>')
             .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto' })
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
@@ -152,56 +141,40 @@ define('io.ox/settings/main',
                 settings: true,
                 title: 'Keyring'
             });
-            console.log('listing apps');
-            console.log(apps);
 
             return $.Deferred().resolve(apps);
         });
 
+        grid.setMultiple(false);
+
         var showSettings = function (obj) {
-            var settingsPath,
-                extPointPart;
-            settingsPath = obj.id + '/settings/pane';
-            extPointPart = obj.id + '/settings';
-            console.log('load:' + settingsPath);
+            var settingsPath = obj.id + '/settings/pane',
+                extPointPart = obj.id + '/settings';
             right.empty().busy();
-            require([ settingsPath ], function (m) {
-                console.log("extpoint:" + extPointPart + '/detail');
+            require([settingsPath], function (m) {
+                right.empty().idle(); // again, since require makes this async
                 ext.point(extPointPart + '/detail').invoke('draw', right, obj);
                 updateExpertMode();
-                right.idle();
             });
         };
+
+        // trigger auto save
         grid.selection.on('change', function (e, selection) {
             if (selection.length === 1) {
-                var isOpenedTheFirstTime = (currentSelection === null);
-                if (!isOpenedTheFirstTime) {
-                    onHideSettingsPane();
-                }
+                saveSettings();
                 currentSelection = selection[0];
-                showSettings(currentSelection);
-            } else {
-                right.empty();
             }
         });
 
-        grid.setMultiple(false);
-
-        win.on('show', function () {
-            grid.selection.keyboard(true);
-        });
-        win.on('hide', function () {
-            grid.selection.keyboard(false);
-        });
-
+        commons.wireGridAndSelectionChange(grid, 'io.ox/settings', showSettings, right);
+        commons.wireGridAndWindow(grid, win);
 
         // go!
         win.show(function () {
             grid.paint();
         });
-        grid.refresh();
-
     });
+
     return {
         getApp: app.getInstance
     };

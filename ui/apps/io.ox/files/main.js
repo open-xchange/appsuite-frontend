@@ -120,7 +120,7 @@ define("io.ox/files/main",
 
         commons.wireGridAndSelectionChange(grid, 'io.ox/files', drawFile, right);
 
-        
+
         grid.selection.on('empty', function () {
             if (currentDetailView) {
                 currentDetailView.destroy();
@@ -229,7 +229,7 @@ define("io.ox/files/main",
             if (folder['com.openexchange.publish.publicationFlag']) {
                 win.nodes.title.prepend(
                     $('<img>', {
-                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud.png',
+                        src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
                         title: gt('This folder has publications'),
                         alt: ''
                     })

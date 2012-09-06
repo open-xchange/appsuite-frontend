@@ -13,14 +13,25 @@
 
 define("io.ox/tasks/main", ["io.ox/tasks/api",
                             'gettext!io.ox/tasks',
-                            "io.ox/core/date"], function (api, gt, date) {
+                            'io.ox/core/tk/vgrid',
+                            'io.ox/tasks/view-grid-template',
+                            "io.ox/core/commons",
+                            'io.ox/tasks/util',
+                            'io.ox/tasks/view-detail'], function (api, gt, VGrid, template, commons, util, viewDetail) {
 
     "use strict";
 
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
         // app window
-        win;
+        win,
+        // grid
+        grid,
+        GRID_WIDTH = 330,
+        // nodes
+        left,
+        right;
+    
     // launcher
     app.setLauncher(function () {
         // get window
@@ -31,77 +42,91 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
             search: true
         });
         
-        api.getAll().done(function (alltasks)
-                {
-            fill(alltasks);
-        });
-        
-        var fill = function (tasks)
-        {
-            
-            var content = win.nodes.main;
-            content.append("div").text("This is just a placeholder taskapp").addClass("default-content-padding abs scrollable");
-            
-            var node = $('<div class="io-ox-portal-tasks">').appendTo(content);
-            $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
-            
-            require(['io.ox/tasks/view-grid-template'], function (viewGrid)
-                    {
-                    
-                    //interpret values for status etc
-                    for (var i = 0; i < tasks.length; i++)
-                    {
-                        tasks[i] = interpretTask(tasks[i]);
-                    }
-                    
-                    viewGrid.drawSimpleGrid(tasks).appendTo(node);
-                });
-            
-            if (tasks.length === 0)
-                {
-                $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
-            }
-        };
-        
-        var interpretTask = function (task)
-        {
-            
-            switch (task.status)
-            {
-            case 2:
-                task.status = gt("In progress");
-                break;
-            case 3:
-                task.status = gt("Done");
-                break;
-            case 4:
-                task.status = gt("Waiting");
-                break;
-            case 5:
-                task.status = gt("Deferred");
-                break;
-            default:
-                task.status = gt("Not started");
-                break;
-            }
-            
-            task.end_date = new date.Local(task.end_date).format(date.DATE);
-            
-            return task;
-        };
-        
-        
+        win.addClass('io-ox-tasks-main');
         app.setWindow(win);
+        
+        // folder tree
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'tasks', view: 'FolderList' });
 
-        // Let's define some event handlers on our window
-        win.on("show", function () {
+        
+        // left panel
+        left = $("<div>")
+            .addClass("leftside border-right")
+            .css({
+                width: GRID_WIDTH + "px",
+                overflow: "auto"
+            })
+            .appendTo(win.nodes.main);
+        
+        // right panel
+        right = $("<div>")
+            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
+            .addClass("rightside default-content-padding")
+            .appendTo(win.nodes.main)
+            .scrollable();
+        
+        // grid
+        grid = new VGrid(left);
+        
+        grid.addTemplate(template.main);
+        
+        commons.wireGridAndAPI(grid, api);
+        
+        grid.setAllRequest(function () {
+            return api.getAll().pipe(function (data) {
+                var datacopy = util.sortTasks(data);
+                return datacopy;
+            });
         });
         
-        win.on("hide", function () {
-            // Gets called whenever the window is hidden
+        grid.setListRequest(function (ids) {
+            return api.getList(ids).pipe(function (list) {
+                var listcopy = _.copy(list, true),
+                    i = 0;
+                for (; i < listcopy.length; i++) {
+                    listcopy[i] = util.interpretTask(listcopy[i]);
+                }
+                
+                return listcopy;
+            });
         });
         
-        win.show();
+        var showTask, drawTask, drawFail;
+
+        //detailview lfo callbacks
+        showTask = function (obj) {
+            // be busy
+            right.busy(true);
+            console.log(obj);
+            api.get(obj)
+                .done(_.lfo(drawTask))
+                .fail(_.lfo(drawFail, obj));
+        };
+
+        drawTask = function (data) {
+            right.idle().empty().append(viewDetail.draw(data));
+        };
+
+        drawFail = function (obj) {
+            right.idle().empty().append(
+                $.fail(gt("Oops, couldn't load that task."), function () {
+                    showTask(obj);
+                })
+            );
+        };
+        
+        commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api, win);
+        
+        app.getGrid = function () {
+            return grid;
+        };
+        
+        //ready for show
+        commons.addFolderSupport(app, grid, 'tasks')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

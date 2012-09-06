@@ -14,7 +14,7 @@
 /* Grid */
 
 .vgrid-cell.calendar {
-    height: 4em;
+    height: 60px; /* = 3 rows */
     padding: 0.75em 13px 0.75em 13px;
 }
 
@@ -36,9 +36,14 @@
     display: inline-block;
 }
 
-
 .vgrid-cell.calendar .location {
     color: #888;
+}
+
+.vgrid-cell.calendar .shown_as.label {
+    width: 1em;
+    float: right;
+    margin-left: 1em;
 }
 
 .vgrid-cell.calendar .time {
@@ -49,23 +54,6 @@
 
 .vgrid-cell.calendar .date {
     color: #555;
-}
-
-.vgrid-cell.calendar .shown_as {
-    right: auto;
-    border-right: 1px solid white;
-    width: 4px;
-    bottom: -1px;
-}
-
-.borderradius .vgrid-cell.calendar .shown_as {
-    top: 5px;
-    bottom: 5px;
-    left: 4px;
-    border-right: 0px none;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    border-radius: 4px 4px 4px 4px;
 }
 
 /* shown_as */
@@ -207,6 +195,15 @@
 .calendar-detail .group {
     margin: 0.75em 0 0.25em 0;
     color: #333;
+}
+
+.popover {
+    width: auto;
+    min-width: 236px;
+}
+
+.popover-content .timezones {
+    width: 260px;
 }
 
 .popover-content .timezones .clear {

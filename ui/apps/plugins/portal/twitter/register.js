@@ -102,8 +102,11 @@ define('plugins/portal/twitter/register',
             var tweet = tweets[0];
             var message = $('<div>').html(tweet.text).text();
             $node.append(
-                $('<div>').append($('<b>').text('@' + tweet.user.name + ':')),
-                $('<div class="io-ox-portal-preview">').text(strings.shorten(message, 120)));
+                $('<div class="io-ox-portal-preview">').append(
+                    $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
+                    $('<span class="io-ox-portal-preview-thirdline">').text(message)
+                )
+            );
         }
     };
 
@@ -163,17 +166,20 @@ define('plugins/portal/twitter/register',
     };
 
     ext.point('io.ox/portal/widget').extend({
-        id: extensionId,
+        id: 'twitter',
         index: 140,
         tileHeight: 2,
         title: "Twitter",
         icon: 'apps/plugins/portal/twitter/twitter-bird-dark-bgs.png',
-        tileColor: 1,
         isEnabled: function () {
-            return keychain.isEnabled(extensionId);
+            return keychain.isEnabled('twitter');
         },
         requiresSetUp: function () {
-            return keychain.isEnabled(extensionId) && ! keychain.hasStandardAccount(extensionId);
+            return keychain.isEnabled('twitter') && ! keychain.hasStandardAccount('twitter');
+        },
+        performSetUp: function () {
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('twitter', win);
         },
         preview: function () {
             var deferred = $.Deferred();
@@ -251,7 +257,9 @@ define('plugins/portal/twitter/register',
             var $node = $(this);
             $node.append(
                 $('<h1>').text('Twitter'),
-                $('<div>').text(gt('%s has not been set up yet, click this box to do so or remove it completely.', 'Twitter'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div>').text(gt('Add your account'))
+                )
             );
         }
     });

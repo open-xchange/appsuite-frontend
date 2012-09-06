@@ -324,8 +324,8 @@ define('io.ox/portal/mediaplugin',
                                     var $o = $('div.io-ox-sidepopup-pane');
                                     var top = $o.scrollTop() - $o.offset().top + event.target.offset().top;
                                     $o.animate({scrollTop: top}, 250, 'swing', function () {
-                                        new dialogs.SidePopup({disableCloseByScroll: true}).show(event, function (popup) {
-                                            popupContent(popup, $(this).data("entry"), $(this).attr('data-counter'));
+                                        new dialogs.SidePopup({disableCloseByScroll: true}).show(event, function (popup, e, el) {
+                                            popupContent(popup, el.data("entry"), el.attr('data-counter'));
                                         });
                                     });
                                 });
@@ -370,10 +370,10 @@ define('io.ox/portal/mediaplugin',
             //                        self.append($more);
 
                                     new dialogs.SidePopup({disableCloseByScroll: true})
-                                        .delegate(self, options.big ? ".mediaplugin-entry-big" : ".mediaplugin-entry", function (popup) {
-                                            lastClickedOn = $(this).attr('data-counter');
+                                        .delegate(self, options.big ? ".mediaplugin-entry-big" : ".mediaplugin-entry", function (popup, e, target) {
+                                            lastClickedOn = target.attr('data-counter');
                                             console.log("Last clicked on: " + lastClickedOn);
-                                            popupContent(popup, $(this).data("entry"), lastClickedOn);
+                                            popupContent(popup, target.data("entry"), lastClickedOn);
                                         });
                                     deferred.resolve();
                                 }

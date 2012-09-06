@@ -18,16 +18,51 @@
 
 .window-content.week-view {
     
-    @appointment-reserved: #08c ; /* blue */ 
-    @appointment-temporary: #FFBB00 ; /* yellow */ 
-    @appointment-absent: #913F3F ; /* red */ 
-    @appointment-free: #8EB360 ; /* green */ 
-    @appointment-private: #555 ; /* dark grey */ 
-    @appointment-out: #aaa ; /* light grey */ 
+    @appointment-reserved: #08c; /* blue */ 
+    @appointment-temporary: #FFBB00; /* yellow */ 
+    @appointment-absent: #913F3F; /* red */ 
+    @appointment-free: #8EB360; /* green */ 
+    @appointment-private: #555; /* dark grey */ 
+    @appointment-out: #aaa; /* light grey */ 
+    @appointment-lasso: rgba(0, 0, 0, 0.4);
     @appointment-hover-pct: 15%; 
-    @appointment-unconfirmed-alpha: 0.4 ;
+    @appointment-unconfirmed-alpha: 0.4;
     @weekview-time-with: 42px;
     @weekview-footer-height: 30px;
+    @weekview-toolbar-height: 37px;
+    
+    .toolbar {
+        background-color: #FFF; 
+        height: @weekview-toolbar-height;
+        text-align: center;
+        border-bottom: 1px solid #ccc;
+        padding: 3px;
+    }
+    
+    .toolbar .info {
+        position: relative;
+        left: 10px;
+        float: left;
+        line-height: 28px;
+        
+    }
+
+    .toolbar .pagination {
+        margin: 0px;
+        height: 30px;
+    }
+    
+    .toolbar .pagination a {
+        line-height: 28px;
+    }
+    
+    .week-view-container {
+        position: absolute;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        top: @weekview-toolbar-height;
+    }
     
     .week {
         width: 100%;
@@ -45,9 +80,9 @@
     
     .fulltime-container {
         position: relative;
-        height: 10%;
         border-bottom: 1px solid #ccc;
         width: 100%;
+        overflow-y: scroll;
     }
     
     .fulltime-lable {
@@ -57,7 +92,6 @@
     }
     
     .fulltime {
-        overflow: auto;
         height: 100%;
         left: @weekview-time-with;
         right: 0;
@@ -65,9 +99,8 @@
     }
     
     .scrollpane {
-        overflow: auto;
+        overflow-y: scroll;
         position: absolute;
-        top: 10%; 
         right: 0; 
         bottom: @weekview-footer-height; 
         left: 0;
@@ -81,6 +114,7 @@
         left: 0;
         bottom: 0; 
         width: 100%;
+        overflow-y: scroll;
     }
     
     .footer-lable {
@@ -91,8 +125,7 @@
     
     .footer {
         position: absolute;
-        height: @weekview-footer-height; 
-        line-height: @weekview-footer-height;
+        line-height: @weekview-footer-height - 1;
         right: 0;
         left: @weekview-time-with;
         white-space: nowrap;
@@ -101,7 +134,7 @@
         font-size: 12px;
     }
     
-    .weekcontainer {
+    .week-container {
         left: @weekview-time-with;
         right: 0;
         position: absolute;
@@ -198,25 +231,37 @@
     }
     
     .appointment {
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
         position: absolute;
-        font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        line-height: 13px;
-        background-color: #08c;
-        color: white;
         margin-bottom: 1px;
-        padding: 2px 7px 2px 7px;
-        overflow: hidden;
-        text-overflow: ellipsis;
         cursor: pointer;
-        border: 1px solid rgba(255, 255, 255, 0.4);
+        background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
         transition: background-color, color 0.1s;
+        opacity: 1;
+        -moz-transition: opacity 0.2s;
+        -webkit-transition: opacity 0.2s;
+        -o-transition: opacity 0.2s;
+        transition: opacity 0.2s;
+    }
+
+    .appointment-content {
+        height: 100%;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        font-family: Arial, Helvetica, sans-serif;
+        font-size: 11px;
+        line-height: 13px;
+        color: white;
+        padding: 2px 7px 2px 7px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .appointment.current {
-        z-index: 1;
+        z-index: 999 !important;
     }
         
     .appointment.opac {
@@ -245,6 +290,12 @@
     
     .appointment.private {
         background-color: @appointment-private;
+    }
+    
+    .appointment.lasso {
+        background-color: @appointment-lasso;
+        width: 100%;
+        cursor: default;
     }
 
     .appointment.reserved.hover {
@@ -284,21 +335,51 @@
         color: #ccc;
         color: rgba(255, 255, 255, 0.6);
     }
-/*
-    .vertical {
-        font-family: @font-light;
-        font-size: 30px;
-        line-height: 1.1em;
-        color: #aaa;
-        position: absolute;
-        right: 0;
-        width: 12.5%;
-        height: 100/6%;
-        padding: 13px;
-        text-align: right;
-    }
-    .day.out .appointment { background-color: @appointment-out; }
-    .day.out .appointment.hover { background-color: darken(@appointment-out, @appointment-hover-pct); }
-    
-*/
+
+}
+
+.ui-resizable {
+    position: relative;
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    font-size: 0.1px;
+    display: block;
+}
+
+.ui-resizable-disabled .ui-resizable-handle,.ui-resizable-autohide .ui-resizable-handle {
+    display: none;
+}
+
+.ui-resizable-n {
+    cursor: n-resize;
+    height: 7px;
+    width: 100%;
+    top: -3px;
+    left: 0;
+}
+
+.ui-resizable-s {
+    cursor: s-resize;
+    height: 7px;
+    width: 100%;
+    bottom: -3px;
+    left: 0;
+}
+
+.ui-resizable-e {
+    cursor: e-resize;
+    width: 7px;
+    right: 0px;
+    top: 0;
+    height: 100%;
+}
+
+.ui-resizable-w {
+    cursor: w-resize;
+    width: 7px;
+    left: 0px;
+    top: 0;
+    height: 100%;
 }

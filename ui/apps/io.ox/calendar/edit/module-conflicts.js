@@ -82,8 +82,8 @@ define('io.ox/calendar/edit/module-conflicts',
                     function (dialogs, viewGrid) {
 
                         new dialogs.SidePopup()
-                            .delegate($(conflictList), ".vgrid-cell", function (popup) {
-                                var data = $(this).data("appointment");
+                            .delegate($(conflictList), ".vgrid-cell", function (popup, e, target) {
+                                var data = target.data("appointment");
                                 require(["io.ox/calendar/view-detail"], function (view) {
                                     popup.append(view.draw(data));
                                     data = null;

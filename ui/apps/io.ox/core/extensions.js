@@ -190,10 +190,17 @@ define("io.ox/core/extensions",
             return extensions;
         };
 
+        this.get = function (id, callback) {
+            var extension = _(extensions).chain()
+                .filter(function (obj) { return obj.id === id; }).first().value();
+            if (extension) {
+                callback(extension);
+            }
+            return this;
+        };
+
         this.keys = function () {
-            return _(extensions).map(function (obj) {
-                    return obj.id;
-                });
+            return _(extensions).pluck('id');
         };
 
         // public for testing purposes

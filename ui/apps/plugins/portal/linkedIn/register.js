@@ -11,13 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("plugins/portal/linkedin/register",
+define("plugins/portal/linkedIn/register",
     ['io.ox/core/extensions',
      'io.ox/core/http',
      'io.ox/oauth/proxy',
      'io.ox/core/strings',
      'io.ox/keychain/api',
-     'gettext!plugins/portal/linkedin',
+     'gettext!plugins/portal/linkedIn',
      'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, keychain, gt) {
 
     "use strict";
@@ -62,7 +62,7 @@ define("plugins/portal/linkedin/register",
             .on("click", person, fnClick);
     }
 
-    ext.point("portal/linkedin/updates/renderer").extend({
+    ext.point("portal/linkedIn/updates/renderer").extend({
         id: "CONN",
         draw: function (activity) {
 
@@ -105,7 +105,8 @@ define("plugins/portal/linkedin/register",
             return keychain.isEnabled('linkedin') && ! keychain.hasStandardAccount('linkedin');
         },
         performSetUp: function () {
-            return keychain.createInteractively('linkedin');
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('linkedin', win);
         },
         loadTile: function () {
             return proxy.request({
@@ -117,14 +118,16 @@ define("plugins/portal/linkedin/register",
             var message = values ? values[0] : null;
 
             $(this).append(
-                $('<img>').attr({src: 'apps/plugins/portal/linkedIn/linkedin175.png', alt: 'LinkedIn', width: '175px', height: 'auto', 'class': 'linkedin-logo'})
+                $('<img class="linkedin-logo">').attr({src: 'apps/plugins/portal/linkedIn/glyphicons_377_linked_in.png'}),
+                $('<h1 class="tile-heading">').text('LinkedIn')
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
-                $('<div class="linkedin-preview">').append(
-                    $('<div class="linkedin-name">').text(strings.shorten(message.from.person.firstName + " " + message.from.person.lastName, 50)),
-                    $('<div class="linkedin-subject">').text(strings.shorten(message.subject, 50)),
-                    $('<div class="linkedin-body">').text(strings.shorten(message.body, 50))
+                $('<div class="ioox-portal-preview">').append(
+                    $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
+                    $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
+                    $('<span class="">').text(' '),
+                    $('<span class="io-ox-portal-preview-thirdline">').text(message.body)
                 ).appendTo(this);
             }
         },
@@ -182,7 +185,7 @@ define("plugins/portal/linkedin/register",
             if (activityFeed.values && activityFeed.values !== 0) {
                 $('<h2 class="linkedin-activities-header">').text(gt("Recent activities:")).appendTo($node);
                 _(activityFeed.values).each(function (activity) {
-                    ext.point("portal/linkedin/updates/renderer")
+                    ext.point("portal/linkedIn/updates/renderer")
                         .invoke("draw", $node, activity);
                 });
             }
@@ -193,7 +196,9 @@ define("plugins/portal/linkedin/register",
             var $node = $(this);
             $node.append(
                 $('<h1>').text('LinkedIn'),
-                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'LinkedIn'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div>').text(gt('Add your account'))
+                )
             );
         }
     };

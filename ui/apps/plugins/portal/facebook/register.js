@@ -51,13 +51,16 @@ define('plugins/portal/facebook/register',
         index: 150,
         title: 'Facebook',
         icon: 'apps/plugins/portal/facebook/f_logo.png',
-        tileColor: 2,
         color: 'bright',
         isEnabled: function () {
             return keychain.isEnabled('facebook');
         },
         requiresSetUp: function () {
             return keychain.isEnabled('facebook') && ! keychain.hasStandardAccount('facebook');
+        },
+        performSetUp: function () {
+            var win = window.open(ox.base + "/busy.html", "_blank", "height=400, width=600");
+            return keychain.createInteractively('facebook', win);
         },
         preview: function () {
             var deferred = $.Deferred();
@@ -85,8 +88,8 @@ define('plugins/portal/facebook/register',
                         message = message.substring(0, 150) + '...';
                     }
                     $previewNode.append(
-                        $('<div>').append($('<b>').text(getProfile(profiles, post.actor_id).name + ':')),
-                        $('<div>').text(strings.shorten(message, 100)));
+                        $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
+                        $('<span class="io-ox-portal-preview-thirdline">').text(strings.shorten(message, 100)));
                 }
 
                 deferred.resolve($previewNode);
@@ -165,12 +168,14 @@ define('plugins/portal/facebook/register',
 
             return $.when();
         },
-        
+
         drawCreationDialog: function () {
             var $node = $(this);
             $node.append(
                 $('<h1>').text('Facebook'),
-                $('<div>').text(gt('A %s account has not been set up yet, click this box to do so or remove it completely.', 'Facebook'))
+                $('<div class="io-ox-portal-preview centered">').append(
+                    $('<div>').text(gt('Add your account'))
+                )
             );
         }
     });

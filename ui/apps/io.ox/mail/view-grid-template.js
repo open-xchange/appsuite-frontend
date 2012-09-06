@@ -52,7 +52,7 @@ define('io.ox/mail/view-grid-template',
                     fields.threadSize.text(data.threadSize).css('display', '');
                 }
                 fields.from.empty().append(
-                    util.getFrom(account.is(data.folder_id, 'sent') ? data.to : data.from, true)
+                    util.getFrom(data, account.is(data.folder_id, 'sent') ? 'to' : 'from', true)
                 );
                 fields.date.text(util.getTime(data.received_date));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
@@ -89,7 +89,7 @@ define('io.ox/mail/view-grid-template',
                             .attr('data-obj-id', key)
                             .append(
                                 $('<div>').addClass('date').text(util.getTime(data.received_date)),
-                                $('<div>').append(util.getFrom(data.from).removeClass('person'))
+                                $('<div>').append(util.getFrom(data).removeClass('person'))
                             )
                         );
                     });

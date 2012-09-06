@@ -9,18 +9,21 @@
 .linkedin-counter {
     margin-top: .5em;
 }
-
-.linkedin-subject {
-    font-weight: bold;
-}
-
 .linkedin-content .linkedin-message {
     padding-bottom: 1em;
 }
 img.linkedin-logo {
-    display: block;
+    float: right;
+    margin-top: 13px;
 }
 
 .linkedin-message.odd {
     background-color: #f4f4f4;
+}
+.centered {
+    vertical-align: middle;
+    text-align: center;
+}
+.linkedin-subject {
+    font-weight: bold;
 }

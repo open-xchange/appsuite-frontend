@@ -44,7 +44,7 @@ define('io.ox/calendar/actions',
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
                 perspective.setRendered(false);
-                perspective.days = 7;
+                perspective.columns = 7;
                 perspective.show(app);
             });
         }
@@ -55,7 +55,7 @@ define('io.ox/calendar/actions',
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
                 perspective.setRendered(false);
-                perspective.days = 5;
+                perspective.columns = 5;
                 perspective.show(app);
             });
         }
@@ -66,7 +66,7 @@ define('io.ox/calendar/actions',
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
                 perspective.setRendered(false);
-                perspective.days = 1;
+                perspective.columns = 1;
                 perspective.show(app);
             });
         }
@@ -182,11 +182,16 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: 'one create',
-        action: function (app) {
+        action: function (app, obj) {
+            obj = obj || {};
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
-                    this.create({folder_id: app.folder.get(), participants: []});
+                    _.extend(obj, {
+                        folder_id: app.folder.get(),
+                        participants: []
+                    });
+                    this.create(obj);
                 });
             });
 
@@ -220,24 +225,10 @@ define('io.ox/calendar/actions',
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'list',
+        id: 'day',
         index: 100,
-        label: gt('List'),
-        ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
-
-    new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'month',
-        index: 200,
-        label: gt('Month'),
-        ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
-
-    new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'fullweek',
-        index: 200,
-        label: gt('Week'),
-        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
+        label: gt('Day'),
+        ref: 'io.ox/calendar/actions/switch-to-day-view'
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
@@ -248,10 +239,24 @@ define('io.ox/calendar/actions',
     });
 
     new Link('io.ox/calendar/links/toolbar/view', {
-        id: 'day',
-        index: 200,
-        label: gt('Day'),
-        ref: 'io.ox/calendar/actions/switch-to-day-view'
+        id: 'fullweek',
+        index: 300,
+        label: gt('Week'),
+        ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'month',
+        index: 400,
+        label: gt('Month'),
+        ref: 'io.ox/calendar/actions/switch-to-month-view'
+    });
+
+    new Link('io.ox/calendar/links/toolbar/view', {
+        id: 'list',
+        index: 500,
+        label: gt('List'),
+        ref: 'io.ox/calendar/actions/switch-to-list-view'
     });
 
     // FIXME: should only be visible if rights are ok

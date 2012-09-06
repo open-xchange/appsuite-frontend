@@ -65,8 +65,6 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     }
                 };
 
-            api = api || $({});
-
             grid.selection.on('change', function (e, selection) {
                 var len = selection.length,
                     // work with reduced string-based set
@@ -75,11 +73,11 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     }));
                 // has anything changed?
                 if (flat !== last) {
-                    api.off('update', update);
+                    if (api) { api.off('update', update); }
                     if (len === 1) {
                         node.css('height', '');
                         draw(selection[0]);
-                        api.on('update', { item: selection[0] }, update);
+                        if (api) { api.on('update', { item: selection[0] }, update); }
                     } else if (len > 1) {
                         node.css('height', '100%');
                         commons.multiSelection(id, node, this.unfold());

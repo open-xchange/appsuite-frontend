@@ -55,56 +55,41 @@ define('plugins/portal/mail/register',
         tileHeight: 2,
 
         loadTile: function () {
-            var folderLoaded = $.Deferred();
             var mailsLoaded = $.Deferred();
-
-            require(['io.ox/core/api/folder', 'io.ox/mail/api'], function (folderApi, mailApi) {
-                folderApi.get(
-                    {
-                        folder: folderApi.getDefaultFolder('mail'),
-                        cache: false
-                    })
-                    .done(function (folder) {
-                        folderLoaded.resolve(folder);
-                    })
-                    .fail(folderLoaded.reject);
-
+            require(['io.ox/mail/api'], function (mailApi) {
                 mailApi.getAll({
-                    folder: folderApi.getDefaultFolder('mail'),
+                    folder: mailApi.getDefaultFolder(),
                     cache: false
                 }, false)
                     .done(function (mails) {
                         if (mails.length === 0) {
                             mailsLoaded.resolve(null);
                         } else {
-                            var mail = _.extend({view: "text"}, mails[0]);
-                            mailApi.get(mail).done(function (loadedMail) {
-                                mailsLoaded.resolve(loadedMail);
-                            }).fail(mailsLoaded.reject);
+                            var mail = _.extend({ view: 'text', unseen: true }, mails[0]);
+                            mailApi.get(mail).then(mailsLoaded.resolve, mailsLoaded.reject);
                         }
                     })
                     .fail(mailsLoaded.reject);
             });
-            return $.when(folderLoaded, mailsLoaded);
+            return mailsLoaded;
         },
-        drawTile: function (folder, mail) {
+        drawTile: function (mail) {
             var deferred = $.Deferred();
             var $node = $(this);
             require(["io.ox/mail/api"], function (mailApi) {
                 $node.addClass('mail-portal-tile');
                 var subject = mail.subject;
                 var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 100);
-                subject = strings.shorten(subject, 40);
+                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 999);
 
                 $node.append(
                     $('<h1 class="tile-heading">').text(gt("Inbox")),
-                    $('<div class="io-ox-clear io-ox-mail-preview">').append(
-                        $("<b>").text(from),
-                        $('<br>'),
-                        $("<span>").text(subject),
-                        $('<br>'),
-                        $("<i>").html(mailtext)
+                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
+                        $('<span class="io-ox-mail-preview-from io-ox-portal-preview-firstline">').text(from),
+                        ' ',
+                        $('<span class="io-ox-mail-preview-subject io-ox-portal-preview-secondline">').text(subject),
+                        ' ',
+                        $('<span class="io-ox-mail-preview-text io-ox-portal-preview-thirdline">').html(mailtext)
                     )
                 );
                 deferred.resolve();
@@ -152,18 +137,18 @@ define('plugins/portal/mail/register',
                         viewGrid.drawSimpleGrid(list).appendTo(node);
 
                         new dialogs.SidePopup({ modal: false })
-                        .delegate(node, '.vgrid-cell', function (pane) {
-                            var data = $(this).data('object-data');
-                            pane.parent().removeClass('default-content-padding');
-                            require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
-                                // get thread
-                                var thread = api.getThread(data);
-                                // get first mail first
-                                api.get(thread[0]).done(function (data) {
-                                    view.drawThread(pane, thread, data);
+                            .delegate(node, '.vgrid-cell', function (pane, e, target) {
+                                var data = target.data('object-data');
+                                pane.parent().removeClass('default-content-padding');
+                                require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
+                                    // get thread
+                                    var thread = api.getThread(data);
+                                    // get first mail first
+                                    api.get(thread[0]).done(function (data) {
+                                        view.drawThread(pane, thread, data);
+                                    });
                                 });
                             });
-                        });
                     }
                 );
             }

@@ -149,8 +149,9 @@ define("io.ox/linkedIn/view-detail",
                     .text("Connections you share with " + data.firstName + " " + data.lastName)
                     .appendTo($myNode);
 
-                var open = function (popup) {
-                        var person = $(this).data("object-data");
+                var open = function (popup, e, target) {
+
+                        var person = target.data("object-data");
                         popup.append(draw(person));
                         var busy = $("<div/>").css("min-height", "100px").busy().appendTo(popup);
 

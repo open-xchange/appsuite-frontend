@@ -23,9 +23,10 @@ define("io.ox/mail/main",
      "gettext!io.ox/mail/main",
      "io.ox/core/tk/upload",
      "io.ox/core/extPatterns/dnd",
+     "io.ox/core/notifications",
      "io.ox/mail/actions",
      "less!io.ox/mail/style.css"
-    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd) {
+    ], function (util, api, ext, commons, config, VGrid, viewDetail, tmpl, gt, upload, dnd, notifications) {
 
     'use strict';
 
@@ -390,7 +391,13 @@ define("io.ox/mail/main",
                     win.busy();
                     return api.importEML({ file: file, folder: app.folder.get() })
                         .done(function (data) {
-                            grid.selection.set(data.data);
+                            var first = _(data.data || []).first() || {};
+                            if ('Error' in first) {
+                                notifications.yell('error', first.Error);
+                            } else {
+                                grid.selection.set(first);
+                                notifications.yell('success', gt('Mail has been imported'));
+                            }
                         })
                         .always(win.idle);
                 }

@@ -26,9 +26,10 @@ define('io.ox/calendar/week/perspective',
     _.extend(perspective, {
         
         collection:     {},
-        days:           7,
+        columns:        7,
         startDate:      null,
         dialog:         $(),
+        app:            null,
         
         showAppointment: function (e, obj) {
             // open appointment details
@@ -41,11 +42,19 @@ define('io.ox/calendar/week/perspective',
             });
         },
         
-        createAppointment: function (e, start, end) {
-            console.log('createAppointment', e, start.toString(), end.toString());
+        updateAppointment: function (obj) {
+            api.update(obj).done(function (data) {
+//                console.log('updateAppointment result', data);
+            });
         },
         
-        editAppointment: function (e, obj) {
+        openCreateAppointment: function (e, obj) {
+            require('io.ox/core/extensions')
+                .point('io.ox/calendar/detail/actions/create')
+                .invoke('action', this, this.app, obj);
+        },
+        
+        openEditAppointment: function (e, obj) {
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, obj);
@@ -57,43 +66,55 @@ define('io.ox/calendar/week/perspective',
                 collection = self.collection;
             if (collection) {
                 api.getAll({ start: start, end: end }).done(function (list) {
-                    collection.reset(_(list).map(function (obj) {
-                        var m = new Backbone.Model(obj);
-                        m.id = _.cid(obj);
-                        return m;
-                    }));
+                    collection
+                        .reset(_(list).map(function (obj) {
+                            var m = new Backbone.Model(obj);
+                            m.id = _.cid(obj);
+                            return m;
+                        }));
                     collection = null;
                 });
             }
         },
         
         refresh: function () {
-            // FIXME: replace 'startDate' with calendar logic
-            this.startDate = util.getWeekStart();
-            
-            this.getAppointments(this.startDate, this.startDate + util.DAY * this.days);
+            this.getAppointments(this.startDate, this.startDate + util.DAY * this.columns);
         },
         
         render: function (app) {
+            this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
-
+            
+            // FIXME: replace 'startDate' with calendar logic
+            if (this.columns === 1) {
+                this.startDate = util.getTodayStart();
+            } else {
+                this.startDate = util.getWeekStart();
+            }
             var weekView = new View({
                 collection: this.collection,
-                columns: this.days,
+                columns: this.columns,
                 startDate: this.startDate
             });
             
             weekView
                 .on('showAppointment', this.showAppointment, this)
-                .on('createAppointment', this.createAppointment, this)
-                .on('editAppointment', this.editAppointment, this);
+                .on('openCreateAppointment', this.openCreateAppointment, this)
+                .on('openEditAppointment', this.openEditAppointment, this)
+                .on('updateAppointment', this.updateAppointment, this)
+                .on('onNextView', function (curDate) {
+                    this.startDate = curDate;
+                    this.refresh();
+                }, this)
+                .on('onPrevView', function (curDate) {
+                    this.startDate = curDate;
+                    this.refresh();
+                }, this);
             
             this.main
                 .empty()
-                .append(weekView.render().el)
-                .find('.scrollpane')
-                .scrollTop(weekView.getScrollPos());
+                .append(weekView.render().el);
             
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {

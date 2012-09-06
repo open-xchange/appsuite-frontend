@@ -37,50 +37,16 @@ define('io.ox/tasks/view-grid-template',
                         )
                     );
                     
-                    //sliding animation
-                    this.toggle(function ()
-                            {
-                        title.parent().animate({height: "+=50"}, "slow");
-                        note.parent().animate({height: "+=80"}, "slow");
-                        title.css("white-space", "pre-wrap");
-                        note.css("white-space", "pre-wrap");
-                    }, function ()
-                            {
-                        title.parent().animate({height: "-=50"}, "slow");
-                        note.parent().animate({height: "-=80"}, "slow");
-                        note.css("white-space", "nowrap");
-                        title.css("white-space", "nowrap");
-                    });
-                    
                     return { title: title, status: status, priority: priority, note: note, end_date: end_date };
                 },
                 
                 set: function (data, fields, index) {
                     
-                    if (data.priority === 3)
-                        {
+                    if (data.priority === 3) {
                         fields.priority.text("\u2605\u2605\u2605");
                     }
-                    //set badgecolor
-                    switch (data.color)
-                    {
-                    case "grey":
-                        fields.status.addClass("badge");
-                        break;
-                    case "green":
-                        fields.status.addClass("badge badge-success");
-                        break;
-                    case "yellow":
-                        fields.status.addClass("badge badge-warning");
-                        break;
-                    case "blue":
-                        fields.status.addClass("badge badge-info");
-                        break;
-                    case "red":
-                        fields.status.addClass("badge badge-important");
-                        break;
-                    }
                     
+                    fields.status.addClass(data.badge);
                     fields.status.text($.trim(data.status));
                     fields.title.text($.trim(data.title));
                     fields.end_date.text(data.end_date);
@@ -90,7 +56,6 @@ define('io.ox/tasks/view-grid-template',
             },
             
             drawSimpleGrid: function (taskList) {
-            
 
                 // use template
                 var tmpl = new VGrid.Template(),

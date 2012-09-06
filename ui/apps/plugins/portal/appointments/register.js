@@ -25,7 +25,7 @@ define("plugins/portal/appointments/register", [
 
 
     //this should be in our date library. And it could probably be done much nicer, e.g. using two lists
-    var timespan = function (timestamp1, timestamp2) {
+    var printTimespan = function (timestamp1, timestamp2) {
         var delta = Math.abs(timestamp1 - timestamp2);
         var past = (timestamp1 - timestamp2) < 0;
         var unit = past ? gt("Started %s milliseconds ago:") : gt("In %s milliseconds:");
@@ -76,11 +76,15 @@ define("plugins/portal/appointments/register", [
 
         if (appointments.length > 0) {
             var nextApp = appointments[0];
-            var deltaT = timespan(nextApp.start_date, new Date().getTime());
+            var deltaT = printTimespan(nextApp.start_date, new Date().getTime());
+            var start = new date.Local(nextApp.start_date), end = new date.Local(nextApp.end_date);
+            var timespan = start.formatInterval(end, date.DATE);
             $node.append(
 //                $('<div class="io-ox-portal-calendar-timeSpan">').text(deltaT),
-                $('<div class="io-ox-portal-calendar-nextTitle">').text(strings.shorten(nextApp.title || ""), 100),
-                $('<div class="io-ox-portal-calendar-nextLocation">').text(strings.shorten(nextApp.location || ""), 100)
+                $('<span class="io-ox-portal-preview-thirdline">').text(gt('Next appointment') + ": "),
+                $('<span class="io-ox-portal-calendar-nextTitle io-ox-portal-preview-firstline">').text(nextApp.title || ""),
+                $('<span class="io-ox-portal-calendar-nextTimeSpan io-ox-portal-preview-secondline">').text(" " + timespan + " "),
+                $('<span class="io-ox-portal-calendar-nextLocation io-ox-portal-preview-thirdline">').text(nextApp.location || "")
             );
         } else {
             $('<div class="io-ox-portal-calendar-message">').text(gt("You don't have any appointments in the near future.")).appendTo($node);
@@ -136,8 +140,8 @@ define("plugins/portal/appointments/register", [
                         viewGrid.drawSimpleGrid(appointments).appendTo($node);
 
                         new dialogs.SidePopup({ modal: false })
-                            .delegate($node, ".vgrid-cell", function (popup) {
-                                var data = $(this).data("appointment");
+                            .delegate($node, ".vgrid-cell", function (popup, e, target) {
+                                var data = target.data("appointment");
                                 require(["io.ox/calendar/view-detail"], function (view) {
                                     popup.append(view.draw(data));
                                     data = null;

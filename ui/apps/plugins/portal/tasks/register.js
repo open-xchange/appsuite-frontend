@@ -14,119 +14,90 @@
 define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          "io.ox/tasks/api",
                                          'gettext!plugins/portal/tasks',
-                                         "io.ox/core/date",
-                                         'io.ox/core/strings'], function (ext, taskApi, gt, date, strings) {
-
+                                         'io.ox/core/strings',
+                                         'io.ox/tasks/util',
+                                         'less!plugins/portal/tasks/style.css'], function (ext, taskApi, gt, strings, util) {
     "use strict";
     
-    var loadTile = function ()
-    {
+    var loadTile = function () {
         var prevDef = new $.Deferred();
-        taskApi.getAll().done(function (taskarray)
-                {
+        taskApi.getAll().done(function (taskarray) {
                 prevDef.resolve(taskarray);
             });
         
         return prevDef;
-    };
+    },
     
-    var drawTile = function (taskarray, $node)
-    {
+    drawTile = function (taskarray, $node) {
         if (taskarray.length > 0)
             {
             var task = taskarray[0];
-            task = interpretTask(task);
+            
+            for (var i = 0; i < taskarray.length; i++) {
+                if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
+                    task = taskarray[i];
+                    i = taskarray.length;
+                }
+            }
+            
+            task = util.interpretTask(task);
         
             $node.append(
-                    $('<div class="io-ox-clear io-ox-task-preview">').append(
-                            $("<span>").text(gt("You have ") + taskarray.length + gt(" tasks")),
-                            $("<br>"),
-                            $("<b>").text(strings.shorten(task.title, 40)),
-                            $('<br>'),
-                            $('<span>').text(task.end_date),
-                            $('<span>').addClass("priority"),
-                            $("<br>"),
-                            $("<span>").text(strings.shorten(task.note, 100))
+                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
+                            $("<span>").text(gt("Next due task") + ': '),
+                            $("<span>").text(strings.shorten(task.title, 50) + ' ').addClass("io-ox-portal-tasks-preview-title"),
+                            $('<span>').text(gt("Due in") + " " + task.end_date + ' ').addClass("io-ox-portal-tasks-preview-date"),
+                            $("<span>").text(strings.shorten(task.note, 100)).addClass("io-ox-portal-tasks-preview-note")
                     )
             );
-            var prio = $node.find(".priority");
-        
-            if (task.priority === 3)
-            {
-                prio.text("\u2605\u2605\u2605");
+            
+            if (task.end_date === "") {
+                $node.find(".io-ox-portal-tasks-preview-date").remove();
             }
-        } else
-            {
-            $node.append($('<div class="io-ox-clear io-ox-task-preview">').text(gt("You don't have any tasks.")));
+        } else {
+            $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
         }
         
-    };
+    },
     
-    var load = function () {
+    load = function () {
         var def = new $.Deferred();
-        taskApi.getAll().done(function (taskarray)
-                {
+        taskApi.getAll().done(function (taskarray) {
             def.resolve(taskarray);
         });
         return def;
-    };
+    },
     
-    //change status number to status text. format enddate to presentable string
-    var interpretTask = function (task)
-    {
-        switch (task.status)
-        {
-        case 2:
-            task.status = gt("In progress");
-            task.color = "yellow";
-            break;
-        case 3:
-            task.status = gt("Done");
-            task.color = "green";
-            break;
-        case 4:
-            task.status = gt("Waiting");
-            task.color = "grey";
-            break;
-        case 5:
-            task.status = gt("Deferred");
-            task.color = "blue";
-            break;
-        default:
-            task.status = gt("Not started");
-            task.color = "grey";
-            break;
-        }
-        var now = new Date();
-        if (now.getTime() > task.end_date)//no state for task over time, so manual check is needed
-            {
-            task.color = "red";
-        }
-        
-        task.end_date = new date.Local(task.end_date).format();
-        
-        return task;
-    };
-    
-    var draw = function (tasks) {
+    draw = function (tasks) {
         
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
-        $('<h1 class="clear-title">').text(gt("Your tasks")).appendTo(node);
+        $('<h1>').addClass('clear-title').text(gt("Your tasks")).appendTo(node);
+        tasks = util.sortTasks(tasks);
         
-        require(['io.ox/tasks/view-grid-template'], function (viewGrid)
-                {
+        require(['io.ox/tasks/view-grid-template', 'io.ox/core/tk/dialogs'], function (viewGrid, dialogs) {
                 
                 //interpret values for status etc
-                for (var i = 0; i < tasks.length; i++)
-                {
-                    tasks[i] = interpretTask(tasks[i]);
+                for (var i = 0; i < tasks.length; i++) {
+                    tasks[i] = util.interpretTask(tasks[i]);
                 }
                 
                 viewGrid.drawSimpleGrid(tasks).appendTo(node);
+                
+                //detailView Popup
+                new dialogs.SidePopup({ modal: false })
+                .delegate(node, '.vgrid-cell', function (pane, e, target) {
+                    var data = target.data('object-data');
+                    
+                    require(['io.ox/tasks/view-detail'], function (viewDetail) {
+                        // get task and draw detailview
+                        taskApi.get(data).done(function (taskData) {
+                            viewDetail.draw(taskData).appendTo(pane);
+                        });
+                    });
+                });
             });
         
-        if (tasks.length === 0)
-            {
+        if (tasks.length === 0) {
             $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
         }
         
@@ -141,9 +112,9 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         draw: draw,
         preview: function () {
             var deferred = $.Deferred();
-            loadTile().done(function (appointments) {
+            loadTile().done(function (getTasks) {
                 var $node = $('<div>');
-                drawTile(appointments, $node);
+                drawTile(getTasks, $node);
                 deferred.resolve($node);
             });
             return deferred;

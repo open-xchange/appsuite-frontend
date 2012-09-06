@@ -340,11 +340,10 @@ define('io.ox/mail/actions',
         id: 'reminder',
         action: function (data) {
             require(['io.ox/core/tk/dialogs', 'io.ox/tasks/api', 'io.ox/tasks/util'],
-                    function (dialogs, taskApi, util)
-                    {
+                    function (dialogs, taskApi, tasksUtil) {
                         //create popup dialog
                         var popup = new dialogs.ModalDialog()
-                            .addButton('create', gt('Create reminder'))
+                            .addPrimaryButton('create', gt('Create reminder'))
                             .addButton('cancel', gt('Cancel'));
 
                         //Header
@@ -354,10 +353,10 @@ define('io.ox/mail/actions',
 
                         //fill popup body
                         var popupBody = popup.getBody();
-                        popupBody.append("<div>" + gt('Subject') + "</div>");
-                        var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ": " + data.subject, width: '90%' })
-                            .focus(function ()
-                                    {
+
+                        popupBody.append($('<div>').text(gt('Subject')));
+                        var titleInput = $('<input>', { type: 'text', value: gt('Mail reminder') + ': ' + data.subject, width: '90%' })
+                            .focus(function () {
                                     this.select();
                                 })
                             .appendTo(popupBody);

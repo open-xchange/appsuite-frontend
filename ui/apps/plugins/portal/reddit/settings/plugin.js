@@ -54,11 +54,11 @@ define('plugins/portal/reddit/settings/plugin',
                 return self;
             },
             events: {
-                'click .deletable-item': 'onSelect'
+                'click .sortable-item': 'onSelect'
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.deletable-item').attr('selected', 'selected');
+                this.$el.find('.sortable-item').attr('selected', 'selected');
             }
         }),
 
@@ -135,12 +135,12 @@ define('plugins/portal/reddit/settings/plugin',
 
                 var that = this;
 
-                dialog.header($("<h4>").text(gt('Add an Subreddit')))
+                dialog.header($("<h4>").text(gt('Add a Subreddit')))
                     .append($subreddit)
                     .append($mode)
                     .append($error)
-                    .addButton('cancel', 'Cancel')
-                    .addButton('add', 'Add', null, {classes: 'btn-primary'})
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
                     .show();
 
                 dialog.on('add', function (e) {
@@ -203,10 +203,11 @@ define('plugins/portal/reddit/settings/plugin',
                     async: true
                 });
 
-                var oldSubreddit = String(this.$el.find('[selected]').data('subreddit')),
+                var oldSubreddit = this.$el.find('[selected]').data('subreddit'),
                     oldMode = this.$el.find('[selected]').data('mode');
 
                 if (oldSubreddit) {
+                    oldSubreddit = String(oldSubreddit);
                     var $subreddit = $('<input>').attr({type: 'text', id: 'add_subreddit', placeholder: 'r/'}).val(oldSubreddit),
                         $error = $('<div>').addClass('alert alert-error').hide(),
                         that = this;
@@ -216,12 +217,12 @@ define('plugins/portal/reddit/settings/plugin',
                         .append($('<option>').attr('value', 'new').text(gt('new')))
                         .val(oldMode);
 
-                    dialog.header($("<h4>").text(gt('Edit an Subreddit')))
+                    dialog.header($("<h4>").text(gt('Edit a Subreddit')))
                         .append($subreddit)
                         .append($mode)
                         .append($error)
-                        .addButton('cancel', 'Cancel')
-                        .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
                         .show();
 
                     dialog.on('edit', function (e) {
@@ -289,17 +290,18 @@ define('plugins/portal/reddit/settings/plugin',
                     easyOut: true
                 });
 
-                var subreddit = String(this.$el.find('[selected]').data('subreddit')),
+                var subreddit = this.$el.find('[selected]').data('subreddit'),
                     mode = this.$el.find('[selected]').data('mode');
 
                 if (subreddit) {
+                    subreddit = String(subreddit);
                     var that = this;
 
-                    dialog.header($("<h4>").text(gt('Delete an Subreddit')))
+                    dialog.header($("<h4>").text(gt('Delete a Subreddit')))
                         .append($('<span>').text(gt('Do you really want to delete the following subreddit(s)?')))
                         .append($('<ul>').append($('<li>').text(subreddit + " (" + mode + ")")))
-                        .addButton('cancel', 'Cancel')
-                        .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

@@ -20,8 +20,9 @@ define('io.ox/contacts/distrib/create-dist-view',
      'io.ox/core/tk/model',
      'io.ox/core/tk/autocomplete',
      'io.ox/core/api/autocomplete',
-     'io.ox/core/config'
-    ], function (ext, gt, util, api, View, Model, autocomplete, AutocompleteAPI, config) {
+     'io.ox/core/config',
+     'io.ox/core/notifications'
+    ], function (ext, gt, util, api, View, Model, autocomplete, AutocompleteAPI, config, notifications) {
 
     'use strict';
 
@@ -282,8 +283,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         );
     }
 
-    var growl = $('<div>', {id: 'myGrowl'}).addClass('jGrowl').css({position: 'absolute', right: '0', top: '0'});
-
     var ContactCreateDistView = View.extend({
 
         draw: function (app) {
@@ -348,13 +347,10 @@ define('io.ox/contacts/distrib/create-dist-view',
 
             self.node.append(addSection);
 
-            self.node.append($('<div>', { id: 'myGrowl' })
-                    .addClass('jGrowl').css({position: 'absolute', right: '-275px', top: '-10px'}));
-
             this.getModel().on('error:invalid', function (evt, err) {
                 console.log('error validation');
                 console.log(arguments);
-                $('#myGrowl').jGrowl(err.message, {header: 'Make an educated guess!', sticky: false});
+                notifications.yell('error', err.message);
             });
 
             return self;

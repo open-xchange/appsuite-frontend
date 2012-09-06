@@ -83,11 +83,11 @@ define('plugins/portal/flickr/settings/plugin',
                 return self;
             },
             events: {
-                'click .deletable-item': 'onSelect'
+                'click .sortable-item': 'onSelect'
             },
             onSelect: function () {
                 this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.deletable-item').attr('selected', 'selected');
+                this.$el.find('.sortable-item').attr('selected', 'selected');
             }
         }),
 
@@ -175,8 +175,8 @@ define('plugins/portal/flickr/settings/plugin',
                     .append($description)
                     .append($method)
                     .append($error)
-                    .addButton('cancel', 'Cancel')
-                    .addButton('add', 'Add', null, {classes: 'btn-primary'})
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
                     .show();
 
                 dialog.on('add', function (e) {
@@ -238,11 +238,12 @@ define('plugins/portal/flickr/settings/plugin',
                     async: true
                 });
 
-                var oldQ = String(this.$el.find('[selected]').data('q')),
+                var oldQ = this.$el.find('[selected]').data('q'),
                     oldMethod = this.$el.find('[selected]').data('method'),
                     oldDescription = this.$el.find('[selected]').data('description');
 
                 if (oldQ && oldMethod) {
+                    oldQ = String(oldQ);
                     var $q = $('<input>').attr({type: 'text', placeholder: gt('Search')}).val(oldQ);
                     var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription);
                     var $method = $('<select>')
@@ -258,8 +259,8 @@ define('plugins/portal/flickr/settings/plugin',
                         .append($description)
                         .append($method)
                         .append($error)
-                        .addButton('cancel', 'Cancel')
-                        .addButton('edit', 'Edit', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
                         .show();
 
                     dialog.on('edit', function (e) {
@@ -323,17 +324,18 @@ define('plugins/portal/flickr/settings/plugin',
                     easyOut: true
                 });
 
-                var q = String(this.$el.find('[selected]').data('q')),
+                var q = this.$el.find('[selected]').data('q'),
                     method = this.$el.find('[selected]').data('method');
 
                 if (q && method) {
+                    q = String(q);
                     var that = this;
 
                     dialog.header($("<h4>").text(gt('Delete a stream')))
                         .append($('<span>').text(gt('Do you really want to delete the following stream(s)?')))
                         .append($('<ul>').append($('<li>').text(q + " (" + method + ")")))
-                        .addButton('cancel', 'Cancel')
-                        .addButton('delete', 'Delete', null, {classes: 'btn-primary'})
+                        .addButton('cancel', gt('Cancel'))
+                        .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
                         .show()
                         .done(function (action) {
                             if (action === 'delete') {

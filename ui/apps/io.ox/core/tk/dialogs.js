@@ -476,7 +476,7 @@ define("io.ox/core/tk/dialogs",
                 self.nodes.target.append((options.modal ? overlay : popup).css('visibility', 'hidden'));
 
                 // call custom handler
-                (handler || $.noop).call(this, pane.empty(), e);
+                (handler || $.noop).call(self, pane.empty(), e, my);
 
                 // set arrow top
                 var halfHeight = (my.outerHeight(true) / 2 >> 0),
@@ -509,7 +509,9 @@ define("io.ox/core/tk/dialogs",
         };
 
         this.show = function (e, handler) {
-            open.call(e.target, e, handler);
+            setTimeout(function () {
+                open.call(e.target, e, handler);
+            }, 0);
             return this;
         };
 
