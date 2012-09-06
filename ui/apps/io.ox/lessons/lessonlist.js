@@ -18,7 +18,6 @@
         'basic_deferred',
         'basic_extensions',
         'basic_jquery',
-        'jslobs',
         'model_view'
     ];
     
