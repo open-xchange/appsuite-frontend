@@ -25,11 +25,17 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     appendColumns: false
                 });
             },
-            getAll: function () {
+            getAll: function (folder) {
+                    var useFolder;
+                    if (folder === undefined) {
+                        useFolder = require('io.ox/core/config').get('folder.tasks');
+                    } else {
+                        useFolder = folder;
+                    }
                     return http.GET({
                         module: "tasks",
                         params: {action: "all",
-                            folder: require('io.ox/core/config').get('folder.tasks'),
+                            folder: useFolder,
                             columns: "1,20,200,202,203,300,309",
                             sort: "202",
                             order: "asc"
@@ -50,7 +56,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     });
 
                 },
-            needsRefresh: function () {
+            needsRefresh: function (folder) {
+                    console.log(folder);
                     // placeholder
                     return false;//all_cache[folder] !== undefined;
                 },
@@ -152,14 +159,18 @@ define("io.ox/tasks/api", ["io.ox/core/http",
 
     };
     
- // global refresh
+    // global refresh
     api.refresh = function () {
         api.getTasks().done(function () {
             // trigger local refresh
             api.trigger("refresh.all");
         });
     };
+    
 
+    ox.on('refresh^', function () {
+        api.refresh();
+    });
     
     return api;
 });

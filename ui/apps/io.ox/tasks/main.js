@@ -73,7 +73,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         commons.wireGridAndAPI(grid, api);
         
         grid.setAllRequest(function () {
-            return api.getAll().pipe(function (data) {
+            return api.getAll(this.prop('folder')).pipe(function (data) {
                 var datacopy = util.sortTasks(data);
                 return datacopy;
             });
