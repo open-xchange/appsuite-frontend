@@ -74,7 +74,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         $('<h1>').addClass('clear-title').text(gt("Your tasks")).appendTo(node);
         tasks = util.sortTasks(tasks);
         
-        require(['io.ox/tasks/view-grid-template'], function (viewGrid) {
+        require(['io.ox/tasks/view-grid-template', 'io.ox/core/tk/dialogs'], function (viewGrid, dialogs) {
                 
                 //interpret values for status etc
                 for (var i = 0; i < tasks.length; i++) {
@@ -82,6 +82,19 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 }
                 
                 viewGrid.drawSimpleGrid(tasks).appendTo(node);
+                
+                //detailView Popup
+                new dialogs.SidePopup({ modal: false })
+                .delegate(node, '.vgrid-cell', function (pane, e, target) {
+                    var data = target.data('object-data');
+                    
+                    require(['io.ox/tasks/view-detail'], function (viewDetail) {
+                        // get task and draw detailview
+                        taskApi.get(data).done(function (taskData) {
+                            viewDetail.draw(taskData).appendTo(pane);
+                        });
+                    });
+                });
             });
         
         if (tasks.length === 0) {

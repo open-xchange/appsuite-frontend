@@ -61,7 +61,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         // right panel
         right = $("<div>")
             .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
-            .addClass("rightside")
+            .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main)
             .scrollable();
         
@@ -84,7 +84,6 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                 var listcopy = _.copy(list, true),
                     i = 0;
                 for (; i < listcopy.length; i++) {
-                    listcopy[i].noslide = true;
                     listcopy[i] = util.interpretTask(listcopy[i]);
                 }
                 
