@@ -10,24 +10,20 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
+define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
-        id: 'basic_deferred',
-        index: 200,
-        title: 'Deferred Objects',
-        description: 'In which burgers will be ordered and the deferred objects pattern for asynchronous operations will be explored',
+        id: 'basic_requirejs',
+        index: 300,
+        title: 'RequireJS',
+        description: 'In which dependencies will be resolved',
         section: "Basics",
         start: function (options) {
             var win = options.win;
-            
-            require(["text!io.ox/lessons/lessons/basic_deferred/lesson.html"], function (html) {
+            require(["text!io.ox/lessons/lessons/basic_requirejs/lesson.html"], function (html) {
                 var win = options.win;
                 
                 win.nodes.main.empty().append($(html));
-                Editor.setUp(win.nodes.main);
-                
-                win.idle();
             });
         }
     });

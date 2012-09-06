@@ -14,7 +14,7 @@ define('io.ox/lessons/lessons/basic_apps/register', ['io.ox/core/extensions'], f
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_apps',
-        index: 200,
+        index: 400,
         title: 'Basic Apps',
         description: 'In which a simple app will be written and app boilerplate explored',
         section: 'Basics',

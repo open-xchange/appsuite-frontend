@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
+define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc'], function (ext, Editor, TOC) {
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_jquery',
@@ -24,9 +24,8 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
                 
                 win.nodes.main.empty().append($(html));
                 
-                win.nodes.main.busy();
-                
                 Editor.setUp(win.nodes.main);
+                TOC.setUp(win.nodes.main);
                 
                 // Selector experiments
                 win.nodes.main.find(".selector_experiment").each(function (index, element) {
@@ -79,7 +78,6 @@ define('io.ox/lessons/lessons/basic_jquery/register', ['io.ox/core/extensions', 
 
                 });
                 
-                win.nodes.main.idle();
                 win.idle();
             });
         }

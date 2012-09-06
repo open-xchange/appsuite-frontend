@@ -50,7 +50,6 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
             if (state && state.lesson) {
                 
                 var lesson = ext.point('io.ox/lessons/lesson').get(state.lesson, function (lesson) {
-                    win.busy();
                     lesson.start({
                         app: app,
                         win: win
@@ -65,6 +64,7 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
     });
     
     app.tableOfContents = function () {
+        app.setState({lesson: null});
         win.nodes.main.empty();
         var lessons = {};
         ext.point('io.ox/lessons/lesson').each(function (lesson) {

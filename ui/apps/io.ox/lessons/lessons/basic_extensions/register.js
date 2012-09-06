@@ -14,6 +14,7 @@ define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extension
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_extensions',
+        index: 500,
         title: 'Extensions and Extension Points',
         description: 'In which we will take a look at the extension point framework and add an action to the lessons module',
         section: 'Basics',
