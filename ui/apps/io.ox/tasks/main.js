@@ -13,15 +13,25 @@
 
 define("io.ox/tasks/main", ["io.ox/tasks/api",
                             'gettext!io.ox/tasks',
-                            "io.ox/core/date"], function (api, gt, date) {
+                            'io.ox/core/tk/vgrid',
+                            'io.ox/tasks/view-grid-template',
+                            "io.ox/core/commons",
+                            'io.ox/tasks/util',
+                            'io.ox/tasks/view-detail'], function (api, gt, VGrid, template, commons, util, viewDetail) {
 
     "use strict";
 
-    //PLACEHOLDER FILE - NO REAL FUNCTIONALITY
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/tasks', title: 'Tasks' }),
         // app window
-        win;
+        win,
+        // grid
+        grid,
+        GRID_WIDTH = 330,
+        // nodes
+        left,
+        right;
+    
     // launcher
     app.setLauncher(function () {
         // get window
@@ -32,19 +42,92 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
             search: true
         });
         
-        win.nodes.main.append($('<div>').text("This is just a placeholder taskapp"));
-
+        win.addClass('io-ox-tasks-main');
         app.setWindow(win);
+        
+        // folder tree
+        commons.addFolderView(app, { width: GRID_WIDTH, type: 'tasks', view: 'FolderList' });
 
-        // Let's define some event handlers on our window
-        win.on("show", function () {
+        
+        // left panel
+        left = $("<div>")
+            .addClass("leftside border-right")
+            .css({
+                width: GRID_WIDTH + "px",
+                overflow: "auto"
+            })
+            .appendTo(win.nodes.main);
+        
+        // right panel
+        right = $("<div>")
+            .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
+            .addClass("rightside")
+            .appendTo(win.nodes.main)
+            .scrollable();
+        
+        // grid
+        grid = new VGrid(left);
+        
+        grid.addTemplate(template.main);
+        
+        commons.wireGridAndAPI(grid, api);
+        
+        grid.setAllRequest(function () {
+            return api.getAll().pipe(function (data) {
+                var datacopy = util.sortTasks(data);
+                return datacopy;
+            });
         });
         
-        win.on("hide", function () {
-            // Gets called whenever the window is hidden
+        grid.setListRequest(function (ids) {
+            return api.getList(ids).pipe(function (list) {
+                var listcopy = _.copy(list, true),
+                    i = 0;
+                for (; i < listcopy.length; i++) {
+                    listcopy[i].noslide = true;
+                    listcopy[i] = util.interpretTask(listcopy[i]);
+                }
+                
+                return listcopy;
+            });
         });
         
-        win.show();
+        var showTask, drawTask, drawFail;
+
+        //detailview lfo callbacks
+        showTask = function (obj) {
+            // be busy
+            right.busy(true);
+            console.log(obj);
+            api.get(obj)
+                .done(_.lfo(drawTask))
+                .fail(_.lfo(drawFail, obj));
+        };
+
+        drawTask = function (data) {
+            right.idle().empty().append(viewDetail.draw(data));
+        };
+
+        drawFail = function (obj) {
+            right.idle().empty().append(
+                $.fail(gt("Oops, couldn't load that task."), function () {
+                    showTask(obj);
+                })
+            );
+        };
+        
+        commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
+        commons.wireGridAndWindow(grid, win);
+        commons.wireFirstRefresh(app, api);
+        commons.wireGridAndRefresh(grid, api, win);
+        
+        app.getGrid = function () {
+            return grid;
+        };
+        
+        //ready for show
+        commons.addFolderSupport(app, grid, 'tasks')
+            .done(commons.showWindow(win, grid));
     });
 
     return {

@@ -15,6 +15,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     
     "use strict";
     
+    var all_cache = {};
+    
     var api = { create: function (task) {
                 return http.PUT({
                     module: "tasks",
@@ -28,7 +30,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                         module: "tasks",
                         params: {action: "all",
                             folder: require('io.ox/core/config').get('folder.tasks'),
-                            columns: "1,200,202,203,300,309",
+                            columns: "1,20,200,202,203,300,309",
                             sort: "202",
                             order: "asc"
                         }
@@ -47,6 +49,31 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                         appendColumns: false
                     });
 
+                },
+            needsRefresh: function () {
+                    // placeholder
+                    return false;//all_cache[folder] !== undefined;
+                },
+            getList: function (ids) {
+                    return http.PUT({
+                            module: "tasks",
+                            params: {
+                                action: "list",
+                                columns: "1,20,200,202,203,300,309"
+                            },
+                            data: http.simplify(ids),
+                            appendColumns: false
+                        });
+                },
+            get: function (task) {
+                    return http.GET({
+                            module: "tasks",
+                            params: {
+                                action: "get",
+                                id: task.id,
+                                folder: task.folder_id
+                            }
+                        });
                 },
             deleteReminder: function (reminderId) {
                     return http.PUT({

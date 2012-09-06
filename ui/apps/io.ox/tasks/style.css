@@ -46,8 +46,32 @@
     font-weight: 500;
 }
 
-.vgrid-cell.tasks .note{
+.tasks-detailview {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 20px 20px 20px 20px;
+    margin: 20px 20px 0px 20px;
+    -webkit-box-shadow: 0px 4px 10px -5px black;
+    -moz-box-shadow: 0px 4px 10px -5px black;
+    box-shadow: 0px 4px 10px -5px black;
 }
 
-.vgrid-cell.tasks .note span{
+.tasks-detailview .info-panel {
+    margin-left: 2em;
+	display: inline;
+    float: right;
+}
+
+.tasks-detailview .priority,
+.tasks-detailview .status,
+.tasks-detailview .end-date {
+	float: right;
+}
+
+.tasks-detailview .status {
+	margin-top: 4px;
+}
+
+.tasks-detailview .note {
+	margin-top: 1em;
 }

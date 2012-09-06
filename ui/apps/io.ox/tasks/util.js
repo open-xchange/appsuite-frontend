@@ -204,7 +204,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     
                 } else {
                     var now = new Date();
-                    if (now.getTime() > task.end_date && task.end_date !== null) {//no state for task over time, so manual check is needed
+                    if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
                         task.status = gt("Over due");
                         task.badge = "badge badge-important";
                     } else {
@@ -214,12 +214,11 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 }
                 
 
-                if (task.title === null) {
+                if (task.title === undefined || task.title === null) {
                     task.title = '\u2014';
                 }
                 
-
-                if (task.end_date !== null) {
+                if (task.end_date !== undefined && task.end_date !== null) {
                     task.end_date = new date.Local(task.end_date).format();
                 } else {
                     task.end_date = '';
