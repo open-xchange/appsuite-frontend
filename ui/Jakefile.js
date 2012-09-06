@@ -209,8 +209,7 @@ utils.concat("boot.js", [
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
-	"lib/jquery.lazyload.js",
-
+        "lib/jquery.lazyload.js",
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
@@ -219,7 +218,6 @@ utils.concat("boot.js", [
         "lib/backbone.custom.js",
         "lib/doT.js",
         "lib/tinycon/tinycon.min.js",
-
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
@@ -229,7 +227,7 @@ utils.concat("pre-core.js",
         "config.js", "session.js", "gettext.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
-        "api/folder.js", "desktop.js", "commons.js", "collection.js",
+        "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
         "extPatterns/actions.js", "extPatterns/links.js",
         "settings.js" // settings plugin
     ]), { type: "source" }

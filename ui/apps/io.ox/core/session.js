@@ -20,8 +20,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         },
 
         setUser = function (username) {
-            ox.user = username.indexOf('@') > -1 ?
-                username : username + '@' + ox.serverConfig.defaultContext;
+            ox.user = username; // might have a domain; depends on what the user entered on login
         };
 
     var that = {

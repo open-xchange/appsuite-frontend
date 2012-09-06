@@ -90,7 +90,7 @@ define("io.ox/mail/api",
     var api = apiFactory({
         module: "mail",
         keyGenerator: function (obj) {
-            return obj.folder_id + '.' + obj.id + '.' + (obj.view || 'noimg');
+            return obj ? obj.folder_id + '.' + obj.id + '.' + (obj.view || 'noimg') : '';
         },
         requests: {
             all: {
