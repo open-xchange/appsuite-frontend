@@ -37,23 +37,24 @@ define('io.ox/tasks/view-grid-template',
                         )
                     );
                     
-                    //sliding animation
-                    this.toggle(function () {
-                        title.parent().animate({height: '+=50'}, 'slow');
-                        note.parent().animate({height: '+=80'}, 'slow');
-                        title.css('white-space', 'pre-wrap');
-                        note.css('white-space', 'pre-wrap');
-                    }, function () {
-                        title.parent().animate({height: '-=50'}, 'slow');
-                        note.parent().animate({height: '-=80'}, 'slow');
-                        note.css('white-space', 'nowrap');
-                        title.css('white-space', 'nowrap');
-                    });
-                    
                     return { title: title, status: status, priority: priority, note: note, end_date: end_date };
                 },
                 
                 set: function (data, fields, index) {
+                    if (data.noslide === undefined || data.noslide === false) {
+                        //sliding animation
+                        this.toggle(function () {
+                            fields.title.parent().animate({height: '+=50'}, 'slow');
+                            fields.note.parent().animate({height: '+=80'}, 'slow');
+                            fields.title.css('white-space', 'pre-wrap');
+                            fields.note.css('white-space', 'pre-wrap');
+                        }, function () {
+                            fields.title.parent().animate({height: '-=50'}, 'slow');
+                            fields.note.parent().animate({height: '-=80'}, 'slow');
+                            fields.note.css('white-space', 'nowrap');
+                            fields.title.css('white-space', 'nowrap');
+                        });
+                    }
                     
                     if (data.priority === 3) {
                         fields.priority.text("\u2605\u2605\u2605");
