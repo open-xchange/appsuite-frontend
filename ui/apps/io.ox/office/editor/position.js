@@ -62,6 +62,11 @@ define('io.ox/office/editor/position',
             selectedNodeName = node.nodeName,
             imageFloatMode = null;
 
+        if (Utils.isTextInField(node)) {
+            node = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
+            offset = 0;
+        }
+
         isRtlCursorTravel = isRtlCursorTravel ? true : false;
         isEndPoint = isEndPoint ? true : false;
 
@@ -89,6 +94,7 @@ define('io.ox/office/editor/position',
                 return;
             }
         } else {
+
             if ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span'))  {
                 if ($(node).text().length === offset) {
                     // Checking if an inline image follows

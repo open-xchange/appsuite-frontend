@@ -1203,7 +1203,7 @@ define('io.ox/office/editor/editor',
                 else if (c === 'F') {
                     var selection = this.getSelection();
                     // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
-                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "05.09.2012"};
+                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
                     this.applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
