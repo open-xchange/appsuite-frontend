@@ -71,8 +71,8 @@ define('io.ox/calendar/week/view',
             'dblclick .fulltime>.day': 'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment',
-            'click .toolbar .button.next': 'onControlView',
-            'click .toolbar .button.prev': 'onControlView',
+            'click .toolbar .control.next': 'onControlView',
+            'click .toolbar .control.prev': 'onControlView',
             'click .toolbar .link.today': 'onControlView'
         },
         
@@ -247,10 +247,25 @@ define('io.ox/calendar/week/view',
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        $('<a>').addClass('link today').text(gt('Today')),
-                        this.kwInfo = $('<span>').addClass('info kw'),
-                        $('<div>').addClass('button prev').append($('<i>').addClass('icon-backward icon-white')),
-                        $('<div>').addClass('button next').append($('<i>').addClass('icon-forward icon-white'))
+                        this.kwInfo = $('<span>').addClass('info'),
+                        $('<div>')
+                            .addClass('pagination')
+                            .append(
+                                $('<ul>')
+                                    .append(
+                                        $('<li>')
+                                            .append(
+                                                $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                                            ),
+                                        $('<li>').append(
+                                            $('<a>').addClass('link today').text(gt('Today'))
+                                        ),
+                                        $('<li>')
+                                            .append(
+                                                    $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
+                                            )
+                                    )
+                            )
                     ),
                 $('<div>')
                     .addClass('week-view-container')
@@ -343,7 +358,7 @@ define('io.ox/calendar/week/view',
                 tmpTS += date.DAY;
             }
             this.footer.empty().append(days);
-            this.kwInfo.text('KW ' + new date.Local(this.currentDate).format('w'));
+            this.kwInfo.text(new date.Local(this.currentDate).formatInterval(new date.Local(this.currentDate + ((this.columns - 1) * date.DAY)), date.DATE));
             
             if (hasToday) {
                 this.timeline.show();
@@ -495,9 +510,10 @@ define('io.ox/calendar/week/view',
             });
             
             // init drag and resize widget on appointments
+            var colWidth = $('.day:first').outerWidth();
             $('.day>.appointment')
                 .draggable({
-                    grid: [$('.day:first').outerWidth(), that.gridHeight()],
+                    grid: [colWidth, that.gridHeight()],
                     scroll: true,
                     snap: '.day',
                     opacity: 0.4,
@@ -519,7 +535,6 @@ define('io.ox/calendar/week/view',
                 .resizable({
                     handles: "n, s",
                     grid: [0, that.gridHeight()],
-                    zIndex: 1,
                     minHeight: that.gridHeight(),
                     containment: "parent",
                     start: function (e, ui) {
@@ -555,13 +570,6 @@ define('io.ox/calendar/week/view',
                         }
                     }
                 });
-            $('.fulltime>.appointment')
-                .resizable({
-                    grid: [$('.fulltime .day:first').outerWidth(), 0],
-                    handles: "w, e",
-                    containment: "parent",
-                    zIndex: 1
-                });
             // define drop areas
             $('.week-container>.day').droppable({
                 drop: function (e, ui) {
@@ -579,6 +587,49 @@ define('io.ox/calendar/week/view',
                     that.trigger('updateAppointment', obj);
                 }
             });
+            
+            // init drag and resize widget on appointments
+            $('.fulltime>.appointment')
+                .draggable({
+                    grid: [colWidth, 0],
+                    axis: 'x',
+                    scroll: true,
+                    snap: '.day',
+                    opacity: 0.4,
+                    zIndex: 2,
+                    start: function (e, ui) {
+                        that.lassoMode = false;
+//                        $(this)
+//                            .css({width: '100%'});
+                        that.onEnterAppointment(e);
+                    },
+                    stop: function (e, ui) {
+                        that.lassoMode = true;
+                        $(this).busy();
+                    },
+                    drag: function (e, ui) {
+//                        // correct position
+//                        $(this).data('draggable').position.left -= ui.originalPosition.left;
+                    }
+                })
+                .resizable({
+                    grid: [colWidth, 0],
+                    minWidth: colWidth,
+                    handles: "w, e",
+                    containment: "parent",
+                    start: function (e, ui) {
+                        that.lassoMode = false;
+                        $(this).addClass('opac').css('zIndex', 2);
+                    },
+                    resize:  function (e, ui) {
+                    },
+                    stop: function (e, ui) {
+                        that.lassoMode = true;
+                        var el = $(this);
+                        el.removeClass('opac').css('zIndex', 'auto');
+                    }
+                });
+ 
         },
 
         renderAppointment: function (a) {
