@@ -2844,10 +2844,20 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(position);
         };
 
+        /**
+         * Implementation function for inserting fields.
+         *
+         * @param {OXOPam.oxoPosition} position
+         *  The logical position.
+         *
+         * @param {String} type
+         *  A property describing the field type using an ebnf syntax.
+         *
+         * @param {String} representation
+         *  A fallback value, if the placeholder cannot be substituted
+         *  with a reasonable value.
+         */
         this.implInsertField = function (position, type, representation) {
-            window.console.log("implInsertField");
-            window.console.log("Parameter: " + position + " : " + type + " : " + representation);
-
             var domPos = Position.getDOMPosition(paragraphs, position),
             node = domPos ? domPos.node : null;
 
