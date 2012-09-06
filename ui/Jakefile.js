@@ -253,8 +253,14 @@ utils.concat("pre-core.js",
 );
 
 //Twitter Bootstrap
+
 utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
+
+// jQuery UI
+
+utils.copy(utils.list("lib", "jquery-ui.min.js"),
+    { to: utils.dest("apps/io.ox/core/tk") });
 
 // module dependencies
 
