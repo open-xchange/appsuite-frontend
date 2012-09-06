@@ -454,7 +454,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 .window-toolbar a {
     color: @toolbar-link-color;
     display: inline-block;
-    margin: 0 2em 0 0;
+    margin: 0 1em 0 0;
     cursor: pointer;
     white-space: nowrap;
     text-decoration: none;
@@ -469,6 +469,9 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 .touch .window-toolbar a {
     outline: 0;
 }
+
+.window-toolbar a.btn-primary,
+.window-toolbar a.btn-primary:hover { color: white; }
 
 /*     -webkit-transition-duration: 0.35s; */
 /*     -webkit-transition-timing-function: linear; */

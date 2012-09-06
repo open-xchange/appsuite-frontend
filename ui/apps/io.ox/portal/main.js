@@ -443,7 +443,9 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
                 var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
                 return $('<div>').append(
                     $('<span class="io-ox-portal-settings">').append(
-                        $('<a>').text(gt('Personalize this page')).on('click', function (event) {
+                        $('<button class="btn btn-primary">')
+                        .text(gt('Personalize this page'))
+                        .on('click', function (event) {
                             return require(["io.ox/settings/main"], function (m) {
                                 m.getApp().launch().done(function () {
                                     this.getGrid().selection.set({ id: 'io.ox/portal' });

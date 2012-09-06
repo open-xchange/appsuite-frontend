@@ -110,6 +110,19 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var ToolbarButtons = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (context) {
+            // paint on current node
+            var args = $.makeArray(arguments);
+            drawLinks(self, new Collection(context), this, context, args);
+            // add classes to get button style
+            this.children('a').addClass('btn btn-primary');
+            this.children('.dropdown').children('a').addClass('btn btn-primary');
+            console.log('YEAH', this, context);
+        };
+    };
+
     var inlineToggle = function (e) {
         var node = $(this), A = 'data-toggle',
             list = node.parent().children('[data-prio="lo"]'),
@@ -190,6 +203,7 @@ define("io.ox/core/extPatterns/links",
         Link: Link,
         XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
+        ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         DropdownLinks: DropdownLinks,

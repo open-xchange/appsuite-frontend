@@ -1167,7 +1167,7 @@ define("io.ox/core/desktop",
             // toolbar extension point
             if (opt.toolbar === true && opt.name) {
                 // add "create" link
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                ext.point(opt.name + '/toolbar').extend(new links.ToolbarButtons({
                     id: 'links',
                     ref: opt.name + '/links/toolbar'
                 }));
