@@ -13,7 +13,8 @@
 
 define("io.ox/tasks/actions", ['io.ox/core/extensions',
                               'io.ox/core/extPatterns/links',
-                              'gettext!io.ox/tasks/actions'], function (ext, links, gt) {
+                              'gettext!io.ox/tasks/actions',
+                              'io.ox/core/notifications'], function (ext, links, gt, notifications) {
 
     "use strict";
     var Action = links.Action;
@@ -28,7 +29,34 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     new Action('io.ox/tasks/actions/delete', {
         id: 'delete',
         action: function (data) {
-            console.log("task delete dummy action fired");
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                //build popup
+                var popup = new dialogs.ModalDialog()
+                    .addPrimaryButton('delete', gt('delete'))
+                    .addButton('cancel', gt('Cancel'));
+                
+                //Header
+                popup.getBody()
+                    .append($("<span>")
+                            .text(gt('Do you really want to delete this task?')));
+                
+                //go
+                popup.show().done(function (action) {
+                    if (action === 'delete') {
+                        require(['io.ox/tasks/api'], function (api) {
+                            api.erase(data.last_modified, data.id, data.folder_id)
+                                .done(function (data) {
+                                    
+                                    if (!data) {
+                                        notifications.yell('success', gt('Task was deleted!'));
+                                    } else {//task was modified
+                                        notifications.yell('fail', gt('Failure! Please refresh.'));
+                                    }
+                                });
+                        });
+                    }
+                });
+            });
         }
     });
     

@@ -11,6 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+//grid
+
 .vgrid-cell.tasks .end_date {
     color: #777;
     margin-left: 0.5em;
@@ -47,6 +49,8 @@
     font-weight: 500;
 }
 
+
+//detailview
 
 .tasks-detailview .info-panel {
     margin-left: 2em;

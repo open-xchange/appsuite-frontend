@@ -63,7 +63,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             infoPanel.appendTo(node);
             
             $('<div>').text(task.title).addClass("title clear-title").appendTo(node);
-            ext.point("io.ox/tasks/detail").invoke("draw", node, task);
+            ext.point("io.ox/tasks/detail").invoke("draw", node, data);
             $('<div>').text(task.note).addClass("note").appendTo(node);
             
             return node;

@@ -67,6 +67,27 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 });
 
             },
+            erase: function (timestamp, taskId, folder) {
+                var useFolder;
+                if (folder === undefined) {
+                    useFolder = require('io.ox/core/config').get('folder.tasks');
+                } else {
+                    useFolder = folder;
+                }
+                var key = useFolder + "." + taskId;
+                
+                return http.PUT({
+                    module: "tasks",
+                    params: {action: "delete",
+                        timestamp: timestamp
+                    },
+                    data: {id: taskId, folder: useFolder}
+                }).pipe(function () {
+                    delete get_cache[key];
+                    api.trigger("refresh.all");
+                });
+
+            },
             needsRefresh: function (folder) {
                     // placeholder
                     return false;//all_cache[folder] !== undefined;
