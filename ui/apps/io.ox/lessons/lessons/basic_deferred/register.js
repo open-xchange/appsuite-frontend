@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
+define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc'], function (ext, Editor, TOC) {
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_deferred',
@@ -25,7 +25,22 @@ define('io.ox/lessons/lessons/basic_deferred/register', ['io.ox/core/extensions'
                 var win = options.win;
                 
                 win.nodes.main.empty().append($(html));
-                Editor.setUp(win.nodes.main);
+                TOC.setUp(win.nodes.main);
+                Editor.setUp(win.nodes.main, {
+                    contexts: {
+                        delayedAjax: {
+                            delayedAjax: function (options) {
+                                var def = $.Deferred();
+                                setTimeout(function () {
+                                    $.ajax(options).done(def.resolve).fail(def.reject);
+
+                                }, 2000);
+
+                                return def;
+                            }
+                        }
+                    }
+                });
                 
                 win.idle();
             });

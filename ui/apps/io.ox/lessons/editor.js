@@ -55,38 +55,71 @@ define('io.ox/lessons/editor', ['ace/ace', 'ace/mode/javascript', 'ace/mode/html
             editor.setReadOnly(true);
             return editor;
         },
-        setUp: function (node) {
+        setUp: function (node, options) {
+            options = options || {};
+            options.contexts = options.contexts || {};
+            
             // Highlight uneditable .code elements
             node.find(".code").each(function (index, element) {
                 Editor.highlight(element);
             });
             
-            // Node Experiments
-            node.find(".node_experiment").each(function (index, element) {
+            // More interesting experiments
+            function createExperiment(index, element) {
                 var experimentDiv = $("<div>").css({
                     marginTop: "10px"
                 });
+                
+                var log = $('<pre class="log">').css({
+                    marginTop: "10px"
+                }).hide();
+                
                 var firstTime = true;
+                $(element).after(log);
                 $(element).after(experimentDiv);
                 
                 Editor.edit(element, {
                     padding: 45,
                     run: function (jsText) {
                         experimentDiv.empty();
-                        if (firstTime) {
-                            firstTime = false;
-                            experimentDiv.addClass("well");
-                        }
+                        log.empty();
                         var parentNode = experimentDiv;
+                        function print() {
+                            _(arguments).each(function (argument) {
+                                console.log(argument);
+                                if (_.isString(argument)) {
+                                    log.append($('<div class="log">').text(argument));
+                                } else {
+                                    log.append($('<div class="log">').text(JSON.stringify(argument, null, 4)));
+                                }
+                            });
+                            log.show();
+                        }
                         
+                        var ctx;
+                        if ($(element).data("context")) {
+                            ctx = options.contexts[$(element).data("context")];
+                            if (_.isFunction(ctx)) {
+                                ctx = ctx();
+                            }
+                        }
                         var runIt = function () {
                             eval(jsText);
                         };
                         
                         runIt.apply(parentNode);
+                    
+                        if (firstTime && experimentDiv.find("*").length > 0) {
+                            firstTime = false;
+                            experimentDiv.addClass("well");
+                        }
                     }
                 });
-            });
+            }
+            
+            // Node Experiments
+            node.find(".node_experiment").each(createExperiment);
+            node.find(".experiment").each(createExperiment);
         }
     };
     
