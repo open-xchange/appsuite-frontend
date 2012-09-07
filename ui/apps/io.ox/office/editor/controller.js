@@ -144,10 +144,12 @@ define('io.ox/office/editor/controller',
                 },
                 'image/insert': {
                     set: function () {
-                        CommonDialogs.insertImageDialog(function (filename) {
-                            if (filename.length() > 0) {
-                                editor.insertImage(filename);
-                            }
+                        CommonDialogs.insertImageDialog(app, function (imageFragment) {
+                            // TODO due to a change of the underlying filestore document,
+                            // the version of the document has also changed (only
+                            // until we don't rely on versioning anymore), so that
+                            // the FileDescriptor needs to be updated accordingly
+                            editor.insertImage(imageFragment);
                         });
                     }
                 },
