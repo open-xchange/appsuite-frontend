@@ -2247,8 +2247,11 @@ define('io.ox/office/editor/editor',
                     implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
 
                     // setting the cursor position
-//                    var useImageNode = true;
-//                    this.setSelection(new OXOSelection(lastOperationEnd), useImageNode);
+                    if (lastOperationEnd) {
+                        // var useImageNode = true;
+                        var useImageNode = false;
+                        this.setSelection(new OXOSelection(lastOperationEnd), useImageNode);
+                    }
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2770,16 +2773,25 @@ define('io.ox/office/editor/editor',
                     inline = attributes.inline;
                 }
 
-                if (attributes.textwrapmode !== undefined) {
-
-                    if (attributes.textwrapmode === 'topandbottom') {
+                if (attributes.anchorhalign !== undefined) {
+                    if (attributes.anchorhalign === 'right')  {
+                        anchorType = 'FloatRight';
+                    } else if (attributes.anchorhalign === 'left') {
+                        anchorType = 'FloatLeft';
+                    } else if (attributes.anchorhalign === 'center') {
                         anchorType = 'FloatNone';
-                    } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
-                        if (attributes.textwrapside !== undefined) {
-                            if (attributes.textwrapside === 'right')  {
-                                anchorType = 'FloatLeft';
-                            } else if (attributes.textwrapside === 'left') {
-                                anchorType = 'FloatRight';
+                    }
+                } else {
+                    if (attributes.textwrapmode !== undefined) {
+                        if (attributes.textwrapmode === 'topandbottom') {
+                            anchorType = 'FloatNone';
+                        } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
+                            if (attributes.textwrapside !== undefined) {
+                                if (attributes.textwrapside === 'right')  {
+                                    anchorType = 'FloatLeft';
+                                } else if (attributes.textwrapside === 'left') {
+                                    anchorType = 'FloatRight';
+                                }
                             }
                         }
                     }
@@ -2887,7 +2899,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
             // insert field before the parent <span> element of the text node
             node = node.parentNode;
-            $('<div>').data('divType', 'field').insertBefore(node).text(representation).css('display', 'inline-block');
+            $('<div>').data('divType', 'field').css({ display: 'inline-block', backgroundColor: '#123456', color: '#ff9900' }).text(representation).insertBefore(node);
         };
 
         /**
@@ -3069,7 +3081,11 @@ define('io.ox/office/editor/editor',
                     $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
 
                     // store last position
-                    lastOperationEnd = new OXOPaM(localStart);
+                    if (attributes.imageFloatMode === 'inline') {
+                        lastOperationEnd = new OXOPaM(localStart);
+                    } else {
+                        lastOperationEnd = null;
+                    }
                 }
             }
         }

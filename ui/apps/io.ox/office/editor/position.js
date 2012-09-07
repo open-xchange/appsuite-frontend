@@ -437,13 +437,15 @@ define('io.ox/office/editor/position',
 
             if ((isImage) || (isField)) {
                 if (! returnImageNode) {
-                    // if the last position is an image or field, the dom position shall be the following text node
-                    childNode = node.nextSibling;
-                    if ((! childNode) && (Utils.getNodeName(node) === 'img')) {
-                        childNode = node.parentNode.nextSibling;
+                    // if the position is an image or field, the dom position shall be the following text node
+                    if (isImage) {
+                        childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
+                        offset = 0;
+                    } else if (isField) {
+                        childNode = node.nextSibling.firstChild; // following the div field must be a text span
+                        offset = 0;
+
                     }
-                    childNode = childNode.firstChild;
-                    offset = 0;
                 } else {
                     childNode = node;
                 }
@@ -666,6 +668,29 @@ define('io.ox/office/editor/position',
         }
 
         return isTextInField;
+    };
+
+    /**
+     * Checks, if an arbitrary node is a node inside a 'div', that contains the css data
+     * 'divType' set to 'field'.
+     *
+     * @param {HTMLElement} element
+     *  A DOM element object.
+     *
+     * @returns {Boolean}
+     *  If element is a node, that has an ancestor 'div', that contains the
+     *  css data 'divType' set to 'field', 'true' is returned, otherwise false.
+     */
+    Position.isNodeInField = function (element) {
+
+        var isNodeInField = false,
+            divNode = $(element).closest('div');
+
+        if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+            isNodeInField = true;
+        }
+
+        return isNodeInField;
     };
 
     /**
