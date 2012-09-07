@@ -710,6 +710,17 @@ define('io.ox/office/editor/main',
             }
         };
 
+        /**
+         * Set a new current file version
+         */
+        app.newVersion = function (newVersion) {
+            var file = app.getFileDescriptor();
+
+            if (file && file.version) {
+                file.version = newVersion;
+            }
+        };
+
         app.failSave = function () {
             var point = {
                 file: app.getFileDescriptor(),
