@@ -72,16 +72,17 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     return false;//all_cache[folder] !== undefined;
                 },
             getList: function (ids) {
-                    return http.PUT({
-                            module: "tasks",
-                            params: {
-                                action: "list",
-                                columns: "1,20,200,202,203,300,309"
-                            },
-                            data: http.simplify(ids),
-                            appendColumns: false
-                        });
-                },
+
+                return http.PUT({
+                        module: "tasks",
+                        params: {
+                            action: "list",
+                            columns: "1,20,200,202,203,300,309"
+                        },
+                        data: http.simplify(ids),
+                        appendColumns: false
+                    });
+            },
             get: function (task) {
                 
                 var key = (task.folder_id || task.folder) + "." + task.id;
@@ -95,11 +96,9 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                                 folder: task.folder_id
                             }
                         }).done(function (data) {
-                            console.log("ich bin nicht aus dem get_cache");
                             get_cache[key] = data;
                         });
                 } else {
-                    console.log("hey ich bin aus dem get_cache");
                     return $.Deferred().resolve(get_cache[key]);
                 }
             },
