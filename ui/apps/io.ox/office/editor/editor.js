@@ -335,7 +335,7 @@ define('io.ox/office/editor/editor',
         var nodes = [];
         Utils.iterateSelectedDescendantNodes(element, function () {
             // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
-            return ((this.nodeType === 3) && (! Utils.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
+            return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
         }, function (node) {
             nodes.push(node);
         });
@@ -832,11 +832,19 @@ define('io.ox/office/editor/editor',
             return '';
         };
 
-        this.getDOMSelection = function (oxoSelection) {
+        this.getDOMSelection = function (oxoSelection, useNonTextNode) {
+
+            useNonTextNode = useNonTextNode ? true : false;
 
             // Only supporting single selection at the moment
-            var start = Position.getDOMPosition(paragraphs, oxoSelection.startPaM.oxoPosition),
-                end = Position.getDOMPosition(paragraphs, oxoSelection.endPaM.oxoPosition);
+            var start = Position.getDOMPosition(paragraphs, oxoSelection.startPaM.oxoPosition, useNonTextNode),
+                end = Position.getDOMPosition(paragraphs, oxoSelection.endPaM.oxoPosition, useNonTextNode);
+
+            // if ((start === end) && (start.node.nodeType === 1)) {
+            //     start = DOM.Point.createPointForNode(start.node);
+            //     end = DOM.Point.createPointForNode(end.node);
+            //     end.offset += 1;
+            // }
 
             // DOM selection is always an array of text ranges
             // TODO: fallback to HOME position in document instead of empty array?
@@ -924,9 +932,11 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.setSelection = function (oxosel) {
+        this.setSelection = function (oxosel, useNonTextNode) {
 
             var ranges = [];
+
+            useNonTextNode = useNonTextNode ? true : false;
 
             // window.console.log("setSelection: Input of Oxo Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
 
@@ -937,7 +947,7 @@ define('io.ox/office/editor/editor',
                 ranges = this.getCellDOMSelections(oxosel);
             } else {
                 // var oldSelection = this.getSelection();
-                ranges = this.getDOMSelection(oxosel);
+                ranges = this.getDOMSelection(oxosel, useNonTextNode);
             }
 
             // for (var i = 0; i < ranges.length; i++) {
@@ -2225,7 +2235,8 @@ define('io.ox/office/editor/editor',
                     implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
 
                     // setting the cursor position
-                    this.setSelection(new OXOSelection(lastOperationEnd));
+//                    var useImageNode = true;
+//                    this.setSelection(new OXOSelection(lastOperationEnd), useImageNode);
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2864,7 +2875,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
             // insert field before the parent <span> element of the text node
             node = node.parentNode;
-            $('<div>').insertBefore(node).text(representation).css('display', 'inline-block');
+            $('<div>').data('divType', 'field').insertBefore(node).text(representation).css('display', 'inline-block');
         };
 
         /**

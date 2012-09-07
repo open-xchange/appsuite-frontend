@@ -62,7 +62,7 @@ define('io.ox/office/editor/position',
             selectedNodeName = node.nodeName,
             imageFloatMode = null;
 
-        if (Utils.isTextInField(node)) {
+        if (Position.isTextInField(node)) {
             node = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
             offset = 0;
         }
@@ -640,6 +640,32 @@ define('io.ox/office/editor/position',
         }
 
         return pos;
+    };
+
+    /**
+     * Checks, if a text node is a node inside a 'div', that contains the css data
+     * 'divType' set to 'field'.
+     *
+     * @param {HTMLElement} element
+     *  A DOM element object.
+     *
+     * @returns {Boolean}
+     *  If element is a text node, that has an ancestor 'div', that contains the
+     *  css data 'divType' set to 'field', 'true' is returned, otherwise false.
+     */
+    Position.isTextInField = function (element) {
+
+        var isTextInField = false;
+
+        if (element.nodeType === 3) {
+            var divNode = $(element).closest('div');
+
+            if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+                isTextInField = true;
+            }
+        }
+
+        return isTextInField;
     };
 
     /**
