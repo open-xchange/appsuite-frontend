@@ -63,7 +63,12 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     new Action('io.ox/tasks/actions/done', {
         id: 'done',
         action: function (data) {
-            console.log("task done dummy action fired");
+            require(['io.ox/tasks/api'], function (api) {
+                api.update(data.last_modified, data.id, {status: 3}, data.folder_id)
+                    .done(function (data) {
+                        notifications.yell('success', gt('Done!'));
+                    });
+            });
         }
     });
     

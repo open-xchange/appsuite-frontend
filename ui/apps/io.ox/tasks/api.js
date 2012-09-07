@@ -64,6 +64,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     appendColumns: false
                 }).pipe(function () {
                     delete get_cache[key];
+                    api.trigger("refresh.all");
                 });
 
             },
