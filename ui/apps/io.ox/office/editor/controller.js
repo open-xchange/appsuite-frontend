@@ -143,15 +143,7 @@ define('io.ox/office/editor/controller',
                     enable: function () { return editor.isImagePosition(); }
                 },
                 'image/insert': {
-                    set: function () {
-                        CommonDialogs.insertImageDialog(app, function (imageFragment) {
-                            // TODO due to a change of the underlying filestore document,
-                            // the version of the document has also changed (only
-                            // until we don't rely on versioning anymore), so that
-                            // the FileDescriptor needs to be updated accordingly
-                            editor.insertImage(imageFragment);
-                        });
-                    }
+                    set: function () { CommonDialogs.insertImage(app, editor); }
                 },
                 'image/delete': {
                     chain: 'chain/image',

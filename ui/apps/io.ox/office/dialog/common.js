@@ -26,7 +26,7 @@ define('io.ox/office/dialog/common',
      *
      * @param  app
      */
-    CommonDialogs.insertImageDialog = function (app, newFragmentHandler) {
+    CommonDialogs.insertImage = function (app, editor) {
         var that = this,
             imageFile = null;
 
@@ -55,7 +55,7 @@ define('io.ox/office/dialog/common',
         })
         .done(function (action, data, node) {
             if (action === 'insert') {
-                that.handleInsertImageFile(app, that.imageFile, newFragmentHandler);
+                that.handleInsertImageFile(app, editor, that.imageFile);
             }
         });
     };
@@ -67,8 +67,8 @@ define('io.ox/office/dialog/common',
      *
      * @param  imageFile
      */
-    CommonDialogs.handleInsertImageFile = function (app, imageFile, fragmentHandler) {
-        if (app && imageFile && window.FileReader) {
+    CommonDialogs.handleInsertImageFile = function (app, editor, imageFile) {
+        if (app && editor && imageFile && window.FileReader) {
             var that = this,
                 fileReader = new window.FileReader();
 
@@ -93,10 +93,14 @@ define('io.ox/office/dialog/common',
                             // the insertioin of the image was successful
                             if (response.data.added_fragment && response.data.added_fragment.length > 0) {
 
-                                // call fragmentHandler with just created new image fragment
-                                if (fragmentHandler) {
-                                    fragmentHandler(response.data.added_fragment);
-                                }
+                                // set version of FileDescriptor to version that is returned in response
+                                app.getFileDescriptor().version = response.data.version;
+
+                                // update the editor's DocumentURL accordingly
+                                editor.setDocumentURL(app.getDocumentFilterUrl('getfile'));
+
+                                // create an InsertImage operation with the newly added fragment
+                                editor.insertImage(response.data.added_fragment);
                             }
                             else {
                                 that.handleInsertImageError();

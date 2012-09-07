@@ -176,8 +176,7 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
                 uid: app.getUniqueId(),
                 id: file.id,
                 folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version
+                filename: file.filename
             }, options);
 
             // build and return the result URL

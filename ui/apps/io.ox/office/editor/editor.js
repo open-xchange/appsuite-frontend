@@ -1950,18 +1950,12 @@ define('io.ox/office/editor/editor',
 
         this.insertImage = function (imageFragment) {
             var selection = this.getSelection(),
-                anchorAttr1 = {anchortype: 'AsCharacter', inline: true},
-                anchorAttr2 = {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false},
-                anchorAttr3 = {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false},
-                anchorAttr4 = {anchortype: 'ToPage', top: '50px', left: '100px', inline: false},
                 newOperation = {
                     name: OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageFragment,
-                    attrs: anchorAttr1
+                    attrs: {anchortype: 'AsCharacter', inline: true}
                 };
-
-            console.log(newOperation);
 
             this.applyOperation(newOperation, true, true);
         };
