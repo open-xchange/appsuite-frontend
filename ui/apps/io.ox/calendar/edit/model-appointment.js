@@ -104,7 +104,7 @@ define('io.ox/calendar/edit/model-appointment',
             if (self.get('recurrence_type')) {
                 o.recurrence_type = self.get('recurrence_type');
 
-                // none recurrence
+                // no recurrence
                 if (o.recurrence_type === 0) {
                     delete o.recurrence_id;
                     self.unset('recurrence_id');
@@ -175,6 +175,7 @@ define('io.ox/calendar/edit/model-appointment',
             return df;
         },
         onChange: function (model, source) {
+            console.log("on change model, ", model, source);
             var self = this;
 
             // silent business logic, modifing attributes and source

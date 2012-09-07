@@ -172,6 +172,12 @@ define('io.ox/calendar/edit/template',
             this.append(
                 $('<div class="row-fluid show-grid">').append(
                     $('<div class="control-group span12">').append(
+                        $('<label class="checkbox">').append(
+                                $('<input type="checkbox" class="full_time" name="full_time">')
+                                    .after(gt("All day"))
+                            )
+                    )));
+                        /*
                         $('<div class="controls">').append(
                             $('<div>').attr({'data-extgroup': 'extrasleft', 'data-extid': 'fulltime'})
                             .append($('<input type="checkbox" class="full_time">').attr({
@@ -182,9 +188,25 @@ define('io.ox/calendar/edit/template',
                                     $('<label>').attr({
                                         'style': 'display: inline;',
                                         'for': data.uid + '_full_time'
-                                    }).text(gt("All day")))))));
+                                    }).text(gt("All day"))))*/
+
+
         }
     });
+
+    /**
+     * RECURRENCE CONTAINER
+     */
+    ext.point('io.ox/calendar/edit/section').extend({
+        index: 181,
+        id: 'repeat-option',
+        draw: function (data) {
+            this.append(
+                $('<div class="edit-appointment-recurrence-container">')
+            );
+        }
+    });
+
 
     ext.point('io.ox/calendar/edit/section').extend({
         index: 200,
@@ -455,6 +477,213 @@ define('io.ox/calendar/edit/template',
     });
 
 
+    /**
+     * shows which type of recurrence is selected
+     */
+    ext.point('io.ox/calendar/edit/recurrence').extend({
+        index: 10,
+        id: 'options',
+        draw: function (data) {
+            console.log("draw ext recurrence", data);
+            this.append(
+                $('<div class="span12">').append(
+                    $('<div class="span3">').append(
+                        $('<label class="radio">').append(
+                            $('<input type="radio" checked="checked">')
+                            .attr({
+                                'value': '1',
+                                'name': 'recurrence_type'
+                            })
+                            .after(gt("Daily"))
+                        )
+                    ),
+                    $('<div class="span3">').append(
+                        $('<label class="radio">').append(
+                            $('<input type="radio">')
+                            .attr({
+                                'value': '2',
+                                'name': 'recurrence_type'
+                            })
+                            .after(gt("Weekly"))
+                        )
+                    ),
+                    $('<div class="span3">').append(
+                        $('<label class="radio">').append(
+                            $('<input type="radio">')
+                                .attr({
+                                    'value': '3',
+                                    'name': 'recurrence_type'
+                                })
+                                .after(gt("Monthly"))
+                        )
+                    ),
+                    $('<div class="span3">').append(
+                        $('<label class="radio">').append(
+                            $('<input type="radio">')
+                                .attr({
+                                    'value': '4',
+                                    'name': 'recurrence_type'
+                                })
+                                .after(gt("Yearly"))
+                        )
+                    )
+                 )
+            );
+        }
+    });
+    /**
+     * day options for recurrence
+     */
+    ext.point('io.ox/calendar/edit/recurrence/option_day').extend({
+        index: 1,
+        id: 'dayoption',
+        draw: function (data) {
+            this.append(
+                $('<div class="span12">').append(
+                    $('<form class="form-inline">').append(
+                        $('<span class="margin-right">')
+                            .text(gt("Every")),
+                        $('<input type="text">')
+                            .attr({
+                                'size': 2,
+                                'name': 'recurrence_days_input',
+                                'value': data.days
+                            })
+                            .css('width', '25px') // TODO not so nice, find better value
+                            .after(
+                                $('<span class="margin-left">')
+                                    .text(gt("Days")))
+                    )
+                )
+            );
+        }
+    });
+
+    /**
+     *
+     */
+    ext.point('io.ox/calendar/edit/recurrence/option_weekly').extend({
+        index: 1,
+        id: 'weekoption',
+        draw: function (data) {
+            var days = ['<option>Montag</option>',
+                        '<option>Dienstag</option>',
+                        '<option>Mittwoch</option>',
+                        '<option>Donnerstag</option>',
+                        '<option>Freitag</option>',
+                        '<option>Samstag</option>',
+                        '<option>Sonntag</option>'];
+            this.append(
+                $('<div class="span12">').append(
+                    $('<form class="form-inline">').append(
+                        $('<span class="margin-right">')
+                            .text(gt("Every")),
+                        $('<input type="text">')
+                            .attr({
+                                'size': 2,
+                                'name': 'recurrence_days_input',
+                                'value': data.days
+                            })
+                            .css('width', '25px') // TODO not so nice, find better value
+                            .after(
+                                $('<span class="margin-left">')
+                                    .text(gt("Weeks on"))
+                                )),
+                    $('<form class="form-inline">').append(
+                        $('<div class=" ">')
+                            .append($('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Monday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Tuesday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Wednesday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Thursday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Friday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                $('<input type="checkbox">')
+                                    .attr({
+                                        'value': 'monthly',
+                                        'name': 'rec_weekly_weekday'
+                                    })
+                                    .after(gt("Saturday"))
+                            )
+                        ),
+                        $('<div class=" ">').append(
+                            $('<label class="checkbox">').append(
+                                    $('<input type="checkbox">')
+                                        .attr({
+                                            'value': 'monthly',
+                                            'name': 'rec_weekly_weekday'
+                                        })
+                                        .after(gt("Sunday"))
+                                )
+                            )
+                    )
+                )
+            );
+        }
+    });
+
+    //TODO nicen this up
+    ext.point('io.ox/calendar/recurrence/repeat').extend({
+        index: 1,
+        id: 'repeat-option',
+        draw: function (data) {
+            this.append(
+                $('<div class="row-fluid show-grid">').append(
+                    $('<div class="control-group span3">').append(
+                        $('<label class="checkbox">').append(
+                            $('<input type="checkbox" class="repeat" name="repeat">')
+                                .after(gt("Repeat"))
+                        ))).append('<span name="recurrenceText"></span><div class="span3 editrecurrence_wrapper" style="display:none;">' +
+                            '(<a class="editrecurrence">' + gt('Edit recurrence') + '</a>)</div>'),
+                $('<div class="row-fluid show-grid recurrence-option-container" style="display:none">')
+            );
+
+        }
+    });
     // per default templates return null
     return null;
 });

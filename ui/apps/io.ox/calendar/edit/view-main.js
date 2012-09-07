@@ -19,7 +19,6 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/module-participants',
        'io.ox/calendar/edit/module-recurrence',
        'io.ox/calendar/edit/template',
-       //'dot!io.ox/calendar/edit/common.html',
        'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
 
     'use strict';
@@ -115,6 +114,7 @@ define('io.ox/calendar/edit/view-main',
             };
 
             self.bindings = {
+                full_time: {selector: '[name=full_time]'},
                 start_date: [
                     {
                         selector: '.startsat-date',
@@ -139,13 +139,13 @@ define('io.ox/calendar/edit/view-main',
             self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
             self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
             self.model.on('change:full_time', _.bind(self.onToggleAllDay, self));
+
             Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
             var self = this;
-
             // create or edit, check for self.model.has('id')
-
+            console.log("model", self.model);
             // clear node
             self.$el.empty();
             // invoke extensionpoints from template
@@ -173,7 +173,19 @@ define('io.ox/calendar/edit/view-main',
             self.$('.endsat-time').combobox(comboboxHours);
 
 
-//            self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
+            self.subviews.recurrenceView = new recurrenceModule.View({
+                model: self.model,
+                parentView: self.el
+            });
+            // append recurrence options view
+            self.subviews.recurrence_option = new recurrenceModule.OptionView({
+                el: $(self.el).find('.edit-appointment-recurrence-container'),
+                model: self.model,
+                parentview: self.el,
+                recurrenceView: self.subviews.recurrenceView
+            });
+
+            self.subviews.recurrence_option.render();
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
             self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});
@@ -216,6 +228,7 @@ define('io.ox/calendar/edit/view-main',
             }
         },
         onToggleAllDay: function () {
+            console.log("toggle all day");
             var isFullTime = this.model.get('full_time');
             if (isFullTime) {
                 this.$('.startsat-time').hide();
