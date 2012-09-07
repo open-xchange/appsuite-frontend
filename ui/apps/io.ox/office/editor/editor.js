@@ -59,6 +59,7 @@ define('io.ox/office/editor/editor',
     var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
 
     var OP_IMAGE_INSERT = 'insertImage';
+    var OP_FIELD_INSERT = 'insertField';
 
     //    var OP_ATTR_DELETE =  'deleteAttribute';
 
@@ -330,10 +331,11 @@ define('io.ox/office/editor/editor',
      *  An array of text nodes and image nodes contained in the passed element,
      *  in the correct order.
      */
-    function collectTextNodesAndImages(element) {
+    function collectTextNodesAndImagesAndFields(element) {
         var nodes = [];
         Utils.iterateSelectedDescendantNodes(element, function () {
-            return (this.nodeType === 3) || (Utils.getNodeName(this) === 'img');
+            // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
+            return ((this.nodeType === 3) && (! Utils.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
         }, function (node) {
             nodes.push(node);
         });
@@ -750,6 +752,16 @@ define('io.ox/office/editor/editor',
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 this.implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
+            }
+            else if (operation.name === OP_FIELD_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var endPos = _.clone(operation.position, true);
+                    endPos[endPos.length - 1] += 1;
+                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                }
+                // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
+                this.implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
             }
             else if (operation.name === OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1188,6 +1200,12 @@ define('io.ox/office/editor/editor',
                     var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
                     this.applyOperation(newOperation, true, true);
                 }
+                else if (c === 'F') {
+                    var selection = this.getSelection();
+                    // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
+                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
+                    this.applyOperation(newOperation, true, true);
+                }
                 else if (c === '1') {
                     dbgoutEvents = !dbgoutEvents;
                     Utils.log('dbgoutEvents is now ' + dbgoutEvents);
@@ -1209,7 +1227,7 @@ define('io.ox/office/editor/editor',
             var selection = this.getSelection();
 
             lastEventSelection = _.copy(selection, true);
-            lastKeyDownEvent = event;   // For some keys we only get keyDown, not keyPressed!
+            lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
             this.implStartCheckEventSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
@@ -2790,8 +2808,6 @@ define('io.ox/office/editor/editor',
                     // points to start or end of text, needed to clone formatting)
                     DOM.splitTextNode(node, domPos.offset);
                     // insert image before the parent <span> element of the text node
-                    // Do not set the 'float' property to 'none'. That is used in
-                    // anchorType 'FloatNone'.
                     node = node.parentNode;
                     floatMode = 'inline';
                 // } else if (anchorType === 'ToPage') {
@@ -2844,6 +2860,29 @@ define('io.ox/office/editor/editor',
             lastPos[posLength] = position[posLength] + 1;
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
+        };
+
+        /**
+         * Implementation function for inserting fields.
+         *
+         * @param {OXOPam.oxoPosition} position
+         *  The logical position.
+         *
+         * @param {String} type
+         *  A property describing the field type using an ebnf syntax.
+         *
+         * @param {String} representation
+         *  A fallback value, if the placeholder cannot be substituted
+         *  with a reasonable value.
+         */
+        this.implInsertField = function (position, type, representation) {
+            var domPos = Position.getDOMPosition(paragraphs, position),
+            node = domPos ? domPos.node : null;
+
+            DOM.splitTextNode(node, domPos.offset);
+            // insert field before the parent <span> element of the text node
+            node = node.parentNode;
+            $('<div>').insertBefore(node).text(representation).css('display', 'inline-block');
         };
 
         /**
@@ -3629,16 +3668,20 @@ define('io.ox/office/editor/editor',
             }
 
             var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = collectTextNodesAndImages(oneParagraph);
+            var searchNodes = collectTextNodesAndImagesAndFields(oneParagraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
-                var isImage = false;
+                var isImage = false,
+                    isField = false;
                 node = searchNodes[i];
-                if (node.nodeName === 'IMG') {
+                if (Utils.getNodeName(node) === 'img') {
                     nodeLen = 1;
                     isImage = true;
+                } else if (Utils.getNodeName(node) === 'div') {
+                    nodeLen = 1;
+                    isField = true;
                 } else {
                     nodeLen = node.nodeValue.length;
                 }
@@ -3654,7 +3697,7 @@ define('io.ox/office/editor/editor',
                     if ((delEnd - delStart) === nodeLen) {
                         // remove element completely.
                         // TODO: Need to take care for empty elements!
-                        if (isImage) {
+                        if ((isImage) || (isField)) {
                             oneParagraph.removeChild(node);
                         } else {
                             node.nodeValue = '';
