@@ -437,12 +437,8 @@ define('io.ox/office/editor/position',
 
             if ((isImage) || (isField)) {
                 if (! returnImageNode) {
-                    // if the last position is an image or field, the dom position shall be the following text node
-                    childNode = node.nextSibling;
-                    if ((! childNode) && (Utils.getNodeName(node) === 'img')) {
-                        childNode = node.parentNode.nextSibling;
-                    }
-                    childNode = childNode.firstChild;
+                    // if the position is an image or field, the dom position shall be the following text node
+                    childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
                     offset = 0;
                 } else {
                     childNode = node;
