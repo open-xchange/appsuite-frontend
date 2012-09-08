@@ -86,7 +86,6 @@ define('io.ox/office/dialog/common',
                         }
                     })
                     .done(function (response) {
-                        console.log(response);
                         if (response && response.data) {
 
                             // if added_fragment is set to a valid name,
