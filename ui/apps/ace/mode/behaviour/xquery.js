@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /*
 *  eXide - web-based XQuery IDE
 *  

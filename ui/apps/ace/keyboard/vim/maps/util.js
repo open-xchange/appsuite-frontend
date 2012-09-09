@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 define(function(require, exports, module) {
 var registers = require("../registers");
 

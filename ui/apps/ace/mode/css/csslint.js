@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 define(function(require, exports, module) {
 /*!
 CSSLint

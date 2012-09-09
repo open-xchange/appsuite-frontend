@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /*
  * based on code from:
  *

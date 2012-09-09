@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /*
  * Copyright (c) 2011 Jeremy Ashkenas
  * 

@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /* -*- Mode: JS; tab-width: 4; indent-tabs-mode: nil; -*-
  * vim: set sw=4 ts=4 et tw=78:
  * ***** BEGIN LICENSE BLOCK *****

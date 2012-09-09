@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /* ***** BEGIN LICENSE BLOCK *****
  * The Original Code is Ajax.org Code Editor (ACE).
  *

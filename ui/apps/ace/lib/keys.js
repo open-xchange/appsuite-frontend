@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 /*! @license
 ==========================================================================
 SproutCore -- JavaScript Application Framework

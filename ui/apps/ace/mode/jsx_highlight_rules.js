@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 define(function(require, exports, module) {
     var oop = require("../lib/oop");
     var lang = require("../lib/lang");

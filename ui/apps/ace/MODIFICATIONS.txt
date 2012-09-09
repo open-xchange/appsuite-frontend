@@ -13,7 +13,7 @@ Find.find(".") do
     text = File.read(path)
     File.open(path, 'w') do
       |f|
-      f.puts "// NOJSHINT"
+      f.puts "// NOJSHINT NODEFINECHECK"
       f.puts text
     end
   end

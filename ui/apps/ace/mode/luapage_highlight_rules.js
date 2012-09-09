@@ -1,4 +1,4 @@
-// NOJSHINT
+// NOJSHINT NODEFINECHECK
 // LuaPage implements the LuaPage markup as described by the Kepler Project's CGILua
 // documentation: http://keplerproject.github.com/cgilua/manual.html#templates
 define(function(require, exports, module) {
