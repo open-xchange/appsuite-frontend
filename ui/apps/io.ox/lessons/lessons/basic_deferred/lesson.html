@@ -414,6 +414,18 @@ function myNotQuiteAsynchronousFunction() {
 			
 			<section id="summary">
 				<h2>Summary</h2>
+				<p>
+				    In OX7 we use jQuery Deferreds extensively to model and deal with asynchronous operations. This is our quick cheat sheet for deferreds:
+				    <ul>
+				        <li>Asynchronous operations (like HTTP calls or modal dialog style user interactions) return a deferred</li>
+				        <li>You can register success handlers with the <code>done</code> method, and error handlers with the <code>fail</code> method on a deferred</li>
+				        <li>You can call <code>pipe</code> on a deferred to modify a return value in flight, before it is passed to the success handlers</li>
+				        <li>You can combine deferreds by calling <code>$.when(d1, d2, d3, ...)</code> with the deferreds as arguments. This method takes any number of deferreds.</li>
+				        <li>You can create your own deferreds by calling <code>$.Deferred</code>. This is sometimes useful if you want to modify the control flow of an asynchronous processing chain.</li>
+				    </ul>
+				    
+				    Finally I can heartily recommend you read up on deferreds in their offical documentation at <a href="http://api.jquery.com/category/deferred-object/" target="_blank">http://api.jquery.com/category/deferred-object/</a>
+				</p>
 			</section>
 		</div>
 	</div>
