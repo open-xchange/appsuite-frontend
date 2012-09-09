@@ -1656,7 +1656,7 @@ define('io.ox/office/editor/position',
 
     /**
      * Calculating the correct family that fits to the logical
-     * position. Allowed values for family are 'paragraph' and
+     * position. Allowed values for family are 'paragraph', 'image' and
      * 'character'. So the family has to fit to the node, that
      * is described by the logical position.
      *
@@ -1677,12 +1677,15 @@ define('io.ox/office/editor/position',
     Position.getPositionAssignedFamily = function (startnode, position) {
 
         var family = null,
-            node = Position.getDOMPosition(startnode, position).node;
+            returnImageNode = true,
+            node = Position.getDOMPosition(startnode, position, returnImageNode).node;
 
         if (node.nodeType === 3) {
             family = 'character';
-        } else if (node.nodeName === 'P') {
+        } else if (Utils.getNodeName(node) === 'p') {
             family = 'paragraph';
+        } else if (Utils.getNodeName(node) === 'img') {
+            family = 'image';
         } else {
             Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + position);
         }

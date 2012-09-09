@@ -1975,6 +1975,196 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
+        // private image functions
+
+        /**
+         * Converting the sizes inside the image attributes to 'mm'.
+         * Additionally the names of the css attributes are used.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function convertAttributeSizes(attributes) {
+
+            if (attributes.width) {
+                attributes.width = attributes.width / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.height) {
+                attributes.height = attributes.height / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginT) {
+                attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginR) {
+                attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginB) {
+                attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
+            }
+            if (attributes.marginL) {
+                attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
+            }
+            if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
+                attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
+            }
+
+            return attributes;
+        }
+
+        /**
+         * Calculating the image margins to be able to change the text flow
+         * around the image. Therefore it is necessary to set the attributes
+         * attributes.fullLeftMargin and attributes.fullRightMargin now.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function calculateImageMargins(attributes) {
+
+            var fullLeftMargin = '0mm',
+                fullRightMargin = '0mm',
+                standardLeftMargin = '0mm',
+                standardRightMargin = '0mm';
+
+            if (attributes.paragraphWidth) {
+
+                var imageWidth = 0,
+                    leftMarginWidth = 0,
+                    anchorhoffset = 0;
+
+                if (attributes.width) {
+                    imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
+                }
+                if (attributes['margin-left']) {
+                    leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
+                    standardLeftMargin = attributes['margin-left'];
+                }
+                if (attributes['margin-right']) {
+                    standardRightMargin = attributes['margin-right'];
+                }
+
+                if (attributes.anchorhoffset) {
+                    anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
+                    fullLeftMargin = anchorhoffset + leftMarginWidth;
+                    fullRightMargin = attributes.paragraphWidth - imageWidth - fullLeftMargin;
+                    fullLeftMargin += 'mm';
+                    fullRightMargin += 'mm';
+                } else {
+                    // Centering the image
+                    var marginWidth = (attributes.paragraphWidth - imageWidth) / 2 + 'mm';
+                    fullLeftMargin = marginWidth;
+                    fullRightMargin = marginWidth;
+                }
+
+            }
+
+            attributes.allMargins = {standardLeftMargin: standardLeftMargin,
+                                     standardRightMargin: standardRightMargin,
+                                     fullLeftMargin: fullLeftMargin,
+                                     fullRightMargin: fullRightMargin};
+
+            return attributes;
+        }
+
+        /**
+         * Defining the correct images attributes for an image.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with css specific formatting attribute values.
+         */
+        function defineImageAttributes(attributes) {
+
+            if (attributes.imageFloatMode === 'rightFloated') {
+                attributes.float = 'right';
+            } else if (attributes.imageFloatMode === 'leftFloated') {
+                attributes.float = 'left';
+            } else {  // 'noneFloated' or 'inline'
+                attributes.float = 'none';
+            }
+
+            return attributes;
+        }
+
+        /**
+         * Changes a formatting attributes of an image node.
+         *
+         * @param {Number[]} start
+         *  The logical start position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Number[]} end
+         *  The logical end position of the element or text range to be
+         *  formatted.
+         *
+         * @param {Object} attributes
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         */
+        function setImageAttributes(start, end, attributes) {
+
+            var returnImageNode = true,
+                localStart = _.copy(start, true),
+                imagePosition = Position.getDOMPosition(paragraphs, localStart, returnImageNode);
+
+            if (imagePosition) {
+                var imageNode = imagePosition.node;
+
+                if (Utils.getNodeName(imageNode) === 'img') {
+
+                    attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                    attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+
+                    if (attributes.imageFloatMode === 'inline') {
+                        // inserting an empty text span before the image, if it is an inline image
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
+                            newTextNode = $(textSpanNode).clone(true);
+
+                        newTextNode.text('');
+                        newTextNode.insertBefore(imageNode);
+                        localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
+                    } else {
+
+                        if (attributes.imageFloatMode === 'noneFloated') {
+                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
+                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
+                        }
+
+                        // inserting the image as the first child of the paragraph, before an text node.
+                        var parent = imageNode.parentNode,
+                            textSpanNode = Position.getFirstTextSpanInParagraph(parent);
+
+                        if (textSpanNode) {
+                            parent.insertBefore(imageNode, textSpanNode);
+                        } else {
+                            parent.insertBefore(imageNode, parent.firstChild);
+                        }
+                    }
+
+                    $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
+
+                    // store last position
+                    if (attributes.imageFloatMode === 'inline') {
+                        lastOperationEnd = new OXOPaM(localStart);
+                    } else {
+                        lastOperationEnd = null;
+                    }
+                }
+            }
+        }
+
         // style sheets and formatting attributes -----------------------------
 
         /**
@@ -2243,8 +2433,8 @@ define('io.ox/office/editor/editor',
 
                     attributes = defineImageAttributes(attributes);
 
-                    // this.setAttributes(family, attributes, imageStartPosition, imageEndPostion);
-                    implSetImageAttributes(imageStartPosition, imageEndPostion, attributes);  // TODO: Replace with call of setAttributes in applyOperation
+                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion};
+                    this.applyOperation(newOperation, true, true);
 
                     // setting the cursor position
                     if (lastOperationEnd) {
@@ -2903,194 +3093,6 @@ define('io.ox/office/editor/editor',
         };
 
         /**
-         * Converting the sizes inside the image attributes to 'mm'.
-         * Additionally the names of the css attributes are used.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function convertAttributeSizes(attributes) {
-
-            if (attributes.width) {
-                attributes.width = attributes.width / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.height) {
-                attributes.height = attributes.height / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginT) {
-                attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginR) {
-                attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginB) {
-                attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginL) {
-                attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
-            }
-            if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
-                attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
-            }
-
-            return attributes;
-        }
-
-        /**
-         * Calculating the image margins to be able to change the text flow
-         * around the image. Therefore it is necessary to set the attributes
-         * attributes.fullLeftMargin and attributes.fullRightMargin now.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function calculateImageMargins(attributes) {
-
-            var fullLeftMargin = '0mm',
-                fullRightMargin = '0mm',
-                standardLeftMargin = '0mm',
-                standardRightMargin = '0mm';
-
-            if (attributes.paragraphWidth) {
-
-                var imageWidth = 0,
-                    leftMarginWidth = 0,
-                    anchorhoffset = 0;
-
-                if (attributes.width) {
-                    imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
-                }
-                if (attributes['margin-left']) {
-                    leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
-                    standardLeftMargin = attributes['margin-left'];
-                }
-                if (attributes['margin-right']) {
-                    standardRightMargin = attributes['margin-right'];
-                }
-
-                if (attributes.anchorhoffset) {
-                    anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
-                    fullLeftMargin = anchorhoffset + leftMarginWidth;
-                    fullRightMargin = attributes.paragraphWidth - imageWidth - fullLeftMargin;
-                    fullLeftMargin += 'mm';
-                    fullRightMargin += 'mm';
-                } else {
-                    // Centering the image
-                    var marginWidth = (attributes.paragraphWidth - imageWidth) / 2 + 'mm';
-                    fullLeftMargin = marginWidth;
-                    fullRightMargin = marginWidth;
-                }
-
-            }
-
-            attributes.allMargins = {standardLeftMargin: standardLeftMargin,
-                                     standardRightMargin: standardRightMargin,
-                                     fullLeftMargin: fullLeftMargin,
-                                     fullRightMargin: fullRightMargin};
-
-            return attributes;
-        }
-
-        /**
-         * Defining the correct images attributes for an image.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function defineImageAttributes(attributes) {
-
-            if (attributes.imageFloatMode === 'rightFloated') {
-                attributes.float = 'right';
-            } else if (attributes.imageFloatMode === 'leftFloated') {
-                attributes.float = 'left';
-            } else {  // 'noneFloated' or 'inline'
-                attributes.float = 'none';
-            }
-
-            return attributes;
-        }
-
-        /**
-         * Changes a formatting attributes of an image node.
-         *
-         * @param {Number[]} start
-         *  The logical start position of the element or text range to be
-         *  formatted.
-         *
-         * @param {Number[]} end
-         *  The logical end position of the element or text range to be
-         *  formatted.
-         *
-         * @param {Object} attributes
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         */
-        function implSetImageAttributes(start, end, attributes) {
-
-            var returnImageNode = true,
-                localStart = _.copy(start, true),
-                imagePosition = Position.getDOMPosition(paragraphs, localStart, returnImageNode);
-
-            if (imagePosition) {
-                var imageNode = imagePosition.node;
-
-                if (Utils.getNodeName(imageNode) === 'img') {
-
-                    attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
-                    attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
-
-                    if (attributes.imageFloatMode === 'inline') {
-                        // inserting an empty text span before the image, if it is an inline image
-                        var parent = imageNode.parentNode,
-                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
-                            newTextNode = $(textSpanNode).clone(true);
-
-                        newTextNode.text('');
-                        newTextNode.insertBefore(imageNode);
-                        localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
-                    } else {
-
-                        if (attributes.imageFloatMode === 'noneFloated') {
-                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
-                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
-                        }
-
-                        // inserting the image as the first child of the paragraph, before an text node.
-                        var parent = imageNode.parentNode,
-                            textSpanNode = Position.getFirstTextSpanInParagraph(parent);
-
-                        if (textSpanNode) {
-                            parent.insertBefore(imageNode, textSpanNode);
-                        } else {
-                            parent.insertBefore(imageNode, parent.firstChild);
-                        }
-                    }
-
-                    $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
-
-                    // store last position
-                    if (attributes.imageFloatMode === 'inline') {
-                        lastOperationEnd = new OXOPaM(localStart);
-                    } else {
-                        lastOperationEnd = null;
-                    }
-                }
-            }
-        }
-
-        /**
          * Inserts a new style sheet into the document.
          *
          * @param {String} family
@@ -3172,11 +3174,15 @@ define('io.ox/office/editor/editor',
             // store last position
             lastOperationEnd = new OXOPaM(end);
 
-            // build the DOM text range and set the formatting attributes
-            styleSheets = self.getStyleSheets(family);
-            if (styleSheets) {
-                ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                styleSheets.setAttributesInRanges(ranges, attributes);
+            if (family !== 'image') {
+                // build the DOM text range and set the formatting attributes
+                styleSheets = self.getStyleSheets(family);
+                if (styleSheets) {
+                    ranges = self.getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
+                    styleSheets.setAttributesInRanges(ranges, attributes);
+                }
+            } else {
+                setImageAttributes(start, end, attributes);
             }
         }
 
