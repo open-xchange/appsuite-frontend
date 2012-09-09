@@ -1,5 +1,4 @@
 // NOJSHINT
-// NOJSHINT
 /*
     http://www.JSON.org/json_parse.js
     2008-09-18

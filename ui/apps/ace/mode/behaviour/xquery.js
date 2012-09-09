@@ -1,5 +1,4 @@
 // NOJSHINT
-// NOJSHINT
 /*
 *  eXide - web-based XQuery IDE
 *  
