@@ -10,8 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions', 'io.ox/lessons/editor'], function (ext, Editor) {
+define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'gettext!io.ox/lessons/lessons/basic_requirejs/lang'], function (ext, Editor, TOC, gt) {
     "use strict";
+    // We need some sample translations
+    gt('Hello');
+    gt('Good morning');
+    gt('Good evening');
+    
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_requirejs',
         index: 300,
@@ -22,8 +27,9 @@ define('io.ox/lessons/lessons/basic_requirejs/register', ['io.ox/core/extensions
             var win = options.win;
             require(["text!io.ox/lessons/lessons/basic_requirejs/lesson.html"], function (html) {
                 var win = options.win;
-                
                 win.nodes.main.empty().append($(html));
+                TOC.setUp(win.nodes.main);
+                Editor.setUp(win.nodes.main);
             });
         }
     });

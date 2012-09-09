@@ -7,3 +7,4 @@ HTTP / API layer
 The HTTP API
 JSLobs
 Dialogs and Sidepopups
+i18n

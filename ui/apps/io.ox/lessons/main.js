@@ -20,7 +20,6 @@ define("io.ox/lessons/main", ['io.ox/core/extensions', 'io.ox/lessons/actions', 
         win,
         openLesson = function (lesson) {
             return function () {
-                win.busy();
                 lesson.start({
                     app: app,
                     win: win
