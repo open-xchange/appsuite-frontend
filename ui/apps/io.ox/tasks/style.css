@@ -11,6 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
+//grid
+
 .vgrid-cell.tasks .end_date {
     color: #777;
     margin-left: 0.5em;
@@ -48,6 +50,8 @@
 }
 
 
+//detailview
+
 .tasks-detailview .info-panel {
     margin-left: 2em;
 	display: inline;
@@ -56,8 +60,14 @@
 
 .tasks-detailview .priority,
 .tasks-detailview .status,
-.tasks-detailview .end-date {
+.tasks-detailview .end-date,
+.tasks-detailview .start-date,
+.tasks-detailview .alarm-date {
 	float: right;
+}
+
+.tasks-detailview br {
+	line-height: 21px; //to correctstrange behavior of priority
 }
 
 .tasks-detailview .status {

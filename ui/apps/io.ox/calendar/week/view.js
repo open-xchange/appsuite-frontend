@@ -377,8 +377,8 @@ define('io.ox/calendar/week/view',
                     var app = this.renderAppointment(model.attributes),
                         found = false,
                         row = 0,
-                        fulltimePos = Math.max(0, (model.get('start_date') - this.curTimeUTC) / date.DAY),
-                        fulltimeWidth = Math.min((model.get('end_date') - model.get('start_date')) / date.DAY, this.columns - fulltimePos);
+                        fulltimePos = (model.get('start_date') - this.curTimeUTC) / date.DAY,
+                        fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
                     // loop over all column positions
                     for (var k = 0; k < fulltimeColPos.length; k++) {
                         if  (fulltimeColPos[k] <= model.get('start_date')) {
@@ -397,7 +397,7 @@ define('io.ox/calendar/week/view',
                     app.css({
                         height: this.fulltimeHeight,
                         width: (100 / this.columns) * fulltimeWidth + '%',
-                        left: (100 / this.columns) * fulltimePos + '%',
+                        left: (100 / this.columns) * Math.max(0, fulltimePos) + '%',
                         top: row * (this.fulltimeHeight + 1) + 1
                     });
                     this.fulltimePane.append(app);
@@ -542,46 +542,42 @@ define('io.ox/calendar/week/view',
                         $(this).width(ui.originalSize.width);
                     },
                     stop: function (e, ui) {
-                        var el = $(this);
+                        var el = $(this),
+                            obj = _.cid(el.attr('data-cid'));
                         that.lassoMode = true;
                         el.removeClass('opac');
                         
-                        var obj = _.cid(el.attr('data-cid'));
                         if (el.position().top !== ui.originalPosition.top) {
                             _.extend(obj, {
                                 start_date: that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top),
                                 ignore_conflicts: true
                             });
-                            el.busy();
-                            that.trigger('updateAppointment', obj);
                         } else if (el.height() !== ui.originalSize.height) {
                             _.extend(obj, {
                                 end_date: that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top + el.outerHeight()),
                                 ignore_conflicts: true
                             });
-                            el.busy();
-                            that.trigger('updateAppointment', obj);
                         }
+                        el.busy();
+                        that.trigger('updateAppointment', obj);
                     }
                 });
-            // define drop areas
+            // define drop areas for normal appointments
             $('.day').droppable({
                 drop: function (e, ui) {
-                    that.lassoMode = true;
                     var cid = ui.draggable.attr('data-cid'),
-                        startTS = that.getTimeFromDateTag($(e.target).attr('date')),
-                        app = that.collection.get(cid).attributes,
-                        obj = _.cid(cid);
+                        app = that.collection.get(cid).attributes;
                     if (!app.full_time) {
-                        startTS = that.getTimeFromDateTag($(e.target).attr('date'), true) + that.getTimeFromPos(ui.position.top);
+                        var obj = _.cid(cid),
+                            startTS = that.getTimeFromDateTag($(e.target).attr('date'), true) + that.getTimeFromPos(ui.position.top);
                         $(this).append(ui.draggable.css({left: 0}));
+                        _.extend(obj, {
+                            start_date: startTS,
+                            end_date: startTS + (app.end_date - app.start_date),
+                            ignore_conflicts: true
+                        });
+                        that.trigger('updateAppointment', obj);
                     }
-                    _.extend(obj, {
-                        start_date: startTS,
-                        end_date: startTS + (app.end_date - app.start_date),
-                        ignore_conflicts: true
-                    });
-                    that.trigger('updateAppointment', obj);
                 }
             });
             
@@ -596,17 +592,22 @@ define('io.ox/calendar/week/view',
                     zIndex: 2,
                     start: function (e, ui) {
                         that.lassoMode = false;
-//                        $(this)
-//                            .css({width: '100%'});
                         that.onEnterAppointment(e);
                     },
                     stop: function (e, ui) {
                         that.lassoMode = true;
                         $(this).busy();
-                    },
-                    drag: function (e, ui) {
-//                        // correct position
-//                        $(this).data('draggable').position.left -= ui.originalPosition.left;
+                        var newPos = Math.round($(this).position().left / (that.fulltimePane.width() / that.columns)),
+                            startTS = that.curTimeUTC + (newPos * date.DAY),
+                            cid = $(this).attr('data-cid'),
+                            app = that.collection.get(cid).attributes,
+                            obj = _.cid(cid);
+                        _.extend(obj, {
+                            start_date: startTS,
+                            end_date: startTS + (app.end_date - app.start_date),
+                            ignore_conflicts: true
+                        });
+                        that.trigger('updateAppointment', obj);
                     }
                 })
                 .resizable({
@@ -622,8 +623,26 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function (e, ui) {
                         that.lassoMode = true;
-                        var el = $(this);
+                        var el = $(this),
+                            cid = el.attr('data-cid'),
+                            app = that.collection.get(cid).attributes,
+                            obj = _.cid(cid),
+                            newDayCount = Math.round(el.outerWidth() / (that.fulltimePane.width() / that.columns));
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
+                        
+                        if (el.position().left !== ui.originalPosition.left) {
+                            _.extend(obj, {
+                                start_date: app.end_date - (newDayCount * date.DAY),
+                                ignore_conflicts: true
+                            });
+                        } else if (el.width() !== ui.originalSize.width) {
+                            _.extend(obj, {
+                                end_date: app.start_date + (newDayCount * date.DAY),
+                                ignore_conflicts: true
+                            });
+                        }
+                        el.busy();
+                        that.trigger('updateAppointment', obj);
                     }
                 });
  

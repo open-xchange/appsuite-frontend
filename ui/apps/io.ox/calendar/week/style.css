@@ -84,6 +84,7 @@
         border-bottom: 1px solid #ccc;
         width: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
     }
     
     .fulltime-lable {
@@ -132,7 +133,7 @@
         white-space: nowrap;
         background-color: white;
         font-family: @font-light;
-        font-size: 12px;
+        font-size: 15px;
     }
     
     .week-container {
@@ -232,11 +233,10 @@
     }
     
     .appointment {
+        position: absolute;
         -webkit-box-sizing: content-box;
         -moz-box-sizing: content-box;
         box-sizing: content-box;
-        position: absolute;
-        margin-bottom: 1px;
         cursor: pointer;
         background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
@@ -258,6 +258,10 @@
         padding: 2px 7px 2px 7px;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+    
+    .fulltime .appointment {
+        border-left: 1px solid white;
     }
     
     .appointment.border {

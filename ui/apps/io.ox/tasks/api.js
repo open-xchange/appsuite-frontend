@@ -15,7 +15,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     
     "use strict";
     
-    var all_cache = {};
+    var all_cache = {},//figure out how to use
+        get_cache = {};
     
     var api = { create: function (task) {
                 return http.PUT({
@@ -43,35 +44,72 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     });
 
                 },
-            update: function (timestamp, taskId, modifications) {
-                    return http.PUT({
-                        module: "tasks",
-                        params: {action: "update",
-                            folder: require('io.ox/core/config').get('folder.tasks'),
-                            id: taskId,
-                            timestamp: timestamp
-                        },
-                        data: modifications,
-                        appendColumns: false
-                    });
+            update: function (timestamp, taskId, modifications, folder) {
+                var useFolder;
+                if (folder === undefined) {
+                    useFolder = require('io.ox/core/config').get('folder.tasks');
+                } else {
+                    useFolder = folder;
+                }
+                var key = useFolder + "." + taskId;
+                
+                return http.PUT({
+                    module: "tasks",
+                    params: {action: "update",
+                        folder: useFolder,
+                        id: taskId,
+                        timestamp: timestamp
+                    },
+                    data: modifications,
+                    appendColumns: false
+                }).pipe(function () {
+                    delete get_cache[key];
+                    api.trigger("refresh.all");
+                });
 
-                },
+            },
+            erase: function (timestamp, taskId, folder) {
+                var useFolder;
+                if (folder === undefined) {
+                    useFolder = require('io.ox/core/config').get('folder.tasks');
+                } else {
+                    useFolder = folder;
+                }
+                var key = useFolder + "." + taskId;
+                
+                return http.PUT({
+                    module: "tasks",
+                    params: {action: "delete",
+                        timestamp: timestamp
+                    },
+                    data: {id: taskId, folder: useFolder}
+                }).pipe(function () {
+                    delete get_cache[key];
+                    api.trigger("refresh.all");
+                });
+
+            },
             needsRefresh: function (folder) {
                     // placeholder
                     return false;//all_cache[folder] !== undefined;
                 },
             getList: function (ids) {
-                    return http.PUT({
-                            module: "tasks",
-                            params: {
-                                action: "list",
-                                columns: "1,20,200,202,203,300,309"
-                            },
-                            data: http.simplify(ids),
-                            appendColumns: false
-                        });
-                },
+
+                return http.PUT({
+                        module: "tasks",
+                        params: {
+                            action: "list",
+                            columns: "1,20,200,202,203,300,309"
+                        },
+                        data: http.simplify(ids),
+                        appendColumns: false
+                    });
+            },
             get: function (task) {
+                
+                var key = (task.folder_id || task.folder) + "." + task.id;
+                    
+                if (get_cache[key] === undefined) {
                     return http.GET({
                             module: "tasks",
                             params: {
@@ -79,8 +117,13 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                                 id: task.id,
                                 folder: task.folder_id
                             }
+                        }).done(function (data) {
+                            get_cache[key] = data;
                         });
-                },
+                } else {
+                    return $.Deferred().resolve(get_cache[key]);
+                }
+            },
             deleteReminder: function (reminderId) {
                     return http.PUT({
                         module: "reminder",
