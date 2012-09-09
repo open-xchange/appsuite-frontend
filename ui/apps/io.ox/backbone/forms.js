@@ -34,10 +34,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                     });
                 }
                 
-                this.model.on('backendError', showBackendError);
-                this.$el.on('dispose', function () {
-                    self.model.off('backendError', showBackendError);
-                });
+                this.observeModel('backendError', showBackendError);
             },
             
             errorTitle: gt('An error occurred'),

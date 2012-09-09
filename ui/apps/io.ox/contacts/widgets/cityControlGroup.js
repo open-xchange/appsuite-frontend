@@ -37,10 +37,8 @@ define('io.ox/contacts/widgets/cityControlGroup', ['io.ox/backbone/forms', 'less
                     self.updateZipInElement();
                 }
                 
-                this.model.on('change:' + options.zipAttribute, updateZip);
-                this.$el.on('dispose', function () {
-                    self.model.off('change:' + options.zipAttribute, updateZip);
-                });
+                this.observeModel('change:' + options.zipAttribute, updateZip);
+                
                 
                 updateZip();
                 

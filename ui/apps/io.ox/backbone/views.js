@@ -28,21 +28,16 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 var self = this;
                 
                 
-                function registerDisposableHandler(evt, handler) {
-                    self.model.on(evt, handler);
-                    self.$el.on('dispose', function () {
-                        self.model.off(evt, handler);
-                    });
-                }
+                
                 
                 if (this.update) {
-                    registerDisposableHandler('change', function () {
+                    self.observeModel('change', function () {
                         self.update();
                     });
                 }
                 
                 if (this.validationError) {
-                    registerDisposableHandler('invalid', function () {
+                    self.observeModel('invalid', function () {
                         self.validationError();
                     });
                 }
@@ -50,7 +45,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 if (options.modelEvents) {
                     _(options.modelEvents).each(function (methodNames, evt) {
                         _(methodNames.split(" ")).each(function (methodName) {
-                            registerDisposableHandler(evt, function () {
+                            self.observeModel(evt, function () {
                                 self[methodName].apply(self, $.makeArray(arguments));
                             });
                         });
@@ -69,6 +64,14 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             options.close = options.close || function () {
                 this.$el.remove();
                 this.$el.trigger('dispose'); // Can't hurt
+            };
+            
+            options.observeModel = options.observeModel || function (evt, handler) {
+                var self = this;
+                this.model.on(evt, handler);
+                this.$el.on('dispose', function () {
+                    self.model.off(evt, handler);
+                });
             };
             
             var ViewClass = Backbone.View.extend(options);

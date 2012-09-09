@@ -45,7 +45,7 @@ define('io.ox/contacts/create/view',
         tagName: 'span',
         className: 'clear-title',
         attribute: 'display_name'
-    }));    
+    }));
     
     point.basicExtend({
         id: 'io.ox/contacts/create/view/headerBreak',
