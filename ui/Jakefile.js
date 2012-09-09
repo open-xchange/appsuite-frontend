@@ -38,7 +38,9 @@ version = rev + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
+var mode = process.env.mode || 'production';
 if (debug) console.info("Debug mode: on");
+console.info("Run mode: " + mode);
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -235,7 +237,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(";"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
+     utils.string(";"), utils.string("ox = ox || {}; ox.mode = '" + mode + "';"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
      "src/boot.js"],
     { to: "tmp", type: "source" });
 
