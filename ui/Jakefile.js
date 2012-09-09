@@ -38,7 +38,9 @@ version = rev + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
+var mode = process.env.mode || 'production';
 if (debug) console.info("Debug mode: on");
+console.info("Run mode: " + mode);
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -48,7 +50,21 @@ var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
 function jsFilter (data) {
     var self = this;
-
+    var sourceOptions = (function () {
+        var firstLine = data.substr(0, data.indexOf("\n")),
+            sourceOptions = {};
+        if (firstLine.substr(0,2) === "//") {
+            _(firstLine.substr(2).split(/\s+/)).each(function (option) {
+                if (option !== "") {
+                    sourceOptions[option] = 1;
+                }
+            })
+        }
+        
+        return sourceOptions;
+    })();
+    
+    
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
@@ -68,14 +84,16 @@ function jsFilter (data) {
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
     
+    
+    
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
         var filename = self.getSrc(this[0].start.line).name;
-        if (filename.slice(0, 5) === 'apps/' &&
+        if (!sourceOptions.NODEFINECHECK && filename.slice(0, 5) === 'apps/' &&
             (!name || name[1] !== filename.slice(5, -3)))
-        {
+        {   
             fail('Invalid module name: ' + (name ? name[1] : "''") +
                 ' should be ' + filename.slice(5, -3));
         }
@@ -219,7 +237,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(";"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
+     utils.string(";"), utils.string("ox = ox || {}; ox.mode = '" + mode + "';"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
      "src/boot.js"],
     { to: "tmp", type: "source" });
 

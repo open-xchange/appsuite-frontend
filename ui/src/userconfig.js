@@ -7,7 +7,7 @@ define(function () {
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/tasks", "io.ox/conversations",
             "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker",
-            "io.ox/demo"
+            "io.ox/demo", "io.ox/lessons"
         ],
 
         favorites: [
@@ -135,6 +135,13 @@ define(function () {
             "io.ox/demo": {
                 title: "Demo Launcher",
                 company: "Cisco Inc.",
+                category: "Dev",
+                settings: false
+            },
+            "io.ox/lessons": {
+                title: "Lessons",
+                company: "Open-Xchange Inc.",
+                icon: "default.png",
                 category: "Dev",
                 settings: false
             },

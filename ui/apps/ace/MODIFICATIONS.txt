@@ -1,0 +1,27 @@
+1) Remove all tests
+	find . -name "*_test.js" -exec rm {} +
+
+2) add NOJSHINT tag to all files:
+
+#!/bin/env ruby
+
+require 'find'
+
+Find.find(".") do
+  |path|
+  if (path =~ /\.js$/)
+    text = File.read(path)
+    File.open(path, 'w') do
+      |f|
+      f.puts "// NOJSHINT NODEFINECHECK"
+      f.puts text
+    end
+  end
+end
+
+3) In ace.js the exports.edit function replace the document.getElementById call by a jquery lookup
+// Always do this:
+el = $(el)[0];
+
+
+
