@@ -193,6 +193,7 @@ utils.includes.load("tmp/includes.json");
 utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
+
 // i18n
 
 file("ox.pot", ["Jakefile.js"], function() {
@@ -284,6 +285,10 @@ utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.css", "img/*"]),
 
 utils.copy(utils.list("lib", "jquery-ui.min.js"),
     { to: utils.dest("apps/io.ox/core/tk") });
+
+// Ace editor
+
+utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
 // module dependencies
 
