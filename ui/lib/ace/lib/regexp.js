@@ -9,7 +9,7 @@
  * including support for additional syntax, flags, and methods
  */
  
-define(function(require, exports, module) {
+define('ace/lib/regexp', function(require, exports, module) {
 "use strict";
 
     //---------------------------------

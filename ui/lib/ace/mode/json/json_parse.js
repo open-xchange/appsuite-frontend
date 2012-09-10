@@ -50,7 +50,7 @@
     hasOwnProperty, message, n, name, push, r, t, text
 */
 
-define(function(require, exports, module) {
+define('ace/mode/json/json_parse', function(require, exports, module) {
 "use strict";
 
 // This is a function that can parse a JSON text, producing a JavaScript

@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/mode/luapage', function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");

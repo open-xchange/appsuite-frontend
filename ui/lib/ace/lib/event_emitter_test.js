@@ -39,7 +39,7 @@ if (typeof process !== "undefined") {
     require("amd-loader");
 }
 
-define(function(require, exports, module) {
+define('ace/lib/event_emitter_test', function(require, exports, module) {
 "use strict";
 
 var oop = require("../lib/oop");

@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/crimson_editor', function(require, exports, module) {
 exports.isDark = false;
 exports.cssText = require('ace/requirejs/text!./crimson_editor.css');
 

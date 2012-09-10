@@ -48,7 +48,7 @@
  * Lexical scanner.
  */
 
- define(function(require, exports, module) {
+ define('ace/narcissus/lexer', function(require, exports, module) {
 
 var definitions = require('./definitions');
 

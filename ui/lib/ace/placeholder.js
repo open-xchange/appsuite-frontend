@@ -34,7 +34,7 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-define(function(require, exports, module) {
+define('ace/placeholder', function(require, exports, module) {
 "use strict";
 
 var Range = require('./range').Range;

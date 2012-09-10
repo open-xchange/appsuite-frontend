@@ -37,7 +37,7 @@
  
 "use strict"
 
-define(function(require, exports, module) {
+define('ace/keyboard/vim/maps/aliases', function(require, exports, module) {
 module.exports = {
     "x": {
         operator: {

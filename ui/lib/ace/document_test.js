@@ -41,7 +41,7 @@ if (typeof process !== "undefined") {
     require("./test/mockdom");
 }
 
-define(function(require, exports, module) {
+define('ace/document_test', function(require, exports, module) {
 "use strict";
 
 var Document = require("./document").Document;

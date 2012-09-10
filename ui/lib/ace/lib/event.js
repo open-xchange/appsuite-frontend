@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/lib/event', function(require, exports, module) {
 "use strict";
 
 var keys = require("./keys");

@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/commands/multi_select_commands', function(require, exports, module) {
 
 // commands to enter multiselect mode
 exports.defaultCommands = [{

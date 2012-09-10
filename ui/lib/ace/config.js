@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/config', function(require, exports, module) {
 "no use strict";
 
 var lang = require("./lib/lang");

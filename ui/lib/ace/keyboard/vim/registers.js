@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/keyboard/vim/registers', function(require, exports, module) {
 
 "never use strict";
 

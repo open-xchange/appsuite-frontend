@@ -10,7 +10,7 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-define(function(require, exports, module) {
+define('ace/lib/fixoldbrowsers', function(require, exports, module) {
 "use strict";
 
 require("./regexp");

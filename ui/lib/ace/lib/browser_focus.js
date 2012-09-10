@@ -38,7 +38,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/lib/browser_focus', function(require, exports, module) {
 "use strict";
 
 var oop = require("./oop");

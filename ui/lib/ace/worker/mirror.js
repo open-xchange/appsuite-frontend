@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/worker/mirror', function(require, exports, module) {
 "use strict";
 
 var Document = require("../document").Document;

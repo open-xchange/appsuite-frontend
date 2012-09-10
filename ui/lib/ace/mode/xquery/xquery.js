@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
  
-define(function(require, exports, module) {
+define('ace/mode/xquery/xquery', function(require, exports, module) {
 
   var antlr = require("./antlr3-all");
   var org =  antlr.org;

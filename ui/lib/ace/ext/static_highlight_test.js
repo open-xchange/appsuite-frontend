@@ -3,7 +3,7 @@ if (typeof process !== "undefined") {
     require("../test/mockdom");
 }
 
-define(function(require, exports, module) {
+define('ace/ext/static_highlight_test', function(require, exports, module) {
 "use strict";
 
 var assert = require("assert");

@@ -39,7 +39,7 @@ if (typeof process !== "undefined") {
     require("amd-loader");
 }
 
-define(function(require, exports, module) {
+define('ace/mode/css_highlight_rules_test', function(require, exports, module) {
 "use strict";
 
 var CssMode = require("./css").Mode;

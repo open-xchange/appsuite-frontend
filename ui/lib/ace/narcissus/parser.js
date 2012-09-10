@@ -49,7 +49,7 @@
  * Parser.
  */
 
-define(function(require, exports, module) {
+define('ace/narcissus/parser', function(require, exports, module) {
 
 var lexer = require('./lexer');
 var definitions = require('./definitions');

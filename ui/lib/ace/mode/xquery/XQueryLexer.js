@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/mode/xquery/XQueryLexer', function(require, exports, module) {
 // $ANTLR 3.3 Nov 30, 2010 12:50:56 xquery/XQueryLexer.g 2012-05-25 02:35:37
 
 /* ***** BEGIN LICENSE BLOCK *****

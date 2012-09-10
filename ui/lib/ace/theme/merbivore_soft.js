@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/merbivore_soft', function(require, exports, module) {
 
 exports.isDark = true;
 exports.cssClass = "ace-merbivore-soft";

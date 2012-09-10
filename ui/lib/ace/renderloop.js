@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/renderloop', function(require, exports, module) {
 "use strict";
 
 var event = require("./lib/event");

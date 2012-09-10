@@ -39,7 +39,7 @@ if (typeof process !== "undefined") {
     require("amd-loader");
 }
 
-define(function(require, exports, module) {
+define('ace/mode/liquid_highlight_rules_test', function(require, exports, module) {
 
 var LiquidMode = require("./liquid").Mode;
 var assert = require("../test/assertions");

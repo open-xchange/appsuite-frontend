@@ -5,7 +5,7 @@
  * Available via the MIT or new BSD license.
  * see: http://github.com/jrburke/requirejs for details
  */
-define(function(require, exports, module) {
+define('ace/lib/net', function(require, exports, module) {
 "use strict";
 
 var useragent = require("./useragent");

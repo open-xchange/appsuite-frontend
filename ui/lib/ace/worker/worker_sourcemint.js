@@ -1,5 +1,5 @@
 
-define(function(require, exports, module) {
+define('ace/worker/worker_sourcemint', function(require, exports, module) {
 
     "no use strict";
 

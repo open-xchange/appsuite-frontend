@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/mode/behaviour', function(require, exports, module) {
 "use strict";
 
 var Behaviour = function() {

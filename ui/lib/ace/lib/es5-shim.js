@@ -24,7 +24,7 @@
     MIT License. http://github.com/280north/narwhal/blob/master/README.md
 */
 
-define(function(require, exports, module) {
+define('ace/lib/es5-shim', function(require, exports, module) {
 
 /*
  * Brings an environment as close to ECMAScript 5 compliance

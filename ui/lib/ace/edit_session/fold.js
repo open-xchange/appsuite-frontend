@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/edit_session/fold', function(require, exports, module) {
 "use strict";
 
 /*

@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/textmate', function(require, exports, module) {
 "use strict";
 
 exports.isDark = false;

@@ -40,7 +40,7 @@ if (typeof process !== "undefined") {
     require("./test/mockdom");
 }
 
-define(function(require, exports, module) {
+define('ace/virtual_renderer_test', function(require, exports, module) {
 "use strict";
 
 var EditSession = require("./edit_session").EditSession;

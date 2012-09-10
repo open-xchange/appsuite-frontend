@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/search_highlight', function(require, exports, module) {
 "use strict";
 
 var lang = require("./lib/lang");

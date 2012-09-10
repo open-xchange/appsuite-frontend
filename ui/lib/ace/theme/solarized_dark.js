@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/solarized_dark', function(require, exports, module) {
 
 exports.isDark = true;
 exports.cssClass = "ace-solarized-dark";

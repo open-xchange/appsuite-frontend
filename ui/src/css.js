@@ -63,7 +63,17 @@
                     if (queue.length) console.error('recursive require', queue);
                 }
             };
-
+            
+            var classicRequire = req.config({
+                context: "classic", 
+                baseUrl: ox.base + "/apps"
+            });
+            classicRequire.load = oldload;
+            
+            define('classic', {load: function (name, parentRequire, load, config) {
+                classicRequire([name], load);
+            } });
+            
             define('text', { load: function (name, parentRequire, load, config) {
                 req(['/text;' + name], load);
             } });

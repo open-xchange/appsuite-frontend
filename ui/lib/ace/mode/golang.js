@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/mode/golang', function(require, exports, module) {
 
     var oop = require("../lib/oop");
     var TextMode = require("./text").Mode;

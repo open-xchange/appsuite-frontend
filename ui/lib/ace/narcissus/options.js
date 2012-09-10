@@ -41,7 +41,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/narcissus/options', function(require, exports, module) {
 
 // Global variables to hide from the interpreter
 exports.hiddenHostGlobals = { Narcissus: true };

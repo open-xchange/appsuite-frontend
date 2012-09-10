@@ -38,7 +38,7 @@
  
 "use strict"
 
-define(function(require, exports, module) {
+define('ace/keyboard/vim/maps/motions', function(require, exports, module) {
 
 var util = require("./util");
 

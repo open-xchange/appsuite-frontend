@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
  
-define(function(require, exports, module) {
+define('ace/mode/coffee/coffee-script', function(require, exports, module) {
     
     var Lexer = require("./lexer").Lexer;
     var parser = require("./parser");

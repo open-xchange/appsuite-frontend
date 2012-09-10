@@ -37,7 +37,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/layer/cursor', function(require, exports, module) {
 "use strict";
 
 var dom = require("../lib/dom");

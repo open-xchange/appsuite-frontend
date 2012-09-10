@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/keyboard/vim/maps/util', function(require, exports, module) {
 var registers = require("../registers");
 
 var dom = require("../../../lib/dom");

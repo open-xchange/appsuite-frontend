@@ -37,7 +37,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/ext/static_highlight', function(require, exports, module) {
 "use strict";
 
 var EditSession = require("../edit_session").EditSession;

@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/mouse/multi_select_handler', function(require, exports, module) {
 
 var event = require("../lib/event");
 

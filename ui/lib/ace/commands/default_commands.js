@@ -38,7 +38,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/commands/default_commands', function(require, exports, module) {
 "use strict";
 
 var lang = require("../lib/lang");

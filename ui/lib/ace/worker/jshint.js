@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/worker/jshint', function(require, exports, module) {
 /*!
  * JSHint, by JSHint Community.
  *

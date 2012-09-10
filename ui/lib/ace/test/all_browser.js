@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/test/all_browser', function(require, exports, module) {
 "use strict";
 
 require("ace/lib/fixoldbrowsers");

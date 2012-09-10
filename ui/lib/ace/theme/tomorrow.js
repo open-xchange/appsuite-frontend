@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/tomorrow', function(require, exports, module) {
 
 exports.isDark = false;
 exports.cssClass = "ace-tomorrow";

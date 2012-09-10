@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/mode/folding/cstyle', function(require, exports, module) {
 "use strict";
 
 var oop = require("../../lib/oop");

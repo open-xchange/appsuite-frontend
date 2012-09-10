@@ -38,7 +38,7 @@
 if (typeof process !== "undefined")
     require("amd-loader");
 
-define(function(require, exports, module) {
+define('ace/mode/folding/coffee_test', function(require, exports, module) {
 "use strict";
 
 var CoffeeMode = require("../coffee").Mode;

@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-define(function(require, exports, module) {
+define('ace/test/asyncjs/async', function(require, exports, module) {
 
 var STOP = exports.STOP = {}
 

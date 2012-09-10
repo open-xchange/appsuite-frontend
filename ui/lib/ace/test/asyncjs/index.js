@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-define(function(require, exports, module) {
+define('ace/test/asyncjs/index', function(require, exports, module) {
     
 module.exports = require("./async")
 module.exports.test = require("./test")

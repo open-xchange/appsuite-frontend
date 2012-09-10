@@ -38,7 +38,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/lib/event_emitter', function(require, exports, module) {
 "use strict";
 
 var EventEmitter = {};

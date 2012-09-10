@@ -15,7 +15,7 @@ Code licensed under the BSD License:
 http://developer.yahoo.net/yui/license.txt
 version: 2.5.1
 */
-define(function(require, exports, module){
+define('ace/mode/xquery/antlr3-all', function(require, exports, module){
 var NewLazyTokenStream = exports.NewLazyTokenStream = function(tokenSource) {
 
   this.tokenSource = tokenSource;

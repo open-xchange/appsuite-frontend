@@ -39,7 +39,7 @@
      require("amd-loader");
  }
 
-define(function(require, exports, module) {
+define('ace/token_iterator_test', function(require, exports, module) {
 "use strict";
 
 var EditSession = require("./edit_session").EditSession;

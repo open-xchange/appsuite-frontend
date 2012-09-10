@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/worker/jslint', function(require, exports, module) {
 // jslint.js
 // 2012-03-15
 

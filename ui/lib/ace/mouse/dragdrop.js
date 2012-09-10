@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/mouse/dragdrop', function(require, exports, module) {
 "use strict";
 
 var event = require("../lib/event");

@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/keyboard/state_handler', function(require, exports, module) {
 "use strict";
 
 // If you're developing a new keymapping and want to get an idea what's going

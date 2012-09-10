@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/theme/chrome', function(require, exports, module) {
 
 exports.cssClass = "ace-chrome";
 exports.cssText = require('ace/requirejs/text!./chrome.css');

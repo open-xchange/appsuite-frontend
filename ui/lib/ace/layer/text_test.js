@@ -40,7 +40,7 @@ if (typeof process !== "undefined") {
     require("../test/mockdom");
 }
 
-define(function(require, exports, module) {
+define('ace/layer/text_test', function(require, exports, module) {
 "use strict";
 
 var assert = require("../test/assertions");

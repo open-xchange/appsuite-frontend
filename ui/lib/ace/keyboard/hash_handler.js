@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/keyboard/hash_handler', function(require, exports, module) {
 "use strict";
 
 var keyUtil  = require("../lib/keys");

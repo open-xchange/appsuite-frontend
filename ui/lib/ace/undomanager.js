@@ -37,7 +37,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/undomanager', function(require, exports, module) {
 "use strict";
 
 /**

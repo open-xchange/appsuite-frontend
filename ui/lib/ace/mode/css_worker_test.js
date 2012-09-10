@@ -39,7 +39,7 @@ if (typeof process !== "undefined") {
     require("amd-loader");
 }
 
-define(function(require, exports, module) {
+define('ace/mode/css_worker_test', function(require, exports, module) {
 "use strict";
 
 var assert = require("../test/assertions");

@@ -23,7 +23,7 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(function(require, exports, module) {
+define('ace/mode/coffee/parser', function(require, exports, module) {
 /* Jison generated parser */
 
 undefined

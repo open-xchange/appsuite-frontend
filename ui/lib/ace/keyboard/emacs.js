@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/keyboard/emacs', function(require, exports, module) {
 "use strict";
 
 var dom = require("../lib/dom");

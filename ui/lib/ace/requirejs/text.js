@@ -43,7 +43,7 @@
     
 var globalRequire = typeof require != "undefined" && require;
  
-define(function (require, exports, module) {
+define('ace/requirejs/text', function (require, exports, module) {
     "use strict";
     
     exports.load = function (name, req, onLoad, config) {

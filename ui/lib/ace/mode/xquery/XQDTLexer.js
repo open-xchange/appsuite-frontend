@@ -33,7 +33,7 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL. *
  * ***** END LICENSE BLOCK ***** */
-define(function(require, exports, module){
+define('ace/mode/xquery/XQDTLexer', function(require, exports, module){
 
 var org =  require("./antlr3-all").org;
 

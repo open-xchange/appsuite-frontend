@@ -35,7 +35,7 @@
  * the terms of any one of the MPL, the GPL or the LGPL.
  *
  * ***** END LICENSE BLOCK ***** */
-define(function(require, exports, module) {
+define('ace/mode/xquery', function(require, exports, module) {
 "use strict";
 
 var WorkerClient = require("../worker/worker_client").WorkerClient;

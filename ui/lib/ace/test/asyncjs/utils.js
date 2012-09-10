@@ -4,7 +4,7 @@
  * MIT Licensed
  */
 
-define(function(require, exports, module) {
+define('ace/test/asyncjs/utils', function(require, exports, module) {
 
 var async = require("asyncjs/async")
 

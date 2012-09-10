@@ -36,7 +36,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/keyboard/vim', function(require, exports, module) {
 "use strict";
 
 var cmds = require("./vim/commands");

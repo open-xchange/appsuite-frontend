@@ -35,7 +35,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/lib/lang', function(require, exports, module) {
 "use strict";
 
 exports.stringReverse = function(string) {

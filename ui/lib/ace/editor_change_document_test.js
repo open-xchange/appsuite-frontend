@@ -40,7 +40,7 @@ if (typeof process !== "undefined") {
     require("./test/mockdom");
 }
 
-define(function(require, exports, module) {
+define('ace/editor_change_document_test', function(require, exports, module) {
 "use strict";
 
 var EditSession = require("./edit_session").EditSession;

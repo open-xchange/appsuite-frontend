@@ -33,7 +33,7 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL. *
  * ***** END LICENSE BLOCK ***** */
-define(function(require, exports, module){
+define('ace/mode/xquery/XQuerySemanticHighlighter', function(require, exports, module){
   
   var Position = require("./Position").Position;
   var XQuerySemanticHighlighter = exports.XQuerySemanticHighlighter = function() {

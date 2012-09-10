@@ -38,7 +38,7 @@
  *
  * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/lib/dom', function(require, exports, module) {
 "use strict";
 
 var XHTML_NS = "http://www.w3.org/1999/xhtml";

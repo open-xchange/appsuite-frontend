@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/test/asyncjs/assert', function(require, exports, module) {
     
 // http://wiki.commonjs.org/wiki/Unit_Testing/1.0
 //

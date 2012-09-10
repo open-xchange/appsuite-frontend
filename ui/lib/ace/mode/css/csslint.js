@@ -1,4 +1,4 @@
-define(function(require, exports, module) {
+define('ace/mode/css/csslint', function(require, exports, module) {
 /*!
 CSSLint
 Copyright (c) 2011 Nicole Sullivan and Nicholas C. Zakas. All rights reserved.

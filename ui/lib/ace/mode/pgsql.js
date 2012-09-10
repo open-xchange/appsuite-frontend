@@ -18,7 +18,7 @@
 *
 * ***** END LICENSE BLOCK ***** */
 
-define(function(require, exports, module) {
+define('ace/mode/pgsql', function(require, exports, module) {
 
     var oop = require("ace/lib/oop");
     var TextMode = require("ace/mode/text").Mode;
