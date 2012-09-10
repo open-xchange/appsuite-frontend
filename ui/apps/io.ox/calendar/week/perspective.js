@@ -60,12 +60,12 @@ define('io.ox/calendar/week/perspective',
                 .invoke('action', this, obj);
         },
         
-        getAppointments: function (start, end) {
+        getAppointments: function (obj) {
             // fetch appointments
             var self = this,
                 collection = self.collection;
             if (collection) {
-                api.getAll({ start: start, end: end }).done(function (list) {
+                api.getAll(obj).done(function (list) {
                     collection
                         .reset(_(list).map(function (obj) {
                             var m = new Backbone.Model(obj);
@@ -77,15 +77,21 @@ define('io.ox/calendar/week/perspective',
             }
         },
         
-        refresh: function () {
-            this.getAppointments(this.startTimeUTC, this.startTimeUTC + util.DAY * this.columns);
+        refresh: function (all) {
+            var obj = {
+                    start: this.startTimeUTC,
+                    end: this.startTimeUTC + util.DAY * this.columns
+                };
+            if (all !== true) {
+                obj.folder = this.app.folder.get();
+            }
+            this.getAppointments(obj);
         },
         
         render: function (app) {
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
-            
             // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {
                 this.startTimeUTC = util.getTodayStart();
@@ -103,13 +109,9 @@ define('io.ox/calendar/week/perspective',
                 .on('openCreateAppointment', this.openCreateAppointment, this)
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
-                .on('onNextView', function (curDate) {
+                .on('onRefreshView', function (curDate, all) {
                     this.startTimeUTC = curDate;
-                    this.refresh();
-                }, this)
-                .on('onPrevView', function (curDate) {
-                    this.startTimeUTC = curDate;
-                    this.refresh();
+                    this.refresh(all);
                 }, this);
             
             this.main
@@ -124,9 +126,12 @@ define('io.ox/calendar/week/perspective',
             // watch for api refresh
             api.on('refresh.all', $.proxy(this.refresh, this));
 
-            app.getWindow().on('show', $.proxy(this.refresh, this));
+            app
+                .on('folder:change', $.proxy(this.refresh, this))
+                .getWindow()
+                .on('show', $.proxy(this.refresh, this));
             
-            this.refresh();
+            this.refresh(true);
         }
     });
 

@@ -73,22 +73,25 @@ define('io.ox/calendar/week/view',
             'mouseleave .appointment': 'onLeaveAppointment',
             'click .toolbar .control.next': 'onControlView',
             'click .toolbar .control.prev': 'onControlView',
-            'click .toolbar .link.today': 'onControlView'
+            'click .toolbar .link.today': 'onControlView',
+            'change .toolbar .showall input[type="checkbox"]' : 'onShowAll'
+        },
+        
+        onShowAll: function (e) {
+            this.trigger('onRefreshView', this.curTimeUTC, $(e.currentTarget).prop('checked'));
         },
         
         onControlView: function (e) {
             if ($(e.currentTarget).is('.next')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
-                this.trigger('onNextView', this.curTimeUTC);
             }
             if ($(e.currentTarget).is('.prev')) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
-                this.trigger('onPrevView', this.curTimeUTC);
             }
             if ($(e.currentTarget).is('.today')) {
                 this.curTimeUTC = this.columns === 1 ? util.getTodayStart() : util.getWeekStart();
-                this.trigger('onPrevView', this.curTimeUTC);
             }
+            this.trigger('onRefreshView', this.curTimeUTC, false);
         },
 
         // handler for single- and double-click events on appointments
@@ -246,6 +249,18 @@ define('io.ox/calendar/week/view',
                     .addClass('toolbar')
                     .append(
                         this.kwInfo = $('<span>').addClass('info'),
+                        $('<div>')
+                            .addClass('showall')
+                            .append(
+                                $('<label>')
+                                    .addClass('checkbox')
+                                    .text(gt('show all'))
+                                    .prepend(
+                                        $('<input/>')
+                                            .attr('type', 'checkbox')
+                                            .prop('checked', true)
+                                    )
+                            ),
                         $('<div>')
                             .addClass('pagination')
                             .append(

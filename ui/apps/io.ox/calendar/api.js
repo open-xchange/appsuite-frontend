@@ -70,7 +70,6 @@ define("io.ox/calendar/api",
             // round start & end date
             o.start = (o.start / DAY >> 0) * DAY;
             o.end = (o.end / DAY >> 0) * DAY;
-            
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
