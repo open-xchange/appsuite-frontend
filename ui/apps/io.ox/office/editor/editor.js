@@ -3089,7 +3089,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
             // insert field before the parent <span> element of the text node
             node = node.parentNode;
-            $('<div>').data('divType', 'field').css({ display: 'inline-block', backgroundColor: '#123456', color: '#ff9900' }).text(representation).insertBefore(node);
+            $('<div>').data('divType', 'field').css({ display: 'inline-block' }).text(representation).insertBefore(node);
         };
 
         /**
