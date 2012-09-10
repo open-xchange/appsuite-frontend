@@ -2008,7 +2008,7 @@ define('io.ox/office/editor/editor',
                 operationAttributes.inline = false;
             }
 
-            operationAttributes.isImageOperation = 'true';
+            operationAttributes.isImageOperation = 'true'; // only if this is set, it is assigned to an image
 
             return operationAttributes;
         }

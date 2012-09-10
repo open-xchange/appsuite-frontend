@@ -1683,13 +1683,8 @@ define('io.ox/office/editor/position',
     Position.getPositionAssignedFamily = function (startnode, startposition, isImageAttribute) {
 
         var family = null,
-            returnImageNode = true;
-
-        if (! isImageAttribute) {
-            returnImageNode = false;
-        }
-
-        var node = Position.getDOMPosition(startnode, startposition, returnImageNode).node;
+            returnImageNode = isImageAttribute ? true : false,
+            node = Position.getDOMPosition(startnode, startposition, returnImageNode).node;
 
         if (node.nodeType === 3) {
             family = 'character';
