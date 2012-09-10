@@ -2008,6 +2008,8 @@ define('io.ox/office/editor/editor',
                 operationAttributes.inline = false;
             }
 
+            operationAttributes.isImageOperation = 'true';
+
             return operationAttributes;
         }
 
@@ -2535,6 +2537,7 @@ define('io.ox/office/editor/editor',
                     var operationAttributes = getImageOperationAttributesFromFloatMode(attributes);
 
                     var newOperation = {name: OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
+//                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion};
                     this.applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -3224,8 +3227,10 @@ define('io.ox/office/editor/editor',
             start = _.copy(start);
             end = _.copy(end);
 
+            var isImageAttribute = attributes.isImageOperation ? true : false;
+
             // get attribute family according to position
-            family = Position.getPositionAssignedFamily(paragraphs, start);
+            family = Position.getPositionAssignedFamily(paragraphs, start, isImageAttribute);
 
             if (family === null) {
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);

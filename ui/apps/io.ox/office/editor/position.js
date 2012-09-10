@@ -81,8 +81,14 @@ define('io.ox/office/editor/position',
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
 
-            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint),
-                newNode = returnObj.domPoint;
+            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint);
+
+            if (! returnObj) {
+                Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                return;
+            }
+
+            var newNode = returnObj.domPoint;
 
             imageFloatMode = returnObj.imageFloatMode;
 
@@ -1674,11 +1680,16 @@ define('io.ox/office/editor/position',
      *  Returns the family that fits to the logical position or null,
      *  if no correct assignment can be made
      */
-    Position.getPositionAssignedFamily = function (startnode, position) {
+    Position.getPositionAssignedFamily = function (startnode, startposition, isImageAttribute) {
 
         var family = null,
-            returnImageNode = true,
-            node = Position.getDOMPosition(startnode, position, returnImageNode).node;
+            returnImageNode = true;
+
+        if (! isImageAttribute) {
+            returnImageNode = false;
+        }
+
+        var node = Position.getDOMPosition(startnode, startposition, returnImageNode).node;
 
         if (node.nodeType === 3) {
             family = 'character';
@@ -1687,7 +1698,7 @@ define('io.ox/office/editor/position',
         } else if (Utils.getNodeName(node) === 'img') {
             family = 'image';
         } else {
-            Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + position);
+            Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
         }
 
         return family;
