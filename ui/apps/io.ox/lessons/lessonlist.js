@@ -10,21 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-(function () {
-    "use strict";
-    
-    var lessons = [
-        'basic_apps',
-        'basic_deferred',
-        'basic_extensions',
-        'basic_jquery',
-        'basic_requirejs',
-        'model_view'
-    ];
-    
-    var dependencies = _(lessons).map(function (lesson) {
-        return 'io.ox/lessons/lessons/' + lesson + "/register";
-    });
-    
-    define('io.ox/lessons/lessonlist', dependencies, $.noop);
-}());
+define('io.ox/lessons/lessonlist', [
+    'io.ox/lessons/lessons/basic_apps/register',
+    'io.ox/lessons/lessons/basic_deferred/register',
+    'io.ox/lessons/lessons/basic_extensions/register',
+    'io.ox/lessons/lessons/basic_jquery/register',
+    'io.ox/lessons/lessons/basic_requirejs/register',
+    'io.ox/lessons/lessons/model_view/register'
+], $.noop);

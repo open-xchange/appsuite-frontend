@@ -50,52 +50,55 @@ var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
 function jsFilter (data) {
     var self = this;
-    var sourceOptions = (function () {
-        var firstLine = data.substr(0, data.indexOf("\n")),
-            sourceOptions = {};
-        if (firstLine.substr(0,2) === "//") {
-            _(firstLine.substr(2).split(/\s+/)).each(function (option) {
-                if (option !== "") {
-                    sourceOptions[option] = 1;
-                }
-            })
-        }
-        
-        return sourceOptions;
-    })();
-    
-    
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
     
     if (data.slice(-1) !== '\n') data += '\n';
     
-    try {
-        var tree = jsp.parse(data, false, true);
-    } catch (e) {
-        fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
-        fail('Parse error in ' + this.task.name + ' at ' + e.line + ':' +
-             e.col + '\n' + e.message);
+    // In case of parse errors, the actually parsed source is stored
+    // in tmp/errorfile.js
+    
+    var tree = parse(data);
+    
+    function parse(data) {
+        return catchParseErrors(function (data) {
+            return jsp.parse(data, false, true);
+        }, data);
     }
+    
+    function catchParseErrors(f, data) {
+        try {
+            return f(data);
+        } catch (e) {
+            fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
+            fail('Parse error in ' + self.task.name + ' at ' + e.line + ':' +
+                 e.col + '\n' + e.message);
+        }
+    }
+    
+    // Custom processing of the parsed AST
+    
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
     
-    
-    
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
         var filename = self.getSrc(this[0].start.line).name;
-        if (!sourceOptions.NODEFINECHECK && filename.slice(0, 5) === 'apps/' &&
-            (!name || name[1] !== filename.slice(5, -3)))
-        {   
-            fail('Invalid module name: ' + (name ? name[1] : "''") +
-                ' should be ' + filename.slice(5, -3));
+        var mod = filename.slice(5, -3);
+        if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {   
+            if (name === undefined) {
+                var newName = parse('(' + JSON.stringify(mod) + ')')[1][0][1];
+                return [this[0], this[1], [newName].concat(args)];
+            } else {
+                fail('Invalid module name: ' + (name ? name[1] : "''") +
+                    ' should be ' + mod);
+            }
         }
         var deps = _.detect(args, ast.is("array"));
         var f = _.detect(args, ast.is("function"));
@@ -114,7 +117,9 @@ function jsFilter (data) {
     tree = pro.ast_mangle(tree);
     tree = pro.ast_squeeze(tree);
     // use split_lines
-    return pro.split_lines(pro.gen_code(tree), 500);
+    return catchParseErrors(function (data) {
+        return pro.split_lines(data, 500);
+    }, pro.gen_code(tree));
 }
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
