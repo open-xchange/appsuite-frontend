@@ -27,9 +27,11 @@ define('io.ox/calendar/week/perspective',
         
         collection:     {},
         columns:        7,
-        startTimeUTC:      null,
+        startTimeUTC:   null,
         dialog:         $(),
         app:            null,
+        view:           null,
+        folder:         null,
         
         showAppointment: function (e, obj) {
             // open appointment details
@@ -77,15 +79,25 @@ define('io.ox/calendar/week/perspective',
             }
         },
         
-        refresh: function (all) {
+        refresh: function () {
             var obj = {
                     start: this.startTimeUTC,
                     end: this.startTimeUTC + util.DAY * this.columns
-                };
-            if (all !== true) {
-                obj.folder = this.app.folder.get();
-            }
-            this.getAppointments(obj);
+                },
+                that = this;
+            this.app.folder.getData().done(function (data) {
+                that.view.setShowAllvisibility(data.type === 1);
+                if (data.type > 1 || that.view.getShowAllStatus() === false) {
+                    obj.folder = data.id;
+                }
+                that.getAppointments(obj);
+            });
+        },
+        
+        changeFolder: function (e, data) {
+            console.log('changeFolder', data);
+            this.folder = data;
+            this.refresh();
         },
         
         render: function (app) {
@@ -98,25 +110,25 @@ define('io.ox/calendar/week/perspective',
             } else {
                 this.startTimeUTC = util.getWeekStart();
             }
-            var weekView = new View({
+            this.view = new View({
                 collection: this.collection,
                 columns: this.columns,
                 startTimeUTC: this.startTimeUTC
             });
             
-            weekView
+            this.view
                 .on('showAppointment', this.showAppointment, this)
                 .on('openCreateAppointment', this.openCreateAppointment, this)
                 .on('openEditAppointment', this.openEditAppointment, this)
                 .on('updateAppointment', this.updateAppointment, this)
-                .on('onRefreshView', function (curDate, all) {
+                .on('onRefreshView', function (curDate) {
                     this.startTimeUTC = curDate;
-                    this.refresh(all);
+                    this.refresh();
                 }, this);
             
             this.main
                 .empty()
-                .append(weekView.render().el);
+                .append(this.view.render().el);
             
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
@@ -126,12 +138,12 @@ define('io.ox/calendar/week/perspective',
             // watch for api refresh
             api.on('refresh.all', $.proxy(this.refresh, this));
 
-            app
+            this.app
                 .on('folder:change', $.proxy(this.refresh, this))
                 .getWindow()
                 .on('show', $.proxy(this.refresh, this));
-            
-            this.refresh(true);
+
+            this.refresh();
         }
     });
 
