@@ -19,7 +19,7 @@ define('io.ox/contacts/distrib/main',
      'gettext!io.ox/contacts/contacts',
      'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
-     ], function (api, ContactModel, ContactCreateDistView, gt, util) {
+     ], function (api, model, ContactCreateDistView, gt, util) {
 
     'use strict';
 
@@ -28,8 +28,7 @@ define('io.ox/contacts/distrib/main',
 
         var app,
             win,
-            container,
-            dirtyStatus = { byApi: true },
+            container
             model,
             view;
 
@@ -41,12 +40,10 @@ define('io.ox/contacts/distrib/main',
         function show() {
 
             win.show(function () {
-                container.append(view.draw().node)
+                container.append(view.render().node)
                     .find('input[type=text]:visible').eq(0).focus();
             });
 
-            model.on('save:progress', win.busy)
-                .on('save:done save:fail', win.idle);
         }
 
         app.create = function (folderId) {
@@ -54,29 +51,11 @@ define('io.ox/contacts/distrib/main',
             app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
-            model = new ContactModel();
+            model = model.create({
+                folder_id: folderId,
+                mark_as_distributionlist: true
+            });
             view = new ContactCreateDistView({ model: model });
-            // define store
-            model.store = function (data, changes) {
-                if (!_.isEmpty(data)) {
-                  //sort the array if not empty before save
-
-                    if (data.distribution_list) {
-                        data.distribution_list = data.distribution_list.sort(util.nameSort);
-                    }
-                    data.folder_id = folderId;
-                    data.mark_as_distributionlist = true;
-                    if (data.display_name === '') {
-                        // TODO: throw proper user alert
-                        data.display_name = 'Unnamed';
-                    }
-                    return api.create(data)
-                        .done(function () {
-                            dirtyStatus.byApi = false;
-                            app.quit();
-                        });
-                }
-            };
             // go!
             show();
             return $.when();
@@ -84,36 +63,13 @@ define('io.ox/contacts/distrib/main',
 
         app.edit = function (obj) {
             // load list first
-            return api.get(obj).done(function (data) {
+            return model.factory.getRealm("edit").get(obj).done(function (data) {
+                model = data;
                 // set state
                 app.setState({ folder: data.folder_id, id: data.id });
                 // set title, init model/view
                 win.setTitle(gt('Edit distribution list'));
-                model = new ContactModel({ data: data });
                 view = new ContactCreateDistView({ model: model });
-                // define store
-                model.store = function (data, changes) {
-
-                    //sort the array before save if not empty
-
-                    if (data.distribution_list) {
-                        data.distribution_list = data.distribution_list.sort(util.nameSort);
-                    }
-                    return api.edit({
-                            id: data.id,
-                            folder: data.folder_id,
-                            timestamp: _.now(),
-                            data: {
-                                // just the potential changes
-                                display_name: data.display_name,
-                                distribution_list: data.distribution_list
-                            }
-                        })
-                        .done(function () {
-                            dirtyStatus.byApi = false;
-                            app.quit();
-                        });
-                };
                 // go!
                 show();
             });
@@ -139,37 +95,29 @@ define('io.ox/contacts/distrib/main',
 
         app.setQuit(function () {
 
-            var def = $.Deferred(),
-                listetItem =  $('.listet-item');
-
-            dirtyStatus.byModel = model.isDirty();
-
-            if (dirtyStatus.byModel === true) {
-                if (dirtyStatus.byApi === true) {
-                    require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                        new dialogs.ModalDialog()
-                            .text(gt("Do you really want to lose your changes?"))
-                            .addButton("cancel", gt('Cancel'))
-                            .addPrimaryButton("delete", gt('Lose changes'))
-                            .show()
-                            .done(function (action) {
-                                console.debug("Action", action);
-                                if (action === 'delete') {
-                                    def.resolve();
-                                    listetItem.remove();
-                                } else {
-                                    def.reject();
-                                }
-                            });
-                    });
-                } else {
-                    def.resolve();
-                    listetItem.remove();
-                }
+            var def = $.Deferred();
+            
+            if (model.isDirty()) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to lose your changes?"))
+                        .addButton("cancel", gt('Cancel'))
+                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .show()
+                        .done(function (action) {
+                            console.debug("Action", action);
+                            if (action === 'delete') {
+                                def.resolve();
+                                listetItem.remove();
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
             } else {
                 def.resolve();
-                listetItem.remove();
             }
+            
             //clean
             return def;
         });

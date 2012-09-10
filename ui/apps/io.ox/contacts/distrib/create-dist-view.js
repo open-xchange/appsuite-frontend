@@ -10,7 +10,42 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-
+define('io.ox/contacts/distrib/create-dist-view', 
+    ['io.ox/backbone/views', 
+     'io.ox/backbone/forms'
+    ], function (views, forms) {
+    
+    var point = views.point('io.ox/contacts/distrib/create-dist-view'),
+        ContactCreateDistView = point.createView({
+            tagName: 'div'
+            className: 'container'
+        });
+        
+    point.extend({
+        id: 'io.ox/contacts/distrib/create-dist-view',
+        tagName: 'div',
+        className: 'row',
+        
+        render: function () {
+            
+        },
+        
+        updateField: function () {
+            
+        }
+        
+        modelEvents: {
+            'change:display_name': 'updateField'
+        }
+    });
+    
+    
+    return ContactCreateDistView;
+    
+    
+});
+ 
+/*
 define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/core/extensions',
      'gettext!io.ox/contacts/contacts',
@@ -359,3 +394,4 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     return ContactCreateDistView;
 });
+*/
