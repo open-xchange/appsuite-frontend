@@ -390,6 +390,7 @@ $(document).ready(function () {
             return req.apply(this, arguments);
         }
     };
+    _.extend(require, req);
 
     /**
      * Asynchronous define (has same signature than define)
