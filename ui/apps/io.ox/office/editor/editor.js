@@ -1977,6 +1977,62 @@ define('io.ox/office/editor/editor',
 
         // private image functions
 
+        function getAttributesFromFloatMode(attributes) {
+
+
+            return attributes;
+        }
+
+        /**
+         * Converting the attribute settings from the operations to the
+         * anchorTypes supported by this client:
+         * AsCharacter, FloatLeft, FloatRight, FloatNone
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {String} anchorType
+         *  One of the anchor types supported by the client.
+         */
+        function getAnchorTypeFromAttributes(attributes) {
+
+            var anchorType = null;
+
+            if (attributes.anchortype) {
+                anchorType = attributes.anchortype;  // internally already specified (via button)
+            } else if (attributes.inline !== undefined) {
+                anchorType = 'AsCharacter';
+            } else {
+                if (attributes.anchorhalign !== undefined) {
+
+                    if (attributes.anchorhalign === 'right')  {
+                        anchorType = 'FloatRight';
+                    } else if (attributes.anchorhalign === 'left') {
+                        anchorType = 'FloatLeft';
+                    } else if (attributes.anchorhalign === 'center') {
+                        anchorType = 'FloatNone';
+                    }
+                } else {
+                    if (attributes.textwrapmode !== undefined) {
+                        if (attributes.textwrapmode === 'topandbottom') {
+                            anchorType = 'FloatNone';
+                        } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
+                            if (attributes.textwrapside !== undefined) {
+                                if (attributes.textwrapside === 'right')  {
+                                    anchorType = 'FloatLeft';
+                                } else if (attributes.textwrapside === 'left') {
+                                    anchorType = 'FloatRight';
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return anchorType;
+        }
+
         /**
          * Converting the sizes inside the image attributes to 'mm'.
          * Additionally the names of the css attributes are used.
@@ -2151,6 +2207,15 @@ define('io.ox/office/editor/editor',
                         } else {
                             parent.insertBefore(imageNode, parent.firstChild);
                         }
+                    }
+
+                    // setting css float property
+                    if (attributes.imageFloatMode === 'rightFloated') {
+                        attributes.float = 'right';
+                    } else if (attributes.imageFloatMode === 'leftFloated') {
+                        attributes.float = 'left';
+                    } else {  // 'noneFloated' or 'inline'
+                        attributes.float = 'none';
                     }
 
                     $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
@@ -2431,7 +2496,8 @@ define('io.ox/office/editor/editor',
 
                     imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
 
-                    attributes = defineImageAttributes(attributes);
+                    // defining attributes, which the server can understand
+                    // attributes = getAttributesFromFloatMode(attributes);
 
                     var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion};
                     this.applyOperation(newOperation, true, true);
@@ -2946,46 +3012,13 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                anchorType = null,
-                inline = true;  // image is in line with text, default is 'true'
+                anchorType = null;
 
             if (attributes) {
 
                 // _(attributes).each(function (element, i) {
                 //     window.console.log("Attribute: " + i + " : " + element);
                 // });
-
-                if (attributes.anchortype) {
-                    anchorType = attributes.anchortype;
-                }
-
-                if (attributes.inline !== undefined) {
-                    inline = attributes.inline;
-                }
-
-                if (attributes.anchorhalign !== undefined) {
-                    if (attributes.anchorhalign === 'right')  {
-                        anchorType = 'FloatRight';
-                    } else if (attributes.anchorhalign === 'left') {
-                        anchorType = 'FloatLeft';
-                    } else if (attributes.anchorhalign === 'center') {
-                        anchorType = 'FloatNone';
-                    }
-                } else {
-                    if (attributes.textwrapmode !== undefined) {
-                        if (attributes.textwrapmode === 'topandbottom') {
-                            anchorType = 'FloatNone';
-                        } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
-                            if (attributes.textwrapside !== undefined) {
-                                if (attributes.textwrapside === 'right')  {
-                                    anchorType = 'FloatLeft';
-                                } else if (attributes.textwrapside === 'left') {
-                                    anchorType = 'FloatRight';
-                                }
-                            }
-                        }
-                    }
-                }
 
                 if ((node) && (node.nodeType === 3)) {
                     var paragraph = node.parentNode.parentNode,
@@ -2994,16 +3027,13 @@ define('io.ox/office/editor/editor',
                     attributes.paragraphWidth = paraWidth;
                 }
 
+                anchorType = getAnchorTypeFromAttributes(attributes);
                 attributes = convertAttributeSizes(attributes);
                 attributes = calculateImageMargins(attributes); // necessary to switch the text flow around the image.
             }
 
             if (anchorType === null) {
-                if (inline) {
-                    anchorType = 'AsCharacter';
-                } else {
-                    anchorType = 'FloatNone';
-                }
+                anchorType = 'AsCharacter';  // setting fallbacks
             }
 
             if ((node) && (node.nodeType === 3)) {
@@ -3017,6 +3047,26 @@ define('io.ox/office/editor/editor',
                     // insert image before the parent <span> element of the text node
                     node = node.parentNode;
                     floatMode = 'inline';
+                } else if (anchorType === 'FloatLeft') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+                    attributes.float = 'left';
+                    floatMode = 'leftFloated';
+                } else if (anchorType === 'FloatRight') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+                    attributes.float = 'right';
+                    floatMode = 'rightFloated';
+                } else if (anchorType === 'FloatNone') {
+                    // insert image before the first span in the paragraph
+                    node = node.parentNode.parentNode.firstChild;
+
+                    attributes['margin-left'] = attributes.allMargins.fullLeftMargin;
+                    attributes['margin-right'] = attributes.allMargins.fullRightMargin;
+                    attributes.float = 'none';
+                    floatMode = 'noneFloated';
+                }
+
                 // } else if (anchorType === 'ToPage') {
                 //     // TODO: This is not a good solution. Adding image to the end of the editdiv,
                 //     // does not produce any disorder, but images are not allowed at editdiv.
@@ -3037,25 +3087,7 @@ define('io.ox/office/editor/editor',
                 //     newParent.insertAfter(textNode.parentNode);
                 //     attributes.position = 'absolute';
                 //     $('<img>', { src: url }).appendTo(newParent).css(attributes);
-                } else if (anchorType === 'FloatLeft') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    attributes.float = 'left';
-                    floatMode = 'leftFloated';
-                } else if (anchorType === 'FloatRight') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    attributes.float = 'right';
-                    floatMode = 'rightFloated';
-                } else if (anchorType === 'FloatNone') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-
-                    attributes['margin-left'] = attributes.allMargins.fullLeftMargin;
-                    attributes['margin-right'] = attributes.allMargins.fullRightMargin;
-                    attributes.float = 'none';
-                    floatMode = 'noneFloated';
-                }
+                // }
 
                 if (floatMode !== null) {
                     $('<img>', { src: url }).data('mode', floatMode).data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
@@ -3089,7 +3121,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
             // insert field before the parent <span> element of the text node
             node = node.parentNode;
-            $('<div>').data('divType', 'field').css({ display: 'inline-block', backgroundColor: '#123456', color: '#ff9900' }).text(representation).insertBefore(node);
+            $('<div>').data('divType', 'field').css({ display: 'inline-block' }).text(representation).insertBefore(node);
         };
 
         /**
