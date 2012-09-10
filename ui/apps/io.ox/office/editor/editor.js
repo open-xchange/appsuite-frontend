@@ -1977,10 +1977,64 @@ define('io.ox/office/editor/editor',
 
         // private image functions
 
-        function getAttributesFromFloatMode(attributes) {
+        /**
+         * Defining the correct images attributes used in operations for an image.
+         *
+         * @param {Object} attr
+         *  A map with formatting attribute values, mapped by the attribute
+         *  names.
+         *
+         * @returns {Object} attr
+         *  A map with operation specific attribute values.
+         */
+        function getImageOperationAttributesFromFloatMode(attributes) {
 
+            var operationAttributes = {};
 
-            return attributes;
+            if (attributes.imageFloatMode === 'inline') {
+                operationAttributes.inline = true;
+            } else if (attributes.imageFloatMode === 'leftFloated') {
+                operationAttributes.anchorhalign = 'left';
+                operationAttributes.textwrapmode = 'square';
+                operationAttributes.textwrapside = 'right';
+                operationAttributes.inline = false;
+            } else if (attributes.imageFloatMode === 'rightFloated') {
+                operationAttributes.anchorhalign = 'right';
+                operationAttributes.textwrapmode = 'square';
+                operationAttributes.textwrapside = 'left';
+                operationAttributes.inline = false;
+            } else if (attributes.imageFloatMode === 'noneFloated') {
+                operationAttributes.textwrapmode = 'none';
+                operationAttributes.inline = false;
+            }
+
+            return operationAttributes;
+        }
+
+        /**
+         * Converting anchorType to floatMode.
+         *
+         * @param {String} anchorType
+         *  The anchorType of an image.
+         *
+         * @returns {String} floatMode
+         *  The floatMode of an image.
+         */
+        function getFloatModeFromAnchorType(anchorType) {
+
+            var floatMode = null;
+
+            if (anchorType === 'AsCharacter') {
+                floatMode = 'inline';
+            } else if (anchorType === 'FloatLeft') {
+                floatMode = 'leftFloated';
+            } else if (anchorType === 'FloatRight') {
+                floatMode = 'rightFloated';
+            } else if (anchorType === 'FloatNone') {
+                floatMode = 'noneFloated';
+            }
+
+            return floatMode;
         }
 
         /**
@@ -2001,7 +2055,7 @@ define('io.ox/office/editor/editor',
 
             if (attributes.anchortype) {
                 anchorType = attributes.anchortype;  // internally already specified (via button)
-            } else if (attributes.inline !== undefined) {
+            } else if ((attributes.inline !== undefined) && (attributes.inline !== false)) {
                 anchorType = 'AsCharacter';
             } else {
                 if (attributes.anchorhalign !== undefined) {
@@ -2015,7 +2069,7 @@ define('io.ox/office/editor/editor',
                     }
                 } else {
                     if (attributes.textwrapmode !== undefined) {
-                        if (attributes.textwrapmode === 'topandbottom') {
+                        if ((attributes.textwrapmode === 'topandbottom') || (attributes.textwrapmode === 'none')) {
                             anchorType = 'FloatNone';
                         } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
                             if (attributes.textwrapside !== undefined) {
@@ -2085,7 +2139,8 @@ define('io.ox/office/editor/editor',
          */
         function calculateImageMargins(attributes) {
 
-            var fullLeftMargin = '0mm',
+            var allMargins = {},
+                fullLeftMargin = '0mm',
                 fullRightMargin = '0mm',
                 standardLeftMargin = '0mm',
                 standardRightMargin = '0mm';
@@ -2122,35 +2177,12 @@ define('io.ox/office/editor/editor',
 
             }
 
-            attributes.allMargins = {standardLeftMargin: standardLeftMargin,
-                                     standardRightMargin: standardRightMargin,
-                                     fullLeftMargin: fullLeftMargin,
-                                     fullRightMargin: fullRightMargin};
+            allMargins = {standardLeftMargin: standardLeftMargin,
+                          standardRightMargin: standardRightMargin,
+                          fullLeftMargin: fullLeftMargin,
+                          fullRightMargin: fullRightMargin};
 
-            return attributes;
-        }
-
-        /**
-         * Defining the correct images attributes for an image.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function defineImageAttributes(attributes) {
-
-            if (attributes.imageFloatMode === 'rightFloated') {
-                attributes.float = 'right';
-            } else if (attributes.imageFloatMode === 'leftFloated') {
-                attributes.float = 'left';
-            } else {  // 'noneFloated' or 'inline'
-                attributes.float = 'none';
-            }
-
-            return attributes;
+            return allMargins;
         }
 
         /**
@@ -2182,7 +2214,10 @@ define('io.ox/office/editor/editor',
                     attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
                     attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
 
-                    if (attributes.imageFloatMode === 'inline') {
+                    var anchorType = getAnchorTypeFromAttributes(attributes),
+                        imageFloatMode = getFloatModeFromAnchorType(anchorType);
+
+                    if (imageFloatMode === 'inline') {
                         // inserting an empty text span before the image, if it is an inline image
                         var parent = imageNode.parentNode,
                             textSpanNode = Position.getFirstTextSpanInParagraph(parent),
@@ -2193,7 +2228,7 @@ define('io.ox/office/editor/editor',
                         localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
                     } else {
 
-                        if (attributes.imageFloatMode === 'noneFloated') {
+                        if (imageFloatMode === 'noneFloated') {
                             attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
                             attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
                         }
@@ -2210,18 +2245,18 @@ define('io.ox/office/editor/editor',
                     }
 
                     // setting css float property
-                    if (attributes.imageFloatMode === 'rightFloated') {
+                    if (imageFloatMode === 'rightFloated') {
                         attributes.float = 'right';
-                    } else if (attributes.imageFloatMode === 'leftFloated') {
+                    } else if (imageFloatMode === 'leftFloated') {
                         attributes.float = 'left';
                     } else {  // 'noneFloated' or 'inline'
                         attributes.float = 'none';
                     }
 
-                    $(imageNode).data('mode', attributes.imageFloatMode).css(attributes);
+                    $(imageNode).data('mode', imageFloatMode).css(attributes);
 
                     // store last position
-                    if (attributes.imageFloatMode === 'inline') {
+                    if (imageFloatMode === 'inline') {
                         lastOperationEnd = new OXOPaM(localStart);
                     } else {
                         lastOperationEnd = null;
@@ -2497,9 +2532,9 @@ define('io.ox/office/editor/editor',
                     imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
 
                     // defining attributes, which the server can understand
-                    // attributes = getAttributesFromFloatMode(attributes);
+                    var operationAttributes = getImageOperationAttributesFromFloatMode(attributes);
 
-                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion};
+                    var newOperation = {name: OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
                     this.applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -3012,7 +3047,8 @@ define('io.ox/office/editor/editor',
         this.implInsertImage = function (url, position, attributes) {
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                anchorType = null;
+                anchorType = null,
+                allMargins = null;
 
             if (attributes) {
 
@@ -3029,7 +3065,7 @@ define('io.ox/office/editor/editor',
 
                 anchorType = getAnchorTypeFromAttributes(attributes);
                 attributes = convertAttributeSizes(attributes);
-                attributes = calculateImageMargins(attributes); // necessary to switch the text flow around the image.
+                allMargins = calculateImageMargins(attributes); // necessary to switch the text flow around the image.
             }
 
             if (anchorType === null) {
@@ -3061,8 +3097,8 @@ define('io.ox/office/editor/editor',
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
 
-                    attributes['margin-left'] = attributes.allMargins.fullLeftMargin;
-                    attributes['margin-right'] = attributes.allMargins.fullRightMargin;
+                    attributes['margin-left'] = allMargins.fullLeftMargin;
+                    attributes['margin-right'] = allMargins.fullRightMargin;
                     attributes.float = 'none';
                     floatMode = 'noneFloated';
                 }
@@ -3090,7 +3126,7 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
-                    $('<img>', { src: url }).data('mode', floatMode).data('allMargins', attributes.allMargins).insertBefore(node).css(attributes);
+                    $('<img>', { src: url }).data('mode', floatMode).data('allMargins', allMargins).insertBefore(node).css(attributes);
                 }
             }
 
