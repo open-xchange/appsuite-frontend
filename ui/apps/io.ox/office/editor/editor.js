@@ -18,9 +18,10 @@ define('io.ox/office/editor/editor',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
+     'io.ox/office/editor/image',
      'io.ox/office/editor/position',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, Position, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, Image, Position, DocumentStyles) {
 
     'use strict';
 
@@ -1975,298 +1976,6 @@ define('io.ox/office/editor/editor',
             this.applyOperation(newOperation, true, true);
         };
 
-        // private image functions
-
-        /**
-         * Defining the correct images attributes used in operations for an image.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with operation specific attribute values.
-         */
-        function getImageOperationAttributesFromFloatMode(attributes) {
-
-            var operationAttributes = {};
-
-            if (attributes.imageFloatMode === 'inline') {
-                operationAttributes.inline = true;
-            } else if (attributes.imageFloatMode === 'leftFloated') {
-                operationAttributes.anchorhalign = 'left';
-                operationAttributes.textwrapmode = 'square';
-                operationAttributes.textwrapside = 'right';
-                operationAttributes.inline = false;
-            } else if (attributes.imageFloatMode === 'rightFloated') {
-                operationAttributes.anchorhalign = 'right';
-                operationAttributes.textwrapmode = 'square';
-                operationAttributes.textwrapside = 'left';
-                operationAttributes.inline = false;
-            } else if (attributes.imageFloatMode === 'noneFloated') {
-                operationAttributes.textwrapmode = 'none';
-                operationAttributes.inline = false;
-            }
-
-            operationAttributes.isImageOperation = 'true'; // only if this is set, it is assigned to an image
-
-            return operationAttributes;
-        }
-
-        /**
-         * Converting anchorType to floatMode.
-         *
-         * @param {String} anchorType
-         *  The anchorType of an image.
-         *
-         * @returns {String} floatMode
-         *  The floatMode of an image.
-         */
-        function getFloatModeFromAnchorType(anchorType) {
-
-            var floatMode = null;
-
-            if (anchorType === 'AsCharacter') {
-                floatMode = 'inline';
-            } else if (anchorType === 'FloatLeft') {
-                floatMode = 'leftFloated';
-            } else if (anchorType === 'FloatRight') {
-                floatMode = 'rightFloated';
-            } else if (anchorType === 'FloatNone') {
-                floatMode = 'noneFloated';
-            }
-
-            return floatMode;
-        }
-
-        /**
-         * Converting the attribute settings from the operations to the
-         * anchorTypes supported by this client:
-         * AsCharacter, FloatLeft, FloatRight, FloatNone
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {String} anchorType
-         *  One of the anchor types supported by the client.
-         */
-        function getAnchorTypeFromAttributes(attributes) {
-
-            var anchorType = null;
-
-            if (attributes.anchortype) {
-                anchorType = attributes.anchortype;  // internally already specified (via button)
-            } else if ((attributes.inline !== undefined) && (attributes.inline !== false)) {
-                anchorType = 'AsCharacter';
-            } else {
-                if (attributes.anchorhalign !== undefined) {
-
-                    if (attributes.anchorhalign === 'right')  {
-                        anchorType = 'FloatRight';
-                    } else if (attributes.anchorhalign === 'left') {
-                        anchorType = 'FloatLeft';
-                    } else if (attributes.anchorhalign === 'center') {
-                        anchorType = 'FloatNone';
-                    }
-                } else {
-                    if (attributes.textwrapmode !== undefined) {
-                        if ((attributes.textwrapmode === 'topandbottom') || (attributes.textwrapmode === 'none')) {
-                            anchorType = 'FloatNone';
-                        } else if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight') || (attributes.textwrapmode === 'through')) {
-                            if (attributes.textwrapside !== undefined) {
-                                if (attributes.textwrapside === 'right')  {
-                                    anchorType = 'FloatLeft';
-                                } else if (attributes.textwrapside === 'left') {
-                                    anchorType = 'FloatRight';
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            return anchorType;
-        }
-
-        /**
-         * Converting the sizes inside the image attributes to 'mm'.
-         * Additionally the names of the css attributes are used.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function convertAttributeSizes(attributes) {
-
-            if (attributes.width) {
-                attributes.width = attributes.width / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.height) {
-                attributes.height = attributes.height / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginT) {
-                attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginR) {
-                attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginB) {
-                attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
-            }
-            if (attributes.marginL) {
-                attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
-            }
-            if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
-                attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
-            }
-
-            return attributes;
-        }
-
-        /**
-         * Calculating the image margins to be able to change the text flow
-         * around the image. Therefore it is necessary to set the attributes
-         * attributes.fullLeftMargin and attributes.fullRightMargin now.
-         *
-         * @param {Object} attr
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         *
-         * @returns {Object} attr
-         *  A map with css specific formatting attribute values.
-         */
-        function calculateImageMargins(attributes) {
-
-            var allMargins = {},
-                fullLeftMargin = '0mm',
-                fullRightMargin = '0mm',
-                standardLeftMargin = '0mm',
-                standardRightMargin = '0mm';
-
-            if (attributes.paragraphWidth) {
-
-                var imageWidth = 0,
-                    leftMarginWidth = 0,
-                    anchorhoffset = 0;
-
-                if (attributes.width) {
-                    imageWidth = parseFloat(attributes.width.substring(0, attributes.width.length - 2));
-                }
-                if (attributes['margin-left']) {
-                    leftMarginWidth = parseFloat(attributes['margin-left'].substring(0, attributes['margin-left'].length - 2));
-                    standardLeftMargin = attributes['margin-left'];
-                }
-                if (attributes['margin-right']) {
-                    standardRightMargin = attributes['margin-right'];
-                }
-
-                if (attributes.anchorhoffset) {
-                    anchorhoffset = parseFloat(attributes.anchorhoffset.substring(0, attributes.anchorhoffset.length - 2));
-                    fullLeftMargin = anchorhoffset + leftMarginWidth;
-                    fullRightMargin = attributes.paragraphWidth - imageWidth - fullLeftMargin;
-                    fullLeftMargin += 'mm';
-                    fullRightMargin += 'mm';
-                } else {
-                    // Centering the image
-                    var marginWidth = (attributes.paragraphWidth - imageWidth) / 2 + 'mm';
-                    fullLeftMargin = marginWidth;
-                    fullRightMargin = marginWidth;
-                }
-
-            }
-
-            allMargins = {standardLeftMargin: standardLeftMargin,
-                          standardRightMargin: standardRightMargin,
-                          fullLeftMargin: fullLeftMargin,
-                          fullRightMargin: fullRightMargin};
-
-            return allMargins;
-        }
-
-        /**
-         * Changes a formatting attributes of an image node.
-         *
-         * @param {Number[]} start
-         *  The logical start position of the element or text range to be
-         *  formatted.
-         *
-         * @param {Number[]} end
-         *  The logical end position of the element or text range to be
-         *  formatted.
-         *
-         * @param {Object} attributes
-         *  A map with formatting attribute values, mapped by the attribute
-         *  names.
-         */
-        function setImageAttributes(start, end, attributes) {
-
-            var returnImageNode = true,
-                localStart = _.copy(start, true),
-                imagePosition = Position.getDOMPosition(paragraphs, localStart, returnImageNode);
-
-            if (imagePosition) {
-                var imageNode = imagePosition.node;
-
-                if (Utils.getNodeName(imageNode) === 'img') {
-
-                    attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
-                    attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
-
-                    var anchorType = getAnchorTypeFromAttributes(attributes),
-                        imageFloatMode = getFloatModeFromAnchorType(anchorType);
-
-                    if (imageFloatMode === 'inline') {
-                        // inserting an empty text span before the image, if it is an inline image
-                        var parent = imageNode.parentNode,
-                            textSpanNode = Position.getFirstTextSpanInParagraph(parent),
-                            newTextNode = $(textSpanNode).clone(true);
-
-                        newTextNode.text('');
-                        newTextNode.insertBefore(imageNode);
-                        localStart = Position.getFirstPositionInParagraph(paragraphs, localStart);
-                    } else {
-
-                        if (imageFloatMode === 'noneFloated') {
-                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
-                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
-                        }
-
-                        // inserting the image as the first child of the paragraph, before an text node.
-                        var parent = imageNode.parentNode,
-                            textSpanNode = Position.getFirstTextSpanInParagraph(parent);
-
-                        if (textSpanNode) {
-                            parent.insertBefore(imageNode, textSpanNode);
-                        } else {
-                            parent.insertBefore(imageNode, parent.firstChild);
-                        }
-                    }
-
-                    // setting css float property
-                    if (imageFloatMode === 'rightFloated') {
-                        attributes.float = 'right';
-                    } else if (imageFloatMode === 'leftFloated') {
-                        attributes.float = 'left';
-                    } else {  // 'noneFloated' or 'inline'
-                        attributes.float = 'none';
-                    }
-
-                    $(imageNode).data('mode', imageFloatMode).css(attributes);
-
-                    // store last position
-                    if (imageFloatMode === 'inline') {
-                        lastOperationEnd = new OXOPaM(localStart);
-                    } else {
-                        lastOperationEnd = null;
-                    }
-                }
-            }
-        }
-
         // style sheets and formatting attributes -----------------------------
 
         /**
@@ -2534,10 +2243,9 @@ define('io.ox/office/editor/editor',
                     imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
 
                     // defining attributes, which the server can understand
-                    var operationAttributes = getImageOperationAttributesFromFloatMode(attributes);
+                    var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
 
                     var newOperation = {name: OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
-//                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion};
                     this.applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -3066,9 +2774,9 @@ define('io.ox/office/editor/editor',
                     attributes.paragraphWidth = paraWidth;
                 }
 
-                anchorType = getAnchorTypeFromAttributes(attributes);
-                attributes = convertAttributeSizes(attributes);
-                allMargins = calculateImageMargins(attributes); // necessary to switch the text flow around the image.
+                anchorType = Image.getAnchorTypeFromAttributes(attributes);
+                attributes = Image.convertAttributeSizes(attributes);
+                allMargins = Image.calculateImageMargins(attributes); // necessary to switch the text flow around the image.
             }
 
             if (anchorType === null) {
@@ -3255,7 +2963,19 @@ define('io.ox/office/editor/editor',
                     styleSheets.setAttributesInRanges(ranges, attributes);
                 }
             } else {
-                setImageAttributes(start, end, attributes);
+                var returnObj = Image.setImageAttributes(paragraphs, start, end, attributes);
+
+                if ((returnObj) && (returnObj.imageFloatMode)) {
+
+                    var imageFloatMode = returnObj.imageFloatMode;
+
+                    // store last position
+                    if (imageFloatMode === 'inline') {
+                        lastOperationEnd = new OXOPaM(returnObj.startPosition);
+                    } else {
+                        lastOperationEnd = null;
+                    }
+                }
             }
         }
 
