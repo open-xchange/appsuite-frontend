@@ -275,7 +275,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         });
         
         this.api = delegate.api;
-        this.extensionNamespace = delegate.extensionNamespace;
+        this.ref = delegate.ref;
         
         function processLoaded(loaded) {
             var uid = self.internal.toUniqueIdFromObject(loaded);
@@ -350,14 +350,14 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             });
         };
         
-        if (!/\/$/.test(this.extensionNamespace)) {
-            this.extensionNamespace = this.extensionNamespace + "/";
+        if (!/\/$/.test(this.ref)) {
+            this.ref = this.ref + "/";
         }
         this.point = this.point || function (subpath) {
             if (/^\//.test(subpath)) {
                 subpath = subpath.substring(1);
             }
-            return ext.point(this.extensionNamespace + subpath);
+            return ext.point(this.ref + subpath);
         };
         
         this.get = this.get || function () {
