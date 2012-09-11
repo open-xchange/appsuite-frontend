@@ -22,7 +22,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     new Action('io.ox/tasks/actions/edit', {
         id: 'edit',
         action: function (data) {
-            console.log("task edit dummy action fired");
+            notifications.yell('info', gt("Under construction"));
         }
     });
     
@@ -32,23 +32,23 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
                 var popup = new dialogs.ModalDialog()
-                    .addPrimaryButton('delete', gt('delete'))
+                    .addPrimaryButton('delete', gt('Delete'))
                     .addButton('cancel', gt('Cancel'));
                 
                 //Header
                 popup.getBody()
-                    .append($("<span>")
+                    .append($("<h4>")
                             .text(gt('Do you really want to delete this task?')));
                 
                 //go
                 popup.show().done(function (action) {
                     if (action === 'delete') {
                         require(['io.ox/tasks/api'], function (api) {
-                            api.erase(data.last_modified, data.id, data.folder_id)
+                            api.remove({id: data.id, folder: data.folder_id}, false)
                                 .done(function (data) {
                                     
                                     if (!data) {
-                                        notifications.yell('success', gt('Task was deleted!'));
+                                        notifications.yell('success', gt('Task has been deleted!'));
                                     } else {//task was modified
                                         notifications.yell('fail', gt('Failure! Please refresh.'));
                                     }
@@ -65,7 +65,8 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
                 api.update(data.last_modified, data.id, {status: 3}, data.folder_id)
-                    .done(function (data) {
+                    .done(function (result) {
+                        api.trigger("update:" + data.folder_id + '.' + data.id);
                         notifications.yell('success', gt('Done!'));
                     });
             });

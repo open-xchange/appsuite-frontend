@@ -11,40 +11,46 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define("io.ox/tasks/api", ["io.ox/core/http",
-                           "io.ox/core/event"], function (http, Events) {
+                           'io.ox/core/api/factory'], function (http, apiFactory) {
     
     "use strict";
     
-    var all_cache = {},//figure out how to use
-        get_cache = {};
     
-    var api = { create: function (task) {
+ // generate basic API
+    var api = apiFactory({
+        module: "tasks",
+        keyGenerator: function (obj) {
+            return obj ? obj.folder_id + '.' + obj.id : '';
+        },
+        requests: {
+            all: {
+                folder: require('io.ox/core/config').get('folder.tasks'),
+                columns: "1,20,200,202,203,300,309",
+                sort: "202",
+                order: "asc"
+                //cache: true // allow DB cache
+            },
+            list: {
+                action: "list",
+                columns: "1,20,200,202,203,300,309"
+            },
+            get: {
+                action: "get"
+            }
+        }
+    });
+            
+            
+    api.create = function (task) {
                 return http.PUT({
                     module: "tasks",
                     params: {action: "new"},
                     data: task,
                     appendColumns: false
                 });
-            },
-            getAll: function (folder) {
-                    var useFolder;
-                    if (folder === undefined) {
-                        useFolder = require('io.ox/core/config').get('folder.tasks');
-                    } else {
-                        useFolder = folder;
-                    }
-                    return http.GET({
-                        module: "tasks",
-                        params: {action: "all",
-                            folder: useFolder,
-                            columns: "1,20,200,202,203,300,309",
-                            sort: "202",
-                            order: "asc"
-                        }
-                    });
-
-                },
-            update: function (timestamp, taskId, modifications, folder) {
+            };
+            
+    api.update = function (timestamp, taskId, modifications, folder) {
                 var useFolder;
                 if (folder === undefined) {
                     useFolder = require('io.ox/core/config').get('folder.tasks');
@@ -63,90 +69,11 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     data: modifications,
                     appendColumns: false
                 }).pipe(function () {
-                    delete get_cache[key];
                     api.trigger("refresh.all");
                 });
 
-            },
-            erase: function (timestamp, taskId, folder) {
-                var useFolder;
-                if (folder === undefined) {
-                    useFolder = require('io.ox/core/config').get('folder.tasks');
-                } else {
-                    useFolder = folder;
-                }
-                var key = useFolder + "." + taskId;
-                
-                return http.PUT({
-                    module: "tasks",
-                    params: {action: "delete",
-                        timestamp: timestamp
-                    },
-                    data: {id: taskId, folder: useFolder}
-                }).pipe(function () {
-                    delete get_cache[key];
-                    api.trigger("refresh.all");
-                });
-
-            },
-            needsRefresh: function (folder) {
-                    // placeholder
-                    return false;//all_cache[folder] !== undefined;
-                },
-            getList: function (ids) {
-
-                return http.PUT({
-                        module: "tasks",
-                        params: {
-                            action: "list",
-                            columns: "1,20,200,202,203,300,309"
-                        },
-                        data: http.simplify(ids),
-                        appendColumns: false
-                    });
-            },
-            get: function (task) {
-                
-                var key = (task.folder_id || task.folder) + "." + task.id;
-                    
-                if (get_cache[key] === undefined) {
-                    return http.GET({
-                            module: "tasks",
-                            params: {
-                                action: "get",
-                                id: task.id,
-                                folder: task.folder_id
-                            }
-                        }).done(function (data) {
-                            get_cache[key] = data;
-                        });
-                } else {
-                    return $.Deferred().resolve(get_cache[key]);
-                }
-            },
-            deleteReminder: function (reminderId) {
-                    return http.PUT({
-                        module: "reminder",
-                        params: {action: "delete"},
-                        data: {id: reminderId}
-                    });
-
-                },
-             remindMeAgain: function (remindDate, reminderId) {
-                        return http.PUT({
-                            module: "reminder",
-                            params: {action: "remindAgain",
-                                     id: reminderId
-                                     },
-                            data: {alarm: remindDate}
-                        });
-
-                    }
-    };
+            };
             
-    Events.extend(api);
-   
-
     //for notification view
     api.getTasks = function () {
 
@@ -175,32 +102,6 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         });
     };
     
-    api.getReminders = function (range) {
-
-        return http.GET({
-            module: "reminder",
-            params: {action: "range",
-                end: range
-            }
-        }).pipe(function (list) {
-            
-                //seperate task reminders from overall reminders
-                var reminderTaskId = [],
-                    reminderId = [];
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].module === 4) {
-                        reminderTaskId.push(list[i].target_id);
-                        reminderId.push(list[i].id);
-                    }
-                }
-                if (reminderTaskId.length > 0) {
-                    api.trigger('reminder-tasks', reminderTaskId, reminderId);
-                }
-                return list;
-            });
-
-    };
-    
     // global refresh
     api.refresh = function () {
         api.getTasks().done(function () {
@@ -208,11 +109,6 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             api.trigger("refresh.all");
         });
     };
-    
-
-    ox.on('refresh^', function () {
-        api.refresh();
-    });
     
     return api;
 });

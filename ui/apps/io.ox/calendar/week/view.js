@@ -45,6 +45,8 @@ define('io.ox/calendar/week/view',
         timeline:       $(),    // timeline
         footer:         $(),    // footer
         kwInfo:         $(),    // current KW
+        showAll:        $(),    // show all folders checkbox
+        showAllCon:     $(),    // container
         week:           [],     // week scaffold
         tlInterval:     {},     // timeline interval
         clickTimer:     null,   // timer to separate single and double click
@@ -73,22 +75,29 @@ define('io.ox/calendar/week/view',
             'mouseleave .appointment': 'onLeaveAppointment',
             'click .toolbar .control.next': 'onControlView',
             'click .toolbar .control.prev': 'onControlView',
-            'click .toolbar .link.today': 'onControlView'
+            'click .toolbar .link.today': 'onControlView',
+            'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
+        },
+        
+        getShowAllStatus: function () {
+            return this.showAll.prop('checked');
+        },
+        
+        setShowAllvisibility: function (display) {
+            this.showAllCon[display ? 'show': 'hide']();
         },
         
         onControlView: function (e) {
             if ($(e.currentTarget).is('.next')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
-                this.trigger('onNextView', this.curTimeUTC);
             }
             if ($(e.currentTarget).is('.prev')) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
-                this.trigger('onPrevView', this.curTimeUTC);
             }
             if ($(e.currentTarget).is('.today')) {
                 this.curTimeUTC = this.columns === 1 ? util.getTodayStart() : util.getWeekStart();
-                this.trigger('onPrevView', this.curTimeUTC);
             }
+            this.trigger('onRefreshView', this.curTimeUTC);
         },
 
         // handler for single- and double-click events on appointments
@@ -246,6 +255,18 @@ define('io.ox/calendar/week/view',
                     .addClass('toolbar')
                     .append(
                         this.kwInfo = $('<span>').addClass('info'),
+                        this.showAllCon = $('<div>')
+                            .addClass('showall')
+                            .append(
+                                $('<label>')
+                                    .addClass('checkbox')
+                                    .text(gt('show all'))
+                                    .prepend(
+                                        this.showAll = $('<input/>')
+                                            .attr('type', 'checkbox')
+                                            .prop('checked', true)
+                                    )
+                            ),
                         $('<div>')
                             .addClass('pagination')
                             .append(
@@ -339,9 +360,8 @@ define('io.ox/calendar/week/view',
                 hasToday = false;
             
             // refresh footer, timeline and today-label
-            var tmpTS = this.curTimeUTC;
+            var tmpDate = new date.Local(this.curTimeUTC);
             for (var d = 0; d < this.columns; d++) {
-                var tmpDate = new date.Local(tmpTS);
                 days.push(
                         $('<div>')
                         .addClass('weekday')
@@ -349,11 +369,11 @@ define('io.ox/calendar/week/view',
                         .width(100 / this.columns + '%')
                 );
                 // mark today
-                if (util.isToday(tmpTS)) {
-                    this.pane.find('.day[date="' + tmpDate.getDay() + '"]').addClass('today');
+                if (util.isToday(tmpDate.getTime())) {
+                    this.pane.find('.day[date="' + d + '"]').addClass('today');
                     hasToday = true;
                 }
-                tmpTS += date.DAY;
+                tmpDate.add(date.DAY);
             }
             this.footer.empty().append(days);
             this.kwInfo.text(new date.Local(this.curTimeUTC).formatInterval(new date.Local(this.curTimeUTC + ((this.columns - 1) * date.DAY)), date.DATE));

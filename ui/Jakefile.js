@@ -38,7 +38,9 @@ version = rev + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
+var mode = process.env.mode || 'production';
 if (debug) console.info("Debug mode: on");
+console.info("Run mode: " + mode);
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -48,20 +50,35 @@ var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
 function jsFilter (data) {
     var self = this;
-
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
     
     if (data.slice(-1) !== '\n') data += '\n';
     
-    try {
-        var tree = jsp.parse(data, false, true);
-    } catch (e) {
-        fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
-        fail('Parse error in ' + this.task.name + ' at ' + e.line + ':' +
-             e.col + '\n' + e.message);
+    // In case of parse errors, the actually parsed source is stored
+    // in tmp/errorfile.js
+    
+    var tree = parse(data);
+    
+    function parse(data) {
+        return catchParseErrors(function (data) {
+            return jsp.parse(data, false, true);
+        }, data);
     }
+    
+    function catchParseErrors(f, data) {
+        try {
+            return f(data);
+        } catch (e) {
+            fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
+            fail('Parse error in ' + self.task.name + ' at ' + e.line + ':' +
+                 e.col + '\n' + e.message);
+        }
+    }
+    
+    // Custom processing of the parsed AST
+    
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
@@ -73,11 +90,15 @@ function jsFilter (data) {
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
         var filename = self.getSrc(this[0].start.line).name;
-        if (filename.slice(0, 5) === 'apps/' &&
-            (!name || name[1] !== filename.slice(5, -3)))
-        {
-            fail('Invalid module name: ' + (name ? name[1] : "''") +
-                ' should be ' + filename.slice(5, -3));
+        var mod = filename.slice(5, -3);
+        if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {   
+            if (name === undefined) {
+                var newName = parse('(' + JSON.stringify(mod) + ')')[1][0][1];
+                return [this[0], this[1], [newName].concat(args)];
+            } else {
+                fail('Invalid module name: ' + (name ? name[1] : "''") +
+                    ' should be ' + mod);
+            }
         }
         var deps = _.detect(args, ast.is("array"));
         var f = _.detect(args, ast.is("function"));
@@ -96,7 +117,9 @@ function jsFilter (data) {
     tree = pro.ast_mangle(tree);
     tree = pro.ast_squeeze(tree);
     // use split_lines
-    return pro.split_lines(pro.gen_code(tree), 500);
+    return catchParseErrors(function (data) {
+        return pro.split_lines(data, 500);
+    }, pro.gen_code(tree));
 }
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
@@ -170,6 +193,7 @@ utils.includes.load("tmp/includes.json");
 utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
 
+
 // i18n
 
 file("ox.pot", ["Jakefile.js"], function() {
@@ -219,7 +243,7 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(";"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
+     utils.string(";"), utils.string("ox = ox || {}; ox.mode = '" + mode + "';"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
      "src/boot.js"],
     { to: "tmp", type: "source" });
 
@@ -261,6 +285,10 @@ utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.css", "img/*"]),
 
 utils.copy(utils.list("lib", "jquery-ui.min.js"),
     { to: utils.dest("apps/io.ox/core/tk") });
+
+// Ace editor
+
+utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
 // module dependencies
 

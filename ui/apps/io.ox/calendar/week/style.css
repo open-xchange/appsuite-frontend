@@ -47,6 +47,12 @@
         font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
         font-size: 20px;
     }
+    
+    .toolbar .showall {
+        position: absolute;
+        right: 30px;
+        top: 10px;
+    }
 
     .toolbar .pagination {
         margin: 0px;
@@ -253,9 +259,9 @@
         height: 100%;
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
-        line-height: 13px;
+        line-height: 18px;
         color: white;
-        padding: 2px 7px 2px 7px;
+        padding: 0px 7px 0px 7px;
         overflow: hidden;
         text-overflow: ellipsis;
     }

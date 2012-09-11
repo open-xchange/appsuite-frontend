@@ -73,14 +73,14 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         commons.wireGridAndAPI(grid, api);
         
         grid.setAllRequest(function () {
-            return api.getAll(this.prop('folder')).pipe(function (data) {
+            return api.getAll({folder: this.prop('folder')}, false).pipe(function (data) {
                 var datacopy = util.sortTasks(data);
                 return datacopy;
             });
         });
         
         grid.setListRequest(function (ids) {
-            return api.getList(ids).pipe(function (list) {
+            return api.getList(ids, false).pipe(function (list) {
                 var listcopy = _.copy(list, true),
                     i = 0;
                 for (; i < listcopy.length; i++) {
@@ -97,7 +97,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         showTask = function (obj) {
             // be busy
             right.busy(true);
-            api.get(obj)
+            api.get(obj, false)
                 .done(_.lfo(drawTask))
                 .fail(_.lfo(drawFail, obj));
         };

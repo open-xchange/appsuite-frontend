@@ -620,7 +620,7 @@ function ast_mangle(ast, options) {
 var warn = function(){};
 
 function best_of(ast1, ast2) {
-        return gen_code(ast1).length > gen_code(ast2[0] == "stat" ? ast2[1] : ast2).length ? ast2 : ast1;
+        return (gen_code(ast1) || "").length > (gen_code(ast2[0] == "stat" ? ast2[1] : ast2) || "").length ? ast2 : ast1;
 };
 
 function last_stat(b) {

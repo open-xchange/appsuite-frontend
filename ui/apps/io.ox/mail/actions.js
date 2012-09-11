@@ -375,7 +375,7 @@ define('io.ox/mail/actions',
                         var dateSelector = $('<select>', {name: "dateselect"})
                         .appendTo(popupBody);
                         var endDate = new Date();
-                        dateSelector.append(util.buildDropdownMenu(endDate));
+                        dateSelector.append(tasksUtil.buildDropdownMenu(endDate));
 
 
                         //ready for work
@@ -387,13 +387,13 @@ define('io.ox/mail/actions',
                                     {
 
                                     //Calculate the right time
-                                    endDate = util.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
+                                    var dates = tasksUtil.computePopupTime(endDate, dateSelector.find(":selected").attr("finderId"));
 
                                     taskApi.create({title: titleInput.val(),
                                         folder_id: config.get('folder.tasks'),
-                                        end_date: endDate.getTime(),
-                                        start_date: endDate.getTime(),
-                                        alarm: endDate.getTime(),
+                                        end_date: dates.endDate.getTime(),
+                                        start_date: dates.endDate.getTime(),
+                                        alarm: dates.alarmDate.getTime(),
                                         note: noteInput.val(),
                                         status: 1,
                                         recurrence_type: 0,
