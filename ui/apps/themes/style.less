@@ -451,23 +451,31 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     line-height: 1.5em;
 }
 
-.window-toolbar a {
+.window-toolbar > a {
     color: @toolbar-link-color;
     display: inline-block;
-    margin: 0 2em 0 0;
+    margin: 0 1em 0 0;
     cursor: pointer;
     white-space: nowrap;
     text-decoration: none;
     outline: 0;
 }
 
-.window-toolbar a:hover { color: darken(@toolbar-link-color, 10%); }
+.window-toolbar > a:hover { color: darken(@toolbar-link-color, 10%); }
 
 .window-toolbar .dropdown-menu { text-align: left; }
 .window-toolbar .dropdown-menu a { margin-right: 0; }
 
 .touch .window-toolbar a {
     outline: 0;
+}
+
+.window-toolbar a.btn-primary,
+.window-toolbar a.btn-primary:hover {
+    color: white;
+    font-size: 13px;
+    line-height: 18px;
+    text-decoration: none;
 }
 
 /*     -webkit-transition-duration: 0.35s; */

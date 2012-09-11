@@ -110,6 +110,18 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
+    var ToolbarButtons = function (options) {
+        var self = _.extend(this, options);
+        this.draw = function (context) {
+            // paint on current node
+            var args = $.makeArray(arguments);
+            drawLinks(self, new Collection(context), this, context, args);
+            // add classes to get button style
+            this.children('a').addClass('btn btn-primary');
+            this.children('.dropdown').children('a').addClass('btn btn-primary');
+        };
+    };
+
     var inlineToggle = function (e) {
         var node = $(this), A = 'data-toggle',
             list = node.parent().children('[data-prio="lo"]'),
@@ -125,6 +137,14 @@ define("io.ox/core/extPatterns/links",
             var args = $.makeArray(arguments),
                 node = $("<div>").addClass("io-ox-inline-links").appendTo(this),
                 multiple = _.isArray(context) && context.length > 1;
+            if (options.attributes) {
+                node.attr(options.attributes);
+            }
+            if (options.classes) {
+                _(options.classes).each(function (cl) {
+                    node.addClass(cl);
+                });
+            }
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
@@ -137,6 +157,9 @@ define("io.ox/core/extPatterns/links",
                         .text('More')
                     );
                     node.children('[data-prio="lo"]').hide();
+                }
+                if (options.customizeNode) {
+                    options.customizeNode(node);
                 }
             });
         };
@@ -190,6 +213,7 @@ define("io.ox/core/extPatterns/links",
         Link: Link,
         XLink: XLink, // TODO: consolidate Link/XLink
         Button: Button,
+        ToolbarButtons: ToolbarButtons,
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         DropdownLinks: DropdownLinks,

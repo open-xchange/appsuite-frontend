@@ -378,6 +378,7 @@ define('io.ox/calendar/edit/view-main',
                 require(['io.ox/mail/write/main'], function (m) {
                     m.getApp().launch().done(function () {
                         this.compose({to: arrayOfRecipients});
+
                     });
                 });
             });

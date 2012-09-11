@@ -22,7 +22,6 @@ define("io.ox/files/main",
      "io.ox/core/extPatterns/shortcuts",
      "io.ox/core/tk/dialogs",
      "gettext!io.ox/files/files",
-     "io.ox/core/bootstrap/basics",
      "io.ox/files/actions",
      "less!io.ox/files/style.css"
     ], function (viewDetail, api, commons, VGrid, upload, dnd, shortcuts, dialogs, gt) {

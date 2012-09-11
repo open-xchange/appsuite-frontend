@@ -29,7 +29,7 @@
     @appointment-unconfirmed-alpha: 0.4;
     @weekview-time-with: 42px;
     @weekview-footer-height: 30px;
-    @weekview-toolbar-height: 37px;
+    @weekview-toolbar-height: 41px;
     
     .toolbar {
         background-color: #FFF; 
@@ -40,20 +40,27 @@
     }
     
     .toolbar .info {
-        position: relative;
+        position: absolute;
         left: 10px;
         float: left;
-        line-height: 28px;
-        
+        line-height: 32px;
+        font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 20px;
+    }
+    
+    .toolbar .showall {
+        position: absolute;
+        right: 30px;
+        top: 10px;
     }
 
     .toolbar .pagination {
         margin: 0px;
-        height: 30px;
+        height: 34px;
     }
     
     .toolbar .pagination a {
-        line-height: 28px;
+        line-height: 32px;
     }
     
     .week-view-container {
@@ -83,6 +90,7 @@
         border-bottom: 1px solid #ccc;
         width: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
     }
     
     .fulltime-lable {
@@ -131,7 +139,7 @@
         white-space: nowrap;
         background-color: white;
         font-family: @font-light;
-        font-size: 12px;
+        font-size: 15px;
     }
     
     .week-container {
@@ -191,7 +199,7 @@
         height: 1px;
         width: 100%;
         background-color: red;
-        z-index: 2;
+        z-index: 9999;
     }
     
     .timeline .glow {
@@ -231,11 +239,10 @@
     }
     
     .appointment {
+        position: absolute;
         -webkit-box-sizing: content-box;
         -moz-box-sizing: content-box;
         box-sizing: content-box;
-        position: absolute;
-        margin-bottom: 1px;
         cursor: pointer;
         background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
@@ -250,16 +257,22 @@
 
     .appointment-content {
         height: 100%;
-        border: 1px solid rgba(255, 255, 255, 0.4);
         font-family: Arial, Helvetica, sans-serif;
         font-size: 11px;
-        line-height: 13px;
+        line-height: 18px;
         color: white;
-        padding: 2px 7px 2px 7px;
+        padding: 0px 7px 0px 7px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     
+    .fulltime .appointment {
+        border-left: 1px solid white;
+    }
+    
+    .appointment.border {
+        border: 1px solid rgba(255, 255, 255, 0.4);
+    }
     .appointment.current {
         z-index: 999 !important;
     }

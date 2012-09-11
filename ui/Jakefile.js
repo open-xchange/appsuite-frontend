@@ -38,7 +38,9 @@ version = rev + "." + t.getUTCFullYear() +
 console.info("Build version: " + version);
 
 var debug = Boolean(process.env.debug);
+var mode = process.env.mode || 'production';
 if (debug) console.info("Debug mode: on");
+console.info("Run mode: " + mode);
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -48,21 +50,56 @@ var defineAsyncWalker = ast("define.async").asCall().walker();
 var assertWalker = ast("assert").asCall().walker();
 function jsFilter (data) {
     var self = this;
-
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-
-    var tree = jsp.parse(data, false, true);
+    
+    if (data.slice(-1) !== '\n') data += '\n';
+    
+    // In case of parse errors, the actually parsed source is stored
+    // in tmp/errorfile.js
+    
+    var tree = parse(data);
+    
+    function parse(data) {
+        return catchParseErrors(function (data) {
+            return jsp.parse(data, false, true);
+        }, data);
+    }
+    
+    function catchParseErrors(f, data) {
+        try {
+            return f(data);
+        } catch (e) {
+            fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
+            fail('Parse error in ' + self.task.name + ' at ' + e.line + ':' +
+                 e.col + '\n' + e.message);
+        }
+    }
+    
+    // Custom processing of the parsed AST
+    
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
+    
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
+        var filename = self.getSrc(this[0].start.line).name;
+        var mod = filename.slice(5, -3);
+        if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {   
+            if (name === undefined) {
+                var newName = parse('(' + JSON.stringify(mod) + ')')[1][0][1];
+                return [this[0], this[1], [newName].concat(args)];
+            } else {
+                fail('Invalid module name: ' + (name ? name[1] : "''") +
+                    ' should be ' + mod);
+            }
+        }
         var deps = _.detect(args, ast.is("array"));
         var f = _.detect(args, ast.is("function"));
         if (!name || !deps || !f) return;
@@ -80,7 +117,9 @@ function jsFilter (data) {
     tree = pro.ast_mangle(tree);
     tree = pro.ast_squeeze(tree);
     // use split_lines
-    return pro.split_lines(pro.gen_code(tree), 500);
+    return catchParseErrors(function (data) {
+        return pro.split_lines(data, 500);
+    }, pro.gen_code(tree));
 }
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
@@ -110,6 +149,7 @@ var jshintOptions = {
     onevar: false,
     plusplus: false,
     regexp: false,
+    regexdash: true,
     shadow: true,
     strict: true,
     trailing: true,
@@ -152,6 +192,7 @@ utils.includes.load("tmp/includes.json");
 
 utils.copy(utils.list("html", [".htaccess", "blank.html", "busy.html", "favicon.ico"]));
 utils.copy(utils.list("src/"));
+
 
 // i18n
 
@@ -201,7 +242,9 @@ file(utils.dest("signin.appcache"), ["force"]);
 // js
 
 utils.concat("boot.js",
-    ["src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
+    [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
+     utils.string(";"), utils.string("ox = ox || {}; ox.mode = '" + mode + "';"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
+     "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.concat("boot.js", [
@@ -209,8 +252,7 @@ utils.concat("boot.js", [
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
-	"lib/jquery.lazyload.js",
-
+        "lib/jquery.lazyload.js",
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
@@ -219,7 +261,6 @@ utils.concat("boot.js", [
         "lib/backbone.custom.js",
         "lib/doT.js",
         "lib/tinycon/tinycon.min.js",
-
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
@@ -229,30 +270,30 @@ utils.concat("pre-core.js",
         "config.js", "session.js", "gettext.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
-        "api/folder.js", "desktop.js", "commons.js", "collection.js",
+        "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
         "extPatterns/actions.js", "extPatterns/links.js",
         "settings.js" // settings plugin
     ]), { type: "source" }
 );
 
-utils.concat("bootstrap.js",
-    utils.list("apps/io.ox/core/bootstrap/js", [
-        'bootstrap-transition.js',
-        'bootstrap-tooltip.js',
-        'bootstrap-dropdown.js',
-        'bootstrap-button.js',
-        'bootstrap-alert.js',
-        'bootstrap-popover.js',
-        'bootstrap-datepicker.js',
-        'bootstrap-typeahead.js',
-        'bootstrap-combobox.js'
-    ]), { type: "source" }
-);
+//Twitter Bootstrap
+
+utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.css", "img/*"]),
+    { to: utils.dest("apps/io.ox/core/bootstrap") });
+
+// jQuery UI
+
+utils.copy(utils.list("lib", "jquery-ui.min.js"),
+    { to: utils.dest("apps/io.ox/core/tk") });
+
+// Ace editor
+
+utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});
 
 // module dependencies
 
 var moduleDeps = {};
-var depsPath = utils.dest("dependencies.json");
+var depsPath = "tmp/dependencies.json";
 
 utils.fileType("module").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner)
@@ -276,9 +317,12 @@ utils.concat("dependencies.json", [{
                 }
             }
         }
-        return JSON.stringify(moduleDeps);
+        return JSON.stringify(moduleDeps, null, 4);
     }
-}], { filter: _.identity }); // prevents binary mode, which erases target before calling getData
+}], {
+    filter: _.identity, // prevents binary mode, which erases target before calling getData
+    to: "tmp"
+});
 
 // apps
 

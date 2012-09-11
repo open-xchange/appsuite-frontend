@@ -67,7 +67,9 @@ define('io.ox/contacts/actions',
         action: function (app) {
             require(['io.ox/contacts/create/main'], function (create) {
                 create.show(app).done(function (data) {
-                    app.getGrid().selection.set(data);
+                    if (data) {
+                        app.getGrid().selection.set(data);
+                    }
                 });
             });
         }

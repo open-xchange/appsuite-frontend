@@ -13,7 +13,7 @@
  *
  */
 
-define("io.ox/files/interface/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
+define("io.ox/files/tests/interface/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
     "use strict";
 
     var TIMEOUT = 2500;

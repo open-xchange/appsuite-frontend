@@ -153,6 +153,8 @@ define('io.ox/contacts/api',
                 });
         }
     };
+    
+    api.update = api.edit;
 
     api.editNewImage = function (o, changes, file) {
 
@@ -166,15 +168,20 @@ define('io.ox/contacts/api',
                 data: form,
                 fixPost: true
             })
-            .pipe(function () {
-                return $.when(
+            .pipe(function (data) {
+                $.when(
                     api.caches.get.clear(),
                     api.caches.list.clear(),
                     contactPictures.clear()
-                );
-            })
-            .done(function () {
-                api.trigger('refresh.list');
+                ).pipe(function () {
+                    api.trigger('refresh.list');
+                    api.trigger('edit', { // TODO needs a switch for created by hand or by test
+                        id: o.id,
+                        folder: o.folder_id
+                    });
+                });
+                
+                return data;
             });
     };
 

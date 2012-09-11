@@ -12,7 +12,7 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  *
  */
-define("io.ox/files/unit/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
+define("io.ox/files/tests/unit/test", ["io.ox/core/extensions", "io.ox/files/main", "io.ox/files/api"], function (ext, files, api) {
     "use strict";
 
     function Done() {

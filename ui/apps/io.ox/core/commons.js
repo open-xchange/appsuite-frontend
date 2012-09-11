@@ -208,7 +208,10 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                 app.folder.updateGrid(grid);
             }
             // add visual caret
-            app.getWindow().nodes.title.append($('<b>').addClass('caret'));
+            app.getWindow().nodes.title.append(
+                $.txt(' '),
+                $('<button class="btn btn-inverse"><i class="icon-folder-open icon-white"></i></button>')
+            );
             // hash support
             app.getWindow().on('show', function () {
                 if (grid) {

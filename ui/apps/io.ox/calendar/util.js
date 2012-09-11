@@ -196,7 +196,9 @@ define("io.ox/calendar/util",
             if (data.full_time) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
                 return length <= 1 ? gettext('Whole day') : gettext.format(
+                    //#. General duration (nominative case): X days
                     //#. %d is the number of days
+                    //#, c-format
                     gettext.ngettext('%d day', '%d days', length), length);
             } else {
                 start = new date.Local(data.start_date);

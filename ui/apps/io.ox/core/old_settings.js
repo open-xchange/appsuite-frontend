@@ -12,7 +12,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
+define("io.ox/core/old_settings", ['io.ox/core/http', 'io.ox/core/cache', 'io.ox/core/tk/model'], function (http, cache, Model) {
 
     'use strict';
 

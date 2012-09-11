@@ -11,8 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs",
-    ['io.ox/core/event', "io.ox/core/bootstrap/basics"], function (Events) {
+define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
 
     'use strict';
 

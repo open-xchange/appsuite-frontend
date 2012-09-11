@@ -10,7 +10,71 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
-
+define('io.ox/contacts/distrib/create-dist-view',
+    ['io.ox/backbone/views',
+     'io.ox/backbone/forms',
+     'gettext!io.ox/contacts/contacts'
+    ], function (views, forms, gt) {
+    
+    "use strict";
+    
+    var point = views.point('io.ox/contacts/distrib/create-dist-view', gt),
+        ContactCreateDistView = point.createView({
+            tagName: 'div',
+            className: 'container'
+        });
+        
+    point.createSubpoint('header', {
+        tagName: 'div',
+        className: 'row'
+    }).extend({
+        id: 'io.ox/contacts/distrib/create-dist-view/header/display_name',
+        index: 100,
+        tagName: 'form',
+        className: 'span6',
+        render: function () {
+            this.$el.append(
+                $('<label>').text(gt("List name")),
+                this.inputField = $('<input type="text">').val(this.model.get("display_name"))
+            );
+        },
+        updateDisplayName: function () {
+            this.inputField.val(this.model.get("display_name"));
+        },
+        modelEvents: {
+            'change:display_name': 'updateDisplayName'
+        }
+    }).basicExtend({
+        id: 'io.ox/contacts/distrib/create-dist-view/header/save',
+        index: 200,
+        draw: function () {
+            this.append(
+                $('<span class="span2">').append(
+                    $("<br/>"),
+                    $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
+                        alert("Save this thang!");
+                    }).css({marginTop: "5px"})
+                )
+            );
+        }
+    }).basicExtend({
+        id: 'io.ox/contacts/distrib/create-dist-view/header/save',
+        index: 200,
+        draw: function () {
+            this.append($('<span class="span4>&nbsp;</span>"'));
+        }
+    });
+    
+    point.extend(new forms.ErrorAlert({
+        id: 'io.ox/contacts/distrib/create-dist-view/errors'
+    }));
+    
+    
+    
+    return ContactCreateDistView;
+});
+ 
+/*
 define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/core/extensions',
      'gettext!io.ox/contacts/contacts',
@@ -348,3 +412,4 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     return ContactCreateDistView;
 });
+*/

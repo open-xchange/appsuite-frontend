@@ -96,7 +96,9 @@ define("io.ox/core/extensions",
                 }
             };
         }
-
+        
+        this.has = has;
+        
         this.extend = function (extension) {
 
             if (extension.invoke) {

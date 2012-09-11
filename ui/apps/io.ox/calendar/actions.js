@@ -223,7 +223,6 @@ define('io.ox/calendar/actions',
                     this.create(obj);
                 });
             });
-
         }
     });
 

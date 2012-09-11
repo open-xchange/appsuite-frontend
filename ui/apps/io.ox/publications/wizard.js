@@ -41,33 +41,30 @@ define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
             api.publishFolder(folderId).done(function (data) {
                 // get publication
                 var pub = data['com.openexchange.publish.microformats.infostore.online'];
-                // get modal dialog class
-                require([ox.base + '/apps/io.ox/core/bootstrap/js/bootstrap-modal.js'], function () {
-                    // build modal dialog
-                    var dialog = $('<div>').addClass('modal fade');
-                    dialog.append(
-                        // header
-                        $('<div>').addClass('modal-header')
-                        .append($('<a>').addClass('close').attr('data-dismiss', 'modal').text('x'))
-                        .append($('<h3>').text('Publication created')),
-                        // body
-                        $('<div>').addClass('modal-body')
-                        .append($('<a>', { href: pub.url, target: '_blank' }).text(pub.url)),
-                        // footer
-                        $('<div>').addClass('modal-footer')
-                        .append(
-                            $('<a>', { href: '#' }).addClass('btn btn-primary').text('Close')
-                            .on('click', { dialog: dialog }, hCloseDialog),
-                            $('<a>', { href: '#' }).addClass('btn').text('Send email')
-                            .on('click', { publication: pub, dialog: dialog }, hSendPublicationByMail)
-                        )
+                // build modal dialog
+                var dialog = $('<div>').addClass('modal fade');
+                dialog.append(
+                    // header
+                    $('<div>').addClass('modal-header')
+                    .append($('<a>').addClass('close').attr('data-dismiss', 'modal').text('x'))
+                    .append($('<h3>').text('Publication created')),
+                    // body
+                    $('<div>').addClass('modal-body')
+                    .append($('<a>', { href: pub.url, target: '_blank' }).text(pub.url)),
+                    // footer
+                    $('<div>').addClass('modal-footer')
+                    .append(
+                        $('<a>', { href: '#' }).addClass('btn btn-primary').text('Close')
+                        .on('click', { dialog: dialog }, hCloseDialog),
+                        $('<a>', { href: '#' }).addClass('btn').text('Send email')
+                        .on('click', { publication: pub, dialog: dialog }, hSendPublicationByMail)
                     )
-                    .appendTo('body')
-                    .modal()
-                    .on('hide', function () {
-                        dialog.remove();
-                        dialog = null;
-                    });
+                )
+                .appendTo('body')
+                .modal()
+                .on('hide', function () {
+                    dialog.remove();
+                    dialog = null;
                 });
             });
         }

@@ -455,13 +455,18 @@ exports.includes = {
 exports.includeFilter = function (data) {
     var dest = this.task.name;
     exports.includes.set(dest, []);
-    var dir = path.dirname(this.getSrc(1).name);
-    return data.replace(/\/\/@include\s+(.*?)(\S*)$/gm,
-        function(m, prefix, name) {
+    var self = this, line = 1;
+    return data.replace(/(\/\/@include\s+(.*?)(\S*)(;?))?$/gm,
+        function(m, include, prefix, name, semicolon) {
+            if (!include) {
+                line++;
+                return m;
+            }
+            var dir = path.dirname(self.getSrc(line).name);
             return (prefix || "") + exports.list(dir, name).map(function(file) {
                 var include = path.join(dir, file);
                 exports.includes.add(dest, include);
                 return fs.readFileSync(include, "utf8");
-            }).join("\n");
+            }).join("\n") + (semicolon || "");
         });
 };

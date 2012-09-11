@@ -15,13 +15,14 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                                                 'gettext!plugins/notifications/tasks',
                                                 'dot!plugins/notifications/tasks/template.html',
                                                 'io.ox/tasks/api',
+                                                'io.ox/core/api/reminder',
                                                 'io.ox/tasks/util',
                                                 'less!plugins/notifications/tasks/style.css'],
-                                                function (ext, gt, templ, api, util) {
+                                                function (ext, gt, templ, api, reminderApi, util) {
     
     "use strict";
     
-    //this file builds to notification views: dueTasks and reminderTasks
+    //this file builds two notification views: dueTasks and reminderTasks
     
     /*
      * DUE TASKS
@@ -51,15 +52,32 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         
         onClickItem: function (e) {
-            var overlay = $('#io-ox-notifications-overlay');
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    // open SidePopup without arrow
-                    new dialogs.SidePopup({ arrow: false, side: 'right' })
-                        .setTarget(overlay.empty())
-                        .show(e, function (popup) {
-                            popup.append("<div> Detailview under construction </div>");
-                        });
+            var overlay = $('#io-ox-notifications-overlay'),
+                data = {
+                    id: this.model.get('taskId'),
+                    folder: this.model.get('folderId')
+                },
+                sidepopup = overlay.prop('sidepopup'),
+                cidthis = data.folder + "." + data.id,
+                cid = overlay.find('.tasks-detailview').attr('data-cid');
+                
+            // toggle?
+            if (sidepopup && cid === cidthis) {
+                sidepopup.close();
+            } else {
+                require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
+                    // get task and draw detailview
+                    api.get(data, false).done(function (taskData) {
+                    
+                        // open SidePopup without arrow
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay)
+                            .show(e, function (popup) {
+                                popup.append(viewDetail.draw(taskData));
+                            });
+                    });
                 });
+            }
         },
         
         close: function () {
@@ -105,6 +123,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                     var inObj = {
                         badge: task.badge,
                         taskId: task.id,
+                        folderId: task.folder_id,
                         title: task.title,
                         end_date: task.end_date,
                         status: task.status
@@ -148,7 +167,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         deleteReminder: function (e) {
             e.stopPropagation();
-            api.deleteReminder(this.model.attributes.reminderId);
+            reminderApi.deleteReminder(this.model.attributes.reminderId);
             this.close();
         },
         selectClicked: function (e) {
@@ -159,23 +178,38 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 dates;
             dates = util.computePopupTime(endDate, this.$el.find(".dateselect").find(":selected").attr("finderId"));
             endDate = dates.alarmDate;
-            api.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
+            reminderApi.remindMeAgain(endDate.getTime(), this.model.attributes.reminderId);
             e.stopPropagation();
             this.close();
         },
         
         onClickItem: function (e) {
-            var overlay = $('#io-ox-notifications-overlay');
-            
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                    // open SidePopup without array
-                    new dialogs.SidePopup({ arrow: false, side: 'right' })
-                        .setTarget(overlay.empty())
-                        .show(e, function (popup) {
-                            popup.append("<div> Detailview under construction </div>");
-                        });
+            var overlay = $('#io-ox-notifications-overlay'),
+                data = {
+                    id: this.model.get('taskId'),
+                    folder: this.model.get('folderId')
+                },
+                sidepopup = overlay.prop('sidepopup'),
+                cidthis = data.folder + "." + data.id,
+                cid = overlay.find('.tasks-detailview').attr('data-cid');
+        
+                // toggle?
+            if (sidepopup && cid === cidthis) {
+                sidepopup.close();
+            } else {
+                require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
+                    // get task and draw detailview
+                    api.get(data, false).done(function (taskData) {
+                
+                        // open SidePopup without arrow
+                        new dialogs.SidePopup({ arrow: false, side: 'right' })
+                            .setTarget(overlay)
+                            .show(e, function (popup) {
+                                popup.append(viewDetail.draw(taskData));
+                            });
+                    });
                 });
-
+            }
         },
         
         close: function () {
@@ -215,9 +249,9 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         index: 300,
         register: function (controller) {
             var notifications = controller.get('io.ox/tasksreminder', NotificationsReminderView);
-            api.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
+            reminderApi.on('reminder-tasks', function (e, reminderTaskIds, reminderIds) {
                 notifications.collection.trigger("reset");
-                api.getAll().done(function (tasks) {
+                api.getAll({}, false).done(function (tasks) {
                     _(tasks).each(function (taskObj) {
                         var index = $.inArray(taskObj.id, reminderTaskIds);
                         if (index !== -1) {
@@ -226,6 +260,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                                 badge: task.badge,
                                 reminderId: reminderIds[index],
                                 taskId: task.id,
+                                folderId: task.folder_id,
                                 title: task.title,
                                 end_date: task.end_date,
                                 status: task.status
@@ -238,7 +273,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             });
             var now = new Date();
-            api.getReminders(now.getTime());
+            reminderApi.getReminders(now.getTime());
         }
     });
 

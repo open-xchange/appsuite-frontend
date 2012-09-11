@@ -13,107 +13,84 @@
 
 define("io.ox/tasks/actions", ['io.ox/core/extensions',
                               'io.ox/core/extPatterns/links',
-                              "io.ox/tasks/api",
                               'gettext!io.ox/tasks/actions',
-                              'io.ox/core/config',
-                              "less!io.ox/tasks/style.css"], function (ext, links, api, gt, conf) {
+                              'io.ox/core/notifications'], function (ext, links, gt, notifications) {
 
     "use strict";
-    //File not in use right now code copied to mail/actions.js
     var Action = links.Action;
     
-    new Action('io.ox/tasks/actions/reminder', {
-        id: 'reminder',
+    new Action('io.ox/tasks/actions/edit', {
+        id: 'edit',
         action: function (data) {
-            require(['io.ox/core/tk/dialogs'], function (dialogs)
-                    {
-                        //create popup dialog
-                        var popup = new dialogs.ModalDialog()
-                            .addPrimaryButton('create', gt('Create reminder'))
-                            .addButton('cancel', gt('Cancel'));
-                        
-                        //Header
-                        popup.getHeader()
-                            .append($("<h4>")
-                                    .text(gt('Create a new reminder task')));
-                        
-                        //fill popup body
-                        var popupBody = popup.getBody();
-                        popupBody.append("<div>" + gt('Subject') + ": " + "</div>");
-                        var titleInput = $('<input>', { type: 'text', value: data.subject, width: '90%' })
-                        .appendTo(popupBody);
-                        
-                        popupBody.append("<div>" + gt('Remind me in') + ": " + "</div>");
-                        var dateSelector = $('<select>', {name: "dateselect"})
-                        .appendTo(popupBody);
-                        dateSelector.append("<option>" + gt('one hour') + "</option>" +
-                                "<option>" + gt('three hours') + "</option>" +
-                                "<option>" + gt('six hours') + "</option>" +
-                                "<option>" + gt('one day') + "</option>" +
-                                "<option>" + gt('three days') + "</option>" +
-                                "<option>" + gt('one week') + "</option>");
-                        
-                        popupBody.append("<br>");
-                        var alarmbox = $('<input>', {type: 'checkbox', name: 'alarm', checked: 'checked'}).appendTo(popupBody);
-                        popupBody.append("<span> " + gt('Alarm') + "?<span>");
-                        
-                        //ready for work
-                        popup.show()
-                            .done(function (action) {
-                                
-                                if (action === "create")
-                                    {
-                                    
-                                    //Calculate the right time
-                                    var endDate = new Date();
-                                    var offset = endDate.getTimezoneOffset() * -1 * 60000;
-                                    
-                                    switch (dateSelector.val())
-                                    {
-                                    case gt('one hour'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 + offset);
-                                        break;
-                                    case gt('three hours'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 * 3 + offset);
-                                        break;
-                                    case gt('six hours'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 * 6 + offset);
-                                        break;
-                                    case gt('one day'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 * 24 + offset);
-                                        break;
-                                    case gt('three days'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 3 + offset);
-                                        break;
-                                    case gt('one week'):
-                                        endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7 + offset);
-                                        break;
-                                    }
-                                    
-                                    //notification one minute before task expires or no notification at all
-                                    var alarmTime;
-                                    if (alarmbox.attr("checked"))
-                                        alarmTime = endDate.getTime() - 60000;
-
-                                    api.create({title: gt('Email reminder') + ": " + titleInput.val(),
-                                        folder_id: conf.get('folder.tasks'),
-                                        end_date: endDate.getTime(),
-                                        start_date: endDate.getTime(),
-                                        alarm: alarmTime,
-                                        note: gt('Email reminder for') + ": " + data.subject + " \n" +
-                                        gt('From') + ": " + data.from[0][0] + ", " + data.from[0][1]
-                                        });
-                                }
-                            });
-                    });
-            
+            notifications.yell('info', gt("Under construction"));
         }
     });
     
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        id: 'reminder',
+    new Action('io.ox/tasks/actions/delete', {
+        id: 'delete',
+        action: function (data) {
+            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                //build popup
+                var popup = new dialogs.ModalDialog()
+                    .addPrimaryButton('delete', gt('Delete'))
+                    .addButton('cancel', gt('Cancel'));
+                
+                //Header
+                popup.getBody()
+                    .append($("<h4>")
+                            .text(gt('Do you really want to delete this task?')));
+                
+                //go
+                popup.show().done(function (action) {
+                    if (action === 'delete') {
+                        require(['io.ox/tasks/api'], function (api) {
+                            api.remove({id: data.id, folder: data.folder_id}, false)
+                                .done(function (data) {
+                                    
+                                    if (!data) {
+                                        notifications.yell('success', gt('Task has been deleted!'));
+                                    } else {//task was modified
+                                        notifications.yell('fail', gt('Failure! Please refresh.'));
+                                    }
+                                });
+                        });
+                    }
+                });
+            });
+        }
+    });
+    
+    new Action('io.ox/tasks/actions/done', {
+        id: 'done',
+        action: function (data) {
+            require(['io.ox/tasks/api'], function (api) {
+                api.update(data.last_modified, data.id, {status: 3}, data.folder_id)
+                    .done(function (result) {
+                        api.trigger("update:" + data.folder_id + '.' + data.id);
+                        notifications.yell('success', gt('Done!'));
+                    });
+            });
+        }
+    });
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'edit',
         index: 10,
-        label: gt("Reminder"),
-        ref: 'io.ox/tasks/actions/reminder'
+        label: gt("Edit"),
+        ref: 'io.ox/tasks/actions/edit'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: 20,
+        label: gt("Delete"),
+        ref: 'io.ox/tasks/actions/delete'
+    }));
+    
+    ext.point('io.ox/tasks/links/inline').extend(new links.Link({
+        id: 'done',
+        index: 30,
+        label: gt("Done"),
+        ref: 'io.ox/tasks/actions/done'
     }));
 });

@@ -195,7 +195,8 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             },
             
             //change status number to status text. format enddate to presentable string
-            interpretTask: function (task)
+            //if detail alarm and startdate get converted too and status text is set for more states than overdue and success
+            interpretTask: function (task, detail)
             {
                 task = _.copy(task, true);
                 if (task.status === 3) {
@@ -203,15 +204,36 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     task.badge = "badge badge-success";
                     
                 } else {
+                    
                     var now = new Date();
                     if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
                         task.status = gt("Over due");
                         task.badge = "badge badge-important";
+                    } else if (detail && task.status) {
+                        switch (task.status) {
+                        case 1:
+                            task.status = gt("Not started");
+                            task.badge = "badge";
+                            break;
+                        case 2:
+                            task.status = gt("In progress");
+                            task.badge = "badge";
+                            break;
+                        case 4:
+                            task.status = gt("Waiting");
+                            task.badge = "badge";
+                            break;
+                        case 5:
+                            task.status = gt("Deferred");
+                            task.badge = "badge";
+                            break;
+                        }
                     } else {
                         task.status = '';
                         task.badge = '';
                     }
                 }
+                
                 
 
                 if (task.title === undefined || task.title === null) {
@@ -222,6 +244,20 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     task.end_date = new date.Local(task.end_date).format();
                 } else {
                     task.end_date = '';
+                }
+                
+                if (detail) {
+                    if (task.start_date !== undefined && task.start_date !== null) {
+                        task.start_date = new date.Local(task.start_date).format();
+                    } else {
+                        task.start_date = '';
+                    }
+                    
+                    if (task.alarm !== undefined && task.alarm !== null) {
+                        task.alarm = new date.Local(task.alarm).format();
+                    } else {
+                        task.alarm = '';
+                    }
                 }
                 
                 return task;

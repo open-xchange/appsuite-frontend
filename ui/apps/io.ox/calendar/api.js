@@ -70,7 +70,6 @@ define("io.ox/calendar/api",
             // round start & end date
             o.start = (o.start / DAY >> 0) * DAY;
             o.end = (o.end / DAY >> 0) * DAY;
-            
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
@@ -148,7 +147,8 @@ define("io.ox/calendar/api",
                         action: 'update',
                         id: o.id,
                         folder: o.folder_id,
-                        timestamp: _.now()
+                        timestamp: _.now(),
+                        timezone: "UTC"
                     },
                     data: o
                 })
@@ -186,7 +186,8 @@ define("io.ox/calendar/api",
             return http.PUT({
                 module: 'calendar',
                 params: {
-                    action: 'new'
+                    action: 'new',
+                    timezone: "UTC"
                 },
                 data: o
             })
