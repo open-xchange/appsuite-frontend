@@ -18,7 +18,7 @@ define('io.ox/contacts/model',
     
     var factory = new ModelFactory({
         api: api,
-        extensionNamespace: 'io.ox/contacts/model',
+        ref: 'io.ox/contacts/model',
         update: function (model) {
             // Some special handling for profile pictures
             var data = model.changedSinceLoading();
