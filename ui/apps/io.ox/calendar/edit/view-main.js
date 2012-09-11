@@ -145,7 +145,7 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
             // create or edit, check for self.model.has('id')
-            console.log("model", self.model);
+
             // clear node
             self.$el.empty();
             // invoke extensionpoints from template
@@ -172,7 +172,6 @@ define('io.ox/calendar/edit/view-main',
             self.$('.startsat-time').combobox(comboboxHours);
             self.$('.endsat-time').combobox(comboboxHours);
 
-
             self.subviews.recurrenceView = new recurrenceModule.View({
                 model: self.model,
                 parentView: self.el
@@ -186,6 +185,7 @@ define('io.ox/calendar/edit/view-main',
             });
 
             self.subviews.recurrence_option.render();
+            //self.subviews.recurrenceView.render();
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
             self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});

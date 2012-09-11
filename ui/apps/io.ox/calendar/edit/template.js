@@ -491,6 +491,7 @@ define('io.ox/calendar/edit/template',
                         $('<label class="radio">').append(
                             $('<input type="radio" checked="checked">')
                             .attr({
+                                'id': data.uid + '_daily',
                                 'value': '1',
                                 'name': 'recurrence_type'
                             })
@@ -501,6 +502,7 @@ define('io.ox/calendar/edit/template',
                         $('<label class="radio">').append(
                             $('<input type="radio">')
                             .attr({
+                                'id': data.uid + '_weekly',
                                 'value': '2',
                                 'name': 'recurrence_type'
                             })
@@ -511,6 +513,7 @@ define('io.ox/calendar/edit/template',
                         $('<label class="radio">').append(
                             $('<input type="radio">')
                                 .attr({
+                                    'id': data.uid + '_monthly',
                                     'value': '3',
                                     'name': 'recurrence_type'
                                 })
@@ -521,6 +524,7 @@ define('io.ox/calendar/edit/template',
                         $('<label class="radio">').append(
                             $('<input type="radio">')
                                 .attr({
+                                    'id': data.uid + '_yearly',
                                     'value': '4',
                                     'name': 'recurrence_type'
                                 })
@@ -543,13 +547,12 @@ define('io.ox/calendar/edit/template',
                     $('<form class="form-inline">').append(
                         $('<span class="margin-right">')
                             .text(gt("Every")),
-                        $('<input type="text">')
+                        $('<input type="text" class="input-extra-small">')
                             .attr({
                                 'size': 2,
                                 'name': 'recurrence_days_input',
                                 'value': data.days
                             })
-                            .css('width', '25px') // TODO not so nice, find better value
                             .after(
                                 $('<span class="margin-left">')
                                     .text(gt("Days")))
@@ -680,6 +683,93 @@ define('io.ox/calendar/edit/template',
                         ))).append('<span name="recurrenceText"></span><div class="span3 editrecurrence_wrapper" style="display:none;">' +
                             '(<a class="editrecurrence">' + gt('Edit recurrence') + '</a>)</div>'),
                 $('<div class="row-fluid show-grid recurrence-option-container" style="display:none">')
+            );
+
+        }
+    });
+
+    /*
+     *
+<div class="row-fluid show-grid">
+<div class="control-group span6">
+    <label for="{{!it.uid}}_recurrence_start" class="control-label">{{! it.strings.STARTS_ON }}</label>
+    <div class="controls">
+        <input id="{{!it.uid}}_recurrence_start" type="text" class="discreet startsat-date" name='recurrence_start'/>
+    </div>
+</div>
+<div class="control-group span6">
+    <label for="{{!it.uid}}_recurrence_endings" class="control-label">{{! it.strings.ENDS }}</label>
+    <div class="controls">
+        <div>
+            <input type="radio" name='endingoption'/>
+            <label class="radio inline">{{! it.strings.NEVER }}</label>
+        </div>
+        <div>
+            <input id="{{!it.uid}}_recurrence_endings" type="radio" name='endingoption'/>
+            <label class="radio inline">
+               {{! it.strings.ON }}
+               <input type="text" class="discreet until" name='until'/>
+            </label>
+        </div>
+        <div>
+            <input type="radio" name='endingoption'/>
+            <label class="radio inline">
+                {{! it.strings.AFTER }}
+                <input type="text" class="discreet until short" name='occurrences'/>
+                <span class="help-inline">{{! it.strings.TIMES }}</span>
+            </label>
+        </div>
+    </div>
+</div>
+</div>
+     */
+    //TODO nicen this up
+    ext.point('io.ox/calendar/edit/recurrence/start_stop').extend({
+        index: 1,
+        id: 'start_stop',
+        draw: function (data) {
+            this.append(
+                $('<div class="span12">').append(
+                    /*$('<div class="span6">').append(
+                        $('<label class="control-label desc">')
+                            .attr({
+                                'for': data.uid + '_recurrence_start'
+                            })
+                            .text(gt('Starts on')),
+                        $('<div>').append($('<input type="text" class="discreet startsat-date input-small">')
+                            .attr({
+//                                'value': data.startDate,
+                                'name': 'recurrence_start',
+                                'id': data.uid + '_recurrence_start'
+                            }))
+                    ),*/
+                    $('<div class="span6">').append(
+                        $('<label class="control-label desc">')
+                            .attr({
+                                'for': data.uid + '_recurrence_endings'
+                            })
+                            .text(gt('Ends'))
+                    ).append(
+                        $('<div class="controls">').append(
+                            $('<label class="radio">').append(
+                                    $('<input type="radio" name="endingoption">')
+                                        .after(gt("Never"))),
+                            $('<label class="radio">').append(
+                                    $('<input type="radio" name="endingoption">').attr('id', data.uid + '_recurrence_endings')
+                                        .after(gt("On"))),
+                            $('<input type="text" class="discreet until input-small">').attr('name', 'until'),
+                            $('<label class="radio">').append(
+                                    $('<input type="radio" name="endingoption">').attr('id', data.uid + '_recurrence_endings')
+                                        .after($('<span>').text(gt("After")))
+                                ),
+                            $('<div>').append(
+                                $('<input type="text" class="discreet until input-extra-small">')
+                                    .attr('name', 'occurences')
+                                    .css('margin-top', '5px')
+                            )
+                        )
+                    )
+                )
             );
 
         }

@@ -16,7 +16,9 @@ define('io.ox/calendar/edit/module-recurrence',
        'io.ox/calendar/edit/binding-util',
        'gettext!io.ox/calendar/edit/main',
        'io.ox/core/extensions',
-       'io.ox/calendar/edit/template'], function (util, BinderUtils, gt, ext) {
+       'io.ox/core/date',
+       'io.ox/calendar/edit/binding-util',
+       'io.ox/calendar/edit/template'], function (util, BinderUtils, gt, ext, dateAPI, binderUtils) {
 
     'use strict';
 
@@ -27,6 +29,7 @@ define('io.ox/calendar/edit/module-recurrence',
             'click .editrecurrence': 'toggleRecurrence',
             'change input.repeat': 'onToggleRepeat'
         },
+        rendered: false,
         initialize: function (options) {
             console.log("init option view", options);
             var self = this;
@@ -79,7 +82,6 @@ define('io.ox/calendar/edit/module-recurrence',
         render: function () {
             console.log("render recurrence", this);
             var self = this;
-
             ext.point('io.ox/calendar/recurrence/repeat').invoke('draw', self.$el, {});
 
             /*self.$el.empty().append(tmpl('repeatoption', {
@@ -91,6 +93,7 @@ define('io.ox/calendar/edit/module-recurrence',
             }));
             */
             self._modelBinder.bind(self.model, self.el, self.bindings);
+
             return self;
         },
         toggleRecurrence: function () {
@@ -103,7 +106,11 @@ define('io.ox/calendar/edit/module-recurrence',
                 $rep.hide();
             } else {
                 self.$('.editrecurrence').text(gt('hide'));
-                var kack = self.recurrenceView.render().el;
+                if (!self.rendered) {
+                    // only render once
+                    self.recurrenceView = self.recurrenceView.render().el;
+                    self.rendered = true;
+                }
                 $rep.show();
             }
             //this.$('.recurrence-option-container').toggle();
@@ -215,19 +222,36 @@ define('io.ox/calendar/edit/module-recurrence',
             var self = this;
             self.parentView = options.parentView;
             self._modelBinder = new Backbone.ModelBinder();
+            /*var bindings = {
+                start_date: {
+                    selector: '[name=recurrence_start]',
+                    converter: binderUtils.convertDate
+                }
+            };*/
+            // bind recurrence type change, i.e. "daily" or "weekly"
             self.model.on('change:recurrence_type', _.bind(self.updateRecurrenceDetail, self));
+//            self.model.on('change:start_date', _.bind(self.updateRecurrenceStart, self));
         },
         render: function () {
             var self = this;
             console.log("render recurrenceview");
+            var $container =  $(self.parentView).find('.recurrence-option-container');
             self.$el.empty();
-            ext.point('io.ox/calendar/edit/recurrence').invoke('draw', $(self.parentView).find('.recurrence-option-container'), {
+            ext.point('io.ox/calendar/edit/recurrence').invoke('draw', $container, {
                 uid: _.uniqueId('io_ox_calendar_edit_')
             });
 
-            ext.point('io.ox/calendar/edit/recurrence/option_weekly').invoke('draw', $(self.parentView).find('.recurrence-option-container'), {
-
+            ext.point('io.ox/calendar/edit/recurrence/option_weekly').invoke('draw', $container, {
+                uid: _.uniqueId('io_ox_calendar_edit_recurrence')
             });
+
+            ext.point('io.ox/calendar/edit/recurrence/start_stop').invoke('draw', $container, {
+                uid: _.uniqueId('io_ox_calendar_edit_recurrence')
+            });
+
+//            $('.startsat-date', $container).datepicker({format: dateAPI.DATE});
+
+//            self.updateRecurrenceStart();
 
             /*self.$el.empty().append(tmpl({
                 uid: _.uniqueId('io_ox_calendar_edit_recurrence'),
@@ -251,7 +275,17 @@ define('io.ox/calendar/edit/module-recurrence',
                 }]
             };
              */
-            var bindings = {};
+
+            var bindings = {
+                recurrence_type: [{
+                    selector: '[name=recurrence_type]',
+                    converter: BinderUtils.numToString //shitty aspect in ModelBinder
+                }],
+                recurrence_start: {
+                    selector: '[name=recurrence_start]',
+                    converter: binderUtils.convertDate
+                }
+            };
             // days of the week - bindings
 //            bindings.days = [];
 //            _.each(weekDayList, function (item) {
@@ -259,11 +293,12 @@ define('io.ox/calendar/edit/module-recurrence',
 //            });
 //            bindings.days.push({ selector: '[name=days]'});
 
-            self._modelBinder.bind(self.model, self.el, bindings);
+//            self._modelBinder.bind(self.model, $(self.parentView).find('.recurrence-option-container'), bindings);
             self.updateRecurrenceDetail();
             return self;
         },
         updateRecurrenceDetail: function () {
+            console.log("update recurrence detail");
             var self = this;
             self.$('.recurrence_details').hide();
 
@@ -377,6 +412,15 @@ define('io.ox/calendar/edit/module-recurrence',
             if (option === 'one') {
                 self.model.unset('days');
             }
+        },
+
+        updateRecurrenceStart: function () {
+            var self = this;
+            var mydate = dateAPI.Local.utc(parseInt(self.model.get('start_date'), 10));
+            console.log(mydate);
+            var formattedDate = new dateAPI.Local(mydate).format(dateAPI.DATE);
+            console.log(formattedDate);
+            $('[name=recurrence_start]').attr('value', formattedDate);
         }
     });
 
