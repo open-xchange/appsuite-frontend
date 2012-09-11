@@ -1043,7 +1043,7 @@ define('io.ox/office/editor/editor',
                     name: OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageFragment,
-                    attrs: {anchortype: 'AsCharacter', inline: true}
+                    attrs: {inline: true}
                 };
 
             applyOperation(newOperation, true, true);
@@ -2727,33 +2727,6 @@ define('io.ox/office/editor/editor',
                 validateParagraphNode(paragraph);
             }
         }
-
-        /* This didn't work - browser doesn't accept the corrected selection, is changing it again immediatly...
-        implCheckSelection = function () {
-            var node;
-            var windowSel = window.getSelection();
-            if ((windowSel.anchorNode.nodeType !== 3) || (windowSel.focusNode.nodeType !== 3)) {
-
-                Utils.warn('Editor.implCheckSelection: invalid selection');
-
-                var selection = getSelection();
-
-                // var node, startnode = windowSel.anchorNode, startpos = windowSel.anchorOffset, endnode = windowSel.focusNode, endpos = windowSel.focusOffset;
-
-                if (windowSel.anchorNode.nodeType !== 3) {
-                    // Assume this only happens on para end - seems we are always directly in a p-element when this error occurs.
-                    selection.startPaM.oxoPosition[1] = this.getParagraphLength(selection.startPaM.oxoPosition);
-                }
-
-                if (windowSel.focusNode.nodeType !== 3) {
-                    selection.endPaM.oxoPosition[1] = this.getParagraphLength(selection.endPaM.oxoPosition);
-
-                }
-
-                setSelection(selection);
-            }
-        };
-        */
 
         function implInitDocument() {
             editdiv[0].innerHTML = '<html><p></p></html>';
