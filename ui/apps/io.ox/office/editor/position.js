@@ -14,7 +14,8 @@
 define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
-     'io.ox/office/editor/oxopam'], function (Utils, DOM, OXOPaM) {
+     'io.ox/office/editor/oxopam',
+     'io.ox/office/editor/oxoselection'], function (Utils, DOM, OXOPaM, OXOSelection) {
 
     'use strict';
 
@@ -474,6 +475,96 @@ define('io.ox/office/editor/position',
         }
 
         return new DOM.Point(childNode, offset);
+    };
+
+    /**
+     * Converts a selection consisting of two logical positions to a selection
+     * (range) consisting of two dom nodes and the corresponding offsets (DOM.Point).
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOSelection} oxoSelection
+     *  The logical selection consisting of two logical positions.
+     *
+     * @param {Boolean} useNonTextNode
+     *  If set to false, only text nodes shall be returned for 'complete'
+     *  logical positions. If set to true, it is allowed to return nodes, that
+     *  are also described by a 'complete' logical positio, like images or
+     *  fields.
+     *
+     * @returns {DOM.Range}
+     *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
+     */
+    Position.getDOMSelection = function (startnode, oxoSelection, useNonTextNode) {
+
+        useNonTextNode = useNonTextNode ? true : false;
+
+        // Only supporting single selection at the moment
+        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, useNonTextNode),
+            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition, useNonTextNode);
+
+        // if ((start === end) && (start.node.nodeType === 1)) {
+        //     start = DOM.Point.createPointForNode(start.node);
+        //     end = DOM.Point.createPointForNode(end.node);
+        //     end.offset += 1;
+        // }
+
+        // DOM selection is always an array of text ranges
+        // TODO: fallback to HOME position in document instead of empty array?
+        return (start && end) ? [new DOM.Range(start, end)] : [];
+    };
+
+    /**
+     * This function is only used for the multi selection for rectangle
+     * cell selection that is only possible in Firefox. It converts a given
+     * logical selection that describe a rectangle of cells inside a table
+     * to an array of ranges. In this array every range describes a table
+     * cell selection. This multi selection is only supported by the
+     * Firefox browser.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOSelection} oxoSelection
+     *  The logical selection consisting of two logical positions.
+     *
+     * @returns {[DOM.Range]} ranges
+     *  The calculated selections (array of ranges DOM.Range) each
+     *  consisting of two dom points (DOM.Point).
+     */
+    Position.getCellDOMSelections = function (startnode, oxoSelection) {
+
+        var ranges = [];
+
+        var startPos = _.copy(oxoSelection.startPaM.oxoPosition, true),
+            endPos = _.copy(oxoSelection.endPaM.oxoPosition, true);
+
+        startPos.pop();
+        startPos.pop();
+        endPos.pop();
+        endPos.pop();
+
+        var startCol = startPos.pop(),
+            startRow = startPos.pop(),
+            endCol = endPos.pop(),
+            endRow = endPos.pop();
+
+        for (var i = startRow; i <= endRow; i++) {
+            for (var j = startCol; j <= endCol; j++) {
+                var position = _.copy(startPos, true);
+                position.push(i);
+                position.push(j);
+                var cell = Position.getDOMPosition(startnode, position);
+                if (cell && $(cell.node).is('td, th')) {
+                    ranges.push(DOM.Range.createRangeForNode(cell.node));
+                }
+            }
+        }
+
+        return ranges;
     };
 
     /**

@@ -18,10 +18,11 @@ define('io.ox/office/editor/editor',
      'io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
+     'io.ox/office/editor/oxoselection',
      'io.ox/office/editor/image',
      'io.ox/office/editor/position',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, Image, Position, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Image, Position, DocumentStyles) {
 
     'use strict';
 
@@ -248,58 +249,6 @@ define('io.ox/office/editor/editor',
         return str;
     }
 
-    /**
-     * Represents a text range consisting of start position and end position.
-     */
-    function OXOSelection(start, end) {
-        this.startPaM = start ? _.copy(start, true) : new OXOPaM([0, 0]);
-        this.endPaM = end ? _.copy(end, true) : _.copy(this.startPaM, true);
-        this.hasRange = function () {
-            var hasRange = false;
-            if (this.startPaM.oxoPosition.length === this.endPaM.oxoPosition.length) {
-                _(this.startPaM.oxoPosition).each(function (element, i) {
-                    if (element !== this.endPaM.oxoPosition[i]) {
-                        hasRange = true;
-                    }
-                }, this);
-            } else {
-                hasRange = true;
-            }
-
-            return hasRange;
-        };
-        this.adjust = function () {
-            var change = false,
-                minLength = 0;
-
-            if (this.startPaM.oxoPosition.length > this.endPaM.oxoPosition.length) {
-                minLength = this.endPaM.oxoPosition.length;
-            } else {
-                minLength = this.startPaM.oxoPosition.length;
-            }
-
-            for (var i = 0; i < minLength; i++) {
-                if (this.startPaM.oxoPosition[i] > this.endPaM.oxoPosition[i]) {
-                    change = true;
-                    break;
-                } else if (this.startPaM.oxoPosition[i] < this.endPaM.oxoPosition[i]) {
-                    change = false;
-                    break;
-                }
-            }
-
-            if (change) {
-                var tmp = _.copy(this.startPaM, true);
-                this.startPaM = _.copy(this.endPaM, true);
-                this.endPaM = tmp;
-            }
-        };
-
-        this.isEqual = function (selection) {
-            return (_.isEqual(this.startPaM.oxoPosition, selection.startPaM.oxoPosition) && _.isEqual(this.endPaM.oxoPosition, selection.endPaM.oxoPosition)) ? true : false;
-        };
-    }
-
     // private static functions ===============================================
 
     /**
@@ -374,7 +323,7 @@ define('io.ox/office/editor/editor',
             documentStyles = (textMode === 'rich') ? new DocumentStyles(editdiv) : null,
 
             // shortcut for paragraph styles
-            paragraphStyles = documentStyles ? documentStyles.getStyleSheets('paragraph') : null,
+            // paragraphStyles = documentStyles ? documentStyles.getStyleSheets('paragraph') : null,
 
             // shortcut for character styles
             characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
@@ -1593,7 +1542,7 @@ define('io.ox/office/editor/editor',
         };
 
         // ==================================================================
-        // private methods ----------------------------------------------------
+        // Private functions
         // ==================================================================
 
         function getPrintableChar(event) {
@@ -1882,57 +1831,6 @@ define('io.ox/office/editor/editor',
         // Private selection functions
         // ==================================================================
 
-        function getDOMSelection(oxoSelection, useNonTextNode) {
-
-            useNonTextNode = useNonTextNode ? true : false;
-
-            // Only supporting single selection at the moment
-            var start = Position.getDOMPosition(paragraphs, oxoSelection.startPaM.oxoPosition, useNonTextNode),
-                end = Position.getDOMPosition(paragraphs, oxoSelection.endPaM.oxoPosition, useNonTextNode);
-
-            // if ((start === end) && (start.node.nodeType === 1)) {
-            //     start = DOM.Point.createPointForNode(start.node);
-            //     end = DOM.Point.createPointForNode(end.node);
-            //     end.offset += 1;
-            // }
-
-            // DOM selection is always an array of text ranges
-            // TODO: fallback to HOME position in document instead of empty array?
-            return (start && end) ? [new DOM.Range(start, end)] : [];
-        }
-
-        function getCellDOMSelections(oxoSelection) {
-
-            var ranges = [];
-
-            var startPos = _.copy(oxoSelection.startPaM.oxoPosition, true),
-                endPos = _.copy(oxoSelection.endPaM.oxoPosition, true);
-
-            startPos.pop();
-            startPos.pop();
-            endPos.pop();
-            endPos.pop();
-
-            var startCol = startPos.pop(),
-                startRow = startPos.pop(),
-                endCol = endPos.pop(),
-                endRow = endPos.pop();
-
-            for (var i = startRow; i <= endRow; i++) {
-                for (var j = startCol; j <= endCol; j++) {
-                    var position = _.copy(startPos, true);
-                    position.push(i);
-                    position.push(j);
-                    var cell = Position.getDOMPosition(paragraphs, position);
-                    if (cell && $(cell.node).is('td, th')) {
-                        ranges.push(DOM.Range.createRangeForNode(cell.node));
-                    }
-                }
-            }
-
-            return ranges;
-        }
-
         function getSelection(updateFromBrowser) {
 
             if (currentSelection && !updateFromBrowser)
@@ -1985,10 +1883,10 @@ define('io.ox/office/editor/editor',
 
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
-                ranges = getCellDOMSelections(oxosel);
+                ranges = Position.getCellDOMSelections(paragraphs, oxosel);
             } else {
                 // var oldSelection = getSelection();
-                ranges = getDOMSelection(oxosel, useNonTextNode);
+                ranges = Position.getDOMSelection(paragraphs, oxosel, useNonTextNode);
             }
 
             // for (var i = 0; i < ranges.length; i++) {
@@ -2823,7 +2721,6 @@ define('io.ox/office/editor/editor',
                 }
 
                 // } else if (anchorType === 'ToPage') {
-                //     // TODO: This is not a good solution. Adding image to the end of the editdiv,
                 //     // does not produce any disorder, but images are not allowed at editdiv.
                 //     // A new counting for paragraphs = editdiv.children() is required.
                 //     $('<img>', { src: url }).appendTo(editdiv).css(attributes);
@@ -2967,7 +2864,7 @@ define('io.ox/office/editor/editor',
                 // build the DOM text range and set the formatting attributes
                 styleSheets = self.getStyleSheets(family);
                 if (styleSheets) {
-                    ranges = getDOMSelection(new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
+                    ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
                     styleSheets.setAttributesInRanges(ranges, attributes);
                 }
             } else {
@@ -3523,7 +3420,6 @@ define('io.ox/office/editor/editor',
                     }
                     if ((delEnd - delStart) === nodeLen) {
                         // remove element completely.
-                        // TODO: Need to take care for empty elements!
                         if ((isImage) || (isField)) {
                             oneParagraph.removeChild(node);
                         } else {
