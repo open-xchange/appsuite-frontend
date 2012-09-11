@@ -15,27 +15,33 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                                    'gettext!io.ox/tasks',
                                    'io.ox/core/extensions',
                                    'io.ox/core/extPatterns/links',
+                                   'io.ox/tasks/api',
                                    'io.ox/tasks/actions',
-                                   'less!io.ox/tasks/style.css' ], function (util, gt, ext, links) {
+                                   'less!io.ox/tasks/style.css' ], function (util, gt, ext, links, api) {
     "use strict";
     
     var taskDetailView = {
         draw: function (data) {
-            
-            var task = util.interpretTask(data, true);
-            var node = $('<div>').addClass("tasks-detailview").prop("data-cid", task.folder_id + "." + task.id);
-            
-            var infoPanel = $('<div>').addClass('info-panel');
-            if (task.start_date) {
-                infoPanel.append(
-                        $('<div>').text(gt("Start date") + " " + task.start_date).addClass("start-date")
-                );
+            if (!data) {
+                return $('<div>');
             }
+            
+            var task = util.interpretTask(data, true),
+                // outer node
+                self = this;
+            var node = $.createViewContainer(data, api)
+                    .on('redraw', function (e, tmp) {
+                        node.replaceWith(self.draw(tmp));
+                    })
+                    .addClass('tasks-detailview'),
+            
+                
+                infoPanel = $('<div>').addClass('info-panel');
             
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
-                        $('<div>').text(gt("Due date") + " " + task.end_date).addClass("end-date")
+                        $('<div>').text(gt("Due") + " " + task.end_date).addClass("end-date")
                 );
             }
             
@@ -63,7 +69,8 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             infoPanel.appendTo(node);
             
             $('<div>').text(task.title).addClass("title clear-title").appendTo(node);
-            ext.point("io.ox/tasks/detail").invoke("draw", node, data);
+            var inlineLinks = $('<div>').addClass("tasks-inline-links").appendTo(node);
+            ext.point("io.ox/tasks/detail").invoke("draw", inlineLinks, data);
             $('<div>').text(task.note).addClass("note").appendTo(node);
             
             return node;

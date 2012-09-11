@@ -21,7 +21,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     
     var loadTile = function () {
         var prevDef = new $.Deferred();
-        taskApi.getAll().done(function (taskarray) {
+        taskApi.getAll({}, false).done(function (taskarray) {
                 prevDef.resolve(taskarray);
             });
         
@@ -62,7 +62,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     
     load = function () {
         var def = new $.Deferred();
-        taskApi.getAll().done(function (taskarray) {
+        taskApi.getAll({cache: false}).done(function (taskarray) {
             def.resolve(taskarray);
         });
         return def;
@@ -86,11 +86,13 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 //detailView Popup
                 new dialogs.SidePopup({ modal: false })
                 .delegate(node, '.vgrid-cell', function (pane, e, target) {
-                    var data = target.data('object-data');
+                    var data = target.data('object-data'),
+                        folder = (data.folder_id || data.folder);
                     
                     require(['io.ox/tasks/view-detail'], function (viewDetail) {
                         // get task and draw detailview
-                        taskApi.get(data).done(function (taskData) {
+                        taskApi.get({folder: folder,
+                                     id: data.id}, false).done(function (taskData) {
                             viewDetail.draw(taskData).appendTo(pane);
                         });
                     });

@@ -54,6 +54,7 @@
 
 .tasks-detailview .info-panel {
     margin-left: 2em;
+    margin-bottom: 1em;
 	display: inline;
     float: right;
 }
@@ -61,7 +62,6 @@
 .tasks-detailview .priority,
 .tasks-detailview .status,
 .tasks-detailview .end-date,
-.tasks-detailview .start-date,
 .tasks-detailview .alarm-date {
 	float: right;
 }
@@ -74,6 +74,7 @@
 	margin-top: 4px;
 }
 
-.tasks-detailview .note {
+.tasks-detailview .note,
+.tasks-detailview .tasks-inline-links {
 	margin-top: 1em;
 }
