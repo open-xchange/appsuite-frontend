@@ -2935,10 +2935,10 @@ define('io.ox/office/editor/editor',
             start = _.copy(start);
             end = _.copy(end);
 
-            var isImageAttribute = attributes.isImageOperation ? true : false;
+            var containsImageAttribute = Image.containsImageAttributes(attributes);
 
             // get attribute family according to position
-            family = Position.getPositionAssignedFamily(paragraphs, start, isImageAttribute);
+            family = Position.getPositionAssignedFamily(paragraphs, start, containsImageAttribute);
 
             if (family === null) {
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);

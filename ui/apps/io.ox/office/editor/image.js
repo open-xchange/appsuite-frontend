@@ -60,8 +60,6 @@ define('io.ox/office/editor/image',
             operationAttributes.inline = false;
         }
 
-        operationAttributes.isImageOperation = 'true'; // only if this is set, it is assigned to an image
-
         return operationAttributes;
     };
 
@@ -240,6 +238,39 @@ define('io.ox/office/editor/image',
     };
 
     /**
+     * Checking, if at least one property of the attributes is
+     * relevant for images.
+     *
+     * @param {Object} attr
+     *  A map with formatting attribute values, mapped by the attribute
+     *  names.
+     *
+     * @returns {Boolean} containsImageProperty
+     *  A boolean value, indicating if the properties are relevant for
+     *  images.
+     */
+    Image.containsImageAttributes = function (attributes) {
+
+        var allImageAttributes = ['inline',
+                                  'width',
+                                  'height',
+                                  'marginL',
+                                  'marginT',
+                                  'marginR',
+                                  'marginB',
+                                  'anchorhbase',
+                                  'anchorhalign',
+                                  'anchorhoffset',
+                                  'anchorvbase',
+                                  'anchorvalign',
+                                  'anchorvoffset',
+                                  'textwrapmode',
+                                  'textwrapside'];
+
+        return _.any(allImageAttributes, function (attr) { return (attr in attributes); });
+    };
+
+    /**
      * Changes a formatting attributes of an image node.
      *
      * @param {Node} startnode
@@ -274,50 +305,58 @@ define('io.ox/office/editor/image',
 
             if (Utils.getNodeName(imageNode) === 'img') {
 
-                attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
-                attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
-
                 var anchorType = Image.getAnchorTypeFromAttributes(attributes);
 
                 imageFloatMode = Image.getFloatModeFromAnchorType(anchorType);
 
-                if (imageFloatMode === 'inline') {
-                    // inserting an empty text span before the image, if it is an inline image
-                    var parent = imageNode.parentNode,
+                if (imageFloatMode !== null) {
+
+                    if (imageFloatMode === 'inline') {
+
+                        attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                        attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+
+                        // inserting an empty text span before the image, if it is an inline image
+                        var parent = imageNode.parentNode,
                         textSpanNode = Position.getFirstTextSpanInParagraph(parent),
                         newTextNode = $(textSpanNode).clone(true);
 
-                    newTextNode.text('');
-                    newTextNode.insertBefore(imageNode);
-                    localStart = Position.getFirstPositionInParagraph(startnode, localStart);
-                } else {
+                        newTextNode.text('');
+                        newTextNode.insertBefore(imageNode);
+                        localStart = Position.getFirstPositionInParagraph(startnode, localStart);
 
-                    if (imageFloatMode === 'noneFloated') {
-                        attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
-                        attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
-                    }
+                    } else {
 
-                    // inserting the image as the first child of the paragraph, before an text node.
-                    var parent = imageNode.parentNode,
+                        if (imageFloatMode === 'noneFloated') {
+                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
+                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
+                        } else if ((imageFloatMode === 'leftFloated') || (imageFloatMode === 'rightFloated')) {
+                            attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                            attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+                        }
+
+                        // inserting the image as the first child of the paragraph, before an text node.
+                        var parent = imageNode.parentNode,
                         textSpanNode = Position.getFirstTextSpanInParagraph(parent);
 
-                    if (textSpanNode) {
-                        parent.insertBefore(imageNode, textSpanNode);
-                    } else {
-                        parent.insertBefore(imageNode, parent.firstChild);
+                        if (textSpanNode) {
+                            parent.insertBefore(imageNode, textSpanNode);
+                        } else {
+                            parent.insertBefore(imageNode, parent.firstChild);
+                        }
                     }
-                }
 
-                // setting css float property
-                if (imageFloatMode === 'rightFloated') {
-                    attributes.float = 'right';
-                } else if (imageFloatMode === 'leftFloated') {
-                    attributes.float = 'left';
-                } else {  // 'noneFloated' or 'inline'
-                    attributes.float = 'none';
-                }
+                    // setting css float property
+                    if (imageFloatMode === 'rightFloated') {
+                        attributes.float = 'right';
+                    } else if (imageFloatMode === 'leftFloated') {
+                        attributes.float = 'left';
+                    } else if ((imageFloatMode === 'noneFloated') || (imageFloatMode === 'inline')) {
+                        attributes.float = 'none';
+                    }
 
-                $(imageNode).data('mode', imageFloatMode).css(attributes);
+                    $(imageNode).data('mode', imageFloatMode).css(attributes);
+                }
             }
         }
 
