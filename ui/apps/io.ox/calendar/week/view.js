@@ -106,7 +106,7 @@ define('io.ox/calendar/week/view',
                 var cid = $(e.currentTarget).attr('data-cid'),
                     obj = _.cid(cid),
                     that = this;
-                
+                that.trigger('showAppointment', e, obj);
                 if (this.clickTimer === null) {
                     this.clickTimer = setTimeout(function () {
                         that.clicks = 0;
@@ -117,7 +117,7 @@ define('io.ox/calendar/week/view',
                             .not($('[data-cid="' + cid + '"]'))
                             .addClass('opac');
                         $('[data-cid="' + cid + '"]').addClass('current');
-                        that.trigger('showAppointment', e, obj);
+                        
                     }, 250);
                 }
     
@@ -164,13 +164,13 @@ define('io.ox/calendar/week/view',
             if (!this.lassoMode) {
                 return;
             }
-            var MousePosY = this.roundToGrid(e.target.offsetTop + e.offsetY);
+            var MousePosY = e.target.offsetTop + e.offsetY;
             // switch mouse events
             switch (e.type) {
             case 'mousemove':
                 // normal move
                 if (this.lasso && e.which === 1) {
-                    var newHeight = MousePosY - this.lasso.data('start'),
+                    var newHeight = this.roundToGrid(MousePosY) - this.lasso.data('start'),
                         newHeightNorm = Math.abs(newHeight);
                     this.lasso.css({
                         height: newHeightNorm,
@@ -184,9 +184,9 @@ define('io.ox/calendar/week/view',
                         .css({
                             height: this.cellHeight,
                             minHeight: this.cellHeight,
-                            top: MousePosY
+                            top: this.roundToGrid(MousePosY, 'top')
                         });
-                    this.lasso.data('start', MousePosY);
+                    this.lasso.data('start', this.roundToGrid(MousePosY, 'top'));
                     $(e.currentTarget)
                         .append(this.lasso);
                 } else {
@@ -563,18 +563,19 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function (e, ui) {
                         var el = $(this),
-                            obj = _.cid(el.attr('data-cid'));
+                            obj = _.cid(el.attr('data-cid')),
+                            tmpTS = that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top);
                         that.lassoMode = true;
                         el.removeClass('opac');
                         
                         if (el.position().top !== ui.originalPosition.top) {
                             _.extend(obj, {
-                                start_date: that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top),
+                                start_date: tmpTS,
                                 ignore_conflicts: true
                             });
                         } else if (el.height() !== ui.originalSize.height) {
                             _.extend(obj, {
-                                end_date: that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top + el.outerHeight()),
+                                end_date: tmpTS + that.getTimeFromPos(el.outerHeight()),
                                 ignore_conflicts: true
                             });
                         }
@@ -688,8 +689,17 @@ define('io.ox/calendar/week/view',
                 );
         },
 
-        roundToGrid: function (pos) {
-            return pos - pos % this.gridHeight();
+        roundToGrid: function (pos, typ) {
+            switch (typ) {
+            case 'top':
+                return pos - pos % this.gridHeight();
+
+            case 'bottom':
+                return pos + pos % this.gridHeight();
+
+            default:
+                return Math.round(pos / this.gridHeight()) * this.gridHeight();
+            }
         },
         
         calcPos: function (ap) {
