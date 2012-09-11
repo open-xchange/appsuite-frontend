@@ -64,8 +64,7 @@ define('io.ox/calendar/week/perspective',
         
         getAppointments: function (obj) {
             // fetch appointments
-            var self = this,
-                collection = self.collection;
+            var collection = this.collection;
             if (collection) {
                 api.getAll(obj).done(function (list) {
                     collection
@@ -86,7 +85,11 @@ define('io.ox/calendar/week/perspective',
                 },
                 that = this;
             this.app.folder.getData().done(function (data) {
-                that.view.setShowAllvisibility(data.type === 1);
+                // switch only visible on private folders
+                that.view.setShowAllVisibility(data.type === 1);
+                // set folder data to view
+                that.view.setFolder(data);
+                // do folder magic
                 if (data.type > 1 || that.view.getShowAllStatus() === false) {
                     obj.folder = data.id;
                 }
