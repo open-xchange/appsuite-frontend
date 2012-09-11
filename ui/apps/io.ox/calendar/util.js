@@ -13,7 +13,8 @@
 
 define("io.ox/calendar/util",
     ["io.ox/core/date", "gettext!io.ox/calendar/calendar",
-     'io.ox/core/api/user', 'io.ox/contacts/api'], function (date, gettext, userAPI, contactAPI) {
+     'io.ox/core/api/user', 'io.ox/contacts/api',
+     'io.ox/core/api/group'], function (date, gettext, userAPI, contactAPI, groupAPI) {
 
     "use strict";
 
@@ -436,7 +437,7 @@ define("io.ox/calendar/util",
 
             return rows;
         },
-        
+
         getTodayStart: function (timestamp) {
             return ((timestamp || _.now()) / DAY >> 0) * DAY;
         },
@@ -478,15 +479,26 @@ define("io.ox/calendar/util",
 
         createArrayOfRecipients: function (participants, def) {
             var arrayOfRecipients = [],
-                arrayOfIds = [];
+                arrayOfIds = [],
+                idsFromGroupMembers = [],
+                arrayOfGroupMembers = [];
 
             _.each(participants, function (single) {
                 if (single.type === 5) {
                     arrayOfRecipients.push([single.display_name, single.mail]);
+                } else if (single.type === 2) {
+                    idsFromGroupMembers.push(single.id);
                 } else {
                     arrayOfIds.push(single.id);
                 }
             });
+
+            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers);
+
+            _.each(arrayOfGroupMembers, function (single) {
+                arrayOfRecipients.push([single.display_name, single.mail]);
+            });
+
             userAPI.getList(arrayOfIds).done(function (obj) {
                 _.each(obj, function (single) {
                     arrayOfRecipients.push([single.display_name, single.email1]);
@@ -501,6 +513,70 @@ define("io.ox/calendar/util",
             contactAPI.get({id: internal, folder: 6}).done(function (data) {
                 def.resolve(data.user_id);
             });
+        },
+
+        resolveGroupMembers: function (idsFromGroupMembers, returnArray) {
+
+            var collectedIdsFromGroups = [];
+            groupAPI.getList(idsFromGroupMembers).done(function (data) {
+
+                _.each(data, function (single) {
+                    _.each(single.members, function (single) {
+                        collectedIdsFromGroups.push(single);
+                    });
+                });
+
+                userAPI.getList(collectedIdsFromGroups).done(function (data) {
+                    _.each(data, function (single) {
+                        returnArray.push({
+                            display_name: single.display_name,
+                            folder_id: single.folder_id,
+                            id: single.id,
+                            mail: single.email1,
+                            mail_field: 1
+                        });
+                    });
+                });
+            });
+        },
+
+        createDistlistArrayFromPartisipantList: function (participants, def) {
+
+            var distlistArray = [],
+                idsFromGroupMembers = [],
+                collectedIdsFromGroups = [],
+                returnArray = [],
+                arrayOfIds = [];
+
+            _.each(participants, function (single) {
+                if (single.type === 2) {
+                    idsFromGroupMembers.push(single.id);
+                } else if (single.type === 5) {
+                    returnArray.push({
+                        display_name: single.display_name,
+                        mail: single.mail,
+                        mail_field: 0
+                    });
+                } else if (single.type === 1) {
+                    arrayOfIds.push(single.id);
+                }
+            });
+
+            that.resolveGroupMembers(idsFromGroupMembers, returnArray);
+
+            userAPI.getList(arrayOfIds).done(function (obj) {
+                _.each(obj, function (single) {
+                    returnArray.push({
+                        display_name: single.display_name,
+                        folder_id: single.folder_id,
+                        id: single.id,
+                        mail: single.email1,
+                        mail_field: 1
+                    });
+                });
+            });
+
+            def.resolve({distribution_list: returnArray});
         }
     };
 

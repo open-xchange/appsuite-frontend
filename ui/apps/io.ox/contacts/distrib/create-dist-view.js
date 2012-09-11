@@ -164,17 +164,6 @@ define('io.ox/contacts/distrib/create-dist-view',
         o.node.append(frame);
     }
 
-    function calcMailField(contact, selectedMail) {
-        var field, mail;
-        mail = [contact.email1, contact.email2, contact.email3];
-        _.each(mail, function (val, key) {
-            if (selectedMail === val) {
-                field = key + 1;
-            }
-        });
-        return field;
-    }
-
     function copyContact(options, contact, selectedMail) {
         var dataMailId;
 
@@ -205,7 +194,7 @@ define('io.ox/contacts/distrib/create-dist-view',
                 options: options
             });
             dataMailId = '[data-mail="' + contact.display_name + '_' + selectedMail + '"]';
-            var mailNr = (calcMailField(contact, selectedMail));
+            var mailNr = (util.calcMailField(contact, selectedMail));
 
             options.model._data.distribution_list.push({
                 id: contact.id,

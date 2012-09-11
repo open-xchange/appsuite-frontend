@@ -49,12 +49,18 @@ define('io.ox/contacts/distrib/main',
                 .on('save:done save:fail', win.idle);
         }
 
-        app.create = function (folderId) {
+        app.create = function (folderId, initdata) {
             // set state
             app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
-            model = new ContactModel();
+
+            if (initdata !== undefined) {
+                model = new ContactModel(initdata);
+            } else {
+                model = new ContactModel();
+            }
+
             view = new ContactCreateDistView({ model: model });
             // define store
             model.store = function (data, changes) {
