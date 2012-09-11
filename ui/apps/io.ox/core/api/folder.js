@@ -411,7 +411,7 @@ define('io.ox/core/api/folder',
                 }
                 return result;
             case 'create':
-                return (isAdmin || this.derive('permissions', data).bit >= 4);
+                return (isAdmin || this.derive.bits('permissions', data).bit >= 4);
             case 'delete':
                 // must be admin; system and default folder cannot be deleted
                 return isAdmin && !isSystem && !this.is('defaultfolder', data);

@@ -85,7 +85,7 @@ define('io.ox/core/collection',
                     var i = 0, item = null, folder = null;
                     for (; i < $l; i++) {
                         item = collection[i];
-                        if ((folder = hash[getFolderId(item)])) {
+                        if ((folder = hash[getFolderId(item)])) {x
                             // get properties
                             props.read = props.read && getRight(folder, item.created_by, 7); // read
                             props.modify = props.modify && getRight(folder, item.created_by, 14); // write

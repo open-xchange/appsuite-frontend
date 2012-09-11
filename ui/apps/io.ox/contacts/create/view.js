@@ -74,6 +74,8 @@ define('io.ox/contacts/create/view',
         index += 100;
     });
     
+    //
+    
     return {
         ContactCreateView: ContactCreateView,
         getPopup: function (contactModel) {

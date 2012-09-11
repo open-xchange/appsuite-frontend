@@ -19,7 +19,7 @@ define('io.ox/contacts/distrib/main',
      'gettext!io.ox/contacts/contacts',
      'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
-     ], function (api, model, ContactCreateDistView, gt, util) {
+     ], function (api, contactModel, ContactCreateDistView, gt, util) {
 
     'use strict';
 
@@ -28,7 +28,7 @@ define('io.ox/contacts/distrib/main',
 
         var app,
             win,
-            container
+            container,
             model,
             view;
 
@@ -40,7 +40,7 @@ define('io.ox/contacts/distrib/main',
         function show() {
 
             win.show(function () {
-                container.append(view.render().node)
+                container.append(view.render().$el)
                     .find('input[type=text]:visible').eq(0).focus();
             });
 
@@ -51,7 +51,7 @@ define('io.ox/contacts/distrib/main',
             app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
-            model = model.create({
+            model = contactModel.factory.create({
                 folder_id: folderId,
                 mark_as_distributionlist: true
             });
@@ -108,7 +108,6 @@ define('io.ox/contacts/distrib/main',
                             console.debug("Action", action);
                             if (action === 'delete') {
                                 def.resolve();
-                                listetItem.remove();
                             } else {
                                 def.reject();
                             }

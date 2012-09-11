@@ -13,12 +13,14 @@
 define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], function (ext, Events) {
     "use strict";
     
+    var views;
     
     
     function ViewExtensionPoint(name) {
         
         this.basicExtend = function (extension) {
             ext.point(name).extend(extension);
+            return this;
         };
         
         this.extend = function (options, extOptions) {
@@ -91,6 +93,27 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             return this;
         };
         
+        this.createSubpoint = function (subpath, options, extOptions) {
+            var point = views.point(name + "/" + subpath),
+                ViewClass = point.createView(options);
+            
+            options.id = options.id || name + "/" + subpath;
+            
+            extOptions = extOptions || {};
+            this.basicExtend(_.extend({}, {
+                id: options.id,
+                index: options.index,
+                draw: function (options) {
+                    var view = new ViewClass(options);
+                    view.render();
+                    this.append(view.$el);
+                }
+            }, extOptions));
+            
+            return point;
+            
+        };
+        
         this.createView = function (options) {
             options.render = options.render || function () {
                 this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model, parentView: this}]));
@@ -108,6 +131,8 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             
             return Backbone.View.extend(options);
         };
+        
+        
     }
     
     
@@ -160,7 +185,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         _.extend(this, options);
     }
 
-    return {
+    views = {
         
         point: function (name) {
             return new ViewExtensionPoint(name);
@@ -172,5 +197,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         ext: ext
         
     };
+    
+    return views;
 
 });
