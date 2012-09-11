@@ -240,10 +240,6 @@
     
     .appointment {
         position: absolute;
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
-        cursor: pointer;
         background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
@@ -255,6 +251,10 @@
         transition: opacity 0.2s;
     }
 
+    .appointment.modify {
+        cursor: pointer;
+    }
+    
     .appointment-content {
         height: 100%;
         font-family: Arial, Helvetica, sans-serif;

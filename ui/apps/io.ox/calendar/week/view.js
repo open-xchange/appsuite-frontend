@@ -15,8 +15,9 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'io.ox/core/config',
      'gettext!io.ox/calendar/view',
+     'io.ox/core/api/folder',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, config, gt) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, config, gt, folder) {
 
     'use strict';
 
@@ -30,39 +31,29 @@ define('io.ox/calendar/week/view',
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
         cellHeight:     24,     // height of one single fragment in px
-        fulltimeHeight: 19,     // height of fulltime appointments in px
+        fulltimeHeight: 19,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
         overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
-        slots:          24,     // amount of shown timeslots
-        workStart:      8,      // full hour for start position of worktime marker
-        workEnd:        18,     // full hour for end position of worktime marker
-        curTimeUTC:    0,       // current timestamp
-        
+        slots:          24,     // amount of shown time-slots
+        workStart:      8,      // full hour for start position of working time marker
+        workEnd:        18,     // full hour for end position of working time marker
+
+        curTimeUTC:     0,      // current timestamp
         pane:           $(),    // main scroll pane
-        fulltimePane:   $(),    // fulltime appointments pane
-        fulltimeCon:    $(),    // fulltime container
+        fulltimePane:   $(),    // full-time appointments pane
+        fulltimeCon:    $(),    // full-time container
         timeline:       $(),    // timeline
         footer:         $(),    // footer
         kwInfo:         $(),    // current KW
-        showAll:        $(),    // show all folders checkbox
+        showAll:        $(),    // show all folders check-box
         showAllCon:     $(),    // container
-        week:           [],     // week scaffold
         tlInterval:     {},     // timeline interval
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         lassoMode:      true,   // is lasso active
-        
-        // calculate complete height of the grid
-        height: function () {
-            return this.cellHeight * this.slots * this.fragmentation;
-        },
-        
-        // calculate height of a single grid fragment
-        gridHeight: function () {
-            return this.cellHeight * this.fragmentation / this.gridSize;
-        },
+        folder:         {},     // current folder
         
         // define view events
         events: {
@@ -77,14 +68,6 @@ define('io.ox/calendar/week/view',
             'click .toolbar .control.prev': 'onControlView',
             'click .toolbar .link.today': 'onControlView',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
-        },
-        
-        getShowAllStatus: function () {
-            return this.showAll.prop('checked');
-        },
-        
-        setShowAllvisibility: function (display) {
-            this.showAllCon[display ? 'show': 'hide']();
         },
         
         onControlView: function (e) {
@@ -147,6 +130,9 @@ define('io.ox/calendar/week/view',
         
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
+            if (!folder.can('create', this.folder)) {
+                return;
+            }
             if ($(e.target).is('.timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.getTimeFromPos(e.target.offsetTop + e.offsetY),
@@ -161,7 +147,7 @@ define('io.ox/calendar/week/view',
         },
         
         onLasso: function (e) {
-            if (!this.lassoMode) {
+            if (!this.lassoMode || !folder.can('create', this.folder)) {
                 return;
             }
             var MousePosY = e.target.offsetTop + e.offsetY;
@@ -527,7 +513,7 @@ define('io.ox/calendar/week/view',
             
             // init drag and resize widget on appointments
             var colWidth = $('.day:first').outerWidth();
-            $('.day>.appointment')
+            $('.day>.appointment:modify')
                 .draggable({
                     grid: [colWidth, that.gridHeight()],
                     scroll: true,
@@ -545,7 +531,7 @@ define('io.ox/calendar/week/view',
                     },
                     drag: function (e, ui) {
                         // correct position
-                        $(this).data('draggable').position.left -= ui.originalPosition.left;
+                        $(this).data('draggable').position.left = 0;
                     }
                 })
                 .resizable({
@@ -603,7 +589,7 @@ define('io.ox/calendar/week/view',
             });
             
             // init drag and resize widget on appointments
-            $('.fulltime>.appointment')
+            $('.fulltime>.appointment.modify')
                 .draggable({
                     grid: [colWidth, 0],
                     axis: 'x',
@@ -672,14 +658,25 @@ define('io.ox/calendar/week/view',
         renderAppointment: function (a) {
 
             myself = myself || config.get('identifier');
-
+            console.log(
+                'myself',
+                folder.can('write', this.folder, a),
+                folder.can('delete', this.folder, a)
+            );
+            
             // check confirmations
             var state = (_(a.participants).find(function (o) {
                     return o.id === myself;
                 }) || { type: 0 }).type;
 
             return $('<div>')
-                .addClass('appointment ' + util.getShownAsClass(a) + (a.private_flag ? ' private' : '') + (state === 0 ? ' unconfirmed' : ''))
+                .addClass(
+                    'appointment ' +
+                    util.getShownAsClass(a) +
+                    (a.private_flag ? ' private' : '') +
+                    (state === 0 ? ' unconfirmed' : '') +
+                    (folder.can('write', this.folder, a) ? ' modify' : '')
+                )
                 .attr('data-cid', _.cid(a))
                 .append(
                     $('<div>')
@@ -725,6 +722,32 @@ define('io.ox/calendar/week/view',
         
         getTimeFromPos: function (pos) {
             return Math.max(0, this.roundToGrid(pos) / this.height() * date.DAY);
+        },
+        
+        // calculate complete height of the grid
+        height: function () {
+            return this.cellHeight * this.slots * this.fragmentation;
+        },
+        
+        // calculate height of a single grid fragment
+        gridHeight: function () {
+            return this.cellHeight * this.fragmentation / this.gridSize;
+        },
+        
+        getShowAllStatus: function () {
+            return this.showAll.prop('checked');
+        },
+        
+        setShowAllVisibility: function (display) {
+            this.showAllCon[display ? 'show': 'hide']();
+        },
+        
+        getFolder: function () {
+            return this.folder;
+        },
+        
+        setFolder: function (folder) {
+            this.folder =  folder;
         }
         
     });
