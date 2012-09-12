@@ -180,7 +180,7 @@ define('io.ox/calendar/edit/view-main',
             self.subviews.recurrence_option = new recurrenceModule.OptionView({
                 el: $(self.el).find('.edit-appointment-recurrence-container'),
                 model: self.model,
-                parentview: self.el,
+                parentview: self.$el,
                 recurrenceView: self.subviews.recurrenceView
             });
 
@@ -195,6 +195,7 @@ define('io.ox/calendar/edit/view-main',
             self.subviews.addparticipants = new AddParticipantsView({ el: $(self.el).find('.add-participants')});
             self.subviews.addparticipants.render();
             self.subviews.addparticipants.on('select', _.bind(self.onAddParticipant, self));
+
             //$(self.el).find('.participants').empty().append(self.subviews.participants.render().el);
 
             return self;

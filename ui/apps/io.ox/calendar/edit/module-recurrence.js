@@ -136,7 +136,7 @@ define('io.ox/calendar/edit/module-recurrence',
         }
     });
 
-
+    // TODO remove later
     //Strings
     var staticStrings = {
         STARTS_ON: gt('Starts on'),
@@ -179,14 +179,14 @@ define('io.ox/calendar/edit/module-recurrence',
         { value: 1, label: gt('February') },
         { value: 2, label: gt('March') },
         { value: 3, label: gt('April') },
-        { value: 4, label: gt('Mai') },
+        { value: 4, label: gt('May') },
         { value: 5, label: gt('June') },
         { value: 6, label: gt('July') },
         { value: 7, label: gt('August') },
         { value: 8, label: gt('September') },
-        { value: 9, label: gt('Oktober') },
+        { value: 9, label: gt('October') },
         { value: 10, label: gt('November') },
-        { value: 11, label: gt('Dezember') }
+        { value: 11, label: gt('December') }
     ];
     //strings end
 
@@ -222,20 +222,25 @@ define('io.ox/calendar/edit/module-recurrence',
             var self = this;
             self.parentView = options.parentView;
             self._modelBinder = new Backbone.ModelBinder();
+
             /*var bindings = {
                 start_date: {
                     selector: '[name=recurrence_start]',
                     converter: binderUtils.convertDate
                 }
             };*/
+
             // bind recurrence type change, i.e. "daily" or "weekly"
             self.model.on('change:recurrence_type', _.bind(self.updateRecurrenceDetail, self));
-//            self.model.on('change:start_date', _.bind(self.updateRecurrenceStart, self));
+
+            //self.model.on('change:start_date', _.bind(self.updateRecurrenceStart, self));
         },
         render: function () {
             var self = this;
-            console.log("render recurrenceview");
-            var $container =  $(self.parentView).find('.recurrence-option-container');
+            console.log("render recurrenceview here", self);
+
+            var $container = $(self.parentView).find('.recurrence-option-container');
+
             self.$el.empty();
             ext.point('io.ox/calendar/edit/recurrence').invoke('draw', $container, {
                 uid: _.uniqueId('io_ox_calendar_edit_')
