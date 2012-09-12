@@ -16,8 +16,9 @@ define('io.ox/calendar/week/perspective',
          'io.ox/calendar/util',
          'io.ox/core/http',
          'io.ox/core/tk/dialogs',
-         'io.ox/calendar/view-detail'
-         ], function (View, api, util, http, dialogs, detailView) {
+         'io.ox/calendar/view-detail',
+         'gettext!io.ox/calendar/view'
+         ], function (View, api, util, http, dialogs, detailView, gt) {
 
     'use strict';
 
@@ -45,9 +46,31 @@ define('io.ox/calendar/week/perspective',
         },
         
         updateAppointment: function (obj) {
-            api.update(obj).done(function (data) {
-//                console.log('updateAppointment result', data);
-            });
+            var that = this;
+            if (obj.recurrence_type > 0) {
+                new dialogs.ModalDialog()
+                    .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
+                    .addPrimaryButton('series', gt('Series'))
+                    .addButton('appointment', gt('Appointment'))
+                    .addButton('cancel', gt('Cancel'))
+                    .show()
+                    .done(function (action) {
+                        if (action === 'cancel') {
+                            that.refresh();
+                            return;
+                        }
+                        if (action === 'series') {
+                            delete obj.recurrence_position;
+                        }
+                        api.update(obj).done(function (data) {
+//                          console.log('updateAppointment result', data);
+                        });
+                    });
+            } else {
+                api.update(obj).done(function (data) {
+//                  console.log('updateAppointment result', data);
+                });
+            }
         },
         
         openCreateAppointment: function (e, obj) {

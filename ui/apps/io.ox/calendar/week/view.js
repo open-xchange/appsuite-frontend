@@ -30,7 +30,7 @@ define('io.ox/calendar/week/view',
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
-        cellHeight:     24,     // height of one single fragment in px
+        cellHeight:     21,     // height of one single fragment in px
         fulltimeHeight: 19,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
@@ -465,10 +465,10 @@ define('io.ox/calendar/week/view',
             }, this);
             
             // calculate full-time appointment container height
-            var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * this.fulltimeHeight + 3;
+            var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1) + 1;
+            this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
+            this.fulltimeCon.add().css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
-            this.fulltimePane.css({ height: fulltimeColPos.length * this.fulltimeHeight + 2 + 'px'});
-            this.fulltimeCon.css({ height: ftHeight + 'px' });
             
             // adjust scoll position
             this.pane.scrollTop(this.getScrollPos());
@@ -541,7 +541,7 @@ define('io.ox/calendar/week/view',
                     },
                     drag: function (e, ui) {
                         // correct position
-                        $(this).data('draggable').position.left = 0;
+                        $(this).data('draggable').position.left -= ui.originalPosition.left - 1;
                     }
                 })
                 .resizable({
@@ -683,6 +683,7 @@ define('io.ox/calendar/week/view',
                 .append(
                     $('<div>')
                         .addClass('appointment-content')
+                        .css('lineHeight', (a.full_time ? this.fulltimeHeight : this.cellHeight) + 'px')
                         .append($('<div>').addClass('title').text(a.title))
                         .append($('<div>').addClass('location').text(a.location || ''))
                 );
