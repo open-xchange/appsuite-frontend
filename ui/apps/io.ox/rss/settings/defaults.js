@@ -17,9 +17,9 @@ define('io.ox/rss/settings/defaults', [], function () {
 
     var settingsDefaults = {
 /*        groups: [
-            {groupname: 'Default feeds', index: 100, members: [
-                {feedname: 'mail', url: 'http://usaerklaert.wordpress.com/feed', index: 100},
-                ...more members...
+            {groupname: 'News RSS', index: 200, members: [
+                {feedname: 'Heise', url: 'http://www.heise.de/newsticker/heise-atom.xml', index: 100},
+                {feedname: 'Gizmodo', url: 'http://www.gizmodo.de/feed', index: 200}
             ]},
             ...more groups...
         ]*/

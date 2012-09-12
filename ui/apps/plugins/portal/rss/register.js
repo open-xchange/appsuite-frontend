@@ -52,6 +52,9 @@ define("plugins/portal/rss/register",
     var feeds = [];
     
     var tileGroups = settings.get('groups');
+    console.log("Before sorting:", tileGroups);
+    tileGroups = _(tileGroups).sortBy(function (group) { return group.index || 0; });
+    console.log("After sorting:", tileGroups);
     _(tileGroups).each(function (tilegroup) {
         ext.point("io.ox/portal/widget").extend({
             id: 'rss-' + tilegroup.index,
@@ -63,11 +66,10 @@ define("plugins/portal/rss/register",
             
                 migrateIfNecessary();
             
-                console.log("Group = ", tilegroup);
                 _(tilegroup.members).each(function (member) {
-                    console.log("Member = ", member);
                     requests.push(member.url);
                 });
+                
                 rss.getMany(requests, "date")
                     .done(def.resolve)
                     .fail(def.reject);
