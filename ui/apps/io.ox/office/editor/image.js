@@ -330,9 +330,12 @@ define('io.ox/office/editor/image',
                         if (imageFloatMode === 'noneFloated') {
                             attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
                             attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
-                        } else if ((imageFloatMode === 'leftFloated') || (imageFloatMode === 'rightFloated')) {
-                            attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                        } else if (imageFloatMode === 'leftFloated') {
+                            attributes['margin-left'] = 0;
                             attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+                        } else if (imageFloatMode === 'rightFloated') {
+                            attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                            attributes['margin-right'] = 0;
                         }
 
                         // inserting the image as the first child of the paragraph, before an text node.

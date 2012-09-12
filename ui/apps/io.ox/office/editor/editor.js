@@ -2704,11 +2704,13 @@ define('io.ox/office/editor/editor',
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'left';
+                    attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
+                    attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
