@@ -21,8 +21,9 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/oxoselection',
      'io.ox/office/editor/image',
      'io.ox/office/editor/position',
+     'io.ox/office/editor/undo',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Image, Position, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Image, Position, Undo, DocumentStyles) {
 
     'use strict';
 
@@ -62,247 +63,7 @@ define('io.ox/office/editor/editor',
 
     var OP_IMAGE_INSERT = 'insertImage';
     var OP_FIELD_INSERT = 'insertField';
-
-    //    var OP_ATTR_DELETE =  'deleteAttribute';
-
-    function OXOUndoAction(_undoOperation, _redoOperation) {
-
-        // Need to store as member, because of the feature to merge undos afterwards...
-        this.undoOperation = _undoOperation;
-        this.redoOperation = _redoOperation;
-
-        this.undo = function (editor) {
-            editor.publicApplyOperation(this.undoOperation, true, true);  // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
-        };
-
-        this.redo = function (editor) {
-            editor.publicApplyOperation(this.redoOperation, true, true);
-        };
-    }
-
-
-    function OXOUndoManager() {
-
-        var actions = [];
-        // var maxActions = 1000;   // not clear if really wanted/needed...
-        var currentAction = 0;
-
-        var groupLevel = 0;
-        var currentGroupActions = [];
-
-        var enabled = true;
-
-        var processingUndoRedo = false;
-
-        this.clear = function () {
-            actions = [];
-            currentAction = 0;
-        };
-
-        this.isEnabled = function () {
-            return enabled;
-        };
-
-        this.enable = function (b) {
-            enabled = b;
-            if (!enabled)
-                this.clear();
-        };
-
-        this.startGroup = function () {
-            // I don't think we really need complex structure with nested arrays here.
-            // Once we start a group, undo will allways undo everything withing
-            // Just using ++/-- so other code don't needs to take care wether or not grouping is already active...
-            groupLevel++;
-        };
-
-        this.endGroup = function () {
-
-            if (!groupLevel) {
-                Utils.error('OXOUndoManager.endGroup(): not in undo group!');
-                return;
-            }
-
-            groupLevel--;
-
-            if (groupLevel === 0) {
-                actions.push(currentGroupActions);
-                currentAction = actions.length;
-                currentGroupActions = [];
-            }
-        };
-
-        this.isInUndo = function () {
-            return processingUndoRedo;
-        };
-
-        this.addUndo = function (oxoUndoAction) {
-
-            if (this.isInUndo()) {
-                Utils.error('OXOUndoManager.addUndo(): creating undo while processing undo!');
-                return;
-            }
-
-            var tryToMerge = true;
-
-            // remove undone actions
-            if (currentAction < actions.length) {
-                actions.splice(currentAction);
-                tryToMerge = false;
-            }
-
-            if (groupLevel) {
-                currentGroupActions.push(oxoUndoAction);
-            }
-            else {
-                var bDone = false;
-                if (tryToMerge && currentAction && oxoUndoAction.allowMerge) {
-                    var prevUndo = actions[currentAction - 1];
-                    if (prevUndo.allowMerge && (prevUndo.redoOperation.name === oxoUndoAction.redoOperation.name)) {
-                        if (oxoUndoAction.redoOperation.name === OP_TEXT_INSERT) {
-                            if (isSameParagraph(oxoUndoAction.redoOperation.start, prevUndo.redoOperation.start, false)) {
-                                var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
-                                var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
-                                if (prevCharEnd === oxoUndoAction.redoOperation.start[nCharPosInArray]) {
-                                    var lastChar = prevUndo.redoOperation.text[prevUndo.redoOperation.text.length - 1];     // text len can't be 0 in undo action...
-                                    if (lastChar !== ' ') {
-                                        // Merge Undo...
-                                        prevUndo.redoOperation.text +=  oxoUndoAction.redoOperation.text;
-                                        prevUndo.undoOperation.end[nCharPosInArray] += oxoUndoAction.redoOperation.text.length;
-                                        bDone = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!bDone)
-                    actions.push(oxoUndoAction);
-                currentAction = actions.length;
-            }
-        };
-
-        this.hasUndo = function () {
-            return currentAction > 0 ? true : false;
-        };
-
-        this.undo = function (editor) {
-
-            if (!this.hasUndo())
-                return;
-
-            processingUndoRedo = true;
-            var action = actions[--currentAction];
-            if (_.isArray(action)) {
-                for (var i = action.length; i;) {
-                    action[--i].undo(editor);
-                }
-            }
-            else {
-                action.undo(editor);
-            }
-            processingUndoRedo = false;
-        };
-
-        this.hasRedo = function () {
-            return currentAction < actions.length ? true : false;
-        };
-
-        this.redo = function (editor) {
-
-            if (!this.hasRedo())
-                return;
-
-            processingUndoRedo = true;
-            var action = actions[currentAction++];
-            if (_.isArray(action)) {
-                _.invoke(action, "redo", editor);
-            }
-            else {
-                action.redo(editor);
-            }
-            processingUndoRedo = false;
-        };
-
-    } // class OXOUndoManager
-
-    function fillstr(str, len, fill, right) {
-        while (str.length < len) {
-            if (right)
-                str = str + fill;
-            else
-                str = fill + str;
-        }
-        return str;
-    }
-
-    function getFormattedPositionString(position) {
-        var str = '';
-
-        for (var i = 0; i < position.length; i++) {
-            str += fillstr(position[i].toString(), 2, '0');
-            if (i !== position.length - 1) {
-                str += ',';
-            }
-        }
-
-        return str;
-    }
-
-    // private static functions ===============================================
-
-    /**
-     * Returns all text nodes contained in the specified element.
-     *
-     * @param {HTMLElement|jQuery} element
-     *  A DOM element object whose descendant text nodes will be returned. If
-     *  this object is a jQuery collection, uses the first node it contains.
-     *
-     * @returns {TextNode[]}
-     *  An array of text nodes contained in the passed element, in the correct
-     *  order.
-     */
-    function collectTextNodes(element) {
-        var textNodes = [];
-        Utils.iterateDescendantTextNodes(element, function (textNode) {
-            textNodes.push(textNode);
-        });
-        return textNodes;
-    }
-
-    /**
-     * Returns all text nodes and images contained in the specified element.
-     *
-     * @param {HTMLElement|jQuery} element
-     *  A DOM element object whose descendant text nodes will be returned. If
-     *  this object is a jQuery collection, uses the first node it contains.
-     *
-     * @returns {Node[]}
-     *  An array of text nodes and image nodes contained in the passed element,
-     *  in the correct order.
-     */
-    function collectTextNodesAndImagesAndFields(element) {
-        var nodes = [];
-        Utils.iterateSelectedDescendantNodes(element, function () {
-            // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
-            return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
-        }, function (node) {
-            nodes.push(node);
-        });
-        return nodes;
-    }
-
-    function isSameParagraph(pos1, pos2, includeLastPos) {
-        if (pos1.length !== pos2.length)
-            return false;
-        if (pos1.length < (includeLastPos ? 1 : 2))
-            return false;
-        var n = pos1.length - (includeLastPos ? 1 : 2);
-        for (var i = 0; i <= n; i++)
-            if (pos1[n] !== pos2[n])
-                return false;
-        return true;
-    }
+    // var OP_ATTR_DELETE =  'deleteAttribute';
 
     // class OXOEditor ========================================================
 
@@ -343,7 +104,7 @@ define('io.ox/office/editor/editor',
             isRtlCursorTravel,
             currentSelection,
 
-            undomgr = new OXOUndoManager(),
+            undomgr = new Undo.OXOUndoManager(),
 
             lastOperationEnd,     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
 
@@ -359,7 +120,7 @@ define('io.ox/office/editor/editor',
         Events.extend(this);
 
         // ==================================================================
-        // Global editor functions
+        // Public editor functions
         // ==================================================================
 
         /**
@@ -1626,7 +1387,7 @@ define('io.ox/office/editor/editor',
                     var endPos = _.clone(operation.start, true);
                     endPos[endPos.length - 1] += operation.text.length;
                     var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
-                    var undoAction = new OXOUndoAction(undoOperation, _.copy(operation, true));
+                    var undoAction = new Undo.OXOUndoAction(undoOperation, _.copy(operation, true));
                     if (operation.text.length === 1)
                         undoAction.allowMerge = true;
                     undomgr.addUndo(undoAction);
@@ -1640,7 +1401,7 @@ define('io.ox/office/editor/editor',
                         startLastVal = localStart.pop(),
                         endLastVal = localEnd.pop(),
                         undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implDeleteText(operation.start, operation.end);
             }
@@ -1654,14 +1415,14 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                     // var undoOperation = {name: OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
-                    // undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    // undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
             else if (operation.name === OP_PARA_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var undoOperation = { name: OP_PARA_DELETE, start: _.copy(operation.start, true) };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implInsertParagraph(operation.start);
                 if (operation.text) {
@@ -1674,14 +1435,14 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
                         undoOperation = { name: OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implDeleteParagraph(operation.start);
             }
             else if (operation.name === OP_TABLE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implInsertTable(operation.start, operation.rows, operation.columns);
             }
@@ -1691,7 +1452,7 @@ define('io.ox/office/editor/editor',
                         columns = Position.getLastColumnIndexInTable(paragraphs, localStart) + 1,
                         rows = Position.getLastRowIndexInTable(paragraphs, localStart) + 1,
                         undoOperation = { name: OP_TABLE_INSERT, start: localStart, columns: columns, rows: rows};
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implDeleteTable(operation.start);
             }
@@ -1708,7 +1469,7 @@ define('io.ox/office/editor/editor',
                         var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
                             undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns},
                             redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one row in redo!
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
+                        undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -1722,7 +1483,7 @@ define('io.ox/office/editor/editor',
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
                             undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows},
                             redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one column in redo!
-                        undomgr.addUndo(new OXOUndoAction(undoOperation, redoOperation));
+                        undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
                 }
@@ -1733,7 +1494,7 @@ define('io.ox/office/editor/editor',
                     var start = operation.end,
                         end = start,
                         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implCopyRow(operation.position, operation.start, operation.end);
             }
@@ -1742,7 +1503,7 @@ define('io.ox/office/editor/editor',
                     var start = operation.end,
                         end = start,
                         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implCopyColumn(operation.position, operation.start, operation.end);
             }
@@ -1752,7 +1513,7 @@ define('io.ox/office/editor/editor',
                 //     var start = operation.end,
                 //         end = start,
                 //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 // }
                 implInsertRow(operation.position, operation.start, operation.columns);
             }
@@ -1762,7 +1523,7 @@ define('io.ox/office/editor/editor',
                 //     var start = operation.end,
                 //         end = start,
                 //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                //     undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 // }
                 implInsertColumn(operation.position, operation.start, operation.end);
             }
@@ -1771,7 +1532,7 @@ define('io.ox/office/editor/editor',
                     var localStart = _.copy(operation.start, true);
                     localStart.pop();
                     var undoOperation = { name: OP_PARA_MERGE, start: localStart };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implSplitParagraph(operation.start);
             }
@@ -1780,7 +1541,7 @@ define('io.ox/office/editor/editor',
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
                     var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
@@ -1792,7 +1553,7 @@ define('io.ox/office/editor/editor',
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
                     var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
                 implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
@@ -1804,7 +1565,7 @@ define('io.ox/office/editor/editor',
                     Position.getParagraphLength(paragraphs, sel);
                     sel.push(paraLen);
                     var undoOperation = { name: OP_PARA_SPLIT, start: sel };
-                    undomgr.addUndo(new OXOUndoAction(undoOperation, operation));
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implMergeParagraph(operation.start);
             }
@@ -2005,7 +1766,7 @@ define('io.ox/office/editor/editor',
         }
 
         // ==================================================================
-        // Local helper method for setting attributes. Only called from
+        // Private helper method for setting attributes. Only called from
         // function 'setAttribute'.
         // ==================================================================
 
@@ -2263,7 +2024,7 @@ define('io.ox/office/editor/editor',
         }
 
         // ==================================================================
-        // LOCAL TABLE METHODS
+        // Private table methods
         // ==================================================================
 
         function deletePreviousCellsInTable(position) {
@@ -2612,8 +2373,76 @@ define('io.ox/office/editor/editor',
         }
 
         // ====================================================================
-        // LOCAL IMPLEMENTATION FUNCTIONS
-        // Local functions, that are called from function 'applyOperation'.
+        // Private helper functions
+        // ====================================================================
+
+        function fillstr(str, len, fill, right) {
+            while (str.length < len) {
+                if (right)
+                    str = str + fill;
+                else
+                    str = fill + str;
+            }
+            return str;
+        }
+
+        function getFormattedPositionString(position) {
+            var str = '';
+
+            for (var i = 0; i < position.length; i++) {
+                str += fillstr(position[i].toString(), 2, '0');
+                if (i !== position.length - 1) {
+                    str += ',';
+                }
+            }
+
+            return str;
+        }
+
+        /**
+         * Returns all text nodes contained in the specified element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  A DOM element object whose descendant text nodes will be returned. If
+         *  this object is a jQuery collection, uses the first node it contains.
+         *
+         * @returns {TextNode[]}
+         *  An array of text nodes contained in the passed element, in the correct
+         *  order.
+         */
+        function collectTextNodes(element) {
+            var textNodes = [];
+            Utils.iterateDescendantTextNodes(element, function (textNode) {
+                textNodes.push(textNode);
+            });
+            return textNodes;
+        }
+
+        /**
+         * Returns all text nodes and images contained in the specified element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  A DOM element object whose descendant text nodes will be returned. If
+         *  this object is a jQuery collection, uses the first node it contains.
+         *
+         * @returns {Node[]}
+         *  An array of text nodes and image nodes contained in the passed element,
+         *  in the correct order.
+         */
+        function collectTextNodesAndImagesAndFields(element) {
+            var nodes = [];
+            Utils.iterateSelectedDescendantNodes(element, function () {
+                // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
+                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
+            }, function (node) {
+                nodes.push(node);
+            });
+            return nodes;
+        }
+
+        // ====================================================================
+        //  IMPLEMENTATION FUNCTIONS
+        // Private functions, that are called from function 'applyOperation'.
         // The operations itself are never generated inside an impl*-function.
         // ====================================================================
 
