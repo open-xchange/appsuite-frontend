@@ -22,7 +22,12 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     new Action('io.ox/tasks/actions/edit', {
         id: 'edit',
         action: function (data) {
-            notifications.yell('info', gt("Under construction"));
+            /*require(['io.ox/tasks/edit/main'], function (edit) {
+                edit.getApp().launch();
+            });*/
+            setTimeout(function () {
+                notifications.yell('info', gt("Under construction"));
+            }, 500);
         }
     });
     
@@ -46,11 +51,10 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
                         require(['io.ox/tasks/api'], function (api) {
                             api.remove({id: data.id, folder: data.folder_id}, false)
                                 .done(function (data) {
-                                    
-                                    if (!data) {
+                                    if (data === undefined || data.length === 0) {
                                         notifications.yell('success', gt('Task has been deleted!'));
                                     } else {//task was modified
-                                        notifications.yell('fail', gt('Failure! Please refresh.'));
+                                        notifications.yell('error', gt('Failure! Please refresh.'));
                                     }
                                 });
                         });
