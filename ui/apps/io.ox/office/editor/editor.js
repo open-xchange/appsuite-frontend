@@ -28,42 +28,42 @@ define('io.ox/office/editor/editor',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
 
-    // key codes of navigation keys that will be passed directly to the browser
-    var NAVIGATION_KEYS = _([
-//          KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
-//          KeyCodes.CAPS_LOCK,
+        // key codes of navigation keys that will be passed directly to the browser
+        NAVIGATION_KEYS = _([
+            // KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
+            // KeyCodes.CAPS_LOCK,
             KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
             KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
-        ]);
+        ]),
 
-    var OP_TEXT_INSERT =  'insertText';
-    var OP_TEXT_DELETE =  'deleteText';
+        OP_TEXT_INSERT =  'insertText',
+        OP_TEXT_DELETE =  'deleteText',
 
-    var OP_PARA_INSERT =  'insertParagraph';
-    var OP_PARA_DELETE =  'deleteParagraph';
-    var OP_PARA_SPLIT =   'splitParagraph';
-    var OP_PARA_MERGE =   'mergeParagraph';
+        OP_PARA_INSERT =  'insertParagraph',
+        OP_PARA_DELETE =  'deleteParagraph',
+        OP_PARA_SPLIT =   'splitParagraph',
+        OP_PARA_MERGE =   'mergeParagraph',
 
-    var OP_TABLE_INSERT = 'insertTable';
-    var OP_TABLE_DELETE = 'deleteTable';
-    var OP_CELLRANGE_DELETE = 'deleteCellRange';
-    var OP_ROWS_DELETE = 'deleteRows';
-    var OP_COLUMNS_DELETE = 'deleteColumns';
-    var OP_ROW_COPY = 'copyRow';
-    var OP_COLUMN_COPY = 'copyColumn';
-    var OP_ROW_INSERT = 'insertRow';
-    var OP_COLUMN_INSERT = 'insertColumn';
+        OP_TABLE_INSERT = 'insertTable',
+        OP_TABLE_DELETE = 'deleteTable',
+        OP_CELLRANGE_DELETE = 'deleteCellRange',
+        OP_ROWS_DELETE = 'deleteRows',
+        OP_COLUMNS_DELETE = 'deleteColumns',
+        OP_ROW_COPY = 'copyRow',
+        OP_COLUMN_COPY = 'copyColumn',
+        OP_ROW_INSERT = 'insertRow',
+        OP_COLUMN_INSERT = 'insertColumn',
 
-    var OP_INSERT_STYLE = 'insertStylesheet';
-    var OP_ATTRS_SET =    'setAttributes';   // Should better be insertAttributes?
+        OP_INSERT_STYLE = 'insertStylesheet',
+        OP_ATTRS_SET =    'setAttributes',
 
-    var OP_IMAGE_INSERT = 'insertImage';
-    var OP_FIELD_INSERT = 'insertField';
-    // var OP_ATTR_DELETE =  'deleteAttribute';
+        OP_IMAGE_INSERT = 'insertImage',
+        OP_FIELD_INSERT = 'insertField';
+        // OP_ATTR_DELETE =  'deleteAttribute';
 
     // class OXOEditor ========================================================
 
