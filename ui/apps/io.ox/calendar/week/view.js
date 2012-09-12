@@ -166,11 +166,12 @@ define('io.ox/calendar/week/view',
             case 'mousemove':
                 // normal move
                 if (this.lasso && e.which === 1) {
-                    var newHeight = this.roundToGrid(MousePosY) - this.lasso.data('start'),
-                        newHeightNorm = Math.abs(newHeight);
+                    var down = MousePosY > this.lasso.data('start'),
+                        lassoStart = this.roundToGrid(this.lasso.data('start'), down ? 'top' : 'bottom'),
+                        newHeightNorm = Math.abs(lassoStart - this.roundToGrid(MousePosY, down ? 'bottom' : 'top'));
                     this.lasso.css({
                         height: newHeightNorm,
-                        top: this.lasso.data('start') - (newHeight <= 0 ? newHeightNorm : 0)
+                        top: lassoStart - (down ? 0 : newHeightNorm)
                     });
                 }
                 // first move
@@ -182,7 +183,7 @@ define('io.ox/calendar/week/view',
                             minHeight: this.cellHeight,
                             top: this.roundToGrid(MousePosY, 'top')
                         });
-                    this.lasso.data('start', this.roundToGrid(MousePosY, 'top'));
+                    this.lasso.data('start', MousePosY);
                     $(e.currentTarget)
                         .append(this.lasso);
                 } else {
@@ -690,16 +691,19 @@ define('io.ox/calendar/week/view',
         },
 
         roundToGrid: function (pos, typ) {
+            var h = this.gridHeight();
             switch (typ) {
             case 'top':
-                return pos - pos % this.gridHeight();
-
+                typ = 'floor';
+                break;
             case 'bottom':
-                return pos + pos % this.gridHeight();
-
+                typ = 'ceil';
+                break;
             default:
-                return Math.round(pos / this.gridHeight()) * this.gridHeight();
+                typ = 'round';
+                break;
             }
+            return Math[typ](pos / h) * h;
         },
         
         calcPos: function (ap) {
