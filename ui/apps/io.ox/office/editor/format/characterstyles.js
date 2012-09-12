@@ -156,13 +156,6 @@ define('io.ox/office/editor/format/characterstyles',
 
         // initialization -----------------------------------------------------
 
-        // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('standard', 'Standard', null, null)
-            .addStyleSheet('emphasis', 'Emphasis', 'standard', { character: { italic: true } })
-            .addStyleSheet('subtleemphasis', 'Subtle Emphasis', 'emphasis', null)
-            .addStyleSheet('intenseemphasis', 'Intense Emphasis', 'emphasis', { character: { bold: true } })
-            .addStyleSheet('bold', 'Bold', 'standard', { character: { bold: true } });
-
     } // class CharacterStyles
 
     // exports ================================================================

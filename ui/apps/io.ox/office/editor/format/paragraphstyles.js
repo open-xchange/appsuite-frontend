@@ -95,17 +95,6 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // initialization -----------------------------------------------------
 
-        // TODO: move these default styles to a 'newDocument' operation
-        this.addStyleSheet('standard', 'Standard', null, { character: { fontname: 'Open Sans', fontsize: 11 } })
-            .addStyleSheet('title', 'Title', 'standard', { paragraph: { alignment: 'center', lineheight: LineHeight.DOUBLE }, character: { fontname: 'Georgia', fontsize: 26, bold: true } })
-            .addStyleSheet('subtitle', 'Subtitle', 'standard', { paragraph: { alignment: 'center', lineheight: LineHeight.ONE_HALF }, character: { fontname: 'Georgia', fontsize: 12, italic: true } })
-            .addStyleSheet('heading1', 'Heading 1', 'standard', { character: { fontname: 'Georgia', fontsize: 16, bold: true } })
-            .addStyleSheet('heading2', 'Heading 2', 'standard', { character: { fontname: 'Georgia', fontsize: 14, bold: true } })
-            .addStyleSheet('heading3', 'Heading 3', 'standard', { character: { fontname: 'Georgia', fontsize: 13, bold: true } })
-            .addStyleSheet('heading4', 'Heading 4', 'standard', { character: { fontname: 'Georgia', fontsize: 13, bold: true, italic: true } })
-            .addStyleSheet('heading5', 'Heading 5', 'standard', { character: { fontname: 'Georgia', fontsize: 12, bold: true } })
-            .addStyleSheet('heading6', 'Heading 6', 'standard', { character: { fontname: 'Georgia', fontsize: 12, bold: true, italic: true } });
-
     } // class ParagraphStyles
 
     // exports ================================================================
