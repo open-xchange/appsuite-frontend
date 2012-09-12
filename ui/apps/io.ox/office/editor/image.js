@@ -170,6 +170,12 @@ define('io.ox/office/editor/image',
         if (attributes.marginL) {
             attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
         }
+        if (attributes.anchorhoffset) {
+            attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
+        }
+        if (attributes.anchorvoffset) {
+            attributes.anchorvoffset = attributes.anchorvoffset / 100 + 'mm';  // converting to mm
+        }
         if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
             attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
         }

@@ -2691,7 +2691,8 @@ define('io.ox/office/editor/editor',
 
             if ((node) && (node.nodeType === 3)) {
 
-                var floatMode = null;
+                var floatMode = null,
+                    verticalSpanSide = null;
 
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
@@ -2706,12 +2707,20 @@ define('io.ox/office/editor/editor',
                     attributes.float = 'left';
                     attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
+                    if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
+                        verticalSpanSide = 'left';
+                        attributes.clear = 'left';
+                    }
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
                     attributes.float = 'right';
                     attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
+                    if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
+                        verticalSpanSide = 'right';
+                        attributes.clear = 'right';
+                    }
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
@@ -2744,7 +2753,11 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
-                    $('<img>', { src: url }).data('mode', floatMode).data('allMargins', allMargins).insertBefore(node).css(attributes);
+                    var imgNode = $('<img>', { src: url }).data('mode', floatMode).data('allMargins', allMargins).insertBefore(node).css(attributes);
+
+                    if (verticalSpanSide !== null) {
+                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data('positionSpan', true).css('float', verticalSpanSide).insertBefore(imgNode);
+                    }
                 }
             }
 

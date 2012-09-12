@@ -402,6 +402,9 @@ define('io.ox/office/editor/position',
                     } else if (Utils.getNodeName(nodeList[i]) === 'div') {
                         currentLength = 1;
                         isField = true;
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('positionSpan'))) {
+                        // ignoring spans that exist only for positioning image
+                        continue;
                     } else {  // this is a span. it can contain text node or image node
                         currentLength = $(nodeList[i]).text().length;
                         isImage = false;
@@ -1998,6 +2001,9 @@ define('io.ox/office/editor/position',
 
             if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
                 counter++;
+                child = child.nextSibling;
+            } else if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
+                // ignoring spans that exist only for positioning image
                 child = child.nextSibling;
             } else {
                 continue_ = false;
