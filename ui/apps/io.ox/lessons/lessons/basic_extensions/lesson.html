@@ -192,7 +192,15 @@ require(["io.ox/core/extensions"], function (ext) {
 </pre>
                 </p>
                 
+                <p>
+                    As you can see, unlike adding functionality, customizing and modifying existing extensions is always more of a grey box operation and might incur some risks when updating the software. For example when replacing a certain functionality parts of the original functionality will have to be reimplemented, and all that extra code will have to be maintained in the future. In essence extension points are better suited to integrating new functionality into the product rather than customizing existing functionality, but, when in a pinch or really wanting to change a certain part of the software, this is certainly a way to consider. At its most extreme use you could even disable all extensions for the mail detail view to register a set of your own extensions to completely change the way mails are displayed, at the cost of having to maintain your own detail view. 
+                </p>
+                
             </section>
+            
+            <p>
+                This wraps up our little tour of the OX7 extension point system. It is used to integrate new functionality into OX7 and provides a system for 3rd party applications to become extensible themselves. It can be used to customize the existing UI at the cost of havint to know a bit more about the internals of our application. For now until more comprehensive documentation becomes available, look at the existing OX7 code to see concrete extensions and extension points in action.
+            </p>
             
         </div>
     </div>
