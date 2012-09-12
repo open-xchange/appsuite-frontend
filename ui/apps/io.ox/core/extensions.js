@@ -197,6 +197,7 @@ define("io.ox/core/extensions",
                 .filter(function (obj) { return obj.id === id; }).first().value();
             if (extension) {
                 callback(extension);
+                extensions.sort(pointSorter);
             }
             return this;
         };
