@@ -2727,7 +2727,8 @@ define('io.ox/office/editor/editor',
 
                     attributes['margin-left'] = allMargins.fullLeftMargin;
                     attributes['margin-right'] = allMargins.fullRightMargin;
-                    attributes.float = 'none';
+                    attributes.float = 'left';  // using left-floating with full margin
+                    // attributes.float = 'none';
                     floatMode = 'noneFloated';
                 }
 

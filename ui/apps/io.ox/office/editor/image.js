@@ -170,10 +170,7 @@ define('io.ox/office/editor/image',
         if (attributes.marginL) {
             attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
         }
-        if (attributes.anchorhoffset) {
-            attributes.anchorhoffset = attributes.anchorhoffset / 100 + 'mm';  // converting to mm
-        }
-        if (attributes.anchorvoffset) {
+        if ((attributes.anchorvbase) && (attributes.anchorvoffset)) {
             attributes.anchorvoffset = attributes.anchorvoffset / 100 + 'mm';  // converting to mm
         }
         if ((attributes.anchorhbase) && (attributes.anchorhoffset)) {
@@ -360,7 +357,9 @@ define('io.ox/office/editor/image',
                         attributes.float = 'right';
                     } else if (imageFloatMode === 'leftFloated') {
                         attributes.float = 'left';
-                    } else if ((imageFloatMode === 'noneFloated') || (imageFloatMode === 'inline')) {
+                    } else if (imageFloatMode === 'noneFloated') {
+                        attributes.float = 'left'; // none-floating is simulated with left floating.
+                    } else if (imageFloatMode === 'inline') {
                         attributes.float = 'none';
                     }
 
