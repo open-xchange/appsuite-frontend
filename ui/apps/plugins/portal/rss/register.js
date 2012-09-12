@@ -51,52 +51,52 @@ define("plugins/portal/rss/register",
     
     var feeds = [];
     
-    ext.point("io.ox/portal/widget").extend({
-        id: 'rss',
-        index: 100,
-        title: 'RSS',
-        load: function () {
-            var def = $.Deferred();
-            var requests = [];
+    var tileGroups = settings.get('groups');
+    _(tileGroups).each(function (tilegroup) {
+        ext.point("io.ox/portal/widget").extend({
+            id: 'rss-' + tilegroup.index,
+            index: 100,
+            title: tilegroup.groupname,
+            load: function () {
+                var def = $.Deferred();
+                var requests = [];
             
-            migrateIfNecessary();
+                migrateIfNecessary();
             
-            var tileGroups = settings.get('groups');
-            _(tileGroups).each(function (group) {
-                console.log("Group = ", group);
-                _(group.members).each(function (member) {
+                console.log("Group = ", tilegroup);
+                _(tilegroup.members).each(function (member) {
                     console.log("Member = ", member);
                     requests.push(member.url);
                 });
                 rss.getMany(requests, "date")
                     .done(def.resolve)
                     .fail(def.reject);
-            });
-            return def;
-        },
+                return def;
+            },
         
-        draw: function (feed) {
-            var togglePreview = function () {
-                $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
-                $(this).parent().find('.io-ox-portal-previewToggle').toggleClass('icon-chevron-down');
-            };
-            var $node = $('<div class="io-ox-portal-rss">').appendTo(this);
+            draw: function (feed) {
+                var togglePreview = function () {
+                    $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
+                    $(this).parent().find('.io-ox-portal-previewToggle').toggleClass('icon-chevron-down');
+                };
+                var $node = $('<div class="io-ox-portal-rss">').appendTo(this);
             
-            $('<h1 class="clear-title">').text("RSS").appendTo($node);
+                $('<h1 class="clear-title">').text(tilegroup.groupname).appendTo($node);
 
-            _(feed).each(function (entry) {
-                var $entry = $('<div class="io-ox-portal-rss-entry">').appendTo($node);
-                $entry.append(
-                    $('<h2 class="io-ox-portal-rss-feedTitle">').text(entry.subject).click(togglePreview),
-                    $('<div class="io-ox-portal-rss-source">').append(
-                        $('<a class="io-ox-portal-feedName" target="_blank">').attr({href: entry.feedUrl}).text(entry.feedTitle),
-                        $('<span>').text(': '),
-                        $('<a class="io-ox-portal-feedUrl" target="_blank">').attr({href: entry.url}).text(new date.Local(entry.date))
-                    ),
-                    $('<div class="io-ox-portal-rss-content portal-preview">').html(entry.body).click(togglePreview)
-                );
-            });
-            return $.Deferred().resolve();
-        }
-    });
+                _(feed).each(function (entry) {
+                    var $entry = $('<div class="io-ox-portal-rss-entry">').appendTo($node);
+                    $entry.append(
+                        $('<h2 class="io-ox-portal-rss-feedTitle">').text(entry.subject).click(togglePreview),
+                        $('<div class="io-ox-portal-rss-source">').append(
+                            $('<a class="io-ox-portal-feedName" target="_blank">').attr({href: entry.feedUrl}).text(entry.feedTitle),
+                            $('<span>').text(': '),
+                            $('<a class="io-ox-portal-feedUrl" target="_blank">').attr({href: entry.url}).text(new date.Local(entry.date))
+                        ),
+                        $('<div class="io-ox-portal-rss-content portal-preview">').html(entry.body).click(togglePreview)
+                    );
+                });
+                return $.Deferred().resolve();
+            }
+        }); //END: ext.point(...).extend
+    }); //END: tileGroups.each
 });
