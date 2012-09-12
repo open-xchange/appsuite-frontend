@@ -15,5 +15,5 @@ Description: Open-Xchange HTML5 client
 
 Package: open-xchange-ui7-apps
 Architecture: all
-Depends: ${misc:Depends}, open-xchange-core (>= @OXVERSION@)
+Depends: ${misc:Depends}, open-xchange-ui7-backend (>= @OXVERSION@)
 Description: Default applications for the Open-Xchange HTML5 client

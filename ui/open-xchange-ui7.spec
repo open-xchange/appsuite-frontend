@@ -32,7 +32,7 @@ Open-Xchange HTML5 client
 %package        apps
 Group:          Applications/Productivity
 Summary:        Default applications for the Open-Xchange HTML5 client
-Requires:       open-xchange-core >= @OXVERSION@
+Requires:       open-xchange-ui7-backend >= @OXVERSION@
 
 %description    apps
 Default applications for the Open-Xchange HTML5 client
