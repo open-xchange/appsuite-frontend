@@ -58,10 +58,36 @@ define('io.ox/office/editor/view',
          * preview CSS formatting to the list items.
          */
         function fillList() {
+            var // sorted OptionButtons
+                buttonList = [];
+
             self.clearOptionButtons();
-            _(styleSheets.getStyleSheetNames()).each(function (name, id) {
-                var options = styleSheets.getPreviewButtonOptions(id);
-                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' } }));
+            _(styleSheets.getStyleSheetNames(true)).each(function (name, id) {
+                var options = styleSheets.getPreviewButtonOptions(id),
+                    uiPriority = styleSheets.getUIPriority(id);
+
+                buttonList.push(Utils.extendOptions(options, { value: id, uiPriority: uiPriority, label: name, css: { height: '36px', padding: '2px 12px' } }));
+            });
+
+            // sort by uiPriority and label
+            buttonList.sort(function (a, b) {
+                if (a.uiPriority < b.uiPriority) {
+                    return -1;
+                }
+                else if (b.uiPriority < a.uiPriority) {
+                    return 1;
+                }
+                else if (a.label < b.label) {
+                    return -1;
+                }
+                else if (b.label < a.label) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            _(buttonList).each(function (button) {
+                self.createOptionButton(button.value, button);
             });
         }
 

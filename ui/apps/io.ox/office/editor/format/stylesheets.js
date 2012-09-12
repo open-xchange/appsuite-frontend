@@ -201,11 +201,16 @@ define('io.ox/office/editor/format/stylesheets',
         /**
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
+         *
+         * @param {Boolean=} skipHidden
+         *  Optional parameter, if true style sheets with hidden flag will not be included
          */
-        this.getStyleSheetNames = function () {
+        this.getStyleSheetNames = function (skipHidden) {
             var names = {};
             _(styleSheets).each(function (styleSheet, id) {
-                names[id] = styleSheet.name;
+                if (!skipHidden || skipHidden && !styleSheet.hidden) {
+                    names[id] = styleSheet.name;
+                }
             });
             return names;
         };
@@ -228,10 +233,16 @@ define('io.ox/office/editor/format/stylesheets',
          *  The formatting attributes contained in the new style sheet, as map
          *  of attribute maps (name/value pairs), keyed by attribute family.
          *
+         * @param {Boolean=} hidden
+         *  Optional property that determines if the style should be displayed in the UI (default is false)
+         *
+         * @param {Number=} uiPriority
+         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         *
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.addStyleSheet = function (id, name, parentId, attributes) {
+        this.addStyleSheet = function (id, name, parentId, attributes, hidden, uiPriority) {
 
             var // get or create a style sheet object
                 styleSheet = styleSheets[id] || (styleSheets[id] = {});
@@ -245,6 +256,12 @@ define('io.ox/office/editor/format/stylesheets',
                 Utils.warn('StyleSheets.addStyleSheet(): cyclic reference, cannot set style sheet parent');
                 styleSheet.parentId = null;
             }
+
+            // set if style sheet should be displayed in the UI
+            styleSheet.hidden = hidden || false;
+
+            // set the UI display priority of the style sheet
+            styleSheet.uiPriority = uiPriority || 0;
 
             // prepare attribute map (empty attributes for all supported families)
             styleSheet.attributes = Utils.makeSimpleObject(styleFamily, {});
@@ -612,6 +629,22 @@ define('io.ox/office/editor/format/stylesheets',
                     definition.preview(options, value);
                 }
             });
+        };
+
+        /**
+         * Returns the UI priority for the style sheet (0 is default, the lower the value the higher the priority)
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns {Number}
+         *  The priority
+         */
+        this.getUIPriority = function (id) {
+            if (id && styleSheets[id] && _.isNumber(styleSheets[id].uiPriority)) {
+                return styleSheets[id].uiPriority;
+            }
+            return 0;
         };
 
         // initialization -----------------------------------------------------

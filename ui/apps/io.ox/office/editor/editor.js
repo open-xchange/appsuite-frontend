@@ -1409,7 +1409,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                 }
-                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs);
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
             else if (operation.name === OP_ATTRS_SET) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2640,14 +2640,20 @@ define('io.ox/office/editor/editor',
          * @param {Object} attributes
          *  The formatting attributes contained in the new style sheet, as map
          *  of name/value pairs.
+         *
+         *  @param {Boolean=} hidden
+         *   Optional property that determines if the style should be displayed in the UI (default is false)
+         *
+         *  @param {Number=} uiPriority
+         *   Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
          */
-        function implInsertStyleSheet(family, id, name, parentId, attributes) {
+        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority) {
 
             var // the style sheet container
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes);
+                styleSheets.addStyleSheet(id, name, parentId, attributes, hidden, uiPriority);
             }
         }
 
