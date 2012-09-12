@@ -57,6 +57,7 @@ sh build.sh clean builddir="%{buildroot}%{docroot}" version=%{version} revision=
 
 %files apps
 %defattr(-,root,root)
+%dir /opt/open-xchange
 /opt/open-xchange/ui7
 
 %changelog
