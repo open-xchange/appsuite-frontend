@@ -70,6 +70,20 @@ define('io.ox/calendar/week/view',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
         
+        // handler for onmouseenter event for hover effect
+        onEnterAppointment: function (e) {
+            if (this.lassoMode) {
+                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
+            }
+        },
+        
+        // handler for onmouseleave event for hover effect
+        onLeaveAppointment: function (e) {
+            if (this.lassoMode) {
+                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
+            }
+        },
+
         onControlView: function (e) {
             if ($(e.currentTarget).is('.next')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
@@ -114,20 +128,6 @@ define('io.ox/calendar/week/view',
             }
         },
         
-        // handler for onmouseenter event for hover effect
-        onEnterAppointment: function (e) {
-            if (this.lassoMode) {
-                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').addClass('hover');
-            }
-        },
-        
-        // handler for onmouseleave event for hover effect
-        onLeaveAppointment: function (e) {
-            if (this.lassoMode) {
-                $('[data-cid="' + $(e.currentTarget).attr('data-cid') + '"]').removeClass('hover');
-            }
-        },
-        
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
             if (!folder.can('create', this.folder)) {
@@ -144,6 +144,16 @@ define('io.ox/calendar/week/view',
                 var startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date'));
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
             }
+        },
+        
+        onUpdateAppointment: function (obj) {
+            _.each(obj, function (el, i) {
+                if (el === null) {
+                    delete obj[i];
+                }
+            });
+            console.log('onUpdateAppointment', obj);
+            this.trigger('updateAppointment', obj);
         },
         
         onLasso: function (e) {
@@ -513,7 +523,7 @@ define('io.ox/calendar/week/view',
             
             // init drag and resize widget on appointments
             var colWidth = $('.day:first').outerWidth();
-            $('.day>.appointment:modify')
+            $('.day>.appointment.modify')
                 .draggable({
                     grid: [colWidth, that.gridHeight()],
                     scroll: true,
@@ -549,24 +559,24 @@ define('io.ox/calendar/week/view',
                     },
                     stop: function (e, ui) {
                         var el = $(this),
-                            obj = _.cid(el.attr('data-cid')),
+                            app = that.collection.get(el.attr('data-cid')).attributes,
                             tmpTS = that.getTimeFromDateTag($(this).parent().attr('date'), true) + that.getTimeFromPos(el.position().top);
                         that.lassoMode = true;
                         el.removeClass('opac');
                         
                         if (el.position().top !== ui.originalPosition.top) {
-                            _.extend(obj, {
+                            _.extend(app, {
                                 start_date: tmpTS,
                                 ignore_conflicts: true
                             });
                         } else if (el.height() !== ui.originalSize.height) {
-                            _.extend(obj, {
+                            _.extend(app, {
                                 end_date: tmpTS + that.getTimeFromPos(el.outerHeight()),
                                 ignore_conflicts: true
                             });
                         }
                         el.busy();
-                        that.trigger('updateAppointment', obj);
+                        that.onUpdateAppointment(app);
                     }
                 });
             // define drop areas for normal appointments
@@ -575,15 +585,14 @@ define('io.ox/calendar/week/view',
                     var cid = ui.draggable.attr('data-cid'),
                         app = that.collection.get(cid).attributes;
                     if (!app.full_time) {
-                        var obj = _.cid(cid),
-                            startTS = that.getTimeFromDateTag($(e.target).attr('date'), true) + that.getTimeFromPos(ui.position.top);
+                        var startTS = that.getTimeFromDateTag($(e.target).attr('date'), true) + that.getTimeFromPos(ui.position.top);
                         $(this).append(ui.draggable.css({left: 0}));
-                        _.extend(obj, {
+                        _.extend(app, {
                             start_date: startTS,
                             end_date: startTS + (app.end_date - app.start_date),
                             ignore_conflicts: true
                         });
-                        that.trigger('updateAppointment', obj);
+                        that.onUpdateAppointment(app);
                     }
                 }
             });
@@ -607,14 +616,13 @@ define('io.ox/calendar/week/view',
                         var newPos = Math.round($(this).position().left / (that.fulltimePane.width() / that.columns)),
                             startTS = that.curTimeUTC + (newPos * date.DAY),
                             cid = $(this).attr('data-cid'),
-                            app = that.collection.get(cid).attributes,
-                            obj = _.cid(cid);
-                        _.extend(obj, {
+                            app = that.collection.get(cid).attributes;
+                        _.extend(app, {
                             start_date: startTS,
                             end_date: startTS + (app.end_date - app.start_date),
                             ignore_conflicts: true
                         });
-                        that.trigger('updateAppointment', obj);
+                        that.onUpdateAppointment(app);
                     }
                 })
                 .resizable({
@@ -633,23 +641,22 @@ define('io.ox/calendar/week/view',
                         var el = $(this),
                             cid = el.attr('data-cid'),
                             app = that.collection.get(cid).attributes,
-                            obj = _.cid(cid),
                             newDayCount = Math.round(el.outerWidth() / (that.fulltimePane.width() / that.columns));
                         el.removeClass('opac').css('zIndex', $(this).css('zIndex') - 2000);
                         
                         if (el.position().left !== ui.originalPosition.left) {
-                            _.extend(obj, {
+                            _.extend(app, {
                                 start_date: app.end_date - (newDayCount * date.DAY),
                                 ignore_conflicts: true
                             });
                         } else if (el.width() !== ui.originalSize.width) {
-                            _.extend(obj, {
+                            _.extend(app, {
                                 end_date: app.start_date + (newDayCount * date.DAY),
                                 ignore_conflicts: true
                             });
                         }
                         el.busy();
-                        that.trigger('updateAppointment', obj);
+                        that.onUpdateAppointment(app);
                     }
                 });
  
@@ -658,11 +665,6 @@ define('io.ox/calendar/week/view',
         renderAppointment: function (a) {
 
             myself = myself || config.get('identifier');
-            console.log(
-                'myself',
-                folder.can('write', this.folder, a),
-                folder.can('delete', this.folder, a)
-            );
             
             // check confirmations
             var state = (_(a.participants).find(function (o) {
