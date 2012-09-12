@@ -37,7 +37,7 @@ version = rev + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = Boolean(process.env.debug);
+var debug = /^\s*(?:on|yes|true|1)/i.test(process.env.debug);
 var mode = process.env.mode || 'production';
 if (debug) console.info("Debug mode: on");
 console.info("Run mode: " + mode);
@@ -53,8 +53,6 @@ function jsFilter (data) {
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-    
-    if (data.slice(-1) !== '\n') data += '\n';
     
     // In case of parse errors, the actually parsed source is stored
     // in tmp/errorfile.js
