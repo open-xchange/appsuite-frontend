@@ -36,11 +36,9 @@ define("plugins/portal/rss/register",
         accountApi.all('com.openexchange.messaging.rss').done(function (accounts) {
             var index = 0;
             _(accounts).each(function (account) {
-                console.log("Account:", account);
                 index += 100;
                 members.push({url: account.configuration.url, feedname: account.displayName, index: index});
             });
-            console.log("Saving this:", group);
             settings.set('groups', [group]);
             settings.save();
             settings.set('needsMigration', false);
@@ -52,9 +50,8 @@ define("plugins/portal/rss/register",
     var feeds = [];
     
     var tileGroups = settings.get('groups');
-    console.log("Before sorting:", tileGroups);
     tileGroups = _(tileGroups).sortBy(function (group) { return group.index || 0; });
-    console.log("After sorting:", tileGroups);
+
     _(tileGroups).each(function (tilegroup) {
         ext.point("io.ox/portal/widget").extend({
             id: 'rss-' + tilegroup.index,
