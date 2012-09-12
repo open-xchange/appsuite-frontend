@@ -2537,8 +2537,10 @@ define('io.ox/office/editor/editor',
                     attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
-                        verticalSpanSide = 'left';
-                        attributes.clear = 'left';
+                        if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
+                            verticalSpanSide = 'left';
+                            attributes.clear = 'left';
+                        }
                     }
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
@@ -2547,8 +2549,10 @@ define('io.ox/office/editor/editor',
                     attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
-                        verticalSpanSide = 'right';
-                        attributes.clear = 'right';
+                        if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
+                            verticalSpanSide = 'right';
+                            attributes.clear = 'right';
+                        }
                     }
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
