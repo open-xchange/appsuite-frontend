@@ -6,9 +6,14 @@ Build-Depends: debhelper (>= 8.0.0), nodejs (>= 0.4.0)
 Standards-Version: 3.9.2
 Homepage: http://open-xchange.com
 Vcs-Git: https://git.open-xchange.com/git/wd/frontend/web
-Vcs-Browser: https://git.open-xchange.com/gitweb/?p=wd/frontend/web;a=summary
+Vcs-Browser: https://gitweb.open-xchange.com/?p=wd/frontend/web;a=summary
 
 Package: open-xchange-ui7
 Architecture: all
 Depends: ${misc:Depends}, apache2
 Description: Open-Xchange HTML5 client
+
+Package: open-xchange-ui7-apps
+Architecture: all
+Depends: ${misc:Depends}, open-xchange-core (>= @OXVERSION@)
+Description: Default applications for the Open-Xchange HTML5 client
