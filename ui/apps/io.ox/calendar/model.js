@@ -77,8 +77,6 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
         }
     });
 
-
-    // TODO: Fix update problems when validating two fields
     ext.point("io.ox/calendar/model/validation").extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
@@ -114,10 +112,9 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
 
             });
         },
+    return {
         factory: factory,
         Appointment: factory.model,
         Appointments: factory.collection
     };
-
-
 });
