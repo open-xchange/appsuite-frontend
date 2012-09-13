@@ -686,6 +686,141 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
         };
 
+        this.insertSpecialTable = function () {
+
+            var selection = getSelection(),
+                lastPos = selection.startPaM.oxoPosition.length - 1,
+                deleteTempParagraph = false;
+
+            selection.adjust();
+            if (selection.hasRange()) {
+                this.deleteSelected(selection);
+            }
+
+            var length = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
+
+            // Splitting paragraph, if the cursor is not at the beginning or at the end of the paragraph.
+            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
+                (selection.startPaM.oxoPosition[lastPos] !== length)) {
+                this.splitParagraph(selection.startPaM.oxoPosition);
+                selection.startPaM.oxoPosition[lastPos - 1] += 1;
+            }
+
+            // Splitting paragraph, if the cursor is at the end of an non empty paragraph and this paragraph is
+            // the last from all .
+            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
+                (selection.startPaM.oxoPosition[lastPos] === length)) {
+
+                var maxIndex = Position.getCountOfAdjacentParagraphsAndTables(paragraphs, selection.startPaM.oxoPosition);
+                // Is this a position after the final character in the final paragraph?
+                // -> then the splitting of the paragraph is required, not only temporarely.
+                if ((selection.startPaM.oxoPosition[lastPos - 1]) === maxIndex) {
+                    this.splitParagraph(selection.startPaM.oxoPosition);
+                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
+                    deleteTempParagraph = false;
+                } else {
+                    implSplitParagraph(selection.startPaM.oxoPosition);  // creating temporarely, to be deleted after table is inserted
+                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
+                    deleteTempParagraph = true;
+                }
+            }
+
+            selection.startPaM.oxoPosition.pop();
+            paragraphs = editdiv.children();
+
+            var position = _.copy(selection.startPaM.oxoPosition, true);
+            var table = $('<table>');
+
+            table.append('<colgroup><col style="width:20mm"><col style="width:30mm"><col style="width:15mm"><col style="width:32mm"><col style="width:16mm"><col style="width:19mm"></colgroup>')
+
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Berlin</span></td>'))
+                .append($('<td colspan="2"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Hamburg</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Kassel</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Bremen</span></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Becks</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Flens</span></td>'))
+                .append($('<td colspan="3"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Warsteiner</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Holsten</span></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td colspan="2"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Buletten</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Friko</span></td>')))
+            .append($('<tr>').attr('valign', 'top')
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Handball</span></td>'))
+                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Fussball</span></td>'))
+                .append($('<td colspan="3"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Volleyball</span></td>')));
+
+//          <table border="1" style="border-style:solid; border-color:green; border-width:2px;">
+//                        <colgroup>
+//                          <col style="width:20mm">
+//                          <col style="width:40mm">
+//                          <col style="width:25mm">
+//                          <col style="width:32mm">
+//                          <col style="width:16mm">
+//                          <col style="width:19mm">
+//                        </colgroup>
+//                        <tr>
+//                          <td>Berlin</td>
+//                          <td colspan="2">Hamburg</td>
+//                          <td>M&uuml;nchen</td>
+//                          <td>Hamburg</td>
+//                        </tr>
+//                        <tr>
+//                          <td>Milj&ouml;h</td>
+//                          <td>Kiez</td>
+//                          <td colspan="3">Bierdampf</td>
+//                          <td>Hamburg</td>
+//                        </tr>
+//                        <tr>
+//                          <td colspan="2">Buletten</td>
+//                          <td>Frikadellen</td>
+//                        </tr>
+//                      </table>
+
+            // insert the table into the document
+            var domPosition = Position.getDOMPosition(paragraphs, position),
+                domParagraph = null,
+                insertBefore = true;
+
+            if (domPosition) {
+                domParagraph = domPosition.node;
+            } else {
+                position[position.length - 1] -= 1; // inserting table at the end
+                domPosition = Position.getDOMPosition(paragraphs, position);
+                if (domPosition) {
+                    domParagraph = domPosition.node;
+                    if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
+                        insertBefore = false;  // inserting after the last paragraph/table
+                    }
+                }
+            }
+
+            if (domParagraph !== null) {
+                if (insertBefore) {
+                    table.insertBefore(domParagraph);
+                } else {
+                    table.insertAfter(domParagraph);
+                }
+
+                paragraphs = editdiv.children();
+
+                // Setting cursor into table (unfortunately not visible in Chrome)
+                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
+                lastOperationEnd = new OXOPaM(oxoPosition);
+            }
+
+            if (deleteTempParagraph) {
+                selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
+                implDeleteParagraph(selection.startPaM.oxoPosition);
+                paragraphs = editdiv.children();
+            }
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
+        };
+
+
         this.insertTable = function (size) {
             if (size) {
 
@@ -954,7 +1089,7 @@ define('io.ox/office/editor/editor',
                     this.grabFocus(true);
                 }
                 else if (c === 'T') {
-                    this.insertTable({width: 2, height: 2});
+                    this.insertSpecialTable();
                 }
                 else if (c === 'G') {
                     var selection = getSelection();
