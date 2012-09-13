@@ -160,20 +160,90 @@ define('io.ox/calendar/week/view',
             if (!this.lassoMode || !folder.can('create', this.folder)) {
                 return;
             }
-            var MousePosY = e.target.offsetTop + e.offsetY;
+            
             // switch mouse events
             switch (e.type) {
             case 'mousemove':
+                var curTar = $(e.currentTarget),
+                    curDay = parseInt(curTar.attr('date'), 10),
+                    mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+                
                 // normal move
                 if (this.lasso && e.which === 1) {
-                    var down = MousePosY > this.lasso.data('start'),
-                        lassoStart = this.roundToGrid(this.lasso.data('start'), down ? 'top' : 'bottom'),
-                        newHeightNorm = Math.abs(lassoStart - this.roundToGrid(MousePosY, down ? 'bottom' : 'top'));
-                    this.lasso.css({
-                        height: newHeightNorm,
-                        top: lassoStart - (down ? 0 : newHeightNorm)
-                    });
+                    var lData = this.lasso.data(),
+                        down = mouseY > lData.start,
+                        right = curDay > lData.startDay,
+                        dayChange = curDay !== lData.lastDay,
+                        dayDiff = Math.abs(curDay - lData.startDay),
+                        lassoStart = this.roundToGrid(lData.start, (down && dayDiff === 0) || right ? 'n' : 's');
+
+                    if (dayDiff > 0) {
+                        
+                        if (dayChange) {
+                            // move mouse to another day area
+                            
+                            // update start lasso
+                            this.lasso.css({
+                                height: right ? 'auto' : lassoStart,
+                                top: right ? lassoStart : 0,
+                                bottom: right ? 0 : 'auto'
+                            });
+                            
+                            // create temp. helper lasso
+                            var tmpLasso = $('<div>')
+                                .addClass('appointment lasso')
+                                .css({
+                                    height: right ? this.roundToGrid(mouseY, 's') : 'auto',
+                                    minHeight: this.cellHeight,
+                                    top: right ? 0 : this.roundToGrid(mouseY, 'n'),
+                                    bottom: right ? 'auto' : 0
+                                });
+                            
+                            // remove or resize helper
+                            $.each(lData.helper, function (i, el) {
+                                if (i >= dayDiff) {
+                                    el.remove();
+                                    delete lData.helper[i];
+                                } else {
+                                    el.css({
+                                        height: 'auto',
+                                        top: 0,
+                                        bottom: 0
+                                    });
+                                }
+                            });
+                            lData.helper[dayDiff] = tmpLasso;
+                            lData.last = tmpLasso;
+                            
+                            // add last helper to pane
+                            curTar
+                                .append(tmpLasso);
+                        } else {
+                            // change only last helper height
+                            lData.last.css({
+                                height: right ? this.roundToGrid(mouseY, 's') : 'auto',
+                                minHeight: this.cellHeight,
+                                top: right ? 0 : this.roundToGrid(mouseY, 'n'),
+                                bottom: right ? 'auto' : 0
+                            });
+
+                        }
+                    } else {
+                        var newHeight = Math.abs(lassoStart - this.roundToGrid(mouseY, down ? 's' : 'n'));
+                        if (dayChange) {
+                            lData.last.remove();
+                            delete lData.last;
+                        }
+                        this.lasso.css({
+                            height: newHeight,
+                            top: lassoStart - (down ? 0 : newHeight)
+                        });
+                        lData.start = lassoStart;
+                    }
+                    lData.stop = down ? this.roundToGrid(mouseY, 's') : this.roundToGrid(mouseY, 'n');
+                    lData.lastDay = curDay;
                 }
+                
                 // first move
                 if (this.lasso === false && e.which === 1 && $(e.target).is('.timeslot')) {
                     this.lasso = $('<div>')
@@ -181,10 +251,16 @@ define('io.ox/calendar/week/view',
                         .css({
                             height: this.cellHeight,
                             minHeight: this.cellHeight,
-                            top: this.roundToGrid(MousePosY, 'top')
+                            top: this.roundToGrid(mouseY, 'n')
                         });
-                    this.lasso.data('start', MousePosY);
-                    $(e.currentTarget)
+                    this.lasso.data({
+                        start: mouseY,
+                        stop: 0,
+                        startDay: curDay,
+                        lastDay: curDay,
+                        helper: {}
+                    });
+                    curTar
                         .append(this.lasso);
                 } else {
                     this.trigger('mouseup');
@@ -193,16 +269,21 @@ define('io.ox/calendar/week/view',
                 
             case 'mouseup':
                 if (this.lasso && e.which === 1) {
-                    var start = this.getTimeFromDateTag(this.lasso.parent().attr('date')) + (this.getTimeFromPos(this.lasso.position().top)),
-                        end = new date.Local(start).add(this.getTimeFromPos(this.lasso.outerHeight())).getTime(),
-                        newApp = {
-                            start_date: start,
-                            end_date: end
-                        };
+                    var lData = this.lasso.data(),
+                        start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.start),
+                        end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.stop);
+                    
                     // delete div and reset object
+                    $.each(lData.helper, function (i, el) {
+                        el.remove();
+                    });
+                    lData = null;
                     this.lasso.remove();
                     this.lasso = false;
-                    this.trigger('openCreateAppointment', e, newApp);
+                    this.trigger('openCreateAppointment', e, {
+                        start_date: start,
+                        end_date: end
+                    });
                 }
                 break;
 
@@ -693,10 +774,10 @@ define('io.ox/calendar/week/view',
         roundToGrid: function (pos, typ) {
             var h = this.gridHeight();
             switch (typ) {
-            case 'top':
+            case 'n':
                 typ = 'floor';
                 break;
-            case 'bottom':
+            case 's':
                 typ = 'ceil';
                 break;
             default:
