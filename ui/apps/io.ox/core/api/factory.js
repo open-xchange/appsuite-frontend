@@ -251,18 +251,24 @@ define("io.ox/core/api/factory",
                 return api.prepareRemove(ids).pipe(function () {
                     // remove from caches first
                     return api.updateCachesAfterRemove(ids).pipe(function () {
-                        // trigger refresh now
-                        api.trigger('refresh.all');
+                        
                         // delete on server?
                         if (local !== true) {
+                            
                             return http.PUT({
                                 module: o.module,
                                 params: opt,
                                 data: data,
                                 appendColumns: false
                             })
-                            .done(done);
+                            .done(function () {
+                                // refresh needs to be done after delete or the all request may still get data from the deleted object
+                                api.trigger('refresh.all');
+                                done();
+                            });
                         } else {
+                            // trigger refresh now
+                            api.trigger('refresh.all');
                             return done();
                         }
                     });

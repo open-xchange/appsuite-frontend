@@ -28,8 +28,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 folder: folderApi.getDefaultFolder("tasks"),
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
-                order: "asc",
-                cache: true // allow DB cache
+                order: "asc"
+                //cache: true // allow DB cache
             },
             list: {
                 action: "list",
@@ -69,8 +69,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     },
                     data: modifications,
                     appendColumns: false
-                }).pipe(function () {
-                    api.trigger("refresh.all");
+                }).done(function () {
+                    api.trigger("refresh.list");
                 });
 
             };
