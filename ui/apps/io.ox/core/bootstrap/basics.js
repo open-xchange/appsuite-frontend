@@ -1,6 +1,7 @@
 // NOJSHINT
 //@include ../../../../lib/bootstrap/js/bootstrap.js
 //@include ../../../../lib/bootstrap-datepicker.js
+//@include ../../../../lib/bootstrap-combobox.js
 
 define('io.ox/core/bootstrap/basics',
     ['css!io.ox/core/bootstrap/css/bootstrap.css'], function () {
