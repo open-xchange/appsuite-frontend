@@ -1,7 +1,10 @@
+#!/bin/sh
+
+if command -v nodejs > /dev/null; then NODEJS=nodejs; else NODEJS=node; fi
 
 os=`uname`
 if [[ "$os" == 'Darwin' ]]; then
-   node lib/appsserver.js /Library/WebServer/Documents/ox7/apps
+    $NODEJS lib/appsserver.js /Library/WebServer/Documents/ox7/apps
 else
-  node lib/appsserver.js 
+    $NODEJS lib/appsserver.js
 fi
