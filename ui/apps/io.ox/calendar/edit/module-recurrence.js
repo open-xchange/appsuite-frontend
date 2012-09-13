@@ -102,10 +102,10 @@ define('io.ox/calendar/edit/module-recurrence',
                 $rep = self.$('.recurrence-option-container');
 
             if ($rep.is(':visible')) {
-                self.$('.editrecurrence').text(gt('edit'));
+                self.$('.editrecurrence').text(gt('(edit)'));
                 $rep.hide();
             } else {
-                self.$('.editrecurrence').text(gt('hide'));
+                self.$('.editrecurrence').text(gt('(hide)'));
                 if (!self.rendered) {
                     // only render once
                     self.recurrenceView = self.recurrenceView.render().el;
@@ -115,6 +115,7 @@ define('io.ox/calendar/edit/module-recurrence',
             }
             //this.$('.recurrence-option-container').toggle();
         },
+        // recurrence on or off
         onToggleRepeat: function (evt) {
 
             var self = this;
@@ -129,6 +130,7 @@ define('io.ox/calendar/edit/module-recurrence',
                 self.$('.editrecurrence_wrapper').hide();
                 self.model.set('recurrence_type', 0);
                 self.$('.recurrence-option-container').hide();
+                self.$('.editrecurrence').text(gt('(Edit recurrence)'));
             }
             // set default recurrence settings and not
             // if not delete all recurrence settings, save them in temporary variable
@@ -284,13 +286,15 @@ define('io.ox/calendar/edit/module-recurrence',
             var bindings = {
                 recurrence_type: [{
                     selector: '[name=recurrence_type]',
-                    converter: BinderUtils.numToString //shitty aspect in ModelBinder
-                }],
-                recurrence_start: {
-                    selector: '[name=recurrence_start]',
-                    converter: binderUtils.convertDate
-                }
+                    converter: BinderUtils.numToString
+                }]
             };
+//                ,
+//                recurrence_start: {
+//                    selector: '[name=recurrence_start]',
+//                    converter: binderUtils.convertDate
+//                }
+
             // days of the week - bindings
 //            bindings.days = [];
 //            _.each(weekDayList, function (item) {
@@ -298,14 +302,15 @@ define('io.ox/calendar/edit/module-recurrence',
 //            });
 //            bindings.days.push({ selector: '[name=days]'});
 
-//            self._modelBinder.bind(self.model, $(self.parentView).find('.recurrence-option-container'), bindings);
+            self._modelBinder.bind(self.model, $(self.parentView).find('.recurrence-option-container'), bindings);
             self.updateRecurrenceDetail();
             return self;
         },
         updateRecurrenceDetail: function () {
-            console.log("update recurrence detail");
+
             var self = this;
-            self.$('.recurrence_details').hide();
+            var $container = $(self.parentView).find('.recurrence-option-container');
+            $('.recurrence_details', $container).hide();
 
             switch (parseInt(self.model.get('recurrence_type'), 10)) {
             case self.RECURRENCE_DAILY:
@@ -313,7 +318,8 @@ define('io.ox/calendar/edit/module-recurrence',
                 if (!self.model.has('interval')) {
                     self.model.set('interval', 1);
                 }
-                self.$('.recurrence_details.daily').show();
+                console.log("day",  $('.recurrence_details.daily', $container));
+                $('.recurrence_details.daily', $container).show();
                 break;
             case self.RECURRENCE_WEEKLY:
                 if (!self.model.has('interval')) {
@@ -322,12 +328,12 @@ define('io.ox/calendar/edit/module-recurrence',
                 if (!self.model.has('days')) {
                     self.model.set('days', 2); //set monday default
                 }
-                self.$('.recurrence_details.weekly').show();
+                $('.recurrence_details.weekly', $container).show();
                 break;
             case self.RECURRENCE_MONTHLY:
                 console.log('ok monthly');
                 self.model.unset('month');
-                self.$('.recurrence_details.monthly').show();
+                $('.recurrence_details.monthly', $container).show();
 
                 if (!self.model.has('day_in_month')) {
                     self.model.set('day_in_month', 1);
@@ -344,10 +350,10 @@ define('io.ox/calendar/edit/module-recurrence',
                     console.log('chck option one');
                     //select option two
                     self.model.set('interval', self.model.get('interval')); //mmhh?
-                    self.$('input[name=monthly_option][value=two]').attr('checked', 'checked');
+                    $('input[name=monthly_option][value=two]', $container).attr('checked', 'checked');
                 } else {
                     //select option one
-                    self.$('input[name=monthly_option][value=one]').attr('checked', 'checked');
+                    $('input[name=monthly_option][value=one]', $container).attr('checked', 'checked');
 
                 }
                 break;

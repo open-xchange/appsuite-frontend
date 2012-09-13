@@ -95,8 +95,7 @@ define('io.ox/calendar/edit/view-main',
         className: 'io-ox-calendar-edit container',
         subviews: {},
         events: {
-            'click .save': 'onSave',
-            'click .sendmail' : 'onSendMail'
+            'click .save': 'onSave'
         },
         initialize: function () {
             var self = this;

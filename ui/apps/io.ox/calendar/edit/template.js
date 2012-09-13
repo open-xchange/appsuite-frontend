@@ -481,54 +481,62 @@ define('io.ox/calendar/edit/template',
      * shows which type of recurrence is selected
      */
     ext.point('io.ox/calendar/edit/recurrence').extend({
-        index: 10,
+        index: 100,
         id: 'options',
         draw: function (data) {
             console.log("draw ext recurrence", data);
             this.append(
                 $('<div class="span12">').append(
                     $('<div class="span3">').append(
-                        $('<label class="radio">').append(
-                            $('<input type="radio" checked="checked">')
-                            .attr({
-                                'id': data.uid + '_daily',
-                                'value': '1',
-                                'name': 'recurrence_type'
-                            })
-                            .after(gt("Daily"))
-                        )
-                    ),
-                    $('<div class="span3">').append(
-                        $('<label class="radio">').append(
-                            $('<input type="radio">')
-                            .attr({
-                                'id': data.uid + '_weekly',
-                                'value': '2',
-                                'name': 'recurrence_type'
-                            })
-                            .after(gt("Weekly"))
-                        )
-                    ),
-                    $('<div class="span3">').append(
-                        $('<label class="radio">').append(
-                            $('<input type="radio">')
+                        $('<div class="inner-margin">').append(
+                            $('<label class="radio">').append(
+                                $('<input type="radio" checked="checked">')
                                 .attr({
-                                    'id': data.uid + '_monthly',
-                                    'value': '3',
+                                    'id': data.uid + '_daily',
+                                    'value': '1',
                                     'name': 'recurrence_type'
                                 })
-                                .after(gt("Monthly"))
+                                .after(gt("Daily"))
+                            )
                         )
                     ),
                     $('<div class="span3">').append(
-                        $('<label class="radio">').append(
-                            $('<input type="radio">')
+                        $('<div class="inner-margin">').append(
+                            $('<label class="radio">').append(
+                                $('<input type="radio">')
                                 .attr({
-                                    'id': data.uid + '_yearly',
-                                    'value': '4',
+                                    'id': data.uid + '_weekly',
+                                    'value': '2',
                                     'name': 'recurrence_type'
                                 })
-                                .after(gt("Yearly"))
+                                .after(gt("Weekly"))
+                            )
+                        )
+                    ),
+                    $('<div class="span3">').append(
+                        $('<div class="inner-margin">').append(
+                            $('<label class="radio">').append(
+                                $('<input type="radio">')
+                                    .attr({
+                                        'id': data.uid + '_monthly',
+                                        'value': '3',
+                                        'name': 'recurrence_type'
+                                    })
+                                    .after(gt("Monthly"))
+                            )
+                        )
+                    ),
+                    $('<div class="span3">').append(
+                        $('<div class="inner-margin">').append(
+                            $('<label class="radio">').append(
+                                $('<input type="radio">')
+                                    .attr({
+                                        'id': data.uid + '_yearly',
+                                        'value': '4',
+                                        'name': 'recurrence_type'
+                                    })
+                                    .after(gt("Yearly"))
+                            )
                         )
                     )
                  )
@@ -538,12 +546,12 @@ define('io.ox/calendar/edit/template',
     /**
      * day options for recurrence
      */
-    ext.point('io.ox/calendar/edit/recurrence/option_day').extend({
-        index: 1,
+    ext.point('io.ox/calendar/edit/recurrence').extend({
+        index: 200,
         id: 'dayoption',
         draw: function (data) {
             this.append(
-                $('<div class="span12">').append(
+                $('<div class="span12 recurrence_details daily">').append(
                     $('<form class="form-inline">').append(
                         $('<span class="margin-right">')
                             .text(gt("Every")),
@@ -563,10 +571,10 @@ define('io.ox/calendar/edit/template',
     });
 
     /**
-     *
+     * week options for recurrence
      */
-    ext.point('io.ox/calendar/edit/recurrence/option_weekly').extend({
-        index: 1,
+    ext.point('io.ox/calendar/edit/recurrence').extend({
+        index: 300,
         id: 'weekoption',
         draw: function (data) {
             var days = ['<option>Montag</option>',
@@ -577,7 +585,7 @@ define('io.ox/calendar/edit/template',
                         '<option>Samstag</option>',
                         '<option>Sonntag</option>'];
             this.append(
-                $('<div class="span12">').append(
+                $('<div class="span12 recurrence_details weekly">').append(
                     $('<form class="form-inline">').append(
                         $('<span class="margin-right">')
                             .text(gt("Every")),
@@ -669,60 +677,160 @@ define('io.ox/calendar/edit/template',
         }
     });
 
-    //TODO nicen this up
-    ext.point('io.ox/calendar/recurrence/repeat').extend({
-        index: 1,
-        id: 'repeat-option',
+    /*
+     *  <div class="row-fluid show-grid recurrence_details monthly">
+        <div class="container span12">
+            <div class="row-fluid show-grid">
+                <div class="control-group span12">
+                    <div class="controls">
+                        <input type='radio' name='monthly_option' value='one'>
+                        <span class='help-inline'>{{! it.strings.AT }}</span>
+                        <input type='text' name='day_in_month' class='discreet short'/>
+                        <span class='help-inline'>{{! it.strings.TH_DAY_EVERY }}</span>
+                        <input type='text' name='interval' class='discreet short'/>
+                        <span class='help-inline'>{{! it.strings.TH_MONTH }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid show-grid">
+                <div class="control-group span12">
+                    <input type='radio' name='monthly_option' value='two'>
+                    <span class='help-inline'>{{! it.strings.AT }}</span>
+                    <select name='day_in_month'>
+                        <option value='1'>{{! it.strings.FIRST }}</option>
+                        <option value='2'>{{! it.strings.SECOND }}</option>
+                        <option value='3'>{{! it.strings.THIRD }}</option>
+                        <option value='4'>{{! it.strings.FOURTH }}</option>
+                        <option value='5'>{{! it.strings.LAST }}</option>
+                    </select>
+                    <select name='days' class='days'>
+                        {{~it.weekDayList :item:index }}
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
+                        {{~}}
+                    </select>
+                    <span class='help-inline'>{{! it.strings.EVERY }}</span>
+                    <input type='text' name='interval' class='discreet short'/>
+                    <span class='help-inline'>{{! it.strings.TH_MONTH }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+     */
+    /*
+     * $('<input type="text" class="input-extra-small">')
+                            .attr({
+                                'size': 2,
+                                'name': 'recurrence_days_input',
+                                'value': data.days
+                            })
+                            .after(
+                                $('<span class="margin-left">')
+                                    .text(gt("Days")))
+     */
+    ext.point('io.ox/calendar/edit/recurrence').extend({
+        index: 300,
+        id: 'monthlyoption',
         draw: function (data) {
-            this.append(
-                $('<div class="row-fluid show-grid">').append(
-                    $('<div class="control-group span3">').append(
-                        $('<label class="checkbox">').append(
-                            $('<input type="checkbox" class="repeat" name="repeat">')
-                                .after(gt("Repeat"))
-                        ))).append('<span name="recurrenceText"></span><div class="span3 editrecurrence_wrapper" style="display:none;">' +
-                            '(<a class="editrecurrence">' + gt('Edit recurrence') + '</a>)</div>'),
-                $('<div class="row-fluid show-grid recurrence-option-container" style="display:none">')
-            );
+            console.log("draw monthlyoption");
 
+            var weekDayList = [
+                { value: 1, label: gt('Sunday')},
+                { value: 2, label: gt('Monday')},
+                { value: 4, label: gt('Tuesday')},
+                { value: 8, label: gt('Wednesday')},
+                { value: 16, label: gt('Thursday')},
+                { value: 32, label: gt('Friday')},
+                { value: 64, label: gt('Saturday')}
+            ];
+            var dayOptionsFragment = [];
+            _.each(weekDayList, function (days) {
+                console.log(days);
+                var node = $('<option>').attr('value', days.value).text(days.label);
+                dayOptionsFragment.push(node);
+            });
+
+            this.append(
+                $('<div class="span12 recurrence_details monthly">').append(
+                    $('<div class="row-fluid show-grid">').append(
+                        $('<div class="control-group span12">').append(
+                            $('<div class="controls">').append(
+                                $('<input type="radio" name="monthly-option" value="one">'),
+                                $('<span class="help-inline">').text(gt('at')),
+                                $('<input type="text" name="day_in_month" class="discreet short">'),
+                                $('<span class="help-inline">').text(gt('th day every')), // TODO use format with plurals
+                                $('<input type="text" name="interval" class="discreet short">'),
+                                $('<span class="help-inline>').text(gt('th month'))
+
+                            )
+                        )
+                    ),
+                    $('<div class="row-fluid show-grid">').append(
+                        $('<div class="control-group span12">').append(
+                            $('<input type="radio" name="monthly_option" value="two">'),
+                            $('<span class="help-inline">').text(gt('at')),
+                            $('<select name="day_in_month">').append(
+                                $('<option value="1">').text(gt('first')),
+                                $('<option value="2">').text(gt('second')),
+                                $('<option value="3">').text(gt('third')),
+                                $('<option value="4">').text(gt('fourth')),
+                                $('<option value="5">').text(gt('last'))
+                            ),
+                            $('<select name="days">').append(dayOptionsFragment),
+                            $('<span class="help-inline">').text(gt('every')),
+                            $('<input type="text" name="interval" class="discreet short">'),
+                            $('<span class="help-inline">').text(gt('th Month'))
+                        )
+                    )
+                )
+            );
         }
     });
 
     /*
-     *
-<div class="row-fluid show-grid">
-<div class="control-group span6">
-    <label for="{{!it.uid}}_recurrence_start" class="control-label">{{! it.strings.STARTS_ON }}</label>
-    <div class="controls">
-        <input id="{{!it.uid}}_recurrence_start" type="text" class="discreet startsat-date" name='recurrence_start'/>
+     *  <div class="row-fluid recurrence_details yearly">
+        <div class="control-group span12">
+            <div class='controls'>
+                <div>
+                    <input type='radio' name='yearly_option' value='one'>
+                    <span class='help-inline'>{{! it.strings.EVERY }}</span>
+                    <input type='text' name='day_in_month' class='short'/>
+                    <span class='help-inline'>{{! it.strings.TH }}</span>
+                    <select name='month' class='month'>
+                        {{~ it.monthList :item:index }}
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
+                        {{~}}
+                    </select>
+                </div>
+                <div>
+                    <input type='radio' name='yearly_option' value='two'>
+                    <span class='help-inline'>{{! it.strings.AT }}</span>
+                    <select name='day_in_month'>
+                        <option value='1'>{{! it.strings.FIRST }}</option>
+                        <option value='2'>{{! it.strings.SECOND }}</option>
+                        <option value='3'>{{! it.strings.THIRD }}</option>
+                        <option value='4'>{{! it.strings.FOURTH }}</option>
+                        <option value='5'>{{! it.strings.LAST }}</option>
+                    </select>
+                    <select name='days' class='days'>
+                        {{~ it.weekDayList :item:index }}
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
+                        {{~}}
+                    </select>
+                    <span class='help-inline'>{{! it.strings.IN }}</span>
+                    <select name='month' class='month'>
+                        {{~ it.monthList :item:index }}
+                        <option value='{{! item.value }}'>{{! item.label }}</option>
+                        {{~}}
+                    </select>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
-<div class="control-group span6">
-    <label for="{{!it.uid}}_recurrence_endings" class="control-label">{{! it.strings.ENDS }}</label>
-    <div class="controls">
-        <div>
-            <input type="radio" name='endingoption'/>
-            <label class="radio inline">{{! it.strings.NEVER }}</label>
-        </div>
-        <div>
-            <input id="{{!it.uid}}_recurrence_endings" type="radio" name='endingoption'/>
-            <label class="radio inline">
-               {{! it.strings.ON }}
-               <input type="text" class="discreet until" name='until'/>
-            </label>
-        </div>
-        <div>
-            <input type="radio" name='endingoption'/>
-            <label class="radio inline">
-                {{! it.strings.AFTER }}
-                <input type="text" class="discreet until short" name='occurrences'/>
-                <span class="help-inline">{{! it.strings.TIMES }}</span>
-            </label>
-        </div>
-    </div>
-</div>
-</div>
+
      */
+
+ // TODO ext point for yearly recurrence
+
     //TODO nicen this up
     ext.point('io.ox/calendar/edit/recurrence/start_stop').extend({
         index: 1,
