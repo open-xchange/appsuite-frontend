@@ -73,10 +73,11 @@ define("io.ox/calendar/api",
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "all",
-                    // id, folder_id, private_flag, recurrence_position, start_date,
+                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by,
-                    // participants
-                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,220",
+                    // participants, recurrence_type, days, day_in_month, month, interval, until, occurrences
+
+                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,220,209,212,213,214,215,216,222",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,
@@ -175,11 +176,11 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
+
                             return data;
                         });
                 });
             }
-
         },
         
         create: function (o) {
@@ -268,9 +269,9 @@ define("io.ox/calendar/api",
             var key = o.folder + "." + o.start + "." + o.end,
                 params = {
                     action: "updates",
-                    // id, folder_id, private_flag, recurrence_position, start_date,
+                    // id, folder_id, private_flag, recurrence_id, recurrence_position, start_date,
                     // title, end_date, location, full_time, shown_as, users, organizer, organizerId, created_by, recurrence_type
-                    columns: "1,20,101,207,201,200,202,400,401,402,221,224,227,2,209",
+                    columns: "1,20,101,206,207,201,200,202,400,401,402,221,224,227,2,209,212,213,214,215,222",
                     start: o.start,
                     end: o.end,
                     showPrivate: true,

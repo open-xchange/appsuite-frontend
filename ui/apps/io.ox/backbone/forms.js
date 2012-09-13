@@ -162,7 +162,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             },
             
             point: function () {
-                return ext.point(this.extensionNamespace);
+                return ext.point(this.ref);
             },
             
             render: function () {

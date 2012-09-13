@@ -20,6 +20,7 @@ define('io.ox/core/api/folder',
     'use strict';
 
     var // folder object cache
+        myself = null,
         folderCache = new cache.SimpleCache('folder', true),
         subFolderCache = new cache.SimpleCache('subfolder', true),
         visibleCache = new cache.SimpleCache('visible-folder', true),
@@ -369,7 +370,15 @@ define('io.ox/core/api/folder',
         /**
          * Can?
          */
-        can: function (action, data) {
+        can: function (action, data, obj) {
+            var compareValue = 1;
+            if (obj) {
+                myself = myself || config.get('identifier');
+                if (myself === _.firstOf(obj.created_by, 0)) {
+                    compareValue--;
+                }
+            }
+            
             // check multiple folder?
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
@@ -389,10 +398,16 @@ define('io.ox/core/api/folder',
                 // can read?
                 // 256 = read own, 512 = read all, 8192 = admin
                 //return (rights & 256 || rights & 512 || rights & 8192) > 0;
-                return perm(rights, 7) > 0;
+                return perm(rights, 7) > compareValue;
+            case 'create':
+                // can create objects?
+                return perm(rights, 0) > 1;
             case 'write':
-                // can write?
-                return perm(rights, 0) >= 2;
+                // can write objects
+                return perm(rights, 14) > compareValue;
+            case 'delete':
+                // can delete objects
+                return perm(rights, 21) > compareValue;
             case 'rename':
                 // can rename?
                 if (!isAdmin || isSystem) {
@@ -410,9 +425,9 @@ define('io.ox/core/api/folder',
                     }
                 }
                 return result;
-            case 'create':
-                return (isAdmin || this.derive('permissions', data).bit >= 4);
-            case 'delete':
+            case 'createFolder':
+                return (isAdmin || this.derive.bits(data.permissions, 0) >= 4);
+            case 'deleteFolder':
                 // must be admin; system and default folder cannot be deleted
                 return isAdmin && !isSystem && !this.is('defaultfolder', data);
             case 'import':

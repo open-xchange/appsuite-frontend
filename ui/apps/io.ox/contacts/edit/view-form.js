@@ -244,7 +244,7 @@ define('io.ox/contacts/edit/view-form', [
             id: uid,
             index: index,
             title: meta.i18n[id],
-            extensionNamespace: uid
+            ref: uid
         }));
         
         section.point = views.point(uid);
