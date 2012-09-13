@@ -303,6 +303,8 @@ define('io.ox/office/editor/image',
             imagePosition = Position.getDOMPosition(startnode, localStart, returnImageNode),
             imageFloatMode = null;
 
+        window.console.log("AAA1: Looking for image at: " + localStart);
+
         if (imagePosition) {
             var imageNode = imagePosition.node;
 
@@ -314,56 +316,65 @@ define('io.ox/office/editor/image',
 
                 if (imageFloatMode !== null) {
 
-                    if (imageFloatMode === 'inline') {
+                    var oldImageFloatMode = $(imageNode).data('mode');
 
-                        attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
-                        attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+                    if (imageFloatMode !== oldImageFloatMode) {
 
-                        // inserting an empty text span before the image, if it is an inline image
-                        var parent = imageNode.parentNode,
-                        textSpanNode = Position.getFirstTextSpanInParagraph(parent),
-                        newTextNode = $(textSpanNode).clone(true);
+                        if (imageFloatMode === 'inline') {
 
-                        newTextNode.text('');
-                        newTextNode.insertBefore(imageNode);
-                        localStart = Position.getFirstPositionInParagraph(startnode, localStart);
-
-                    } else {
-
-                        if (imageFloatMode === 'noneFloated') {
-                            attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
-                            attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
-                        } else if (imageFloatMode === 'leftFloated') {
-                            attributes['margin-left'] = 0;
-                            attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
-                        } else if (imageFloatMode === 'rightFloated') {
                             attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
-                            attributes['margin-right'] = 0;
-                        }
+                            attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
 
-                        // inserting the image as the first child of the paragraph, before an text node.
-                        var parent = imageNode.parentNode,
-                        textSpanNode = Position.getFirstTextSpanInParagraph(parent);
+                            // If there are floated images, this inline image has to be shifted behind them. Then
+                            // an empty text node has to be inserted before the image node.
+                            var parent = imageNode.parentNode,
+                                textSpanNode = Position.getFirstTextSpanInParagraph(parent),
+                                newTextNode = $(textSpanNode).clone(true);
 
-                        if (textSpanNode) {
                             parent.insertBefore(imageNode, textSpanNode);
+
+                            newTextNode.text('');
+                            parent.insertBefore(newTextNode.get(0), imageNode);
+
+                            localStart = Position.getFirstPositionInParagraph(startnode, localStart);
+
                         } else {
-                            parent.insertBefore(imageNode, parent.firstChild);
+
+                            if (imageFloatMode === 'noneFloated') {
+                                attributes['margin-left'] = $(imageNode).data('allMargins').fullLeftMargin;
+                                attributes['margin-right'] = $(imageNode).data('allMargins').fullRightMargin;
+                            } else if (imageFloatMode === 'leftFloated') {
+                                attributes['margin-left'] = 0;
+                                attributes['margin-right'] = ($(imageNode).data('allMargins')).standardRightMargin;
+                            } else if (imageFloatMode === 'rightFloated') {
+                                attributes['margin-left'] = ($(imageNode).data('allMargins')).standardLeftMargin;
+                                attributes['margin-right'] = 0;
+                            }
+
+                            if (oldImageFloatMode === 'inline') {
+                                // inserting the image after all position spans and after all floated images.
+                                var parent = imageNode.parentNode,
+                                    insertNode = parent.firstChild;
+
+                                while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
+
+                                parent.insertBefore(imageNode, insertNode);
+                            }
                         }
-                    }
 
-                    // setting css float property
-                    if (imageFloatMode === 'rightFloated') {
-                        attributes.float = 'right';
-                    } else if (imageFloatMode === 'leftFloated') {
-                        attributes.float = 'left';
-                    } else if (imageFloatMode === 'noneFloated') {
-                        attributes.float = 'left'; // none-floating is simulated with left floating.
-                    } else if (imageFloatMode === 'inline') {
-                        attributes.float = 'none';
-                    }
+                        // setting css float property
+                        if (imageFloatMode === 'rightFloated') {
+                            attributes.float = 'right';
+                        } else if (imageFloatMode === 'leftFloated') {
+                            attributes.float = 'left';
+                        } else if (imageFloatMode === 'noneFloated') {
+                            attributes.float = 'left'; // none-floating is simulated with left floating.
+                        } else if (imageFloatMode === 'inline') {
+                            attributes.float = 'none';
+                        }
 
-                    $(imageNode).data('mode', imageFloatMode).css(attributes);
+                        $(imageNode).data('mode', imageFloatMode).css(attributes);
+                    }
                 }
             }
         }
