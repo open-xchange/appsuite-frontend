@@ -16,118 +16,15 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/core/extensions',
        'io.ox/core/date',
        'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/module-participants',
        'io.ox/calendar/edit/module-recurrence',
-       'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
+       'io.ox/calendar/edit/template',
+       'gettext!io.ox/calendar/edit/main',
+       'io.ox/backbone/views',
+       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, recurrenceModule, tmpl, gt, views, forms) {
 
     'use strict';
 
 
-    //strings
-    var reminderListValues = [
-        {value: 0, format: 'minutes'},
-        {value: 15, format: 'minutes'},
-        {value: 30, format: 'minutes'},
-        {value: 45, format: 'minutes'},
-
-        {value: 60, format: 'hours'},
-        {value: 120, format: 'hours'},
-        {value: 240, format: 'hours'},
-        {value: 360, format: 'hours'},
-        {value: 420, format: 'hours'},
-        {value: 720, format: 'hours'},
-
-        {value: 1440, format: 'days'},
-        {value: 2880, format: 'days'},
-        {value: 4320, format: 'days'},
-        {value: 5760, format: 'days'},
-        {value: 7200, format: 'days'},
-        {value: 8640, format: 'days'},
-        {value: 10080, format: 'weeks'},
-        {value: 20160, format: 'weeks'},
-        {value: 30240, format: 'weeks'},
-        {value: 40320, format: 'weeks'}
-    ];
-
-    _.each(reminderListValues, function (item, index) {
-        var i;
-        switch (item.format) {
-        case 'minutes':
-            item.label = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-            break;
-        case 'hours':
-            i = Math.floor(item.value / 60);
-            item.label = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-            break;
-        case 'days':
-            i  = Math.floor(item.value / 60 / 24);
-            item.label = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-            break;
-        case 'weeks':
-            i = Math.floor(item.value / 60 / 24 / 7);
-            item.label = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-            break;
-        }
-    });
-
-    var staticStrings = {
-        SUBJECT:            gt('Subject'),
-        LOCATION:           gt('Location'),
-        STARTS_ON:          gt('Starts on'),
-        ENDS_ON:            gt('Ends on'),
-        ALL_DAY:            gt('All day'),
-        REPEAT:             gt('Repeat'),
-        EDIT:               gt('edit'),
-
-
-        CHANGE_TIMEZONE:    gt('Change timezone'),
-        DESCRIPTION:        gt('Description'),
-        REMINDER:           gt('Reminder'),
-        NO_REMINDER:        gt('No reminder'),
-
-        DISPLAY_AS:         gt('Display as'),
-        RESERVED:           gt('Reserved'),
-        TEMPORARY:          gt('Temporary'),
-        ABSENT:             gt('Absent'),
-        FREE:               gt('Free'),
-        TYPE:               gt('Type'),
-        PARTICIPANTS:       gt('Participants'),
-        PRIVATE:            gt('Private'),
-        NOTIFY_ALL:         gt('Notify all participants about this change'),
-        HELP_ADD_PARTICIPANTS_MANUALLY:     gt('To add participants manually, just provide a valid email address (e.g john.doe@example.com or "John Doe" <jd@example.com>)'),
-        MAIL_TO_ALL :       gt('Send mail to all')
-
-    };
-
-
-    // generate source for time-typeahead
-    var hours_typeahead = [];
-    var filldate = new dateAPI.Local();
-    filldate.setHours(0);
-    filldate.setMinutes(0);
-    for (var i = 0; i < 24; i++) {
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-    }
-
-    var comboboxHours = {
-        source: hours_typeahead,
-        items: 48,
-        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-        sorter: function (items) {
-            items = _(items).sortBy(function (item) {
-                var pd = dateAPI.Local.parse(item, dateAPI.TIME);
-                return pd.getTime();
-            });
-            return items;
-        },
-        autocompleteBehavoir: false
-    };
-
-    /// strings end
 
     //customize datepicker
     //just localize the picker
@@ -138,7 +35,9 @@ define('io.ox/calendar/edit/view-main',
         "months": dateAPI.locale.months,
         "monthsShort": dateAPI.locale.monthsShort
     };
+
     var dates = $.fn.datepicker.dates;
+    /*
     $.fn.datepicker.DPGlobal.formatDate = function (date, format, language) {
         if (!date) {
             return null;
@@ -164,16 +63,45 @@ define('io.ox/calendar/edit/view-main',
     $.fn.datepicker.DPGlobal.parseFormat = function (format) {
         return format;
     };
+*/
+
+    var CommonView = views.point('io.ox/calendar/edit/section').createView({
+        tagName: 'div',
+        className: 'io-ox-calendar-edit container-fluid',
+        render: function () {
+            var self = this;
+
+            var rows = [];
+            function getRow(index) {
+                if (rows.length > index + 1) {
+                    return rows[index];
+                }
+                for (var i = 0; i < index + 1 - rows.length; i++) {
+                    rows.push($('<div class="row-fluid">'));
+                }
+                return rows[index];
+            }
+
+            this.point.each(function (extension) {
+                var node = getRow(extension.forceLine || rows.length);
+                extension.invoke('draw', node, {model: self.model, parentView: self});
+            });
 
 
+            this.$el.append(rows);
+
+            return this;
+        }
+    });
+
+/*
     var CommonView = Backbone.View.extend({
         RECURRENCE_NONE: 0,
         tagName: 'div',
         className: 'io-ox-calendar-edit container',
         subviews: {},
         events: {
-            'click .save': 'onSave',
-            'click .sendmail' : 'onSendMail'
+            'click .save': 'onSave'
         },
         initialize: function () {
             var self = this;
@@ -191,6 +119,7 @@ define('io.ox/calendar/edit/view-main',
             };
 
             self.bindings = {
+                full_time: {selector: '[name=full_time]'},
                 start_date: [
                     {
                         selector: '.startsat-date',
@@ -215,20 +144,22 @@ define('io.ox/calendar/edit/view-main',
             self.model.on('change:start_date', _.bind(self.onStartDateChange, self));
             self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
             self.model.on('change:full_time', _.bind(self.onToggleAllDay, self));
-            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
+
+//            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
             var self = this;
+            // create or edit, check for self.model.has('id')
 
-            // pre render it
-            staticStrings.SAVE_BUTTON_LABEL = (self.model.has('id') ? gt('Save') : gt('Create'));
+            // clear node
+            self.$el.empty();
+            // invoke extensionpoints from template
+            ext.point('io.ox/calendar/edit/section').invoke('draw', self.$el, {
+                uid: self.guid,
+                editmode: !!(self.model.has('id'))
+            });
 
-            self.$el.empty().append(tmpl.render('io.ox/calendar/edit/section', {
-                strings: staticStrings,
-                reminderList: reminderListValues,
-                uid: self.guid
-            }));
-
+            // TODO remove this, pass model to template and don't use data-property
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(this.el, 'data-property');
             var bindings = _.extend(defaultBindings, self.bindings);
 
@@ -240,14 +171,26 @@ define('io.ox/calendar/edit/view-main',
             self._modelBinder.bind(self.model, self.el, bindings);
 
             //init date picker
+
             self.$('.startsat-date').datepicker({format: dateAPI.DATE});
             self.$('.endsat-date').datepicker({format: dateAPI.DATE});
             self.$('.startsat-time').combobox(comboboxHours);
             self.$('.endsat-time').combobox(comboboxHours);
 
+            self.subviews.recurrenceView = new recurrenceModule.View({
+                model: self.model,
+                parentView: self.el
+            });
+            // append recurrence options view
+            self.subviews.recurrence_option = new recurrenceModule.OptionView({
+                el: $(self.el).find('.edit-appointment-recurrence-container'),
+                model: self.model,
+                parentview: self.$el,
+                recurrenceView: self.subviews.recurrenceView
+            });
 
-            //self.subviews.recurrence_option = new recurrenceModule.OptionView({model: self.model});
-
+            self.subviews.recurrence_option.render();
+            //self.subviews.recurrenceView.render();
 
             var participants = new participantsModule.Collection(self.model.get('participants'));
             self.subviews.participants = new participantsModule.CollectionView({collection: participants, el: $(self.el).find('.participants')});
@@ -257,6 +200,7 @@ define('io.ox/calendar/edit/view-main',
             self.subviews.addparticipants = new AddParticipantsView({ el: $(self.el).find('.add-participants')});
             self.subviews.addparticipants.render();
             self.subviews.addparticipants.on('select', _.bind(self.onAddParticipant, self));
+
             //$(self.el).find('.participants').empty().append(self.subviews.participants.render().el);
 
             return self;
@@ -290,6 +234,7 @@ define('io.ox/calendar/edit/view-main',
             }
         },
         onToggleAllDay: function () {
+            console.log("toggle all day");
             var isFullTime = this.model.get('full_time');
             if (isFullTime) {
                 this.$('.startsat-time').hide();
@@ -368,23 +313,8 @@ define('io.ox/calendar/edit/view-main',
                 return true;
             });
             this.model.set('participants', participants);
-        },
-        onSendMail: function () {
-            var participants = this.model.get('participants');
-            var def = $.Deferred();
-            util.createArrayOfRecipients(participants, def);
-
-            def.done(function (arrayOfRecipients) {
-                require(['io.ox/mail/write/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.compose({
-                            to: arrayOfRecipients
-                        });
-                    });
-                });
-            });
         }
     });
-
+*/
     return CommonView;
 });

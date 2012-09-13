@@ -14,6 +14,7 @@ define('io.ox/calendar/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
+
      'gettext!io.ox/calendar/actions'], function (ext, links, api, gt) {
 
     'use strict';
@@ -183,15 +184,11 @@ define('io.ox/calendar/actions',
         id: 'create',
         requires: 'one create',
         action: function (app, obj) {
-            obj = obj || {};
-            require(['io.ox/calendar/edit/main'], function (editmain) {
-                // FIXME: what a hack > folder_id
-                editmain.getApp().launch().done(function () {
-                    _.extend(obj, {
-                        folder_id: app.folder.get(),
-                        participants: []
-                    });
-                    this.create(obj);
+            require(['io.ox/calendar/edit/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.create(_.extend({
+                        folder_id: app.folder.get()
+                    }, obj));
                 });
             });
         }

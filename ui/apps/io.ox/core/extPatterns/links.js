@@ -103,11 +103,13 @@ define("io.ox/core/extPatterns/links",
 
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
+        
         this.draw = function (context) {
             // paint on current node
             var args = $.makeArray(arguments);
             drawLinks(self, new Collection(context), this, context, args);
         };
+        
     };
 
     var ToolbarButtons = function (options) {

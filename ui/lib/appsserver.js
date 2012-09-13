@@ -38,6 +38,7 @@ function escape(s) {
 }
 
 http.createServer(function (request, response) {
+
     response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
     var list = url.parse(request.url).pathname.split(',');
     list.shift();

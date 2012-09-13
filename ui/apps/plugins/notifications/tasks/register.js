@@ -46,8 +46,15 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         setTaskStatus: function (e) {
             e.stopPropagation();
-            var now = new Date();
-            api.update(now.getTime(), this.model.attributes.taskId, {status: 3});
+            var now = new Date(),
+                data = {
+                    id: this.model.get('taskId'),
+                    folder: this.model.get('folderId')
+                };
+            api.update(now.getTime(), data.id, {status: 3}, data.folder)
+                .done(function (result) {
+                    api.trigger("update:" + data.folder + '.' + data.id);
+                });
             this.close();
         },
         
@@ -60,7 +67,6 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 sidepopup = overlay.prop('sidepopup'),
                 cidthis = data.folder + "." + data.id,
                 cid = overlay.find('.tasks-detailview').attr('data-cid');
-                
             // toggle?
             if (sidepopup && cid === cidthis) {
                 sidepopup.close();
