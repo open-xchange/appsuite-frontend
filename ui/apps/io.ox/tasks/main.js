@@ -114,12 +114,6 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
             );
         };
         
-        var repaint = function (data) {
-            api.trigger("refresh.all");
-        };
-
-        api.on('delete', repaint);
-        
         commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

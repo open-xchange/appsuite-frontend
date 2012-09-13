@@ -44,6 +44,8 @@ define('io.ox/tasks/view-grid-template',
                     
                     if (data.priority === 3) {
                         fields.priority.text("\u2605\u2605\u2605");
+                    } else {
+                        fields.priority.html("&nbsp");
                     }
 
                     fields.status.attr('class', "status " + data.badge);//important. with addClass old classes aren't removed correctly
