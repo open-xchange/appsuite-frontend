@@ -37,10 +37,12 @@ version = rev + "." + t.getUTCFullYear() +
     pad(t.getUTCSeconds());
 console.info("Build version: " + version);
 
-var debug = /^\s*(?:on|yes|true|1)/i.test(process.env.debug);
-var mode = process.env.mode || 'production';
+function envBoolean(name) {
+    return /^\s*(?:on|yes|true|1)/i.test(process.env[name]);
+}
+
+var debug = envBoolean('debug');
 if (debug) console.info("Debug mode: on");
-console.info("Run mode: " + mode);
 
 utils.fileType("source").addHook("filter", utils.includeFilter);
 utils.fileType("module").addHook("filter", utils.includeFilter);
@@ -54,9 +56,6 @@ function jsFilter (data) {
         data = hint.call(this, data, this.getSrc);
     }
     
-    // In case of parse errors, the actually parsed source is stored
-    // in tmp/errorfile.js
-    
     var tree = parse(data);
     
     function parse(data) {
@@ -65,6 +64,8 @@ function jsFilter (data) {
         }, data);
     }
     
+    // In case of parse errors, the actually parsed source is stored
+    // in tmp/errorfile.js
     function catchParseErrors(f, data) {
         try {
             return f(data);
@@ -110,14 +111,16 @@ function jsFilter (data) {
     }
 
     // UglifyJS
-    if (debug) return data;
+    if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
-    tree = pro.ast_mangle(tree);
+    tree = pro.ast_mangle(tree, { defines: {
+        STATIC_APPS: parse(process.env.STATIC_APPS || 'false')[1][0][1]
+    } });
     tree = pro.ast_squeeze(tree);
     // use split_lines
     return catchParseErrors(function (data) {
         return pro.split_lines(data, 500);
-    }, pro.gen_code(tree));
+    }, pro.gen_code(tree)) + ';';
 }
 utils.fileType("source").addHook("filter", jsFilter)
     .addHook("define", i18n.potScanner);
@@ -241,8 +244,9 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     utils.string(";"), utils.string("ox = ox || {}; ox.mode = '" + mode + "';"), "src/css.js", "src/jquery.plugins.js", "src/util.js",
-     "src/boot.js"],
+     debug ? utils.string(';STATIC_APPS=(' + process.env.STATIC_APPS + ');') :
+             utils.string(';'),
+     "src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 utils.concat("boot.js", [
