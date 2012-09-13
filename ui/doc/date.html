@@ -504,6 +504,15 @@ functions, please let's extend the high level APIs instead.</span></p>
     </dd>
 </dl>
 
+<p>Metadata about a time zone is stored directly on the <code>LocalDate</code>
+object.</p>
+
+<dl>
+    <dt>LocalDate.id</dt><dd>Original name used to retrieve this time zone.</dd>
+    <dt>LocalDate.displayName</dt><dd>A human-readable name of this time zone
+    as provided by the config module under "availableTimeZones".</dd>
+</dl>
+
 <p>Parsing of date and time strings as entered by a user is done using format
 flags from <a href="#Constants">Constants</a>. The current implementation
 expects the string to match the corresponding localized format string pretty
