@@ -2533,7 +2533,8 @@ define('io.ox/office/editor/editor',
                 } else if (anchorType === 'FloatLeft') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan'))) { node = node.nextSibling; } // spans as positionSpan have to be the first children
+                    // inserting new image behind spans as positionSpan and already inserted images
+                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'left';
                     attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
@@ -2546,7 +2547,8 @@ define('io.ox/office/editor/editor',
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan'))) { node = node.nextSibling; } // spans as positionSpan have to be the first children
+                    // inserting new image behind spans as positionSpan and already inserted images
+                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'right';
                     attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
@@ -2559,7 +2561,8 @@ define('io.ox/office/editor/editor',
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan'))) { node = node.nextSibling; } // spans as positionSpan have to be the first children
+                    // inserting new image behind spans as positionSpan and already inserted images
+                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
 
                     attributes['margin-left'] = allMargins.fullLeftMargin;
                     attributes['margin-right'] = allMargins.fullRightMargin;
@@ -2593,9 +2596,10 @@ define('io.ox/office/editor/editor',
                     var imgNode = $('<img>', { src: url }).data('mode', floatMode).data('allMargins', allMargins).insertBefore(node).css(attributes);
 
                     if (verticalSpanSide !== null) {
-                        // all spans have to be listed before the floated images
-                        // $('<span>', { width: '1px', height: attributes.anchorvoffset }).data('positionSpan', true).css('float', verticalSpanSide).insertBefore(imgNode);
-                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data('positionSpan', true).css('float', verticalSpanSide).insertBefore(imgNode.get(0).parentNode.firstChild);
+                        // all spans have to be listed before the floated images, but keeping the correct order
+                        var insertNode = imgNode.get(0).parentNode.firstChild;
+                        while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan'))) { insertNode = insertNode.nextSibling; }
+                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data('positionSpan', true).css('float', verticalSpanSide).insertBefore(insertNode);
                     }
                 }
             }
