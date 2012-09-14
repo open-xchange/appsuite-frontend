@@ -257,10 +257,9 @@ define('plugins/portal/facebook/register',
             return (post.type === 237);
         },
         draw: function (post) {
-            var media = post.attachment.media === undefined ? undefined : post.attachment.media[0];
-
             $('<div class="message">').text(post.message).appendTo($(this));
-            if (media !== undefined) {
+            if (post.attachment && post.attachment.media && post.attachment.media[0]) {
+                var media = post.attachment.media[0];
                 $('<a class="app-story">').attr('href', media.href).append(
                     $('<img class="wall-img-left">').attr('src', media.src),
                     $('<span class="caption title">').text(post.attachment.name),
