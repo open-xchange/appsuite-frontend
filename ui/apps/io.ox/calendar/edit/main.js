@@ -12,14 +12,18 @@
  */
 
 define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/edit/model-appointment',
+      ['io.ox/calendar/model',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, MainView, gt) {
+       'io.ox/core/api/folder',
+       'io.ox/core/config',
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI) {
 
     'use strict';
+    function AppointmentModel() {
 
+    }
     var EditAppointmentController = function () {};
 
     EditAppointmentController.prototype = {
@@ -69,30 +73,49 @@ define('io.ox/calendar/edit/main',
             var self = this;
             var cont = function (data) {
                 self.model = new AppointmentModel(data);
+                var participants = self.model.get('participants');
 
-                window.mymodel = self.model;
+                folderAPI.get({folder: data.folder_id}).done(function (folder) {
 
-                if (self._restored === true) {
-                    self.model.toSync = data; //just to make it dirty
-                }
+                    if (folderAPI.is('private', folder)) {
+                        // it's a private folder for the current user,
+                        // he can not be removed from the actual appointment
 
-                self.view = new MainView({model: self.model});
-                self.view.on('save', _.bind(self.onSave, self));
+                        _.each(participants, function (d) {
+                            if (d.id === configAPI.get('identifier')) {
+                                d.ui_removable = false;
+                            }
+                        });
+                        self.model.set('participants', participants);
+                    }
 
-                // create app window
-                self.setWindow(ox.ui.createWindow({
-                    name: 'io.ox/calendar/edit',
-                    title: gt('Edit Appointment'),
-                    toolbar: true,
-                    search: false,
-                    close: true
-                }));
+                    window.mymodel = self.model;
 
-                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                self.getWindow().show(_.bind(self.onShowWindow, self));
+                    if (self._restored === true) {
+                        self.model.toSync = data; //just to make it dirty
+                    }
+
+                    self.view = new MainView({model: self.model});
+                    self.view.on('save', _.bind(self.onSave, self));
+
+                    // create app window
+                    self.setWindow(ox.ui.createWindow({
+                        name: 'io.ox/calendar/edit',
+                        title: gt('Edit Appointment'),
+                        toolbar: true,
+                        search: false,
+                        close: true
+                    }));
+
+                    $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                    self.getWindow().show(_.bind(self.onShowWindow, self));
+
+                });
+
             };
 
             if (data) {
+
                 //hash support
                 self.setState({ folder: data.folder_id, id: data.id});
                 cont(data);
@@ -108,24 +131,47 @@ define('io.ox/calendar/edit/main',
         create: function (data) {
             var self = this;
 
-            self.model = new AppointmentModel(data);
-            self.view = new MainView({model: self.model});
-            self.view.on('save', _.bind(self.onSave, self));
-            self.setTitle(gt('Create Appointment'));
+            self.model = appointmentModel.factory.create(data);
+            appointmentModel.setDefaultParticipants(self.model).done(function () {
+                self.view = new MainView({model: self.model});
+                self.view.on('save', _.bind(self.onSave, self));
+                self.setTitle(gt('Create Appointment'));
 
-            // create app window
-            self.setWindow(ox.ui.createWindow({
-                name: 'io.ox/calendar/edit',
-                title: gt('Create Appointment'),
-                toolbar: true,
-                search: false,
-                close: true
-            }));
+                // create app window
+                self.setWindow(ox.ui.createWindow({
+                    name: 'io.ox/calendar/edit',
+                    title: gt('Create Appointment'),
+                    toolbar: true,
+                    search: false,
+                    close: true
+                }));
 
-            $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-            self.getWindow().show(_.bind(self.onShowWindow, self));
+                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                self.getWindow().show(_.bind(self.onShowWindow, self));
+            });
+
+            folderAPI.get({folder: data.folder_id}).done(function (folder) {
+                if (folderAPI.is('private', folder)) {
+                    // it's a private folder for the current user, add him by default
+                    // as participant
+                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1, ui_removable: false}]);
+
+                } else if (folderAPI.is('public', folder)) {
+                    // if public folder, current user will be added
+                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1}]);
+
+                } else if (folderAPI.is('shared', folder)) {
+                    // in a shared folder the owner (created_by) will be added by default
+                    self.model.set('participants', [{id: folder.created_by, type: 1}]);
+                }
+
+
+            });
+
+
         },
         onShowWindow: function () {
+            console.log('onshowwindow');
             var self = this;
             if (self.model.get('title')) {
                 $('.window-title').text(self.model.get('title'));
@@ -135,7 +181,8 @@ define('io.ox/calendar/edit/main',
                 $('.window-title').text(value);
                 self.setTitle(value);
             });
-            $('#' + self.view.guid + '_title').get(0).focus();
+            //$('#' + self.view.guid + '_title').get(0).focus();
+
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {
@@ -195,8 +242,9 @@ define('io.ox/calendar/edit/main',
                         }
                     }
                 );
-        },
+        }/*,
         failSave: function () {
+            console.log("fail save", this);
             return {
                 module: 'io.ox/calendar/edit',
                 point: this.model.attributes
@@ -212,7 +260,7 @@ define('io.ox/calendar/edit/main',
             }
             df.resolve();
             return df;
-        }
+        }*/
     };
 
 

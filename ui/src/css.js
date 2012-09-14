@@ -34,62 +34,60 @@
 
     // Replace the load function of RequireJS with our own, which fetches
     // dynamically concatenated files.
-    if (!ox.mode || ox.mode === "production") {
-        (function () {
-            var queue = [];
-            var timeout = null;
-            var deps = window.dependencies;
-            window.dependencies = undefined;
-            var req = require, oldload = req.load;
-            req.load = function (context, modulename, url) {
-                var prefix = context.config.baseUrl;
-                if (modulename.charAt(0) !== '/') {
-                    if (url.slice(0, prefix.length) !== prefix) {
-                        return oldload.apply(this, arguments);
-                    }
-                    url = url.slice(prefix.length);
-                }
-                if (timeout === null) timeout = setTimeout(loaded, 0);
-                var next = deps[modulename];
-                if (next && next.length) req(deps[modulename]);
-                queue.push(url);
-
-                function loaded() {
-                    timeout = null;
-                    var q = queue;
-                    queue = [];
-                    oldload(context, modulename,
-                        [ox.apiRoot, '/apps/', ox.base, ',', q.join()].join(''));
-                    if (queue.length) console.error('recursive require', queue);
-                }
-            };
-            
-            var classicRequire = req.config({
-                context: "classic", 
-                baseUrl: ox.base + "/apps"
-            });
-            classicRequire.load = oldload;
-            
-            define('classic', {load: function (name, parentRequire, load, config) {
-                classicRequire([name], load);
-            } });
-            
-            define('text', { load: function (name, parentRequire, load, config) {
-                req(['/text;' + name], load);
-            } });
-            define('raw', { load: function (name, parentRequire, load, config) {
-                req(['/raw;' + name], load);
-            } });
-        }());
-    } else {
-        define("text", { load: function(name, parentRequire, load, config) {
+    (function () {
+        function defaultImpl(name, parentRequire, load, config) {
             $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
-        } });
+        };
+        if (STATIC_APPS) {
+            define("text", { load: defaultImpl });
+            define("raw", { load: defaultImpl });
+            return;
+        }
+        var queue = [];
+        var timeout = null;
+        var deps = window.dependencies;
+        window.dependencies = undefined;
+        var req = require, oldload = req.load;
+        req.load = function (context, modulename, url) {
+            var prefix = context.config.baseUrl;
+            if (modulename.charAt(0) !== '/') {
+                if (url.slice(0, prefix.length) !== prefix) {
+                    return oldload.apply(this, arguments);
+                }
+                url = url.slice(prefix.length);
+            }
+            if (timeout === null) timeout = setTimeout(loaded, 0);
+            var next = deps[modulename];
+            if (next && next.length) req(deps[modulename]);
+            queue.push(url);
 
-        define("raw", { load: function(name, parentRequire, load, config) {
-            $.ajax({ url: config.baseUrl + name, dataType: "text" }).done(load);
+            function loaded() {
+                timeout = null;
+                var q = queue;
+                queue = [];
+                oldload(context, modulename,
+                    [ox.apiRoot, '/apps/', ox.base, ',', q.join()].join(''));
+                if (queue.length) console.error('recursive require', queue);
+            }
+        };
+        
+        var classicRequire = req.config({
+            context: "classic", 
+            baseUrl: ox.base + "/apps"
+        });
+        classicRequire.load = oldload;
+        
+        define('classic', {load: function (name, parentRequire, load, config) {
+            classicRequire([name], load);
         } });
-    }
+        
+        define('text', { load: function (name, parentRequire, load, config) {
+            req(['/text;' + name], load);
+        } });
+        define('raw', { load: function (name, parentRequire, load, config) {
+            req(['/raw;' + name], load);
+        } });
+    }());
     
     // css plugin
     define("css", {

@@ -38,6 +38,7 @@ function escape(s) {
 }
 
 http.createServer(function (request, response) {
+
     response.setHeader('Content-Type', 'text/javascript;charset=UTF-8');
     var list = url.parse(request.url).pathname.split(',');
     list.shift();
@@ -67,12 +68,7 @@ http.createServer(function (request, response) {
             }
             response.write("define('" + list[i] + "','" + escape(s) + "');\n");
         } else {
-            var buf = fs.readFileSync(filename);
-            response.write(buf);
-            var last = buf[buf.length - 1];
-            if (last != 10 && last != 13 && last != ';'.charCodeAt(0)) {
-                response.write('\n');
-            }
+            response.write(fs.readFileSync(filename));
         }
     }
     response.end();

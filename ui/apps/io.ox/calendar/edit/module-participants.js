@@ -16,8 +16,8 @@ define('io.ox/calendar/edit/module-participants',
        'io.ox/core/api/resource',
        'io.ox/contacts/api',
        'io.ox/core/extensions',
-       'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main',
+       'io.ox/calendar/edit/template'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, gt) {
 
     'use strict';
 
@@ -144,7 +144,7 @@ define('io.ox/calendar/edit/module-participants',
             self.$el.attr('data-cid', self.model.cid);
 
             // rerender on model change
-            //self.model.on('change', _.bind(self.render, self));
+            self.model.on('change', _.bind(self.render, self));
             this._modelBinder = new Backbone.ModelBinder();
 
             // FIXME: polymorph model so fetch on initialize, may be it's not a good idea
@@ -169,96 +169,55 @@ define('io.ox/calendar/edit/module-participants',
             return this;
         },
         renderUser: function () {
-            var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/user', {}));
-            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            this.$el.empty();
+            // invoke point
+            ext.point('io.ox/calendar/edit/participants/user').invoke('draw', this.$el, this.model);
 
-            if (Modernizr.backgroundsize) {
-                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
-            } else {
-                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
-                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
-            }
-
-            this._modelBinder.bind(self.model, this.el, bindings);
-            return self;
+            return this;
         },
         renderUserGroup: function () {
-            var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/usergroup', {strings: {
-                GROUP: gt('Group')
-            }}));
+            this.$el.empty();
+            ext.point('io.ox/calendar/edit/participants/usergroup').invoke('draw', this.$el, this.model);
 
-            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            if (Modernizr.backgroundsize) {
-                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
-            } else {
-                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
-                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
-            }
-
-            this._modelBinder.bind(self.model, this.el, bindings);
-            return self;
+            return this;
         },
         renderResource: function () {
-            var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/resource', {strings: {
-                RESOURCE: gt('Resource')
-            }}));
+            this.$el.empty();
+            ext.point('io.ox/calendar/edit/participants/resource').invoke('draw', this.$el, this.model);
 
-            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            if (Modernizr.backgroundsize) {
-                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
-            } else {
-                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
-                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
-            }
-
-            this._modelBinder.bind(self.model, this.el, bindings);
-            return self;
+            return this;
         },
         renderExternalUser: function () {
-            var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/externaluser', {}));
-            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
+            this.$el.empty();
+            ext.point('io.ox/calendar/edit/participants/externaluser').invoke('draw', this.$el, this.model);
 
-            if (Modernizr.backgroundsize) {
-                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
-            } else {
-                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
-                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
-            }
-            this._modelBinder.bind(self.model, this.el, bindings);
-            return self;
+            return this;
         },
+
+        renderDistlistUser: function () {
+
+            this.$el.empty();
+            ext.point('io.ox/calendar/edit/participants/user').invoke('draw', this.$el, this.model);
+
+            return this;
+        },
+
         renderDistlistUserGroup: function () {
-            var self = this;
 
-            this.$el.empty().append(tmpl.render('io.ox/calendar/edit/particpant/distlistusergroup', {strings: {
-                DISTLISTGROUP: gt('Distribution list')
-            }}));
+            this.$el.empty();
+            ext.point('io.ox/calendar/edit/participants/distlistusergroup').invoke('draw', this.$el, this.model);
 
-            var bindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
-            if (Modernizr.backgroundsize) {
-                bindings.image1_url =  [{selector: '[data-property="image1_url"]', elAttribute: 'style', converter: convertImageStyle}];
-            } else {
-                this.$('[data-property="image1_url"]').append($('<img>').css({width: '100%'/*, height: '100%'*/}));
-                bindings.image1_url =  [{selector: '[data-property="image1_url"] > img', elAttribute: 'src', converter: convertImage}];
-            }
-
-            this._modelBinder.bind(self.model, this.el, bindings);
-            return self;
+            return this;
         },
         close: function () {
             this.remove();
         }
 
     });
-
 
 
     // just a collection of a participant view
@@ -295,9 +254,10 @@ define('io.ox/calendar/edit/module-participants',
             this.collection.add(model);
         },
 
-        onClickRemove: function (evt) {
+        onClickRemove: function (e) {
+            e.preventDefault();
             var self = this,
-                item = $(evt.target).parents('.edit-appointment-participant').get(0),
+                item = $(e.target).parents('.edit-appointment-participant').get(0),
                 itemid = $(item).attr('data-cid');
 
             self.collection.remove(self.collection.getByCid(itemid));
@@ -309,20 +269,19 @@ define('io.ox/calendar/edit/module-participants',
             $(e.target).find('i').removeClass('icon-white');
         },
 
-        onClickPersonLink: function (evt) {
+        onClickPersonLink: function (e) {
             var self = this,
-                item = $(evt.target).parents('.edit-appointment-participant').get(0),
+                item = $(e.target).parents('.edit-appointment-participant').get(0),
                 itemid = $(item).attr('data-cid');
-
             var obj = self.collection.getByCid(itemid);
 
             if (obj.get('type') !== 5) { // no external
-                evt.data = {id: obj.get('id'), email1: obj.get('email1')};
+                e.data = {id: obj.get('id'), email1: obj.get('email1')};
             } else {
-                evt.data = {email1: obj.get('email1'), display_name: obj.get('display_name')};
+                e.data = {email1: obj.get('email1'), display_name: obj.get('display_name')};
             }
             ext.point('io.ox/core/person:action').each(function (ext) {
-                _.call(ext.action, evt.data, evt);
+                _.call(ext.action, e.data, e);
             });
         }
     });

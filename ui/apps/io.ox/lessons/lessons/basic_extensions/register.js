@@ -10,7 +10,7 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extensions', "io.ox/lessons/editor", "io.ox/lessons/toc"], function (ext, Editor, TOC) {
     "use strict";
     ext.point("io.ox/lessons/lesson").extend({
         id: 'basic_extensions',
@@ -19,9 +19,33 @@ define('io.ox/lessons/lessons/basic_extensions/register', ['io.ox/core/extension
         description: 'In which we will take a look at the extension point framework and add an action to the lessons module',
         section: 'Basics',
         start: function (options) {
-            var win = options.win;
-            
-            win.nodes.main.empty().append($("<h1>").text("Basic Extensions"));
+            require(["text!io.ox/lessons/lessons/basic_extensions/lesson.html"], function (html) {
+                var win = options.win;
+                
+                win.nodes.main.empty().append($(html));
+                TOC.setUp(win.nodes.main);
+                Editor.setUp(win.nodes.main);
+                
+                
+                
+                (function () {
+                    var floatingDiv = $('<div class="well"/>').css({
+                        position: 'fixed',
+                        top: $(window).height() / 2,
+                        left: win.nodes.main.find(".navigation").offset().left,
+                        width: "180px"
+                    }),
+                        point = ext.point("io.ox/lessons/floatingWidget");
+                    win.nodes.main.find(".navigation").append(floatingDiv);
+                    
+                    point.invoke("draw", floatingDiv);
+                    point.on('extended', function () {
+                        floatingDiv.empty();
+                        point.invoke("draw", floatingDiv);
+                    });
+                    
+                }());
+            });
         }
     });
 });

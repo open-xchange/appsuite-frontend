@@ -20,7 +20,8 @@ define('plugins/portal/mail/register',
      'less!plugins/portal/mail/style.css'], function (ext, links, strings, gt) {
 
     'use strict';
-
+    
+    var sidepopup; //only one detailsidepopup is needed
     // actions
     ext.point('io.ox/portal/widget/mail/actions/compose').extend({
         id: 'compose',
@@ -135,9 +136,11 @@ define('plugins/portal/mail/register',
                                 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
-
-                        new dialogs.SidePopup({ modal: false })
-                            .delegate(node, '.vgrid-cell', function (pane, e, target) {
+                        
+                        if (!sidepopup) {
+                            sidepopup = new dialogs.SidePopup({ modal: false });
+                        }
+                        sidepopup.delegate(node, '.vgrid-cell', function (pane, e, target) {
                                 var data = target.data('object-data');
                                 pane.parent().removeClass('default-content-padding');
                                 require(['io.ox/mail/view-detail', 'io.ox/mail/api'], function (view, api) {
