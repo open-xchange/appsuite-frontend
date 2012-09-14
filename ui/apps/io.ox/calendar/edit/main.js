@@ -12,16 +12,18 @@
  */
 
 define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/edit/model-appointment',
+      ['io.ox/calendar/model',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
        'io.ox/core/api/folder',
        'io.ox/core/config',
-       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, MainView, gt, folderAPI, configAPI) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI) {
 
     'use strict';
+    function AppointmentModel() {
 
+    }
     var EditAppointmentController = function () {};
 
     EditAppointmentController.prototype = {
@@ -129,22 +131,8 @@ define('io.ox/calendar/edit/main',
         create: function (data) {
             var self = this;
 
-            self.model = new AppointmentModel(data);
-            folderAPI.get({folder: data.folder_id}).done(function (folder) {
-                if (folderAPI.is('private', folder)) {
-                    // it's a private folder for the current user, add him by default
-                    // as participant
-                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1, ui_removable: false}]);
-
-                } else if (folderAPI.is('public', folder)) {
-                    // if public folder, current user will be added
-                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1}]);
-
-                } else if (folderAPI.is('shared', folder)) {
-                    // in a shared folder the owner (created_by) will be added by default
-                    self.model.set('participants', [{id: folder.created_by, type: 1}]);
-                }
-
+            self.model = appointmentModel.factory.create(data);
+            appointmentModel.setDefaultParticipants(self.model).done(function () {
                 self.view = new MainView({model: self.model});
                 self.view.on('save', _.bind(self.onSave, self));
                 self.setTitle(gt('Create Appointment'));
@@ -161,6 +149,25 @@ define('io.ox/calendar/edit/main',
                 $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                 self.getWindow().show(_.bind(self.onShowWindow, self));
             });
+            /*
+            folderAPI.get({folder: data.folder_id}).done(function (folder) {
+                if (folderAPI.is('private', folder)) {
+                    // it's a private folder for the current user, add him by default
+                    // as participant
+                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1, ui_removable: false}]);
+
+                } else if (folderAPI.is('public', folder)) {
+                    // if public folder, current user will be added
+                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1}]);
+
+                } else if (folderAPI.is('shared', folder)) {
+                    // in a shared folder the owner (created_by) will be added by default
+                    self.model.set('participants', [{id: folder.created_by, type: 1}]);
+                }
+
+
+            });
+            */
 
         },
         onShowWindow: function () {

@@ -19,38 +19,13 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/module-participants',
        'io.ox/calendar/edit/module-recurrence',
        'io.ox/calendar/edit/template',
-       'gettext!io.ox/calendar/edit/main'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt) {
+       'gettext!io.ox/calendar/edit/main',
+       'io.ox/backbone/views',
+       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt, views, forms) {
 
     'use strict';
 
 
-    // generate source for time-typeahead
-    var hours_typeahead = [];
-    var filldate = new dateAPI.Local();
-    filldate.setHours(0);
-    filldate.setMinutes(0);
-    for (var i = 0; i < 24; i++) {
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-        hours_typeahead.push(filldate.format(dateAPI.TIME));
-        filldate.add(1000 * 60 * 30); //half hour
-    }
-
-    var comboboxHours = {
-        source: hours_typeahead,
-        items: 48,
-        menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-        sorter: function (items) {
-            items = _(items).sortBy(function (item) {
-                var pd = dateAPI.Local.parse(item, dateAPI.TIME);
-                return pd.getTime();
-            });
-            return items;
-        },
-        autocompleteBehavoir: false
-    };
-
-    /// strings end
 
     //customize datepicker
     //just localize the picker
@@ -89,6 +64,36 @@ define('io.ox/calendar/edit/view-main',
     };
 
 
+    var CommonView = views.point('io.ox/calendar/edit/section').createView({
+        tagName: 'div',
+        className: 'io-ox-calendar-edit container-fluid',
+        render: function () {
+            var self = this;
+
+            var rows = [];
+            function getRow(index) {
+                if (rows.length > index + 1) {
+                    return rows[index];
+                }
+                for (var i = 0; i < index + 1 - rows.length; i++) {
+                    rows.push($('<div class="row-fluid">'));
+                }
+                return rows[index];
+            }
+
+            this.point.each(function (extension) {
+                var node = getRow(extension.forceLine || rows.length);
+                extension.invoke('draw', node, {model: self.model, parentView: self});
+            });
+
+
+            this.$el.append(rows);
+
+            return this;
+        }
+    });
+
+/*
     var CommonView = Backbone.View.extend({
         RECURRENCE_NONE: 0,
         tagName: 'div',
@@ -139,7 +144,7 @@ define('io.ox/calendar/edit/view-main',
             self.model.on('change:end_date', _.bind(self.onEndDateChange, self));
             self.model.on('change:full_time', _.bind(self.onToggleAllDay, self));
 
-            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
+//            Backbone.Validation.bind(this, {forceUpdate: true, selector: 'data-property'});
         },
         render: function () {
             var self = this;
@@ -309,6 +314,6 @@ define('io.ox/calendar/edit/view-main',
             this.model.set('participants', participants);
         }
     });
-
+*/
     return CommonView;
 });

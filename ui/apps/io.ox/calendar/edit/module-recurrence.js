@@ -47,37 +47,37 @@ define('io.ox/calendar/edit/module-recurrence',
                     return model.get(attribute);
                 }
             };
-
-            self.bindings = {
-
-                recurrence_type: [
-                    {
-                        selector: '[name=repeat]',
-                        converter: function (direction, value, attribute, model) {
-                            console.log("converter", direction, value, attribute, model);
-                            if (direction === 'ModelToView') {
-                                if (value === self.RECURRENCE_NONE) {
-                                    return false;
-                                }
-                                return true;
-                            } else {
-                                if (value === false) {
-                                    return self.RECURRENCE_NONE;
-                                }
-                                return model.get(attribute);
-                            }
-                        }
-                    },
-                    {
-                        selector: '[name=recurrenceText]',
-                        converter: recurTextConverter
-                    }
-                ]//,
+            self.bindings = { };
+//            self.bindings = {
+//
+//                recurrence_type: [
+//                    {
+//                        selector: '[name=repeat]',
+//                        converter: function (direction, value, attribute, model) {
+//                            console.log("converter", direction, value, attribute, model);
+//                            if (direction === 'ModelToView') {
+//                                if (value === self.RECURRENCE_NONE) {
+//                                    return false;
+//                                }
+//                                return true;
+//                            } else {
+//                                if (value === false) {
+//                                    return self.RECURRENCE_NONE;
+//                                }
+//                                return model.get(attribute);
+//                            }
+//                        }
+//                    },
+//                    {
+//                        selector: '[name=recurrenceText]',
+//                        converter: recurTextConverter
+//                    }
+//                ]//,
 //                day_in_month: {selector: '[name=recurrenceText]', converter: recurTextConverter},
 //                interval: {selector: '[name=recurrenceText]', converter: recurTextConverter},
 //                days: {selector: '[name=recurrenceText]', converter: recurTextConverter},
 //                month: {selector: '[name=recurrenceText]', converter: recurTextConverter}
-            };
+//            };
         },
         render: function () {
             console.log("render recurrence", this);
