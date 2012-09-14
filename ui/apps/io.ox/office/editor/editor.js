@@ -748,22 +748,22 @@ define('io.ox/office/editor/editor',
             table.append('<colgroup><col style="width:20mm"><col style="width:30mm"><col style="width:15mm"><col style="width:32mm"><col style="width:16mm"><col style="width:19mm"></colgroup>')
 
             .append($('<tr>').attr('valign', 'top')
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Berlin</span></td>'))
-                .append($('<td colspan="2"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Hamburg</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Kassel</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Bremen</span></td>')))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Berlin</span></p></td>'))
+                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Hamburg</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Kassel</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Bremen</span></p></td>')))
             .append($('<tr>').attr('valign', 'top')
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Becks</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Flens</span></td>'))
-                .append($('<td colspan="3"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Warsteiner</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Holsten</span></td>')))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Becks</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Flens</span></p></td>'))
+                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Warsteiner</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Holsten</span></p></td>')))
             .append($('<tr>').attr('valign', 'top')
-                .append($('<td colspan="2"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Buletten</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Friko</span></td>')))
+                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Buletten</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Friko</span></p></td>')))
             .append($('<tr>').attr('valign', 'top')
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Handball</span></td>'))
-                .append($('<td><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Fussball</span></td>'))
-                .append($('<td colspan="3"><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Volleyball</span></td>')));
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Handball</span></p></td>'))
+                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Fussball</span></p></td>'))
+                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Volleyball</span></p></td>')));
 
 //          <table border="1" style="border-style:solid; border-color:green; border-width:2px;">
 //                        <colgroup>
@@ -2627,15 +2627,17 @@ define('io.ox/office/editor/editor',
         function implInsertText(text, position) {
             var domPos = Position.getDOMPosition(paragraphs, position);
 
-            var oldText = domPos.node.nodeValue;
-            if (oldText !== null) {
-                var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
-                domPos.node.nodeValue = newText;
-                var lastPos = _.copy(position);
-                var posLength = position.length - 1;
-                lastPos[posLength] = position[posLength] + text.length;
-                lastOperationEnd = new OXOPaM(lastPos);
-                implParagraphChanged(position);
+            if ((domPos) && (domPos.node)) {
+                var oldText = domPos.node.nodeValue;
+                if (oldText !== null) {
+                    var newText = oldText.slice(0, domPos.offset) + text + oldText.slice(domPos.offset);
+                    domPos.node.nodeValue = newText;
+                    var lastPos = _.copy(position);
+                    var posLength = position.length - 1;
+                    lastPos[posLength] = position[posLength] + text.length;
+                    lastOperationEnd = new OXOPaM(lastPos);
+                    implParagraphChanged(position);
+                }
             }
         }
 

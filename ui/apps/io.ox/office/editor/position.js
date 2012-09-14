@@ -387,13 +387,18 @@ define('io.ox/office/editor/position',
 
             while ((node.hasChildNodes()) && (! bFound)) {
 
-                var nodeList = node.childNodes;
+                var nodeList = node.childNodes,
+                    lastChild = false;
 
                 for (var i = 0; i < nodeList.length; i++) {
 
                     // Searching the children
                     var currentLength = 0,
                         currentNode = nodeList[i];
+
+                    if (i === (nodeList.length - 1)) {
+                        lastChild = true;
+                    }
 
                     if ((nodeList[i].nodeName === 'IMG') || ((nodeList[i].firstChild) && (nodeList[i].firstChild.nodeName === 'IMG'))) {
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
@@ -437,6 +442,10 @@ define('io.ox/office/editor/position',
                     } else {
                         textLength += currentLength;
                     }
+                }
+
+                if ((! bFound) && (lastChild)) {
+                    break; // avoiding endless loop
                 }
             }
 
@@ -1778,16 +1787,20 @@ define('io.ox/office/editor/position',
 
         var family = null,
             returnImageNode = isImageAttribute ? true : false,
-            node = Position.getDOMPosition(startnode, startposition, returnImageNode).node;
+            domPos = Position.getDOMPosition(startnode, startposition, returnImageNode);
 
-        if (node.nodeType === 3) {
-            family = 'character';
-        } else if (Utils.getNodeName(node) === 'p') {
-            family = 'paragraph';
-        } else if (Utils.getNodeName(node) === 'img') {
-            family = 'image';
-        } else {
-            Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
+        if (domPos) {
+            var node = domPos.node;
+
+            if (node.nodeType === 3) {
+                family = 'character';
+            } else if (Utils.getNodeName(node) === 'p') {
+                family = 'paragraph';
+            } else if (Utils.getNodeName(node) === 'img') {
+                family = 'image';
+            } else {
+                Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
+            }
         }
 
         return family;
