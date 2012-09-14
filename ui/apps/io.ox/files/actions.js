@@ -86,6 +86,15 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/fullscreen', {
+        id: 'fullscreen',
+        action: function (app) {
+            require(['io.ox/files/bigscreen'], function (bigscreen) {
+                this.BigScreen.toggle();
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -227,6 +236,13 @@ define("io.ox/files/actions",
         id: "editor-new",
         label: gt("Pad!"),
         ref: "io.ox/files/actions/editor-new"
+    }));
+
+    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+        index: 350,
+        id: "fullscreen",
+        label: 'Fullscreen',
+        ref: "io.ox/files/actions/fullscreen"
     }));
 
     // links
