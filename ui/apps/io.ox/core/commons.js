@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLinks) {
+define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, extLinks) {
 
     'use strict';
 
@@ -245,19 +245,29 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
          */
         addFolderView: function (app, options) {
 
-            options = $.extend({
-                width: 330,
-                rootFolderId: '1',
-                type: undefined,
-                view: 'ApplicationFolderTree'
-            }, options);
-
             var container,
                 visible = false,
                 permanent = false,
                 top = 0,
                 fnChangeFolder, fnShow, togglePermanent,
-                fnToggle, toggle, loadTree, initTree;
+                fnToggle, toggle, loadTree, initTree,
+                name = app.getName();
+
+            ext.point(name + '/folderview/options').extend({
+                id: 'defaults',
+                index: 100,
+                width: 330,
+                rootFolderId: '1',
+                type: undefined,
+                view: 'ApplicationFolderTree',
+                visible: false,
+                permanent: false
+            });
+
+            // apply all options
+            _(ext.point(name + '/folderview/options').all()).each(function (obj) {
+                options = _.extend(obj, options || {});
+            });
 
             container = $('<div>')
                 .addClass('abs border-right foldertree-sidepanel')
@@ -316,7 +326,7 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
                     if (permanent) { togglePermanent(); }
                 } else {
                     fnShow();
-                    if (e.altKey) { togglePermanent(); }
+                    if (e && e.altKey) { togglePermanent(); }
                 }
             };
 
@@ -342,20 +352,30 @@ define('io.ox/core/commons', ['io.ox/core/extPatterns/links'], function (extLink
             };
 
             loadTree = function (e) {
-                if (!e.isDefaultPrevented()) {
+                if (!e || !e.isDefaultPrevented()) {
                     toggle(e);
                     app.showFolderView = fnShow;
                     app.getWindow().nodes.title.off('click', loadTree);
                     return require(['io.ox/core/tk/folderviews']).pipe(initTree);
+                } else {
+                    return $.when();
                 }
             };
 
             app.showFolderView = loadTree;
+            app.togglePermanentFolderView = togglePermanent;
             app.folderView = null;
 
             app.getWindow().nodes.title
                 .css('cursor', 'pointer')
                 .on('click', loadTree);
+
+            if (options.visible === true) {
+                loadTree();
+                if (options.permanent === true) {
+                    togglePermanent();
+                }
+            }
         }
     };
 

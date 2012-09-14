@@ -78,7 +78,6 @@ define('io.ox/core/tk/vgrid',
         Row.prototype.update = function (data, index, id, prev) {
             // loop over setters
             var i = 0, setters = this.set, $i = setters.length, rets = [];
-            console.log('update > CALL SETTER', $i);
             for (; i < $i; i++) {
                 rets.push(setters[i].call(this.node, data, this.fields, index, prev) || DONE);
             }
