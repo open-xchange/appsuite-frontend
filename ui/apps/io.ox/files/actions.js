@@ -19,9 +19,27 @@ define("io.ox/files/actions",
 
     'use strict';
 
-    var Action = links.Action;
+    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown;
 
     // actions
+
+	new Action('io.ox/files/actions/switch-to-list-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/files/list/perspective'], function (perspective) {
+                perspective.show(app);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/switch-to-icon-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/files/icons/perspective'], function (perspective) {
+                perspective.show(app);
+            });
+        }
+    });
 
     new Action('io.ox/files/actions/upload', {
         id: 'upload',
@@ -190,9 +208,6 @@ define("io.ox/files/actions",
         }
     });
 
-
-    // links
-
     ext.point('io.ox/files/links/toolbar').extend(new links.Link({
         index: 100,
         id: "upload",
@@ -214,6 +229,26 @@ define("io.ox/files/actions",
         ref: "io.ox/files/actions/editor-new"
     }));
 
+    // links
+	new Dropdown('io.ox/files/links/toolbar', {
+        id: 'view',
+        index: 400,
+        label: gt('View')
+    });
+
+    new Link('io.ox/files/links/toolbar/view', {
+        id: 'list',
+        index: 100,
+        label: gt('List'),
+        ref: 'io.ox/files/actions/switch-to-list-view'
+    });
+
+    new Link('io.ox/files/links/toolbar/view', {
+        id: 'icon',
+        index: 200,
+        label: gt('Icons'),
+        ref: 'io.ox/files/actions/switch-to-icon-view'
+    });
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "editor",
