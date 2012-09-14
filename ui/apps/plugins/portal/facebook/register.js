@@ -68,8 +68,8 @@ define('plugins/portal/facebook/register',
             proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT actor_id, message, description , created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
-                    profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
+                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
+                    profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
             }).pipe(JSON.parse).done(function (resultsets) {
                 var wall = resultsets.data[0].fql_result_set;
@@ -89,7 +89,7 @@ define('plugins/portal/facebook/register',
                     }
                     $previewNode.append(
                         $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
-                        $('<span class="io-ox-portal-preview-thirdline">').text(strings.shorten(message, 100)));
+                        $('<span class="io-ox-portal-preview-thirdline">').text(message));
                 }
 
                 deferred.resolve($previewNode);
@@ -103,8 +103,8 @@ define('plugins/portal/facebook/register',
             return proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
-                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id FROM #newsfeed)"
+                    newsfeed: "SELECT post_id, actor_id, message, type, description, likes, comments, action_links, app_data, attachment, created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0",
+                    profiles: "SELECT id, name, url, pic_square FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
             }).pipe(JSON.parse);
         },
@@ -121,6 +121,8 @@ define('plugins/portal/facebook/register',
             this.append($('<h1>').addClass('clear-title').text('Facebook'));
             _(wall).each(function (post) {
                 var profile = getProfile(profiles, post.actor_id);
+                var source = getProfile(profiles, post.source_id);
+                var onOwnWall = post.actor_id === post.source_id;
                 var entry_id = 'facebook-' + post.post_id;
                 var wall_content = $('<div class="facebook wall-entry">').attr('id', entry_id);
                 var foundHandler = false;
@@ -130,6 +132,8 @@ define('plugins/portal/facebook/register',
                         $('<img class="picture">').attr('src', profile.pic_square)),
                     $('<div class="wall-post">').append(
                         $('<a class="from">').text(profile.name).attr('href', profile.url),
+                        !onOwnWall ? $('<span class="io-ox-facebook-onOwnWall">').html(' &#9654; ') : '',
+                        !onOwnWall ? $('<a class="io-ox-facebook-onWall">').attr('href', source.url).text(source.name) : '',
                         $('<div class="wall-post-content">'),
                         $('<span class="datetime">').text(new Date(post.created_time * 1000))
                     ));
@@ -138,7 +142,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-                        //console.log(profile.name, ' Renderer: ', renderer.id, post);
+                        console.log(profile.name, ' Renderer: ', renderer.id, post);
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
@@ -253,10 +257,9 @@ define('plugins/portal/facebook/register',
             return (post.type === 237);
         },
         draw: function (post) {
-            var media = post.attachment.media[0];
-
             $('<div class="message">').text(post.message).appendTo($(this));
-            if (media !== undefined) {
+            if (post.attachment && post.attachment.media && post.attachment.media[0]) {
+                var media = post.attachment.media[0];
                 $('<a class="app-story">').attr('href', media.href).append(
                     $('<img class="wall-img-left">').attr('src', media.src),
                     $('<span class="caption title">').text(post.attachment.name),
