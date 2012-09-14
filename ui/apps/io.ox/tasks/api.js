@@ -11,7 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 define("io.ox/tasks/api", ["io.ox/core/http",
-                           'io.ox/core/api/factory'], function (http, apiFactory) {
+                           'io.ox/core/api/factory',
+                           "io.ox/core/api/folder"], function (http, apiFactory, folderApi) {
     
     "use strict";
     
@@ -24,7 +25,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
         },
         requests: {
             all: {
-                folder: require('io.ox/core/config').get('folder.tasks'),
+                folder: folderApi.getDefaultFolder("tasks"),
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
                 order: "asc"
@@ -53,7 +54,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     api.update = function (timestamp, taskId, modifications, folder) {
                 var useFolder;
                 if (folder === undefined) {
-                    useFolder = require('io.ox/core/config').get('folder.tasks');
+                    useFolder = api.getDefaultFolder();
                 } else {
                     useFolder = folder;
                 }
@@ -68,19 +69,23 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     },
                     data: modifications,
                     appendColumns: false
-                }).pipe(function () {
-                    api.trigger("refresh.all");
+                }).done(function () {
+                    api.trigger("refresh.list");
                 });
 
             };
             
+    api.getDefaultFolder = function () {
+        return folderApi.getDefaultFolder('tasks');
+    };
+    
     //for notification view
     api.getTasks = function () {
 
         return http.GET({
             module: "tasks",
             params: {action: "all",
-                folder: require('io.ox/core/config').get('folder.tasks'),
+                folder: api.getDefaultFolder(),
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
                 order: "asc"

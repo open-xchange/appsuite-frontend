@@ -240,10 +240,6 @@
     
     .appointment {
         position: absolute;
-        -webkit-box-sizing: content-box;
-        -moz-box-sizing: content-box;
-        box-sizing: content-box;
-        cursor: pointer;
         background-color: #08c;
         -webkit-transition: background-color, color 0.1s;
         -moz-transition: background-color, color 0.1s;
@@ -255,18 +251,21 @@
         transition: opacity 0.2s;
     }
 
+    .appointment.modify {
+        cursor: pointer;
+    }
+    
     .appointment-content {
         height: 100%;
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 11px;
-        line-height: 18px;
+        font-size: 12px;
         color: white;
         padding: 0px 7px 0px 7px;
         overflow: hidden;
         text-overflow: ellipsis;
     }
     
-    .fulltime .appointment {
+    .fulltime .appointment-content {
         border-left: 1px solid white;
     }
     
