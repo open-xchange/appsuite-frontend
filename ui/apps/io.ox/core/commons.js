@@ -355,6 +355,7 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                 if (!e || !e.isDefaultPrevented()) {
                     toggle(e);
                     app.showFolderView = fnShow;
+                    app.toggleFolderView = toggle;
                     app.getWindow().nodes.title.off('click', loadTree);
                     return require(['io.ox/core/tk/folderviews']).pipe(initTree);
                 } else {
@@ -363,6 +364,7 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             };
 
             app.showFolderView = loadTree;
+            app.toggleFolderView = loadTree;
             app.togglePermanentFolderView = togglePermanent;
             app.folderView = null;
 
