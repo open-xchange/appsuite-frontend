@@ -56,7 +56,7 @@ define('io.ox/office/editor/position',
      *  The calculated logical position (OXOPaM.oxoPosition) together with
      *  the property nodeName of the dom node parameter.
      */
-    Position.getOXOPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint) {
+    Position.getOXOPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
 
         var node = domposition.node,
             offset = domposition.offset,
@@ -70,6 +70,7 @@ define('io.ox/office/editor/position',
 
         isRtlCursorTravel = isRtlCursorTravel ? true : false;
         isEndPoint = isEndPoint ? true : false;
+        allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
         // check input values
         if (! node) {
@@ -82,7 +83,7 @@ define('io.ox/office/editor/position',
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
 
-            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint);
+            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint, allowNoneTextNodes);
 
             if (! returnObj) {
                 Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
@@ -138,7 +139,7 @@ define('io.ox/office/editor/position',
 
         // Calculating the position inside the editor div.
         var oxoPosition = [],
-            evaluateOffset = (node.nodeType === 3) ? true : false,  // Is evaluation of offset required?
+            evaluateOffset = ((node.nodeType === 3) || ((Utils.getNodeName(node) === 'img') && (allowNoneTextNodes))) ? true : false,  // Is evaluation of offset required?
             offsetEvaluated = false,
             textLength = 0;
 
@@ -261,18 +262,28 @@ define('io.ox/office/editor/position',
      *  of a range. This is important for some calculations, where the
      *  dom node is a row inside a table.
      *
+     * @param {Boolean} allowNoneTextNodes
+     *  The information specifies, if a node can be returned, that is
+     *  not a text node. This can be an image or a field, that can be
+     *  located next to a text node and is described with a fully
+     *  qualified logical position.
+     *
      * @returns {Object}
      *  The text node, that will be used in Position.getOxoPosition
      *  for the calculation of the logical position.
      *  And additionally some information about the floating state of an
      *  image, if the position describes an image.
      */
-    Position.getTextNodeFromCurrentNode = function (node, offset, isRtlCursorTravel, isEndPoint) {
+    Position.getTextNodeFromCurrentNode = function (node, offset, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
 
         var useFirstTextNode = true,  // can be false for final child in a paragraph
             usePreviousCell = false,
+            foundValidNode = false,
             localNode = node.childNodes[offset], // offset can be zero for start points but too high for end points
-            imageFloatMode = null;
+            imageFloatMode = null,
+            offset = 0;
+
+        allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
         if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
             usePreviousCell = true;
@@ -289,40 +300,62 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // special handling for non-floated images as children of paragraphs, use text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.hasInlineFloatProperty(localNode))) {
-            imageFloatMode = Position.getPropertyValue(localNode, 'mode');
-            localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
-            useFirstTextNode = false;
-        }
-
-        // special handling for floated images as children of paragraphs, use text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'img') && (Position.hasFloatProperty(localNode))) {
-            imageFloatMode = Position.getPropertyValue(localNode, 'mode');
-            if (isRtlCursorTravel) {
-                localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+        // Determining the text node before or after an image node.
+        // But if 'allowNoneTextNodes' is set, the image node can be returnd
+        if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (! allowNoneTextNodes)) {
+            // special handling for non-floated images as children of paragraphs, use text node instead
+            if (Position.hasInlineFloatProperty(localNode)) {
+                imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+                localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
                 useFirstTextNode = false;
-            } else {
-                localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
-                useFirstTextNode = true;
+            }
+
+            // special handling for floated images as children of paragraphs, use text node instead
+            if (Position.hasFloatProperty(localNode)) {
+                imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+                if (isRtlCursorTravel) {
+                    localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+                    useFirstTextNode = false;
+                } else {
+                    localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
+                    useFirstTextNode = true;
+                }
             }
         }
 
-        // find the first or last text node contained in the element
-        var textNode = localNode;
-        if (localNode && (localNode.nodeType !== 3)) {
-            textNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
+        // setting some properties for image nodes
+        if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (allowNoneTextNodes)) {
+            imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+            foundValidNode = true;
+            offset = 0;
         }
 
-        if (! textNode) {
+        // checking, if a valid node was already found
+        if ((localNode) && (localNode.nodeType === 3)) {
+            foundValidNode = true;
+        }
+
+        var foundNode = localNode;
+
+        if (! foundValidNode) {
+            // find the first or last text node contained in the element
+            if (localNode && (localNode.nodeType !== 3)) {
+                foundNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
+            }
+        }
+
+        if (! foundNode) {
             var nodeName = localNode ? localNode.nodeName : '';
             Utils.error('Position.getTextNodeFromCurrentNode(): Failed to determine text node from current node! (useFirstTextNode: ' + useFirstTextNode + " : " + nodeName + ')');
             return;
         }
 
-        var offset = useFirstTextNode ? 0 : textNode.nodeValue.length;
+        // getting offset for text nodes
+        if (localNode.nodeType === 3) {
+            offset = useFirstTextNode ? 0 : foundNode.nodeValue.length;
+        }
 
-        return {domPoint: new DOM.Point(textNode, offset), imageFloatMode: imageFloatMode};
+        return {domPoint: new DOM.Point(foundNode, offset), imageFloatMode: imageFloatMode};
     };
 
     /**
@@ -418,7 +451,7 @@ define('io.ox/office/editor/position',
 
                     if (textLength + currentLength >= pos) {
 
-                        if ((returnImageNode) && (! isField) && (! isImage) && ((textLength + currentLength) === pos)) {
+                        if ((returnImageNode) && ((textLength + currentLength) === pos)) {
                             var j = i + 1,
                                 nextNode = nodeList[j];
 
@@ -434,7 +467,6 @@ define('io.ox/office/editor/position',
                                 break;  // leaving the for-loop
                             }
                         }
-
                         bFound = true;
                         node = currentNode;
                         break;  // leaving the for-loop

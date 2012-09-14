@@ -1741,7 +1741,9 @@ define('io.ox/office/editor/editor',
         // Private selection functions
         // ==================================================================
 
-        function getSelection(updateFromBrowser) {
+        function getSelection(updateFromBrowser, allowNoneTextNodes) {
+
+            allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
             if (currentSelection && !updateFromBrowser)
                 return currentSelection;
@@ -1769,7 +1771,7 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint), Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint));
+                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes), Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes));
 
                 // window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
@@ -1945,7 +1947,10 @@ define('io.ox/office/editor/editor',
             // TODO: adjust position according to passed attribute family
             if (para === undefined) {
                 // Set attr to current selection
-                var selection = getSelection();
+                var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
+                    updateFromBrowser = false,
+                    selection = getSelection(updateFromBrowser, allowNoneTextNodes);
+
                 if (selection.hasRange()) {
 
                     selection.adjust();
@@ -2136,12 +2141,6 @@ define('io.ox/office/editor/editor',
                     // setting attributes without image selection (only workaround until image selection with mouse is possible)
                     var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true);
-
-                    if (selection.startPaM.isRtlCursorTravel) {
-                        imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
-                    }
-
-                    imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
 
                     // defining attributes, which the server can understand
                     var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
