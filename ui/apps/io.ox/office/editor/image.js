@@ -303,8 +303,6 @@ define('io.ox/office/editor/image',
             imagePosition = Position.getDOMPosition(startnode, localStart, returnImageNode),
             imageFloatMode = null;
 
-        window.console.log("AAA1: Looking for image at: " + localStart);
-
         if (imagePosition) {
             var imageNode = imagePosition.node;
 
@@ -327,6 +325,7 @@ define('io.ox/office/editor/image',
 
                             // If there are floated images, this inline image has to be shifted behind them. Then
                             // an empty text node has to be inserted before the image node.
+                            // Alternatively: if data('previousInlinePosition') gesetzt ist, dann an vorherige Stelle einfügen.
                             var parent = imageNode.parentNode,
                                 textSpanNode = Position.getFirstTextSpanInParagraph(parent),
                                 newTextNode = $(textSpanNode).clone(true);
@@ -335,6 +334,8 @@ define('io.ox/office/editor/image',
 
                             newTextNode.text('');
                             parent.insertBefore(newTextNode.get(0), imageNode);
+
+                            $(imageNode).css('clear', 'none');
 
                             localStart = Position.getFirstPositionInParagraph(startnode, localStart);
 
@@ -356,6 +357,7 @@ define('io.ox/office/editor/image',
                                 var parent = imageNode.parentNode,
                                     insertNode = parent.firstChild;
 
+                                $(imageNode).data('previousInlinePosition', localStart);
                                 while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
 
                                 parent.insertBefore(imageNode, insertNode);
@@ -365,15 +367,30 @@ define('io.ox/office/editor/image',
                         // setting css float property
                         if (imageFloatMode === 'rightFloated') {
                             attributes.float = 'right';
+                            attributes.clear = 'right';
                         } else if (imageFloatMode === 'leftFloated') {
                             attributes.float = 'left';
+                            attributes.clear = 'left';
                         } else if (imageFloatMode === 'noneFloated') {
                             attributes.float = 'left'; // none-floating is simulated with left floating.
+                            attributes.clear = 'left';
                         } else if (imageFloatMode === 'inline') {
                             attributes.float = 'none';
+                            attributes.clear = 'none';
                         }
 
                         $(imageNode).data('mode', imageFloatMode).css(attributes);
+
+                        // also setting float mode of a corresponding span, if exists
+                        var spanNode = imageNode.parentNode.firstChild;
+                        while ((Utils.getNodeName(spanNode) === 'span') && ($(spanNode).data('positionSpan'))) {
+                            if ($(spanNode).data('spanID') === $(imageNode).data('imageID')) {
+                                $(spanNode).css('float', attributes.float);
+                                break;
+                            } else {
+                                spanNode = spanNode.nextSibling;
+                            }
+                        }
                     }
                 }
             }

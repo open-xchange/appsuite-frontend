@@ -564,7 +564,21 @@ define('io.ox/office/editor/editor',
                 var returnImageNode = true;
                 // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
                 // deleting with button is possible.
-                if (Utils.getNodeName(Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node) === 'img') {
+                var imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                if (Utils.getNodeName(imageNode) === 'img') {
+                    // delete an corresponding span
+                    var spanNode = imageNode.parentNode.firstChild;
+                    while ((Utils.getNodeName(spanNode) === 'span') && ($(spanNode).data('positionSpan'))) {
+                        if ($(spanNode).data('spanID') === $(imageNode).data('imageID')) {
+                            // removing node
+                            $(spanNode).remove();
+                            break;
+                        } else {
+                            spanNode = spanNode.nextSibling;
+                        }
+                    }
+
+                    // deleting the image with an operation
                     this.deleteText(imageStartPosition, imageEndPostion);
                 }
             }
@@ -2728,13 +2742,13 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
-                    var imgNode = $('<img>', { src: url }).data('mode', floatMode).data('allMargins', allMargins).insertBefore(node).css(attributes);
+                    var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
 
                     if (verticalSpanSide !== null) {
                         // all spans have to be listed before the floated images, but keeping the correct order
                         var insertNode = imgNode.get(0).parentNode.firstChild;
                         while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan'))) { insertNode = insertNode.nextSibling; }
-                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data('positionSpan', true).css('float', verticalSpanSide).insertBefore(insertNode);
+                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data({'positionSpan': true, 'spanID': url}).css('float', verticalSpanSide).insertBefore(insertNode);
                     }
                 }
             }
