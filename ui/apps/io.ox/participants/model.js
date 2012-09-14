@@ -77,7 +77,6 @@ define("io.ox/participants/model",
                     } else {
                         self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
                     }
-
                     self.trigger('change', self);
                     df.resolve();
                 });
@@ -108,6 +107,7 @@ define("io.ox/participants/model",
         },
         getImage: function () {
             return util.getImage(this.toJSON());
+            return util.getDisplayName(this.toJSON());
         }
     });
 

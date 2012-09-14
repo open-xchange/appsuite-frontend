@@ -145,7 +145,6 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
 
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
-
         _.extend(this, options); // May override any of the above aspects
     }
     
@@ -201,7 +200,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
     function CheckBoxField(options) {
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateCheckbox';
-        
+
         var basicImplementation = {
             tagName: 'div',
             modelEvents: modelEvents,
@@ -530,4 +529,8 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
 
 
 
+=======
+>>>>>>> 945f272... working on new model-view for calendar edit/create
 
+    return forms;
+});

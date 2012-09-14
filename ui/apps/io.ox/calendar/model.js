@@ -113,6 +113,24 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
             });
         },
     return {
+        setDefaultParticipants: function (model) {
+            return folderAPI.get({folder: model.get('folder_id')}).done(function (folder) {
+                if (folderAPI.is('private', folder)) {
+                    // it's a private folder for the current user, add him by default
+                    // as participant
+                    model.set('participants', [{id: configAPI.get('identifier'), type: 1, ui_removable: false}]);
+
+                } else if (folderAPI.is('public', folder)) {
+                    // if public folder, current user will be added
+                    model.set('participants', [{id: configAPI.get('identifier'), type: 1}]);
+
+                } else if (folderAPI.is('shared', folder)) {
+                    // in a shared folder the owner (created_by) will be added by default
+                    model.set('participants', [{id: folder.created_by, type: 1}]);
+                }
+
+            });
+        },
         factory: factory,
         Appointment: factory.model,
         Appointments: factory.collection

@@ -149,6 +149,25 @@ define('io.ox/calendar/edit/main',
                 self.getWindow().show(_.bind(self.onShowWindow, self));
             });
 
+            self.model = appointmentModel.factory.create(data);
+            appointmentModel.setDefaultParticipants(self.model).done(function () {
+                self.view = new MainView({model: self.model});
+                self.view.on('save', _.bind(self.onSave, self));
+                self.setTitle(gt('Create Appointment'));
+
+                // create app window
+                self.setWindow(ox.ui.createWindow({
+                    name: 'io.ox/calendar/edit',
+                    title: gt('Create Appointment'),
+                    toolbar: true,
+                    search: false,
+                    close: true
+                }));
+
+                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                self.getWindow().show(_.bind(self.onShowWindow, self));
+            });
+            /*
             folderAPI.get({folder: data.folder_id}).done(function (folder) {
                 if (folderAPI.is('private', folder)) {
                     // it's a private folder for the current user, add him by default
@@ -165,6 +184,7 @@ define('io.ox/calendar/edit/main',
                 }
 
             });
+            */
         },
         onShowWindow: function () {
             console.log('onshowwindow');

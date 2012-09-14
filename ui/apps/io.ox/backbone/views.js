@@ -60,7 +60,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             return this;
         };
 
-        this.extend = function (options, extOptions) {            
+        this.extend = function (options, extOptions) {
             var id = options.id;
             delete options.id;
             
@@ -225,6 +225,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             render: function () {
                 var self = this;
                 var first = true;
+
                 _([this.attribute]).chain().flatten().each(function (attribute) {
                     var value = self.model.get(attribute);
                     if (self.transform && self.transform[attribute]) {
@@ -235,6 +236,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     if (!first) {
                         self.$el.append($.txt(" "));
                     }
+
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(value));
                     } else if (self.initialValue) {
@@ -269,7 +271,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             return new ViewExtensionPoint(name);
         },
         AttributeView: AttributeView,
-
         ext: ext
 
     };
