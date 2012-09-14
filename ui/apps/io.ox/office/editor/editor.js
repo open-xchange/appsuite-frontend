@@ -896,12 +896,24 @@ define('io.ox/office/editor/editor',
             }
         };
 
-        this.insertImage = function (imageFragment) {
+        this.insertImageFile = function (imageFragment) {
             var selection = getSelection(),
                 newOperation = {
                     name: OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageFragment,
+                    attrs: {inline: true}
+                };
+
+            applyOperation(newOperation, true, true);
+        };
+
+        this.insertImageURL = function (imageURL) {
+            var selection = getSelection(),
+                newOperation = {
+                    name: OP_IMAGE_INSERT,
+                    position: _.copy(selection.startPaM.oxoPosition),
+                    imgurl: imageURL,
                     attrs: {inline: true}
                 };
 

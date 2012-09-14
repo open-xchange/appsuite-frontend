@@ -143,7 +143,7 @@ define('io.ox/office/editor/controller',
                     enable: function () { return editor.isImagePosition(); }
                 },
                 'image/insert': {
-                    set: function () { CommonDialogs.insertImage(app, editor); }
+                    set: function () { CommonDialogs.insertImageFile(app, editor); }
                 },
                 'image/delete': {
                     chain: 'chain/image',

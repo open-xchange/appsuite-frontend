@@ -67,7 +67,7 @@ define("io.ox/files/actions",
             });
         }
     });
-    
+
     new Action('io.ox/files/actions/office/newdocument', {
         id: 'officenew',
         action: function (app) {
@@ -287,7 +287,7 @@ define("io.ox/files/actions",
         id: "officeeditor",
         index: 60,
         prio: 'hi',
-        label: gt("Edit office document"),
+        label: gt("Change"),
         ref: "io.ox/files/actions/office/editor"
     }));
 
@@ -295,8 +295,7 @@ define("io.ox/files/actions",
         id: "officepreview",
         index: 65,
         prio: 'hi',
-        // TODO (KA): finalize menu entry
-        label: gt("Preview (OXO)"),
+        label: gt("Preview"),
         ref: "io.ox/files/actions/office/preview"
     }));
 

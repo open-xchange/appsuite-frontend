@@ -13,9 +13,9 @@
 
 define('io.ox/office/dialog/common',
     ['io.ox/core/tk/dialogs',
-     'io.ox/office/tk/apphelper',
+     'io.ox/office/tk/image',
      'gettext!io.ox/office/main'
-    ], function (Dialogs, AppHelper, gt) {
+    ], function (Dialogs, Image, gt) {
 
     'use strict';
 
@@ -26,7 +26,7 @@ define('io.ox/office/dialog/common',
      *
      * @param  app
      */
-    CommonDialogs.insertImage = function (app, editor) {
+    CommonDialogs.insertImageFile = function (app, editor) {
         var that = this,
             imageFile = null;
 
@@ -35,7 +35,7 @@ define('io.ox/office/dialog/common',
             easyOut: true
         })
         .header(
-            $('<h4>').text(gt('Insert Image'))
+            $('<h4>').text(gt('Insert Image File'))
         )
         .append(
             $('<input>', { placeholder: gt('Filename'), value: '' })
@@ -55,70 +55,49 @@ define('io.ox/office/dialog/common',
         })
         .done(function (action, data, node) {
             if (action === 'insert') {
-                that.handleInsertImageFile(app, editor, that.imageFile);
+                Image.insertFile(app, editor, that.imageFile);
             }
         });
     };
 
     /**
-     * Handles the insertion of the file into the document
+     * Shows an insert image file dialog
      *
      * @param  app
-     *
-     * @param  imageFile
      */
-    CommonDialogs.handleInsertImageFile = function (app, editor, imageFile) {
-        if (app && editor && imageFile && window.FileReader) {
-            var that = this,
-                fileReader = new window.FileReader();
+    CommonDialogs.insertImageURL = function (app, editor) {
+        var that = this,
+            imageURL = null;
 
-            fileReader.onload = function (e) {
-                if (e.target.result) {
-                    $.ajax({
-                        type: 'POST',
-                        url: app.getDocumentFilterUrl('addfile', { add_filename: imageFile.name}),
-                        dataType: 'json',
-                        data: { image_data: e.target.result },
-                        beforeSend: function (xhr) {
-                            if (xhr && xhr.overrideMimeType) {
-                                xhr.overrideMimeType('application/j-son;charset=UTF-8');
-                            }
-                        }
-                    })
-                    .done(function (response) {
-                        if (response && response.data) {
-
-                            // if added_fragment is set to a valid name,
-                            // the insertioin of the image was successful
-                            if (response.data.added_fragment && response.data.added_fragment.length > 0) {
-
-                                // set version of FileDescriptor to version that is returned in response
-                                app.getFileDescriptor().version = response.data.version;
-
-                                // update the editor's DocumentURL accordingly
-                                editor.setDocumentURL(app.getDocumentFilterUrl('getfile'));
-
-                                // create an InsertImage operation with the newly added fragment
-                                editor.insertImage(response.data.added_fragment);
-                            }
-                            else {
-                                that.handleInsertImageError();
-                            }
-                        }
-                    })
-                    .fail(function (response) {
-                        that.handleInsertImageError();
-                    });
+        new Dialogs.ModalDialog({
+            width: 400,
+            easyOut: true
+        })
+        .header(
+            $('<h4>').text(gt('Insert Image URL'))
+        )
+        .append(
+            $('<input>', { placeholder: gt('URL'), value: '' })
+            .attr('data-property', 'imageURL')
+            .addClass('nice-input')
+            .change(function (e) {
+                that.imageURL = $('input[data-property="imageURL"]').val().trim();
+            })
+        )
+        .addButton('cancel', gt('Cancel'))
+        .addPrimaryButton('insert', gt('Insert'))
+        .show(function () {
+            $('input[data-property="imageURL"]').focus();
+        })
+        .done(function (action, data, node) {
+            if (action === 'insert') {
+                if (editor && that.imageURL && (that.imageURL.search("http://") === 0)) {
+                    editor.insertImageURL(that.imageURL);
                 }
-            };
-
-            fileReader.onerror = function (e) {
-                that.handleInsertImageError();
-            };
-
-            fileReader.readAsDataURL(imageFile);
-        }
+            }
+        });
     };
+
 
     /**
      * Shows an UI in case the resource could not be inserted as image
