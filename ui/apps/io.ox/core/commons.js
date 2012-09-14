@@ -323,10 +323,10 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                     top = container.scrollTop();
                     container.hide();
                     visible = false;
-                    if (permanent) { togglePermanent(); }
+                    if (permanent || options.permanent) { togglePermanent(); }
                 } else {
                     fnShow();
-                    if (e && e.altKey) { togglePermanent(); }
+                    if (options.permanent || (e && e.altKey)) { togglePermanent(); }
                 }
             };
 
@@ -374,9 +374,6 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
 
             if (options.visible === true) {
                 loadTree();
-                if (options.permanent === true) {
-                    togglePermanent();
-                }
             }
         }
     };
