@@ -14,7 +14,8 @@ define('io.ox/calendar/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
-     'gettext!io.ox/calendar/actions'], function (ext, links, api, gt) {
+     'io.ox/calendar/util',
+     'gettext!io.ox/calendar/actions'], function (ext, links, api, util, gt) {
 
     'use strict';
 
@@ -68,6 +69,34 @@ define('io.ox/calendar/actions',
                 perspective.setRendered(false);
                 perspective.columns = 1;
                 perspective.show(app);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/sendmail', {
+        action: function (params) {
+            var def = $.Deferred();
+            util.createArrayOfRecipients(params.participants, def);
+            def.done(function (arrayOfRecipients) {
+                require(['io.ox/mail/write/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.compose({to: arrayOfRecipients, subject: params.title});
+                    });
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/save-as-distlist', {
+        action: function (params) {
+            var def = $.Deferred();
+            util.createDistlistArrayFromPartisipantList(params.participants, def);
+            def.done(function (initdata) {
+                require(['io.ox/contacts/distrib/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.create(params.folder_id, initdata);
+                    });
+                });
             });
         }
     });
@@ -271,6 +300,22 @@ define('io.ox/calendar/actions',
         id: 'edit',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'send mail',
+        label: gt('Send mail'),
+        ref: 'io.ox/calendar/detail/actions/sendmail'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'save as distlist',
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({

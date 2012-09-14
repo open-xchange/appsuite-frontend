@@ -99,6 +99,17 @@ define('io.ox/contacts/util', [], function () {
                 return 1;
             }
             return 0;
+        },
+
+        calcMailField: function (contact, selectedMail) {
+            var field, mail;
+            mail = [contact.email1, contact.email2, contact.email3];
+            _.each(mail, function (val, key) {
+                if (selectedMail === val) {
+                    field = key + 1;
+                }
+            });
+            return field;
         }
     };
 });
