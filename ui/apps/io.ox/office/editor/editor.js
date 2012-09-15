@@ -3074,7 +3074,8 @@ define('io.ox/office/editor/editor',
                         if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
-                            if (Utils.getNodeName(child) === 'img') {
+                            if (((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) ||
+                                ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan')))) {
                                 var localChild = thisPara.firstChild;
                                 if (localChild) {
                                     thisPara.insertBefore(child, localChild);  // what about order of images?
