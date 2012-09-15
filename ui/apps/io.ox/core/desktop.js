@@ -787,6 +787,15 @@ define("io.ox/core/desktop",
                     }
                 });
 
+                ext.point(name + '/window-body').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.body.append(
+                            this.main = $('<div class="window-content">')
+                        );
+                    }
+                });
+
                 this.show = function (cont) {
                     // get node and its parent node
                     var node = this.nodes.outer, parent = node.parent();
@@ -1033,48 +1042,28 @@ define("io.ox/core/desktop",
                 };
 
             // window container
-            win.nodes.outer = $("<div>")
-            .attr({
-                id: opt.id,
-                "data-window-nr": guid
-            })
-            .addClass("window-container")
-            .append(
-                $("<div>")
-                .addClass("window-container-center")
-                .data({
-                    width: width + unit
-                }).css({
-                    width: width + unit
+            win.nodes.outer = $('<div class="window-container">')
+                .attr({
+                    id: opt.id,
+                    "data-window-nr": guid
                 })
                 .append(
-                    win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
-                )
-                .append(
-                    // window HEAD
-                    win.nodes.head = $('<div class="window-head css-table">')
-                )
-                .append(
-                    // window BODY
-                    win.nodes.body = $("<div>")
-                    .addClass("window-body")
+                    $('<div class="window-container-center">')
+                    .data({ width: width + unit })
+                    .css({ width: width + unit })
                     .append(
-                        // quick settings
-                        win.nodes.settings = $("<div>")
-                        .hide()
-                        .addClass("window-settings")
-                        .html("<h2>Each window can have a quick settings area</h2>")
+                        // blocker
+                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
+                        // window HEAD
+                        win.nodes.head = $('<div class="window-head css-table">'),
+                        // window BODY
+                        win.nodes.body = $('<div class="window-body">')
                     )
-                    .append(
-                        // content
-                        win.nodes.main = $("<div>")
-                        .addClass("window-content")
-                    )
-                )
-            );
+                );
 
             // draw window head
             ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+            ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);
