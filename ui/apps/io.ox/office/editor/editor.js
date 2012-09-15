@@ -1960,7 +1960,7 @@ define('io.ox/office/editor/editor',
             if (para === undefined) {
                 // Set attr to current selection
                 var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    updateFromBrowser = false,
+                    updateFromBrowser = buttonEvent,
                     selection = getSelection(updateFromBrowser, allowNoneTextNodes);
 
                 if (selection.hasRange()) {
