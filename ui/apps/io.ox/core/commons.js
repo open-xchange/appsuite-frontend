@@ -200,6 +200,10 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
          * Add folder support
          */
         addFolderSupport: function (app, grid, type, defaultFolderId) {
+
+            var name = app.getName(),
+                POINT = name + '/folderview';
+
             app.folder
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
@@ -207,11 +211,20 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             if (grid) {
                 app.folder.updateGrid(grid);
             }
+
+            ext.point(POINT + '/toggle').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    return $().add($.txt(' ')).add($('<button class="btn btn-inverse"><i class="icon-folder-open icon-white"></i></button>'));
+                }
+            });
+
             // add visual caret
             app.getWindow().nodes.title.append(
-                $.txt(' '),
-                $('<button class="btn btn-inverse"><i class="icon-folder-open icon-white"></i></button>')
+                ext.point(POINT + '/toggle').invoke('draw').value()
             );
+
             // hash support
             app.getWindow().on('show', function () {
                 if (grid) {
@@ -251,9 +264,10 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                 top = 0,
                 fnChangeFolder, fnShow, togglePermanent,
                 fnToggle, toggle, loadTree, initTree,
-                name = app.getName();
+                name = app.getName(),
+                POINT = name + '/folderview';
 
-            ext.point(name + '/folderview/options').extend({
+            ext.point(POINT + '/options').extend({
                 id: 'defaults',
                 index: 100,
                 width: 330,
@@ -265,19 +279,28 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             });
 
             // apply all options
-            _(ext.point(name + '/folderview/options').all()).each(function (obj) {
+            _(ext.point(POINT + '/options').all()).each(function (obj) {
                 options = _.extend(obj, options || {});
             });
 
-            container = $('<div>')
-                .addClass('abs border-right foldertree-sidepanel')
-                .css({
-                    right: 'auto',
-                    width: options.width + 'px',
-                    zIndex: 3
-                })
-                .hide()
-                .appendTo(app.getWindow().nodes.body);
+            // draw container
+            ext.point(POINT + '/sidepanel').extend({
+                id: 'default',
+                index: 100,
+                draw: function () {
+                    return $('<div>')
+                        .addClass('abs border-right foldertree-sidepanel')
+                        .css({
+                            right: 'auto',
+                            width: options.width + 'px',
+                            zIndex: 3
+                        });
+                }
+            });
+
+            // get container
+            container = ext.point(POINT + '/sidepanel').invoke('draw').first().value() || $();
+            container.hide().appendTo(app.getWindow().nodes.body);
 
             fnChangeFolder = function (e, selection) {
                 var folder = selection[0];

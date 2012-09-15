@@ -702,9 +702,11 @@ define("io.ox/core/desktop",
             // window class
             Window = function (id, name) {
 
+                name = name || 'generic';
+
                 this.id = id;
                 this.name = name;
-                this.nodes = {};
+                this.nodes = { title: $(), toolbar: $(), controls: $() };
                 this.search = { query: "" };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -718,9 +720,72 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.updateToolbar = function () {
-                    ext.point(this.name + "/toolbar")
+                    ext.point(name + '/toolbar')
                         .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
                 };
+
+                ext.point(name + '/window-title').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<h1 class="window-title">').append(
+                            ext.point(name + '/window-title-label')
+                                .invoke('draw', this).first().value() || $()
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-title-label').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<span class="window-title-label">');
+                    }
+                });
+
+                ext.point(name + '/window-toolbar').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<div class="window-toolbar">');
+                    }
+                });
+
+                ext.point(name + '/window-controls').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<div class="window-controls">').append(
+                            // settings
+                            this.settingsButton = $('<div class="window-control">').hide()
+                                .text('\u270E'),
+                            // close
+                            this.closeButton = $('<div class="window-control">').hide()
+                                .append($('<a class="close">&times;</a>'))
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-head').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.head.append(
+                            $('<div class="css-table-row">').append(
+                                // title
+                                $('<div class="css-table-cell cell-33">').append(
+                                    this.title = ext.point(name + '/window-title')
+                                        .invoke('draw', this).first().value() || $()
+                                ),
+                                // toolbar
+                                $("<div class='css-table-cell cell-33 cell-center'>").append(
+                                    this.toolbar = ext.point(name + '/window-toolbar')
+                                        .invoke('draw', this).first().value() || $()
+                                ),
+                                // controls
+                                $("<div class='css-table-cell cell-33 cell-right'>").append(
+                                    this.controls = ext.point(name + '/window-controls')
+                                        .invoke('draw', this).first().value() || $()
+                                )
+                            )
+                        );
+                    }
+                });
 
                 this.show = function (cont) {
                     // get node and its parent node
@@ -988,37 +1053,6 @@ define("io.ox/core/desktop",
                 .append(
                     // window HEAD
                     win.nodes.head = $('<div class="window-head css-table">')
-                    .append(
-                        $("<div class='css-table-row'>")
-                        .append(
-                            $("<div class='css-table-cell cell-33'>").append(
-                                // title
-                                win.nodes.title = $('<h1 class="window-title">')
-                                //.css('width', opt.titleWidth)
-                                .append($("<span>"))
-                            ),
-                            $("<div class='css-table-cell cell-33 cell-center'>").append(
-                                // toolbar
-                                win.nodes.toolbar = $('<div class="window-toolbar">')
-                            ),
-                            $("<div class='css-table-cell cell-33 cell-right'>").append(
-                                // controls
-                                win.nodes.controls = $('<div class="window-controls">')
-                                .append(
-                                    // settings
-                                    win.nodes.settingsButton = $("<div>").hide()
-                                    .addClass("window-control")
-                                    .text("\u270E"),
-                                    // close
-                                    win.nodes.closeButton = $("<div>").hide()
-                                    .addClass("window-control")
-                                    .append(
-                                        $('<a class="close">&times;</a>')
-                                    )
-                                )
-                            )
-                        )
-                    )
                 )
                 .append(
                     // window BODY
@@ -1038,6 +1072,9 @@ define("io.ox/core/desktop",
                     )
                 )
             );
+
+            // draw window head
+            ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);
