@@ -303,7 +303,8 @@ define("io.ox/core/main",
         var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
-                def.resolve();
+                def.resolve(true);
+                return;
             }
             if (autoLaunch.length || canRestore || location.hash === '#!') {
                 def.resolve(true);
