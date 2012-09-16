@@ -253,7 +253,55 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
         getInitialDefaultSender: function () {
             var mailArray = _(config.get('mail.addresses', []));
             return mailArray._wrapped[0];
-        }
+        },
+
+        getAttachments: (function () {
+
+            var isWinmailDATPart = function (obj) {
+                return !('filename' in obj) && obj.attachments &&
+                    obj.attachments.length === 1 && obj.attachments[0].content === null;
+            };
+
+            return function (data) {
+
+                var i, $i, obj, dat, attachments = [],
+                mail = { id: data.id, folder_id: data.folder_id };
+
+                // get nested messages
+                for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
+                    obj = data.nested_msgs[i];
+                    // is wrapped attachment? (winmail.dat stuff)
+                    if (isWinmailDATPart(obj)) {
+                        dat = obj.attachments[0];
+                        attachments.push(
+                            _.extend({}, dat, { mail: mail, title: obj.filename || '' })
+                        );
+                    } else {
+                        attachments.push({
+                            id: obj.id,
+                            content_type: 'message/rfc822',
+                            filename: obj.filename ||
+                                _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
+                            title: obj.filename || obj.subject || '',
+                            mail: mail,
+                            nested_message: _.extend({}, obj, { parent: mail })
+                        });
+                    }
+                }
+
+                // get non-inline attachments
+                for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
+                    obj = data.attachments[i];
+                    if (obj.disp === 'attachment') {
+                        attachments.push(
+                            _.extend(obj, { mail: mail, title: obj.filename || '' })
+                        );
+                    }
+                }
+
+                return attachments;
+            };
+        }())
     };
     return that;
 });
