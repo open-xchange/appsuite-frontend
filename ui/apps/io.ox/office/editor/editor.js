@@ -881,7 +881,31 @@ define('io.ox/office/editor/editor',
                 selection.startPaM.oxoPosition.pop();
                 paragraphs = editdiv.children();
 
-                var newOperation = {name: OP_TABLE_INSERT, start: _.copy(selection.startPaM.oxoPosition, true), columns: size.width, rows: size.height};
+                // table grid is width of paragraph divided by number of columns
+                var domPos = Position.getDOMPosition(paragraphs, selection.startPaM.oxoPosition),
+                    tableGrid = [],
+                    width = null;
+
+                if (domPos) {
+                    width = Utils.roundDigits(Utils.convertLength(domPos.node.offsetWidth, 'px', 'mm', 2) * 100 / size.width, 1);
+                } else {
+                    width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
+                }
+
+                for (var i = 0; i < size.width; i++) {
+                    tableGrid.push(width);
+                }
+
+                var newOperation = {name: OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
+                applyOperation(newOperation, true, true);
+
+                paragraphs = editdiv.children();
+
+                // adding rows
+                var localPos = _.copy(selection.startPaM.oxoPosition, true);
+                localPos.push(0);
+
+                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertDefaultCells: true};
                 applyOperation(newOperation, true, true);
 
                 if (deleteTempParagraph) {
@@ -3291,7 +3315,7 @@ define('io.ox/office/editor/editor',
 
             if (insertDefaultCells) {
 
-                var columnCount = table.data('columns'),
+                var columnCount = $(table).data('columns'),
                     // prototype elements for row, cell, and paragraph
                     paragraph = $('<p>'),
                     cell = $('<td>').append(paragraph);
@@ -3303,12 +3327,6 @@ define('io.ox/office/editor/editor',
 
                 // clone the cells in the row element
                 _.times(columnCount, function () { row.append(cell.clone(true)); });
-
-                if (tableRowNode) {
-                    _.times(count, function () { $(tableRowNode).insertBefore(row.clone(true)); });
-                } else {
-                    _.times(count, function () { table.append(row.clone(true)); });
-                }
 
             } else {
                 row = $('<tr>');
@@ -3326,12 +3344,6 @@ define('io.ox/office/editor/editor',
                 // appending the new row(s) to the table
                 _.times(count, function () { $(table).append(row.clone(true)); });
             }
-
-//            if (insertAfter === -1) {
-//                row.insertBefore($(table).children().children().get(0));
-//            } else {
-//                row.insertAfter($(table).children().children().get(insertAfter));
-//            }
 
             // Setting cursor
 //            localPosition.push(insertAfter + 1);
