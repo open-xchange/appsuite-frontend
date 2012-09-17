@@ -805,7 +805,7 @@ define('io.ox/core/tk/vgrid',
         this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
-                this.selection.setEditable(true, selector);
+                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
                 editable = true;
             } else {
                 node.removeClass('editable');
@@ -877,7 +877,7 @@ define('io.ox/core/tk/vgrid',
 
         // apply options
         if (options.editable) {
-            this.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
+            this.setEditable(true);
         }
     };
 
