@@ -89,8 +89,17 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/fullscreen', {
         id: 'fullscreen',
         action: function (app) {
-            require(['io.ox/files/bigscreen'], function (bigscreen) {
-                this.BigScreen.toggle();
+            require(['io.ox/files/bigscreen'], function () {
+                if (app.currentFile.file_mimetype.match(/^image\/[gif|png|jpe?g|gmp]/i)) {
+                    var src = api.getUrl(app.currentFile, 'open');
+                    $('#tmp').append($('<img>', { src: src })).show();
+                    if (this.BigScreen.enabled) {
+                        this.BigScreen.request($('#tmp').get(0));
+                    }
+                    this.BigScreen.onexit = function () {
+                        $('#tmp').empty().hide();
+                    };
+                }
             });
         }
     });
