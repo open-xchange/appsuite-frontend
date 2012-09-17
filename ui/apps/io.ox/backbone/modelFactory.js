@@ -40,6 +40,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         idAttribute: '_uid',
         initialize: function (obj) {
             this.realm = this.get('_realm');
+            this._valid = true;
             delete this.attributes._realm;
             
         },
@@ -54,7 +55,13 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
                     self.trigger("invalid:" + attribute, messages, errors, self);
                 });
                 self.trigger('invalid', errors, self);
+                self._valid = false;
                 return errors;
+            } else {
+                if (!self._valid) {
+                    self._valid = true;
+                    this.trigger('valid');
+                }
             }
         },
         sync: function (action, model, callbacks) {
