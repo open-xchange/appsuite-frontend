@@ -39,9 +39,8 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
-            this.factory = this.get('_factory');
             this.realm = this.get('_realm');
-            delete this.attributes._factory;
+            this._valid = true;
             delete this.attributes._realm;
             
         },
@@ -56,7 +55,13 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
                     self.trigger("invalid:" + attribute, messages, errors, self);
                 });
                 self.trigger('invalid', errors, self);
+                self._valid = false;
                 return errors;
+            } else {
+                if (!self._valid) {
+                    self._valid = true;
+                    this.trigger('valid');
+                }
             }
         },
         sync: function (action, model, callbacks) {
@@ -266,7 +271,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             return realms[name] || (realms[name] = new ModelRealm(name, this));
         };
         
-        this.model = OXModel.extend(delegate.model || {});
+        this.model = OXModel.extend(_.extend({
+            factory: this
+        }, (delegate.model || {})));
         this.collection = Backbone.Collection.extend({
             model: this.model,
             sync: function () {
@@ -280,7 +287,6 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         function processLoaded(loaded) {
             var uid = self.internal.toUniqueIdFromObject(loaded);
             loaded._uid = uid;
-            loaded._factory = self;
             return loaded;
         }
         
@@ -377,7 +383,6 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         
         this.create = this.create || function (options) {
             options = options || {};
-            options._factory = self;
             return new this.model(options);
         };
         
