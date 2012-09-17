@@ -1,0 +1,88 @@
+<div style="padding: 20px">
+	<div class="row">
+		<div class="span3 navigation">&nbsp;</div>
+		<div class="content span9">
+			<div class="page-header">
+				<h1>Model / View <small>Managing and responding to state changes</small></h1>
+			</div>
+			
+			<p class="lead">
+                
+			</p>
+			
+			<section>
+			    
+			    <pre class="experiment">
+			     var Recipe = Backbone.Model.extend({});
+                 
+                 var recipe = new Recipe({
+                     folder: 12,
+                     title: 'Water',
+                     ingredients: ["A glass", "Some Water"],
+                     description: "Pour the water into the glass. Serve with desired temperature.",
+                     servings: 1
+                 });
+                 
+                 
+                 print("Title: ", recipe.get("title"));
+                 print("Ingredients: ", recipe.get("ingredients"));
+                 print("Description: ", recipe.get("description"));
+                 print("Servings: ", recipe.get("servings"));
+                 
+			     recipe.set("title", "A glass of water á la niçoise");
+			     
+			     print(recipe.toJSON());
+			    </pre>
+			    
+			    <pre class="experiment">
+			     var Recipe = Backbone.Model.extend({
+			         addIngredient: function (ingredient) {
+			             if (! _(this.get('ingredients')).contains(ingredient)) {
+			                 this.get('ingredients).push(ingredient);
+			                 this.trigger("change");
+			                 this.trigger("change:ingredients");
+			             }
+			         },
+			         
+			         removeIngredient: function (ingredient) {
+			             this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+			         }
+			     });
+                 
+                 var recipe = new Recipe({
+                     folder: 12,
+                     title: 'Water',
+                     ingredients: ["A glass", "Some Water"],
+                     description: "Pour the water into the glass. Serve with desired temperature.",
+                     servings: 1
+                 });
+			     print(recipe.toJSON());
+			     
+			     recipe.addIngredient("Straw");
+			     
+			     print(recipe.toJSON());
+			     
+			    </pre>
+			    
+			    <pre class="experiment">
+define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/essons/lessons/model_view/api"], function (ModelFactory, api) {
+    
+    var factory = new ModelFactory({
+        ref: 'io.ox/lessons/recipes/model',
+        api: api
+    });
+
+    return {
+        factory: factory,
+        Recipe: factory.model,
+        Recipes: factory.collection
+    };
+    
+});
+			    </pre>
+			 
+			</section>
+			
+		</div>
+	</div>
+</div>

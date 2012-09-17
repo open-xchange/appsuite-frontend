@@ -20,8 +20,12 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions'], f
         section: 'Architecture',
         start: function (options) {
             var win = options.win;
-            
-            win.nodes.main.empty().append($("<h1>").text("Model/View"));
+            require(["text!io.ox/lessons/lessons/model_view/lesson.html"], function (html) {
+                var win = options.win;
+                win.nodes.main.empty().append($(html));
+                TOC.setUp(win.nodes.main);
+                Editor.setUp(win.nodes.main);
+            });
         }
     });
 });
