@@ -13,7 +13,7 @@
 
 define('io.ox/office/dialog/common',
     ['io.ox/core/tk/dialogs',
-     'io.ox/office/tk/image',
+     'io.ox/office/editor/image',
      'gettext!io.ox/office/main'
     ], function (Dialogs, Image, gt) {
 
@@ -24,11 +24,10 @@ define('io.ox/office/dialog/common',
     /**
      * Shows an insert image file dialog
      *
-     * @param  app
+     * @param  app the current application
      */
-    CommonDialogs.insertImageFile = function (app, editor) {
-        var that = this,
-            imageFile = null;
+    CommonDialogs.insertImageFile = function (app) {
+        var imageFile = null;
 
         new Dialogs.ModalDialog({
             width: 400,
@@ -45,7 +44,7 @@ define('io.ox/office/dialog/common',
             .attr('data-property', 'imageFilename')
             .addClass('nice-input')
             .change(function (e) {
-                that.imageFile = (e.target.files.length > 0) ? e.target.files[0] : null;
+                imageFile = (e.target.files.length > 0) ? e.target.files[0] : null;
             })
         )
         .addButton('cancel', gt('Cancel'))
@@ -55,7 +54,7 @@ define('io.ox/office/dialog/common',
         })
         .done(function (action, data, node) {
             if (action === 'insert') {
-                Image.insertFile(app, editor, that.imageFile);
+                Image.insertFile(app, imageFile, true);
             }
         });
     };
@@ -63,11 +62,10 @@ define('io.ox/office/dialog/common',
     /**
      * Shows an insert image file dialog
      *
-     * @param  app
+     * @param  app the current application
      */
-    CommonDialogs.insertImageURL = function (app, editor) {
-        var that = this,
-            imageURL = null;
+    CommonDialogs.insertImageURL = function (app) {
+        var imageURL = null;
 
         new Dialogs.ModalDialog({
             width: 400,
@@ -81,7 +79,7 @@ define('io.ox/office/dialog/common',
             .attr('data-property', 'imageURL')
             .addClass('nice-input')
             .change(function (e) {
-                that.imageURL = $('input[data-property="imageURL"]').val().trim();
+                imageURL = ($('input[data-property="imageURL"]').val()).trim();
             })
         )
         .addButton('cancel', gt('Cancel'))
@@ -91,19 +89,9 @@ define('io.ox/office/dialog/common',
         })
         .done(function (action, data, node) {
             if (action === 'insert') {
-                if (editor && that.imageURL && (that.imageURL.search("http://") === 0)) {
-                    editor.insertImageURL(that.imageURL);
-                }
+                Image.insertURL(app, imageURL, true);
             }
         });
-    };
-
-
-    /**
-     * Shows an UI in case the resource could not be inserted as image
-     */
-    CommonDialogs.handleInsertImageError = function () {
-        alert("Sorry, image could not be inserted.");
     };
 
     // exports ================================================================

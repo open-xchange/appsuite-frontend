@@ -331,7 +331,8 @@ define('io.ox/office/editor/view',
         // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
-            .addButton('image/insert',  { icon: 'icon-picture', tooltip: gt('Insert Image') });
+            .addButton('image/insertfile',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/inserturl',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -366,7 +367,8 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/insert',    { icon: 'icon-picture',   tooltip: gt('Insert Image') })
+            .addButton('image/insertfile',    { icon: 'icon-picture',   tooltip: gt('Insert Image File') })
+            .addButton('image/inserturl',    { icon: 'icon-picture',   tooltip: gt('Insert Image URL') })
             .addButton('image/delete',    { icon: 'icon-trash',     tooltip: gt('Delete Image') })
             .addSeparator()
             .addRadioGroup('image/alignment', { icon: 'icon-picture', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })

@@ -15,7 +15,8 @@ define('io.ox/office/editor/image',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/oxopam'], function (Utils, DOM, Position, OXOPaM) {
+     'io.ox/office/editor/oxopam',
+     'io.ox/office/dialog/error'], function (Utils, DOM, Position, OXOPaM, ErrorDialogs) {
 
     'use strict';
 
@@ -399,6 +400,86 @@ define('io.ox/office/editor/image',
         return {imageFloatMode: imageFloatMode, startPosition: localStart};
     };
 
+    /**
+     * Handles the insertion of the file into the document
+     *
+     * @param  app the current application
+     * @param  showErrorUI indicating if an alert box is shown in case of an error
+     * @param  imageFile the image file to be inserted
+     *
+     * @param  imageFile
+     */
+    Image.insertFile = function (app, imageFile, showErrorUI) {
+        if (app && app.getEditor() && imageFile && window.FileReader) {
+            var fileReader = new window.FileReader();
+
+            fileReader.onload = function (e) {
+                if (e.target.result) {
+                    $.ajax({
+                        type: 'POST',
+                        url: app.getDocumentFilterUrl('addfile', { add_filename: imageFile.name}),
+                        dataType: 'json',
+                        data: { image_data: e.target.result },
+                        beforeSend: function (xhr) {
+                            if (xhr && xhr.overrideMimeType) {
+                                xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                            }
+                        }
+                    })
+                    .done(function (response) {
+                        if (response && response.data) {
+
+                            // if added_fragment is set to a valid name,
+                            // the insertioin of the image was successful
+                            if (response.data.added_fragment && response.data.added_fragment.length > 0) {
+
+                                // set version of FileDescriptor to version that is returned in response
+                                app.getFileDescriptor().version = response.data.version;
+
+                                // update the app.getEditor()'s DocumentURL accordingly
+                                app.getEditor().setDocumentURL(app.getDocumentFilterUrl('getfile'));
+
+                                // create an InsertImage operation with the newly added fragment
+                                app.getEditor().insertImageFile(response.data.added_fragment);
+                            }
+                            else if (showErrorUI) {
+                                ErrorDialogs.insertImageError();
+                            }
+                        }
+                    })
+                    .fail(function (response) {
+                        if (showErrorUI) {
+                            ErrorDialogs.insertImageError();
+                        }
+                    });
+                }
+            };
+
+            fileReader.onerror = function (e) {
+                if (showErrorUI) {
+                    ErrorDialogs.insertImageError();
+                }
+            };
+
+            fileReader.readAsDataURL(imageFile);
+        }
+    };
+
+    /**
+     * Handles the insertion of the image URL into the document
+     *
+     * @param  app the current application
+     * @param  showErrorUI indicating if an alert box is shown in case of an error
+     * @param  imageURL the imageURL to be inserted
+     */
+    Image.insertURL = function (app, imageURL, showErrorUI) {
+        if (app && app.getEditor() && imageURL && (imageURL.search("://") !== - 1)) {
+            app.getEditor().insertImageURL(imageURL);
+        }
+        else if (showErrorUI) {
+            ErrorDialogs.insertImageError();
+        }
+    };
 
     return Image;
 
