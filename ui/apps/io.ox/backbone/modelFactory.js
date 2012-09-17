@@ -40,6 +40,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
         idAttribute: '_uid',
         initialize: function (obj) {
             this.realm = this.get('_realm');
+            this._valid = true;
             delete this.attributes._realm;
 
         },
