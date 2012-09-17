@@ -192,17 +192,15 @@ define('io.ox/office/editor/view',
          */
         function createToolBar(id, options) {
 
-            var // the 'File' drop-down menu
-                fileMenu = new MenuBox(appWindow)
-                    .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
-                    .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
-                    .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') });
+//            var // the 'File' drop-down menu
+//                fileMenu = new MenuBox(appWindow)
+//                    .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
+//                    .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
+//                    .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
+//                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') });
 
             // create common controls present in all tool bars
             return toolPane.createToolBar(id, options)
-                .addMenu(fileMenu, { label: gt('File') })
-                .addSeparator()
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
                 .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .addSeparator();
@@ -329,6 +327,12 @@ define('io.ox/office/editor/view',
         ));
 
         // create the tool bars
+        toolPane.createToolBar('file', { label: gt('File') })
+            .addButton('action/export',   { icon: 'icon-share',     tooltip: gt('Export') })
+            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
+            .addButton('action/download', { icon: 'icon-download',  tooltip: gt('Download') })
+            .addButton('action/print',    { icon: 'icon-print',     tooltip: gt('Print') });
+
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addButton('image/insertfile',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
@@ -379,6 +383,8 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })
+            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
+            .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 

@@ -40,6 +40,8 @@ define('io.ox/office/editor/editor',
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
         ]),
 
+        OP_DELETE = 'delete',
+
         OP_TEXT_INSERT =  'insertText',
         OP_TEXT_DELETE =  'deleteText',
 
@@ -57,6 +59,7 @@ define('io.ox/office/editor/editor',
         OP_COLUMN_COPY = 'copyColumn',
         OP_ROW_INSERT = 'insertRow',
         OP_COLUMN_INSERT = 'insertColumn',
+        OP_CELL_INSERT = 'insertCell',
 
         OP_INSERT_STYLE = 'insertStylesheet',
         OP_ATTRS_SET =    'setAttributes',
@@ -629,6 +632,7 @@ define('io.ox/office/editor/editor',
             if (isCompleteTable) {
                 newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
+                // newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
                 newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
@@ -665,15 +669,18 @@ define('io.ox/office/editor/editor',
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.copyRow = function () {
+        this.insertRow = function () {
             var selection = getSelection(),
-                start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
-                end = start + 1,
+                // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
+                count = 1,  // inserting only one row
+                insertDefaultCells = true,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
+            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
 
-            var newOperation = { name: OP_ROW_COPY, position: tablePos, start: start, end: end };
+            rowPos[rowPos.length - 1] += 1;
+
+            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertDefaultCells: insertDefaultCells };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -880,7 +887,31 @@ define('io.ox/office/editor/editor',
                 selection.startPaM.oxoPosition.pop();
                 paragraphs = editdiv.children();
 
-                var newOperation = {name: OP_TABLE_INSERT, start: _.copy(selection.startPaM.oxoPosition, true), columns: size.width, rows: size.height};
+                // table grid is width of paragraph divided by number of columns
+                var domPos = Position.getDOMPosition(paragraphs, selection.startPaM.oxoPosition),
+                    tableGrid = [],
+                    width = null;
+
+                if (domPos) {
+                    width = Utils.roundDigits(Utils.convertLength(domPos.node.offsetWidth, 'px', 'mm', 2) * 100 / size.width, 1);
+                } else {
+                    width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
+                }
+
+                for (var i = 0; i < size.width; i++) {
+                    tableGrid.push(width);
+                }
+
+                var newOperation = {name: OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
+                applyOperation(newOperation, true, true);
+
+                paragraphs = editdiv.children();
+
+                // adding rows
+                var localPos = _.copy(selection.startPaM.oxoPosition, true);
+                localPos.push(0);
+
+                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertDefaultCells: true};
                 applyOperation(newOperation, true, true);
 
                 if (deleteTempParagraph) {
@@ -1555,6 +1586,17 @@ define('io.ox/office/editor/editor',
                 }
                 implInsertText(operation.text, operation.start);
             }
+            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
+//                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+//                    var localStart = _.copy(operation.start, true),
+//                        localEnd = _.copy(operation.end, true),
+//                        startLastVal = localStart.pop(),
+//                        endLastVal = localEnd.pop(),
+//                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+//                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+//                }
+                implDelete(operation.start, operation.end);
+            }
             else if (operation.name === OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
@@ -1602,10 +1644,10 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_TABLE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.start, true) };
+                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.position, true) };
                     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
-                implInsertTable(operation.start, operation.rows, operation.columns);
+                implInsertTable(_.copy(operation.position), operation.attrs);
             }
             else if (operation.name === OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1668,6 +1710,9 @@ define('io.ox/office/editor/editor',
                 }
                 implCopyColumn(operation.position, operation.start, operation.end);
             }
+            else if (operation.name === OP_CELL_INSERT) {
+                implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
+            }
             else if (operation.name === OP_ROW_INSERT) {
                 // OP_ROW_INSERT is only called as undo for OP_ROWS_DELETE
                 // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1676,7 +1721,7 @@ define('io.ox/office/editor/editor',
                 //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 // }
-                implInsertRow(operation.position, operation.start, operation.columns);
+                implInsertRow(_.copy(operation.position), operation.count, operation.insertDefaultCells, operation.attrs);
             }
             else if (operation.name === OP_COLUMN_INSERT) {
                 // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
@@ -2944,24 +2989,20 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(position);
         }
 
-        function implInsertTable(pos, rows, columns) {
+        function implInsertTable(pos, attrs) {
 
-            var // prototype elements for the table, row, cell, and paragraph
-                paragraph = $('<p>'),
-                cell = $('<td>').append(paragraph),
-                row = $('<tr>').append(cell),
-                table = $('<table>').append(row),
-                position = _.copy(pos, true);
+            var position = _.copy(pos, true),
+                colgroup = $('<colgroup>'),
+                colCount = attrs.tablegrid.length;
 
-            // insert empty text node into the paragraph
-            validateParagraphNode(paragraph);
-            // clone the cells in the row element
-            _.times(columns - 1, function () { row.append(cell.clone(true)); });
-            // clone the rows in the table element
-            _.times(rows - 1, function () { table.append(row.clone(true)); });
+            for (var i = 0; i < attrs.tablegrid.length; i++) {
+                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm // removing 360 asap
+                colgroup.append($('<col>').css('width', width));
+            }
 
             // insert the table into the document
-            var domPosition = Position.getDOMPosition(paragraphs, position),
+            var table = $('<table>').data('columns', colCount).append(colgroup),
+                domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
 
@@ -2988,8 +3029,8 @@ define('io.ox/office/editor/editor',
                 paragraphs = editdiv.children();
 
                 // Setting cursor into table (unfortunately not visible in Chrome)
-                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-                lastOperationEnd = new OXOPaM(oxoPosition);
+//                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
+//                lastOperationEnd = new OXOPaM(oxoPosition);
             }
         }
 
@@ -3258,39 +3299,129 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertRow(pos, startRow, columns) {
+        function implInsertRow(pos, count, insertDefaultCells, attrs) {
 
-            var localPosition = _.copy(pos, true);
+            var localPosition = _.copy(pos, true),
+                setRowHeight = false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
-            var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                insertAfter = startRow - 1,
-                // prototype elements for row, cell, and paragraph
-                paragraph = $('<p>'),
-                cell = $('<td>').append(paragraph),
-                row = $('<tr>').append(cell);
+            insertDefaultCells = insertDefaultCells ? true : false;
 
-            // insert empty text node into the paragraph
-            validateParagraphNode(paragraph);
-            // clone the cells in the row element
-            _.times(columns - 1, function () { row.append(cell.clone(true)); });
+            if (!_.isNumber(count)) {
+                count = 1; // setting default for number of rows
+            }
 
-            if (insertAfter === -1) {
-                row.insertBefore($(table).children().children().get(0));
+            if ((attrs) && (attrs.height)) {
+                setRowHeight = true;
+            }
+
+            var tablePos = _.copy(localPosition, true);
+            tablePos.pop();
+
+            var table = Position.getDOMPosition(paragraphs, tablePos).node,
+                tableRowDomPos = Position.getDOMPosition(paragraphs, localPosition),
+                tableRowNode = null,
+                row = null;
+
+            if (tableRowDomPos) {
+                tableRowNode = tableRowDomPos.node;
+            }
+
+            if (insertDefaultCells) {
+
+                var columnCount = $(table).data('columns'),
+                    // prototype elements for row, cell, and paragraph
+                    paragraph = $('<p>'),
+                    cell = $('<td>').append(paragraph);
+
+                // insert empty text node into the paragraph
+                validateParagraphNode(paragraph);
+
+                row = $('<tr>');
+
+                // clone the cells in the row element
+                _.times(columnCount, function () { row.append(cell.clone(true)); });
+
             } else {
-                row.insertAfter($(table).children().children().get(insertAfter));
+                row = $('<tr>');
+            }
+
+            if (setRowHeight) {
+                var height = attrs.height / 100 + 'mm';  // converting to mm
+                row.css('height', height);
+            }
+
+            if (tableRowNode) {
+                // inserting the new row(s) after the existing row at the specified position
+                _.times(count, function () { $(tableRowNode).before(row.clone(true)); });
+            } else {
+                // appending the new row(s) to the table
+                _.times(count, function () { $(table).append(row.clone(true)); });
             }
 
             // Setting cursor
-            localPosition.push(insertAfter + 1);
-            localPosition.push(0);
-            localPosition.push(0);
-            localPosition.push(0);
+//            localPosition.push(insertAfter + 1);
+//            localPosition.push(0);
+//            localPosition.push(0);
+//            localPosition.push(0);
+//
+//            lastOperationEnd = new OXOPaM(localPosition);
+        }
 
-            lastOperationEnd = new OXOPaM(localPosition);
+        function implInsertCell(pos, count, attrs) {
+
+            var localPosition = _.copy(pos, true),
+                setGridSpan = false;
+
+            if (! Position.isPositionInTable(paragraphs, localPosition)) {
+                return;
+            }
+
+            if (!_.isNumber(count)) {
+                count = 1; // setting default for number of rows
+            }
+
+            if ((attrs) && (attrs.gridspan)) {
+                setGridSpan = true;
+            }
+
+            var tableCellDomPos = Position.getDOMPosition(paragraphs, localPosition),
+                tableCellNode = null;
+
+            if (tableCellDomPos) {
+                tableCellNode = tableCellNode.node;
+            }
+
+            // prototype elements for row, cell, and paragraph
+            var paragraph = $('<p>'),
+                cell = $('<td>').append(paragraph);
+
+            if (setGridSpan) {
+                cell.attr('colspan', attrs.gridspan);
+            }
+
+            // insert empty text node into the paragraph
+            validateParagraphNode(paragraph);
+
+            if (tableCellNode) {
+                _.times(count, function () { $(tableCellNode).insertBefore(cell.clone(true)); });
+            } else {
+                var rowPos = _.copy(localPosition, true);
+                rowPos.pop();
+                var row = Position.getDOMPosition(paragraphs, rowPos).node;
+                _.times(count, function () { $(row).append(cell.clone(true)); });
+            }
+
+            // Setting cursor
+//            localPosition.push(insertAfter + 1);
+//            localPosition.push(0);
+//            localPosition.push(0);
+//            localPosition.push(0);
+//
+//            lastOperationEnd = new OXOPaM(localPosition);
         }
 
         function implDeleteColumns(pos, startCol, endCol) {
