@@ -19,7 +19,7 @@ define("io.ox/files/actions",
 
     'use strict';
 
-    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown;
+    var Action = links.Action, Link = links.XLink, Button = links.Button, Dropdown = links.Dropdown, ButtonGroup = links.ButtonGroup;
 
     // actions
 
@@ -226,54 +226,61 @@ define("io.ox/files/actions",
         }
     });
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
         index: 100,
         id: "upload",
         label: gt("Upload"),
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/upload"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
         index: 200,
         id: "share",
         label: gt("Share"),
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/share"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
         index: 300,
         id: "editor-new",
         label: gt("Pad!"),
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/editor-new"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
         index: 350,
         id: "fullscreen",
         label: 'Fullscreen',
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/fullscreen"
     }));
 
     // links
-	new Dropdown('io.ox/files/links/toolbar', {
+	new ButtonGroup('io.ox/files/links/toolbar', {
         id: 'view',
         index: 400,
         label: gt('View')
     });
 
-    new Link('io.ox/files/links/toolbar/view', {
+    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
         id: 'list',
         index: 100,
         label: gt('List'),
+        cssClasses: 'active',
+        groupButton: true,
         ref: 'io.ox/files/actions/switch-to-list-view'
-    });
+    }));
 
-    new Link('io.ox/files/links/toolbar/view', {
+    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
         id: 'icon',
         index: 200,
         label: gt('Icons'),
+        groupButton: true,
         ref: 'io.ox/files/actions/switch-to-icon-view'
-    });
+    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "editor",
