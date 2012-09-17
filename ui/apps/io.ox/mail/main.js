@@ -102,7 +102,7 @@ define("io.ox/mail/main",
         right = scrollpane.scrollable();
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(left, ext.point('io.ox/mail/vgrid/options').options());
 
         // add template
         grid.addTemplate(tmpl.main);

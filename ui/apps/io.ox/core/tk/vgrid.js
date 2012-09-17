@@ -132,7 +132,7 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var VGrid = function (target) {
+    var VGrid = function (target, options) {
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -219,6 +219,8 @@ define('io.ox/core/tk/vgrid',
             fnScroll,
             deserialize,
             emptyMessage;
+
+        options = options || {};
 
         // add label class
         template.node.addClass('selectable');
@@ -800,10 +802,10 @@ define('io.ox/core/tk/vgrid',
             return editable;
         };
 
-        this.setEditable = function (flag) {
+        this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
-                this.selection.setEditable(true);
+                this.selection.setEditable(true, selector);
                 editable = true;
             } else {
                 node.removeClass('editable');
@@ -872,6 +874,11 @@ define('io.ox/core/tk/vgrid',
             init();
             this.repaint();
         };
+
+        // apply options
+        if (options.editable) {
+            this.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
+        }
     };
 
     // make Template accessible
