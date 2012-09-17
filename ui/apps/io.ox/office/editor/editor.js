@@ -666,15 +666,18 @@ define('io.ox/office/editor/editor',
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.copyRow = function () {
+        this.insertRow = function () {
             var selection = getSelection(),
-                start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
-                end = start + 1,
+                // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
+                count = 1,  // inserting only one row
+                insertDefaultCells = true,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
+            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
 
-            var newOperation = { name: OP_ROW_COPY, position: tablePos, start: start, end: end };
+            rowPos[rowPos.length - 1] += 1;
+
+            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertDefaultCells: insertDefaultCells };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -2976,7 +2979,7 @@ define('io.ox/office/editor/editor',
 
             var position = _.copy(pos, true),
                 colgroup = $('<colgroup>'),
-                colCount = attrs.tablegrid.length - 1;
+                colCount = attrs.tablegrid.length;
 
             for (var i = 0; i < attrs.tablegrid.length; i++) {
                 var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm // removing 360 asap
@@ -3320,10 +3323,10 @@ define('io.ox/office/editor/editor',
                     paragraph = $('<p>'),
                     cell = $('<td>').append(paragraph);
 
-                row = $('<tr>').append(cell);
-
                 // insert empty text node into the paragraph
                 validateParagraphNode(paragraph);
+
+                row = $('<tr>');
 
                 // clone the cells in the row element
                 _.times(columnCount, function () { row.append(cell.clone(true)); });
@@ -3338,8 +3341,8 @@ define('io.ox/office/editor/editor',
             }
 
             if (tableRowNode) {
-                // inserting the new row(s) before the existing row at the specified position
-                _.times(count, function () { $(tableRowNode).insertBefore(row.clone(true)); });
+                // inserting the new row(s) after the existing row at the specified position
+                _.times(count, function () { $(tableRowNode).before(row.clone(true)); });
             } else {
                 // appending the new row(s) to the table
                 _.times(count, function () { $(table).append(row.clone(true)); });
@@ -3352,42 +3355,6 @@ define('io.ox/office/editor/editor',
 //            localPosition.push(0);
 //
 //            lastOperationEnd = new OXOPaM(localPosition);
-        }
-
-        // to be removed, replaced by new implInsertRow
-        function _implInsertRow(pos, startRow, columns) {
-
-            var localPosition = _.copy(pos, true);
-
-            if (! Position.isPositionInTable(paragraphs, localPosition)) {
-                return;
-            }
-
-            var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                insertAfter = startRow - 1,
-                // prototype elements for row, cell, and paragraph
-                paragraph = $('<p>'),
-                cell = $('<td>').append(paragraph),
-                row = $('<tr>').append(cell);
-
-            // insert empty text node into the paragraph
-            validateParagraphNode(paragraph);
-            // clone the cells in the row element
-            _.times(columns - 1, function () { row.append(cell.clone(true)); });
-
-            if (insertAfter === -1) {
-                row.insertBefore($(table).children().children().get(0));
-            } else {
-                row.insertAfter($(table).children().children().get(insertAfter));
-            }
-
-            // Setting cursor
-            localPosition.push(insertAfter + 1);
-            localPosition.push(0);
-            localPosition.push(0);
-            localPosition.push(0);
-
-            lastOperationEnd = new OXOPaM(localPosition);
         }
 
         function implInsertCell(pos, count, attrs) {
