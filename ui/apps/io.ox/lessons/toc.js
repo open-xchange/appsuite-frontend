@@ -67,8 +67,7 @@ define("io.ox/lessons/toc",  function () {
             // Glue in place
             $toc.css({
                 position: 'fixed',
-                top: $toc.offset().top,
-                left: $toc.offset().left
+                top: $toc.offset().top
             });
             
             node.on("scroll", function () {
