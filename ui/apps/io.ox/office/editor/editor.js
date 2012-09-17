@@ -40,6 +40,8 @@ define('io.ox/office/editor/editor',
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
         ]),
 
+        OP_DELETE = 'delete',
+
         OP_TEXT_INSERT =  'insertText',
         OP_TEXT_DELETE =  'deleteText',
 
@@ -630,6 +632,7 @@ define('io.ox/office/editor/editor',
             if (isCompleteTable) {
                 newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
+                // newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
                 newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
@@ -1582,6 +1585,17 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(undoAction);
                 }
                 implInsertText(operation.text, operation.start);
+            }
+            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
+//                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+//                    var localStart = _.copy(operation.start, true),
+//                        localEnd = _.copy(operation.end, true),
+//                        startLastVal = localStart.pop(),
+//                        endLastVal = localEnd.pop(),
+//                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+//                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+//                }
+                implDelete(operation.start, operation.end);
             }
             else if (operation.name === OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
