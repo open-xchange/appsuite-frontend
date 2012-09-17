@@ -10,8 +10,26 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions'], function (ext) {
+define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions', 'io.ox/lessons/editor', 'io.ox/lessons/toc', 'io.ox/backbone/modelFactory', 'io.ox/lessons/lessons/model_view/api'], function (ext, Editor, TOC, ModelFactory, api) {
     "use strict";
+    var factory = new ModelFactory({
+        ref: 'io.ox/lessons/recipes/model',
+        api: api,
+        model: {
+            addIngredient: function (ingredient) {
+                if (! _(this.get('ingredients')).contains(ingredient)) {
+                    this.get('ingredients').push(ingredient);
+                    this.trigger("change");
+                    this.trigger("change:ingredients");
+                }
+            },
+
+            removeIngredient: function (ingredient) {
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+            }
+        }
+    });
+    
     ext.point("io.ox/lessons/lesson").extend({
         id: 'model_view',
         index: 500,
@@ -24,7 +42,17 @@ define('io.ox/lessons/lessons/model_view/register', ['io.ox/core/extensions'], f
                 var win = options.win;
                 win.nodes.main.empty().append($(html));
                 TOC.setUp(win.nodes.main);
-                Editor.setUp(win.nodes.main);
+                Editor.setUp(win.nodes.main, {
+                    contexts: {
+                        factory: {
+                            model: {
+                                factory: factory,
+                                Recipe: factory.model,
+                                Recipes: factory.collection
+                            }
+                        }
+                    }
+                });
             });
         }
     });

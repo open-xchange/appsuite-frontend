@@ -32,7 +32,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
             folder: 12,
             title: 'Chocolate Milk',
             ingredients: ['Chocolate', 'Milk', 'Sugar'],
-            description: "Pour milk into a kettle and heat it (don't boil it!). Add pieces of chocolate and melt them, again make sure not to boil them. Try it and add sugar to your taste. Serve and enjoy. Yummy."
+            description: "Pour milk into a kettle and heat it (don't boil it!). Add pieces of chocolate and melt them, again make sure not to boil them. Try it and add sugar to your taste. Serve and enjoy. Yummy.",
             servings: 12
         }
     };
@@ -44,7 +44,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
             if (db[options.id] && db[options.id].folder === options.folder) {
                 return $.Deferred().resolve(db[options.id]);
             }
-            return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
+            return $.Deferred().reject({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         },
         
         getAll: function (options) {
@@ -66,27 +66,27 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
             nextId++;
             
             db[element.id] = element;
-            trigger("created", element);
+            this.trigger("created", element);
             
             return $.Deferred().resolve({id: element.id});
         },
         
         update: function (options) {
             if (db[options.id] && db[options.id].folder === options.folder) {
-                _.extend(db[options.id], );
+                _.extend(db[options.id], options);
                 return $.Deferred().resolve({});
             }
             
-            trigger("update", {id: options.id, folder: options.folder});
+            this.trigger("update", {id: options.id, folder: options.folder});
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         },
         
-        remove: function () {
+        remove: function (options) {
             if (db[options.id] && db[options.id].folder === options.folder) {
                 delete db[options.id];
                 return $.Deferred().resolve({});
             }
-            trigger("update", {id: options.id, folder: options.folder});
+            this.trigger("update", {id: options.id, folder: options.folder});
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         }
     };

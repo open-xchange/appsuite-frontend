@@ -1,75 +1,100 @@
 <div style="padding: 20px">
-	<div class="row">
-		<div class="span3 navigation">&nbsp;</div>
-		<div class="content span9">
-			<div class="page-header">
-				<h1>Model / View <small>Managing and responding to state changes</small></h1>
-			</div>
-			
-			<p class="lead">
+    <div class="row">
+        <div class="span3 navigation">&nbsp;</div>
+        <div class="content span9">
+            <div class="page-header">
+                <h1>Model / View <small>Managing and responding to state changes</small></h1>
+            </div>
+            
+            <p class="lead">
                 
-			</p>
-			
-			<section>
-			    
-			    <pre class="experiment">
-			     var Recipe = Backbone.Model.extend({});
-                 
-                 var recipe = new Recipe({
-                     folder: 12,
-                     title: 'Water',
-                     ingredients: ["A glass", "Some Water"],
-                     description: "Pour the water into the glass. Serve with desired temperature.",
-                     servings: 1
-                 });
-                 
-                 
-                 print("Title: ", recipe.get("title"));
-                 print("Ingredients: ", recipe.get("ingredients"));
-                 print("Description: ", recipe.get("description"));
-                 print("Servings: ", recipe.get("servings"));
-                 
-			     recipe.set("title", "A glass of water á la niçoise");
-			     
-			     print(recipe.toJSON());
-			    </pre>
-			    
-			    <pre class="experiment">
-			     var Recipe = Backbone.Model.extend({
-			         addIngredient: function (ingredient) {
-			             if (! _(this.get('ingredients')).contains(ingredient)) {
-			                 this.get('ingredients).push(ingredient);
-			                 this.trigger("change");
-			                 this.trigger("change:ingredients");
-			             }
-			         },
-			         
-			         removeIngredient: function (ingredient) {
-			             this.set('ingredients', _(this.get('ingredients')).without(ingredient));
-			         }
-			     });
-                 
-                 var recipe = new Recipe({
-                     folder: 12,
-                     title: 'Water',
-                     ingredients: ["A glass", "Some Water"],
-                     description: "Pour the water into the glass. Serve with desired temperature.",
-                     servings: 1
-                 });
-			     print(recipe.toJSON());
-			     
-			     recipe.addIngredient("Straw");
-			     
-			     print(recipe.toJSON());
-			     
-			    </pre>
-			    
-			    <pre class="experiment">
-define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/essons/lessons/model_view/api"], function (ModelFactory, api) {
+            </p>
+            
+            <section>
+                <h2>Getting and setting attributes</h2>
+                <pre class="experiment">
+var Recipe = Backbone.Model.extend({});
+ 
+var recipe = new Recipe({
+    folder: 12,
+    title: 'Water',
+    ingredients: ["A glass", "Some Water"],
+    description: "Pour the water into the glass. Serve at the desired temperature.",
+    servings: 1
+});
+
+
+print("Title: ", recipe.get("title"));
+print("=====");
+print("Ingredients: ", recipe.get("ingredients"));
+print("=====");
+print("Description: ", recipe.get("description"));
+print("=====");
+print("Servings: ", recipe.get("servings"));
+
+recipe.set("title", "A glass of water á la niçoise");
+
+print("============================");
+print(recipe.toJSON());
+                </pre>
+            </section>
+            <section>
+                <h2>Adding business logic functions</h2>
+                <pre class="experiment">
+var Recipe = Backbone.Model.extend({
+    addIngredient: function (ingredient) {
+        if (! _(this.get('ingredients')).contains(ingredient)) {
+            this.get('ingredients').push(ingredient);
+            this.trigger("change");
+            this.trigger("change:ingredients");
+        }
+    },
+ 
+    removeIngredient: function (ingredient) {
+        this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+    }
+});
+
+var recipe = new Recipe({
+    folder: 12,
+    title: 'Water',
+    ingredients: ["A glass", "Some Water"],
+    description: "Pour the water into the glass. Serve at the desired temperature.",
+    servings: 1
+});
+
+print(recipe.toJSON());
+
+recipe.addIngredient("Straw");
+
+print("=================");
+print(recipe.toJSON());
+                </pre>
+            </section>
+            
+            <section>
+                <h2>Creating a model factory</h2>
+                <h3>Loading an entry</h3>
+                <pre class="experiment">
+define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/lessons/lessons/model_view/api"], function (ModelFactory, api) {
+    "use strict";
     
     var factory = new ModelFactory({
         ref: 'io.ox/lessons/recipes/model',
-        api: api
+        api: api,
+        model: {
+            addIngredient: function (ingredient) {
+                if (! _(this.get('ingredients')).contains(ingredient)) {
+                    this.get('ingredients').push(ingredient);
+                    this.trigger("change");
+                    this.trigger("change:ingredients");
+                }
+            },
+
+            removeIngredient: function (ingredient) {
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+            }
+        }
     });
 
     return {
@@ -79,10 +104,315 @@ define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/ess
     };
     
 });
-			    </pre>
-			 
-			</section>
-			
-		</div>
-	</div>
+
+require(['io.ox/lessons/recipes/model'], function (model) {
+    
+    model.factory.get({
+        id: 2,
+        folder: 12
+    }).done(function (recipe) {
+        print(recipe);
+    });
+});
+</pre>
+             <h3>Creating or updating an entry</h3>
+<pre class="experiment">
+define("io.ox/lessons/recipes/model", ["io.ox/backbone/modelFactory", "io.ox/lessons/lessons/model_view/api"], function (ModelFactory, api) {
+    "use strict";
+    
+    var factory = new ModelFactory({
+        ref: 'io.ox/lessons/recipes/model',
+        api: api,
+        model: {
+            addIngredient: function (ingredient) {
+                if (! _(this.get('ingredients')).contains(ingredient)) {
+                    this.get('ingredients').push(ingredient);
+                    this.trigger("change");
+                    this.trigger("change:ingredients");
+                }
+            },
+
+            removeIngredient: function (ingredient) {
+                this.set('ingredients', _(this.get('ingredients')).without(ingredient));
+            }
+        }
+    });
+
+    return {
+        factory: factory,
+        Recipe: factory.model,
+        Recipes: factory.collection
+    };
+
+});
+
+require(['io.ox/lessons/recipes/model'], function (model) {
+    
+    var recipe = model.factory.create({
+        title: 'Scrambled Eggs',
+        ingredients: ['Eggs', 'Substitution table'],
+        description: "Apply the substitution table to scramble all egg components. Send over wire",
+        folder: 12
+    });
+    // Create the recipe
+    recipe.save().done(function (resp) {
+        print("Saved!", resp);
+        
+        // Load it again
+        model.factory.get({id: resp.id, folder: 12}).done(function (loadedRecipe) {
+            print(loadedRecipe);
+            
+            // Modify the recipe
+            loadedRecipe.set("title", "Crypted Eggs");
+            loadedRecipe.removeIngredient('Substitution table');
+            loadedRecipe.addIngredient('Salt');
+            loadedRecipe.addIngredient('A secret');
+            loadedRecipe.set("description", "Encrypt the egg using the secret and salt ");
+            // Update the recipe
+            loadedRecipe.save().done(function () {
+                // Load it a final time
+                model.factory.get({id: loadedRecipe.id, folder: 12}).done(function (loadedRecipe2) {
+                    print(loadedRecipe2);
+                });
+            }); // Now an update
+        });
+        
+    });
+    
+});
+ </pre>
+            </section>
+            
+            <section>
+                <h3>Be observable</h3>
+                <pre class="experiment" data-context="factory">
+var recipe = ctx.model.factory.create({
+    title: 'Scrambled Eggs',
+    ingredients: ['Eggs', 'Substitution table'],
+    description: "Apply the substitution table to scramble all egg components. Send over wire",
+    folder: 12
+});
+
+
+recipe.on("change:title", function () {
+    print("Title changed!", recipe.get("title"));
+    print("====");
+});
+
+recipe.on("change:ingredients", function () {
+    print("Ingredients changed!", recipe.get("ingredients"));
+    print("====");
+});
+
+recipe.set("title", "Encrypted Eggs");
+recipe.removeIngredient('Substitution table');
+recipe.addIngredient('Salt');
+recipe.addIngredient('A secret');
+                </pre>
+                
+                <h3>A live view</h3>
+                <pre class="experiment" data-context="factory">
+var recipe = ctx.model.factory.create({
+    title: 'Scrambled Eggs',
+    ingredients: ['Eggs', 'Substitution table'],
+    description: "Apply the substitution table to scramble all egg components. Send over wire",
+    servings: 1,
+    folder: 12
+});
+
+var nodes = {};
+
+this.append(nodes.title = $("&lt;h3&gt;").text(recipe.get("title")));
+this.append(nodes.ingredients = $("&lt;ul&gt;"));
+
+_(recipe.get("ingredients")).each(function (ingredient) {
+    nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+});
+
+this.append(node.description = $("&lt;p&gt;").text(recipe.get("description")));
+this.append("Servings: ", node.servings = $("&lt;span&gt;").text(recipe.get("servings")));
+
+// Register listeners
+
+recipe.on("change:title", function () {
+    nodes.title.text(recipe.get("title"));
+});
+
+recipe.on("change:ingredients", function () {
+    nodes.ingredients.empty();
+    _(recipe.get("ingredients")).each(function (ingredient) {
+        nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+    });
+});
+
+recipe.on("change:description", function () {
+    nodes.description.text(recipe.get("description"));
+});
+
+recipe.on("change:servings", function () {
+    nodes.servings.text(recipe.get("servings"));
+});
+
+window.$recipe = recipe;
+
+                </pre>
+                
+                <h3>With an extension</h3>
+                <pre class="experiment" data-context="factory">
+var recipe = ctx.model.factory.create({
+    title: 'Scrambled Eggs',
+    ingredients: ['Eggs', 'Substitution table'],
+    description: "Apply the substitution table to scramble all egg components. Send over wire",
+    servings: 1,
+    folder: 12
+});
+
+var nodes = {};
+
+this.append(nodes.title = $("&lt;h3&gt;").text(recipe.get("title")));
+this.append(nodes.ingredients = $("&lt;ul&gt;"));
+
+_(recipe.get("ingredients")).each(function (ingredient) {
+    nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+});
+
+this.append(node.description = $("&lt;p&gt;").text(recipe.get("description")));
+this.append("Servings: ", node.servings = $("&lt;span&gt;").text(recipe.get("servings")));
+
+// Register listeners
+
+recipe.on("change:title", function () {
+    nodes.title.text(recipe.get("title"));
+});
+
+recipe.on("change:ingredients", function () {
+    nodes.ingredients.empty();
+    _(recipe.get("ingredients")).each(function (ingredient) {
+        nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+    });
+});
+
+recipe.on("change:description", function () {
+    nodes.description.text(recipe.get("description"));
+});
+
+recipe.on("change:servings", function () {
+    nodes.servings.text(recipe.get("servings"));
+});
+
+this.append("&lt;br&gt;", "&lt;br&gt;",
+    $('&lt;form class="form-inline"&gt;').append(
+        nodes.titleInput = $('&lt;input type="text"&gt;'),
+        $('&lt;button class="btn"&gt;').text("Set title").on("click", function () {
+            recipe.set("title", nodes.titleInput.val());
+            nodes.titleInput.val('');
+        })
+    ), 
+    $('&lt;form class="form-inline"&gt;').append(
+        nodes.ingredientInput = $('&lt;input type="text"&gt;'),
+        $('&lt;button class="btn"&gt;').text("Add").on("click", function () {
+            recipe.addIngredient(nodes.ingredientInput.val());
+            nodes.ingredientInput.val('');
+        }),
+        $('&lt;button class="btn"&gt;').text("Remove").on("click", function () {
+            recipe.removeIngredient(nodes.ingredientInput.val());
+            nodes.ingredientInput.val('');
+        })
+    )
+);
+
+                </pre>
+                <h3>Collections</h3>
+                <pre class="experiment" data-context="factory">
+var recipeList = ctx.model.factory.createCollection([
+    {id: 1, title: 'A glass of water'},
+    {id: 2, title: 'Pieces of melon'},
+    {id: 3, title: 'Hot chocolate'}
+]);
+
+var listNode = $("&lt;ul&gt;").appendTo(this);
+recipeList.each(function (recipe) {
+    listNode.append($('&lt;li&gt;').text(recipe.get("title")));
+});
+
+recipeList.on('add', function () {
+    listNode.empty();
+    recipeList.each(function (recipe) {
+        listNode.append($('&lt;li&gt;').text(recipe.get("title")));
+    });
+});
+
+recipeList.on('remove', function () {
+    listNode.empty();
+    recipeList.each(function (recipe) {
+        listNode.append($('&lt;li&gt;').text(recipe.get("title")));
+    });
+});
+
+window.$recipes = recipeList;
+
+print("Play with $recipes in the console");
+                </pre>
+            </section>
+            <section>
+                <h2>Validation</h2>
+                <pre class="experiment" data-context="factory">
+require(["io.ox/core/extensions"], function (ext) {
+    
+    ext.point('io.ox/lessons/recipes/model/validation/title').extend({
+        id: 'recipes_title_begins_with_the_great',
+        validate: function(value) {
+            if (value) {
+                if (!/^The great/.test(value)) {
+                    return "Recipe titles must begin with 'The great'";
+                }
+            }
+        }
+    });
+    
+    window.$recipe = ctx.model.factory.create({});
+    
+    window.$recipe.on("invalid:title", function (messages) {
+        print(messages);
+    });
+
+    print("Play with $recipe in the console");
+    
+});
+</pre>
+                <h3>Predefined validators</h3>
+                <pre class="experiment" data-context="factory">
+require(["io.ox/backbone/validation"], function (Validation) {
+    
+    Validation.validationFor('io.ox/lessons/recipes/model', {
+        title: {
+            format: 'string', 
+            mandatory: true
+        },
+        ingredients: {
+            format: 'array'
+        },
+        description: {
+            format: 'text'
+        },
+        servings: {
+            format: 'number'
+        }
+    });
+
+    window.$recipe = ctx.model.factory.create({});
+
+    window.$recipe.on("invalid", function (errors) {
+        errors.each(function (messages, attribute) {
+            print(attribute + ": " + messages.join(', '));
+        });
+    });
+    
+    print("Play with $recipe in the console");
+});
+</pre>          
+                
+            </section>
+        </div>
+    </div>
 </div>
