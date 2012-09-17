@@ -102,7 +102,7 @@ define("io.ox/files/actions",
         }
     });
 
-    new Action('io.ox/files/actions/office/preview', {
+    new Action('io.ox/files/actions/office/view', {
         id: 'officepreview',
         requires: function (e) {
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|odc|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
@@ -295,8 +295,8 @@ define("io.ox/files/actions",
         id: "officepreview",
         index: 65,
         prio: 'hi',
-        label: gt("Preview"),
-        ref: "io.ox/files/actions/office/preview"
+        label: gt("View"),
+        ref: "io.ox/files/actions/office/view"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({
