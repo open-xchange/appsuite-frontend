@@ -96,9 +96,9 @@ define("io.ox/core/extensions",
                 }
             };
         }
-        
+
         this.has = has;
-        
+
         this.extend = function (extension) {
 
             if (extension.invoke) {
@@ -250,7 +250,7 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !!disabled[id];  //FIXME: something may be wrong here after disable an id it returns true for the same id
+            return !disabled[id];
         };
 
         this.inspect = function () {
