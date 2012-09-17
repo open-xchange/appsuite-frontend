@@ -42,10 +42,13 @@ define('io.ox/files/icons/perspective',
                 .on('click', '.file-icon', function (data) {
                     $('.files-iconview > .file-icon').removeClass('selected');
                     $(this).addClass('selected');
+                    api.get({id: $(data.currentTarget).attr('data-obj-id')}).done(function (file) {
+                        app.currentFile = file;
+                    });
                 })
                 .on('dblclick', '.file-icon', function (data) {
                     that.dialog.show(data, function (popup, e, target) {
-                        api.get({id: target.closest('.file-icon').attr('data-obj-id')}).done(function (file) {
+                        api.get({id: $(data.currentTarget).attr('data-obj-id')}).done(function (file) {
                             var currentDetailView = viewDetail.draw(file);
                             popup.append(currentDetailView.element)
                                 .on("dblclick", function (e) {
@@ -132,8 +135,8 @@ define('io.ox/files/icons/perspective',
         render: function (app) {
             this.app = app;
             var win = app.getWindow();
-            this.app.on('folder:change', function () {
-                perspective.draw(app);
+            app.on('folder:change', function () {
+                this.draw(app);
             });
             this.dialog = new dialogs.SidePopup({ arrow: false});
             this.draw(app);
