@@ -229,8 +229,8 @@ _(recipe.get("ingredients")).each(function (ingredient) {
     nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
 });
 
-this.append(node.description = $("&lt;p&gt;").text(recipe.get("description")));
-this.append("Servings: ", node.servings = $("&lt;span&gt;").text(recipe.get("servings")));
+this.append(nodes.description = $("&lt;p&gt;").text(recipe.get("description")));
+this.append("Servings: ", nodes.servings = $("&lt;span&gt;").text(recipe.get("servings")));
 
 // Register listeners
 
@@ -276,8 +276,8 @@ _(recipe.get("ingredients")).each(function (ingredient) {
     nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
 });
 
-this.append(node.description = $("&lt;p&gt;").text(recipe.get("description")));
-this.append("Servings: ", node.servings = $("&lt;span&gt;").text(recipe.get("servings")));
+this.append(nodes.description = $("&lt;p&gt;").text(recipe.get("description")));
+this.append("Servings: ", nodes.servings = $("&lt;span&gt;").text(recipe.get("servings")));
 
 // Register listeners
 
@@ -412,6 +412,401 @@ require(["io.ox/backbone/validation"], function (Validation) {
 });
 </pre>          
                 
+            </section>
+            
+            <h2>Views</h2>
+            <section>
+                <h3>A backbone view</h3>
+                <pre class="experiment" data-context="factory">
+var RecipeView = Backbone.View.extend({
+    tagName: 'div',
+    className: 'io-ox-recipe-details',
+    initialize: function () {
+        _.bindAll(this); // Preserves the 'this' 
+        
+        this.model.on('change:title'        , this.onTitleChange);
+        this.model.on('change:ingredients'  , this.onIngredientsChange);
+        this.model.on('change:description'  , this.onDescriptionChange);
+        this.model.on('change:servings'     , this.onServingsChange);
+    },
+    render: function () {
+        var self = this;
+        this.nodes = {};
+        this.$el.append(this.nodes.title = $("&lt;h3&gt;").text(this.model.get("title")));
+        this.$el.append(this.nodes.ingredients = $("&lt;ul&gt;"));
+
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+        });
+
+        this.$el.append(this.nodes.description = $("&lt;p&gt;").text(this.model.get("description")));
+        this.$el.append("Servings: ", this.nodes.servings = $("&lt;span&gt;").text(this.model.get("servings")));
+        return this;
+    },
+    onTitleChange: function () {
+        this.nodes.title.text(this.model.get("title"));
+    },
+    onIngredientsChange: function () {
+        var self = this;
+        this.nodes.ingredients.empty();
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient));
+        });
+    },
+    onDescriptionChange: function () {
+        this.nodes.description.text(this.model.get("description"));
+    },
+    onServingsChange: function () {
+        this.nodes.servings.text(this.model.get("servings"));
+    }
+});
+
+var node = this;
+ctx.model.factory.get({id: 2, folder: 12}).done(function (recipe) {
+    window.$recipe = recipe;
+    node.append(
+        new RecipeView({model: recipe}).render().$el
+    );
+});
+                </pre>
+            </section>
+            <section>
+                <h3>A backbone form</h3>
+                <pre class="experiment" data-context="factory">
+var RecipeEdit = Backbone.View.extend({
+    tagName: 'form',
+    className: 'form-horizontal',
+    initialize: function () {
+        _.bindAll(this);
+        
+        this.model.on('change:title'        , this.onTitleChange);
+        this.model.on('change:ingredients'  , this.onIngredientsChange);
+        this.model.on('change:description'  , this.onDescriptionChange);
+        this.model.on('change:servings'     , this.onServingsChange);
+        
+    },
+    render: function () {
+        var self = this;
+        this.nodes = {};
+        // Title
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Title'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.titleInput = $('&lt;input type="text"&gt;')
+                )
+            )
+        );
+        
+        this.nodes.titleInput.on("change", this.updateTitle);
+        this.onTitleChange();
+        
+        // Ingredients
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Ingredients'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.ingredients = $("&lt;ul&gt;")
+                )
+            )
+        );
+
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient)).on("click", function () {
+                self.nodes.ingredientInput.val(ingredient);
+            });
+        });
+        
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.ingredientInput = $('&lt;input type="text"&gt;'),
+                    $('&lt;button class="btn" &gt;').text("Add").on("click", function () {
+                        self.model.addIngredient(self.nodes.ingredientInput.val());
+                        self.nodes.ingredientInput.val("");
+                    }),
+                    $('&lt;button class="btn" &gt;').text("Remove").on("click", function () {
+                        self.model.removeIngredient(self.nodes.ingredientInput.val());
+                        self.nodes.ingredientInput.val("");
+                    })
+                )
+            )
+        );
+        
+        
+        // Description
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Description'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.descriptionInput = $('&lt;textarea class="input-xlarge" rows="10"&gt;')
+                )
+            )
+        );
+        this.nodes.descriptionInput.on("change", this.updateDescription);
+        this.onDescriptionChange();
+        
+        // Servings
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Servings'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.servingsInput = $('&lt;input type="text"&gt;')
+                )
+            )
+        );
+        
+        this.nodes.servingsInput.on("change", this.updateServings);
+        this.onServingsChange();
+        
+        return this;
+    },
+    onTitleChange: function () {
+        this.nodes.titleInput.val(this.model.get('title'));
+    },
+    updateTitle: function () {
+        this.model.set("title", this.nodes.titleInput.val());
+    },
+    onIngredientsChange: function () {
+        var self = this;
+        this.nodes.ingredients.empty();
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient)).on("click", function () {
+                self.nodes.ingredientInput.val(ingredient);
+            });
+        });
+    },
+    onDescriptionChange: function () {
+        this.nodes.descriptionInput.val(this.model.get('description'));
+    },
+    updateDescription: function () {
+        this.model.set("description", this.nodes.descriptionInput.val());
+    },
+    onServingsChange: function () {
+        this.nodes.servingsInput.val(this.model.get('servings'));
+    },
+    updateServings: function () {
+        this.model.set("servings", this.nodes.servingsInput.val());
+    }
+});
+
+var recipe = ctx.model.factory.create({
+    title: 'Scrambled Eggs',
+    ingredients: ['Eggs', 'Substitution table'],
+    description: "Apply the substitution table to scramble all egg components. Send over wire",
+    servings: 1,
+    folder: 12
+});
+
+this.append(new RecipeEdit({model: recipe}).render().$el);
+
+var attributeNode;
+this.append(attributeNode = $('&lt;pre&gt;').text(JSON.stringify(recipe, null, 4)));
+recipe.on("change", function () {
+    attributeNode.text(JSON.stringify(recipe, null, 4));
+});
+</pre>
+                
+                <h3>With Validation</h3>
+                <pre class="experiment" data-context="factory">
+require(["io.ox/backbone/validation"], function (Validation) {
+
+    Validation.validationFor('io.ox/lessons/recipes/model', {
+        title: {
+            format: 'string', 
+            mandatory: true
+        },
+        ingredients: {
+            format: 'array'
+        },
+        description: {
+            format: 'text'
+        },
+        servings: {
+            format: 'number'
+        }
+    });
+});
+
+var RecipeEdit = Backbone.View.extend({
+    tagName: 'form',
+    className: 'form-horizontal',
+    initialize: function () {
+        _.bindAll(this);
+        
+        this.model.on('change:title'        , this.onTitleChange);
+        this.model.on('change:ingredients'  , this.onIngredientsChange);
+        this.model.on('change:description'  , this.onDescriptionChange);
+        this.model.on('change:servings'     , this.onServingsChange);
+        
+        this.model.on("invalid:title"       , this.titleError);
+        //this.model.on("invalid:ingredients" , this.ingredientsError);
+        this.model.on("invalid:description" , this.descriptionError);
+        this.model.on("invalid:servings"    , this.servingsError);
+        this.model.on("valid"               , this.clearError);
+        
+    },
+    render: function () {
+        var self = this;
+        this.nodes = {};
+        // Error
+        this.$el.append($(this.nodes.errorBox = '&lt;div class="alert alert-error"').hide());
+        // Title
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Title'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.titleInput = $('&lt;input type="text"&gt;')
+                )
+            )
+        );
+        
+        this.nodes.titleInput.on("change", this.updateTitle);
+        this.onTitleChange();
+        
+        // Ingredients
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Ingredients'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.ingredients = $("&lt;ul&gt;")
+                )
+            )
+        );
+
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient)).on("click", function () {
+                self.nodes.ingredientInput.val(ingredient);
+            });
+        });
+        
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.ingredientInput = $('&lt;input type="text"&gt;'),
+                    $('&lt;button class="btn" &gt;').text("Add").on("click", function () {
+                        self.model.addIngredient(self.nodes.ingredientInput.val());
+                        self.nodes.ingredientInput.val("");
+                    }),
+                    $('&lt;button class="btn" &gt;').text("Remove").on("click", function () {
+                        self.model.removeIngredient(self.nodes.ingredientInput.val());
+                        self.nodes.ingredientInput.val("");
+                    })
+                )
+            )
+        );
+        
+        
+        // Description
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Description'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.descriptionInput = $('&lt;textarea class="input-xlarge" rows="10"&gt;')
+                )
+            )
+        );
+        this.nodes.descriptionInput.on("change", this.updateDescription);
+        this.onDescriptionChange();
+        
+        // Servings
+        this.$el.append(
+            $('&lt;div class="control-group"&gt;').append(
+                $("&lt;label&gt;").text('Servings'),
+                $('&lt;div class="controls"&gt;').append(
+                    this.nodes.servingsInput = $('&lt;input type="text"&gt;')
+                )
+            )
+        );
+        
+        this.nodes.servingsInput.on("change", this.updateServings);
+        this.onServingsChange();
+        
+        return this;
+    },
+    onTitleChange: function () {
+        this.nodes.titleInput.val(this.model.get('title'));
+    },
+    updateTitle: function () {
+        this.model.set("title", this.nodes.titleInput.val());
+    },
+    titleError: function (msgs) {
+        var self = this;
+        this.nodes.errorBox.append($("&lt;b&gt;").text("Title:"));
+        _(msgs).each(function (msg) {
+            self.nodes.errorBox.append($('&lt;div&gt;').text(msg));
+        })
+        this.nodes.errorBox.show();
+        this.nodes.titleInput.nearest('.control-group').addClass("error");
+    },
+    onIngredientsChange: function () {
+        var self = this;
+        this.nodes.ingredients.empty();
+        _(this.model.get("ingredients")).each(function (ingredient) {
+            self.nodes.ingredients.append($("&lt;li&gt;").text(ingredient)).on("click", function () {
+                self.nodes.ingredientInput.val(ingredient);
+            });
+        });
+    },
+    onDescriptionChange: function () {
+        this.nodes.descriptionInput.val(this.model.get('description'));
+    },
+    descriptionError: function (msgs) {
+        var self = this;
+        this.nodes.errorBox.append($("&lt;b&gt;").text("Description:"));
+        _(msgs).each(function (msg) {
+            self.nodes.errorBox.append($('&lt;div&gt;').text(msg));
+        })
+        this.nodes.errorBox.show();
+        this.nodes.descriptionInput.nearest('.control-group').addClass("error");
+    },
+    updateDescription: function () {
+        this.model.set("description", this.nodes.descriptionInput.val());
+    },
+    onServingsChange: function () {
+        this.nodes.servingsInput.val(this.model.get('servings'));
+    },
+    updateServings: function () {
+        this.model.set("servings", this.nodes.servingsInput.val());
+    },
+    servingsError: function (msgs) {
+        var self = this;
+        this.nodes.errorBox.append($("&lt;b&gt;").text("Servings:"));
+        _(msgs).each(function (msg) {
+            self.nodes.errorBox.append($('&lt;div&gt;').text(msg));
+        })
+        this.nodes.errorBox.show();
+        this.nodes.servingsInput.nearest('.control-group').addClass("error");
+    },
+    
+    valid: function () {
+        this.nodes.errorBox.empty().hide();
+        this.$el.find('.error').removeClass('error');
+    }
+});
+
+var recipe = ctx.model.factory.create({
+    title: 'Scrambled Eggs',
+    ingredients: ['Eggs', 'Substitution table'],
+    description: "Apply the substitution table to scramble all egg components. Send over wire",
+    servings: 1,
+    folder: 12
+});
+
+this.append(new RecipeEdit({model: recipe}).render().$el);
+
+var attributeNode;
+this.append(attributeNode = $('&lt;pre&gt;').text(JSON.stringify(recipe, null, 4)));
+recipe.on("change", function () {
+    attributeNode.text(JSON.stringify(recipe, null, 4));
+});
+</pre>
+            </section>
+            <section>
+                <h3>An extensible OX view</h3>
+            </section>
+            <section>
+                <h3>An extensible OX form</h3>
             </section>
         </div>
     </div>

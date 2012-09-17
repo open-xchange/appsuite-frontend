@@ -42,7 +42,7 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
     var api = {
         get: function (options) {
             if (db[options.id] && db[options.id].folder === options.folder) {
-                return $.Deferred().resolve(db[options.id]);
+                return $.Deferred().resolve(_.extend({}, db[options.id]));
             }
             return $.Deferred().reject({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         },
@@ -50,6 +50,8 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
         getAll: function (options) {
             var all = _(db).chain().values.filter(function (recipe) {
                 return recipe.folder === options.folder;
+            }).map(function (recipe) {
+                return _.extend({}, recipe);
             }).values();
             return $.Deferred().resolve(all);
         },
@@ -57,6 +59,9 @@ define("io.ox/lessons/lessons/model_view/api", ["io.ox/core/event"], function (E
         getList: function (ids) {
             var list = _(ids).map(function (id) {
                 return db[id];
+            });
+            list = _(list).map(function (recipe) {
+                return _.extend({}, recipe);
             });
             return $.Deferred().resolve(list);
         },

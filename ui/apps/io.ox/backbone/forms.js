@@ -148,6 +148,110 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         _.extend(this, options); // May override any of the above aspects
     }
     
+    function InputField(options) {
+        var modelEvents = {};
+        modelEvents['change:' + options.attribute] = 'updateInputField';
+        modelEvents['invalid:' + options.attribute] = 'showError';
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                this.nodes = {};
+                this.$el.append($('<label>').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.nodes.inputField.val(this.model.get(this.attribute));
+                this.nodes.inputField.on('change', _.bind(this.updateModel, this));
+            },
+            modelEvents: modelEvents,
+            updateInputField: function () {
+                this.nodes.inputField.val(this.model.get(this.attribute));
+            },
+            updateModel: function () {
+                if (this.model.set(this.attribute, this.nodes.inputField.val())) {
+                    this.$el.removeClass("error");
+                    this.$el.find('.help-block').remove();
+                }
+            },
+            showError: function (messages) {
+                var helpBlock =  $('<div class="help-block error">');
+                _(messages).each(function (msg) {
+                    helpBlock.append($.txt(msg));
+                });
+                this.$el.append(helpBlock);
+                this.$el.addClass("error");
+            }
+        }, options);
+    }
+
+    function CheckBoxField(options) {
+        var modelEvents = {};
+        modelEvents['change:' + options.attribute] = 'updateCheckbox';
+
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                var self = this;
+                this.nodes = {};
+                if (this.header) {
+                    this.$el.append($('<label>').text(this.header));
+                }
+                this.$el.append(
+                        $('<label class="checkbox">').append(
+                            this.nodes.checkbox = $('<input type="checkbox">')
+                                .after(this.label)
+                        )
+                );
+                this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
+                this.nodes.checkbox.on('change', function () {
+                    self.model.set(self.attribute, self.nodes.checkbox.is(':checked'));
+                });
+            },
+            updateCheckbox: function () {
+                this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
+            }
+        }, options);
+    }
+
+    function SelectBoxField(options) {
+        var modelEvents = {};
+        modelEvents['change:' + options.attribute] = 'updateChoice';
+
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                var self = this;
+                this.nodes = {};
+                this.nodes.select = $('<select>');
+                _(this.selectOptions).each(function (label, value) {
+                    self.nodes.select.append(
+                        $("<option>", {value: value}).text(label)
+                    );
+                });
+
+                this.$el.append($('<label>').text(this.label), this.nodes.select);
+
+                this.updateChoice();
+                this.nodes.select.on('change', function () {
+                    self.model.set(self.nodes.select.val());
+                });
+            },
+            updateChoice: function () {
+                this.nodes.select.val(this.model.get(this.attribute));
+            }
+        }, options);
+    }
+    /**
+     * Generates a section title with a <label> element
+     */
+    function SectionLegend(options) {
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                this.nodes = {};
+                this.$el.append(this.nodes.legend = $('<legend>').text(this.label).addClass('sectiontitle'));
+            }
+        }, options);
+    }
+    
+    
     // Form Sections made up of horizontal forms
     
     function Section(options) {
@@ -308,6 +412,9 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         Section: Section,
+        CheckBoxField: CheckBoxField,
+        SelectBoxField: SelectBoxField,
+        SectionLegend: SectionLegend,
         
         utils: {
             string2date: function (string) {
