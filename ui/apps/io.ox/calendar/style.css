@@ -103,6 +103,16 @@
     margin-bottom: 0.5em;
 }
 
+
+.calendar-detail .calendar-participant-actions.inline-actions {
+	padding: 1em 0 0.25em 0em;
+}
+
+.calendar-detail .io-ox-label.sublabel {
+    border-bottom: none;
+    color: #AAA;
+}
+
 .calendar-detail .note {
     max-width: 550px;
     white-space: pre-wrap;

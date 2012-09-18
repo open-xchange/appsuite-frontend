@@ -76,7 +76,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         action: function (params) {
             var def = $.Deferred();
-            util.createArrayOfRecipients(params.participants, def);
+            util.createArrayOfRecipients(params.participants, params.organizer, def);
             def.done(function (arrayOfRecipients) {
                 require(['io.ox/mail/write/main'], function (m) {
                     m.getApp().launch().done(function () {
@@ -302,21 +302,7 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
 
-    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'send mail',
-        label: gt('Send mail'),
-        ref: 'io.ox/calendar/detail/actions/sendmail'
-    }));
 
-    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'save as distlist',
-        label: gt('Save as distribution list'),
-        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
-    }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,
@@ -333,6 +319,35 @@ define('io.ox/calendar/actions',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
+
+
+
+
+    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links-participant',
+        ref: 'io.ox/calendar/links/inline-participants'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'send mail',
+        label: gt('Send mail to all'),
+        ref: 'io.ox/calendar/detail/actions/sendmail'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'save as distlist',
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
+
+
+
 
     /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
         index: 200,
