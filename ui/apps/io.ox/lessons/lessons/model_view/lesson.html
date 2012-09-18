@@ -914,7 +914,7 @@ require(["io.ox/backbone/views"], function (views) {
             
             render: function () {
                 this.$el.text(this.model.get(this.attribute));
-                this.observeModel('change:' + this.attribute, this.updateText);
+                this.observeModel('change:' + this.attribute, _.bind(this.updateText, this));
             },
             updateText: function () {
                 this.$el.text(this.model.get(this.attribute));
