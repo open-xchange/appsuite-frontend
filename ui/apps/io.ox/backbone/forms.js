@@ -412,6 +412,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         ErrorAlert: ErrorAlert,
         ControlGroup: ControlGroup,
         Section: Section,
+        InputField: InputField,
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,

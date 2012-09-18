@@ -114,6 +114,12 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
             );
         };
         
+        /*var selectNew = function (e, id) {
+            grid.selection.select(id);
+        };
+
+        api.on('select', selectNew);*/
+        
         commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);

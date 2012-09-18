@@ -1,0 +1,259 @@
+/**
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ */
+
+define('io.ox/files/list/perspective',
+    ['io.ox/files/list/view-detail',
+     'io.ox/files/api',
+     'io.ox/core/tk/vgrid',
+     'io.ox/core/tk/upload',
+     'io.ox/core/extPatterns/dnd',
+     'io.ox/core/extPatterns/shortcuts',
+     'io.ox/core/commons',
+     'gettext!io.ox/files/files',
+     "io.ox/core/bootstrap/basics",
+     "less!io.ox/files/list/style.css"
+     ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, gt) {
+
+    'use strict';
+
+    var perspective = new ox.ui.Perspective('list');
+
+    _.extend(perspective, {
+
+        drawPublicationFlag: function (app, win) {
+            app.folder.getData().done(function (data) {
+                win.nodes.title.find('.has-publications').remove();
+                // published?
+                if (data['com.openexchange.publish.publicationFlag']) {
+                    win.nodes.title.prepend(
+                        $('<img>', {
+                            src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
+                            title: gt('This folder has publications'),
+                            alt: ''
+                        })
+                        .addClass('has-publications')
+                    );
+                }
+            });
+        },
+
+        render: function (app) {
+            var win = app.getWindow(),
+                GRID_WIDTH = 330,
+                left, right, grid;
+
+            // left panel
+            left = $("<div>")
+                .addClass("leftside border-right")
+                .css({
+                    width: GRID_WIDTH + "px",
+                    overflow: "auto"
+                })
+                .appendTo(this.main);
+
+            // right panel
+            right = $("<div>")
+                .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
+                .addClass("rightside default-content-padding")
+                .appendTo(this.main);
+
+            // grid
+            grid = new VGrid(left);
+
+            grid.addTemplate({
+                build: function () {
+                    var name;
+                    this
+                        .addClass("file")
+                        .append(name = $("<div>").addClass("name"));
+                    return { name: name };
+                },
+                set: function (data, fields, index) {
+                    fields.name.text(data.title || data.filename || '\u00A0');
+                }
+            });
+
+            commons.wireGridAndAPI(grid, api);
+            commons.wireGridAndSearch(grid, win, api);
+
+            // LFO callback
+            var currentDetailView = null;
+
+            var showFile, selectFile, drawFail;
+
+            showFile = function (obj) {
+                // get file
+                if (currentDetailView && currentDetailView.file.id === obj.id) {
+                    return;
+                }
+                right.busy(true);
+                api.get(obj)
+                    .done(_.lfo(selectFile))
+                    .fail(_.lfo(drawFail));
+            };
+
+            selectFile = function (data) {
+                if (currentDetailView) {
+                    currentDetailView.destroy();
+                }
+                currentDetailView = viewDetail.draw(data);
+                right.idle().empty().append(currentDetailView.element);
+                right.parent().scrollTop(0);
+                app.currentFile = data;
+                app.detailView = currentDetailView;
+                dropZone.update();
+                shortcutPoint.activateForContext({
+                    data: data,
+                    view: app.detailView,
+                    folder: data.folder_id
+                });
+            };
+
+            drawFail = function (obj) {
+                right.idle().empty().append(
+                    $.fail("Oops, couldn't load file data.", function () {
+                        showFile(obj);
+                    })
+                );
+            };
+
+            commons.wireGridAndSelectionChange(grid, 'io.ox/files', showFile, right);
+
+            grid.selection.on('empty', function () {
+                if (currentDetailView) {
+                    currentDetailView.destroy();
+                    currentDetailView = null;
+                }
+                app.currentFile = null;
+                dropZone.update();
+            })
+            .on("change", function (evt, selected) {
+                if (selected.length > 1) {
+                    app.currentFile = null;
+                }
+            });
+
+            // delete item
+            api.on("beforedelete", function () {
+                grid.selection.selectNext();
+            })
+            .on("triggered", function () {
+                var args = $.makeArray(arguments), source = args.shift();
+                if (currentDetailView) {
+                    currentDetailView.trigger.apply(currentDetailView, args);
+                }
+            });
+            //.on('refresh.all', grid.repaint());
+
+            // Toggle Edit Mode
+
+            right.on("dblclick", function (e) {
+                if (_(["a", "button", "input", "textarea"]).include(e.srcElement.tagName.toLowerCase())) {
+                    return;
+                }
+                if (currentDetailView) {
+                    currentDetailView.toggleEdit();
+                }
+            });
+
+            // Uploads
+            app.queues = {};
+
+            app.queues.create = upload.createQueue({
+                processFile: function (file) {
+                    win.busy();
+                    return api.uploadFile({file: file, folder: app.folder.get()})
+                        .done(function (data) {
+                            // select new item
+                            grid.selection.set([data]);
+                            grid.refresh();
+                            // TODO: Error Handling
+                        })
+                        .always(win.idle);
+                }
+            });
+
+            app.queues.update = upload.createQueue({
+                processFile: function (fileData) {
+                    win.busy();
+                    return api.uploadNewVersion({
+                            file: fileData,
+                            id: app.currentFile.id,
+                            folder: app.currentFile.folder,
+                            timestamp: app.currentFile.last_modified
+                        })
+                        .done(function (data) {
+                            // select new item
+                            grid.selection.set([data]);
+                            grid.refresh();
+                            // TODO: Error Handling
+                        })
+                        .always(win.idle);
+                }
+            });
+
+            var dropZone = new dnd.UploadZone({
+                ref: "io.ox/files/dnd/actions"
+            }, app);
+
+            var shortcutPoint = new shortcuts.Shortcuts({
+                ref: "io.ox/files/shortcuts"
+            });
+
+            dropZone.include();
+
+            win.on("hide", function () {
+                console.log('hide');
+                dropZone.remove();
+                shortcutPoint.deactivate();
+            });
+
+            // Add status for uploads
+
+            commons.wireGridAndWindow(grid, win);
+            commons.wireFirstRefresh(app, api);
+            commons.wireGridAndRefresh(grid, api, win);
+            commons.addGridFolderSupport(app, grid);
+
+            app.invalidateFolder = function (data) {
+                if (data) {
+                    grid.selection.set([data]);
+                }
+                grid.refresh();
+            };
+
+            this.drawPublicationFlag(app, win);
+
+            app.on('folder:change', function (e, id, folder) {
+                // reset first
+                win.nodes.title.find('.has-publications').remove();
+                // published?
+                if (folder['com.openexchange.publish.publicationFlag']) {
+                    win.nodes.title.prepend(
+                        $('<img>', {
+                            src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
+                            title: gt('This folder has publications'),
+                            alt: ''
+                        })
+                        .addClass('has-publications')
+                    );
+                }
+            });
+
+            grid.prop('folder', app.folder.get());
+            grid.paint();
+        }
+    });
+
+    return perspective;
+
+});
