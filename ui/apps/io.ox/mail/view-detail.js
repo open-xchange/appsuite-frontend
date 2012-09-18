@@ -646,54 +646,14 @@ define('io.ox/mail/view-detail',
             });
     };
 
-    var isWinmailDATPart = function (obj) {
-        return !('filename' in obj) && obj.attachments &&
-            obj.attachments.length === 1 && obj.attachments[0].content === null;
-    };
-
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
         draw: function (data) {
 
-            var i, $i, obj, dat, attachments = [], hasAttachments = false,
-                mail = { id: data.id, folder_id: data.folder_id };
+            var attachments = util.getAttachments(data);
 
-            // get nested messages
-            for (i = 0, $i = (data.nested_msgs || []).length; i < $i; i++) {
-                obj = data.nested_msgs[i];
-                // is wrapped attachment? (winmail.dat stuff)
-                if (isWinmailDATPart(obj)) {
-                    dat = obj.attachments[0];
-                    attachments.push(
-                        _.extend({}, dat, { mail: mail, title: obj.filename || '' })
-                    );
-                } else {
-                    attachments.push({
-                        id: obj.id,
-                        content_type: 'message/rfc822',
-                        filename: obj.filename ||
-                            _.ellipsis((obj.subject || '').replace(/\s+/g, ' '), 50), // remove consecutive white-space
-                        title: obj.filename || obj.subject || '',
-                        mail: mail,
-                        nested_message: _.extend({}, obj, { parent: mail })
-                    });
-                }
-                hasAttachments = true;
-            }
-
-            // get non-inline attachments
-            for (i = 0, $i = (data.attachments || []).length; i < $i; i++) {
-                obj = data.attachments[i];
-                if (obj.disp === 'attachment') {
-                    attachments.push(
-                        _.extend(obj, { mail: mail, title: obj.filename || '' })
-                    );
-                    hasAttachments = true;
-                }
-            }
-
-            if (hasAttachments) {
+            if (attachments.length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
                 );

@@ -96,9 +96,9 @@ define("io.ox/core/extensions",
                 }
             };
         }
-        
+
         this.has = has;
-        
+
         this.extend = function (extension) {
 
             if (extension.invoke) {
@@ -250,7 +250,7 @@ define("io.ox/core/extensions",
         };
 
         this.isEnabled = function (id) {
-            return !!disabled[id];  //FIXME: something may be wrong here after disable an id it returns true for the same id
+            return !disabled[id];
         };
 
         this.inspect = function () {
@@ -269,6 +269,14 @@ define("io.ox/core/extensions",
                 ext.index = 100 + 100 * index;
             });
             return this;
+        };
+
+        this.options = function (defaults) {
+            var options = defaults || {};
+            this.each(function (obj) {
+                options = _.extend(options, obj);
+            });
+            return options;
         };
     };
 
