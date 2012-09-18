@@ -129,11 +129,9 @@ define("io.ox/core/main",
 
                 // Maximise
                 desktop.addLauncher("right", $('<i class="icon-resize-full icon-white">'), function (e) {
-                    require(['io.ox/files/bigscreen'], function () {
-                        if (this.BigScreen.request) {
-                            this.BigScreen.toggle();
-                        }
-                    });
+                    if (window.BigScreen.request) {
+                        window.BigScreen.toggle();
+                    }
                 }, gt('Fullscreen'));
 
                 // help
