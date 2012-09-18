@@ -145,31 +145,47 @@ define("io.ox/mail/main",
 
         var option = '<li><a data-option="%s"><i/> %s</a></li>';
 
-        grid.getToolbar().prepend(
-            $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
-            .append(
-                $('<a>', { href: '#' })
-                .attr('data-toggle', 'dropdown')
-                .append(
-                    $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
-                    $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
-                )
-                .dropdown(),
-                $('<ul>').addClass("dropdown-menu")
-                .append(
-                    $(_.printf(option, 610, gt('Date'))),
-                    $(_.printf(option, 603, gt('From'))),
-                    $(_.printf(option, 102, gt('Label'))),
-                    $(_.printf(option, 607, gt('Subject'))),
-                    $('<li class="divider">'),
-                    $(_.printf(option, 'asc', gt('Ascending'))),
-                    $(_.printf(option, 'desc', gt('Descending'))),
-                    $('<li class="divider">'),
-                    $(_.printf(option, 'unread', gt('Unread only')))
-                )
-                .on('click', 'a', { grid: grid }, hToolbarOptions)
-            )
-        );
+        ext.point('io.ox/mail/vgrid/toolbar').extend({
+            id: 'dropdown',
+            index: 100,
+            draw: function () {
+                this.prepend(
+                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    .append(
+                        $('<a>', { href: '#' })
+                        .attr('data-toggle', 'dropdown')
+                        .append(
+                            $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
+                            $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
+                        )
+                        .dropdown(),
+                        $('<ul>').addClass("dropdown-menu")
+                        .append(
+                            $(_.printf(option, 610, gt('Date'))),
+                            $(_.printf(option, 603, gt('From'))),
+                            $(_.printf(option, 102, gt('Label'))),
+                            $(_.printf(option, 607, gt('Subject'))),
+                            $('<li class="divider">'),
+                            $(_.printf(option, 'asc', gt('Ascending'))),
+                            $(_.printf(option, 'desc', gt('Descending'))),
+                            $('<li class="divider">'),
+                            $(_.printf(option, 'unread', gt('Unread only')))
+                        )
+                        .on('click', 'a', { grid: grid }, hToolbarOptions)
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/mail/vgrid/toolbar').extend({
+            id: 'count',
+            index: 200,
+            draw: function () {
+                this.append(
+                    $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
+                );
+            }
+        });
 
         grid.on('change:prop:unread', function (e, value) {
             if (value === true) {
@@ -182,9 +198,7 @@ define("io.ox/mail/main",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        grid.getToolbar().append(
-            $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
-        );
+        ext.point('io.ox/mail/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now

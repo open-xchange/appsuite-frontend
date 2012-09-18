@@ -138,6 +138,8 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
+        options = options || {};
+
         // target node
         var node = $(target).empty().addClass('vgrid'),
             // reference for private functions
@@ -158,10 +160,12 @@ define('io.ox/core/tk/vgrid',
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    $('<a>', { href: '#' })
-                    .css('float', 'left')
-                    .append($('<i class="icon-th-list">'))
-                    .on('click', { grid: this }, fnToggleEditable)
+                    options.toggle === false ?
+                        $() :
+                        $('<a>', { href: '#' })
+                        .css('float', 'left')
+                        .append($('<i class="icon-th-list">'))
+                        .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template
@@ -223,8 +227,6 @@ define('io.ox/core/tk/vgrid',
             fnScroll,
             deserialize,
             emptyMessage;
-
-        options = options || {};
 
         // add label class
         template.node.addClass('selectable');
