@@ -26,6 +26,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         var self = this,
             multiple = true,
             editable = false,
+            editableSelector = '.vgrid-cell',
             selectedItems = {},
             bHasIndex = true,
             observedItems = [],
@@ -54,7 +55,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             hasMultiple;
 
         isMultiple = function (e) {
-            return editable || (multiple && (e && e.metaKey));
+            var closest = $(e.target).closest(editableSelector),
+                isEditable = editable && closest.length;
+            return isEditable || (multiple && (e && e.metaKey));
         };
 
         isRange = function (e) {
@@ -387,8 +390,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         /**
          * Set editable mode
          */
-        this.setEditable = function (flag) {
+        this.setEditable = function (flag, selector) {
             editable = !!flag;
+            editableSelector = selector || '.vgrid-cell';
             last = prev = empty;
             lastIndex = -1;
             return this;

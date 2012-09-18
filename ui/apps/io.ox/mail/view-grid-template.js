@@ -25,7 +25,7 @@ define('io.ox/mail/view-grid-template',
         // main grid template
         main: {
             build: function () {
-                var from, date, priority, subject, attachment, threadSize, flag;
+                var from, date, priority, unread, subject, attachment, threadSize, flag;
                 this.addClass('mail').append(
                     $('<div>').append(
                         date = $('<span>').addClass('date'),
@@ -37,11 +37,11 @@ define('io.ox/mail/view-grid-template',
                         attachment = $('<span>').addClass('attachment'),
                         priority = $('<span>').addClass('priority'),
                         $('<div>').addClass('subject')
-                            .append($('<i>').addClass('icon-envelope'))
+                            .append(unread = $('<i>').addClass('icon-envelope'))
                             .append(subject = $('<span>'))
                     )
                 );
-                return { from: from, date: date, priority: priority, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
+                return { from: from, date: date, priority: priority, unread: unread, subject: subject, attachment: attachment, threadSize: threadSize, flag: flag };
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
