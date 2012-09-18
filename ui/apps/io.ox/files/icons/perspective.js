@@ -72,6 +72,7 @@ define('io.ox/files/icons/perspective',
                     preview.append(wrap.append(
                         //$('<span class="file-mimetype label">')
                         //    .text(file.file_mimetype)
+                        $('<img>', { src: ox.base + '/apps/themes/default/icons/file-generic.png', alt: file.title }).addClass('file-generic')
                     ));
                 }
                 preview.append($('<div class="title">').text(
