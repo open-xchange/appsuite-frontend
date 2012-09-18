@@ -31,6 +31,9 @@
                 bottom:0;
                 margin:auto
             }
+            img.file-generic {
+                opacity:0.2;
+            }
 
             .file-mimetype {
                 position:absolute;
