@@ -75,10 +75,6 @@ define("io.ox/core/extPatterns/links",
                 .click(click)
                 .text(String(self.label))
             );
-            if (!options.groupButton)
-            {
-                this.append("&nbsp;");
-            }
         };
     };
 
@@ -215,15 +211,17 @@ define("io.ox/core/extPatterns/links",
 
     var drawButtonGroup = function (options, context) {
         var args = $.makeArray(arguments),
-            $parent = $("<div>").addClass('btn-group').css({ display: 'inline-block' }).addClass(options.classes)
-                .attr('data-toggle', 'buttons-radio').appendTo(this);
+            $parent = $("<div>").addClass('btn-group')
+                .css({ display: 'inline-block' })
+                .addClass(options.classes)
+                .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
+                .appendTo(this);
         // create & add node first, since the rest is async
         var node = $parent;
         drawLinks(options, new Collection(context), node, context, args, false);
-        $parent.children('button').addClass('btn btn-inverse');
 
         // Padding does'nt look good with this.
-        //$parent.parent().addClass('btn-toolbar');
+        $parent.parent().addClass('btn-toolbar');
         return $parent;
     };
 

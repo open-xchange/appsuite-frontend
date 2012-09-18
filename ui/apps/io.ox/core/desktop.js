@@ -378,6 +378,7 @@ define("io.ox/core/desktop",
                 // update hash
                 if (opt.name !== _.url.hash('app')) {
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                 }
                 if (opt.name) {
@@ -416,6 +417,7 @@ define("io.ox/core/desktop",
                     // update hash
                     _.url.hash('app', null);
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                     // remove from list
                     ox.ui.running = _(ox.ui.running).without(self);
@@ -558,6 +560,7 @@ define("io.ox/core/desktop",
                 }
                 // set perspective
                 app.getWindow().setPerspective(name);
+                _.url.hash('perspective', name);
                 // render?
                 if (!rendered) {
                     this.render(app);

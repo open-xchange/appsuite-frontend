@@ -48,8 +48,10 @@ define("io.ox/files/main",
         commons.addFolderSupport(app, null, 'infostore')
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to list view
-                require(['io.ox/files/list/perspective'], function (perspective) {
+                // switch to view in url hash or default
+                var p = _.url.hash('perspective') || 'list';
+                console.log(app.getState());
+                require(['io.ox/files/' + p + '/perspective'], function (perspective) {
                     perspective.show(app);
                 });
             });

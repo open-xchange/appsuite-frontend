@@ -82,7 +82,7 @@ define('io.ox/files/icons/perspective',
                     ));
                 }
                 preview.append($('<div class="title">').text(
-                        file.title.replace(/^(.{30}).+(.{6})$/, "$1…$2")));
+                        file.title.replace(/^(.{26}).+(.{10})$/, "$1…$2")));
                 return preview;
             };
 

@@ -86,24 +86,6 @@ define("io.ox/files/actions",
         }
     });
 
-    new Action('io.ox/files/actions/fullscreen', {
-        id: 'fullscreen',
-        action: function (app) {
-            require(['io.ox/files/bigscreen'], function () {
-                if (app.currentFile.file_mimetype.match(/^image\/[gif|png|jpe?g|gmp]/i)) {
-                    var src = api.getUrl(app.currentFile, 'open');
-                    $('#tmp').append($('<img>', { src: src })).show();
-                    if (this.BigScreen.enabled) {
-                        this.BigScreen.request($('#tmp').get(0));
-                    }
-                    this.BigScreen.onexit = function () {
-                        $('#tmp').empty().hide();
-                    };
-                }
-            });
-        }
-    });
-
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -226,7 +208,13 @@ define("io.ox/files/actions",
         }
     });
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
+    new ButtonGroup('io.ox/files/links/toolbar', {
+        id: 'buttongroup',
+        index: 100,
+        label: gt('View')
+    });
+
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 100,
         id: "upload",
         label: gt("Upload"),
@@ -234,34 +222,27 @@ define("io.ox/files/actions",
         ref: "io.ox/files/actions/upload"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 200,
         id: "share",
         label: gt("Share"),
-        cssClasses: 'btn btn-primary',
+        cssClasses: 'btn btn-inverse',
         ref: "io.ox/files/actions/share"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 300,
         id: "editor-new",
         label: gt("Pad!"),
-        cssClasses: 'btn btn-primary',
+        cssClasses: 'btn btn-inverse',
         ref: "io.ox/files/actions/editor-new"
-    }));
-
-    ext.point('io.ox/files/links/toolbar').extend(new links.Button({
-        index: 350,
-        id: "fullscreen",
-        label: 'Fullscreen',
-        cssClasses: 'btn btn-primary',
-        ref: "io.ox/files/actions/fullscreen"
     }));
 
     // links
 	new ButtonGroup('io.ox/files/links/toolbar', {
         id: 'view',
         index: 400,
+        radio: true,
         label: gt('View')
     });
 
@@ -269,15 +250,16 @@ define("io.ox/files/actions",
         id: 'list',
         index: 100,
         label: gt('List'),
-        cssClasses: 'active',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
         groupButton: true,
         ref: 'io.ox/files/actions/switch-to-list-view'
     }));
 
     ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
-        id: 'icon',
+        id: 'icons',
         index: 200,
         label: gt('Icons'),
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'icons' ? 'active' : ''),
         groupButton: true,
         ref: 'io.ox/files/actions/switch-to-icon-view'
     }));
