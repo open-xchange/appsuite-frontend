@@ -1586,7 +1586,7 @@ define('io.ox/office/editor/editor',
                 }
                 implInsertText(operation.text, operation.start);
             }
-            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
+//            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
 //                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
 //                    var localStart = _.copy(operation.start, true),
 //                        localEnd = _.copy(operation.end, true),
@@ -1595,8 +1595,8 @@ define('io.ox/office/editor/editor',
 //                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
 //                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
 //                }
-                implDelete(operation.start, operation.end);
-            }
+//                implDelete(operation.start, operation.end);
+//            }
             else if (operation.name === OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
