@@ -13,6 +13,7 @@
 
 .file-details .title {
     margin-bottom: 0.5em;
+    word-wrap: break-word;
 }
 
 .file-details .basicInfo em {
