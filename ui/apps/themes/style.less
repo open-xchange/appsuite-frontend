@@ -625,7 +625,6 @@ a.button.default-action {
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
     z-index: 1;
-    bottom: 34px;
 }
 
 .vgrid, .vgrid:focus {
@@ -635,13 +634,37 @@ a.button.default-action {
 .vgrid-toolbar {
     position: absolute;
     right: 0;
-    bottom: 0;
     left: 0;
     line-height: 18px;
     padding: 8px 13px 8px 13px;
-    border-top: 1px solid mix(@color, @background, 200%/15);
     background-color: #f5f5f5;
     z-index: 2;
+}
+
+.vgrid.top-toolbar .vgrid-toolbar {
+    top: 0;
+    border-bottom: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.bottom-toolbar .vgrid-toolbar {
+    bottom: 0;
+    border-top: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.top-toolbar .vgrid-scrollpane {
+    top: 35px;
+}
+
+.vgrid.bottom-toolbar .vgrid-scrollpane {
+    bottom: 35px;
+}
+
+.vgrid.bottom-toolbar .dropdown-menu {
+    top: auto; bottom: 110%; right: 0; left: auto;
+}
+
+.vgrid.top-toolbar .dropdown-menu {
+    top: 110%; bottom: auto; right: 0; left: auto;
 }
 
 .vgrid-cell {
