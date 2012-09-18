@@ -479,6 +479,10 @@ define("io.ox/calendar/util",
             return days;
         },
 
+        removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
+            return _(idsFromGrGroups).difference(idsFromUsers);
+        },
+
         resolveGroupMembers: function (idsFromGroupMembers, returnArray, collectedUserIds) {
 
             var collectedIdsFromGroups = [];
@@ -490,7 +494,7 @@ define("io.ox/calendar/util",
                     });
                 });
 
-                collectedIdsFromGroups = _(collectedIdsFromGroups).difference(collectedUserIds);
+                collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
 
                 userAPI.getList(collectedIdsFromGroups).done(function (data) {
                     _.each(data, function (single) {
