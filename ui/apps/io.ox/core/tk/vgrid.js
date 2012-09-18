@@ -160,7 +160,7 @@ define('io.ox/core/tk/vgrid',
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    options.toggle === false ?
+                    options.showToggle === false ?
                         $() :
                         $('<a>', { href: '#' })
                         .css('float', 'left')
