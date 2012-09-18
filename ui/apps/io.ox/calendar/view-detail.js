@@ -21,7 +21,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links, gt) {
 
     "use strict";
 
@@ -211,12 +211,10 @@ define("io.ox/calendar/view-detail",
                     })
                     .value();
 
-                var userRelatedDiv = $('<div>').addClass('user-related');
-                participants.append(userRelatedDiv);
-                userRelatedDiv.append($("<div>")
-                        .addClass("io-ox-label").text("Participants"));
+                participants.append($("<div>")
+                        .addClass("io-ox-label participants-block").text(gt("Participants")));
 
-                var plist = $("<div>").addClass("participant-list").appendTo(userRelatedDiv);
+                var plist = $("<div>").addClass("participant-list").appendTo(participants);
 
                 $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
                 .done(function (userList, groupList, resourceList) {
@@ -245,7 +243,7 @@ define("io.ox/calendar/view-detail",
                             memberList = _(obj.members).difference(users);
                             if (memberList.length) {
                                 // new section
-                                userRelatedDiv
+                                participants
                                     .append($("<div>").addClass("group").text(obj.display_name + ":"))
                                     .append(glist = $("<div>").addClass("participant-list"));
                                 userAPI.getList(memberList)
@@ -265,7 +263,7 @@ define("io.ox/calendar/view-detail",
                     // resources
                     if (resourceList.length) {
                         participants
-                            .append($("<div>").addClass("io-ox-label").text("Resources"))
+                            .append($("<div>").addClass("io-ox-label").text(gt("Resources")))
                             .append(plist = $("<div>").addClass("participant-list"));
                         // loop over resources
                         _(resourceList)
@@ -294,14 +292,8 @@ define("io.ox/calendar/view-detail",
         index: 550,
         id: 'inline-actions-participantrelated',
         draw: function (data) {
-            var preDiv = this.find('.user-related'),
-                inline = $('<div class="calendar-participant-actions inline-actions">');
-            preDiv.after(inline);
-            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', inline, data);
-
-            inline.find('.io-ox-inline-links').prepend(
-                $('<span class="io-ox-label sublabel">').text('Participants:')
-            );
+            var preDiv = this.find('.io-ox-label.participants-block');
+            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', preDiv, data);
         }
     });
 
