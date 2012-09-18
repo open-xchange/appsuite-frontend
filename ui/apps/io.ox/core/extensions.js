@@ -270,6 +270,14 @@ define("io.ox/core/extensions",
             });
             return this;
         };
+
+        this.options = function (defaults) {
+            var options = defaults || {};
+            this.each(function (obj) {
+                options = _.extend(options, obj);
+            });
+            return options;
+        };
     };
 
     that = {

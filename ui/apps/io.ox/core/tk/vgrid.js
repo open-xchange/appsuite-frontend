@@ -103,9 +103,13 @@ define('io.ox/core/tk/vgrid',
             return this;
         };
 
-        this.getClone = function () {
+        this.getClone = function (prebuild) {
             var i = 0, $i = template.length, tmpl,
                 row = new Row(this.node.clone());
+            // pre build
+            if (prebuild) {
+                _.extend(row.fields, prebuild.call(row.node) || {});
+            }
             // build
             for (; i < $i; i++) {
                 tmpl = template[i];
@@ -132,7 +136,7 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var VGrid = function (target) {
+    var VGrid = function (target, options) {
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -220,6 +224,8 @@ define('io.ox/core/tk/vgrid',
             deserialize,
             emptyMessage;
 
+        options = options || {};
+
         // add label class
         template.node.addClass('selectable');
         label.node.addClass('vgrid-label');
@@ -293,23 +299,26 @@ define('io.ox/core/tk/vgrid',
 
             var guid = 0,
                 createCheckbox = function () {
-                    var id = 'grid_cb_' + (guid++);
-                    return $('<div>')
+                    var id = 'grid_cb_' + (guid++), fields = {};
+                    this.prepend(
+                        fields.div = $('<div>')
                         .addClass('vgrid-cell-checkbox')
                         .append(
-                            $('<label>', { 'for': id })
+                            fields.label = $('<label>', { 'for': id })
                             .append(
-                                $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                                fields.input = $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
                             )
-                        );
+                        )
+                    );
+                    return { checkbox: fields };
                 };
 
             return function (template) {
                 // get clone
-                var clone = template.getClone();
-                // add checkbox for edit mode
-                clone.node.prepend(createCheckbox());
-                return clone;
+                return template.getClone(function () {
+                    // add checkbox for edit mode
+                    return createCheckbox.call(this);
+                });
             };
         }());
 
@@ -800,10 +809,10 @@ define('io.ox/core/tk/vgrid',
             return editable;
         };
 
-        this.setEditable = function (flag) {
+        this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
-                this.selection.setEditable(true);
+                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
                 editable = true;
             } else {
                 node.removeClass('editable');
@@ -872,6 +881,11 @@ define('io.ox/core/tk/vgrid',
             init();
             this.repaint();
         };
+
+        // apply options
+        if (options.editable) {
+            this.setEditable(true);
+        }
     };
 
     // make Template accessible

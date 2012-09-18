@@ -252,7 +252,6 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             }
         }, options);
     }
-
     // Form Sections made up of horizontal forms
 
     function Section(options) {
@@ -417,7 +416,6 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
-
         utils: {
             string2date: function (string) {
                 var reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;

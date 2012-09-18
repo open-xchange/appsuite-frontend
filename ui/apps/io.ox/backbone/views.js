@@ -125,6 +125,15 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 if (this.init) {
                     this.init.apply(this, $.makeArray(arguments));
                 }
+                var self = this;
+                function redraw() {
+                    self.$el.empty();
+                    self.render();
+                }
+                this.point.on("extended", redraw);
+                self.$el.on('dispose', function () {
+                    self.point.off('extended', redraw);
+                });
             };
 
             options.point = options.point || ext.point(name);
