@@ -1,0 +1,164 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.box-sizing(@sizing-mode) {
+    -webkit-box-sizing: @sizing-mode;
+    -moz-box-sizing: @sizing-mode;
+    box-sizing: @sizing-mode;
+}
+
+.opacity(@opacity) {
+    @opacity-percent: @opacity * 100;
+    opacity: @opacity;
+    filter: alpha(opacity=@opacity-percent);
+}
+
+.debug-highlight-mixin(@border-color, @fill-color) {
+    outline: thin @border-color solid;
+    background-color: @fill-color;
+}
+
+.io-ox-office-title {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    
+    &:hover {
+        border-color: #d5d5d5;
+        border-radius: 4px;
+        -moz-border-radius: 4px;
+    }
+}
+
+.io-ox-office-main {
+    margin: 0;
+    padding: 0;
+
+    .io-ox-office-apppane {
+    	margin: 0;
+    	padding: 0;
+    	background-color: #e5e5e5;
+    	overflow-y: auto;
+    }
+
+    .io-ox-pane.debug > table.debug-table {
+        width: 100%;
+        table-layout: fixed;
+        background-color: white;
+    }
+
+    .io-ox-office-editor {
+        .box-sizing(border-box);
+        cursor: text;
+        background-color: white;
+        position: relative;
+
+        p {
+            margin: 0;
+            font-size: 12pt;
+            line-height: 0;
+            position: relative;
+        }
+
+        table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+
+            &:first-child { margin-top: 0; }
+            &:last-child { margin-bottom: 0; }
+
+            th, td {
+                padding: 4px;
+                border: 1px solid black;
+                vertical-align: top;
+            }
+        }
+
+        /* prevent dotted focus rectangle around page area */
+        &:focus, &:active {
+            outline: none;
+        }
+
+        &.highlight > * {
+            .opacity(0.7);
+        }
+
+        &.rich {
+            width: 210mm;
+            padding: 15mm;
+            margin: 30px auto;
+            border: 1px solid gray;
+
+            p > span {
+                font-family: sans-serif;
+                font-size: 11pt;
+                line-height: normal;
+
+                &.highlight {
+                    .opacity(1);
+                    background-color: yellow !important;
+	                color: black !important;
+	            }
+            }
+        }
+
+        &.plain {
+            width: 100%;
+            height: 5cm;
+            padding: 6px;
+            overflow-y: auto;
+            border: 1px #d5d5d5 solid;
+
+            p > span {
+                font-family: 'Courier New',Courier,monospace;
+                font-size: 10pt;
+                line-height: normal;
+            }
+        }
+
+        &.output {
+            width: 100%;
+            height: 5cm;
+            overflow-y: auto;
+            border: 1px #d5d5d5 solid;
+
+            p {
+                border-top: 1px #d5d5d5 dotted;
+                font-family: Arial,sans-serif;
+                font-size: 8pt;
+                line-height: normal;
+            }
+        }
+
+        &.rich.debug-highlight {
+
+            p {
+                .debug-highlight-mixin(#8f8, #efe);
+            }
+
+            span, b, i, u, strong, em {
+                .debug-highlight-mixin(#88f, #eef);
+            }
+
+            img, table {
+                .debug-highlight-mixin(#f88, #fee);
+                outline-offset: 2px;
+            }
+        }
+    }
+}

@@ -1,0 +1,41 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Kai Ahrens <kai.ahrens@open-xchange.com>
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.io-ox-office-preview-main {
+    margin: 0;
+    padding: 0;
+    background-color: #e5e5e5;
+    overflow-y: auto;
+    text-align: center;
+    
+    .io-ox-office-preview-page {
+        display: inline-block;
+        margin: 30px;
+        background-color: white;
+        border: 1px solid gray;
+    }
+    
+    .io-ox-office-preview-presentation {
+        width: 720pt;
+        box-sizing: border-box; -moz-box-sizing: border-box;
+        margin: 0cm auto 0cm auto;
+    }
+    
+    .io-ox-office-preview-content {
+        -webkit-box-shadow: 0px 0px 30px -5px #aaa;
+           -moz-box-shadow: 0px 0px 30px -5px #aaa;
+                box-shadow: 0px 0px 30px -5px #aaa;
+        background-color: white;
+    }
+}

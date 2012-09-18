@@ -68,6 +68,52 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/office/newdocument', {
+        id: 'officenew',
+        action: function (app) {
+            $.ajax({
+                type: 'GET',
+                url: ox.apiRoot +
+                '/oxodocumentfilter' +
+                '?action=createdefaultdocument' +
+                '&folder_id=' + app.folder.get() +
+                '&session=' + ox.session +
+                '&uid=' + app.getUniqueId() +
+                '&document_type=text',
+                dataType: 'json'
+            })
+            .done(function (response) {
+                ox.launch('io.ox/office/editor/main', { file: response.data }).done(function () {
+                    this.load();
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/editor', {
+        id: 'officeeditor',
+        requires: function (e) {
+            return e.collection.has('one') && /\.(odt|docx)$/i.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/editor/main', { file: data }).done(function () {
+                this.load();
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/view', {
+        id: 'officepreview',
+        requires: function (e) {
+            return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|odc|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/preview/main', { file: data }).done(function () {
+                this.load();
+            });
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -194,6 +240,13 @@ define("io.ox/files/actions",
     // links
 
     ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+        index: 50,
+        id: "officenew",
+        label: gt("New Document"),
+        ref: "io.ox/files/actions/office/newdocument"
+    }));
+
+    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
         index: 100,
         id: "upload",
         label: gt("Upload"),
@@ -228,6 +281,22 @@ define("io.ox/files/actions",
         index: 50,
         label: gt("Edit"),
         ref: "io.ox/files/actions/edit"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officeeditor",
+        index: 60,
+        prio: 'hi',
+        label: gt("Change"),
+        ref: "io.ox/files/actions/office/editor"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officepreview",
+        index: 65,
+        prio: 'hi',
+        label: gt("View"),
+        ref: "io.ox/files/actions/office/view"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({

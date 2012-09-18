@@ -1048,9 +1048,58 @@ define("io.ox/core/desktop",
                     "data-window-nr": guid
                 })
                 .append(
-                    $('<div class="window-container-center">')
-                    .data({ width: width + unit })
-                    .css({ width: width + unit })
+                    win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
+                )
+                .append(
+                    // window HEAD
+                    win.nodes.head = $("<div>")
+                    .addClass("window-head")
+                    .append(
+                        // title
+                        win.nodes.title = $("<h1>")
+                        .css("width", opt.titleWidth)
+                        .addClass("window-title")
+                        .append($("<span>"))
+                    )
+                    .append(
+                        // toolbar
+                        win.nodes.toolbar = $("<div>")
+                        .css("left", opt.titleWidth)
+                        .addClass("window-toolbar")
+                    )
+                    .append(
+                        // controls
+                        win.nodes.controls = $("<div>")
+                        .addClass("window-controls")
+                        .append(
+                            // settings
+                            win.nodes.settingsButton = $("<div>")
+                            .addClass("window-control")
+                            .css({ display: 'inline-block' })
+                            .text("\u270E")
+                        )
+                        .append(
+                            // close
+                            win.nodes.closeButton = $("<div>")
+                            .addClass("window-control")
+                            .css({ display: 'inline-block' })
+                            .append(
+                                $('<a class="close">&times;</a>')
+                            )
+                        )
+                    )
+                )
+                .append(
+                    // window BODY
+                    win.nodes.body = $("<div>")
+                    .addClass("window-body")
+                    .append(
+                        // quick settings
+                        win.nodes.settings = $("<div>")
+                        .hide()
+                        .addClass("window-settings")
+                        .html("<h2>Each window can have a quick settings area</h2>")
+                    )
                     .append(
                         // blocker
                         win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
@@ -1140,7 +1189,7 @@ define("io.ox/core/desktop",
                 $('<form>')
                 .on('submit', false)
                 .addClass('form-search')
-                .css({ 'float': 'right' })
+                .css({ display: 'inline-block', verticalAlign: 'top' })
                 .append(
                     $('<label>', { 'for': searchId })
                     .append(
@@ -1211,12 +1260,21 @@ define("io.ox/core/desktop",
 
                 // add close handler
                 if (opt.close === true) {
-                    win.nodes.closeButton.show().on("click", close);
+                    win.nodes.closeButton.on("click", close);
                     win.setQuitOnClose(true);
+                } else {
+                    win.nodes.closeButton.hide();
                 }
 
                 // set title
                 win.setTitle(opt.title);
+
+                // quick settings?
+                if (opt.settings) {
+                    $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
+                } else {
+                    win.nodes.settingsButton.hide();
+                }
             }
 
             // inc

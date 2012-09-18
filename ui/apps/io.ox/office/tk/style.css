@@ -1,0 +1,643 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+/* ========================================================================= */
+/* generic mix-in classes                                                    */
+/* ========================================================================= */
+
+.box-sizing(@sizing-mode) {
+    -webkit-box-sizing: @sizing-mode;
+    -moz-box-sizing: @sizing-mode;
+    box-sizing: @sizing-mode;
+}
+
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.border-top-left-radius(@radius) {
+    -webkit-border-top-left-radius: @radius;
+    -moz-border-radius-topleft: @radius;
+    border-top-left-radius: @radius;
+}
+
+.border-top-right-radius(@radius) {
+    -webkit-border-top-right-radius: @radius;
+    -moz-border-radius-topright: @radius;
+    border-top-right-radius: @radius;
+}
+
+.border-bottom-left-radius(@radius) {
+    -webkit-border-bottom-left-radius: @radius;
+    -moz-border-radius-bottomleft: @radius;
+    border-bottom-left-radius: @radius;
+}
+
+.border-bottom-right-radius(@radius) {
+    -webkit-border-bottom-right-radius: @radius;
+    -moz-border-radius-bottomright: @radius;
+    border-bottom-right-radius: @radius;
+}
+
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
+.box-shadow(@outset-shadow, @inset-shadow) {
+    -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
+    -moz-box-shadow: @outset-shadow, inset @inset-shadow;
+    box-shadow: @outset-shadow, inset @inset-shadow;
+}
+
+.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
+    background-color: mix(@start-color, @end-color, 50%);
+    background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
+    background: -moz-linear-gradient(@start-point, @start-color, @end-color);
+    background: -ms-linear-gradient(@start-point, @start-color, @end-color);
+    background: -o-linear-gradient(@start-point, @start-color, @end-color);
+    background: linear-gradient(@start-point, @start-color, @end-color);
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
+}
+
+.horizontal-gradient(@left-color, @right-color) {
+    .impl-linear-gradient(left, @left-color, @right-color, 1);
+    background-repeat: repeat-y;
+}
+
+.vertical-gradient(@top-color, @bottom-color) {
+    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
+    background-repeat: repeat-x;
+}
+
+.opacity(@opacity) {
+    @opacity-percent: @opacity * 100;
+    opacity: @opacity;
+    filter: alpha(opacity=@opacity-percent);
+}
+
+.transition(@transition) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    -ms-transition: @transition;
+    -o-transition: @transition;
+    transition: @transition;
+}
+
+/* Opera does not get "-o-transition: none" right */
+.transition(none) {
+    -o-transition-property: none;
+}
+
+/* ========================================================================= */
+/* OX icons                                                                  */
+/* ========================================================================= */
+
+/*
+ * Replace images for icon classes starting with "icon-io-ox-". Icons are
+ * 14x14px with a 6px grid spacing.
+ */
+i[class^="icon-io-ox-"] {
+    background-image: url(img/ox-icons-black.png);
+    background-origin: content-box;
+    width: 14px;
+    height: 14px;
+
+    &.icon-white {
+        background-image: url(img/ox-icons-white.png);
+    }
+}
+
+/* special icon for the drop-down caret */
+i.icon-io-ox-caret {
+    background-position: 0 0;
+    width: 7px;
+
+    &.up {
+        background-position: -7px 0;
+    }
+}
+
+/*
+ * Define class names for all icons.
+ */
+i.icon-io-ox-undo                { background-position:  -20px      0; }
+i.icon-io-ox-redo                { background-position:  -40px      0; }
+i.icon-io-ox-bold                { background-position:  -60px      0; }
+i.icon-io-ox-bold.de_DE          { background-position:  -80px      0; }
+i.icon-io-ox-bold.fr_FR          { background-position: -100px      0; }
+i.icon-io-ox-italic              { background-position: -120px      0; }
+i.icon-io-ox-italic.de_DE        { background-position: -140px      0; }
+i.icon-io-ox-underline           { background-position: -160px      0; }
+i.icon-io-ox-underline.fr_FR     { background-position: -180px      0; }
+i.icon-io-ox-font-height         { background-position: -200px      0; }
+i.icon-io-ox-line-spacing-1      { background-position: -220px      0; }
+i.icon-io-ox-line-spacing-1-5    { background-position: -240px      0; }
+i.icon-io-ox-line-spacing-2      { background-position: -260px      0; }
+
+i.icon-io-ox-table               { background-position:      0  -20px; }
+i.icon-io-ox-table-insert-row    { background-position:  -20px  -20px; }
+i.icon-io-ox-table-insert-column { background-position:  -40px  -20px; }
+i.icon-io-ox-table-delete-row    { background-position:  -60px  -20px; }
+i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
+
+/* ========================================================================= */
+/* panes and view components                                                 */
+/* ========================================================================= */
+
+/* background color for panes */
+@pane-fill-color: #f5f5f5;
+
+/* second color for pane background gradient */
+@pane-accented-fill-color: #ffffff;
+
+/* border color for panes */
+@pane-border-color: #d5d5d5;
+
+/* base border color for controls */
+@control-border-color: @pane-border-color;
+
+/* base text color for controls */
+@control-text-color: #333333;
+
+/* border color for selected controls */
+@selected-border-color: #b5b5ff;
+
+/* fill color for input controls */
+@input-fill-color: white;
+
+/* fill color for tool bar tab buttons */
+@tab-fill-color: #757575;
+
+/* text color for tool bar tab buttons */
+@tab-text-color: white;
+
+/* fill color for selected tool bar tab buttons */
+@tab-selected-fill-color: @pane-accented-fill-color;
+
+/* panes =================================================================== */
+
+div.io-ox-pane {
+    background-color: @pane-fill-color;
+
+    &.top { border-bottom: 1px solid @pane-border-color; }
+    &.bottom { border-top: 1px solid @pane-border-color; }
+    &.left { border-right: 1px solid @pane-border-color; }
+    &.right { border-left: 1px solid @pane-border-color; }
+
+    &.toolpane {
+        padding: 0 13px;
+        .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
+    }
+}
+
+/* view components ========================================================= */
+
+div.io-ox-view-component {
+    padding: 0;
+    /* prevent multi-line layout of button groups */
+    white-space: nowrap;
+    text-align: left;
+
+    /* disabled style for any element marked with the 'disabled' class */
+    .disabled {
+        .opacity(0.5);
+        cursor: default;
+    }
+
+    /* groups (container elements for controls) ---------------------------- */
+
+    .group {
+        /* relative position is essential for drop-down menu positioning */
+        position: relative;
+
+        /* hidden groups ('important' to overrule display modes from other rules) */
+        &.hidden {
+            display: none !important;
+        }
+
+        /* reset mouse pointer for controls embedded in a disabled group */
+        &.disabled {
+            label, button, input {
+                cursor: default !important;
+            }
+        }
+
+        /* common controls ------------------------------------------------- */
+
+        label, button, input {
+            display: inline-block;
+            position: relative;
+            .box-sizing(border-box);
+            height: 28px;
+            margin: 0;
+            padding: 0;
+            background: none;
+            /* reserve space for border */
+            border: 1px solid transparent;
+            .border-radius(0);
+            white-space: nowrap;
+            line-height: 26px;
+            font-size: 13px;
+            font-weight: normal;
+            color: @control-text-color;
+            text-shadow: none;
+            vertical-align: top;
+
+            /* prevent dotted focus rectangle around the control */
+            &:focus, &:active {
+                outline: none;
+            }
+        }
+
+        /* control caption elements (always spans as children) */
+        label, button {
+            > span {
+                display: inline-block;
+                vertical-align: top;
+
+                > i[class^="icon-"] {
+                    vertical-align: center;
+                }
+
+                + span {
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        /* labels ---------------------------------------------------------- */
+
+        label {
+            text-align: center;
+        }
+
+        /* buttons --------------------------------------------------------- */
+
+        button {
+            padding-left: 8px;
+            padding-right: 8px;
+            text-align: left;
+
+            /* adjust margins for e.g. caret buttons in drop-down split mode */
+            &.narrow-padding {
+                padding-left: 4px;
+                padding-right: 4px;
+            }
+        }
+
+        /* text fields ----------------------------------------------------- */
+
+        input {
+            width: 150px;
+            padding-left: 4px;
+            padding-right: 4px;
+            background-color: @input-fill-color;
+            border-color: @control-border-color;
+            .box-shadow(none);
+            .transition(none);
+            line-height: 18px;
+            cursor: text;
+
+            &.readonly {
+                background: none;
+                cursor: default;
+            }
+
+            /* drop-down button over text field */
+            + button {
+                z-index: 1;
+            }
+        }
+
+        /* drop-down groups ------------------------------------------------ */
+
+        &.dropdown-group {
+            &:not(.disabled) {
+
+                /* show drop-down menu element */
+                &.menu-open > .dropdown-menu {
+                    display: block;
+                }
+
+                /* set border to all buttons in the group when hovered or opened (split mode) */
+                &.menu-open, &:hover {
+                    > button:not(:focus):not(:active) {
+                        border-color: @control-border-color;
+                    }
+                }
+            }
+
+            /* the drop-down menu element */
+            > .dropdown-menu {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                min-width: 0;
+                max-width: none;
+                z-index: 1000;
+                margin: 1px 0 0 0;
+                padding: 0;
+                background-color: @pane-fill-color;
+                border: 1px solid @control-border-color;
+                .border-radius(0);
+
+                /* the Scrollable mix-in class */
+                &.scrollable {
+                    overflow-y: auto;
+                }
+
+                /* the List mix-in class */
+                &.list > ul {
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+
+                    > li {
+                        margin: 0;
+                        padding: 0;
+
+                        > button {
+                            width: 100%;
+                            height: 26px;
+                            border-color: transparent;
+                            line-height: 24px;
+                            text-align: left;
+
+                            /* mouse hover and focus effect */
+                            &:hover:not(:active), &:focus:not(:active) {
+                                background-color: fade(@control-border-color, 25%);
+                            }
+
+                            /* active effect (button currently clicked) */
+                            &:active {
+                                background-color: fade(@control-border-color, 50%);
+                            }
+
+                            &.selected {
+                                background-color: fade(@selected-border-color, 50%);
+
+                                /* mouse hover and focus effect */
+                                &:hover:not(:active), &:focus:not(:active) {
+                                    background-color: fade(@selected-border-color, 75%);
+                                    border-color: transparent;
+                                }
+
+                                /* active effect (button currently clicked) */
+                                &:active {
+                                    background-color: @selected-border-color;
+                                    border-color: transparent;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                /* the GridSizer mix-in class */
+                &.grid-sizer {
+
+                    /* inner size (pixels between grid lines) of one cell in the size chooser */
+                    @cell-width: 18px;
+                    @cell-height: 16px;
+
+                    /* minimum dimensions for the outer container (in cells) */
+                    min-width: 5 * (@cell-width + 1px) + 1px;
+                    min-height: 3 * (@cell-height + 1px) + 1px;
+                    background-color: white;
+                    text-align: left;
+
+                    > div {
+                        display: inline-block;
+                        position: relative;
+                        vertical-align: top;
+                        font-size: 1px;
+                        line-height: 1px;
+
+                        /* grid layout (done with embedded divs instead of a table to prevent grid flicker */
+                        > button {
+                            height: auto;
+                            margin: 0;
+                            padding: 0;
+                            background-color: @pane-fill-color;
+
+                            /* always show the same border */
+                            &, &:hover, &:focus, &:active {
+                                border: 1px solid @control-border-color;
+                            }
+
+                            /* a row in the grid */
+                            > div {
+                                /* need to set height explicitly for Firefox */
+                                height: @cell-height + 1px;
+
+                                /* a cell in the grid */
+                                > div {
+                                    display: inline-block;
+                                    width: @cell-width;
+                                    height: @cell-height;
+                                    vertical-align: top;
+
+                                    &:not(:last-child) {
+                                        border-right: 1px solid @control-border-color;
+                                    }
+                                }
+
+                                &:not(:last-child) > div {
+                                    border-bottom: 1px solid @control-border-color;
+                                }
+
+                                /* height for last row (again, especially for Firefox) */
+                                &:last-child {
+                                    height: @cell-height;
+                                }
+                            }
+                        }
+
+                        /* the badge labels showing the width and height of the grid */
+                        > span {
+                            position: absolute;
+                            top: 100%;
+                            right: @cell-width;
+                            z-index: 1020;
+                            margin: 5px 0 0 0;
+                            padding: 4px 6px;
+                            background-color: black;
+                            .opacity(0.8);
+                            .border-radius(9px);
+                            .box-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+                            font-size: 11px;
+                            line-height: 100%;
+                            color: white;
+                            text-shadow: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* tool bar ------------------------------------------------------------ */
+
+    &.toolbar {
+        padding: 4px 0;
+
+        > span {
+            display: inline-block;
+            position: relative;
+
+            /* show groups in a horizontal bar */
+            > .group {
+                display: inline-block;
+
+                /* group spacing */
+    	        + .group {
+    	            margin-left: -1px;
+    	        }
+
+                &.separator {
+                    width: 10px;
+                }
+
+                /* collapse borders of top-level control elements inside group */
+                > label, > button, > input {
+                    ~ label, ~ button, ~ input {
+                        margin-left: -1px;
+                    }
+                }
+
+                /* selected toggle/radio buttons */
+                > button.selected {
+                    z-index: 20;
+                    background-color: fade(@selected-border-color, 50%);
+                    border-color: @selected-border-color;
+                }
+
+                /* keyboard/mouse effects (not for disabled buttons) */
+                &:not(.disabled) > button:not(.disabled) {
+
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
+                        z-index: 2;
+                        border-color: @control-border-color;
+                    }
+
+                    /* active effect (control currently clicked) */
+                    &:active {
+                        z-index: 4;
+                        background-color: fade(@control-border-color, 25%);
+                    }
+
+                    /* selected toggle/radio buttons */
+                    &.selected {
+
+                        /* mouse/keyboard effects */
+                        &:hover, &:focus, &:active {
+                            z-index: 22;
+                            border-color: darken(@selected-border-color, 10%);
+                        }
+
+                        /* active effect (button currently clicked) */
+                        &:active {
+                            z-index: 24;
+                            background-color: fade(@selected-border-color, 75%);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /* top-level tab bar --------------------------------------------------- */
+
+    &.tabbar {
+        position: absolute;
+        left: 313px;
+        bottom: -1px;
+        padding: 0 1px;
+        .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
+
+        > span {
+            display: inline-block;
+            position: relative;
+
+            > .group {
+                display: inline-block;
+
+                /* style buttons as tabs */
+                > button {
+                    padding-left: 12px;
+                    padding-right: 12px;
+                    border: none;
+                    color: @tab-text-color;
+    
+                    /* semi-transparency for all contents of the button */
+                    &:not(.selected) > * { .opacity(0.7); }
+    
+                    /* override the default style of selected buttons */
+                    &.selected, &.selected:active {
+                        background: @tab-selected-fill-color !important;
+                        color: @control-text-color;
+                        cursor: default;
+                    }
+                }
+    
+                /* mouse/keyboard effects (not for disabled group) */
+                &:not(.disabled) > button:not(.disabled):not(.selected) {
+                    &:hover, &:focus, &:active {
+                        .vertical-gradient(lighten(@tab-fill-color, 15%), lighten(@tab-fill-color, 5%));
+    
+                        /* remove semi-transparency for all contents of the button */
+                        > * { .opacity(1); }
+                    }
+                }
+            }
+        }
+    }
+
+    /* menu box ------------------------------------------------------------ */
+
+    &.menubox {
+        display: inline-block;
+	
+        > .group {
+            display: list-item;
+
+	        /* group spacing */
+	        &.separator {
+	            height: 6px;
+	        }
+
+	        /* menu items as buttons */
+	        > button {
+	            width: 100%;
+	            border-color: transparent;
+	            text-align: left;
+
+	            /* mouse hover and focus effect */
+	            &:hover:not(:active), &:focus:not(:active) {
+	                background-color: fade(@control-border-color, 25%);
+	            }
+
+	            /* active effect (button currently clicked) */
+	            &:active {
+	                background-color: fade(@control-border-color, 50%);
+	            }
+            }
+        }
+    }
+}
