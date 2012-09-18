@@ -886,6 +886,8 @@ define('io.ox/core/tk/vgrid',
         if (options.editable) {
             this.setEditable(true);
         }
+
+        node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
     };
 
     // make Template accessible

@@ -156,7 +156,6 @@ define("io.ox/mail/main",
                 )
                 .dropdown(),
                 $('<ul>').addClass("dropdown-menu")
-                .css({ top: 'auto', bottom: '110%', right: 0, left: 'auto' })
                 .append(
                     $(_.printf(option, 610, gt('Date'))),
                     $(_.printf(option, 603, gt('From'))),
