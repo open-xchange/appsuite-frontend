@@ -479,45 +479,11 @@ define("io.ox/calendar/util",
             return days;
         },
 
-        createArrayOfRecipients: function (participants, def) {
-            var arrayOfRecipients = [],
-                arrayOfIds = [],
-                idsFromGroupMembers = [],
-                arrayOfGroupMembers = [];
-
-            _.each(participants, function (single) {
-                if (single.type === 5) {
-                    arrayOfRecipients.push([single.display_name, single.mail]);
-                } else if (single.type === 2) {
-                    idsFromGroupMembers.push(single.id);
-                } else {
-                    arrayOfIds.push(single.id);
-                }
-            });
-
-            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers);
-
-            _.each(arrayOfGroupMembers, function (single) {
-                arrayOfRecipients.push([single.display_name, single.mail]);
-            });
-
-            userAPI.getList(arrayOfIds).done(function (obj) {
-                _.each(obj, function (single) {
-                    arrayOfRecipients.push([single.display_name, single.email1]);
-                });
-                def.resolve(
-                    arrayOfRecipients
-                );
-            });
+        removeDuplicates: function (idsFromGrGroups, idsFromUsers) {
+            return _(idsFromGrGroups).difference(idsFromUsers);
         },
 
-        getUserIdByInternalId: function (internal, def) {
-            contactAPI.get({id: internal, folder: 6}).done(function (data) {
-                def.resolve(data.user_id);
-            });
-        },
-
-        resolveGroupMembers: function (idsFromGroupMembers, returnArray) {
+        resolveGroupMembers: function (idsFromGroupMembers, returnArray, collectedUserIds) {
 
             var collectedIdsFromGroups = [];
             groupAPI.getList(idsFromGroupMembers).done(function (data) {
@@ -527,6 +493,8 @@ define("io.ox/calendar/util",
                         collectedIdsFromGroups.push(single);
                     });
                 });
+
+                collectedIdsFromGroups = that.removeDuplicates(collectedIdsFromGroups, collectedUserIds);
 
                 userAPI.getList(collectedIdsFromGroups).done(function (data) {
                     _.each(data, function (single) {
@@ -542,8 +510,49 @@ define("io.ox/calendar/util",
             });
         },
 
-        createDistlistArrayFromPartisipantList: function (participants, def) {
+        createArrayOfRecipients: function (participants, organizer, def) {
+            var arrayOfRecipients = [],
+                arrayOfIds = [],
+                idsFromGroupMembers = [],
+                arrayOfGroupMembers = [];
 
+            _.each(participants, function (single) {
+                if (single.type === 5 && single.mail !== organizer) {
+                    arrayOfRecipients.push([single.display_name, single.mail]);
+                } else if (single.type === 2) {
+                    idsFromGroupMembers.push(single.id);
+                } else if (single.type === 1) {
+                    arrayOfIds.push(single.id);
+                }
+            });
+
+            that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers, arrayOfIds);
+
+            _.each(arrayOfGroupMembers, function (single) {
+                if (single.mail !== organizer) {
+                    arrayOfRecipients.push([single.display_name, single.mail]);
+                }
+            });
+
+            userAPI.getList(arrayOfIds).done(function (obj) {
+                _.each(obj, function (single) {
+                    if (single.email1 !== organizer) {
+                        arrayOfRecipients.push([single.display_name, single.email1]);
+                    }
+                });
+                def.resolve(
+                    arrayOfRecipients
+                );
+            });
+        },
+
+        getUserIdByInternalId: function (internal, def) {
+            contactAPI.get({id: internal, folder: 6}).done(function (data) {
+                def.resolve(data.user_id);
+            });
+        },
+
+        createDistlistArrayFromPartisipantList: function (participants, def) {
             var distlistArray = [],
                 idsFromGroupMembers = [],
                 collectedIdsFromGroups = [],
@@ -564,7 +573,7 @@ define("io.ox/calendar/util",
                 }
             });
 
-            that.resolveGroupMembers(idsFromGroupMembers, returnArray);
+            that.resolveGroupMembers(idsFromGroupMembers, returnArray, arrayOfIds);
 
             userAPI.getList(arrayOfIds).done(function (obj) {
                 _.each(obj, function (single) {

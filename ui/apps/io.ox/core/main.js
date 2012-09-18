@@ -126,6 +126,16 @@ define("io.ox/core/main",
                     return logout();
                 }, gt('Sign out'));
 
+
+                // Maximise
+                desktop.addLauncher("right", $('<i class="icon-resize-full icon-white">'), function (e) {
+                    require(['io.ox/files/bigscreen'], function () {
+                        if (this.BigScreen.request) {
+                            this.BigScreen.toggle();
+                        }
+                    });
+                }, gt('Fullscreen'));
+
                 // help
                 desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
                     require(['io.ox/help/center'], function (center) {

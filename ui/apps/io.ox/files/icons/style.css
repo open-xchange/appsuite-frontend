@@ -1,0 +1,55 @@
+@inner: 128px;
+@outer: 175px;
+.files-iconview .selected .wrap {
+    background: #ddd;
+}
+.file-icon {
+    position:relative;
+    height:@outer;
+    width:@inner;
+    max-height:@outer;
+    max-width:@inner;
+    margin-left:30px;
+    margin-top:30px;
+
+    .img-polaroid {
+        padding:0;
+    }
+
+    .wrap {
+        position:relative;
+        height:@inner;
+        width:@inner;
+        max-height:@inner;
+        max-width:@inner;
+        background:-moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+        background:-webkit-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
+        img {
+            position:absolute;
+            top:0;
+            bottom:0;
+            margin:auto
+        }
+
+        .file-mimetype {
+            position:absolute;
+            top:0;
+            bottom:0;
+            margin:auto;
+            height:14px;
+        }
+    }
+
+    .title {
+        position:absolute;
+        bottom:0;
+        word-wrap:break-word;
+        width:@inner;
+        max-width:@inner;
+        vertical-align:top;
+        height:37px;
+        display:block;
+        /* text-shadow: 0px 1px 1px #555; */
+        font-size:14px;
+    }
+}

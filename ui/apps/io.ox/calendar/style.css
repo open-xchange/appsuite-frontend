@@ -103,6 +103,22 @@
     margin-bottom: 0.5em;
 }
 
+
+.calendar-detail .io-ox-label.participants-block .io-ox-inline-links {
+	float: right;
+	margin: 0px;
+	font-size: 9pt;
+}
+
+.calendar-detail .io-ox-label.participants-block .io-ox-inline-links a{
+	color: #333;
+}
+
+.calendar-detail .io-ox-label.sublabel {
+    border-bottom: none;
+    color: #AAA;
+}
+
 .calendar-detail .note {
     max-width: 550px;
     white-space: pre-wrap;
