@@ -186,7 +186,7 @@ define("io.ox/calendar/util",
         },
 
         onSameDay: function (t1, t2) {
-            // don't change this to date.Local; thisis just a simple comparison
+            // don't change this to date.Local; this is just a simple comparison
             return new Date(t1).setUTCHours(0, 0, 0, 0) === new Date(t2).setUTCHours(0, 0, 0, 0);
         },
 
