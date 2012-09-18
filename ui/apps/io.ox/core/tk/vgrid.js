@@ -139,7 +139,6 @@ define('io.ox/core/tk/vgrid',
     var VGrid = function (target, options) {
 
         options = options || {};
-        options.selectAll = true;
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -161,7 +160,11 @@ define('io.ox/core/tk/vgrid',
                 },
             fnShowAll = function (e) {
                     var grid = e.data.grid;
-                    grid.selection.selectAll();
+                    if ($(this).prop('checked')) {
+                        grid.selection.selectAll();
+                    } else {
+                        grid.selection.selectFirst();
+                    }
                 },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
@@ -169,7 +172,7 @@ define('io.ox/core/tk/vgrid',
                     options.showSelectAll === true ?
                         $('<input type="checkbox">')
                         .css({ 'float': 'left', 'margin-right': '13px' })
-                        .on('click', { grid: this }, fnShowAll) :
+                        .on('change', { grid: this }, fnShowAll) :
                         $(),
                     // show toggle
                     options.showToggle === false ?
