@@ -348,12 +348,13 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         // columns set?
         columns = columns !== undefined ? columns : getAllColumns(module);
         // get ids
-        var ids = idMapping[module] || {};
-        var obj = {}, i = 0, $l = data.length;
+        var ids = idMapping[module] || {},
+            obj = {}, i = 0, $i = data.length, column, id;
         // loop through data
-        for (; i < $l; i++) {
+        for (; i < $i; i++) {
             // get id
-            var id = ids[columns[i]] || columns[i];
+            column = columns[i];
+            id = ids[column] || column;
             // extend object
             obj[id] = data[i];
         }
