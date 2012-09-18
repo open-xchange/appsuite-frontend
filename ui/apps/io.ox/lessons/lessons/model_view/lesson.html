@@ -306,6 +306,7 @@ this.append("&lt;br&gt;", "&lt;br&gt;",
         $('&lt;button class="btn"&gt;').text("Set title").on("click", function () {
             recipe.set("title", nodes.titleInput.val());
             nodes.titleInput.val('');
+            return false;
         })
     ), 
     $('&lt;form class="form-inline"&gt;').append(
@@ -313,10 +314,12 @@ this.append("&lt;br&gt;", "&lt;br&gt;",
         $('&lt;button class="btn"&gt;').text("Add").on("click", function () {
             recipe.addIngredient(nodes.ingredientInput.val());
             nodes.ingredientInput.val('');
+            return false;
         }),
         $('&lt;button class="btn"&gt;').text("Remove").on("click", function () {
             recipe.removeIngredient(nodes.ingredientInput.val());
             nodes.ingredientInput.val('');
+            return false;
         })
     )
 );
@@ -524,10 +527,12 @@ var RecipeEdit = Backbone.View.extend({
                     $('&lt;button class="btn" &gt;').text("Add").on("click", function () {
                         self.model.addIngredient(self.nodes.ingredientInput.val());
                         self.nodes.ingredientInput.val("");
+                        return false;
                     }),
                     $('&lt;button class="btn" &gt;').text("Remove").on("click", function () {
                         self.model.removeIngredient(self.nodes.ingredientInput.val());
                         self.nodes.ingredientInput.val("");
+                        return false;
                     })
                 )
             )
@@ -687,10 +692,12 @@ var RecipeEdit = Backbone.View.extend({
                     $('&lt;button class="btn" &gt;').text("Add").on("click", function () {
                         self.model.addIngredient(self.nodes.ingredientInput.val());
                         self.nodes.ingredientInput.val("");
+                        return false;
                     }),
                     $('&lt;button class="btn" &gt;').text("Remove").on("click", function () {
                         self.model.removeIngredient(self.nodes.ingredientInput.val());
                         self.nodes.ingredientInput.val("");
+                        return false;
                     })
                 )
             )
@@ -1122,10 +1129,12 @@ require(["io.ox/backbone/views", "io.ox/backbone/forms"], function (views, forms
                         $('&lt;button class="btn" &gt;').text("Add").on("click", function () {
                             self.model.addIngredient(self.nodes.ingredientInput.val());
                             self.nodes.ingredientInput.val("");
+                            return false
                         }),
                         $('&lt;button class="btn" &gt;').text("Remove").on("click", function () {
                             self.model.removeIngredient(self.nodes.ingredientInput.val());
                             self.nodes.ingredientInput.val("");
+                            return false;
                         })
                     )
                 )
