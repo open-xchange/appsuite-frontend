@@ -3249,7 +3249,7 @@ define('io.ox/office/editor/editor',
             // iterating over all cells and remove all paragraphs in the cells
             implDeleteCellRange(localPosition, [startRow, 0], [endRow, lastColumn]);
 
-            $(table).children().children().slice(startRow, endRow + 1).remove();
+            $(table).children('tbody').children().slice(startRow, endRow + 1).remove();
 
             if ($(table).children().children().length === 0) {
                 // This code should never be reached. If last row shall be deleted, deleteTable is called.
