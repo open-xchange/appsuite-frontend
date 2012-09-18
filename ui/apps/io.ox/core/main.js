@@ -37,6 +37,8 @@ define("io.ox/core/main",
             });
     };
 
+    var topbar = $('#io-ox-topbar');
+
     function initRefreshAnimation() {
 
         var count = 0, timer = null;
@@ -82,15 +84,10 @@ define("io.ox/core/main",
     setInterval(globalRefresh, 60000 * 5); // 5 minute refresh interval!
 
     function launch() {
-        // add small logo to top bar
-        $("#io-ox-topbar").append(
-            $('<div>', { id: 'io-ox-top-logo-small' })
-        );
 
         ox.on('application:launch application:resume', function (e, app) {
             var name = app.getName(),
                 id = app.getId(),
-                topbar = $("#io-ox-topbar"),
                 launcher = $();
             // remove active class
             topbar.find('.launcher').removeClass('active');
@@ -106,66 +103,74 @@ define("io.ox/core/main",
 
         ox.on('application:quit', function (e, app) {
             var id = app.getId();
-            $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').remove();
+            topbar.find('.launcher[data-app-id=' + $.escape(id) + ']').remove();
         });
 
         ox.on('application:change:title', function (e, app) {
             var id = app.getId(), title = app.getTitle();
-            $("#io-ox-topbar").find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
+            topbar.find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
         });
 
-        // sign out
-        desktop.addLauncher("right", $('<i class="icon-off icon-white">'), function (e) {
-            return logout();
-        }, gt('Sign out'));
+        ext.point("io.ox/core/topbar").extend({
+            id: 'default',
+            draw: function () {
 
-        // help
-        desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
-            require(['io.ox/help/center'], function (center) {
-                setTimeout(function () {
-                    center.toggle();
-                }, 1);
-            });
-        }, gt('Help'));
+                // logo
+                // add small logo to top bar
+                topbar.append(
+                    $('<div>', { id: 'io-ox-top-logo-small' })
+                );
 
-        // refresh
-        desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                globalRefresh();
-                return $.Deferred().resolve();
-            }, gt('Refresh'))
-            .attr("id", "io-ox-refresh-icon");
-        // refresh animation
-        initRefreshAnimation();
+                // sign out
+                desktop.addLauncher("right", $('<i class="icon-off icon-white">'), function (e) {
+                    return logout();
+                }, gt('Sign out'));
 
+                // help
+                desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
+                    require(['io.ox/help/center'], function (center) {
+                        setTimeout(function () {
+                            center.toggle();
+                        }, 1);
+                    });
+                }, gt('Help'));
 
+                // refresh
+                desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                        globalRefresh();
+                        return $.Deferred().resolve();
+                    }, gt('Refresh'))
+                    .attr("id", "io-ox-refresh-icon");
+                // refresh animation
+                initRefreshAnimation();
 
+                var addLauncher = function (app, tooltip) {
+                    var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
+                        return require([app.id + '/main'], function (m) {
+                            var app = m.getApp();
+                            launcher.attr('data-app-id', app.getId());
+                            app.launch();
+                        });
+                    }, _.isString(tooltip) ? tooltip : void(0))
+                    .attr('data-app-name', app.id);
+                };
+                // settings
+                addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
 
-        var addLauncher = function (app, tooltip) {
-            var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
-                return require([app.id + '/main'], function (m) {
-                    var app = m.getApp();
-                    launcher.attr('data-app-id', app.getId());
-                    app.launch();
+                // notifications
+                notifications.attach(desktop, "right");
+                notifications.addFaviconNotification();
+
+                // apps
+                desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
+                    return require(["io.ox/launchpad/main"], function (m) {
+                        m.show();
+                    });
                 });
-            }, _.isString(tooltip) ? tooltip : void(0))
-            .attr('data-app-name', app.id);
-        };
-        // settings
-        addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
-
-        // notifications
-        notifications.attach(desktop, "right");
-        notifications.addFaviconNotification();
-
-        // apps
-        desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
-            return require(["io.ox/launchpad/main"], function (m) {
-                m.show();
-            });
+                _(appAPI.getFavorites()).each(addLauncher);
+            }
         });
-        _(appAPI.getFavorites()).each(addLauncher);
 
-        // initialize empty desktop
         /**
          * Exemplary upsell widget
          */
@@ -173,10 +178,8 @@ define("io.ox/core/main",
             id: "upsell",
             draw: function () {
                 // does nothing - just to demo an exemplary upsell path
-                this
-                .append(
-                    $('<div>')
-                    .css({
+                this.append(
+                    $('<div>').css({
                         position: "absolute",
                         width: "270px",
                         height: "140px",
@@ -241,25 +244,38 @@ define("io.ox/core/main",
                 ox.ui.screens.show('windowmanager');
             }
         });
+
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
             location.hash = '#' + (_.getCookie('hash') || '!');
         }
+
         var def = $.Deferred(),
             autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
                     return m.split(/:/)[0] + '/main';
                 });
+
         $.when(
+                def,
                 ext.loadPlugins(),
                 require(autoLaunchModules),
                 require(['io.ox/core/api/account']).pipe(function (api) {
                     return api.all();
-                }),
-                def
+                })
             )
-            .done(function () {
+            .done(function (instantFadeOut) {
+
+                // draw top bar now
+                ext.point('io.ox/core/topbar').invoke('draw');
+
+                // help here
+                if (!ext.point('io.ox/core/topbar').isEnabled('default')) {
+                    $('#io-ox-screens').css('top', '0px');
+                    topbar.hide();
+                }
+
                 // auto launch
                 _(autoLaunch).each(function (id) {
                     // split app/call
@@ -277,21 +293,27 @@ define("io.ox/core/main",
                 });
                 // restore apps
                 ox.ui.App.restore();
+
+                if (instantFadeOut === true) {
+                    // instant fade out
+                    $("#background_loader").idle().hide();
+                }
             });
+
         var restoreLauncher = function (canRestore) {
             if (autoLaunch.length === 0 && !canRestore) {
                 drawDesktop();
-                def.resolve();
+                def.resolve(true);
+                return;
             }
             if (autoLaunch.length || canRestore || location.hash === '#!') {
-                // instant fade out
-                $("#background_loader").idle().hide();
-                def.resolve();
+                def.resolve(true);
             } else {
                 // fade out animation
                 $("#background_loader").idle().fadeOut(DURATION, def.resolve);
             }
         };
+
         ox.ui.App.canRestore()
             .done(function (canRestore) {
                 if (canRestore) {
