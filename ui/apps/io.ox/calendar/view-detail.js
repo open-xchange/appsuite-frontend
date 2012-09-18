@@ -211,11 +211,12 @@ define("io.ox/calendar/view-detail",
                     })
                     .value();
 
-
-                participants.append($("<div>")
+                var userRelatedDiv = $('<div>').addClass('user-related');
+                participants.append(userRelatedDiv);
+                userRelatedDiv.append($("<div>")
                         .addClass("io-ox-label").text("Participants"));
 
-                var plist = $("<div>").addClass("participant-list").appendTo(participants);
+                var plist = $("<div>").addClass("participant-list").appendTo(userRelatedDiv);
 
                 $.when(userAPI.getList(users), groupAPI.getList(groups), resourceAPI.getList(resources))
                 .done(function (userList, groupList, resourceList) {
@@ -244,7 +245,7 @@ define("io.ox/calendar/view-detail",
                             memberList = _(obj.members).difference(users);
                             if (memberList.length) {
                                 // new section
-                                participants
+                                userRelatedDiv
                                     .append($("<div>").addClass("group").text(obj.display_name + ":"))
                                     .append(glist = $("<div>").addClass("participant-list"));
                                 userAPI.getList(memberList)
@@ -285,6 +286,22 @@ define("io.ox/calendar/view-detail",
             }
 
             this.append(participants);
+        }
+    });
+
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 550,
+        id: 'inline-actions-participantrelated',
+        draw: function (data) {
+            var preDiv = this.find('.user-related'),
+                inline = $('<div class="calendar-participant-actions inline-actions">');
+            preDiv.after(inline);
+            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', inline, data);
+
+            inline.find('.io-ox-inline-links').prepend(
+                $('<span class="io-ox-label sublabel">').text('Participants:')
+            );
         }
     });
 

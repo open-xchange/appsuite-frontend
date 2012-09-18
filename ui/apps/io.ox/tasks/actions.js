@@ -19,15 +19,24 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     "use strict";
     var Action = links.Action;
     
+
+    new Action('io.ox/tasks/actions/newtask', {
+        id: 'newtask',
+        action: function (app) {
+            require(['io.ox/tasks/edit/main'], function (edit) {
+                edit.getApp().launch();
+            });
+        }
+    });
+    
     new Action('io.ox/tasks/actions/edit', {
         id: 'edit',
         action: function (data) {
-            /*require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch();
-            });*/
-            setTimeout(function () {
-                notifications.yell('info', gt("Under construction"));
-            }, 500);
+            require(['io.ox/tasks/edit/main'], function (edit) {
+                edit.getApp().launch().done(function () {
+                    this.preFill(data);
+                });
+            });
         }
     });
     
@@ -77,6 +86,16 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         }
     });
     
+    // toolbar
+
+    ext.point('io.ox/tasks/links/toolbar').extend(new links.Link({
+        index: 100,
+        id: 'newtask',
+        label: gt('Create new task'),
+        ref: 'io.ox/tasks/actions/newtask'
+    }));
+    
+    //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
         index: 10,
