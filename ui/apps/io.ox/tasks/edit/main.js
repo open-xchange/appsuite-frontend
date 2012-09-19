@@ -20,7 +20,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
     "use strict";
 
-    function buildApp() {
+    function createApp() {
         // application object
         var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: 'Taskedit' }),
             // app window
@@ -262,7 +262,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             
             if (data === -1) {
                 setTimeout(function () {
-                    notifications.yell("error", "All dates must be in following format: day.month.year hour:minutes");
+                    notifications.yell("error", gt("All dates must be in following format") + ": day.month.year hour:minutes");
+                }, 300);
+            } else if (data.start_date && data.end_date && data.start_date > data.end_date) {
+                setTimeout(function () {
+                    notifications.yell("error", gt("Start date must be before due date"));
                 }, 300);
             } else {
                 
@@ -317,6 +321,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             }
         };
         
+        //build data to be send
         app.buildRequestData = function (rawData) {
             
             var result = {title: rawData.title,
@@ -406,17 +411,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         
         return app;
     }
-
-    function createInstance() {
-        var currapp;
-        if (!currapp || currapp === null) {
-            currapp = buildApp();
-        }
-        
-        return currapp;
-    }
     
     return {
-        getApp: createInstance
+        getApp: createApp
     };
 });
