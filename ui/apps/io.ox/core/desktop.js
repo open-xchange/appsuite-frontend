@@ -1051,45 +1051,6 @@ define("io.ox/core/desktop",
                     win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
                 )
                 .append(
-                    // window HEAD
-                    win.nodes.head = $("<div>")
-                    .addClass("window-head")
-                    .append(
-                        // title
-                        win.nodes.title = $("<h1>")
-                        .css("width", opt.titleWidth)
-                        .addClass("window-title")
-                        .append($("<span>"))
-                    )
-                    .append(
-                        // toolbar
-                        win.nodes.toolbar = $("<div>")
-                        .css("left", opt.titleWidth)
-                        .addClass("window-toolbar")
-                    )
-                    .append(
-                        // controls
-                        win.nodes.controls = $("<div>")
-                        .addClass("window-controls")
-                        .append(
-                            // settings
-                            win.nodes.settingsButton = $("<div>")
-                            .addClass("window-control")
-                            .css({ display: 'inline-block' })
-                            .text("\u270E")
-                        )
-                        .append(
-                            // close
-                            win.nodes.closeButton = $("<div>")
-                            .addClass("window-control")
-                            .css({ display: 'inline-block' })
-                            .append(
-                                $('<a class="close">&times;</a>')
-                            )
-                        )
-                    )
-                )
-                .append(
                     // window BODY
                     win.nodes.body = $("<div>")
                     .addClass("window-body")
