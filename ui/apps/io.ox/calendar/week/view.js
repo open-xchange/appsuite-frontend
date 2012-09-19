@@ -152,7 +152,6 @@ define('io.ox/calendar/week/view',
                     delete obj[i];
                 }
             });
-            console.log('onUpdateAppointment', obj);
             this.trigger('updateAppointment', obj);
         },
 
@@ -563,7 +562,7 @@ define('io.ox/calendar/week/view',
                 for (var i = 0; i < apps.length; i++) {
                     // loop over all column positions
                     for (var pos = 0; pos < colPos.length; pos++) {
-                        if  (colPos[pos] <= apps[i].pos.start) {
+                        if  (colPos[pos] < apps[i].pos.start - 1) {
                             colPos[pos] = apps[i].pos.end;
                             apps[i].pos.index = pos;
                             break;
@@ -587,7 +586,7 @@ define('io.ox/calendar/week/view',
                         minHeight: self.cellHeight + 'px',
                         maxWidth: self.appWidth + '%',
                         left: leftWidth + '%',
-                        zIndex: Math.ceil(pos.start)
+                        zIndex: j
                     })
                     .addClass((leftWidth > 0 || (leftWidth === 0 && elWidth < self.appWidth)) ? 'border' : '')
                     .outerHeight(pos.lenght)
@@ -637,6 +636,7 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
+//                    containment: '.week-container',
                     start: function (e, ui) {
                         self.lassoMode = false;
                         self.onEnterAppointment(e);
@@ -662,9 +662,9 @@ define('io.ox/calendar/week/view',
                             .css('left', data.position.left -= data.originalPosition.left);
                         // handling on multi-drag
                         if (data.all.length > 1) {
+                            var diff = data.position.top - data.originalPosition.top;
                             if (lastDiff !== diff) {
-                                var diff = data.position.top - data.originalPosition.top;
-                                // first element
+                                // first or last element
                                 if (this === data.all.last()[0] || this === data.all.first()[0]) {
                                     var dir = lastDiff - diff;
                                     data.all.last().height(function (i, h) { return Math.min(h - dir, self.height()); });
