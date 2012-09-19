@@ -138,6 +138,8 @@ define('io.ox/core/tk/vgrid',
 
     var VGrid = function (target, options) {
 
+        options = options || {};
+
         // target node
         var node = $(target).empty().addClass('vgrid'),
             // reference for private functions
@@ -156,12 +158,29 @@ define('io.ox/core/tk/vgrid',
                     var grid = e.data.grid;
                     grid.setEditable(!grid.getEditable());
                 },
+            fnShowAll = function (e) {
+                    var grid = e.data.grid;
+                    if ($(this).prop('checked')) {
+                        grid.selection.selectAll();
+                    } else {
+                        grid.selection.selectFirst();
+                    }
+                },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    $('<a>', { href: '#' })
-                    .css('float', 'left')
-                    .append($('<i class="icon-th-list">'))
-                    .on('click', { grid: this }, fnToggleEditable)
+                    // select all
+                    options.showSelectAll === true ?
+                        $('<input type="checkbox">')
+                        .css({ 'float': 'left', 'margin-right': '13px' })
+                        .on('change', { grid: this }, fnShowAll) :
+                        $(),
+                    // show toggle
+                    options.showToggle === false ?
+                        $() :
+                        $('<a>', { href: '#' })
+                        .css('float', 'left')
+                        .append($('<i class="icon-th-list">'))
+                        .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template
@@ -223,8 +242,6 @@ define('io.ox/core/tk/vgrid',
             fnScroll,
             deserialize,
             emptyMessage;
-
-        options = options || {};
 
         // add label class
         template.node.addClass('selectable');
@@ -886,6 +903,8 @@ define('io.ox/core/tk/vgrid',
         if (options.editable) {
             this.setEditable(true);
         }
+
+        node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
     };
 
     // make Template accessible

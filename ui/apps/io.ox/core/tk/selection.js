@@ -203,7 +203,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return selectedItems[self.serialize(id)] !== undefined;
         };
 
-        select = function (id) {
+        select = function (id, quiet) {
             if (id) {
                 var key = self.serialize(id);
                 selectedItems[key] = id;
@@ -216,7 +216,9 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 if (prev === empty) {
                     prev = id;
                 }
-                self.trigger('select', key);
+                if (quiet !== true) {
+                    self.trigger('select', key);
+                }
             }
         };
 
@@ -497,6 +499,15 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.selectNext = selectNext;
+
+        this.selectAll = function () {
+            if (bHasIndex && observedItems.length) {
+                _(observedItems).each(function (obj) {
+                    select(obj, true);
+                });
+                changed();
+            }
+        };
 
         /**
          * Is selected?

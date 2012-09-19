@@ -219,9 +219,6 @@ define("io.ox/core/extPatterns/links",
         // create & add node first, since the rest is async
         var node = $parent;
         drawLinks(options, new Collection(context), node, context, args, false);
-
-        // Padding does'nt look good with this.
-        $parent.parent().addClass('btn-toolbar');
         return $parent;
     };
 
