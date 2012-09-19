@@ -1,7 +1,35 @@
-@inner: 128px;
-@outerWidth: 138px;
-@outer: 175px;
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.vertical-gradient(@startColor: #828282, @endColor: #333333) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
+}
+
 .files-iconview {
+
+    @innerHeight:   128px;
+    @innerWidth:    128px;
+    @outerHeight:   175px;
+    @outerWidth:    138px;
+
     position:absolute;
     overflow:auto;
     left:0;
@@ -9,38 +37,35 @@
     top:0;
     bottom:0;
 
+    .vertical-gradient(#828282, #333333);
+
     .file-icon {
         position:relative;
-        height:@outer;
+        height:@outerHeight;
         width:@outerWidth;
-        max-height:@outer;
+        max-height:@outerHeight;
         max-width:@outerWidth;
         margin-left:30px;
         margin-top:30px;
 
-
         .wrap {
             position:relative;
-            height:@inner;
+            height:@innerHeight;
             width:@outerWidth;
-            max-height:@inner;
+            max-height:@innerHeight;
             max-width:@outerWidth;
+
             img {
                 position:absolute;
-                top:0;
                 bottom:0;
-                margin:auto
-            }
-            img.file-generic {
-                opacity:0.2;
+                top: auto;
+                left: 0;
+                right: 0;
+                margin: 0 auto 0 auto;
             }
 
-            .file-mimetype {
-                position:absolute;
-                top:0;
-                bottom:0;
-                margin:auto;
-                height:14px;
+            img.file-generic {
+                opacity:0.2;
             }
         }
 
@@ -49,35 +74,14 @@
             position:absolute;
             bottom:0;
             word-wrap:break-word;
-            width:@inner;
-            max-width:@inner;
+            width:@innerWidth;
+            max-width:@innerWidth;
             vertical-align:top;
             height:37px;
             display:block;
             font-size:14px;
+            text-shadow: 0 0 3px black;
+            color: white;
         }
     }
-}
-
-.files-iconview {
-    background: rgb(130,130,130); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(130,130,130,1) 0%, rgba(51,51,51,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(130,130,130,1)), color-stop(100%,rgba(51,51,51,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(130,130,130,1) 0%,rgba(51,51,51,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(130,130,130,1) 0%,rgba(51,51,51,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(130,130,130,1) 0%,rgba(51,51,51,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(130,130,130,1) 0%,rgba(51,51,51,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#828282', endColorstr='#333333',GradientType=0 ); /* IE6-9 */
-}
-
-.files-iconview .file-icon .wrap img {
-    top: auto;
-    left: 0;
-    right: 0;
-    margin: 0 auto 0 auto;
-}
-
-.files-iconview .file-icon .title {
-    text-shadow: 0 0 3px black;
-    color: white;
 }
