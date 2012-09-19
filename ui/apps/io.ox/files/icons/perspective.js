@@ -40,13 +40,6 @@ define('io.ox/files/icons/perspective',
 
             iconview = $('<div class="files-iconview">')
                 .on('click', '.file-icon', function (data) {
-                    $('.files-iconview > .file-icon').removeClass('selected');
-                    $(this).addClass('selected');
-                    api.get({id: $(data.currentTarget).attr('data-obj-id')}).done(function (file) {
-                        app.currentFile = file;
-                    });
-                })
-                .on('dblclick', '.file-icon', function (data) {
                     that.dialog.show(data, function (popup, e, target) {
                         api.get({id: $(data.currentTarget).attr('data-obj-id')}).done(function (file) {
                             var currentDetailView = viewDetail.draw(file);
@@ -69,16 +62,17 @@ define('io.ox/files/icons/perspective',
             drawIcon = function (file) {
                 var preview = $('<div class="file-icon pull-left">')
                     .attr('data-obj-id', file.id);
-                var wrap = $('<div class="wrap img-polaroid">');
+                var wrap = $('<div class="wrap">');
                 if (file.file_mimetype.match(/^image\/[gif|png|jpe?g|gmp]/i)) {
                     var src = api.getIcon(file);
-                    preview.append(wrap.append($('<img>', { src: src, alt: file.title })));
+                    preview.append(wrap.append($('<img>', { src: src, alt: file.title }).addClass('img-polaroid')));
                 }
                 else
                 {
                     preview.append(wrap.append(
-                        $('<span class="file-mimetype label">')
-                            .text(file.file_mimetype)
+                        //$('<span class="file-mimetype label">')
+                        //    .text(file.file_mimetype)
+                        $('<img>', { src: ox.base + '/apps/themes/default/icons/file-generic.png', alt: file.title }).addClass('file-generic')
                     ));
                 }
                 preview.append($('<div class="title">').text(

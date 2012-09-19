@@ -19,7 +19,7 @@ define('io.ox/calendar/actions',
 
     'use strict';
 
-    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown;
+    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown, Button = links.Button, ButtonGroup = links.ButtonGroup;
 
     // Actions
     new Action('io.ox/calendar/actions/switch-to-list-view', {
@@ -235,53 +235,59 @@ define('io.ox/calendar/actions',
 
     // Links - toolbar
 
-    new Link('io.ox/calendar/links/toolbar', {
+    ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
         label: gt('Create'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
-    });
+    }));
 
-    new Dropdown('io.ox/calendar/links/toolbar', {
+    new ButtonGroup('io.ox/calendar/links/toolbar', {
         id: 'view',
         index: 200,
         label: gt('View')
     });
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'day',
         index: 100,
         label: gt('Day'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-day-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
         label: gt('Work Week'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'fullweek',
         index: 300,
         label: gt('Week'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'month',
         index: 400,
         label: gt('Month'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'list',
         index: 500,
         label: gt('List'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
+    }));
 
     // FIXME: should only be visible if rights are ok
     ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({

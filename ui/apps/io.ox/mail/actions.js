@@ -411,10 +411,11 @@ define('io.ox/mail/actions',
 
     // toolbar
 
-    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/mail/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'compose',
         label: gt('Compose new mail'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/mail/actions/compose'
     }));
 

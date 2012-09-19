@@ -1,55 +1,87 @@
-@inner: 128px;
-@outer: 175px;
-.files-iconview .selected .wrap {
-    background: #ddd;
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.vertical-gradient(@startColor: #828282, @endColor: #333333) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
 }
-.file-icon {
-    position:relative;
-    height:@outer;
-    width:@inner;
-    max-height:@outer;
-    max-width:@inner;
-    margin-left:30px;
-    margin-top:30px;
 
-    .img-polaroid {
-        padding:0;
-    }
+.files-iconview {
 
-    .wrap {
+    @innerHeight:   128px;
+    @innerWidth:    128px;
+    @outerHeight:   175px;
+    @outerWidth:    138px;
+
+    position:absolute;
+    overflow:auto;
+    left:0;
+    right:0;
+    top:0;
+    bottom:0;
+
+    .vertical-gradient(#828282, #333333);
+
+    .file-icon {
         position:relative;
-        height:@inner;
-        width:@inner;
-        max-height:@inner;
-        max-width:@inner;
-        background:-moz-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
-        background:-webkit-linear-gradient(top, #ddd 0, #eee 15%, #fff 40%, #fff 70%, #eee 100%);
-        img {
-            position:absolute;
-            top:0;
-            bottom:0;
-            margin:auto
+        height:@outerHeight;
+        width:@outerWidth;
+        max-height:@outerHeight;
+        max-width:@outerWidth;
+        margin-left:30px;
+        margin-top:30px;
+
+        .wrap {
+            position:relative;
+            height:@innerHeight;
+            width:@outerWidth;
+            max-height:@innerHeight;
+            max-width:@outerWidth;
+
+            img {
+                position:absolute;
+                bottom:0;
+                top: auto;
+                left: 0;
+                right: 0;
+                margin: 0 auto 0 auto;
+            }
+
+            img.file-generic {
+                opacity:0.2;
+            }
         }
 
-        .file-mimetype {
+        .title {
+            text-align:center;
             position:absolute;
-            top:0;
             bottom:0;
-            margin:auto;
-            height:14px;
+            word-wrap:break-word;
+            width:@innerWidth;
+            max-width:@innerWidth;
+            vertical-align:top;
+            height:37px;
+            display:block;
+            font-size:14px;
+            text-shadow: 0 0 3px black;
+            color: white;
         }
-    }
-
-    .title {
-        position:absolute;
-        bottom:0;
-        word-wrap:break-word;
-        width:@inner;
-        max-width:@inner;
-        vertical-align:top;
-        height:37px;
-        display:block;
-        /* text-shadow: 0px 1px 1px #555; */
-        font-size:14px;
     }
 }
