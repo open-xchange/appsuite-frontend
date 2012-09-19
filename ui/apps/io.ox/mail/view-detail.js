@@ -757,6 +757,16 @@ define('io.ox/mail/view-detail',
             this.addClass('view')
             .attr('data-cid', data.folder_id + '.' + data.id)
             .append(that.getContent(data), $('<div>').addClass('mail-detail-clear-both'));
+
+            var content = this.find('.content');
+
+            setTimeout(function () {
+                var scrollHeight = content.get(0).scrollHeight;
+                if (scrollHeight > content.height()) {
+                    content.css('height', scrollHeight + 'px');
+                }
+                content = null;
+            }, 0);
         }
     });
 
