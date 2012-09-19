@@ -470,6 +470,17 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     outline: 0;
 }
 
+.window-toolbar .btn-group + .btn-group {
+    margin-left: 15px;
+}
+
+.window-toolbar .btn-primary + .btn-primary {
+    margin-left: 10px;
+}
+.window-toolbar .btn-primary + .btn-group {
+    margin-left: 10px;
+}
+
 .window-toolbar a.btn-primary,
 .window-toolbar a.btn-primary:hover {
     color: white;
@@ -533,7 +544,7 @@ a.button.default-action {
 }
 
 /* avoid bootstrap's form margins */
-.window-controls form { margin-bottom: 0; } 
+.window-controls form { margin-bottom: 0; }
 .window-controls label { margin-bottom: 0; }
 
 .window-control {
@@ -554,11 +565,10 @@ a.button.default-action {
 
 .window-body {
     position: absolute;
+    top: 50px;
     right: 0px;
     bottom: 0px;
     left: 0px;
-/*    top: 50px; */
-    top: 0;
     white-space: normal;
     z-index: 10;
 }
@@ -622,7 +632,6 @@ a.button.default-action {
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
     z-index: 1;
-    bottom: 34px;
 }
 
 .vgrid, .vgrid:focus {
@@ -632,13 +641,38 @@ a.button.default-action {
 .vgrid-toolbar {
     position: absolute;
     right: 0;
-    bottom: 0;
     left: 0;
+    bottom: 0;
     line-height: 18px;
     padding: 8px 13px 8px 13px;
-    border-top: 1px solid mix(@color, @background, 200%/15);
     background-color: #f5f5f5;
     z-index: 2;
+}
+
+.vgrid.top-toolbar .vgrid-toolbar {
+    top: 0;
+    border-bottom: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.bottom-toolbar .vgrid-toolbar {
+    bottom: 0;
+    border-top: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.top-toolbar .vgrid-scrollpane {
+    top: 35px;
+}
+
+.vgrid.bottom-toolbar .vgrid-scrollpane {
+    bottom: 35px;
+}
+
+.vgrid.bottom-toolbar .dropdown-menu {
+    top: auto; bottom: 110%; right: 0; left: auto;
+}
+
+.vgrid.top-toolbar .dropdown-menu {
+    top: 110%; bottom: auto; right: 0; left: auto;
 }
 
 .vgrid-cell {
@@ -1422,6 +1456,5 @@ div.external-user-image {
 @media screen and (min-height: 800px) {
     .window-head { height: 59px; }
     .window-title, .window-toolbar, .window-controls { top: 15px; }
-/*    .window-body { top: 60px; } */
-      .window-body { top: 0; }
+    .window-body { top: 60px; }
 }
