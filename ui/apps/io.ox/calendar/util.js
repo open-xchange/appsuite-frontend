@@ -14,7 +14,7 @@
 define("io.ox/calendar/util",
     ["io.ox/core/date", "gettext!io.ox/calendar/calendar",
      'io.ox/core/api/user', 'io.ox/contacts/api',
-     'io.ox/core/api/group'], function (date, gettext, userAPI, contactAPI, groupAPI) {
+     'io.ox/core/api/group', 'io.ox/core/config'], function (date, gettext, userAPI, contactAPI, groupAPI, config) {
 
     "use strict";
 
@@ -510,18 +510,19 @@ define("io.ox/calendar/util",
             });
         },
 
-        createArrayOfRecipients: function (participants, organizer, def) {
+        createArrayOfRecipients: function (participants, def) {
             var arrayOfRecipients = [],
                 arrayOfIds = [],
                 idsFromGroupMembers = [],
-                arrayOfGroupMembers = [];
+                arrayOfGroupMembers = [],
+                currentUser = config.get('identifier');
 
             _.each(participants, function (single) {
-                if (single.type === 5 && single.mail !== organizer) {
+                if (single.type === 5) {
                     arrayOfRecipients.push([single.display_name, single.mail]);
                 } else if (single.type === 2) {
                     idsFromGroupMembers.push(single.id);
-                } else if (single.type === 1) {
+                } else if (single.type === 1 && single.id !== currentUser) {
                     arrayOfIds.push(single.id);
                 }
             });
@@ -529,16 +530,14 @@ define("io.ox/calendar/util",
             that.resolveGroupMembers(idsFromGroupMembers, arrayOfGroupMembers, arrayOfIds);
 
             _.each(arrayOfGroupMembers, function (single) {
-                if (single.mail !== organizer) {
+                if (single.id !== currentUser) {
                     arrayOfRecipients.push([single.display_name, single.mail]);
                 }
             });
 
             userAPI.getList(arrayOfIds).done(function (obj) {
                 _.each(obj, function (single) {
-                    if (single.email1 !== organizer) {
-                        arrayOfRecipients.push([single.display_name, single.email1]);
-                    }
+                    arrayOfRecipients.push([single.display_name, single.email1]);
                 });
                 def.resolve(
                     arrayOfRecipients
@@ -557,7 +556,8 @@ define("io.ox/calendar/util",
                 idsFromGroupMembers = [],
                 collectedIdsFromGroups = [],
                 returnArray = [],
-                arrayOfIds = [];
+                arrayOfIds = [],
+                currentUser = config.get('identifier');
 
             _.each(participants, function (single) {
                 if (single.type === 2) {
@@ -577,13 +577,15 @@ define("io.ox/calendar/util",
 
             userAPI.getList(arrayOfIds).done(function (obj) {
                 _.each(obj, function (single) {
-                    returnArray.push({
-                        display_name: single.display_name,
-                        folder_id: single.folder_id,
-                        id: single.id,
-                        mail: single.email1,
-                        mail_field: 1
-                    });
+                    if (single.id !== currentUser) {
+                        returnArray.push({
+                            display_name: single.display_name,
+                            folder_id: single.folder_id,
+                            id: single.id,
+                            mail: single.email1,
+                            mail_field: 1
+                        });
+                    }
                 });
             });
 
