@@ -378,6 +378,7 @@ define("io.ox/core/desktop",
                 // update hash
                 if (opt.name !== _.url.hash('app')) {
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                 }
                 if (opt.name) {
@@ -416,6 +417,7 @@ define("io.ox/core/desktop",
                     // update hash
                     _.url.hash('app', null);
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                     // remove from list
                     ox.ui.running = _(ox.ui.running).without(self);
@@ -558,6 +560,7 @@ define("io.ox/core/desktop",
                 }
                 // set perspective
                 app.getWindow().setPerspective(name);
+                _.url.hash('perspective', name);
                 // render?
                 if (!rendered) {
                     this.render(app);
@@ -1048,19 +1051,9 @@ define("io.ox/core/desktop",
                     "data-window-nr": guid
                 })
                 .append(
-                    win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
-                )
-                .append(
-                    // window BODY
-                    win.nodes.body = $("<div>")
-                    .addClass("window-body")
-                    .append(
-                        // quick settings
-                        win.nodes.settings = $("<div>")
-                        .hide()
-                        .addClass("window-settings")
-                        .html("<h2>Each window can have a quick settings area</h2>")
-                    )
+                    $('<div class="window-container-center">')
+                    .data({ width: width + unit })
+                    .css({ width: width + unit })
                     .append(
                         // blocker
                         win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
@@ -1150,7 +1143,7 @@ define("io.ox/core/desktop",
                 $('<form>')
                 .on('submit', false)
                 .addClass('form-search')
-                .css({ display: 'inline-block', verticalAlign: 'top' })
+                .css({ 'float': 'right' })
                 .append(
                     $('<label>', { 'for': searchId })
                     .append(
@@ -1221,21 +1214,12 @@ define("io.ox/core/desktop",
 
                 // add close handler
                 if (opt.close === true) {
-                    win.nodes.closeButton.on("click", close);
+                    win.nodes.closeButton.show().on("click", close);
                     win.setQuitOnClose(true);
-                } else {
-                    win.nodes.closeButton.hide();
                 }
 
                 // set title
                 win.setTitle(opt.title);
-
-                // quick settings?
-                if (opt.settings) {
-                    $.quickSettings(win.nodes.main, win.nodes.settings, win.nodes.settingsButton);
-                } else {
-                    win.nodes.settingsButton.hide();
-                }
             }
 
             // inc
