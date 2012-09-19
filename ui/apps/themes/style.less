@@ -44,7 +44,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar {
     bottom: auto;
     height: 40px;
-    overflow: hidden;
     z-index: 2;
     /* --- */
     background-color: #2C2C2C;
@@ -55,6 +54,11 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     background-image: -o-linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-image: linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-repeat: repeat-x;
+}
+
+#io-ox-topbar .launchers {
+    overflow: hidden;
+    float: left;
 }
 
 #io-ox-top-logo-small {
@@ -99,7 +103,15 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar .launcher.right {
     float: right;
     display: inline-block !important;
+    overflow: visible;
 }
+
+#io-ox-topbar .launcher.right .dropdown-menu {
+    left: auto; right: 0; text-align: left;
+}
+
+#io-ox-topbar .launcher.right .dropdown-menu a { color: @link-color; }
+#io-ox-topbar .launcher.right .dropdown-menu li:hover a { color: white; }
 
 #io-ox-topbar .launcher.hover {
     color: @topbar-launcher-color-hover;

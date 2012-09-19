@@ -28,7 +28,8 @@ define("io.ox/core/desktop",
     // ref to core screen
     var core = $("#io-ox-core"),
         // top bar
-        topBar = $("#io-ox-topbar"),
+        topbar = $("#io-ox-topbar"),
+        launchers = topbar.find('.launchers'),
         // add launcher
         addLauncher = function (side, label, fn, tooltip) {
             // construct
@@ -86,9 +87,9 @@ define("io.ox/core/desktop",
             } else {
                 // just add
                 if (side === "left") {
-                    node.appendTo(topBar);
+                    node.appendTo(launchers);
                 } else {
-                    node.addClass("right").appendTo(topBar);
+                    node.addClass("right").appendTo(topbar);
                 }
             }
 
