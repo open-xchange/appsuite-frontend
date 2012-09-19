@@ -31,7 +31,7 @@
  .info-wrapper .start-date-field,
  .info-wrapper .alarm-date-field {
  	margin-bottom: 9px;
- 	width: 200px;
+ 	width: 150px;
  	float: right;
  }
  
@@ -68,5 +68,42 @@
     line-height: 30px;
     margin-bottom: 9px;
     width: 100%;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper .task-edit-picker {
+ 	margin-left: 5px;
+ 	width: 45px;
+ 	float: right;
+ }
+ 
+ //PickerPopup
+ 
+ .picker-day {
+ 	border: 1px solid;
+ 	fontsize: 16px; 
+ }
+ 
+ .picker-table {
+ 	width: 100%;
+ }
+ 
+ .picker-label {
+ 	left: 50%;
+ 	position: absolute;
+ }
+ 
+ .picker-button-left {
+ 	float: left;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picker-button-right {
+ 	float: right;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picked-day {
+ 	background-color: #0070FF;
+ 	color: #FFFFFF;
  }
  

@@ -165,6 +165,10 @@
     margin-bottom: 1em;
 }
 
+.io-ox-mail-write .section[data-section='All']{
+	font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
 .io-ox-mail-write-contact {
     height: 3em;
 }
