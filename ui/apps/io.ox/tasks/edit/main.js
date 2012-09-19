@@ -15,7 +15,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                  'io.ox/core/date',
                                  'io.ox/core/extensions',
                                  'io.ox/core/notifications',
-                                 'less!io.ox/tasks/edit/style.css'], function (gt, date, ext, notifications) {
+                                 'io.ox/tasks/edit/pickerPopup',
+                                 'less!io.ox/tasks/edit/style.css'], function (gt, date, ext, notifications, picker) {
 
     "use strict";
 
@@ -38,6 +39,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             alarmDate,
             //buttons
             saveButton,
+            startDateButton,
+            endDateButton,
+            alarmButton,
             //storage container Object
             editTask = {};
             
@@ -77,9 +81,63 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .addClass("btn btn-primary task-edit-save")
                 .text(gt("save"))
                 .on('click', function (e) {
-                    e.preventDefault();
+                    e.stopPropagation();
                     ext.point('io.ox/tasks/edit/actions/save').invoke('action', null, app, app.updateData());
                 });
+            
+            startDateButton = $('<button>')
+                .addClass("btn task-edit-picker")
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    picker.create().done(function (timevalue) {
+                        console.log(timevalue);
+                        if (timevalue !== -1) {
+                            if (!editTask.start_date) {
+                                editTask.start_date = new date.Local(parseInt(timevalue, 10));
+                            } else {
+                                editTask.start_date.setTime(parseInt(timevalue, 10));
+                            }
+                            startDate.val(editTask.start_date.format());
+                        }
+                    });
+                })
+                .append($('<i>').addClass('icon-calendar'));
+            
+            endDateButton = $('<button>')
+                .addClass("btn task-edit-picker")
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    picker.create().done(function (timevalue) {
+                        console.log(timevalue);
+                        if (timevalue !== -1) {
+                            if (!editTask.end_date) {
+                                editTask.end_date = new date.Local(parseInt(timevalue, 10));
+                            } else {
+                                editTask.end_date.setTime(parseInt(timevalue, 10));
+                            }
+                            endDate.val(editTask.end_date.format());
+                        }
+                    });
+                })
+                .append($('<i>').addClass('icon-calendar'));
+            
+            alarmButton = $('<button>')
+                .addClass("btn task-edit-picker")
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    picker.create().done(function (timevalue) {
+                        console.log(timevalue);
+                        if (timevalue !== -1) {
+                            if (!editTask.alarm) {
+                                editTask.alarm = new date.Local(parseInt(timevalue, 10));
+                            } else {
+                                editTask.alarm.setTime(parseInt(timevalue, 10));
+                            }
+                            alarmDate.val(editTask.alarm.format());
+                        }
+                    });
+                })
+                .append($('<i>').addClass('icon-calendar'));
             
             status = $('<select>').addClass("status-selector");
             status.append(
@@ -109,10 +167,13 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     $('<span>').text(gt("Priority")).addClass("task-edit-info-label"),
                     priority, $('<br>'),
                     $('<span>').text(gt("Start date")).addClass("task-edit-info-label"),
+                    startDateButton,
                     startDate, $('<br>'),
                     $('<span>').text(gt("Due date")).addClass("task-edit-info-label"),
+                    endDateButton,
                     endDate, $('<br>'),
                     $('<span>').text(gt("Reminder date")).addClass("task-edit-info-label"),
+                    alarmButton,
                     alarmDate,
                     $('<div>').html("All dates must be in following format:<br>" +
                                     "for Germany: day.month.year hour:minutes<br>" +
@@ -233,7 +294,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                 api.create(reqData).done(function (reqResult) {
                                     app.quit().done(function () {
                                         reqResult.folder_id = reqData.folder_id;
-                                        //api.trigger("select", reqResult);
                                     });
                                 }).fail(function () {
                                 });

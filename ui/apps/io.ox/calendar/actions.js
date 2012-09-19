@@ -76,7 +76,7 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/sendmail', {
         action: function (params) {
             var def = $.Deferred();
-            util.createArrayOfRecipients(params.participants, params.organizer, def);
+            util.createArrayOfRecipients(params.participants, def);
             def.done(function (arrayOfRecipients) {
                 require(['io.ox/mail/write/main'], function (m) {
                     m.getApp().launch().done(function () {
