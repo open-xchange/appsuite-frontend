@@ -141,16 +141,18 @@ define('io.ox/contacts/actions',
 
     // toolbar
 
-    ext.point('io.ox/contacts/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/contacts/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
         label: gt('Add contact'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/contacts/main/create'
     }));
 
-    ext.point('io.ox/contacts/links/toolbar').extend(new links.Link({
-        index: 100,
+    ext.point('io.ox/contacts/links/toolbar').extend(new links.Button({
+        index: 200,
         id: 'create-dist',
+        cssClasses: 'btn btn-primary',
         label: gt('Add distribution list'),
         ref: 'io.ox/contacts/main/distrib'
     }));
