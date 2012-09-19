@@ -19,11 +19,12 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
      'io.ox/office/editor/oxoselection',
+     'io.ox/office/editor/table',
      'io.ox/office/editor/image',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Image, Position, Undo, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Position, Undo, DocumentStyles) {
 
     'use strict';
 
@@ -687,15 +688,16 @@ define('io.ox/office/editor/editor',
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.copyColumn = function () {
+        this.insertColumn = function () {
             var selection = getSelection(),
                 start = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
-                end = start + 1,
-                position = _.copy(selection.endPaM.oxoPosition, true);
+                position = _.copy(selection.endPaM.oxoPosition, true),
+                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
+                insertmode = 'behind',
+                gridPosition = start, // simplification, valid only if colspan === 1 for each cell
+                tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
-
-            var newOperation = { name: OP_COLUMN_COPY, position: tablePos, start: start, end: end };
+            var newOperation = { name: OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -1731,7 +1733,7 @@ define('io.ox/office/editor/editor',
                 //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 // }
-                implInsertColumn(operation.position, operation.start, operation.end);
+                implInsertColumn(operation.position, operation.gridposition, operation.tablegrid, operation.insertmode);
             }
             else if (operation.name === OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2993,15 +2995,17 @@ define('io.ox/office/editor/editor',
 
             var position = _.copy(pos, true),
                 colgroup = $('<colgroup>'),
-                colCount = attrs.tablegrid.length;
+                colCount = attrs.tablegrid.length,
+                tableWidth = 0;
 
             for (var i = 0; i < attrs.tablegrid.length; i++) {
-                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm // removing 360 asap
+                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm
+                tableWidth += attrs.tablegrid[i];
                 colgroup.append($('<col>').css('width', width));
             }
 
             // insert the table into the document
-            var table = $('<table>').data('columns', colCount).append(colgroup),
+            var table = $('<table>').data({'columns': colCount, 'width': tableWidth, 'grid': attrs.tablegrid}).append(colgroup),
                 domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
@@ -3437,7 +3441,7 @@ define('io.ox/office/editor/editor',
             implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-            allRows = $(table).children().children();
+            allRows = $(table).children('tbody').children();
 
             allRows.each(
                 function (i, elem) {
@@ -3445,14 +3449,14 @@ define('io.ox/office/editor/editor',
                 }
             );
 
-            if ($(table).children().children().children().length === 0) {   // no more columns
+            if ($(table).children('tbody').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
                 $(table).remove();
                 paragraphs = editdiv.children();
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastColInFirstRow = $(table).children().children().first().children().length - 1;
+                var lastColInFirstRow = $(table).children('tbody').children().first().children().length - 1;
                 if (endCol > lastColInFirstRow) {
                     endCol = lastColInFirstRow;
                 }
@@ -3497,7 +3501,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertColumn(pos, startRow, rows) {
+        function implInsertColumn(pos, gridposition, tablegrid, insertmode) {
 
             var localPosition = _.copy(pos, true);
 
@@ -3506,8 +3510,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                allRows = $(table).children().children(),
-                insertAfter = startRow - 1,
+                allRows = $(table).children('tbody').children(),
                 // prototype elements for cell and paragraph
                 paragraph = $('<p>'),
                 cell = $('<td>').append(paragraph);
@@ -3518,17 +3521,25 @@ define('io.ox/office/editor/editor',
             allRows.each(
                 function (i, elem) {
                     var cellClone = cell.clone(true);
-                    if (insertAfter === -1) {
-                        cellClone.insertBefore($(elem).children().get(0));
+                    if (insertmode === 'behind') {
+                        cellClone.insertAfter($(elem).children().get(gridposition));
                     } else {
-                        cellClone.insertAfter($(elem).children().get(insertAfter));
+                        cellClone.insertBefore($(elem).children().get(gridposition));
                     }
                 }
             );
 
+            // setting new widths of the grid elements (saved in tablegrid)
+            var colgroup = $(table).children('colgroup').append($('<col>')), // adding one element to colgroup
+                allCols = colgroup.children('col');
+
+            allCols.each(function (i) {
+                $(this).css('width', (tablegrid[i] / 100) + 'mm');
+            });
+
             // Setting cursor to first position in table
             localPosition.push(0);
-            localPosition.push(insertAfter + 1);
+            localPosition.push(gridposition);
             localPosition.push(0);
             localPosition.push(0);
 

@@ -128,7 +128,7 @@ define('io.ox/office/editor/controller',
                 },
                 'table/insert/column': {
                     chain: 'chain/table',
-                    set: function () { editor.copyColumn(); }
+                    set: function () { editor.insertColumn(); }
                 },
                 'table/delete/row': {
                     chain: 'chain/table',
