@@ -52,7 +52,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks',
                 title: "Task edit",
-                toolbar: true,
+                toolbar: false,
                 close: true
             });
             
@@ -90,12 +90,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
-                        console.log(timevalue);
                         if (timevalue !== -1) {
                             if (!editTask.start_date) {
-                                editTask.start_date = new date.Local(parseInt(timevalue, 10));
+                                editTask.start_date = new date.Local(timevalue);
                             } else {
-                                editTask.start_date.setTime(parseInt(timevalue, 10));
+                                editTask.start_date.setTime(timevalue);
                             }
                             startDate.val(editTask.start_date.format());
                         }
@@ -108,12 +107,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
-                        console.log(timevalue);
                         if (timevalue !== -1) {
                             if (!editTask.end_date) {
-                                editTask.end_date = new date.Local(parseInt(timevalue, 10));
+                                editTask.end_date = new date.Local(timevalue);
                             } else {
-                                editTask.end_date.setTime(parseInt(timevalue, 10));
+                                editTask.end_date.setTime(timevalue);
                             }
                             endDate.val(editTask.end_date.format());
                         }
@@ -126,12 +124,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
-                        console.log(timevalue);
                         if (timevalue !== -1) {
                             if (!editTask.alarm) {
-                                editTask.alarm = new date.Local(parseInt(timevalue, 10));
+                                editTask.alarm = new date.Local(timevalue);
                             } else {
-                                editTask.alarm.setTime(parseInt(timevalue, 10));
+                                editTask.alarm.setTime(timevalue);
                             }
                             alarmDate.val(editTask.alarm.format());
                         }
@@ -253,7 +250,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
                 
                 //stop being busy
-                node.busy(false);
+                node.idle();
             }
         };
         
