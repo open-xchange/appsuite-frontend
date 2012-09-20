@@ -23,9 +23,9 @@
     filter: alpha(opacity=@opacity-percent);
 }
 
-.debug-highlight-mixin(@border-color, @fill-color) {
-    outline: thin @border-color solid;
-    background-color: @fill-color;
+.debug-highlight-mixin(@color) {
+    outline: thin @color solid;
+    background-color: fade(@color, 20%);
 }
 
 .io-ox-office-title {
@@ -148,15 +148,15 @@
         &.rich.debug-highlight {
 
             p {
-                .debug-highlight-mixin(#8f8, #efe);
+                .debug-highlight-mixin(#8f8);
             }
 
             span, b, i, u, strong, em {
-                .debug-highlight-mixin(#88f, #eef);
+                .debug-highlight-mixin(#88f);
             }
 
             img, table {
-                .debug-highlight-mixin(#f88, #fee);
+                .debug-highlight-mixin(#f88);
                 outline-offset: 2px;
             }
         }
