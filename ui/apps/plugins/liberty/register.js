@@ -1,23 +1,23 @@
-define("3rd.party/noms/register", ["io.ox/core/extensions"], function (ext) {
+define("plugins/liberty/register", ["io.ox/core/extensions"], function (ext) {
     "use strict";
     ext.point("io.ox/core/apps/category").extend({
         id: 'noms',
         title: 'Fujitsu BSS',
         count: 2,
         group: 'Fujitsu',
-        viewModule: '3rd.party/noms/view-bss'
+        viewModule: 'plugins/liberty/view-bss'
     });
         
     ext.point("io.ox/core/apps/installed").extend({
-        id: "3rd.party/noms/photoshop",
-        icon: ox.base + '/apps/3rd.party/noms/images/PhotoshopIcon.png',
+        id: "plugins/liberty/photoshop",
+        icon: ox.base + '/apps/plugins/liberty/images/PhotoshopIcon.png',
         title: "Adobe Photoshop",
         description: "Adobe Photoshop",
         visible: true
     });
     
     ext.point("io.ox/core/apps/installed").extend({
-        id: "3rd.party/noms/webOffice",
+        id: "plugins/liberty/webOffice",
         icon: ox.base + '/apps/io.ox/core/images/default.png',
         title: "Trve Office",
         description: "Trve Office",

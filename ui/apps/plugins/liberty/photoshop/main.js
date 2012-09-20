@@ -1,8 +1,8 @@
-define("3rd.party/noms/photoshop/main", function () {
+define("plugins/liberty/photoshop/main", function () {
     "use strict";
     
     // application object
-    var app = ox.ui.createApp({ name: '3rd.party/noms/photoshop' }),
+    var app = ox.ui.createApp({ name: 'plugins/liberty/photoshop' }),
         // app window
         win;
     // launcher
@@ -10,16 +10,16 @@ define("3rd.party/noms/photoshop/main", function () {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            name: '3rd.party/noms/photoshop',
+            name: 'plugins/liberty/photoshop',
             title: "Photoshop",
             toolbar: false,
             search: false
         }));
         
         app.images = [
-            ox.base + '/apps/3rd.party/noms/images/Photoshop1.png',
-            ox.base + '/apps/3rd.party/noms/images/Photoshop2.png',
-            ox.base + '/apps/3rd.party/noms/images/Photoshop3.png'
+            ox.base + '/apps/plugins/liberty/images/Photoshop1.png',
+            ox.base + '/apps/plugins/liberty/images/Photoshop2.png',
+            ox.base + '/apps/plugins/liberty/images/Photoshop3.png'
         ];
         
         app.index = -1;
