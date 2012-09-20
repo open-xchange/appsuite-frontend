@@ -74,6 +74,8 @@ define("io.ox/core/api/factory",
 
         var api = {
 
+            options: o,
+
             getAll: function (options, useCache, cache, processResponse) {
 
                 // merge defaults for "all"
@@ -251,10 +253,10 @@ define("io.ox/core/api/factory",
                 return api.prepareRemove(ids).pipe(function () {
                     // remove from caches first
                     return api.updateCachesAfterRemove(ids).pipe(function () {
-                        
+
                         // delete on server?
                         if (local !== true) {
-                            
+
                             return http.PUT({
                                 module: o.module,
                                 params: opt,
