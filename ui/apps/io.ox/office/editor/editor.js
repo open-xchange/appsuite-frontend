@@ -2016,7 +2016,8 @@ define('io.ox/office/editor/editor',
             if (para === undefined) {
                 // Set attr to current selection
                 var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    updateFromBrowser = buttonEvent,
+                    // updateFromBrowser = buttonEvent,
+                    updateFromBrowser = false,
                     selection = getSelection(updateFromBrowser, allowNoneTextNodes);
 
                 if (selection.hasRange()) {
@@ -2811,6 +2812,8 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
+
+                    attributes['vertical-align'] = 'baseline';  // only important for inline images, text should be aligned to baseline of image
                     var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
 
                     if (verticalSpanSide !== null) {
@@ -3018,6 +3021,10 @@ define('io.ox/office/editor/editor',
                 domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
+
+            if (tableWidth > 0) {
+                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+            }
 
             if (domPosition) {
                 domParagraph = domPosition.node;
@@ -3268,7 +3275,7 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastRow = $(table).children().children().length - 1;
+                var lastRow = $(table).children('tbody').children().length - 1;
                 if (endRow > lastRow) {
                     endRow = lastRow;
                 }
@@ -3469,8 +3476,8 @@ define('io.ox/office/editor/editor',
                 tableWidth += tablegrid[i];
             }
 
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
             $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
-
 
             if ($(table).children('tbody').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
@@ -3562,6 +3569,7 @@ define('io.ox/office/editor/editor',
                 tableWidth += tablegrid[i];
             });
 
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
             $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
 
             // Setting cursor to first position in table
