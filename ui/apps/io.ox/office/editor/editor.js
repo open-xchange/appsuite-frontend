@@ -2016,7 +2016,8 @@ define('io.ox/office/editor/editor',
             if (para === undefined) {
                 // Set attr to current selection
                 var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    updateFromBrowser = buttonEvent,
+                    // updateFromBrowser = buttonEvent,
+                    updateFromBrowser = false,
                     selection = getSelection(updateFromBrowser, allowNoneTextNodes);
 
                 if (selection.hasRange()) {
@@ -2811,6 +2812,8 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
+
+                    attributes['vertical-align'] = 'baseline';  // only important for inline images, text should be aligned to baseline of image
                     var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
 
                     if (verticalSpanSide !== null) {
@@ -3268,7 +3271,7 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastRow = $(table).children().children().length - 1;
+                var lastRow = $(table).children('tbody').children().length - 1;
                 if (endRow > lastRow) {
                     endRow = lastRow;
                 }
