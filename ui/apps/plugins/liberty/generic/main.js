@@ -1,8 +1,8 @@
-define("3rd.party/noms/generic/main", function () {
+define("plugins/liberty/generic/main", function () {
     "use strict";
     
     // application object
-    var app = ox.ui.createApp({ name: '3rd.party/noms/generic' }),
+    var app = ox.ui.createApp({ name: 'plugins/liberty/generic' }),
         // app window
         win;
     // launcher
