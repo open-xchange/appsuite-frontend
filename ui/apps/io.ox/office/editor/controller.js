@@ -59,10 +59,11 @@ define('io.ox/office/editor/controller',
                 },
                 'action/search/quick': {
                     // highlighting goes always to the rich editor
-                    get: function () { return editor.hasHighlighting(); },
-                    set: function (query) { editor.quickSearch(query); },
+                    get: function () { return app.getEditor().hasHighlighting(); },
+                    set: function (query) { app.getEditor().quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
+
                 'chain/format/paragraph': {
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
@@ -162,7 +163,7 @@ define('io.ox/office/editor/controller',
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
-                    done: function (state) { editor.grabFocus(); }
+                    done: function (state) { app.getEditor().grabFocus(); }
                 },
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
