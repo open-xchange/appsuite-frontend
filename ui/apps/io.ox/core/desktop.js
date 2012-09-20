@@ -756,7 +756,10 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return $('<div class="window-controls">').append(
-                            // settings
+                            // fullscreen
+                            this.fullscreenButton = $('<div class="window-control pull-right">').hide()
+                                .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
+                                // settings
                             this.settingsButton = $('<div class="window-control">').hide()
                                 .text('\u270E'),
                             // close
@@ -1191,7 +1194,7 @@ define("io.ox/core/desktop",
                         })
                     )
                 )
-                .prependTo(win.nodes.controls);
+                .appendTo(win.nodes.controls);
             }
 
             // toolbar extension point
@@ -1217,6 +1220,16 @@ define("io.ox/core/desktop",
                 if (opt.close === true) {
                     win.nodes.closeButton.show().on("click", close);
                     win.setQuitOnClose(true);
+                }
+
+                // add fullscreen handler
+                if (opt.fullscreen === true) {
+                    win.nodes.fullscreenButton.show().on('click', function () {
+                        // Maximize
+                        if (window.BigScreen.enabled) {
+                            window.BigScreen.toggle(win.nodes.outer.get(0));
+                        }
+                    });
                 }
 
                 // set title
