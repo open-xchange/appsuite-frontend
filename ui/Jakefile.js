@@ -256,6 +256,7 @@ utils.concat("boot.js", [
         "lib/modernizr.js",
         "lib/jquery.lazyload.js",
         "lib/bigscreen.js",
+        "lib/placeholder.min.js",
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
@@ -281,7 +282,7 @@ utils.concat("pre-core.js",
 
 //Twitter Bootstrap
 
-utils.copy(utils.list("lib/bootstrap", ["img/*"]),
+utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
 // Concat styles of core and plugins
