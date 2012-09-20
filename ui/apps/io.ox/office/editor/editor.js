@@ -3022,6 +3022,10 @@ define('io.ox/office/editor/editor',
                 domParagraph = null,
                 insertBefore = true;
 
+            if (tableWidth > 0) {
+                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+            }
+
             if (domPosition) {
                 domParagraph = domPosition.node;
             } else {
@@ -3472,8 +3476,8 @@ define('io.ox/office/editor/editor',
                 tableWidth += tablegrid[i];
             }
 
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
             $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
-
 
             if ($(table).children('tbody').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
@@ -3565,6 +3569,7 @@ define('io.ox/office/editor/editor',
                 tableWidth += tablegrid[i];
             });
 
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
             $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
 
             // Setting cursor to first position in table
