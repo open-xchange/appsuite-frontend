@@ -42,6 +42,7 @@ define('io.ox/office/editor/editor',
         ]),
 
         OP_DELETE = 'delete',
+        OP_MOVE = 'move',
 
         OP_TEXT_INSERT =  'insertText',
         OP_TEXT_DELETE =  'deleteText',
@@ -1599,6 +1600,13 @@ define('io.ox/office/editor/editor',
 //                }
 //                implDelete(operation.start, operation.end);
 //            }
+            else if (operation.name === OP_MOVE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: OP_MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                }
+                implMove(operation.start, operation.end);
+            }
             else if (operation.name === OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
@@ -3134,18 +3142,57 @@ define('io.ox/office/editor/editor',
                         if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
-                            if (((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) ||
-                                ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan')))) {
+
+                            if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
+
                                 var localChild = thisPara.firstChild;
                                 if (localChild) {
-                                    thisPara.insertBefore(child, localChild);  // what about order of images?
-                                    imageCounter++;
+                                    thisPara.insertBefore(child, localChild);  // what about order of spans?
                                 } else {
                                     thisPara.appendChild(child);
                                 }
                             } else {
+
+                                if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+                                    imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
+                                }
+
                                 thisPara.appendChild(child);
                             }
+                        }
+
+                        child = nextChild;
+                    }
+
+                    // moving floated images with operation
+                    var counter = 0;
+                    child = thisPara.firstChild;
+                    while (child !== null) {
+                        var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
+
+                        if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+
+                            var localPos = Position.getObjectPositionInParagraph(thisPara, child),
+                                source = _.copy(position, true),
+                                dest = _.copy(position, true);
+
+                            if (localPos !== counter) {
+                                source.push(localPos);
+                                dest.push(counter);  // there might be floated images already in the first paragraph
+
+                             //   var newOperation = {name: OP_MOVE, start: source, end: dest};
+                             //    applyOperation(newOperation, true, true);
+
+                                implMove(source, dest);
+                            } else {
+                                // only internal shifting required. image should be shifted before empty paragraphs
+                                // there can be empty text spans before the destination node
+                                while (DOM.isEmptyTextSpan(child.previousSibling)) {
+                                    $(child).insertBefore(child.previousSibling);
+                                }
+                            }
+
+                            counter++;
                         }
 
                         child = nextChild;
@@ -3648,6 +3695,42 @@ define('io.ox/office/editor/editor',
             // old:  lastOperationEnd = new OXOPaM([para, start]);
 
             implParagraphChanged(startPosition);
+        }
+
+        function implMove(source, dest) {
+
+            var returnImageNode = true,
+                sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
+                destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode);
+
+            if ((sourcePos) && (destPos)) {
+                var sourceNode = sourcePos.node,
+                    destNode = destPos.node;
+
+                // ignoring offset in first version,
+                // and using complete spans instead of text nodes.
+
+                if ((sourceNode) && (destNode)) {
+                    if (sourceNode.nodeType === 3) {
+                        sourceNode = sourceNode.parentNode;
+                    }
+                    if (destNode.nodeType === 3) {
+                        destNode = destNode.parentNode;
+                    }
+
+                    if (Utils.getNodeName(sourceNode) !== 'img') {
+                        Utils.warn('Editor.implMove(): moved object is not an image: ' + Utils.getNodeName(sourceNode));
+                    }
+
+                    // there can be empty text spans before the destination node
+                    while (DOM.isTextSpan(destNode) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                        destNode = destNode.previousSibling;
+                    }
+
+                    // inserting the sourceNode before the destNode
+                    $(sourceNode).insertBefore(destNode);
+                }
+            }
         }
 
         function implDbgOutEvent(event) {

@@ -2090,6 +2090,52 @@ define('io.ox/office/editor/position',
         return child;
     };
 
+    /**
+     * Determining the position of a node (for example an image)
+     * in a paragraph.
+     *
+     * @param Node paragraph
+     *  The paragraph node, in which the node (second parameter) is
+     *  searched.
+     *
+     * @param Node node
+     *  The node (for example an image), whose position shall be found.
+     *
+     * @returns Number
+     *  Returns the integer value representing the position of the
+     *  searched node in the paragraph.
+     */
+    Position.getObjectPositionInParagraph = function (paragraph, node) {
+
+        var position = 0,
+            found = false;
+
+        if (paragraph) {
+            if (paragraph.hasChildNodes()) {
+                var nodeList = paragraph.childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    if (nodeList[i] === node) {
+                        found = true;
+                        break;
+                    }
+                    position += $(nodeList[i]).text().length;
+                    if (Utils.getNodeName(nodeList[i]) === 'img') {
+                        position++;
+                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                        position -= $(nodeList[i]).text().length;
+                        position++;
+                    }
+                }
+            }
+        }
+
+        if (! found) {
+            position = -1;
+        }
+
+        return position;
+    };
+
     return Position;
 
 });
