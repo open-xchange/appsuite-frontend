@@ -18,8 +18,14 @@ define("plugins/liberty/generic/main", function () {
             search: false
         }));
         
-
+        win.nodes.title.hide();
+        
         win.show(function () {
+            win.nodes.body.css({
+                top: '0px'
+            });
+            win.nodes.head.hide();
+            
             win.nodes.main.append(
                 $("<iframe>", {
                     src: entry.url,
