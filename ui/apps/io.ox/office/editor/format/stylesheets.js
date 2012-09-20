@@ -202,13 +202,17 @@ define('io.ox/office/editor/format/stylesheets',
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
          *
-         * @param {Boolean=} skipHidden
-         *  Optional parameter, if true style sheets with hidden flag will not be included
+         * @param {Boolean} [includeHidden=false]
+         *  Specifies whether style sheets with the 'hidden' flag will be
+         *  included in the returned list.
+         *
+         * @returns {Object}
+         *  A map with all style sheet names, keyed by style sheet identifiers.
          */
-        this.getStyleSheetNames = function (skipHidden) {
+        this.getStyleSheetNames = function (includeHidden) {
             var names = {};
             _(styleSheets).each(function (styleSheet, id) {
-                if (!skipHidden || skipHidden && !styleSheet.hidden) {
+                if ((includeHidden === true) || !styleSheet.hidden) {
                     names[id] = styleSheet.name;
                 }
             });
@@ -233,16 +237,20 @@ define('io.ox/office/editor/format/stylesheets',
          *  The formatting attributes contained in the new style sheet, as map
          *  of attribute maps (name/value pairs), keyed by attribute family.
          *
-         * @param {Boolean=} hidden
-         *  Optional property that determines if the style should be displayed in the UI (default is false)
-         *
-         * @param {Number=} uiPriority
-         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         * @param {Object} [options]
+         *  A map of options to control the behavior of the new style sheet.
+         *  The following options are supported:
+         *  @param {Boolean} [options.hidden=false]
+         *      Determines if the style should be displayed in the user
+         *      interface.
+         *  @param {Number} [options.priority=0]
+         *      The sort priority of the style (the lower the value the higher
+         *      the priority).
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.addStyleSheet = function (id, name, parentId, attributes, hidden, uiPriority) {
+        this.addStyleSheet = function (id, name, parentId, attributes, options) {
 
             var // get or create a style sheet object
                 styleSheet = styleSheets[id] || (styleSheets[id] = {});
@@ -258,10 +266,10 @@ define('io.ox/office/editor/format/stylesheets',
             }
 
             // set if style sheet should be displayed in the UI
-            styleSheet.hidden = hidden || false;
+            styleSheet.hidden = Utils.getBooleanOption(options, 'hidden', false);
 
             // set the UI display priority of the style sheet
-            styleSheet.uiPriority = uiPriority || 0;
+            styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
 
             // prepare attribute map (empty attributes for all supported families)
             styleSheet.attributes = Utils.makeSimpleObject(styleFamily, {});
@@ -318,6 +326,19 @@ define('io.ox/office/editor/format/stylesheets',
                 this.trigger('change');
             }
             return this;
+        };
+
+        /**
+         * Returns the UI priority for the specified style sheet.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns {Number}
+         *  The UI priority.
+         */
+        this.getUIPriority = function (id) {
+            return (id in styleSheets) ? styleSheets[id].priority : 0;
         };
 
         this.getPreviewButtonOptions = function (id) {
@@ -629,22 +650,6 @@ define('io.ox/office/editor/format/stylesheets',
                     definition.preview(options, value);
                 }
             });
-        };
-
-        /**
-         * Returns the UI priority for the style sheet (0 is default, the lower the value the higher the priority)
-         *
-         * @param {String} id
-         *  The unique identifier of the style sheet.
-         *
-         * @returns {Number}
-         *  The priority
-         */
-        this.getUIPriority = function (id) {
-            if (id && styleSheets[id] && _.isNumber(styleSheets[id].uiPriority)) {
-                return styleSheets[id].uiPriority;
-            }
-            return 0;
         };
 
         // initialization -----------------------------------------------------
