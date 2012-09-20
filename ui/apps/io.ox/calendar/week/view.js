@@ -57,6 +57,7 @@ define('io.ox/calendar/week/view',
 
         // define view events
         events: {
+            'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
             'click .appointment': 'onClickAppointment',
@@ -160,15 +161,38 @@ define('io.ox/calendar/week/view',
                 return;
             }
 
+            var curTar = $(e.currentTarget),
+                curDay = parseInt(curTar.attr('date'), 10),
+                mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+
             // switch mouse events
             switch (e.type) {
-            case 'mousemove':
-                var curTar = $(e.currentTarget),
-                    curDay = parseInt(curTar.attr('date'), 10),
-                    mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+            case 'mousedown':
+                if (this.lasso === false && $(e.target).is('.timeslot')) {
+                    this.lasso = $('<div>')
+                        .addClass('appointment lasso')
+                        .css({
+                            height: this.cellHeight,
+                            minHeight: this.cellHeight,
+                            top: this.roundToGrid(mouseY, 'n')
+                        });
+                    this.lasso.data({
+                        start: mouseY,
+                        stop: 0,
+                        startDay: curDay,
+                        lastDay: curDay,
+                        helper: {}
+                    });
+                    curTar
+                        .append(this.lasso);
+                } else {
+                    this.trigger('mouseup');
+                }
+                break;
 
+            case 'mousemove':
                 // normal move
-                if (this.lasso && e.which === 1) {
+                if (this.lasso !== false && e.which === 1) {
                     var lData = this.lasso.data(),
                         down = mouseY > lData.start,
                         right = curDay > lData.startDay,
@@ -242,32 +266,10 @@ define('io.ox/calendar/week/view',
                     lData.stop = down ? this.roundToGrid(mouseY, 's') : this.roundToGrid(mouseY, 'n');
                     lData.lastDay = curDay;
                 }
-
-                // first move
-                if (this.lasso === false && e.which === 1 && $(e.target).is('.timeslot')) {
-                    this.lasso = $('<div>')
-                        .addClass('appointment lasso')
-                        .css({
-                            height: this.cellHeight,
-                            minHeight: this.cellHeight,
-                            top: this.roundToGrid(mouseY, 'n')
-                        });
-                    this.lasso.data({
-                        start: mouseY,
-                        stop: 0,
-                        startDay: curDay,
-                        lastDay: curDay,
-                        helper: {}
-                    });
-                    curTar
-                        .append(this.lasso);
-                } else {
-                    this.trigger('mouseup');
-                }
                 break;
 
             case 'mouseup':
-                if (this.lasso && e.which === 1) {
+                if (this.lasso !== false && e.which === 1) {
                     var lData = this.lasso.data(),
                         start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.start),
                         end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.stop);
@@ -580,11 +582,10 @@ define('io.ox/calendar/week/view',
                     // cals amount of collisions
                     for (var k = 0; k < apps.length; k++) {
                         if (i === k) continue;
-                        var app2 = apps[k],
-                            as = app.pos.start,
+                        var as = app.pos.start,
                             ae = app.pos.end,
-                            ms = app2.pos.start,
-                            me = app2.pos.end;
+                            ms = apps[k].pos.start,
+                            me = apps[k].pos.end;
                         if ((as >= ms && as < me) || (as <= ms && ae >= me) || (ae > ms && ae <= me)) {
                             collisions++;
                         }
