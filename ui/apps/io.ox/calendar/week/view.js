@@ -169,30 +169,13 @@ define('io.ox/calendar/week/view',
             switch (e.type) {
             case 'mousedown':
                 if (this.lasso === false && $(e.target).is('.timeslot')) {
-                    this.lasso = $('<div>')
-                        .addClass('appointment lasso')
-                        .css({
-                            height: this.cellHeight,
-                            minHeight: this.cellHeight,
-                            top: this.roundToGrid(mouseY, 'n')
-                        });
-                    this.lasso.data({
-                        start: mouseY,
-                        stop: 0,
-                        startDay: curDay,
-                        lastDay: curDay,
-                        helper: {}
-                    });
-                    curTar
-                        .append(this.lasso);
-                } else {
-                    this.trigger('mouseup');
+                    this.lasso = true;
                 }
                 break;
 
             case 'mousemove':
                 // normal move
-                if (this.lasso !== false && e.which === 1) {
+                if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
                         down = mouseY > lData.start,
                         right = curDay > lData.startDay,
@@ -266,10 +249,32 @@ define('io.ox/calendar/week/view',
                     lData.stop = down ? this.roundToGrid(mouseY, 's') : this.roundToGrid(mouseY, 'n');
                     lData.lastDay = curDay;
                 }
+
+                if (this.lasso === true && $(e.target).is('.timeslot')) {
+                    this.lasso = $('<div>')
+                        .addClass('appointment lasso')
+                        .css({
+                            height: this.cellHeight,
+                            minHeight: this.cellHeight,
+                            top: this.roundToGrid(mouseY, 'n')
+                        });
+                    this.lasso.data({
+                        start: mouseY,
+                        stop: 0,
+                        startDay: curDay,
+                        lastDay: curDay,
+                        helper: {}
+                    });
+                    curTar
+                        .append(this.lasso);
+                } else {
+                    this.trigger('mouseup');
+                }
+
                 break;
 
             case 'mouseup':
-                if (this.lasso !== false && e.which === 1) {
+                if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
                         start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.start),
                         end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.stop);
@@ -280,12 +285,12 @@ define('io.ox/calendar/week/view',
                     });
                     lData = null;
                     this.lasso.remove();
-                    this.lasso = false;
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,
                         end_date: end
                     });
                 }
+                this.lasso = false;
                 break;
 
             default:
