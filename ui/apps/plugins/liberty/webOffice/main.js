@@ -16,6 +16,8 @@ define("plugins/liberty/webOffice/main", function () {
             search: false
         }));
         
+        win.nodes.title.hide();
+        
         app.images = [
             ox.base + '/apps/plugins/liberty/images/office1.png',
             ox.base + '/apps/plugins/liberty/images/office2.png'
@@ -34,6 +36,11 @@ define("plugins/liberty/webOffice/main", function () {
         
 
         win.show(function () {
+            win.nodes.body.css({
+                top: '0px'
+            });
+            win.nodes.head.hide();
+            
             app.nextImage();
             win.nodes.main.on("click", function () {
                 app.nextImage();

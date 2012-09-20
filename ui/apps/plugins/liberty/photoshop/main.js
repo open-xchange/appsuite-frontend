@@ -16,6 +16,7 @@ define("plugins/liberty/photoshop/main", function () {
             search: false
         }));
         
+        
         app.images = [
             ox.base + '/apps/plugins/liberty/images/Photoshop1.png',
             ox.base + '/apps/plugins/liberty/images/Photoshop2.png',
@@ -35,6 +36,11 @@ define("plugins/liberty/photoshop/main", function () {
         
 
         win.show(function () {
+            win.nodes.body.css({
+                top: '0px'
+            });
+            win.nodes.head.hide();
+            
             app.nextImage();
             win.nodes.main.on("click", function () {
                 app.nextImage();
