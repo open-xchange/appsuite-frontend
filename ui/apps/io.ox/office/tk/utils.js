@@ -75,13 +75,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.SELECTED_CLASS = 'selected';
 
-    /**
-     * Attribute name for string values to be stored in the control.
-     *
-     * @constant
-     */
-    Utils.DATA_VALUE_ATTR = 'data-value';
-
     // generic JS object helpers ----------------------------------------------
 
     /**
@@ -502,7 +495,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         function extend(options, extensions) {
             _(extensions).each(function (value, name) {
-                if (_.isObject(value)) {
+                if (_.isObject(value) && !_.isFunction(value)) {
                     // extension value is an object: ensure that the options map contains an embedded object
                     if (!_.isObject(options[name])) {
                         options[name] = {};
@@ -1010,6 +1003,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *      A value or object that will be copied to the 'data-value' attribute
      *      of the control. Will be converted to a JSON string. Must not be
      *      null. The undefined value will be ignored.
+     *  @param [options.userData]
+     *      A value or object that will be copied to the 'data-userdata'
+     *      attribute of the control. May contain any user-defined data.
      *  @param {Number} [options.width]
      *      The fixed total width of the control element (including padding and
      *      border), in pixels. If omitted, the size will be set automatically
@@ -1030,47 +1026,63 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             css = Utils.getObjectOption(options, 'css', {});
 
         Utils.setControlValue(control, Utils.getOption(options, 'value'));
+        Utils.setControlUserData(control, Utils.getOption(options, 'userData'));
         if (_.isNumber(width)) { control.width(width); }
         return control.css(css);
     };
 
     /**
-     * Returns the value stored in the 'data-value' attribute of the first
-     * control in the passed jQuery collection. Will be converted from the JSON
-     * string to the original value.
+     * Returns the value stored in the 'value' data attribute of the first
+     * control in the passed jQuery collection.
      *
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      */
     Utils.getControlValue = function (control) {
-        var value = control.first().attr(Utils.DATA_VALUE_ATTR);
-        if (_.isString(value)) {
-            try {
-                return JSON.parse(value);
-            } catch (ex) {
-            }
-        }
+        return control.first().data('value');
     };
 
     /**
-     * Stores the passed value in the 'data-value' attribute of the control in
-     * the passed jQuery collection, after converting it to a JSON string.
+     * Stores the passed value in the 'value' data attribute of the first
+     * control in the passed jQuery collection.
      *
      * @param {jQuery} control
      *  A jQuery collection containing a control element.
      *
      * @param value
-     *  A value or object that will be copied to the 'data-value' attribute of
-     *  the control. Will be converted to a JSON string. Must not be null. The
-     *  undefined value will be ignored.
+     *  A value or object that will be copied to the 'value' data attribute of
+     *  the control. Must not be null. The undefined value will be ignored.
      */
     Utils.setControlValue = function (control, value) {
         if (!_.isUndefined(value) && !_.isNull(value)) {
-            try {
-                control.attr(Utils.DATA_VALUE_ATTR, JSON.stringify(value));
-            } catch (ex) {
-            }
+            control.data('value', value);
         }
+    };
+
+    /**
+     * Returns the value stored in the 'userdata' data attribute of the first
+     * control in the passed jQuery collection.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a control element.
+     */
+    Utils.getControlUserData = function (control) {
+        return control.first().data('userdata');
+    };
+
+    /**
+     * Stores the passed value in the 'userdata' data attribute of the first
+     * control in the passed jQuery collection.
+     *
+     * @param {jQuery} control
+     *  A jQuery collection containing a control element.
+     *
+     * @param value
+     *  A value or object that will be copied to the 'userdata' data attribute
+     *  of the control.
+     */
+    Utils.setControlUserData = function (control, value) {
+        control.data('userdata', value);
     };
 
     /**

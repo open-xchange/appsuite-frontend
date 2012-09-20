@@ -39,14 +39,13 @@ define('io.ox/office/editor/view',
      *
      * @constructor
      *
-     * @extends Group
-     * @extends List
+     * @extends RadioGroup
      *
      * @param {StyleSheets} styleSheets
      *  A style sheet container.
      *
      * @param {Object} [options]
-     *  Additional options passed to the ComboField constructor.
+     *  Additional options passed to the RadioGroup constructor.
      */
     var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheets, options) {
 
@@ -54,46 +53,42 @@ define('io.ox/office/editor/view',
             self = this;
 
         /**
+         * Called for each list item to get the sorting index, which has been
+         * stored in the user data of the button elements.
+         */
+        function sortFunctor(button) {
+            return Utils.getControlUserData(button);
+        }
+
+        /**
          * Fills the drop-down list with all known style names, and adds
          * preview CSS formatting to the list items.
          */
         function fillList() {
-            var // sorted OptionButtons
-                buttonList = [];
-
             self.clearOptionButtons();
-            _(styleSheets.getStyleSheetNames(true)).each(function (name, id) {
-                var options = styleSheets.getPreviewButtonOptions(id),
-                    uiPriority = styleSheets.getUIPriority(id);
+            _(styleSheets.getStyleSheetNames()).each(function (name, id) {
 
-                buttonList.push(Utils.extendOptions(options, { value: id, uiPriority: uiPriority, label: name, css: { height: '36px', padding: '2px 12px' } }));
-            });
+                var // options for the formatting preview
+                    options = styleSheets.getPreviewButtonOptions(id),
+                    // sorting priority
+                    priority = styleSheets.getUIPriority(id),
+                    // the sort index stored at the button for lexicographical sorting
+                    sortIndex = String((priority < 0) ? (priority + 0x7FFFFFFF) : priority);
 
-            // sort by uiPriority and label
-            buttonList.sort(function (a, b) {
-                if (a.uiPriority < b.uiPriority) {
-                    return -1;
-                }
-                else if (b.uiPriority < a.uiPriority) {
-                    return 1;
-                }
-                else if (a.label < b.label) {
-                    return -1;
-                }
-                else if (b.label < a.label) {
-                    return 1;
-                }
-                return 0;
-            });
+                // build a sorting index usable for lexicographical comparison:
+                // 1 digit for priority sign, 10 digits positive priority,
+                // followed by lower-case style sheet name
+                while (sortIndex.length < 10) { sortIndex = '0' + sortIndex; }
+                sortIndex = ((priority < 0) ? '0' : '1') + sortIndex + name.toLowerCase();
 
-            _(buttonList).each(function (button) {
-                self.createOptionButton(button.value, button);
+                // create the list item, pass sorting index as user data
+                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' }, userData: sortIndex }));
             });
         }
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true }));
+        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true, sorted: true, sortFunctor: sortFunctor }));
 
         // initialization -----------------------------------------------------
 

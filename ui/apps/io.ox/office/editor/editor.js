@@ -2872,10 +2872,10 @@ define('io.ox/office/editor/editor',
          *  The formatting attributes contained in the new style sheet, as map
          *  of name/value pairs.
          *
-         *  @param {Boolean=} hidden
+         *  @param {Boolean} [hidden]
          *   Optional property that determines if the style should be displayed in the UI (default is false)
          *
-         *  @param {Number=} uiPriority
+         *  @param {Number} [uiPriority]
          *   Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
          */
         function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority) {
@@ -2884,7 +2884,7 @@ define('io.ox/office/editor/editor',
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes, hidden, uiPriority);
+                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority });
             }
         }
 
