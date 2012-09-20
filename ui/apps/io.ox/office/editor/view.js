@@ -221,21 +221,27 @@ define('io.ox/office/editor/view',
 
             var // the quick-search text field
                 searchField = $(this),
+                // ESCAPE key returns to editor
+                escape = (event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE),
                 // current value of the search query
-                searchQuery = searchField.val(),
+                searchQuery = null,
                 // any matches found in document
                 matches = false;
 
-            // ESCAPE key returns to editor
-            if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
-                controller.cancel();
+            // ESCAPE key clears the quick-search text field
+            if (escape) { searchField.val(''); }
+
             // always refresh search results if edit fields receives focus
-            } else if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
+            searchQuery = searchField.val();
+            if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
                 controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
                 matches = !searchQuery.length || controller.get('action/search/quick');
-                searchField.css('background-color', matches ? '' : '#ffdfdf');
+                searchField.css('background-color', matches ? '' : '#ffcfcf');
             }
+
+            // ESCAPE key returns to editor
+            if (escape) { controller.cancel(); }
         }
 
         /**
@@ -323,8 +329,9 @@ define('io.ox/office/editor/view',
 
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
-            .addButton('image/insertfile',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
-            .addButton('image/inserturl',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
+            .addSeparator()
+            .addButton('image/insert/file',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -359,9 +366,10 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/insertfile',    { icon: 'icon-picture',   tooltip: gt('Insert Image File') })
-            .addButton('image/inserturl',    { icon: 'icon-picture',   tooltip: gt('Insert Image URL') })
-            .addButton('image/delete',    { icon: 'icon-trash',     tooltip: gt('Delete Image') })
+            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') })
+            .addSeparator()
+            .addButton('image/delete', { icon: 'icon-trash', tooltip: gt('Delete Image') })
             .addSeparator()
             .addRadioGroup('image/alignment', { icon: 'icon-picture', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
