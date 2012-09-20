@@ -100,10 +100,10 @@ define('io.ox/calendar/week/view',
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
             if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
-                var cid = $(e.currentTarget).data('cid'),
+                var cid = $(e.currentTarget).attr('data-cid'),
                     obj = _.cid(cid),
                     self = this;
-                self.trigger('showAppointment', e, obj);
+                this.trigger('showAppointment', e, obj);
                 if (this.clickTimer === null) {
                     this.clickTimer = setTimeout(function () {
                         self.clicks = 0;
@@ -494,14 +494,13 @@ define('io.ox/calendar/week/view',
                     this.fulltimePane.append(app);
                 } else {
                     var startDate = new date.Local(model.get('start_date')),
-                        endDate = new date.Local(model.get('end_date') - 1),
+                        endDate = new date.Local(model.get('end_date')),
                         start = startDate.format(date.DAYOFWEEK_DATE),
                         end = endDate.format(date.DAYOFWEEK_DATE),
                         maxCount = this.columns,
                         style = '';
 
                     // draw across multiple days
-                    // FIXE ME: just to make it work and safe
                     while (true && maxCount) {
                         var app = this.renderAppointment(model.attributes),
                             sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
@@ -510,10 +509,10 @@ define('io.ox/calendar/week/view',
                         // if
                         if (start !== end) {
                             endDate = new date.Local(startDate.getTime());
-                            endDate.setHours(23, 59, 59, 999);
+                            endDate.setHours(23, 59, 59, 998);
                             style += 'rmsouth';
                         } else {
-                            endDate = new date.Local(model.get('end_date') - 1);
+                            endDate = new date.Local(model.get('end_date'));
                         }
 
                         app.pos = {
@@ -522,6 +521,9 @@ define('io.ox/calendar/week/view',
                                 end: endDate.getTime(),
                                 col: 0
                             };
+                        if (model.get('title') === '134') {
+                            console.log(start, end, startDate.toString(), endDate.toString(), app.pos);
+                        }
                         app.addClass(style);
                         if (!draw[sel]) {
                             draw[sel] = [];
@@ -557,12 +559,15 @@ define('io.ox/calendar/week/view',
             $.each(draw, function (day, apps) {
                 // init position Array
                 var colPos = [0];
-
                 // loop over all apps per day to calculate position
                 for (var i = 0; i < apps.length; i++) {
                     // loop over all column positions
                     for (var pos = 0; pos < colPos.length; pos++) {
-                        if  (colPos[pos] < apps[i].pos.start - 1) {
+                        // workaround for appointments with length 0
+                        if (apps[i].pos.start === apps[i].pos.end) {
+                            apps[i].pos.end++;
+                        }
+                        if  (colPos[pos] <= apps[i].pos.start) {
                             colPos[pos] = apps[i].pos.end;
                             apps[i].pos.index = pos;
                             break;
@@ -577,7 +582,7 @@ define('io.ox/calendar/week/view',
 
                 var elWidth = Math.min((self.appWidth / colPos.length) * (1 + (self.overlap * (colPos.length - 1))), self.appWidth);
 
-                // loop over all appss to draw them
+                // loop over all appointments to draw them
                 for (var j = 0; j < apps.length; j++) {
                     var pos = self.calcPos(apps[j]),
                         leftWidth = colPos.length > 1 ? ((self.appWidth - elWidth) / (colPos.length - 1)) * apps[j].pos.index : 0;
@@ -636,7 +641,6 @@ define('io.ox/calendar/week/view',
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
-//                    containment: '.week-container',
                     start: function (e, ui) {
                         self.lassoMode = false;
                         self.onEnterAppointment(e);
@@ -650,6 +654,7 @@ define('io.ox/calendar/week/view',
                                 zIndex: 999
                             });
                         data.firstPos = data.all.first().position().top;
+                        data.lastHeight = data.all.last().height();
                         // last element
                         if (data.all.length > 1 && this === data.all.last()[0]) {
                             data.options.axis = 'x';
@@ -667,12 +672,39 @@ define('io.ox/calendar/week/view',
                                 // first or last element
                                 if (this === data.all.last()[0] || this === data.all.first()[0]) {
                                     var dir = lastDiff - diff;
-                                    data.all.last().height(function (i, h) { return Math.min(h - dir, self.height()); });
-                                    data.all.first().height(function (i, h) { return Math.min(h + dir, self.height()); });
                                     // last element
                                     if (this === data.all.last()[0]) {
-                                        data.all.first().css({top: data.all.first().position().top - dir});
+                                        var t = data.all.first().position().top - dir;
+                                        if (t <= 0) {
+                                            t = 0;
+                                        }
+                                        if (t >= self.height()) {
+                                            t = self.height();
+                                        }
+                                        data.all.first().css('top', t);
                                     }
+                                    data.all.last().height(function (i, h) {
+                                        h -= dir;
+                                        if (h <= 0) {
+                                            $(this).css('minHeight', 0);
+                                            return 0;
+                                        }
+                                        if (h > self.height()) {
+                                            return self.height();
+                                        }
+                                        return h;
+                                    });
+                                    data.all.first().height(function (i, h) {
+                                        h += dir;
+                                        if (h <= 0) {
+                                            $(this).css('minHeight', 0);
+                                            return 0;
+                                        }
+                                        if (h > self.height()) {
+                                            return self.height();
+                                        }
+                                        return h;
+                                    });
                                     lastDiff = diff;
                                 } else {
                                     data.position.top = data.originalPosition.top;
