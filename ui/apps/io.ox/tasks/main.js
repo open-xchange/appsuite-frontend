@@ -97,7 +97,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         showTask = function (obj) {
             // be busy
             right.busy(true);
-            api.get(obj, false)
+            api.get(obj)
                 .done(_.lfo(drawTask))
                 .fail(_.lfo(drawFail, obj));
         };
@@ -113,12 +113,6 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                 })
             );
         };
-        
-        /*var selectNew = function (e, id) {
-            grid.selection.select(id);
-        };
-
-        api.on('select', selectNew);*/
         
         commons.wireGridAndSelectionChange(grid, 'io.ox/task', showTask, right);
         commons.wireGridAndWindow(grid, win);

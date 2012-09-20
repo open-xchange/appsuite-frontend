@@ -1,8 +1,8 @@
-define("3rd.party/noms/webOffice/main", function () {
+define("plugins/liberty/webOffice/main", function () {
     "use strict";
     
     // application object
-    var app = ox.ui.createApp({ name: '3rd.party/noms/webOffice' }),
+    var app = ox.ui.createApp({ name: 'plugins/liberty/webOffice' }),
         // app window
         win;
     // launcher
@@ -10,15 +10,15 @@ define("3rd.party/noms/webOffice/main", function () {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            name: '3rd.party/noms/webOffice',
+            name: 'plugins/liberty/webOffice',
             title: "Trve Office",
             toolbar: false,
             search: false
         }));
         
         app.images = [
-            ox.base + '/apps/3rd.party/noms/images/office1.png',
-            ox.base + '/apps/3rd.party/noms/images/office2.png'
+            ox.base + '/apps/plugins/liberty/images/office1.png',
+            ox.base + '/apps/plugins/liberty/images/office2.png'
         ];
         
         app.index = -1;
