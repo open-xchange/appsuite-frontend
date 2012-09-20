@@ -1,6 +1,6 @@
 define("plugins/liberty/generic/main", function () {
     "use strict";
-    
+
     // application object
     var app = ox.ui.createApp({ name: 'plugins/liberty/generic' }),
         // app window
@@ -17,15 +17,15 @@ define("plugins/liberty/generic/main", function () {
             toolbar: false,
             search: false
         }));
-        
+
         win.nodes.title.hide();
-        
+
         win.show(function () {
             win.nodes.body.css({
                 top: '0px'
             });
             win.nodes.head.hide();
-            
+
             win.nodes.main.append(
                 $("<iframe>", {
                     src: entry.url,
