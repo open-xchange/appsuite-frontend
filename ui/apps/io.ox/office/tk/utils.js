@@ -1180,6 +1180,10 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // control captions -------------------------------------------------------
 
+    Utils.createIcon = function (icon, white) {
+        return $('<i>').addClass(icon + ' ' + (white ? ' icon-white' : ''));
+    };
+
     /**
      * Returns whether the passed form control contains an icon and/or a text
      * label.
@@ -1214,6 +1218,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      *  @param {String} [options.icon]
      *      The full name of the Bootstrap or OX icon class. If omitted, no
      *      icon will be shown.
+     *  @param {Boolean} [options.whiteIcon=false]
+     *      If set to true, the icon will be shown in light colors by adding
+     *      the CSS class 'icon-white'.
      *  @param {String} [options.label]
      *      The text label. Will follow an icon. If omitted, no text will be
      *      shown.
@@ -1225,6 +1232,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         var // option values
             icon = Utils.getStringOption(options, 'icon'),
+            whiteIcon = Utils.getBooleanOption(options, 'whiteIcon'),
             label = Utils.getStringOption(options, 'label'),
             labelCss = Utils.getObjectOption(options, 'labelCss');
 
@@ -1244,7 +1252,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             control.removeClass('narrow-padding').prepend($('<span>')
                 .attr('data-role', 'icon')
                 .attr('data-icon', icon)
-                .append($('<i>').addClass(icon + ' ' + language))
+                .append(Utils.createIcon(icon, whiteIcon).addClass(language))
             );
         }
     };

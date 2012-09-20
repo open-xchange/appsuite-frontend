@@ -13,8 +13,9 @@
 
 define('io.ox/office/tk/component/toolpane',
     ['io.ox/office/tk/utils',
+     'io.ox/office/tk/control/radiogroup',
      'io.ox/office/tk/component/toolbar'
-    ], function (Utils, ToolBar) {
+    ], function (Utils, RadioGroup, ToolBar) {
 
     'use strict';
 
@@ -50,7 +51,7 @@ define('io.ox/office/tk/component/toolpane',
             tabBar = appWindow.nodes.tabBar = new ToolBar(appWindow),
 
             // the tab buttons to select the tool bars
-            radioGroup = tabBar.addRadioGroup(key),
+            radioGroup = new RadioGroup(),
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
@@ -107,7 +108,8 @@ define('io.ox/office/tk/component/toolpane',
         };
 
         /**
-         * Creates a new tool bar object and registers it at the tab bar.
+         * Creates a new tool bar object and registers it at the controller
+         * passed to the constructor of this tool pane.
          *
          * @param {String} id
          *  The unique identifier of the new tool bar.
@@ -129,7 +131,7 @@ define('io.ox/office/tk/component/toolpane',
             // add a tool bar tab, add the tool bar to the pane, and register it at the controller
             toolBarIds.push(id);
             node.append(toolBar.getNode());
-            radioGroup.addOptionButton(id, options);
+            radioGroup.createOptionButton(id, options);
             controller.registerViewComponent(toolBar);
             if (toolBarIds.length > 1) {
                 toolBar.hide();
@@ -138,6 +140,29 @@ define('io.ox/office/tk/component/toolpane',
             }
 
             return toolBar;
+        };
+
+        /**
+         * Creates a drop-down button in the tab bar and inserts the passed
+         * view component into its drop-down menu. Registers the view component
+         * at the controller passed to the constructor of this tool pane.
+         *
+         * @param {Component} component
+         *  The view component instance whose root node will be inserted into
+         *  the drop-down menu.
+         *
+         * @param {String} [options]
+         *  A map of options to control the properties of the drop-down button.
+         *  Supports all options of the Scrollable class constructor.
+         *
+         * @returns {ToolPane}
+         *  A reference to this instance.
+         */
+        this.addMenu = function (component, options) {
+            tabBar.addMenu(component, Utils.extendOptions(options, { whiteIcon: true }));
+            // keep the tool bar tabs at the end of the tab bar
+            radioGroup.getNode().parent().append(radioGroup.getNode());
+            return this;
         };
 
         /**
@@ -198,7 +223,7 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // insert the tool bar selector and a separator line into the tool pane
-        tabBar.getNode().removeClass('toolbar').addClass('tabbar').appendTo(appWindow.nodes.head);
+        tabBar.addGroup(key, radioGroup).getNode().removeClass('toolbar').addClass('tabbar').appendTo(appWindow.nodes.head);
 
         // prepare the controller
         controller

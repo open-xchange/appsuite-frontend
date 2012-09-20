@@ -186,14 +186,6 @@ define('io.ox/office/editor/view',
          *  details).
          */
         function createToolBar(id, options) {
-
-//            var // the 'File' drop-down menu
-//                fileMenu = new MenuBox(appWindow)
-//                    .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
-//                    .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
-//                    .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-//                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') });
-
             // create common controls present in all tool bars
             return toolPane.createToolBar(id, options)
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
@@ -321,12 +313,13 @@ define('io.ox/office/editor/view',
             )
         ));
 
-        // create the tool bars
-        toolPane.createToolBar('file', { label: gt('File') })
-            .addButton('action/export',   { icon: 'icon-share',     tooltip: gt('Export') })
-            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
-            .addButton('action/download', { icon: 'icon-download',  tooltip: gt('Download') })
-            .addButton('action/print',    { icon: 'icon-print',     tooltip: gt('Print') });
+        // create the tool bars and drop-down menus
+        toolPane.addMenu(new MenuBox(appWindow)
+                .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
+                .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
+                .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
+                .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
+            { label: gt('File') });
 
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
