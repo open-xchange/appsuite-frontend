@@ -281,7 +281,9 @@ define('io.ox/office/editor/position',
             foundValidNode = false,
             localNode = node.childNodes[offset], // offset can be zero for start points but too high for end points
             imageFloatMode = null,
-            offset = 0;
+            offsetSave = offset;
+
+        offset = 0;
 
         allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
@@ -290,7 +292,7 @@ define('io.ox/office/editor/position',
         }
 
         if ((! localNode) || (usePreviousCell)) {
-            localNode = node.childNodes[offset - 1];
+            localNode = node.childNodes[offsetSave - 1];
             useFirstTextNode = false;
         }
 
@@ -341,6 +343,9 @@ define('io.ox/office/editor/position',
             // find the first or last text node contained in the element
             if (localNode && (localNode.nodeType !== 3)) {
                 foundNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
+                if (foundNode) {
+                    localNode = foundNode;
+                }
             }
         }
 
