@@ -23,9 +23,9 @@ define('io.ox/calendar/week/perspective',
     'use strict';
 
     var perspective = new ox.ui.Perspective('week');
-    
+
     _.extend(perspective, {
-        
+
         collection:     {},
         columns:        7,
         startTimeUTC:   null,
@@ -33,18 +33,18 @@ define('io.ox/calendar/week/perspective',
         app:            null,
         view:           null,
         folder:         null,
-        
+
         showAppointment: function (e, obj) {
             // open appointment details
-            var that = this;
+            var self = this;
             api.get(obj).done(function (data) {
-                that.dialog
+                self.dialog
                     .show(e, function (popup) {
                         popup.append(detailView.draw(data));
                     });
             });
         },
-        
+
         updateAppointment: function (obj) {
             var that = this;
             if (obj.recurrence_type > 0) {
@@ -72,19 +72,19 @@ define('io.ox/calendar/week/perspective',
                 });
             }
         },
-        
+
         openCreateAppointment: function (e, obj) {
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, this.app, obj);
         },
-        
+
         openEditAppointment: function (e, obj) {
             require('io.ox/core/extensions')
                 .point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, obj);
         },
-        
+
         getAppointments: function (obj) {
             // fetch appointments
             var collection = this.collection;
@@ -100,7 +100,7 @@ define('io.ox/calendar/week/perspective',
                 });
             }
         },
-        
+
         refresh: function () {
             var obj = {
                     start: this.startTimeUTC,
@@ -119,13 +119,13 @@ define('io.ox/calendar/week/perspective',
                 that.getAppointments(obj);
             });
         },
-        
+
         changeFolder: function (e, data) {
             console.log('changeFolder', data);
             this.folder = data;
             this.refresh();
         },
-        
+
         render: function (app) {
             this.app = app;
             this.collection = new Backbone.Collection([]);
@@ -141,7 +141,7 @@ define('io.ox/calendar/week/perspective',
                 columns: this.columns,
                 startTimeUTC: this.startTimeUTC
             });
-            
+
             this.view
                 .on('showAppointment', this.showAppointment, this)
                 .on('openCreateAppointment', this.openCreateAppointment, this)
@@ -151,11 +151,11 @@ define('io.ox/calendar/week/perspective',
                     this.startTimeUTC = curDate;
                     this.refresh();
                 }, this);
-            
+
             this.main
                 .empty()
                 .append(this.view.render().el);
-            
+
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
