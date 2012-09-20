@@ -1653,11 +1653,24 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localStart = _.copy(operation.start, true),
-                        columns = Position.getLastColumnIndexInTable(paragraphs, localStart) + 1,
-                        rows = Position.getLastRowIndexInTable(paragraphs, localStart) + 1,
-                        undoOperation = { name: OP_TABLE_INSERT, start: localStart, columns: columns, rows: rows};
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+
+                    var localStart = _.copy(operation.start, true);
+                    var tablePos = Position.getDOMPosition(paragraphs, localStart);
+                    if (tablePos) {
+                        undomgr.startGroup();
+                        var tableNode = tablePos.node,
+                            tablegrid = $(tableNode).data('grid'),
+                            localattrs = {'tablegrid': tablegrid},
+                            tableUndoOperation = { name: OP_TABLE_INSERT, position: localStart, attrs: localattrs},
+                            rowCount = $(tableNode).children('tbody').children().length,
+                            localPos = _.copy(localStart, true);
+                        localPos.push(0);
+                        var rowUndoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertDefaultCells: true, attrs: {} };
+
+                        undomgr.addUndo(new Undo.OXOUndoAction(rowUndoOperation, operation));
+                        undomgr.addUndo(new Undo.OXOUndoAction(tableUndoOperation, operation));
+                        undomgr.endGroup();
+                    }
                 }
                 implDeleteTable(operation.start);
             }
@@ -1666,17 +1679,12 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    undomgr.startGroup();
-                    for (var i = operation.start; i <= operation.end; i++) {
-                        var localPos = _.copy(operation.position, true),
-                            localRow = _.copy(localPos, true);
-                        localRow.push(i);
-                        var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
-                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns},
-                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one row in redo!
-                        undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
-                    }
-                    undomgr.endGroup();
+                    var localPos = _.copy(operation.position, true);
+                    localPos.push(operation.start);
+
+                    var rowCount = operation.end - operation.start + 1,
+                        undoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertDefaultCells: true, attrs: {} };
+                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
@@ -1686,8 +1694,9 @@ define('io.ox/office/editor/editor',
                     for (var i = operation.start; i <= operation.end; i++) {
                         var localPos = _.copy(operation.position, true),
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows},
-                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one column in redo!
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start},  // Deleting only one column in redo!
+                            // needs name, position, tablegrid, gridposition, insertmode
+                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
                         undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
                     }
                     undomgr.endGroup();
@@ -3031,10 +3040,6 @@ define('io.ox/office/editor/editor',
                 }
 
                 paragraphs = editdiv.children();
-
-                // Setting cursor into table (unfortunately not visible in Chrome)
-//                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-//                lastOperationEnd = new OXOPaM(oxoPosition);
             }
         }
 
@@ -3367,12 +3372,13 @@ define('io.ox/office/editor/editor',
             }
 
             // Setting cursor
-//            localPosition.push(insertAfter + 1);
-//            localPosition.push(0);
-//            localPosition.push(0);
-//            localPosition.push(0);
-//
-//            lastOperationEnd = new OXOPaM(localPosition);
+            if (insertDefaultCells) {
+                localPosition.push(0);
+                localPosition.push(0);
+                localPosition.push(0);
+
+                lastOperationEnd = new OXOPaM(localPosition);
+            }
         }
 
         function implInsertCell(pos, count, attrs) {
@@ -3441,13 +3447,30 @@ define('io.ox/office/editor/editor',
             implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-            allRows = $(table).children('tbody').children();
+                allRows = $(table).children('tbody').children(),
+                allCols = $(table).children('colgroup').children();
+
+            allCols.slice(startCol, endCol + 1).remove();  // updating cols in colgroup
 
             allRows.each(
                 function (i, elem) {
                     $(elem).children().slice(startCol, endCol + 1).remove();
                 }
             );
+
+            allCols = $(table).children('colgroup').children(); // update allCols selection
+
+            var tablegrid = $(table).data('grid');
+            tablegrid.splice(startCol, endCol - startCol + 1);  // removing column(s) in tablegrid
+
+            var tableWidth = 0;
+
+            for (var i = 0; i < tablegrid.length; i++) {
+                tableWidth += tablegrid[i];
+            }
+
+            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
+
 
             if ($(table).children('tbody').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
@@ -3531,11 +3554,15 @@ define('io.ox/office/editor/editor',
 
             // setting new widths of the grid elements (saved in tablegrid)
             var colgroup = $(table).children('colgroup').append($('<col>')), // adding one element to colgroup
-                allCols = colgroup.children('col');
+                allCols = colgroup.children('col'),
+                tableWidth = 0;
 
             allCols.each(function (i) {
                 $(this).css('width', (tablegrid[i] / 100) + 'mm');
+                tableWidth += tablegrid[i];
             });
+
+            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
 
             // Setting cursor to first position in table
             localPosition.push(0);
