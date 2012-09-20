@@ -2103,7 +2103,8 @@ define('io.ox/office/editor/position',
      *
      * @returns Number
      *  Returns the integer value representing the position of the
-     *  searched node in the paragraph.
+     *  searched node in the paragraph. Returns '-1', if the node cannot
+     *  be found inside the paragraph.
      */
     Position.getObjectPositionInParagraph = function (paragraph, node) {
 
