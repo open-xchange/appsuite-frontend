@@ -1,4 +1,4 @@
-define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
+define("plugins/liberty/view-bss", ["io.ox/core/extensions"], function (ext) {
     "use strict";
     
     function PeriodicRefresher() {
@@ -46,7 +46,7 @@ define("3rd.party/noms/view-bss", ["io.ox/core/extensions"], function (ext) {
                 title: entry.name,
                 description: entry.name,
                 visible: true,
-                entryModule: "3rd.party/noms/generic/main",
+                entryModule: "plugins/liberty/generic/main",
                 launchArguments: [entry]
             });
         };

@@ -46,6 +46,13 @@ $(document).ready(function () {
         // shortcut
         enc = encodeURIComponent;
 
+    // feedback
+    function feedback(type, node) {
+        $("#io-ox-login-feedback").empty().append(
+            $('<div class="alert alert-block alert-' + type + '">').append(node)
+        )
+    }
+
     // continuation
     cont = function () {
         $("#io-ox-login-username").focus().select();
@@ -126,7 +133,6 @@ $(document).ready(function () {
     fnSubmit = function (e) {
         // stop unless iOS
         e.preventDefault();
-        //if (!_.browser.iOS) {  }
         // restore form
         var restore = function () {
                 // stop being busy
@@ -134,35 +140,31 @@ $(document).ready(function () {
                 $("#io-ox-login-feedback").idle();
             },
             // fail handler
-            fail = function (error) {
+            fail = function (error, focus) {
                 // fail
                 $("#io-ox-login-feedback").idle();
-                // shake it!
-                $("#login-box-content").stop().shake()
-                .done(function () {
-                    // show error
-                    $("#io-ox-login-feedback").text(
-                        _.formatError(error, "%1$s")
-                    );
-                    // restore form
-                    restore();
-                    // reset focus
-                    $("#io-ox-login-" + (relogin ? "password" : "username")).focus().select();
-                });
+                // visual response (shake sucks on touch devices)
+                $("#io-ox-login-form").css('opacity', '');
+                // show error
+                feedback('error', $.txt(_.formatError(error, "%1$s")));
+                // restore form
+                restore();
+                // reset focus
+                $("#io-ox-login-" + (focus || (relogin ? "password" : "username"))).focus().select();
             },
             // get user name / password
             username = $("#io-ox-login-username").val(),
             password = $("#io-ox-login-password").val();
         // be busy
+        $("#io-ox-login-form").css('opacity', 0.5);
         $("#io-ox-login-blocker").show();
         $("#io-ox-login-feedback").busy().empty();
         // user name and password shouldn't be empty
-        if ($.trim(username).length === 0 || ($.trim(password).length === 0 && ox.online)) {
-            fail({
-                error: "Please enter your credentials.",
-                code: "UI-0001"
-            });
-            return;
+        if ($.trim(username).length === 0) {
+            return fail({ error: "Please enter your credentials.", code: "UI-0001" }, 'username');
+        }
+        if ($.trim(password).length === 0 && ox.online) {
+            return fail({ error: "Please enter your password.", code: "UI-0002" }, 'password');
         }
         // login
         require("io.ox/core/session")
@@ -184,11 +186,13 @@ $(document).ready(function () {
             // get all nodes
             $("[data-i18n]").each(function () {
                 var node = $(this),
-                    val = gt(node.attr("data-i18n"));
-                if (this.tagName === "INPUT") {
-                    node.val(val);
-                } else {
-                    node.text(val);
+                    val = gt(node.attr("data-i18n")),
+                    target = node.attr("data-i18n-attr") || 'text';
+                switch (target) {
+                case 'value': node.val(val); break;
+                case 'text': node.text(val); break;
+                case 'label': node.contents().get(-1).nodeValue = val; break;
+                default: node.attr(target, val); break;
                 }
             });
         });
@@ -310,8 +314,7 @@ $(document).ready(function () {
      */
     initialize = function () {
         // shortcut
-        var sc = ox.serverConfig, lang = sc.languages, node, id = "",
-            header = "", footer = "";
+        var sc = ox.serverConfig, lang = sc.languages, node, id = "", footer = "";
         // show languages
         if (lang !== false) {
             node = $("#io-ox-language-list");
@@ -327,13 +330,13 @@ $(document).ready(function () {
             $("#io-ox-languages").remove();
         }
         // update header
-        header = sc.pageHeader || "open xchange 7";
-        $("#io-ox-login-header").html(header);
+        $("#io-ox-login-header-prefix").text((sc.pageHeaderPrefix || '') + ' ');
+        $("#io-ox-login-header-label").text(sc.pageHeader || '');
         // update footer
         footer = sc.copyright ? sc.copyright + " " : "";
         footer += sc.version ? "Version: " + sc.version + " " : "";
         footer += sc.buildDate ? "(" + sc.buildDate + ")" : "";
-        $("#io-ox-copyright").html(footer);
+        $("#io-ox-copyright").text(footer);
         // hide checkbox?
         if (sc.autoLogin === false) {
             $("#io-ox-login-store").remove();
@@ -347,20 +350,22 @@ $(document).ready(function () {
         // disable password?
         if (!ox.online) {
             $("#io-ox-login-password").attr("disabled", "disabled");
-            $("#io-ox-login-feedback").html("Offline mode");
+            feedback('info', $.txt("Offline mode"));
         } else {
             $("#io-ox-login-password").removeAttr("disabled");
         }
         // recommend chrome frame?
         if (_.browser.IE <= 8) {
             var link = "http://www.google.com/chromeframe/?user=true";
-            $("#io-ox-login-feedback").html(
-                '<div>Your browser is slow and outdated!</div>' +
-                '<div style="font-size: 0.8em">Try <a href="' + link + '" target="_blank">Google Chrome Frame</a> ' +
+            feedback('info', $(
+                '<b>Your browser is slow and outdated!</b> ' +
+                'Try <a href="' + link + '" target="_blank">Google Chrome Frame</a> ' +
                 'for much better performance. It&rsquo;s awesome! ' +
-                'Administrator rights are not required. Just restart IE after installation.</div>'
-            );
+                'You don&rsquo;t need administrator rights. Just restart IE after installation.</div>'
+            ));
         }
+
+        $('input').placeholder();
 
         return $.when(
                 // load extensions

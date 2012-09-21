@@ -68,7 +68,8 @@ define("io.ox/mail/main",
             title: gt("Inbox"),
             titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
-            search: true
+            search: true,
+            fullscreen: true
         });
 
         win.addClass("io-ox-mail-main");

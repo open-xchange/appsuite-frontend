@@ -117,7 +117,7 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
             table.appendTo(node);
             buildTable();
             
-            
+            //build table, assign clickevents
             function buildTable() {
                 tempDate.setDate(1);
                 var i = 0,
@@ -150,9 +150,11 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
                     }
                 });
             }
+            
+            //returns timestamp or -1 if no valid time was created(no day selected, user pressed cancel etc.)
             return popup.show().pipe(function (action) {
                 if (action === 'ok' && selected) {
-                    return $(selected).attr("timevalue");
+                    return parseInt($(selected).attr("timevalue"), 10);
                 } else {
                     return -1;
                 }

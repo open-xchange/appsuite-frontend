@@ -2,8 +2,7 @@
 //@include ../../../../lib/bootstrap/js/bootstrap.js
 //@include ../../../../lib/bootstrap-datepicker.js
 
-define('io.ox/core/bootstrap/basics',
-    ['css!io.ox/core/bootstrap/css/bootstrap.css'], function () {
+define('io.ox/core/bootstrap/basics', function () {
 
     'use strict';
 

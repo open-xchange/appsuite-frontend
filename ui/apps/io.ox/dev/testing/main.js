@@ -50,6 +50,7 @@ define('io.ox/dev/testing/main',
 
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/dev/testing',
             title: 'Jasmine Tests'
         });
 

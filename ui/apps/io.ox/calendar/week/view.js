@@ -57,6 +57,7 @@ define('io.ox/calendar/week/view',
 
         // define view events
         events: {
+            'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
             'click .appointment': 'onClickAppointment',
@@ -100,10 +101,10 @@ define('io.ox/calendar/week/view',
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
             if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
-                var cid = $(e.currentTarget).data('cid'),
+                var cid = $(e.currentTarget).attr('data-cid'),
                     obj = _.cid(cid),
                     self = this;
-                self.trigger('showAppointment', e, obj);
+                this.trigger('showAppointment', e, obj);
                 if (this.clickTimer === null) {
                     this.clickTimer = setTimeout(function () {
                         self.clicks = 0;
@@ -152,7 +153,6 @@ define('io.ox/calendar/week/view',
                     delete obj[i];
                 }
             });
-            console.log('onUpdateAppointment', obj);
             this.trigger('updateAppointment', obj);
         },
 
@@ -161,15 +161,21 @@ define('io.ox/calendar/week/view',
                 return;
             }
 
+            var curTar = $(e.currentTarget),
+                curDay = parseInt(curTar.attr('date'), 10),
+                mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+
             // switch mouse events
             switch (e.type) {
-            case 'mousemove':
-                var curTar = $(e.currentTarget),
-                    curDay = parseInt(curTar.attr('date'), 10),
-                    mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+            case 'mousedown':
+                if (this.lasso === false && $(e.target).is('.timeslot')) {
+                    this.lasso = true;
+                }
+                break;
 
+            case 'mousemove':
                 // normal move
-                if (this.lasso && e.which === 1) {
+                if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
                         down = mouseY > lData.start,
                         right = curDay > lData.startDay,
@@ -244,8 +250,7 @@ define('io.ox/calendar/week/view',
                     lData.lastDay = curDay;
                 }
 
-                // first move
-                if (this.lasso === false && e.which === 1 && $(e.target).is('.timeslot')) {
+                if (this.lasso === true && $(e.target).is('.timeslot')) {
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
@@ -265,10 +270,11 @@ define('io.ox/calendar/week/view',
                 } else {
                     this.trigger('mouseup');
                 }
+
                 break;
 
             case 'mouseup':
-                if (this.lasso && e.which === 1) {
+                if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
                         start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.start),
                         end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.stop);
@@ -279,12 +285,12 @@ define('io.ox/calendar/week/view',
                     });
                     lData = null;
                     this.lasso.remove();
-                    this.lasso = false;
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,
                         end_date: end
                     });
                 }
+                this.lasso = false;
                 break;
 
             default:
@@ -495,14 +501,13 @@ define('io.ox/calendar/week/view',
                     this.fulltimePane.append(app);
                 } else {
                     var startDate = new date.Local(model.get('start_date')),
-                        endDate = new date.Local(model.get('end_date') - 1),
+                        endDate = new date.Local(model.get('end_date')),
                         start = startDate.format(date.DAYOFWEEK_DATE),
                         end = endDate.format(date.DAYOFWEEK_DATE),
                         maxCount = this.columns,
                         style = '';
 
                     // draw across multiple days
-                    // FIXE ME: just to make it work and safe
                     while (true && maxCount) {
                         var app = this.renderAppointment(model.attributes),
                             sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
@@ -511,17 +516,16 @@ define('io.ox/calendar/week/view',
                         // if
                         if (start !== end) {
                             endDate = new date.Local(startDate.getTime());
-                            endDate.setHours(23, 59, 59, 999);
+                            endDate.setHours(23, 59, 59, 998);
                             style += 'rmsouth';
                         } else {
-                            endDate = new date.Local(model.get('end_date') - 1);
+                            endDate = new date.Local(model.get('end_date'));
                         }
 
                         app.pos = {
                                 id: model.id,
                                 start: startDate.getTime(),
-                                end: endDate.getTime(),
-                                col: 0
+                                end: endDate.getTime()
                             };
                         app.addClass(style);
                         if (!draw[sel]) {
@@ -557,41 +561,61 @@ define('io.ox/calendar/week/view',
             // loop over all single days
             $.each(draw, function (day, apps) {
                 // init position Array
-                var colPos = [0];
-
+                var positions = [0];
                 // loop over all apps per day to calculate position
                 for (var i = 0; i < apps.length; i++) {
+                    var app = apps[i],
+                        collisions = 0;
                     // loop over all column positions
-                    for (var pos = 0; pos < colPos.length; pos++) {
-                        if  (colPos[pos] <= apps[i].pos.start) {
-                            colPos[pos] = apps[i].pos.end;
-                            apps[i].pos.index = pos;
+                    for (var p = 0; p < positions.length; p++) {
+                        // workaround for appointments with length 0
+                        if (app.pos.start === app.pos.end) {
+                            app.pos.end++;
+                        }
+                        if  (positions[p] <= app.pos.start) {
+                            positions[p] = app.pos.end;
+                            app.pos.index = p;
                             break;
                         }
                     }
 
-                    if (pos === colPos.length) {
-                        apps[i].pos.index = colPos.length;
-                        colPos.push(apps[i].pos.end);
+                    if (p === positions.length) {
+                        app.pos.index = positions.length;
+                        positions.push(app.pos.end);
                     }
+
+                    // cals amount of collisions
+                    for (var k = 0; k < apps.length; k++) {
+                        if (i === k) continue;
+                        var as = app.pos.start,
+                            ae = app.pos.end,
+                            ms = apps[k].pos.start,
+                            me = apps[k].pos.end;
+                        if ((as >= ms && as < me) || (as <= ms && ae >= me) || (ae > ms && ae <= me)) {
+                            collisions++;
+                        }
+                    }
+                    app.pos.max = ++collisions;
                 }
 
-                var elWidth = Math.min((self.appWidth / colPos.length) * (1 + (self.overlap * (colPos.length - 1))), self.appWidth);
-
-                // loop over all appss to draw them
+                // loop over all appointments to draw them
                 for (var j = 0; j < apps.length; j++) {
-                    var pos = self.calcPos(apps[j]),
-                        leftWidth = colPos.length > 1 ? ((self.appWidth - elWidth) / (colPos.length - 1)) * apps[j].pos.index : 0;
-                    apps[j].css({
-                        top: pos.start,
+                    var app = apps[j],
+                        pos = self.calcPos(app),
+                        idx = Math.min(app.pos.max, positions.length),
+                        width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
+                        left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0;
+
+                    app.css({
+                        top: pos.top,
+                        left: left + '%',
+                        height: pos.height,
+                        width: width + '%',
                         minHeight: self.cellHeight + 'px',
                         maxWidth: self.appWidth + '%',
-                        left: leftWidth + '%',
-                        zIndex: Math.ceil(pos.start)
+                        zIndex: j
                     })
-                    .addClass((leftWidth > 0 || (leftWidth === 0 && elWidth < self.appWidth)) ? 'border' : '')
-                    .outerHeight(pos.lenght)
-                    .width(elWidth + '%');
+                    .addClass((left > 0 || (left === 0 && width < self.appWidth)) ? 'border' : '');
                 }
                 self.$('.week-container ' + day).append(apps);
             });
@@ -650,6 +674,7 @@ define('io.ox/calendar/week/view',
                                 zIndex: 999
                             });
                         data.firstPos = data.all.first().position().top;
+                        data.lastHeight = data.all.last().height();
                         // last element
                         if (data.all.length > 1 && this === data.all.last()[0]) {
                             data.options.axis = 'x';
@@ -662,17 +687,44 @@ define('io.ox/calendar/week/view',
                             .css('left', data.position.left -= data.originalPosition.left);
                         // handling on multi-drag
                         if (data.all.length > 1) {
+                            var diff = data.position.top - data.originalPosition.top;
                             if (lastDiff !== diff) {
-                                var diff = data.position.top - data.originalPosition.top;
-                                // first element
+                                // first or last element
                                 if (this === data.all.last()[0] || this === data.all.first()[0]) {
                                     var dir = lastDiff - diff;
-                                    data.all.last().height(function (i, h) { return Math.min(h - dir, self.height()); });
-                                    data.all.first().height(function (i, h) { return Math.min(h + dir, self.height()); });
                                     // last element
                                     if (this === data.all.last()[0]) {
-                                        data.all.first().css({top: data.all.first().position().top - dir});
+                                        var t = data.all.first().position().top - dir;
+                                        if (t <= 0) {
+                                            t = 0;
+                                        }
+                                        if (t >= self.height()) {
+                                            t = self.height();
+                                        }
+                                        data.all.first().css('top', t);
                                     }
+                                    data.all.last().height(function (i, h) {
+                                        h -= dir;
+                                        if (h <= 0) {
+                                            $(this).css('minHeight', 0);
+                                            return 0;
+                                        }
+                                        if (h > self.height()) {
+                                            return self.height();
+                                        }
+                                        return h;
+                                    });
+                                    data.all.first().height(function (i, h) {
+                                        h += dir;
+                                        if (h <= 0) {
+                                            $(this).css('minHeight', 0);
+                                            return 0;
+                                        }
+                                        if (h > self.height()) {
+                                            return self.height();
+                                        }
+                                        return h;
+                                    });
                                     lastDiff = diff;
                                 } else {
                                     data.position.top = data.originalPosition.top;
@@ -712,7 +764,6 @@ define('io.ox/calendar/week/view',
                         self.lassoMode = false;
                     },
                     stop: function (e, ui) {
-                        console.log('drag stop fulltime', e, ui);
                         self.lassoMode = true;
                         $(this).busy();
                         var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
@@ -813,8 +864,8 @@ define('io.ox/calendar/week/view',
                 },
                 s = calc(start);
             return {
-                start: s,
-                lenght: Math.max(calc(end) - s, self.gridHeight())
+                top: s,
+                height: Math.max(calc(end) - s, self.gridHeight())
             };
         },
 

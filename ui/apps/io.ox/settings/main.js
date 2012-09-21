@@ -73,10 +73,10 @@ define('io.ox/settings/main',
     app.setLauncher(function () {
 
         app.setWindow(win = ox.ui.createWindow({
+            name: 'io.ox/settings',
             title: 'Settings',
             toolbar: true,
-            titleWidth: (GRID_WIDTH + 27) + "px",
-            name: 'io.ox/settings'
+            titleWidth: (GRID_WIDTH + 27) + "px"
         }));
 
         var saveSettings = function () {
