@@ -92,6 +92,7 @@
             return ExtendableClass;
         };
 
+
     // add namespaces
     _.browser = {
         /** is IE? */
@@ -109,8 +110,17 @@
         Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
         /** MacOS **/
         MacOS: ua.indexOf('Macintosh') > -1,
-        /** iOS **/
-        iOS: /iPhone|iPad|iPod/.test(navigator.platform) && webkit
+        /** some mobile devices **/
+        /** iOS with stock browser**/
+        iOS: /iPhone|iPad|iPod/.test(navigator.platform) && webkit,
+        /** iOS and iPad in general**/
+        iPad: /iPad/.test(navigator.platform),
+        iPhone: /iPod|iPhone/.test(navigator.platform),
+        /** Android **/
+        android: /android/.test(navigator.platform),
+        /** Blackberry **/
+        bb: /blackberry/.test(navigator.platform),
+        bbPlaybook: /playbook/.test(navigator.platform)
     };
 
     _.url = {

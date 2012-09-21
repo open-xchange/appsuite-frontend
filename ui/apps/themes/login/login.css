@@ -229,6 +229,14 @@ html, body {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffe36b', endColorstr='#fcbb3a',GradientType=0 );
 }
 
+.io-ox-ui-disabled {
+    cursor: default !important;
+    pointer-events: none;
+    -ms-filter:"progid:DXImageTransform.Microsoft.Alpha(opacity=30)";
+    filter: alpha(opacity=30);
+    opacity: .3;
+}
+
 /* ipad
 @media screen and (orientation: portrait) {
     body { width: 768px; }
