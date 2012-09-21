@@ -248,7 +248,7 @@ define("io.ox/files/actions",
 
     ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
         id: 'list',
-        index: 100,
+        index: 200,
         label: gt('List'),
         cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
         groupButton: true,
@@ -257,7 +257,7 @@ define("io.ox/files/actions",
 
     ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
         id: 'icons',
-        index: 200,
+        index: 100,
         label: gt('Icons'),
         cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'icons' ? 'active' : ''),
         groupButton: true,
