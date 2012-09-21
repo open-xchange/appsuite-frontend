@@ -22,7 +22,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: 'Taskedit' }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: 'Edit task' }),
             // app window
             win,
             // nodes
@@ -44,38 +44,38 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             alarmButton,
             //storage container Object
             editTask = {};
-            
-        
+
+
         // launcher
         app.setLauncher(function (data) {
             // get window
             win = ox.ui.createWindow({
-                name: 'io.ox/tasks',
-                title: "Task edit",
+                name: 'io.ox/tasks/edit',
+                title: "Edit task",
                 toolbar: false,
                 close: true
             });
-            
+
             win.addClass('io-ox-tasks-edit-main');
             app.setWindow(win);
-            
+
             //build main edit windows
             node = $('<div>').addClass("io-ox-tasks-edit default-content-padding").appendTo(win.nodes.main);
             infoWrapper = $('<div>').addClass('info-wrapper').appendTo(node);
             main = $('<div>').addClass("main-edit").appendTo(node);
-           
-            
+
+
             //fill main
             title = $('<input>').addClass("title-field");
             note = $('<textarea>', {rows: '15'}).addClass("note-field");
-            
+
             main.append(
                 $('<span>').text(gt("Title")).addClass("task-edit-main-label"),
                 title,
                 $('<span>').text(gt("Note")).addClass("task-edit-main-label"),
                 note
                 );
-            
+
             //fill info
             saveButton = $('<button>')
                 .addClass("btn btn-primary task-edit-save")
@@ -84,7 +84,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     e.stopPropagation();
                     ext.point('io.ox/tasks/edit/actions/save').invoke('action', null, app, app.updateData());
                 });
-            
+
             startDateButton = $('<button>')
                 .addClass("btn task-edit-picker")
                 .on('click', function (e) {
@@ -101,7 +101,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
-            
+
             endDateButton = $('<button>')
                 .addClass("btn task-edit-picker")
                 .on('click', function (e) {
@@ -118,7 +118,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
-            
+
             alarmButton = $('<button>')
                 .addClass("btn task-edit-picker")
                 .on('click', function (e) {
@@ -135,7 +135,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
-            
+
             status = $('<select>').addClass("status-selector");
             status.append(
                     $('<option>').text(gt("not started")),
@@ -144,7 +144,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     $('<option>').text(gt("waiting")),
                     $('<option>').text(gt("deferred"))
                 );
-            
+
             priority = $('<select>').addClass('priority-selector');
             priority.append(
                     $('<option>').text(gt('low')),
@@ -152,11 +152,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     $('<option>').text(gt('high'))
                 );
             priority.prop('selectedIndex', 1);
-            
+
             startDate = $('<input>').addClass("start-date-field");
             endDate = $('<input>').addClass("end-date-field");
             alarmDate = $('<input>').addClass("alarm-date-field");
-            
+
             infoWrapper.append(
                     saveButton,
                     $('<span>').text(gt("Status")).addClass("task-edit-info-label"),
@@ -179,18 +179,18 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                     "exsample: 1/1/2012 2:00 a<br>" +
                                     "Datepicker is under Construction").css("color", "red")
                 );
-            
+
             //ready for show
-            
+
             win.show();
         });
-        
+
         app.preFill = function (taskData) {
             //prefill with taskdata, if available
             if (taskData) {
                 //be busy
                 node.busy(true);
-                
+
                 //empty storageContainer and fields of old values
                 editTask = {};
                 startDate.val('');
@@ -200,63 +200,63 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 title.val('');
                 priority.prop('selectedIndex', 1);
                 status.prop('selectedIndex', 0);
-                
+
                 //fill with new ones
                 if (taskData.start_date) {
                     editTask.start_date = new date.Local(taskData.start_date);
                     startDate.val(editTask.start_date.format());
                 }
-                
+
                 if (taskData.end_date) {
                     editTask.end_date = new date.Local(taskData.end_date);
                     endDate.val(editTask.end_date.format());
                 }
-                
+
                 if (taskData.alarm) {
                     editTask.alarm = new date.Local(taskData.alarm);
                     alarmDate.val(editTask.alarm.format());
                 }
-                
+
                 if (taskData.title) {
                     editTask.title = taskData.title;
                     title.val(editTask.title);
                 }
-                
+
                 if (taskData.note) {
                     editTask.note = taskData.note;
                     note.val(editTask.note);
                 }
-                
+
                 if (taskData.status) {
                     editTask.status = taskData.status;
                     status.prop('selectedIndex', editTask.status - 1);
                 }
-                
+
                 if (taskData.priority) {
                     editTask.priority = taskData.priority;
                     priority.prop('selectedIndex', editTask.priority - 1);
                 }
-                
+
                 if (taskData.folder_id) {
                     editTask.folder_id = taskData.folder_id;
                 }
-                
+
                 if (taskData.id) {
                     editTask.id = taskData.id;
                 }
-                
+
                 if (taskData.last_modified) {
                     editTask.last_modified = taskData.last_modified;
                 }
-                
+
                 //stop being busy
                 node.idle();
             }
         };
-        
+
         app.save = function (data) {
             var reqData = this.buildRequestData(data);
-            
+
             if (data === -1) {
                 setTimeout(function () {
                     notifications.yell("error", gt("All dates must be in following format") + ": day.month.year hour:minutes");
@@ -266,12 +266,12 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     notifications.yell("error", gt("Start date must be before due date"));
                 }, 300);
             } else {
-                
+
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
-                
+
                     //create popup dialog
                     var popup = new dialogs.ModalDialog();
-                
+
                     //if id is present an existing task with given id was edited, otherwise it must be a new one
                     if (data.id) {
                         popup.addPrimaryButton('edit', gt('Edit task'))
@@ -279,16 +279,16 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     } else {
                         popup.addPrimaryButton('newTask', gt('Create new task'));
                     }
-                
+
                     popup.addButton('cancel', gt('Cancel'));
-                
+
                     //Header
                     popup.getHeader().append($("<h4>").text(gt('Save task')));
-                
+
                     popup.show().done(function (action) {
                         if (action === 'newTask') {
                             require(['io.ox/tasks/api'], function (api) {
-                                
+
                                 if (!reqData.folder_id) {
                                     reqData.folder_id = api.getDefaultFolder();
                                 }
@@ -301,7 +301,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                             });
                         } else if (action === 'edit') {
                             require(['io.ox/tasks/api'], function (api) {
-                            
+
                                 if (!reqData.folder_id) {
                                     reqData.folder_id = api.getDefaultFolder();
                                 }
@@ -317,10 +317,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 });
             }
         };
-        
+
         //build data to be send
         app.buildRequestData = function (rawData) {
-            
+
             var result = {title: rawData.title,
                 folder_id: rawData.folder_id,
                 id: rawData.id,
@@ -330,32 +330,32 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 recurrence_type: 0,
                 percent_completed: 0
                 };
-            
+
             //checks needed to prevent is undefined error when getTime() should be called
             if (rawData.end_date) {
                 result.end_date = rawData.end_date.getTime();
-                
+
             } else {
                 result.end_date = null;
             }
-            
+
             if (rawData.start_date) {
                 result.start_date = rawData.start_date.getTime();
-                
+
             } else {
                 result.start_date = null;
             }
-            
+
             if (rawData.alarm) {
                 result.alarm = rawData.alarm.getTime();
-                
+
             } else {
                 result.alarm = undefined;
             }
-            
+
             return result;
         };
-        
+
         app.updateData = function () {
             editTask.title = title.val();
             editTask.note = note.val();
@@ -371,7 +371,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     return -1;
                 }
             }
-            
+
             temp = date.Local.parse(startDate.val());
             if (temp !== null) {
                 editTask.start_date = new date.Local(temp.t);
@@ -382,7 +382,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     return -1;
                 }
             }
-            
+
             temp = date.Local.parse(alarmDate.val());
             if (temp !== null) {
                 editTask.alarm = new date.Local(temp.t);
@@ -393,11 +393,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     return -1;
                 }
             }
-            
+
             return editTask;
         };
-        
-        
+
+
         //Extension points
         ext.point('io.ox/tasks/edit/actions/save').extend({
             id: 'save',
@@ -405,10 +405,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 app.save(data);
             }
         });
-        
+
         return app;
     }
-    
+
     return {
         getApp: createApp
     };
