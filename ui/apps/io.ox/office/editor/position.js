@@ -456,20 +456,22 @@ define('io.ox/office/editor/position',
 
                     if (textLength + currentLength >= pos) {
 
-                        if ((returnImageNode) && ((textLength + currentLength) === pos)) {
-                            var j = i + 1,
-                                nextNode = nodeList[j];
+                        if (returnImageNode) {
+                            if  ((textLength + currentLength) === pos) {
+                                var j = i + 1,
+                                    nextNode = nodeList[j];
 
-                            if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
-                                bFound = true;
-                                node = nextNode;
-                                isImage = true;
-                                break;  // leaving the for-loop
-                            } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div')) {
-                                bFound = true;
-                                node = nextNode;
-                                isField = true;
-                                break;  // leaving the for-loop
+                                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
+                                    bFound = true;
+                                    node = nextNode;
+                                    isImage = true;
+                                    break;  // leaving the for-loop
+                                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div')) {
+                                    bFound = true;
+                                    node = nextNode;
+                                    isField = true;
+                                    break;  // leaving the for-loop
+                                }
                             }
                         }
                         bFound = true;
