@@ -249,9 +249,11 @@ utils.concat("boot.js",
      "src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
+
 utils.concat("boot.js", [
         "lib/jquery.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
+        "lib/browsers.js", // browserdetection and support matrix
         "lib/require.js",
         "lib/modernizr.js",
         "lib/jquery.lazyload.js",

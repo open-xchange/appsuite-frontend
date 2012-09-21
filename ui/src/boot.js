@@ -46,11 +46,21 @@ $(document).ready(function () {
         // shortcut
         enc = encodeURIComponent;
 
+    // check for supported browser
+    function browserCheck() {
+        var browser = _.browserDetect.getBrowser();
+        if (_.browserSupport[browser.type].isSupported) {
+           return true;
+        } else {
+           return false;
+        }
+    }
+
     // feedback
     function feedback(type, node) {
         $("#io-ox-login-feedback").empty().append(
             $('<div class="alert alert-block alert-' + type + '">').append(node)
-        )
+        );
     }
 
     // continuation
@@ -278,7 +288,6 @@ $(document).ready(function () {
      * Auto login
      */
     autoLogin = function () {
-
         var ref;
 
         function fail() {
@@ -447,6 +456,7 @@ $(document).ready(function () {
     $("#background_loader").busy();
 
     var boot = function () {
+
         // get pre core & server config
         require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
             .done(function (data) {
@@ -454,8 +464,19 @@ $(document).ready(function () {
                 ox.serverConfig = data;
                 // set page title now
                 document.title = ox.serverConfig.pageTitle || '';
-                // continue
-                autoLogin();
+
+                if (browserCheck()) {
+                    // continue
+                    autoLogin();
+                } else {
+                    // disable login form and display warning
+                    initialize();
+                    $('#io-ox-login-form input,label').addClass('io-ox-ui-disabled');
+                    feedback('info', $(
+                            '<b>Your browser is currently not supported!</b> ' +
+                            '<div>Please use <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a> for best results.</di>'
+                        ));
+                }
             });
     };
 
