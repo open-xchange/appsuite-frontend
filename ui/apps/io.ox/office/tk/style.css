@@ -106,6 +106,11 @@
 /* OX icons                                                                  */
 /* ========================================================================= */
 
+/* reset Bootstrap margins for all icons */
+i[class^="icon-"] {
+    margin: 0;
+}
+
 /*
  * Replace images for icon classes starting with "icon-io-ox-". Icons are
  * 14x14px with a 6px grid spacing.
@@ -285,6 +290,8 @@ div.io-ox-view-component {
         /* labels ---------------------------------------------------------- */
 
         label {
+            padding-left: 8px;
+            padding-right: 8px;
             text-align: center;
         }
 
@@ -568,15 +575,12 @@ div.io-ox-view-component {
     /* top-level tab bar --------------------------------------------------- */
 
     &.tabbar {
-        position: absolute;
-        left: 313px;
-        bottom: 0;
         padding: 0;
-        .vertical-gradient(@tab-accented-fill-color, @tab-fill-color);
 
         > span {
             display: inline-block;
             position: relative;
+            .vertical-gradient(@tab-accented-fill-color, @tab-fill-color);
 
             > .group {
                 display: inline-block;
@@ -586,7 +590,6 @@ div.io-ox-view-component {
                     padding-left: 12px;
                     padding-right: 12px;
                     border: none;
-                    color: @tab-text-color;
     
                     /* semi-transparency for all contents of the button */
                     &:not(.selected) > * { .opacity(0.7); }
@@ -598,7 +601,12 @@ div.io-ox-view-component {
                         cursor: default;
                     }
                 }
-    
+
+                /* text color */
+                > button, > label {
+                    color: @tab-text-color;
+                }
+
                 /* mouse/keyboard effects (not for disabled group) */
                 &:not(.disabled) > button:not(.disabled):not(.selected) {
                     &:hover, &:focus, &:active {
