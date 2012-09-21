@@ -557,19 +557,15 @@ define('io.ox/office/editor/editor',
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
 
-                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                    imageEndPostion = _.copy(imageStartPosition, true);
+                // updating current selection, so that image positions are also available
+                var updateFromBrowser = true,
+                    allowNoneTextNodes = true,
+                    newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                    imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                    returnImageNode = true,
+                    imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
-                if (selection.startPaM.isRtlCursorTravel) {
-                    imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
-                }
-
-                imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
-
-                var returnImageNode = true;
-                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
-                // deleting with button is possible.
-                var imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                // only delete, if imageStartPosition is really an image position
                 if (Utils.getNodeName(imageNode) === 'img') {
                     // delete an corresponding span
                     var spanNode = imageNode.parentNode.firstChild;
@@ -583,8 +579,10 @@ define('io.ox/office/editor/editor',
                         }
                     }
 
+                    var imageEndPosition = _.copy(imageStartPosition, true);
+                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range
                     // deleting the image with an operation
-                    this.deleteText(imageStartPosition, imageEndPostion);
+                    this.deleteText(imageStartPosition, imageEndPosition);
                 }
             }
         };
