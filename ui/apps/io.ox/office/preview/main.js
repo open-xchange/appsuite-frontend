@@ -14,11 +14,11 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/apphelper',
      'io.ox/office/tk/controller',
-     'io.ox/office/tk/component/toolbar',
+     'io.ox/office/tk/component/topbar',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (AppHelper, Controller, ToolBar, Preview, gt) {
+    ], function (AppHelper, Controller, TopBar, Preview, gt) {
 
     'use strict';
 
@@ -32,7 +32,7 @@ define('io.ox/office/preview/main',
 
             preview = new Preview(),
 
-            toolBar = null,
+            topBar = null,
 
             controller = new Controller({
                 page: {
@@ -138,31 +138,16 @@ define('io.ox/office/preview/main',
                 .addClass('io-ox-office-preview-main')
                 .append(preview.getNode());
 
-            // create the tool bar
-            toolBar = new ToolBar(win)
-                .addButton('first', { icon: 'icon-fast-backward', tooltip: gt('First page') })
-                .addButton('previous', { icon: 'icon-step-backward', tooltip: gt('Previous page') })
+            // create the top tool bar
+            topBar = new TopBar(win)
+                .addButton('first', { icon: 'icon-fast-backward', whiteIcon: true, tooltip: gt('First page') })
+                .addButton('previous', { icon: 'icon-step-backward', whiteIcon: true, tooltip: gt('Previous page') })
                 .addLabel('page', { tooltip: gt('Page number') })
-                .addButton('next', { icon: 'icon-step-forward', tooltip: gt('Next page') })
-                .addButton('last', { icon: 'icon-fast-forward', tooltip: gt('Last page') });
+                .addButton('next', { icon: 'icon-step-forward', whiteIcon: true, tooltip: gt('Next page') })
+                .addButton('last', { icon: 'icon-fast-forward', whiteIcon: true, tooltip: gt('Last page') });
 
             // register view components at the controller
-            controller.registerViewComponent(toolBar);
-
-            // The toolkit will clear the tool bar area and insert extension
-            // point links every time the window is shown. Therefore it is
-            // needed to -insert the own tool bar into the tool bar node of the
-            // window in the 'show' event, and to detach it in the 'hide' event
-            // (otherwise, removing the tool bar will destroy all listeners).
-            win.on('show', function () {
-                win.nodes.toolbar.append(toolBar.getNode());
-            })
-            .on('hide', function () {
-                // tool bar is destroyed already, if app is shutting down
-                if (toolBar) {
-                    toolBar.getNode().detach();
-                }
-            });
+            controller.registerViewComponent(topBar);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
@@ -278,9 +263,9 @@ define('io.ox/office/preview/main',
          */
         app.destroy = function () {
             controller.destroy();
-            toolBar.destroy();
+            topBar.destroy();
             preview.destroy();
-            app = win = preview = toolBar = controller = null;
+            app = win = preview = topBar = controller = null;
         };
 
         // ------------------------------------------------

@@ -87,17 +87,37 @@ define('io.ox/office/editor/format/stylesheets',
      *  function to be called for each found DOM element as second parameter,
      *  and a context object used to call the iterator function with.
      *  Compatible with the iterator functions defined in the DOM module.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the behavior of the style sheet container.
+     *  The following options are supported:
+     *  @param {String} [options.descendantStyleFamilies]
+     *      Space-separated list of additional attribute families whose
+     *      attributes may be inserted into the attribute map of a style sheet.
+     *  @param {String} [options.ancestorStyleFamily]
+     *      The attribute family of the style sheets assigned to ancestor
+     *      elements. Used to resolve attributes from the style sheet of an
+     *      ancestor of the current element.
+     *  @param {Function} [options.ancestorElementResolver]
+     *      A function used to receive the ancestor element containing a style
+     *      sheet of the family passed in the 'ancestorStyleFamily' option.
+     *      Receives a DOM element node, and must return the ancestor DOM
+     *      element node.
      */
     function StyleSheets(styleFamily, definitions, documentStyles, iterateReadOnly, iterateReadWrite, options) {
 
         var // style sheets, mapped by identifier
             styleSheets = {},
+
             // default values for all supported attributes of the own style family
             defaultAttributes = {},
+
             // additional attribute families supported by the style sheets
             descendantStyleFamilies = _(Utils.getStringOption(options, 'descendantStyleFamilies', '').split(/\s+/)).without(''),
+
             // style family of ancestor style sheets
             ancestorStyleFamily = Utils.getStringOption(options, 'ancestorStyleFamily'),
+
             // element resolver for style sheets referred by ancestor DOM elements
             ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver');
 
@@ -236,6 +256,9 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} attributes
          *  The formatting attributes contained in the new style sheet, as map
          *  of attribute maps (name/value pairs), keyed by attribute family.
+         *  Supports the main attribute family passed in the styleFamily
+         *  parameter to the constructor, and all additional attribute families
+         *  registered via the 'descendantStyleFamilies' constructor option.
          *
          * @param {Object} [options]
          *  A map of options to control the behavior of the new style sheet.
@@ -244,8 +267,8 @@ define('io.ox/office/editor/format/stylesheets',
          *      Determines if the style should be displayed in the user
          *      interface.
          *  @param {Number} [options.priority=0]
-         *      The sort priority of the style (the lower the value the higher
-         *      the priority).
+         *      The sorting priority of the style (the lower the value the
+         *      higher the priority).
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
@@ -341,6 +364,19 @@ define('io.ox/office/editor/format/stylesheets',
             return (id in styleSheets) ? styleSheets[id].priority : 0;
         };
 
+        /**
+         * Returns the options map used to create the preview list item in a
+         * style chooser control. Uses the 'preview' entry of all attribute
+         * definitions to build the options map.
+         *
+         * @param {String} id
+         *  The unique identifier of of the style sheet whose preview will be
+         *  created.
+         *
+         * @returns {Object}
+         *  A map of options passed to the creator function of the preview
+         *  button element.
+         */
         this.getPreviewButtonOptions = function (id) {
 
             var // the result options
@@ -383,8 +419,11 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the values of all formatting attributes in the specified DOM
-         * ranges supported by the CSS formatter of this container.
+         * Returns the merged values of all formatting attributes in the
+         * specified DOM ranges supported by the CSS formatter of this
+         * container. If an attribute value is not unique in the specified
+         * ranges, the respective value in the returned attribute map be set to
+         * null.
          *
          * @param {DOM.Range[]} ranges
          *  (in/out) The DOM ranges to be visited. The array will be validated
@@ -514,7 +553,8 @@ define('io.ox/office/editor/format/stylesheets',
                 // add passed attributes
                 _(attributes).each(function (value, name) {
                     if (isRegisteredAttribute(name, special)) {
-                        if (clear && (styleAttributes[name] === value)) {
+                        // check whether to clear the attribute
+                        if (clear && _.isEqual(styleAttributes[name], value)) {
                             delete elementAttributes[name];
                         } else {
                             elementAttributes[name] = value;
@@ -543,6 +583,8 @@ define('io.ox/office/editor/format/stylesheets',
                 }
 
             }, this);
+
+            return this;
         };
 
         /**
@@ -617,6 +659,8 @@ define('io.ox/office/editor/format/stylesheets',
                 });
 
             }, this);
+
+            return this;
         };
 
         this.updateFormattingInRanges = function (ranges) {
@@ -641,6 +685,8 @@ define('io.ox/office/editor/format/stylesheets',
                 });
 
             }, this);
+
+            return this;
         };
 
         this.updatePreviewButtonOptions = function (options, attributes) {
@@ -650,6 +696,8 @@ define('io.ox/office/editor/format/stylesheets',
                     definition.preview(options, value);
                 }
             });
+
+            return this;
         };
 
         // initialization -----------------------------------------------------

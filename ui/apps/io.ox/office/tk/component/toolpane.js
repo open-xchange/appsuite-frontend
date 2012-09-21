@@ -13,9 +13,9 @@
 
 define('io.ox/office/tk/component/toolpane',
     ['io.ox/office/tk/utils',
-     'io.ox/office/tk/control/radiogroup',
-     'io.ox/office/tk/component/toolbar'
-    ], function (Utils, RadioGroup, ToolBar) {
+     'io.ox/office/tk/component/toolbar',
+     'io.ox/office/tk/component/topbar'
+    ], function (Utils, ToolBar, TopBar) {
 
     'use strict';
 
@@ -47,11 +47,11 @@ define('io.ox/office/tk/component/toolpane',
             // the container element representing the tool pane
             node = $('<div>').addClass('io-ox-pane top toolpane'),
 
-            // the top-level tab bar to select tool bars
-            tabBar = appWindow.nodes.tabBar = new ToolBar(appWindow),
+            // the top bar to select the visible tool bar
+            topBar = new TopBar(appWindow),
 
             // the tab buttons to select the tool bars
-            radioGroup = new RadioGroup(),
+            radioGroup = null,
 
             // all registered tool bars, mapped by tool bar key
             toolBars = {},
@@ -128,11 +128,18 @@ define('io.ox/office/tk/component/toolpane',
             var // create a new tool bar object, and store it in the map
                 toolBar = toolBars[id] = new ToolBar(appWindow);
 
-            // add a tool bar tab, add the tool bar to the pane, and register it at the controller
+            // add the tool bar to the pane, and register it at the controller
             toolBarIds.push(id);
             node.append(toolBar.getNode());
-            radioGroup.createOptionButton(id, options);
             controller.registerViewComponent(toolBar);
+
+            // create the tab bar radio group on first call, add option tab
+            if (!radioGroup) {
+                radioGroup = topBar.addRadioGroup(key, { auto: true, whiteIcon: true });
+            }
+            radioGroup.addOptionButton(id, options);
+
+            // hide all tool bars but the first
             if (toolBarIds.length > 1) {
                 toolBar.hide();
             } else {
@@ -159,9 +166,7 @@ define('io.ox/office/tk/component/toolpane',
          *  A reference to this instance.
          */
         this.addMenu = function (component, options) {
-            tabBar.addMenu(component, Utils.extendOptions(options, { whiteIcon: true }));
-            // keep the tool bar tabs at the end of the tab bar
-            radioGroup.getNode().parent().append(radioGroup.getNode());
+            topBar.addMenu(component, Utils.extendOptions(options, { whiteIcon: true }));
             return this;
         };
 
@@ -192,7 +197,7 @@ define('io.ox/office/tk/component/toolpane',
          * bar tabs.
          */
         this.hasFocus = function () {
-            return tabBar.hasFocus() || ((visibleToolBarId in toolBars) && toolBars[visibleToolBarId].hasFocus());
+            return topBar.hasFocus() || ((visibleToolBarId in toolBars) && toolBars[visibleToolBarId].hasFocus());
         };
 
         /**
@@ -209,28 +214,25 @@ define('io.ox/office/tk/component/toolpane',
          * Triggers a 'refresh' event at all registered tool bars.
          */
         this.refresh = function () {
-            tabBar.trigger('refresh');
+            topBar.trigger('refresh');
             _(toolBars).invoke('trigger', 'refresh');
             return this;
         };
 
         this.destroy = function () {
-            tabBar.destroy();
+            topBar.destroy();
             _(toolBars).invoke('destroy');
-            tabBar = radioGroup = toolBars = null;
+            topBar = radioGroup = toolBars = null;
         };
 
         // initialization -----------------------------------------------------
-
-        // insert the tool bar selector and a separator line into the tool pane
-        tabBar.addGroup(key, radioGroup).getNode().removeClass('toolbar').addClass('tabbar').appendTo(appWindow.nodes.head);
 
         // prepare the controller
         controller
             // add item definition for the tab bar
             .addDefinition(key, { get: function () { return visibleToolBarId; }, set: showToolBar })
             // register the tab bar at the controller
-            .registerViewComponent(tabBar);
+            .registerViewComponent(topBar);
 
         // change visible tool bar with keyboard
         node.on('keydown keypress keyup', toolPaneKeyHandler);

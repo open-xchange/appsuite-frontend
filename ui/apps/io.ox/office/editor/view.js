@@ -201,12 +201,7 @@ define('io.ox/office/editor/view',
         function windowResizeHandler(event) {
 
             var // the left position of the editor node
-                editorLeft = Math.floor(editors.rich.getNode().offset().left),
-                // width of the document title label
-                titleWidth = Math.floor(appWindow.nodes.title.outerWidth(true));
-
-            // position the tab bar
-            appWindow.nodes.tabBar.getNode().css('left', Math.max(editorLeft, titleWidth) + 'px');
+                editorLeft = Math.floor(editors.rich.getNode().offset().left);
 
             // set a left padding to the tool pane to align the tool bars with the editor node
             toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
@@ -379,8 +374,6 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
-            .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
