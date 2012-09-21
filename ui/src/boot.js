@@ -48,12 +48,13 @@ $(document).ready(function () {
 
     // check for supported browser
     function browserCheck() {
-        var browser = _.browserDetect.getBrowser();
-        if (_.browserSupport[browser.type].isSupported) {
-           return true;
-        } else {
-           return false;
-        }
+        var supp = false;
+        _.each(_.browserSupport, function(value, key) {
+            if (_.browser[key] >= value) {
+                supp =  true;
+            }
+        });
+        return supp;
     }
 
     // feedback
@@ -363,6 +364,7 @@ $(document).ready(function () {
         } else {
             $("#io-ox-login-password").removeAttr("disabled");
         }
+
         // recommend chrome frame?
         if (_.browser.IE <= 8) {
             var link = "http://www.google.com/chromeframe/?user=true";
@@ -465,13 +467,14 @@ $(document).ready(function () {
                 // set page title now
                 document.title = ox.serverConfig.pageTitle || '';
 
-                if (browserCheck()) {
+                if ( browserCheck() ) {
                     // continue
                     autoLogin();
                 } else {
                     // disable login form and display warning
                     initialize();
-                    $('#io-ox-login-form input,label').addClass('io-ox-ui-disabled');
+                    // don't disable,
+                    //$('#io-ox-login-form input,label').addClass('io-ox-ui-disabled');
                     feedback('info', $(
                             '<b>Your browser is currently not supported!</b> ' +
                             '<div>Please use <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a> for best results.</di>'
