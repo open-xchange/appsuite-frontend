@@ -673,14 +673,14 @@ define('io.ox/office/editor/editor',
             var selection = getSelection(),
                 // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
                 count = 1,  // inserting only one row
-                insertDefaultCells = true,
+                insertdefaultcells = true,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
             var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
 
             rowPos[rowPos.length - 1] += 1;
 
-            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertDefaultCells: insertDefaultCells };
+            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -777,7 +777,7 @@ define('io.ox/office/editor/editor',
                 var localPos = _.copy(selection.startPaM.oxoPosition, true);
                 localPos.push(0);
 
-                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertDefaultCells: true};
+                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertdefaultcells: true};
                 applyOperation(newOperation, true, true);
 
                 if (deleteTempParagraph) {
@@ -1537,7 +1537,7 @@ define('io.ox/office/editor/editor',
                             rowCount = $(tableNode).children('tbody').children().length,
                             localPos = _.copy(localStart, true);
                         localPos.push(0);
-                        var rowUndoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertDefaultCells: true, attrs: {} };
+                        var rowUndoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
 
                         undomgr.addUndo(rowUndoOperation, operation);
                         undomgr.addUndo(tableUndoOperation, operation);
@@ -1555,7 +1555,7 @@ define('io.ox/office/editor/editor',
                     localPos.push(operation.start);
 
                     var rowCount = operation.end - operation.start + 1,
-                        undoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertDefaultCells: true, attrs: {} };
+                        undoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
@@ -1604,7 +1604,7 @@ define('io.ox/office/editor/editor',
                 //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(undoOperation, operation);
                 // }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertDefaultCells, operation.attrs);
+                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.attrs);
             }
             else if (operation.name === OP_COLUMN_INSERT) {
                 // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
@@ -3266,7 +3266,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertRow(pos, count, insertDefaultCells, attrs) {
+        function implInsertRow(pos, count, insertdefaultcells, attrs) {
 
             var localPosition = _.copy(pos, true),
                 setRowHeight = false;
@@ -3275,7 +3275,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            insertDefaultCells = insertDefaultCells ? true : false;
+            insertdefaultcells = insertdefaultcells ? true : false;
 
             if (!_.isNumber(count)) {
                 count = 1; // setting default for number of rows
@@ -3297,7 +3297,7 @@ define('io.ox/office/editor/editor',
                 tableRowNode = tableRowDomPos.node;
             }
 
-            if (insertDefaultCells) {
+            if (insertdefaultcells) {
 
                 var columnCount = $(table).data('columns'),
                     // prototype elements for row, cell, and paragraph
@@ -3330,7 +3330,7 @@ define('io.ox/office/editor/editor',
             }
 
             // Setting cursor
-            if (insertDefaultCells) {
+            if (insertdefaultcells) {
                 localPosition.push(0);
                 localPosition.push(0);
                 localPosition.push(0);
