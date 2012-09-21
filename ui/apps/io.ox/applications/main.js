@@ -35,6 +35,7 @@ define('io.ox/applications/main',
 
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/applications',
             title: 'Application Manager',
             toolbar: true
         });

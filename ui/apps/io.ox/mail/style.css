@@ -332,6 +332,7 @@
     margin-top: 1em;
     cursor: auto;
     position: relative;
+    overflow: hidden; /* helper for absolutely positioned elements */
 }
 
 /* TODO: remove / temp. fix for bootstrap */
