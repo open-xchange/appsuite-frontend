@@ -10,7 +10,11 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
- 
+
+html, body {
+    height: 100%;
+}
+
 .css-table { display: table; }
 .css-table-row { display: table-row; }
 .css-table-cell { display: table-cell; }
