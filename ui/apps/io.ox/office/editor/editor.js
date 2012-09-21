@@ -3146,8 +3146,21 @@ define('io.ox/office/editor/editor',
                             if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
 
                                 var localChild = thisPara.firstChild;
+
                                 if (localChild) {
-                                    thisPara.insertBefore(child, localChild);  // what about order of spans?
+
+                                    if ((Utils.getNodeName(localChild) === 'span') && ($(localChild).data('positionSpan'))) {
+
+                                        while ((Utils.getNodeName(localChild.nextSibling) === 'span') && ($(localChild.nextSibling).data('positionSpan'))) {
+                                            localChild = localChild.nextSibling;
+                                        }
+
+                                        localChild = localChild.nextSibling;  // using next sibling, to be able to use insertBefore
+                                    }
+
+
+                                    thisPara.insertBefore(child, localChild);
+
                                 } else {
                                     thisPara.appendChild(child);
                                 }
@@ -3181,7 +3194,7 @@ define('io.ox/office/editor/editor',
                                 dest.push(counter);  // there might be floated images already in the first paragraph
 
                              //   var newOperation = {name: OP_MOVE, start: source, end: dest};
-                             //    applyOperation(newOperation, true, true);
+                             //   applyOperation(newOperation, true, true);
 
                                 implMove(source, dest);
                             } else {
@@ -3698,6 +3711,10 @@ define('io.ox/office/editor/editor',
         }
 
         function implMove(source, dest) {
+
+            // workaround: improve last position of destination by 1 to get the correct image
+            // -> might be superfluous in the future.
+            dest[dest.length - 1] += 1;
 
             var returnImageNode = true,
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
