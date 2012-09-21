@@ -557,19 +557,15 @@ define('io.ox/office/editor/editor',
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
 
-                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                    imageEndPostion = _.copy(imageStartPosition, true);
+                // updating current selection, so that image positions are also available
+                var updateFromBrowser = true,
+                    allowNoneTextNodes = true,
+                    newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                    imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                    returnImageNode = true,
+                    imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
-                if (selection.startPaM.isRtlCursorTravel) {
-                    imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
-                }
-
-                imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
-
-                var returnImageNode = true;
-                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
-                // deleting with button is possible.
-                var imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                // only delete, if imageStartPosition is really an image position
                 if (Utils.getNodeName(imageNode) === 'img') {
                     // delete an corresponding span
                     var spanNode = imageNode.parentNode.firstChild;
@@ -583,8 +579,10 @@ define('io.ox/office/editor/editor',
                         }
                     }
 
+                    var imageEndPosition = _.copy(imageStartPosition, true);
+                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                     // deleting the image with an operation
-                    this.deleteText(imageStartPosition, imageEndPostion);
+                    this.deleteText(imageStartPosition, imageEndPosition);
                 }
             }
         };
@@ -962,6 +960,8 @@ define('io.ox/office/editor/editor',
         this.mergeParagraph = function (position) {
             var newOperation = {name: OP_PARA_MERGE, start: _.copy(position)};
             applyOperation(newOperation, true, true);
+
+            moveFloatedImages(position);
         };
 
         this.insertText = function (text, position) {
@@ -2668,6 +2668,57 @@ define('io.ox/office/editor/editor',
             return nodes;
         }
 
+        /**
+         * After merging two paragraphs, it can be necessary to move floated images
+         * of the second paragraph to the beginning of the first paragraph. This can
+         * done using this function 'moveFloatedImages', that generates 'move'
+         * operations for moving the images.
+         *
+         * @param {OXOPaM.oxoPosition} position
+         *  The logical position describing the paragraph.
+         */
+        function moveFloatedImages(position) {
+
+            var domPos = Position.getDOMPosition(paragraphs, position);
+
+            if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'p')) {
+
+                var para = domPos.node,
+                    counter = Position.getNumberOfFloatedImagesInParagraph(para),  // counting number of floated images at begin of paragraph
+                    child = para.firstChild;
+
+                while (child !== null) {
+                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
+
+                    if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+
+                        var localPos = Position.getObjectPositionInParagraph(para, child),
+                        source = _.copy(position, true),
+                        dest = _.copy(position, true);
+
+                        if (localPos !== counter) {
+                            source.push(localPos);
+                            dest.push(counter);  // there might be floated images already in the first paragraph
+
+                            // moving floated images with operation
+                            var newOperation = {name: OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
+                            applyOperation(newOperation, true, true);
+                        } else {
+                            // only internal shifting required. image should be shifted before empty paragraphs
+                            // there can be empty text spans before the destination node
+                            while (DOM.isEmptyTextSpan(child.previousSibling)) {
+                                $(child).insertBefore(child.previousSibling);
+                            }
+                        }
+
+                        counter++;
+                    }
+
+                    child = nextChild;
+                }
+            }
+        }
+
         // ====================================================================
         //  IMPLEMENTATION FUNCTIONS
         // Private functions, that are called from function 'applyOperation'.
@@ -3106,7 +3157,8 @@ define('io.ox/office/editor/editor',
         function implMergeParagraph(position) {
 
             var posLength = position.length - 1,
-                para = position[posLength];
+                para = position[posLength],
+                imageMoves = [];
 
             position.push(0); // adding pos to position temporarely
 
@@ -3146,8 +3198,21 @@ define('io.ox/office/editor/editor',
                             if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
 
                                 var localChild = thisPara.firstChild;
+
                                 if (localChild) {
-                                    thisPara.insertBefore(child, localChild);  // what about order of spans?
+
+                                    if ((Utils.getNodeName(localChild) === 'span') && ($(localChild).data('positionSpan'))) {
+
+                                        while ((Utils.getNodeName(localChild.nextSibling) === 'span') && ($(localChild.nextSibling).data('positionSpan'))) {
+                                            localChild = localChild.nextSibling;
+                                        }
+
+                                        localChild = localChild.nextSibling;  // using next sibling, to be able to use insertBefore
+                                    }
+
+
+                                    thisPara.insertBefore(child, localChild);
+
                                 } else {
                                     thisPara.appendChild(child);
                                 }
@@ -3159,40 +3224,6 @@ define('io.ox/office/editor/editor',
 
                                 thisPara.appendChild(child);
                             }
-                        }
-
-                        child = nextChild;
-                    }
-
-                    // moving floated images with operation
-                    var counter = 0;
-                    child = thisPara.firstChild;
-                    while (child !== null) {
-                        var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
-
-                        if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
-
-                            var localPos = Position.getObjectPositionInParagraph(thisPara, child),
-                                source = _.copy(position, true),
-                                dest = _.copy(position, true);
-
-                            if (localPos !== counter) {
-                                source.push(localPos);
-                                dest.push(counter);  // there might be floated images already in the first paragraph
-
-                             //   var newOperation = {name: OP_MOVE, start: source, end: dest};
-                             //    applyOperation(newOperation, true, true);
-
-                                implMove(source, dest);
-                            } else {
-                                // only internal shifting required. image should be shifted before empty paragraphs
-                                // there can be empty text spans before the destination node
-                                while (DOM.isEmptyTextSpan(child.previousSibling)) {
-                                    $(child).insertBefore(child.previousSibling);
-                                }
-                            }
-
-                            counter++;
                         }
 
                         child = nextChild;
@@ -3215,6 +3246,8 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
+
+            return imageMoves;
         }
 
         function implDeleteParagraph(position) {
@@ -3697,7 +3730,14 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(startPosition);
         }
 
-        function implMove(source, dest) {
+        function implMove(_source, _dest) {
+
+            var source = _.copy(_source, true),
+                dest = _.copy(_dest, true);
+
+            // workaround: improve last position of destination by 1 to get the correct image
+            // -> might (should) be superfluous in the future.
+            dest[dest.length - 1] += 1;
 
             var returnImageNode = true,
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
