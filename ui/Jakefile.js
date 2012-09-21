@@ -253,7 +253,6 @@ utils.concat("boot.js",
 utils.concat("boot.js", [
         "lib/jquery.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
-        "lib/browsers.js", // browserdetection and support matrix
         "lib/require.js",
         "lib/modernizr.js",
         "lib/jquery.lazyload.js",
