@@ -34,7 +34,7 @@ define('io.ox/calendar/week/view',
         fulltimeHeight: 19,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
-        overlap:        0.4,    // visual overlap of appointments [0.0 - 1.0]
+        overlap:        0.35,    // visual overlap of appointments [0.0 - 1.0]
         slots:          24,     // amount of shown time-slots
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
@@ -310,9 +310,9 @@ define('io.ox/calendar/week/view',
             // create scaffold
 
             // create timelabels
-            var timeLabel = [];
+            var times = [];
             for (var i = 1; i <= this.slots; i++) {
-                timeLabel.push(
+                times.push(
                     $('<div>')
                         .addClass('time')
                         .append($('<div>').addClass('number').text((i < 10 ? '0' + i : i) + '.00'))
@@ -323,7 +323,7 @@ define('io.ox/calendar/week/view',
             // create panes
             this.pane = $('<div>')
                 .addClass('scrollpane')
-                .append($('<div>').addClass('lable').append(timeLabel));
+                .append($('<div>').addClass('lable').append(times));
             this.fulltimePane = $('<div>')
                 .addClass('fulltime');
             this.fulltimeCon = $('<div>')
@@ -516,7 +516,7 @@ define('io.ox/calendar/week/view',
                         // if
                         if (start !== end) {
                             endDate = new date.Local(startDate.getTime());
-                            endDate.setHours(23, 59, 59, 998);
+                            endDate.setHours(23, 59, 59, 999);
                             style += 'rmsouth';
                         } else {
                             endDate = new date.Local(model.get('end_date'));
@@ -622,6 +622,7 @@ define('io.ox/calendar/week/view',
 
             // init drag and resize widget on appointments
             var colWidth = $('.day:first').outerWidth(),
+                paneOffset = self.pane.children().first().width(),
                 lastDiff = 0;
             $('.week-container .day>.appointment.modify')
                 .resizable({
@@ -631,31 +632,62 @@ define('io.ox/calendar/week/view',
                     containment: "parent",
                     start: function (e, ui) {
                         self.lassoMode = false;
-                        $(this).addClass('opac');
+                        $(this).addClass('opac').data('resizable').startPosition = Math.floor((e.pageX - paneOffset) / colWidth);
                     },
                     resize:  function (e, ui) {
-//                        var data = $(this).data('resizable');
+                        var el = $(this).css('zIndex', 999),
+                            data = el.data('resizable'),
+                            handle = 'n',
+                            dir = 'normal',
+                            day = Math.floor((e.pageX - paneOffset) / colWidth);
+                        // detect direction
+                        if (ui.position.top !== ui.originalPosition.top) {
+                            handle = 'n';
+                        } else if (ui.size.height !== ui.originalSize.height) {
+                            handle = 's';
+                        }
+
+                        // resize actions
+                        if (day === data.startPosition) {
+                            dir = 'normal';
+                            if (handle === 's') {
+                                ui.position.top = ui.originalPosition.top;
+                            }
+                        } else if (day > data.startPosition) {
+                            dir = 'recht';
+                            if (handle === 's') {
+                                ui.size.height = self.height() - ui.originalPosition.top;
+//                                var clone = el.clone();
+//                                clone.css('top', 0);
+//                                $('.day[date="' + day + '"]').append(clone);
+                            }
+                        } else if (day < data.startPosition) {
+                            dir = 'left';
+                            if (handle === 'n') {
+                                ui.size.height = ui.originalPosition.top + ui.originalSize.height;
+                                ui.position.top = 0;
+                            }
+                        }
+//                        console.log(dir, day, data, handle);
                     },
                     stop: function (e, ui) {
-                        var el = $(this),
+                        var el = $(this).removeClass('opac'),
                             app = self.collection.get(el.data('cid')).attributes,
                             tmpTS = self.getTimeFromDateTag($(this).parent().attr('date'), true) + self.getTimeFromPos(el.position().top);
-                        self.lassoMode = true;
-                        el.removeClass('opac');
-
-                        if (el.position().top !== ui.originalPosition.top) {
+                        if (ui.position.top !== ui.originalPosition.top) {
                             _.extend(app, {
                                 start_date: tmpTS,
                                 ignore_conflicts: true
                             });
-                        } else if (el.height() !== ui.originalSize.height) {
+                        } else if (ui.size.height !== ui.originalSize.height) {
                             _.extend(app, {
-                                end_date: tmpTS + self.getTimeFromPos(el.outerHeight()),
+                                end_date: tmpTS + self.getTimeFromPos(ui.size.height),
                                 ignore_conflicts: true
                             });
                         }
                         el.busy();
                         self.onUpdateAppointment(app);
+                        self.lassoMode = true;
                     }
                 })
                 .draggable({
