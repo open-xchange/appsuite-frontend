@@ -175,6 +175,14 @@ define("io.ox/mail/api",
             getPost: function (data) {
                 return applyLatest(data);
             }
+        },
+        params: {
+            all: function (options) {
+                if (options.sort === 'thread') {
+                    options.sort = 610;
+                }
+                return options;
+            }
         }
     });
 
