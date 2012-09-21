@@ -56,6 +56,7 @@ define("io.ox/core/api/factory",
             done: {},
             fail: {},
             pipe: {},
+            params: {},
             filter: null
         }, o || {});
 
@@ -88,9 +89,11 @@ define("io.ox/core/api/factory",
 
                 // cache miss?
                 var getter = function () {
+                    console.log('mmmh', o, o.params);
+                    var params = o.params.all ? o.params.all(_.copy(opt, true)) : opt;
                     return http.GET({
                         module: o.module,
-                        params: opt,
+                        params: params,
                         processResponse: processResponse === undefined ? true : processResponse
                     })
                     .pipe(function (data) {
