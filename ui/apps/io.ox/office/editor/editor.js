@@ -580,7 +580,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     var imageEndPosition = _.copy(imageStartPosition, true);
-                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range
+                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                     // deleting the image with an operation
                     this.deleteText(imageStartPosition, imageEndPosition);
                 }
