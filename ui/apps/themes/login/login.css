@@ -15,9 +15,9 @@ html, body {
     height: 100%;
 }
 
-.css-table { display: table; }
+.css-table { display: table; width: 100%; }
 .css-table-row { display: table-row; }
-.css-table-cell { display: table-cell; }
+.css-table-cell { display: table-cell; vertical-align: middle; }
 
 .unselectable {
     -moz-user-select: -moz-none;
