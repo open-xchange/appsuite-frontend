@@ -3732,10 +3732,13 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(startPosition);
         }
 
-        function implMove(source, dest) {
+        function implMove(_source, _dest) {
+
+            var source = _.copy(_source, true),
+                dest = _.copy(_dest, true);
 
             // workaround: improve last position of destination by 1 to get the correct image
-            // -> might be superfluous in the future.
+            // -> might (should) be superfluous in the future.
             dest[dest.length - 1] += 1;
 
             var returnImageNode = true,
