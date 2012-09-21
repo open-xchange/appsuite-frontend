@@ -407,10 +407,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='@window-head-top', endColorstr='@window-head-bottom', GradientType=0 );"
 }
 
-.css-table { display: table; table-layout: fixed; width: 100%; }
-.css-table-row { display: table-row }
-.css-table-cell { display: table-cell; vertical-align: middle; }
-
 .cell-50 { width: 50.0%; }
 .cell-33 { width: 33.33333%; }
 .cell-25 { width: 25.0%; }
@@ -1465,6 +1461,14 @@ div.external-user-image {
 
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
+
+@media (max-width: 900px) {
+    .window-head.css-table { display: block; }
+    .window-head .css-table-row { display: block; }
+    .window-head .css-table-cell { display: block; width: 100%; }
+    .window-head { height: 100px; }
+    .window-body { top: 100px; }
+}
 
 @media screen and (min-height: 800px) {
     .window-head { height: 59px; }
