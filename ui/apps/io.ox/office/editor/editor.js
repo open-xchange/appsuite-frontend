@@ -708,141 +708,6 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
         };
 
-        this.insertSpecialTable = function () {
-
-            var selection = getSelection(),
-                lastPos = selection.startPaM.oxoPosition.length - 1,
-                deleteTempParagraph = false;
-
-            selection.adjust();
-            if (selection.hasRange()) {
-                this.deleteSelected(selection);
-            }
-
-            var length = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
-
-            // Splitting paragraph, if the cursor is not at the beginning or at the end of the paragraph.
-            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
-                (selection.startPaM.oxoPosition[lastPos] !== length)) {
-                this.splitParagraph(selection.startPaM.oxoPosition);
-                selection.startPaM.oxoPosition[lastPos - 1] += 1;
-            }
-
-            // Splitting paragraph, if the cursor is at the end of an non empty paragraph and this paragraph is
-            // the last from all .
-            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
-                (selection.startPaM.oxoPosition[lastPos] === length)) {
-
-                var maxIndex = Position.getCountOfAdjacentParagraphsAndTables(paragraphs, selection.startPaM.oxoPosition);
-                // Is this a position after the final character in the final paragraph?
-                // -> then the splitting of the paragraph is required, not only temporarely.
-                if ((selection.startPaM.oxoPosition[lastPos - 1]) === maxIndex) {
-                    this.splitParagraph(selection.startPaM.oxoPosition);
-                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
-                    deleteTempParagraph = false;
-                } else {
-                    implSplitParagraph(selection.startPaM.oxoPosition);  // creating temporarely, to be deleted after table is inserted
-                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
-                    deleteTempParagraph = true;
-                }
-            }
-
-            selection.startPaM.oxoPosition.pop();
-            paragraphs = editdiv.children();
-
-            var position = _.copy(selection.startPaM.oxoPosition, true);
-            var table = $('<table>');
-
-            table.append('<colgroup><col style="width:20mm"><col style="width:30mm"><col style="width:15mm"><col style="width:32mm"><col style="width:16mm"><col style="width:19mm"></colgroup>')
-
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Berlin</span></p></td>'))
-                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Hamburg</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Kassel</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Bremen</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Becks</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Flens</span></p></td>'))
-                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Warsteiner</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Holsten</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Buletten</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Friko</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Handball</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Fussball</span></p></td>'))
-                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Volleyball</span></p></td>')));
-
-//          <table border="1" style="border-style:solid; border-color:green; border-width:2px;">
-//                        <colgroup>
-//                          <col style="width:20mm">
-//                          <col style="width:40mm">
-//                          <col style="width:25mm">
-//                          <col style="width:32mm">
-//                          <col style="width:16mm">
-//                          <col style="width:19mm">
-//                        </colgroup>
-//                        <tr>
-//                          <td>Berlin</td>
-//                          <td colspan="2">Hamburg</td>
-//                          <td>M&uuml;nchen</td>
-//                          <td>Hamburg</td>
-//                        </tr>
-//                        <tr>
-//                          <td>Milj&ouml;h</td>
-//                          <td>Kiez</td>
-//                          <td colspan="3">Bierdampf</td>
-//                          <td>Hamburg</td>
-//                        </tr>
-//                        <tr>
-//                          <td colspan="2">Buletten</td>
-//                          <td>Frikadellen</td>
-//                        </tr>
-//                      </table>
-
-            // insert the table into the document
-            var domPosition = Position.getDOMPosition(paragraphs, position),
-                domParagraph = null,
-                insertBefore = true;
-
-            if (domPosition) {
-                domParagraph = domPosition.node;
-            } else {
-                position[position.length - 1] -= 1; // inserting table at the end
-                domPosition = Position.getDOMPosition(paragraphs, position);
-                if (domPosition) {
-                    domParagraph = domPosition.node;
-                    if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
-                        insertBefore = false;  // inserting after the last paragraph/table
-                    }
-                }
-            }
-
-            if (domParagraph !== null) {
-                if (insertBefore) {
-                    table.insertBefore(domParagraph);
-                } else {
-                    table.insertAfter(domParagraph);
-                }
-
-                paragraphs = editdiv.children();
-
-                // Setting cursor into table (unfortunately not visible in Chrome)
-                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-                lastOperationEnd = new OXOPaM(oxoPosition);
-            }
-
-            if (deleteTempParagraph) {
-                selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
-                implDeleteParagraph(selection.startPaM.oxoPosition);
-                paragraphs = editdiv.children();
-            }
-
-            // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
-        };
-
-
         this.insertTable = function (size) {
             if (size) {
 
@@ -1076,10 +941,10 @@ define('io.ox/office/editor/editor',
         // ==================================================================
 
         // ====================================================================
-        // Public functions for the hybrid edit mode
+        // Private functions for the hybrid edit mode
         // ====================================================================
 
-        this.processFocus = function (state) {
+        function processFocus(state) {
             Utils.info('Editor: received focus event: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
@@ -1087,35 +952,35 @@ define('io.ox/office/editor/editor',
                     // Update Browser Selection, might got lost.
                     setSelection(currentSelection);
                 }
-                this.trigger('focus', state);
+                self.trigger('focus', state);
             }
-        };
+        }
 
-        this.processMouseDown = function (event) {
+        function processMouseDown(event) {
             implCheckEventSelection(); // just in case the user was faster than the timer...
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
-        };
+        }
 
-        this.processMouseUp = function (event) {
+        function processMouseUp(event) {
             implCheckEventSelection();
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
-        };
+        }
 
-        this.processDragOver = function (event) {
+        function processDragOver(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processDrop = function (event) {
+        function processDrop(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processContextMenu = function (event) {
+        function processContextMenu(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processKeyDown = function (event) {
+        function processKeyDown(event) {
 
             implDbgOutEvent(event);
             // implCheckSelection();
@@ -1142,14 +1007,14 @@ define('io.ox/office/editor/editor',
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
                 else if (c === 'I') {
-                    this.insertParagraph([paragraphs.length]);
+                    self.insertParagraph([paragraphs.length]);
                 }
                 else if (c === 'D') {
-                    this.initDocument();
-                    this.grabFocus(true);
+                    self.initDocument();
+                    self.grabFocus(true);
                 }
                 else if (c === 'T') {
-                    this.insertSpecialTable();
+                    self.insertTable({width: 2, height: 4});
                 }
                 else if (c === 'G') {
                     var selection = getSelection();
@@ -1204,7 +1069,7 @@ define('io.ox/office/editor/editor',
             if (event.keyCode === KeyCodes.DELETE) {
                 selection.adjust();
                 if (selection.hasRange()) {
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
@@ -1213,7 +1078,7 @@ define('io.ox/office/editor/editor',
 
                     if (startPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
-                        this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
+                        self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
                     else {
                         var mergeselection = _.copy(selection.startPaM.oxoPosition),
@@ -1237,14 +1102,14 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = true;
                         }
 
-                        this.mergeParagraph(mergeselection);
+                        self.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
                             if (characterPos === 0) {
                                 // removing empty paragraph
                                 var localPos = _.copy(selection.startPaM.oxoPosition, true);
                                 localPos.pop();
-                                this.deleteParagraph(localPos);
+                                self.deleteParagraph(localPos);
                                 nextParagraphPosition[lastValue] -= 1;
                             }
                             selection.startPaM.oxoPosition = Position.getFirstPositionInParagraph(paragraphs, nextParagraphPosition);
@@ -1272,7 +1137,7 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
                 if (selection.hasRange()) {
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1,
@@ -1291,7 +1156,7 @@ define('io.ox/office/editor/editor',
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         var endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
-                        this.deleteText(startPosition, endPosition);
+                        self.deleteText(startPosition, endPosition);
                         selection.startPaM.oxoPosition[lastValue] -= 1;
                     }
                     else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
@@ -1314,7 +1179,7 @@ define('io.ox/office/editor/editor',
 
                             if (startPosition[lastValue - 1] >= 0) {
                                 if (! prevIsTable) {
-                                    this.mergeParagraph(startPosition);
+                                    self.mergeParagraph(startPosition);
                                     paragraphsMerged = true;
                                 }
                                 selection.startPaM.oxoPosition[lastValue - 1] -= 1;
@@ -1368,35 +1233,35 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'Z') {
                     event.preventDefault();
-                    this.undo();
+                    self.undo();
                 }
                 else if (c === 'Y') {
                     event.preventDefault();
-                    this.redo();
+                    self.redo();
                 }
                 else if (c === 'X') {
                     event.preventDefault();
-                    this.cut();
+                    self.cut();
                 }
                 else if (c === 'C') {
                     event.preventDefault();
-                    this.copy();
+                    self.copy();
                 }
                 else if (c === 'V') {
                     event.preventDefault();
-                    this.paste();
+                    self.paste();
                 }
                 else if (c === 'B') {
                     event.preventDefault();
-                    this.setAttribute('character', 'bold', !this.getAttributes('character').bold);
+                    self.setAttribute('character', 'bold', !self.getAttributes('character').bold);
                 }
                 else if (c === 'I') {
                     event.preventDefault();
-                    this.setAttribute('character', 'italic', !this.getAttributes('character').italic);
+                    self.setAttribute('character', 'italic', !self.getAttributes('character').italic);
                 }
                 else if (c === 'U') {
                     event.preventDefault();
-                    this.setAttribute('character', 'underline', !this.getAttributes('character').underline);
+                    self.setAttribute('character', 'underline', !self.getAttributes('character').underline);
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
@@ -1406,9 +1271,9 @@ define('io.ox/office/editor/editor',
             if (self.getParagraphCount() !== editdiv.children().size()) {
                 Utils.warn('Editor.processKeyDown(): paragraph count invalid!');
             }
-        };
+        }
 
-        this.processKeyPressed = function (event) {
+        function processKeyPressed(event) {
 
             implDbgOutEvent(event);
 
@@ -1447,9 +1312,9 @@ define('io.ox/office/editor/editor',
 
             if ((!event.ctrlKey) && (c.length === 1)) {
 
-                this.deleteSelected(selection);
+                self.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
-                this.insertText(c, selection.startPaM.oxoPosition);
+                self.insertText(c, selection.startPaM.oxoPosition);
                 var lastValue = selection.startPaM.oxoPosition.length - 1;
                 selection.startPaM.oxoPosition[lastValue]++;
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1464,18 +1329,18 @@ define('io.ox/office/editor/editor',
 
                 if (event.keyCode === KeyCodes.ENTER) {
 
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true),
                         lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     if ((lastValue >= 4) &&
                         (Position.isPositionInTable(paragraphs, [0])) &&
                         _(startPosition).all(function (value) { return (value === 0); })) {
-                        this.insertParagraph([0]);
+                        self.insertParagraph([0]);
                         paragraphs = editdiv.children();
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
-                        this.splitParagraph(startPosition);
+                        self.splitParagraph(startPosition);
                         // TODO / TBD: Should all API / Operation calls return the new position?!
                         var lastValue = selection.startPaM.oxoPosition.length - 1;
                         selection.startPaM.oxoPosition[lastValue - 1] += 1;
@@ -1495,7 +1360,7 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.processKeyPressed(): paragraph count invalid!');
             }
 
-        };
+        }
 
         // ==================================================================
         // Private functions
@@ -3800,15 +3665,15 @@ define('io.ox/office/editor/editor',
 
         // hybrid edit mode
         editdiv
-            .on('focus', _.bind(this.processFocus, this, true))
-            .on('blur', _.bind(this.processFocus, this, false))
-            .on('keydown', $.proxy(this, 'processKeyDown'))
-            .on('keypress', $.proxy(this, 'processKeyPressed'))
-            .on('mousedown', $.proxy(this, 'processMouseDown'))
-            .on('mouseup', $.proxy(this, 'processMouseUp'))
-            .on('dragover', $.proxy(this, 'processDragOver'))
-            .on('drop', $.proxy(this, 'processDrop'))
-            .on('contextmenu', $.proxy(this, 'processContextMenu'))
+            .on('focus', function () { processFocus(true); })
+            .on('blur', function () { processFocus(false); })
+            .on('keydown', processKeyDown)
+            .on('keypress', processKeyPressed)
+            .on('mousedown', processMouseDown)
+            .on('mouseup', processMouseUp)
+            .on('dragover', processDragOver)
+            .on('drop', processDrop)
+            .on('contextmenu', processContextMenu)
             .on('cut paste', false);
 
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
