@@ -1907,13 +1907,16 @@ define('io.ox/office/editor/editor',
 
             var // array of arrays collecting all sequences of sibling text nodes
                 siblingTextNodes = [],
-                // the number of child nodes in the paragraph
-                childCount = 0,
+                // whether the paragraph contains any text
+                hasText = false,
                 // whether the last child node is the dummy <br> element
                 lastDummy = false;
 
             // convert parameter to a DOM node
             paragraph = Utils.getDomNode(paragraph);
+
+            // whether last node is the dummy <br> node
+            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
 
             // remove all empty text spans which have sibling text spans, and collect
             // sequences of sibling text spans (needed for white-space handling)
@@ -1934,27 +1937,6 @@ define('io.ox/office/editor/editor',
                 }
             });
 
-            // get current child count and whether last node is the dummy <br> node
-            childCount = paragraph.childNodes.length;
-            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
-
-            // insert an empty text span if there is no other content (except the dummy <br>)
-            if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
-                $(paragraph).prepend($('<span>').text(''));
-                if (characterStyles) {
-                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
-                }
-                childCount += 1;
-            }
-
-            // append dummy <br> if the paragraph contains only an empty text span, or
-            // remove the dummy <br> if there is anything but a single empty text span
-            if ((childCount === 1) && DOM.isEmptyTextSpan(paragraph.firstChild)) {
-                $(paragraph).append($('<br>').data('dummy', true));
-            } else if (lastDummy && ((childCount > 2) || !DOM.isEmptyTextSpan(paragraph.firstChild))) {
-                $(paragraph.lastChild).remove();
-            }
-
             // Convert consecutive white-space characters to sequences of SPACE/NBSP
             // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
             // it breaks the paragraph's CSS attribute text-align:justify. Process
@@ -1972,24 +1954,46 @@ define('io.ox/office/editor/editor',
                 // collect the complete text in all text nodes
                 _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
 
-                // process all white-space contained in the text nodes
-                text = text
-                    // normalize white-space (convert to SPACE characters)
-                    .replace(/\s/g, ' ')
-                    // text in the node sequence cannot start with a SPACE character
-                    .replace(/^ /, '\xa0')
-                    // convert SPACE/SPACE pairs to SPACE/NBSP pairs
-                    .replace(/ {2}/g, ' \xa0')
-                    // text in the node sequence cannot end with a SPACE character
-                    .replace(/ $/, '\xa0');
+                // ignore empty sequences
+                if (text.length > 0) {
+                    hasText = true;
 
-                // distribute converted text to the text nodes
-                _(textNodes).each(function (textNode) {
-                    var length = textNode.nodeValue.length;
-                    textNode.nodeValue = text.substr(offset, length);
-                    offset += length;
-                });
+                    // process all white-space contained in the text nodes
+                    text = text
+                        // normalize white-space (convert to SPACE characters)
+                        .replace(/\s/g, ' ')
+                        // text in the node sequence cannot start with a SPACE character
+                        .replace(/^ /, '\xa0')
+                        // convert SPACE/SPACE pairs to SPACE/NBSP pairs
+                        .replace(/ {2}/g, ' \xa0')
+                        // text in the node sequence cannot end with a SPACE character
+                        .replace(/ $/, '\xa0');
+
+                    // distribute converted text to the text nodes
+                    _(textNodes).each(function (textNode) {
+                        var length = textNode.nodeValue.length;
+                        textNode.nodeValue = text.substr(offset, length);
+                        offset += length;
+                    });
+                }
             });
+
+            // insert an empty text span if there is no other content (except the dummy <br>)
+            if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
+                $(paragraph).prepend($('<span>').text(''));
+                // initialize character formatting from current paragraph style
+                if (characterStyles) {
+                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                }
+            }
+
+            // append dummy <br> if the paragraph contains no text, or remove
+            // the dummy <br> if there is any text
+            if (!hasText && !lastDummy) {
+                $(paragraph).append($('<br>').data('dummy', true));
+            } else if (hasText && lastDummy) {
+                $(paragraph.lastChild).remove();
+            }
 
             // TODO: Adjust tabs, ...
         }
