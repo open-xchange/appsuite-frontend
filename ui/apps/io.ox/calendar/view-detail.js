@@ -21,7 +21,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/extPatterns/links",
      "gettext!io.ox/calendar/calendar",
      "less!io.ox/calendar/style.css"
-    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links) {
+    ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links, gt) {
 
     "use strict";
 
@@ -211,9 +211,8 @@ define("io.ox/calendar/view-detail",
                     })
                     .value();
 
-
                 participants.append($("<div>")
-                        .addClass("io-ox-label").text("Participants"));
+                        .addClass("io-ox-label participants-block").text(gt("Participants")));
 
                 var plist = $("<div>").addClass("participant-list").appendTo(participants);
 
@@ -264,7 +263,7 @@ define("io.ox/calendar/view-detail",
                     // resources
                     if (resourceList.length) {
                         participants
-                            .append($("<div>").addClass("io-ox-label").text("Resources"))
+                            .append($("<div>").addClass("io-ox-label").text(gt("Resources")))
                             .append(plist = $("<div>").addClass("participant-list"));
                         // loop over resources
                         _(resourceList)
@@ -285,6 +284,16 @@ define("io.ox/calendar/view-detail",
             }
 
             this.append(participants);
+        }
+    });
+
+
+    ext.point('io.ox/calendar/detail').extend({
+        index: 550,
+        id: 'inline-actions-participantrelated',
+        draw: function (data) {
+            var preDiv = this.find('.io-ox-label.participants-block');
+            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', preDiv, data);
         }
     });
 

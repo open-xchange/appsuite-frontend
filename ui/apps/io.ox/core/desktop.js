@@ -28,7 +28,8 @@ define("io.ox/core/desktop",
     // ref to core screen
     var core = $("#io-ox-core"),
         // top bar
-        topBar = $("#io-ox-topbar"),
+        topbar = $("#io-ox-topbar"),
+        launchers = topbar.find('.launchers'),
         // add launcher
         addLauncher = function (side, label, fn, tooltip) {
             // construct
@@ -86,9 +87,9 @@ define("io.ox/core/desktop",
             } else {
                 // just add
                 if (side === "left") {
-                    node.appendTo(topBar);
+                    node.appendTo(launchers);
                 } else {
-                    node.addClass("right").appendTo(topBar);
+                    node.addClass("right").appendTo(topbar);
                 }
             }
 
@@ -378,6 +379,7 @@ define("io.ox/core/desktop",
                 // update hash
                 if (opt.name !== _.url.hash('app')) {
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                 }
                 if (opt.name) {
@@ -416,6 +418,7 @@ define("io.ox/core/desktop",
                     // update hash
                     _.url.hash('app', null);
                     _.url.hash('folder', null);
+                    _.url.hash('perspective', null);
                     _.url.hash('id', null);
                     // remove from list
                     ox.ui.running = _(ox.ui.running).without(self);
@@ -558,6 +561,7 @@ define("io.ox/core/desktop",
                 }
                 // set perspective
                 app.getWindow().setPerspective(name);
+                _.url.hash('perspective', name);
                 // render?
                 if (!rendered) {
                     this.render(app);
@@ -702,9 +706,11 @@ define("io.ox/core/desktop",
             // window class
             Window = function (id, name) {
 
+                name = name || 'generic';
+
                 this.id = id;
                 this.name = name;
-                this.nodes = {};
+                this.nodes = { title: $(), toolbar: $(), controls: $() };
                 this.search = { query: "" };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -718,9 +724,84 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.updateToolbar = function () {
-                    ext.point(this.name + "/toolbar")
+                    ext.point(name + '/toolbar')
                         .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
                 };
+
+                ext.point(name + '/window-title').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<h1 class="window-title">').append(
+                            ext.point(name + '/window-title-label')
+                                .invoke('draw', this).first().value() || $()
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-title-label').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<span class="window-title-label">');
+                    }
+                });
+
+                ext.point(name + '/window-toolbar').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<div class="window-toolbar">');
+                    }
+                });
+
+                ext.point(name + '/window-controls').extend({
+                    id: 'default',
+                    draw: function () {
+                        return $('<div class="window-controls">').append(
+                            // fullscreen
+                            this.fullscreenButton = $('<div class="window-control pull-right">').hide()
+                                .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
+                                // settings
+                            this.settingsButton = $('<div class="window-control">').hide()
+                                .text('\u270E'),
+                            // close
+                            this.closeButton = $('<div class="window-control">').hide()
+                                .append($('<a class="close">&times;</a>'))
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-head').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.head.append(
+                            $('<div class="css-table-row">').append(
+                                // title
+                                $('<div class="css-table-cell cell-33">').append(
+                                    this.title = ext.point(name + '/window-title')
+                                        .invoke('draw', this).first().value() || $()
+                                ),
+                                // toolbar
+                                $("<div class='css-table-cell cell-33 cell-center'>").append(
+                                    this.toolbar = ext.point(name + '/window-toolbar')
+                                        .invoke('draw', this).first().value() || $()
+                                ),
+                                // controls
+                                $("<div class='css-table-cell cell-33 cell-right'>").append(
+                                    this.controls = ext.point(name + '/window-controls')
+                                        .invoke('draw', this).first().value() || $()
+                                )
+                            )
+                        );
+                    }
+                });
+
+                ext.point(name + '/window-body').extend({
+                    id: 'default',
+                    draw: function () {
+                        return this.body.append(
+                            this.main = $('<div class="window-content">')
+                        );
+                    }
+                });
 
                 this.show = function (cont) {
                     // get node and its parent node
@@ -968,76 +1049,28 @@ define("io.ox/core/desktop",
                 };
 
             // window container
-            win.nodes.outer = $("<div>")
-            .attr({
-                id: opt.id,
-                "data-window-nr": guid
-            })
-            .addClass("window-container")
-            .append(
-                $("<div>")
-                .addClass("window-container-center")
-                .data({
-                    width: width + unit
-                }).css({
-                    width: width + unit
+            win.nodes.outer = $('<div class="window-container">')
+                .attr({
+                    id: opt.id,
+                    "data-window-nr": guid
                 })
                 .append(
-                    win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
-                )
-                .append(
-                    // window HEAD
-                    win.nodes.head = $('<div class="window-head css-table">')
+                    $('<div class="window-container-center">')
+                    .data({ width: width + unit })
+                    .css({ width: width + unit })
                     .append(
-                        $("<div class='css-table-row'>")
-                        .append(
-                            $("<div class='css-table-cell cell-33'>").append(
-                                // title
-                                win.nodes.title = $('<h1 class="window-title">')
-                                //.css('width', opt.titleWidth)
-                                .append($("<span>"))
-                            ),
-                            $("<div class='css-table-cell cell-33 cell-center'>").append(
-                                // toolbar
-                                win.nodes.toolbar = $('<div class="window-toolbar">')
-                            ),
-                            $("<div class='css-table-cell cell-33 cell-right'>").append(
-                                // controls
-                                win.nodes.controls = $('<div class="window-controls">')
-                                .append(
-                                    // settings
-                                    win.nodes.settingsButton = $("<div>").hide()
-                                    .addClass("window-control")
-                                    .text("\u270E"),
-                                    // close
-                                    win.nodes.closeButton = $("<div>").hide()
-                                    .addClass("window-control")
-                                    .append(
-                                        $('<a class="close">&times;</a>')
-                                    )
-                                )
-                            )
-                        )
+                        // blocker
+                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
+                        // window HEAD
+                        win.nodes.head = $('<div class="window-head css-table">'),
+                        // window BODY
+                        win.nodes.body = $('<div class="window-body">')
                     )
-                )
-                .append(
-                    // window BODY
-                    win.nodes.body = $("<div>")
-                    .addClass("window-body")
-                    .append(
-                        // quick settings
-                        win.nodes.settings = $("<div>")
-                        .hide()
-                        .addClass("window-settings")
-                        .html("<h2>Each window can have a quick settings area</h2>")
-                    )
-                    .append(
-                        // content
-                        win.nodes.main = $("<div>")
-                        .addClass("window-content")
-                    )
-                )
-            );
+                );
+
+            // draw window head
+            ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
+            ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
 
             // add event hub
             Events.extend(win);
@@ -1161,7 +1194,7 @@ define("io.ox/core/desktop",
                         })
                     )
                 )
-                .prependTo(win.nodes.controls);
+                .appendTo(win.nodes.controls);
             }
 
             // toolbar extension point
@@ -1187,6 +1220,16 @@ define("io.ox/core/desktop",
                 if (opt.close === true) {
                     win.nodes.closeButton.show().on("click", close);
                     win.setQuitOnClose(true);
+                }
+
+                // add fullscreen handler
+                if (opt.fullscreen === true && win.nodes.fullsreenButton) {
+                    win.nodes.fullscreenButton.show().on('click', function () {
+                        // Maximize
+                        if (window.BigScreen.enabled) {
+                            window.BigScreen.toggle(win.nodes.outer.get(0));
+                        }
+                    });
                 }
 
                 // set title

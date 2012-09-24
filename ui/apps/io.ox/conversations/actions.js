@@ -29,10 +29,11 @@ define("io.ox/conversations/actions", ["io.ox/core/extensions", "io.ox/core/extP
 
     // links
 
-    ext.point("io.ox/conversations/links/toolbar").extend(new links.Link({
+    ext.point("io.ox/conversations/links/toolbar").extend(new links.Button({
         index: 100,
         id: "create",
         label: "Start new conversation",
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/conversations/actions/create"
     }));
 

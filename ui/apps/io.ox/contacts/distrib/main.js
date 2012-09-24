@@ -46,15 +46,17 @@ define('io.ox/contacts/distrib/main',
 
         }
 
-        app.create = function (folderId) {
+        app.create = function (folderId, initdata) {
             // set state
             app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
+
             model = contactModel.factory.create({
                 folder_id: folderId,
                 mark_as_distributionlist: true
             });
+
             view = new ContactCreateDistView({ model: model });
             // go!
             show();
@@ -77,7 +79,7 @@ define('io.ox/contacts/distrib/main',
 
         app.setLauncher(function () {
 
-            app.setWindow(win = ox.ui.createWindow({ title: '', toolbar: true, close: true }));
+            app.setWindow(win = ox.ui.createWindow({ title: '', toolbar: true, close: true, name: 'io.ox/contacts/distrib' }));
 
             container = win.nodes.main
                 .addClass('create-distributionlist')
@@ -96,7 +98,7 @@ define('io.ox/contacts/distrib/main',
         app.setQuit(function () {
 
             var def = $.Deferred();
-            
+
             if (model.isDirty()) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
@@ -116,7 +118,7 @@ define('io.ox/contacts/distrib/main',
             } else {
                 def.resolve();
             }
-            
+
             //clean
             return def;
         });

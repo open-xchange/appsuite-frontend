@@ -1,0 +1,110 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+ 
+ .io-ox-tasks-edit .task-edit-main-label {
+ 	display: block;
+ 	margin-bottom: 3px;
+    margin-top: 5px;
+ }
+ 
+ .io-ox-tasks-edit .task-edit-info-label {
+ 	top: 0.5em;
+ 	margin-right: 0.5em;
+ 	line-height: 39px;
+ }
+ 
+ .io-ox-tasks-edit {
+ 	background-color: #F3F3F3;
+ 	height: 100%;
+ }
+ 
+ .info-wrapper .end-date-field,
+ .info-wrapper .start-date-field,
+ .info-wrapper .alarm-date-field {
+ 	margin-bottom: 9px;
+ 	width: 150px;
+ 	float: right;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper select {
+ 	float: right;
+ 	width: 206px;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper {
+	width: 330px;
+	position: absolute;
+ }
+ 
+ .io-ox-tasks-edit .main-edit {
+ 	display: inline-block;
+ 	left: 331px;
+ 	position: relative;
+	width: 60%;
+	padding-left: 40px;
+ }
+ 
+ .io-ox-tasks-edit-main .title-field,
+ .io-ox-tasks-edit-main .note-field {
+ 	width: 100%;
+ }
+ 
+ .io-ox-tasks-edit-main .title-field {
+ 	padding: 4px;
+ }
+ 
+ .io-ox-tasks-edit-main .task-edit-save {
+ 	display: block;
+    font-size: 20px;
+    line-height: 30px;
+    margin-bottom: 9px;
+    width: 100%;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper .task-edit-picker {
+ 	margin-left: 5px;
+ 	width: 45px;
+ 	float: right;
+ }
+ 
+ //PickerPopup
+ 
+ .picker-day {
+ 	border: 1px solid;
+ 	fontsize: 16px; 
+ }
+ 
+ .picker-table {
+ 	width: 100%;
+ }
+ 
+ .picker-label {
+ 	left: 50%;
+ 	position: absolute;
+ }
+ 
+ .picker-button-left {
+ 	float: left;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picker-button-right {
+ 	float: right;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picked-day {
+ 	background-color: #0070FF;
+ 	color: #FFFFFF;
+ }
+ 

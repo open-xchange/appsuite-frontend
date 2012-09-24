@@ -14,11 +14,12 @@ define('io.ox/calendar/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
-     'gettext!io.ox/calendar/actions'], function (ext, links, api, gt) {
+     'io.ox/calendar/util',
+     'gettext!io.ox/calendar/actions'], function (ext, links, api, util, gt) {
 
     'use strict';
 
-    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown;
+    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown, Button = links.Button, ButtonGroup = links.ButtonGroup;
 
     // Actions
     new Action('io.ox/calendar/actions/switch-to-list-view', {
@@ -68,6 +69,34 @@ define('io.ox/calendar/actions',
                 perspective.setRendered(false);
                 perspective.columns = 1;
                 perspective.show(app);
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/sendmail', {
+        action: function (params) {
+            var def = $.Deferred();
+            util.createArrayOfRecipients(params.participants, def);
+            def.done(function (arrayOfRecipients) {
+                require(['io.ox/mail/write/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.compose({to: arrayOfRecipients, subject: params.title});
+                    });
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/calendar/detail/actions/save-as-distlist', {
+        action: function (params) {
+            var def = $.Deferred();
+            util.createDistlistArrayFromPartisipantList(params.participants, def);
+            def.done(function (initdata) {
+                require(['io.ox/contacts/distrib/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.create(params.folder_id, initdata);
+                    });
+                });
             });
         }
     });
@@ -210,53 +239,59 @@ define('io.ox/calendar/actions',
 
     // Links - toolbar
 
-    new Link('io.ox/calendar/links/toolbar', {
+    ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
         label: gt('Create'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
-    });
+    }));
 
-    new Dropdown('io.ox/calendar/links/toolbar', {
+    new ButtonGroup('io.ox/calendar/links/toolbar', {
         id: 'view',
         index: 200,
         label: gt('View')
     });
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'day',
         index: 100,
         label: gt('Day'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-day-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
         label: gt('Work Week'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'fullweek',
         index: 300,
         label: gt('Week'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'month',
         index: 400,
         label: gt('Month'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-month-view'
-    });
+    }));
 
-    new Link('io.ox/calendar/links/toolbar/view', {
+    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'list',
         index: 500,
         label: gt('List'),
+        cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-list-view'
-    });
+    }));
 
     // FIXME: should only be visible if rights are ok
     ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({
@@ -273,6 +308,8 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
 
+
+
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,
         prio: 'hi',
@@ -288,6 +325,35 @@ define('io.ox/calendar/actions',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
     }));
+
+
+
+
+    ext.point('io.ox/calendar/detail/actions-participantrelated').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links-participant',
+        ref: 'io.ox/calendar/links/inline-participants'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'send mail',
+        label: gt('Send mail to all'),
+        ref: 'io.ox/calendar/detail/actions/sendmail'
+    }));
+
+    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'save as distlist',
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+    }));
+
+
+
+
 
     /*ext.point('io.ox/calendar/links/inline').extend(new links.DropdownLinks({
         index: 200,

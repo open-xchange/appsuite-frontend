@@ -78,7 +78,6 @@ define('io.ox/core/tk/vgrid',
         Row.prototype.update = function (data, index, id, prev) {
             // loop over setters
             var i = 0, setters = this.set, $i = setters.length, rets = [];
-            console.log('update > CALL SETTER', $i);
             for (; i < $i; i++) {
                 rets.push(setters[i].call(this.node, data, this.fields, index, prev) || DONE);
             }
@@ -104,9 +103,13 @@ define('io.ox/core/tk/vgrid',
             return this;
         };
 
-        this.getClone = function () {
+        this.getClone = function (prebuild) {
             var i = 0, $i = template.length, tmpl,
                 row = new Row(this.node.clone());
+            // pre build
+            if (prebuild) {
+                _.extend(row.fields, prebuild.call(row.node) || {});
+            }
             // build
             for (; i < $i; i++) {
                 tmpl = template[i];
@@ -133,7 +136,9 @@ define('io.ox/core/tk/vgrid',
         };
     }
 
-    var VGrid = function (target) {
+    var VGrid = function (target, options) {
+
+        options = options || {};
 
         // target node
         var node = $(target).empty().addClass('vgrid'),
@@ -153,12 +158,29 @@ define('io.ox/core/tk/vgrid',
                     var grid = e.data.grid;
                     grid.setEditable(!grid.getEditable());
                 },
+            fnShowAll = function (e) {
+                    var grid = e.data.grid;
+                    if ($(this).prop('checked')) {
+                        grid.selection.selectAll();
+                    } else {
+                        grid.selection.selectFirst();
+                    }
+                },
             toolbar = $('<div>').addClass('vgrid-toolbar')
                 .append(
-                    $('<a>', { href: '#' })
-                    .css('float', 'left')
-                    .append($('<i class="icon-th-list">'))
-                    .on('click', { grid: this }, fnToggleEditable)
+                    // select all
+                    options.showSelectAll === true ?
+                        $('<input type="checkbox">')
+                        .css({ 'float': 'left', 'margin-right': '13px' })
+                        .on('change', { grid: this }, fnShowAll) :
+                        $(),
+                    // show toggle
+                    options.showToggle === false ?
+                        $() :
+                        $('<a>', { href: '#' })
+                        .css('float', 'left')
+                        .append($('<i class="icon-th-list">'))
+                        .on('click', { grid: this }, fnToggleEditable)
                 )
                 .appendTo(node),
             // item template
@@ -294,23 +316,26 @@ define('io.ox/core/tk/vgrid',
 
             var guid = 0,
                 createCheckbox = function () {
-                    var id = 'grid_cb_' + (guid++);
-                    return $('<div>')
+                    var id = 'grid_cb_' + (guid++), fields = {};
+                    this.prepend(
+                        fields.div = $('<div>')
                         .addClass('vgrid-cell-checkbox')
                         .append(
-                            $('<label>', { 'for': id })
+                            fields.label = $('<label>', { 'for': id })
                             .append(
-                                $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
+                                fields.input = $('<input>', { type: 'checkbox', id: id }).addClass('reflect-selection')
                             )
-                        );
+                        )
+                    );
+                    return { checkbox: fields };
                 };
 
             return function (template) {
                 // get clone
-                var clone = template.getClone();
-                // add checkbox for edit mode
-                clone.node.prepend(createCheckbox());
-                return clone;
+                return template.getClone(function () {
+                    // add checkbox for edit mode
+                    return createCheckbox.call(this);
+                });
             };
         }());
 
@@ -801,10 +826,10 @@ define('io.ox/core/tk/vgrid',
             return editable;
         };
 
-        this.setEditable = function (flag) {
+        this.setEditable = function (flag, selector) {
             if (flag) {
                 node.addClass('editable');
-                this.selection.setEditable(true);
+                this.selection.setEditable(true, options.simple ? '.vgrid-cell-checkbox' : '.vgrid-cell');
                 editable = true;
             } else {
                 node.removeClass('editable');
@@ -873,6 +898,13 @@ define('io.ox/core/tk/vgrid',
             init();
             this.repaint();
         };
+
+        // apply options
+        if (options.editable) {
+            this.setEditable(true);
+        }
+
+        node.addClass(options.toolbarPlacement === 'top' ? 'top-toolbar' : 'bottom-toolbar');
     };
 
     // make Template accessible

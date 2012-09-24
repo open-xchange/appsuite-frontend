@@ -92,25 +92,29 @@
             return ExtendableClass;
         };
 
+     // supported browsers
+    _.browserSupport = {
+        'Chrome': '20',
+        'Safari': '5'
+    };
+
     // add namespaces
     _.browser = {
         /** is IE? */
         IE: navigator.appName !== "Microsoft Internet Explorer" ? undefined
             : Number(navigator.appVersion.match(/MSIE (\d+\.\d+)/)[1]),
         /** is Opera? */
-        Opera: isOpera,
+        Opera: isOpera ? ua.split('Opera/')[1].split(' ')[0].split('.')[0]: undefined,
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome,
+        Safari: webkit && !chrome ? ua.split('Version/')[1].split(' ')[0].split('.')[0]: undefined,
         /** Chrome */
-        Chrome: webkit && chrome,
+        Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
-        Firefox:  ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1,
+        Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1,
-        /** iOS **/
-        iOS: /iPhone|iPad|iPod/.test(navigator.platform) && webkit
+        MacOS: ua.indexOf('Macintosh') > -1
     };
 
     _.url = {

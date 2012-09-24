@@ -384,6 +384,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
             contentQueue.start();
             // get window
             app.setWindow(win = ox.ui.createWindow({
+                name: 'io.ox/portal',
                 chromeless: true,
                 toolbar: true,
                 titleWidth: '100%'

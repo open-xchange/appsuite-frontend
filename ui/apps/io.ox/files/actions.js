@@ -19,9 +19,27 @@ define("io.ox/files/actions",
 
     'use strict';
 
-    var Action = links.Action;
+    var Action = links.Action, Link = links.XLink, Button = links.Button, Dropdown = links.Dropdown, ButtonGroup = links.ButtonGroup;
 
     // actions
+
+	new Action('io.ox/files/actions/switch-to-list-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/files/list/perspective'], function (perspective) {
+                perspective.show(app);
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/switch-to-icon-view', {
+        requires: true,
+        action: function (app) {
+            require(['io.ox/files/icons/perspective'], function (perspective) {
+                perspective.show(app);
+            });
+        }
+    });
 
     new Action('io.ox/files/actions/upload', {
         id: 'upload',
@@ -190,30 +208,61 @@ define("io.ox/files/actions",
         }
     });
 
+    new ButtonGroup('io.ox/files/links/toolbar', {
+        id: 'buttongroup',
+        index: 100,
+        label: gt('View')
+    });
 
-    // links
-
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 100,
         id: "upload",
         label: gt("Upload"),
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/upload"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 200,
         id: "share",
         label: gt("Share"),
+        cssClasses: 'btn btn-inverse',
         ref: "io.ox/files/actions/share"
     }));
 
-    ext.point('io.ox/files/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 300,
         id: "editor-new",
         label: gt("Pad!"),
+        cssClasses: 'btn btn-inverse',
         ref: "io.ox/files/actions/editor-new"
     }));
 
+    // links
+	new ButtonGroup('io.ox/files/links/toolbar', {
+        id: 'view',
+        index: 400,
+        radio: true,
+        label: gt('View')
+    });
+
+    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
+        id: 'list',
+        index: 200,
+        label: gt('List'),
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
+        groupButton: true,
+        ref: 'io.ox/files/actions/switch-to-list-view'
+    }));
+
+    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
+        id: 'icons',
+        index: 100,
+        label: gt('Icons'),
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'icons' ? 'active' : ''),
+        groupButton: true,
+        ref: 'io.ox/files/actions/switch-to-icon-view'
+    }));
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "editor",
