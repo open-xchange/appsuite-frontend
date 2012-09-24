@@ -23,9 +23,9 @@
     filter: alpha(opacity=@opacity-percent);
 }
 
-.debug-highlight-mixin(@border-color, @fill-color) {
-    outline: thin @border-color solid;
-    background-color: @fill-color;
+.debug-highlight-mixin(@color) {
+    outline: 1px @color solid;
+    background-color: fade(@color, 20%);
 }
 
 .io-ox-office-title {
@@ -137,27 +137,44 @@
             overflow-y: auto;
             border: 1px #d5d5d5 solid;
 
-            p {
-                border-top: 1px #d5d5d5 dotted;
+            > table {
+                table-layout: auto;
+                border-collapse: collapse;
                 font-family: Arial,sans-serif;
                 font-size: 8pt;
                 line-height: normal;
+                white-space: nowrap;
+
+                td {
+                    padding: 0 1mm;
+                    border: 1px #d5d5d5 solid;
+
+                    &:first-child {
+                        background-color: #d5d5d5;
+                        color: white;
+                        text-align: right;
+                    }
+                }
             }
         }
 
         &.rich.debug-highlight {
 
             p {
-                .debug-highlight-mixin(#8f8, #efe);
+                .debug-highlight-mixin(#8f8);
             }
 
             span, b, i, u, strong, em {
-                .debug-highlight-mixin(#88f, #eef);
+                .debug-highlight-mixin(#88f);
             }
 
             img, table {
-                .debug-highlight-mixin(#f88, #fee);
+                .debug-highlight-mixin(#f88);
                 outline-offset: 2px;
+            }
+
+            div {
+                .debug-highlight-mixin(#f8f);
             }
         }
     }

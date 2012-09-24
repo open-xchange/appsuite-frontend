@@ -27,16 +27,12 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {jQuery} element
      *  The DOM element, as jQuery object.
      *
-     * @param {Boolean} [clone]
-     *  If set to true, the returned attribute map will be a clone of the
-     *  attribute map stored in the element.
-     *
      * @returns {Object}
      *  The attribute map if existing, otherwise an empty object.
      */
     function getElementAttributes(element, clone) {
         var attributes = element.data('attributes');
-        return _.isObject(attributes) ? (clone ? _.clone(attributes) : attributes) : {};
+        return _.isObject(attributes) ? attributes : {};
     }
 
     /**
@@ -72,32 +68,36 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      *
-     * @param {Function} iterateReadOnly
-     *  A function that implements iterating the DOM elements covered by an
-     *  array of DOM ranges for read-only access. The function receives the
-     *  array of DOM ranges to be iterated as first parameter, an iterator
-     *  function to be called for each found DOM element as second parameter,
-     *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module.
-     *
-     * @param {Function} iterateReadWrite
-     *  A function that implements iterating the DOM elements covered by an
-     *  array of DOM ranges for read/write access. The function receives the
-     *  array of DOM ranges to be iterated as first parameter, an iterator
-     *  function to be called for each found DOM element as second parameter,
-     *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module.
+     * @param {Object} [options]
+     *  A map of options to control the behavior of the style sheet container.
+     *  The following options are supported:
+     *  @param {String} [options.descendantStyleFamilies]
+     *      Space-separated list of additional attribute families whose
+     *      attributes may be inserted into the attribute map of a style sheet.
+     *  @param {String} [options.ancestorStyleFamily]
+     *      The attribute family of the style sheets assigned to ancestor
+     *      elements. Used to resolve attributes from the style sheet of an
+     *      ancestor of the current element.
+     *  @param {Function} [options.ancestorElementResolver]
+     *      A function used to receive the ancestor element containing a style
+     *      sheet of the family passed in the 'ancestorStyleFamily' option.
+     *      Receives a DOM element node, and must return the ancestor DOM
+     *      element node.
      */
-    function StyleSheets(styleFamily, definitions, documentStyles, iterateReadOnly, iterateReadWrite, options) {
+    function StyleSheets(styleFamily, definitions, documentStyles, options) {
 
         var // style sheets, mapped by identifier
             styleSheets = {},
+
             // default values for all supported attributes of the own style family
             defaultAttributes = {},
+
             // additional attribute families supported by the style sheets
             descendantStyleFamilies = _(Utils.getStringOption(options, 'descendantStyleFamilies', '').split(/\s+/)).without(''),
+
             // style family of ancestor style sheets
             ancestorStyleFamily = Utils.getStringOption(options, 'ancestorStyleFamily'),
+
             // element resolver for style sheets referred by ancestor DOM elements
             ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver');
 
@@ -196,19 +196,69 @@ define('io.ox/office/editor/format/stylesheets',
             return attributes;
         }
 
+        // abstract interface -------------------------------------------------
+
+        /**
+         * Subclasses MUST overwrite this method and implement iterating the
+         * DOM elements covered by the passed array of DOM ranges for read-only
+         * access. Usually the iterator functions defined in the DOM module can
+         * be used to implement the iteration process.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be visited.
+         *
+         * @param {Function} iterator
+         *  The iterator function to be called for each found DOM element. This
+         *  function receives the current DOM element as first parameter.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         */
+        this.iterateReadOnly = function (ranges, iterator, context) {
+            Utils.error('StyleSheets.iterateReadOnly(): MUST be implemented in the subclass!');
+        };
+
+        /**
+         * Subclasses MUST overwrite this method and implement iterating the
+         * DOM elements covered by the passed array of DOM ranges for
+         * read/write access. Usually the iterator functions defined in the DOM
+         * module can be used to implement the iteration process.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be visited.
+         *
+         * @param {Function} iterator
+         *  The iterator function to be called for each found DOM element. This
+         *  function receives the current DOM element as first parameter.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         */
+        this.iterateReadWrite = function (ranges, iterator, context) {
+            Utils.error('StyleSheets.iterateReadWrite(): MUST be implemented in the subclass!');
+        };
+
         // methods ------------------------------------------------------------
 
         /**
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
          *
-         * @param {Boolean=} skipHidden
-         *  Optional parameter, if true style sheets with hidden flag will not be included
+         * @param {Boolean} [includeHidden=false]
+         *  Specifies whether style sheets with the 'hidden' flag will be
+         *  included in the returned list.
+         *
+         * @returns {Object}
+         *  A map with all style sheet names, keyed by style sheet identifiers.
          */
-        this.getStyleSheetNames = function (skipHidden) {
+        this.getStyleSheetNames = function (includeHidden) {
             var names = {};
             _(styleSheets).each(function (styleSheet, id) {
-                if (!skipHidden || skipHidden && !styleSheet.hidden) {
+                if ((includeHidden === true) || !styleSheet.hidden) {
                     names[id] = styleSheet.name;
                 }
             });
@@ -232,17 +282,24 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} attributes
          *  The formatting attributes contained in the new style sheet, as map
          *  of attribute maps (name/value pairs), keyed by attribute family.
+         *  Supports the main attribute family passed in the styleFamily
+         *  parameter to the constructor, and all additional attribute families
+         *  registered via the 'descendantStyleFamilies' constructor option.
          *
-         * @param {Boolean=} hidden
-         *  Optional property that determines if the style should be displayed in the UI (default is false)
-         *
-         * @param {Number=} uiPriority
-         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         * @param {Object} [options]
+         *  A map of options to control the behavior of the new style sheet.
+         *  The following options are supported:
+         *  @param {Boolean} [options.hidden=false]
+         *      Determines if the style should be displayed in the user
+         *      interface.
+         *  @param {Number} [options.priority=0]
+         *      The sorting priority of the style (the lower the value the
+         *      higher the priority).
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
          */
-        this.addStyleSheet = function (id, name, parentId, attributes, hidden, uiPriority) {
+        this.addStyleSheet = function (id, name, parentId, attributes, options) {
 
             var // get or create a style sheet object
                 styleSheet = styleSheets[id] || (styleSheets[id] = {});
@@ -258,10 +315,10 @@ define('io.ox/office/editor/format/stylesheets',
             }
 
             // set if style sheet should be displayed in the UI
-            styleSheet.hidden = hidden || false;
+            styleSheet.hidden = Utils.getBooleanOption(options, 'hidden', false);
 
             // set the UI display priority of the style sheet
-            styleSheet.uiPriority = uiPriority || 0;
+            styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
 
             // prepare attribute map (empty attributes for all supported families)
             styleSheet.attributes = Utils.makeSimpleObject(styleFamily, {});
@@ -320,6 +377,32 @@ define('io.ox/office/editor/format/stylesheets',
             return this;
         };
 
+        /**
+         * Returns the UI priority for the specified style sheet.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns {Number}
+         *  The UI priority.
+         */
+        this.getUIPriority = function (id) {
+            return (id in styleSheets) ? styleSheets[id].priority : 0;
+        };
+
+        /**
+         * Returns the options map used to create the preview list item in a
+         * style chooser control. Uses the 'preview' entry of all attribute
+         * definitions to build the options map.
+         *
+         * @param {String} id
+         *  The unique identifier of of the style sheet whose preview will be
+         *  created.
+         *
+         * @returns {Object}
+         *  A map of options passed to the creator function of the preview
+         *  button element.
+         */
         this.getPreviewButtonOptions = function (id) {
 
             var // the result options
@@ -362,8 +445,11 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the values of all formatting attributes in the specified DOM
-         * ranges supported by the CSS formatter of this container.
+         * Returns the merged values of all formatting attributes in the
+         * specified DOM ranges supported by the CSS formatter of this
+         * container. If an attribute value is not unique in the specified
+         * ranges, the respective value in the returned attribute map be set to
+         * null.
          *
          * @param {DOM.Range[]} ranges
          *  (in/out) The DOM ranges to be visited. The array will be validated
@@ -389,7 +475,7 @@ define('io.ox/office/editor/format/stylesheets',
                 special = Utils.getBooleanOption(options, 'special', false);
 
             // get merged attributes from all covered elements
-            iterateReadOnly(ranges, function (element) {
+            this.iterateReadOnly(ranges, function (element) {
 
                 var // the current element, as jQuery object
                     $element = $(element),
@@ -439,7 +525,9 @@ define('io.ox/office/editor/format/stylesheets',
          *  DOM.iterateNodesInRanges() for details).
          *
          * @param {Object} attributes
-         *  A map of attribute name/value pairs.
+         *  A map of attribute name/value pairs. To clear an explicit attribute
+         *  value from the elements (thus defaulting to the current style
+         *  sheet), the value in this map can be set to null.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
@@ -452,6 +540,9 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to change special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
+         *  @param {Function} [options.elementChangeListener]
+         *      If specified, will be called for each DOM element covered by
+         *      the passed ranges whose attributes have been changed.
          */
         this.setAttributesInRanges = function (ranges, attributes, options) {
 
@@ -460,14 +551,18 @@ define('io.ox/office/editor/format/stylesheets',
                 // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false);
+                special = Utils.getBooleanOption(options, 'special', false),
+                // element change listener notified for changed attributes
+                changeListener = Utils.getFunctionOption(options, 'elementChangeListener');
 
             // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
+            this.iterateReadWrite(ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),
-                    // explicit element attributes
+                    // the existing explicit element attributes
+                    oldElementAttributes = getElementAttributes($element),
+                    // new explicit element attributes
                     elementAttributes = null,
                     // attributes of the current or new style sheet
                     styleAttributes = null,
@@ -475,9 +570,9 @@ define('io.ox/office/editor/format/stylesheets',
                     cssAttributes = null;
 
                 if (styleId) {
-                    // change style sheet of the element: remove existing
-                    // element attributes, set CSS formatting of all attributes
-                    // according to the new style sheet
+                    // style sheet of the element will be changed: remove all
+                    // existing element attributes, set CSS formatting of all
+                    // attributes according to the new style sheet
                     styleAttributes = getStyleAttributes(styleId, styleFamily, element);
                     elementAttributes = { style: styleAttributes.style };
                     cssAttributes = _.clone(styleAttributes);
@@ -485,7 +580,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // clone the attributes coming from the element, there may
                     // be multiple elements pointing to the same data object,
                     // e.g. after using the $.clone() method.
-                    elementAttributes = getElementAttributes($element, true);
+                    elementAttributes = _.clone(oldElementAttributes);
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element);
                     cssAttributes = {};
                 }
@@ -493,14 +588,25 @@ define('io.ox/office/editor/format/stylesheets',
                 // add passed attributes
                 _(attributes).each(function (value, name) {
                     if (isRegisteredAttribute(name, special)) {
-                        if (clear && (styleAttributes[name] === value)) {
+                        // check whether to clear the attribute
+                        if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
                             delete elementAttributes[name];
                         } else {
                             elementAttributes[name] = value;
                         }
-                        cssAttributes[name] = value;
+                        cssAttributes[name] = _.isNull(value) ? styleAttributes[name] : value;
                     }
                 });
+
+                // check if any attributes have been changed
+                if (_.isEqual(oldElementAttributes, elementAttributes)) {
+                    return;
+                }
+
+                // call element change listener
+                if (_.isFunction(changeListener)) {
+                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
+                }
 
                 // write back element attributes to the element
                 setElementAttributes($element, elementAttributes);
@@ -522,13 +628,15 @@ define('io.ox/office/editor/format/stylesheets',
                 }
 
             }, this);
+
+            return this;
         };
 
         /**
          * Clears specific formatting attributes in the specified DOM ranges.
          *
          * @param {DOM.Range[]} ranges
-         *  (in/out) The DOM ranges to be formatted. The array will b
+         *  (in/out) The DOM ranges to be formatted. The array will be
          *  validated and sorted before iteration starts (see method
          *  DOM.iterateNodesInRanges() for details).
          *
@@ -544,64 +652,50 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to clear special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
          */
         this.clearAttributesInRanges = function (ranges, attributeNames, options) {
 
-            var // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false);
+            var // build a map with null values from passed name list
+                attributes = {};
 
-            // validate passed array of attribute names
-            attributeNames = _.chain(attributeNames).getArray().filter(function (name) {
-                return _.isString(name) && (name !== 'style');
-            }).value();
-
-            // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
-
-                var // the element, as jQuery object
-                    $element = $(element),
-                    // explicit element attributes
-                    elementAttributes = getElementAttributes($element, true),
-                    // get attributes of the style sheet (only of the style family)
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element),
-                    // the resulting attributes to be changed at each element
-                    cssAttributes = {};
-
-                if (attributeNames.length) {
-                    // remove specified attributes
-                    _(attributeNames).each(function (name) {
-                        if (isRegisteredAttribute(name, special) && (name in elementAttributes)) {
-                            delete elementAttributes[name];
-                            cssAttributes[name] = styleAttributes[name];
-                        }
-                    });
-                } else {
-                    // remove all attributes except style name
-                    _(elementAttributes).each(function (value, name) {
-                        if (isRegisteredAttribute(name, special)) {
-                            delete elementAttributes[name];
-                            cssAttributes[name] = styleAttributes[name];
-                        }
-                    });
-                }
-
-                // write back element attributes to the element
-                setElementAttributes($element, elementAttributes);
-
-                // change CSS formatting of the element
-                _(cssAttributes).each(function (value, name) {
-                    if (name in definitions) {
-                        definitions[name].set($element, value);
-                    }
+            // fill attribute map from passed array of attribute names
+            if (_.isString(attributeNames)) {
+                // string passed: clear single attribute
+                attributes[attributeNames] = null;
+            } else if (_.isArray(attributeNames)) {
+                // array passed: clear all specified attributes
+                _(attributeNames).each(function (name) {
+                    attributes[name] = null;
                 });
+            } else {
+                // no valid attribute names passed: clear all attributes
+                _(definitions).each(function (definition, name) {
+                    attributes[name] = null;
+                });
+            }
 
-            }, this);
+            return this.setAttributesInRanges(ranges, attributes, options);
         };
 
+        /**
+         * Updates the CSS formatting in the specified DOM ranges, according to
+         * the current attribute and style settings.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be updated. The array will be validated
+         *  and sorted before iteration starts (see method
+         *  DOM.iterateNodesInRanges() for details).
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
         this.updateFormattingInRanges = function (ranges) {
 
-            // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
+            // iterate all covered elements and update their CSS formatting
+            this.iterateReadWrite(ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),
@@ -620,6 +714,8 @@ define('io.ox/office/editor/format/stylesheets',
                 });
 
             }, this);
+
+            return this;
         };
 
         this.updatePreviewButtonOptions = function (options, attributes) {
@@ -629,22 +725,8 @@ define('io.ox/office/editor/format/stylesheets',
                     definition.preview(options, value);
                 }
             });
-        };
 
-        /**
-         * Returns the UI priority for the style sheet (0 is default, the lower the value the higher the priority)
-         *
-         * @param {String} id
-         *  The unique identifier of the style sheet.
-         *
-         * @returns {Number}
-         *  The priority
-         */
-        this.getUIPriority = function (id) {
-            if (id && styleSheets[id] && _.isNumber(styleSheets[id].uiPriority)) {
-                return styleSheets[id].uiPriority;
-            }
-            return 0;
+            return this;
         };
 
         // initialization -----------------------------------------------------

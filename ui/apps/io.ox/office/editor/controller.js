@@ -13,7 +13,7 @@
 
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
-     'io.ox/office/dialog/common'
+     'io.ox/office/editor/dialog/common'
     ], function (BaseController, CommonDialogs) {
 
     'use strict';
@@ -59,10 +59,11 @@ define('io.ox/office/editor/controller',
                 },
                 'action/search/quick': {
                     // highlighting goes always to the rich editor
-                    get: function () { return editor.hasHighlighting(); },
-                    set: function (query) { editor.quickSearch(query); },
+                    get: function () { return app.getEditor().hasHighlighting(); },
+                    set: function (query) { app.getEditor().quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
+
                 'chain/format/paragraph': {
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
@@ -128,7 +129,7 @@ define('io.ox/office/editor/controller',
                 },
                 'table/insert/column': {
                     chain: 'chain/table',
-                    set: function () { editor.copyColumn(); }
+                    set: function () { editor.insertColumn(); }
                 },
                 'table/delete/row': {
                     chain: 'chain/table',
@@ -142,10 +143,10 @@ define('io.ox/office/editor/controller',
                 'chain/image': {
                     enable: function () { return editor.isImagePosition(); }
                 },
-                'image/insertfile': {
+                'image/insert/file': {
                     set: function () { CommonDialogs.insertImageFile(app); }
                 },
-                'image/inserturl': {
+                'image/insert/url': {
                     set: function () { CommonDialogs.insertImageURL(app); }
                 },
                 'image/delete': {
@@ -162,7 +163,7 @@ define('io.ox/office/editor/controller',
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); },
-                    done: function (state) { editor.grabFocus(); }
+                    done: function (state) { app.getEditor().grabFocus(); }
                 },
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },

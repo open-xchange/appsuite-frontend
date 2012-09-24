@@ -11,7 +11,7 @@
  * @author Kai Ahrens <kai.ahrens@open-xchange.com>
  */
 
-define('io.ox/office/dialog/error',
+define('io.ox/office/editor/dialog/error',
     ['gettext!io.ox/office/main'
     ], function (gt) {
 

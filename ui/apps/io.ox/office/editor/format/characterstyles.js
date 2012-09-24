@@ -111,9 +111,6 @@ define('io.ox/office/editor/format/characterstyles',
      */
     function CharacterStyles(rootNode, documentStyles) {
 
-        var // self reference
-            self = this;
-
         // private methods ----------------------------------------------------
 
         /**
@@ -128,11 +125,32 @@ define('io.ox/office/editor/format/characterstyles',
          * Iterates over all text nodes covered by the passed DOM ranges and
          * calls the passed iterator function for their parent <span> elements.
          */
-        function iterateReadOnly(ranges, iterator, context) {
+        function iterateTextSpans(ranges, iterator, context, readWrite) {
+
+            var // options for DOM.iterateTextPortionsInRanges() depending on read/write mode
+                options = readWrite ? { split: true, merge: hasEqualAttributes } : undefined;
+
             return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
                 return iterator.call(context, textNode.parentNode);
-            }, context);
+            }, context, options);
         }
+
+        // base constructor ---------------------------------------------------
+
+        StyleSheets.call(this, 'character', definitions, documentStyles, {
+            ancestorStyleFamily: 'paragraph',
+            ancestorElementResolver: function (span) { return span.parentNode; }
+        });
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Iterates over all text nodes covered by the passed DOM ranges and
+         * calls the passed iterator function for their parent <span> elements.
+         */
+        this.iterateReadOnly = function (ranges, iterator, context) {
+            return iterateTextSpans(ranges, iterator, context, false);
+        };
 
         /**
          * Iterates over all text nodes covered by the passed DOM ranges and
@@ -141,20 +159,9 @@ define('io.ox/office/editor/format/characterstyles',
          * iterator, and tries to merge sibling text nodes with equal character
          * formatting after calling the iterator.
          */
-        function iterateReadWrite(ranges, iterator, context) {
-            return DOM.iterateTextPortionsInRanges(ranges, function (textNode, start, end, range) {
-                return iterator.call(context, textNode.parentNode);
-            }, context, { split: true, merge: hasEqualAttributes });
-        }
-
-        // base constructor ---------------------------------------------------
-
-        StyleSheets.call(this, 'character', definitions, documentStyles, iterateReadOnly, iterateReadWrite, {
-            ancestorStyleFamily: 'paragraph',
-            ancestorElementResolver: function (span) { return span.parentNode; }
-        });
-
-        // initialization -----------------------------------------------------
+        this.iterateReadWrite = function (ranges, iterator, context) {
+            return iterateTextSpans(ranges, iterator, context, true);
+        };
 
     } // class CharacterStyles
 

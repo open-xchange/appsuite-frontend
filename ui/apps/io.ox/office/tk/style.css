@@ -154,6 +154,13 @@ i.icon-io-ox-table-insert-column { background-position:  -40px  -20px; }
 i.icon-io-ox-table-delete-row    { background-position:  -60px  -20px; }
 i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 
+/* reset Bootstrap margins for all icons */
+.reset-icon-margins() {
+    i[class^="icon-"] {
+        margin: 0;
+    }
+}
+
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */
@@ -180,7 +187,10 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 @input-fill-color: white;
 
 /* fill color for tool bar tab buttons */
-@tab-fill-color: #757575;
+@tab-fill-color: #222222;
+
+/* second fill color for tool bar tab buttons gradient */
+@tab-accented-fill-color: #363636;
 
 /* text color for tool bar tab buttons */
 @tab-text-color: white;
@@ -192,6 +202,8 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 
 div.io-ox-pane {
     background-color: @pane-fill-color;
+
+    .reset-icon-margins();
 
     &.top { border-bottom: 1px solid @pane-border-color; }
     &.bottom { border-top: 1px solid @pane-border-color; }
@@ -211,6 +223,8 @@ div.io-ox-view-component {
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
     text-align: left;
+
+    .reset-icon-margins();
 
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {
@@ -282,6 +296,8 @@ div.io-ox-view-component {
         /* labels ---------------------------------------------------------- */
 
         label {
+            padding-left: 8px;
+            padding-right: 8px;
             text-align: center;
         }
 
@@ -565,15 +581,12 @@ div.io-ox-view-component {
     /* top-level tab bar --------------------------------------------------- */
 
     &.tabbar {
-        position: absolute;
-        left: 313px;
-        bottom: -1px;
-        padding: 0 1px;
-        .vertical-gradient(lighten(@tab-fill-color, 15%), @tab-fill-color);
+        padding: 0;
 
         > span {
             display: inline-block;
             position: relative;
+            .vertical-gradient(@tab-accented-fill-color, @tab-fill-color);
 
             > .group {
                 display: inline-block;
@@ -583,7 +596,6 @@ div.io-ox-view-component {
                     padding-left: 12px;
                     padding-right: 12px;
                     border: none;
-                    color: @tab-text-color;
     
                     /* semi-transparency for all contents of the button */
                     &:not(.selected) > * { .opacity(0.7); }
@@ -595,11 +607,16 @@ div.io-ox-view-component {
                         cursor: default;
                     }
                 }
-    
+
+                /* text color */
+                > button, > label {
+                    color: @tab-text-color;
+                }
+
                 /* mouse/keyboard effects (not for disabled group) */
                 &:not(.disabled) > button:not(.disabled):not(.selected) {
                     &:hover, &:focus, &:active {
-                        .vertical-gradient(lighten(@tab-fill-color, 15%), lighten(@tab-fill-color, 5%));
+                        background: @tab-accented-fill-color;
     
                         /* remove semi-transparency for all contents of the button */
                         > * { .opacity(1); }

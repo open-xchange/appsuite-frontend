@@ -159,7 +159,7 @@ define('io.ox/office/editor/position',
                         textLength++;
                     }
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
-                    if (Utils.getNodeName(prevNode) === 'div') {
+                    if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
                         textLength -= $(prevNode).text().length;
                         textLength++;  // 'div' has only a length of '1'
                     }
@@ -281,7 +281,9 @@ define('io.ox/office/editor/position',
             foundValidNode = false,
             localNode = node.childNodes[offset], // offset can be zero for start points but too high for end points
             imageFloatMode = null,
-            offset = 0;
+            offsetSave = offset;
+
+        offset = 0;
 
         allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
@@ -290,7 +292,7 @@ define('io.ox/office/editor/position',
         }
 
         if ((! localNode) || (usePreviousCell)) {
-            localNode = node.childNodes[offset - 1];
+            localNode = node.childNodes[offsetSave - 1];
             useFirstTextNode = false;
         }
 
@@ -341,6 +343,9 @@ define('io.ox/office/editor/position',
             // find the first or last text node contained in the element
             if (localNode && (localNode.nodeType !== 3)) {
                 foundNode = useFirstTextNode ? Utils.findFirstTextNode(localNode) : Utils.findLastTextNode(localNode);
+                if (foundNode) {
+                    localNode = foundNode;
+                }
             }
         }
 
@@ -404,7 +409,7 @@ define('io.ox/office/editor/position',
             childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
         } else if (node.nodeName === 'TR') {
             childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
-        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeName === 'DIV')) {
+        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || ((node.nodeName === 'DIV') && (! $(node).data('positionDiv')))) {
             childNode = $(node).children().get(pos);
         } else if (node.nodeName === 'P') {
             var textLength = 0,
@@ -437,12 +442,12 @@ define('io.ox/office/editor/position',
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
-                        currentLength = 1;
-                        isField = true;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('positionSpan'))) {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && ($(nodeList[i]).data('positionDiv'))) {
                         // ignoring spans that exist only for positioning image
                         continue;
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                        currentLength = 1;
+                        isField = true;
                     } else {  // this is a span. it can contain text node or image node
                         currentLength = $(nodeList[i]).text().length;
                         isImage = false;
@@ -451,20 +456,22 @@ define('io.ox/office/editor/position',
 
                     if (textLength + currentLength >= pos) {
 
-                        if ((returnImageNode) && ((textLength + currentLength) === pos)) {
-                            var j = i + 1,
-                                nextNode = nodeList[j];
+                        if (returnImageNode) {
+                            if  ((textLength + currentLength) === pos) {
+                                var j = i + 1,
+                                    nextNode = nodeList[j];
 
-                            if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
-                                bFound = true;
-                                node = nextNode;
-                                isImage = true;
-                                break;  // leaving the for-loop
-                            } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div')) {
-                                bFound = true;
-                                node = nextNode;
-                                isField = true;
-                                break;  // leaving the for-loop
+                                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
+                                    bFound = true;
+                                    node = nextNode;
+                                    isImage = true;
+                                    break;  // leaving the for-loop
+                                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {
+                                    bFound = true;
+                                    node = nextNode;
+                                    isField = true;
+                                    break;  // leaving the for-loop
+                                }
                             }
                         }
                         bFound = true;
@@ -786,8 +793,8 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks, if a text node is a node inside a 'div', that contains the css data
-     * 'divType' set to 'field'.
+     * Checks, if a text node is a node inside a 'span', that contains the css data
+     * 'spanType' set to 'field'.
      *
      * @param {HTMLElement} element
      *  A DOM element object.
@@ -801,9 +808,9 @@ define('io.ox/office/editor/position',
         var isTextInField = false;
 
         if (element.nodeType === 3) {
-            var divNode = $(element).closest('div');
+            var spanNode = $(element).closest('span');
 
-            if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+            if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
                 isTextInField = true;
             }
         }
@@ -812,22 +819,22 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks, if an arbitrary node is a node inside a 'div', that contains the css data
-     * 'divType' set to 'field'.
+     * Checks, if an arbitrary node is a node inside a 'span', that contains the css data
+     * 'spanType' set to 'field'.
      *
      * @param {HTMLElement} element
      *  A DOM element object.
      *
      * @returns {Boolean}
-     *  If element is a node, that has an ancestor 'div', that contains the
-     *  css data 'divType' set to 'field', 'true' is returned, otherwise false.
+     *  If element is a node, that has an ancestor 'span', that contains the
+     *  css data 'spanType' set to 'field', 'true' is returned, otherwise false.
      */
     Position.isNodeInField = function (element) {
 
         var isNodeInField = false,
-            divNode = $(element).closest('div');
+            spanNode = $(element).closest('span');
 
-        if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+        if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
             isNodeInField = true;
         }
 
@@ -1222,7 +1229,7 @@ define('io.ox/office/editor/position',
                     paraLen += $(nodeList[i]).text().length;
                     if (Utils.getNodeName(nodeList[i]) === 'img') {
                         paraLen++;
-                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
                         paraLen -= $(nodeList[i]).text().length;
                         paraLen++;
                     }
@@ -2047,8 +2054,8 @@ define('io.ox/office/editor/position',
             if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
                 counter++;
                 child = child.nextSibling;
-            } else if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
-                // ignoring spans that exist only for positioning image
+            } else if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
+                // ignoring divs that exist only for positioning image
                 child = child.nextSibling;
             } else {
                 continue_ = false;
@@ -2083,6 +2090,53 @@ define('io.ox/office/editor/position',
         }
 
         return child;
+    };
+
+    /**
+     * Determining the position of a node (for example an image)
+     * in a paragraph.
+     *
+     * @param Node paragraph
+     *  The paragraph node, in which the node (second parameter) is
+     *  searched.
+     *
+     * @param Node node
+     *  The node (for example an image), whose position shall be found.
+     *
+     * @returns Number
+     *  Returns the integer value representing the position of the
+     *  searched node in the paragraph. Returns '-1', if the node cannot
+     *  be found inside the paragraph.
+     */
+    Position.getObjectPositionInParagraph = function (paragraph, node) {
+
+        var position = 0,
+            found = false;
+
+        if (paragraph) {
+            if (paragraph.hasChildNodes()) {
+                var nodeList = paragraph.childNodes;
+                for (var i = 0; i < nodeList.length; i++) {
+                    if (nodeList[i] === node) {
+                        found = true;
+                        break;
+                    }
+                    position += $(nodeList[i]).text().length;
+                    if (Utils.getNodeName(nodeList[i]) === 'img') {
+                        position++;
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                        position -= $(nodeList[i]).text().length;
+                        position++;
+                    }
+                }
+            }
+        }
+
+        if (! found) {
+            position = -1;
+        }
+
+        return position;
     };
 
     return Position;

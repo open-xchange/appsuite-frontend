@@ -19,11 +19,13 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
      'io.ox/office/editor/oxoselection',
+     'io.ox/office/editor/table',
      'io.ox/office/editor/image',
+     'io.ox/office/editor/operations',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Image, Position, Undo, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles) {
 
     'use strict';
 
@@ -38,39 +40,11 @@ define('io.ox/office/editor/editor',
             KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
-        ]),
-
-        OP_DELETE = 'delete',
-
-        OP_TEXT_INSERT =  'insertText',
-        OP_TEXT_DELETE =  'deleteText',
-
-        OP_PARA_INSERT =  'insertParagraph',
-        OP_PARA_DELETE =  'deleteParagraph',
-        OP_PARA_SPLIT =   'splitParagraph',
-        OP_PARA_MERGE =   'mergeParagraph',
-
-        OP_TABLE_INSERT = 'insertTable',
-        OP_TABLE_DELETE = 'deleteTable',
-        OP_CELLRANGE_DELETE = 'deleteCellRange',
-        OP_ROWS_DELETE = 'deleteRows',
-        OP_COLUMNS_DELETE = 'deleteColumns',
-        OP_ROW_COPY = 'copyRow',
-        OP_COLUMN_COPY = 'copyColumn',
-        OP_ROW_INSERT = 'insertRow',
-        OP_COLUMN_INSERT = 'insertColumn',
-        OP_CELL_INSERT = 'insertCell',
-
-        OP_INSERT_STYLE = 'insertStylesheet',
-        OP_ATTRS_SET =    'setAttributes',
-
-        OP_IMAGE_INSERT = 'insertImage',
-        OP_FIELD_INSERT = 'insertField';
-        // OP_ATTR_DELETE =  'deleteAttribute';
+        ]);
 
     // class OXOEditor ========================================================
 
-    /**
+    /**'io.ox/office/editor/position',
      * The text editor.
      *
      * Triggers the following events:
@@ -107,7 +81,7 @@ define('io.ox/office/editor/editor',
             isRtlCursorTravel,
             currentSelection,
 
-            undomgr = new Undo.OXOUndoManager(),
+            undomgr = new UndoManager(this),
 
             lastOperationEnd,     // Need to decide: Should the last operation modify this member, or should the selection be passed up the whole call chain?!
 
@@ -227,12 +201,12 @@ define('io.ox/office/editor/editor',
         };
 
         this.undo = function () {
-            undomgr.undo(this);
+            undomgr.undo();
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.redo = function () {
-            undomgr.redo(this);
+            undomgr.redo();
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
@@ -555,41 +529,39 @@ define('io.ox/office/editor/editor',
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
 
-                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                    imageEndPostion = _.copy(imageStartPosition, true);
+                // updating current selection, so that image positions are also available
+                var updateFromBrowser = true,
+                    allowNoneTextNodes = true,
+                    newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                    imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                    returnImageNode = true,
+                    imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
-                if (selection.startPaM.isRtlCursorTravel) {
-                    imageEndPostion = Position.getFollowingTextNodePosition(paragraphs, editdiv, imageStartPosition);
-                }
-
-                imageStartPosition = Position.getPreviousTextNodePosition(paragraphs, editdiv, imageEndPostion);
-
-                var returnImageNode = true;
-                // to be sure, only delete, if imageStartPosition is really an image position and if no keyDown event is handled. Only
-                // deleting with button is possible.
-                var imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                // only delete, if imageStartPosition is really an image position
                 if (Utils.getNodeName(imageNode) === 'img') {
                     // delete an corresponding span
-                    var spanNode = imageNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(spanNode) === 'span') && ($(spanNode).data('positionSpan'))) {
-                        if ($(spanNode).data('spanID') === $(imageNode).data('imageID')) {
+                    var divNode = imageNode.parentNode.firstChild;
+                    while ((Utils.getNodeName(divNode) === 'div') && ($(divNode).data('positionDiv'))) {
+                        if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
                             // removing node
-                            $(spanNode).remove();
+                            $(divNode).remove();
                             break;
                         } else {
-                            spanNode = spanNode.nextSibling;
+                            divNode = divNode.nextSibling;
                         }
                     }
 
+                    var imageEndPosition = _.copy(imageStartPosition, true);
+                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                     // deleting the image with an operation
-                    this.deleteText(imageStartPosition, imageEndPostion);
+                    this.deleteText(imageStartPosition, imageEndPosition);
                 }
             }
         };
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
+                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
                 setSelection(new OXOSelection(lastOperationEnd));
@@ -597,12 +569,12 @@ define('io.ox/office/editor/editor',
         };
 
         this.deleteParagraph = function (position) {
-            var newOperation = { name: OP_PARA_DELETE, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_PARA_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
         };
 
         this.deleteTable = function (position) {
-            var newOperation = { name: OP_TABLE_DELETE, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -610,7 +582,7 @@ define('io.ox/office/editor/editor',
         };
 
         this.deleteCellRange = function (position, start, end) {
-            var newOperation = { name: OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
+            var newOperation = { name: Operations.OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
             applyOperation(newOperation, true, true);
         };
 
@@ -630,10 +602,10 @@ define('io.ox/office/editor/editor',
                 newOperation;
 
             if (isCompleteTable) {
-                newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                // newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
-                newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
+                // newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
+                newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
             applyOperation(newOperation, true, true);
@@ -658,9 +630,9 @@ define('io.ox/office/editor/editor',
                 newOperation;
 
             if (isCompleteTable) {
-                newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                newOperation = { name: OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
+                newOperation = { name: Operations.OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
             }
 
             applyOperation(newOperation, true, true);
@@ -673,29 +645,30 @@ define('io.ox/office/editor/editor',
             var selection = getSelection(),
                 // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
                 count = 1,  // inserting only one row
-                insertDefaultCells = true,
+                insertdefaultcells = true,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
             var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
 
             rowPos[rowPos.length - 1] += 1;
 
-            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertDefaultCells: insertDefaultCells };
+            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
 
-        this.copyColumn = function () {
+        this.insertColumn = function () {
             var selection = getSelection(),
                 start = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
-                end = start + 1,
-                position = _.copy(selection.endPaM.oxoPosition, true);
+                position = _.copy(selection.endPaM.oxoPosition, true),
+                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
+                insertmode = 'behind',
+                gridPosition = start, // simplification, valid only if colspan === 1 for each cell
+                tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE');
-
-            var newOperation = { name: OP_COLUMN_COPY, position: tablePos, start: start, end: end };
+            var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -703,144 +676,9 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertParagraph = function (position) {
-            var newOperation = {name: OP_PARA_INSERT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.OP_PARA_INSERT, start: _.copy(position, true)};
             applyOperation(newOperation, true, true);
         };
-
-        this.insertSpecialTable = function () {
-
-            var selection = getSelection(),
-                lastPos = selection.startPaM.oxoPosition.length - 1,
-                deleteTempParagraph = false;
-
-            selection.adjust();
-            if (selection.hasRange()) {
-                this.deleteSelected(selection);
-            }
-
-            var length = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
-
-            // Splitting paragraph, if the cursor is not at the beginning or at the end of the paragraph.
-            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
-                (selection.startPaM.oxoPosition[lastPos] !== length)) {
-                this.splitParagraph(selection.startPaM.oxoPosition);
-                selection.startPaM.oxoPosition[lastPos - 1] += 1;
-            }
-
-            // Splitting paragraph, if the cursor is at the end of an non empty paragraph and this paragraph is
-            // the last from all .
-            if ((selection.startPaM.oxoPosition[lastPos] !== 0) &&
-                (selection.startPaM.oxoPosition[lastPos] === length)) {
-
-                var maxIndex = Position.getCountOfAdjacentParagraphsAndTables(paragraphs, selection.startPaM.oxoPosition);
-                // Is this a position after the final character in the final paragraph?
-                // -> then the splitting of the paragraph is required, not only temporarely.
-                if ((selection.startPaM.oxoPosition[lastPos - 1]) === maxIndex) {
-                    this.splitParagraph(selection.startPaM.oxoPosition);
-                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
-                    deleteTempParagraph = false;
-                } else {
-                    implSplitParagraph(selection.startPaM.oxoPosition);  // creating temporarely, to be deleted after table is inserted
-                    selection.startPaM.oxoPosition[lastPos - 1] += 1;
-                    deleteTempParagraph = true;
-                }
-            }
-
-            selection.startPaM.oxoPosition.pop();
-            paragraphs = editdiv.children();
-
-            var position = _.copy(selection.startPaM.oxoPosition, true);
-            var table = $('<table>');
-
-            table.append('<colgroup><col style="width:20mm"><col style="width:30mm"><col style="width:15mm"><col style="width:32mm"><col style="width:16mm"><col style="width:19mm"></colgroup>')
-
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Berlin</span></p></td>'))
-                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Hamburg</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Kassel</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Bremen</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Becks</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Flens</span></p></td>'))
-                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Warsteiner</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Holsten</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td colspan="2"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Buletten</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Friko</span></p></td>')))
-            .append($('<tr>').attr('valign', 'top')
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Handball</span></p></td>'))
-                .append($('<td><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Fussball</span></p></td>'))
-                .append($('<td colspan="3"><p><span style="font-family: sans-serif; line-height: 15pt; font-size: 12pt; font-weight: normal; font-style: normal; text-decoration: none;">Volleyball</span></p></td>')));
-
-//          <table border="1" style="border-style:solid; border-color:green; border-width:2px;">
-//                        <colgroup>
-//                          <col style="width:20mm">
-//                          <col style="width:40mm">
-//                          <col style="width:25mm">
-//                          <col style="width:32mm">
-//                          <col style="width:16mm">
-//                          <col style="width:19mm">
-//                        </colgroup>
-//                        <tr>
-//                          <td>Berlin</td>
-//                          <td colspan="2">Hamburg</td>
-//                          <td>M&uuml;nchen</td>
-//                          <td>Hamburg</td>
-//                        </tr>
-//                        <tr>
-//                          <td>Milj&ouml;h</td>
-//                          <td>Kiez</td>
-//                          <td colspan="3">Bierdampf</td>
-//                          <td>Hamburg</td>
-//                        </tr>
-//                        <tr>
-//                          <td colspan="2">Buletten</td>
-//                          <td>Frikadellen</td>
-//                        </tr>
-//                      </table>
-
-            // insert the table into the document
-            var domPosition = Position.getDOMPosition(paragraphs, position),
-                domParagraph = null,
-                insertBefore = true;
-
-            if (domPosition) {
-                domParagraph = domPosition.node;
-            } else {
-                position[position.length - 1] -= 1; // inserting table at the end
-                domPosition = Position.getDOMPosition(paragraphs, position);
-                if (domPosition) {
-                    domParagraph = domPosition.node;
-                    if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
-                        insertBefore = false;  // inserting after the last paragraph/table
-                    }
-                }
-            }
-
-            if (domParagraph !== null) {
-                if (insertBefore) {
-                    table.insertBefore(domParagraph);
-                } else {
-                    table.insertAfter(domParagraph);
-                }
-
-                paragraphs = editdiv.children();
-
-                // Setting cursor into table (unfortunately not visible in Chrome)
-                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-                lastOperationEnd = new OXOPaM(oxoPosition);
-            }
-
-            if (deleteTempParagraph) {
-                selection.startPaM.oxoPosition[lastPos - 1] += 1;  // the position of the new temporary empty paragraph
-                implDeleteParagraph(selection.startPaM.oxoPosition);
-                paragraphs = editdiv.children();
-            }
-
-            // setting the cursor position
-            setSelection(new OXOSelection(lastOperationEnd));
-        };
-
 
         this.insertTable = function (size) {
             if (size) {
@@ -902,7 +740,7 @@ define('io.ox/office/editor/editor',
                     tableGrid.push(width);
                 }
 
-                var newOperation = {name: OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
+                var newOperation = {name: Operations.OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
                 applyOperation(newOperation, true, true);
 
                 paragraphs = editdiv.children();
@@ -911,7 +749,7 @@ define('io.ox/office/editor/editor',
                 var localPos = _.copy(selection.startPaM.oxoPosition, true);
                 localPos.push(0);
 
-                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertDefaultCells: true};
+                newOperation = {name: Operations.OP_ROW_INSERT, position: localPos, count: size.height, insertdefaultcells: true};
                 applyOperation(newOperation, true, true);
 
                 if (deleteTempParagraph) {
@@ -930,7 +768,7 @@ define('io.ox/office/editor/editor',
         this.insertImageFile = function (imageFragment) {
             var selection = getSelection(),
                 newOperation = {
-                    name: OP_IMAGE_INSERT,
+                    name: Operations.OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageFragment,
                     attrs: {inline: true}
@@ -942,7 +780,7 @@ define('io.ox/office/editor/editor',
         this.insertImageURL = function (imageURL) {
             var selection = getSelection(),
                 newOperation = {
-                    name: OP_IMAGE_INSERT,
+                    name: Operations.OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageURL,
                     attrs: {inline: true}
@@ -952,17 +790,19 @@ define('io.ox/office/editor/editor',
         };
 
         this.splitParagraph = function (position) {
-            var newOperation = {name: OP_PARA_SPLIT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.OP_PARA_SPLIT, start: _.copy(position, true)};
             applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (position) {
-            var newOperation = {name: OP_PARA_MERGE, start: _.copy(position)};
+            var newOperation = {name: Operations.OP_PARA_MERGE, start: _.copy(position)};
             applyOperation(newOperation, true, true);
+
+            moveFloatedImages(position);
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
         };
 
@@ -1073,10 +913,10 @@ define('io.ox/office/editor/editor',
         // ==================================================================
 
         // ====================================================================
-        // Public functions for the hybrid edit mode
+        // Private functions for the hybrid edit mode
         // ====================================================================
 
-        this.processFocus = function (state) {
+        function processFocus(state) {
             Utils.info('Editor: received focus event: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
@@ -1084,35 +924,35 @@ define('io.ox/office/editor/editor',
                     // Update Browser Selection, might got lost.
                     setSelection(currentSelection);
                 }
-                this.trigger('focus', state);
+                self.trigger('focus', state);
             }
-        };
+        }
 
-        this.processMouseDown = function (event) {
+        function processMouseDown(event) {
             implCheckEventSelection(); // just in case the user was faster than the timer...
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
-        };
+        }
 
-        this.processMouseUp = function (event) {
+        function processMouseUp(event) {
             implCheckEventSelection();
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
-        };
+        }
 
-        this.processDragOver = function (event) {
+        function processDragOver(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processDrop = function (event) {
+        function processDrop(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processContextMenu = function (event) {
+        function processContextMenu(event) {
             event.preventDefault();
-        };
+        }
 
-        this.processKeyDown = function (event) {
+        function processKeyDown(event) {
 
             implDbgOutEvent(event);
             // implCheckSelection();
@@ -1139,39 +979,39 @@ define('io.ox/office/editor/editor',
                     alert('#Paragraphs: ' + paragraphs.length);
                 }
                 else if (c === 'I') {
-                    this.insertParagraph([paragraphs.length]);
+                    self.insertParagraph([paragraphs.length]);
                 }
                 else if (c === 'D') {
-                    this.initDocument();
-                    this.grabFocus(true);
+                    self.initDocument();
+                    self.grabFocus(true);
                 }
                 else if (c === 'T') {
-                    this.insertSpecialTable();
+                    self.insertTable({width: 2, height: 4});
                 }
                 else if (c === 'G') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'R') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'S') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'V') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'F') {
                     var selection = getSelection();
                     // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
-                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
+                    var newOperation = {name: Operations.OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -1201,7 +1041,7 @@ define('io.ox/office/editor/editor',
             if (event.keyCode === KeyCodes.DELETE) {
                 selection.adjust();
                 if (selection.hasRange()) {
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1;
@@ -1210,7 +1050,7 @@ define('io.ox/office/editor/editor',
 
                     if (startPosition[lastValue] < paraLen) {
                         selection.endPaM.oxoPosition[lastValue]++;
-                        this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
+                        self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
                     else {
                         var mergeselection = _.copy(selection.startPaM.oxoPosition),
@@ -1234,14 +1074,14 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = true;
                         }
 
-                        this.mergeParagraph(mergeselection);
+                        self.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
                             if (characterPos === 0) {
                                 // removing empty paragraph
                                 var localPos = _.copy(selection.startPaM.oxoPosition, true);
                                 localPos.pop();
-                                this.deleteParagraph(localPos);
+                                self.deleteParagraph(localPos);
                                 nextParagraphPosition[lastValue] -= 1;
                             }
                             selection.startPaM.oxoPosition = Position.getFirstPositionInParagraph(paragraphs, nextParagraphPosition);
@@ -1269,7 +1109,7 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
                 if (selection.hasRange()) {
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                 }
                 else {
                     var lastValue = selection.startPaM.oxoPosition.length - 1,
@@ -1288,7 +1128,7 @@ define('io.ox/office/editor/editor',
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         var endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
-                        this.deleteText(startPosition, endPosition);
+                        self.deleteText(startPosition, endPosition);
                         selection.startPaM.oxoPosition[lastValue] -= 1;
                     }
                     else if (selection.startPaM.oxoPosition[lastValue - 1] >= 0) {
@@ -1311,7 +1151,7 @@ define('io.ox/office/editor/editor',
 
                             if (startPosition[lastValue - 1] >= 0) {
                                 if (! prevIsTable) {
-                                    this.mergeParagraph(startPosition);
+                                    self.mergeParagraph(startPosition);
                                     paragraphsMerged = true;
                                 }
                                 selection.startPaM.oxoPosition[lastValue - 1] -= 1;
@@ -1365,35 +1205,35 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'Z') {
                     event.preventDefault();
-                    this.undo();
+                    self.undo();
                 }
                 else if (c === 'Y') {
                     event.preventDefault();
-                    this.redo();
+                    self.redo();
                 }
                 else if (c === 'X') {
                     event.preventDefault();
-                    this.cut();
+                    self.cut();
                 }
                 else if (c === 'C') {
                     event.preventDefault();
-                    this.copy();
+                    self.copy();
                 }
                 else if (c === 'V') {
                     event.preventDefault();
-                    this.paste();
+                    self.paste();
                 }
                 else if (c === 'B') {
                     event.preventDefault();
-                    this.setAttribute('character', 'bold', !this.getAttributes('character').bold);
+                    self.setAttribute('character', 'bold', !self.getAttributes('character').bold);
                 }
                 else if (c === 'I') {
                     event.preventDefault();
-                    this.setAttribute('character', 'italic', !this.getAttributes('character').italic);
+                    self.setAttribute('character', 'italic', !self.getAttributes('character').italic);
                 }
                 else if (c === 'U') {
                     event.preventDefault();
-                    this.setAttribute('character', 'underline', !this.getAttributes('character').underline);
+                    self.setAttribute('character', 'underline', !self.getAttributes('character').underline);
                 }
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
@@ -1403,9 +1243,9 @@ define('io.ox/office/editor/editor',
             if (self.getParagraphCount() !== editdiv.children().size()) {
                 Utils.warn('Editor.processKeyDown(): paragraph count invalid!');
             }
-        };
+        }
 
-        this.processKeyPressed = function (event) {
+        function processKeyPressed(event) {
 
             implDbgOutEvent(event);
 
@@ -1444,9 +1284,9 @@ define('io.ox/office/editor/editor',
 
             if ((!event.ctrlKey) && (c.length === 1)) {
 
-                this.deleteSelected(selection);
+                self.deleteSelected(selection);
                 // Selection was adjusted, so we need to use start, not end
-                this.insertText(c, selection.startPaM.oxoPosition);
+                self.insertText(c, selection.startPaM.oxoPosition);
                 var lastValue = selection.startPaM.oxoPosition.length - 1;
                 selection.startPaM.oxoPosition[lastValue]++;
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -1461,18 +1301,18 @@ define('io.ox/office/editor/editor',
 
                 if (event.keyCode === KeyCodes.ENTER) {
 
-                    this.deleteSelected(selection);
+                    self.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true),
                         lastValue = selection.startPaM.oxoPosition.length - 1;
 
                     if ((lastValue >= 4) &&
                         (Position.isPositionInTable(paragraphs, [0])) &&
                         _(startPosition).all(function (value) { return (value === 0); })) {
-                        this.insertParagraph([0]);
+                        self.insertParagraph([0]);
                         paragraphs = editdiv.children();
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
-                        this.splitParagraph(startPosition);
+                        self.splitParagraph(startPosition);
                         // TODO / TBD: Should all API / Operation calls return the new position?!
                         var lastValue = selection.startPaM.oxoPosition.length - 1;
                         selection.startPaM.oxoPosition[lastValue - 1] += 1;
@@ -1492,7 +1332,7 @@ define('io.ox/office/editor/editor',
                 Utils.warn('Editor.processKeyPressed(): paragraph count invalid!');
             }
 
-        };
+        }
 
         // ==================================================================
         // Private functions
@@ -1574,58 +1414,59 @@ define('io.ox/office/editor/editor',
             if (operation.name === "initDocument") {
                 implInitDocument();
             }
-            else if (operation.name === OP_TEXT_INSERT) {
+            else if (operation.name === Operations.OP_TEXT_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.start, true);
                     endPos[endPos.length - 1] += operation.text.length;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
-                    var undoAction = new Undo.OXOUndoAction(undoOperation, _.copy(operation, true));
-                    if (operation.text.length === 1)
-                        undoAction.allowMerge = true;
-                    undomgr.addUndo(undoAction);
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
+                    var redoOperation = _.copy(operation, true);
+                    var allowMerge = operation.text.length === 1;
+                    undomgr.addUndo(undoOperation, redoOperation, allowMerge);
                 }
                 implInsertText(operation.text, operation.start);
             }
-//            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
+//            else if (operation.name === Operations.OP_DELETE) { // this shall be the only delete operation
 //                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
 //                    var localStart = _.copy(operation.start, true),
 //                        localEnd = _.copy(operation.end, true),
 //                        startLastVal = localStart.pop(),
 //                        endLastVal = localEnd.pop(),
-//                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
-//                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+//                        undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+//                    undomgr.addUndo(undoOperation, operation);
 //                }
 //                implDelete(operation.start, operation.end);
 //            }
-            else if (operation.name === OP_TEXT_DELETE) {
+            else if (operation.name === Operations.OP_MOVE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var undoOperation = { name: Operations.OP_MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
+                    undomgr.addUndo(undoOperation, operation);
+                }
+                implMove(operation.start, operation.end);
+            }
+            else if (operation.name === Operations.OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
                         startLastVal = localStart.pop(),
                         endLastVal = localEnd.pop(),
-                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                        undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteText(operation.start, operation.end);
             }
-            else if (operation.name === OP_INSERT_STYLE) {
+            else if (operation.name === Operations.OP_INSERT_STYLE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                 }
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
-            else if (operation.name === OP_ATTRS_SET) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    // TODO!!!
-                    // var undoOperation = {name: OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
-                    // undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
-                }
+            else if (operation.name === Operations.OP_ATTRS_SET) {
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
-            else if (operation.name === OP_PARA_INSERT) {
+            else if (operation.name === Operations.OP_PARA_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_PARA_DELETE, start: _.copy(operation.start, true) };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_PARA_DELETE, start: _.copy(operation.start, true) };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implInsertParagraph(operation.start);
                 if (operation.text) {
@@ -1634,144 +1475,153 @@ define('io.ox/office/editor/editor',
                     implInsertText(operation.text, startPos);
                 }
             }
-            else if (operation.name === OP_PARA_DELETE) {
+            else if (operation.name === Operations.OP_PARA_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
-                        undoOperation = { name: OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                        undoOperation = { name: Operations.OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteParagraph(operation.start);
             }
-            else if (operation.name === OP_TABLE_INSERT) {
+            else if (operation.name === Operations.OP_TABLE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.position, true) };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(operation.position, true) };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implInsertTable(_.copy(operation.position), operation.attrs);
             }
-            else if (operation.name === OP_TABLE_DELETE) {
+            else if (operation.name === Operations.OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localStart = _.copy(operation.start, true),
-                        columns = Position.getLastColumnIndexInTable(paragraphs, localStart) + 1,
-                        rows = Position.getLastRowIndexInTable(paragraphs, localStart) + 1,
-                        undoOperation = { name: OP_TABLE_INSERT, start: localStart, columns: columns, rows: rows};
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+
+                    var localStart = _.copy(operation.start, true);
+                    var tablePos = Position.getDOMPosition(paragraphs, localStart);
+                    if (tablePos) {
+                        undomgr.startGroup();
+                        var tableNode = tablePos.node,
+                            tablegrid = $(tableNode).data('grid'),
+                            localattrs = {'tablegrid': tablegrid},
+                            tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs},
+                            rowCount = $(tableNode).children('tbody').children().length,
+                            localPos = _.copy(localStart, true);
+                        localPos.push(0);
+                        var rowUndoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
+
+                        undomgr.addUndo(rowUndoOperation, operation);
+                        undomgr.addUndo(tableUndoOperation, operation);
+                        undomgr.endGroup();
+                    }
                 }
                 implDeleteTable(operation.start);
             }
-            else if (operation.name === OP_CELLRANGE_DELETE) {
+            else if (operation.name === Operations.OP_CELLRANGE_DELETE) {
                 implDeleteCellRange(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_ROWS_DELETE) {
+            else if (operation.name === Operations.OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    undomgr.startGroup();
-                    for (var i = operation.start; i <= operation.end; i++) {
-                        var localPos = _.copy(operation.position, true),
-                            localRow = _.copy(localPos, true);
-                        localRow.push(i);
-                        var columns = Position.getLastColumnIndexInRow(paragraphs, localRow) + 1,
-                            undoOperation = { name: OP_ROW_INSERT, position: localPos, start: operation.start, columns: columns},
-                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one row in redo!
-                        undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
-                    }
-                    undomgr.endGroup();
+                    var localPos = _.copy(operation.position, true);
+                    localPos.push(operation.start);
+
+                    var rowCount = operation.end - operation.start + 1,
+                        undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_COLUMNS_DELETE) {
+            else if (operation.name === Operations.OP_COLUMNS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     undomgr.startGroup();
                     for (var i = operation.start; i <= operation.end; i++) {
                         var localPos = _.copy(operation.position, true),
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows},
-                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start};  // Deleting only one column in redo!
-                        undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, redoOperation));
+                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start},  // Deleting only one column in redo!
+                            // needs name, position, tablegrid, gridposition, insertmode
+                            undoOperation = { name: Operations.OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
+                        undomgr.addUndo(undoOperation, redoOperation);
                     }
                     undomgr.endGroup();
                 }
                 implDeleteColumns(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_ROW_COPY) {
+            else if (operation.name === Operations.OP_ROW_COPY) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var start = operation.end,
                         end = start,
-                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                        undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implCopyRow(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_COLUMN_COPY) {
+            else if (operation.name === Operations.OP_COLUMN_COPY) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var start = operation.end,
                         end = start,
-                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                        undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implCopyColumn(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_CELL_INSERT) {
+            else if (operation.name === Operations.OP_CELL_INSERT) {
                 implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
             }
-            else if (operation.name === OP_ROW_INSERT) {
-                // OP_ROW_INSERT is only called as undo for OP_ROWS_DELETE
+            else if (operation.name === Operations.OP_ROW_INSERT) {
+                // Operations.OP_ROW_INSERT is only called as undo for Operations.OP_ROWS_DELETE
                 // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                 //     var start = operation.end,
                 //         end = start,
-                //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                //         undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(undoOperation, operation);
                 // }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertDefaultCells, operation.attrs);
+                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.attrs);
             }
-            else if (operation.name === OP_COLUMN_INSERT) {
-                // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
+            else if (operation.name === Operations.OP_COLUMN_INSERT) {
+                // Operations.OP_COLUMN_INSERT is only called as undo for Operations.OP_COLUMNS_DELETE
                 // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                 //     var start = operation.end,
                 //         end = start,
-                //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-                //     undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                //         undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //     undomgr.addUndo(undoOperation, operation);
                 // }
-                implInsertColumn(operation.position, operation.start, operation.end);
+                implInsertColumn(operation.position, operation.gridposition, operation.tablegrid, operation.insertmode);
             }
-            else if (operation.name === OP_PARA_SPLIT) {
+            else if (operation.name === Operations.OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true);
                     localStart.pop();
-                    var undoOperation = { name: OP_PARA_MERGE, start: localStart };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_PARA_MERGE, start: localStart };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implSplitParagraph(operation.start);
             }
-            else if (operation.name === OP_IMAGE_INSERT) {
+            else if (operation.name === Operations.OP_IMAGE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
-            else if (operation.name === OP_FIELD_INSERT) {
+            else if (operation.name === Operations.OP_FIELD_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
                 implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
             }
-            else if (operation.name === OP_PARA_MERGE) {
+            else if (operation.name === Operations.OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var sel = _.copy(operation.start);
                     var paraLen = 0;
                     Position.getParagraphLength(paragraphs, sel);
                     sel.push(paraLen);
-                    var undoOperation = { name: OP_PARA_SPLIT, start: sel };
-                    undomgr.addUndo(new Undo.OXOUndoAction(undoOperation, operation));
+                    var undoOperation = { name: Operations.OP_PARA_SPLIT, start: sel };
+                    undomgr.addUndo(undoOperation, operation);
                 }
                 implMergeParagraph(operation.start);
             }
@@ -1828,7 +1678,10 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                currentSelection = new OXOSelection(Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes), Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes));
+                var startPaM = Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
+                    endPaM = Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
+
+                currentSelection = new OXOSelection(startPaM, endPaM);
 
                 // window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
@@ -1886,13 +1739,16 @@ define('io.ox/office/editor/editor',
 
             var // array of arrays collecting all sequences of sibling text nodes
                 siblingTextNodes = [],
-                // the number of child nodes in the paragraph
-                childCount = 0,
+                // whether the paragraph contains any text
+                hasText = false,
                 // whether the last child node is the dummy <br> element
                 lastDummy = false;
 
             // convert parameter to a DOM node
             paragraph = Utils.getDomNode(paragraph);
+
+            // whether last node is the dummy <br> node
+            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
 
             // remove all empty text spans which have sibling text spans, and collect
             // sequences of sibling text spans (needed for white-space handling)
@@ -1913,27 +1769,6 @@ define('io.ox/office/editor/editor',
                 }
             });
 
-            // get current child count and whether last node is the dummy <br> node
-            childCount = paragraph.childNodes.length;
-            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
-
-            // insert an empty text span if there is no other content (except the dummy <br>)
-            if (!paragraph.hasChildNodes() || (lastDummy && (childCount === 1))) {
-                $(paragraph).prepend($('<span>').text(''));
-                if (characterStyles) {
-                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
-                }
-                childCount += 1;
-            }
-
-            // append dummy <br> if the paragraph contains only an empty text span, or
-            // remove the dummy <br> if there is anything but a single empty text span
-            if ((childCount === 1) && DOM.isEmptyTextSpan(paragraph.firstChild)) {
-                $(paragraph).append($('<br>').data('dummy', true));
-            } else if (lastDummy && ((childCount > 2) || !DOM.isEmptyTextSpan(paragraph.firstChild))) {
-                $(paragraph.lastChild).remove();
-            }
-
             // Convert consecutive white-space characters to sequences of SPACE/NBSP
             // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
             // it breaks the paragraph's CSS attribute text-align:justify. Process
@@ -1951,24 +1786,46 @@ define('io.ox/office/editor/editor',
                 // collect the complete text in all text nodes
                 _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
 
-                // process all white-space contained in the text nodes
-                text = text
-                    // normalize white-space (convert to SPACE characters)
-                    .replace(/\s/g, ' ')
-                    // text in the node sequence cannot start with a SPACE character
-                    .replace(/^ /, '\xa0')
-                    // convert SPACE/SPACE pairs to SPACE/NBSP pairs
-                    .replace(/ {2}/g, ' \xa0')
-                    // text in the node sequence cannot end with a SPACE character
-                    .replace(/ $/, '\xa0');
+                // ignore empty sequences
+                if (text.length > 0) {
+                    hasText = true;
 
-                // distribute converted text to the text nodes
-                _(textNodes).each(function (textNode) {
-                    var length = textNode.nodeValue.length;
-                    textNode.nodeValue = text.substr(offset, length);
-                    offset += length;
-                });
+                    // process all white-space contained in the text nodes
+                    text = text
+                        // normalize white-space (convert to SPACE characters)
+                        .replace(/\s/g, ' ')
+                        // text in the node sequence cannot start with a SPACE character
+                        .replace(/^ /, '\xa0')
+                        // convert SPACE/SPACE pairs to SPACE/NBSP pairs
+                        .replace(/ {2}/g, ' \xa0')
+                        // text in the node sequence cannot end with a SPACE character
+                        .replace(/ $/, '\xa0');
+
+                    // distribute converted text to the text nodes
+                    _(textNodes).each(function (textNode) {
+                        var length = textNode.nodeValue.length;
+                        textNode.nodeValue = text.substr(offset, length);
+                        offset += length;
+                    });
+                }
             });
+
+            // insert an empty text span if there is no other content (except the dummy <br>)
+            if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
+                $(paragraph).prepend($('<span>').text(''));
+                // initialize character formatting from current paragraph style
+                if (characterStyles) {
+                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                }
+            }
+
+            // append dummy <br> if the paragraph contains no text, or remove
+            // the dummy <br> if there is any text
+            if (!hasText && !lastDummy) {
+                $(paragraph).append($('<br>').data('dummy', true));
+            } else if (hasText && lastDummy) {
+                $(paragraph.lastChild).remove();
+            }
 
             // TODO: Adjust tabs, ...
         }
@@ -2005,7 +1862,8 @@ define('io.ox/office/editor/editor',
             if (para === undefined) {
                 // Set attr to current selection
                 var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    updateFromBrowser = buttonEvent,
+                    // updateFromBrowser = buttonEvent,
+                    updateFromBrowser = false,
                     selection = getSelection(updateFromBrowser, allowNoneTextNodes);
 
                 if (selection.hasRange()) {
@@ -2195,14 +2053,17 @@ define('io.ox/office/editor/editor',
                 }
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                    // setting attributes without image selection (only workaround until image selection with mouse is possible)
-                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                    // updating current selection, so that image positions are also available
+                    var updateFromBrowser = true,
+                        allowNoneTextNodes = true,
+                        newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                        imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true);
 
                     // defining attributes, which the server can understand
                     var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
 
-                    var newOperation = {name: OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
+                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
                     applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -2216,14 +2077,14 @@ define('io.ox/office/editor/editor',
                 else if (family === 'paragraph') {
                     startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
                     endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
-                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                     applyOperation(newOperation, true, true);
                 }
             }
             else {
                 startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
                 endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
-                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
             }
         }
@@ -2638,11 +2499,62 @@ define('io.ox/office/editor/editor',
             var nodes = [];
             Utils.iterateSelectedDescendantNodes(element, function () {
                 // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
-                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
+                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || ((Utils.getNodeName(this) === 'span') && ($(this).data('spanType') === 'field'));
             }, function (node) {
                 nodes.push(node);
             });
             return nodes;
+        }
+
+        /**
+         * After merging two paragraphs, it can be necessary to move floated images
+         * of the second paragraph to the beginning of the first paragraph. This can
+         * done using this function 'moveFloatedImages', that generates 'move'
+         * operations for moving the images.
+         *
+         * @param {OXOPaM.oxoPosition} position
+         *  The logical position describing the paragraph.
+         */
+        function moveFloatedImages(position) {
+
+            var domPos = Position.getDOMPosition(paragraphs, position);
+
+            if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'p')) {
+
+                var para = domPos.node,
+                    counter = Position.getNumberOfFloatedImagesInParagraph(para),  // counting number of floated images at begin of paragraph
+                    child = para.firstChild;
+
+                while (child !== null) {
+                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
+
+                    if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+
+                        var localPos = Position.getObjectPositionInParagraph(para, child),
+                        source = _.copy(position, true),
+                        dest = _.copy(position, true);
+
+                        if (localPos !== counter) {
+                            source.push(localPos);
+                            dest.push(counter);  // there might be floated images already in the first paragraph
+
+                            // moving floated images with operation
+                            var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
+                            applyOperation(newOperation, true, true);
+                        } else {
+                            // only internal shifting required. image should be shifted before empty paragraphs
+                            // there can be empty text spans before the destination node
+                            while (DOM.isEmptyTextSpan(child.previousSibling)) {
+                                $(child).insertBefore(child.previousSibling);
+                            }
+                        }
+
+                        counter++;
+                    }
+
+                    child = nextChild;
+                }
+            }
         }
 
         // ====================================================================
@@ -2728,7 +2640,7 @@ define('io.ox/office/editor/editor',
             if ((node) && (node.nodeType === 3)) {
 
                 var floatMode = null,
-                    verticalSpanSide = null;
+                    verticalDivSide = null;
 
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
@@ -2740,36 +2652,36 @@ define('io.ox/office/editor/editor',
                 } else if (anchorType === 'FloatLeft') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind spans as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'left';
                     attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
                         if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalSpanSide = 'left';
+                            verticalDivSide = 'left';
                             attributes.clear = 'left';
                         }
                     }
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind divs as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'right';
                     attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
                         if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalSpanSide = 'right';
+                            verticalDivSide = 'right';
                             attributes.clear = 'right';
                         }
                     }
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind divs as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
 
                     attributes['margin-left'] = allMargins.fullLeftMargin;
                     attributes['margin-right'] = allMargins.fullRightMargin;
@@ -2800,13 +2712,15 @@ define('io.ox/office/editor/editor',
                 // }
 
                 if (floatMode !== null) {
+
+                    attributes['vertical-align'] = 'baseline';  // only important for inline images, text should be aligned to baseline of image
                     var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
 
-                    if (verticalSpanSide !== null) {
+                    if (verticalDivSide !== null) {
                         // all spans have to be listed before the floated images, but keeping the correct order
                         var insertNode = imgNode.get(0).parentNode.firstChild;
-                        while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan'))) { insertNode = insertNode.nextSibling; }
-                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data({'positionSpan': true, 'spanID': url}).css('float', verticalSpanSide).insertBefore(insertNode);
+                        while ((Utils.getNodeName(insertNode) === 'div') && ($(insertNode).data('positionDiv'))) { insertNode = insertNode.nextSibling; }
+                        $('<div>', { width: '1px', height: attributes.anchorvoffset }).data({'positionDiv': true, 'divID': url}).css({'float': verticalDivSide, 'display': 'inline-block'}).insertBefore(insertNode);
                     }
                 }
             }
@@ -2836,9 +2750,11 @@ define('io.ox/office/editor/editor',
             node = domPos ? domPos.node : null;
 
             DOM.splitTextNode(node, domPos.offset);
+
+            var newNode = DOM.splitTextNode(node, 0);
             // insert field before the parent <span> element of the text node
-            node = node.parentNode;
-            $('<div>').data('divType', 'field').css({ display: 'inline-block' }).text(representation).insertBefore(node);
+            newNode = newNode.parentNode;
+            $(newNode).data('spanType', 'field').text(representation);
         }
 
         /**
@@ -2861,10 +2777,10 @@ define('io.ox/office/editor/editor',
          *  The formatting attributes contained in the new style sheet, as map
          *  of name/value pairs.
          *
-         *  @param {Boolean=} hidden
+         *  @param {Boolean} [hidden]
          *   Optional property that determines if the style should be displayed in the UI (default is false)
          *
-         *  @param {Number=} uiPriority
+         *  @param {Number} [uiPriority]
          *   Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
          */
         function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority) {
@@ -2873,7 +2789,7 @@ define('io.ox/office/editor/editor',
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes, hidden, uiPriority);
+                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority });
             }
         }
 
@@ -2896,6 +2812,37 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
+            // change listener used to build the undo operations
+            function elementChangeListener(element, oldAttributes, newAttributes) {
+
+                var // the operational address of the passed element
+                    range = { start: [3], end: [3] },//TODO!!!
+                    // the operation used to undo the attribute changes
+                    undoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range),
+                    // the operation used to redo the attribute changes
+                    redoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range);
+
+                // find all old attributes that have been changed or cleared
+                _(oldAttributes).each(function (value, name) {
+                    if (!_.isEqual(value, newAttributes[name])) {
+                        undoOperation.attrs[name] = value;
+                        redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
+                    }
+                });
+
+                // find all newly added attributes
+                _(newAttributes).each(function (value, name) {
+                    if (!(name in oldAttributes)) {
+                        undoOperation.attrs[name] = null;
+                        redoOperation.attrs[name] = value;
+                    }
+                });
+
+                // add a new undo action for the current element
+                //TODO: enable when addressing works
+                //undomgr.addUndo(undoOperation, redoOperation);
+            }
+
             var // last index in the start position array
                 startLastIndex = start.length - 1,
                 // last index in the end position array
@@ -2905,7 +2852,11 @@ define('io.ox/office/editor/editor',
                 // the attribute family according to the passed range address
                 family = null,
                 // the style sheet container of the specified attribute family
-                styleSheets = null;
+                styleSheets = null,
+                // whether undo is enabled
+                createUndo = undomgr.isEnabled() && !undomgr.isInUndo(),
+                // options for StyleSheets.setAttributesInRanges() method calls
+                setAttributesOptions = createUndo ? { elementChangeListener: elementChangeListener } : undefined;
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
@@ -2932,11 +2883,13 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(end);
 
             if (family !== 'image') {
-                // build the DOM text range and set the formatting attributes
+                // build the DOM text range, set the formatting attributes, create undo operations
                 styleSheets = self.getStyleSheets(family);
                 if (styleSheets) {
+                    if (createUndo) { undomgr.startGroup(); }
                     ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                    styleSheets.setAttributesInRanges(ranges, attributes);
+                    styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                    if (createUndo) { undomgr.endGroup(); }
                 }
             } else {
                 var returnObj = Image.setImageAttributes(paragraphs, start, end, attributes);
@@ -2993,24 +2946,32 @@ define('io.ox/office/editor/editor',
 
             var position = _.copy(pos, true),
                 colgroup = $('<colgroup>'),
-                colCount = attrs.tablegrid.length;
+                colCount = attrs.tablegrid.length,
+                tableWidth = 0;
 
             for (var i = 0; i < attrs.tablegrid.length; i++) {
-                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm // removing 360 asap
+                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm
+                tableWidth += attrs.tablegrid[i];
                 colgroup.append($('<col>').css('width', width));
             }
 
             // insert the table into the document
-            var table = $('<table>').data('columns', colCount).append(colgroup),
+            var table = $('<table>').data({'columns': colCount, 'width': tableWidth, 'grid': attrs.tablegrid}).append(colgroup),
                 domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
+
+            if (tableWidth > 0) {
+                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+            }
 
             if (domPosition) {
                 domParagraph = domPosition.node;
             } else {
                 position[position.length - 1] -= 1; // inserting table at the end
                 domPosition = Position.getDOMPosition(paragraphs, position);
+                Utils.warn('Editor.implInsertTable(): Creating new table after position: ' + position);
+
                 if (domPosition) {
                     domParagraph = domPosition.node;
                     if (domParagraph.parentNode.childNodes.length === position[position.length - 1] + 1) {
@@ -3027,10 +2988,6 @@ define('io.ox/office/editor/editor',
                 }
 
                 paragraphs = editdiv.children();
-
-                // Setting cursor into table (unfortunately not visible in Chrome)
-//                var oxoPosition = Position.getFirstPositionInParagraph(paragraphs, position);
-//                lastOperationEnd = new OXOPaM(oxoPosition);
             }
         }
 
@@ -3079,7 +3036,8 @@ define('io.ox/office/editor/editor',
         function implMergeParagraph(position) {
 
             var posLength = position.length - 1,
-                para = position[posLength];
+                para = position[posLength],
+                imageMoves = [];
 
             position.push(0); // adding pos to position temporarely
 
@@ -3115,16 +3073,34 @@ define('io.ox/office/editor/editor',
                         if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
-                            if (((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) ||
-                                ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan')))) {
+
+                            if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
+
                                 var localChild = thisPara.firstChild;
+
                                 if (localChild) {
-                                    thisPara.insertBefore(child, localChild);  // what about order of images?
-                                    imageCounter++;
+
+                                    if ((Utils.getNodeName(localChild) === 'div') && ($(localChild).data('positionDiv'))) {
+
+                                        while ((Utils.getNodeName(localChild.nextSibling) === 'div') && ($(localChild.nextSibling).data('positionDiv'))) {
+                                            localChild = localChild.nextSibling;
+                                        }
+
+                                        localChild = localChild.nextSibling;  // using next sibling, to be able to use insertBefore
+                                    }
+
+
+                                    thisPara.insertBefore(child, localChild);
+
                                 } else {
                                     thisPara.appendChild(child);
                                 }
                             } else {
+
+                                if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+                                    imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
+                                }
+
                                 thisPara.appendChild(child);
                             }
                         }
@@ -3149,6 +3125,8 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
+
+            return imageMoves;
         }
 
         function implDeleteParagraph(position) {
@@ -3259,7 +3237,7 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastRow = $(table).children().children().length - 1;
+                var lastRow = $(table).children('tbody').children().length - 1;
                 if (endRow > lastRow) {
                     endRow = lastRow;
                 }
@@ -3299,7 +3277,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertRow(pos, count, insertDefaultCells, attrs) {
+        function implInsertRow(pos, count, insertdefaultcells, attrs) {
 
             var localPosition = _.copy(pos, true),
                 setRowHeight = false;
@@ -3308,7 +3286,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            insertDefaultCells = insertDefaultCells ? true : false;
+            insertdefaultcells = insertdefaultcells ? true : false;
 
             if (!_.isNumber(count)) {
                 count = 1; // setting default for number of rows
@@ -3330,7 +3308,7 @@ define('io.ox/office/editor/editor',
                 tableRowNode = tableRowDomPos.node;
             }
 
-            if (insertDefaultCells) {
+            if (insertdefaultcells) {
 
                 var columnCount = $(table).data('columns'),
                     // prototype elements for row, cell, and paragraph
@@ -3363,12 +3341,13 @@ define('io.ox/office/editor/editor',
             }
 
             // Setting cursor
-//            localPosition.push(insertAfter + 1);
-//            localPosition.push(0);
-//            localPosition.push(0);
-//            localPosition.push(0);
-//
-//            lastOperationEnd = new OXOPaM(localPosition);
+            if (insertdefaultcells) {
+                localPosition.push(0);
+                localPosition.push(0);
+                localPosition.push(0);
+
+                lastOperationEnd = new OXOPaM(localPosition);
+            }
         }
 
         function implInsertCell(pos, count, attrs) {
@@ -3437,7 +3416,10 @@ define('io.ox/office/editor/editor',
             implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-            allRows = $(table).children().children();
+                allRows = $(table).children('tbody').children(),
+                allCols = $(table).children('colgroup').children();
+
+            allCols.slice(startCol, endCol + 1).remove();  // updating cols in colgroup
 
             allRows.each(
                 function (i, elem) {
@@ -3445,14 +3427,28 @@ define('io.ox/office/editor/editor',
                 }
             );
 
-            if ($(table).children().children().children().length === 0) {   // no more columns
+            allCols = $(table).children('colgroup').children(); // update allCols selection
+
+            var tablegrid = $(table).data('grid');
+            tablegrid.splice(startCol, endCol - startCol + 1);  // removing column(s) in tablegrid
+
+            var tableWidth = 0;
+
+            for (var i = 0; i < tablegrid.length; i++) {
+                tableWidth += tablegrid[i];
+            }
+
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
+
+            if ($(table).children('tbody').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
                 $(table).remove();
                 paragraphs = editdiv.children();
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastColInFirstRow = $(table).children().children().first().children().length - 1;
+                var lastColInFirstRow = $(table).children('tbody').children().first().children().length - 1;
                 if (endCol > lastColInFirstRow) {
                     endCol = lastColInFirstRow;
                 }
@@ -3497,7 +3493,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertColumn(pos, startRow, rows) {
+        function implInsertColumn(pos, gridposition, tablegrid, insertmode) {
 
             var localPosition = _.copy(pos, true);
 
@@ -3506,8 +3502,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                allRows = $(table).children().children(),
-                insertAfter = startRow - 1,
+                allRows = $(table).children('tbody').children(),
                 // prototype elements for cell and paragraph
                 paragraph = $('<p>'),
                 cell = $('<td>').append(paragraph);
@@ -3518,17 +3513,30 @@ define('io.ox/office/editor/editor',
             allRows.each(
                 function (i, elem) {
                     var cellClone = cell.clone(true);
-                    if (insertAfter === -1) {
-                        cellClone.insertBefore($(elem).children().get(0));
+                    if (insertmode === 'behind') {
+                        cellClone.insertAfter($(elem).children().get(gridposition));
                     } else {
-                        cellClone.insertAfter($(elem).children().get(insertAfter));
+                        cellClone.insertBefore($(elem).children().get(gridposition));
                     }
                 }
             );
 
+            // setting new widths of the grid elements (saved in tablegrid)
+            var colgroup = $(table).children('colgroup').append($('<col>')), // adding one element to colgroup
+                allCols = colgroup.children('col'),
+                tableWidth = 0;
+
+            allCols.each(function (i) {
+                $(this).css('width', (tablegrid[i] / 100) + 'mm');
+                tableWidth += tablegrid[i];
+            });
+
+            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
+
             // Setting cursor to first position in table
             localPosition.push(0);
-            localPosition.push(insertAfter + 1);
+            localPosition.push(gridposition);
             localPosition.push(0);
             localPosition.push(0);
 
@@ -3561,7 +3569,7 @@ define('io.ox/office/editor/editor',
                 if (Utils.getNodeName(node) === 'img') {
                     nodeLen = 1;
                     isImage = true;
-                } else if (Utils.getNodeName(node) === 'div') {
+                } else if ((Utils.getNodeName(node) === 'span') && ($(node).data('spanType') === 'field')) {
                     nodeLen = 1;
                     isField = true;
                 } else {
@@ -3601,6 +3609,49 @@ define('io.ox/office/editor/editor',
             implParagraphChanged(startPosition);
         }
 
+        function implMove(_source, _dest) {
+
+            var source = _.copy(_source, true),
+                dest = _.copy(_dest, true);
+
+            // workaround: improve last position of destination by 1 to get the correct image
+            // -> might (should) be superfluous in the future.
+            dest[dest.length - 1] += 1;
+
+            var returnImageNode = true,
+                sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
+                destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode);
+
+            if ((sourcePos) && (destPos)) {
+                var sourceNode = sourcePos.node,
+                    destNode = destPos.node;
+
+                // ignoring offset in first version,
+                // and using complete spans instead of text nodes.
+
+                if ((sourceNode) && (destNode)) {
+                    if (sourceNode.nodeType === 3) {
+                        sourceNode = sourceNode.parentNode;
+                    }
+                    if (destNode.nodeType === 3) {
+                        destNode = destNode.parentNode;
+                    }
+
+                    if (Utils.getNodeName(sourceNode) !== 'img') {
+                        Utils.warn('Editor.implMove(): moved object is not an image: ' + Utils.getNodeName(sourceNode));
+                    }
+
+                    // there can be empty text spans before the destination node
+                    while (DOM.isTextSpan(destNode) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                        destNode = destNode.previousSibling;
+                    }
+
+                    // inserting the sourceNode before the destNode
+                    $(sourceNode).insertBefore(destNode);
+                }
+            }
+        }
+
         function implDbgOutEvent(event) {
 
             if (!dbgoutEvents)
@@ -3628,15 +3679,15 @@ define('io.ox/office/editor/editor',
 
         // hybrid edit mode
         editdiv
-            .on('focus', _.bind(this.processFocus, this, true))
-            .on('blur', _.bind(this.processFocus, this, false))
-            .on('keydown', $.proxy(this, 'processKeyDown'))
-            .on('keypress', $.proxy(this, 'processKeyPressed'))
-            .on('mousedown', $.proxy(this, 'processMouseDown'))
-            .on('mouseup', $.proxy(this, 'processMouseUp'))
-            .on('dragover', $.proxy(this, 'processDragOver'))
-            .on('drop', $.proxy(this, 'processDrop'))
-            .on('contextmenu', $.proxy(this, 'processContextMenu'))
+            .on('focus', function () { processFocus(true); })
+            .on('blur', function () { processFocus(false); })
+            .on('keydown', processKeyDown)
+            .on('keypress', processKeyPressed)
+            .on('mousedown', processMouseDown)
+            .on('mouseup', processMouseUp)
+            .on('dragover', processDragOver)
+            .on('drop', processDrop)
+            .on('contextmenu', processContextMenu)
             .on('cut paste', false);
 
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.

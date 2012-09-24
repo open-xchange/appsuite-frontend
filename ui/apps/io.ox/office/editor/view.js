@@ -39,14 +39,13 @@ define('io.ox/office/editor/view',
      *
      * @constructor
      *
-     * @extends Group
-     * @extends List
+     * @extends RadioGroup
      *
      * @param {StyleSheets} styleSheets
      *  A style sheet container.
      *
      * @param {Object} [options]
-     *  Additional options passed to the ComboField constructor.
+     *  Additional options passed to the RadioGroup constructor.
      */
     var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheets, options) {
 
@@ -54,46 +53,42 @@ define('io.ox/office/editor/view',
             self = this;
 
         /**
+         * Called for each list item to get the sorting index, which has been
+         * stored in the user data of the button elements.
+         */
+        function sortFunctor(button) {
+            return Utils.getControlUserData(button);
+        }
+
+        /**
          * Fills the drop-down list with all known style names, and adds
          * preview CSS formatting to the list items.
          */
         function fillList() {
-            var // sorted OptionButtons
-                buttonList = [];
-
             self.clearOptionButtons();
-            _(styleSheets.getStyleSheetNames(true)).each(function (name, id) {
-                var options = styleSheets.getPreviewButtonOptions(id),
-                    uiPriority = styleSheets.getUIPriority(id);
+            _(styleSheets.getStyleSheetNames()).each(function (name, id) {
 
-                buttonList.push(Utils.extendOptions(options, { value: id, uiPriority: uiPriority, label: name, css: { height: '36px', padding: '2px 12px' } }));
-            });
+                var // options for the formatting preview
+                    options = styleSheets.getPreviewButtonOptions(id),
+                    // sorting priority
+                    priority = styleSheets.getUIPriority(id),
+                    // the sort index stored at the button for lexicographical sorting
+                    sortIndex = String((priority < 0) ? (priority + 0x7FFFFFFF) : priority);
 
-            // sort by uiPriority and label
-            buttonList.sort(function (a, b) {
-                if (a.uiPriority < b.uiPriority) {
-                    return -1;
-                }
-                else if (b.uiPriority < a.uiPriority) {
-                    return 1;
-                }
-                else if (a.label < b.label) {
-                    return -1;
-                }
-                else if (b.label < a.label) {
-                    return 1;
-                }
-                return 0;
-            });
+                // build a sorting index usable for lexicographical comparison:
+                // 1 digit for priority sign, 10 digits positive priority,
+                // followed by lower-case style sheet name
+                while (sortIndex.length < 10) { sortIndex = '0' + sortIndex; }
+                sortIndex = ((priority < 0) ? '0' : '1') + sortIndex + name.toLowerCase();
 
-            _(buttonList).each(function (button) {
-                self.createOptionButton(button.value, button);
+                // create the list item, pass sorting index as user data
+                self.createOptionButton(id, Utils.extendOptions(options, { label: name, css: { height: '36px', padding: '2px 12px' }, userData: sortIndex }));
             });
         }
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true }));
+        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true, sorted: true, sortFunctor: sortFunctor }));
 
         // initialization -----------------------------------------------------
 
@@ -191,14 +186,6 @@ define('io.ox/office/editor/view',
          *  details).
          */
         function createToolBar(id, options) {
-
-//            var // the 'File' drop-down menu
-//                fileMenu = new MenuBox(appWindow)
-//                    .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
-//                    .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
-//                    .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-//                    .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') });
-
             // create common controls present in all tool bars
             return toolPane.createToolBar(id, options)
                 .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
@@ -214,12 +201,7 @@ define('io.ox/office/editor/view',
         function windowResizeHandler(event) {
 
             var // the left position of the editor node
-                editorLeft = Math.floor(editors.rich.getNode().offset().left),
-                // width of the document title label
-                titleWidth = Math.floor(appWindow.nodes.title.outerWidth(true));
-
-            // position the tab bar
-            appWindow.nodes.tabBar.getNode().css('left', Math.max(editorLeft, titleWidth) + 'px');
+                editorLeft = Math.floor(editors.rich.getNode().offset().left);
 
             // set a left padding to the tool pane to align the tool bars with the editor node
             toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
@@ -234,21 +216,27 @@ define('io.ox/office/editor/view',
 
             var // the quick-search text field
                 searchField = $(this),
+                // ESCAPE key returns to editor
+                escape = (event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE),
                 // current value of the search query
-                searchQuery = searchField.val(),
+                searchQuery = null,
                 // any matches found in document
                 matches = false;
 
-            // ESCAPE key returns to editor
-            if ((event.type === 'keyup') && (event.keyCode === KeyCodes.ESCAPE)) {
-                controller.cancel();
+            // ESCAPE key clears the quick-search text field
+            if (escape) { searchField.val(''); }
+
             // always refresh search results if edit fields receives focus
-            } else if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
+            searchQuery = searchField.val();
+            if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
                 controller.change('action/search/quick', searchQuery);
                 oldSearchQuery = searchQuery;
                 matches = !searchQuery.length || controller.get('action/search/quick');
-                searchField.css('background-color', matches ? '' : '#ffdfdf');
+                searchField.css('background-color', matches ? '' : '#ffcfcf');
             }
+
+            // ESCAPE key returns to editor
+            if (escape) { controller.cancel(); }
         }
 
         /**
@@ -326,17 +314,19 @@ define('io.ox/office/editor/view',
             )
         ));
 
-        // create the tool bars
-        toolPane.createToolBar('file', { label: gt('File') })
-            .addButton('action/export',   { icon: 'icon-share',     tooltip: gt('Export') })
-            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
-            .addButton('action/download', { icon: 'icon-download',  tooltip: gt('Download') })
-            .addButton('action/print',    { icon: 'icon-print',     tooltip: gt('Print') });
+        // create the tool bars and drop-down menus
+        toolPane.addMenu(new MenuBox(appWindow)
+                .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
+                .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
+                .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
+                .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
+            { label: gt('File') });
 
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
-            .addButton('image/insertfile',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
-            .addButton('image/inserturl',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
+            .addSeparator()
+            .addButton('image/insert/file',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -371,9 +361,10 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/insertfile',    { icon: 'icon-picture',   tooltip: gt('Insert Image File') })
-            .addButton('image/inserturl',    { icon: 'icon-picture',   tooltip: gt('Insert Image URL') })
-            .addButton('image/delete',    { icon: 'icon-trash',     tooltip: gt('Delete Image') })
+            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') })
+            .addSeparator()
+            .addButton('image/delete', { icon: 'icon-trash', tooltip: gt('Delete Image') })
             .addSeparator()
             .addRadioGroup('image/alignment', { icon: 'icon-picture', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
@@ -383,8 +374,6 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('action/flush',    { icon: 'icon-share-alt', tooltip: gt('Flush') })
-            .addSeparator()
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
             .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
 
