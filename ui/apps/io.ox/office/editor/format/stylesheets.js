@@ -27,16 +27,12 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {jQuery} element
      *  The DOM element, as jQuery object.
      *
-     * @param {Boolean} [clone]
-     *  If set to true, the returned attribute map will be a clone of the
-     *  attribute map stored in the element.
-     *
      * @returns {Object}
      *  The attribute map if existing, otherwise an empty object.
      */
     function getElementAttributes(element, clone) {
         var attributes = element.data('attributes');
-        return _.isObject(attributes) ? (clone ? _.clone(attributes) : attributes) : {};
+        return _.isObject(attributes) ? attributes : {};
     }
 
     /**
@@ -72,24 +68,6 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      *
-     * @param {Function} iterateReadOnly
-     *  A function that implements iterating the DOM elements covered by an
-     *  array of DOM ranges for read-only access. The function receives the
-     *  array of DOM ranges to be iterated as first parameter, an iterator
-     *  function to be called for each found DOM element as second parameter,
-     *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module. Will
-     *  be called in the context of this style sheet container instance.
-     *
-     * @param {Function} iterateReadWrite
-     *  A function that implements iterating the DOM elements covered by an
-     *  array of DOM ranges for read/write access. The function receives the
-     *  array of DOM ranges to be iterated as first parameter, an iterator
-     *  function to be called for each found DOM element as second parameter,
-     *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module. Will
-     *  be called in the context of this style sheet container instance.
-     *
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
@@ -106,7 +84,7 @@ define('io.ox/office/editor/format/stylesheets',
      *      Receives a DOM element node, and must return the ancestor DOM
      *      element node.
      */
-    function StyleSheets(styleFamily, definitions, documentStyles, iterateReadOnly, iterateReadWrite, options) {
+    function StyleSheets(styleFamily, definitions, documentStyles, options) {
 
         var // style sheets, mapped by identifier
             styleSheets = {},
@@ -217,6 +195,52 @@ define('io.ox/office/editor/format/stylesheets',
 
             return attributes;
         }
+
+        // abstract interface -------------------------------------------------
+
+        /**
+         * Subclasses MUST overwrite this method and implement iterating the
+         * DOM elements covered by the passed array of DOM ranges for read-only
+         * access. Usually the iterator functions defined in the DOM module can
+         * be used to implement the iteration process.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be visited.
+         *
+         * @param {Function} iterator
+         *  The iterator function to be called for each found DOM element. This
+         *  function receives the current DOM element as first parameter.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         */
+        this.iterateReadOnly = function (ranges, iterator, context) {
+            Utils.error('StyleSheets.iterateReadOnly(): MUST be implemented in the subclass!');
+        };
+
+        /**
+         * Subclasses MUST overwrite this method and implement iterating the
+         * DOM elements covered by the passed array of DOM ranges for
+         * read/write access. Usually the iterator functions defined in the DOM
+         * module can be used to implement the iteration process.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be visited.
+         *
+         * @param {Function} iterator
+         *  The iterator function to be called for each found DOM element. This
+         *  function receives the current DOM element as first parameter.
+         *
+         * @param {Object} [context]
+         *  If specified, the iterator will be called with this context (the
+         *  symbol 'this' will be bound to the context inside the iterator
+         *  function).
+         */
+        this.iterateReadWrite = function (ranges, iterator, context) {
+            Utils.error('StyleSheets.iterateReadWrite(): MUST be implemented in the subclass!');
+        };
 
         // methods ------------------------------------------------------------
 
@@ -451,7 +475,7 @@ define('io.ox/office/editor/format/stylesheets',
                 special = Utils.getBooleanOption(options, 'special', false);
 
             // get merged attributes from all covered elements
-            iterateReadOnly.call(this, ranges, function (element) {
+            this.iterateReadOnly(ranges, function (element) {
 
                 var // the current element, as jQuery object
                     $element = $(element),
@@ -516,6 +540,9 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to change special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
+         *  @param {Function} [options.elementChangeListener]
+         *      If specified, will be called for each DOM element covered by
+         *      the passed ranges whose attributes have been changed.
          */
         this.setAttributesInRanges = function (ranges, attributes, options) {
 
@@ -524,14 +551,18 @@ define('io.ox/office/editor/format/stylesheets',
                 // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false);
+                special = Utils.getBooleanOption(options, 'special', false),
+                // element change listener notified for changed attributes
+                changeListener = Utils.getFunctionOption(options, 'elementChangeListener');
 
             // iterate all covered elements and change their formatting
-            iterateReadWrite.call(this, ranges, function (element) {
+            this.iterateReadWrite(ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),
-                    // explicit element attributes
+                    // the existing explicit element attributes
+                    oldElementAttributes = getElementAttributes($element),
+                    // new explicit element attributes
                     elementAttributes = null,
                     // attributes of the current or new style sheet
                     styleAttributes = null,
@@ -539,9 +570,9 @@ define('io.ox/office/editor/format/stylesheets',
                     cssAttributes = null;
 
                 if (styleId) {
-                    // change style sheet of the element: remove existing
-                    // element attributes, set CSS formatting of all attributes
-                    // according to the new style sheet
+                    // style sheet of the element will be changed: remove all
+                    // existing element attributes, set CSS formatting of all
+                    // attributes according to the new style sheet
                     styleAttributes = getStyleAttributes(styleId, styleFamily, element);
                     elementAttributes = { style: styleAttributes.style };
                     cssAttributes = _.clone(styleAttributes);
@@ -549,7 +580,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // clone the attributes coming from the element, there may
                     // be multiple elements pointing to the same data object,
                     // e.g. after using the $.clone() method.
-                    elementAttributes = getElementAttributes($element, true);
+                    elementAttributes = _.clone(oldElementAttributes);
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element);
                     cssAttributes = {};
                 }
@@ -566,6 +597,16 @@ define('io.ox/office/editor/format/stylesheets',
                         cssAttributes[name] = value;
                     }
                 });
+
+                // check if any attributes have been changed
+                if (_.isEqual(oldElementAttributes, elementAttributes)) {
+                    return;
+                }
+
+                // call element change listener
+                if (_.isFunction(changeListener)) {
+                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
+                }
 
                 // write back element attributes to the element
                 setElementAttributes($element, elementAttributes);
@@ -654,7 +695,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.updateFormattingInRanges = function (ranges) {
 
             // iterate all covered elements and update their CSS formatting
-            iterateReadWrite.call(this, ranges, function (element) {
+            this.iterateReadWrite(ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),

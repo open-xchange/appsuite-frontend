@@ -64,11 +64,15 @@ define('io.ox/office/editor/undo',
 
             this.undo = function () {
                 // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
-                editor.publicApplyOperation(this.undoOperation, true, true);
+                if (this.undoOperation) {
+                    editor.publicApplyOperation(this.undoOperation, true, true);
+                }
             };
 
             this.redo = function () {
-                editor.publicApplyOperation(this.redoOperation, true, true);
+                if (this.redoOperation) {
+                    editor.publicApplyOperation(this.redoOperation, true, true);
+                }
             };
 
         } // class Action
@@ -98,17 +102,29 @@ define('io.ox/office/editor/undo',
 
         this.enable = function (b) {
             enabled = b;
-            if (!enabled)
+            if (!enabled) {
                 this.clear();
+            }
         };
 
+        /**
+         * Opens an undo group. All undo operations added while an undo group
+         * is open will be collected and act like a single undo action. Can be
+         * called repeatedly. Every call of this method must be followed by a
+         * matching call of the method UndoManager.endGroup().
+         */
         this.startGroup = function () {
             // I don't think we really need complex structure with nested arrays here.
             // Once we start a group, undo will always undo everything within
-            // Just using ++/-- so other code don't needs to take care whether or not grouping is already active...
+            // Just using ++/-- so other code don't need to take care whether or
+            // not grouping is already active...
             groupLevel++;
         };
 
+        /**
+         * Closes an undo group that has been opened with the method
+         * UndoManager.startGroup() before.
+         */
         this.endGroup = function () {
 
             if (!groupLevel) {
@@ -177,7 +193,7 @@ define('io.ox/office/editor/undo',
         };
 
         this.hasUndo = function () {
-            return currentAction > 0 ? true : false;
+            return currentAction > 0;
         };
 
         this.undo = function () {
@@ -199,7 +215,7 @@ define('io.ox/office/editor/undo',
         };
 
         this.hasRedo = function () {
-            return currentAction < actions.length ? true : false;
+            return currentAction < actions.length;
         };
 
         this.redo = function () {

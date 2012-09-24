@@ -147,8 +147,7 @@
 
                 td {
                     padding: 0 1mm;
-                    border: none;
-                    border-top: 1px #d5d5d5 solid;
+                    border: 1px #d5d5d5 solid;
 
                     &:first-child {
                         background-color: #d5d5d5;

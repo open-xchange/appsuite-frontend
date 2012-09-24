@@ -1461,11 +1461,6 @@ define('io.ox/office/editor/editor',
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    // TODO!!!
-                    // var undoOperation = {name: Operations.OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
-                    // undomgr.addUndo(undoOperation, operation);
-                }
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
             else if (operation.name === Operations.OP_PARA_INSERT) {
@@ -2812,6 +2807,37 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
+            // change listener used to build the undo operations
+            function elementChangeListener(element, oldAttributes, newAttributes) {
+
+                var // the operational address of the passed element
+                    range = { start: [3], end: [3] },//TODO!!!
+                    // the operation used to undo the attribute changes
+                    undoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range),
+                    // the operation used to redo the attribute changes
+                    redoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range);
+
+                // find all old attributes that have been changed or cleared
+                _(oldAttributes).each(function (value, name) {
+                    if (!_.isEqual(value, newAttributes[name])) {
+                        undoOperation.attrs[name] = value;
+                        redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
+                    }
+                });
+
+                // find all newly added attributes
+                _(newAttributes).each(function (value, name) {
+                    if (!(name in oldAttributes)) {
+                        undoOperation.attrs[name] = null;
+                        redoOperation.attrs[name] = value;
+                    }
+                });
+
+                // add a new undo action for the current element
+                //TODO: enable when addressing works
+                //undomgr.addUndo(undoOperation, redoOperation);
+            }
+
             var // last index in the start position array
                 startLastIndex = start.length - 1,
                 // last index in the end position array
@@ -2821,7 +2847,11 @@ define('io.ox/office/editor/editor',
                 // the attribute family according to the passed range address
                 family = null,
                 // the style sheet container of the specified attribute family
-                styleSheets = null;
+                styleSheets = null,
+                // whether undo is enabled
+                createUndo = undomgr.isEnabled() && !undomgr.isInUndo(),
+                // options for StyleSheets.setAttributesInRanges() method calls
+                setAttributesOptions = createUndo ? { elementChangeListener: elementChangeListener } : undefined;
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
@@ -2848,11 +2878,13 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(end);
 
             if (family !== 'image') {
-                // build the DOM text range and set the formatting attributes
+                // build the DOM text range, set the formatting attributes, create undo operations
                 styleSheets = self.getStyleSheets(family);
                 if (styleSheets) {
+                    if (createUndo) { undomgr.startGroup(); }
                     ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                    styleSheets.setAttributesInRanges(ranges, attributes);
+                    styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                    if (createUndo) { undomgr.endGroup(); }
                 }
             } else {
                 var returnObj = Image.setImageAttributes(paragraphs, start, end, attributes);

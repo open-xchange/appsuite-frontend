@@ -106,11 +106,6 @@
 /* OX icons                                                                  */
 /* ========================================================================= */
 
-/* reset Bootstrap margins for all icons */
-i[class^="icon-"] {
-    margin: 0;
-}
-
 /*
  * Replace images for icon classes starting with "icon-io-ox-". Icons are
  * 14x14px with a 6px grid spacing.
@@ -159,6 +154,13 @@ i.icon-io-ox-table-insert-column { background-position:  -40px  -20px; }
 i.icon-io-ox-table-delete-row    { background-position:  -60px  -20px; }
 i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 
+/* reset Bootstrap margins for all icons */
+.reset-icon-margins() {
+    i[class^="icon-"] {
+        margin: 0;
+    }
+}
+
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */
@@ -201,6 +203,8 @@ i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
 div.io-ox-pane {
     background-color: @pane-fill-color;
 
+    .reset-icon-margins();
+
     &.top { border-bottom: 1px solid @pane-border-color; }
     &.bottom { border-top: 1px solid @pane-border-color; }
     &.left { border-right: 1px solid @pane-border-color; }
@@ -219,6 +223,8 @@ div.io-ox-view-component {
     /* prevent multi-line layout of button groups */
     white-space: nowrap;
     text-align: left;
+
+    .reset-icon-margins();
 
     /* disabled style for any element marked with the 'disabled' class */
     .disabled {

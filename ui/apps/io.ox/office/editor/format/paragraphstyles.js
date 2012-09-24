@@ -74,26 +74,29 @@ define('io.ox/office/editor/format/paragraphstyles',
      */
     function ParagraphStyles(rootNode, documentStyles) {
 
-        var // self reference
-            self = this;
-
-        // private methods ----------------------------------------------------
-
-        /**
-         * Iterates over all paragraph elements covered by the passed DOM
-         * ranges and calls the passed iterator function.
-         */
-        function iterate(ranges, iterator, context) {
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', iterator, context);
-        }
-
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'paragraph', definitions, documentStyles, iterate, iterate, {
+        StyleSheets.call(this, 'paragraph', definitions, documentStyles, {
             descendantStyleFamilies: 'character'
         });
 
-        // initialization -----------------------------------------------------
+        // methods ------------------------------------------------------------
+
+        /**
+         * Iterates over all paragraph elements covered by the passed DOM
+         * ranges for read-only access and calls the passed iterator function.
+         */
+        this.iterateReadOnly = function (ranges, iterator, context) {
+            // DOM.iterateAncestorNodesInRanges() passes the current element to
+            // the passed iterator function exactly as expected
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'p', iterator, context);
+        };
+
+        /**
+         * Iterates over all paragraph elements covered by the passed DOM
+         * ranges for read/write access and calls the passed iterator function.
+         */
+        this.iterateReadWrite = this.iterateReadOnly;
 
     } // class ParagraphStyles
 
