@@ -78,7 +78,8 @@ define('io.ox/office/editor/format/stylesheets',
      *  array of DOM ranges to be iterated as first parameter, an iterator
      *  function to be called for each found DOM element as second parameter,
      *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module.
+     *  Compatible with the iterator functions defined in the DOM module. Will
+     *  be called in the context of this style sheet container instance.
      *
      * @param {Function} iterateReadWrite
      *  A function that implements iterating the DOM elements covered by an
@@ -86,7 +87,8 @@ define('io.ox/office/editor/format/stylesheets',
      *  array of DOM ranges to be iterated as first parameter, an iterator
      *  function to be called for each found DOM element as second parameter,
      *  and a context object used to call the iterator function with.
-     *  Compatible with the iterator functions defined in the DOM module.
+     *  Compatible with the iterator functions defined in the DOM module. Will
+     *  be called in the context of this style sheet container instance.
      *
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
@@ -449,7 +451,7 @@ define('io.ox/office/editor/format/stylesheets',
                 special = Utils.getBooleanOption(options, 'special', false);
 
             // get merged attributes from all covered elements
-            iterateReadOnly(ranges, function (element) {
+            iterateReadOnly.call(this, ranges, function (element) {
 
                 var // the current element, as jQuery object
                     $element = $(element),
@@ -499,7 +501,9 @@ define('io.ox/office/editor/format/stylesheets',
          *  DOM.iterateNodesInRanges() for details).
          *
          * @param {Object} attributes
-         *  A map of attribute name/value pairs.
+         *  A map of attribute name/value pairs. To clear an explicit attribute
+         *  value from the elements (thus defaulting to the current style
+         *  sheet), the value in this map can be set to null.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
@@ -523,7 +527,7 @@ define('io.ox/office/editor/format/stylesheets',
                 special = Utils.getBooleanOption(options, 'special', false);
 
             // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
+            iterateReadWrite.call(this, ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),
@@ -554,7 +558,7 @@ define('io.ox/office/editor/format/stylesheets',
                 _(attributes).each(function (value, name) {
                     if (isRegisteredAttribute(name, special)) {
                         // check whether to clear the attribute
-                        if (clear && _.isEqual(styleAttributes[name], value)) {
+                        if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
                             delete elementAttributes[name];
                         } else {
                             elementAttributes[name] = value;
@@ -591,7 +595,7 @@ define('io.ox/office/editor/format/stylesheets',
          * Clears specific formatting attributes in the specified DOM ranges.
          *
          * @param {DOM.Range[]} ranges
-         *  (in/out) The DOM ranges to be formatted. The array will b
+         *  (in/out) The DOM ranges to be formatted. The array will be
          *  validated and sorted before iteration starts (see method
          *  DOM.iterateNodesInRanges() for details).
          *
@@ -607,66 +611,50 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to clear special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
          */
         this.clearAttributesInRanges = function (ranges, attributeNames, options) {
 
-            var // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false);
+            var // build a map with null values from passed name list
+                attributes = {};
 
-            // validate passed array of attribute names
-            attributeNames = _.chain(attributeNames).getArray().filter(function (name) {
-                return _.isString(name) && (name !== 'style');
-            }).value();
-
-            // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
-
-                var // the element, as jQuery object
-                    $element = $(element),
-                    // explicit element attributes
-                    elementAttributes = getElementAttributes($element, true),
-                    // get attributes of the style sheet (only of the style family)
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element),
-                    // the resulting attributes to be changed at each element
-                    cssAttributes = {};
-
-                if (attributeNames.length) {
-                    // remove specified attributes
-                    _(attributeNames).each(function (name) {
-                        if (isRegisteredAttribute(name, special) && (name in elementAttributes)) {
-                            delete elementAttributes[name];
-                            cssAttributes[name] = styleAttributes[name];
-                        }
-                    });
-                } else {
-                    // remove all attributes except style name
-                    _(elementAttributes).each(function (value, name) {
-                        if (isRegisteredAttribute(name, special)) {
-                            delete elementAttributes[name];
-                            cssAttributes[name] = styleAttributes[name];
-                        }
-                    });
-                }
-
-                // write back element attributes to the element
-                setElementAttributes($element, elementAttributes);
-
-                // change CSS formatting of the element
-                _(cssAttributes).each(function (value, name) {
-                    if (name in definitions) {
-                        definitions[name].set($element, value);
-                    }
+            // fill attribute map from passed array of attribute names
+            if (_.isString(attributeNames)) {
+                // string passed: clear single attribute
+                attributes[attributeNames] = null;
+            } else if (_.isArray(attributeNames)) {
+                // array passed: clear all specified attributes
+                _(attributeNames).each(function (name) {
+                    attributes[name] = null;
                 });
+            } else {
+                // no valid attribute names passed: clear all attributes
+                _(definitions).each(function (definition, name) {
+                    attributes[name] = null;
+                });
+            }
 
-            }, this);
-
-            return this;
+            return this.setAttributesInRanges(ranges, attributes, options);
         };
 
+        /**
+         * Updates the CSS formatting in the specified DOM ranges, according to
+         * the current attribute and style settings.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be updated. The array will be validated
+         *  and sorted before iteration starts (see method
+         *  DOM.iterateNodesInRanges() for details).
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
         this.updateFormattingInRanges = function (ranges) {
 
-            // iterate all covered elements and change their formatting
-            iterateReadWrite(ranges, function (element) {
+            // iterate all covered elements and update their CSS formatting
+            iterateReadWrite.call(this, ranges, function (element) {
 
                 var // the element, as jQuery object
                     $element = $(element),

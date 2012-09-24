@@ -16,11 +16,11 @@ define('io.ox/office/editor/image',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
      'io.ox/office/editor/oxopam',
-     'io.ox/office/dialog/error'], function (Utils, DOM, Position, OXOPaM, ErrorDialogs) {
+     'io.ox/office/editor/dialog/error'], function (Utils, DOM, Position, OXOPaM, ErrorDialogs) {
 
     'use strict';
 
-    // static class Image ==================================================
+    // static class Image =====================================================
 
     /**
      * Provides static helper methods for manipulation and calculation
@@ -480,6 +480,8 @@ define('io.ox/office/editor/image',
             ErrorDialogs.insertImageError();
         }
     };
+
+    // exports ================================================================
 
     return Image;
 

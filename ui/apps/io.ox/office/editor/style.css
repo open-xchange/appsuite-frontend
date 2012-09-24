@@ -173,6 +173,10 @@
                 .debug-highlight-mixin(#f88);
                 outline-offset: 2px;
             }
+
+            div {
+                .debug-highlight-mixin(#f8f);
+            }
         }
     }
 }

@@ -15,12 +15,11 @@ define('io.ox/office/editor/table',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/oxopam',
-     'io.ox/office/dialog/error'], function (Utils, DOM, Position, OXOPaM, ErrorDialogs) {
+     'io.ox/office/editor/oxopam'], function (Utils, DOM, Position, OXOPaM) {
 
     'use strict';
 
-    // static class Image ==================================================
+    // static class Table =====================================================
 
     /**
      * Provides static helper methods for manipulation and calculation
@@ -176,6 +175,8 @@ define('io.ox/office/editor/table',
         return tableGrid;
 
     };
+
+    // exports ================================================================
 
     return Table;
 

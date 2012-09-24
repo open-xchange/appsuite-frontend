@@ -13,7 +13,7 @@
 
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
-     'io.ox/office/dialog/common'
+     'io.ox/office/editor/dialog/common'
     ], function (BaseController, CommonDialogs) {
 
     'use strict';
