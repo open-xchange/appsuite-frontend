@@ -12,7 +12,10 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 
-define('io.ox/office/editor/undo', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/editor/undo',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/editor/operations'
+    ], function (Utils, Operations) {
 
     'use strict';
 
@@ -150,7 +153,7 @@ define('io.ox/office/editor/undo', ['io.ox/office/tk/utils'], function (Utils) {
                 if (tryToMerge && currentAction && action.allowMerge) {
                     var prevUndo = actions[currentAction - 1];
                     if (prevUndo.allowMerge && (prevUndo.redoOperation.name === action.redoOperation.name)) {
-                        if (action.redoOperation.name === 'insertText') {
+                        if (action.redoOperation.name === Operations.OP_TEXT_INSERT) {
                             if (isSameParagraph(action.redoOperation.start, prevUndo.redoOperation.start, false)) {
                                 var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
                                 var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
