@@ -103,7 +103,7 @@ define("io.ox/mail/api",
             },
             list: {
                 action: "list",
-                columns: "102,600,601,602,603,604,607,610,611,614"
+                columns: "102,600,601,602,603,604,605,607,610,611,614"
             },
             get: {
                 action: "get",
@@ -174,6 +174,14 @@ define("io.ox/mail/api",
             },
             getPost: function (data) {
                 return applyLatest(data);
+            }
+        },
+        params: {
+            all: function (options) {
+                if (options.sort === 'thread') {
+                    options.sort = 610;
+                }
+                return options;
             }
         }
     });

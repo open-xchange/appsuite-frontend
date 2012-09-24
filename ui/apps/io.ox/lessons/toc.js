@@ -41,7 +41,7 @@ define("io.ox/lessons/toc",  function () {
             id++;
             
             var $nav = node.find(".navigation"),
-                $toc = $('<ul class="nav nav-stacked nav-pills span3">').attr("id", "io-ox-lessons-toc-" + id);
+                $toc = $('<ul class="nav nav-stacked nav-pills span2">').attr("id", "io-ox-lessons-toc-" + id);
             if ($nav.length === 0) {
                 return;
             }
@@ -67,8 +67,7 @@ define("io.ox/lessons/toc",  function () {
             // Glue in place
             $toc.css({
                 position: 'fixed',
-                top: $toc.offset().top,
-                left: $toc.offset().left
+                top: $toc.offset().top
             });
             
             node.on("scroll", function () {

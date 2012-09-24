@@ -44,7 +44,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar {
     bottom: auto;
     height: 40px;
-    overflow: hidden;
     z-index: 2;
     /* --- */
     background-color: #2C2C2C;
@@ -55,6 +54,12 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     background-image: -o-linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-image: linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-repeat: repeat-x;
+}
+
+#io-ox-topbar .launchers {
+    overflow: hidden;
+    float: left;
+    height: 100%;
 }
 
 #io-ox-top-logo-small {
@@ -71,7 +76,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 .touch #io-ox-topbar { height: 40px; }
 .touch #io-ox-topbar .launcher { font-size: @topbar-font-size + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
-.touch #io-ox-screens { top: 42px; }
+.touch #io-ox-screens { top: 40px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
 
@@ -99,7 +104,15 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar .launcher.right {
     float: right;
     display: inline-block !important;
+    overflow: visible;
 }
+
+#io-ox-topbar .launcher.right .dropdown-menu {
+    left: auto; right: 0; text-align: left;
+}
+
+#io-ox-topbar .launcher.right .dropdown-menu a { color: @link-color; }
+#io-ox-topbar .launcher.right .dropdown-menu li:hover a { color: white; }
 
 #io-ox-topbar .launcher.hover {
     color: @topbar-launcher-color-hover;
@@ -394,10 +407,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='@window-head-top', endColorstr='@window-head-bottom', GradientType=0 );"
 }
 
-.css-table { display: table; table-layout: fixed; width: 100%; }
-.css-table-row { display: table-row }
-.css-table-cell { display: table-cell; vertical-align: middle; }
-
 .cell-50 { width: 50.0%; }
 .cell-33 { width: 33.33333%; }
 .cell-25 { width: 25.0%; }
@@ -470,6 +479,17 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     outline: 0;
 }
 
+.window-toolbar .btn-group + .btn-group {
+    margin-left: 15px;
+}
+
+.window-toolbar .btn-primary + .btn-primary {
+    margin-left: 10px;
+}
+.window-toolbar .btn-primary + .btn-group {
+    margin-left: 10px;
+}
+
 .window-toolbar a.btn-primary,
 .window-toolbar a.btn-primary:hover {
     color: white;
@@ -533,7 +553,7 @@ a.button.default-action {
 }
 
 /* avoid bootstrap's form margins */
-.window-controls form { margin-bottom: 0; } 
+.window-controls form { margin-bottom: 0; }
 .window-controls label { margin-bottom: 0; }
 
 .window-control {
@@ -541,7 +561,7 @@ a.button.default-action {
     margin-left: 5px;
     display: inline-block;
     overflow: hidden;
-    height: 38px;
+    height: 28px;
 }
 
 .window-control .close {
@@ -621,7 +641,6 @@ a.button.default-action {
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
     z-index: 1;
-    bottom: 34px;
 }
 
 .vgrid, .vgrid:focus {
@@ -631,13 +650,37 @@ a.button.default-action {
 .vgrid-toolbar {
     position: absolute;
     right: 0;
-    bottom: 0;
     left: 0;
     line-height: 18px;
     padding: 8px 13px 8px 13px;
-    border-top: 1px solid mix(@color, @background, 200%/15);
     background-color: #f5f5f5;
     z-index: 2;
+}
+
+.vgrid.top-toolbar .vgrid-toolbar {
+    top: 0;
+    border-bottom: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.bottom-toolbar .vgrid-toolbar {
+    bottom: 0;
+    border-top: 1px solid mix(@color, @background, 200%/15);
+}
+
+.vgrid.top-toolbar .vgrid-scrollpane {
+    top: 35px;
+}
+
+.vgrid.bottom-toolbar .vgrid-scrollpane {
+    bottom: 35px;
+}
+
+.vgrid.bottom-toolbar .dropdown-menu {
+    top: auto; bottom: 110%; right: 0; left: auto;
+}
+
+.vgrid.top-toolbar .dropdown-menu {
+    top: 110%; bottom: auto; right: 0; left: auto;
 }
 
 .vgrid-cell {
@@ -674,6 +717,9 @@ a.button.default-action {
     height: 100% !important;
     float: left;
     display: none;
+    cursor: pointer;
+    margin-left: -13px;
+    padding-left: 13px;
 }
 
 .vgrid-cell-checkbox label {
@@ -1413,7 +1459,16 @@ div.external-user-image {
     float: left;
 }
 
+
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
+
+@media (max-width: 900px) {
+    .window-head.css-table { display: block; }
+    .window-head .css-table-row { display: block; }
+    .window-head .css-table-cell { display: block; width: 100%; }
+    .window-head { height: 100px; }
+    .window-body { top: 100px; }
+}
 
 @media screen and (min-height: 800px) {
     .window-head { height: 59px; }

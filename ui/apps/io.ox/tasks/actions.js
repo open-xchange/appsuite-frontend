@@ -18,19 +18,28 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
 
     "use strict";
     var Action = links.Action;
-    
+
+
+    new Action('io.ox/tasks/actions/newtask', {
+        id: 'newtask',
+        action: function (app) {
+            require(['io.ox/tasks/edit/main'], function (edit) {
+                edit.getApp().launch();
+            });
+        }
+    });
+
     new Action('io.ox/tasks/actions/edit', {
         id: 'edit',
         action: function (data) {
-            /*require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch();
-            });*/
-            setTimeout(function () {
-                notifications.yell('info', gt("Under construction"));
-            }, 500);
+            require(['io.ox/tasks/edit/main'], function (edit) {
+                edit.getApp().launch().done(function () {
+                    this.preFill(data);
+                });
+            });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/delete', {
         id: 'delete',
         action: function (data) {
@@ -39,12 +48,12 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
                 var popup = new dialogs.ModalDialog()
                     .addPrimaryButton('delete', gt('Delete'))
                     .addButton('cancel', gt('Cancel'));
-                
+
                 //Header
                 popup.getBody()
                     .append($("<h4>")
                             .text(gt('Do you really want to delete this task?')));
-                
+
                 //go
                 popup.show().done(function (action) {
                     if (action === 'delete') {
@@ -63,7 +72,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/done', {
         id: 'done',
         action: function (data) {
@@ -76,21 +85,32 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
+    // toolbar
+
+    ext.point('io.ox/tasks/links/toolbar').extend(new links.Button({
+        index: 100,
+        id: 'newtask',
+        label: gt('Create new task'),
+        cssClasses: 'btn btn-primary',
+        ref: 'io.ox/tasks/actions/newtask'
+    }));
+
+    //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
         index: 10,
         label: gt("Edit"),
         ref: 'io.ox/tasks/actions/edit'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'delete',
         index: 20,
         label: gt("Delete"),
         ref: 'io.ox/tasks/actions/delete'
     }));
-    
+
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'done',
         index: 30,

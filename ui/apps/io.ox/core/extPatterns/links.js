@@ -74,10 +74,9 @@ define("io.ox/core/extPatterns/links",
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .text(String(self.label))
-            ).append("&nbsp;");
+            );
         };
     };
-
 
     var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
         return actions.extPatterns.applyCollection(self, collection, context, args)
@@ -103,13 +102,13 @@ define("io.ox/core/extPatterns/links",
 
     var ToolbarLinks = function (options) {
         var self = _.extend(this, options);
-        
+
         this.draw = function (context) {
             // paint on current node
             var args = $.makeArray(arguments);
             drawLinks(self, new Collection(context), this, context, args);
         };
-        
+
     };
 
     var ToolbarButtons = function (options) {
@@ -210,6 +209,39 @@ define("io.ox/core/extPatterns/links",
         );
     };
 
+    var drawButtonGroup = function (options, context) {
+        var args = $.makeArray(arguments),
+            $parent = $("<div>").addClass('btn-group')
+                .css({ display: 'inline-block' })
+                .addClass(options.classes)
+                .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
+                .appendTo(this);
+        // create & add node first, since the rest is async
+        var node = $parent;
+        drawLinks(options, new Collection(context), node, context, args, false);
+        return $parent;
+    };
+
+    var ButtonGroupButtons = function (options) {
+        var o = _.extend(this, options);
+        this.draw = function () {
+            return drawButtonGroup.apply(this, [o].concat($.makeArray(arguments)));
+        };
+    };
+
+    var ButtonGroup = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (context) {
+                    drawButtonGroup.call(this, o, context);
+                }
+            }, o)
+        );
+    };
+
     return {
         Action: Action,
         Link: Link,
@@ -219,6 +251,7 @@ define("io.ox/core/extPatterns/links",
         ToolbarLinks: ToolbarLinks,
         InlineLinks: InlineLinks,
         DropdownLinks: DropdownLinks,
-        Dropdown: Dropdown
+        Dropdown: Dropdown,
+        ButtonGroup: ButtonGroup
     };
 });

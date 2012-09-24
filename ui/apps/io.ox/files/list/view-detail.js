@@ -11,7 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
-define("io.ox/files/view-detail",
+define("io.ox/files/list/view-detail",
     ["io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/core/extPatterns/layouts",
@@ -383,7 +383,7 @@ define("io.ox/files/view-detail",
             if (!file.filename) {
                 return null;
             }
-            
+
             return {
                 name: file.filename,
                 mimetype: file.file_mimetype,

@@ -24,7 +24,6 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
     
     //var for detailView sidepane.Needs to be closed on DetailView delete action
     var sidepane,
-        repaintEvent = false, //Only one repaint event should be assigned
     loadTile = function () {
         var prevDef = new $.Deferred();
         taskApi.getAll({}, false).done(function (taskarray) {
@@ -81,7 +80,10 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         fillGrid(tasks, node);
         
         //repaint function called on done and delete events
-        var repaint = function (dom, draw) {
+        var repaint = function (e) {
+            var dom = e.data.node,
+                draw = e.data.draw;
+            
             load().done(function (inputTasks) {
                 if (sidepane && draw === false) {
                     sidepane.close();
@@ -96,16 +98,13 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             });
         };
         
-        //without this on every repaint one repaint more is fired.
-        if (repaintEvent === false) {
-            taskApi.on("refresh.all", function () {repaint(node); })
-                   .on("delete", function () {repaint(node, false); });
-            repaintEvent = true;
-        }
+        
+        taskApi.on("refresh.list", {node: node}, repaint)
+               .on("delete", {node: node, draw: false}, repaint);
         
         node.on("dispose", function () {
-            taskApi.off("refresh.all", function () {repaint(node); })
-                   .off("delete", function () {repaint(node, false); });
+            taskApi.off("refresh.list", repaint)
+                   .off("delete", repaint);
         });
         
         if (tasks.length === 0) {
@@ -135,7 +134,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
             require(['io.ox/tasks/view-detail'], function (viewDetail) {
                 // get task and draw detailview
                 taskApi.get({folder: folder,
-                             id: data.id}, false).done(function (taskData) {
+                             id: data.id}).done(function (taskData) {
                     viewDetail.draw(taskData).appendTo(pane);
                 });
                 

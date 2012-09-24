@@ -26,7 +26,7 @@ define('io.ox/portal/settings/pane',
     'use strict';
 
     var staticStrings =  {
-        ACTIVATE_PLUGIN: gt('Activate Plugin'),
+        ACTIVATE_PLUGIN: gt('Enable Plugin'),
         PLUGIN_SETTINGS: gt('Properties'),
         SAVE:            gt('Save'),
         PORTAL:          gt('Portal'),
@@ -117,10 +117,10 @@ define('io.ox/portal/settings/pane',
                 var toggle = this.$el.find('.toggle-state');
                 if (toggle) {
                     if (this.model.get('active')) {
-                        toggle.text(gt('Deaktivieren'));//.removeClass('btn-inverse');
+                        toggle.text(gt('Disable'));//.removeClass('btn-inverse');
                         this.$el.removeClass('disabled').addClass('enabled');
                     } else {
-                        toggle.text(gt('Aktivieren'));//.addClass('btn-inverse');
+                        toggle.text(gt('Enable'));//.addClass('btn-inverse');
                         this.$el.removeClass('enabled').addClass('disabled');
                     }
                 }

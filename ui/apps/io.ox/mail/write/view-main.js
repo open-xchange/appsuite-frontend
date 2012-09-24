@@ -234,6 +234,14 @@ define("io.ox/mail/write/view-main",
             return node;
         },
 
+        createLinklistForAllActions: function () {
+            var node = $('<div>').append(
+                    $('<a>').attr('href', '#').text('Invite to appointment').css('display', 'block'),
+                    $('<a>').attr('href', '#').text('Save as distribution list').css('display', 'block')
+            );
+            return node;
+        },
+
         createRecipientList: function (id) {
             return (this.sections[id + 'List'] = $('<div>'))
                 .addClass('recipient-list').hide();
@@ -392,6 +400,11 @@ define("io.ox/mail/write/view-main",
                 .append(this.createRecipientList('cc'))
                 .append(this.createField('cc'));
             this.addLink('cc', gt('Copy (CC) to ...'));
+
+         // All
+            this.addSection('All', gt('All'), false, true)
+            .append(this.createLinklistForAllActions());
+            this.addLink('All', gt('All'));
 
             // BCC
             this.addSection('bcc', gt('Blind copy to'), false, true)

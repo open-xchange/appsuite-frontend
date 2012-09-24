@@ -3,13 +3,15 @@ define(function () {
 
     return {
 
-        pageTitle: 'OX7. ',
-        pageHeader: 'open xchange 7',
+        pageTitle: 'OX Suite 7. ',
 
-        productNameMail: 'OX7 Mailer',
+        pageHeaderPrefix: 'open xchange',
+        pageHeader: 'Suite 7',
+
+        productNameMail: 'OX Mail',
 
         autoLogin: true,
-        forgotPassword: 'https://iforgot.apple.com',
+        forgotPassword: false, //'https://iforgot.apple.com',
 
         languages: {
             en_US: 'English',
@@ -19,9 +21,9 @@ define(function () {
 
         hosts: ['ox7-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com'],
 
-        copyright: '&copy; 2012 open xchange.',
-        version: '7.0.0 dev',
-        buildDate: '2012-04-26',
+        copyright: '\u00A9 2012 open xchange.',
+        version: '7.0.0 Drop #5',
+        buildDate: '2012-09-20',
 
         plugins: {
             signin: [],

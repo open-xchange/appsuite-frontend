@@ -55,15 +55,15 @@ function jsFilter (data) {
     if (data.substr(0, 11) !== "// NOJSHINT") {
         data = hint.call(this, data, this.getSrc);
     }
-    
+
     var tree = parse(data);
-    
+
     function parse(data) {
         return catchParseErrors(function (data) {
             return jsp.parse(data, false, true);
         }, data);
     }
-    
+
     // In case of parse errors, the actually parsed source is stored
     // in tmp/errorfile.js
     function catchParseErrors(f, data) {
@@ -75,22 +75,22 @@ function jsFilter (data) {
                  e.col + '\n' + e.message);
         }
     }
-    
+
     // Custom processing of the parsed AST
-    
+
     var defineHooks = this.type.getHooks("define");
     var tree2 = ast.scanner(defineWalker, defineHandler)
                    .scanner(defineAsyncWalker, defineHandler);
     if (!debug) tree2 = tree2.scanner(assertWalker, assertHandler);
     tree = tree2.scan(pro.ast_add_scope(tree));
-    
+
     function defineHandler(scope) {
         if (scope.refs.define !== undefined) return;
         var args = this[2];
         var name = _.detect(args, ast.is("string"));
         var filename = self.getSrc(this[0].start.line).name;
         var mod = filename.slice(5, -3);
-        if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {   
+        if (filename.slice(0, 5) === 'apps/' && (!name || name[1] !== mod)) {
             if (name === undefined) {
                 var newName = parse('(' + JSON.stringify(mod) + ')')[1][0][1];
                 return [this[0], this[1], [newName].concat(args)];
@@ -249,12 +249,15 @@ utils.concat("boot.js",
      "src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
+
 utils.concat("boot.js", [
         "lib/jquery.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
         "lib/modernizr.js",
         "lib/jquery.lazyload.js",
+        "lib/bigscreen.js",
+        "lib/placeholder.min.js",
         //add backbone and dot.js may be a AMD-variant would be better
         "lib/backbone.js",
         "lib/backbone.modelbinder.js",
@@ -280,7 +283,7 @@ utils.concat("pre-core.js",
 
 //Twitter Bootstrap
 
-utils.copy(utils.list("lib/bootstrap", ["img/*"]),
+utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
 // Concat styles of core and plugins
