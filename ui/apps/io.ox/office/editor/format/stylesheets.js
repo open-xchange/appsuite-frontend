@@ -594,7 +594,7 @@ define('io.ox/office/editor/format/stylesheets',
                         } else {
                             elementAttributes[name] = value;
                         }
-                        cssAttributes[name] = value;
+                        cssAttributes[name] = _.isNull(value) ? styleAttributes[name] : value;
                     }
                 });
 
