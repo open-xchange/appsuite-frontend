@@ -21,10 +21,11 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/oxoselection',
      'io.ox/office/editor/table',
      'io.ox/office/editor/image',
+     'io.ox/office/editor/operations',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Position, UndoManager, DocumentStyles) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles) {
 
     'use strict';
 
@@ -39,40 +40,11 @@ define('io.ox/office/editor/editor',
             KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
-        ]),
-
-        OP_DELETE = 'delete',
-        OP_MOVE = 'move',
-
-        OP_TEXT_INSERT =  'insertText',
-        OP_TEXT_DELETE =  'deleteText',
-
-        OP_PARA_INSERT =  'insertParagraph',
-        OP_PARA_DELETE =  'deleteParagraph',
-        OP_PARA_SPLIT =   'splitParagraph',
-        OP_PARA_MERGE =   'mergeParagraph',
-
-        OP_TABLE_INSERT = 'insertTable',
-        OP_TABLE_DELETE = 'deleteTable',
-        OP_CELLRANGE_DELETE = 'deleteCellRange',
-        OP_ROWS_DELETE = 'deleteRows',
-        OP_COLUMNS_DELETE = 'deleteColumns',
-        OP_ROW_COPY = 'copyRow',
-        OP_COLUMN_COPY = 'copyColumn',
-        OP_ROW_INSERT = 'insertRow',
-        OP_COLUMN_INSERT = 'insertColumn',
-        OP_CELL_INSERT = 'insertCell',
-
-        OP_INSERT_STYLE = 'insertStylesheet',
-        OP_ATTRS_SET =    'setAttributes',
-
-        OP_IMAGE_INSERT = 'insertImage',
-        OP_FIELD_INSERT = 'insertField';
-        // OP_ATTR_DELETE =  'deleteAttribute';
+        ]);
 
     // class OXOEditor ========================================================
 
-    /**
+    /**'io.ox/office/editor/position',
      * The text editor.
      *
      * Triggers the following events:
@@ -589,7 +561,7 @@ define('io.ox/office/editor/editor',
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: OP_TEXT_DELETE, start: startposition, end: endposition };
+                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
                 setSelection(new OXOSelection(lastOperationEnd));
@@ -597,12 +569,12 @@ define('io.ox/office/editor/editor',
         };
 
         this.deleteParagraph = function (position) {
-            var newOperation = { name: OP_PARA_DELETE, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_PARA_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
         };
 
         this.deleteTable = function (position) {
-            var newOperation = { name: OP_TABLE_DELETE, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -610,7 +582,7 @@ define('io.ox/office/editor/editor',
         };
 
         this.deleteCellRange = function (position, start, end) {
-            var newOperation = { name: OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
+            var newOperation = { name: Operations.OP_CELLRANGE_DELETE, position: _.copy(position, true), start: _.copy(start, true), end: _.copy(end, true) };
             applyOperation(newOperation, true, true);
         };
 
@@ -630,10 +602,10 @@ define('io.ox/office/editor/editor',
                 newOperation;
 
             if (isCompleteTable) {
-                newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                // newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
-                newOperation = { name: OP_ROWS_DELETE, position: tablePos, start: start, end: end };
+                // newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
+                newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
             applyOperation(newOperation, true, true);
@@ -658,9 +630,9 @@ define('io.ox/office/editor/editor',
                 newOperation;
 
             if (isCompleteTable) {
-                newOperation = { name: OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                newOperation = { name: OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
+                newOperation = { name: Operations.OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
             }
 
             applyOperation(newOperation, true, true);
@@ -680,7 +652,7 @@ define('io.ox/office/editor/editor',
 
             rowPos[rowPos.length - 1] += 1;
 
-            var newOperation = { name: OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
+            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -696,7 +668,7 @@ define('io.ox/office/editor/editor',
                 gridPosition = start, // simplification, valid only if colspan === 1 for each cell
                 tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
-            var newOperation = { name: OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
+            var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -704,7 +676,7 @@ define('io.ox/office/editor/editor',
         };
 
         this.insertParagraph = function (position) {
-            var newOperation = {name: OP_PARA_INSERT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.OP_PARA_INSERT, start: _.copy(position, true)};
             applyOperation(newOperation, true, true);
         };
 
@@ -768,7 +740,7 @@ define('io.ox/office/editor/editor',
                     tableGrid.push(width);
                 }
 
-                var newOperation = {name: OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
+                var newOperation = {name: Operations.OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
                 applyOperation(newOperation, true, true);
 
                 paragraphs = editdiv.children();
@@ -777,7 +749,7 @@ define('io.ox/office/editor/editor',
                 var localPos = _.copy(selection.startPaM.oxoPosition, true);
                 localPos.push(0);
 
-                newOperation = {name: OP_ROW_INSERT, position: localPos, count: size.height, insertdefaultcells: true};
+                newOperation = {name: Operations.OP_ROW_INSERT, position: localPos, count: size.height, insertdefaultcells: true};
                 applyOperation(newOperation, true, true);
 
                 if (deleteTempParagraph) {
@@ -796,7 +768,7 @@ define('io.ox/office/editor/editor',
         this.insertImageFile = function (imageFragment) {
             var selection = getSelection(),
                 newOperation = {
-                    name: OP_IMAGE_INSERT,
+                    name: Operations.OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageFragment,
                     attrs: {inline: true}
@@ -808,7 +780,7 @@ define('io.ox/office/editor/editor',
         this.insertImageURL = function (imageURL) {
             var selection = getSelection(),
                 newOperation = {
-                    name: OP_IMAGE_INSERT,
+                    name: Operations.OP_IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
                     imgurl: imageURL,
                     attrs: {inline: true}
@@ -818,19 +790,19 @@ define('io.ox/office/editor/editor',
         };
 
         this.splitParagraph = function (position) {
-            var newOperation = {name: OP_PARA_SPLIT, start: _.copy(position, true)};
+            var newOperation = {name: Operations.OP_PARA_SPLIT, start: _.copy(position, true)};
             applyOperation(newOperation, true, true);
         };
 
         this.mergeParagraph = function (position) {
-            var newOperation = {name: OP_PARA_MERGE, start: _.copy(position)};
+            var newOperation = {name: Operations.OP_PARA_MERGE, start: _.copy(position)};
             applyOperation(newOperation, true, true);
 
             moveFloatedImages(position);
         };
 
         this.insertText = function (text, position) {
-            var newOperation = { name: OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
+            var newOperation = { name: Operations.OP_TEXT_INSERT, text: text, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
         };
 
@@ -1018,28 +990,28 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'G') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'R') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'S') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'V') {
                     var selection = getSelection();
-                    var newOperation = {name: OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.OP_IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'F') {
                     var selection = getSelection();
                     // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
-                    var newOperation = {name: OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
+                    var newOperation = {name: Operations.OP_FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -1442,63 +1414,63 @@ define('io.ox/office/editor/editor',
             if (operation.name === "initDocument") {
                 implInitDocument();
             }
-            else if (operation.name === OP_TEXT_INSERT) {
+            else if (operation.name === Operations.OP_TEXT_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.start, true);
                     endPos[endPos.length - 1] += operation.text.length;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
                     var redoOperation = _.copy(operation, true);
                     var allowMerge = operation.text.length === 1;
                     undomgr.addUndo(undoOperation, redoOperation, allowMerge);
                 }
                 implInsertText(operation.text, operation.start);
             }
-//            else if (operation.name === OP_DELETE) { // this shall be the only delete operation
+//            else if (operation.name === Operations.OP_DELETE) { // this shall be the only delete operation
 //                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
 //                    var localStart = _.copy(operation.start, true),
 //                        localEnd = _.copy(operation.end, true),
 //                        startLastVal = localStart.pop(),
 //                        endLastVal = localEnd.pop(),
-//                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+//                        undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
 //                    undomgr.addUndo(undoOperation, operation);
 //                }
 //                implDelete(operation.start, operation.end);
 //            }
-            else if (operation.name === OP_MOVE) {
+            else if (operation.name === Operations.OP_MOVE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
+                    var undoOperation = { name: Operations.OP_MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMove(operation.start, operation.end);
             }
-            else if (operation.name === OP_TEXT_DELETE) {
+            else if (operation.name === Operations.OP_TEXT_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
                         startLastVal = localStart.pop(),
                         endLastVal = localEnd.pop(),
-                        undoOperation = { name: OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
+                        undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteText(operation.start, operation.end);
             }
-            else if (operation.name === OP_INSERT_STYLE) {
+            else if (operation.name === Operations.OP_INSERT_STYLE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                 }
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
-            else if (operation.name === OP_ATTRS_SET) {
+            else if (operation.name === Operations.OP_ATTRS_SET) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
-                    // var undoOperation = {name: OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
+                    // var undoOperation = {name: Operations.OP_ATTRS_SET, attr: operation.attr, value: !operation.value, start: _.copy(operation.start, true), end: _.copy(operation.end, true)};
                     // undomgr.addUndo(undoOperation, operation);
                 }
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
-            else if (operation.name === OP_PARA_INSERT) {
+            else if (operation.name === Operations.OP_PARA_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_PARA_DELETE, start: _.copy(operation.start, true) };
+                    var undoOperation = { name: Operations.OP_PARA_DELETE, start: _.copy(operation.start, true) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implInsertParagraph(operation.start);
@@ -1508,22 +1480,22 @@ define('io.ox/office/editor/editor',
                     implInsertText(operation.text, startPos);
                 }
             }
-            else if (operation.name === OP_PARA_DELETE) {
+            else if (operation.name === Operations.OP_PARA_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
-                        undoOperation = { name: OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
+                        undoOperation = { name: Operations.OP_PARA_INSERT, start: localStart, text: Position.getParagraphText(paragraphs, localStart) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteParagraph(operation.start);
             }
-            else if (operation.name === OP_TABLE_INSERT) {
+            else if (operation.name === Operations.OP_TABLE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: OP_TABLE_DELETE, start: _.copy(operation.position, true) };
+                    var undoOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(operation.position, true) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implInsertTable(_.copy(operation.position), operation.attrs);
             }
-            else if (operation.name === OP_TABLE_DELETE) {
+            else if (operation.name === Operations.OP_TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
 
                     var localStart = _.copy(operation.start, true);
@@ -1533,11 +1505,11 @@ define('io.ox/office/editor/editor',
                         var tableNode = tablePos.node,
                             tablegrid = $(tableNode).data('grid'),
                             localattrs = {'tablegrid': tablegrid},
-                            tableUndoOperation = { name: OP_TABLE_INSERT, position: localStart, attrs: localattrs},
+                            tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs},
                             rowCount = $(tableNode).children('tbody').children().length,
                             localPos = _.copy(localStart, true);
                         localPos.push(0);
-                        var rowUndoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
+                        var rowUndoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
 
                         undomgr.addUndo(rowUndoOperation, operation);
                         undomgr.addUndo(tableUndoOperation, operation);
@@ -1546,21 +1518,21 @@ define('io.ox/office/editor/editor',
                 }
                 implDeleteTable(operation.start);
             }
-            else if (operation.name === OP_CELLRANGE_DELETE) {
+            else if (operation.name === Operations.OP_CELLRANGE_DELETE) {
                 implDeleteCellRange(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_ROWS_DELETE) {
+            else if (operation.name === Operations.OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localPos = _.copy(operation.position, true);
                     localPos.push(operation.start);
 
                     var rowCount = operation.end - operation.start + 1,
-                        undoOperation = { name: OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
+                        undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_COLUMNS_DELETE) {
+            else if (operation.name === Operations.OP_COLUMNS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     undomgr.startGroup();
                     for (var i = operation.start; i <= operation.end; i++) {
@@ -1568,68 +1540,68 @@ define('io.ox/office/editor/editor',
                             rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
                             redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start},  // Deleting only one column in redo!
                             // needs name, position, tablegrid, gridposition, insertmode
-                            undoOperation = { name: OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
+                            undoOperation = { name: Operations.OP_COLUMN_INSERT, position: localPos, start: operation.start, rows: rows};
                         undomgr.addUndo(undoOperation, redoOperation);
                     }
                     undomgr.endGroup();
                 }
                 implDeleteColumns(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_ROW_COPY) {
+            else if (operation.name === Operations.OP_ROW_COPY) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var start = operation.end,
                         end = start,
-                        undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                        undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implCopyRow(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_COLUMN_COPY) {
+            else if (operation.name === Operations.OP_COLUMN_COPY) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var start = operation.end,
                         end = start,
-                        undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                        undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implCopyColumn(operation.position, operation.start, operation.end);
             }
-            else if (operation.name === OP_CELL_INSERT) {
+            else if (operation.name === Operations.OP_CELL_INSERT) {
                 implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
             }
-            else if (operation.name === OP_ROW_INSERT) {
-                // OP_ROW_INSERT is only called as undo for OP_ROWS_DELETE
+            else if (operation.name === Operations.OP_ROW_INSERT) {
+                // Operations.OP_ROW_INSERT is only called as undo for Operations.OP_ROWS_DELETE
                 // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                 //     var start = operation.end,
                 //         end = start,
-                //         undoOperation = { name: OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //         undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(undoOperation, operation);
                 // }
                 implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.attrs);
             }
-            else if (operation.name === OP_COLUMN_INSERT) {
-                // OP_COLUMN_INSERT is only called as undo for OP_COLUMNS_DELETE
+            else if (operation.name === Operations.OP_COLUMN_INSERT) {
+                // Operations.OP_COLUMN_INSERT is only called as undo for Operations.OP_COLUMNS_DELETE
                 // if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                 //     var start = operation.end,
                 //         end = start,
-                //         undoOperation = { name: OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
+                //         undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(undoOperation, operation);
                 // }
                 implInsertColumn(operation.position, operation.gridposition, operation.tablegrid, operation.insertmode);
             }
-            else if (operation.name === OP_PARA_SPLIT) {
+            else if (operation.name === Operations.OP_PARA_SPLIT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true);
                     localStart.pop();
-                    var undoOperation = { name: OP_PARA_MERGE, start: localStart };
+                    var undoOperation = { name: Operations.OP_PARA_MERGE, start: localStart };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implSplitParagraph(operation.start);
             }
-            else if (operation.name === OP_IMAGE_INSERT) {
+            else if (operation.name === Operations.OP_IMAGE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 var imgurl = operation.imgurl;
@@ -1637,23 +1609,23 @@ define('io.ox/office/editor/editor',
                     imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
                 implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
-            else if (operation.name === OP_FIELD_INSERT) {
+            else if (operation.name === Operations.OP_FIELD_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.position, true);
                     endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
                 implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
             }
-            else if (operation.name === OP_PARA_MERGE) {
+            else if (operation.name === Operations.OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var sel = _.copy(operation.start);
                     var paraLen = 0;
                     Position.getParagraphLength(paragraphs, sel);
                     sel.push(paraLen);
-                    var undoOperation = { name: OP_PARA_SPLIT, start: sel };
+                    var undoOperation = { name: Operations.OP_PARA_SPLIT, start: sel };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMergeParagraph(operation.start);
@@ -2093,7 +2065,7 @@ define('io.ox/office/editor/editor',
                     // defining attributes, which the server can understand
                     var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
 
-                    var newOperation = {name: OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
+                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
                     applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -2107,14 +2079,14 @@ define('io.ox/office/editor/editor',
                 else if (family === 'paragraph') {
                     startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
                     endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
-                    var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                     applyOperation(newOperation, true, true);
                 }
             }
             else {
                 startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
                 endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
-                var newOperation = {name: OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
             }
         }
@@ -2569,7 +2541,7 @@ define('io.ox/office/editor/editor',
                             dest.push(counter);  // there might be floated images already in the first paragraph
 
                             // moving floated images with operation
-                            var newOperation = {name: OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
+                            var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
                             applyOperation(newOperation, true, true);
                         } else {
                             // only internal shifting required. image should be shifted before empty paragraphs
