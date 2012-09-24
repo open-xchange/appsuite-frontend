@@ -15,7 +15,8 @@
 define("io.ox/files/main",
     ["io.ox/core/commons",
      "gettext!io.ox/files/files",
-     "io.ox/files/actions"
+     "io.ox/files/actions",
+     "less!io.ox/files/style.css"
     ], function (commons, gt) {
 
     "use strict";
@@ -49,8 +50,7 @@ define("io.ox/files/main",
             .pipe(commons.showWindow(win))
             .done(function () {
                 // switch to view in url hash or default
-                var p = _.url.hash('perspective') || 'list';
-                console.log(app.getState());
+                var p = _.url.hash('perspective') || 'icons';
                 require(['io.ox/files/' + p + '/perspective'], function (perspective) {
                     perspective.show(app);
                 });

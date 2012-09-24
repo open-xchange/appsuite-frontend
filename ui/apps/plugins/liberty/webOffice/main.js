@@ -1,8 +1,8 @@
-define("3rd.party/noms/photoshop/main", function () {
+define("plugins/liberty/webOffice/main", function () {
     "use strict";
     
     // application object
-    var app = ox.ui.createApp({ name: '3rd.party/noms/photoshop' }),
+    var app = ox.ui.createApp({ name: 'plugins/liberty/webOffice' }),
         // app window
         win;
     // launcher
@@ -10,16 +10,17 @@ define("3rd.party/noms/photoshop/main", function () {
 
         // get window
         app.setWindow(win = ox.ui.createWindow({
-            name: '3rd.party/noms/photoshop',
-            title: "Photoshop",
+            name: 'plugins/liberty/webOffice',
+            title: "Trve Office",
             toolbar: false,
             search: false
         }));
         
+        win.nodes.title.hide();
+        
         app.images = [
-            ox.base + '/apps/3rd.party/noms/images/Photoshop1.png',
-            ox.base + '/apps/3rd.party/noms/images/Photoshop2.png',
-            ox.base + '/apps/3rd.party/noms/images/Photoshop3.png'
+            ox.base + '/apps/plugins/liberty/images/office1.png',
+            ox.base + '/apps/plugins/liberty/images/office2.png'
         ];
         
         app.index = -1;
@@ -35,10 +36,16 @@ define("3rd.party/noms/photoshop/main", function () {
         
 
         win.show(function () {
+            win.nodes.body.css({
+                top: '0px'
+            });
+            win.nodes.head.hide();
+            
             app.nextImage();
             win.nodes.main.on("click", function () {
                 app.nextImage();
             });
+            win.nodes.head.hide();
         });
     });
 

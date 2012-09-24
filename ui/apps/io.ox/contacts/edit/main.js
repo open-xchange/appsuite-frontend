@@ -34,6 +34,7 @@ define('io.ox/contacts/edit/main',
             var win;
 
             win = ox.ui.createWindow({
+                name: 'io.ox/contacts/edit',
                 title: 'Edit Contact',
                 toolbar: true,
                 close: true
@@ -51,28 +52,28 @@ define('io.ox/contacts/edit/main',
                 win.show(function () {
                     var considerSaved = false;
                     // create model & view
-                    
+
                     model.factory.realm('edit').retain().get(data).done(function (contact) {
                         app.contact = contact;
                         var editView = new view.ContactEditView({ model: contact });
                         container.append(editView.render().$el);
                         container.find('input[type=text]:visible').eq(0).focus();
-                        
+
                         editView.on('save:start', function () {
                             win.busy();
                         });
-                        
+
                         editView.on('save:fail', function () {
                             win.idle();
                         });
-                        
+
                         editView.on('save:success', function () {
                             considerSaved = true;
                             win.idle();
                             app.quit();
                         });
                     });
-                        
+
 
                     getDirtyStatus = function () {
                         if (considerSaved) {

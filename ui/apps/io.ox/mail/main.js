@@ -36,7 +36,7 @@ define("io.ox/mail/main",
             e.preventDefault();
             var option = $(this).attr('data-option'),
                 grid = e.data.grid;
-            if (/^(603|607|610|102)$/.test(option)) {
+            if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
@@ -68,7 +68,8 @@ define("io.ox/mail/main",
             title: gt("Inbox"),
             titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
-            search: true
+            search: true,
+            fullscreen: true
         });
 
         win.addClass("io-ox-mail-main");
@@ -102,7 +103,8 @@ define("io.ox/mail/main",
         right = scrollpane.scrollable();
 
         // grid
-        grid = new VGrid(left, ext.point('io.ox/mail/vgrid/options').options());
+        var options = ext.point('io.ox/mail/vgrid/options').options();
+        grid = new VGrid(left, options);
 
         // add template
         grid.addTemplate(tmpl.main);
@@ -115,7 +117,7 @@ define("io.ox/mail/main",
         };
 
         // add grid options
-        grid.prop('sort', '610')
+        grid.prop('sort', options.threadView !== false ? 'thread' : '610')
             .prop('order', 'desc')
             .prop('unread', false);
 
@@ -161,6 +163,7 @@ define("io.ox/mail/main",
                         .dropdown(),
                         $('<ul>').addClass("dropdown-menu")
                         .append(
+                            options.threadView !== false ? $(_.printf(option, 'thread', gt('Conversations'))) : $(),
                             $(_.printf(option, 610, gt('Date'))),
                             $(_.printf(option, 603, gt('From'))),
                             $(_.printf(option, 102, gt('Label'))),
@@ -224,7 +227,7 @@ define("io.ox/mail/main",
         grid.setAllRequest(function () {
             var sort = this.prop('sort'),
                 unread = this.prop('unread');
-            return api[sort === '610' ? 'getAllThreads' : 'getAll']({
+            return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
@@ -234,6 +237,11 @@ define("io.ox/mail/main",
                         return (obj.flags & 32) === 0;
                     });
                 });
+        });
+
+        grid.setListRequest(function (ids) {
+            var sort = this.prop('sort');
+            return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 
         win.nodes.title.on('click', '.badge', function (e) {
@@ -336,7 +344,7 @@ define("io.ox/mail/main",
             // be busy
             right.busy(true);
             // which mode?
-            if (grid.getMode() === "all") {
+            if (grid.getMode() === "all" && grid.prop('sort') === 'thread') {
                 // get thread
                 var thread = api.getThread(obj);
                 // get first mail first

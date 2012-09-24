@@ -44,7 +44,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 #io-ox-topbar {
     bottom: auto;
     height: 40px;
-    overflow: hidden;
     z-index: 2;
     /* --- */
     background-color: #2C2C2C;
@@ -55,6 +54,12 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     background-image: -o-linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-image: linear-gradient(top, @topbar-background-alt, @topbar-background);
     background-repeat: repeat-x;
+}
+
+#io-ox-topbar .launchers {
+    overflow: hidden;
+    float: left;
+    height: 100%;
 }
 
 #io-ox-top-logo-small {
@@ -71,7 +76,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 
 .touch #io-ox-topbar { height: 40px; }
 .touch #io-ox-topbar .launcher { font-size: @topbar-font-size + 1; line-height: 35px; padding: 2px 15px 5px 15px; }
-.touch #io-ox-screens { top: 42px; }
+.touch #io-ox-screens { top: 40px; }
 .touch #io-ox-windowmanager .window-container-center { width: 100% !important; }
 .touch #io-ox-top-logo-small { margin-top: 6px; }
 
@@ -96,10 +101,22 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     cursor: pointer;
 }
 
+#io-ox-topbar .launcher i[class^="icon-"] {
+    color: white;
+}
+
 #io-ox-topbar .launcher.right {
     float: right;
     display: inline-block !important;
+    overflow: visible;
 }
+
+#io-ox-topbar .launcher.right .dropdown-menu {
+    left: auto; right: 0; text-align: left;
+}
+
+#io-ox-topbar .launcher.right .dropdown-menu a { color: @link-color; }
+#io-ox-topbar .launcher.right .dropdown-menu li:hover a { color: white; }
 
 #io-ox-topbar .launcher.hover {
     color: @topbar-launcher-color-hover;
@@ -394,10 +411,6 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='@window-head-top', endColorstr='@window-head-bottom', GradientType=0 );"
 }
 
-.css-table { display: table; table-layout: fixed; width: 100%; }
-.css-table-row { display: table-row }
-.css-table-cell { display: table-cell; vertical-align: middle; }
-
 .cell-50 { width: 50.0%; }
 .cell-33 { width: 33.33333%; }
 .cell-25 { width: 25.0%; }
@@ -432,9 +445,8 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     margin: 0;
 }
 
-.window-title b.caret {
-    vertical-align: middle;
-    margin-left: 0.25em;
+.window-title .folderview-toggle {
+    color: @link-color;
 }
 
 .window-title .badge {
@@ -552,7 +564,7 @@ a.button.default-action {
     margin-left: 5px;
     display: inline-block;
     overflow: hidden;
-    height: 38px;
+    height: 28px;
 }
 
 .window-control .close {
@@ -646,6 +658,11 @@ a.button.default-action {
     padding: 8px 13px 8px 13px;
     background-color: #f5f5f5;
     z-index: 2;
+}
+
+.vgrid-toolbar a {
+    color: black;
+    text-decoration: none;
 }
 
 .vgrid.top-toolbar .vgrid-toolbar {
@@ -1450,7 +1467,16 @@ div.external-user-image {
     float: left;
 }
 
+
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
+
+@media (max-width: 900px) {
+    .window-head.css-table { display: block; }
+    .window-head .css-table-row { display: block; }
+    .window-head .css-table-cell { display: block; width: 100%; }
+    .window-head { height: 100px; }
+    .window-body { top: 100px; }
+}
 
 @media screen and (min-height: 800px) {
     .window-head { height: 59px; }
