@@ -336,6 +336,24 @@ define('io.ox/mail/actions',
         }
     });
 
+    //all actions
+
+    new Action('io.ox/mail/actions/createdistlist', {
+        id: 'create-distlist',
+        requires: 'some',
+        multiple: function (data) {
+            console.log('create distlist');
+        }
+    });
+
+    new Action('io.ox/mail/actions/invite', {
+        id: 'invite',
+        requires: 'some',
+        multiple: function (data) {
+            console.log('invite to appointment');
+        }
+    });
+
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         action: function (data) {
@@ -600,6 +618,20 @@ define('io.ox/mail/actions',
         index: 400,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
+    }));
+
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'save-as-distlist',
+        index: 100,
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/mail/actions/createdistlist'
+    }));
+
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'invite-to-appointment',
+        index: 200,
+        label: gt('Invite to appointment'),
+        ref: 'io.ox/mail/actions/invite'
     }));
 
     // DND actions
