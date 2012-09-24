@@ -540,14 +540,14 @@ define('io.ox/office/editor/editor',
                 // only delete, if imageStartPosition is really an image position
                 if (Utils.getNodeName(imageNode) === 'img') {
                     // delete an corresponding span
-                    var spanNode = imageNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(spanNode) === 'span') && ($(spanNode).data('positionSpan'))) {
-                        if ($(spanNode).data('spanID') === $(imageNode).data('imageID')) {
+                    var divNode = imageNode.parentNode.firstChild;
+                    while ((Utils.getNodeName(divNode) === 'div') && ($(divNode).data('positionDiv'))) {
+                        if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
                             // removing node
-                            $(spanNode).remove();
+                            $(divNode).remove();
                             break;
                         } else {
-                            spanNode = spanNode.nextSibling;
+                            divNode = divNode.nextSibling;
                         }
                     }
 
@@ -2058,8 +2058,11 @@ define('io.ox/office/editor/editor',
                 }
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                    // setting attributes without image selection (only workaround until image selection with mouse is possible)
-                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                    // updating current selection, so that image positions are also available
+                    var updateFromBrowser = true,
+                        allowNoneTextNodes = true,
+                        newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                        imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true);
 
                     // defining attributes, which the server can understand
@@ -2501,7 +2504,7 @@ define('io.ox/office/editor/editor',
             var nodes = [];
             Utils.iterateSelectedDescendantNodes(element, function () {
                 // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
-                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || (Utils.getNodeName(this) === 'div');
+                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || ((Utils.getNodeName(this) === 'span') && ($(this).data('spanType') === 'field'));
             }, function (node) {
                 nodes.push(node);
             });
@@ -2642,7 +2645,7 @@ define('io.ox/office/editor/editor',
             if ((node) && (node.nodeType === 3)) {
 
                 var floatMode = null,
-                    verticalSpanSide = null;
+                    verticalDivSide = null;
 
                 if (anchorType === 'AsCharacter') {
                     // prepend text before offset in a new span (also if position
@@ -2654,36 +2657,36 @@ define('io.ox/office/editor/editor',
                 } else if (anchorType === 'FloatLeft') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind spans as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'left';
                     attributes['margin-left'] = 0;
                     floatMode = 'leftFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
                         if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalSpanSide = 'left';
+                            verticalDivSide = 'left';
                             attributes.clear = 'left';
                         }
                     }
                 } else if (anchorType === 'FloatRight') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind divs as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
                     attributes.float = 'right';
                     attributes['margin-right'] = 0;
                     floatMode = 'rightFloated';
                     if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
                         if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalSpanSide = 'right';
+                            verticalDivSide = 'right';
                             attributes.clear = 'right';
                         }
                     }
                 } else if (anchorType === 'FloatNone') {
                     // insert image before the first span in the paragraph
                     node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionSpan and already inserted images
-                    while ((Utils.getNodeName(node) === 'span') && ($(node).data('positionSpan')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
+                    // inserting new image behind divs as positionDiv and already inserted images
+                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
 
                     attributes['margin-left'] = allMargins.fullLeftMargin;
                     attributes['margin-right'] = allMargins.fullRightMargin;
@@ -2718,11 +2721,11 @@ define('io.ox/office/editor/editor',
                     attributes['vertical-align'] = 'baseline';  // only important for inline images, text should be aligned to baseline of image
                     var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
 
-                    if (verticalSpanSide !== null) {
+                    if (verticalDivSide !== null) {
                         // all spans have to be listed before the floated images, but keeping the correct order
                         var insertNode = imgNode.get(0).parentNode.firstChild;
-                        while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan'))) { insertNode = insertNode.nextSibling; }
-                        $('<span>', { width: '1px', height: attributes.anchorvoffset }).data({'positionSpan': true, 'spanID': url}).css('float', verticalSpanSide).insertBefore(insertNode);
+                        while ((Utils.getNodeName(insertNode) === 'div') && ($(insertNode).data('positionDiv'))) { insertNode = insertNode.nextSibling; }
+                        $('<div>', { width: '1px', height: attributes.anchorvoffset }).data({'positionDiv': true, 'divID': url}).css({'float': verticalDivSide, 'display': 'inline-block'}).insertBefore(insertNode);
                     }
                 }
             }
@@ -2752,9 +2755,11 @@ define('io.ox/office/editor/editor',
             node = domPos ? domPos.node : null;
 
             DOM.splitTextNode(node, domPos.offset);
+
+            var newNode = DOM.splitTextNode(node, 0);
             // insert field before the parent <span> element of the text node
-            node = node.parentNode;
-            $('<div>').data('divType', 'field').css({ display: 'inline-block' }).text(representation).insertBefore(node);
+            newNode = newNode.parentNode;
+            $(newNode).data('spanType', 'field').text(representation);
         }
 
         /**
@@ -3035,15 +3040,15 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
+                            if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
 
                                 var localChild = thisPara.firstChild;
 
                                 if (localChild) {
 
-                                    if ((Utils.getNodeName(localChild) === 'span') && ($(localChild).data('positionSpan'))) {
+                                    if ((Utils.getNodeName(localChild) === 'div') && ($(localChild).data('positionDiv'))) {
 
-                                        while ((Utils.getNodeName(localChild.nextSibling) === 'span') && ($(localChild.nextSibling).data('positionSpan'))) {
+                                        while ((Utils.getNodeName(localChild.nextSibling) === 'div') && ($(localChild.nextSibling).data('positionDiv'))) {
                                             localChild = localChild.nextSibling;
                                         }
 
@@ -3530,7 +3535,7 @@ define('io.ox/office/editor/editor',
                 if (Utils.getNodeName(node) === 'img') {
                     nodeLen = 1;
                     isImage = true;
-                } else if (Utils.getNodeName(node) === 'div') {
+                } else if ((Utils.getNodeName(node) === 'span') && ($(node).data('spanType') === 'field')) {
                     nodeLen = 1;
                     isField = true;
                 } else {

@@ -359,7 +359,7 @@ define('io.ox/office/editor/image',
                                     insertNode = parent.firstChild;
 
                                 $(imageNode).data('previousInlinePosition', localStart);
-                                while ((Utils.getNodeName(insertNode) === 'span') && ($(insertNode).data('positionSpan')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
+                                while ((Utils.getNodeName(insertNode) === 'div') && ($(insertNode).data('positionDiv')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
 
                                 parent.insertBefore(imageNode, insertNode);
                             }
@@ -383,13 +383,13 @@ define('io.ox/office/editor/image',
                         $(imageNode).data('mode', imageFloatMode).css(attributes);
 
                         // also setting float mode of a corresponding span, if exists
-                        var spanNode = imageNode.parentNode.firstChild;
-                        while ((Utils.getNodeName(spanNode) === 'span') && ($(spanNode).data('positionSpan'))) {
-                            if ($(spanNode).data('spanID') === $(imageNode).data('imageID')) {
-                                $(spanNode).css('float', attributes.float);
+                        var divNode = imageNode.parentNode.firstChild;
+                        while ((Utils.getNodeName(divNode) === 'div') && ($(divNode).data('positionDiv'))) {
+                            if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
+                                $(divNode).css('float', attributes.float);
                                 break;
                             } else {
-                                spanNode = spanNode.nextSibling;
+                                divNode = divNode.nextSibling;
                             }
                         }
                     }
