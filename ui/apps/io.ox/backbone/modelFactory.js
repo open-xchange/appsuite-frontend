@@ -83,7 +83,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
 
         changedSinceLoading: function () {
             var self = this;
-            var oldAttributes = this.realm.internal.cachedServerAttributes(this.id);
+            var oldAttributes = this.realm.internal.cachedServerAttributes(this.id) || {};
             var currentAttributes = this.attributes;
             var keys = {};
 
