@@ -159,7 +159,7 @@ define('io.ox/office/editor/position',
                         textLength++;
                     }
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
-                    if (Utils.getNodeName(prevNode) === 'div') {
+                    if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
                         textLength -= $(prevNode).text().length;
                         textLength++;  // 'div' has only a length of '1'
                     }
@@ -409,7 +409,7 @@ define('io.ox/office/editor/position',
             childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
         } else if (node.nodeName === 'TR') {
             childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
-        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || (node.nodeName === 'DIV')) {
+        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || ((node.nodeName === 'DIV') && (! $(node).data('positionDiv')))) {
             childNode = $(node).children().get(pos);
         } else if (node.nodeName === 'P') {
             var textLength = 0,
@@ -442,12 +442,12 @@ define('io.ox/office/editor/position',
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
-                        currentLength = 1;
-                        isField = true;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('positionSpan'))) {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && ($(nodeList[i]).data('positionDiv'))) {
                         // ignoring spans that exist only for positioning image
                         continue;
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                        currentLength = 1;
+                        isField = true;
                     } else {  // this is a span. it can contain text node or image node
                         currentLength = $(nodeList[i]).text().length;
                         isImage = false;
@@ -466,7 +466,7 @@ define('io.ox/office/editor/position',
                                     node = nextNode;
                                     isImage = true;
                                     break;  // leaving the for-loop
-                                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div')) {
+                                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {
                                     bFound = true;
                                     node = nextNode;
                                     isField = true;
@@ -793,8 +793,8 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks, if a text node is a node inside a 'div', that contains the css data
-     * 'divType' set to 'field'.
+     * Checks, if a text node is a node inside a 'span', that contains the css data
+     * 'spanType' set to 'field'.
      *
      * @param {HTMLElement} element
      *  A DOM element object.
@@ -808,9 +808,9 @@ define('io.ox/office/editor/position',
         var isTextInField = false;
 
         if (element.nodeType === 3) {
-            var divNode = $(element).closest('div');
+            var spanNode = $(element).closest('span');
 
-            if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+            if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
                 isTextInField = true;
             }
         }
@@ -819,22 +819,22 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks, if an arbitrary node is a node inside a 'div', that contains the css data
-     * 'divType' set to 'field'.
+     * Checks, if an arbitrary node is a node inside a 'span', that contains the css data
+     * 'spanType' set to 'field'.
      *
      * @param {HTMLElement} element
      *  A DOM element object.
      *
      * @returns {Boolean}
-     *  If element is a node, that has an ancestor 'div', that contains the
-     *  css data 'divType' set to 'field', 'true' is returned, otherwise false.
+     *  If element is a node, that has an ancestor 'span', that contains the
+     *  css data 'spanType' set to 'field', 'true' is returned, otherwise false.
      */
     Position.isNodeInField = function (element) {
 
         var isNodeInField = false,
-            divNode = $(element).closest('div');
+            spanNode = $(element).closest('span');
 
-        if ((divNode.get(0)) && (divNode.data('divType') === 'field')) {
+        if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
             isNodeInField = true;
         }
 
@@ -1229,7 +1229,7 @@ define('io.ox/office/editor/position',
                     paraLen += $(nodeList[i]).text().length;
                     if (Utils.getNodeName(nodeList[i]) === 'img') {
                         paraLen++;
-                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
                         paraLen -= $(nodeList[i]).text().length;
                         paraLen++;
                     }
@@ -2054,8 +2054,8 @@ define('io.ox/office/editor/position',
             if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
                 counter++;
                 child = child.nextSibling;
-            } else if ((Utils.getNodeName(child) === 'span') && ($(child).data('positionSpan'))) {
-                // ignoring spans that exist only for positioning image
+            } else if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
+                // ignoring divs that exist only for positioning image
                 child = child.nextSibling;
             } else {
                 continue_ = false;
@@ -2124,7 +2124,7 @@ define('io.ox/office/editor/position',
                     position += $(nodeList[i]).text().length;
                     if (Utils.getNodeName(nodeList[i]) === 'img') {
                         position++;
-                    } else if (Utils.getNodeName(nodeList[i]) === 'div') {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
                         position -= $(nodeList[i]).text().length;
                         position++;
                     }
