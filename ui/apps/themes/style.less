@@ -101,6 +101,10 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     cursor: pointer;
 }
 
+#io-ox-topbar .launcher i[class^="icon-"] {
+    color: white;
+}
+
 #io-ox-topbar .launcher.right {
     float: right;
     display: inline-block !important;
@@ -441,9 +445,8 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     margin: 0;
 }
 
-.window-title b.caret {
-    vertical-align: middle;
-    margin-left: 0.25em;
+.window-title .folderview-toggle {
+    color: @link-color;
 }
 
 .window-title .badge {
@@ -655,6 +658,11 @@ a.button.default-action {
     padding: 8px 13px 8px 13px;
     background-color: #f5f5f5;
     z-index: 2;
+}
+
+.vgrid-toolbar a {
+    color: black;
+    text-decoration: none;
 }
 
 .vgrid.top-toolbar .vgrid-toolbar {

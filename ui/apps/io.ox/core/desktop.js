@@ -1223,7 +1223,7 @@ define("io.ox/core/desktop",
                 }
 
                 // add fullscreen handler
-                if (opt.fullscreen === true) {
+                if (opt.fullscreen === true && win.nodes.fullscreenButton) {
                     win.nodes.fullscreenButton.show().on('click', function () {
                         // Maximize
                         if (window.BigScreen.enabled) {

@@ -12,8 +12,8 @@ CACHE:
 # core - bootstrap
 @base@/apps/io.ox/core/bootstrap/basics.js
 @base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
-@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
-@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
+# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
+# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
