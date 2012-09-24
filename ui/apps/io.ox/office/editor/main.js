@@ -449,7 +449,8 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                window.open(app.getDocumentFilterUrl('getfile', { filter_format: format }), app.getFileDescriptor().title || 'file');
+                var f = format ? format : "";
+                window.open(app.getDocumentFilterUrl('getdocument', { filter_format: f }), app.getFileDescriptor().title || 'file');
                 def.resolve();
             })
             .fail(function () {
@@ -716,7 +717,7 @@ define('io.ox/office/editor/main',
         app.newVersion = function (newVersion) {
             var file = app.getFileDescriptor();
 
-            if (file && file.version) {
+            if (file) {
                 file.version = newVersion;
             }
         };
@@ -733,6 +734,7 @@ define('io.ox/office/editor/main',
 
         app.failRestore = function (point) {
             initializeApp(point);
+            app.newVersion(0);  // Get top-level version
             updateDebugMode();
             return app.load().always(function () {
                 view.getToolPane().showToolBar(Utils.getStringOption(point, 'toolBarId'));
