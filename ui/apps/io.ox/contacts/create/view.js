@@ -28,7 +28,7 @@ define('io.ox/contacts/create/view',
         
     // Picture Magic
     point.extend(new PictureUpload({
-        id: 'io.ox/contacts/create/view/picture',
+        id: 'picture',
         index: 100,
         customizeNode: function () {
             this.$el.css({
@@ -40,7 +40,7 @@ define('io.ox/contacts/create/view',
     }));
     
     point.extend(new views.AttributeView({
-        id: 'io.ox/contacts/create/view/display_name_header',
+        id: 'display_name_header',
         index: 150,
         tagName: 'span',
         className: 'clear-title',
@@ -48,7 +48,7 @@ define('io.ox/contacts/create/view',
     }));
     
     point.basicExtend({
-        id: 'io.ox/contacts/create/view/headerBreak',
+        id: 'headerBreak',
         index: 200,
         draw: function () {
             this.append($('<div>').css({clear: 'both'}));
@@ -57,7 +57,7 @@ define('io.ox/contacts/create/view',
     
     // Show backend errors
     point.extend(new forms.ErrorAlert({
-        id: 'io.ox/contacts/create/view/backendErrors',
+        id: 'backendErrors',
         index: 250
     }));
     
@@ -65,7 +65,7 @@ define('io.ox/contacts/create/view',
     var index = 300;
     _(['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1']).each(function (fieldName) {
         point.extend(new forms.ControlGroup({
-            id: 'io.ox/contacts/create/view/' + fieldName,
+            id: fieldName,
             label: model.fields[fieldName],
             control: '<input type="text" class="input-xlarge" name="' + fieldName + '">',
             attribute: fieldName

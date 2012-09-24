@@ -92,7 +92,7 @@ define('io.ox/contacts/edit/view-form', [
         special: {
             note: function (options) {
                 options.point.extend(new forms.ControlGroup({
-                    id: options.uid + '/' + options.field,
+                    id: options.field,
                     index: options.index,
                     label: model.fields[options.field],
                     control: '<textarea rows="12" class="span6" name="' + options.field + '">',
@@ -116,7 +116,7 @@ define('io.ox/contacts/edit/view-form', [
     
     function dateField(options) {
         options.point.extend(new forms.ControlGroup({
-            id: options.uid + '/' + options.field,
+            id: options.field,
             index: options.index,
             label: model.fields[options.field],
             control: '<input type="text" class="input-xlarge" name="' + options.field + '">',
@@ -134,7 +134,7 @@ define('io.ox/contacts/edit/view-form', [
     function city(cityAttribute, postalCodeAttribute) {
         return function (options) {
             options.point.extend(new CityControlGroup({
-                id: options.uid + '/' + cityAttribute,
+                id: cityAttribute,
                 index: options.index,
                 label: model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute],
                 zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
@@ -237,11 +237,11 @@ define('io.ox/contacts/edit/view-form', [
     var index = 400;
     
     _(meta.sections).each(function (fields, id) {
-        var uid = 'io.px/contacts/edit/' + id,
+        var uid = 'io.ox/contacts/edit/' + id,
             section = {};
             
         point.extend(new forms.Section({
-            id: uid,
+            id: id,
             index: index,
             title: meta.i18n[id],
             ref: uid
@@ -260,7 +260,7 @@ define('io.ox/contacts/edit/view-form', [
             if (meta.special[field]) {
                 meta.special[field]({
                     point: section.point,
-                    uid: uid,
+                    uid: id,
                     field: field,
                     index: fieldIndex,
                     isAlwaysVisible: isAlwaysVisible,
@@ -268,7 +268,7 @@ define('io.ox/contacts/edit/view-form', [
                 });
             } else {
                 section.point.extend(new forms.ControlGroup({
-                    id: uid + '/' + field,
+                    id: field,
                     index: fieldIndex,
                     label: model.fields[field],
                     control: '<input type="text" class="input-xlarge" name="' + field + '">',
