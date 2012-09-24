@@ -802,11 +802,18 @@ define('io.ox/office/editor/main',
 
         // operations output console
         editors.output = {
-            node: $('<div>').addClass('io-ox-office-editor user-select-text output'),
+            node: $('<div>').addClass('io-ox-office-editor user-select-text output').append('<table>'),
             getNode: function () { return this.node; },
             on: function () { return this; },
             applyOperation: function (operation) {
-                this.node.append($('<p>').text(JSON.stringify(operation)));
+                var name = operation.name, table = this.node.children('table');
+                operation = _.clone(operation);
+                delete operation.name;
+                operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1');
+                table.append($('<tr>').append(
+                    $('<td>').text(table.find('tr').length + 1),
+                    $('<td>').text(name),
+                    $('<td>').text(operation)));
                 this.node.scrollTop(this.node.get(0).scrollHeight);
             },
             applyOperations: function (operations) {
