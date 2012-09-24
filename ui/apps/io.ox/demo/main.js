@@ -4,7 +4,7 @@ define("io.ox/demo/main", ["io.ox/core/tk/keys"], function (KeyListener) {
     
     var demos = {
         "open sesame": function () {
-            require(["3rd.party/noms/register"]);
+            require(["plugins/liberty/register"]);
             return "Fujitsu Demo loaded.";
         }
     };

@@ -19,8 +19,7 @@ define('io.ox/files/list/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
      'gettext!io.ox/files/files',
-     "io.ox/core/bootstrap/basics",
-     "less!io.ox/files/list/style.css"
+     "io.ox/core/bootstrap/basics"
      ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, gt) {
 
     'use strict';

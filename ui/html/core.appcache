@@ -12,12 +12,13 @@ CACHE:
 # core - bootstrap
 @base@/apps/io.ox/core/bootstrap/basics.js
 @base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
-@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
-@base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
+# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
+# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/opensans-300.woff
+@base@/apps/themes/login/fonts/fontawesome-webfont.woff
 @base@/apps/themes/default/style.css
 @base@/apps/themes/default/style.less
 @base@/apps/themes/default/definitions.less
