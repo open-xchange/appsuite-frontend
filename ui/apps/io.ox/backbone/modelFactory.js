@@ -128,6 +128,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions"], function (ext) 
             return _(arguments).any(function (attribute) {
                 return self.has(attribute) && self.get(attribute) !== '';
             });
+        },
+        getCompositeId: function () {
+            return (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
         }
     });
 
