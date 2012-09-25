@@ -74,6 +74,19 @@
 	margin-top: 4px;
 }
 
+.tasks-detailview .attachments {
+	font-family: @font-light;
+    color: #aaa;
+}
+
+.tasks-detailview .attachments-container {
+	margin-top: 0.8em;
+}
+
+.tasks-detailview .attachment-item{
+	color: #333;
+}
+
 .tasks-detailview .note,
 .tasks-detailview .tasks-inline-links {
 	margin-top: 1em;
