@@ -3688,7 +3688,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // there can be empty text spans before the destination node
-                    while (DOM.isTextSpan(destNode) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                    while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
                         destNode = destNode.previousSibling;
                     }
 
