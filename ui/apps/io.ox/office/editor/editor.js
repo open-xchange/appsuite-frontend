@@ -2829,7 +2829,7 @@ define('io.ox/office/editor/editor',
             function elementChangeListener(element, oldAttributes, newAttributes) {
 
                 var // selection object representing the passed element
-                    selection = Position.getOxoSelectionForNode(editdiv, element, true),
+                    selection = Position.getOxoSelectionForNode(editdiv, element, false),
                     // the operational address of the passed element
                     range = { start: selection.startPaM.oxoPosition, end: selection.endPaM.oxoPosition },
                     // the operation used to undo the attribute changes
