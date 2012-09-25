@@ -66,12 +66,16 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} definitions
      *  A map of attribute definitions for all attributes supported by the
      *  specified style family, mapped by attribute names. Each definition
-     *  object contains the following options:
-     *  - 'def': Specifies the default value of the attribute.
-     *  - 'set': A setter function that applies the passed attribute value to a
-     *      DOM element. The function receives the DOM element as jQuery object
-     *      in the first parameter, and the attribute value in the second
-     *      parameter.
+     *  object contains the following entries:
+     *  - 'def': Specifies the default value of the attribute which will be
+     *      used if neither the style sheet of an element nor its explicit
+     *      attributes collection specify a value for the attribute.
+     *  - 'set': An optional setter function that applies the passed attribute
+     *      value to a DOM element. The function receives the DOM element as
+     *      jQuery object in the first parameter, and the attribute value in
+     *      the second parameter. An alternative way to update the element
+     *      formatting using a complete map of all attribute values is to
+     *      specify a global setter handler (see options below).
      *  - 'preview': An optional function that initializes an options map that
      *      will be used to create a list item in a GUI style sheet selector
      *      control. The function receives the options map to be extended in
@@ -84,8 +88,17 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
-     *  @param {Function} [options.globalUpdateHandler]
-     *
+     *  @param {Function} [options.globalSetHandler]
+     *      If specified, this function will be called for every DOM element
+     *      whose attributes have been changed. In difference to the individual
+     *      setter functions defined for each single attribute (see parameter
+     *      definitions above), this handler will be called once for an element
+     *      regardless of the number of changed attributes. The function
+     *      receives the element whose attributes have been changed as jQuery
+     *      object as first parameter, and a map of all attributes (name/value
+     *      pairs, effective values merged from style sheets and explicit
+     *      attributes) of the element as second parameter. Will be called in
+     *      the context of this style sheet container instance.
      *  @param {String} [options.descendantStyleFamilies]
      *      Space-separated list of additional attribute families whose
      *      attributes may be inserted into the attribute map of a style sheet.
@@ -96,16 +109,23 @@ define('io.ox/office/editor/format/stylesheets',
      *  @param {Function} [options.ancestorElementResolver]
      *      A function used to receive the ancestor element containing a style
      *      sheet of the family passed in the 'ancestorStyleFamily' option.
-     *      Receives a DOM element node, and must return the ancestor DOM
-     *      element node.
+     *      Receives a DOM element node as first parameter, and must return the
+     *      ancestor DOM element node. Will be called in the context of this
+     *      style sheet container instance.
      */
     function StyleSheets(styleFamily, definitions, documentStyles, options) {
 
-        var // style sheets, mapped by identifier
+        var // self reference
+            self = this,
+
+            // style sheets, mapped by identifier
             styleSheets = {},
 
             // default values for all supported attributes of the own style family
             defaultAttributes = {},
+
+            // global element setter
+            globalSetHandler = Utils.getFunctionOption(options, 'globalSetHandler'),
 
             // additional attribute families supported by the style sheets
             descendantStyleFamilies = _(Utils.getStringOption(options, 'descendantStyleFamilies', '').split(/\s+/)).without(''),
@@ -175,7 +195,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // ancestor style sheet container from the document styles collection
                 ancestorStyleSheets = _.isString(ancestorStyleFamily) ? documentStyles.getStyleSheets(ancestorStyleFamily) : null,
                 // ancestor element of the passed element
-                ancestorElement = (element && _.isFunction(ancestorElementResolver)) ? ancestorElementResolver(element) : null;
+                ancestorElement = (element && _.isFunction(ancestorElementResolver)) ? ancestorElementResolver.call(self, element) : null;
 
             function collectAttributes(styleSheet) {
                 if (styleSheet) {
@@ -248,8 +268,10 @@ define('io.ox/office/editor/format/stylesheets',
                 });
             }
 
-            // call global update handler taking all attributes at once
-
+            // call global setter handler taking all attributes at once
+            if (_.isFunction(globalSetHandler)) {
+                globalSetHandler.call(self, element, mergedAttributes);
+            }
         }
 
         // abstract interface -------------------------------------------------

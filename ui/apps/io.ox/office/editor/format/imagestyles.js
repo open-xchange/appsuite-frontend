@@ -23,38 +23,31 @@ define('io.ox/office/editor/format/imagestyles',
         definitions = {
 
             width: {
-                def: 0,
-                set: function (element, width) {}
+                def: 0
             },
 
             height: {
-                def: 0,
-                set: function (element, height) {}
+                def: 0
             },
 
             marginT: {
-                def: 0,
-                set: function (element, margin) {}
+                def: 0
             },
 
             marginB: {
-                def: 0,
-                set: function (element, margin) {}
+                def: 0
             },
 
             marginL: {
-                def: 0,
-                set: function (element, margin) {}
+                def: 0
             },
 
             marginR: {
-                def: 0,
-                set: function (element, margin) {}
+                def: 0
             },
 
             inline: {
-                def: true,
-                set: function (element, state) {}
+                def: true
             }
 
         };
@@ -79,9 +72,29 @@ define('io.ox/office/editor/format/imagestyles',
      */
     function ImageStyles(rootNode, documentStyles) {
 
+        // private methods ----------------------------------------------------
+
+        /**
+         * Global setter handler that will be called for every image element
+         * whose attributes have been changed.
+         *
+         * @param {jQuery} element
+         *  The <img> element whose image attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
+         */
+        function globalSetHandler(element, attributes) {
+        }
+
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'image', definitions, documentStyles);
+        StyleSheets.call(this, 'image', definitions, documentStyles, {
+            globalSetHandler: globalSetHandler
+        });
 
         // methods ------------------------------------------------------------
 

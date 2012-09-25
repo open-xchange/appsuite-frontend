@@ -28,7 +28,6 @@ define('io.ox/office/editor/format/characterstyles',
                 def: 'sans-serif',
                 set: function (element, fontName) {
                     element.css('font-family', Fonts.getCssFontFamily(fontName));
-                    LineHeight.updateElementLineHeight(element);
                 },
                 preview: function (options, fontName) {
                     options.labelCss.fontFamily = Fonts.getCssFontFamily(fontName);
@@ -39,7 +38,6 @@ define('io.ox/office/editor/format/characterstyles',
                 def: 12,
                 set: function (element, fontSize) {
                     element.css('font-size', fontSize + 'pt');
-                    LineHeight.updateElementLineHeight(element);
                 },
                 preview: function (options, fontSize) {
                     options.labelCss.fontSize = Math.min(Math.max(fontSize, 8), 24) + 'pt';
@@ -50,7 +48,6 @@ define('io.ox/office/editor/format/characterstyles',
                 def: false,
                 set: function (element, state) {
                     element.css('font-weight', state ? 'bold' : 'normal');
-                    LineHeight.updateElementLineHeight(element);
                 },
                 preview: function (options, state) {
                     options.labelCss.fontWeight = state ? 'bold' : 'normal';
@@ -61,7 +58,6 @@ define('io.ox/office/editor/format/characterstyles',
                 def: false,
                 set: function (element, state) {
                     element.css('font-style', state ? 'italic' : 'normal');
-                    LineHeight.updateElementLineHeight(element);
                 },
                 preview: function (options, state) {
                     options.labelCss.fontStyle = state ? 'italic' : 'normal';
@@ -135,9 +131,28 @@ define('io.ox/office/editor/format/characterstyles',
             }, context, options);
         }
 
+        /**
+         * Global setter handler that will be called for every text span whose
+         * attributes have been changed.
+         *
+         * @param {jQuery} element
+         *  The <span> element whose character attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
+         */
+        function globalSetHandler(element, attributes) {
+            // update calculated line height due to changed font settings
+            LineHeight.updateElementLineHeight(element);
+        }
+
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'character', definitions, documentStyles, {
+            globalSetHandler: globalSetHandler,
             ancestorStyleFamily: 'paragraph',
             ancestorElementResolver: function (span) { return span.parentNode; }
         });
