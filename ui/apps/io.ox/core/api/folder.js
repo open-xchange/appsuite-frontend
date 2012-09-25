@@ -556,24 +556,29 @@ define('io.ox/core/api/folder',
         return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
     };
 
-    api.getBreadcrump = (function () {
+    api.getBreadcrumb = (function () {
 
         var add = function (folder, i, list) {
-            var li = $('<li>');
+            var li = $('<li>'), elem;
             if (i === list.length - 1) {
-                this.append(li.addClass('active').text(folder.title));
+                elem = li.addClass('active');
             } else {
-                this.append(li.append(
-                    $('<a href="#">').text(folder.title), $.txt(' '),
-                    $('<span class="divider">').text('/')
-                ));
+                elem = $('<a href="#">');
+                li.append(
+                    elem, $.txt(' '), $('<span class="divider">').text('/')
+                );
             }
+            elem.attr('data-folder-id', folder.id).text(folder.title);
+            this.append(li);
         };
 
-        return function (id) {
+        return function (id, handler) {
             var ul;
             try {
-                return (ul = $('<ul class="breadcrumb">'));
+                return (ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
+                    e.preventDefault();
+                    if (handler) { handler($(this).attr('data-folder-id')); }
+                }));
             }
             finally {
                 api.getPath({ folder: id }).done(function (list) {
