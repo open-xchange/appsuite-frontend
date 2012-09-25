@@ -561,7 +561,14 @@ define('io.ox/office/editor/editor',
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
+
+                var _endPosition = _.copy(endposition, true);
+                if (_endPosition[_endPosition.length - 1] > 0) {
+                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
+                }
+
+                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: _endPosition };
+                // var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
                 setSelection(new OXOSelection(lastOperationEnd));
@@ -1439,6 +1446,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.start, true);
                     endPos[endPos.length - 1] += operation.text.length;
+                    endPos[endPos.length - 1] -= 1;    // switching from range mode to operation mode
                     var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
                     var redoOperation = _.copy(operation, true);
                     var allowMerge = operation.text.length === 1;
@@ -1469,7 +1477,7 @@ define('io.ox/office/editor/editor',
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
                         startLastVal = localStart.pop(),
-                        endLastVal = localEnd.pop(),
+                        endLastVal = localEnd.pop() + 1, // switching operation mode from OP_TEXT_DELETE
                         undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
                     undomgr.addUndo(undoOperation, operation);
                 }
@@ -1615,9 +1623,8 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_IMAGE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var endPos = _.clone(operation.position, true);
-                    endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var endPos = _.clone(operation.position, true),
+                        undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 var imgurl = operation.imgurl;
@@ -1627,9 +1634,8 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_FIELD_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var endPos = _.clone(operation.position, true);
-                    endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var endPos = _.clone(operation.position, true),
+                        undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
@@ -2105,7 +2111,14 @@ define('io.ox/office/editor/editor',
             else {
                 startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
                 endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
-                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+
+                var _endPosition = _.copy(endPosition, true);
+                if ((family === 'character') && (_endPosition[_endPosition.length - 1] > 0)) {
+                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
+                }
+
+                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: _endPosition};
+                // var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
             }
         }
@@ -2837,7 +2850,7 @@ define('io.ox/office/editor/editor',
             function elementChangeListener(element, oldAttributes, newAttributes) {
 
                 var // selection object representing the passed element
-                    selection = Position.getOxoSelectionForNode(editdiv, element, true),
+                    selection = Position.getOxoSelectionForNode(editdiv, element, false),
                     // the operational address of the passed element
                     range = { start: selection.startPaM.oxoPosition, end: selection.endPaM.oxoPosition },
                     // the operation used to undo the attribute changes
@@ -2891,6 +2904,10 @@ define('io.ox/office/editor/editor',
 
             if (family === null) {
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
+            }
+
+            if ((family === 'character') && (end[end.length - 1] > 0)) {
+                end[end.length - 1] += 1; // Switching from operation mode to range mode
             }
 
             // validate text offset
@@ -3035,6 +3052,9 @@ define('io.ox/office/editor/editor',
                 var startPos = _.copy(position, true);
                 var endPos = _.copy(position, true);
                 endPos[posLength] = -1;
+                if (endPos[posLength] > 0) {
+                    endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
+                }
                 implDeleteText(startPos, endPos);
             }
             var startPosition = _.copy(position, true);
@@ -3042,6 +3062,9 @@ define('io.ox/office/editor/editor',
             startPosition[posLength] = 0;
             var endPosition = _.copy(position, true);
             endPosition[posLength - 1] = startPosition[posLength - 1];
+            if (endPosition[posLength] > 0) {
+                endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
+            }
             implDeleteText(startPosition, endPosition);
 
             implParagraphChanged(position);
@@ -3573,6 +3596,8 @@ define('io.ox/office/editor/editor',
             if (end === -1) {
                 end = Position.getParagraphLength(paragraphs, startPosition);
             }
+
+            end += 1; // switching from operation mode to range mode
 
             if (start === end) {
                 return;
