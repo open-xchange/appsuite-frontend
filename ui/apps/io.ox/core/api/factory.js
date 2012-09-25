@@ -21,6 +21,7 @@ define("io.ox/core/api/factory",
     var fix = function (obj) {
         var clone = _.copy(obj, true);
         clone.folder = clone.folder || clone.folder_id;
+        delete clone.folder_id; // to avoid trash in requests
         return clone;
     };
 
