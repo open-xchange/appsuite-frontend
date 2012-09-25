@@ -2885,7 +2885,7 @@ define('io.ox/office/editor/editor',
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
             }
 
-            if ((family === 'character') && (end[end.length - 1] > 0)) {
+            if (family === 'character') {
                 end[end.length - 1] += 1; // Switching from operation mode to range mode
             }
 
