@@ -313,10 +313,38 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
             });
             
             j.describe("ModelFactory realms", function () {
+                j.it("should provide different instances for different realms", function () {
+                    
+                });
+                
+                j.it("should trigger change events in a different realm on update", function () {
+                    
+                });
+                
+                j.it("should trigger destroy events when a model was deleted in a different realm", function () {
+                    
+                });
+                
+                j.it("should do reference counting", function () {
+                    
+                });
                 
             });
             
             j.describe("ModelFactory change detection", function () {
+                j.it("should track changes differing from the loaded state", function () {
+                    var recipe;
+                    
+                    utils.waitsFor(factory.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        recipe.set({title: 'Hello', servings: 2});
+                        j.expect(recipe.isDirty()).toEqual(true);
+                        j.expect(recipe.changedSinceLoading()).toEqual({title: 'Hello', servings: 2});
+                    });
+                });
                 
             });
         }
