@@ -449,8 +449,7 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                var f = format ? format : "";
-                window.open(app.getDocumentFilterUrl('getdocument', { filter_format: f }), app.getFileDescriptor().title || 'file');
+                window.open(app.getDocumentFilterUrl('getdocument', { filter_format: (format || "") }), app.getFileDescriptor().title || 'file');
                 def.resolve();
             })
             .fail(function () {

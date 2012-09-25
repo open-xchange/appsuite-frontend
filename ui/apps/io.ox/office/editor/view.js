@@ -316,8 +316,6 @@ define('io.ox/office/editor/view',
 
         // create the tool bars and drop-down menus
         toolPane.addMenu(new MenuBox(appWindow)
-                .addButton('action/export',   { icon: 'icon-share',     label: gt('Export') })
-                .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') })
                 .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
                 .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
             { label: gt('File') });
@@ -375,7 +373,8 @@ define('io.ox/office/editor/view',
 
         createToolBar('debug', { label: gt('Debug') })
             .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
-            .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true });
+            .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true })
+            .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') });
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
