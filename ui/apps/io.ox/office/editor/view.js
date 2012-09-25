@@ -316,14 +316,14 @@ define('io.ox/office/editor/view',
 
         // create the tool bars and drop-down menus
         toolPane.addMenu(new MenuBox(appWindow)
-                .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-                .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
+                .addButton('action/download', { icon: 'icon-download', label: gt('Download') })
+                .addButton('action/print',    { icon: 'icon-print',    label: gt('Print') }),
             { label: gt('File') });
 
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
-            .addButton('image/insert/file',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
             .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
@@ -372,9 +372,10 @@ define('io.ox/office/editor/view',
                 .end();
 
         createToolBar('debug', { label: gt('Debug') })
-            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
-            .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true })
-            .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') });
+            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+            .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+            .addSeparator()
+            .addButton('action/flush', { icon: 'icon-share-alt', label: gt('Flush') });
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
