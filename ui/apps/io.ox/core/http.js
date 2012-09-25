@@ -807,7 +807,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     // remove session
                     delete req.params.session;
                     // build request
-                    console.log(req);
                     o = $.extend(req.params, { module: req.module, data: req.original });
                     // action?
                     if (req.params.action !== undefined) {
