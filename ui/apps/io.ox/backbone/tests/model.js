@@ -13,8 +13,10 @@
 define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/tests/recipeApi"], function (ext, ModelFactory, api) {
     "use strict";
     // Firstly let's define a factory for use in our tests
+    var ref = 'io.ox/lessons/recipes/model/' + new Date().getTime(); // Again namespaced fun
+    
     var factory = new ModelFactory({
-        ref: 'io.ox/lessons/recipes/model',
+        ref: ref,
         api: api,
         model: {
             addIngredient: function (ingredient) {
@@ -167,17 +169,145 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
                 
                 j.it("should be able to delete entries", function () {
-                    j.expect("TODO: Implement me").toEqual(null);
+                    j.expect(testId).toBeDefined();
+                    j.expect(testId).not.toEqual(null);
+                    
+                    j.spyOn(api, 'remove').andCallThrough();
+                    
+                    var updated = new utils.Done();
+                    
+                    factory.get({id: testId, folder: 12}).done(function (loaded) {
+                        loaded.destroy().done(updated.yep);
+                    });
+                    j.waitsFor(updated, 'updated', 5000);
+                    
+                    j.runs(function () {
+                        j.expect(api.remove).toHaveBeenCalledWith({id: testId, folder: 12});
+                    });
                 });
-                
-                                
-            });
-            
-            j.describe("ModelFactory realms", function () {
-                
             });
             
             j.describe("ModelFactory validation", function () {
+                
+                j.it("should run an extension for each attribute", function () {
+                    
+                    // Create an extension that forces servings to be even
+                    ext.point(ref + '/validation/servings').extend({
+                        id: 'servings-must-be-even',
+                        validate: function (value) {
+                            if (!_.isNumber(value)) {
+                                value = parseInt(value, 10);
+                            }
+                            if (value % 2 === 1) {
+                                return "Servings must be even";
+                            }
+                        }
+                    });
+                    
+                    // violate the rule
+                    j.expect(factory.create().set("servings", 1).isValid()).toEqual(false);
+                    j.expect(factory.create().set("servings", 2).get("servings")).toEqual(2);
+                });
+                
+                j.it("should trigger 'invalid' and 'invalid:attribute' events", function () {
+                    var model = factory.create();
+                    var invalidTriggered, invalidServingsTriggered;
+                    
+                    model.on("invalid", function () {
+                        invalidTriggered = true;
+                    });
+                    
+                    model.on("invalid:servings", function () {
+                        invalidServingsTriggered = true;
+                    });
+                    
+                    model.set("servings", 1);
+                    
+                    j.expect(invalidTriggered).toEqual(true);
+                    j.expect(invalidServingsTriggered).toEqual(true);
+                    j.expect(model.invalidAttributes()).toEqual(['servings']);
+                    
+                });
+                
+                j.it("should run general validation extensions after attribute extensions", function () {
+                    var validations = [];
+                    
+                    ext.point(ref + '/validation/servings').replace({
+                        id: 'servings-must-be-even',
+                        validate: function (value) {
+                            validations.push('servings-must-be-even');
+                            if (!_.isNumber(value)) {
+                                value = parseInt(value, 10);
+                            }
+                            if (value % 2 === 1) {
+                                return "Servings must be even";
+                            }
+                        }
+                    });
+                    
+                    ext.point(ref + '/validation').extend({
+                        id: 'general',
+                        validate: function () {
+                            validations.push('general');
+                        }
+                    });
+                    
+                    factory.create().set('servings', 2);
+                    
+                    j.expect(validations).toEqual(['servings-must-be-even', 'general']);
+                });
+                
+                j.it("should trigger a 'valid' event if the model becomes valid again", function () {
+                    var model = factory.create();
+                    var invalidTriggered, validTriggered;
+                    
+                    model.on("invalid", function () {
+                        invalidTriggered = true;
+                    });
+                    
+                    model.on("valid", function () {
+                        validTriggered = true;
+                    });
+                    model.set("servings", 2);
+                    model.set("servings", 1);
+                    model.set("servings", 2);
+                    
+                    j.expect(model.get("servings")).toEqual(2);
+                    j.expect(invalidTriggered).toEqual(true);
+                    j.expect(validTriggered).toEqual(true);
+                });
+                
+                j.it("should try to reapply previously invalid attribute changes to see if they work now", function () {
+                    ext.point(ref + '/validation/servings').disable('servings-must-be-even');
+                    ext.point(ref + '/validation').extend({
+                        id: 'servings-and-title',
+                        validate: function (attributes) {
+                            // Here is our funky business rule
+                            // servings must be even, unless the title starts with 'The great'
+                            
+                            if (attributes.servings) {
+                                if (attributes.title && /^The great/.test(attributes.title)) {
+                                    return; // Yeah, we're happy with that
+                                }
+                                if (attributes.servings % 2 === 1) {
+                                    this.add('servings', "Servings must be equal, unless the title starts with 'The great'");
+                                }
+                            }
+                        }
+                    });
+                    
+                    var model = factory.create();
+                    
+                    model.set('servings', 2); // Valid
+                    j.expect(model.set('servings', 1).isValid()).toEqual(false); // Invalid
+                    model.set('title', 'The great pancakes of yesteryear'); // Now servings of 1 are valid also
+                    
+                    j.expect(model.get('servings')).toEqual(1);
+                    j.expect(model.get('title')).toEqual('The great pancakes of yesteryear');
+                });
+            });
+            
+            j.describe("ModelFactory realms", function () {
                 
             });
             
