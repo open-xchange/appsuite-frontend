@@ -35,10 +35,8 @@ define('io.ox/files/icons/perspective',
         drawIcon: function (file) {
             var node = $('<div class="file-icon pull-left">').attr('data-obj-id', file.id),
                 wrap = $('<div class="wrap">');
-            if ((! file.filename.match(/^\._/)) && file.file_mimetype.match(/^image\/[gif|png|jpe?g|gmp]/i) ||
-                    (file.file_mimetype === 'application/octet-stream' && (file.filename.match(/[gif|png|jpe?g|gmp]$/i)))) {
+            if ((/^((?!\._?).)*\.(gif|jpg|jpeg|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
                 var src = api.getIcon(file);
-                console.log(file);
                 node.append(wrap.append($('<img>', { src: src, alt: file.title }).addClass('img-polaroid').addClass('lazy')));
             }
             else
@@ -191,6 +189,7 @@ define('io.ox/files/icons/perspective',
                 win = app.getWindow();
 
             app.on('folder:change', function (e, id, folder) {
+                that.main.empty();
                 that.draw(app);
             });
 
