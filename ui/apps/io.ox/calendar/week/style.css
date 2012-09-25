@@ -200,6 +200,11 @@
         width: 100%;
         background-color: red;
         z-index: 9999;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -o-user-select: none;
+        user-select: none;
     }
     
     .timeline .glow {

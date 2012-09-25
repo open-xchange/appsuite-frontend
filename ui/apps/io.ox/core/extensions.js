@@ -316,7 +316,9 @@ define("io.ox/core/extensions",
         // plugin loader
         loadPlugins: function (options) {
             // require plugins
-            return require(this.getPlugins(options));
+            return require(this.getPlugins(options)).fail(function (e) {
+                console.error(e);
+            });
         },
 
         // add wrapper

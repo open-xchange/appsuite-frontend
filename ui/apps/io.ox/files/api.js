@@ -234,9 +234,9 @@ define("io.ox/files/api",
     api.getIcon = function (file, cover) {
         var url = this.getUrl(file);
         if (cover) {
-            return url + '&scaleType=cover&width=128&height=128';
+            return url + '&scaleType=cover&width=128&height=90';
         } else {
-            return url + '&scaleType=contain&width=128&height=128';
+            return url + '&scaleType=contain&width=128&height=90';
         }
     };
 

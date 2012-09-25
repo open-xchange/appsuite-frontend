@@ -22,16 +22,15 @@
     background-repeat: repeat-x;
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
 }
-
-.files-iconview-background {
-    .vertical-gradient(#828282, #333333);
+.files-scrollable-pane {
+    position:absolute;
+    padding:13px;
 }
-
 .files-iconview {
 
-    @innerHeight:   128px;
+    @innerHeight:   90px;
     @innerWidth:    128px;
-    @outerHeight:   175px;
+    @outerHeight:   128px;
     @outerWidth:    138px;
 
     position:absolute;
@@ -42,14 +41,16 @@
     bottom:0;
     min-height:100px;
 
+    .vertical-gradient(#828282, #333333);
+
     .file-icon {
         position:relative;
         height:@outerHeight;
         width:@outerWidth;
         max-height:@outerHeight;
         max-width:@outerWidth;
-        margin-left:30px;
-        margin-top:30px;
+        margin-right:30px;
+        margin-bottom:13px;
 
         .wrap {
             position:relative;
