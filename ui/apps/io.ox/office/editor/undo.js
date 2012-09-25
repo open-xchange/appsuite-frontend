@@ -134,7 +134,7 @@ define('io.ox/office/editor/undo',
 
             groupLevel--;
 
-            if (groupLevel === 0) {
+            if ((groupLevel === 0) && (currentGroupActions.length > 0)) {
                 actions.push(currentGroupActions);
                 currentAction = actions.length;
                 currentGroupActions = [];

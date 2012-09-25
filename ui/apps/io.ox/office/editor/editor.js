@@ -845,8 +845,29 @@ define('io.ox/office/editor/editor',
          *  attribute.
          */
         this.setAttribute = function (family, name, value) {
-            setAttributes(family, Utils.makeSimpleObject(name, value));
+            this.setAttributes(family, Utils.makeSimpleObject(name, value));
         };
+
+        /**
+         * Changes multiple attributes of the specified attribute family in the
+         * current selection.
+         *
+         * @param {String} family
+         *  The name of the attribute family containing the passed attributes.
+         */
+        this.setAttributes = function (family, attributes) {
+
+            var // whether undo is enabled
+                createUndo = undomgr.isEnabled() && !undomgr.isInUndo();
+
+            // Create an undo group that collects all undo operations generated
+            // in the local setAttributes() method (it calls itself recursively
+            // with smaller parts of the current selection).
+            if (createUndo) { undomgr.startGroup(); }
+            setAttributes(family, attributes);
+            if (createUndo) { undomgr.endGroup(); }
+        };
+
 
         this.getParagraphCount = function () {
             return paragraphs.size();
@@ -1848,7 +1869,7 @@ define('io.ox/office/editor/editor',
             var para,
                 start,
                 end,
-                buttonEvent = ((startPosition === undefined) && (endPosition === undefined)) ? true : false;
+                buttonEvent = (startPosition === undefined) && (endPosition === undefined);
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
