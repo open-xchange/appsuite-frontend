@@ -151,16 +151,46 @@ define('io.ox/core/api/folder',
                 // result
                 def = $.Deferred(),
                 result = [],
+                // get from server
+                getter = function () {
+                    http.GET({
+                        module: 'folders',
+                        params: {
+                            action: 'path',
+                            id: opt.folder,
+                            tree: '1'
+                        },
+                        appendColumns: true
+                    })
+                    .done(function (data) {
+                        // loop over folders to remove root & update cache
+                        data = _(data).filter(function (folder) {
+                            cache.add(folder.id, folder);
+                            return folder.id !== '1';
+                        });
+                        // resolve in reverse order (root > folder)
+                        def.resolve(data.reverse());
+                    })
+                    .fail(def.reject);
+                },
                 // get via cache?
                 useCache = function (id) {
                     cache.get(id).done(function (data) {
-                        if (data === null) {
-
+                        if (data !== null) {
+                            if (data.folder_id !== '0') {
+                                result.unshift(data);
+                                useCache(data.folder_id);
+                            } else {
+                                def.resolve(result);
+                            }
+                        } else {
+                            getter();
                         }
                     });
                 };
 
-            return useCache(opt.folder);
+            useCache(opt.folder);
+            return def;
         },
 
         getVisible: function (options) {
@@ -378,7 +408,7 @@ define('io.ox/core/api/folder',
                     compareValue--;
                 }
             }
-            
+
             // check multiple folder?
             if (_.isArray(data)) {
                 // for multiple folders, all folders must satisfy the condition
@@ -525,6 +555,34 @@ define('io.ox/core/api/folder',
         type = type || 'mail';
         return config.get(type === 'mail' ? 'mail.folder.inbox' : 'folder.' + type);
     };
+
+    api.getBreadcrump = (function () {
+
+        var add = function (folder, i, list) {
+            var li = $('<li>');
+            if (i === list.length - 1) {
+                this.append(li.addClass('active').text(folder.title));
+            } else {
+                this.append(li.append(
+                    $('<a href="#">').text(folder.title), $.txt(' '),
+                    $('<span class="divider">').text('/')
+                ));
+            }
+        };
+
+        return function (id) {
+            var ul;
+            try {
+                return (ul = $('<ul class="breadcrumb">'));
+            }
+            finally {
+                api.getPath({ folder: id }).done(function (list) {
+                    _(list).each(add, ul);
+                    ul = null;
+                });
+            }
+        };
+    }());
 
     Events.extend(api);
 
