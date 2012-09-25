@@ -1473,6 +1473,11 @@ define('io.ox/office/editor/editor',
                 implMove(operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_TEXT_DELETE) {
+
+                if (! operation.end) {  // operation.end is optional
+                    operation.end = _.copy(operation.start, true);
+                }
+
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
@@ -1490,6 +1495,11 @@ define('io.ox/office/editor/editor',
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
+
+                if (! operation.end) {  // operation.end is optional
+                    operation.end = _.copy(operation.start, true);
+                }
+
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
             else if (operation.name === Operations.OP_PARA_INSERT) {
