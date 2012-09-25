@@ -2971,7 +2971,6 @@ define('io.ox/office/editor/editor',
             } else {
                 position[position.length - 1] -= 1; // inserting table at the end
                 domPosition = Position.getDOMPosition(paragraphs, position);
-                Utils.warn('Editor.implInsertTable(): Creating new table after position: ' + position);
 
                 if (domPosition) {
                     domParagraph = domPosition.node;

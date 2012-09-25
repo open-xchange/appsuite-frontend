@@ -114,6 +114,19 @@ define("io.ox/files/actions",
         }
     });
 
+    new Action('io.ox/files/actions/office/refresh_hack', {
+        id: 'refresh_hack',
+        requires: function (e) {
+            return true;
+        },
+        action: function (data) {
+            api.caches.get.clear();
+            api.caches.versions.clear();
+            api.trigger('refresh.all');
+            window.location.reload();
+        }
+    });
+
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
@@ -299,6 +312,13 @@ define("io.ox/files/actions",
         ref: "io.ox/files/actions/office/view"
     }));
 
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "refresh_hack",
+        index: 666,
+        label: gt("Refresh!"),
+        ref: "io.ox/files/actions/office/refresh_hack"
+    }));
+    
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
