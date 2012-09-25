@@ -31,12 +31,100 @@ define('io.ox/office/editor/position',
     // static functions =======================================================
 
     /**
-     * The central function to calculate logical position from dom positions.
+     * This function calculates the logical position from dom positions.
+     * Receiving a dom position consisting of a dom node and optionally
+     * an offset, it calculates the logical position (oxoPosition) that
+     * is an array of integer values.
+     * The offset is only used for text nodes, where the logical position
+     * can be shifted with the offset.
+     * So contrary to the function getTextLevelOxoPosition, this function
+     * does not always return a text level oxo position (a full logical
+     * position), but it can also return positions of elements like p, table,
+     * tr, th and td.
+     *
+     * @param {jQuery} maindiv
+     *  The jQuery object of a DIV node, that is the frame for the complete
+     *  search and calculation process. No dom position outside of this
+     *  maindiv can be calculated.
+     *
+     * @param {Node} node
+     *  The dom node, whose logical position will be calculated.
+     *
+     * @param {Number} offset
+     *  An additional offset, that can be used to modify the last position
+     *  inside the logical position array. This is typically only useful
+     *  for text nodes.
+
+     * @returns {OXOPaM.oxoPosition} oxoPosition
+     *  The logical position.
+     */
+    Position.getOxoPosition = function (maindiv, node, offset) {
+
+        // Checking offset for text nodes
+        if ((node.nodeType === 3) && !_.isNumber(offset)) {
+            Utils.error('Position.getOxoPosition(): Invalid start position: text node without offset');
+            return;
+        }
+
+        if (offset < 0) {
+            Utils.error('Position.getOxoPosition(): Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            return;
+        }
+
+        // Check, if the selected node is a descendant of the maindiv
+        if (!maindiv.get(0).contains(node)) { // range not in text area
+            Utils.error('Position.getOxoPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
+            return;
+        }
+
+        // Starting to calculate the logical position
+        var oxoPosition = [],
+            evaluateCharacterPosition = ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span') || (Utils.getNodeName(node) === 'img')) ? true : false,  // Is evaluation of offset required?
+            characterPositionEvaluated = false,
+            textLength = 0;
+
+        // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
+        // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
+        // Column must be integrated after row -> a buffer is required.
+
+        for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
+            if ($(node).is('TABLE, P, TR, TH, TD')) {
+                oxoPosition.unshift($(node).prevAll().length);  // zero based
+                evaluateCharacterPosition = false;
+            }
+            if (evaluateCharacterPosition) {
+                for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
+                    textLength += $(prevNode).text().length;
+                    if ((Utils.getNodeName(prevNode) === 'img') || ((prevNode.firstChild) && (Utils.getNodeName(prevNode.firstChild) === 'img'))) {
+                        textLength++;
+                    }
+                    // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
+                    if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
+                        textLength -= $(prevNode).text().length;
+                        textLength++;  // 'div' has only a length of '1'
+                    }
+                }
+                characterPositionEvaluated = true;
+            }
+        }
+
+        if (characterPositionEvaluated) {
+            oxoPosition.push(textLength + offset);
+        }
+
+        return oxoPosition;
+    };
+
+    /**
+     * This function calculates the logical position from dom positions.
      * Receiving a dom position consisting of a dom node and an offset, it
      * calculates the logical position (oxoPosition) that is an array of
      * integer values. This logical position is saved together with the
      * property nodeName of the dom node in the OXOPaM object, that is
-     * the return value of this function.
+     * the return value of this function. The calculated logical position
+     * is always a valid text level position. This means, that even if the
+     * dom position is a DIV, a TR or a similar node type, the logical position
+     * describes always the position of a text node or image or field.
      *
      * @param {DOM.Point} domposition
      *  The dom position, consisting of dom node and offset, whose logical
@@ -56,7 +144,7 @@ define('io.ox/office/editor/position',
      *  The calculated logical position (OXOPaM.oxoPosition) together with
      *  the property nodeName of the dom node parameter.
      */
-    Position.getOXOPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
+    Position.getTextLevelOxoPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
 
         var node = domposition.node,
             offset = domposition.offset,
@@ -74,7 +162,7 @@ define('io.ox/office/editor/position',
 
         // check input values
         if (! node) {
-            Utils.error('Position.getOXOPosition(): Invalid DOM position. Node not defined');
+            Utils.error('Position.getTextLevelOxoPosition(): Invalid DOM position. Node not defined');
             return;
         }
 
@@ -86,7 +174,7 @@ define('io.ox/office/editor/position',
             var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint, allowNoneTextNodes);
 
             if (! returnObj) {
-                Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                 return;
             }
 
@@ -98,7 +186,7 @@ define('io.ox/office/editor/position',
                 node = newNode.node;
                 offset = newNode.offset;
             } else {
-                Utils.error('Position.getOXOPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
+                Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                 return;
             }
         } else {
@@ -120,63 +208,70 @@ define('io.ox/office/editor/position',
             }
         }
 
-        // Checking offset for text nodes
-        if ((node.nodeType === 3) && !_.isNumber(offset)) {
-            Utils.error('Position.getOXOPosition(): Invalid start position: text node without offset');
-            return;
-        }
-
-        if (offset < 0) {
-            Utils.error('Position.getOXOPosition(): Invalid DOM position. Offset < 0 : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
-            return;
-        }
-
-        // Check, if the selected node is a descendant of the maindiv
-        if (!maindiv.get(0).contains(node)) { // range not in text area
-            Utils.error('Position.getOXOPosition(): Invalid DOM position. It is not part of the editor DIV: ! Offset : ' + offset + ' . Node: ' + node.nodeName + ',' + node.nodeType);
-            return;
-        }
-
-        // Calculating the position inside the editor div.
-        var oxoPosition = [],
-            evaluateOffset = ((node.nodeType === 3) || ((Utils.getNodeName(node) === 'img') && (allowNoneTextNodes))) ? true : false,  // Is evaluation of offset required?
-            offsetEvaluated = false,
-            textLength = 0;
-
-        // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
-        // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
-        // Column must be integrated after row -> a buffer is required.
-
-        for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
-            if ($(node).is('TABLE, P, TR, TH, TD')) {
-                oxoPosition.unshift($(node).prevAll().length);  // zero based
-                evaluateOffset = false;
-            }
-            if (evaluateOffset) {
-                for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
-                    textLength += $(prevNode).text().length;
-                    if ((Utils.getNodeName(prevNode) === 'img') || ((prevNode.firstChild) && (Utils.getNodeName(prevNode.firstChild) === 'img'))) {
-                        textLength++;
-                    }
-                    // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
-                    if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
-                        textLength -= $(prevNode).text().length;
-                        textLength++;  // 'div' has only a length of '1'
-                    }
-                }
-                offsetEvaluated = true;
-            }
-        }
-
-        if (offsetEvaluated) {
-            oxoPosition.push(textLength + offset);
-        }
-
-        if ((node.nodeType === 3) && (! offsetEvaluated)) {
-            Utils.warn('Position.getOXOPosition(): Offset ' + offset + ' was not evaluated, although nodeType is 3! Calculated oxoPosition: ' + oxoPosition);
-        }
+        // calculating the logical position for the specified text node, span, or image
+        var oxoPosition = Position.getOxoPosition(maindiv, node, offset);
 
         return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode, isRtlCursorTravel);
+    };
+
+    /**
+     * This function calculates a logical selection consisting of two
+     * logical positions for a specified dom position. Using the boolean
+     * parameter useRangeNode it is possible to switch between the
+     * selection in which the endPosition describes the final character
+     * of the selection (useRangeMode === false) and that selection, in
+     * which the end position is a position behind the last character of
+     * the selection.
+     * For all nodes, that describe dom positions that are not on text level,
+     * like p, table, td, ... the startposition and endposition are equal.
+     *
+     * @param {jQuery} maindiv
+     *  The jQuery object of a DIV node, that is the frame for the complete
+     *  search and calculation process. No dom position outside of this
+     *  maindiv can be calculated.
+     *
+     * @param {Node} node
+     *  The dom node, whose logical position will be calculated.
+     *
+     * @param {Boolean} useRangeMode
+     *  A boolean value that can be used to switch the endposition between
+     *  a 'range' mode (end position behind the final character) and a
+     *  'position' mode (end position points to the final character).
+     *
+     * @returns {OXOSelection} oxoSelection
+     *  The selection consisting of start and end point.
+     */
+    Position.getOxoSelectionForNode = function (maindiv, node, useRangeMode) {
+
+        var offset = 0,
+            startPosition = Position.getOxoPosition(maindiv, node, offset),
+            endPosition = _.copy(startPosition),
+            characterPositionOffset = 0;
+
+        // if node is a text node, a span or an image, then startposition and
+        // endposition are not equal.
+
+        if (Utils.getNodeName(node) === 'img') {
+            characterPositionOffset = 1;
+        } else if ((Utils.getNodeName(node) === 'span') && ($(node).data('spanType') === 'field')) {
+            characterPositionOffset = 1;
+        } else if (Utils.getNodeName(node) === 'span') {
+            characterPositionOffset = $(node).text().length;
+        } else if ((node.nodeType === 3) && (Utils.getNodeName(node.parentNode) === 'span') && ($(node.parentNode).data('spanType') === 'field')) {
+            characterPositionOffset = 1;
+        } else if (node.nodeType === 3) {
+            characterPositionOffset = $(node).text().length;
+        }
+
+        if ((!useRangeMode) && (characterPositionOffset > 0)) {
+            characterPositionOffset -= 1;
+        }
+
+        if (characterPositionOffset > 0) {
+            endPosition[endPosition.length - 1] += characterPositionOffset;
+        }
+
+        return new OXOSelection(new OXOPaM(startPosition), new OXOPaM(endPosition));
     };
 
     /**
@@ -243,7 +338,7 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Helper function for Position.getOxoPosition. If the node is not
+     * Helper function for Position.getTextLevelOxoPosition. If the node is not
      * a text node, this function determines the correct text node, that
      * is used for calculation of the logical position instead of the
      * specified node. This could be a 'DIV', 'TABLE', 'P', ... . It is
@@ -269,7 +364,7 @@ define('io.ox/office/editor/position',
      *  qualified logical position.
      *
      * @returns {Object}
-     *  The text node, that will be used in Position.getOxoPosition
+     *  The text node, that will be used in Position.getTextLevelOxoPosition
      *  for the calculation of the logical position.
      *  And additionally some information about the floating state of an
      *  image, if the position describes an image.
@@ -1883,7 +1978,7 @@ define('io.ox/office/editor/position',
                 offset = textNode.nodeValue.length;
 
             if (maindiv.get(0).contains(textNode)) {
-                precedingPos = Position.getOXOPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
+                precedingPos = Position.getTextLevelOxoPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
                 foundPos = true;
             }
         }
@@ -1936,7 +2031,7 @@ define('io.ox/office/editor/position',
                 offset = 0;
 
             if (maindiv.get(0).contains(textNode)) {
-                followingPos = Position.getOXOPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
+                followingPos = Position.getTextLevelOxoPosition(new DOM.Point(textNode, offset), maindiv).oxoPosition;
                 foundPos = true;
             }
         }

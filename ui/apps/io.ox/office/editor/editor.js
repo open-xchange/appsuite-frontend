@@ -1678,8 +1678,8 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                var startPaM = Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
-                    endPaM = Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
+                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 
