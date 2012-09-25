@@ -127,7 +127,6 @@ define('io.ox/portal/settings/pane',
             },
             render: function () {
                 var self = this;
-                console.log("PluginSelectView#render called for ID=%s", this.model.get('id'));
                 self.$el.empty().append(self.template({
                     id: this.model.get('id'),
                     strings: staticStrings
@@ -165,7 +164,6 @@ define('io.ox/portal/settings/pane',
 
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
-                console.log("PluginSettingsView#initialize called for " + this.plugin.id);
                 this.plugin = options.plugin;
                 this.deferred = new $.Deferred();
                 this.strings = staticStrings;
@@ -268,7 +266,6 @@ define('io.ox/portal/settings/pane',
                 },
                 onShowProperties: function (e) {
                     var $sel = this.$el.find('[selected]');
-
                     e.data = {id: $sel.data('id'), node: this.el};
                     e.target = $sel;
 
