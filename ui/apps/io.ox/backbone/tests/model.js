@@ -282,7 +282,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.expect(validServingsTriggered).toEqual(true);
                 });
                 
-                j.it("should try to reapply previously invalid attribute changes to see if they work now", function () {
+                j.it("should work for attributes whose validity is dependant on each other", function () {
                     ext.point(ref + '/validation/servings').disable('servings-must-be-even');
                     ext.point(ref + '/validation').extend({
                         id: 'servings-and-title',
