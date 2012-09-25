@@ -64,6 +64,19 @@ define('io.ox/office/editor/format/stylesheets',
      *  attribute families.
      *
      * @param {Object} definitions
+     *  A map of attribute definitions for all attributes supported by the
+     *  specified style family, mapped by attribute names. Each definition
+     *  object contains the following options:
+     *  - 'def': Specifies the default value of the attribute.
+     *  - 'set': A setter function that applies the passed attribute value to a
+     *      DOM element. The function receives the DOM element as jQuery object
+     *      in the first parameter, and the attribute value in the second
+     *      parameter.
+     *  - 'preview': An optional function that initializes an options map that
+     *      will be used to create a list item in a GUI style sheet selector
+     *      control. The function receives the options map to be extended in
+     *      the first parameter, and the attribute value in the second
+     *      parameter.
      *
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
@@ -71,6 +84,8 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
+     *  @param {Function} [options.globalUpdateHandler]
+     *
      *  @param {String} [options.descendantStyleFamilies]
      *      Space-separated list of additional attribute families whose
      *      attributes may be inserted into the attribute map of a style sheet.
@@ -194,6 +209,47 @@ define('io.ox/office/editor/format/stylesheets',
             attributes.style = id;
 
             return attributes;
+        }
+
+        /**
+         * Updates the element formatting according to the passed attributes.
+         *
+         * @param {jQuery} element
+         *  The element whose formatting will be updated, as jQuery object.
+         *
+         * @param {Object} mergedAttributes
+         *  A map with all attribute values merged from style sheet and
+         *  explicit attributes, as name/value pairs.
+         *
+         * @param {String[]} [updateAttributeNames]
+         *  If specified, restricts the set of attributes updated at the passed
+         *  element. If omitted, updates all attributes passed in the parameter
+         *  mergedAttributes.
+         */
+        function updateElementFormatting(element, mergedAttributes, updateAttributeNames) {
+
+            // updates a single attribute, if it has a registered setter in its definition
+            function updateSingleAttribute(name, value) {
+                if ((name in definitions) && _.isFunction(definitions[name].set)) {
+                    definitions[name].set(element, value);
+                }
+            }
+
+            // update attributes via setter functions from definitions
+            if (_.isArray(updateAttributeNames)) {
+                _(updateAttributeNames).each(function (name) {
+                    if (name in mergedAttributes) {
+                        updateSingleAttribute(name, mergedAttributes[name]);
+                    }
+                });
+            } else {
+                _(mergedAttributes).each(function (value, name) {
+                    updateSingleAttribute(name, value);
+                });
+            }
+
+            // call global update handler taking all attributes at once
+
         }
 
         // abstract interface -------------------------------------------------
@@ -566,26 +622,27 @@ define('io.ox/office/editor/format/stylesheets',
                     elementAttributes = null,
                     // attributes of the current or new style sheet
                     styleAttributes = null,
-                    // the attributes whose CSS needs to be changed
-                    cssAttributes = null;
+                    // the resulting attributes according to style sheet and explicit formatting
+                    mergedAttributes = null,
+                    // names of all attributes needed to update the current element
+                    updateAttributeNames = [];
 
                 if (styleId) {
                     // style sheet of the element will be changed: remove all
-                    // existing element attributes, set CSS formatting of all
+                    // existing element attributes, update formatting of all
                     // attributes according to the new style sheet
                     styleAttributes = getStyleAttributes(styleId, styleFamily, element);
                     elementAttributes = { style: styleAttributes.style };
-                    cssAttributes = _.clone(styleAttributes);
+                    updateAttributeNames = _.keys(styleAttributes);
                 } else {
                     // clone the attributes coming from the element, there may
                     // be multiple elements pointing to the same data object,
                     // e.g. after using the $.clone() method.
                     elementAttributes = _.clone(oldElementAttributes);
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element);
-                    cssAttributes = {};
                 }
 
-                // add passed attributes
+                // add (or remove/clear) the passed explicit attributes
                 _(attributes).each(function (value, name) {
                     if (isRegisteredAttribute(name, special)) {
                         // check whether to clear the attribute
@@ -594,7 +651,7 @@ define('io.ox/office/editor/format/stylesheets',
                         } else {
                             elementAttributes[name] = value;
                         }
-                        cssAttributes[name] = _.isNull(value) ? styleAttributes[name] : value;
+                        updateAttributeNames.push(name);
                     }
                 });
 
@@ -611,12 +668,10 @@ define('io.ox/office/editor/format/stylesheets',
                 // write back element attributes to the element
                 setElementAttributes($element, elementAttributes);
 
-                // change CSS formatting of the element
-                _(cssAttributes).each(function (value, name) {
-                    if (name in definitions) {
-                        definitions[name].set($element, value);
-                    }
-                });
+                // update element formatting
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                updateAttributeNames = _.unique(updateAttributeNames);
+                updateElementFormatting($element, mergedAttributes, updateAttributeNames);
 
                 // update CSS formatting of descendant elements, if another
                 // style sheet has been set at the element
@@ -677,6 +732,7 @@ define('io.ox/office/editor/format/stylesheets',
                 });
             }
 
+            // use method setAttributesInRanges() to do the real work
             return this.setAttributesInRanges(ranges, attributes, options);
         };
 
@@ -704,14 +760,10 @@ define('io.ox/office/editor/format/stylesheets',
                     // get attributes of the style sheet
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element),
                     // the resulting attributes to be updated at each element
-                    cssAttributes = _({}).extend(styleAttributes, elementAttributes);
+                    mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 
-                // change CSS formatting of the element
-                _(cssAttributes).each(function (value, name) {
-                    if (name in definitions) {
-                        definitions[name].set($element, value);
-                    }
-                });
+                // update element formatting according to current attribute values
+                updateElementFormatting($element, mergedAttributes);
 
             }, this);
 
