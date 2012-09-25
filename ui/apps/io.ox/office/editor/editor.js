@@ -494,7 +494,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // 3) delete selected part in last para (start to pos) and merge first and last para
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
 
                         var startPosition = _.copy(selection.endPaM.oxoPosition, true);
                         startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
@@ -2062,9 +2062,8 @@ define('io.ox/office/editor/editor',
                         }
 
                         // 3) selected part in last para
-                        if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                        if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                             var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                             localstartPosition[endposLength] = 0;
 
                             isTable = Position.isPositionInTable(paragraphs, localstartPosition);
@@ -2906,7 +2905,7 @@ define('io.ox/office/editor/editor',
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
             }
 
-            if ((family === 'character') && (end[end.length - 1] > 0)) {
+            if (family === 'character') {
                 end[end.length - 1] += 1; // Switching from operation mode to range mode
             }
 
@@ -3688,7 +3687,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // there can be empty text spans before the destination node
-                    while (DOM.isTextSpan(destNode) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                    while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
                         destNode = destNode.previousSibling;
                     }
 
