@@ -16,7 +16,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                  'io.ox/core/extensions',
                                  'io.ox/core/notifications',
                                  'io.ox/tasks/edit/pickerPopup',
-                                 'less!io.ox/tasks/edit/style.css'], function (gt, date, ext, notifications, picker) {
+                                 'io.ox/core/tk/upload',
+                                 'io.ox/core/strings',
+                                 'less!io.ox/tasks/edit/style.css'], function (gt, date, ext, notifications, picker, upload, strings) {
 
     "use strict";
 
@@ -25,6 +27,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: 'Edit task' }),
             // app window
             win,
+            //app
+            self,
             // nodes
             node,
             main,
@@ -42,12 +46,19 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             startDateButton,
             endDateButton,
             alarmButton,
+            //attachmentsection
+            attachmentLink,
+            attachmentDisplay,
+            dropZone,
+            attachmentArray = [],//displayed Attachments
+            attachmentsToRemove = [], //stored Attachments that should be removed on edit
             //storage container Object
             editTask = {};
 
 
         // launcher
         app.setLauncher(function (data) {
+            self = this;
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
@@ -156,7 +167,42 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             startDate = $('<input>').addClass("start-date-field");
             endDate = $('<input>').addClass("end-date-field");
             alarmDate = $('<input>').addClass("alarm-date-field");
-
+            
+            //datasection
+            attachmentDisplay = $('<div>').addClass("task-attachment-display")
+                .css("display:", "none");
+            
+            attachmentLink = $('<a>').attr('href', '#')
+                .addClass("task-attachment-link")
+                .text(gt('Attachments') + " (0)")
+                .on('click', function (e) {
+                    e.preventDefault();
+                    attachmentDisplay.children().toggle();
+                });
+            
+            dropZone = upload.dnd.createDropZone({'type': 'single'});
+            dropZone.on('drop', function (e, file) {
+                attachmentArray.push(file);
+                attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                self.buildAttachmentNode(attachmentArray.length - 1);
+                attachmentDisplay.children().first().addClass('first');
+            });
+            
+            attachmentDisplay.delegate(".task-remove-attachment", "click", function () {
+                var node = $(this).parent();
+                if (attachmentArray[node.attr('lnr')].id) { //attachments with id are already stored so they need to be deleted
+                    attachmentsToRemove.push(attachmentArray[node.attr('lnr')].id);
+                }
+                attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                attachmentArray.splice(node.attr('lnr'), 1);
+                node.remove();
+                attachmentDisplay.children().first().addClass('first');
+                attachmentDisplay.children().each(function (index) {
+                    $(this).attr('lnr', index);
+                });
+            });
+            
+            //put everything into the panel
             infoWrapper.append(
                     saveButton,
                     $('<span>').text(gt("Status")).addClass("task-edit-info-label"),
@@ -171,7 +217,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     endDate, $('<br>'),
                     $('<span>').text(gt("Reminder date")).addClass("task-edit-info-label"),
                     alarmButton,
-                    alarmDate,
+                    alarmDate, $('<br>'),
+                    attachmentLink,
+                    attachmentDisplay,
                     $('<div>').html("All dates must be in following format:<br>" +
                                     "for Germany: day.month.year hour:minutes<br>" +
                                     "exsample: 1.1.2012 2:00<br>" +
@@ -249,11 +297,42 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     editTask.last_modified = taskData.last_modified;
                 }
 
+                if (taskData.number_of_attachments !== 0) {
+                    require(['io.ox/core/api/attachment'], function (api) {
+                        api.getAll({folder_id: taskData.folder_id, id: taskData.id, module: 4}).done(function (data) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                data[i].name = data[i].filename;
+                                data[i].size = data[i].file_size;
+                                data[i].type = data[i].file_mimetype;
+                                
+                                delete data[i].filename;
+                                delete data[i].file_size;
+                                delete data[i].file_mimetype;
+                                
+                                attachmentArray.push(data[i]);
+                                self.buildAttachmentNode(i);
+                            }
+                            attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                            attachmentDisplay.children().first().addClass('first');
+                        });
+                    });
+                }
+
                 //stop being busy
                 node.idle();
             }
         };
 
+        app.buildAttachmentNode = function (index) {
+            $('<div>').text(attachmentArray[index].name)
+                .addClass("task-attachment-single")
+                .attr('lnr', index)
+                .append($('<i>').addClass("icon-remove task-remove-attachment"),
+                        $('<span>').text(strings.fileSize(attachmentArray[index].size)).addClass("attachment-filesize"))
+                .appendTo(attachmentDisplay);
+        };
+        
         app.save = function (data) {
             var reqData = this.buildRequestData(data);
 
@@ -293,9 +372,14 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                     reqData.folder_id = api.getDefaultFolder();
                                 }
                                 api.create(reqData).done(function (reqResult) {
-                                    app.quit().done(function () {
-                                        reqResult.folder_id = reqData.folder_id;
-                                    });
+                                    //add all attachments
+                                    if (attachmentArray.length > 1) {
+                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                            attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqResult.id},
+                                                                              attachmentArray);
+                                        });
+                                    }
+                                    app.quit();
                                 }).fail(function () {
                                 });
                             });
@@ -306,6 +390,27 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                     reqData.folder_id = api.getDefaultFolder();
                                 }
                                 api.update(data.last_modified, reqData.id, reqData, reqData.folder_id).done(function () {
+                                    //remove attachments
+                                    if (attachmentsToRemove.length > 0) {
+                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                            attachmentApi.remove({module: 4, folder: reqData.folder_id, id: reqData.id},
+                                                                 attachmentsToRemove);
+                                        });
+                                    }
+                                    //add new attachments
+                                    var attachmentsToAdd = [];
+                                    for (var i = 0; i < attachmentArray.length; i++) {
+                                        if (!attachmentArray[i].id) { //unstored Attachments don't have an id
+                                            attachmentsToAdd.push(attachmentArray[i]);
+                                        }
+                                    }
+                                    if (attachmentsToAdd.length > 0) {
+                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                            attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqData.id},
+                                                                              attachmentsToAdd);
+                                        });
+                                    }
+                                    
                                     app.quit().done(function () {
                                         api.trigger("update:" + reqData.folder_id + '.' + reqData.id);
                                     });
