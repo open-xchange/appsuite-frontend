@@ -1473,11 +1473,6 @@ define('io.ox/office/editor/editor',
                 implMove(operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_TEXT_DELETE) {
-
-                if (! operation.end) {  // operation.end is optional
-                    operation.end = _.copy(operation.start, true);
-                }
-
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
@@ -1495,11 +1490,6 @@ define('io.ox/office/editor/editor',
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
-
-                if (! operation.end) {  // operation.end is optional
-                    operation.end = _.copy(operation.start, true);
-                }
-
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
             else if (operation.name === Operations.OP_PARA_INSERT) {
@@ -2887,6 +2877,10 @@ define('io.ox/office/editor/editor',
                 undomgr.addUndo(undoOperation, redoOperation);
             }
 
+            if (! end) {  // end is optional
+                end = _.copy(start, true);
+            }
+
             var // last index in the start position array
                 startLastIndex = start.length - 1,
                 // last index in the end position array
@@ -3597,6 +3591,10 @@ define('io.ox/office/editor/editor',
         }
 
         function implDeleteText(startPosition, endPosition) {
+
+            if (! endPosition) {  // operation.end is optional
+                endPosition = _.copy(startPosition, true);
+            }
 
             var lastValue = startPosition.length - 1,
                 start = startPosition[lastValue],
