@@ -259,7 +259,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 
                 j.it("should trigger a 'valid' event if the model becomes valid again", function () {
                     var model = factory.create();
-                    var invalidTriggered, validTriggered;
+                    var invalidTriggered, validTriggered, validServingsTriggered;
                     
                     model.on("invalid", function () {
                         invalidTriggered = true;
@@ -268,6 +268,10 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     model.on("valid", function () {
                         validTriggered = true;
                     });
+                    model.on("valid:servings", function () {
+                        validServingsTriggered = true;
+                    });
+                    
                     model.set("servings", 2);
                     model.set("servings", 1);
                     model.set("servings", 2);
@@ -275,6 +279,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     j.expect(model.get("servings")).toEqual(2);
                     j.expect(invalidTriggered).toEqual(true);
                     j.expect(validTriggered).toEqual(true);
+                    j.expect(validServingsTriggered).toEqual(true);
                 });
                 
                 j.it("should try to reapply previously invalid attribute changes to see if they work now", function () {
