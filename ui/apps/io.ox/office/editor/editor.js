@@ -2815,8 +2815,10 @@ define('io.ox/office/editor/editor',
             // change listener used to build the undo operations
             function elementChangeListener(element, oldAttributes, newAttributes) {
 
-                var // the operational address of the passed element
-                    range = { start: [3], end: [3] },//TODO!!!
+                var // selection object representing the passed element
+                    selection = Position.getOxoSelectionForNode(editdiv, element, true),
+                    // the operational address of the passed element
+                    range = { start: selection.startPaM.oxoPosition, end: selection.endPaM.oxoPosition },
                     // the operation used to undo the attribute changes
                     undoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range),
                     // the operation used to redo the attribute changes
@@ -2839,8 +2841,7 @@ define('io.ox/office/editor/editor',
                 });
 
                 // add a new undo action for the current element
-                //TODO: enable when addressing works
-                //undomgr.addUndo(undoOperation, redoOperation);
+                undomgr.addUndo(undoOperation, redoOperation);
             }
 
             var // last index in the start position array
