@@ -114,7 +114,7 @@ function jsFilter (data) {
     if (debug) return data.slice(-1) === '\n' ? data : data + '\n';
     tree = pro.ast_lift_variables(tree);
     tree = pro.ast_mangle(tree, { defines: {
-        STATIC_APPS: parse(process.env.STATIC_APPS || 'false')[1][0][1]
+        STATIC_APPS: parse(process.env.STATIC_APPS || 'true')[1][0][1]
     } });
     tree = pro.ast_squeeze(tree);
     // use split_lines
