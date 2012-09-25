@@ -19,9 +19,10 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
+     'io.ox/core/api/folder',
      'gettext!io.ox/files/files',
      'io.ox/core/config'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, gt, config) {
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config) {
 
     'use strict';
 
@@ -70,7 +71,9 @@ define('io.ox/files/icons/perspective',
                 fileIconHeight = 149,
                 fileIconWidth = 176;
 
-            this.main.append(iconview);
+            this.main.append(folderAPI.getBreadcrump(app.folder.get()))
+                .append($('<div class="files-iconview">')
+                .append(iconview));
 
             var filesIconviewHeight = iconview.parent().height() - 26;
             var filesIconviewWidth = iconview.parent().width() - 26;
@@ -159,6 +162,30 @@ define('io.ox/files/icons/perspective',
 
             drawFirst();
 
+            app.queues = {};
+
+            app.queues.create = upload.createQueue({
+                processFile: function (file) {
+                    win.busy();
+                    return api.uploadFile({file: file, folder: app.folder.get()})
+                        .done(function (data) {
+                            iconview.empty().busy();
+                            drawFirst();
+                        })
+                        .always(win.idle);
+                }
+            });
+
+            var dropZone = new dnd.UploadZone({
+                ref: "io.ox/files/dnd/actions"
+            }, app);
+
+            var shortcutPoint = new shortcuts.Shortcuts({
+                ref: "io.ox/files/shortcuts"
+            });
+
+            dropZone.include();
+
             win.on('search cancel-search', function (e) {
                 mode = (e.type === 'search' ? true : false);
                 iconview.empty().busy();
@@ -182,8 +209,7 @@ define('io.ox/files/icons/perspective',
 
         },
         render: function (app) {
-            this.main.addClass('files-iconview')
-                .empty();
+            this.main.addClass('files-icon-perspective').empty();
 
             var that = this,
                 win = app.getWindow();
