@@ -28,6 +28,7 @@
  	height: 100%;
  }
  
+ //info section
  .info-wrapper .end-date-field,
  .info-wrapper .start-date-field,
  .info-wrapper .alarm-date-field {
@@ -45,6 +46,37 @@
 	width: 330px;
 	position: absolute;
  }
+ 
+ .io-ox-tasks-edit .info-wrapper .task-edit-picker {
+ 	margin-left: 5px;
+ 	width: 45px;
+ 	float: right;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper .task-attachment-link {
+ 	margin-bottom: 9px;
+ }
+ 
+ .task-attachment-single {
+ 	border-bottom: 1px solid #C0C0C0;
+ 	padding: 2px 9px;
+ }
+ 
+ .task-attachment-display .first {
+ 	border-top: 1px solid #C0C0C0;
+ }
+ 
+ .task-remove-attachment {
+ 	float: right;
+ 	cursor: pointer;
+ }
+ 
+ .task-attachment-single .attachment-filesize {
+	float: right;
+ 	margin-right: 3px;
+ }
+ 
+ //main edit
  
  .io-ox-tasks-edit .main-edit {
  	display: inline-block;
@@ -69,12 +101,6 @@
     line-height: 30px;
     margin-bottom: 9px;
     width: 100%;
- }
- 
- .io-ox-tasks-edit .info-wrapper .task-edit-picker {
- 	margin-left: 5px;
- 	width: 45px;
- 	float: right;
  }
  
  //PickerPopup
