@@ -652,14 +652,15 @@ define('io.ox/office/editor/editor',
             var selection = getSelection(),
                 // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
                 count = 1,  // inserting only one row
-                insertdefaultcells = true,
+                insertdefaultcells = false,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
-            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
+            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR'),
+                referenceRow = rowPos[rowPos.length - 1];
 
             rowPos[rowPos.length - 1] += 1;
 
-            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
+            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -1600,7 +1601,7 @@ define('io.ox/office/editor/editor',
                 //         undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(undoOperation, operation);
                 // }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.attrs);
+                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.OP_COLUMN_INSERT) {
                 // Operations.OP_COLUMN_INSERT is only called as undo for Operations.OP_COLUMNS_DELETE
@@ -3324,10 +3325,11 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertRow(pos, count, insertdefaultcells, attrs) {
+        function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
-                setRowHeight = false;
+                setRowHeight = false,
+                useReferenceRow = _.isNumber(referencerow) ? true : false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3355,7 +3357,12 @@ define('io.ox/office/editor/editor',
                 tableRowNode = tableRowDomPos.node;
             }
 
-            if (insertdefaultcells) {
+            if (useReferenceRow) {
+
+                var refRowNode = $(table).children('tbody').children().get(referencerow),
+                row = $(refRowNode);
+
+            } else if (insertdefaultcells) {
 
                 var columnCount = $(table).data('columns'),
                     // prototype elements for row, cell, and paragraph
@@ -3387,8 +3394,14 @@ define('io.ox/office/editor/editor',
                 _.times(count, function () { $(table).append(row.clone(true)); });
             }
 
+            // removing content, if the row was cloned from a reference row
+            if (useReferenceRow) {
+                // iterating over all new cells and remove all paragraphs in the cells
+                implDeleteCellRange(tablePos, [referencerow + 1, 0], [referencerow + count, row.children().length - 1]);
+            }
+
             // Setting cursor
-            if (insertdefaultcells) {
+            if ((insertdefaultcells) || (useReferenceRow)) {
                 localPosition.push(0);
                 localPosition.push(0);
                 localPosition.push(0);
