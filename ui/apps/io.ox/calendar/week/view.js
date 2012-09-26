@@ -638,7 +638,8 @@ define('io.ox/calendar/week/view',
                         $.extend(data, {
                             curHelper: $(this),
                             all: $('[data-cid="' + ui.helper.data('cid') + '"]'),
-                            day: Math.floor((e.pageX - paneOffset) / colWidth)
+                            day: Math.floor((e.pageX - paneOffset) / colWidth),
+                            handle: ''
                         });
                         data.firstPos = parseInt(data.all.first().closest('.day').attr('date'), 10);
                         data.lastPos = parseInt(data.all.last().closest('.day').attr('date'), 10);
@@ -648,15 +649,14 @@ define('io.ox/calendar/week/view',
                     resize:  function (e, ui) {
                         var el = $(this),
                             data = el.data('resizable'),
-                            handle = '',
                             day = Math.floor((e.pageX - paneOffset) / colWidth),
                             mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
 
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
-                            handle = 'n';
+                            data.handle = 'n';
                         } else if (ui.size.height !== ui.originalSize.height) {
-                            handle = 's';
+                            data.handle = 's';
                         }
 
                         // add new style
@@ -670,18 +670,22 @@ define('io.ox/calendar/week/view',
                             });
 
                         // resize actions
-                        if (day >= data.firstPos && handle === 's') {
+                        if (day >= data.firstPos && data.handle === 's') {
                             // right side
                             mouseY = self.roundToGrid(mouseY, 's');
                             // default move
                             if (day !== data.startPos) {
                                 ui.position.top = ui.originalPosition.top;
-                                ui.size.height = (paneHeight - el.position().top);
+                                ui.size.height = paneHeight - ui.position.top;
+                            } else {
+                                data.height = ui.size.height;
                             }
                             if (data.day === day && day !== data.startPos) {
                                 data.curHelper.height(function (i, h) {
-                                    return mouseY - $(this).position().top;
+                                    data.height = mouseY - $(this).position().top;
+                                    return data.height;
                                 });
+
                             } else if (day < data.day) {
                                 // move left
                                 if (day >= data.lastPos) {
@@ -717,12 +721,14 @@ define('io.ox/calendar/week/view',
                                     });
                                 }
                             }
-                        } else if (day <= data.lastPos && handle === 'n') {
+                        } else if (day <= data.lastPos && data.handle === 'n') {
                             // left side
                             mouseY = self.roundToGrid(mouseY, 'n');
                             if (day !== data.startPos) {
                                 ui.size.height = paneHeight;
                                 ui.position.top = 0;
+                            } else {
+                                data.top = ui.position.top;
                             }
                             if (data.day === day && day !== data.startPos) {
                                 // default move
@@ -730,6 +736,7 @@ define('io.ox/calendar/week/view',
                                     top: mouseY,
                                     height: (day === data.lastPos ? data.lastHeight : paneHeight) - mouseY
                                 });
+                                data.top = mouseY;
                             } else if (day > data.day) {
                                 // move right
                                 if (day < data.startPos) {
@@ -775,21 +782,27 @@ define('io.ox/calendar/week/view',
                         var el = $(this),
                             data = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
-                            tmpTS = self.getTimeFromDateTag($(this).parent().attr('date'), true) + self.getTimeFromPos(el.position().top);
+                            tmpTS = self.getTimeFromDateTag(data.day, true);
                         data.all.removeClass('opac');
-                        if (ui.position.top !== ui.originalPosition.top) {
+
+                        switch (data.handle) {
+                        case 'n':
                             _.extend(app, {
-                                start_date: tmpTS,
+                                start_date: tmpTS + self.getTimeFromPos(data.top),
                                 ignore_conflicts: true
                             });
-                        } else if (ui.size.height !== ui.originalSize.height) {
+                            break;
+                        case 's':
                             _.extend(app, {
-                                end_date: tmpTS + self.getTimeFromPos(ui.size.height),
+                                end_date: tmpTS + self.getTimeFromPos(data.height),
                                 ignore_conflicts: true
                             });
+                            break;
+                        default:
+                            break;
                         }
-                        //el.busy();
-                        //self.onUpdateAppointment(app);
+                        el.busy();
+                        self.onUpdateAppointment(app);
                         self.lassoMode = true;
                     }
                 })
