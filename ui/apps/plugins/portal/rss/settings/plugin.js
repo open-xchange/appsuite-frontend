@@ -45,10 +45,11 @@ define('plugins/portal/rss/settings/plugin',
                     id = 'rss-feedgroup-' + groupname.replace(/[^A-Za-z0-9]/g, '_');
 
                 self.$el.empty().append(
-                    $('<div>').attr({'class': 'sortable-item listbox-item enabled', id: id, 'data-groupname': groupname}).append(
+                    $('<div>').attr({'class': 'io-ox-portal-rss-settings-feedgroup sortable-item listbox-item enabled', id: id, 'data-groupname': groupname}).append(
                         $('<strong>').text(groupname),
                         $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
-                        $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP})
+                        $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP}),
+                        $('<i>').attr({'class': 'icon-plus', 'data-action': 'add-feed', title: staticStrings.ADD_FEED})
                     ),
                     $('<div class="io-ox-portal-rss-settings-members">').append(_(members).map(function (member) {
                         return $('<div>').attr({'id': 'rss-feed-' + member.feedname.replace(/[^A-Za-z0-9]/g, '_'),
@@ -163,11 +164,11 @@ define('plugins/portal/rss/settings/plugin',
                 return $select;
             },
             onAddFeed: function (args) {
-                var dialog = new dialogs.ModalDialog({ easyOut: true, async: true });
-
-                var $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
+                var dialog = new dialogs.ModalDialog({ easyOut: true, async: true }),
+                    $url = $('<input>').attr({type: 'text', placeholder: gt('http://')}),
                     $feedname = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
-                    $group = this.makeFeedgroupSelection(),
+                    callerGroupname = $(this.$el.find('[selected]')).data('groupname'),
+                    $group = this.makeFeedgroupSelection(callerGroupname),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
                 
@@ -332,26 +333,69 @@ define('plugins/portal/rss/settings/plugin',
 
                     deferred.done(function () {
                         var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; }),
-                            newGroup = _(feedgroups).find(function (g) {return g.groupname === groups; }),
-                            newFeedgroups = feedgroups;
-                        console.log("oldgroup/newgroup", oldGroup, newGroup);
+                            newGroup = _(feedgroups).find(function (g) {return g.groupname === groups; });
                         oldGroup.members = removeFeed(oldGroup.members, oldUrl);
-                        newGroup.members = removeFeed(newGroup.members, oldUrl);
-                        console.log("oldgroup/newgroup", oldGroup, newGroup);
-                        newFeedgroups = removeFeedgroup(newFeedgroups, oldGroup);
-                        newFeedgroups = removeFeedgroup(newFeedgroups, newGroup);
-                        console.log("oldgroup/newgroup", oldGroup, newGroup);
-                        
                         newGroup.members.push({url: url, feedname: feedname});
 
-                        settings.set('groups', newFeedgroups);
+                        settings.set('groups', feedgroups);
                         settings.save();
 
-                        require(['plugins/portal/rss/register'], function (rss) {
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                            dialog.close();
-                        });
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
+                        dialog.close();
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            },
+            onEditGroup: function (args) {
+                var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
+                    $changed = $(this.$el.find('[selected]'));
+                    
+                console.log("changed:", $changed);
+                
+                var oldGroupname = $changed.data('groupname');
+
+                if (!oldGroupname) {
+                    return;
+                }
+                var $groupname = $('<input>').attr({type: 'text', placeholder: gt('Name for group of feeds')}).val(oldGroupname),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Edit a group of feeds')))
+                    .append($groupname)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('edit', function (e) {
+                    $error.hide();
+
+                    var groupname = $.trim($groupname.val()),
+                        deferred = $.Deferred();
+
+                    if (groupname.length === 0) {
+                        $error.text(gt('Please enter a name for the group of feeds.'));
+                        deferred.reject();
+                    } else {
+                        deferred.resolve();
+                    }
+
+                    deferred.done(function () {
+                        var oldGroup = _(feedgroups).find(function (g) {return g.groupname === oldGroupname; });
+                        oldGroup.groupname = groupname;
+
+                        settings.set('groups', feedgroups);
+                        settings.save();
+
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
+                        dialog.close();
                     });
 
                     deferred.fail(function () {
@@ -364,46 +408,38 @@ define('plugins/portal/rss/settings/plugin',
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
-                console.log("onDeleteFeed", this.$el.find('[selected]'), args);
-                var url = this.$el.find('[selected]').data('url');
+                var deleteme = this.$el.find('[selected]'),
+                    url = deleteme.data('url'),
+                    groupname = deleteme.data('group');
 
-                if (url) {
-                    var that = this;
-
-                    dialog.header($("<h4>").text(gt('Delete a feed')))
-                        .append($('<span>').text(gt('Do you really want to delete the following feed(s)?'))) //TODO i18n
-                        .append($('<ul>').append($('<li>').text(url)))
-                        .addButton('cancel', gt('Cancel'))
-                        .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
-                        .show()
-                        .done(function (action) {
-                            if (action === 'delete') {
-                                var newfeedgroups = [];
-                                _.each(feedgroups, function (sub) {
-                                    if (sub.url !== url) {
-                                        newfeedgroups.push(sub);
-                                    }
-                                });
-
-                                feedgroups = removeFeed(feedgroups, url);
-                                settings.set('groups', feedgroups);
-                                settings.save();
-
-                                var extId = 'rss-' + url.replace(/[^A-Za-z0-9]/g, '_');
-
-                                ext.point("io.ox/portal/widget").disable(extId);
-
-                                require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                    tumblr.reload();
-                                    that.trigger('redraw');
-                                    ox.trigger("refresh^");
-                                });
-                            }
-                            return false;
-                        });
+                if (!url) {
+                    return;
                 }
+                var that = this;
+
+                dialog.header($("<h4>").text(gt('Delete a feed')))
+                    .append($('<span>').text(gt('Do you really want to delete the following feed(s)?'))) //TODO i18n
+                    .append($('<ul>').append($('<li>').text(url)))
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            var newGroup = _(feedgroups).find(function (g) {return g.groupname === groupname; }),
+                                newFeedgroups = feedgroups;
+                            newGroup.members = removeFeed(newGroup.members, url);
+                            newFeedgroups = removeFeedgroup(newFeedgroups, groupname);
+                            newFeedgroups.push(newGroup);
+
+                            settings.set('groups', newFeedgroups);
+                            settings.save();
+
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                        }
+                        return false;
+                    });
             },
-            onEditGroup: function () {},
             onDeleteGroup: function () {}
         }),
         removeFeedgroup = function (feedgroups, groupname) {
