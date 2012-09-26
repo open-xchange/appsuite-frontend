@@ -13,8 +13,10 @@
 define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/tests/recipeApi"], function (ext, ModelFactory, api) {
     "use strict";
     // Firstly let's define a factory for use in our tests
+    var ref = 'io.ox/lessons/recipes/model/' + new Date().getTime(); // Again namespaced fun
+    
     var factory = new ModelFactory({
-        ref: 'io.ox/lessons/recipes/model',
+        ref: ref,
         api: api,
         model: {
             addIngredient: function (ingredient) {
@@ -167,21 +169,277 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
                 
                 j.it("should be able to delete entries", function () {
-                    j.expect("TODO: Implement me").toEqual(null);
+                    j.expect(testId).toBeDefined();
+                    j.expect(testId).not.toEqual(null);
+                    
+                    j.spyOn(api, 'remove').andCallThrough();
+                    
+                    var updated = new utils.Done();
+                    
+                    factory.get({id: testId, folder: 12}).done(function (loaded) {
+                        loaded.destroy().done(updated.yep);
+                    });
+                    j.waitsFor(updated, 'updated', 5000);
+                    
+                    j.runs(function () {
+                        j.expect(api.remove).toHaveBeenCalledWith({id: testId, folder: 12});
+                    });
                 });
-                
-                                
             });
             
             j.describe("ModelFactory realms", function () {
+                j.it("should provide different instances for different realms", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+                        
+                        recipe1.set('title', 'new title');
+                        
+                        j.expect(recipe2.get('title')).not.toEqual('new title');
+                        
+                        r1.destroy();
+                        r2.destroy();
+                    });
+                });
+                
+                j.it("should update models in a different realm on update", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        var checked = new utils.Done();
+                        
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+
+                        recipe1.set('title', 'new title').save().done(function () {
+                            
+                            j.expect(recipe2.get('title')).toEqual('new title');
+                            checked.yep();
+
+                            r1.destroy();
+                            r2.destroy();
+                        });
+                        
+                        j.waitsFor(checked, 'checked', 5000);
+                    });
+                });
+                
+                j.it("should trigger destroy events when a model was deleted in a different realm", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 2, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 2, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        var checked = new utils.Done(),
+                            destroyed = false;
+                        
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+                        
+                        recipe2.on("destroy", function () {
+                            destroyed = true;
+                        });
+                        
+                        recipe1.destroy().done(function () {
+                            j.expect(destroyed).toEqual(true);
+                            checked.yep();
+                        });
+                        
+                        j.waitsFor(checked, 'checked', 5000);
+                    });
+                });
+                
+                j.it("should do reference counting", function () {
+                    var r = factory.realm('r');
+                    
+                    j.spyOn(r, 'destroy');
+                    
+                    r.retain().retain();
+                    
+                    r.release();
+                    j.expect(r.destroy).not.toHaveBeenCalled();
+                    
+                    r.release();
+                    j.expect(r.destroy).toHaveBeenCalled();
+                    
+                });
                 
             });
             
             j.describe("ModelFactory validation", function () {
                 
+                j.it("should run an extension for each attribute", function () {
+                    
+                    // Create an extension that forces servings to be even
+                    ext.point(ref + '/validation/servings').extend({
+                        id: 'servings-must-be-even',
+                        validate: function (value) {
+                            if (!_.isNumber(value)) {
+                                value = parseInt(value, 10);
+                            }
+                            if (value % 2 === 1) {
+                                return "Servings must be even";
+                            }
+                        }
+                    });
+                    
+                    // violate the rule
+                    j.expect(factory.create().set("servings", 1).isValid()).toEqual(false);
+                    j.expect(factory.create().set("servings", 2).get("servings")).toEqual(2);
+                });
+                
+                j.it("should trigger 'invalid' and 'invalid:attribute' events", function () {
+                    var model = factory.create();
+                    var invalidTriggered, invalidServingsTriggered;
+                    
+                    model.on("invalid", function () {
+                        invalidTriggered = true;
+                    });
+                    
+                    model.on("invalid:servings", function () {
+                        invalidServingsTriggered = true;
+                    });
+                    
+                    model.set("servings", 1);
+                    
+                    j.expect(invalidTriggered).toEqual(true);
+                    j.expect(invalidServingsTriggered).toEqual(true);
+                    j.expect(model.invalidAttributes()).toEqual(['servings']);
+                    
+                });
+                
+                j.it("should run general validation extensions after attribute extensions", function () {
+                    var validations = [];
+                    
+                    ext.point(ref + '/validation/servings').replace({
+                        id: 'servings-must-be-even',
+                        validate: function (value) {
+                            validations.push('servings-must-be-even');
+                            if (!_.isNumber(value)) {
+                                value = parseInt(value, 10);
+                            }
+                            if (value % 2 === 1) {
+                                return "Servings must be even";
+                            }
+                        }
+                    });
+                    
+                    ext.point(ref + '/validation').extend({
+                        id: 'general',
+                        validate: function () {
+                            validations.push('general');
+                        }
+                    });
+                    
+                    factory.create().set('servings', 2);
+                    
+                    j.expect(validations).toEqual(['servings-must-be-even', 'general']);
+                });
+                
+                j.it("should trigger a 'valid' event if the model becomes valid again", function () {
+                    var model = factory.create();
+                    var invalidTriggered, validTriggered, validServingsTriggered;
+                    
+                    model.on("invalid", function () {
+                        invalidTriggered = true;
+                    });
+                    
+                    model.on("valid", function () {
+                        validTriggered = true;
+                    });
+                    model.on("valid:servings", function () {
+                        validServingsTriggered = true;
+                    });
+                    
+                    model.set("servings", 2);
+                    model.set("servings", 1);
+                    model.set("servings", 2);
+                    
+                    j.expect(model.get("servings")).toEqual(2);
+                    j.expect(invalidTriggered).toEqual(true);
+                    j.expect(validTriggered).toEqual(true);
+                    j.expect(validServingsTriggered).toEqual(true);
+                });
+                
+                j.it("should work for attributes whose validity is dependant on each other", function () {
+                    ext.point(ref + '/validation/servings').disable('servings-must-be-even');
+                    ext.point(ref + '/validation').extend({
+                        id: 'servings-and-title',
+                        validate: function (attributes) {
+                            // Here is our funky business rule
+                            // servings must be even, unless the title starts with 'The great'
+                            
+                            if (attributes.servings) {
+                                if (attributes.title && /^The great/.test(attributes.title)) {
+                                    return; // Yeah, we're happy with that
+                                }
+                                if (attributes.servings % 2 === 1) {
+                                    this.add('servings', "Servings must be equal, unless the title starts with 'The great'");
+                                }
+                            }
+                        }
+                    });
+                    
+                    var model = factory.create();
+                    
+                    model.set('servings', 2); // Valid
+                    j.expect(model.set('servings', 1).isValid()).toEqual(false); // Invalid
+                    model.set('title', 'The great pancakes of yesteryear'); // Now servings of 1 are valid also
+                    
+                    j.expect(model.get('servings')).toEqual(1);
+                    j.expect(model.get('title')).toEqual('The great pancakes of yesteryear');
+                });
             });
             
+            
+            
             j.describe("ModelFactory change detection", function () {
+                j.it("should track changes differing from the loaded state", function () {
+                    var recipe;
+                    
+                    utils.waitsFor(factory.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        recipe.set({title: 'Hello', servings: 2});
+                        j.expect(recipe.isDirty()).toEqual(true);
+                        j.expect(recipe.changedSinceLoading()).toEqual({title: 'Hello', servings: 2});
+                    });
+                });
                 
             });
         }
