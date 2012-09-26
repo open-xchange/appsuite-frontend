@@ -124,6 +124,9 @@ define('io.ox/office/editor/format/stylesheets',
             // default values for all supported attributes of the own style family
             defaultAttributes = {},
 
+            // identifier of the default style sheet
+            defaultStyleId = null,
+
             // global element setter
             globalSetHandler = Utils.getFunctionOption(options, 'globalSetHandler'),
 
@@ -216,8 +219,8 @@ define('io.ox/office/editor/format/stylesheets',
             }
 
             // add style sheet identifier to attributes
-            if (!(id in styleSheets)) {
-                id = 'standard';
+            if (!(id in styleSheets) && (defaultStyleId in styleSheets)) {
+                id = defaultStyleId;
             }
 
             // collect attributes from the style sheet and its ancestors
@@ -373,6 +376,10 @@ define('io.ox/office/editor/format/stylesheets',
          *  @param {Number} [options.priority=0]
          *      The sorting priority of the style (the lower the value the
          *      higher the priority).
+         *  @param {Boolean} [defStyle=false]
+         *      True, if the new style sheet is the default style sheet of this
+         *      style sheet container. The default style will be used for all
+         *      elements without explicit style sheet.
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
@@ -392,11 +399,14 @@ define('io.ox/office/editor/format/stylesheets',
                 styleSheet.parentId = null;
             }
 
-            // set if style sheet should be displayed in the UI
+            // set style sheet options
             styleSheet.hidden = Utils.getBooleanOption(options, 'hidden', false);
-
-            // set the UI display priority of the style sheet
             styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
+
+            // set new default style sheet
+            if (Utils.getIntegerOption(options, 'defStyle', false)) {
+
+            }
 
             // prepare attribute map (empty attributes for all supported families)
             styleSheet.attributes = Utils.makeSimpleObject(styleFamily, {});
@@ -433,8 +443,8 @@ define('io.ox/office/editor/format/stylesheets',
             var // the style sheet to be removed
                 styleSheet = styleSheets[id];
 
-            if (id === 'standard') {
-                Utils.warn('StyleSheets.removeStyleSheet(): cannot remove standard style sheet');
+            if (id === defaultStyleId) {
+                Utils.warn('StyleSheets.removeStyleSheet(): cannot remove default style sheet');
                 styleSheet = null;
             }
 
@@ -682,11 +692,6 @@ define('io.ox/office/editor/format/stylesheets',
                     return;
                 }
 
-                // call element change listener
-                if (_.isFunction(changeListener)) {
-                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
-                }
-
                 // write back element attributes to the element
                 setElementAttributes($element, elementAttributes);
 
@@ -702,6 +707,11 @@ define('io.ox/office/editor/format/stylesheets',
                     _(descendantStyleFamilies).each(function (family) {
                         documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
                     });
+                }
+
+                // call element change listener
+                if (_.isFunction(changeListener)) {
+                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
                 }
 
             }, this);

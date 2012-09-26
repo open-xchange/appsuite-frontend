@@ -195,8 +195,7 @@ define('io.ox/office/editor/image',
      */
     Image.calculateImageMargins = function (attributes) {
 
-        var allMargins = {},
-            fullLeftMargin = '0mm',
+        var fullLeftMargin = '0mm',
             fullRightMargin = '0mm',
             standardLeftMargin = '0mm',
             standardRightMargin = '0mm';
@@ -233,12 +232,12 @@ define('io.ox/office/editor/image',
 
         }
 
-        allMargins = {standardLeftMargin: standardLeftMargin,
-                      standardRightMargin: standardRightMargin,
-                      fullLeftMargin: fullLeftMargin,
-                      fullRightMargin: fullRightMargin};
-
-        return allMargins;
+        return {
+            standardLeftMargin: standardLeftMargin,
+            standardRightMargin: standardRightMargin,
+            fullLeftMargin: fullLeftMargin,
+            fullRightMargin: fullRightMargin
+        };
     };
 
     /**

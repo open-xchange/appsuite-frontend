@@ -100,7 +100,7 @@
     
             .box-sizing(border-box);
             position: absolute;
-            border: 3px fade(@border-color, 50%) solid;
+            border: 3px fade(@border-color, 70%) solid;
 
             cursor: default;
             &.moveable { cursor: move; }

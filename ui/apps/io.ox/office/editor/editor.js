@@ -1488,7 +1488,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                 }
-                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default']);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
                 implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -2650,16 +2650,9 @@ define('io.ox/office/editor/editor',
                 allMargins = null;
 
             if (attributes) {
-
-                // _(attributes).each(function (element, i) {
-                //     window.console.log("Attribute: " + i + " : " + element);
-                // });
-
-                if ((node) && (node.nodeType === 3)) {
-                    var paragraph = node.parentNode.parentNode,
-                        paraWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
-
-                    attributes.paragraphWidth = paraWidth;
+                if (node && (node.nodeType === 3)) {
+                    var paragraph = node.parentNode.parentNode;
+                    attributes.paragraphWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
                 }
 
                 anchorType = Image.getAnchorTypeFromAttributes(attributes);
@@ -2811,19 +2804,24 @@ define('io.ox/office/editor/editor',
          *  The formatting attributes contained in the new style sheet, as map
          *  of name/value pairs.
          *
-         *  @param {Boolean} [hidden]
-         *   Optional property that determines if the style should be displayed in the UI (default is false)
+         * @param {Boolean} [hidden]
+         *  Optional property that determines if the style should be displayed in the UI (default is false)
          *
-         *  @param {Number} [uiPriority]
-         *   Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         * @param {Number} [uiPriority]
+         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         *
+         * @param {Boolean} [defStyle]
+         *  True, if the new style sheet is the default style sheet of the
+         *  attribute family (will be used for elements without explicit style
+         *  sheet).
          */
-        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority) {
+        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority, defStyle) {
 
             var // the style sheet container
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority });
+                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
             }
         }
 
