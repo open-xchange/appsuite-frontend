@@ -494,7 +494,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // 3) delete selected part in last para (start to pos) and merge first and last para
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
 
                         var startPosition = _.copy(selection.endPaM.oxoPosition, true);
                         startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
@@ -561,7 +561,14 @@ define('io.ox/office/editor/editor',
 
         this.deleteText = function (startposition, endposition) {
             if (startposition !== endposition) {
-                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
+
+                var _endPosition = _.copy(endposition, true);
+                if (_endPosition[_endPosition.length - 1] > 0) {
+                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
+                }
+
+                var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: _endPosition };
+                // var newOperation = { name: Operations.OP_TEXT_DELETE, start: startposition, end: endposition };
                 applyOperation(newOperation, true, true);
                 // setting the cursor position
                 setSelection(new OXOSelection(lastOperationEnd));
@@ -645,14 +652,15 @@ define('io.ox/office/editor/editor',
             var selection = getSelection(),
                 // start = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition),
                 count = 1,  // inserting only one row
-                insertdefaultcells = true,
+                insertdefaultcells = false,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
-            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
+            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR'),
+                referenceRow = rowPos[rowPos.length - 1];
 
             rowPos[rowPos.length - 1] += 1;
 
-            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells };
+            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -731,7 +739,7 @@ define('io.ox/office/editor/editor',
                     width = null;
 
                 if (domPos) {
-                    width = Utils.roundDigits(Utils.convertLength(domPos.node.offsetWidth, 'px', 'mm', 2) * 100 / size.width, 1);
+                    width = Utils.roundDigits(Utils.convertLengthToHmm(domPos.node.offsetWidth, 'px') / size.width, 1);
                 } else {
                     width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
                 }
@@ -845,8 +853,29 @@ define('io.ox/office/editor/editor',
          *  attribute.
          */
         this.setAttribute = function (family, name, value) {
-            setAttributes(family, Utils.makeSimpleObject(name, value));
+            this.setAttributes(family, Utils.makeSimpleObject(name, value));
         };
+
+        /**
+         * Changes multiple attributes of the specified attribute family in the
+         * current selection.
+         *
+         * @param {String} family
+         *  The name of the attribute family containing the passed attributes.
+         */
+        this.setAttributes = function (family, attributes) {
+
+            var // whether undo is enabled
+                createUndo = undomgr.isEnabled() && !undomgr.isInUndo();
+
+            // Create an undo group that collects all undo operations generated
+            // in the local setAttributes() method (it calls itself recursively
+            // with smaller parts of the current selection).
+            if (createUndo) { undomgr.startGroup(); }
+            setAttributes(family, attributes);
+            if (createUndo) { undomgr.endGroup(); }
+        };
+
 
         this.getParagraphCount = function () {
             return paragraphs.size();
@@ -1418,6 +1447,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var endPos = _.clone(operation.start, true);
                     endPos[endPos.length - 1] += operation.text.length;
+                    endPos[endPos.length - 1] -= 1;    // switching from range mode to operation mode
                     var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
                     var redoOperation = _.copy(operation, true);
                     var allowMerge = operation.text.length === 1;
@@ -1448,7 +1478,7 @@ define('io.ox/office/editor/editor',
                     var localStart = _.copy(operation.start, true),
                         localEnd = _.copy(operation.end, true),
                         startLastVal = localStart.pop(),
-                        endLastVal = localEnd.pop(),
+                        endLastVal = localEnd.pop() + 1, // switching operation mode from OP_TEXT_DELETE
                         undoOperation = { name: Operations.OP_TEXT_INSERT, start: _.copy(operation.start, true), text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
                     undomgr.addUndo(undoOperation, operation);
                 }
@@ -1571,7 +1601,7 @@ define('io.ox/office/editor/editor',
                 //         undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
                 //     undomgr.addUndo(undoOperation, operation);
                 // }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.attrs);
+                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.OP_COLUMN_INSERT) {
                 // Operations.OP_COLUMN_INSERT is only called as undo for Operations.OP_COLUMNS_DELETE
@@ -1594,9 +1624,8 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_IMAGE_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var endPos = _.clone(operation.position, true);
-                    endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var endPos = _.clone(operation.position, true),
+                        undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 var imgurl = operation.imgurl;
@@ -1606,9 +1635,8 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_FIELD_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var endPos = _.clone(operation.position, true);
-                    endPos[endPos.length - 1] += 1;
-                    var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
+                    var endPos = _.clone(operation.position, true),
+                        undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
@@ -1678,8 +1706,8 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                var startPaM = Position.getOXOPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
-                    endPaM = Position.getOXOPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
+                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 
@@ -1848,7 +1876,7 @@ define('io.ox/office/editor/editor',
             var para,
                 start,
                 end,
-                buttonEvent = ((startPosition === undefined) && (endPosition === undefined)) ? true : false;
+                buttonEvent = (startPosition === undefined) && (endPosition === undefined);
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
@@ -2035,9 +2063,8 @@ define('io.ox/office/editor/editor',
                         }
 
                         // 3) selected part in last para
-                        if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                        if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
                             var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
                             localstartPosition[endposLength] = 0;
 
                             isTable = Position.isPositionInTable(paragraphs, localstartPosition);
@@ -2084,7 +2111,14 @@ define('io.ox/office/editor/editor',
             else {
                 startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
                 endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
-                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
+
+                var _endPosition = _.copy(endPosition, true);
+                if ((family === 'character') && (_endPosition[_endPosition.length - 1] > 0)) {
+                    _endPosition[_endPosition.length - 1] -= 1;  // switching from range mode to operation mode
+                }
+
+                var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: _endPosition};
+                // var newOperation = {name: Operations.OP_ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
             }
         }
@@ -2815,8 +2849,10 @@ define('io.ox/office/editor/editor',
             // change listener used to build the undo operations
             function elementChangeListener(element, oldAttributes, newAttributes) {
 
-                var // the operational address of the passed element
-                    range = { start: [3], end: [3] },//TODO!!!
+                var // selection object representing the passed element
+                    selection = Position.getOxoSelectionForNode(editdiv, element, false),
+                    // the operational address of the passed element
+                    range = { start: selection.startPaM.oxoPosition, end: selection.endPaM.oxoPosition },
                     // the operation used to undo the attribute changes
                     undoOperation = _({ name: Operations.OP_ATTRS_SET, attrs: {} }).extend(range),
                     // the operation used to redo the attribute changes
@@ -2839,8 +2875,11 @@ define('io.ox/office/editor/editor',
                 });
 
                 // add a new undo action for the current element
-                //TODO: enable when addressing works
-                //undomgr.addUndo(undoOperation, redoOperation);
+                undomgr.addUndo(undoOperation, redoOperation);
+            }
+
+            if (! end) {  // end is optional
+                end = _.copy(start, true);
             }
 
             var // last index in the start position array
@@ -2869,6 +2908,10 @@ define('io.ox/office/editor/editor',
 
             if (family === null) {
                 Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
+            }
+
+            if (family === 'character') {
+                end[end.length - 1] += 1; // Switching from operation mode to range mode
             }
 
             // validate text offset
@@ -2970,7 +3013,6 @@ define('io.ox/office/editor/editor',
             } else {
                 position[position.length - 1] -= 1; // inserting table at the end
                 domPosition = Position.getDOMPosition(paragraphs, position);
-                Utils.warn('Editor.implInsertTable(): Creating new table after position: ' + position);
 
                 if (domPosition) {
                     domParagraph = domPosition.node;
@@ -3014,6 +3056,9 @@ define('io.ox/office/editor/editor',
                 var startPos = _.copy(position, true);
                 var endPos = _.copy(position, true);
                 endPos[posLength] = -1;
+                if (endPos[posLength] > 0) {
+                    endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
+                }
                 implDeleteText(startPos, endPos);
             }
             var startPosition = _.copy(position, true);
@@ -3021,6 +3066,9 @@ define('io.ox/office/editor/editor',
             startPosition[posLength] = 0;
             var endPosition = _.copy(position, true);
             endPosition[posLength - 1] = startPosition[posLength - 1];
+            if (endPosition[posLength] > 0) {
+                endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
+            }
             implDeleteText(startPosition, endPosition);
 
             implParagraphChanged(position);
@@ -3277,10 +3325,11 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implInsertRow(pos, count, insertdefaultcells, attrs) {
+        function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
-                setRowHeight = false;
+                setRowHeight = false,
+                useReferenceRow = _.isNumber(referencerow) ? true : false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3308,7 +3357,12 @@ define('io.ox/office/editor/editor',
                 tableRowNode = tableRowDomPos.node;
             }
 
-            if (insertdefaultcells) {
+            if (useReferenceRow) {
+
+                var refRowNode = $(table).children('tbody').children().get(referencerow),
+                row = $(refRowNode);
+
+            } else if (insertdefaultcells) {
 
                 var columnCount = $(table).data('columns'),
                     // prototype elements for row, cell, and paragraph
@@ -3340,8 +3394,14 @@ define('io.ox/office/editor/editor',
                 _.times(count, function () { $(table).append(row.clone(true)); });
             }
 
+            // removing content, if the row was cloned from a reference row
+            if (useReferenceRow) {
+                // iterating over all new cells and remove all paragraphs in the cells
+                implDeleteCellRange(tablePos, [referencerow + 1, 0], [referencerow + count, row.children().length - 1]);
+            }
+
             // Setting cursor
-            if (insertdefaultcells) {
+            if ((insertdefaultcells) || (useReferenceRow)) {
                 localPosition.push(0);
                 localPosition.push(0);
                 localPosition.push(0);
@@ -3545,6 +3605,10 @@ define('io.ox/office/editor/editor',
 
         function implDeleteText(startPosition, endPosition) {
 
+            if (! endPosition) {  // operation.end is optional
+                endPosition = _.copy(startPosition, true);
+            }
+
             var lastValue = startPosition.length - 1,
                 start = startPosition[lastValue],
                 end = endPosition[lastValue];
@@ -3552,6 +3616,8 @@ define('io.ox/office/editor/editor',
             if (end === -1) {
                 end = Position.getParagraphLength(paragraphs, startPosition);
             }
+
+            end += 1; // switching from operation mode to range mode
 
             if (start === end) {
                 return;
@@ -3642,7 +3708,7 @@ define('io.ox/office/editor/editor',
                     }
 
                     // there can be empty text spans before the destination node
-                    while (DOM.isTextSpan(destNode) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                    while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
                         destNode = destNode.previousSibling;
                     }
 

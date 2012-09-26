@@ -20,37 +20,38 @@ define('io.ox/office/editor/operations', [], function () {
     /**
      * The class Operations is used to define some global public constants.
      */
-    var Operations = {};
+    var Operations = {
 
-    Operations.OP_DELETE = 'delete';
-    Operations.OP_MOVE = 'move';
+        OP_DELETE: 'delete',
+        OP_MOVE: 'move',
 
-    Operations.OP_TEXT_INSERT = 'insertText';
-    Operations.OP_TEXT_DELETE = 'deleteText';
+        OP_TEXT_INSERT: 'insertText',
+        OP_TEXT_DELETE: 'deleteText',
 
-    Operations.OP_PARA_INSERT = 'insertParagraph';
-    Operations.OP_PARA_DELETE = 'deleteParagraph';
-    Operations.OP_PARA_SPLIT = 'splitParagraph';
-    Operations.OP_PARA_MERGE = 'mergeParagraph';
+        OP_PARA_INSERT: 'insertParagraph',
+        OP_PARA_DELETE: 'deleteParagraph',
+        OP_PARA_SPLIT: 'splitParagraph',
+        OP_PARA_MERGE: 'mergeParagraph',
 
-    Operations.OP_TABLE_INSERT = 'insertTable';
-    Operations.OP_TABLE_DELETE = 'deleteTable';
-    Operations.OP_CELLRANGE_DELETE = 'deleteCellRange';
-    Operations.OP_ROWS_DELETE = 'deleteRows';
-    Operations.OP_COLUMNS_DELETE = 'deleteColumns';
-    Operations.OP_ROW_COPY = 'copyRow';
-    Operations.OP_COLUMN_COPY = 'copyColumn';
-    Operations.OP_ROW_INSERT = 'insertRow';
-    Operations.OP_COLUMN_INSERT = 'insertColumn';
-    Operations.OP_CELL_INSERT = 'insertCell';
+        OP_TABLE_INSERT: 'insertTable',
+        OP_TABLE_DELETE: 'deleteTable',
+        OP_CELLRANGE_DELETE: 'deleteCellRange',
+        OP_ROWS_DELETE: 'deleteRows',
+        OP_COLUMNS_DELETE: 'deleteColumns',
+        OP_ROW_COPY: 'copyRow',
+        OP_COLUMN_COPY: 'copyColumn',
+        OP_ROW_INSERT: 'insertRow',
+        OP_COLUMN_INSERT: 'insertColumn',
+        OP_CELL_INSERT: 'insertCell',
 
-    Operations.OP_INSERT_STYLE = 'insertStylesheet';
-    Operations.OP_ATTRS_SET = 'setAttributes';
+        OP_INSERT_STYLE: 'insertStylesheet',
+        OP_ATTRS_SET: 'setAttributes',
 
-    Operations.OP_IMAGE_INSERT = 'insertImage';
-    Operations.OP_FIELD_INSERT = 'insertField';
-    // this.OP_ATTR_DELETE =  'deleteAttribute';
+        OP_IMAGE_INSERT: 'insertImage',
+        OP_FIELD_INSERT: 'insertField'
+        // OP_ATTR_DELETE:  'deleteAttribute'
+
+    };
 
     return Operations;
-
 });

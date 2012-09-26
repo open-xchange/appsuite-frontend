@@ -298,7 +298,7 @@ define('io.ox/office/editor/view',
         
         appWindow.nodes.main.addClass('io-ox-office-main').append(
             appWindow.nodes.toolPane = toolPane.getNode(),
-            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane')//,
+            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane')
         );
         if (debugavailable === true) {
             appWindow.nodes.main.addClass('io-ox-office-main').append(
@@ -326,14 +326,14 @@ define('io.ox/office/editor/view',
 
         // create the tool bars and drop-down menus
         toolPane.addMenu(new MenuBox(appWindow)
-                .addButton('action/download', { icon: 'icon-download',  label: gt('Download') })
-                .addButton('action/print',    { icon: 'icon-print',     label: gt('Print') }),
+                .addButton('action/download', { icon: 'icon-download', label: gt('Download') })
+                .addButton('action/print',    { icon: 'icon-print',    label: gt('Print') }),
             { label: gt('File') });
 
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
-            .addButton('image/insert/file',  { icon: 'icon-picture', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
             .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
@@ -381,11 +381,12 @@ define('io.ox/office/editor/view',
                 .addOptionButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
                 .end();
 
-        if (debugavailable === true)
+        if (debugavailable === true) {
             createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
-                .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') });
+            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+            .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+            .addButton('action/flush', { icon: 'icon-share-alt', label: gt('Flush') });
+        }
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
@@ -410,6 +411,38 @@ define('io.ox/office/editor/view',
 
         // update all view components
         controller.update();
+
+        // POC: image selection
+        editors.rich.getNode().on('click', 'img', function () {
+
+            var rootNode = editors.rich.getNode(),
+                rootOffset = rootNode.offset(),
+                imgNode = $(this),
+                imgOffset = imgNode.offset();
+
+            rootNode.find('div.selection').remove();
+            rootNode.append($('<div>', { contentEditable: false })
+                .addClass('selection')
+                .css({
+                    width: (imgNode.width() + 2) + 'px',
+                    height: (imgNode.height() + 2) + 'px',
+                    left: (imgOffset.left - rootOffset.left - 2) + 'px',
+                    top: (imgOffset.top - rootOffset.top - 2) + 'px'
+                }).append(
+                    $('<div>').addClass('handler tl'),
+                    $('<div>').addClass('handler t'),
+                    $('<div>').addClass('handler tr'),
+                    $('<div>').addClass('handler r'),
+                    $('<div>').addClass('handler br'),
+                    $('<div>').addClass('handler b'),
+                    $('<div>').addClass('handler bl'),
+                    $('<div>').addClass('handler l')
+                )
+            );
+        });
+        editors.rich.on('selectionChanged', function () {
+            editors.rich.getNode().find('div.selection').remove();
+        });
 
     } // class View
 
