@@ -216,7 +216,9 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                 id: 'default',
                 index: 100,
                 draw: function () {
-                    return $().add($.txt(' ')).add($('<button class="btn btn-inverse"><i class="icon-folder-open icon-white"></i></button>'));
+                    return $().add($.txt(' ')).add(
+                        $('<i class="icon-chevron-down folderview-toggle">')
+                    );
                 }
             });
 
@@ -261,8 +263,8 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             var container,
                 visible = false,
                 permanent = false,
-                top = 0,
-                fnChangeFolder, fnShow, togglePermanent,
+                top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
+                fnChangeFolder, fnHide, fnShow, togglePermanent,
                 fnToggle, toggle, loadTree, initTree,
                 name = app.getName(),
                 POINT = name + '/folderview';
@@ -318,8 +320,16 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                 }
             };
 
+            fnHide = function () {
+                app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
+                top = container.scrollTop();
+                container.hide();
+                visible = false;
+            };
+
             fnShow = function () {
                 if (!visible) {
+                    app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
                     container.show().scrollTop(top);
                     visible = true;
                 }
@@ -343,9 +353,7 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
 
             toggle = function (e) {
                 if (visible) {
-                    top = container.scrollTop();
-                    container.hide();
-                    visible = false;
+                    fnHide();
                     if (permanent || options.permanent) { togglePermanent(); }
                 } else {
                     fnShow();

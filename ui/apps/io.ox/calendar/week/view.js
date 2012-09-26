@@ -34,7 +34,7 @@ define('io.ox/calendar/week/view',
         fulltimeHeight: 19,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
-        overlap:        0.35,    // visual overlap of appointments [0.0 - 1.0]
+        overlap:        0.35,   // visual overlap of appointments [0.0 - 1.0]
         slots:          24,     // amount of shown time-slots
         workStart:      8,      // full hour for start position of working time marker
         workEnd:        18,     // full hour for end position of working time marker
@@ -623,7 +623,8 @@ define('io.ox/calendar/week/view',
             // init drag and resize widget on appointments
             var colWidth = $('.day:first').outerWidth(),
                 paneOffset = self.pane.children().first().width(),
-                lastDiff = 0;
+                paneHeight = self.height();
+
             $('.week-container .day>.appointment.modify')
                 .resizable({
                     handles: "n, s",
@@ -632,14 +633,25 @@ define('io.ox/calendar/week/view',
                     containment: "parent",
                     start: function (e, ui) {
                         self.lassoMode = false;
-                        $(this).addClass('opac').data('resizable').startPosition = Math.floor((e.pageX - paneOffset) / colWidth);
+                        var data = $(this).data('resizable');
+                        // set current day
+                        $.extend(data, {
+                            curHelper: $(this),
+                            all: $('[data-cid="' + ui.helper.data('cid') + '"]'),
+                            day: Math.floor((e.pageX - paneOffset) / colWidth)
+                        });
+                        data.firstPos = parseInt(data.all.first().closest('.day').attr('date'), 10);
+                        data.lastPos = parseInt(data.all.last().closest('.day').attr('date'), 10);
+                        data.lastHeight = data.all.last().height();
+                        data.startPos = data.day;
                     },
                     resize:  function (e, ui) {
-                        var el = $(this).css('zIndex', 999),
+                        var el = $(this),
                             data = el.data('resizable'),
-                            handle = 'n',
-                            dir = 'normal',
-                            day = Math.floor((e.pageX - paneOffset) / colWidth);
+                            handle = '',
+                            day = Math.floor((e.pageX - paneOffset) / colWidth),
+                            mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
+
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
                             handle = 'n';
@@ -647,33 +659,124 @@ define('io.ox/calendar/week/view',
                             handle = 's';
                         }
 
+                        // add new style
+                        data.all
+                            .addClass('opac')
+                            .css({
+                                left : 0,
+                                width: '100%',
+                                maxWidth: '100%',
+                                zIndex: 999
+                            });
+
                         // resize actions
-                        if (day === data.startPosition) {
-                            dir = 'normal';
-                            if (handle === 's') {
+                        if (day >= data.firstPos && handle === 's') {
+                            // right side
+                            mouseY = self.roundToGrid(mouseY, 's');
+                            // default move
+                            if (day !== data.startPos) {
                                 ui.position.top = ui.originalPosition.top;
+                                ui.size.height = (paneHeight - el.position().top);
                             }
-                        } else if (day > data.startPosition) {
-                            dir = 'recht';
-                            if (handle === 's') {
-                                ui.size.height = self.height() - ui.originalPosition.top;
-//                                var clone = el.clone();
-//                                clone.css('top', 0);
-//                                $('.day[date="' + day + '"]').append(clone);
+                            if (data.day === day && day !== data.startPos) {
+                                data.curHelper.height(function (i, h) {
+                                    return mouseY - $(this).position().top;
+                                });
+                            } else if (day < data.day) {
+                                // move left
+                                if (day >= data.lastPos) {
+                                    data.all.filter(':visible').last().remove();
+                                } else {
+                                    data.all.filter(':visible').last().hide();
+                                }
+                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                data.curHelper = data.all.filter(':visible').last();
+                                data.curHelper.css({
+                                    minHeight: 0,
+                                    maxHeight: paneHeight
+                                });
+                            } else if (day > data.day) {
+                                // move right
+                                if (day > data.lastPos) {
+                                    // set new helper
+                                    $('.week-container .day[date="' + day + '"]')
+                                        .append(data.curHelper = el.clone());
+                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                } else {
+                                    data.curHelper = data.all.filter(':hidden').first();
+                                }
+                                if (day > data.firstPos) {
+                                    data.all.filter(':visible').slice(0, -1).css({
+                                        height: 'auto',
+                                        bottom: 0
+                                    });
+                                    data.curHelper.show().css({
+                                        top: 0,
+                                        height: mouseY,
+                                        minHeight: 0
+                                    });
+                                }
                             }
-                        } else if (day < data.startPosition) {
-                            dir = 'left';
-                            if (handle === 'n') {
-                                ui.size.height = ui.originalPosition.top + ui.originalSize.height;
+                        } else if (day <= data.lastPos && handle === 'n') {
+                            // left side
+                            mouseY = self.roundToGrid(mouseY, 'n');
+                            if (day !== data.startPos) {
+                                ui.size.height = paneHeight;
                                 ui.position.top = 0;
                             }
+                            if (data.day === day && day !== data.startPos) {
+                                // default move
+                                data.curHelper.css({
+                                    top: mouseY,
+                                    height: (day === data.lastPos ? data.lastHeight : paneHeight) - mouseY
+                                });
+                            } else if (day > data.day) {
+                                // move right
+                                if (day < data.startPos) {
+                                    data.all.filter(':visible').first().remove();
+                                } else {
+                                    // if original element - do not remove
+                                    data.all.filter(':visible').first().hide();
+                                }
+                                // update dataset
+                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                data.curHelper = data.all.filter(':visible').first();
+                            } else if (day < data.day) {
+                                // move left
+                                if (day < data.firstPos) {
+                                    // add new helper
+                                    $('.week-container .day[date="' + day + '"]')
+                                        .append(data.curHelper = el.clone().addClass('opac'));
+                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+
+                                } else {
+                                    data.curHelper = data.all.filter(':hidden').last();
+                                }
+                                if (day < data.lastPos) {
+                                    data.all.filter(':visible').slice(0, -1).css({
+                                        top: 0,
+                                        height: paneHeight
+                                    }).end().last().height(function (i, h) {
+                                        return $(this).position().top + h;
+                                    }).css({top: 0});
+                                    data.curHelper.show().css({
+                                        top: mouseY,
+                                        height: paneHeight - mouseY
+                                    });
+                                }
+                                // update dataset
+                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                            }
                         }
-//                        console.log(dir, day, data, handle);
+                        // update day
+                        data.day = day;
                     },
                     stop: function (e, ui) {
-                        var el = $(this).removeClass('opac'),
+                        var el = $(this),
+                            data = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
                             tmpTS = self.getTimeFromDateTag($(this).parent().attr('date'), true) + self.getTimeFromPos(el.position().top);
+                        data.all.removeClass('opac');
                         if (ui.position.top !== ui.originalPosition.top) {
                             _.extend(app, {
                                 start_date: tmpTS,
@@ -685,8 +788,8 @@ define('io.ox/calendar/week/view',
                                 ignore_conflicts: true
                             });
                         }
-                        el.busy();
-                        self.onUpdateAppointment(app);
+                        //el.busy();
+                        //self.onUpdateAppointment(app);
                         self.lassoMode = true;
                     }
                 })
@@ -701,12 +804,14 @@ define('io.ox/calendar/week/view',
                         data.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
                             .addClass('opac')
                             .css({
+                                left : 0,
                                 width: '100%',
                                 maxWidth: '100%',
                                 zIndex: 999
                             });
                         data.firstPos = data.all.first().position().top;
                         data.lastHeight = data.all.last().height();
+                        data.lastDiff = 0;
                         // last element
                         if (data.all.length > 1 && this === data.all.last()[0]) {
                             data.options.axis = 'x';
@@ -720,18 +825,18 @@ define('io.ox/calendar/week/view',
                         // handling on multi-drag
                         if (data.all.length > 1) {
                             var diff = data.position.top - data.originalPosition.top;
-                            if (lastDiff !== diff) {
+                            if (data.lastDiff !== diff) {
                                 // first or last element
                                 if (this === data.all.last()[0] || this === data.all.first()[0]) {
-                                    var dir = lastDiff - diff;
+                                    var dir = data.lastDiff - diff;
                                     // last element
                                     if (this === data.all.last()[0]) {
                                         var t = data.all.first().position().top - dir;
                                         if (t <= 0) {
                                             t = 0;
                                         }
-                                        if (t >= self.height()) {
-                                            t = self.height();
+                                        if (t >= paneHeight) {
+                                            t = paneHeight;
                                         }
                                         data.all.first().css('top', t);
                                     }
@@ -741,8 +846,8 @@ define('io.ox/calendar/week/view',
                                             $(this).css('minHeight', 0);
                                             return 0;
                                         }
-                                        if (h > self.height()) {
-                                            return self.height();
+                                        if (h > paneHeight) {
+                                            return paneHeight;
                                         }
                                         return h;
                                     });
@@ -752,12 +857,12 @@ define('io.ox/calendar/week/view',
                                             $(this).css('minHeight', 0);
                                             return 0;
                                         }
-                                        if (h > self.height()) {
-                                            return self.height();
+                                        if (h > paneHeight) {
+                                            return paneHeight;
                                         }
                                         return h;
                                     });
-                                    lastDiff = diff;
+                                    data.lastDiff = diff;
                                 } else {
                                     data.position.top = data.originalPosition.top;
                                 }

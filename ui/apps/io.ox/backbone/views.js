@@ -25,12 +25,13 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         
         this.extend = function (options, extOptions) {
             
+            var id = options.id;
+            delete options.id;
+            
+            
             // A few overridable default implementations
             options.initialize = options.initialize || function () {
                 var self = this;
-                
-                
-                
                 
                 if (this.update) {
                     self.observeModel('change', function () {
@@ -53,6 +54,12 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                         });
                     });
                 }
+                
+                this.$el.attr({
+                    'data-extension-id': extOptions.id || id,
+                    'data-extension-point': name,
+                    'data-composite-id': this.model.getCompositeId()
+                });
                 
                 if (options.init) {
                     options.init.apply(this, $.makeArray(arguments));
@@ -81,7 +88,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             extOptions = extOptions || {};
             
             this.basicExtend(_.extend({}, {
-                id: options.id,
+                id: id,
                 index: options.index,
                 draw: function (options) {
                     var view = new ViewClass(options);
@@ -97,11 +104,15 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             var point = views.point(name + "/" + subpath),
                 ViewClass = point.createView(options);
             
-            options.id = options.id || name + "/" + subpath;
+            var id = options.id || name + "/" + subpath;
+            
+            if (options.id) {
+                delete options.id;
+            }
             
             extOptions = extOptions || {};
             this.basicExtend(_.extend({}, {
-                id: options.id,
+                id: id,
                 index: options.index,
                 draw: function (options) {
                     var view = new ViewClass(options);
@@ -115,6 +126,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
         
         this.createView = function (options) {
+            var id = options.id;
+            delete options.id;
+            
             options.render = options.render || function () {
                 this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model, parentView: this}]));
                 return this;

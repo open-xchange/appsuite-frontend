@@ -309,6 +309,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "1035": "pop3_storage ",
             "1036": "pop3_path",
             "1037": "personal"
+        },
+        "attachment": {
+            "1": "id",
+            "2": "created_by",
+            "4": "creation_date",
+            "800": "folder",
+            "801": "attached",
+            "802": "module",
+            "803": "filename",
+            "804": "file_size",
+            "805": "file_mimetype",
+            "806": "rtf_flag"
         }
     };
 

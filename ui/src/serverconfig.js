@@ -3,10 +3,10 @@ define(function () {
 
     return {
 
-        pageTitle: 'OX Suite 7. ',
+        pageTitle: 'OX App Suite 7. ',
 
         pageHeaderPrefix: 'open xchange',
-        pageHeader: 'Suite 7',
+        pageHeader: 'Ooh-eX Äpp Sweet 7teen',
 
         productNameMail: 'OX Mail',
 
@@ -35,7 +35,7 @@ define(function () {
             portal: ['appointments', 'linkedIn', 'mail', 'rss', 'facebook', 'twitter', 'tumblr', 'flickr', 'reddit', 'dummy', 'tasks', 'quota'],
             notifications: ['calendar', 'mail', 'tasks'],
             tests: ["io.ox/mail/write", "plugins/halo", "io.ox/contacts", "io.ox/contacts/edit", "io.ox/contacts/distrib",
-                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email", "io.ox/settings"]
+                    "io.ox/core", "io.ox/files/tests/interface", "io.ox/files/tests/unit", "io.ox/settings/accounts/email", "io.ox/settings", 'io.ox/backbone/tests']
         },
 
         portalPluginEditable: ['reddit', 'flickr', 'tumblr'],
