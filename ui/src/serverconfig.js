@@ -3,10 +3,10 @@ define(function () {
 
     return {
 
-        pageTitle: 'OX Suite 7. ',
+        pageTitle: 'OX App Suite 7. ',
 
         pageHeaderPrefix: 'open xchange',
-        pageHeader: 'Suite 7',
+        pageHeader: 'Ooh-eX Äpp Sweet 7teen',
 
         productNameMail: 'OX Mail',
 
