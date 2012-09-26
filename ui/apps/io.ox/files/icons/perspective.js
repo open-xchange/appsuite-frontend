@@ -26,6 +26,11 @@ define('io.ox/files/icons/perspective',
 
     'use strict';
 
+    ext.point('io.ox/mail/icons/options').extend({
+        fileIconWidth: 176,
+        fileIconHeight: 149
+    });
+
     ext.point('io.ox/files/icons').extend({
         id: 'breadcrumb',
         index: 100,
@@ -64,8 +69,8 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             var file = baton.data,
                 img = $('<img>', { alt: file.title });
-            this.addClass('file-icon pull-left').attr('data-obj-id', file.id);
-            if ((/^((?!\._?).)*\.(gif|jpg|jpeg|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+            this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
+            if ((/^((?!\._?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
                 img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy');
             } else {
                 img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
@@ -77,12 +82,18 @@ define('io.ox/files/icons/perspective',
         }
     });
 
-    return _.extend(new ox.ui.Perspective('icons'), {
+    function iconClick(popup, e, target) {
+        var cid = target.attr('data-cid');
+        api.get(_.cid(cid)).done(function (file) {
+            popup.append(viewDetail.draw(file).element);
+        });
+    }
 
-        dialog: $(),
+    return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
 
+            var options = ext.point('io.ox/mail/icons/options').options();
             var that = this,
                 mode = false,
                 win = app.getWindow(),
@@ -102,7 +113,9 @@ define('io.ox/files/icons/perspective',
                 fileIconHeight = 149,
                 fileIconWidth = 176,
 
-                baton = new ext.Baton({ app: app });
+                baton = new ext.Baton({ app: app }),
+
+                dialog = new dialogs.SidePopup();
 
             this.main.append(
                 $('<div class="files-iconview">').append(iconview)
@@ -111,20 +124,7 @@ define('io.ox/files/icons/perspective',
             var filesIconviewHeight = iconview.parent().height() - 26;
             var filesIconviewWidth = iconview.parent().width() - 26;
 
-            iconview.on('click', '.file-icon', function (data) {
-                var currentTarget = $(data.currentTarget).attr('data-obj-id');
-                if (currentDetailViewTarget !== currentTarget) {
-                    that.dialog.show(data, function (popup, e, target) {
-                        currentDetailViewTarget = currentTarget;
-                        api.get({ id: currentTarget }).done(function (file) {
-                            var currentDetailView = viewDetail.draw(file);
-                            popup.append(currentDetailView.element);
-                        });
-                    });
-                } else {
-                    currentDetailViewTarget = null;
-                }
-            });
+            dialog.delegate(iconview, '.file-icon', iconClick);
 
             loadAll = function () {
                 var deferred = new $.Deferred();
@@ -156,22 +156,15 @@ define('io.ox/files/icons/perspective',
                 });
             };
 
-            var loadingResults;
-
             redraw = function (ids) {
-
                 drawIcons(ids).done(function () {
-                    var $p = $('.files-scrollable-pane');
-                    var $o = $('.files-iconview');
-                    $o.on('scroll', function (event) {
-                        if ($p[0].scrollHeight - $o.scrollTop() === $o.outerHeight()) {
-                            if (!loadingResults) {
-                                $o.off('scroll');
-                                start = end;
-                                end = end + cols;
-                                displayedRows = displayedRows + 1;
-                                redraw(allIds.slice(start, end));
-                            }
+                    $('.files-iconview').on('scroll', function (event) {
+                        if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
+                            $(this).off('scroll');
+                            start = end;
+                            end = end + cols;
+                            displayedRows = displayedRows + 1;
+                            redraw(allIds.slice(start, end));
                         }
                     });
                 });
@@ -182,6 +175,8 @@ define('io.ox/files/icons/perspective',
                 iconview.empty().busy();
 
                 // call extensions
+
+
                 ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
                 iconContainer = baton.$.iconContainer;
 
@@ -257,7 +252,6 @@ define('io.ox/files/icons/perspective',
                 that.draw(app);
             });
 
-            this.dialog = new dialogs.SidePopup();
             this.draw(app);
         }
     });
