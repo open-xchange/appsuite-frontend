@@ -739,9 +739,9 @@ define("io.ox/mail/api",
 
         $(form).submit();
 
-        window.callback_new = function (newMailId) {
+        window.callback_new = function (response) {
             $('#' + tmpName).remove();
-            deferred.resolve(newMailId);
+            deferred[(response && response.error ? 'reject' : 'resolve')](response);
             window.callback_new = null;
         };
     }
