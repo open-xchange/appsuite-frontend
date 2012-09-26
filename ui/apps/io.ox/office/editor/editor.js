@@ -622,24 +622,30 @@ define('io.ox/office/editor/editor',
         };
 
         this.deleteColumns = function () {
+
             var selection = getSelection(),
-                start = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
-                end = start,
-                position = _.copy(selection.startPaM.oxoPosition, true);
+                position = _.copy(selection.startPaM.oxoPosition, true),
+                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
+                tableNode = Position.getDOMPosition(paragraphs, tablePos).node,
+                maxGrid = $(tableNode).children('colgroup').children('col').length - 1,
+                rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
+                startColIndex = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
+                endColIndex = startColIndex,
+                startGrid = Table.getGridPositionFromCellPosition(rowNode, startColIndex),
+                endGrid = startGrid;
 
             if (selection.hasRange()) {
-                end = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
+                endColIndex = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
+                endGrid = Table.getGridPositionFromCellPosition(rowNode, endColIndex);
             }
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
-                lastColumn = Position.getLastColumnIndexInTable(paragraphs, position),
-                isCompleteTable = ((start === 0) && (end === lastColumn)) ? true : false,
+            var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
                 newOperation;
 
             if (isCompleteTable) {
                 newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                newOperation = { name: Operations.OP_COLUMNS_DELETE, position: tablePos, start: start, end: end };
+                newOperation = { name: Operations.OP_COLUMNS_DELETE, position: tablePos, start: startGrid, end: endGrid };
             }
 
             applyOperation(newOperation, true, true);
@@ -669,11 +675,12 @@ define('io.ox/office/editor/editor',
 
         this.insertColumn = function () {
             var selection = getSelection(),
-                start = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
+                cellPosition = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
                 position = _.copy(selection.endPaM.oxoPosition, true),
                 tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
+                rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 insertmode = 'behind',
-                gridPosition = start, // simplification, valid only if colspan === 1 for each cell
+                gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition),
                 tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
             var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
@@ -3463,34 +3470,49 @@ define('io.ox/office/editor/editor',
 //            lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implDeleteColumns(pos, startCol, endCol) {
+        function implDeleteColumns(pos, startGrid, endGrid) {
 
-            var localPosition = _.copy(pos, true),
-                lastRow = Position.getLastRowIndexInTable(paragraphs, localPosition);
+            var localPosition = _.copy(pos, true);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
             }
 
-            // iterating over all cells and remove all paragraphs in the cells
-            implDeleteCellRange(localPosition, [0, startCol], [lastRow, endCol]);
-
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
                 allRows = $(table).children('tbody').children(),
-                allCols = $(table).children('colgroup').children();
+                allCols = $(table).children('colgroup').children(),
+                endColInFirstRow = -1;
 
-            allCols.slice(startCol, endCol + 1).remove();  // updating cols in colgroup
+            allCols.slice(startGrid, endGrid + 1).remove();  // updating cols in colgroup
 
             allRows.each(
-                function (i, elem) {
-                    $(elem).children().slice(startCol, endCol + 1).remove();
+                function (i, row) {
+                    var startCol = Table.getCellPositionFromGridPosition(row, startGrid, false),
+                        endCol = Table.getCellPositionFromGridPosition(row, endGrid, false);
+
+                    if ((i === 0) && (endCol !== -1)) {
+                        endColInFirstRow = endCol;
+                    }
+
+                    if (startCol !== -1) {  // do nothing if startCol is out of range for this row
+
+                        if (endCol === -1) {
+                            $(row).children().slice(startCol).remove(); // removing all following cells
+                        } else {
+                            $(row).children().slice(startCol, endCol + 1).remove();
+                        }
+                        // removing empty rows implicitely
+                        if ($(row).children().length === 0) {
+                            $(row).remove();
+                        }
+                    }
                 }
             );
 
             allCols = $(table).children('colgroup').children(); // update allCols selection
 
             var tablegrid = $(table).data('grid');
-            tablegrid.splice(startCol, endCol - startCol + 1);  // removing column(s) in tablegrid
+            tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid
 
             var tableWidth = 0;
 
@@ -3509,11 +3531,11 @@ define('io.ox/office/editor/editor',
             } else {
                 // Setting cursor
                 var lastColInFirstRow = $(table).children('tbody').children().first().children().length - 1;
-                if (endCol > lastColInFirstRow) {
-                    endCol = lastColInFirstRow;
+                if ((endColInFirstRow > lastColInFirstRow) || (endColInFirstRow === -1)) {
+                    endColInFirstRow = lastColInFirstRow;
                 }
                 localPosition.push(0);
-                localPosition.push(endCol);
+                localPosition.push(endColInFirstRow);
                 localPosition.push(0);
                 localPosition.push(0);
             }
@@ -3571,12 +3593,13 @@ define('io.ox/office/editor/editor',
             validateParagraphNode(paragraph);
 
             allRows.each(
-                function (i, elem) {
-                    var cellClone = cell.clone(true);
+                function (i, row) {
+                    var cellClone = cell.clone(true),
+                        cellPosition = Table.getCellPositionFromGridPosition(row, gridposition);
                     if (insertmode === 'behind') {
-                        cellClone.insertAfter($(elem).children().get(gridposition));
+                        cellClone.insertAfter($(row).children().get(cellPosition));
                     } else {
-                        cellClone.insertBefore($(elem).children().get(gridposition));
+                        cellClone.insertBefore($(row).children().get(cellPosition));
                     }
                 }
             );
