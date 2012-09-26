@@ -21,9 +21,11 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/menubox',
+     'io.ox/office/tk/config',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, LineHeight, gt) {
+
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, Config, LineHeight, gt) {
 
     'use strict';
 
@@ -292,27 +294,35 @@ define('io.ox/office/editor/view',
         // initialization -----------------------------------------------------
 
         // create the tool panes and append them to the window main node
+        var debugavailable = Config.isDebugAvailable();
+        
         appWindow.nodes.main.addClass('io-ox-office-main').append(
             appWindow.nodes.toolPane = toolPane.getNode(),
-            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane'),
-            appWindow.nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug')
+            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane')//,
         );
+        if (debugavailable === true) {
+            appWindow.nodes.main.addClass('io-ox-office-main').append(
+                    appWindow.nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug')
+                    );
+        }
 
         // insert editor into the app pane
         appWindow.nodes.appPane.append(editors.rich.getNode());
 
-        // table element containing the debug mode elements
-        appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
-            $('<colgroup>').append(
-                $('<col>', { width: '50%' }),
-                $('<col>', { width: '50%' })
-            ),
-            $('<tr>').append(
-                // add plain-text editor and operations output console to debug table
-                $('<td>').append(editors.plain.getNode()),
-                $('<td>').append(editors.output.getNode())
-            )
-        ));
+        if (debugavailable === true) {
+            // table element containing the debug mode elements
+            appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
+                $('<colgroup>').append(
+                    $('<col>', { width: '50%' }),
+                    $('<col>', { width: '50%' })
+                ),
+                $('<tr>').append(
+                    // add plain-text editor and operations output console to debug table
+                    $('<td>').append(editors.plain.getNode()),
+                    $('<td>').append(editors.output.getNode())
+                )
+            ));
+        }
 
         // create the tool bars and drop-down menus
         toolPane.addMenu(new MenuBox(appWindow)
@@ -371,10 +381,11 @@ define('io.ox/office/editor/view',
                 .addOptionButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
                 .end();
 
-        createToolBar('debug', { label: gt('Debug') })
-            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
-            .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true })
-            .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') });
+        if (debugavailable === true)
+            createToolBar('debug', { label: gt('Debug') })
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode', toggle: true })
+                .addButton('debug/sync', { icon: 'icon-refresh', tooltip: 'Synchronize With Backend', toggle: true })
+                .addButton('action/flush',    { icon: 'icon-share-alt', label: gt('Flush') });
 
         // make the format tool bar visible
         toolPane.showToolBar('format');
