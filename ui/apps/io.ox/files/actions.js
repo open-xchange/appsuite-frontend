@@ -89,7 +89,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/download', {
         id: 'download',
         requires: 'some',
-        action: function (list) {
+        multiple: function (list) {
             // loop over list, get full file object and trigger downloads
             _(list).each(function (o) {
                 api.get(o).done(function (file) {
@@ -218,7 +218,7 @@ define("io.ox/files/actions",
         index: 100,
         id: "upload",
         label: gt("Upload"),
-        cssClasses: 'btn btn-primary',
+        cssClasses: 'btn',
         ref: "io.ox/files/actions/upload"
     }));
 

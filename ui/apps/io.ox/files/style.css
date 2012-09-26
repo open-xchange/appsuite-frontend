@@ -32,82 +32,49 @@
 
 .files-iconview {
 
-    @innerHeight:   90px;
-    @innerWidth:    128px;
-    @outerHeight:   128px;
+    @innerHeight:   110px;
     @outerWidth:    138px;
 
-    position:absolute;
-    overflow:auto;
-    top:0;
-    left:0;
-    right:0;
-    bottom:0;
-    min-height:100px;
-
-    .vertical-gradient(#828282, #333333);
+    position: absolute;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 100px;
 
     .file-icon {
-        position:relative;
-        height:@outerHeight;
-        width:@outerWidth;
-        max-height:@outerHeight;
-        max-width:@outerWidth;
-        margin-right:30px;
-        margin-bottom:13px;
-
+        
+        width: @outerWidth;
+        margin: 0 30px 13px 0;
+    
         .wrap {
-            position:relative;
-            height:@innerHeight;
-            width:@outerWidth;
-            max-height:@innerHeight;
-            max-width:@outerWidth;
-
+            
+            width: @outerWidth;
+            height: @innerHeight;
+            display: table-cell;
+            text-align: center;
+            vertical-align: bottom;
+        
             img {
-                position:absolute;
-                bottom:0;
-                top: auto;
-                left: 0;
-                right: 0;
-                margin: 0 auto 0 auto;
+                max-height: @innerHeight; // till backend fix
             }
 
             img.file-generic {
-                opacity:0.2;
+                opacity: 0.15;
             }
         }
 
         .title {
-            text-align:center;
-            position:absolute;
-            bottom:0;
-            word-wrap:break-word;
-            width:@innerWidth;
-            max-width:@innerWidth;
-            vertical-align:top;
-            height:37px;
-            display:block;
-            font-size:14px;
-            text-shadow: 0 0 3px black;
-            color: white;
+            text-align: center;
+            word-wrap: break-word;
+            height: 2.5em;
+            font-size: 14px;
+            line-height: 1.25em;
+            text-shadow: 0px 1px 2px #CCC
+            color: black;
+            margin: 0.5em 0 0.5em 0;
         }
-    }
-    
-    .breadcrumb {
-        background-color: rgba(0, 0, 0, 0.10);
-        margin-bottom: 2em;
-    }
-
-    .breadcrumb li {
-        text-shadow: none;
-    }
-    
-    .breadcrumb .divider {
-        color: #888;
-    }
-    
-    .breadcrumb a {
-        color: @link-on-dark;
     }
     
     h4.search-query {
