@@ -155,6 +155,47 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     }());
 
     /**
+     * Converts a length value from an absolute CSS measurement unit into 1/100
+     * of millimeters.
+     *
+     * @param {Number} value
+     *  The length value to convert, as floating-point number.
+     *
+     * @param {String} fromUnit
+     *  The CSS measurement unit of the passed value, as string. See method
+     *  Utils.convertLength() for a list of supported units.
+     *
+     * @returns {Number}
+     *  The length value converted to 1/100 of millimeters, as integer.
+     */
+    Utils.convertLengthToHmm = function (value, fromUnit) {
+        return Math.round(Utils.convertLength(value, fromUnit, 'mm') * 100);
+    };
+
+    /**
+     * Converts a length value from 1/100 of millimeters into an absolute CSS
+     * measurement unit.
+     *
+     * @param {Number} value
+     *  The length value in 1/100 of millimeters to convert, as integer.
+     *
+     * @param {String} toUnit
+     *  The target measurement unit. See method Utils.convertLength() for a
+     *  list of supported units.
+     *
+     * @param {Number} [digits]
+     *  If specified, the number of digits after the decimal point to round the
+     *  result to.
+     *
+     * @returns {Number}
+     *  The length value converted to the target measurement unit, as
+     *  floating-point number.
+     */
+    Utils.convertHmmToLength = function (value, toUnit, digits) {
+        return Utils.convertLength(value / 100, 'mm', toUnit, digits);
+    };
+
+    /**
      * Converts a CSS length value with measurement unit into a value of
      * another absolute CSS measurement unit.
      *
@@ -182,6 +223,43 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             value = Utils.convertLength(value, valueAndUnit.substr(-2), toUnit, digits);
         }
         return value;
+    };
+
+    /**
+     * Converts a CSS length value with measurement unit into 1/100 of
+     * millimeters.
+     *
+     * @param {String} valueAndUnit
+     *  The value with its measurement unit to be converted, as string.
+     *
+     * @returns {Number}
+     *  The length value converted to 1/100 of millimeters, as integer.
+     */
+    Utils.convertCssLengthToHmm = function (valueAndUnit) {
+        return Math.round(Utils.convertCssLength(valueAndUnit, 'mm') * 100);
+    };
+
+    /**
+     * Converts a length value from 1/100 of millimeters into an absolute CSS
+     * measurement unit and returns the CSS length with its unit as string.
+     *
+     * @param {Number} value
+     *  The length value in 1/100 of millimeters to convert, as integer.
+     *
+     * @param {String} toUnit
+     *  The target measurement unit. See method Utils.convertLength() for a
+     *  list of supported units.
+     *
+     * @param {Number} [digits]
+     *  If specified, the number of digits after the decimal point to round the
+     *  result to.
+     *
+     * @returns {String}
+     *  The length value converted to the target measurement unit, followed by
+     *  the unit name.
+     */
+    Utils.convertHmmToCssLength = function (value, toUnit, digits) {
+        return Utils.convertHmmToLength(value, toUnit, digits) + toUnit;
     };
 
     /**

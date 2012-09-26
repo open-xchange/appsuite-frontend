@@ -22,12 +22,29 @@ define('io.ox/office/editor/format/imagestyles',
     var // definitions for image attributes
         definitions = {
 
+            /**
+             * Width of the image, as number in 1/100 mm. If set to the value
+             * 0, will be changed to the CSS attribute 'auto' (original width).
+             */
             width: {
-                def: 0
+                def: 0,
+                set: function (element, width) {
+                    width = (width > 0) ? Utils.convertHmmToCssLength(width, 'px', 0) : 'auto';
+                    element.css('width', width);
+                }
             },
 
+            /**
+             * Height of the image, as number in 1/100 mm. If set to the value
+             * 0, will be changed to the CSS attribute 'auto' (original
+             * height).
+             */
             height: {
-                def: 0
+                def: 0,
+                set: function (element, height) {
+                    height = (height > 0) ? Utils.convertHmmToCssLength(height, 'px', 0) : 'auto';
+                    element.css('height', height);
+                }
             },
 
             marginT: {

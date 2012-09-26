@@ -738,7 +738,7 @@ define('io.ox/office/editor/editor',
                     width = null;
 
                 if (domPos) {
-                    width = Utils.roundDigits(Utils.convertLength(domPos.node.offsetWidth, 'px', 'mm', 2) * 100 / size.width, 1);
+                    width = Utils.roundDigits(Utils.convertLengthToHmm(domPos.node.offsetWidth, 'px') / size.width, 1);
                 } else {
                     width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
                 }
