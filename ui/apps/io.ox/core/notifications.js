@@ -32,9 +32,9 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
         },
         setNotifier: function (b) {
             if (b) {
-                this.$el.addClass('badge-important');
+                this.$el.addClass('badge-info');
             } else {
-                this.$el.removeClass('badge-important');
+                this.$el.removeClass('badge-info');
             }
         },
         setCount: function (count) {

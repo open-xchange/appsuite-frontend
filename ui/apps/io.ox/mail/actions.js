@@ -483,7 +483,7 @@ define('io.ox/mail/actions',
         index: 100,
         id: 'compose',
         label: gt('Compose new mail'),
-        cssClasses: 'btn btn-primary',
+        cssClasses: 'btn',
         ref: 'io.ox/mail/actions/compose'
     }));
 
