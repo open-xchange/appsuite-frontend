@@ -65,13 +65,17 @@ define('io.ox/files/icons/perspective',
         }
     });
 
+    function iconError() {
+        $(this).closest('.file-icon').remove();
+    }
+
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
                 img = $('<img>', { alt: file.title });
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^((?!\._?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy');
+                img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy').on('error', iconError);
             } else {
                 img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
             }
