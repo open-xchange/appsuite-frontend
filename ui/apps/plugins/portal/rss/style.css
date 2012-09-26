@@ -39,6 +39,13 @@
 .io-ox-portal-rss-feedname {
     font-weight: 500;
 }
-.io-ox-portal-rss-feedurl {
+.io-ox-portal-rss-feedurl{
     margin: 0 .5em;
+}
+
+.io-ox-portal-rss-settings-feedgroup strong {
+    margin-right: .5em;
+}
+.io-ox-portal-rss-settings-feedgroup i, .io-ox-portal-rss-settings-members i {
+    margin: 0 .1em;
 }
