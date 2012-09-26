@@ -172,8 +172,7 @@ define('io.ox/calendar/edit/view-main',
         className: 'io-ox-calendar-edit container',
         subviews: {},
         events: {
-            'click .save': 'onSave',
-            'click .sendmail' : 'onSendMail'
+            'click .save': 'onSave'
         },
         initialize: function () {
             var self = this;
@@ -368,20 +367,6 @@ define('io.ox/calendar/edit/view-main',
                 return true;
             });
             this.model.set('participants', participants);
-        },
-        onSendMail: function () {
-            var participants = this.model.get('participants');
-            var def = $.Deferred();
-            util.createArrayOfRecipients(participants, def);
-
-            def.done(function (arrayOfRecipients) {
-                require(['io.ox/mail/write/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.compose({to: arrayOfRecipients});
-
-                    });
-                });
-            });
         }
     });
 

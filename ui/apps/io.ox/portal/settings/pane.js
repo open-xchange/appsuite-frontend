@@ -127,7 +127,6 @@ define('io.ox/portal/settings/pane',
             },
             render: function () {
                 var self = this;
-
                 self.$el.empty().append(self.template({
                     id: this.model.get('id'),
                     strings: staticStrings
@@ -267,7 +266,6 @@ define('io.ox/portal/settings/pane',
                 },
                 onShowProperties: function (e) {
                     var $sel = this.$el.find('[selected]');
-
                     e.data = {id: $sel.data('id'), node: this.el};
                     e.target = $sel;
 
