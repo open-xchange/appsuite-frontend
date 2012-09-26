@@ -711,7 +711,7 @@ define("io.ox/core/desktop",
                 this.id = id;
                 this.name = name;
                 this.nodes = { title: $(), toolbar: $(), controls: $() };
-                this.search = { query: "" };
+                this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = true;
@@ -1170,6 +1170,7 @@ define("io.ox/core/desktop",
                                 e.stopPropagation();
                                 if (e.which === 27) {
                                     $(this).val('');
+                                    win.search.active = false;
                                     win.trigger("cancel-search", lastQuery = '');
                                 }
                             },
@@ -1177,17 +1178,20 @@ define("io.ox/core/desktop",
                                 e.stopPropagation();
                                 if ($(this).val() === "") {
                                     $(this).blur();
+                                    win.search.active = false;
                                 }
                             },
                             change: function (e) {
                                 e.stopPropagation();
                                 win.search.query = $(this).val();
                                 // trigger search?
-                                if (win.search.query !== "") {
+                                if (win.search.query !== '') {
+                                    win.search.active = true;
                                     if (win.search.query !== lastQuery) {
                                         triggerSearch(lastQuery = win.search.query);
                                     }
                                 } else if (lastQuery !== "") {
+                                    win.search.active = false;
                                     win.trigger("cancel-search", lastQuery = "");
                                 }
                             }
