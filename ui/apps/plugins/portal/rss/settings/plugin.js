@@ -16,9 +16,8 @@ define('plugins/portal/rss/settings/plugin',
         'io.ox/core/tk/dialogs',
         'settings!io.ox/rss',
         'gettext!io.ox/rss',
-        'text!plugins/portal/rss/settings/tpl/feeds.html',
         'text!plugins/portal/rss/settings/tpl/pluginsettings.html'
-        ], function (ext, dialogs, settings, gt, blogSelectTemplate, pluginSettingsTemplate) {
+        ], function (ext, dialogs, settings, gt, pluginSettingsTemplate) {
 
     'use strict';
 
@@ -33,46 +32,58 @@ define('plugins/portal/rss/settings/plugin',
             DELETE_GROUP: gt('Delete group')
         },
 
-        FeedGroupSelectView = Backbone.View.extend({
+        FeedGroupView = Backbone.View.extend({
             _modelBinder: undefined,
             initialize: function (options) {
-                this.template = doT.template(blogSelectTemplate);
                 this._modelBinder = new Backbone.ModelBinder();
             },
             render: function () {
-                var self = this;
-                var groupname = self.model.attributes.groupname;
+                var self = this,
+                    groupname = self.model.attributes.groupname,
+                    members = self.model.attributes.members,
+                    id = 'rss-feedgroup-' + groupname.replace(/[^A-Za-z0-9]/g, '_');
 
-                self.$el.empty().append(self.template({
-                    url: "Ze örl",
-                    description: groupname,
-                    strings: staticStrings
-                }));
+                self.$el.empty().append(
+                    $('<div>').attr({'class': 'sortable-item listbox-item enabled', id: id}).append(
+                        $('<strong>').text(groupname),
+                        $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-group', title: staticStrings.EDIT_GROUP}),
+                        $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-group', title: staticStrings.DELETE_GROUP})
+                    ),
+                    $('<div class="io-ox-portal-rss-settings-members">').append(_(members).map(function (member) {
+                        return $('<div>').attr({'class': 'io-ox-portal-rss-settings-member sortable-item', 'id': 'rss-feed-' + member.feedname.replace(/[^A-Za-z0-9]/g, '_')}).append(
+                            $('<span class="io-ox-portal-rss-feedurl">').text(member.url),
+                            $('<i>').attr({'class': 'icon-edit', 'data-action': 'edit-feed', title: staticStrings.EDIT_FEED}),
+                            $('<i>').attr({'class': 'icon-remove', 'data-action': 'del-feed', title: staticStrings.DELETE_FEED})
+                        );
+                    }))
+                );
 
                 // Used by jquery ui sortable
-                self.$el.attr('id', groupname.replace(/[^a-z0-9]/g, '_'));
+                self.$el.attr('id', id);
 
                 var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
                 self._modelBinder.bind(self.model, self.el, defaultBindings);
-                
-//                this.$el.find('.io-ox-portal-rss-settings-members').append('<h1>PEEEENIS</h1>');
 
                 return self;
             },
             events: {
                 'click .sortable-item': 'onSelect'
             },
-            onSelect: function () {
-                this.$el.parent().find('div[selected="selected"]').attr('selected', null);
-                this.$el.find('.sortable-item').attr('selected', 'selected');
+            onSelect: function (args) {
+                this.$el.parent().find('[selected]').removeAttr('selected');
+                $(args.srcElement).parent().attr('selected', 'selected');
             }
         }),
+
+
 
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
                 this.template = doT.template(pluginSettingsTemplate);
             },
             render: function () {
+                console.log("feedgroups = ", feedgroups);
+                
                 this.$el.empty().append(this.template({
                     strings: staticStrings
                 }));
@@ -85,7 +96,7 @@ define('plugins/portal/rss/settings/plugin',
                     $listbox.empty();
 
                     collection.each(function (item) {
-                        $listbox.append(new FeedGroupSelectView({ model: item }).render().el);
+                        $listbox.append(new FeedGroupView({ model: item }).render().el);
                     });
 
                     if (collection.length === 0) {
@@ -138,7 +149,6 @@ define('plugins/portal/rss/settings/plugin',
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
                 
-                console.log("feedgroups = ", feedgroups);
                 _(feedgroups).each(function (feedgroup) {
                     $group.append($('<option>').text(feedgroup.groupname));
                 });
@@ -172,7 +182,6 @@ define('plugins/portal/rss/settings/plugin',
                     } else {
                         //TODO add test for existence of feed
                         newFeed = {feedname: description, url: url, index: 100};
-                        console.log('New feed:', newFeed);
                         deferred.resolve();
                     }
 
@@ -180,22 +189,19 @@ define('plugins/portal/rss/settings/plugin',
                         if (_(feedgroups).any(function (group) { return group.groupname === groupname; })) {
                             var group = _(feedgroups).find(function (group) {return group.groupname === groupname; });
                             group.members.push(newFeed);
-                            console.log('Saving feed "%s" in existing group "%s"', description, groupname);
                         } else {
                             feedgroups.push({ groupname: groupname, index: 100, members: [newFeed]});
-                            console.log('Saving feed "%s" in new group "%s"', description, groupname);
                         }
                         settings.set('groups', feedgroups);
                         settings.save();
                         
-                        /*var extId = 'tumblr-' + url.replace(/[^a-z0-9]/g, '_');
+                        /*var extId = 'tumblr-' + url.replace(/[^A-Za-z0-9]/g, '_');
                         ext.point("io.ox/portal/widget").enable(extId);
-
+                        */
                         require(['plugins/portal/rss/register'], function (rss) {
-                            rss.reload();
                             that.trigger('redraw');
                             ox.trigger("refresh^");
-                        });*/
+                        });
 
                         dialog.close();
                     });
@@ -206,80 +212,133 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
+            onAddGroup: function (args) {
+                var dialog = new dialogs.ModalDialog({ easyOut: true, async: true });
+
+                var $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
+
+                dialog.header($("<h4>").text(gt('Add a new group for your feeds')))
+                    .append($description)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('add', gt('Add'), null, {classes: 'btn-primary'})
+                    .show();
+
+                dialog.on('add', function (e) {
+                    var description = $.trim($description.val()),
+                        deferred = $.Deferred(),
+                        newFeedgroup;
+
+                    $error.hide();
+
+                    if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
+                        deferred.reject();
+                    } else {
+                        //TODO add test for existence of group name
+                        newFeedgroup = {groupname: description, index: 100, members: []};
+                        console.log('New feedgroup:', newFeedgroup);
+                        deferred.resolve();
+                    }
+
+                    deferred.done(function () { //TODO
+                        feedgroups.push(newFeedgroup);
+                        settings.set('groups', feedgroups);
+                        settings.save();
+
+                        /*var extId = 'tumblr-' + url.replace(/[^A-Za-z0-9]/g, '_');
+                        ext.point("io.ox/portal/widget").enable(extId);
+                        */
+                        require(['plugins/portal/rss/register'], function (rss) {
+                            rss.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                        });
+
+                        dialog.close();
+                    });
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
+            },
+            
             onEditFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true,
                     async: true
                 });
+                var $changed = $(this.$el.find('[selected]'));
+                var oldUrl = $changed.data('url').storemefirst,
+                    oldDescription = $changed.data('description');
 
-                var oldUrl = this.$el.find('[selected]').data('url'),
-                    oldDescription = this.$el.find('[selected]').data('description');
+                if (!oldUrl) {
+                    return;
+                }
+                var $url = $('<input>').attr({type: 'text'}).val(oldUrl),
+                    $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
+                    $error = $('<div>').addClass('alert alert-error').hide(),
+                    that = this;
 
-                if (oldUrl) {
-                    var $url = $('<input>').attr({type: 'text'}).val(oldUrl),
-                        $description = $('<input>').attr({type: 'text', placeholder: gt('Description')}).val(oldDescription),
-                        $error = $('<div>').addClass('alert alert-error').hide(),
-                        that = this;
+                dialog.header($("<h4>").text(gt('Edit a feed')))
+                    .append($url)
+                    .append($description)
+                    .append($error)
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
+                    .show();
 
-                    dialog.header($("<h4>").text(gt('Edit a feed')))
-                        .append($url)
-                        .append($description)
-                        .append($error)
-                        .addButton('cancel', gt('Cancel'))
-                        .addButton('edit', gt('Edit'), null, {classes: 'btn-primary'})
-                        .show();
+                dialog.on('edit', function (e) {
+                    $error.hide();
 
-                    dialog.on('edit', function (e) {
-                        $error.hide();
+                    var url = $.trim($url.val()),
+                        description = $.trim($description.val()),
+                        deferred = $.Deferred();
 
-                        var url = $.trim($url.val()),
-                            description = $.trim($description.val()),
-                            deferred = $.Deferred();
+                    if (url.length === 0) {
+                        $error.text(gt('Please enter an blog-url.'));
+                        deferred.reject();
+                    } else if (description.length === 0) {
+                        $error.text(gt('Please enter a description.'));
+                        deferred.reject();
+                    } else {
+                        //TODO add test for existence of feed
+                    }
 
-                        if (url.length === 0) {
-                            $error.text(gt('Please enter an blog-url.'));
-                            deferred.reject();
-                        } else if (description.length === 0) {
-                            $error.text(gt('Please enter a description.'));
-                            deferred.reject();
-                        } else {
-                            //TODO add test for existence of feed
-                        }
+                    deferred.done(function () {
+                        ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^A-Za-z0-9]/g, '_'));
 
-                        deferred.done(function () {
-                            console.log('disable tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+                        feedgroups = removeFeed(feedgroups, oldUrl);
 
-                            ext.point("io.ox/portal/widget").disable('tumblr-' + oldUrl.replace(/[^a-z0-9]/g, '_'));
+                        feedgroups.push({url: url, description: description});
+                        settings.set('groups', feedgroups);
+                        settings.save();
 
-                            feedgroups = removeFeed(feedgroups, oldUrl);
+                        ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^A-Za-z0-9]/g, '_'));
 
-                            feedgroups.push({url: url, description: description});
-                            settings.set('groups', feedgroups);
-                            settings.save();
-
-                            console.log('enable tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-                            ext.point("io.ox/portal/widget").enable('tumblr-' + url.replace(/[^a-z0-9]/g, '_'));
-
-                            require(['plugins/portal/tumblr/register'], function (tumblr) {
-                                tumblr.reload();
-                                that.trigger('redraw');
-                                ox.trigger("refresh^");
-                                dialog.close();
-                            });
-                        });
-
-                        deferred.fail(function () {
-                            $error.show();
-                            dialog.idle();
+                        require(['plugins/portal/rss/register'], function (rss) {
+                            rss.reload();
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                            dialog.close();
                         });
                     });
-                }
+
+                    deferred.fail(function () {
+                        $error.show();
+                        dialog.idle();
+                    });
+                });
             },
             onDeleteFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
                 });
-
+                console.log("onDeleteFeed", this.$el.find('[selected]'), args);
                 var url = this.$el.find('[selected]').data('url');
 
                 if (url) {
@@ -304,7 +363,7 @@ define('plugins/portal/rss/settings/plugin',
                                 settings.set('groups', feedgroups);
                                 settings.save();
 
-                                var extId = 'rss-' + url.replace(/[^a-z0-9]/g, '_');
+                                var extId = 'rss-' + url.replace(/[^A-Za-z0-9]/g, '_');
 
                                 ext.point("io.ox/portal/widget").disable(extId);
 
@@ -318,7 +377,6 @@ define('plugins/portal/rss/settings/plugin',
                         });
                 }
             },
-            onAddGroup: function () {},
             onEditGroup: function () {},
             onDeleteGroup: function () {}
         }),
