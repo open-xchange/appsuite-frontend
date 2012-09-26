@@ -89,8 +89,6 @@ define('plugins/portal/rss/settings/plugin',
                 this.template = doT.template(pluginSettingsTemplate);
             },
             render: function () {
-                console.log("feedgroups = ", feedgroups);
-                
                 this.$el.empty().append(this.template({
                     strings: staticStrings
                 }));
@@ -212,10 +210,8 @@ define('plugins/portal/rss/settings/plugin',
                         settings.set('groups', feedgroups);
                         settings.save();
 
-                        require(['plugins/portal/rss/register'], function (rss) {
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                        });
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
 
                         dialog.close();
                     });
@@ -255,7 +251,6 @@ define('plugins/portal/rss/settings/plugin',
                     } else {
                         //TODO add test for existence of group name
                         newFeedgroup = {groupname: description, index: 100, members: []};
-                        console.log('New feedgroup:', newFeedgroup);
                         deferred.resolve();
                     }
 
@@ -264,14 +259,8 @@ define('plugins/portal/rss/settings/plugin',
                         settings.set('groups', feedgroups);
                         settings.save();
 
-                        /*var extId = 'tumblr-' + url.replace(/[^A-Za-z0-9]/g, '_');
-                        ext.point("io.ox/portal/widget").enable(extId);
-                        */
-                        require(['plugins/portal/rss/register'], function (rss) {
-                            rss.reload();
-                            that.trigger('redraw');
-                            ox.trigger("refresh^");
-                        });
+                        that.trigger('redraw');
+                        ox.trigger("refresh^");
 
                         dialog.close();
                     });
@@ -287,9 +276,7 @@ define('plugins/portal/rss/settings/plugin',
             onEditFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
                     $changed = $(this.$el.find('[selected]'));
-                    
-                console.log("changed:", $changed);
-                
+
                 var oldUrl = $changed.data('url'),
                     oldFeedname = $changed.data('feedname'),
                     oldGroupname = $changed.data('group');
@@ -354,9 +341,7 @@ define('plugins/portal/rss/settings/plugin',
             onEditGroup: function (args) {
                 var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
                     $changed = $(this.$el.find('[selected]'));
-                    
-                console.log("changed:", $changed);
-                
+
                 var oldGroupname = $changed.data('groupname');
 
                 if (!oldGroupname) {
@@ -435,6 +420,7 @@ define('plugins/portal/rss/settings/plugin',
 
                             that.trigger('redraw');
                             ox.trigger("refresh^");
+                            dialog.close();
                         }
                         return false;
                     });
@@ -447,7 +433,6 @@ define('plugins/portal/rss/settings/plugin',
                 });
                 var deleteme = this.$el.find('[selected]'),
                     groupname = deleteme.data('groupname');
-                console.log("deleteme/groupname", deleteme, groupname);
                 if (!groupname) {
                     return;
                 }
@@ -461,7 +446,8 @@ define('plugins/portal/rss/settings/plugin',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            settings.set('groups', feedgroups.filter(function (groups) { return groups.groupname !== groupname; }));
+                            feedgroups = feedgroups.filter(function (groups) { return groups.groupname !== groupname; });
+                            settings.set('groups', feedgroups);
                             settings.save();
                             
                             that.trigger('redraw');
