@@ -19,137 +19,211 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
+     'io.ox/core/api/folder',
      'gettext!io.ox/files/files',
      'io.ox/core/config'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, gt, config) {
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config) {
 
     'use strict';
 
-    var perspective = new ox.ui.Perspective('icons');
+    ext.point('io.ox/mail/icons/options').extend({
+        fileIconWidth: 176,
+        fileIconHeight: 149
+    });
 
-    _.extend(perspective, {
-        app:            null,
-        dialog:         $(),
-        iconview:       $(),
+    ext.point('io.ox/files/icons').extend({
+        id: 'breadcrumb',
+        index: 100,
+        draw: function (baton) {
+            if (!baton.app.getWindow().search.active) {
+                this.append(
+                    baton.$.breadcrumb = folderAPI.getBreadcrumb(baton.app.folder.get(), baton.app.folder.set)
+                );
+            }
+        }
+    });
 
-        drawIcon: function (file) {
-            var node = $('<div class="file-icon pull-left">').attr('data-obj-id', file.id);
-            var wrap = $('<div class="wrap">');
-            if (file.file_mimetype.match(/^image\/[gif|png|jpe?g|gmp]/i)) {
-                var src = api.getIcon(file);
-                node.append(wrap.append($('<img>', { 'data-original': src, alt: file.title }).addClass('img-polaroid').addClass('lazy')));
+    ext.point('io.ox/files/icons').extend({
+        id: 'search-term',
+        index: 100,
+        draw: function (baton) {
+            if (baton.app.getWindow().search.active) {
+                this.append(
+                    $('<h4 class="search-query">').text('Searched for: ' + baton.app.getWindow().search.query)
+                );
             }
-            else
-            {
-                node.append(wrap.append(
-                    $('<img>', { src: ox.base + '/apps/themes/default/icons/file-generic.png', alt: file.title }).addClass('file-generic')
-                ));
+        }
+    });
+
+    ext.point('io.ox/files/icons').extend({
+        id: 'icons',
+        index: 200,
+        draw: function (baton) {
+            this.append(
+                baton.$.iconContainer = $('<div class="icon-container">')
+            );
+        }
+    });
+
+    ext.point('io.ox/files/icons/file').extend({
+        draw: function (baton) {
+            var file = baton.data,
+                img = $('<img>', { alt: file.title });
+            this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
+            if ((/^((?!\._?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy');
+            } else {
+                img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
             }
-            node.append($('<div class="title">').text(
-                    file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2")));
-            return node;
-        },
+            this.append(
+                $('<div class="wrap">').append(img),
+                $('<div class="title">').text(file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2"))
+            );
+        }
+    });
+
+    function iconClick(popup, e, target) {
+        var cid = target.attr('data-cid');
+        api.get(_.cid(cid)).done(function (file) {
+            popup.append(viewDetail.draw(file).element);
+        });
+    }
+
+    return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
-            var that = this;
-            var mode = false;
-            var win = app.getWindow(),
+
+            var options = ext.point('io.ox/mail/icons/options').options();
+            var that = this,
+                mode = false,
+                win = app.getWindow(),
                 currentDetailViewTarget,
-                chunk,
-                $view = this.main;
-            var rows, cols;
-            var fileIconHeight = 175;
-            var fileIconWidth = 138;
-            var fileiconMargin = 30;
+                iconview = $('<div class="files-scrollable-pane">'),
+                iconContainer,
+                rows,
+                cols,
+                start,
+                end,
+                drawIcons,
+                redraw,
+                loadAll,
+                drawFirst,
+                allIds,
+                displayedRows,
+                fileIconHeight = 149,
+                fileIconWidth = 176,
 
-            Array.prototype.chunk = function (chunkSize) {
-                var array = this;
-                return [].concat.apply([],
-                    array.map(function (elem, i) {
-                        return i % chunkSize ? [] : [array.slice(i, i + chunkSize)];
-                    })
-                );
-            };
+                baton = new ext.Baton({ app: app }),
 
-            this.main.on('click', '.file-icon', function (data) {
-                var currentTarget = $(data.currentTarget).attr('data-obj-id');
-                if (currentDetailViewTarget !== currentTarget)
-                {
-                    that.dialog.show(data, function (popup, e, target) {
-                        currentDetailViewTarget = currentTarget;
-                        api.get({id: currentTarget}).done(function (file) {
-                            var currentDetailView = viewDetail.draw(file);
-                            popup.append(currentDetailView.element);
-                        });
-                    });
-                }
-                else
-                {
-                    currentDetailViewTarget = null;
-                }
-            });
+                dialog = new dialogs.SidePopup();
 
-            var drawIcons, drawIconview, loadIcon, Icon;
+            this.main.append(
+                $('<div class="files-iconview">').append(iconview)
+            );
 
-            loadIcon = function () {
+            var filesIconviewHeight = iconview.parent().height() - 26;
+            var filesIconviewWidth = iconview.parent().width() - 26;
+
+            dialog.delegate(iconview, '.file-icon', iconClick);
+
+            loadAll = function () {
                 var deferred = new $.Deferred();
-                if (!mode)
-                {
+                if (!mode) {
                     api.getAll({ folder: app.folder.get() })
-                        .done(function (ids) {
-                            chunk = 0;
-                            //var tmp = ids.chunk(rows * cols * 2);
-                            //api.getList(tmp[chunk])
-                            api.getList(ids)
-                            .done(deferred.resolve)
-                            .fail(deferred.reject);
-                        })
-                        .fail(_.lfo(deferred.reject));
-                }
-                else
-                {
+                        .done(deferred.resolve)
+                        .fail(deferred.reject);
+                } else {
                     api.search(win.search.query, {
                         action: "search"
                     })
-                    .done(function (ids) {
-                        api.getList(ids)
-                            .done(deferred.resolve)
-                            .fail(deferred.reject);
-                    })
+                    .done(deferred.resolve)
                     .fail(deferred.reject);
-
                 }
                 return deferred;
             };
 
-            drawIcons = function () {
-                var deferred = new $.Deferred();
-                loadIcon().done(function (files) {
+            drawIcons = function (ids) {
+                return api.getList(ids).done(function (files) {
+                    var nodes = [];
                     _(files).each(function (file) {
-                        $view.append(that.drawIcon(file));
+                        var node = $('<div>');
+                        ext.point('io.ox/files/icons/file').invoke(
+                            'draw', node, new ext.Baton({ data: file })
+                        );
+                        nodes.push(node);
                     });
-                    $view.idle().addClass('files-iconview-background');
-                    deferred.resolve();
-                });
-                return deferred;
-            };
-
-            var redraw = function () {
-                rows = Math.floor($view.height() / (fileIconHeight + fileiconMargin));
-                cols = Math.floor($view.width() / (fileIconWidth + fileiconMargin));
-                $view.empty().busy().removeClass('files-iconview-background');
-                drawIcons().done(function () {
-                    $(".file-icon > div > img").lazyload({
-                        container: $view
-                    });
+                    iconContainer.find('.scroll-spacer').before(nodes);
                 });
             };
 
-            redraw();
+            redraw = function (ids) {
+                drawIcons(ids).done(function () {
+                    $('.files-iconview').on('scroll', function (event) {
+                        if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
+                            $(this).off('scroll');
+                            start = end;
+                            end = end + cols;
+                            displayedRows = displayedRows + 1;
+                            redraw(allIds.slice(start, end));
+                        }
+                    });
+                });
+            };
+
+            drawFirst = function () {
+
+                iconview.empty().busy();
+
+                // call extensions
+
+
+                ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
+                iconContainer = baton.$.iconContainer;
+
+                // add element to provoke scrolling
+                iconContainer.append(
+                    $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
+                );
+
+                loadAll().done(function (ids) {
+                    iconview.idle();
+                    // still some work to do here. get's stuck sometimes
+                    rows = Math.round(filesIconviewHeight / fileIconHeight);
+                    cols = Math.round(filesIconviewWidth / fileIconWidth);
+                    displayedRows = rows + 1;
+                    start = 0;
+                    end = displayedRows * cols;
+                    allIds = ids;
+                    redraw(allIds.slice(start, end));
+                });
+            };
+
+            drawFirst();
+
+            app.queues = {};
+
+            app.queues.create = upload.createQueue({
+                processFile: function (file) {
+                    win.busy();
+                    return api.uploadFile({file: file, folder: app.folder.get()})
+                        .done(drawFirst)
+                        .always(win.idle);
+                }
+            });
+
+            var dropZone = new dnd.UploadZone({
+                ref: "io.ox/files/dnd/actions"
+            }, app);
+
+            var shortcutPoint = new shortcuts.Shortcuts({
+                ref: "io.ox/files/shortcuts"
+            });
+
+            dropZone.include();
 
             win.on('search cancel-search', function (e) {
                 mode = (e.type === 'search' ? true : false);
-                redraw();
+                drawFirst();
             });
 
             // published?
@@ -166,20 +240,19 @@ define('io.ox/files/icons/perspective',
                     );
                 }
             });
-
         },
+
         render: function (app) {
-            this.main.addClass('files-iconview').empty();
+            this.main.addClass('files-icon-perspective').empty();
+
             var that = this;
-            var win = app.getWindow();
+
             app.on('folder:change', function (e, id, folder) {
+                that.main.empty();
                 that.draw(app);
             });
-            this.dialog = new dialogs.SidePopup();
+
             this.draw(app);
         }
     });
-
-    return perspective;
-
 });

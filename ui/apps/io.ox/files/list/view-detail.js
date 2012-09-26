@@ -23,7 +23,8 @@ define("io.ox/files/list/view-detail",
      "io.ox/preview/main",
      "io.ox/core/tk/upload",
      "io.ox/core/api/user",
-     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, gt) {
+     "io.ox/core/api/folder",
+     "gettext!io.ox/files/files"], function (ext, links, layouts, KeyListener, date, Event, actions, filesAPI, preview, upload, userAPI, folderAPI, gt) {
 
     "use strict";
 
@@ -173,6 +174,19 @@ define("io.ox/files/list/view-detail",
             return file.current_version && file.version > 1;
         }
     });
+
+//    ext.point("io.ox/files/details/sections").extend({
+//        id: "folder",
+//        layout: "Grid",
+//        index: 500
+//    });
+//
+//    ext.point("io.ox/files/details/sections/folder").extend({
+//        id: 'folder',
+//        draw: function (file) {
+//            this.append(folderAPI.getBreadcrump(file.folder_id));
+//        }
+//    });
 
     // Fill up the sections
 

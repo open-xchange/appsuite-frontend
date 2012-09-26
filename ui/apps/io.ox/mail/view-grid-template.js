@@ -37,7 +37,7 @@ define('io.ox/mail/view-grid-template',
                         attachment = $('<span>').addClass('attachment'),
                         priority = $('<span>').addClass('priority'),
                         $('<div>').addClass('subject')
-                            .append(unread = $('<i>').addClass('icon-envelope'))
+                            .append(unread = $('<i>').addClass('icon-bookmark'))
                             .append(subject = $('<span>'))
                     )
                 );

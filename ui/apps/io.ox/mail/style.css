@@ -60,11 +60,10 @@
 
 /* unread */
 
-.vgrid-cell.mail i.icon-envelope { display: none; }
-.vgrid-cell.mail.unread i.icon-envelope { display: inline-block; margin-right: 0.5em; }
+.vgrid-cell.mail i.icon-bookmark { display: none; }
+.vgrid-cell.mail.unread i.icon-bookmark { display: inline-block; margin-right: 0.5em; }
 
 .vgrid-cell.mail.unread .subject {
-    font-weight: bold;
     color: #08c;
 }
 
