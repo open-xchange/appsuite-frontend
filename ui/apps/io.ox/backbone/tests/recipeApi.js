@@ -83,19 +83,19 @@ define("io.ox/backbone/tests/recipeApi", ["io.ox/core/event"], function (Events)
         update: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 _.extend(db[options.id], options);
+                this.trigger("update", {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
 
-            this.trigger("update", {id: options.id, folder: options.folder});
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         },
 
         remove: function (options) {
             if (db[options.id] && db[options.id].folder_id === options.folder) {
                 delete db[options.id];
+                this.trigger("delete", {id: options.id, folder: options.folder});
                 return $.Deferred().resolve({});
             }
-            this.trigger("update", {id: options.id, folder: options.folder});
             return $.Deferred.rejec({error: 'Cannot resolve id %1$s in folder %2$s', error_params: [options.id, options.folder]});
         }
     };

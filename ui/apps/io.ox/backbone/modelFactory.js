@@ -271,6 +271,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             if (models[uid]) {
                 var model = models[uid];
                 delete models[uid];
+                console.log("MARK DESTROYED");
                 model.trigger('destroy', model);
             }
         };
@@ -288,7 +289,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         };
 
         this.release = function () {
-            refCount++;
+            refCount--;
             if (refCount === 0) {
                 this.destroy();
             }
@@ -441,11 +442,13 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         _(this.internal.updateEvents).each(function (eventName) {
 
             self.api.on(eventName, function () {
+                console.log("Caught event", eventName);
                 var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
                     uid = self.internal.toUniqueIdFromGet.apply(self, args);
 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
+                        console.log(realm, uid, loaded);
                         realm.refresh(uid, loaded);
                     });
                 });

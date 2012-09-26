@@ -187,6 +187,118 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
             });
             
+            j.describe("ModelFactory realms", function () {
+                j.it("should provide different instances for different realms", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+                        
+                        recipe1.set('title', 'new title');
+                        
+                        j.expect(recipe2.get('title')).not.toEqual('new title');
+                        
+                        r1.destroy();
+                        r2.destroy();
+                    });
+                });
+                
+                j.it("should update models in a different realm on update", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        var checked = new utils.Done();
+                        
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+
+                        recipe1.set('title', 'new title').save().done(function () {
+                            
+                            j.expect(recipe2.get('title')).toEqual('new title');
+                            checked.yep();
+
+                            r1.destroy();
+                            r2.destroy();
+                        });
+                        
+                        j.waitsFor(checked, 'checked', 5000);
+                    });
+                });
+                
+                j.it("should trigger destroy events when a model was deleted in a different realm", function () {
+                    var r1 = factory.realm("r1"),
+                        r2 = factory.realm("r2");
+                    
+                    var recipe1, recipe2;
+                    
+                    utils.waitsFor(r1.get({id: 2, folder: 12}).done(function (loaded) {
+                        recipe1 = loaded;
+                    }));
+                    
+                    utils.waitsFor(r2.get({id: 2, folder: 12}).done(function (loaded) {
+                        recipe2 = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        var checked = new utils.Done(),
+                            destroyed = false;
+                        
+                        j.expect(recipe1).toBeDefined();
+                        j.expect(recipe2).toBeDefined();
+                        
+                        recipe2.on("destroy", function () {
+                            destroyed = true;
+                        });
+                        
+                        recipe1.destroy().done(function () {
+                            j.expect(destroyed).toEqual(true);
+                            checked.yep();
+                        });
+                        
+                        j.waitsFor(checked, 'checked', 5000);
+                    });
+                });
+                
+                j.it("should do reference counting", function () {
+                    var r = factory.realm('r');
+                    
+                    j.spyOn(r, 'destroy');
+                    
+                    r.retain().retain();
+                    
+                    r.release();
+                    j.expect(r.destroy).not.toHaveBeenCalled();
+                    
+                    r.release();
+                    j.expect(r.destroy).toHaveBeenCalled();
+                    
+                });
+                
+            });
+            
             j.describe("ModelFactory validation", function () {
                 
                 j.it("should run an extension for each attribute", function () {
@@ -312,24 +424,7 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
             });
             
-            j.describe("ModelFactory realms", function () {
-                j.it("should provide different instances for different realms", function () {
-                    
-                });
-                
-                j.it("should trigger change events in a different realm on update", function () {
-                    
-                });
-                
-                j.it("should trigger destroy events when a model was deleted in a different realm", function () {
-                    
-                });
-                
-                j.it("should do reference counting", function () {
-                    
-                });
-                
-            });
+            
             
             j.describe("ModelFactory change detection", function () {
                 j.it("should track changes differing from the loaded state", function () {
