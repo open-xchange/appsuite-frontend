@@ -360,7 +360,7 @@ define('io.ox/mail/actions',
                 createCalendarApp = function (participants, notetext) {
                     require(['io.ox/calendar/edit/main'], function (m) {
                         m.getApp().launch().done(function () {
-                            var initData = {participants: participants, note: notetext, folder_id: currentFolder};
+                            var initData = {participants: participants, title: notetext, folder_id: currentFolder};
                             this.create(initData);
 //                             to set Dirty
                             this.model.toSync = initData;
