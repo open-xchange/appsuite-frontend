@@ -68,10 +68,11 @@ define('io.ox/files/icons/perspective',
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
+                options = baton.options,
                 img = $('<img>', { alt: file.title });
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^((?!\._?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy');
+                img.attr('src', getIcon(file, options)).addClass('img-polaroid');
             } else {
                 img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
             }
@@ -89,29 +90,46 @@ define('io.ox/files/icons/perspective',
         });
     }
 
+    function getIcon(file, options) {
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.fileIconWidth + '&height=' + options.fileIconHeight;
+    }
+
+    function loadFiles(app) {
+        var deferred = new $.Deferred();
+        if (!app.getWindow().search.active) {
+            api.getAll({ folder: app.folder.get() })
+                .done(deferred.resolve)
+                .fail(deferred.reject);
+        } else {
+            api.search(app.getWindow().search.query)
+            .done(deferred.resolve)
+            .fail(deferred.reject);
+        }
+        return deferred;
+    }
+
+    function calculateLayout(el, options) {
+        return { iconRows: Math.round(el.parent().height() / options.fileIconHeight),
+                 iconCols: Math.round(el.parent().width() / options.fileIconWidth) };
+    }
+
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
 
             var options = ext.point('io.ox/mail/icons/options').options();
-            var that = this,
-                mode = false,
-                win = app.getWindow(),
-                currentDetailViewTarget,
+            var win = app.getWindow(),
                 iconview = $('<div class="files-scrollable-pane">'),
                 iconContainer,
-                rows,
-                cols,
                 start,
                 end,
                 drawIcons,
                 redraw,
-                loadAll,
                 drawFirst,
                 allIds,
                 displayedRows,
-                fileIconHeight = 149,
-                fileIconWidth = 176,
+                layout,
+                recalculateLayout,
 
                 baton = new ext.Baton({ app: app }),
 
@@ -121,26 +139,9 @@ define('io.ox/files/icons/perspective',
                 $('<div class="files-iconview">').append(iconview)
             );
 
-            var filesIconviewHeight = iconview.parent().height() - 26;
-            var filesIconviewWidth = iconview.parent().width() - 26;
+            layout = calculateLayout(iconview, options);
 
             dialog.delegate(iconview, '.file-icon', iconClick);
-
-            loadAll = function () {
-                var deferred = new $.Deferred();
-                if (!mode) {
-                    api.getAll({ folder: app.folder.get() })
-                        .done(deferred.resolve)
-                        .fail(deferred.reject);
-                } else {
-                    api.search(win.search.query, {
-                        action: "search"
-                    })
-                    .done(deferred.resolve)
-                    .fail(deferred.reject);
-                }
-                return deferred;
-            };
 
             drawIcons = function (ids) {
                 return api.getList(ids).done(function (files) {
@@ -148,7 +149,7 @@ define('io.ox/files/icons/perspective',
                     _(files).each(function (file) {
                         var node = $('<div>');
                         ext.point('io.ox/files/icons/file').invoke(
-                            'draw', node, new ext.Baton({ data: file })
+                            'draw', node, new ext.Baton({ data: file, options: options })
                         );
                         nodes.push(node);
                     });
@@ -162,7 +163,7 @@ define('io.ox/files/icons/perspective',
                         if ($('.files-scrollable-pane')[0].scrollHeight - $(this).scrollTop() === $(this).outerHeight()) {
                             $(this).off('scroll');
                             start = end;
-                            end = end + cols;
+                            end = end + layout.iconCols;
                             displayedRows = displayedRows + 1;
                             redraw(allIds.slice(start, end));
                         }
@@ -176,7 +177,6 @@ define('io.ox/files/icons/perspective',
 
                 // call extensions
 
-
                 ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
                 iconContainer = baton.$.iconContainer;
 
@@ -185,17 +185,31 @@ define('io.ox/files/icons/perspective',
                     $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
                 );
 
-                loadAll().done(function (ids) {
+                loadFiles(app).done(function (ids) {
                     iconview.idle();
                     // still some work to do here. get's stuck sometimes
-                    rows = Math.round(filesIconviewHeight / fileIconHeight);
-                    cols = Math.round(filesIconviewWidth / fileIconWidth);
-                    displayedRows = rows + 1;
+                    displayedRows = layout.iconRows + 1;
                     start = 0;
-                    end = displayedRows * cols;
+                    end = displayedRows * layout.iconCols;
                     allIds = ids;
                     redraw(allIds.slice(start, end));
                 });
+            };
+
+            recalculateLayout = function () {
+                // This should be improved
+                var last_layout = layout;
+                layout = calculateLayout($('.files-iconview'), options);
+                if (last_layout.iconCols !== layout.iconCols || last_layout.iconRows !== layout.iconRows)
+                {
+                    $('.icon-container').empty().append(
+                        $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
+                    );
+                    displayedRows = layout.iconRows + 1;
+                    start = 0;
+                    end = displayedRows * layout.iconCols;
+                    redraw(allIds.slice(start, end));
+                }
             };
 
             drawFirst();
@@ -221,8 +235,9 @@ define('io.ox/files/icons/perspective',
 
             dropZone.include();
 
+            $(window).resize(_.debounce(recalculateLayout, 300));
+
             win.on('search cancel-search', function (e) {
-                mode = (e.type === 'search' ? true : false);
                 drawFirst();
             });
 
