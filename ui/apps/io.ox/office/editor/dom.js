@@ -83,7 +83,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // element: if offset is missing, take own index and refer to the parent node
         if (this.node.nodeType === 1) {
             if (_.isNumber(this.offset)) {
-                this.offset = Math.min(Math.max(this.offset, 0), this.node.childNodes.length);
+                this.offset = Utils.minMax(this.offset, 0, this.node.childNodes.length);
             } else {
                 this.offset = $(this.node).index();
                 this.node = this.node.parentNode;
@@ -92,7 +92,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // text node: if offset is missing, use zero
         } else if (this.node.nodeType === 3) {
             if (_.isNumber(this.offset)) {
-                this.offset = Math.min(Math.max(this.offset, 0), this.node.nodeValue.length);
+                this.offset = Utils.minMax(this.offset, 0, this.node.nodeValue.length);
             } else {
                 this.offset = 0;
             }
@@ -779,8 +779,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             // call passed iterator for all text nodes
             if (node.nodeType === 3) {
                 // calculate/validate start/end offset in the text node
-                start = (node === range.start.node) ? Math.min(Math.max(range.start.offset, 0), node.nodeValue.length) : 0;
-                end = (node === range.end.node) ? Math.min(Math.max(range.end.offset, start), node.nodeValue.length) : node.nodeValue.length;
+                start = (node === range.start.node) ? Utils.minMax(range.start.offset, 0, node.nodeValue.length) : 0;
+                end = (node === range.end.node) ? Utils.minMax(range.end.offset, start, node.nodeValue.length) : node.nodeValue.length;
                 // call iterator for the text node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
 
@@ -871,6 +871,72 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
             }
         });
+    };
+
+    // object selection =======================================================
+
+    /**
+     * Clears all element selection boxes from the passed root node.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root element containing all elements that can be selected.
+     */
+    DOM.clearElementSelections = function (rootNode) {
+        $(rootNode).children('div.selection').remove();
+    };
+
+    /**
+     * Adds a new selection box for the specified element.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root element containing all elements that can be selected.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  The element for which a new selection box will be inserted.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the appearance of the selection box.
+     *  Supports the following options:
+     *  @param {Boolean} [options.moveable]
+     *      If set to true, the mouse pointer will change to a move pointer
+     *      when the mouse hovers the selected element.
+     *  @param {Boolean} [options.sizeable]
+     *      If set to true, the mouse pointer will change to a specific resize
+     *      pointer when the mouse hovers the corner handles of the selected
+     *      element.
+     */
+    DOM.addElementSelection = function (rootNode, element, options) {
+
+        var // position of the root node
+            rootOffset = $(rootNode).offset(),
+            // position of the element
+            offset = $(element).offset(),
+            // the container element used to visualize the selection
+            selectorBox = $('<div>', { contentEditable: false }).addClass('selection');
+
+        // add classes according to passed options
+        if (Utils.getBooleanOption(options, 'moveable')) { selectorBox.addClass('moveable'); }
+        if (Utils.getBooleanOption(options, 'sizeable')) { selectorBox.addClass('sizeable'); }
+
+        // set position and size of the selector box, add resize handles
+        selectorBox.css({
+            width: ($(element).width() + 2) + 'px',
+            height: ($(element).height() + 2) + 'px',
+            left: (offset.left - rootOffset.left - 2) + 'px',
+            top: (offset.top - rootOffset.top - 2) + 'px'
+        }).append(
+            $('<div>').addClass('handler tl'),
+            $('<div>').addClass('handler t'),
+            $('<div>').addClass('handler tr'),
+            $('<div>').addClass('handler r'),
+            $('<div>').addClass('handler br'),
+            $('<div>').addClass('handler b'),
+            $('<div>').addClass('handler bl'),
+            $('<div>').addClass('handler l')
+        );
+
+        // insert selector box into the root node
+        $(rootNode).append(selectorBox);
     };
 
     // exports ================================================================

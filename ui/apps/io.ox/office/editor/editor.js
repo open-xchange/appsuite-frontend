@@ -3756,6 +3756,15 @@ define('io.ox/office/editor/editor',
             .on('contextmenu', processContextMenu)
             .on('cut paste', false);
 
+        // POC: image selection
+        editdiv.on('click', 'img', function () {
+            DOM.clearElementSelections(editdiv);
+            DOM.addElementSelection(editdiv, this, { moveable: true, sizeable: true });
+        });
+        this.on('selectionChanged', function () {
+            DOM.clearElementSelections(editdiv);
+        });
+
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 
     } // end of OXOEditor()

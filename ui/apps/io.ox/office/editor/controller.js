@@ -157,7 +157,7 @@ define('io.ox/office/editor/controller',
                 'image/alignment': {
                     chain: 'chain/image',
                     get: function () { return editor.getImageFloatMode(); },
-                    set: function (floatMode) { editor.setAttribute('character', 'imageFloatMode', floatMode); }
+                    set: function (floatMode) { editor.setAttributes('character', { imageFloatMode: floatMode }); }
                 },
 
                 'debug/toggle': {

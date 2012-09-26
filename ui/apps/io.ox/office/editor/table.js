@@ -60,16 +60,8 @@ define('io.ox/office/editor/table',
                 var allCols = $(tableNode).children('colgroup').children('col');
 
                 allCols.each(function (index) {
-                    var width = $(this).css('width');
-                    if (width) {
-                        var localWidth = parseFloat(width.substring(0, width.length - 2));
-                        // converting from px to 1/100 mm again
-                        localWidth = Utils.roundDigits(Utils.convertLength(localWidth, 'px', 'mm', 2), 2) * 100;
-                        // localWidth *= 100; // 1/100 mm
-                        tablegrid.push(localWidth);
-                    } else {
-                        tablegrid.push(0);
-                    }
+                    var width = Utils.convertLengthToHmm($(this).width(), 'px');
+                    tablegrid.push(width);
                 });
             }
         }

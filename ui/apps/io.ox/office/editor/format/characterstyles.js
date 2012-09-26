@@ -40,7 +40,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('font-size', fontSize + 'pt');
                 },
                 preview: function (options, fontSize) {
-                    options.labelCss.fontSize = Math.min(Math.max(fontSize, 8), 24) + 'pt';
+                    options.labelCss.fontSize = Utils.minMax(fontSize, 8, 24) + 'pt';
                 }
             },
 

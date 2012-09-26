@@ -59,7 +59,7 @@
     	background-color: #e5e5e5;
     	overflow-y: auto;
     }
-
+    
     .io-ox-pane.debug > table.debug-table {
         width: 100%;
         table-layout: fixed;
@@ -97,12 +97,14 @@
 
         div.selection {
             @border-color: #44f;
-
+    
             .box-sizing(border-box);
             position: absolute;
             border: 3px fade(@border-color, 50%) solid;
-            cursor: move;
 
+            cursor: default;
+            &.moveable { cursor: move; }
+    
             > div.handler {
                 position: absolute;
                 width: 5px;
@@ -110,15 +112,15 @@
                 background-color: white;
                 border: 1px @border-color solid;
                 .border-radius(3px);
-
+    
                 .v-beg() { top: -5px; }
                 .v-cen() { top: 50%; margin-top: -3px; }
                 .v-end() { bottom: -5px; }
-
+    
                 .h-beg() { left: -5px; }
                 .h-cen() { left: 50%; margin-left: -3px; }
                 .h-end() { right: -5px; }
-
+    
                 &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
                 &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
                 &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
@@ -128,8 +130,12 @@
                 &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
                 &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
             }
+            
+            &:not(.sizeable) > div.handler {
+                cursor: inherit;
+            }
         }
-
+    
         /* prevent dotted focus rectangle around page area */
         &:focus, &:active {
             outline: none;
@@ -205,7 +211,7 @@
                 .debug-highlight-mixin(#8f8);
             }
 
-            span, b, i, u, strong, em {
+            span {
                 .debug-highlight-mixin(#88f);
             }
 
@@ -214,7 +220,7 @@
                 outline-offset: 2px;
             }
 
-            div:not(.selection):not(.handler) {
+            p > div {
                 .debug-highlight-mixin(#f8f);
             }
         }

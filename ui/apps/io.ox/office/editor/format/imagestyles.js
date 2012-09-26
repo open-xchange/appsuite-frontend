@@ -23,8 +23,7 @@ define('io.ox/office/editor/format/imagestyles',
         definitions = {
 
             /**
-             * Width of the image, as number in 1/100 mm. If set to the value
-             * 0, will be changed to the CSS attribute 'auto' (original width).
+             * Width of the image, as number in 1/100 of millimeters.
              */
             width: {
                 def: 0,
@@ -35,9 +34,7 @@ define('io.ox/office/editor/format/imagestyles',
             },
 
             /**
-             * Height of the image, as number in 1/100 mm. If set to the value
-             * 0, will be changed to the CSS attribute 'auto' (original
-             * height).
+             * Height of the image, as number in 1/100 of millimeters.
              */
             height: {
                 def: 0,
@@ -47,26 +44,95 @@ define('io.ox/office/editor/format/imagestyles',
                 }
             },
 
-            marginT: {
+            /**
+             * Margin from top border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            margint: {
                 def: 0
             },
 
-            marginB: {
+            /**
+             * Margin from bottom border of the image to text contents, in
+             * 1/100 of millimeters.
+             */
+            marginb: {
                 def: 0
             },
 
-            marginL: {
+            /**
+             * Margin from left border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            marginl: {
                 def: 0
             },
 
-            marginR: {
+            /**
+             * Margin from right border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            marginr: {
                 def: 0
             },
 
+            /**
+             * If set to true, the image is rendered as inline element ('as
+             * character'), otherwise it is anchorered relative to another
+             * element (page, paragraph, table cell, ...).
+             */
             inline: {
                 def: true
-            }
+            },
 
+            anchorhbase: {
+                def: 'margin'
+            },
+
+            anchorhalign: {
+                def: 'left'
+            },
+
+            anchorhoffset: {
+                def: 0
+            },
+
+            anchorvbase: {
+                def: 'margin'
+            },
+
+            anchorvalign: {
+                def: 'top'
+            },
+
+            anchorvoffset: {
+                def: 0
+            },
+
+            /**
+             * Specifies how text floats around the image.
+             * - 'none': Text does not float around the image.
+             * - 'square': Text floats around the bounding box of the image.
+             * - 'tight': Text flows around a complex outline area.
+             * - 'through': Text floats through the entire image.
+             * - 'topandbottom': Text floats above and below the image only.
+             */
+            textwrapmode: {
+                def: 'none'
+            },
+
+            /**
+             * Specifies on which side text floats around the image. Effective
+             * only if the attribute 'textwrapmode' is either 'square' or
+             * 'tight'.
+             * - 'bothsides': Text floats at the left and right side.
+             * - 'left': Text floats at the left side of the image only.
+             * - 'right': Text floats at the right side of the image only.
+             * - 'largest': Text floats at the larger side of the image only.
+             */
+            textwrapside: {
+                def: 'bothsides'
+            }
         };
 
     // class ImageStyles ======================================================
@@ -93,7 +159,8 @@ define('io.ox/office/editor/format/imagestyles',
 
         /**
          * Global setter handler that will be called for every image element
-         * whose attributes have been changed.
+         * whose attributes have been changed. Repositions and reformats the
+         * image according to the passed attributes.
          *
          * @param {jQuery} element
          *  The <img> element whose image attributes have been changed, as

@@ -159,17 +159,17 @@ define('io.ox/office/editor/image',
         if (attributes.height) {
             attributes.height = attributes.height / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginT) {
-            attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
+        if (attributes.margint) {
+            attributes['margin-top'] = attributes.margint / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginR) {
-            attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
+        if (attributes.marginr) {
+            attributes['margin-right'] = attributes.marginr / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginB) {
-            attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
+        if (attributes.marginb) {
+            attributes['margin-bottom'] = attributes.marginb / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginL) {
-            attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
+        if (attributes.marginl) {
+            attributes['margin-left'] = attributes.marginl / 100 + 'mm';  // converting to mm
         }
         if ((attributes.anchorvbase) && (attributes.anchorvoffset)) {
             attributes.anchorvoffset = attributes.anchorvoffset / 100 + 'mm';  // converting to mm
@@ -258,10 +258,10 @@ define('io.ox/office/editor/image',
         var allImageAttributes = ['inline',
                                   'width',
                                   'height',
-                                  'marginL',
-                                  'marginT',
-                                  'marginR',
-                                  'marginB',
+                                  'marginl',
+                                  'margint',
+                                  'marginr',
+                                  'marginb',
                                   'anchorhbase',
                                   'anchorhalign',
                                   'anchorhoffset',

@@ -96,7 +96,11 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
         return object;
     };
 
-    // attribute conversion ---------------------------------------------------
+    // calculation and conversion ---------------------------------------------
+
+    Utils.minMax = function (value, min, max) {
+        return Math.min(Math.max(value, min), max);
+    };
 
     /**
      * Rounds the passed floating-point number to the specified number of
@@ -1043,7 +1047,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
             if (minChildOffset <= maxChildOffset) {
                 // if there is a valid range for the child element, calculate its new position
-                newChildOffset = Math.min(Math.max(childOffset, minChildOffset), maxChildOffset);
+                newChildOffset = Utils.minMax(childOffset, minChildOffset, maxChildOffset);
             } else {
                 // otherwise: find position according to overflow mode
                 switch (overflow) {
