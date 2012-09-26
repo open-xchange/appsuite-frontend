@@ -218,7 +218,7 @@ define("io.ox/files/actions",
         index: 100,
         id: "upload",
         label: gt("Upload"),
-        cssClasses: 'btn btn-primary',
+        cssClasses: 'btn',
         ref: "io.ox/files/actions/upload"
     }));
 
