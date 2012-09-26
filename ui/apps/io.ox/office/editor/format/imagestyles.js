@@ -19,37 +19,108 @@ define('io.ox/office/editor/format/imagestyles',
 
     'use strict';
 
+    /**
+     * Helper function to convert a length in 1/100 of millimeters into a CSS
+     * length in pixels and set the length at the passed element.
+     */
+    function setLengthAttribute(cssAttrName, element, length) {
+        element.css(cssAttrName, Utils.convertHmmToCssLength(length, 'px', 0));
+    }
+
     var // definitions for image attributes
         definitions = {
 
+            /**
+             * Width of the image, as number in 1/100 of millimeters.
+             */
             width: {
-                def: 0
+                def: 0,
+                set: _.bind(setLengthAttribute, 'width')
             },
 
+            /**
+             * Height of the image, as number in 1/100 of millimeters.
+             */
             height: {
-                def: 0
+                def: 0,
+                set: _.bind(setLengthAttribute, 'height')
             },
 
-            marginT: {
-                def: 0
+            /**
+             * Margin from top border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            margint: {
+                def: 0,
+                set: _.bind(setLengthAttribute, 'margin-top')
             },
 
-            marginB: {
-                def: 0
+            /**
+             * Margin from bottom border of the image to text contents, in
+             * 1/100 of millimeters.
+             */
+            marginb: {
+                def: 0,
+                set: _.bind(setLengthAttribute, 'margin-bottom')
             },
 
-            marginL: {
-                def: 0
+            /**
+             * Margin from left border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            marginl: {
+                def: 0,
+                set: _.bind(setLengthAttribute, 'margin-left')
             },
 
-            marginR: {
-                def: 0
+            /**
+             * Margin from right border of the image to text contents, in 1/100
+             * of millimeters.
+             */
+            marginr: {
+                def: 0,
+                set: _.bind(setLengthAttribute, 'margin-right')
             },
 
-            inline: {
-                def: true
-            }
+            /**
+             * If set to true, the image is rendered as inline element ('as
+             * character'), otherwise it is anchored relative to another
+             * element (page, paragraph, table cell, ...).
+             */
+            inline: { def: true },
 
+            anchorhbase: { def: 'margin' },
+
+            anchorhalign: { def: 'left' },
+
+            anchorhoffset: { def: 0 },
+
+            anchorvbase: { def: 'margin' },
+
+            anchorvalign: { def: 'top' },
+
+            anchorvoffset: { def: 0 },
+
+            /**
+             * Specifies how text floats around the image.
+             * - 'none': Text does not float around the image.
+             * - 'square': Text floats around the bounding box of the image.
+             * - 'tight': Text flows around a complex outline area.
+             * - 'through': Text floats through the entire image.
+             * - 'topandbottom': Text floats above and below the image only.
+             */
+            textwrapmode: { def: 'none' },
+
+            /**
+             * Specifies on which side text floats around the image. Effective
+             * only if the attribute 'textwrapmode' is either 'square' or
+             * 'tight'.
+             * - 'bothsides': Text floats at the left and right side.
+             * - 'left': Text floats at the left side of the image only.
+             * - 'right': Text floats at the right side of the image only.
+             * - 'largest': Text floats at the larger side of the image only.
+             */
+            textwrapside: { def: 'bothsides' }
         };
 
     // class ImageStyles ======================================================
@@ -76,9 +147,10 @@ define('io.ox/office/editor/format/imagestyles',
 
         /**
          * Global setter handler that will be called for every image element
-         * whose attributes have been changed.
+         * whose attributes have been changed. Repositions and reformats the
+         * image according to the passed attributes.
          *
-         * @param {jQuery} element
+         * @param {jQuery} image
          *  The <img> element whose image attributes have been changed, as
          *  jQuery object.
          *
@@ -87,7 +159,11 @@ define('io.ox/office/editor/format/imagestyles',
          *  effective attribute values merged from style sheets and explicit
          *  attributes.
          */
-        function globalSetHandler(element, attributes) {
+        function globalSetHandler(image, attributes) {
+
+            var // the paragraph element containing the image
+                paragraph = image.parent();
+
         }
 
         // base constructor ---------------------------------------------------

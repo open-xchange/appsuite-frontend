@@ -90,7 +90,7 @@ define('io.ox/office/tk/component/toolpane',
             if (event.keyCode === KeyCodes.F7) {
                 if (keydown) {
                     index = event.shiftKey ? (index - 1) : (index + 1);
-                    index = Math.min(Math.max(index, 0), toolBarIds.length - 1);
+                    index = Utils.minMax(index, 0, toolBarIds.length - 1);
                     self.showToolBar(toolBarIds[index]);
                     self.grabFocus();
                 }

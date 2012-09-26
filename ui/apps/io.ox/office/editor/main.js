@@ -17,12 +17,13 @@ define('io.ox/office/editor/main',
     ['io.ox/files/api',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
+     'io.ox/office/tk/config',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view',
      'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, AppHelper, Editor, View, Controller, gt) {
+    ], function (FilesAPI, Utils, AppHelper, Config, Editor, View, Controller, gt) {
 
     'use strict';
 
@@ -199,11 +200,14 @@ define('io.ox/office/editor/main',
          * Updates the view according to the current state of the debug mode.
          */
         function updateDebugMode() {
-            editor.getNode().toggleClass('debug-highlight', debugMode);
-            win.nodes.debugPane.toggle(debugMode);
-            controller.update('debug/toggle');
-            // resize editor pane
-            windowResizeHandler();
+            var debugavailable = Config.isDebugAvailable();
+            if (debugavailable) {
+                editor.getNode().toggleClass('debug-highlight', debugMode);
+                win.nodes.debugPane.toggle(debugMode);
+                controller.update('debug/toggle');
+                // resize editor pane
+                windowResizeHandler();
+            }
         }
 
         /**

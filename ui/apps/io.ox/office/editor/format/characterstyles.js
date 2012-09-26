@@ -40,7 +40,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('font-size', fontSize + 'pt');
                 },
                 preview: function (options, fontSize) {
-                    options.labelCss.fontSize = Math.min(Math.max(fontSize, 8), 24) + 'pt';
+                    options.labelCss.fontSize = Utils.minMax(fontSize, 8, 24) + 'pt';
                 }
             },
 
@@ -135,7 +135,7 @@ define('io.ox/office/editor/format/characterstyles',
          * Global setter handler that will be called for every text span whose
          * attributes have been changed.
          *
-         * @param {jQuery} element
+         * @param {jQuery} span
          *  The <span> element whose character attributes have been changed, as
          *  jQuery object.
          *
@@ -144,9 +144,9 @@ define('io.ox/office/editor/format/characterstyles',
          *  effective attribute values merged from style sheets and explicit
          *  attributes.
          */
-        function globalSetHandler(element, attributes) {
+        function globalSetHandler(span, attributes) {
             // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(element);
+            LineHeight.updateElementLineHeight(span);
         }
 
         // base constructor ---------------------------------------------------

@@ -746,7 +746,7 @@ define('io.ox/office/editor/editor',
                     width = null;
 
                 if (domPos) {
-                    width = Utils.roundDigits(Utils.convertLength(domPos.node.offsetWidth, 'px', 'mm', 2) * 100 / size.width, 1);
+                    width = Utils.roundDigits(Utils.convertLengthToHmm(domPos.node.offsetWidth, 'px') / size.width, 1);
                 } else {
                     width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
                 }
@@ -912,36 +912,20 @@ define('io.ox/office/editor/editor',
         // PUBLIC IMAGE METHODS
 
         this.isImagePosition = function () {
-
             var selection = getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return ((selection.endPaM.imageFloatMode === 'inline') || (selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
-        };
-
-        this.isFloatedImagePosition = function () {
-
-            var selection = getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return ((selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
+            return selection && _.isString(selection.endPaM.imageFloatMode);
         };
 
         this.getImageFloatMode = function () {
-
             var selection = getSelection();
+            return selection ? selection.endPaM.imageFloatMode : null;
+        };
 
-            if (! selection) {
-                return null;
+        this.setImageFloatMode = function (floatMode) {
+            var attributes = Image.getAttributesFromFloatMode(floatMode);
+            if (_.isObject(attributes)) {
+                this.setAttributes('character', attributes);
             }
-
-            return selection.endPaM.imageFloatMode;
         };
 
         // ==================================================================
@@ -1495,7 +1479,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     // TODO!!!
                 }
-                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority);
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default']);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
                 implSetAttributes(operation.start, operation.end, operation.attrs);
@@ -2092,12 +2076,9 @@ define('io.ox/office/editor/editor',
                         allowNoneTextNodes = true,
                         newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
                         imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
-                        imageEndPostion = _.copy(imageStartPosition, true);
+                        imageEndPostion = _.copy(imageStartPosition, true),
+                        newOperation = { name: Operations.OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
 
-                    // defining attributes, which the server can understand
-                    var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
-
-                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
                     applyOperation(newOperation, true, true);
 
                     // setting the cursor position
@@ -2657,16 +2638,9 @@ define('io.ox/office/editor/editor',
                 allMargins = null;
 
             if (attributes) {
-
-                // _(attributes).each(function (element, i) {
-                //     window.console.log("Attribute: " + i + " : " + element);
-                // });
-
-                if ((node) && (node.nodeType === 3)) {
-                    var paragraph = node.parentNode.parentNode,
-                        paraWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
-
-                    attributes.paragraphWidth = paraWidth;
+                if (node && (node.nodeType === 3)) {
+                    var paragraph = node.parentNode.parentNode;
+                    attributes.paragraphWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
                 }
 
                 anchorType = Image.getAnchorTypeFromAttributes(attributes);
@@ -2818,19 +2792,24 @@ define('io.ox/office/editor/editor',
          *  The formatting attributes contained in the new style sheet, as map
          *  of name/value pairs.
          *
-         *  @param {Boolean} [hidden]
-         *   Optional property that determines if the style should be displayed in the UI (default is false)
+         * @param {Boolean} [hidden]
+         *  Optional property that determines if the style should be displayed in the UI (default is false)
          *
-         *  @param {Number} [uiPriority]
-         *   Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         * @param {Number} [uiPriority]
+         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         *
+         * @param {Boolean} [defStyle]
+         *  True, if the new style sheet is the default style sheet of the
+         *  attribute family (will be used for elements without explicit style
+         *  sheet).
          */
-        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority) {
+        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority, defStyle) {
 
             var // the style sheet container
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority });
+                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
             }
         }
 
@@ -3778,6 +3757,15 @@ define('io.ox/office/editor/editor',
             .on('drop', processDrop)
             .on('contextmenu', processContextMenu)
             .on('cut paste', false);
+
+        // POC: image selection
+        editdiv.on('click', 'img', function () {
+            DOM.clearElementSelections(editdiv);
+            DOM.addElementSelection(editdiv, this, { moveable: true, sizeable: true });
+        });
+        this.on('selectionChanged', function () {
+            DOM.clearElementSelections(editdiv);
+        });
 
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 

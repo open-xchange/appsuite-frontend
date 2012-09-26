@@ -124,7 +124,7 @@ define('io.ox/office/tk/control/combofield',
                 if (index >= 0) {
                     index += delta * (page ? self.getItemCountPerPage() : 1);
                 }
-                index = Math.max(Math.min(index, buttons.length - 1), 0);
+                index = Utils.minMax(index, 0, buttons.length - 1);
                 // call the update handler to update the text field and list selection
                 self.update(Utils.getControlValue(buttons.eq(index)));
                 Utils.setTextFieldSelection(self.getTextField(), true);
