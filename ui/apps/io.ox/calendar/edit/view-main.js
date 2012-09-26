@@ -313,20 +313,6 @@ define('io.ox/calendar/edit/view-main',
                 return true;
             });
             this.model.set('participants', participants);
-        },
-        onSendMail: function () {
-            var participants = this.model.get('participants');
-            var def = $.Deferred();
-            util.createArrayOfRecipients(participants, def);
-
-            def.done(function (arrayOfRecipients) {
-                require(['io.ox/mail/write/main'], function (m) {
-                    m.getApp().launch().done(function () {
-                        this.compose({to: arrayOfRecipients});
-
-                    });
-                });
-            });
         }
     });
 */

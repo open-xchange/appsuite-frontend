@@ -289,7 +289,7 @@
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
     }
-  
+
     .appointment.reserved {
         background-color: @appointment-reserved;
     }

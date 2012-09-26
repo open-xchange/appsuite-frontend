@@ -605,11 +605,10 @@ define('io.ox/mail/view-detail',
                         // CC
                         showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
                         util.serializeList(data, 'cc'),
-                        $.txt(' \u00A0 '),
-                        $('<span>').addClass('io-ox-label').text(gt('All') + '\u00A0\u00A0')
+                        $.txt(' \u00A0 ')
                     )
                 );
-                drawAllDropDown(container, gt('Actions'), {});
+                drawAllDropDown(container, gt('All'), data);
             }
         }
     });

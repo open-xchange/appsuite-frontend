@@ -241,20 +241,20 @@ define('io.ox/files/icons/perspective',
                 drawFirst();
             });
 
-            // published?
-            app.folder.getData().done(function (data) {
-                win.nodes.title.find('.has-publications').remove();
-                if (data['com.openexchange.publish.publicationFlag']) {
-                    win.nodes.title.prepend(
-                        $('<img>', {
-                            src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
-                            title: gt('This folder has publications'),
-                            alt: ''
-                        })
-                        .addClass('has-publications')
-                    );
-                }
-            });
+//            // published?
+//            app.folder.getData().done(function (data) {
+//                win.nodes.title.find('.has-publications').remove();
+//                if (data['com.openexchange.publish.publicationFlag']) {
+//                    win.nodes.title.prepend(
+//                        $('<img>', {
+//                            src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
+//                            title: gt('This folder has publications'),
+//                            alt: ''
+//                        })
+//                        .addClass('has-publications')
+//                    );
+//                }
+//            });
         },
 
         render: function (app) {
