@@ -30,7 +30,7 @@ define('io.ox/calendar/week/view',
         columns:        7,      // default value for day columns
         fragmentation:  2,      // fragmentation of a hour
         gridSize:       2,      // grid fragmentation of a hour
-        cellHeight:     16,     // height of one single fragment in px
+        cellHeight:     24,     // height of one single fragment in px
         fulltimeHeight: 19,     // height of full-time appointments in px
         fulltimeMax:    5,      // threshold for visible full-time appointments in header
         appWidth:       98,     // max width of an appointment in %
@@ -622,7 +622,8 @@ define('io.ox/calendar/week/view',
 
             // init drag and resize widget on appointments
             var colWidth = $('.day:first').outerWidth(),
-                paneOffset = self.pane.children().first().width();
+                paneOffset = self.pane.children().first().width(),
+                paneHeight = self.height();
 
             $('.week-container .day>.appointment.modify')
                 .resizable({
@@ -636,29 +637,20 @@ define('io.ox/calendar/week/view',
                         // set current day
                         $.extend(data, {
                             curHelper: $(this),
-                            all: $('[data-cid="' + ui.helper.data('cid') + '"]').addClass('opac'),
+                            all: $('[data-cid="' + ui.helper.data('cid') + '"]'),
                             day: Math.floor((e.pageX - paneOffset) / colWidth)
                         });
-                        data.firstPosition = parseInt(data.all.first().closest('.day').attr('date'), 10);
-                        data.startPosition = data.day;
+                        data.firstPos = parseInt(data.all.first().closest('.day').attr('date'), 10);
+                        data.lastPos = parseInt(data.all.last().closest('.day').attr('date'), 10);
+                        data.lastHeight = data.all.last().height();
+                        data.startPos = data.day;
                     },
                     resize:  function (e, ui) {
                         var el = $(this),
                             data = el.data('resizable'),
-                            first = data.all.filter(':visible').first(),
-                            last = data.all.filter(':visible').last(),
-                            handle = 'n',
+                            handle = '',
                             day = Math.floor((e.pageX - paneOffset) / colWidth),
-                            mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop()),
-                            dayChanged = data.day !== day;
-
-                        // change helper layout
-                        data.all.css({
-                            zIndex: 999,
-                            left: 0,
-                            width: '100%',
-                            maxWidth: '100%'
-                        });
+                            mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
 
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
@@ -667,99 +659,116 @@ define('io.ox/calendar/week/view',
                             handle = 's';
                         }
 
-                        // resize actions
-                        if (day >= data.firstPosition && handle === 's') {
-                            // right side
-
-                            // set height
-                            ui.size.height = self.height() - ui.originalPosition.top;
-                            last.height(function (i, h) {
-                                return self.height() - $(this).position().top;
+                        // add new style
+                        data.all
+                            .addClass('opac')
+                            .css({
+                                left : 0,
+                                width: '100%',
+                                maxWidth: '100%',
+                                zIndex: 999
                             });
 
-                            if (dayChanged) {
-                                if (day < data.day) {
-                                    if (day >= data.startPosition) {
-                                        last.remove();
-                                    } else {
-                                        // if original element - do not remove
-                                        last.hide();
-                                    }
-                                    data.curHelper = last;
+                        // resize actions
+                        if (day >= data.firstPos && handle === 's') {
+                            // right side
+                            mouseY = self.roundToGrid(mouseY, 's');
+                            // default move
+                            if (day !== data.startPos) {
+                                ui.position.top = ui.originalPosition.top;
+                                ui.size.height = (paneHeight - el.position().top);
+                            }
+                            if (data.day === day && day !== data.startPos) {
+                                data.curHelper.height(function (i, h) {
+                                    return mouseY - $(this).position().top;
+                                });
+                            } else if (day < data.day) {
+                                // move left
+                                if (day >= data.lastPos) {
+                                    data.all.filter(':visible').last().remove();
                                 } else {
-                                    if (day > data.startPosition) {
-                                        var con = $('.week-container .day[date="' + day + '"]');
-                                        if ($.contains(con, $('[data-cid="' + ui.helper.data('cid') + '"]'))) {
-                                            data.all.show();
-                                        } else {
-                                            // set last helper to full height
-                                            data.curHelper.height(self.height());
-                                            // set new helper
-                                            data.curHelper = el.clone().css({
-                                                top: 0,
-                                                height: self.roundToGrid(mouseY, 's')
-                                            }).addClass('opac');
-                                            // append to current day
-                                            con.append(data.curHelper);
-                                        }
-                                    } else {
-                                        data.all.filter(':hidden').first().show();
-                                    }
+                                    data.all.filter(':visible').last().hide();
+                                }
+                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                data.curHelper = data.all.filter(':visible').last();
+                                data.curHelper.css({
+                                    minHeight: 0,
+                                    maxHeight: paneHeight
+                                });
+                            } else if (day > data.day) {
+                                // move right
+                                if (day > data.lastPos) {
+                                    // set new helper
+                                    $('.week-container .day[date="' + day + '"]')
+                                        .append(data.curHelper = el.clone());
+                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                } else {
+                                    data.curHelper = data.all.filter(':hidden').first();
+                                }
+                                if (day > data.firstPos) {
+                                    data.all.filter(':visible').slice(0, -1).css({
+                                        height: 'auto',
+                                        bottom: 0
+                                    });
+                                    data.curHelper.show().css({
+                                        top: 0,
+                                        height: mouseY,
+                                        minHeight: 0
+                                    });
+                                }
+                            }
+                        } else if (day <= data.lastPos && handle === 'n') {
+                            // left side
+                            mouseY = self.roundToGrid(mouseY, 'n');
+                            if (day !== data.startPos) {
+                                ui.size.height = paneHeight;
+                                ui.position.top = 0;
+                            }
+                            if (data.day === day && day !== data.startPos) {
+                                // default move
+                                data.curHelper.css({
+                                    top: mouseY,
+                                    height: (day === data.lastPos ? data.lastHeight : paneHeight) - mouseY
+                                });
+                            } else if (day > data.day) {
+                                // move right
+                                if (day < data.startPos) {
+                                    data.all.filter(':visible').first().remove();
+                                } else {
+                                    // if original element - do not remove
+                                    data.all.filter(':visible').first().hide();
                                 }
                                 // update dataset
                                 data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
-                            } else {
-                                last.height(function (i, h) {
-                                    return self.roundToGrid(mouseY, 's') - $(this).position().top;
-                                });
-                            }
-                        } else if (day < data.firstPosition && handle === 'n') {
-                            // left side
-                            ui.size.height = ui.originalPosition.top + ui.originalSize.height;
-                            ui.position.top = 0;
-                            first.height(function (i, h) {
-                                return self.height() - self.roundToGrid(mouseY, 's');
-                            });
-                            first.css('top', self.roundToGrid(mouseY, 's'));
+                                data.curHelper = data.all.filter(':visible').first();
+                            } else if (day < data.day) {
+                                // move left
+                                if (day < data.firstPos) {
+                                    // add new helper
+                                    $('.week-container .day[date="' + day + '"]')
+                                        .append(data.curHelper = el.clone().addClass('opac'));
+                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
 
-                            if (dayChanged) {
-//                                if (day < data.day) {
-//                                    if (day >= data.startPosition) {
-//                                        last.remove();
-//                                    } else {
-//                                        // if original element - do not remove
-//                                        last.hide();
-//                                    }
-//                                    data.curHelper = last;
-//                                } else {
-//                                    if (day > data.startPosition) {
-//                                        var con = $('.week-container .day[date="' + day + '"]');
-//                                        if ($.contains(con, $('[data-cid="' + ui.helper.data('cid') + '"]'))) {
-//                                            data.all.show();
-//                                        } else {
-//                                            // set last helper to full height
-//                                            data.curHelper.height(self.height());
-//                                            // set new helper
-//                                            data.curHelper = el.clone().css({
-//                                                top: 0,
-//                                                height: self.roundToGrid(mouseY, 's')
-//                                            }).addClass('opac');
-//                                            // append to current day
-//                                            con.append(data.curHelper);
-//                                        }
-//                                    } else {
-//                                        data.all.filter(':hidden').first().show();
-//                                    }
-//                                }
-//                                // update dataset
-//                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
-                            } else {
-//                                last.height(function (i, h) {
-//                                    return self.roundToGrid(mouseY, 's') - $(this).position().top;
-//                                });
+                                } else {
+                                    data.curHelper = data.all.filter(':hidden').last();
+                                }
+                                if (day < data.lastPos) {
+                                    data.all.filter(':visible').slice(0, -1).css({
+                                        top: 0,
+                                        height: paneHeight
+                                    }).end().last().height(function (i, h) {
+                                        return $(this).position().top + h;
+                                    }).css({top: 0});
+                                    data.curHelper.show().css({
+                                        top: mouseY,
+                                        height: paneHeight - mouseY
+                                    });
+                                }
+                                // update dataset
+                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
                             }
                         }
-
+                        // update day
                         data.day = day;
                     },
                     stop: function (e, ui) {
@@ -795,6 +804,7 @@ define('io.ox/calendar/week/view',
                         data.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
                             .addClass('opac')
                             .css({
+                                left : 0,
                                 width: '100%',
                                 maxWidth: '100%',
                                 zIndex: 999
@@ -825,8 +835,8 @@ define('io.ox/calendar/week/view',
                                         if (t <= 0) {
                                             t = 0;
                                         }
-                                        if (t >= self.height()) {
-                                            t = self.height();
+                                        if (t >= paneHeight) {
+                                            t = paneHeight;
                                         }
                                         data.all.first().css('top', t);
                                     }
@@ -836,8 +846,8 @@ define('io.ox/calendar/week/view',
                                             $(this).css('minHeight', 0);
                                             return 0;
                                         }
-                                        if (h > self.height()) {
-                                            return self.height();
+                                        if (h > paneHeight) {
+                                            return paneHeight;
                                         }
                                         return h;
                                     });
@@ -847,8 +857,8 @@ define('io.ox/calendar/week/view',
                                             $(this).css('minHeight', 0);
                                             return 0;
                                         }
-                                        if (h > self.height()) {
-                                            return self.height();
+                                        if (h > paneHeight) {
+                                            return paneHeight;
                                         }
                                         return h;
                                     });
