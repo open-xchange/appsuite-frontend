@@ -20,6 +20,16 @@ define('io.ox/office/editor/image',
 
     'use strict';
 
+    /**
+     * Predefined image attributes for supported image float modes.
+     */
+    var FLOAT_MODE_ATTRIBUTES = {
+            inline:       { inline: true },
+            leftFloated:  { inline: false, anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
+            rightFloated: { inline: false, anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
+            noneFloated:  { inline: false, textwrapmode: 'none' }
+        };
+
     // static class Image =====================================================
 
     /**
@@ -31,37 +41,17 @@ define('io.ox/office/editor/image',
     // static functions =======================================================
 
     /**
-     * Defining the correct images attributes used in operations for an image.
+     * Returns the images attributes that are needed to represent the passed
+     * image float mode as used in the GUI.
      *
-     * @param {Object} attr
-     *  A map with formatting attribute values, mapped by the attribute
-     *  names.
+     * @param {String} floatMode
+     *  The GUI image float mode.
      *
-     * @returns {Object} attr
-     *  A map with operation specific attribute values.
+     * @returns {Object}
+     *  A map with image attributes, as name/value pairs.
      */
-    Image.getImageOperationAttributesFromFloatMode = function (attributes) {
-
-        var operationAttributes = {};
-
-        if (attributes.imageFloatMode === 'inline') {
-            operationAttributes.inline = true;
-        } else if (attributes.imageFloatMode === 'leftFloated') {
-            operationAttributes.anchorhalign = 'left';
-            operationAttributes.textwrapmode = 'square';
-            operationAttributes.textwrapside = 'right';
-            operationAttributes.inline = false;
-        } else if (attributes.imageFloatMode === 'rightFloated') {
-            operationAttributes.anchorhalign = 'right';
-            operationAttributes.textwrapmode = 'square';
-            operationAttributes.textwrapside = 'left';
-            operationAttributes.inline = false;
-        } else if (attributes.imageFloatMode === 'noneFloated') {
-            operationAttributes.textwrapmode = 'none';
-            operationAttributes.inline = false;
-        }
-
-        return operationAttributes;
+    Image.getAttributesFromFloatMode = function (floatMode) {
+        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : null;
     };
 
     /**

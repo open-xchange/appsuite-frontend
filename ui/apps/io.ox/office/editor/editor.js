@@ -905,36 +905,20 @@ define('io.ox/office/editor/editor',
         // PUBLIC IMAGE METHODS
 
         this.isImagePosition = function () {
-
             var selection = getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return ((selection.endPaM.imageFloatMode === 'inline') || (selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
-        };
-
-        this.isFloatedImagePosition = function () {
-
-            var selection = getSelection();
-
-            if (! selection) {
-                return false;
-            }
-
-            return ((selection.endPaM.imageFloatMode === 'leftFloated') || (selection.endPaM.imageFloatMode === 'rightFloated') || (selection.endPaM.imageFloatMode === 'noneFloated'));
+            return selection && _.isString(selection.endPaM.imageFloatMode);
         };
 
         this.getImageFloatMode = function () {
-
             var selection = getSelection();
+            return selection ? selection.endPaM.imageFloatMode : null;
+        };
 
-            if (! selection) {
-                return null;
+        this.setImageFloatMode = function (floatMode) {
+            var attributes = Image.getAttributesFromFloatMode(floatMode);
+            if (_.isObject(attributes)) {
+                this.setAttributes('character', attributes);
             }
-
-            return selection.endPaM.imageFloatMode;
         };
 
         // ==================================================================
@@ -2085,12 +2069,9 @@ define('io.ox/office/editor/editor',
                         allowNoneTextNodes = true,
                         newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
                         imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
-                        imageEndPostion = _.copy(imageStartPosition, true);
+                        imageEndPostion = _.copy(imageStartPosition, true),
+                        newOperation = { name: Operations.OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
 
-                    // defining attributes, which the server can understand
-                    var operationAttributes = Image.getImageOperationAttributesFromFloatMode(attributes);
-
-                    var newOperation = {name: Operations.OP_ATTRS_SET, attrs: operationAttributes, start: imageStartPosition, end: imageEndPostion};
                     applyOperation(newOperation, true, true);
 
                     // setting the cursor position
