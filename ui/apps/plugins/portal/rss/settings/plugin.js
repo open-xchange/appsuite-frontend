@@ -404,6 +404,8 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
+            
+            
             onDeleteFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
@@ -425,13 +427,10 @@ define('plugins/portal/rss/settings/plugin',
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            var newGroup = _(feedgroups).find(function (g) {return g.groupname === groupname; }),
-                                newFeedgroups = feedgroups;
+                            var newGroup = _(feedgroups).find(function (g) {return g.groupname === groupname; });
                             newGroup.members = removeFeed(newGroup.members, url);
-                            newFeedgroups = removeFeedgroup(newFeedgroups, groupname);
-                            newFeedgroups.push(newGroup);
 
-                            settings.set('groups', newFeedgroups);
+                            settings.set('groups', feedgroups);
                             settings.save();
 
                             that.trigger('redraw');
@@ -440,8 +439,40 @@ define('plugins/portal/rss/settings/plugin',
                         return false;
                     });
             },
-            onDeleteGroup: function () {}
+            
+            
+            onDeleteGroup: function (args) {
+                var dialog = new dialogs.ModalDialog({
+                    easyOut: true
+                });
+                var deleteme = this.$el.find('[selected]'),
+                    groupname = deleteme.data('groupname');
+                console.log("deleteme/groupname", deleteme, groupname);
+                if (!groupname) {
+                    return;
+                }
+                var that = this;
+
+                dialog.header($("<h4>").text(gt('Delete a group of feeds')))
+                    .append($('<span>').text(gt('Do you really want to delete the following group of feeds?'))) //TODO i18n
+                    .append($('<ul>').append($('<li>').text(groupname)))
+                    .addButton('cancel', gt('Cancel'))
+                    .addButton('delete', gt('Delete'), null, {classes: 'btn-primary'})
+                    .show()
+                    .done(function (action) {
+                        if (action === 'delete') {
+                            settings.set('groups', feedgroups.filter(function (groups) { return groups.groupname !== groupname; }));
+                            settings.save();
+                            
+                            that.trigger('redraw');
+                            ox.trigger("refresh^");
+                        }
+                        return false;
+                    });
+            }
         }),
+        
+        
         removeFeedgroup = function (feedgroups, groupname) {
             var newfeedgroups = [];
             _.each(feedgroups, function (group) {
