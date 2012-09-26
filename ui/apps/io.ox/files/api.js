@@ -231,15 +231,6 @@ define("io.ox/files/api",
         }
     };
 
-    api.getIcon = function (file, cover) {
-        var url = this.getUrl(file);
-        if (cover) {
-            return url + '&scaleType=cover&width=128&height=90';
-        } else {
-            return url + '&scaleType=contain&width=128&height=90';
-        }
-    };
-
     api.detach = function (version) {
         return http.PUT({
             module: "infostore",
