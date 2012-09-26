@@ -12,6 +12,7 @@ CACHE:
 @base@/apps/themes/login/login.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/opensans-300.woff
+@base@/apps/themes/login/fonts/fontawesome-webfont.woff
 
 NETWORK:
 *

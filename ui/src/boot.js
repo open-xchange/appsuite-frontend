@@ -289,6 +289,7 @@ $(document).ready(function () {
      * Auto login
      */
     autoLogin = function () {
+
         var ref;
 
         function fail() {
@@ -364,9 +365,15 @@ $(document).ready(function () {
         } else {
             $("#io-ox-login-password").removeAttr("disabled");
         }
-
-        // recommend chrome frame?
-        if (_.browser.IE <= 8) {
+        // supported browser?
+        if (!browserCheck()) {
+            // warn user
+            feedback('info', $(
+                    '<b>Your browser is currently not supported!</b> ' +
+                    '<div>Please use <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a> for best results.</di>'
+                ));
+        } else if (_.browser.IE <= 8) {
+            // recommend chrome frame?
             var link = "http://www.google.com/chromeframe/?user=true";
             feedback('info', $(
                 '<b>Your browser is slow and outdated!</b> ' +
@@ -466,20 +473,8 @@ $(document).ready(function () {
                 ox.serverConfig = data;
                 // set page title now
                 document.title = ox.serverConfig.pageTitle || '';
-
-                if ( browserCheck() ) {
-                    // continue
-                    autoLogin();
-                } else {
-                    // disable login form and display warning
-                    initialize();
-                    // don't disable,
-                    //$('#io-ox-login-form input,label').addClass('io-ox-ui-disabled');
-                    feedback('info', $(
-                            '<b>Your browser is currently not supported!</b> ' +
-                            '<div>Please use <a href="http://www.google.com/chrome" target="_blank">Google Chrome</a> for best results.</di>'
-                        ));
-                }
+                // continue
+                autoLogin();
             });
     };
 

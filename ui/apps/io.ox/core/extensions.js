@@ -105,12 +105,13 @@ define("io.ox/core/extensions",
                 console.error(extension);
                 throw "Extensions must not have their own invoke method";
             }
-            if (!extension.id) {
-                console.error(extension);
-                throw "Extensions must have an id!";
-            }
 
-            extension.index = extension.index || 1000000000;
+            if (!extension.id) {
+                extensions.id = 'default';
+                extension.index = extension.index || 100;
+            } else {
+                extension.index = extension.index || 1000000000;
+            }
 
             // Used for seamless scrolling
             extension.isLoadingMoreResults = false;
@@ -280,6 +281,30 @@ define("io.ox/core/extensions",
         };
     };
 
+    /*
+     * Baton class
+     * (returnFalse/returnTrue trick adopted from jQuery event object)
+     */
+    function returnFalse() { return false; }
+    function returnTrue() { return true; }
+
+    function Baton(options) {
+        // to be safe
+        this.data = {};
+        this.$ = {};
+        // just copy options
+        _.extend(this, options);
+    }
+
+    Baton.prototype = {
+
+        isDefaultPrevented: returnFalse,
+
+        preventDefault: function () {
+            this.isDefaultPrevented = returnTrue;
+        }
+    };
+
     that = {
 
         // get point
@@ -316,13 +341,17 @@ define("io.ox/core/extensions",
         // plugin loader
         loadPlugins: function (options) {
             // require plugins
-            return require(this.getPlugins(options));
+            return require(this.getPlugins(options)).fail(function (e) {
+                console.error(e);
+            });
         },
 
         // add wrapper
         addWrapper: function (name, fn) {
             wrappers[name] = fn;
-        }
+        },
+
+        Baton: Baton
     };
 
     return that;

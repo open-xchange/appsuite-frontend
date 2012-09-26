@@ -155,6 +155,7 @@ html, body {
 #io-ox-login-form-container {
     height: 40%;
     margin: 0;
+    vertical-align: top;
 }
 
 #login-box-content td {
