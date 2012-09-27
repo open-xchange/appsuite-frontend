@@ -418,7 +418,7 @@ h4.mail-attachment-preview {
     -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
 }
 
-.io-ox-mail-main .window-title .badge {
+.io-ox-mail-window .window-title .badge {
     cursor: pointer;
 }
 

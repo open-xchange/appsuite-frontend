@@ -31,8 +31,6 @@ define("io.ox/mail/write/view-main",
 
     'use strict';
 
-    var GRID_WIDTH = 330;
-
     var autocompleteAPI = new AutocompleteAPI({id: 'mailwrite', contacts: true });
 
     var view = View.extend({
@@ -262,10 +260,7 @@ define("io.ox/mail/write/view-main",
 
             // main panel
             this.main = $('<div>')
-                .addClass('rightside')
-                .css({
-                    left: GRID_WIDTH + 'px'
-                });
+                .addClass('rightside');
 
             this.main.append(
                 $('<div>')
@@ -375,7 +370,6 @@ define("io.ox/mail/write/view-main",
 
             // side panel
             this.scrollpane = $('<div>')
-                .css({ width: (GRID_WIDTH - 26) + 'px' })
                 .addClass('leftside io-ox-mail-write-sidepanel');
 
             this.sidepanel = this.scrollpane.scrollable();

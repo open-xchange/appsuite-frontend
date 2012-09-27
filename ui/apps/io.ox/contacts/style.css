@@ -24,7 +24,13 @@
 
 /* Tabs */
 
+.contact-grid-container {
+    left: 37px;
+    overflow: auto;
+}
+
 .contact-grid-index {
+    width: 35px;
     overflow: hidden;
 }
 
