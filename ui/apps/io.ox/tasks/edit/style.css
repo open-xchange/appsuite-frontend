@@ -11,46 +11,46 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
  
- .io-ox-tasks-edit .task-edit-main-label {
+ //fill out the grid
+ .io-ox-tasks-edit .row-content {
+ 	width: 100%;
+ }
+ 
+ .io-ox-tasks-edit .private-flag {
+ 	display: inline;
+ 	width: auto;
+ 	margin: 0 5px 0 0;
+ 	top: 26px;
+ 	color: #000000;
+ 	position: relative;
+ }
+ 
+ .io-ox-tasks-edit .btn{
+ 	top: 20px;
+ 	position: relative;
+ }
+ .task-edit-wrapper {
+ 	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+ }
+ 
+ .task-edit-label {
  	display: block;
- 	margin-bottom: 3px;
-    margin-top: 5px;
+ 	color: #888;
+	font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.25em;
+	margin-bottom: 5px;
  }
  
- .io-ox-tasks-edit .task-edit-info-label {
- 	top: 0.5em;
- 	margin-right: 0.5em;
- 	line-height: 39px;
- }
- 
- .io-ox-tasks-edit {
- 	background-color: #F3F3F3;
- 	height: 100%;
- }
- 
- //info section
- .info-wrapper .end-date-field,
- .info-wrapper .start-date-field,
- .info-wrapper .alarm-date-field {
+ .task-edit-row {
  	margin-bottom: 9px;
- 	width: 150px;
- 	float: right;
  }
- 
- .io-ox-tasks-edit .info-wrapper select {
- 	float: right;
- 	width: 206px;
- }
- 
- .io-ox-tasks-edit .info-wrapper {
-	width: 330px;
-	position: absolute;
- }
- 
- .io-ox-tasks-edit .info-wrapper .task-edit-picker {
- 	margin-left: 5px;
- 	width: 45px;
- 	float: right;
+
+ .io-ox-tasks-edit .alarm-date-field {
+  	top: 20px;
+ 	position: relative;
  }
  
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
@@ -76,37 +76,10 @@
  	margin-right: 3px;
  }
  
- //main edit
- 
- .io-ox-tasks-edit .main-edit {
- 	display: inline-block;
- 	left: 331px;
- 	position: relative;
-	width: 60%;
-	padding-left: 40px;
- }
- 
- .io-ox-tasks-edit-main .title-field,
- .io-ox-tasks-edit-main .note-field {
- 	width: 100%;
- }
- 
- .io-ox-tasks-edit-main .title-field {
- 	padding: 4px;
- }
- 
- .io-ox-tasks-edit-main .task-edit-save {
- 	display: block;
-    font-size: 20px;
-    line-height: 30px;
-    margin-bottom: 9px;
-    width: 100%;
- }
- 
  //PickerPopup
  
  .picker-day {
- 	border: 1px solid;
+ 	border: 1px solid #C0C0C0;
  	fontsize: 16px; 
  }
  
