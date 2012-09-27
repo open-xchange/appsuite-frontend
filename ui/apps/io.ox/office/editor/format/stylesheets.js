@@ -183,8 +183,9 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {String} family
          *  The attribute family whose attributes will be returned.
          *
-         * @param {HTMLElement} [element]
-         *  The DOM element used to resolve ancestor style attributes.
+         * @param {jQuery} [element]
+         *  The DOM element used to resolve ancestor style attributes, as
+         *  jQuery object.
          *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
@@ -198,7 +199,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // ancestor style sheet container from the document styles collection
                 ancestorStyleSheets = _.isString(ancestorStyleFamily) ? documentStyles.getStyleSheets(ancestorStyleFamily) : null,
                 // ancestor element of the passed element
-                ancestorElement = (element && _.isFunction(ancestorElementResolver)) ? ancestorElementResolver.call(self, element) : null;
+                ancestorElement = (element && _.isFunction(ancestorElementResolver)) ? ancestorElementResolver.call(self, Utils.getDomNode(element)) : null;
 
             function collectAttributes(styleSheet) {
                 if (styleSheet) {
@@ -528,16 +529,60 @@ define('io.ox/office/editor/format/stylesheets',
          *  sheet referred by the passed element.
          */
         this.getElementStyleAttributes = function (element, family) {
-            element = Utils.getDomNode(element);
-            return getStyleAttributes(getElementAttributes($(element)).style, family, element);
+            var $element = $(element);
+            return getStyleAttributes(getElementAttributes($element).style, family, $element);
         };
 
         /**
          * Returns the merged values of all formatting attributes in the
-         * specified DOM ranges supported by the CSS formatter of this
-         * container. If an attribute value is not unique in the specified
+         * specified DOM element. If an attribute value is not unique in the specified
          * ranges, the respective value in the returned attribute map be set to
          * null.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The element whose attributes will be returned. If this object is a
+         *  jQuery collection, uses the first DOM node it contains.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, includes special attributes (attributes that
+         *      are marked with the 'special' flag in the attribute definitions
+         *      passed to the constructor) to the result map.
+         *
+         * @returns {Object}
+         *  A map of attribute name/value pairs.
+         */
+        this.getElementAttributes = function (element, options) {
+
+            var // whether to allow special attributes
+                special = Utils.getBooleanOption(options, 'special', false),
+
+                // the current element, as jQuery object
+                $element = $(element),
+                // get the element attributes
+                elementAttributes = getElementAttributes($element),
+                // get attributes of the style sheets
+                styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
+                // the resulting attributes according to style sheet and explicit formatting
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+
+            // filter by supported attributes
+            _(mergedAttributes).each(function (value, name)  {
+                if ((name !== 'style') && !isRegisteredAttribute(name, special)) {
+                    delete mergedAttributes[name];
+                }
+            });
+
+            return mergedAttributes;
+        };
+
+        /**
+         * Returns the merged values of all formatting attributes in the
+         * specified DOM ranges. If an attribute value is not unique in the
+         * specified ranges, the respective value in the returned attribute map
+         * be set to null.
          *
          * @param {DOM.Range[]} ranges
          *  (in/out) The DOM ranges to be visited. The array will be validated
@@ -558,34 +603,18 @@ define('io.ox/office/editor/format/stylesheets',
         this.getAttributesInRanges = function (ranges, options) {
 
             var // the resulting attribute values, mapped by name
-                attributes = {},
-                // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false);
+                attributes = {};
 
             // get merged attributes from all covered elements
             this.iterateReadOnly(ranges, function (element) {
 
-                var // the current element, as jQuery object
-                    $element = $(element),
-                    // get the element attributes
-                    elementAttributes = getElementAttributes($element),
-                    // get attributes of the style sheets
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element),
+                var // get attributes of the current element
+                    elementAttributes = this.getElementAttributes(element, options),
                     // whether any attribute is still unambiguous
                     hasNonNull = false;
 
-                // overwrite style sheet attributes with existing element attributes
-                _(styleAttributes).extend(elementAttributes);
-
-                // filter by supported attributes (styles may contain other attributes)
-                _(styleAttributes).each(function (value, name)  {
-                    if ((name !== 'style') && !isRegisteredAttribute(name, special)) {
-                        delete styleAttributes[name];
-                    }
-                });
-
                 // update all attributes in the result set
-                _(styleAttributes).each(function (value, name) {
+                _(elementAttributes).each(function (value, name) {
                     if (!(name in attributes)) {
                         // initial iteration: store value
                         attributes[name] = value;
@@ -602,6 +631,120 @@ define('io.ox/office/editor/format/stylesheets',
             }, this);
 
             return attributes;
+        };
+
+        /**
+         * Changes specific formatting attributes in the specified DOM element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The element whose attributes will be changed. If this object is a
+         *  jQuery collection, uses the first DOM node it contains.
+         *
+         * @param {Object} attributes
+         *  A map of attribute name/value pairs. To clear an explicit attribute
+         *  value from the element (thus defaulting to the current style
+         *  sheet), the value in this map can be set to null.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.clear=false]
+         *      If set to true, explicit element attributes that are equal to
+         *      the attributes of the current style sheet will be removed from
+         *      the element.
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, allows to change special attributes (attributes
+         *      that are marked with the 'special' flag in the attribute
+         *      definitions passed to the constructor).
+         *  @param {Function} [options.changeListener]
+         *      If specified, will be called if the attributes of the element
+         *      have been changed. Will be called in the context of this style
+         *      sheet container instance. Receives the passed element as first
+         *      parameter, the old explicit attributes (name/value map) as
+         *      second parameter, and the new explicit attributes (name/value
+         *      map) as third parameter.
+         */
+        this.setElementAttributes = function (element, attributes, options) {
+
+            var // the style sheet identifier
+                styleId = Utils.getStringOption(attributes, 'style'),
+                // whether to remove element attributes equal to style attributes
+                clear = Utils.getBooleanOption(options, 'clear', false),
+                // allow special attributes
+                special = Utils.getBooleanOption(options, 'special', false),
+                // change listener notified for changed attributes
+                changeListener = Utils.getFunctionOption(options, 'changeListener'),
+
+                // the element, as jQuery object
+                $element = $(element),
+                // the existing explicit element attributes
+                oldElementAttributes = getElementAttributes($element),
+                // new explicit element attributes
+                elementAttributes = null,
+                // attributes of the current or new style sheet
+                styleAttributes = null,
+                // the resulting attributes according to style sheet and explicit formatting
+                mergedAttributes = null,
+                // names of all attributes needed to update the current element
+                updateAttributeNames = null;
+
+            if (styleId) {
+                // style sheet of the element will be changed: remove all
+                // existing element attributes
+                styleAttributes = getStyleAttributes(styleId, styleFamily, $element);
+                elementAttributes = { style: styleAttributes.style };
+            } else {
+                // clone the attributes coming from the element, there may
+                // be multiple elements pointing to the same data object,
+                // e.g. after using the $.clone() method.
+                elementAttributes = _.clone(oldElementAttributes);
+                styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element);
+                // collect every single changed attribute
+                updateAttributeNames = [];
+            }
+
+            // add (or remove/clear) the passed explicit attributes
+            _(attributes).each(function (value, name) {
+                if (isRegisteredAttribute(name, special)) {
+                    // check whether to clear the attribute
+                    if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
+                        delete elementAttributes[name];
+                    } else {
+                        elementAttributes[name] = value;
+                    }
+                    // collect changed attribute names if required
+                    if (updateAttributeNames) {
+                        updateAttributeNames.push(name);
+                    }
+                }
+            });
+
+            // check if any attributes have been changed
+            if (!_.isEqual(oldElementAttributes, elementAttributes)) {
+
+                // write back new explicit attributes to the element
+                setElementAttributes($element, elementAttributes);
+
+                // update element formatting
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                updateElementFormatting($element, mergedAttributes, updateAttributeNames);
+
+                // update CSS formatting of descendant elements, if another
+                // style sheet has been set at the element
+                if (descendantStyleFamilies.length && (styleId in styleSheets)) {
+                    var ranges = [DOM.Range.createRangeForNode(element)];
+                    _(descendantStyleFamilies).each(function (family) {
+                        documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
+                    });
+                }
+
+                // call the passed change listener
+                if (_.isFunction(changeListener)) {
+                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
+                }
+            }
+
+            return this;
         };
 
         /**
@@ -628,92 +771,15 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to change special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
-         *  @param {Function} [options.elementChangeListener]
+         *  @param {Function} [options.changeListener]
          *      If specified, will be called for each DOM element covered by
          *      the passed ranges whose attributes have been changed.
          */
         this.setAttributesInRanges = function (ranges, attributes, options) {
 
-            var // the style sheet identifier
-                styleId = Utils.getStringOption(attributes, 'style'),
-                // whether to remove element attributes equal to style attributes
-                clear = Utils.getBooleanOption(options, 'clear', false),
-                // allow special attributes
-                special = Utils.getBooleanOption(options, 'special', false),
-                // element change listener notified for changed attributes
-                changeListener = Utils.getFunctionOption(options, 'elementChangeListener');
-
             // iterate all covered elements and change their formatting
             this.iterateReadWrite(ranges, function (element) {
-
-                var // the element, as jQuery object
-                    $element = $(element),
-                    // the existing explicit element attributes
-                    oldElementAttributes = getElementAttributes($element),
-                    // new explicit element attributes
-                    elementAttributes = null,
-                    // attributes of the current or new style sheet
-                    styleAttributes = null,
-                    // the resulting attributes according to style sheet and explicit formatting
-                    mergedAttributes = null,
-                    // names of all attributes needed to update the current element
-                    updateAttributeNames = [];
-
-                if (styleId) {
-                    // style sheet of the element will be changed: remove all
-                    // existing element attributes, update formatting of all
-                    // attributes according to the new style sheet
-                    styleAttributes = getStyleAttributes(styleId, styleFamily, element);
-                    elementAttributes = { style: styleAttributes.style };
-                    updateAttributeNames = _.keys(styleAttributes);
-                } else {
-                    // clone the attributes coming from the element, there may
-                    // be multiple elements pointing to the same data object,
-                    // e.g. after using the $.clone() method.
-                    elementAttributes = _.clone(oldElementAttributes);
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element);
-                }
-
-                // add (or remove/clear) the passed explicit attributes
-                _(attributes).each(function (value, name) {
-                    if (isRegisteredAttribute(name, special)) {
-                        // check whether to clear the attribute
-                        if (_.isNull(value) || (clear && _.isEqual(styleAttributes[name], value))) {
-                            delete elementAttributes[name];
-                        } else {
-                            elementAttributes[name] = value;
-                        }
-                        updateAttributeNames.push(name);
-                    }
-                });
-
-                // check if any attributes have been changed
-                if (_.isEqual(oldElementAttributes, elementAttributes)) {
-                    return;
-                }
-
-                // write back element attributes to the element
-                setElementAttributes($element, elementAttributes);
-
-                // update element formatting
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
-                updateAttributeNames = _.unique(updateAttributeNames);
-                updateElementFormatting($element, mergedAttributes, updateAttributeNames);
-
-                // update CSS formatting of descendant elements, if another
-                // style sheet has been set at the element
-                if (descendantStyleFamilies.length && (styleId in styleSheets)) {
-                    var ranges = [DOM.Range.createRangeForNode(element)];
-                    _(descendantStyleFamilies).each(function (family) {
-                        documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
-                    });
-                }
-
-                // call element change listener
-                if (_.isFunction(changeListener)) {
-                    changeListener.call(this, element, oldElementAttributes, elementAttributes);
-                }
-
+                this.setElementAttributes(element, attributes, options);
             }, this);
 
             return this;
@@ -790,7 +856,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // explicit element attributes
                     elementAttributes = getElementAttributes($element),
                     // get attributes of the style sheet
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, element),
+                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                     // the resulting attributes to be updated at each element
                     mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 

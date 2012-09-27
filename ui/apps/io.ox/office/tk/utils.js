@@ -18,7 +18,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     var // the ISO code of the language used by gettext
         language = null,
 
-        // selector for the label <span> element in a control caption
+        // selector for the icon <span> element in a control caption
         ICON_SELECTOR = 'span[data-role="icon"]',
 
         // selector for the label <span> element in a control caption
@@ -26,7 +26,6 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
         // selector for <span> elements in a control caption
         CAPTION_SELECTOR = ICON_SELECTOR + ', ' + LABEL_SELECTOR;
-
 
     // static class Utils =====================================================
 
@@ -1775,7 +1774,7 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
 
     // global initialization ==================================================
 
-    // get current language: TODO review
+    // get current language
     gettext.language.done(function (lang) { language = lang; });
 
     // exports ================================================================

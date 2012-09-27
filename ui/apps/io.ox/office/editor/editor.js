@@ -52,7 +52,7 @@ define('io.ox/office/editor/editor',
      * - 'operation': When a new operation has been applied.
      * - 'selectionChanged': When the selection has been changed.
      */
-    function OXOEditor(editdiv, textMode) {
+    function OXOEditor(app, editdiv, textMode) {
 
         var // self reference for local functions
             self = this,
@@ -66,13 +66,14 @@ define('io.ox/office/editor/editor',
             // shortcut for character styles
             characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
 
+            // shortcut for image styles
+            imageStyles = documentStyles ? documentStyles.getStyleSheets('image') : null,
+
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
 
             // list of operations
             operations = [],
-
-            currentDocumentURL,
 
             focused = false,
 
@@ -186,10 +187,6 @@ define('io.ox/office/editor/editor',
         this.initDocument = function () {
             var newOperation = { name: 'initDocument' };
             applyOperation(newOperation, true, true);
-        };
-
-        this.setDocumentURL = function (url) {
-            currentDocumentURL = url;
         };
 
         this.clearUndo = function () {
@@ -1358,6 +1355,15 @@ define('io.ox/office/editor/editor',
         // Private functions
         // ==================================================================
 
+        /**
+         * Returns the current document URL that will be used to access the
+         * source document in the database.
+         */
+        function getDocumentUrl() {
+            // do not cache the URL, it may change during runtime (versions etc)
+            return app.getDocumentFilterUrl('getfile');
+        }
+
         function getPrintableChar(event) {
             // event.char preferred. DL2, but nyi in most browsers:(
             if (event.char) {
@@ -1405,7 +1411,7 @@ define('io.ox/office/editor/editor',
 
         function applyOperation(operation, bRecord, bNotify) {
 
-            if (!_(operation).isObject()) {
+            if (!_.isObject(operation)) {
                 Utils.error('Editor.applyOperation(): expecting operation object');
                 return;
             }
@@ -1621,7 +1627,7 @@ define('io.ox/office/editor/editor',
                 }
                 var imgurl = operation.imgurl;
                 if (imgurl.indexOf("://") === -1)
-                    imgurl = currentDocumentURL + '&fragment=' + operation.imgurl;
+                    imgurl = getDocumentUrl() + '&fragment=' + operation.imgurl;
                 implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
             else if (operation.name === Operations.OP_FIELD_INSERT) {
@@ -2632,11 +2638,32 @@ define('io.ox/office/editor/editor',
         }
 
         function implInsertImage(url, position, attributes) {
+
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
+                image = null,
                 anchorType = null,
                 allMargins = null;
 
+            // insert the image with default settings (inline)
+            if (node && (node.nodeType === 3)) {
+
+                // prepend text before offset in a new span (also if position
+                // points to start or end of text, needed to clone formatting)
+                DOM.splitTextNode(node, domPos.offset);
+
+                // insert the image between the two text nodes
+                image = $('<img>', { src: url }).insertBefore(node.parentNode);
+
+                // apply the passed image attributes
+                if (imageStyles) {
+                    imageStyles.setElementAttributes(image, attributes);
+                }
+
+            } else {
+                Utils.error('implInsertImage(): expecting text position to insert image.');
+            }
+/*
             if (attributes) {
                 if (node && (node.nodeType === 3)) {
                     var paragraph = node.parentNode.parentNode;
@@ -2739,7 +2766,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
-
+*/
             var lastPos = _.copy(position);
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + 1;
@@ -2833,7 +2860,7 @@ define('io.ox/office/editor/editor',
         function implSetAttributes(start, end, attributes) {
 
             // change listener used to build the undo operations
-            function elementChangeListener(element, oldAttributes, newAttributes) {
+            function changeListener(element, oldAttributes, newAttributes) {
 
                 var // selection object representing the passed element
                     selection = Position.getOxoSelectionForNode(editdiv, element, false),
@@ -2881,7 +2908,7 @@ define('io.ox/office/editor/editor',
                 // whether undo is enabled
                 createUndo = undomgr.isEnabled() && !undomgr.isInUndo(),
                 // options for StyleSheets.setAttributesInRanges() method calls
-                setAttributesOptions = createUndo ? { elementChangeListener: elementChangeListener } : undefined;
+                setAttributesOptions = createUndo ? { changeListener: changeListener } : undefined;
 
             // build local copies of the arrays (do not change caller's data)
             start = _.copy(start);
