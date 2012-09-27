@@ -30,9 +30,10 @@
     box-sizing: border-box;
 }
 
-.carousel .item > img { margin:0 auto }
+.carousel .item > img { margin:0 auto; max-height: 100%; }
 
 .files-carousel {
+
     background:#000;
     position: absolute;
     overflow: auto;
@@ -40,6 +41,8 @@
     left: 0;
     right: 0;
     bottom: 0;
+
+    margin:0 auto;
 
     .close {
         position:absolute;
