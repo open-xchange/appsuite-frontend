@@ -846,7 +846,8 @@ define("io.ox/core/desktop",
                 this.hide = function () {
                     // detach if there are no iframes
                     this.trigger("beforehide");
-                    if (this.detachable && this.nodes.outer.find("iframe").length === 0) {
+                    // TODO: decide on whether or not to detach nodes
+                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
                         this.nodes.outer.hide();
@@ -1149,12 +1150,23 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
+                var setActive = function () {
+                    win.search.active = true;
+                    win.nodes.search.closest('form').addClass('active-search');
+                };
+
+                var setInactive = function () {
+                    win.search.active = false;
+                    win.nodes.search.val(win.search.query = '');
+                    win.nodes.search.closest('form').removeClass('active-search');
+                };
+
                 var searchHandler = {
                     keydown: function (e) {
                         e.stopPropagation();
                         if (e.which === 27) {
                             $(this).val('');
-                            win.search.active = false;
+                            setInactive();
                             win.trigger("cancel-search", lastQuery = '');
                         }
                     },
@@ -1162,7 +1174,7 @@ define("io.ox/core/desktop",
                         e.stopPropagation();
                         if ($(this).val() === "") {
                             $(this).blur();
-                            win.search.active = false;
+                            setInactive();
                         }
                     },
                     change: function (e) {
@@ -1170,12 +1182,12 @@ define("io.ox/core/desktop",
                         win.search.query = $(this).val();
                         // trigger search?
                         if (win.search.query !== '') {
-                            win.search.active = true;
+                            setActive();
                             if (win.search.query !== lastQuery) {
                                 triggerSearch(lastQuery = win.search.query);
                             }
                         } else if (lastQuery !== "") {
-                            win.search.active = false;
+                            setInactive();
                             win.trigger("cancel-search", lastQuery = "");
                         }
                     }
