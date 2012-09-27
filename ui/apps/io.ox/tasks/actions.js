@@ -77,7 +77,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         id: 'done',
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
-                api.update(data.last_modified, data.id, {status: 3}, data.folder_id)
+                api.update(data.last_modified, data.id, {status: 3, percent_completed: 100}, data.folder_id)
                     .done(function (result) {
                         api.trigger("update:" + data.folder_id + '.' + data.id);
                         notifications.yell('success', gt('Done!'));
