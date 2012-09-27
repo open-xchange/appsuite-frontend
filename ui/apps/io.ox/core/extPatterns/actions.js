@@ -45,7 +45,7 @@ define("io.ox/core/extPatterns/actions",
         var p = ext.point(ref),
             data = context ? context.data || context : {};
         // general handler
-        p.invoke('action', self, _.isArray(data) ? data[0] : data, context);
+        p.invoke('action', self, _.isArray(data) && data.length === 1 ? data[0] : data, context);
         // handler for multi selection - always provides an array
         p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
     };
