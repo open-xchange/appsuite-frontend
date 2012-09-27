@@ -305,6 +305,40 @@ define('io.ox/office/editor/table',
 
     };
 
+    /**
+     * Calculating the sum of all colspans from a selection of cells.
+     *
+     * @param {jQuery} cellSelection
+     *  The jQuery selection of cell element(s).
+     *
+     * @returns {Number} sum
+     *  The sum of all col spans in the selection of cells.
+     */
+    Table.getColSpanSum = function (cellSelection) {
+
+        var sum = 0;
+
+        cellSelection.each(function (index) {
+
+            var colSpan = 1;
+            if ($(this).attr('colspan')) {
+                colSpan = parseInt($(this).attr('colspan'), 10);
+            }
+
+            sum += colSpan;
+        });
+
+        return sum;
+    };
+
+    Table.shiftCellContent = function (targetCell, sourceCells) {
+
+        sourceCells.each(function (index) {
+            targetCell.append($(this).children());
+        });
+    };
+
+
     // exports ================================================================
 
     return Table;

@@ -38,6 +38,7 @@ define('io.ox/office/editor/operations', [], function () {
         OP_CELLRANGE_DELETE: 'deleteCellRange',
         OP_ROWS_DELETE: 'deleteRows',
         OP_COLUMNS_DELETE: 'deleteColumns',
+        OP_CELLS_DELETE: 'deleteCells',
         OP_ROW_COPY: 'copyRow',
         OP_COLUMN_COPY: 'copyColumn',
         OP_ROW_INSERT: 'insertRow',
