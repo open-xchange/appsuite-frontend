@@ -631,12 +631,13 @@ define('io.ox/office/editor/editor',
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 startColIndex = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
                 endColIndex = startColIndex,
-                startGrid = Table.getGridPositionFromCellPosition(rowNode, startColIndex),
-                endGrid = startGrid;
+                returnObj = Table.getGridPositionFromCellPosition(rowNode, startColIndex),
+                startGrid = returnObj.start,
+                endGrid = returnObj.end;
 
             if (selection.hasRange()) {
                 endColIndex = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
-                endGrid = Table.getGridPositionFromCellPosition(rowNode, endColIndex);
+                endGrid = Table.getGridPositionFromCellPosition(rowNode, endColIndex).end;
             }
 
             var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
@@ -680,7 +681,7 @@ define('io.ox/office/editor/editor',
                 tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 insertmode = 'behind',
-                gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition),
+                gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition).start,
                 tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
             var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
