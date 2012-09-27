@@ -30,7 +30,8 @@ define('io.ox/files/icons/perspective',
         thumbnailWidth: 128,
         thumbnailHeight: 90,
         fileIconWidth: 158,
-        fileIconHeight: 182
+        fileIconHeight: 182,
+        fileFilterRegExp: '^((?![.]_?).)'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -108,6 +109,10 @@ define('io.ox/files/icons/perspective',
         } else {
             return api.search(app.getWindow().search.query);
         }
+    }
+
+    function filterFiles(files, options) {
+        return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
     }
 
     function calculateLayout(el, options) {
@@ -199,7 +204,7 @@ define('io.ox/files/icons/perspective',
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
-                        allIds = ids;
+                        allIds = filterFiles(ids, options);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
