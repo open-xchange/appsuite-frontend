@@ -62,7 +62,8 @@
 .tasks-detailview .priority,
 .tasks-detailview .status,
 .tasks-detailview .end-date,
-.tasks-detailview .alarm-date {
+.tasks-detailview .alarm-date,
+.tasks-detailview .task-progress {
 	float: right;
 }
 
