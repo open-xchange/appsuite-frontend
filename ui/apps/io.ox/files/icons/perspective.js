@@ -153,10 +153,8 @@ define('io.ox/files/icons/perspective',
     function carouselItem(file)
     {
         return $('<div class="item">')
-            .append($('<img>', { alt: file.title, src: api.getUrl(file, 'open') })
-                .append(
-                    carouselCaption(file)
-                ));
+            .append($('<img>', { alt: file.title, src: api.getUrl(file, 'open') }))
+            .append(carouselCaption(file));
     }
 
     function drawCarousel(ids)
@@ -171,11 +169,10 @@ define('io.ox/files/icons/perspective',
         });
         $('.files-carousel')
             .append(innerCarousel)
-            .append($('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev'))
-            .append($('<a class="carousel-control right">').text('›').attr('data-slide', 'next'))
+            .append($('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev').on('click', function () { $('.files-carousel').carousel('prev'); }))
+            .append($('<a class="carousel-control right">').text('›').attr('data-slide', 'next').on('click', function () { $('.files-carousel').carousel('next'); }))
             .append($('<a class="close">').text('x').on('click', closeCarousel));
-        $('.item:first-child').addClass('active');
-        $('.files-carousel').carousel();
+        $('.files-carousel .item:first').addClass('active');
     }
 
     return _.extend(new ox.ui.Perspective('icons'), {
