@@ -56,7 +56,6 @@ define("io.ox/dev/ajaxDebug/main",
         win,
         // vgrid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -69,22 +68,17 @@ define("io.ox/dev/ajaxDebug/main",
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/dev/ajaxDebug',
             title: "API debug",
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: false
         }));
 
         // left side
         left = $("<div>").addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + 'px',
-                overflow: "auto"
-            })
             .appendTo(win.nodes.main);
 
         right = $("<div>")
-            .css({ left: GRID_WIDTH + 1 + 'px', overflow: "auto", padding: "20px 40px 20px 40px" })
             .addClass("rightside")
+            .css({ padding: "20px 40px 20px 40px" })
             .appendTo(win.nodes.main);
 
 
