@@ -164,7 +164,9 @@ define('io.ox/files/icons/perspective',
         var innerCarousel = $('<div class="carousel-inner">');
         api.getList(ids).done(function (files) {
             _(files).each(function (file) {
-                innerCarousel.append(carouselItem(file));
+                if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                    innerCarousel.append(carouselItem(file));
+                }
             });
         });
         $('.files-carousel')
