@@ -24,9 +24,7 @@ define("io.ox/files/main",
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/files' }),
         // app window
-        win,
-        // vgrid
-        GRID_WIDTH = 330;
+        win;
 
     // launcher
     app.setLauncher(function () {
@@ -35,7 +33,6 @@ define("io.ox/files/main",
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/files',
             title: gt("Files"),
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
         }));
@@ -43,7 +40,7 @@ define("io.ox/files/main",
         win.addClass("io-ox-files-main");
 
         // folder tree
-        commons.addFolderView(app, { width: GRID_WIDTH, type: 'infostore', rootFolderId: 9 });
+        commons.addFolderView(app, { type: 'infostore', rootFolderId: 9 });
 
         // go!
         commons.addFolderSupport(app, null, 'infostore')

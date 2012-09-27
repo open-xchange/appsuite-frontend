@@ -1068,6 +1068,11 @@ define("io.ox/core/desktop",
                     )
                 );
 
+            // add default css class
+            if (opt.name) {
+                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+            }
+
             // draw window head
             ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
             ext.point(opt.name + '/window-body').invoke('draw', win.nodes);

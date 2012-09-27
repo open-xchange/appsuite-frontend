@@ -47,21 +47,15 @@ define('io.ox/files/list/perspective',
 
         render: function (app) {
             var win = app.getWindow(),
-                GRID_WIDTH = 330,
                 left, right, grid;
 
             // left panel
             left = $("<div>")
                 .addClass("leftside border-right")
-                .css({
-                    width: GRID_WIDTH + "px",
-                    overflow: "auto"
-                })
                 .appendTo(this.main);
 
             // right panel
             right = $("<div>")
-                .css({ left: GRID_WIDTH + 1 + "px", overflow: "auto" })
                 .addClass("rightside default-content-padding")
                 .appendTo(this.main);
 

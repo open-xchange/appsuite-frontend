@@ -272,7 +272,6 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             ext.point(POINT + '/options').extend({
                 id: 'defaults',
                 index: 100,
-                width: 330,
                 rootFolderId: '1',
                 type: undefined,
                 view: 'ApplicationFolderTree',
@@ -294,7 +293,6 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                         .addClass('abs border-right foldertree-sidepanel')
                         .css({
                             right: 'auto',
-                            width: options.width + 'px',
                             zIndex: 3
                         });
                 }
