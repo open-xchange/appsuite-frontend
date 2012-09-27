@@ -207,9 +207,8 @@ define('io.ox/mail/view-detail',
 
             // empty?
             if (source === '') {
-                return $('<div>').addClass('content').append(
-                    $('<div>')
-                    .addClass('infoblock backstripes')
+                return $('<div class="content">').append(
+                    $('<div class="alert alert-info">')
                     .text(gt('This mail has no content'))
                 );
             }
@@ -732,9 +731,7 @@ define('io.ox/mail/view-detail',
             var self = this;
             if (data.modified === 1) {
                 this.append(
-                    $('<div>')
-                    .addClass('list')
-                    .addClass('infoblock backstripes cursor-pointer')
+                    $('<div class="alert alert-info cursor-pointer">')
                     .append(
                          $('<a>').text(gt('Show images')),
                          $('<i>').text(

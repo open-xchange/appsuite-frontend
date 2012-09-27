@@ -52,7 +52,9 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             if (baton.app.getWindow().search.active) {
                 this.append(
-                    $('<h4 class="search-query">').text('Searched for: ' + baton.app.getWindow().search.query)
+                    $('<li class="breadcrumb">').append(
+                        $('<li class="active">').text('Searched for: ' + baton.app.getWindow().search.query)
+                    )
                 );
             }
         }
