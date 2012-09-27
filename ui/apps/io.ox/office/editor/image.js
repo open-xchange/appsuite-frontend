@@ -425,9 +425,6 @@ define('io.ox/office/editor/image',
                                 // set version of FileDescriptor to version that is returned in response
                                 app.getFileDescriptor().version = response.data.version;
 
-                                // update the app.getEditor()'s DocumentURL accordingly
-                                app.getEditor().setDocumentURL(app.getDocumentFilterUrl('getfile'));
-
                                 // create an InsertImage operation with the newly added fragment
                                 app.getEditor().insertImageFile(response.data.added_fragment);
                             }

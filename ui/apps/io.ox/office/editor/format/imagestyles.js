@@ -19,14 +19,6 @@ define('io.ox/office/editor/format/imagestyles',
 
     'use strict';
 
-    /**
-     * Helper function to convert a length in 1/100 of millimeters into a CSS
-     * length in pixels and set the length at the passed element.
-     */
-    function setLengthAttribute(cssAttrName, element, length) {
-        element.css(cssAttrName, Utils.convertHmmToCssLength(length, 'px', 0));
-    }
-
     var // definitions for image attributes
         definitions = {
 
@@ -35,7 +27,9 @@ define('io.ox/office/editor/format/imagestyles',
              */
             width: {
                 def: 0,
-                set: _.bind(setLengthAttribute, 'width')
+                set: function (element, width) {
+                    element.css('width', Utils.convertHmmToCssLength(width, 'px', 0));
+                }
             },
 
             /**
@@ -43,44 +37,34 @@ define('io.ox/office/editor/format/imagestyles',
              */
             height: {
                 def: 0,
-                set: _.bind(setLengthAttribute, 'height')
+                set: function (element, height) {
+                    element.css('height', Utils.convertHmmToCssLength(height, 'px', 0));
+                }
             },
 
             /**
              * Margin from top border of the image to text contents, in 1/100
              * of millimeters.
              */
-            margint: {
-                def: 0,
-                set: _.bind(setLengthAttribute, 'margin-top')
-            },
+            margint: { def: 0 },
 
             /**
              * Margin from bottom border of the image to text contents, in
              * 1/100 of millimeters.
              */
-            marginb: {
-                def: 0,
-                set: _.bind(setLengthAttribute, 'margin-bottom')
-            },
+            marginb: { def: 0 },
 
             /**
              * Margin from left border of the image to text contents, in 1/100
              * of millimeters.
              */
-            marginl: {
-                def: 0,
-                set: _.bind(setLengthAttribute, 'margin-left')
-            },
+            marginl: { def: 0 },
 
             /**
              * Margin from right border of the image to text contents, in 1/100
              * of millimeters.
              */
-            marginr: {
-                def: 0,
-                set: _.bind(setLengthAttribute, 'margin-right')
-            },
+            marginr: { def: 0 },
 
             /**
              * If set to true, the image is rendered as inline element ('as
@@ -164,6 +148,7 @@ define('io.ox/office/editor/format/imagestyles',
             var // the paragraph element containing the image
                 paragraph = image.parent();
 
+            image.css('vertical-align', 'baseline');
         }
 
         // base constructor ---------------------------------------------------
