@@ -633,34 +633,36 @@ define('io.ox/calendar/week/view',
                     containment: "parent",
                     start: function (e, ui) {
                         self.lassoMode = false;
-                        var data = $(this).data('resizable');
+                        var d = $(this).data('resizable');
+                        // init custom resize object
+                        d.my = {};
                         // set current day
-                        $.extend(data, {
+                        $.extend(d.my, {
                             curHelper: $(this),
                             all: $('[data-cid="' + ui.helper.data('cid') + '"]'),
                             day: Math.floor((e.pageX - paneOffset) / colWidth),
                             handle: ''
                         });
-                        data.firstPos = parseInt(data.all.first().closest('.day').attr('date'), 10);
-                        data.lastPos = parseInt(data.all.last().closest('.day').attr('date'), 10);
-                        data.lastHeight = data.all.last().height();
-                        data.startPos = data.day;
+                        d.my.firstPos = parseInt(d.my.all.first().closest('.day').attr('date'), 10);
+                        d.my.lastPos = parseInt(d.my.all.last().closest('.day').attr('date'), 10);
+                        d.my.lastHeight = d.my.all.last().height();
+                        d.my.startPos = d.my.day;
                     },
                     resize:  function (e, ui) {
                         var el = $(this),
-                            data = el.data('resizable'),
+                            d = el.data('resizable'),
                             day = Math.floor((e.pageX - paneOffset) / colWidth),
                             mouseY = e.pageY - (self.pane.offset().top - self.pane.scrollTop());
 
                         // detect direction
                         if (ui.position.top !== ui.originalPosition.top) {
-                            data.handle = 'n';
+                            d.my.handle = 'n';
                         } else if (ui.size.height !== ui.originalSize.height) {
-                            data.handle = 's';
+                            d.my.handle = 's';
                         }
 
                         // add new style
-                        data.all
+                        d.my.all
                             .addClass('opac')
                             .css({
                                 left : 0,
@@ -670,131 +672,130 @@ define('io.ox/calendar/week/view',
                             });
 
                         // resize actions
-                        if (day >= data.firstPos && data.handle === 's') {
+                        if (day >= d.my.firstPos && d.my.handle === 's') {
                             // right side
                             mouseY = self.roundToGrid(mouseY, 's');
                             // default move
-                            if (day !== data.startPos) {
+                            if (day !== d.my.startPos) {
                                 ui.position.top = ui.originalPosition.top;
                                 ui.size.height = paneHeight - ui.position.top;
                             } else {
-                                data.height = ui.size.height;
+                                d.my.bottom = ui.size.height + ui.position.top;
                             }
-                            if (data.day === day && day !== data.startPos) {
-                                data.curHelper.height(function (i, h) {
-                                    data.height = mouseY - $(this).position().top;
-                                    return data.height;
+                            if (d.my.day === day && day !== d.my.startPos) {
+                                d.my.curHelper.height(function (i, h) {
+                                    return mouseY - $(this).position().top;
                                 });
-
-                            } else if (day < data.day) {
+                                d.my.bottom = mouseY;
+                            } else if (day < d.my.day) {
                                 // move left
-                                if (day >= data.lastPos) {
-                                    data.all.filter(':visible').last().remove();
+                                if (day >= d.my.lastPos) {
+                                    d.my.all.filter(':visible').last().remove();
                                 } else {
-                                    data.all.filter(':visible').last().hide();
+                                    d.my.all.filter(':visible').last().hide();
                                 }
-                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
-                                data.curHelper = data.all.filter(':visible').last();
-                                data.curHelper.css({
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.curHelper = d.my.all.filter(':visible').last();
+                                d.my.curHelper.css({
                                     minHeight: 0,
                                     maxHeight: paneHeight
                                 });
-                            } else if (day > data.day) {
+                            } else if (day > d.my.day) {
                                 // move right
-                                if (day > data.lastPos) {
+                                if (day > d.my.lastPos) {
                                     // set new helper
                                     $('.week-container .day[date="' + day + '"]')
-                                        .append(data.curHelper = el.clone());
-                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                        .append(d.my.curHelper = el.clone());
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
                                 } else {
-                                    data.curHelper = data.all.filter(':hidden').first();
+                                    d.my.curHelper = d.my.all.filter(':hidden').first();
                                 }
-                                if (day > data.firstPos) {
-                                    data.all.filter(':visible').slice(0, -1).css({
+                                if (day > d.my.firstPos) {
+                                    d.my.all.filter(':visible').slice(0, -1).css({
                                         height: 'auto',
                                         bottom: 0
                                     });
-                                    data.curHelper.show().css({
+                                    d.my.curHelper.show().css({
                                         top: 0,
                                         height: mouseY,
                                         minHeight: 0
                                     });
                                 }
                             }
-                        } else if (day <= data.lastPos && data.handle === 'n') {
+                        } else if (day <= d.my.lastPos && d.my.handle === 'n') {
                             // left side
                             mouseY = self.roundToGrid(mouseY, 'n');
-                            if (day !== data.startPos) {
+                            if (day !== d.my.startPos) {
                                 ui.size.height = paneHeight;
                                 ui.position.top = 0;
                             } else {
-                                data.top = ui.position.top;
+                                d.my.top = ui.position.top;
                             }
-                            if (data.day === day && day !== data.startPos) {
+                            if (d.my.day === day && day !== d.my.startPos) {
                                 // default move
-                                data.curHelper.css({
+                                d.my.curHelper.css({
                                     top: mouseY,
-                                    height: (day === data.lastPos ? data.lastHeight : paneHeight) - mouseY
+                                    height: (day === d.my.lastPos ? d.my.lastHeight : paneHeight) - mouseY
                                 });
-                                data.top = mouseY;
-                            } else if (day > data.day) {
+                                d.my.top = mouseY;
+                            } else if (day > d.my.day) {
                                 // move right
-                                if (day < data.startPos) {
-                                    data.all.filter(':visible').first().remove();
+                                if (day < d.my.startPos) {
+                                    d.my.all.filter(':visible').first().remove();
                                 } else {
                                     // if original element - do not remove
-                                    data.all.filter(':visible').first().hide();
+                                    d.my.all.filter(':visible').first().hide();
                                 }
                                 // update dataset
-                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
-                                data.curHelper = data.all.filter(':visible').first();
-                            } else if (day < data.day) {
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.curHelper = d.my.all.filter(':visible').first();
+                            } else if (day < d.my.day) {
                                 // move left
-                                if (day < data.firstPos) {
+                                if (day < d.my.firstPos) {
                                     // add new helper
                                     $('.week-container .day[date="' + day + '"]')
-                                        .append(data.curHelper = el.clone().addClass('opac'));
-                                    data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                        .append(d.my.curHelper = el.clone().addClass('opac'));
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
 
                                 } else {
-                                    data.curHelper = data.all.filter(':hidden').last();
+                                    d.my.curHelper = d.my.all.filter(':hidden').last();
                                 }
-                                if (day < data.lastPos) {
-                                    data.all.filter(':visible').slice(0, -1).css({
+                                if (day < d.my.lastPos) {
+                                    d.my.all.filter(':visible').slice(0, -1).css({
                                         top: 0,
                                         height: paneHeight
                                     }).end().last().height(function (i, h) {
                                         return $(this).position().top + h;
                                     }).css({top: 0});
-                                    data.curHelper.show().css({
+                                    d.my.curHelper.show().css({
                                         top: mouseY,
                                         height: paneHeight - mouseY
                                     });
                                 }
                                 // update dataset
-                                data.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
                             }
                         }
                         // update day
-                        data.day = day;
+                        d.my.day = day;
                     },
                     stop: function (e, ui) {
                         var el = $(this),
-                            data = el.data('resizable'),
+                            d = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
-                            tmpTS = self.getTimeFromDateTag(data.day, true);
-                        data.all.removeClass('opac');
-
-                        switch (data.handle) {
+                            //app = _.cid(el.data('cid') + ''),
+                            tmpTS = self.getTimeFromDateTag(d.my.day, true);
+                        d.my.all.removeClass('opac');
+                        switch (d.my.handle) {
                         case 'n':
                             _.extend(app, {
-                                start_date: tmpTS + self.getTimeFromPos(data.top),
+                                start_date: tmpTS + self.getTimeFromPos(d.my.top),
                                 ignore_conflicts: true
                             });
                             break;
                         case 's':
                             _.extend(app, {
-                                end_date: tmpTS + self.getTimeFromPos(data.height),
+                                end_date: tmpTS + self.getTimeFromPos(d.my.bottom),
                                 ignore_conflicts: true
                             });
                             break;
