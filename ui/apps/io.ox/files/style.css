@@ -27,7 +27,32 @@
     padding:13px;
     width: 100%;
     min-height: 100%;
-    box-sizing: border-box; 
+    box-sizing: border-box;
+}
+
+.carousel .item > img { margin:0 auto }
+
+.files-carousel {
+    background:#000;
+    position: absolute;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    .close {
+        position:absolute;
+        top:0;
+        right:0;
+        font-size: 40px;
+        line-height: 30px;
+        color: white;
+        text-shadow: 0 1px 0 #555;
+        opacity:0.9;
+        margin-right:13px;
+    }
+
 }
 
 .files-iconview {
@@ -46,26 +71,26 @@
     .icon-container {
         margin-right: -13px;
     }
-    
+
     .icon-container .alert {
         margin-right: 13px;
     }
 
     .file-icon {
-        
+
         width: @outerWidth;
         height: @innerHeight + 59;
         margin: 0 20px 13px 0;
         cursor: pointer;
-    
+
         .wrap {
-            
+
             width: @outerWidth;
             height: @innerHeight + 20;
             display: table-cell;
             text-align: center;
             vertical-align: bottom;
-        
+
             img {
                 max-height: @innerHeight; // till backend fix
             }
@@ -87,11 +112,11 @@
             margin: 0.5em 0 0.5em 0;
         }
     }
-    
+
     .file-icon:hover {
         opacity: 0.5;
     }
-    
+
     h4.search-query {
         margin-bottom: 2em;
     }
