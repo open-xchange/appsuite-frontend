@@ -83,7 +83,7 @@ define("io.ox/core/extPatterns/actions",
                 _(controls).map(function (node) {
                     node = $(node);
                     var ref = node.attr('data-action');
-                    return processActions(ref, collection).done(function (result) {
+                    return processActions(ref, collection, selection).done(function (result) {
                         if (result === false) {
                             node.attr('disabled', 'disabled').off('click.action');
                         } else {
