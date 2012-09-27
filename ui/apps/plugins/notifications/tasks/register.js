@@ -51,7 +51,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                     id: this.model.get('taskId'),
                     folder: this.model.get('folderId')
                 };
-            api.update(now.getTime(), data.id, {status: 3}, data.folder)
+            api.update(now.getTime(), data.id, {status: 3, percent_completed: 100}, data.folder)
                 .done(function (result) {
                     api.trigger("update:" + data.folder + '.' + data.id);
                 });
