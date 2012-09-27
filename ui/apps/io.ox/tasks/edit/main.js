@@ -39,8 +39,11 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             status,
             priority,
             endDate,
+            endDateTime,
             startDate,
+            startDateTime,
             alarmDate,
+            alarmDateTime,
             reminderDropdown,
             progress,
             privateFlag,
@@ -115,11 +118,13 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                                     } else {
                                                         editTask.alarm.setTime(dates.alarmDate.getTime());
                                                     }
-                                                    alarmDate.val(editTask.alarm.format());
+                                                    alarmDate.val(editTask.alarm.format(date.DATE));
+                                                    alarmDateTime.val(editTask.alarm.format(date.TIME));
                                                 }
                                             });
             
             alarmDate = $('<input>').addClass("alarm-date-field").attr('type', 'text');
+            alarmDateTime = $('<input>').addClass("alarm-date-field").attr('type', 'text');
             alarmButton = $('<button>')
                 .addClass("btn task-edit-picker")
                 .on('click', function (e) {
@@ -131,16 +136,18 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                             } else {
                                 editTask.alarm.setTime(timevalue);
                             }
-                            alarmDate.val(editTask.alarm.format());
+                            alarmDate.val(editTask.alarm.format(date.DATE));
+                            alarmDateTime.val(editTask.alarm.format(date.TIME));
                         }
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
             
-            util.buildRow(node, [[util.buildLabel(gt("Reminder date")), reminderDropdown], alarmDate, alarmButton], [5, [5, 1], 1]);
+            util.buildRow(node, [[util.buildLabel(gt("Reminder date")), reminderDropdown], alarmDate, alarmDateTime, alarmButton],
+                    [5, [3, 1], 2, 1]);
             
             //row 3 note
-            note = $('<textarea>', {rows: '10'}).addClass("note-field");
+            note = $('<textarea>').addClass("note-field");
             util.buildRow(node, [[util.buildLabel(gt("Note")), note]]);
 
             //row 4 status progress priority privateFlag
@@ -207,7 +214,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                             } else {
                                 editTask.start_date.setTime(timevalue);
                             }
-                            startDate.val(editTask.start_date.format());
+                            startDate.val(editTask.start_date.format(date.DATE));
+                            startDateTime.val(editTask.start_date.format(date.TIME));
                         }
                     });
                 })
@@ -224,17 +232,21 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                             } else {
                                 editTask.end_date.setTime(timevalue);
                             }
-                            endDate.val(editTask.end_date.format());
+                            endDate.val(editTask.end_date.format(date.DATE));
+                            endDateTime.val(editTask.end_date.format(date.TIME));
                         }
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
 
             startDate = $('<input>').addClass("start-date-field").attr('type', 'text');
+            startDateTime = $('<input>').addClass("start-date-time-field").attr('type', 'text');
             endDate = $('<input>').addClass("end-date-field").attr('type', 'text');
+            endDateTime = $('<input>').addClass("end-date-time-field").attr('type', 'text');
             
-            util.buildRow(node, [[util.buildLabel(gt("Start date")), startDate], startDateButton,
-                                 [util.buildLabel(gt("Due date")), endDate], endDateButton], [5, 1, 5, 1]);
+            util.buildRow(node, [[util.buildLabel(gt("Start date")), startDate], startDateTime, startDateButton,
+                                 [util.buildLabel(gt("Due date")), endDate], endDateTime, endDateButton],
+                                 [3, 2, 1, 3, 2, 1]);
             
             //row 6 repeat
             repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
@@ -309,15 +321,18 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 //fill with new ones
                 if (taskData.start_date) {
                     editTask.start_date = new date.Local(taskData.start_date);
-                    startDate.val(editTask.start_date.format());
+                    startDate.val(editTask.start_date.format(date.DATE));
+                    startDateTime.val(editTask.start_date.format(date.TIME));
                 }
                 if (taskData.end_date) {
                     editTask.end_date = new date.Local(taskData.end_date);
-                    endDate.val(editTask.end_date.format());
+                    endDate.val(editTask.end_date.format(date.DATE));
+                    endDateTime.val(editTask.end_date.format(date.TIME));
                 }
                 if (taskData.alarm) {
                     editTask.alarm = new date.Local(taskData.alarm);
-                    alarmDate.val(editTask.alarm.format());
+                    alarmDate.val(editTask.alarm.format(date.DATE));
+                    alarmDateTime.val(editTask.alarm.format(date.TIME));
                 }
                 if (taskData.title) {
                     editTask.title = taskData.title;
@@ -525,7 +540,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             editTask.status = status.prop('selectedIndex') + 1;
             editTask.priority = priority.prop('selectedIndex') + 1;
             editTask.private_flag = (privateFlag.attr('checked') === 'checked');
-            var temp = date.Local.parse(endDate.val());
+            
+            var temp = date.Local.parse(endDate.val() + ' ' + endDateTime.val());
             if (temp !== null) {
                 editTask.end_date = new date.Local(temp.t);
             } else {
@@ -536,7 +552,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
             }
 
-            temp = date.Local.parse(startDate.val());
+            temp = date.Local.parse(startDate.val() + ' ' + startDateTime.val());
             if (temp !== null) {
                 editTask.start_date = new date.Local(temp.t);
             } else {
@@ -547,7 +563,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
             }
 
-            temp = date.Local.parse(alarmDate.val());
+            temp = date.Local.parse(alarmDate.val() + ' ' + alarmDateTime.val());
             if (temp !== null) {
                 editTask.alarm = new date.Local(temp.t);
             } else {
@@ -560,7 +576,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
             return editTask;
         };
-
 
         //Extension points
         ext.point('io.ox/tasks/edit/actions/save').extend({

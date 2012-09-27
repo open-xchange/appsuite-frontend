@@ -53,6 +53,19 @@
  	position: relative;
  }
  
+ .io-ox-tasks-edit .note-field {
+  	height: 120px;
+  	min-height: 120px;
+  	resize: vertical;
+  	box-sizing: border-box;
+ }
+ 
+ .io-ox-tasks-edit .start-date-time-field,
+ .io-ox-tasks-edit .end-date-time-field {
+   	top: 20px;
+ 	position: relative;
+ }
+ 
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
  	margin-bottom: 9px;
  }
