@@ -52,7 +52,6 @@ define("io.ox/mail/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         audio,
         left,
@@ -66,17 +65,15 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: gt("Inbox"),
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true,
             fullscreen: true
         });
 
-        win.addClass("io-ox-mail-main");
         app.setWindow(win);
 
         // folder tree
-        commons.addFolderView(app, { width: GRID_WIDTH, type: 'mail' });
+        commons.addFolderView(app, { type: 'mail' });
 
         // sound
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
@@ -89,14 +86,10 @@ define("io.ox/mail/main",
         // left panel
         left = $("<div>")
             .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px"
-            })
             .appendTo(win.nodes.main);
 
         // right panel
         scrollpane = $("<div>")
-            .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside mail-detail-pane")
             .appendTo(win.nodes.main);
 

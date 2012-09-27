@@ -33,12 +33,11 @@ define("io.ox/contacts/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         thumbs,
+        gridContainer,
         right,
-        foldertree,
         // full thumb index
         fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
@@ -49,7 +48,6 @@ define("io.ox/contacts/main",
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
             title: "Global Address Book",
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
         });
@@ -57,36 +55,26 @@ define("io.ox/contacts/main",
         app.setWindow(win);
 
         // left panel
-        left = $("<div>")
-            .addClass("leftside border-left border-right")
-            .css({
-                left: 38 + "px",
-                width: GRID_WIDTH - 40 + "px",
-                overflow: "auto"
-            })
-            .appendTo(win.nodes.main);
+        win.nodes.main.append(
+            left = $('<div class="leftside">').append(
+                // grid container
+                gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
+                // thumb index
+                thumbs = $('<div class="atb contact-grid-index border-right">')
+            )
+        );
 
         // folder tree
-        commons.addFolderView(app, { width: GRID_WIDTH, type: 'contacts', view: 'FolderList' });
-
-        // thumb index
-        thumbs = $("<div>")
-            .addClass("atb contact-grid-index border-right")
-            .css({
-                left: "0px",
-                width: "35px"
-            })
-            .appendTo(win.nodes.main);
+        commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
 
         // right panel
         right = $("<div>")
-            .css({ left: GRID_WIDTH + "px", overflow: "auto" })
             .addClass("rightside default-content-padding")
             .appendTo(win.nodes.main)
             .scrollable();
 
         // grid
-        grid = new VGrid(left);
+        grid = new VGrid(gridContainer);
 
         // add template
         grid.addTemplate({
