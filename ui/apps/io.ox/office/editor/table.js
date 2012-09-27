@@ -39,7 +39,7 @@ define('io.ox/office/editor/table',
      * @param {Number[]} tablePos
      *  The logical position of the table element
      *
-     * @returns {Number[]}
+     * @returns {[]}
      *  Array of grid widths of the table in 1/100 mm
      */
     Table.getTableGrid = function (startnode, tablePos) {
@@ -78,6 +78,8 @@ define('io.ox/office/editor/table',
                     var width = Utils.convertLengthToHmm($(this).width(), 'px');
                     tablegrid.push(width);
                 });
+
+                $(tableNode).data('grid', tablegrid);
             }
         }
 
@@ -101,8 +103,7 @@ define('io.ox/office/editor/table',
     Table.getTableWidth = function (startnode, tablePos) {
 
         var width = 0,
-            tablePosition = Position.getDOMPosition(startnode, tablePos),
-            tableDataRead = false;
+            tablePosition = Position.getDOMPosition(startnode, tablePos);
 
         if (tablePosition) {
 
@@ -111,18 +112,17 @@ define('io.ox/office/editor/table',
             if ($(tableNode).data('width')) {
 
                 width = $(tableNode).data('width');
-                tableDataRead = true;
 
-            }
-        }
+            } else {
 
-        if (! tableDataRead) {
+                var tablegrid = Table.getTableGrid(startnode, tablePos);
 
-            var tablegrid = Table.getTableGrid(startnode, tablePos);
+                if (tablegrid) {
+                    for (var i = 0; i < tablegrid.length; i++) {
+                        width += tablegrid[i];
+                    }
 
-            if (tablegrid) {
-                for (var i = 0; i < tablegrid.length; i++) {
-                    width += tablegrid[i];
+                    $(tableNode).data('width', width);
                 }
             }
         }
@@ -148,7 +148,7 @@ define('io.ox/office/editor/table',
      *  The insertmode can be 'before' or 'behind'. This is relevant for
      *  the position of the added column.
      *
-     * @returns {Number[]}
+     * @returns {[]}
      *  Array of grid widths of the table in 1/100 mm
      */
     Table.getTableGridWithNewColumn = function (startnode, tablePos, gridPosition, insertmode) {
@@ -195,28 +195,43 @@ define('io.ox/office/editor/table',
      * @param {Number} cellPosition
      *  The cell number inside the row
      *
-     * @returns {Number} gridPosition
-     *  A number representing the grid position of the selected cell
+     * @returns {Object} gridPosition
+     *  An array with start and end number representing the grid position
+     *  of the selected cell. If the cell has a width of one grid position,
+     *  start and end are equal.
      */
     Table.getGridPositionFromCellPosition = function (rowNode, cellPosition) {
 
         var gridPosition = 0,
+            endGridPosition = 0,
+            startGridPosition = 0,
             allCells = $(rowNode).children();
 
         allCells.each(function (index) {
 
-            if (index < cellPosition) {
+            if (index <= cellPosition) {
                 var colSpan = 1;
                 if ($(this).attr('colspan')) {
                     colSpan = parseInt($(this).attr('colspan'), 10);
                 }
+
                 gridPosition += colSpan;
+
+                if (index === cellPosition) {  // last run, the specified cell
+
+                    endGridPosition = gridPosition;  // the end grid position of the selected cell
+                    startGridPosition = gridPosition - colSpan + 1;  // the start grid position of the selected cell
+
+                    endGridPosition--;  // grid position are 0-based
+                    startGridPosition--;   // grid position are 0-based
+                }
+
             } else {
                 return false; // leaving the each-loop
             }
         });
 
-        return gridPosition;
+        return {start: startGridPosition, end: endGridPosition};
     };
 
     /**

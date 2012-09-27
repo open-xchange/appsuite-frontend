@@ -628,12 +628,13 @@ define('io.ox/office/editor/editor',
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 startColIndex = Position.getColumnIndexInRow(paragraphs, selection.startPaM.oxoPosition),
                 endColIndex = startColIndex,
-                startGrid = Table.getGridPositionFromCellPosition(rowNode, startColIndex),
-                endGrid = startGrid;
+                returnObj = Table.getGridPositionFromCellPosition(rowNode, startColIndex),
+                startGrid = returnObj.start,
+                endGrid = returnObj.end;
 
             if (selection.hasRange()) {
                 endColIndex = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition);
-                endGrid = Table.getGridPositionFromCellPosition(rowNode, endColIndex);
+                endGrid = Table.getGridPositionFromCellPosition(rowNode, endColIndex).end;
             }
 
             var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
@@ -677,7 +678,7 @@ define('io.ox/office/editor/editor',
                 tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TABLE'),
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 insertmode = 'behind',
-                gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition),
+                gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition).start,
                 tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
             var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
@@ -1528,7 +1529,7 @@ define('io.ox/office/editor/editor',
                             tablegrid = $(tableNode).data('grid'),
                             localattrs = {'tablegrid': tablegrid},
                             tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs},
-                            rowCount = $(tableNode).children('tbody').children().length,
+                            rowCount = $(tableNode).children('tbody, thead').children().length,
                             localPos = _.copy(localStart, true);
                         localPos.push(0);
                         var rowUndoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
@@ -3288,7 +3289,7 @@ define('io.ox/office/editor/editor',
             // iterating over all cells and remove all paragraphs in the cells
             implDeleteCellRange(localPosition, [startRow, 0], [endRow, lastColumn]);
 
-            $(table).children('tbody').children().slice(startRow, endRow + 1).remove();
+            $(table).children('tbody, thead').children().slice(startRow, endRow + 1).remove();
 
             if ($(table).children().children().length === 0) {
                 // This code should never be reached. If last row shall be deleted, deleteTable is called.
@@ -3298,7 +3299,7 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastRow = $(table).children('tbody').children().length - 1;
+                var lastRow = $(table).children('tbody, thead').children().length - 1;
                 if (endRow > lastRow) {
                     endRow = lastRow;
                 }
@@ -3372,7 +3373,7 @@ define('io.ox/office/editor/editor',
 
             if (useReferenceRow) {
 
-                var refRowNode = $(table).children('tbody').children().get(referencerow),
+                var refRowNode = $(table).children('tbody, thead').children().get(referencerow),
                 row = $(refRowNode);
 
             } else if (insertdefaultcells) {
@@ -3485,7 +3486,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                allRows = $(table).children('tbody').children(),
+                allRows = $(table).children('tbody, thead').children(),
                 allCols = $(table).children('colgroup').children(),
                 endColInFirstRow = -1;
 
@@ -3518,7 +3519,10 @@ define('io.ox/office/editor/editor',
             allCols = $(table).children('colgroup').children(); // update allCols selection
 
             var tablegrid = $(table).data('grid');
-            tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid
+
+            if (tablegrid.length > allCols.length) {  // ? this should always be true, but it is not in second editor (who already adapted table grid?)
+                tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid
+            }
 
             var tableWidth = 0;
 
@@ -3529,14 +3533,14 @@ define('io.ox/office/editor/editor',
             $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
             $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
 
-            if ($(table).children('tbody').children().children().length === 0) {   // no more columns
+            if ($(table).children('tbody, thead').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
                 $(table).remove();
                 paragraphs = editdiv.children();
                 localPosition.push(0);
             } else {
                 // Setting cursor
-                var lastColInFirstRow = $(table).children('tbody').children().first().children().length - 1;
+                var lastColInFirstRow = $(table).children('tbody, thead').children().first().children().length - 1;
                 if ((endColInFirstRow > lastColInFirstRow) || (endColInFirstRow === -1)) {
                     endColInFirstRow = lastColInFirstRow;
                 }
@@ -3590,7 +3594,7 @@ define('io.ox/office/editor/editor',
             }
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                allRows = $(table).children('tbody').children(),
+                allRows = $(table).children('tbody, thead').children(),
                 // prototype elements for cell and paragraph
                 paragraph = $('<p>'),
                 cell = $('<td>').append(paragraph);
