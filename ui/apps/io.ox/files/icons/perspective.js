@@ -27,8 +27,10 @@ define('io.ox/files/icons/perspective',
     'use strict';
 
     ext.point('io.ox/mail/icons/options').extend({
-        fileIconWidth: 176,
-        fileIconHeight: 149
+        thumbnailWidth: 128,
+        thumbnailHeight: 90,
+        fileIconWidth: 158,
+        fileIconHeight: 182
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -68,7 +70,7 @@ define('io.ox/files/icons/perspective',
     });
 
     function iconError() {
-        $(this).closest('.file-icon').remove();
+        $(this).closest('.file-icon > .wrap > img').attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -77,8 +79,8 @@ define('io.ox/files/icons/perspective',
                 options = baton.options,
                 img = $('<img>', { alt: file.title });
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
-            if ((/^((?!\._?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                img.attr('src', api.getIcon(file)).addClass('img-polaroid lazy').on('error', iconError);
+            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                img.attr('src', getIcon(file, options)).addClass('img-polaroid').on('error', iconError);
             } else {
                 img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
             }
@@ -97,7 +99,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.fileIconWidth + '&height=' + options.fileIconHeight;
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     function loadFiles(app) {
@@ -115,8 +117,14 @@ define('io.ox/files/icons/perspective',
     }
 
     function calculateLayout(el, options) {
-        return { iconRows: Math.round(el.parent().height() / options.fileIconHeight),
-                 iconCols: Math.round(el.parent().width() / options.fileIconWidth) };
+
+        var rows = Math.round((el.parent().height() - 40) / options.fileIconHeight);
+        var cols = Math.floor((el.parent().width() - 6) / options.fileIconWidth);
+
+        if (rows === 0) rows = 1;
+        if (cols === 0) cols = 1;
+
+        return { iconRows: rows, iconCols: cols, icons: rows * cols };
     }
 
     return _.extend(new ox.ui.Perspective('icons'), {
@@ -193,11 +201,12 @@ define('io.ox/files/icons/perspective',
 
                 loadFiles(app).done(function (ids) {
                     iconview.idle();
-                    // still some work to do here. get's stuck sometimes
-                    displayedRows = layout.iconRows + 1;
+
+                    displayedRows = layout.iconRows;
                     start = 0;
                     end = displayedRows * layout.iconCols;
                     allIds = ids;
+
                     redraw(allIds.slice(start, end));
                 });
             };
@@ -206,16 +215,28 @@ define('io.ox/files/icons/perspective',
                 // This should be improved
                 var last_layout = layout;
                 layout = calculateLayout($('.files-iconview'), options);
-                if (last_layout.iconCols !== layout.iconCols || last_layout.iconRows !== layout.iconRows)
+
+                if (last_layout.icons < layout.icons)
                 {
-                    $('.icon-container').empty().append(
-                        $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
-                    );
-                    displayedRows = layout.iconRows + 1;
-                    start = 0;
-                    end = displayedRows * layout.iconCols;
+                    start = end;
+                    end = end + (layout.icons - last_layout.icons);
                     redraw(allIds.slice(start, end));
                 }
+                displayedRows = layout.iconRows + 1;
+                start = end;
+                end = end + layout.iconCols;
+                redraw(allIds.slice(start, end));
+
+                //if (last_layout.iconCols !== layout.iconCols || last_layout.iconRows !== layout.iconRows)
+                //{
+                //    $('.icon-container').empty().append(
+                //        $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
+                //    );
+                //    displayedRows = layout.iconRows + 1;
+                //    start = 0;
+                //    end = displayedRows * layout.iconCols;
+                //    redraw(allIds.slice(start, end));
+                //}
             };
 
             drawFirst();
@@ -243,9 +264,7 @@ define('io.ox/files/icons/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', function (e) {
-                drawFirst();
-            });
+            win.on('search cancel-search', drawFirst);
 
 //            // published?
 //            app.folder.getData().done(function (data) {
