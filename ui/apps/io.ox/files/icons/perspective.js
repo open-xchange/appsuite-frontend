@@ -70,20 +70,39 @@ define('io.ox/files/icons/perspective',
         }
     });
 
+    function drawGeneric(name) {
+        var node = $('<i>');
+        if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
+        else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
+        else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
+        else if ((/mp3$/i).test(name)) { node.addClass('icon-music'); }
+        else { node.addClass('icon-file'); }
+        return node;
+    }
+
     function iconError() {
-        $(this).closest('.file-icon > .wrap > img').attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
+        $(this).replaceWith(drawGeneric());
+    }
+
+    function drawImage(src) {
+        return $('<img>', { alt: '', src: src })
+            .addClass('img-polaroid').on('error', iconError);
+    }
+
+    function getIcon(file, options) {
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
                 options = baton.options,
-                img = $('<img>', { alt: file.title });
+                img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
-            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                img.attr('src', getIcon(file, options)).addClass('img-polaroid').on('error', iconError);
+            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|bmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                img = drawImage(getIcon(file, options));
             } else {
-                img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
+                img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
@@ -97,10 +116,6 @@ define('io.ox/files/icons/perspective',
         api.get(_.cid(cid)).done(function (file) {
             popup.append(viewDetail.draw(file).element);
         });
-    }
-
-    function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     function loadFiles(app) {
