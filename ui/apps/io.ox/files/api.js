@@ -30,7 +30,7 @@ define("io.ox/files/api",
             all: {
                 action: "all",
                 folder: config.get("folder.infostore"),
-                columns: "20,1",
+                columns: "20,1,702",
                 sort: "700",
                 order: "asc"
             },
@@ -43,7 +43,7 @@ define("io.ox/files/api",
             },
             search: {
                 action: "search",
-                columns: "20,1",
+                columns: "20,1,702",
                 sort: "700",
                 order: "asc",
                 getData: function (query) {
