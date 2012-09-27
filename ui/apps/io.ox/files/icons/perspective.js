@@ -126,6 +126,56 @@ define('io.ox/files/icons/perspective',
         return { iconRows: rows, iconCols: cols, icons: rows * cols };
     }
 
+    function addCarouselButton(el, ids)
+    {
+        return el.append(
+            $('<button class="btn btn-inverse pull-right">').text('Carousel').css({ position: 'relative', top: -5, right: -10 })
+                .on('click', function () { drawCarousel(ids); })
+        );
+    }
+
+    function closeCarousel()
+    {
+        $('.files-carousel').remove();
+        $('.files-iconview').show();
+    }
+
+    function carouselCaption(file)
+    {
+        var caption = $('<h4>').text(file.title);
+        if (file.description) caption.append($('<p>').text(file.description));
+        return $('<div class="carousel-caption">').append(caption);
+
+    }
+
+    function carouselItem(file)
+    {
+        return $('<div class="item">')
+            .append($('<img>', { alt: file.title, src: api.getUrl(file, 'open') })
+                .append(
+                    carouselCaption(file)
+                ));
+    }
+
+    function drawCarousel(ids)
+    {
+        var carousel = $('<div class="files-carousel carousel slide">');
+        $('.files-iconview').hide().parent().append(carousel);
+        var innerCarousel = $('<div class="carousel-inner">');
+        api.getList(ids).done(function (files) {
+            _(files).each(function (file) {
+                innerCarousel.append(carouselItem(file));
+            });
+        });
+        $('.files-carousel')
+            .append(innerCarousel)
+            .append($('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev'))
+            .append($('<a class="carousel-control right">').text('›').attr('data-slide', 'next'))
+            .append($('<a class="close">').text('x').on('click', closeCarousel));
+        $('.item:first-child').addClass('active');
+        $('.files-carousel').carousel();
+    }
+
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
@@ -205,6 +255,7 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
+                        addCarouselButton($('.breadcrumb'), allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
