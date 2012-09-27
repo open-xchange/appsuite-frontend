@@ -331,6 +331,18 @@ define('io.ox/office/editor/table',
         return sum;
     };
 
+    /**
+     * Shifting the content of table cells from one or more cells to one
+     * target cell.
+     *
+     * @param {jQuery} targetCell
+     *  The jQuery selection containing a cell element in which the content
+     *  of the other cells shall be included.
+     *
+     * @param {jQuery} sourceCells
+     *  The jQuery selection of cell element(s), whose content shall be
+     *  added to another cell.
+     */
     Table.shiftCellContent = function (targetCell, sourceCells) {
 
         sourceCells.each(function (index) {
