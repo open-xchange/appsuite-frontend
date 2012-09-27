@@ -98,9 +98,15 @@
                 max-height: @innerHeight; // till backend fix
             }
 
-            img.file-generic {
-                opacity: 0.15;
+            [class^="icon-"] {
+                font-size: 60px;
+                line-height: 0.5em;
+                color: #ccc;
             }
+            
+            i.file-type-doc { color: #0092D0; }
+            i.file-type-xls { color: #2FB145; }
+            i.file-type-ppt { color: #ED4D21; }
         }
 
         .title {
