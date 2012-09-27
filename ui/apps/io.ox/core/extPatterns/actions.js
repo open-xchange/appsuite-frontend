@@ -45,7 +45,7 @@ define("io.ox/core/extPatterns/actions",
         var p = ext.point(ref),
             data = context ? context.data || context : {};
         // general handler
-        p.invoke('action', self, data, context);
+        p.invoke('action', self, _.isArray(data) ? data[0] : data, context);
         // handler for multi selection - always provides an array
         p.invoke('multiple', self, _.isArray(data) ? data : [data], context);
     };
@@ -67,6 +67,10 @@ define("io.ox/core/extPatterns/actions",
         );
     };
 
+    var customClick = function (e) {
+        performAction(e.data.ref, this, e.data.selection, e);
+    };
+
     var updateCustomControls = function (container, selection) {
 
         var deferred = $.Deferred(),
@@ -83,9 +87,8 @@ define("io.ox/core/extPatterns/actions",
                         if (result === false) {
                             node.attr('disabled', 'disabled').off('click.action');
                         } else {
-                            node.removeAttr('disabled').on('click.action', function (e) {
-                                performAction(ref, node, {}, e);
-                            });
+                            node.removeAttr('disabled').off('click.action')
+                                .on('click.action', { ref: ref, selection: selection }, customClick);
                         }
                     });
                 })
