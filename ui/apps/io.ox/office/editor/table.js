@@ -78,6 +78,8 @@ define('io.ox/office/editor/table',
                     var width = Utils.convertLengthToHmm($(this).width(), 'px');
                     tablegrid.push(width);
                 });
+
+                $(tableNode).data('grid', tablegrid);
             }
         }
 
@@ -101,8 +103,7 @@ define('io.ox/office/editor/table',
     Table.getTableWidth = function (startnode, tablePos) {
 
         var width = 0,
-            tablePosition = Position.getDOMPosition(startnode, tablePos),
-            tableDataRead = false;
+            tablePosition = Position.getDOMPosition(startnode, tablePos);
 
         if (tablePosition) {
 
@@ -111,18 +112,17 @@ define('io.ox/office/editor/table',
             if ($(tableNode).data('width')) {
 
                 width = $(tableNode).data('width');
-                tableDataRead = true;
 
-            }
-        }
+            } else {
 
-        if (! tableDataRead) {
+                var tablegrid = Table.getTableGrid(startnode, tablePos);
 
-            var tablegrid = Table.getTableGrid(startnode, tablePos);
+                if (tablegrid) {
+                    for (var i = 0; i < tablegrid.length; i++) {
+                        width += tablegrid[i];
+                    }
 
-            if (tablegrid) {
-                for (var i = 0; i < tablegrid.length; i++) {
-                    width += tablegrid[i];
+                    $(tableNode).data('width', width);
                 }
             }
         }
