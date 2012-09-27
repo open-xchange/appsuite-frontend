@@ -103,17 +103,11 @@ define('io.ox/files/icons/perspective',
     }
 
     function loadFiles(app) {
-        var deferred = new $.Deferred();
         if (!app.getWindow().search.active) {
-            api.getAll({ folder: app.folder.get() })
-                .done(deferred.resolve)
-                .fail(deferred.reject);
+            return api.getAll({ folder: app.folder.get() });
         } else {
-            api.search(app.getWindow().search.query)
-            .done(deferred.resolve)
-            .fail(deferred.reject);
+            return api.search(app.getWindow().search.query);
         }
-        return deferred;
     }
 
     function calculateLayout(el, options) {
@@ -140,7 +134,7 @@ define('io.ox/files/icons/perspective',
                 drawIcons,
                 redraw,
                 drawFirst,
-                allIds,
+                allIds = [],
                 displayedRows,
                 layout,
                 recalculateLayout,
@@ -199,16 +193,21 @@ define('io.ox/files/icons/perspective',
                     $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
                 );
 
-                loadFiles(app).done(function (ids) {
-                    iconview.idle();
-
-                    displayedRows = layout.iconRows;
-                    start = 0;
-                    end = displayedRows * layout.iconCols;
-                    allIds = ids;
-
-                    redraw(allIds.slice(start, end));
-                });
+                loadFiles(app)
+                    .done(function (ids) {
+                        iconview.idle();
+                        displayedRows = layout.iconRows;
+                        start = 0;
+                        end = displayedRows * layout.iconCols;
+                        allIds = ids;
+                        redraw(allIds.slice(start, end));
+                    })
+                    .fail(function (response) {
+                        iconview.idle();
+                        iconContainer.prepend(
+                            $('<div class="alert alert-info">').text(response.error)
+                        );
+                    });
             };
 
             recalculateLayout = function () {
