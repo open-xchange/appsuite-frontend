@@ -558,14 +558,46 @@ define('io.ox/core/api/folder',
 
     api.getBreadcrumb = (function () {
 
-        var add = function (folder, i, list) {
+        var dropdown = function (li, id) {
+            _.defer(function () {
+                api.getSubFolders({ folder: id }).done(function (list) {
+                    var first;
+                    if (list.length) {
+                        // add first folder as dropdown
+                        first = list[0];
+                        li.after(
+                            $('<span class="divider">').text(' / '),
+                            $('<li class="dropdown">').append(
+                                $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
+                                    $.txt(first.title + ' ... '),
+                                    $('<b class="caret">')
+                                ),
+                                $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
+                                    _(list).map(function (folder) {
+                                        return $('<li>').append(
+                                            $('<a href="#">')
+                                            .attr('data-folder-id', folder.id).text(folder.title)
+                                        );
+                                    })
+                                )
+                            )
+                        );
+                    }
+                });
+            });
+        };
+
+        var add = function (folder, i, list, hasHandler) {
             var li = $('<li>'), elem;
             if (i === list.length - 1) {
                 elem = li.addClass('active');
+                if (hasHandler) {
+                    dropdown(elem, folder.id);
+                }
             } else {
                 elem = $('<a href="#">');
                 li.append(
-                    elem, $.txt(' '), $('<span class="divider">').text('/')
+                    elem, $('<span class="divider">').text(' / ')
                 );
             }
             elem.attr('data-folder-id', folder.id).text(folder.title);
@@ -577,12 +609,17 @@ define('io.ox/core/api/folder',
             try {
                 return (ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
                     e.preventDefault();
-                    if (handler) { handler($(this).attr('data-folder-id')); }
+                    var id = $(this).attr('data-folder-id');
+                    if (id !== undefined) {
+                        handler(id);
+                    }
                 }));
             }
             finally {
                 api.getPath({ folder: id }).done(function (list) {
-                    _(list).each(add, ul);
+                    _(list).each(function (o, i, list) {
+                        add.call(ul, o, i, list, handler !== undefined);
+                    });
                     ul = null;
                 });
             }
