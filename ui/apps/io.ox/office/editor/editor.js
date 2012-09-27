@@ -685,6 +685,8 @@ define('io.ox/office/editor/editor',
 
             if (endCol > startCol) {
 
+                var endPosition = null;
+
                 for (var i = endRow; i >= startRow; i--) {  // merging for each row
 
                     var rowPosition = _.copy(tablePos, true);
@@ -722,10 +724,15 @@ define('io.ox/office/editor/editor',
 
                     var cell = Position.getDOMPosition(paragraphs, rowPosition).node;
                     $(cell).attr('colspan', colSpanSum);
+
+                    endPosition = _.copy(rowPosition, true);
                 }
 
+                endPosition.push(0);
+                endPosition.push(0);
+
                 // setting the cursor position
-                setSelection(new OXOSelection(lastOperationEnd));
+                setSelection(new OXOSelection(new OXOPaM(endPosition)));
             }
         };
 
@@ -3599,6 +3606,7 @@ define('io.ox/office/editor/editor',
             }
 
             var tableRowDomPos = Position.getDOMPosition(paragraphs, localPosition),
+                removedRow = false,
                 row = null;
 
             if (tableRowDomPos) {
@@ -3619,9 +3627,26 @@ define('io.ox/office/editor/editor',
                     // removing empty rows implicitely
                     if ($(row).children().length === 0) {
                         $(row).remove();
+                        removedRow = true;
                     }
                 }
             }
+
+            // setting cursor position
+            if (removedRow) {
+                var rowCount = localPosition.pop();
+                if (rowCount > 0) {
+                    rowCount--;
+                }
+                localPosition.push(rowCount);
+
+            } else {
+                localPosition.push(0);
+                localPosition.push(0);
+                localPosition.push(0);
+            }
+
+            lastOperationEnd = new OXOPaM(localPosition);
         }
 
         function implDeleteColumns(pos, startGrid, endGrid) {
