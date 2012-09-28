@@ -354,7 +354,7 @@ define('io.ox/office/editor/table',
     /**
      * Collecting the attributes of table cells from a jQuery collection of cells.
      *
-     * @param {jQuery} cell´s
+     * @param {jQuery} cells
      *  The jQuery collection containing cell elements, whose attributes shall
      *  be collected in an array.
      *
@@ -382,6 +382,43 @@ define('io.ox/office/editor/table',
 
         return allCellAttributes;
 
+    };
+
+    /**
+     * Collecting for a collection of rows the cell positions that correspond
+     * to a specific grid position.
+     *
+     * @param {jQuery} allRows
+     *  The jQuery collection containing row elements, whose cell positions
+     *  corresponding to a specific grid position shall be collected in an array.
+     *
+     * @param {Number} gridposition
+     *  The integer grid position.
+     *
+     * @param {String} insertmode
+     *  The calculated cell position depends from the insert mode concerning
+     *  the grid position. Allowed values are 'behind' and 'before'.
+     *
+     * @return {any[]} allInsertPositions
+     *  An array, that contains the integer insert positions for each row in the
+     *  correct order.
+     */
+    Table.getAllInsertPositions = function (allRows, gridposition, insertmode) {
+
+        var allInsertPositions = [];
+
+        allRows.each(function (index) {
+
+            var insertPosition = Table.getCellPositionFromGridPosition(this, gridposition);
+
+            if (insertmode === 'behind') {
+                insertPosition++;
+            }
+
+            allInsertPositions.push(insertPosition);
+        });
+
+        return allInsertPositions;
     };
 
     // exports ================================================================

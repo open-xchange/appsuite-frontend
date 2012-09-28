@@ -1886,12 +1886,47 @@ define('io.ox/office/editor/editor',
                 implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.OP_COLUMN_INSERT) {
+
+
+//
+//                allRows.each(
+//                    function (i, row) {
+//                        var cellClone = cell.clone(true),
+//                            cellPosition = Table.getCellPositionFromGridPosition(row, gridposition);
+//                        if (insertmode === 'behind') {
+//                            cellClone.insertAfter($(row).children().get(cellPosition));
+//                        } else {
+//                            cellClone.insertBefore($(row).children().get(cellPosition));
+//                        }
+//                    }
+//                );
+
+// AAA
+
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var startgrid = operation.gridposition + 1, // for insertmode 'behind'
-                        endgrid = startgrid,
-                        // OP_COLUMNS_DELETE requires position (table), startgrid and endgrid
-                        undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), startgrid: startgrid, endgrid: endgrid };
-                    undomgr.addUndo(undoOperation, operation);
+                    undomgr.startGroup();
+                    // OP_COLUMNS_DELETE cannot be the answer to OP_COLUMN_INSERT, because the cells of the new column may be inserted
+                    // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
+                    var localPos = _.copy(operation.position, true),
+                        table = Position.getDOMPosition(paragraphs, localPos).node,
+                        allRows = $(table).children('tbody, thead').children(),
+                        allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridposition, operation.insertmode);
+
+                    for (var i = (allCellInsertPositions.length - 1); i >= 0; i--) {
+                        var rowPos = _.copy(localPos, true),
+                            start = allCellInsertPositions[i],
+                            end = start;  // only one cell within each operation
+                        rowPos.push(i);
+                        var undoOperation = { name: Operations.OP_CELLS_DELETE, position: rowPos, start: start, end: end };
+
+                        if (i > 0) {
+                            undomgr.addUndo(undoOperation);
+                        } else {
+                            undomgr.addUndo(undoOperation, operation);  // only one redo operation required
+                        }
+                    }
+
+                    undomgr.endGroup();
                 }
                 implInsertColumn(operation.position, operation.gridposition, operation.tablegrid, operation.insertmode);
             }
