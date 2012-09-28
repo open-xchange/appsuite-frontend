@@ -1858,6 +1858,7 @@ define('io.ox/office/editor/editor',
 
                     var localPos = _.copy(operation.position, true),
                         table = Position.getDOMPosition(paragraphs, localPos).node,
+                        tablegrid = _.copy($(table).data('grid'), true),
                         allRows = $(table).children('tbody, thead').children(),
                         allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid);
 
@@ -1897,14 +1898,12 @@ define('io.ox/office/editor/editor',
                             }
 
                             var undoOperation = { name: Operations.OP_CELL_INSERT, position: cellPosition, count: 1, attrs: cellAttrs }; // only one cell per operation
-
-                            if ((i === 0) && (j === 0)) {
-                                undomgr.addUndo(undoOperation, operation);  // only one redo operation required
-                            } else {
-                                undomgr.addUndo(undoOperation);
-                            }
+                            undomgr.addUndo(undoOperation);
                         }
                     }
+
+                    var setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: tablegrid };
+                    undomgr.addUndo(setTableGridOperation, operation);  // only one redo operation
 
                     undomgr.endGroup();
                 }
@@ -1999,6 +1998,9 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMergeParagraph(operation.start);
+            }
+            else if (operation.name === Operations.OP_TABLEGRID_SET) {
+                implSetTableGrid(operation.position, operation.tablegrid);
             }
             else if (operation.name === "xxxxxxxxxxxxxx") {
                 // TODO
@@ -3311,6 +3313,31 @@ define('io.ox/office/editor/editor',
                         lastOperationEnd = null;
                     }
                 }
+            }
+        }
+
+        // helper operation for undo functionality,
+        // should be replaced by implSetAttributes
+        function implSetTableGrid(position, tablegrid) {
+
+            var localPos = _.copy(position, true),
+                tablePosition = Position.getDOMPosition(paragraphs, localPos);
+
+            if (tablePosition) {
+                var table = tablePosition.node,
+                    tableWidth = 0;
+
+                var colgroup = $(table).children('colgroup');
+                colgroup.children('col').remove(); // removing all col entries
+
+                for (var i = 0; i < tablegrid.length; i++) {
+                    var width = tablegrid[i] / 100 + 'mm';  // converting to mm
+                    tableWidth += tablegrid[i];
+                    colgroup.append($('<col>').css('width', width));
+                }
+
+                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
+                $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': colgroup.children('col').length});  // updating table data
             }
         }
 
