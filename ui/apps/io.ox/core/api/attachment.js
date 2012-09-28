@@ -101,7 +101,8 @@ define("io.ox/core/api/attachment", ["io.ox/core/http",
             }
         },
         
-        save: function (data, target) { //multiple does not work, module overides module in params
+        save: function (data, target) {
+            //multiple does not work, because module overides module in params. So we need to do it one by one
             // be robust
             target = target || config.get('folder.infostore');
             
