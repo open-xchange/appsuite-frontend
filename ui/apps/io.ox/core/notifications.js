@@ -27,7 +27,7 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
             return this;
         },
         onChange: function () {
-            this.$el.addClass('badge-important');
+            this.$el.addClass('badge-info');
             this.$el.text(this.model.get('count'));
         },
         setNotifier: function (b) {

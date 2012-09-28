@@ -17,8 +17,9 @@ define('plugins/portal/rss/settings/plugin',
         'settings!io.ox/rss',
         'gettext!io.ox/rss',
         'text!plugins/portal/rss/settings/tpl/pluginsettings.html',
+        'io.ox/messaging/accounts/api',
         'less!plugins/portal/rss/style.css'
-        ], function (ext, dialogs, settings, gt, pluginSettingsTemplate) {
+        ], function (ext, dialogs, settings, gt, pluginSettingsTemplate, accountApi) {
 
     'use strict';
 
@@ -31,6 +32,25 @@ define('plugins/portal/rss/settings/plugin',
             EDIT_GROUP: gt('Edit group'),
             DELETE_FEED: gt('Delete feed'),
             DELETE_GROUP: gt('Delete group')
+        },
+        migrateIfNecessary = function () {
+            if (!settings.get('needsMigration')) {
+                return;
+            }
+            var members = [];
+            var group = {groupname: gt('RSS Feeds'), index: 100, members: members};
+
+            accountApi.all('com.openexchange.messaging.rss').done(function (accounts) {
+                var index = 0;
+                _(accounts).each(function (account) {
+                    index += 100;
+                    members.push({url: account.configuration.url, feedname: account.displayName, index: index});
+                });
+                settings.set('groups', [group]);
+                settings.save();
+                settings.set('needsMigration', false);
+                settings.save();
+            });
         },
 
         FeedGroupView = Backbone.View.extend({
@@ -87,6 +107,19 @@ define('plugins/portal/rss/settings/plugin',
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
                 this.template = doT.template(pluginSettingsTemplate);
+                
+                if (feedgroups) {
+                    return;
+                }
+                migrateIfNecessary();
+
+                feedgroups = settings.get('groups');
+                if (feedgroups) {
+                    return;
+                }
+                feedgroups = [];
+                settings.set('groups', feedgroups);
+                settings.save();
             },
             render: function () {
                 this.$el.empty().append(this.template({

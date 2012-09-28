@@ -846,7 +846,8 @@ define("io.ox/core/desktop",
                 this.hide = function () {
                     // detach if there are no iframes
                     this.trigger("beforehide");
-                    if (this.detachable && this.nodes.outer.find("iframe").length === 0) {
+                    // TODO: decide on whether or not to detach nodes
+                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
                         this.nodes.outer.hide();
@@ -1068,6 +1069,11 @@ define("io.ox/core/desktop",
                     )
                 );
 
+            // add default css class
+            if (opt.name) {
+                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+            }
+
             // draw window head
             ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
             ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
@@ -1144,60 +1150,65 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                $('<form>')
-                .on('submit', false)
-                .addClass('form-search')
-                .css({ 'float': 'right' })
-                .append(
-                    $('<label>', { 'for': searchId })
-                    .append(
-                        win.nodes.search = $("<input>", {
-                            type: "text",
-                            placeholder: "Search ...",
-                            tabindex: '1',
-                            size: "40",
-                            id: searchId
-                        })
-                        .tooltip({
-                            animation: false,
-                            title: 'Press &lt;enter> to search,<br>press &lt;esc> to clear',
-                            placement: 'bottom',
-                            trigger: 'focus'
-                        })
-                        .addClass('input-medium search-query')
-                        .on({
-                            keydown: function (e) {
-                                e.stopPropagation();
-                                if (e.which === 27) {
-                                    $(this).val('');
-                                    win.search.active = false;
-                                    win.trigger("cancel-search", lastQuery = '');
-                                }
-                            },
-                            search: function (e) {
-                                e.stopPropagation();
-                                if ($(this).val() === "") {
-                                    $(this).blur();
-                                    win.search.active = false;
-                                }
-                            },
-                            change: function (e) {
-                                e.stopPropagation();
-                                win.search.query = $(this).val();
-                                // trigger search?
-                                if (win.search.query !== '') {
-                                    win.search.active = true;
-                                    if (win.search.query !== lastQuery) {
-                                        triggerSearch(lastQuery = win.search.query);
-                                    }
-                                } else if (lastQuery !== "") {
-                                    win.search.active = false;
-                                    win.trigger("cancel-search", lastQuery = "");
-                                }
+                var setActive = function () {
+                    win.search.active = true;
+                    win.nodes.search.closest('form').addClass('active-search');
+                };
+
+                var setInactive = function () {
+                    win.search.active = false;
+                    win.nodes.search.val(win.search.query = '');
+                    win.nodes.search.closest('form').removeClass('active-search');
+                };
+
+                var searchHandler = {
+                    keydown: function (e) {
+                        e.stopPropagation();
+                        if (e.which === 27) {
+                            $(this).val('');
+                            setInactive();
+                            win.trigger("cancel-search", lastQuery = '');
+                        }
+                    },
+                    search: function (e) {
+                        e.stopPropagation();
+                        if ($(this).val() === "") {
+                            $(this).blur();
+                            setInactive();
+                        }
+                    },
+                    change: function (e) {
+                        e.stopPropagation();
+                        win.search.query = $(this).val();
+                        // trigger search?
+                        if (win.search.query !== '') {
+                            setActive();
+                            if (win.search.query !== lastQuery) {
+                                triggerSearch(lastQuery = win.search.query);
                             }
-                        })
+                        } else if (lastQuery !== "") {
+                            setInactive();
+                            win.trigger("cancel-search", lastQuery = "");
+                        }
+                    }
+                };
+
+                $('<form class="form-search pull-right">').append(
+                    $('<div class="input-append">').append(
+                        $('<label>', { 'for': searchId }).append(
+                            win.nodes.search = $('<input type="text" class="input-medium search-query">')
+                            .attr({
+                                tabindex: '1',
+                                placeholder: 'Search ...',
+                                id: searchId
+                            })
+                            .on(searchHandler)
+                            .placeholder()
+                        ),
+                        $('<button type="submit" class="btn"><i class="icon-search"></i></button>')
                     )
                 )
+                .on('submit', false)
                 .appendTo(win.nodes.controls);
             }
 

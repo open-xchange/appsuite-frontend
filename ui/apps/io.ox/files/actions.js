@@ -218,7 +218,7 @@ define("io.ox/files/actions",
         index: 100,
         id: "upload",
         label: gt("Upload"),
-        cssClasses: 'btn',
+        cssClasses: 'btn btn-primary',
         ref: "io.ox/files/actions/upload"
     }));
 
@@ -317,7 +317,7 @@ define("io.ox/files/actions",
         index: 100,
         label: gt("Cancel"),
         ref: "io.ox/files/actions/edit/cancel",
-        cssClasses: "btn",
+        cssClasses: "btn btn-primary",
         tabIndex: 40
     }));
 

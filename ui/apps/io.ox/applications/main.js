@@ -25,7 +25,6 @@ define('io.ox/applications/main',
         win,
         // grid
         grid,
-        GRID_WIDTH = 250,
         // nodes
         left,
         right;
@@ -46,14 +45,11 @@ define('io.ox/applications/main',
         // left panel
         left = $('<div>')
             .addClass('leftside border-right')
-            .css({
-                width: GRID_WIDTH + 'px'
-            })
             .appendTo(win.nodes.main);
 
         // right panel
         right = $('<div>')
-            .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto', paddingRight: '0' })
+            .css({ paddingRight: '0' })
             .addClass('rightside default-content-padding')
             .appendTo(win.nodes.main)
             .scrollable();

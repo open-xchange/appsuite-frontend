@@ -389,9 +389,10 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     height: 49px;
     left: 0px;
     z-index: 20;
-
+    
     font-size: @window-head-font-size;
     color: @head-color;
+    white-space: nowrap;
 
     border-top: 1px solid @topbar-launcher-background-active;
 
@@ -482,6 +483,8 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
     outline: 0;
 }
 
+.window-toolbar .btn { font-size: 13px; }
+
 .window-toolbar .btn-group + .btn-group {
     margin-left: 15px;
 }
@@ -504,6 +507,7 @@ filter: ~"progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', e
 .window-head .search-query {
     font-size: 13px;
 }
+
 a.button {
     line-height: 18px;
     color: #fff;
@@ -554,7 +558,7 @@ a.button.default-action {
     margin-left: 5px;
     display: inline-block;
     overflow: hidden;
-    height: 28px;
+    height: 30px;
 }
 
 .window-control .close {
@@ -807,13 +811,9 @@ a.button.default-action {
     top: 0px;
     bottom: 0px;
     left: 0px;
-    width: 200px;
+    width: 330px;
+    box-sizing: border-box;
     background-color: @background;
-}
-
-.reverse.leftside {
-    width: auto;
-    right: 310px;
 }
 
 .rightside {
@@ -821,13 +821,10 @@ a.button.default-action {
     top: 0px;
     right: 0px;
     bottom: 0px;
-    left: 200px;
+    left: 330px;
+    box-sizing: border-box;
     background-color: @background;
-}
-
-.reverse.rightside {
-    left: auto;
-    width: 310px;
+    overflow: auto;
 }
 
 .withStatusBar {
@@ -1372,9 +1369,10 @@ input.nice-input {
 
 .foldertree-sidepanel {
     background-color: @window-head-bottom; /* must match lower window-head color or it's simply white */
+    width: 330px;
 }
 
-.foldertree-sidepanel.io-ox-foldertree .section .section-title { color: #555; }
+.foldertree-sidepanel.io-ox-foldertree .section .section-title { color: #888; }
 .foldertree-sidepanel.io-ox-foldertree .folder .folder-label { color: #ccc; }
 .foldertree-sidepanel.io-ox-foldertree .folder-icon { display: none; }
 
@@ -1457,16 +1455,21 @@ div.external-user-image {
     float: left;
 }
 
+/** BOOTSTRAP FIXES **/
+.dropdown li { display: block; text-shadow: none; } // fixes dropdown in breadcrumb
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 
 @media (max-width: 900px) {
 
+    // SMALL SCREENS
+    /*
     .window-head.css-table { display: block; }
     .window-head .css-table-row { display: block; }
     .window-head .css-table-cell { display: block; width: 100%; }
     .window-head { height: 110px; }
     .window-body { top: 110px; }
+    */
     
     .io-ox-sidepopup.right, .io-ox-sidepopup.left {
         left: 0; right: 0;
@@ -1475,12 +1478,13 @@ div.external-user-image {
     }
     
     .io-ox-sidepopup-arrow { display: none; }
+    
+    .leftside { width: 250px; }
+    .rightside { left: 250px; }
+    .default-content-padding { padding: 13px; }
 }
 
-/*
 @media screen and (min-height: 800px) {
     .window-head { height: 59px; }
-    .window-title, .window-toolbar, .window-controls { top: 15px; }
     .window-body { top: 60px; }
 }
-*/
