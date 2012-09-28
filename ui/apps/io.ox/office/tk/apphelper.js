@@ -116,6 +116,9 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
                     (file.folder_id === appFile.folder_id);
             }) : [];
 
+        if (runningApps.length > 1) {
+            Utils.warn('AppHelper.getRunningApplication(): found multiple applications for the same file.');
+        }
         return runningApps.length ? runningApps[0] : null;
     };
 
@@ -149,6 +152,34 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         // methods ------------------------------------------------------------
 
         /**
+         * Returns an URL that can be passed to AJAX calls to communicate with
+         * a specific server-side service.
+         *
+         * @param {String} service
+         *  The name of the service.
+         *
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the URL. Each option
+         *  will be inserted into the URL as name/value pair separated by an
+         *  equality sign. The different options are separated by ampersand
+         *  characters.
+         *
+         * @returns {String}
+         *  The URL.
+         */
+        app.buildServiceUrl = function (service, options) {
+
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({
+                session: ox.session,
+                uid: this.getUniqueId()
+            }, options);
+
+            // build and return the resulting URL
+            return ox.apiRoot + '/' + service + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+        };
+
+        /**
          * Returns the URL passed to AJAX calls used to convert a document file
          * with the 'oxodocumentfilter' service.
          *
@@ -172,16 +203,14 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
             // build a default options map, and add the passed options
             options = Utils.extendOptions({
                 action: action,
-                session: ox.session,
-                uid: app.getUniqueId(),
                 id: file.id,
                 folder_id: file.folder_id,
                 filename: file.filename,
                 version: file.version
             }, options);
 
-            // build and return the result URL
-            return ox.apiRoot + '/oxodocumentfilter?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+            // build and return the resulting URL
+            return this.buildServiceUrl('oxodocumentfilter', options);
         };
 
         app.hasFileDescriptor = function () {
@@ -192,17 +221,17 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
             return file;
         };
 
-        app.setFileDescriptor = function (options) {
+        app.setFileDescriptor = function (newFile) {
             // only set new file descriptor, do not change it
-            if (_.isNull(file)) {
-                file = Utils.getObjectOption(options, 'file', null);
+            if (_.isNull(file) && _.isObject(newFile)) {
+                file = newFile;
             }
         };
 
         // initialization -----------------------------------------------------
 
         // initialize file descriptor (options may be empty yet, e.g. in fail restore)
-        app.setFileDescriptor(options);
+        app.setFileDescriptor(Utils.getObjectOption(options, 'file'));
 
         // call the initialization handler
         initAppHandler(app, options);

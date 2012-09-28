@@ -103,8 +103,8 @@ define('io.ox/office/editor/main',
 
         // private methods ----------------------------------------------------
 
-        function initializeApp(options) {
-            app.setFileDescriptor(options);
+        function initializeFromOptions(options) {
+            app.setFileDescriptor(Utils.getObjectOption(options, 'file'));
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
             syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
@@ -225,6 +225,11 @@ define('io.ox/office/editor/main',
          */
         function launchHandler() {
 
+            var // deferred used to initialize file descriptor
+                initFileDef = null,
+                // deferred returned to caller
+                def = $.Deferred();
+
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
@@ -253,6 +258,30 @@ define('io.ox/office/editor/main',
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
+
+            // 'new document' action: create the new file in InfoStore
+            if (Utils.getStringOption(options, 'file') === 'new') {
+                Utils.info('App.launchHandler(): creating new file.');
+                initFileDef = $.ajax({
+                    type: 'GET',
+                    url: app.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
+                    dataType: 'json'
+                }).pipe(function (response) {
+                    // creation succeeded: receive file descriptor and set it
+                    app.setFileDescriptor(response.data);
+                });
+            } else {
+                initFileDef = $.when();
+            }
+
+            // load the file
+            initFileDef.done(function () {
+                loadAndShow().then(function () { def.resolve(); }, function () { def.reject(); });
+            }).fail(function () {
+                def.reject();
+            });
+
+            return def;
         }
 
         /**
@@ -332,13 +361,13 @@ define('io.ox/office/editor/main',
         }
 
         /**
-         * Loads the document described in the file descriptor passed to the
-         * constructor of this application, and shows the application window.
+         * Loads the document described in the current file descriptor of this
+         * application, and shows the application window.
          *
          * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the load operation.
          */
-        function load() {
+        function loadAndShow() {
 
             var // initialize the deferred to be returned
                 def = $.Deferred().always(function () {
@@ -356,29 +385,37 @@ define('io.ox/office/editor/main',
                 operationsBuffer = []; // initDocument will result in an operation
 
                 // load the file
-                $.ajax({
-                    type: 'GET',
-                    url: app.getDocumentFilterUrl('importdocument'),
-                    dataType: 'json'
-                })
-                .pipe(extractOperationsList)
-                .done(function (operations) {
-                    var realEditors = _([editors.rich, editors.plain]);
-                    if (operations) {
-                        realEditors.invoke('enableUndo', false);
-                        applyOperations(operations);
-                        realEditors.invoke('enableUndo', true);
-                        startOperationsTimer();
-                        def.resolve();
-                    } else {
-                        showError(gt('An error occurred while importing the document.'), gt('Load Error'));
+                if (app.hasFileDescriptor()) {
+
+                    Utils.info('App.loadAndShow(): loading file "' + app.getFileDescriptor().filename + '"');
+                    $.ajax({
+                        type: 'GET',
+                        url: app.getDocumentFilterUrl('importdocument'),
+                        dataType: 'json'
+                    })
+                    .pipe(extractOperationsList)
+                    .done(function (operations) {
+                        var realEditors = _([editors.rich, editors.plain]);
+                        if (operations) {
+                            realEditors.invoke('enableUndo', false);
+                            applyOperations(operations);
+                            realEditors.invoke('enableUndo', true);
+                            startOperationsTimer();
+                            def.resolve();
+                        } else {
+                            showError(gt('An error occurred while importing the document.'), gt('Load Error'));
+                            def.reject();
+                        }
+                    })
+                    .fail(function (response) {
+                        showAjaxError(response);
                         def.reject();
-                    }
-                })
-                .fail(function (response) {
-                    showAjaxError(response);
-                    def.reject();
-                });
+                    });
+
+                } else {
+                    // no file descriptor: just show an empty editor
+                    def.resolve();
+                }
             });
 
             return def;
@@ -453,7 +490,9 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                window.open(app.getDocumentFilterUrl('getdocument', { filter_format: (format || "") }), app.getFileDescriptor().title || 'file');
+                var url = app.getDocumentFilterUrl('getdocument', { filter_format: format || '' }),
+                    title = app.getFileDescriptor().title || 'file';
+                window.open(url, title);
                 def.resolve();
             })
             .fail(function () {
@@ -645,20 +684,6 @@ define('io.ox/office/editor/main',
             return def;
         };
 
-        /**
-         * Loads the document described in the file descriptor passed to the
-         * constructor of this application, and shows the application window.
-         *
-         * @returns {jQuery.Deferred}
-         *  A deferred that reflects the result of the load operation.
-         */
-        app.load = function () {
-            // do not load twice (may be called repeatedly from app launcher)
-            app.load = app.show;
-            // do not try to load, if file descriptor is missing
-            return app.hasFileDescriptor() ? load() : app.show();
-        };
-
         app.save = function () {
             return saveOrFlush('exportdocument');
         };
@@ -736,10 +761,10 @@ define('io.ox/office/editor/main',
         };
 
         app.failRestore = function (point) {
-            initializeApp(point);
+            initializeFromOptions(point);
             app.newVersion(0);  // Get top-level version
             updateDebugMode();
-            return app.load().always(function () {
+            return loadAndShow().always(function () {
                 view.getToolPane().showToolBar(Utils.getStringOption(point, 'toolBarId'));
             });
         };
@@ -844,7 +869,7 @@ define('io.ox/office/editor/main',
         });
 
         // configure OX application
-        initializeApp(options);
+        initializeFromOptions(options);
         return app.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // initializeApplication()
