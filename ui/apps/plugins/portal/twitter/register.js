@@ -130,7 +130,6 @@ define('plugins/portal/twitter/register',
 
     var showTweet = function (tweet) {
         if (tweet.retweeted_status) {
-            console.log("This one was retweeted:", tweet);
             var $temp = renderTweet(tweet.retweeted_status);
             $temp.find('.text').append(
                 $('<div class="io-ox-twitter-retweet-source">').append(
@@ -147,7 +146,6 @@ define('plugins/portal/twitter/register',
     var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-        console.log("Tweet=", tweet);
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
             $('<a class="io-ox-twitter-follow btn" href="https://twitter.com/intent/user">').append(
                 $('<span>').text(gt('Follow')),
