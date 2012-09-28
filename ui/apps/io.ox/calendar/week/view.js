@@ -918,7 +918,7 @@ define('io.ox/calendar/week/view',
                             end_date: startTS + (app.end_date - app.start_date),
                             ignore_conflicts: true
                         });
-//                        self.onUpdateAppointment(app);
+                        self.onUpdateAppointment(app);
                     }
                 });
 
