@@ -74,22 +74,19 @@ define('io.ox/office/editor/main',
         var // application window
             win = null,
 
-            // editors mapped by text mode
-            editors = {},
-
-            // primary editor used in save, quit, etc.
+            // the editor (model)
             editor = null,
 
             // editor view, contains panes, tool bars, etc.
             view = null,
 
-            // controller as single connection point between editors and view elements
+            // controller as single connection point between editor and view elements
             controller = null,
 
             // deferred objects causing the quit handler to delay destruction of the application
             quitDelays = [],
 
-            // buffer for user operations. One should be enough, as the editors here are always in sync
+            // buffer for user operations
             operationsBuffer = [],
 
             // browser timer for operations handling
@@ -153,7 +150,7 @@ define('io.ox/office/editor/main',
          */
         function showError(message, title) {
 
-            var // the alert box
+            var // the alert box (return focus to editor when clicked)
                 alert = $.alert(title || gt('Error'), message).click(function () { controller.done(); });
 
             win.nodes.appPane
@@ -244,13 +241,11 @@ define('io.ox/office/editor/main',
             // - prevent resize handles for tables and objects (re-enabled after detach/insert)
             win.detachable = false;
 
-            // create controller and register editors
-            controller = new Controller(app)
-                .registerEditor(editors.rich, null)
-                .registerEditor(editors.plain, /^format\//);
+            // create controller
+            controller = new Controller(app);
 
             // editor view
-            view = new View(win, controller, editors);
+            view = new View(win, controller, editor);
             updateDebugMode();
 
             // register window event handlers
@@ -261,7 +256,6 @@ define('io.ox/office/editor/main',
 
             // 'new document' action: create the new file in InfoStore
             if (Utils.getStringOption(options, 'file') === 'new') {
-                Utils.info('App.launchHandler(): creating new file.');
                 initFileDef = $.ajax({
                     type: 'GET',
                     url: app.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
@@ -334,30 +328,16 @@ define('io.ox/office/editor/main',
         }
 
         /**
-         * Applies the passed operations at all known editor objects but the
-         * editor specified as event source.
+         * Applies the passed operations at the editor and logs them in the
+         * output console.
          *
-         * @param {Object|Object[]} operations
-         *  An operation or an array of operations to be applied.
-         *
-         * @param {Editor} [eventSource]
-         *  The editor that has called the function. This editor will not
-         *  receive the passed operations again. May be omitted to apply the
-         *  operations to all editors.
+         * @param {Object[]} operations
+         *  An array of operations to be applied.
          */
-        function applyOperations(operations, eventSource) {
-
-            // normalize operations parameter
-            if (!_.isArray(operations)) {
-                operations = [operations];
-            }
-
-            // apply operations to all editors
-            _(editors).each(function (editor) {
-                if (editor !== eventSource) {
-                    editor.applyOperations(operations, false, false);
-                }
-            });
+        function applyOperations(operations) {
+            editor.applyOperations(operations, false, false);
+            controller.update();
+            view.logOperations(operations);
         }
 
         /**
@@ -387,7 +367,6 @@ define('io.ox/office/editor/main',
                 // load the file
                 if (app.hasFileDescriptor()) {
 
-                    Utils.info('App.loadAndShow(): loading file "' + app.getFileDescriptor().filename + '"');
                     $.ajax({
                         type: 'GET',
                         url: app.getDocumentFilterUrl('importdocument'),
@@ -395,11 +374,10 @@ define('io.ox/office/editor/main',
                     })
                     .pipe(extractOperationsList)
                     .done(function (operations) {
-                        var realEditors = _([editors.rich, editors.plain]);
                         if (operations) {
-                            realEditors.invoke('enableUndo', false);
+                            editor.enableUndo(false);
                             applyOperations(operations);
-                            realEditors.invoke('enableUndo', true);
+                            editor.enableUndo(true);
                             startOperationsTimer();
                             def.resolve();
                         } else {
@@ -815,57 +793,18 @@ define('io.ox/office/editor/main',
             }
             controller.destroy();
             view.destroy();
-            _(editors).invoke('destroy');
-            app = win = editors = editor = view = controller = null;
+            editor.destroy();
+            app = win = editor = view = controller = null;
         };
 
         // initialization -----------------------------------------------------
 
-        // create the rich-text and plain-text editor
-        _(['rich', 'plain']).each(function (textMode) {
-            var // class names for the editor
-                classes = 'io-ox-office-editor user-select-text ' + textMode,
-                // the editor root node
-                node = $('<div>', { contenteditable: true }).addClass(classes);
-            editors[textMode] = new Editor(app, node, textMode);
-        });
+        // create the editor model
+        editor = new Editor(app);
 
-        // operations output console
-        editors.output = {
-            node: $('<div>').addClass('io-ox-office-editor user-select-text output').append('<table>'),
-            getNode: function () { return this.node; },
-            on: function () { return this; },
-            applyOperation: function (operation) {
-                var name = operation.name, table = this.node.children('table');
-                operation = _.clone(operation);
-                delete operation.name;
-                operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1');
-                table.append($('<tr>').append(
-                    $('<td>').text(table.find('tr').length + 1),
-                    $('<td>').text(name),
-                    $('<td>').text(operation)));
-                this.node.scrollTop(this.node.get(0).scrollHeight);
-            },
-            applyOperations: function (operations) {
-                if (_.isArray(operations)) {
-                    _(operations).each(_.bind(this.applyOperation, this));
-                } else {
-                    this.applyOperation(operations);
-                }
-            },
-            destroy: $.noop
-        };
-
-        // primary editor for global operations (e.g. save)
-        editor = editors.rich;
-
-        // listen to operations and deliver them to editors and output console
-        _(editors).each(function (editor) {
-            editor.on('operation', function (event, operation) {
-                // buffer operations for sending them later on...
-                operationsBuffer.push(operation);
-                applyOperations(operation, editor);
-            });
+        // cache operations from editor
+        editor.on('operation', function (event, operation) {
+            operationsBuffer.push(operation);
         });
 
         // configure OX application
