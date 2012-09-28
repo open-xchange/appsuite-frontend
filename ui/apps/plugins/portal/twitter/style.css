@@ -32,3 +32,49 @@
 .twitter .name {
     font-weight: bold;
 }
+
+.io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite, .io-ox-twitter-follow {
+    display: block;
+    float: right;
+    margin-left: 0.5em;
+}
+.io-ox-twitter-reply i, .io-ox-twitter-retweet i, .io-ox-twitter-favorite i, .io-ox-twitter-follow i {
+    border: none;
+    background-image: url('everything-spritev2.png');
+    display: block;
+    float: left;
+    width: 16px; //because at Twitter, an icon advertised as 16x16 is, of course, 14x11 pixels in size.
+    height: 16px;
+}
+.io-ox-twitter-follow i {
+    background-image: url('bird_blue_16.png');
+    background-position: 0px 0px;
+    width: 14px;
+    height: 11px;
+    margin-top: 5px;
+}
+.io-ox-twitter-reply i{
+    background-position: 0px 0px;
+}
+.io-ox-twitter-reply a:hover i{
+    background-position: -16px 0px;
+}
+.io-ox-twitter-favorite i{
+    background-position: -32px 0px;
+} 
+.io-ox-twitter-favorite a:hover i{
+    background-position: -48px 0;    
+}
+.io-ox-twitter-favorite i.favorited{
+    background-position: -64px 0;    
+}
+.io-ox-twitter-retweet i{
+    background-position: -80px 0;
+}
+.io-ox-twitter-retweet a:hover i{
+    background-position: -96px 0;
+} 
+.io-ox-twitter-retweet i.retweeted{
+    background-position: -112px 0;
+} 
+
