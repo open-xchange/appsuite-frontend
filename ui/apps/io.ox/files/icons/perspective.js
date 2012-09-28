@@ -70,20 +70,39 @@ define('io.ox/files/icons/perspective',
         }
     });
 
+    function drawGeneric(name) {
+        var node = $('<i>');
+        if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
+        else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
+        else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
+        else if ((/mp3$/i).test(name)) { node.addClass('icon-music'); }
+        else { node.addClass('icon-file'); }
+        return node;
+    }
+
     function iconError() {
-        $(this).closest('.file-icon > .wrap > img').attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
+        $(this).replaceWith(drawGeneric());
+    }
+
+    function drawImage(src) {
+        return $('<img>', { alt: '', src: src })
+            .addClass('img-polaroid').on('error', iconError);
+    }
+
+    function getIcon(file, options) {
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     ext.point('io.ox/files/icons/file').extend({
         draw: function (baton) {
             var file = baton.data,
                 options = baton.options,
-                img = $('<img>', { alt: file.title });
+                img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
-            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                img.attr('src', getIcon(file, options)).addClass('img-polaroid').on('error', iconError);
+            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|bmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                img = drawImage(getIcon(file, options));
             } else {
-                img.attr('src', ox.base + '/apps/themes/default/icons/file-generic.png').addClass('file-generic');
+                img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
@@ -97,10 +116,6 @@ define('io.ox/files/icons/perspective',
         api.get(_.cid(cid)).done(function (file) {
             popup.append(viewDetail.draw(file).element);
         });
-    }
-
-    function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     function loadFiles(app) {
@@ -126,6 +141,55 @@ define('io.ox/files/icons/perspective',
         if (cols === 0) cols = 1;
 
         return { iconRows: rows, iconCols: cols, icons: rows * cols };
+    }
+
+    function addCarouselButton(el, ids)
+    {
+        return el.append(
+            $('<button class="btn btn-inverse pull-right">').text('Carousel').css({ position: 'relative', top: -5, right: -10 })
+                .on('click', function () { drawCarousel(ids); })
+        );
+    }
+
+    function closeCarousel()
+    {
+        $('.files-carousel').remove();
+        $('.files-iconview').show();
+    }
+
+    function carouselCaption(file)
+    {
+        var caption = $('<h4>').text(file.title);
+        if (file.description) caption.append($('<p>').text(file.description));
+        return $('<div class="carousel-caption">').append(caption);
+
+    }
+
+    function carouselItem(file)
+    {
+        return $('<div class="item">')
+            .append($('<img>', { alt: file.title, src: api.getUrl(file, 'open') }))
+            .append(carouselCaption(file));
+    }
+
+    function drawCarousel(ids)
+    {
+        var carousel = $('<div class="files-carousel carousel slide">');
+        $('.files-iconview').hide().parent().append(carousel);
+        var innerCarousel = $('<div class="carousel-inner">');
+        api.getList(ids).done(function (files) {
+            _(files).each(function (file) {
+                if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+                    innerCarousel.append(carouselItem(file));
+                }
+            });
+        });
+        $('.files-carousel')
+            .append(innerCarousel)
+            .append($('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev').on('click', function () { $('.files-carousel').carousel('prev'); }))
+            .append($('<a class="carousel-control right">').text('›').attr('data-slide', 'next').on('click', function () { $('.files-carousel').carousel('next'); }))
+            .append($('<a class="close">').text('x').on('click', closeCarousel));
+        $('.files-carousel .item:first').addClass('active');
     }
 
     return _.extend(new ox.ui.Perspective('icons'), {
@@ -200,15 +264,22 @@ define('io.ox/files/icons/perspective',
                     $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
                 );
 
-                loadFiles(app).done(function (ids) {
-                    iconview.idle();
-
-                    displayedRows = layout.iconRows;
-                    start = 0;
-                    end = displayedRows * layout.iconCols;
-                    allIds = filterFiles(ids, options);
-                    redraw(allIds.slice(start, end));
-                });
+                loadFiles(app)
+                    .done(function (ids) {
+                        iconview.idle();
+                        displayedRows = layout.iconRows;
+                        start = 0;
+                        end = displayedRows * layout.iconCols;
+                        allIds = filterFiles(ids, options);
+                        addCarouselButton($('.breadcrumb'), allIds);
+                        redraw(allIds.slice(start, end));
+                    })
+                    .fail(function (response) {
+                        iconview.idle();
+                        iconContainer.prepend(
+                            $('<div class="alert alert-info">').text(response.error)
+                        );
+                    });
             };
 
             recalculateLayout = function () {
