@@ -31,6 +31,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             win,
             //app
             self,
+            //state
+            taskState,
             // nodes
             node,
             //input
@@ -52,7 +54,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             startDateButton,
             endDateButton,
             alarmButton,
-            progressButtons,
             //links
             repeatLink,
             //tabs
@@ -67,11 +68,26 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             attachmentsToRemove = [], //stored Attachments that should be removed on edit
             //storage container Object
             editTask = {};
+        app.STATES = {
+            'CLEAN': 1,
+            'DIRTY': 2
+        };
+        app.getState = function () {
+            return taskState;
+        };
 
+        app.markDirty = function () {
+            taskState = app.STATES.DIRTY;
+        };
+
+        app.markClean = function () {
+            taskState = app.STATES.CLEAN;
+        };
 
         // launcher
         app.setLauncher(function (data) {
             self = this;
+            self.markDirty();
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
@@ -88,16 +104,16 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             node = $('<div>').addClass("io-ox-tasks-edit  task-edit-wrapper container-fluid").appendTo(win.nodes.main);
 
             //row 1 subject and savebutton
-            title = $('<input>').addClass("title-field").attr('type', 'text');
+            title = $('<input>').addClass("title-field span12").attr({type: 'text', id: 'task-edit-title'});
             saveButton = $('<button>')
                 .addClass("btn btn-primary task-edit-save")
-                .text(gt("save"))
+                .text(gt("Create"))
                 .on('click', function (e) {
                     e.stopPropagation();
                     ext.point('io.ox/tasks/edit/actions/save').invoke('action', null, app, app.updateData());
                 });
             
-            util.buildRow(node, [[util.buildLabel(gt("Title")), title], saveButton], [9, 3]);
+            util.buildRow(node, [[util.buildLabel(gt("Title"), title.attr('id')), title], [util.buildLabel('\u00A0'), saveButton]], [9, 3]);
             
             //row 2 reminder
             reminderDropdown = $('<select>').append($('<option>')
@@ -122,11 +138,12 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                                     alarmDateTime.val(editTask.alarm.format(date.TIME));
                                                 }
                                             });
-            
-            alarmDate = $('<input>').addClass("alarm-date-field").attr('type', 'text');
-            alarmDateTime = $('<input>').addClass("alarm-date-field").attr('type', 'text');
+            //bootstrap is not clever enough to figure out the right width by itself
+            var width = 20.003091;
+            alarmDate = $('<input>').addClass("alarm-date-field span7 add-on").attr('type', 'text');
+            alarmDateTime = $('<input>').addClass("alarm-date-field span3 add-on").attr('type', 'text');
             alarmButton = $('<button>')
-                .addClass("btn task-edit-picker")
+                .addClass("btn task-edit-picker fluid-grid-fix").css('width', width + '%')
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -142,13 +159,14 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
+            $('<div>').addClass('input-prepend input-append span12').append(alarmDate, alarmButton, alarmDateTime);
             
-            util.buildRow(node, [[util.buildLabel(gt("Reminder date")), reminderDropdown], alarmDate, alarmDateTime, alarmButton],
-                    [5, [3, 1], 2, 1]);
+            util.buildRow(node, [[util.buildLabel(gt("Reminder date")), reminderDropdown], [util.buildLabel('\u00A0'), alarmDate.parent()]],
+                    [5, [6, 1]]);
             
             //row 3 note
-            note = $('<textarea>').addClass("note-field");
-            util.buildRow(node, [[util.buildLabel(gt("Note")), note]]);
+            note = $('<textarea>').addClass("note-field span12").attr('id', 'task-edit-note');
+            util.buildRow(node, [[util.buildLabel(gt("Note"), note.attr('id')), note]]);
 
             //row 4 status progress priority privateFlag
             status = $('<select>').addClass("status-selector");
@@ -168,10 +186,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 );
             priority.prop('selectedIndex', 1);
             
-            var temp = util.buildProgress(progress, progressButtons);
-            progress = temp.progress;
-            progressButtons = temp.buttons;
-            temp = null;
+            progress = util.buildProgress();
             progress.on('change', function () {
                 if (progress.val() === '0 %' && status.prop('selectedIndex') === 1) {
                     status.prop('selectedIndex', 0);
@@ -196,15 +211,13 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             privateFlag = $('<input>').attr({type: 'checkbox', name: 'privateFlag'}).addClass("private-flag");
             
             util.buildRow(node, [[util.buildLabel(gt("Status")), status],
-                                 [util.buildLabel(gt("Progress")), progress],
-                                 progressButtons,
+                                 [util.buildLabel(gt("Progress")), progress.parent()],
                                  [util.buildLabel(gt("Priority")), priority],
-                                 [privateFlag, util.buildLabel(gt("Private")).addClass("private-flag")]],
-                    [3, 1, 2, 3, 3]);
+                                 [privateFlag, util.buildLabel(gt("Private")).addClass("private-flag")]]);
             
             //row 5 start date due date
             startDateButton = $('<button>')
-                .addClass("btn task-edit-picker")
+                .addClass("btn task-edit-picker fluid-grid-fix").css('width', width + '%')
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -222,7 +235,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .append($('<i>').addClass('icon-calendar'));
 
             endDateButton = $('<button>')
-                .addClass("btn task-edit-picker")
+                .addClass("btn task-edit-picker fluid-grid-fix").css('width', width + '%')
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -239,14 +252,15 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 })
                 .append($('<i>').addClass('icon-calendar'));
 
-            startDate = $('<input>').addClass("start-date-field").attr('type', 'text');
-            startDateTime = $('<input>').addClass("start-date-time-field").attr('type', 'text');
-            endDate = $('<input>').addClass("end-date-field").attr('type', 'text');
-            endDateTime = $('<input>').addClass("end-date-time-field").attr('type', 'text');
+            startDate = $('<input>').addClass("start-date-field span7 add-on").attr('type', 'text');
+            startDateTime = $('<input>').addClass("start-date-time-field span3 add-on").attr('type', 'text');
+            endDate = $('<input>').addClass("end-date-field span7 add-on").attr('type', 'text');
+            endDateTime = $('<input>').addClass("end-date-time-field span3 add-on").attr('type', 'text');
             
-            util.buildRow(node, [[util.buildLabel(gt("Start date")), startDate], startDateTime, startDateButton,
-                                 [util.buildLabel(gt("Due date")), endDate], endDateTime, endDateButton],
-                                 [3, 2, 1, 3, 2, 1]);
+            $('<div>').addClass('input-prepend input-append span12').append(startDate, startDateButton, startDateTime);
+            $('<div>').addClass('input-prepend input-append span12').append(endDate, endDateButton, endDateTime);
+            util.buildRow(node, [[util.buildLabel(gt("Start date")), startDate.parent()],
+                                 [util.buildLabel(gt("Due date")), endDate.parent()]]);
             
             //row 6 repeat
             repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
@@ -256,7 +270,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             util.buildRow(node, repeatLink);
             
             //tabsection
-            temp = util.buildTabs([gt('Participants'), gt('Attachments') + ' (0)', gt('Details')]);
+            var temp = util.buildTabs([gt('Participants'), gt('Attachments') + ' (0)', gt('Details')]);
             tabs = temp.table;
             participantsTab = temp.content.find('#edit-task-tab0');
             attachmentsTab = temp.content.find('#edit-task-tab1');
@@ -268,7 +282,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             //partitipants tab
             participantsTab.append($('<h4>').text(gt("Under construction")).css('text-align', 'center'));
             //details tab
-            detailsTab.append($('<h4>').text(gt("Under construction")).css('text-align', 'center'));
+            detailsTab = util.buildDetailsTab(detailsTab);
             
             //attachmentTab
             
@@ -296,7 +310,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     $(this).attr('lnr', index);
                 });
             });
-
+            
             //ready for show
 
             win.show();
@@ -389,7 +403,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                         });
                     });
                 }
-
+                util.fillDetailsTab(taskData);
+                saveButton.text(gt("Save changes"));
+                
                 //stop being busy
                 node.idle();
             }
@@ -416,80 +432,53 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     notifications.yell("error", gt("Start date must be before due date"));
                 }, 300);
             } else {
-
-                require(['io.ox/core/tk/dialogs'], function (dialogs) {
-
-                    //create popup dialog
-                    var popup = new dialogs.ModalDialog();
-
-                    //if id is present an existing task with given id was edited, otherwise it must be a new one
-                    if (data.id) {
-                        popup.addPrimaryButton('edit', gt('Edit task'))
-                        .addButton('newTask', gt('Create new task'));
-                    } else {
-                        popup.addPrimaryButton('newTask', gt('Create new task'));
+                require(['io.ox/tasks/api'], function (api) {
+                    if (!reqData.folder_id) {
+                        reqData.folder_id = api.getDefaultFolder();
                     }
-
-                    popup.addButton('cancel', gt('Cancel'));
-
-                    //Header
-                    popup.getHeader().append($("<h4>").text(gt('Save task')));
-
-                    popup.show().done(function (action) {
-                        if (action === 'newTask') {
-                            require(['io.ox/tasks/api'], function (api) {
-
-                                if (!reqData.folder_id) {
-                                    reqData.folder_id = api.getDefaultFolder();
-                                }
-                                api.create(reqData).done(function (reqResult) {
-                                    //add all attachments
-                                    if (attachmentArray.length > 1) {
-                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                                            attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqResult.id},
-                                                                              attachmentArray);
-                                        });
-                                    }
-                                    app.quit();
-                                }).fail(function () {
+                    //if id is present an existing task with given id was edited, otherwise it must be a new one
+                    if (!data.id) {
+                        api.create(reqData).done(function (reqResult) {
+                            //add all attachments
+                            if (attachmentArray.length > 1) {
+                                require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                    attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqResult.id},
+                                                         attachmentArray);
                                 });
-                            });
-                        } else if (action === 'edit') {
-                            require(['io.ox/tasks/api'], function (api) {
-
-                                if (!reqData.folder_id) {
-                                    reqData.folder_id = api.getDefaultFolder();
-                                }
-                                api.update(data.last_modified, reqData.id, reqData, reqData.folder_id).done(function () {
-                                    //remove attachments
-                                    if (attachmentsToRemove.length > 0) {
-                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                                            attachmentApi.remove({module: 4, folder: reqData.folder_id, id: reqData.id},
-                                                                 attachmentsToRemove);
-                                        });
-                                    }
-                                    //add new attachments
-                                    var attachmentsToAdd = [];
-                                    for (var i = 0; i < attachmentArray.length; i++) {
-                                        if (!attachmentArray[i].id) { //unstored Attachments don't have an id
-                                            attachmentsToAdd.push(attachmentArray[i]);
-                                        }
-                                    }
-                                    if (attachmentsToAdd.length > 0) {
-                                        require(['io.ox/core/api/attachment'], function (attachmentApi) {
-                                            attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqData.id},
-                                                                              attachmentsToAdd);
-                                        });
-                                    }
-                                    
-                                    app.quit().done(function () {
-                                        api.trigger("update:" + reqData.folder_id + '.' + reqData.id);
-                                    });
-                                }).fail(function () {
+                            }
+                            self.markClean();
+                            app.quit();
+                        }).fail(function () {
+                        });
+                    } else {
+                        api.update(data.last_modified, reqData.id, reqData, reqData.folder_id).done(function () {
+                            //remove attachments
+                            if (attachmentsToRemove.length > 0) {
+                                require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                    attachmentApi.remove({module: 4, folder: reqData.folder_id, id: reqData.id},
+                                                         attachmentsToRemove);
                                 });
+                            }
+                            //add new attachments
+                            var attachmentsToAdd = [];
+                            for (var i = 0; i < attachmentArray.length; i++) {
+                                if (!attachmentArray[i].id) { //unstored Attachments don't have an id
+                                    attachmentsToAdd.push(attachmentArray[i]);
+                                }
+                            }
+                            if (attachmentsToAdd.length > 0) {
+                                require(['io.ox/core/api/attachment'], function (attachmentApi) {
+                                    attachmentApi.create({module: 4, folder: reqData.folder_id, id: reqData.id},
+                                                         attachmentsToAdd);
+                                });
+                            }
+                            self.markClean();
+                            app.quit().done(function () {
+                                api.trigger("update:" + reqData.folder_id + '.' + reqData.id);
                             });
-                        }
-                    });
+                        }).fail(function () {
+                        });
+                    }
                 });
             }
         };
@@ -507,7 +496,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 percent_completed: rawData.percent_completed,
                 private_flag: rawData.private_flag
                 };
-
+            
+            util.updateDetailTabValues(result);
+            
             //checks needed to prevent is undefined error when getTime() should be called
             if (rawData.end_date) {
                 result.end_date = rawData.end_date.getTime();
@@ -573,9 +564,42 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     return -1;
                 }
             }
-
+            util.updateDetailTabValues(editTask);
             return editTask;
         };
+        
+        // Popup on close
+        app.setQuit(function () {
+            var def = $.Deferred();
+
+            var clean = function () {
+                // clear private vars
+                app = win = null;
+            };
+
+            if (app.getState() === app.STATES.DIRTY) {
+                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt("Do you really want to cancel editing this task?"))
+                        .addPrimaryButton("delete", gt('Lose changes'))
+                        .addButton("cancel", gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                clean(); // clean before resolve, otherwise tinymce gets half-destroyed (ugly timing)
+                                def.resolve();
+                            } else {
+                                def.reject();
+                            }
+                        });
+                });
+            } else {
+                clean();
+                def.resolve();
+            }
+
+            return def;
+        });
 
         //Extension points
         ext.point('io.ox/tasks/edit/actions/save').extend({
