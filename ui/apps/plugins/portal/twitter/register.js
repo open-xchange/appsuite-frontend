@@ -146,18 +146,9 @@ define('plugins/portal/twitter/register',
             ),
             $('<div class="io-ox-twitter-details">').append(
                 $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(tweet.created_at), //TODO format correctly
-                $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).append(
-                    $('<span>').text(gt('Reply')),
-                    $('<i>')
-                ),
-                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).append(
-                    $('<span>').text(gt('Retweet')),
-                    tweet.retweeted ? $('<i class="retweeted">') : $('<i>')
-                ),
-                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).append(
-                    $('<span>').text(gt('Favorite')),
-                    tweet.favorited ? $('<i class="favorited">') : $('<i>')
-                )
+                $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).text(gt('Reply')),
+                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).text(gt('Retweet')),
+                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))
             )
         );
     };
@@ -249,6 +240,7 @@ define('plugins/portal/twitter/register',
             script.src   = 'http://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
             
             self.empty().append(
+                $('<a class="io-ox-twitter-action-tweet btn btn-primary">').text(gt('Tweet')),
                 $('<div>').addClass('clear-title').text('Twitter'),
                 script
             );
