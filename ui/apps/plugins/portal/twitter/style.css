@@ -86,3 +86,7 @@
     margin-left: -14px;
     margin-top: 5px;
 }
+.io-ox-twitter-retweet-source span {
+    font-size: 90%;
+    color: #999;
+}
