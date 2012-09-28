@@ -788,7 +788,7 @@ define('io.ox/office/editor/editor',
             endPosition.push(0);
             endPosition.push(0);
 
-            // setting the cursor position // AAA
+            // setting the cursor position
             setSelection(new OXOSelection(new OXOPaM(endPosition)));
         };
 
