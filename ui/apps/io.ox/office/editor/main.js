@@ -363,11 +363,11 @@ define('io.ox/office/editor/main',
                 })
                 .pipe(extractOperationsList)
                 .done(function (operations) {
+                    var realEditors = _([editors.rich, editors.plain]);
                     if (operations) {
-                        editor.setDocumentURL(app.getDocumentFilterUrl('getfile'));
-                        editor.enableUndo(false);
+                        realEditors.invoke('enableUndo', false);
                         applyOperations(operations);
-                        editor.enableUndo(true);
+                        realEditors.invoke('enableUndo', true);
                         startOperationsTimer();
                         def.resolve();
                     } else {
@@ -802,7 +802,7 @@ define('io.ox/office/editor/main',
                 classes = 'io-ox-office-editor user-select-text ' + textMode,
                 // the editor root node
                 node = $('<div>', { contenteditable: true }).addClass(classes);
-            editors[textMode] = new Editor(node, textMode);
+            editors[textMode] = new Editor(app, node, textMode);
         });
 
         // operations output console

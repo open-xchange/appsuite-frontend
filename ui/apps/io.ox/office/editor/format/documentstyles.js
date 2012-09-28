@@ -58,7 +58,7 @@ define('io.ox/office/editor/format/documentstyles',
 
         containers.character = new CharacterStyles(rootNode, this);
         containers.paragraph = new ParagraphStyles(rootNode, this);
-        //containers.image = new ImageStyles(rootNode, this);
+        containers.image = new ImageStyles(rootNode, this);
 
     } // class DocumentStyles
 

@@ -759,12 +759,12 @@ define('io.ox/office/editor/position',
                     }
                 } else {
                     // index = -1;
-                    Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (2) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
+                    // Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (2) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
                     break;
                 }
             } else {
                 // index = -1;
-                Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (1) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
+                // Utils.error('Position.getLastNodeInformationInPositionByNodeName(): (1) Invalid position: ' + position + ' . Failed to get node at index: ' + counter);
                 break;
             }
         }
@@ -1167,6 +1167,35 @@ define('io.ox/office/editor/position',
         }
 
         return columnIndex;
+    };
+
+    /**
+     * Determining the maximum number of columns in a table, which
+     * is the number of grids. Returned is the number of grids, the
+     * value is 0-based. So this is not the length.
+     * Otherwise -1 we be returned.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPam.oxoPosition} position
+     *  The logical position.
+     *
+     * @returns {Number}
+     *  Returns the index of the last grid of a  table or -1,
+     *  if the position is not included in a table.
+     */
+    Position.getLastGridIndexInTable = function (startnode, position) {
+
+        var gridIndex = -1,
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+
+        if (table) {
+            gridIndex = $(table).children('colgroup').children('col').length - 1;
+        }
+
+        return gridIndex;
     };
 
     /**

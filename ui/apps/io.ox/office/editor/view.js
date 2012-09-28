@@ -412,38 +412,6 @@ define('io.ox/office/editor/view',
         // update all view components
         controller.update();
 
-        // POC: image selection
-        editors.rich.getNode().on('click', 'img', function () {
-
-            var rootNode = editors.rich.getNode(),
-                rootOffset = rootNode.offset(),
-                imgNode = $(this),
-                imgOffset = imgNode.offset();
-
-            rootNode.find('div.selection').remove();
-            rootNode.append($('<div>', { contentEditable: false })
-                .addClass('selection')
-                .css({
-                    width: (imgNode.width() + 2) + 'px',
-                    height: (imgNode.height() + 2) + 'px',
-                    left: (imgOffset.left - rootOffset.left - 2) + 'px',
-                    top: (imgOffset.top - rootOffset.top - 2) + 'px'
-                }).append(
-                    $('<div>').addClass('handler tl'),
-                    $('<div>').addClass('handler t'),
-                    $('<div>').addClass('handler tr'),
-                    $('<div>').addClass('handler r'),
-                    $('<div>').addClass('handler br'),
-                    $('<div>').addClass('handler b'),
-                    $('<div>').addClass('handler bl'),
-                    $('<div>').addClass('handler l')
-                )
-            );
-        });
-        editors.rich.on('selectionChanged', function () {
-            editors.rich.getNode().find('div.selection').remove();
-        });
-
     } // class View
 
     // exports ================================================================

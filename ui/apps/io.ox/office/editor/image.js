@@ -20,6 +20,16 @@ define('io.ox/office/editor/image',
 
     'use strict';
 
+    /**
+     * Predefined image attributes for supported image float modes.
+     */
+    var FLOAT_MODE_ATTRIBUTES = {
+            inline:       { inline: true },
+            leftFloated:  { inline: false, anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
+            rightFloated: { inline: false, anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
+            noneFloated:  { inline: false, textwrapmode: 'none' }
+        };
+
     // static class Image =====================================================
 
     /**
@@ -31,37 +41,17 @@ define('io.ox/office/editor/image',
     // static functions =======================================================
 
     /**
-     * Defining the correct images attributes used in operations for an image.
+     * Returns the images attributes that are needed to represent the passed
+     * image float mode as used in the GUI.
      *
-     * @param {Object} attr
-     *  A map with formatting attribute values, mapped by the attribute
-     *  names.
+     * @param {String} floatMode
+     *  The GUI image float mode.
      *
-     * @returns {Object} attr
-     *  A map with operation specific attribute values.
+     * @returns {Object}
+     *  A map with image attributes, as name/value pairs.
      */
-    Image.getImageOperationAttributesFromFloatMode = function (attributes) {
-
-        var operationAttributes = {};
-
-        if (attributes.imageFloatMode === 'inline') {
-            operationAttributes.inline = true;
-        } else if (attributes.imageFloatMode === 'leftFloated') {
-            operationAttributes.anchorhalign = 'left';
-            operationAttributes.textwrapmode = 'square';
-            operationAttributes.textwrapside = 'right';
-            operationAttributes.inline = false;
-        } else if (attributes.imageFloatMode === 'rightFloated') {
-            operationAttributes.anchorhalign = 'right';
-            operationAttributes.textwrapmode = 'square';
-            operationAttributes.textwrapside = 'left';
-            operationAttributes.inline = false;
-        } else if (attributes.imageFloatMode === 'noneFloated') {
-            operationAttributes.textwrapmode = 'none';
-            operationAttributes.inline = false;
-        }
-
-        return operationAttributes;
+    Image.getAttributesFromFloatMode = function (floatMode) {
+        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : null;
     };
 
     /**
@@ -159,17 +149,17 @@ define('io.ox/office/editor/image',
         if (attributes.height) {
             attributes.height = attributes.height / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginT) {
-            attributes['margin-top'] = attributes.marginT / 100 + 'mm';  // converting to mm
+        if (attributes.margint) {
+            attributes['margin-top'] = attributes.margint / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginR) {
-            attributes['margin-right'] = attributes.marginR / 100 + 'mm';  // converting to mm
+        if (attributes.marginr) {
+            attributes['margin-right'] = attributes.marginr / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginB) {
-            attributes['margin-bottom'] = attributes.marginB / 100 + 'mm';  // converting to mm
+        if (attributes.marginb) {
+            attributes['margin-bottom'] = attributes.marginb / 100 + 'mm';  // converting to mm
         }
-        if (attributes.marginL) {
-            attributes['margin-left'] = attributes.marginL / 100 + 'mm';  // converting to mm
+        if (attributes.marginl) {
+            attributes['margin-left'] = attributes.marginl / 100 + 'mm';  // converting to mm
         }
         if ((attributes.anchorvbase) && (attributes.anchorvoffset)) {
             attributes.anchorvoffset = attributes.anchorvoffset / 100 + 'mm';  // converting to mm
@@ -195,8 +185,7 @@ define('io.ox/office/editor/image',
      */
     Image.calculateImageMargins = function (attributes) {
 
-        var allMargins = {},
-            fullLeftMargin = '0mm',
+        var fullLeftMargin = '0mm',
             fullRightMargin = '0mm',
             standardLeftMargin = '0mm',
             standardRightMargin = '0mm';
@@ -233,12 +222,12 @@ define('io.ox/office/editor/image',
 
         }
 
-        allMargins = {standardLeftMargin: standardLeftMargin,
-                      standardRightMargin: standardRightMargin,
-                      fullLeftMargin: fullLeftMargin,
-                      fullRightMargin: fullRightMargin};
-
-        return allMargins;
+        return {
+            standardLeftMargin: standardLeftMargin,
+            standardRightMargin: standardRightMargin,
+            fullLeftMargin: fullLeftMargin,
+            fullRightMargin: fullRightMargin
+        };
     };
 
     /**
@@ -258,10 +247,10 @@ define('io.ox/office/editor/image',
         var allImageAttributes = ['inline',
                                   'width',
                                   'height',
-                                  'marginL',
-                                  'marginT',
-                                  'marginR',
-                                  'marginB',
+                                  'marginl',
+                                  'margint',
+                                  'marginr',
+                                  'marginb',
                                   'anchorhbase',
                                   'anchorhalign',
                                   'anchorhoffset',
@@ -435,9 +424,6 @@ define('io.ox/office/editor/image',
 
                                 // set version of FileDescriptor to version that is returned in response
                                 app.getFileDescriptor().version = response.data.version;
-
-                                // update the app.getEditor()'s DocumentURL accordingly
-                                app.getEditor().setDocumentURL(app.getDocumentFilterUrl('getfile'));
 
                                 // create an InsertImage operation with the newly added fragment
                                 app.getEditor().insertImageFile(response.data.added_fragment);

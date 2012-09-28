@@ -79,7 +79,7 @@ define('io.ox/office/editor/format/lineheight', ['io.ox/office/tk/utils'], funct
     function setElementLineHeight(element, lineHeight) {
 
         var // effective line height in points (start with passed value, converted from 1/100mm to points)
-            height = Utils.convertLength(lineHeight.value / 100, 'mm', 'pt');
+            height = Utils.convertHmmToLength(lineHeight.value, 'pt');
 
         // set the CSS formatting
         switch (lineHeight.type) {
