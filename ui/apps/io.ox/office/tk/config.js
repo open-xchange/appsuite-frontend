@@ -32,7 +32,7 @@ define('io.ox/office/tk/config', ['io.ox/core/config'], function (CoreConfig) {
      */
     Config.isDebugAvailable = function () {
                 
-        return documentsConfig.debugavailable;
+        return documentsConfig === undefined ? false : documentsConfig.debugavailable;
     };
     /**
      * Returns the value of the configuration property odfsupport.
@@ -41,7 +41,7 @@ define('io.ox/office/tk/config', ['io.ox/core/config'], function (CoreConfig) {
      *  whether ODF documents are supported.
      */
     Config.isODFSupported = function () {
-        return documentsConfig.odfsupport;
+        return documentsConfig === undefined ? false : documentsConfig.odfsupport;
     };
     return Config;
 });
