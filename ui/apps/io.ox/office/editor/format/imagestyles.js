@@ -146,9 +146,38 @@ define('io.ox/office/editor/format/imagestyles',
         function globalSetHandler(image, attributes) {
 
             var // the paragraph element containing the image
-                paragraph = image.parent();
+                paragraph = image.parent(),
+                // total width of the paragraph
+                paraWidth = paragraph.width(),
+                // first text node in paragraph
+                textNode = null,
+                // image currently in floating mode
+                wasFloated = image.hasClass('float');
 
-            image.css('vertical-align', 'baseline');
+            if (attributes.inline) {
+
+                // from floating mode to inline mode
+                if (wasFloated) {
+                    // remove floating, set margins
+                    // TODO: Word uses fixed predefined margins in inline mode, we too?
+                    image.removeClass('float left right').css('margin', '0 0.125in');
+
+                    // move image behind floated images, add empty text span before image
+                    textNode = Utils.findFirstTextNode(paragraph);
+                    DOM.splitTextNode(textNode, 0);
+                    image.insertBefore(textNode.parentNode);
+                }
+
+                // ignore other attributes in inline mode
+
+            } else {
+
+                // from inline mode to floating mode
+                if (!wasFloated) {
+                }
+
+                image.addClass('float').removeClass('left right');
+            }
         }
 
         // base constructor ---------------------------------------------------

@@ -110,6 +110,18 @@
             }
         }
 
+        /* default image formatting */
+        img {
+            vertical-align: baseline;
+        }
+
+        img.float, div.float {
+            display: block;
+
+            &.left { float: left; }
+            &.right { float: right; }
+        }
+
         /* selection box for objects/images */
         div.selection {
             @border-color: #44f;
