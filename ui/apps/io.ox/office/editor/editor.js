@@ -1767,12 +1767,46 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localPos = _.copy(operation.position, true);
-                    localPos.push(operation.start);
+                    var start = operation.start,
+                        end = operation.end || start;
 
-                    var rowCount = operation.end - operation.start + 1,
-                        undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
-                    undomgr.addUndo(undoOperation, operation);
+                    undomgr.startGroup();
+                    for (var i = end; i >= start; i--) {
+                        var localPos = _.copy(operation.position, true);  // table position
+                        localPos.push(i);  // row position
+
+                        var tableRow = Position.getDOMPosition(paragraphs, localPos);
+                        if (tableRow) {
+                            var row = tableRow.node,
+                                rowAttrs = {};
+
+                            if ($(row).data('attributes')) {
+                                rowAttrs = $(row).data('attributes');  // saving row attributes
+                            }
+
+                            // all cells of this row have to be restored (without redo operation)
+                            var allCells = $(row).children(),
+                                allCellsAttributes = Table.getCellAttributes(allCells);
+
+                            for (var j = allCellsAttributes.length - 1; j >= 0; j--) {
+                                var count = 1,  // always only one cell in undo, cells can have different attributes
+                                    cellAttrs = allCellsAttributes[j],
+                                    cellPos = _.copy(localPos, true);
+
+                                cellPos.push(j);
+
+                                var localUndoOperation = { name: Operations.OP_CELL_INSERT, position: cellPos, count: count, attrs: cellAttrs };
+
+                                undomgr.addUndo(localUndoOperation);  // no redo operation
+                            }
+
+                            var undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: 1, insertdefaultcells: false, attrs: rowAttrs },
+                                redoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: i, end: i };  // only one row in each redo
+
+                            undomgr.addUndo(undoOperation, redoOperation);
+                        }
+                    }
+                    undomgr.endGroup();
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
