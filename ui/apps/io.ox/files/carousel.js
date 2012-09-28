@@ -88,13 +88,6 @@ define('io.ox/files/carousel',
         return $('<button class="btn btn-primary closecarousel">').text(gt('Close')).on('click', closeCarousel);
     }
 
-    function addBreadcrumb(app)
-    {
-        if (!app.getWindow().search.active) {
-            console.log(folderAPI.getBreadcrumb(app.folder.get(), app.folder.set));
-        }
-    }
-
     function drawCarousel(app, ids) {
         var win = app.getWindow();
 
