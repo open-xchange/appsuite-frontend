@@ -45,6 +45,7 @@ define('io.ox/office/editor/operations', [], function () {
 
         OP_INSERT_STYLE: 'insertStylesheet',
         OP_ATTRS_SET: 'setAttributes',
+        OP_TABLEGRID_SET: 'setTableGrid',
 
         OP_IMAGE_INSERT: 'insertImage',
         OP_FIELD_INSERT: 'insertField'
