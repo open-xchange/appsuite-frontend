@@ -165,13 +165,22 @@ define('io.ox/office/editor/view',
 
     // class View =============================================================
 
-    function View(appWindow, controller, editors) {
+    function View(appWindow, controller, editor) {
 
-        var // tool pane containing all tool bars
+        var // all nodes of the application window
+            nodes = appWindow.nodes,
+
+            // tool pane containing all tool bars
             toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show'),
 
             // old value of the search query field
-            oldSearchQuery = '';
+            oldSearchQuery = '',
+
+            // output element for operations log
+            opsNode = null,
+
+            // output element for other debug information
+            infoNode = null;
 
         // private methods ----------------------------------------------------
 
@@ -203,7 +212,7 @@ define('io.ox/office/editor/view',
         function windowResizeHandler(event) {
 
             var // the left position of the editor node
-                editorLeft = Math.floor(editors.rich.getNode().offset().left);
+                editorLeft = Math.floor(editor.getNode().offset().left);
 
             // set a left padding to the tool pane to align the tool bars with the editor node
             toolPane.getNode().css('padding-left', Math.max(editorLeft, 13) + 'px');
@@ -280,10 +289,45 @@ define('io.ox/office/editor/view',
             });
         }
 
+        /**
+         * Logs the passed operation in the operations output console.
+         */
+        function logOperation(operation) {
+            var name = operation.name;
+            if (opsNode) {
+                operation = _.clone(operation);
+                delete operation.name;
+                operation = JSON.stringify(operation).replace(/^\{(.*)\}$/, '$1');
+                opsNode.append($('<tr>').append(
+                    $('<td>').text(opsNode.find('tr').length + 1),
+                    $('<td>').text(name),
+                    $('<td>').text(operation)));
+                opsNode.parent().scrollTop(opsNode.parent().get(0).scrollHeight);
+            }
+        }
+
+        function logSelection(selection) {
+            if (infoNode) {
+                infoNode.find('tr').eq(0).children('td').eq(1).text(selection ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(1).children('td').eq(1).text(selection ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
+            }
+        }
+
         // methods ------------------------------------------------------------
 
         this.getToolPane = function () {
             return toolPane;
+        };
+
+        /**
+         * Logs the passed operations in the operations output console.
+         *
+         * @param {Object[]} operations
+         *  An array of operations.
+         */
+        this.logOperations = function (operations) {
+            _(operations).each(logOperation);
+            return this;
         };
 
         this.destroy = function () {
@@ -293,36 +337,11 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
 
-        // create the tool panes and append them to the window main node
-        var debugavailable = Config.isDebugAvailable();
-        
-        appWindow.nodes.main.addClass('io-ox-office-main').append(
-            appWindow.nodes.toolPane = toolPane.getNode(),
-            appWindow.nodes.appPane = $('<div>').addClass('io-ox-office-apppane')
+        // create all panes
+        nodes.main.addClass('io-ox-office-main').append(
+            nodes.toolPane = toolPane.getNode(),
+            nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editor.getNode())
         );
-        if (debugavailable === true) {
-            appWindow.nodes.main.addClass('io-ox-office-main').append(
-                    appWindow.nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug')
-                    );
-        }
-
-        // insert editor into the app pane
-        appWindow.nodes.appPane.append(editors.rich.getNode());
-
-        if (debugavailable === true) {
-            // table element containing the debug mode elements
-            appWindow.nodes.debugPane.append($('<table>').addClass('debug-table').append(
-                $('<colgroup>').append(
-                    $('<col>', { width: '50%' }),
-                    $('<col>', { width: '50%' })
-                ),
-                $('<tr>').append(
-                    // add plain-text editor and operations output console to debug table
-                    $('<td>').append(editors.plain.getNode()),
-                    $('<td>').append(editors.output.getNode())
-                )
-            ));
-        }
 
         // create the tool bars and drop-down menus
         toolPane.addMenu(new MenuBox(appWindow)
@@ -337,7 +356,7 @@ define('io.ox/office/editor/view',
             .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editors.rich.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
+            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('format/character/font/family', new FontFamilyChooser())
             .addSeparator()
@@ -381,11 +400,35 @@ define('io.ox/office/editor/view',
                 .addOptionButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
                 .end();
 
-        if (debugavailable === true) {
+        // additions for debug mode
+        if (Config.isDebugAvailable()) {
+
+            opsNode = $('<table>');
+
+            infoNode = $('<table>').css('table-layout', 'fixed').append(
+                $('<colgroup>').append($('<col>', { width: '40px' })),
+                $('<tr>').append($('<td>').text('start'), $('<td>')),
+                $('<tr>').append($('<td>').text('end'), $('<td>'))
+            );
+
+            nodes.debugPane = $('<div>').addClass('io-ox-pane bottom debug user-select-text').append(
+                $('<table>').append(
+                    $('<colgroup>').append($('<col>', { width: '70%' })),
+                    $('<tr>').append(
+                        $('<td>').append($('<div>').append(opsNode)),
+                        $('<td>').append($('<div>').append(infoNode))
+                    )
+                )
+            ).appendTo(nodes.main);
+
+            editor.on('operation', function (event, operation) { logOperation(operation); })
+                .on('selection', function (event, selection) { logSelection(selection); });
+
             createToolBar('debug', { label: gt('Debug') })
-            .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
-            .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-            .addButton('action/flush', { icon: 'icon-share-alt', label: gt('Flush') });
+                .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+                .addSeparator()
+                .addButton('action/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
 
         // make the format tool bar visible
@@ -395,19 +438,17 @@ define('io.ox/office/editor/view',
         Utils.registerWindowResizeHandler(appWindow, windowResizeHandler);
 
         // add 'rename document' functionality to title field
-        appWindow.nodes.title
-            .addClass('io-ox-office-title')
-            .click(renameDocumentHandler);
-        Utils.setControlTooltip(appWindow.nodes.title, gt('Rename Document'), 'bottom');
+        nodes.title.addClass('io-ox-office-title').click(renameDocumentHandler);
+        Utils.setControlTooltip(nodes.title, gt('Rename Document'), 'bottom');
 
         // override the limited functionality of the quick-search text field
-        appWindow.nodes.search
+        nodes.search
             .off('keydown search change')
             .on('input keydown keypress keyup focus', searchKeyHandler)
             .data('tooltip', null); // remove old tooltip
 
         // set the quick-search tooltip
-        Utils.setControlTooltip(appWindow.nodes.search, gt('Quick Search'), 'bottom');
+        Utils.setControlTooltip(nodes.search, gt('Quick Search'), 'bottom');
 
         // update all view components
         controller.update();

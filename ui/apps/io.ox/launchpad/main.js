@@ -16,8 +16,9 @@
 define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
+     'io.ox/core/config',
      'gettext!io.ox/core/launchpad',
-     'less!io.ox/launchpad/style.css'], function (desktop, api, gt) {
+     'less!io.ox/launchpad/style.css'], function (desktop, api, config, gt) {
 
     'use strict';
 
@@ -52,6 +53,7 @@ define('io.ox/launchpad/main',
                 .map(function (app) {
                     var data = api.get(app.getName());
                     data.title = app.getTitle() || data.title || app.getWindowTitle() || app.getName();
+                    data.appId = app.getId();
                     return { data: data, app: app };
                 })
                 .value();
@@ -77,8 +79,17 @@ define('io.ox/launchpad/main',
             // animate & launch
             parent.focus();
             // look for running app
-            if ((running = getRunningApps(e.data.id)).length) {
-                running[0].app.launch();
+            if (e.data.appId && (running = getRunningApps(e.data.id)).length) {
+                var runIndex = 0;
+                if (running.length > 1) {
+                    for (var i = 0; i < running.length; ++i) {
+                        if (running[i].app.getId() === e.data.appId) {
+                            runIndex = i;
+                            break;
+                        }
+                    }
+                }
+                running[runIndex].app.launch();
             } else {
                 console.log("APP DATA: ", e, this);
                 $.when(
@@ -89,6 +100,10 @@ define('io.ox/launchpad/main',
                     if (e.data.launchArguments) {
                         var app = m.getApp();
                         app.launch.apply(app, e.data.launchArguments);
+                    } else if (e.data.createArguments) {
+                        //documents need a parameter to create a new document
+                        e.data.createArguments.folder_id = config.get("folder.infostore");
+                        m.getApp(e.data.createArguments).launch();
                     } else {
                         m.getApp().launch();
                     }

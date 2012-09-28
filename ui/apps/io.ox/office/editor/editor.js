@@ -50,24 +50,27 @@ define('io.ox/office/editor/editor',
      * Triggers the following events:
      * - 'focus': When the editor container got or lost browser focus.
      * - 'operation': When a new operation has been applied.
-     * - 'selectionChanged': When the selection has been changed.
+     * - 'selection': When the selection has been changed.
      */
-    function OXOEditor(app, editdiv, textMode) {
+    function OXOEditor(app) {
 
         var // self reference for local functions
             self = this,
 
+            // the container element for the document contents
+            editdiv = $('<div>', { contenteditable: true }).addClass('io-ox-office-editor user-select-text'),
+
             // container for all style sheets of all attribute families
-            documentStyles = (textMode === 'rich') ? new DocumentStyles(editdiv) : null,
+            documentStyles = new DocumentStyles(editdiv),
 
             // shortcut for paragraph styles
-            // paragraphStyles = documentStyles ? documentStyles.getStyleSheets('paragraph') : null,
+            // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
 
             // shortcut for character styles
-            characterStyles = documentStyles ? documentStyles.getStyleSheets('character') : null,
+            characterStyles = documentStyles.getStyleSheets('character'),
 
             // shortcut for image styles
-            imageStyles = documentStyles ? documentStyles.getStyleSheets('image') : null,
+            imageStyles = documentStyles.getStyleSheets('image'),
 
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
@@ -124,10 +127,8 @@ define('io.ox/office/editor/editor',
          */
         this.destroy = function () {
             this.events.destroy();
-            if (documentStyles) {
-                documentStyles.destroy();
-                documentStyles = characterStyles = null;
-            }
+            documentStyles.destroy();
+            documentStyles = /*paragraphStyles = */characterStyles = imageStyles = null;
         };
 
         // OPERATIONS API
@@ -1003,7 +1004,7 @@ define('io.ox/office/editor/editor',
          *  The name of the attribute family.
          */
         this.getStyleSheets = function (family) {
-            return documentStyles ? documentStyles.getStyleSheets(family) : null;
+            return documentStyles.getStyleSheets(family);
         };
 
         /**
@@ -1109,7 +1110,6 @@ define('io.ox/office/editor/editor',
         // ====================================================================
 
         function processFocus(state) {
-            Utils.info('Editor: received focus event: mode=' + textMode + ', state=' + state);
             if (focused !== state) {
                 focused = state;
                 if (focused && currentSelection) {
@@ -1571,7 +1571,7 @@ define('io.ox/office/editor/editor',
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
-                    self.trigger('selectionChanged');
+                    self.trigger('selection', currentSelection);
                 } else if (focused) {
                     // If not focused, browser selection might not be available...
                     Utils.warn('Editor.implCheckEventSelection(): missing selection!');
@@ -1672,6 +1672,7 @@ define('io.ox/office/editor/editor',
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default']);
             }
             else if (operation.name === Operations.OP_ATTRS_SET) {
+                // undo/redo is done inside implSetAttributes()
                 implSetAttributes(operation.start, operation.end, operation.attrs);
             }
             else if (operation.name === Operations.OP_PARA_INSERT) {
@@ -2063,7 +2064,7 @@ define('io.ox/office/editor/editor',
             if (ranges.length) {
                 DOM.setBrowserSelection(ranges);
                 // if (TODO: Compare Arrays oldSelection, oxosel)
-                self.trigger('selectionChanged');   // when setSelection() is called, it's very likely that the selection actually did change. If it didn't - that normally shouldn't matter.
+                self.trigger('selection', currentSelection);
             } else {
                 Utils.error('Editor.setSelection(): Failed to determine DOM Selection from OXO Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
             }
@@ -4101,7 +4102,7 @@ define('io.ox/office/editor/editor',
             DOM.clearElementSelections(editdiv);
             DOM.addElementSelection(editdiv, this, { moveable: true, sizeable: true });
         });
-        this.on('selectionChanged', function () {
+        this.on('selection', function () {
             DOM.clearElementSelections(editdiv);
         });
 
