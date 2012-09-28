@@ -169,27 +169,13 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         },
         
         updateDetailTabValues: function (data) {
-            if (detailsTab.target_duration.val() !== '') {
-                data.target_duration = detailsTab.target_duration.val();
-            }
-            if (detailsTab.actual_duration.val() !== '') {
-                data.actual_duration = detailsTab.actual_duration.val();
-            }
-            if (detailsTab.target_costs.val() !== '') {
-                data.target_costs = detailsTab.target_costs.val();
-            }
-            if (detailsTab.actual_costs.val() !== '') {
-                data.actual_costs = detailsTab.actual_costs.val();
-            }
-            if (detailsTab.billing_information.val() !== '') {
-                data.billing_information = detailsTab.billing_information.val();
-            }
-            if (detailsTab.companies.val() !== '') {
-                data.companies = detailsTab.companies.val();
-            }
-            if (detailsTab.trip_meter.val() !== '') {
-                data.trip_meter = detailsTab.trip_meter.val();
-            }
+            data.target_duration = detailsTab.target_duration.val();
+            data.actual_duration = detailsTab.actual_duration.val();
+            data.target_costs = detailsTab.target_costs.val();
+            data.actual_costs = detailsTab.actual_costs.val();
+            data.billing_information = detailsTab.billing_information.val();
+            data.companies = detailsTab.companies.val();
+            data.trip_meter = detailsTab.trip_meter.val();
             data.currency = detailsTab.currency.val();
         }
     };

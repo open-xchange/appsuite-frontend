@@ -427,6 +427,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 setTimeout(function () {
                     notifications.yell("error", gt("All dates must be in following format") + ": day.month.year hour:minutes");
                 }, 300);
+            } else if (data === -2) {
+                setTimeout(function () {
+                    notifications.yell("error", gt("Costs and times must be valid numbers between -130000 and 13000"));
+                }, 300);
             } else if (data.start_date && data.end_date && data.start_date > data.end_date) {
                 setTimeout(function () {
                     notifications.yell("error", gt("Start date must be before due date"));
@@ -565,6 +569,32 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
             }
             util.updateDetailTabValues(editTask);
+            if (editTask.actual_costs < -130000 || editTask.actual_costs > 130000) {
+                return -2;
+            }
+            if (editTask.target_costs < -130000 || editTask.target_costs > 130000) {
+                return -2;
+            }
+            if (editTask.actual_duration < -130000 || editTask.actual_duration > 130000) {
+                return -2;
+            }
+            if (editTask.target_duration < -130000 || editTask.target_duration > 130000) {
+                return -2;
+            }
+            
+            if (editTask.actual_costs  && isNaN(editTask.actual_costs)) {
+                return -2;
+            }
+            if (editTask.target_costs  && isNaN(editTask.target_costs)) {
+                return -2;
+            }
+            if (editTask.actual_duration  && isNaN(editTask.actual_duration)) {
+                return -2;
+            }
+            if (editTask.target_duration  && isNaN(editTask.target_duration)) {
+                return -2;
+            }
+            
             return editTask;
         };
         
