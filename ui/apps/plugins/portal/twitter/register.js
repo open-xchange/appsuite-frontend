@@ -131,7 +131,7 @@ define('plugins/portal/twitter/register',
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
         console.log("Tweet=", tweet);
-        return $('<div class="tweet">').data('entry', tweet).append(
+        var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
             $('<a class="io-ox-twitter-follow btn" href="https://twitter.com/intent/user">').append(
                 $('<span>').text(gt('Follow')),
                 $('<i>')
@@ -151,6 +151,13 @@ define('plugins/portal/twitter/register',
                 $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))
             )
         );
+        if (tweet.favorited) {
+            $myTweet.find('.io-ox-twitter-favorite').addClass('favorited').text(gt('Favorited'));
+        }
+        if (tweet.retweeted) {
+            $myTweet.find('.io-ox-twitter-retweet').addClass('retweeted').text(gt('Retweeted'));
+        }
+        return $myTweet;
     };
 
     var onPullToRefresh = function () {
