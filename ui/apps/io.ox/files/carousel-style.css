@@ -13,27 +13,16 @@
  *
  */
 
-.carousel .item > img {
-    position: absolute;
-    margin: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
 .carousel {
     background:#000;
     position: absolute;
-    overflow: auto;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    /* margin:0 auto; */
     z-index:10000;
     height:100%;
-    width:100%;
+
     .carousel-inner {
         height:100%;
     }
@@ -46,41 +35,37 @@
         margin-right:13px;
     }
 
-    .breadcrumb {
-        position:absolute;
-        top:10px;
-        left:10px;
-        width:;
-        /* background:black; */
-        opacity:0.5;
-        .active {
-            display:inline;
-        }
-    }
-
     .item {
-        position:absolute;
-        top:0;
-        bottom:0;
-        right:0;
         height:100%;
         width:100%;
 
         .carousel-caption {
+
             .breadcrumb {
-                position:static;
+                opacity:0.8;
                 padding:0;
                 margin:0;
                 background:transparent;
 
                 li {
                     text-shadow: none;
+                    word-wrap:break-word;
+                }
+                li.active {
+                    display:inline;
                 }
             }
         }
     }
 
-
+    .item > img {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
 
     .carousel-control {
         cursor: pointer;
