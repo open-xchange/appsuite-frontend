@@ -219,15 +219,16 @@ define("io.ox/files/api",
     };
 
     api.getUrl = function (file, mode) {
-        var url = ox.apiRoot + "/infostore?action=document&id=" + file.id +
-            "&folder=" + file.folder_id + "&version=" + file.version;
+        var url = ox.apiRoot + '/infostore',
+            query = '?action=document&id=' + file.id + '&folder=' + file.folder_id + '&version=' + file.version;
         switch (mode) {
         case 'open':
-            return url + '&delivery=view';
+            return url + query + '&delivery=view';
         case 'download':
-            return url + '&delivery=download';
+            return url + (file.filename ? '/' + encodeURIComponent(file.filename) : '') +
+                query + '&delivery=download';
         default:
-            return url;
+            return url + query;
         }
     };
 

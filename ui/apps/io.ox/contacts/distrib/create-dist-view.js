@@ -15,27 +15,31 @@ define('io.ox/contacts/distrib/create-dist-view',
      'io.ox/backbone/forms',
      'gettext!io.ox/contacts/contacts'
     ], function (views, forms, gt) {
-    
+
     "use strict";
-    
+
     var point = views.point('io.ox/contacts/distrib/create-dist-view', gt),
         ContactCreateDistView = point.createView({
-            tagName: 'div',
-            className: 'container'
+            tagName: 'div'
+//            className: 'container'
         });
-        
+
+
     point.createSubpoint('header', {
         tagName: 'div',
-        className: 'row'
+        className: 'section-group header'
     }).extend({
         id: 'io.ox/contacts/distrib/create-dist-view/header/display_name',
         index: 100,
         tagName: 'form',
-        className: 'span6',
+        className: 'form-inline',
         render: function () {
             this.$el.append(
                 $('<label>').text(gt("List name")),
-                this.inputField = $('<input type="text">').val(this.model.get("display_name"))
+                this.inputField = $('<input type="text">').val(this.model.get("display_name")),
+                $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
+                    alert("Save this thang!");
+                })
             );
         },
         updateDisplayName: function () {
@@ -44,36 +48,32 @@ define('io.ox/contacts/distrib/create-dist-view',
         modelEvents: {
             'change:display_name': 'updateDisplayName'
         }
+    });
+
+    point.createSubpoint('members', {
+        tagName: 'div'
+//        className: 'row'
     }).basicExtend({
-        id: 'io.ox/contacts/distrib/create-dist-view/header/save',
-        index: 200,
+        id: 'io.ox/contacts/distrib/create-dist-view/members',
+        index: 300,
         draw: function () {
             this.append(
-                $('<span class="span2">').append(
-                    $("<br/>"),
-                    $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
-                        alert("Save this thang!");
-                    }).css({marginTop: "5px"})
-                )
+                $('<legend>').addClass('sectiontitle').text(gt('Members'))
             );
         }
-    }).basicExtend({
-        id: 'io.ox/contacts/distrib/create-dist-view/header/save',
-        index: 200,
-        draw: function () {
-            this.append($('<span class="span4>&nbsp;</span>"'));
-        }
     });
-    
+
+
+
+
     point.extend(new forms.ErrorAlert({
         id: 'io.ox/contacts/distrib/create-dist-view/errors'
     }));
-    
-    
-    
+
+
     return ContactCreateDistView;
 });
- 
+
 /*
 define('io.ox/contacts/distrib/create-dist-view',
     ['io.ox/core/extensions',
