@@ -1888,22 +1888,6 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_COLUMN_INSERT) {
 
-
-//
-//                allRows.each(
-//                    function (i, row) {
-//                        var cellClone = cell.clone(true),
-//                            cellPosition = Table.getCellPositionFromGridPosition(row, gridposition);
-//                        if (insertmode === 'behind') {
-//                            cellClone.insertAfter($(row).children().get(cellPosition));
-//                        } else {
-//                            cellClone.insertBefore($(row).children().get(cellPosition));
-//                        }
-//                    }
-//                );
-
-// AAA
-
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     undomgr.startGroup();
                     // OP_COLUMNS_DELETE cannot be the answer to OP_COLUMN_INSERT, because the cells of the new column may be inserted
