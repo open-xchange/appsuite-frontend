@@ -12,13 +12,14 @@
  */
 
 define('io.ox/office/preview/main',
-    ['io.ox/office/tk/apphelper',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/tk/apphelper',
      'io.ox/office/tk/controller',
      'io.ox/office/tk/component/topbar',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (AppHelper, Controller, TopBar, Preview, gt) {
+    ], function (Utils, AppHelper, Controller, TopBar, Preview, gt) {
 
     'use strict';
 
@@ -252,7 +253,7 @@ define('io.ox/office/preview/main',
         };
 
         app.failRestore = function (point) {
-            app.setFileDescriptor(point);
+            app.setFileDescriptor(Utils.getObjectOption(point, 'file'));
             return app.load();
         };
 
