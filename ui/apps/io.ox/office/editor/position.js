@@ -1652,7 +1652,7 @@ define('io.ox/office/editor/position',
 
             while (Position.getDOMPosition(startnode, paraPosition).node.nodeName === 'TABLE') {
                 paraPosition.push(Position.getLastRowIndexInTable(startnode, paraPosition));
-                paraPosition.push(Position.getLastColumnIndexInTable(startnode, paraPosition));
+                paraPosition.push(Position.getLastColumnIndexInRow(startnode, paraPosition));
                 paraPosition.push(Position.getLastParaIndexInCell(startnode, paraPosition));
             }
 
@@ -1722,9 +1722,9 @@ define('io.ox/office/editor/position',
         if ((paragraph) && (paragraph.length > 0)) {
 
             var column = paragraph.pop(),
+                lastColumn = Position.getLastColumnIndexInRow(startnode, paragraph),
                 row = paragraph.pop(),
-                lastRow = Position.getLastRowIndexInTable(startnode, paragraph),
-                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+                lastRow = Position.getLastRowIndexInTable(startnode, paragraph);
 
             if (column < lastColumn) {
                 column += 1;
@@ -1775,15 +1775,16 @@ define('io.ox/office/editor/position',
         while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
 
             var column = paragraph.pop(),
-                row = paragraph.pop(),
-                lastColumn = Position.getLastColumnIndexInTable(startnode, paragraph);
+                row = paragraph.pop();
 
             if (column > 0) {
                 column -= 1;
             } else {
                 if (row > 0) {
                     row -= 1;
-                    column = lastColumn;
+                    var localRow = _.copy(paragraph, true);
+                    localRow.push(row);
+                    column = Position.getLastColumnIndexInRow(startnode, row);
                 } else {
                     beginOfTable = true;
                 }

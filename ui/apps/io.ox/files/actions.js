@@ -15,7 +15,8 @@ define("io.ox/files/actions",
     ["io.ox/files/api",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/files/files"], function (api, ext, links, gt) {
+     'io.ox/office/tk/config',
+     "gettext!io.ox/files/files"], function (api, ext, links, OfficeConfig, gt) {
 
     'use strict';
 
@@ -78,7 +79,9 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/office/editor', {
         id: 'officeeditor',
         requires: function (e) {
-            return e.collection.has('one') && /\.(odt|docx)$/i.test(e.context.data.filename);
+            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
+            return e.collection.has('one') && pattern.test(e.context.data.filename);
+            
         },
         action: function (data) {
             ox.launch('io.ox/office/editor/main', { file: data });
