@@ -351,6 +351,39 @@ define('io.ox/office/editor/table',
     };
 
 
+    /**
+     * Collecting the attributes of table cells from a jQuery collection of cells.
+     *
+     * @param {jQuery} cell´s
+     *  The jQuery collection containing cell elements, whose attributes shall
+     *  be collected in an array.
+     *
+     * @return {Object[]} allCellAttributes
+     *  An array, that contains the cell attributes in the correct order.
+     */
+    Table.getCellAttributes = function (cells) {
+
+        var allCellAttributes = [];
+
+        cells.each(function (index) {
+
+            var cellAttrs = {};
+
+            // trying to get attributes from the cell (attributes might be different for each cell)
+            if ($(this).data('attributes')) {
+                cellAttrs = $(this).data('attributes');
+            }
+            if ($(this).attr('colspan')) {
+                cellAttrs.gridspan = $(this).attr('colspan');
+            }
+
+            allCellAttributes.push(cellAttrs);
+        });
+
+        return allCellAttributes;
+
+    };
+
     // exports ================================================================
 
     return Table;
