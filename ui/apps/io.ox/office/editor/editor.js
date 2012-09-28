@@ -1852,15 +1852,60 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_COLUMNS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    // OP_COLUMN_INSERT cannot be the answer to OP_COLUMNS_DELETE, because using OP_COLUMNS_DELETE can
+                    // remove more than one cell in a row. It is only possible to add the removed cells with insertCell operation.
                     undomgr.startGroup();
-                    for (var i = operation.start; i <= operation.end; i++) {
-                        var localPos = _.copy(operation.position, true),
-                            rows = Position.getLastRowIndexInTable(paragraphs, localPos) + 1,
-                            redoOperation = { name: operation.name, position: localPos, start: operation.start, end: operation.start},  // Deleting only one column in redo!
-                            // needs name, position, tablegrid, gridposition, insertmode
-                            undoOperation = { name: Operations.OP_COLUMN_INSERT, position: localPos, start: operation.startgrid, rows: rows};
-                        undomgr.addUndo(undoOperation, redoOperation);
+
+                    var localPos = _.copy(operation.position, true),
+                        table = Position.getDOMPosition(paragraphs, localPos).node,
+                        allRows = $(table).children('tbody, thead').children(),
+                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid);
+
+                    for (var i = (allCellRemovePositions.length - 1); i >= 0; i--) {
+                        var rowPos = _.copy(localPos, true),
+                            oneRowCellArray =  allCellRemovePositions[i],
+                            end = oneRowCellArray.pop(),
+                            start = oneRowCellArray.pop();  // more than one cell might be deleted in a row
+                        rowPos.push(i);
+
+                        if ((start === -1) && (end === -1)) {  // no cell will be removed in this row
+                            continue;
+                        }
+
+                        if (end === -1) { // removing all cells behind startcol
+                            var rowNode = Position.getDOMPosition(paragraphs, rowPos).node;
+                            end = $(rowNode).children.length - 1;
+                        }
+
+                        for (var j = end; j >= start; j--) {
+
+                            var cellPosition = _.copy(rowPos, true);
+                            cellPosition.push(j);
+
+                            // trying to get attributes from the cell (attributes might be different for each cell)
+                            var cellAttrs = {},
+                                cellPos = Position.getDOMPosition(paragraphs, cellPosition);
+
+                            if (cellPos) {
+                                var cellPosNode = cellPos.node;
+                                if ($(cellPosNode).data('attributes')) {
+                                    cellAttrs = $(cellPosNode).data('attributes');
+                                }
+                                if ($(cellPosNode).attr('colspan')) {
+                                    cellAttrs.gridspan = $(cellPosNode).attr('colspan');
+                                }
+                            }
+
+                            var undoOperation = { name: Operations.OP_CELL_INSERT, position: cellPosition, count: 1, attrs: cellAttrs }; // only one cell per operation
+
+                            if ((i === 0) && (j === 0)) {
+                                undomgr.addUndo(undoOperation, operation);  // only one redo operation required
+                            } else {
+                                undomgr.addUndo(undoOperation);
+                            }
+                        }
                     }
+
                     undomgr.endGroup();
                 }
                 implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);

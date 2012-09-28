@@ -421,6 +421,51 @@ define('io.ox/office/editor/table',
         return allInsertPositions;
     };
 
+    /**
+     * Collecting for a collection of rows the cell positions that correspond
+     * to specified grid start position and grid end position. For each row
+     * an array with two integer values is returned, representing the start
+     * and the end position of the cells. If no cells correspond to the specified
+     * grid position end can be '-1' or even start and end can be '-1'. This
+     * happens for example if startgrid and endgrid have high numbers, but the
+     * currently investigated row is very short. In the case of removal of cells,
+     * no cell is removed from such a cell.
+     *
+     * @param {jQuery} allRows
+     *  The jQuery collection containing row elements, whose cell positions
+     *  corresponding to the specified grid positions shall be collected in an array.
+     *
+     * @param {Number} startgrid
+     *  The integer start grid position.
+     *
+     * @param {Number} endgrid
+     *  The integer end grid position.
+     *
+     * @return {any[]} allRemovePositions
+     *  An array, that contains for each row an array with two integer values
+     *  for start and end position of the cells. If no cells correspond to the
+     *  specified grid position end can be '-1' or even start and end can be '-1'.
+     */
+    Table.getAllRemovePositions = function (allRows, startgrid, endgrid) {
+
+        var allRemovePositions = [];
+
+        allRows.each(function (index) {
+
+            var removeRangeInOneRow = [],  // an array collecting the start and end position (integer) of the cells to be removed
+                startCol = Table.getCellPositionFromGridPosition(this, startgrid, false),
+                endCol = Table.getCellPositionFromGridPosition(this, endgrid, false);
+
+            // startCol and endCol might be '-1', if the grid positions are out of range. In this case, no cells are deleted
+            removeRangeInOneRow.push(startCol);
+            removeRangeInOneRow.push(endCol);
+
+            allRemovePositions.push(removeRangeInOneRow);
+        });
+
+        return allRemovePositions;
+    };
+
     // exports ================================================================
 
     return Table;
