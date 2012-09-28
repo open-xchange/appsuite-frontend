@@ -163,7 +163,6 @@ define('io.ox/mail/write/main',
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
                 title: '',
-                titleWidth: (view.GRID_WIDTH + 10) + 'px',
                 toolbar: true,
                 close: true
             });

@@ -51,6 +51,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                         $('<div>').text(gt("Remind date") + " " + task.alarm).addClass("alarm-date")
                 );
             }
+            if (task.percent_completed && task.percent_completed !== 0) {
+                infoPanel.append(
+                        $('<br>'),
+                        $('<div>').text(gt("Progress") + " " + task.percent_completed + "%").addClass("task-progress")
+                    );
+            }
             infoPanel.append(
                 $('<br>'),
                 $('<div>').text(task.status).addClass("status " +  task.badge)

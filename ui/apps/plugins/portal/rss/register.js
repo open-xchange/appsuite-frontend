@@ -44,7 +44,6 @@ define("plugins/portal/rss/register",
             settings.set('needsMigration', false);
             settings.save();
         });
-            
     };
     
     var feeds = [];

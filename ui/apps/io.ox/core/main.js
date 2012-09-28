@@ -349,7 +349,7 @@ define("io.ox/core/main",
 
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
-            location.hash = '#' + (_.getCookie('hash') || '!');
+            location.hash = '#!';
         }
 
         var def = $.Deferred(),

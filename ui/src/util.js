@@ -148,7 +148,6 @@
                 });
                 // be persistent
                 document.location.hash = hashStr;
-                _.setCookie('hash', hashStr);
             } else {
                 return name === undefined ? hashData : hashData[name];
             }

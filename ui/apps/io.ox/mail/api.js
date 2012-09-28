@@ -650,7 +650,7 @@ define("io.ox/mail/api",
     function handleSendXHR2(data, files, deferred) {
         var form = new FormData(),
             flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -698,7 +698,7 @@ define("io.ox/mail/api",
     function handleSendTheGoodOldWay(data, files, deferred) {
         var form = $('.io-ox-mail-write form'),
             flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
 
         // clone data (to avoid side-effects)

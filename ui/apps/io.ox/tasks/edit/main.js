@@ -12,13 +12,15 @@
  */
 
 define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
+                                 'io.ox/tasks/edit/util',
+                                 'io.ox/tasks/util',
                                  'io.ox/core/date',
                                  'io.ox/core/extensions',
                                  'io.ox/core/notifications',
                                  'io.ox/tasks/edit/pickerPopup',
                                  'io.ox/core/tk/upload',
                                  'io.ox/core/strings',
-                                 'less!io.ox/tasks/edit/style.css'], function (gt, date, ext, notifications, picker, upload, strings) {
+                                 'less!io.ox/tasks/edit/style.css'], function (gt, util, reminderUtil, date, ext, notifications, picker, upload, strings) {
 
     "use strict";
 
@@ -31,23 +33,34 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             self,
             // nodes
             node,
-            main,
-            infoWrapper,
-            //inputfields
+            //input
             title,
             note,
             status,
             priority,
             endDate,
+            endDateTime,
             startDate,
+            startDateTime,
             alarmDate,
+            alarmDateTime,
+            reminderDropdown,
+            progress,
+            privateFlag,
             //buttons
             saveButton,
             startDateButton,
             endDateButton,
             alarmButton,
-            //attachmentsection
-            attachmentLink,
+            progressButtons,
+            //links
+            repeatLink,
+            //tabs
+            tabs,
+            attachmentsTab,
+            participantsTab,
+            detailsTab,
+            //attachmensttab
             attachmentDisplay,
             dropZone,
             attachmentArray = [],//displayed Attachments
@@ -69,25 +82,13 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
             win.addClass('io-ox-tasks-edit-main');
             app.setWindow(win);
-
+            win.nodes.main.addClass("scrollable");
+            
             //build main edit windows
-            node = $('<div>').addClass("io-ox-tasks-edit default-content-padding").appendTo(win.nodes.main);
-            infoWrapper = $('<div>').addClass('info-wrapper').appendTo(node);
-            main = $('<div>').addClass("main-edit").appendTo(node);
+            node = $('<div>').addClass("io-ox-tasks-edit  task-edit-wrapper container-fluid").appendTo(win.nodes.main);
 
-
-            //fill main
-            title = $('<input>').addClass("title-field");
-            note = $('<textarea>', {rows: '15'}).addClass("note-field");
-
-            main.append(
-                $('<span>').text(gt("Title")).addClass("task-edit-main-label"),
-                title,
-                $('<span>').text(gt("Note")).addClass("task-edit-main-label"),
-                note
-                );
-
-            //fill info
+            //row 1 subject and savebutton
+            title = $('<input>').addClass("title-field").attr('type', 'text');
             saveButton = $('<button>')
                 .addClass("btn btn-primary task-edit-save")
                 .text(gt("save"))
@@ -95,41 +96,35 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     e.stopPropagation();
                     ext.point('io.ox/tasks/edit/actions/save').invoke('action', null, app, app.updateData());
                 });
-
-            startDateButton = $('<button>')
-                .addClass("btn task-edit-picker")
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    picker.create().done(function (timevalue) {
-                        if (timevalue !== -1) {
-                            if (!editTask.start_date) {
-                                editTask.start_date = new date.Local(timevalue);
-                            } else {
-                                editTask.start_date.setTime(timevalue);
-                            }
-                            startDate.val(editTask.start_date.format());
-                        }
-                    });
-                })
-                .append($('<i>').addClass('icon-calendar'));
-
-            endDateButton = $('<button>')
-                .addClass("btn task-edit-picker")
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    picker.create().done(function (timevalue) {
-                        if (timevalue !== -1) {
-                            if (!editTask.end_date) {
-                                editTask.end_date = new date.Local(timevalue);
-                            } else {
-                                editTask.end_date.setTime(timevalue);
-                            }
-                            endDate.val(editTask.end_date.format());
-                        }
-                    });
-                })
-                .append($('<i>').addClass('icon-calendar'));
-
+            
+            util.buildRow(node, [[util.buildLabel(gt("Title")), title], saveButton], [9, 3]);
+            
+            //row 2 reminder
+            reminderDropdown = $('<select>').append($('<option>')
+                                            .text(gt("don't remind me")), reminderUtil.buildDropdownMenu())
+                                            .on('change', function (e) {
+                                                if (reminderDropdown.prop('selectedIndex') === 0) {
+                                                    editTask.alarm = undefined;
+                                                    alarmDate.val('');
+                                                } else {
+                                                    var dates = reminderUtil.computePopupTime(new Date(),
+                                                            reminderDropdown.find(":selected").attr("finderId"));
+                                                    //util.computePopupTime uses Date with added Offset,
+                                                    //for use with date.Local this Offset must be unset
+                                                    var offset = dates.alarmDate.getTimezoneOffset() * 60000;
+                                                    dates.alarmDate.setTime(dates.alarmDate.getTime() + offset);
+                                                    if (!editTask.alarm) {
+                                                        editTask.alarm = new date.Local(dates.alarmDate.getTime());
+                                                    } else {
+                                                        editTask.alarm.setTime(dates.alarmDate.getTime());
+                                                    }
+                                                    alarmDate.val(editTask.alarm.format(date.DATE));
+                                                    alarmDateTime.val(editTask.alarm.format(date.TIME));
+                                                }
+                                            });
+            
+            alarmDate = $('<input>').addClass("alarm-date-field").attr('type', 'text');
+            alarmDateTime = $('<input>').addClass("alarm-date-field").attr('type', 'text');
             alarmButton = $('<button>')
                 .addClass("btn task-edit-picker")
                 .on('click', function (e) {
@@ -141,12 +136,21 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                             } else {
                                 editTask.alarm.setTime(timevalue);
                             }
-                            alarmDate.val(editTask.alarm.format());
+                            alarmDate.val(editTask.alarm.format(date.DATE));
+                            alarmDateTime.val(editTask.alarm.format(date.TIME));
                         }
                     });
                 })
                 .append($('<i>').addClass('icon-calendar'));
+            
+            util.buildRow(node, [[util.buildLabel(gt("Reminder date")), reminderDropdown], alarmDate, alarmDateTime, alarmButton],
+                    [5, [3, 1], 2, 1]);
+            
+            //row 3 note
+            note = $('<textarea>').addClass("note-field");
+            util.buildRow(node, [[util.buildLabel(gt("Note")), note]]);
 
+            //row 4 status progress priority privateFlag
             status = $('<select>').addClass("status-selector");
             status.append(
                     $('<option>').text(gt("not started")),
@@ -163,27 +167,118 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     $('<option>').text(gt('high'))
                 );
             priority.prop('selectedIndex', 1);
-
-            startDate = $('<input>').addClass("start-date-field");
-            endDate = $('<input>').addClass("end-date-field");
-            alarmDate = $('<input>').addClass("alarm-date-field");
             
-            //datasection
-            attachmentDisplay = $('<div>').addClass("task-attachment-display")
-                .css("display:", "none");
+            var temp = util.buildProgress(progress, progressButtons);
+            progress = temp.progress;
+            progressButtons = temp.buttons;
+            temp = null;
+            progress.on('change', function () {
+                if (progress.val() === '0 %' && status.prop('selectedIndex') === 1) {
+                    status.prop('selectedIndex', 0);
+                } else if (progress.val() === '100 %' && status.prop('selectedIndex') !== 2) {
+                    status.prop('selectedIndex', 2);
+                } else if (status.prop('selectedIndex') === 2) {
+                    status.prop('selectedIndex', 1);
+                } else if (status.prop('selectedIndex') === 0) {
+                    status.prop('selectedIndex', 1);
+                }
+            });
+            status.on('change', function () {
+                if (status.prop('selectedIndex') === 0) {
+                    progress.val('0 %');
+                } else if (status.prop('selectedIndex') === 2) {
+                    progress.val('100 %');
+                } else if (status.prop('selectedIndex') === 1 && (progress.val() === '0 %' || progress.val() === '100 %')) {
+                    progress.val('25 %');
+                }
+            });
             
-            attachmentLink = $('<a>').attr('href', '#')
-                .addClass("task-attachment-link")
-                .text(gt('Attachments') + " (0)")
+            privateFlag = $('<input>').attr({type: 'checkbox', name: 'privateFlag'}).addClass("private-flag");
+            
+            util.buildRow(node, [[util.buildLabel(gt("Status")), status],
+                                 [util.buildLabel(gt("Progress")), progress],
+                                 progressButtons,
+                                 [util.buildLabel(gt("Priority")), priority],
+                                 [privateFlag, util.buildLabel(gt("Private")).addClass("private-flag")]],
+                    [3, 1, 2, 3, 3]);
+            
+            //row 5 start date due date
+            startDateButton = $('<button>')
+                .addClass("btn task-edit-picker")
                 .on('click', function (e) {
-                    e.preventDefault();
-                    attachmentDisplay.children().toggle();
-                });
+                    e.stopPropagation();
+                    picker.create().done(function (timevalue) {
+                        if (timevalue !== -1) {
+                            if (!editTask.start_date) {
+                                editTask.start_date = new date.Local(timevalue);
+                            } else {
+                                editTask.start_date.setTime(timevalue);
+                            }
+                            startDate.val(editTask.start_date.format(date.DATE));
+                            startDateTime.val(editTask.start_date.format(date.TIME));
+                        }
+                    });
+                })
+                .append($('<i>').addClass('icon-calendar'));
+
+            endDateButton = $('<button>')
+                .addClass("btn task-edit-picker")
+                .on('click', function (e) {
+                    e.stopPropagation();
+                    picker.create().done(function (timevalue) {
+                        if (timevalue !== -1) {
+                            if (!editTask.end_date) {
+                                editTask.end_date = new date.Local(timevalue);
+                            } else {
+                                editTask.end_date.setTime(timevalue);
+                            }
+                            endDate.val(editTask.end_date.format(date.DATE));
+                            endDateTime.val(editTask.end_date.format(date.TIME));
+                        }
+                    });
+                })
+                .append($('<i>').addClass('icon-calendar'));
+
+            startDate = $('<input>').addClass("start-date-field").attr('type', 'text');
+            startDateTime = $('<input>').addClass("start-date-time-field").attr('type', 'text');
+            endDate = $('<input>').addClass("end-date-field").attr('type', 'text');
+            endDateTime = $('<input>').addClass("end-date-time-field").attr('type', 'text');
+            
+            util.buildRow(node, [[util.buildLabel(gt("Start date")), startDate], startDateTime, startDateButton,
+                                 [util.buildLabel(gt("Due date")), endDate], endDateTime, endDateButton],
+                                 [3, 2, 1, 3, 2, 1]);
+            
+            //row 6 repeat
+            repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
+                .on('click', function (e) { e.preventDefault();
+                                            setTimeout(function () {notifications.yell("info", gt("Under construction")); }, 300);
+                                        });
+            util.buildRow(node, repeatLink);
+            
+            //tabsection
+            temp = util.buildTabs([gt('Participants'), gt('Attachments') + ' (0)', gt('Details')]);
+            tabs = temp.table;
+            participantsTab = temp.content.find('#edit-task-tab0');
+            attachmentsTab = temp.content.find('#edit-task-tab1');
+            detailsTab = temp.content.find('#edit-task-tab2');
+            node.append(tabs, temp.content);
+            
+            temp = null;
+            
+            //partitipants tab
+            participantsTab.append($('<h4>').text(gt("Under construction")).css('text-align', 'center'));
+            //details tab
+            detailsTab.append($('<h4>').text(gt("Under construction")).css('text-align', 'center'));
+            
+            //attachmentTab
+            
+            attachmentDisplay = $('<div>').addClass("task-attachment-display")
+                .css("display:", "none").appendTo(attachmentsTab);
             
             dropZone = upload.dnd.createDropZone({'type': 'single'});
             dropZone.on('drop', function (e, file) {
                 attachmentArray.push(file);
-                attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
                 self.buildAttachmentNode(attachmentArray.length - 1);
                 attachmentDisplay.children().first().addClass('first');
             });
@@ -193,40 +288,14 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 if (attachmentArray[node.attr('lnr')].id) { //attachments with id are already stored so they need to be deleted
                     attachmentsToRemove.push(attachmentArray[node.attr('lnr')].id);
                 }
-                attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
                 attachmentArray.splice(node.attr('lnr'), 1);
+                tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
                 node.remove();
                 attachmentDisplay.children().first().addClass('first');
                 attachmentDisplay.children().each(function (index) {
                     $(this).attr('lnr', index);
                 });
             });
-            
-            //put everything into the panel
-            infoWrapper.append(
-                    saveButton,
-                    $('<span>').text(gt("Status")).addClass("task-edit-info-label"),
-                    status, $('<br>'),
-                    $('<span>').text(gt("Priority")).addClass("task-edit-info-label"),
-                    priority, $('<br>'),
-                    $('<span>').text(gt("Start date")).addClass("task-edit-info-label"),
-                    startDateButton,
-                    startDate, $('<br>'),
-                    $('<span>').text(gt("Due date")).addClass("task-edit-info-label"),
-                    endDateButton,
-                    endDate, $('<br>'),
-                    $('<span>').text(gt("Reminder date")).addClass("task-edit-info-label"),
-                    alarmButton,
-                    alarmDate, $('<br>'),
-                    attachmentLink,
-                    attachmentDisplay,
-                    $('<div>').html("All dates must be in following format:<br>" +
-                                    "for Germany: day.month.year hour:minutes<br>" +
-                                    "exsample: 1.1.2012 2:00<br>" +
-                                    "for US/EN: month/day/year hour:minutes <br>" +
-                                    "exsample: 1/1/2012 2:00 a<br>" +
-                                    "Datepicker is under Construction").css("color", "red")
-                );
 
             //ready for show
 
@@ -252,51 +321,53 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 //fill with new ones
                 if (taskData.start_date) {
                     editTask.start_date = new date.Local(taskData.start_date);
-                    startDate.val(editTask.start_date.format());
+                    startDate.val(editTask.start_date.format(date.DATE));
+                    startDateTime.val(editTask.start_date.format(date.TIME));
                 }
-
                 if (taskData.end_date) {
                     editTask.end_date = new date.Local(taskData.end_date);
-                    endDate.val(editTask.end_date.format());
+                    endDate.val(editTask.end_date.format(date.DATE));
+                    endDateTime.val(editTask.end_date.format(date.TIME));
                 }
-
                 if (taskData.alarm) {
                     editTask.alarm = new date.Local(taskData.alarm);
-                    alarmDate.val(editTask.alarm.format());
+                    alarmDate.val(editTask.alarm.format(date.DATE));
+                    alarmDateTime.val(editTask.alarm.format(date.TIME));
                 }
-
                 if (taskData.title) {
                     editTask.title = taskData.title;
                     title.val(editTask.title);
                 }
-
                 if (taskData.note) {
                     editTask.note = taskData.note;
                     note.val(editTask.note);
                 }
-
                 if (taskData.status) {
                     editTask.status = taskData.status;
                     status.prop('selectedIndex', editTask.status - 1);
                 }
-
                 if (taskData.priority) {
                     editTask.priority = taskData.priority;
                     priority.prop('selectedIndex', editTask.priority - 1);
                 }
-
                 if (taskData.folder_id) {
                     editTask.folder_id = taskData.folder_id;
                 }
-
                 if (taskData.id) {
                     editTask.id = taskData.id;
                 }
-
                 if (taskData.last_modified) {
                     editTask.last_modified = taskData.last_modified;
                 }
-
+                if (taskData.percent_completed) {
+                    editTask.percent_completed = taskData.percent_completed;
+                    progress.val(editTask.percent_completed + ' %');
+                }
+                if (taskData.private_flag) {
+                    editTask.private_flag = taskData.private_flag;
+                    privateFlag.attr('checked', true);
+                }
+                
                 if (taskData.number_of_attachments !== 0) {
                     require(['io.ox/core/api/attachment'], function (api) {
                         api.getAll({folder_id: taskData.folder_id, id: taskData.id, module: 4}).done(function (data) {
@@ -313,7 +384,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                 attachmentArray.push(data[i]);
                                 self.buildAttachmentNode(i);
                             }
-                            attachmentLink.text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                            tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
                             attachmentDisplay.children().first().addClass('first');
                         });
                     });
@@ -433,7 +504,8 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 status: rawData.status,
                 priority: rawData.priority,
                 recurrence_type: 0,
-                percent_completed: 0
+                percent_completed: rawData.percent_completed,
+                private_flag: rawData.private_flag
                 };
 
             //checks needed to prevent is undefined error when getTime() should be called
@@ -464,9 +536,12 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
         app.updateData = function () {
             editTask.title = title.val();
             editTask.note = note.val();
+            editTask.percent_completed = parseInt(progress.val(), 10);
             editTask.status = status.prop('selectedIndex') + 1;
             editTask.priority = priority.prop('selectedIndex') + 1;
-            var temp = date.Local.parse(endDate.val());
+            editTask.private_flag = (privateFlag.attr('checked') === 'checked');
+            
+            var temp = date.Local.parse(endDate.val() + ' ' + endDateTime.val());
             if (temp !== null) {
                 editTask.end_date = new date.Local(temp.t);
             } else {
@@ -477,7 +552,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
             }
 
-            temp = date.Local.parse(startDate.val());
+            temp = date.Local.parse(startDate.val() + ' ' + startDateTime.val());
             if (temp !== null) {
                 editTask.start_date = new date.Local(temp.t);
             } else {
@@ -488,7 +563,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 }
             }
 
-            temp = date.Local.parse(alarmDate.val());
+            temp = date.Local.parse(alarmDate.val() + ' ' + alarmDateTime.val());
             if (temp !== null) {
                 editTask.alarm = new date.Local(temp.t);
             } else {
@@ -501,7 +576,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
             return editTask;
         };
-
 
         //Extension points
         ext.point('io.ox/tasks/edit/actions/save').extend({

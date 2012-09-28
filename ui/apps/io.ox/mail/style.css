@@ -100,10 +100,10 @@
     float: right;
 }
 
-.vgrid-cell.mail .attachment {
-    background: url(images/attachment.png) no-repeat 0px 0px;
-    width: 17px;
-    margin-left: 1em;
+.vgrid-cell.mail .icon-paper-clip {
+    font-size: 20px;
+    width: 18px;
+    margin-left: 0.5em;
     float: right;
 }
 
@@ -233,15 +233,8 @@
     margin-bottom: 0;
 }
 
-.mail-detail .infoblock {
-	padding: 13px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+.mail-detail .alert {
     margin-bottom: 1em;
-}
-
-.mail-detail .infoblock a {
-    text-decoration: underline;
 }
 
 .mail-detail .date {
@@ -418,7 +411,7 @@ h4.mail-attachment-preview {
     -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
 }
 
-.io-ox-mail-main .window-title .badge {
+.io-ox-mail-window .window-title .badge {
     cursor: pointer;
 }
 

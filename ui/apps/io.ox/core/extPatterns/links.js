@@ -79,7 +79,7 @@ define("io.ox/core/extPatterns/links",
     };
 
     var drawLinks = function (self, collection, node, context, args, bootstrapMode) {
-        return actions.extPatterns.applyCollection(self, collection, context, args)
+        return actions.applyCollection(self.ref, collection, context, args)
         .always(function (links) {
             // count resolved links
             var count = 0;

@@ -31,7 +31,6 @@ define("io.ox/conversations/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -46,7 +45,6 @@ define("io.ox/conversations/main",
         win = ox.ui.createWindow({
             name: 'io.ox/conversations',
             title: "Conversations",
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true
         });
 
@@ -73,16 +71,12 @@ define("io.ox/conversations/main",
         }
 
         // left panel
-        left = $("<div/>")
+        left = $("<div>")
             .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px"
-            })
             .appendTo(win.nodes.main);
 
         // right panel
-        right = $("<div/>")
-            .css({ left: GRID_WIDTH + 1 + "px" })
+        right = $("<div>")
             .addClass("rightside io-ox-conversation")
             .appendTo(win.nodes.main);
 
