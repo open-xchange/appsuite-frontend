@@ -71,22 +71,7 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/office/newdocument', {
         id: 'officenew',
         action: function (app) {
-            $.ajax({
-                type: 'GET',
-                url: ox.apiRoot +
-                '/oxodocumentfilter' +
-                '?action=createdefaultdocument' +
-                '&folder_id=' + app.folder.get() +
-                '&session=' + ox.session +
-                '&uid=' + app.getUniqueId() +
-                '&document_type=text',
-                dataType: 'json'
-            })
-            .done(function (response) {
-                ox.launch('io.ox/office/editor/main', { file: response.data }).done(function () {
-                    this.load();
-                });
-            });
+            ox.launch('io.ox/office/editor/main', { file: 'new', folder_id: app.folder.get() });
         }
     });
 
@@ -96,9 +81,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && /\.(odt|docx)$/i.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/office/editor/main', { file: data }).done(function () {
-                this.load();
-            });
+            ox.launch('io.ox/office/editor/main', { file: data });
         }
     });
 
@@ -318,7 +301,7 @@ define("io.ox/files/actions",
         label: gt("Refresh!"),
         ref: "io.ox/files/actions/office/refresh_hack"
     }));
-    
+
     ext.point("io.ox/files/links/inline").extend(new links.Link({
         id: "open",
         index: 100,
