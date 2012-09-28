@@ -1710,15 +1710,55 @@ define('io.ox/office/editor/editor',
                     if (tablePos) {
                         undomgr.startGroup();
                         var tableNode = tablePos.node,
-                            tablegrid = $(tableNode).data('grid'),
-                            localattrs = {'tablegrid': tablegrid},
-                            tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs},
-                            rowCount = $(tableNode).children('tbody, thead').children().length,
-                            localPos = _.copy(localStart, true);
-                        localPos.push(0);
-                        var rowUndoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
+                            localattrs = {};
+                        if ($(tableNode).data('attributes')) {
+                            localattrs = $(tableNode).data('attributes');
+                        }
+                        if ($(tableNode).data('grid')) {
+                            localattrs.tablegrid = $(tableNode).data('grid');
+                        }
 
-                        undomgr.addUndo(rowUndoOperation, operation);
+                        var tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs };
+
+                        // restoring also all rows and cells (only one with each operation, because attributes can be different)
+
+                        var lastRow = $(tableNode).children('tbody').children().length - 1;
+
+                        for (var i = lastRow; i >= 0; i--) {
+                            var localPos = _.copy(operation.start, true);  // table position
+                            localPos.push(i);  // row position
+
+                            var tableRow = Position.getDOMPosition(paragraphs, localPos);
+                            if (tableRow) {
+                                var row = tableRow.node,
+                                rowAttrs = {};
+
+                                if ($(row).data('attributes')) {
+                                    rowAttrs = $(row).data('attributes');  // saving row attributes
+                                }
+
+                                // all cells of this row have to be restored (without redo operation)
+                                var allCells = $(row).children(),
+                                    allCellsAttributes = Table.getCellAttributes(allCells);
+
+                                for (var j = allCellsAttributes.length - 1; j >= 0; j--) {
+                                    var count = 1,  // always only one cell in undo, cells can have different attributes
+                                        cellAttrs = allCellsAttributes[j],
+                                        cellPos = _.copy(localPos, true);
+
+                                    cellPos.push(j);
+
+                                    var localUndoOperation = { name: Operations.OP_CELL_INSERT, position: cellPos, count: count, attrs: cellAttrs };
+
+                                    undomgr.addUndo(localUndoOperation);  // no redo operation
+                                }
+
+                                var undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: 1, insertdefaultcells: false, attrs: rowAttrs };
+
+                                undomgr.addUndo(undoOperation);
+                            }
+                        }
+
                         undomgr.addUndo(tableUndoOperation, operation);
                         undomgr.endGroup();
                     }
@@ -1738,9 +1778,8 @@ define('io.ox/office/editor/editor',
                     // ToDo: Removal of complete row not yet supported
                     // Every cell has to be recreated with its own operation, because it might have different attributes
                     for (var i = end; i >= start; i--) {
-                        count = 1;  // always only one cell
-
-                        var pos = _.copy(operation.position, true);
+                        var count = 1,  // always only one cell
+                            pos = _.copy(operation.position, true);
                         pos.push(i);
 
                         // trying to get attributes from the cell (attributes might be different for each cell)
@@ -1768,12 +1807,46 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_ROWS_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localPos = _.copy(operation.position, true);
-                    localPos.push(operation.start);
+                    var start = operation.start,
+                        end = operation.end || start;
 
-                    var rowCount = operation.end - operation.start + 1,
-                        undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: rowCount, insertdefaultcells: true, attrs: {} };
-                    undomgr.addUndo(undoOperation, operation);
+                    undomgr.startGroup();
+                    for (var i = end; i >= start; i--) {
+                        var localPos = _.copy(operation.position, true);  // table position
+                        localPos.push(i);  // row position
+
+                        var tableRow = Position.getDOMPosition(paragraphs, localPos);
+                        if (tableRow) {
+                            var row = tableRow.node,
+                                rowAttrs = {};
+
+                            if ($(row).data('attributes')) {
+                                rowAttrs = $(row).data('attributes');  // saving row attributes
+                            }
+
+                            // all cells of this row have to be restored (without redo operation)
+                            var allCells = $(row).children(),
+                                allCellsAttributes = Table.getCellAttributes(allCells);
+
+                            for (var j = allCellsAttributes.length - 1; j >= 0; j--) {
+                                var count = 1,  // always only one cell in undo, cells can have different attributes
+                                    cellAttrs = allCellsAttributes[j],
+                                    cellPos = _.copy(localPos, true);
+
+                                cellPos.push(j);
+
+                                var localUndoOperation = { name: Operations.OP_CELL_INSERT, position: cellPos, count: count, attrs: cellAttrs };
+
+                                undomgr.addUndo(localUndoOperation);  // no redo operation
+                            }
+
+                            var undoOperation = { name: Operations.OP_ROW_INSERT, position: localPos, count: 1, insertdefaultcells: false, attrs: rowAttrs },
+                                redoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: i, end: i };  // only one row in each redo
+
+                            undomgr.addUndo(undoOperation, redoOperation);
+                        }
+                    }
+                    undomgr.endGroup();
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
@@ -1791,24 +1864,6 @@ define('io.ox/office/editor/editor',
                     undomgr.endGroup();
                 }
                 implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
-            }
-            else if (operation.name === Operations.OP_ROW_COPY) {
-//                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-//                    var start = operation.end,
-//                        end = start,
-//                        undoOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-//                    undomgr.addUndo(undoOperation, operation);
-//                }
-                implCopyRow(operation.position, operation.start, operation.end);
-            }
-            else if (operation.name === Operations.OP_COLUMN_COPY) {
-//                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-//                    var start = operation.end,
-//                        end = start,
-//                        undoOperation = { name: Operations.OP_COLUMNS_DELETE, position: _.copy(operation.position, true), start: start, end: end };
-//                    undomgr.addUndo(undoOperation, operation);
-//                }
-                implCopyColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_CELL_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -3542,33 +3597,6 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(localPosition);
         }
 
-        function implCopyRow(pos, startRow, endRow) {
-
-            var localPosition = _.copy(pos, true),
-                lastColumn = Position.getLastColumnIndexInTable(paragraphs, localPosition);
-
-            if (! Position.isPositionInTable(paragraphs, localPosition)) {
-                return;
-            }
-
-            var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                selectedRow = $(table).children().children().get(startRow),
-                insertAfter = endRow - 1;
-
-            $(selectedRow).clone(true).insertAfter($(table).children().children().get(insertAfter));
-
-            // iterating over all new cells and remove all paragraphs in the cells
-            implDeleteCellRange(localPosition, [endRow, 0], [endRow, lastColumn]);
-
-            // Setting cursor
-            localPosition.push(endRow);
-            localPosition.push(0);
-            localPosition.push(0);
-            localPosition.push(0);
-
-            lastOperationEnd = new OXOPaM(localPosition);
-        }
-
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
@@ -3826,38 +3854,6 @@ define('io.ox/office/editor/editor',
                 localPosition.push(0);
                 localPosition.push(0);
             }
-
-            lastOperationEnd = new OXOPaM(localPosition);
-        }
-
-        function implCopyColumn(pos, startCol, endCol) {
-
-            var localPosition = _.copy(pos, true),
-                lastRow = Position.getLastRowIndexInTable(paragraphs, localPosition);
-
-            if (! Position.isPositionInTable(paragraphs, localPosition)) {
-                return;
-            }
-
-            var table = Position.getDOMPosition(paragraphs, localPosition).node,
-                allRows = $(table).children().children(),
-                insertAfter = endCol - 1;
-
-            allRows.each(
-                function (i, elem) {
-                    var selectedColumn = $(elem).children().get(startCol);
-                    $(selectedColumn).clone(true).insertAfter($(elem).children().get(insertAfter));
-                }
-            );
-
-            // iterating over all new cells and remove all paragraphs in the cells
-            implDeleteCellRange(localPosition, [0, endCol], [lastRow, endCol]);
-
-            // Setting cursor to first position in table
-            localPosition.push(0);
-            localPosition.push(endCol);
-            localPosition.push(0);
-            localPosition.push(0);
 
             lastOperationEnd = new OXOPaM(localPosition);
         }

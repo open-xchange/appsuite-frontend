@@ -7,7 +7,7 @@ define(function () {
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
             "io.ox/files", "io.ox/tasks", "io.ox/conversations",
             "io.ox/dev/ajaxDebug", "io.ox/dev/testing", "io.ox/dev/theme-maker",
-            "io.ox/demo", "io.ox/lessons"
+            "io.ox/demo", "io.ox/lessons", "io.ox/office/editor"
         ],
 
         favorites: [
@@ -144,6 +144,14 @@ define(function () {
                 icon: "default.png",
                 category: "Dev",
                 settings: false
+            },
+            "io.ox/office/editor": {
+                title: "Documents",
+                company: "Open-Xchange Inc.",
+                icon: "documents.png",
+                category: "Dev",
+                settings: false,
+                createArguments: {file:"new"}
             },
             "3rd.party/addr": {
                 title: "Plaxo Address Book",
