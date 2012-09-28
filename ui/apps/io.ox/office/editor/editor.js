@@ -1728,6 +1728,41 @@ define('io.ox/office/editor/editor',
                 implDeleteCellRange(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_CELLS_DELETE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var start = operation.start,
+                        end = operation.end || start;
+
+                    undomgr.startGroup();
+
+                    // ToDo: Removal of complete row not yet supported
+                    // Every cell has to be recreated with its own operation, because it might have different attributes
+                    for (var i = end; i >= start; i--) {
+                        count = 1;  // always only one cell
+
+                        var pos = _.copy(operation.position, true);
+                        pos.push(i);
+
+                        // trying to get attributes from the cell (attributes might be different for each cell)
+                        var cellPos = Position.getDOMPosition(paragraphs, pos),
+                            attrs = {};
+
+                        if (cellPos) {
+                            var cellPosNode = cellPos.node;
+                            if ($(cellPosNode).data('attributes')) {
+                                attrs = $(cellPosNode).data('attributes');
+                            }
+                            if ($(cellPosNode).attr('colspan')) {
+                                attrs.gridspan = $(cellPosNode).attr('colspan');
+                            }
+                        }
+
+                        var undoOperation = { name: Operations.OP_CELL_INSERT, position: pos, count: count, attrs: attrs },
+                            redoOperation = { name: Operations.OP_CELLS_DELETE, position: _.copy(operation.position, true), start: i, end: i};  // only one cell in each redo
+
+                        undomgr.addUndo(undoOperation, redoOperation);
+                    }
+                    undomgr.endGroup();
+                }
                 implDeleteCells(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_ROWS_DELETE) {
@@ -1775,6 +1810,14 @@ define('io.ox/office/editor/editor',
                 implCopyColumn(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.OP_CELL_INSERT) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var pos = _.copy(operation.position, true),
+                        start = pos.pop(),
+                        count = operation.count || 1,
+                        end = start + count - 1,
+                        undoOperation = { name: Operations.OP_CELLS_DELETE, position: pos, start: start, end: end };
+                    undomgr.addUndo(undoOperation, operation);
+                }
                 implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
             }
             else if (operation.name === Operations.OP_ROW_INSERT) {
