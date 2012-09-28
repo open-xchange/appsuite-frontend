@@ -343,13 +343,14 @@ define('io.ox/calendar/actions',
         ref: 'io.ox/calendar/detail/actions/sendmail'
     }));
 
-    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
-        index: 100,
-        prio: 'hi',
-        id: 'save as distlist',
-        label: gt('Save as distribution list'),
-        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
-    }));
+
+//    ext.point('io.ox/calendar/links/inline-participants').extend(new links.Link({
+//        index: 100,
+//        prio: 'hi',
+//        id: 'save as distlist',
+//        label: gt('Save as distribution list'),
+//        ref: 'io.ox/calendar/detail/actions/save-as-distlist'
+//    }));
 
 
 
