@@ -815,13 +815,41 @@ define('io.ox/office/editor/editor',
             var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
                 newOperation;
 
+            undomgr.startGroup();  // starting to group operations for undoing
+
             if (isCompleteTable) {
                 newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                applyOperation(newOperation, true, true);
             } else {
                 newOperation = { name: Operations.OP_COLUMNS_DELETE, position: tablePos, startgrid: startGrid, endgrid: endGrid };
+                applyOperation(newOperation, true, true);
+
+                // Checking, if there are empty rows
+                var maxRow = $(tableNode).children('tbody').children().length - 1,
+                    deletedAllRows = true;
+
+                for (var i = maxRow; i >= 0; i--) {
+                    var rowPos = _.copy(tablePos, true);
+                    rowPos.push(i);
+                    var currentRowNode = Position.getDOMPosition(paragraphs, rowPos).node;
+
+                    if ($(currentRowNode).children().length === 0) {
+                        newOperation = {  name: Operations.OP_ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
+                        applyOperation(newOperation, true, true);
+                    } else {
+                        deletedAllRows = false;
+                    }
+                }
+
+                // Checking, if now the complete table is empty
+
+                if (deletedAllRows) {
+                    newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                    applyOperation(newOperation, true, true);
+                }
             }
 
-            applyOperation(newOperation, true, true);
+            undomgr.endGroup();
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -3905,9 +3933,9 @@ define('io.ox/office/editor/editor',
                             $(row).children().slice(startCol, endCol + 1).remove();
                         }
                         // removing empty rows implicitely
-                        if ($(row).children().length === 0) {
-                            $(row).remove();
-                        }
+//                        if ($(row).children().length === 0) {
+//                            $(row).remove();
+//                        }
                     }
                 }
             );
