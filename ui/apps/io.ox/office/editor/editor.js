@@ -609,7 +609,6 @@ define('io.ox/office/editor/editor',
             if (isCompleteTable) {
                 newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
             } else {
-                // newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
                 newOperation = { name: Operations.OP_ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
@@ -640,6 +639,8 @@ define('io.ox/office/editor/editor',
                 endRow = endPos.pop(),
                 tablePos = _.copy(startPos, true);
 
+            undomgr.startGroup();  // starting to group operations for undoing
+
             for (var i = endRow; i >= startRow; i--) {
 
                 var rowPosition = _.copy(tablePos, true);
@@ -657,7 +658,23 @@ define('io.ox/office/editor/editor',
                 var newOperation = {name: Operations.OP_CELLS_DELETE, position: rowPosition, start: localStartCol, end: localEndCol};
                 applyOperation(newOperation, true, true);
 
+                // removing empty row
+                var rowNode = Position.getDOMPosition(paragraphs, rowPosition).node;
+                if ($(rowNode).children().length === 0) {
+                    newOperation = { name: Operations.OP_ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
+                    applyOperation(newOperation, true, true);
+                }
+
+                // checking if the table is empty
+                var tableNode = Position.getDOMPosition(paragraphs, tablePos).node;
+                if ($(tableNode).children('tbody, thead').children().length === 0) {
+                    newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
+                    applyOperation(newOperation, true, true);
+                }
+
             }
+
+            undomgr.endGroup();
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -825,7 +842,7 @@ define('io.ox/office/editor/editor',
                 applyOperation(newOperation, true, true);
 
                 // Checking, if there are empty rows
-                var maxRow = $(tableNode).children('tbody').children().length - 1,
+                var maxRow = $(tableNode).children('tbody, thead').children().length - 1,
                     deletedAllRows = true;
 
                 for (var i = maxRow; i >= 0; i--) {
@@ -1750,7 +1767,7 @@ define('io.ox/office/editor/editor',
 
                         // restoring also all rows and cells (only one with each operation, because attributes can be different)
 
-                        var lastRow = $(tableNode).children('tbody').children().length - 1;
+                        var lastRow = $(tableNode).children('tbody, thead').children().length - 1;
 
                         for (var i = lastRow; i >= 0; i--) {
                             var localPos = _.copy(operation.start, true);  // table position
@@ -3876,11 +3893,6 @@ define('io.ox/office/editor/editor',
                     } else {
                         $(row).children().slice(start, end + 1).remove();
                     }
-                    // removing empty rows implicitely
-                    if ($(row).children().length === 0) {
-                        $(row).remove();
-                        removedRow = true;
-                    }
                 }
             }
 
@@ -3932,10 +3944,6 @@ define('io.ox/office/editor/editor',
                         } else {
                             $(row).children().slice(startCol, endCol + 1).remove();
                         }
-                        // removing empty rows implicitely
-//                        if ($(row).children().length === 0) {
-//                            $(row).remove();
-//                        }
                     }
                 }
             );
