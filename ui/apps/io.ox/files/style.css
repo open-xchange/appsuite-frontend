@@ -102,9 +102,10 @@
                 font-size: 60px;
                 line-height: 0.5em;
                 color: #ccc;
+                color: rgba(0, 0, 0, 0.5);
             }
             
-            i.file-type-doc { color: #0092D0; }
+            i.file-type-doc { color: #08c; }
             i.file-type-xls { color: #2FB145; }
             i.file-type-ppt { color: #ED4D21; }
         }
