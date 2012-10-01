@@ -814,8 +814,10 @@ define('io.ox/calendar/week/view',
                         self.lassoMode = false;
                         self.onEnterAppointment(e);
                         // write all appointment divs to draggable object
-                        var data = $(this).data('draggable');
-                        data.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
+                        var d = $(this).data('draggable'),
+                            day = Math.floor((e.pageX - paneOffset) / colWidth);
+                        d.my = {};
+                        d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
                             .addClass('opac')
                             .css({
                                 left : 0,
@@ -823,73 +825,94 @@ define('io.ox/calendar/week/view',
                                 maxWidth: '100%',
                                 zIndex: 999
                             });
-                        data.firstPos = data.all.first().position().top;
-                        data.lastHeight = data.all.last().height();
-                        data.lastDiff = 0;
+                        d.my.firstPos = parseInt(d.my.all.first().closest('.day').attr('date'), 10);
+                        d.my.lastPos = parseInt(d.my.all.last().closest('.day').attr('date'), 10);
+                        d.my.helper = null;
+                        d.my.lastDiff = ui.position.top;
+                        if (d.my.firstPos === d.my.lastPos) {
+                            d.my.mode = 4;
+                        } else if (day === d.my.firstPos) {
+                            d.my.mode = 3;
+                        } else if (day === d.my.lastPos) {
+                            d.my.mode = 2;
+                        } else {
+                            d.my.mode = 1;
+                        }
+//                        d.my.firstHelper = $(this).clone().hide();
+//                        $('.week-container .day[date="' + (d.my.firstPos - 1) + '"]')
+//                            .append(d.my.firstHelper);
+//                        d.my.lastHelper = $(this).clone().hide();
+//                        $('.week-container .day[date="' + (d.my.lastPos + 1) + '"]')
+//                            .append(d.my.lastHelper);
                         // last element
-                        if (data.all.length > 1 && this === data.all.last()[0]) {
-                            data.options.axis = 'x';
+                        if (d.my.mode === 3) {
+                            d.options.axis = 'x';
                         }
                     },
                     drag: function (e, ui) {
-                        var data = $(this).data('draggable');
+                        var d = $(this).data('draggable'),
+//                            day = Math.floor((e.pageX - paneOffset) / colWidth),
+//                            moveY = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
+                            top = ui.position.top;
                         // correct position
-                        data.all
-                            .css('left', data.position.left -= data.originalPosition.left);
+                        if (ui.position.top < 0 || d.my.mode <= 2) {
+                            ui.position.top = 0;
+                        }
+//                        console.log(ui.position.top);
+                        d.my.all
+                            .css('left', ui.position.left -= ui.originalPosition.left);
+
                         // handling on multi-drag
-                        if (data.all.length > 1) {
-                            var diff = data.position.top - data.originalPosition.top;
-                            if (data.lastDiff !== diff) {
-                                // first or last element
-                                if (this === data.all.last()[0] || this === data.all.first()[0]) {
-                                    var dir = data.lastDiff - diff;
-                                    // last element
-                                    if (this === data.all.last()[0]) {
-                                        var t = data.all.first().position().top - dir;
-                                        if (t <= 0) {
-                                            t = 0;
-                                        }
-                                        if (t >= paneHeight) {
-                                            t = paneHeight;
-                                        }
-                                        data.all.first().css('top', t);
-                                    }
-                                    data.all.last().height(function (i, h) {
-                                        h -= dir;
-                                        if (h <= 0) {
-                                            $(this).css('minHeight', 0);
-                                            return 0;
-                                        }
-                                        if (h > paneHeight) {
-                                            return paneHeight;
-                                        }
-                                        return h;
-                                    });
-                                    data.all.first().height(function (i, h) {
-                                        h += dir;
-                                        if (h <= 0) {
-                                            $(this).css('minHeight', 0);
-                                            return 0;
-                                        }
-                                        if (h > paneHeight) {
-                                            return paneHeight;
-                                        }
-                                        return h;
-                                    });
-                                    data.lastDiff = diff;
-                                } else {
-                                    data.position.top = data.originalPosition.top;
-                                }
+                        if (d.my.mode < 4) {
+                            if (d.my.lastDiff !== top) {
+                                var diff = top - d.my.lastDiff;
+                                d.my.lastDiff = top;
+//                                if (d.my.mode === 3) {
+//                                    if (top < 0) {
+//                                        if (d.my.helper === null) {
+//                                            console.log('first add');
+//                                            d.my.helper = 1;
+//                                        } else {
+//                                            console.log('first resize', Math.abs(top));
+//                                        }
+//                                        top = 0;
+//                                    }
+//                                    if (top > paneHeight) {
+//                                        console.log('first remove');
+//                                        top = paneHeight;
+//                                    }
+//                                }
+
+                                // calc first position
+//                                var overhead = 0,
+                                var tmpTop = Math.max(0, d.my.all.first().position().top + diff);
+//                                if (tmpTop < 0) {
+//                                    tmpTop = 0;
+//                                    overhead = Math.abs(top);
+//                                }
+//                                console.log(overhead, top, tmpTop,  diff);
+
+                                d.my.all.first().css({
+                                    top: tmpTop,
+                                    height: paneHeight - tmpTop
+                                });
+
+                                // calc last position
+                                d.my.all.last().height(function (i, h) {
+                                    return Math.min(Math.max(0, h += diff), paneHeight);
+                                });
                             }
+                        } else {
+                            d.my.lastDiff = top;
                         }
                     },
                     stop: function (e, ui) {
                         self.lassoMode = true;
                         $(this).busy();
-                        var move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
-                            data = $(this).data('draggable'),
+                        var d = $(this).data('draggable'),
+                            moveY = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = app.start_date + self.getTimeFromPos(data.all.first().position().top - data.firstPos) + (move * date.DAY);
+                            startTS = app.start_date + self.getTimeFromPos(d.my.lastDiff - ui.originalPosition.top) + (moveY * date.DAY);
                         _.extend(app, {
                             start_date: startTS,
                             end_date: startTS + (app.end_date - app.start_date),
@@ -903,7 +926,7 @@ define('io.ox/calendar/week/view',
             $('.day>.appointment.rmnorth .ui-resizable-n, .day>.appointment.rmsouth .ui-resizable-s')
                 .remove();
 
-            // init drag and resize widget on appointments
+            // init drag and resize widget on full-time appointments
             $('.fulltime>.appointment.modify')
                 .draggable({
                     grid: [colWidth, 0],

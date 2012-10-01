@@ -42,7 +42,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             this.realm = this.get('_realm');
             this._valid = true;
             this.attributeValidity = {};
-            
+
             delete this.attributes._realm;
 
         },
@@ -65,7 +65,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                         self.trigger('valid:' + attribute, self);
                     }
                 });
-                
+
                 self.attributeValidity = validAttributes;
                 self.trigger('invalid', errors, self);
                 self._valid = false;
@@ -76,7 +76,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                             self.trigger('valid:' + attribute, self);
                         }
                     });
-                    
+
                     _(attributes).chain().keys().each(function (key) {
                         self.attributeValidity[key] = true;
                     });
@@ -107,6 +107,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
         changedSinceLoading: function () {
             var self = this;
+
             var oldAttributes = this.realm.internal.cachedServerAttributes(this.id) || {};
             var currentAttributes = this.attributes;
             var keys = {};
@@ -300,7 +301,6 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     }
 
     function ModelFactory(delegate) {
-
         this.internal = {};
 
         var self = this;

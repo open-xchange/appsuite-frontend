@@ -47,11 +47,11 @@ define('io.ox/contacts/actions',
         requires: 'one modify',
         action: function (data) {
             if (data.mark_as_distributionlist === true) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
-                    m.getApp(data).launch().done(function () {
-                        this.edit(data);
-                    });
-                });
+//                require(['io.ox/contacts/distrib/main'], function (m) {
+//                    m.getApp(data).launch().done(function () {
+//                        this.edit(data);
+//                    });
+//                });
             } else {
                 require(['io.ox/contacts/util'], function (util) {
                     util.createEditPage(data);
@@ -154,13 +154,13 @@ define('io.ox/contacts/actions',
         ref: 'io.ox/contacts/main/create'
     }));
 
-    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
-        index: 200,
-        id: 'create-dist',
-        cssClasses: 'btn btn-inverse',
-        label: gt('Add distribution list'),
-        ref: 'io.ox/contacts/main/distrib'
-    }));
+//    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
+//        index: 200,
+//        id: 'create-dist',
+//        cssClasses: 'btn btn-inverse',
+//        label: gt('Add distribution list'),
+//        ref: 'io.ox/contacts/main/distrib'
+//    }));
 
     //  inline links
 
