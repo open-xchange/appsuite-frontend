@@ -1657,8 +1657,6 @@ define('io.ox/office/editor/editor',
                 operations.push(operation);
             }
 
-            window.console.log("AAA: " + JSON.stringify(operation));
-
             if (operation.name === "initDocument") {
                 implInitDocument();
             }
