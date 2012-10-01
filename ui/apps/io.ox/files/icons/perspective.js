@@ -278,7 +278,10 @@ define('io.ox/files/icons/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            win.on('search cancel-search', drawFirst);
+            // TODO fix cancel-search
+            win.on('search', function () {
+                drawFirst();
+            });
 
 //            // published?
 //            app.folder.getData().done(function (data) {
