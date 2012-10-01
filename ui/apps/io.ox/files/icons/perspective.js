@@ -221,7 +221,9 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
-                        carousel.addLink($('.breadcrumb'), app, allIds);
+                        $('.breadcrumb').after($('<div class="slideshowmenu pull-right">'));
+                        carousel.addLink($('.slideshowmenu'), app, allIds);
+                        carousel.addFullscreenLink($('.slideshowmenu'), app, allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
