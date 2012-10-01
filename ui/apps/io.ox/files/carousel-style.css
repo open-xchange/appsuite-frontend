@@ -1,0 +1,71 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+.carousel {
+    background:#000;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index:10000;
+    height:100%;
+
+    .carousel-inner {
+        height:100%;
+    }
+
+    .closecarousel {
+        position:absolute;
+        top:13px;
+        right:13px;
+    }
+
+    .item {
+        height:100%;
+
+        .carousel-caption {
+
+            .breadcrumb {
+                opacity:0.8;
+                padding:0;
+                margin:0;
+                background:transparent;
+
+                li {
+                    text-shadow: none;
+                    word-wrap:break-word;
+                }
+                li.active {
+                    display:inline;
+                }
+            }
+        }
+    }
+
+    .item > img {
+        position: absolute;
+        margin: auto;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .carousel-control {
+        cursor: pointer;
+    }
+}
+
+

@@ -21,8 +21,9 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
      'gettext!io.ox/files/files',
-     'io.ox/core/config'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config) {
+     'io.ox/core/config',
+     'io.ox/files/carousel'
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config, carousel) {
 
     'use strict';
 
@@ -141,55 +142,6 @@ define('io.ox/files/icons/perspective',
         return { iconRows: rows, iconCols: cols, icons: rows * cols };
     }
 
-    function addCarouselButton(el, ids)
-    {
-        return el.append(
-            $('<button class="btn btn-inverse pull-right">').text('Carousel').css({ position: 'relative', top: -5, right: -10 })
-                .on('click', function () { drawCarousel(ids); })
-        );
-    }
-
-    function closeCarousel()
-    {
-        $('.files-carousel').remove();
-        $('.files-iconview').show();
-    }
-
-    function carouselCaption(file)
-    {
-        var caption = $('<h4>').text(file.title);
-        if (file.description) caption.append($('<p>').text(file.description));
-        return $('<div class="carousel-caption">').append(caption);
-
-    }
-
-    function carouselItem(file)
-    {
-        return $('<div class="item">')
-            .append($('<img>', { alt: file.title, src: api.getUrl(file, 'open') }))
-            .append(carouselCaption(file));
-    }
-
-    function drawCarousel(ids)
-    {
-        var carousel = $('<div class="files-carousel carousel slide">');
-        $('.files-iconview').hide().parent().append(carousel);
-        var innerCarousel = $('<div class="carousel-inner">');
-        api.getList(ids).done(function (files) {
-            _(files).each(function (file) {
-                if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
-                    innerCarousel.append(carouselItem(file));
-                }
-            });
-        });
-        $('.files-carousel')
-            .append(innerCarousel)
-            .append($('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev').on('click', function () { $('.files-carousel').carousel('prev'); }))
-            .append($('<a class="carousel-control right">').text('›').attr('data-slide', 'next').on('click', function () { $('.files-carousel').carousel('next'); }))
-            .append($('<a class="close">').text('x').on('click', closeCarousel));
-        $('.files-carousel .item:first').addClass('active');
-    }
-
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
@@ -269,7 +221,7 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
-                        addCarouselButton($('.breadcrumb'), allIds);
+                        carousel.addLink($('.breadcrumb'), app, allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
@@ -295,17 +247,6 @@ define('io.ox/files/icons/perspective',
                 start = end;
                 end = end + layout.iconCols;
                 redraw(allIds.slice(start, end));
-
-                //if (last_layout.iconCols !== layout.iconCols || last_layout.iconRows !== layout.iconRows)
-                //{
-                //    $('.icon-container').empty().append(
-                //        $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
-                //    );
-                //    displayedRows = layout.iconRows + 1;
-                //    start = 0;
-                //    end = displayedRows * layout.iconCols;
-                //    redraw(allIds.slice(start, end));
-                //}
             };
 
             drawFirst();
