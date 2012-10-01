@@ -30,34 +30,6 @@
     box-sizing: border-box;
 }
 
-.carousel .item > img { margin:0 auto; max-height: 100%; }
-
-.files-carousel {
-
-    background:#000;
-    position: absolute;
-    overflow: auto;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-
-    margin:0 auto;
-
-    .close {
-        position:absolute;
-        top:0;
-        right:0;
-        font-size: 40px;
-        line-height: 30px;
-        color: white;
-        text-shadow: 0 1px 0 #555;
-        opacity:0.9;
-        margin-right:13px;
-    }
-
-}
-
 .files-iconview {
 
     @innerHeight:   110px;
@@ -77,6 +49,10 @@
 
     .icon-container .alert {
         margin-right: 13px;
+    }
+
+    .breadcrumb a {
+        cursor:pointer;
     }
 
     .file-icon {
@@ -102,6 +78,7 @@
                 font-size: 60px;
                 line-height: 0.5em;
                 color: #ccc;
+                color: rgba(0, 0, 0, 0.5);
             }
             
             i.file-type-doc { color: #0092D0; }

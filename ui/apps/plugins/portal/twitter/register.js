@@ -21,7 +21,8 @@ define('plugins/portal/twitter/register',
      'io.ox/keychain/api',
      'gettext!plugins/portal/twitter',
      'io.ox/core/notifications',
-     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt, notifications) {
+     'io.ox/core/date',
+     'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt, notifications, date) {
 
     'use strict';
 
@@ -128,17 +129,50 @@ define('plugins/portal/twitter/register',
     };
 
     var showTweet = function (tweet) {
+        if (tweet.retweeted_status) {
+            var $temp = renderTweet(tweet.retweeted_status);
+            $temp.find('.text').append(
+                $('<div class="io-ox-twitter-retweet-source">').append(
+                    $('<i class="icon-retweet">'),
+                    " ",
+                    $('<span>').text(gt('Retweeted by %s', tweet.user.screen_name))
+                )
+            );
+            return $temp;
+        }
+        return renderTweet(tweet);
+    };
+    
+    var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
-
-        return $('<div class="tweet">')
-            .data('entry', tweet)
-            .append($('<a>', {href: tweetLink, target: '_blank'})
-                .append($('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})))
-            .append($('<div class="text">')
-                .append($('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text(tweet.user.name))
-                .append('<br />')
-                .append(parseTweet(tweet.text, tweet.entities)));
+        var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
+            $('<a class="io-ox-twitter-follow btn" href="https://twitter.com/intent/user">').append(
+                $('<span>').text(gt('Follow')),
+                $('<i>')
+            ),
+            $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description}),
+            $('<div class="text">').append(
+                $('<strong class="io-ox-twitter-name">').text(tweet.user.name),
+                '<br />',
+                $('<a>', {'class': 'name', href: profileLink, target: '_blank'}).text('@' + tweet.user.screen_name),
+                '<br />',
+                parseTweet(tweet.text, tweet.entities)
+            ),
+            $('<div class="io-ox-twitter-details">').append(
+                $('<a>').attr({'class': 'io-ox-twitter-date', 'href': tweetLink, 'target': '_blank'}).text(new date.Local(new Date(tweet.created_at)).format(date.DATE_TIME)), //TODO format correctly
+                $('<a>').attr({'class': 'io-ox-twitter-reply', 'href': 'https://twitter.com/intent/tweet?in_reply_to=' + tweet.id_str}).text(gt('Reply')),
+                $('<a>').attr({'class': 'io-ox-twitter-retweet', 'href': "https://twitter.com/intent/retweet?tweet_id=" + tweet.id_str}).text(gt('Retweet')),
+                $('<a>').attr({'class': 'io-ox-twitter-favorite', 'href': "https://twitter.com/intent/favorite?tweet_id=" + tweet.id_str}).text(gt('Favorite'))
+            )
+        );
+        if (tweet.favorited) {
+            $myTweet.find('.io-ox-twitter-favorite').addClass('favorited').text(gt('Favorited'));
+        }
+        if (tweet.retweeted) {
+            $myTweet.find('.io-ox-twitter-retweet').addClass('retweeted').text(gt('Retweeted'));
+        }
+        return $myTweet;
     };
 
     var onPullToRefresh = function () {
@@ -223,8 +257,16 @@ define('plugins/portal/twitter/register',
                 return $.Deferred().resolve();
             }
             var self = this;
-
-            self.empty().append($('<div>').addClass('clear-title').text('Twitter'));
+            var script   = document.createElement('script');
+            script.type  = 'text/javascript';
+            script.src   = 'http://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
+            
+            self.empty().append(
+                $('<a class="io-ox-twitter-action-tweet btn btn-primary">').text(gt('Tweet')),
+                $('<div>').addClass('clear-title').text('Twitter'),
+                script
+            );
+            
             $tweets.empty();
 
             $tweets.appendTo(self);

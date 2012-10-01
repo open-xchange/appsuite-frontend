@@ -11,11 +11,13 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
-
+.twitter {
+    margin-top: 26px;
+}
 .twitter .tweet {
     position: relative;
     min-height: 55px;
-    margin: 0 0 20px 65px;
+    margin: 0 0 26px 65px;
     -webkit-user-select: text; -moz-user-select: text; user-select: text;
 }
 
@@ -31,4 +33,60 @@
 
 .twitter .name {
     font-weight: bold;
+}
+.io-ox-twitter-action-tweet {
+    display: block;
+    float: right;
+}
+.io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite, .io-ox-twitter-follow {
+    display: inline-block;
+    float: right;
+    margin-left: 0.5em;
+    overflow: hidden;
+    padding-left: 16px;
+}
+.io-ox-twitter-reply:before, .io-ox-twitter-retweet:before, .io-ox-twitter-favorite:before, .io-ox-twitter-follow:before {
+    content: " ";
+    background: url('everything-spritev2.png');
+    background-repeat: no-repeat;
+    position: absolute;
+    height: 16px;
+    width: 16px;
+    margin-left: -16px;
+}
+.io-ox-twitter-reply:before {
+    background-position: 0 0;
+}
+.io-ox-twitter-reply:hover:before {
+    background-position: -16px 0;
+}
+.io-ox-twitter-favorite:before {
+    background-position: -32px 0;
+} 
+.io-ox-twitter-favorite:hover:before {
+    background-position: -48px 0;
+}
+.io-ox-twitter-favorite.favorited:before {
+    background-position: -64px 0;
+}
+.io-ox-twitter-retweet:before {
+    background-position: -80px 0;
+}
+.io-ox-twitter-retweet:hover:before {
+    background-position: -96px 0;
+} 
+.io-ox-twitter-retweet.retweeted:before {
+    background-position: -112px 0;
+} 
+.io-ox-twitter-follow:before {
+    background: url('bird_blue_16.png');
+    background-position: 0px 0px;
+    width: 14px; //because at Twitter an icon advertised as 16x16 is 14x11 pixels in size.
+    height: 11px;
+    margin-left: -14px;
+    margin-top: 5px;
+}
+.io-ox-twitter-retweet-source span {
+    font-size: 90%;
+    color: #999;
 }

@@ -16,6 +16,11 @@
  	width: 100%;
  }
  
+ .io-ox-tasks-edit .row-content .progress-field{
+ 	text-align: center;
+ 	height: 20px;
+ }
+ 
  .io-ox-tasks-edit .private-flag {
  	display: inline;
  	width: auto;
@@ -25,10 +30,6 @@
  	position: relative;
  }
  
- .io-ox-tasks-edit .btn{
- 	top: 20px;
- 	position: relative;
- }
  .task-edit-wrapper {
  	max-width: 800px;
 	margin-left: auto;
@@ -47,23 +48,37 @@
  .task-edit-row {
  	margin-bottom: 9px;
  }
-
- .io-ox-tasks-edit .alarm-date-field {
-  	top: 20px;
- 	position: relative;
+ 
+ .io-ox-tasks-edit .tab-pane {
+  	margin-bottom: 85px;
+ }
+ 
+ .io-ox-tasks-edit .tab-content {
+  	overflow: visible;
+ }
+ 
+ .io-ox-tasks-edit .fluid-grid-fix {
+  	line-height: 20px;
+  	float: none!important;
+    margin: 0!important;
+ }
+ 
+ .io-ox-tasks-edit .alarm-date-field,
+ .io-ox-tasks-edit .start-date-time-field,
+ .io-ox-tasks-edit .end-date-time-field,
+ .io-ox-tasks-edit .start-date-field,
+ .io-ox-tasks-edit .end-date-field {
+  	background-color: #FFFFFF;
  }
  
  .io-ox-tasks-edit .note-field {
   	height: 120px;
   	min-height: 120px;
   	resize: vertical;
-  	box-sizing: border-box;
  }
  
- .io-ox-tasks-edit .start-date-time-field,
- .io-ox-tasks-edit .end-date-time-field {
-   	top: 20px;
- 	position: relative;
+ .io-ox-tasks-edit .input-prepend {
+ 	margin: 0;
  }
  
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
