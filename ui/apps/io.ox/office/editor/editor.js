@@ -958,19 +958,10 @@ define('io.ox/office/editor/editor',
                 selection.startPaM.oxoPosition.pop();
                 paragraphs = editdiv.children();
 
-                // table grid is width of paragraph divided by number of columns
-                var domPos = Position.getDOMPosition(paragraphs, selection.startPaM.oxoPosition),
-                    tableGrid = [],
-                    width = null;
-
-                if (domPos) {
-                    width = Utils.roundDigits(Utils.convertLengthToHmm(domPos.node.offsetWidth, 'px') / size.width, 1);
-                } else {
-                    width = Utils.roundDigits(179 * 100 / size.width, 1);  // only guess, not always valid
-                }
+                var tableGrid = [];
 
                 for (var i = 0; i < size.width; i++) {
-                    tableGrid.push(width);
+                    tableGrid.push(Utils.roundDigits(1 / size.width, 2));
                 }
 
                 var newOperation = {name: Operations.OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
@@ -1982,7 +1973,8 @@ define('io.ox/office/editor/editor',
                     // OP_COLUMNS_DELETE cannot be the answer to OP_COLUMN_INSERT, because the cells of the new column may be inserted
                     // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
                     var localPos = _.copy(operation.position, true),
-                        table = Position.getDOMPosition(paragraphs, localPos).node,
+                        table = Position.getDOMPosition(paragraphs, localPos).node,  // -> this is already the new grid with the new column!
+                        tablegrid = _.copy($(table).data('grid'), true),
                         allRows = $(table).children('tbody, thead').children(),
                         allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridposition, operation.insertmode);
 
@@ -1992,13 +1984,15 @@ define('io.ox/office/editor/editor',
                             end = start;  // only one cell within each operation
                         rowPos.push(i);
                         var undoOperation = { name: Operations.OP_CELLS_DELETE, position: rowPos, start: start, end: end };
-
-                        if (i > 0) {
-                            undomgr.addUndo(undoOperation);
-                        } else {
-                            undomgr.addUndo(undoOperation, operation);  // only one redo operation required
-                        }
+                        undomgr.addUndo(undoOperation);
                     }
+
+                    // Setting old tablegrid, recreating old table grid
+                    var removeGridPosition = operation.gridposition;
+                    if (operation.insertmode === 'behind') { removeGridPosition++; }
+                    tablegrid.splice(removeGridPosition, 1);
+                    var setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: tablegrid };
+                    undomgr.addUndo(setTableGridOperation, operation);  // only one redo operation
 
                     undomgr.endGroup();
                 }
@@ -3370,19 +3364,16 @@ define('io.ox/office/editor/editor',
 
             if (tablePosition) {
                 var table = tablePosition.node,
-                    tableWidth = 0;
+                    colgroup = $(table).children('colgroup');
 
-                var colgroup = $(table).children('colgroup');
                 colgroup.children('col').remove(); // removing all col entries
 
                 for (var i = 0; i < tablegrid.length; i++) {
-                    var width = tablegrid[i] / 100 + 'mm';  // converting to mm
-                    tableWidth += tablegrid[i];
-                    colgroup.append($('<col>').css('width', width));
+                    var oneGridWidth = Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%';  // converting to %
+                    colgroup.append($('<col>').css('width', oneGridWidth));
                 }
 
-                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
-                $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': colgroup.children('col').length});  // updating table data
+                $(table).data({'grid': tablegrid, 'columns': colgroup.children('col').length});  // updating table data
             }
         }
 
@@ -3425,23 +3416,28 @@ define('io.ox/office/editor/editor',
             var position = _.copy(pos, true),
                 colgroup = $('<colgroup>'),
                 colCount = attrs.tablegrid.length,
-                tableWidth = 0;
+                tableWidth = null;
+
+            if ((! attrs.width) || (attrs.width === 0)) {
+                tableWidth = "100%";
+            } else {
+                tableWidth = attrs.width * 100 + 'mm';
+            }
+
+            if (tableWidth !== null) {
+                $(table).css('width', tableWidth);  // setting width
+            }
 
             for (var i = 0; i < attrs.tablegrid.length; i++) {
-                var width = attrs.tablegrid[i] / 100 + 'mm';  // converting to mm
-                tableWidth += attrs.tablegrid[i];
-                colgroup.append($('<col>').css('width', width));
+                var oneGridWidth = Table.getGridWidthPercentage(attrs.tablegrid, attrs.tablegrid[i])  + '%';  // converting to %
+                colgroup.append($('<col>').css('width', oneGridWidth));
             }
 
             // insert the table into the document
-            var table = $('<table>').data({'columns': colCount, 'width': tableWidth, 'grid': attrs.tablegrid}).append(colgroup),
+            var table = $('<table>').data({'columns': colCount, 'grid': attrs.tablegrid, 'attributes': attrs}).append(colgroup),
                 domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
-
-            if (tableWidth > 0) {
-                $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
-            }
 
             if (domPosition) {
                 domParagraph = domPosition.node;
@@ -3956,14 +3952,12 @@ define('io.ox/office/editor/editor',
                 tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid
             }
 
-            var tableWidth = 0;
+            // updating percentages in cols
+            allCols.each(function (i) {
+                $(this).css('width', Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%');
+            });
 
-            for (var i = 0; i < tablegrid.length; i++) {
-                tableWidth += tablegrid[i];
-            }
-
-            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
-            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
+            $(table).data({'grid': tablegrid, 'columns': allCols.length});  // updating table data
 
             if ($(table).children('tbody, thead').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
@@ -4016,16 +4010,13 @@ define('io.ox/office/editor/editor',
 
             // setting new widths of the grid elements (saved in tablegrid)
             var colgroup = $(table).children('colgroup').append($('<col>')), // adding one element to colgroup
-                allCols = colgroup.children('col'),
-                tableWidth = 0;
+                allCols = colgroup.children('col');
 
             allCols.each(function (i) {
-                $(this).css('width', (tablegrid[i] / 100) + 'mm');
-                tableWidth += tablegrid[i];
+                $(this).css('width', Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%');
             });
 
-            $(table).css('width', (tableWidth / 100) + 'mm');  // setting new width
-            $(table).data({'grid': tablegrid, 'width': tableWidth, 'columns': allCols.length});  // updating table data
+            $(table).data({'grid': tablegrid, 'columns': allCols.length});  // updating table data
 
             // Setting cursor to first position in table
             localPosition.push(0);
