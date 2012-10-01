@@ -1920,6 +1920,9 @@ define('io.ox/office/editor/position',
         case "paragraph":
             assignedPos = (node.nodeName === 'P') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'P');
             break;
+        case "table":
+            assignedPos = (node.nodeName === 'TABLE') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TABLE');
+            break;
         default:
             Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
         }
@@ -1962,6 +1965,8 @@ define('io.ox/office/editor/position',
                 family = 'paragraph';
             } else if (Utils.getNodeName(node) === 'img') {
                 family = 'image';
+            } else if (Utils.getNodeName(node) === 'table') {
+                family = 'table';
             } else {
                 Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
             }

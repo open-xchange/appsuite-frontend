@@ -1657,6 +1657,8 @@ define('io.ox/office/editor/editor',
                 operations.push(operation);
             }
 
+            window.console.log("AAA: " + JSON.stringify(operation));
+
             if (operation.name === "initDocument") {
                 implInitDocument();
             }
@@ -1895,12 +1897,12 @@ define('io.ox/office/editor/editor',
 
                     var localPos = _.copy(operation.position, true),
                         table = Position.getDOMPosition(paragraphs, localPos).node,
-                        localtablegrid = _.copy($(table).data('attributes').tablegrid, true),
                         allRows = $(table).children('tbody, thead').children(),
                         allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid),
-                        setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: localtablegrid };
+                        setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: _.copy($(table).data('attributes').tablegrid, true) };
+                        // setTableGridOperation = { name: Operations.OP_ATTRS_SET, attrs: $(table).data('attributes'), start: localPos, end: localPos };
 
-                    undomgr.addUndo(setTableGridOperation, operation);  // only one redo operation
+                    undomgr.addUndo(setTableGridOperation);
 
                     for (var i = (allCellRemovePositions.length - 1); i >= 0; i--) {
                         var rowPos = _.copy(localPos, true),
@@ -1941,6 +1943,8 @@ define('io.ox/office/editor/editor',
                             undomgr.addUndo(undoOperation);
                         }
                     }
+
+                    undomgr.addUndo(null, operation);  // only one redo operation
 
                     undomgr.endGroup();
                 }
@@ -1993,6 +1997,7 @@ define('io.ox/office/editor/editor',
                     if (operation.insertmode === 'behind') { removeGridPosition++; }
                     tablegrid.splice(removeGridPosition, 1);
                     var setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: tablegrid };
+                    // setTableGridOperation = { name: Operations.OP_ATTRS_SET, attrs: $(table).data('attributes'), start: localPos, end: localPos };
                     undomgr.addUndo(setTableGridOperation, operation);  // only one redo operation
 
                     undomgr.endGroup();
@@ -3387,6 +3392,13 @@ define('io.ox/office/editor/editor',
                 var pos = _.copy(position, true);
                 pos[pos.length - 1] -= 1; // decreasing last value by 1, if new paragraphs are inserted
                 allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, pos);
+
+                if (! allParagraphs) {
+                    var domPos = Position.getDOMPosition(paragraphs, pos);
+                    if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'table')) {
+                        allParagraphs = $(domPos.node.parentNode).children();
+                    }
+                }
             }
 
             var newPara = $('<p>');
