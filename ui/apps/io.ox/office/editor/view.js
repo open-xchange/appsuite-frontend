@@ -352,8 +352,8 @@ define('io.ox/office/editor/view',
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
-            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
-            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') });
+            .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
@@ -388,16 +388,16 @@ define('io.ox/office/editor/view',
             .addButton('table/delete/column', { icon: 'icon-io-ox-table-delete-column', tooltip: gt('Delete Columns') });
 
         createToolBar('image', { label: gt('Image') })
-            .addButton('image/insert/file', { icon: 'icon-picture', tooltip: gt('Insert Image File') })
-            .addButton('image/insert/url',  { icon: 'icon-picture', tooltip: gt('Insert Image URL') })
+            .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image File') })
+            .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') })
             .addSeparator()
-            .addButton('image/delete', { icon: 'icon-trash', tooltip: gt('Delete Image') })
+            .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/alignment', { icon: 'icon-picture', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
-                .addOptionButton('inline',       { icon: 'icon-indent-left',  tooltip: gt('Inline') })
-                .addOptionButton('leftFloated',  { icon: 'icon-align-left',   tooltip: gt('Float Left') })
-                .addOptionButton('rightFloated', { icon: 'icon-align-right',  tooltip: gt('Float Right') })
-                .addOptionButton('noneFloated',  { icon: 'icon-align-center', tooltip: gt('Center') })
+            .addRadioGroup('image/alignment', { icon: 'icon-io-ox-image-inline', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
+                .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
+                .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
+                .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })
+                .addOptionButton('noneFloated',  { icon: 'icon-io-ox-image-center',      tooltip: gt('Center') })
                 .end();
 
         // additions for debug mode

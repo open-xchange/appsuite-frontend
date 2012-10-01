@@ -134,25 +134,32 @@ i.icon-io-ox-caret {
 /*
  * Define class names for all icons.
  */
-i.icon-io-ox-undo                { background-position:  -20px      0; }
-i.icon-io-ox-redo                { background-position:  -40px      0; }
-i.icon-io-ox-bold                { background-position:  -60px      0; }
-i.icon-io-ox-bold.de_DE          { background-position:  -80px      0; }
-i.icon-io-ox-bold.fr_FR          { background-position: -100px      0; }
-i.icon-io-ox-italic              { background-position: -120px      0; }
-i.icon-io-ox-italic.de_DE        { background-position: -140px      0; }
-i.icon-io-ox-underline           { background-position: -160px      0; }
-i.icon-io-ox-underline.fr_FR     { background-position: -180px      0; }
-i.icon-io-ox-font-height         { background-position: -200px      0; }
-i.icon-io-ox-line-spacing-1      { background-position: -220px      0; }
-i.icon-io-ox-line-spacing-1-5    { background-position: -240px      0; }
-i.icon-io-ox-line-spacing-2      { background-position: -260px      0; }
+i.icon-io-ox-undo                   { background-position:  -20px      0; }
+i.icon-io-ox-redo                   { background-position:  -40px      0; }
+i.icon-io-ox-bold                   { background-position:  -60px      0; }
+i.icon-io-ox-bold.de_DE             { background-position:  -80px      0; }
+i.icon-io-ox-bold.fr_FR             { background-position: -100px      0; }
+i.icon-io-ox-italic                 { background-position: -120px      0; }
+i.icon-io-ox-italic.de_DE           { background-position: -140px      0; }
+i.icon-io-ox-underline              { background-position: -160px      0; }
+i.icon-io-ox-underline.fr_FR        { background-position: -180px      0; }
+i.icon-io-ox-font-height            { background-position: -200px      0; }
+i.icon-io-ox-line-spacing-1         { background-position: -220px      0; }
+i.icon-io-ox-line-spacing-1-5       { background-position: -240px      0; }
+i.icon-io-ox-line-spacing-2         { background-position: -260px      0; }
 
-i.icon-io-ox-table               { background-position:      0  -20px; }
-i.icon-io-ox-table-insert-row    { background-position:  -20px  -20px; }
-i.icon-io-ox-table-insert-column { background-position:  -40px  -20px; }
-i.icon-io-ox-table-delete-row    { background-position:  -60px  -20px; }
-i.icon-io-ox-table-delete-column { background-position:  -80px  -20px; }
+i.icon-io-ox-table                  { background-position:      0  -20px; }
+i.icon-io-ox-table-insert-row       { background-position:  -20px  -20px; }
+i.icon-io-ox-table-insert-column    { background-position:  -40px  -20px; }
+i.icon-io-ox-table-delete-row       { background-position:  -60px  -20px; }
+i.icon-io-ox-table-delete-column    { background-position:  -80px  -20px; }
+
+i.icon-io-ox-image-insert           { background-position: -180px  -20px; }
+i.icon-io-ox-image-delete           { background-position: -200px  -20px; }
+i.icon-io-ox-image-float-left       { background-position: -220px  -20px; }
+i.icon-io-ox-image-float-right      { background-position: -240px  -20px; }
+i.icon-io-ox-image-center           { background-position: -260px  -20px; }
+i.icon-io-ox-image-inline           { background-position: -280px  -20px; }
 
 /* reset Bootstrap margins for all icons */
 .reset-icon-margins() {
