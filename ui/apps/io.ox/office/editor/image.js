@@ -348,7 +348,7 @@ define('io.ox/office/editor/image',
                                     insertNode = parent.firstChild;
 
                                 $(imageNode).data('previousInlinePosition', localStart);
-                                while ((Utils.getNodeName(insertNode) === 'div') && ($(insertNode).data('positionDiv')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
+                                while (((Utils.getNodeName(insertNode) === 'div') && $(insertNode).hasClass('float')) || (Utils.getNodeName(insertNode) === 'img')) { insertNode = insertNode.nextSibling; }
 
                                 parent.insertBefore(imageNode, insertNode);
                             }
@@ -373,7 +373,7 @@ define('io.ox/office/editor/image',
 
                         // also setting float mode of a corresponding span, if exists
                         var divNode = imageNode.parentNode.firstChild;
-                        while ((Utils.getNodeName(divNode) === 'div') && ($(divNode).data('positionDiv'))) {
+                        while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
                             if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
                                 $(divNode).css('float', attributes.float);
                                 break;

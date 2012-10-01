@@ -504,7 +504,7 @@ define('io.ox/office/editor/position',
             childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
         } else if (node.nodeName === 'TR') {
             childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
-        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || ((node.nodeName === 'DIV') && (! $(node).data('positionDiv')))) {
+        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || ((node.nodeName === 'DIV') && !$(node).hasClass('float'))) {
             childNode = $(node).children().get(pos);
         } else if (node.nodeName === 'P') {
             var textLength = 0,
@@ -537,7 +537,7 @@ define('io.ox/office/editor/position',
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && ($(nodeList[i]).data('positionDiv'))) {
+                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && $(nodeList[i]).hasClass('float')) {
                         // ignoring spans that exist only for positioning image
                         continue;
                     } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
@@ -2179,7 +2179,7 @@ define('io.ox/office/editor/position',
             if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
                 counter++;
                 child = child.nextSibling;
-            } else if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
+            } else if ((Utils.getNodeName(child) === 'div') && $(child).hasClass('float')) {
                 // ignoring divs that exist only for positioning image
                 child = child.nextSibling;
             } else {
