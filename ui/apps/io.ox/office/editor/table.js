@@ -52,9 +52,9 @@ define('io.ox/office/editor/table',
             var tableNode = tablePosition.node,
                 validTableGrid = false;
 
-            if ($(tableNode).data('grid')) {
+            if ($(tableNode).data('attributes').tablegrid) {
 
-                tablegrid = $(tableNode).data('grid');
+                tablegrid = $(tableNode).data('attributes').tablegrid;
 
                 if (tablegrid.length > 0) {
                     validTableGrid = true;
