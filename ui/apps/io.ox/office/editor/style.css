@@ -115,11 +115,11 @@
             vertical-align: baseline;
         }
 
-        img.float, div.float {
+        .float {
             display: block;
 
-            &.left { float: left; }
-            &.right { float: right; }
+            &.left { float: left; clear: left; }
+            &.right { float: right; clear: right; }
         }
 
         /* selection box for objects/images */

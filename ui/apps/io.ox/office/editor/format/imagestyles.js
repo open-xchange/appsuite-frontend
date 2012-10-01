@@ -107,6 +107,178 @@ define('io.ox/office/editor/format/imagestyles',
             textwrapside: { def: 'bothsides' }
         };
 
+    // private global functions ===============================================
+
+    /**
+     * Will be called for every image element whose attributes have been
+     * changed. Repositions and reformats the image according to the passed
+     * attributes.
+     *
+     * @param {jQuery} image
+     *  The <img> element whose image attributes have been changed, as jQuery
+     *  object.
+     *
+     * @param {Object} attributes
+     *  A map of all attributes (name/value pairs), containing the effective
+     *  attribute values merged from style sheets and explicit attributes.
+     */
+    function updateImageFormatting(image, attributes) {
+
+        var // the paragraph element containing the image
+            paragraph = image.parent(),
+            // preceding div element used for vertical offset
+            verticalOffsetNode = image.prev('div.float'),
+            // total width of the paragraph, in 1/100 mm
+            paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
+            // first text node in paragraph
+            firstTextNode = null,
+            // current image width, in 1/100 mm
+            imageWidth = Utils.convertLengthToHmm(image.width(), 'px'),
+            // offset from top/left/right margin of paragraph element, in 1/100 mm
+            topOffset = 0, leftOffset = 0, rightOffset = 0,
+            // margins to be applied at the image
+            topMargin = 0, bottomMargin = 0, leftMargin = 0, rightMargin = 0,
+            // text wrapping side (left/right/none)
+            wrapMode = 'none';
+
+        if (attributes.inline) {
+
+            // from floating mode to inline mode
+            if (image.hasClass('float')) {
+
+                // remove leading div used for positioning
+                verticalOffsetNode.remove();
+
+                // create empty text span before first text span
+                firstTextNode = Utils.findFirstTextNode(image.parent());
+                DOM.splitTextNode(firstTextNode, 0);
+
+                // remove floating classes, move image behind floated images
+                image.removeClass('float left right').insertBefore(firstTextNode.parentNode);
+            }
+
+            // TODO: Word uses fixed predefined margins in inline mode, we too?
+            image.css('margin', '0 1mm');
+            // ignore other attributes in inline mode
+
+        } else {
+
+            // from inline mode to floating mode
+            if (!image.hasClass('float')) {
+
+                // first text node in paragraph
+                firstTextNode = Utils.findFirstTextNode(image.parent());
+
+                // add floating classes, move image before the first text node
+                image.addClass('float').insertBefore(firstTextNode.parentNode);
+            }
+
+            // calculate top offset (only if image is anchored to paragraph)
+            if (attributes.anchorvbase === 'paragraph') {
+                if (attributes.anchorvalign === 'offset') {
+                    topOffset = Math.max(attributes.anchorvoffset, 0);
+                } else {
+                    // TODO: automatic alignment (top/bottom/center/...)
+                    topOffset = 0;
+                }
+            }
+
+            // calculate top/bottom image margins
+            topMargin = Utils.minMax(attributes.margint, 0, topOffset);
+            bottomMargin = Math.max(attributes.marginb, 0);
+
+            // add or remove leading div used for positioning
+            // TODO: support for multiple images (also overlapping) per side
+            topOffset -= topMargin;
+            if (topOffset < 50) {
+                verticalOffsetNode.remove();
+            } else if (verticalOffsetNode.length === 0) {
+                verticalOffsetNode = $('<div>').addClass('float').css({
+                    width: '0.1px',
+                    height: Utils.convertHmmToCssLength(topOffset, 'px', 0)
+                });
+            }
+
+            // calculate left/right offset (only if image is anchored to column)
+            if (attributes.anchorhbase === 'column') {
+                switch (attributes.anchorhalign) {
+                case 'center':
+                    leftOffset = (paraWidth - imageWidth) / 2;
+                    break;
+                case 'right':
+                    leftOffset = paraWidth - imageWidth;
+                    break;
+                case 'offset':
+                    leftOffset = attributes.anchorhoffset;
+                    break;
+                default:
+                    leftOffset = 0;
+                }
+            } else {
+                // TODO: other anchor bases (page/character/margins/...)
+                leftOffset = 0;
+            }
+            rightOffset = paraWidth - leftOffset - imageWidth;
+
+            // determine text wrapping side
+            if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight')) {
+                switch (attributes.textwrapside) {
+                case 'left':
+                    wrapMode = 'left';
+                    break;
+                case 'right':
+                    wrapMode = 'right';
+                    break;
+                case 'bothsides':
+                case 'largest':
+                    // no support for 'wrap both sides' in CSS, default to 'largest'
+                    wrapMode = (leftOffset > rightOffset) ? 'left' : 'right';
+                    break;
+                default:
+                    Utils.warn('updateImageFormatting(): invalid text wrap side: ' + attributes.textwrapside);
+                    wrapMode = 'none';
+                }
+            } else {
+                // text does not float beside image
+                wrapMode = 'none';
+            }
+
+            // calculate left/right image margins
+            switch (wrapMode) {
+            case 'left':
+                // image floats at right paragraph margin
+                rightMargin = rightOffset;
+                leftMargin = Math.max(attributes.marginl, 0);
+                // if there is less than 6mm space available for text, occupy all space (no wrapping)
+                if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
+                break;
+            case 'right':
+                // image floats at left paragraph margin
+                leftMargin = leftOffset;
+                rightMargin = Math.max(attributes.marginr, 0);
+                // if there is less than 6mm space available for text, occupy all space (no wrapping)
+                if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
+                break;
+            default:
+                // no wrapping: will be modeled by left-floated with large CSS margins
+                wrapMode = 'right';
+                leftMargin = leftOffset;
+                rightMargin = Math.max(rightOffset, 0);
+            }
+
+            // set floating mode to image and positioning div
+            image.add(verticalOffsetNode).removeClass('left right').addClass((wrapMode === 'left') ? 'right' : 'left');
+
+            // apply CSS formatting to image element
+            image.css({
+                marginTop: Utils.convertHmmToCssLength(topMargin, 'px', 0),
+                marginBottom: Utils.convertHmmToCssLength(bottomMargin, 'px', 0),
+                marginLeft: Utils.convertHmmToCssLength(leftMargin, 'px', 0),
+                marginRight: Utils.convertHmmToCssLength(rightMargin, 'px', 0)
+            });
+        }
+    }
+
     // class ImageStyles ======================================================
 
     /**
@@ -127,63 +299,10 @@ define('io.ox/office/editor/format/imagestyles',
      */
     function ImageStyles(rootNode, documentStyles) {
 
-        // private methods ----------------------------------------------------
-
-        /**
-         * Global setter handler that will be called for every image element
-         * whose attributes have been changed. Repositions and reformats the
-         * image according to the passed attributes.
-         *
-         * @param {jQuery} image
-         *  The <img> element whose image attributes have been changed, as
-         *  jQuery object.
-         *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
-         */
-        function globalSetHandler(image, attributes) {
-
-            var // the paragraph element containing the image
-                paragraph = image.parent(),
-                // total width of the paragraph
-                paraWidth = paragraph.width(),
-                // first text node in paragraph
-                textNode = null,
-                // image currently in floating mode
-                wasFloated = image.hasClass('float');
-
-            if (attributes.inline) {
-
-                // from floating mode to inline mode
-                if (wasFloated) {
-                    // remove floating, set margins
-                    // TODO: Word uses fixed predefined margins in inline mode, we too?
-                    image.removeClass('float left right').css('margin', '0 0.125in');
-
-                    // move image behind floated images, add empty text span before image
-                    textNode = Utils.findFirstTextNode(paragraph);
-                    DOM.splitTextNode(textNode, 0);
-                    image.insertBefore(textNode.parentNode);
-                }
-
-                // ignore other attributes in inline mode
-
-            } else {
-
-                // from inline mode to floating mode
-                if (!wasFloated) {
-                }
-
-                image.addClass('float').removeClass('left right');
-            }
-        }
-
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'image', definitions, documentStyles, {
-            globalSetHandler: globalSetHandler
+            globalSetHandler: updateImageFormatting
         });
 
         // methods ------------------------------------------------------------
@@ -204,7 +323,7 @@ define('io.ox/office/editor/format/imagestyles',
          */
         this.iterateReadWrite = this.iterateReadOnly;
 
-    } // class ParagraphStyles
+    } // class ImageStyles
 
     // exports ================================================================
 
