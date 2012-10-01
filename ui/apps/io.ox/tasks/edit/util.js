@@ -23,25 +23,11 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         },
         //build progressField and buttongroup
         buildProgress: function () {
-            //bootstrap is not clever enough to figure out the right width by itself
-            var width = 53.810366,
-                progress = $('<input>').attr({type: 'text', readonly: 'readonly'}).val('0 %')
-                .addClass("span6 progress-field").css('width', width + '%');
+            var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
+                .addClass("span6 progress-field");
             
             $('<div>').addClass('input-append').append(progress,
-                    $('<button>').addClass('span3 fluid-grid-fix btn').append($('<i>').addClass('icon-plus'))
-                    .on('click', function () {
-                        var temp = parseInt(progress.val(), 10);
-                        temp += 25;
-                        if (temp > 100) {
-                            temp = 100;
-                        }
-                        if (temp !== parseInt(progress.val(), 10)) {
-                            progress.val(temp + " %");
-                            progress.trigger('change');
-                        }
-                    }),
-                    $('<button>').addClass('span3 fluid-grid-fix btn').append($('<i>').addClass('icon-minus'))
+                    $('<button>').addClass('fluid-grid-fix btn').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -49,10 +35,23 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                             temp = 0;
                         }
                         if (temp !== parseInt(progress.val(), 10)) {
-                            progress.val(temp + " %");
+                            progress.val(temp);
                             progress.trigger('change');
                         }
-                    }));
+                    }),
+                    $('<button>').addClass('fluid-grid-fix btn').append($('<i>').addClass('icon-plus'))
+                    .on('click', function () {
+                        var temp = parseInt(progress.val(), 10);
+                        temp += 25;
+                        if (temp > 100) {
+                            temp = 100;
+                        }
+                        if (temp !== parseInt(progress.val(), 10)) {
+                            progress.val(temp);
+                            progress.trigger('change');
+                        }
+                    })
+                    );
             
             return progress;
         },
@@ -111,29 +110,37 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         buildDetailsTab: function (tab) {
             //build TabObject
             detailsTab.main = tab;
-            detailsTab.target_duration = $('<input>').attr('type', 'text').addClass('target-duration span12');
-            detailsTab.actual_duration = $('<input>').attr('type', 'text').addClass('actual-duration span12');
-            detailsTab.target_costs = $('<input>').attr('type', 'text').addClass('target-costs span12');
-            detailsTab.actual_costs = $('<input>').attr('type', 'text').addClass('actual-costs span12');
-            detailsTab.billing_information = $('<input>').attr('type', 'text').addClass('billing-information span12');
-            detailsTab.companies = $('<input>').attr('type', 'text').addClass('companies span12');
-            detailsTab.trip_meter = $('<input>').attr('type', 'text').addClass('trip_meter span12');
-            detailsTab.currency = $('<select>').addClass('currency');
+            detailsTab.target_duration = $('<input>').attr({type: 'text', id: 'task-edit-target-duration'}).addClass('target-duration span12');
+            detailsTab.actual_duration = $('<input>').attr({type: 'text', id: 'task-edit-actual-duration'}).addClass('actual-duration span12');
+            detailsTab.target_costs = $('<input>').attr({type: 'text', id: 'task-edit-target-costs'}).addClass('target-costs span12');
+            detailsTab.actual_costs = $('<input>').attr({type: 'text', id: 'task-edit-actual-costs'}).addClass('actual-costs span12');
+            detailsTab.billing_information = $('<input>').attr({type: 'text', id: 'task-edit-billing-information'}).addClass('billing-information span12');
+            detailsTab.companies = $('<input>').attr({type: 'text', id: 'task-edit-companies'}).addClass('companies span12');
+            detailsTab.trip_meter = $('<input>').attr({type: 'text', id: 'task-edit-trip-meter'}).addClass('trip_meter span12');
+            detailsTab.currency = $('<select>').addClass('currency').attr('id', 'task-edit-currency');
             for (var i = 0; i < currencyArray.length; i++) {
                 $('<option>').text(currencyArray[i]).appendTo(detailsTab.currency);
             }
             detailsTab.currency.prop('selectedIndex', 3);
             
             //build Output
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time") + ' ' + gt("in minutes")), detailsTab.target_duration],
-                                            [this.buildLabel(gt("Actual time") + ' ' + gt("in minutes")), detailsTab.actual_duration]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated costs")), detailsTab.target_costs],
-                                            [this.buildLabel(gt("Actual costs")), detailsTab.actual_costs],
-                                            [this.buildLabel(gt("Currency")), detailsTab.currency]],
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time") + ' ' + gt("in minutes"),
+                                             detailsTab.target_duration.attr('id')), detailsTab.target_duration],
+                                            [this.buildLabel(gt("Actual time") + ' ' + gt("in minutes"),
+                                             detailsTab.actual_duration.attr('id')), detailsTab.actual_duration]]);
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated costs"),
+                                             detailsTab.target_costs.attr('id')), detailsTab.target_costs],
+                                            [this.buildLabel(gt("Actual costs"),
+                                             detailsTab.actual_costs.attr('id')), detailsTab.actual_costs],
+                                            [this.buildLabel(gt("Currency"),
+                                             detailsTab.currency.attr('id')), detailsTab.currency]],
                                             [5, 5, 2]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Distance")), detailsTab.trip_meter]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Billing information")), detailsTab.billing_information]]);
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Companies")), detailsTab.companies]]);
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Distance"),
+                                             detailsTab.trip_meter.attr('id')), detailsTab.trip_meter]]);
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Billing information"),
+                                             detailsTab.billing_information.attr('id')), detailsTab.billing_information]]);
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Companies"),
+                                             detailsTab.companies.attr('id')), detailsTab.companies]]);
             
             return detailsTab;
         },
@@ -177,6 +184,25 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             data.companies = detailsTab.companies.val();
             data.trip_meter = detailsTab.trip_meter.val();
             data.currency = detailsTab.currency.val();
+        },
+        
+        buildAttachmentNode: function (node, attachments) {
+            var tempNodes = [];
+            node.empty();
+            for (var i = 0; i < attachments.length; i++) {
+                tempNodes.push([$('<i>').addClass("icon-remove task-remove-attachment").attr('lnr', i),
+                                $('<i>').addClass('icon-paper-clip'),
+                                $('<div>').text(attachments[i].name).addClass("task-attachment-name"),
+                                $('<div>').text(strings.fileSize(attachments[i].size)).addClass("task-attachment-filesize")]);
+            }
+            //check if we have an odd number of attachements
+            if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
+                tempNodes.push({});
+            }
+            
+            for (var i = 0; i < tempNodes.length; i += 2) {
+                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]]);
+            }
         }
     };
     

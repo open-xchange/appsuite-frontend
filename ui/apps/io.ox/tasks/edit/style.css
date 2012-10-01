@@ -59,8 +59,6 @@
  
  .io-ox-tasks-edit .fluid-grid-fix {
   	line-height: 20px;
-  	float: none!important;
-    margin: 0!important;
  }
  
  .io-ox-tasks-edit .alarm-date-field,
@@ -68,7 +66,7 @@
  .io-ox-tasks-edit .end-date-time-field,
  .io-ox-tasks-edit .start-date-field,
  .io-ox-tasks-edit .end-date-field {
-  	background-color: #FFFFFF;
+  	height: 20px;
  }
  
  .io-ox-tasks-edit .note-field {
@@ -84,24 +82,22 @@
  .io-ox-tasks-edit .info-wrapper .task-attachment-link {
  	margin-bottom: 9px;
  }
- 
- .task-attachment-single {
- 	border-bottom: 1px solid #C0C0C0;
- 	padding: 2px 9px;
- }
- 
- .task-attachment-display .first {
- 	border-top: 1px solid #C0C0C0;
- }
- 
  .task-remove-attachment {
  	float: right;
- 	cursor: pointer;
+	cursor: pointer;
+	width: 20px!important;
+	margin-top: 10px;
+	margin-right: 10px;
  }
  
- .task-attachment-single .attachment-filesize {
-	float: right;
- 	margin-right: 3px;
+ .io-ox-tasks-edit .icon-paper-clip {
+ 	font-size: 30px;
+	width: 20px;
+	margin-right: 0.5em;
+	height: 15px;
+	margin-top: 10px;
+	float: left;
+	position: relative;
  }
  
  //PickerPopup
