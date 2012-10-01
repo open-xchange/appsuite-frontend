@@ -3947,17 +3947,12 @@ define('io.ox/office/editor/editor',
             allCols = $(table).children('colgroup').children(); // update allCols selection
 
             var tablegrid = $(table).data('attributes').tablegrid;
-
-            if (tablegrid.length > allCols.length) {  // ? this should always be true, but it is not in second editor (who already adapted table grid?)
-                tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid
-            }
+            tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
 
             // updating percentages in cols
             allCols.each(function (i) {
                 $(this).css('width', Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%');
             });
-
-            // $(table).data('attributes').tablegrid = tablegrid;  // updating table data
 
             if ($(table).children('tbody, thead').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
