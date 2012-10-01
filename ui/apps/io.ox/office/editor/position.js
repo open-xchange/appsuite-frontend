@@ -2079,23 +2079,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Checks if a specified node has the data property 'mode' set to 'leftFloated' or 'rightFloated'.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  A DOM element object or jQuery element, that is checked, if it contains
-     *  the data property 'mode' set to 'leftFloated' or 'rightFloated'.
-     *  If it is a DOM element, it is jQuerified first.
-     *
-     * @returns {Boolean}
-     *  A boolean containing the information, if the specified node has the data
-     *  property 'mode' set to 'leftFloated' or 'rightFloated'.
-     */
-    Position.isFloated = function (node) {
-        var localNode = (node instanceof $) ? node : $(node);
-        return ((localNode.data('mode') === 'leftFloated') || (localNode.data('mode') === 'rightFloated'));
-    };
-
-    /**
      * Checks if a specified node has the data property 'mode' set to 'leftFloated'
      * or 'rightFloated' or 'noneFloated'.
      *
@@ -2174,7 +2157,8 @@ define('io.ox/office/editor/position',
      *  and that are the first children of 'node'.
      */
     Position.getNumberOfFloatedImagesInParagraph = function (node) {
-
+        return $(node).find('img.float').length;
+/*
         var counter = 0,
             child = node.firstChild,
             continue_ = true;
@@ -2193,6 +2177,7 @@ define('io.ox/office/editor/position',
         }
 
         return counter;
+*/
     };
 
     /**

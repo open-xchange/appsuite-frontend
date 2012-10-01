@@ -25,9 +25,9 @@ define('io.ox/office/editor/image',
      */
     var FLOAT_MODE_ATTRIBUTES = {
             inline:       { inline: true },
-            leftFloated:  { inline: false, anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
-            rightFloated: { inline: false, anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
-            noneFloated:  { inline: false, textwrapmode: 'none' }
+            leftFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
+            rightFloated: { inline: false, anchorhbase: 'column', anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
+            noneFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'center', textwrapmode: 'none' }
         };
 
     // static class Image =====================================================
