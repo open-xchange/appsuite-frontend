@@ -1,6 +1,6 @@
 Name:           open-xchange-ui7
 Version:        7.0.0
-Release:        1
+Release:        5
 Group:          Applications/Productivity
 Vendor:         Open-Xchange
 URL:            http://open-xchange.com
