@@ -52,9 +52,9 @@ define('io.ox/office/editor/table',
             var tableNode = tablePosition.node,
                 validTableGrid = false;
 
-            if ($(tableNode).data('grid')) {
+            if ($(tableNode).data('attributes').tablegrid) {
 
-                tablegrid = $(tableNode).data('grid');
+                tablegrid = $(tableNode).data('attributes').tablegrid;
 
                 if (tablegrid.length > 0) {
                     validTableGrid = true;
@@ -75,7 +75,7 @@ define('io.ox/office/editor/table',
                 var allCols = $(tableNode).children('colgroup').children('col');
 
                 allCols.each(function (index) {
-                    var width = Utils.convertLengthToHmm($(this).width(), 'px');
+                    var width = $(this).css('width'); // -> including % or px or mm (?) -> must be relative value
                     tablegrid.push(width);
                 });
 
@@ -102,32 +102,19 @@ define('io.ox/office/editor/table',
      */
     Table.getTableWidth = function (startnode, tablePos) {
 
-        var width = 0,
+        var tableWidth = null,
             tablePosition = Position.getDOMPosition(startnode, tablePos);
 
         if (tablePosition) {
 
             var tableNode = tablePosition.node;
 
-            if ($(tableNode).data('width')) {
-
-                width = $(tableNode).data('width');
-
-            } else {
-
-                var tablegrid = Table.getTableGrid(startnode, tablePos);
-
-                if (tablegrid) {
-                    for (var i = 0; i < tablegrid.length; i++) {
-                        width += tablegrid[i];
-                    }
-
-                    $(tableNode).data('width', width);
-                }
+            if ($(tableNode).css('width')) {
+                tableWidth = $(tableNode).css('width');
             }
         }
 
-        return width;
+        return tableWidth;
     };
 
     /**
@@ -464,6 +451,33 @@ define('io.ox/office/editor/table',
         });
 
         return allRemovePositions;
+    };
+
+
+    /**
+     * Calculating the relative width of one grid column in relation to the
+     * width of the table. The result is the percentage.
+     *
+     * @param {Number[]} tablegrid
+     *  The grid array.
+     *
+     * @param {Number} width
+     *  The relative width of one column of the grid array.
+     *
+     * @return {Number} percentage
+     *  The percentage of the one specified grid width in relation to the
+     *  complete grid array.
+     */
+    Table.getGridWidthPercentage = function (tablegrid, width) {
+
+        var fullWidth = 0,
+            percentage = 0;
+
+        _(tablegrid).each(function (gridWidth) { fullWidth += gridWidth; });
+
+        percentage = Utils.roundDigits(width * 100 / fullWidth, 1);
+
+        return percentage;
     };
 
     // exports ================================================================
