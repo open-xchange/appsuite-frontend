@@ -539,7 +539,7 @@ define('io.ox/office/editor/editor',
                 if (Utils.getNodeName(imageNode) === 'img') {
                     // delete an corresponding span
                     var divNode = imageNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(divNode) === 'div') && ($(divNode).data('positionDiv'))) {
+                    while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
                         if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
                             // removing node
                             $(divNode).remove();
@@ -3565,15 +3565,15 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((Utils.getNodeName(child) === 'div') && ($(child).data('positionDiv'))) {
+                            if ((Utils.getNodeName(child) === 'div') && $(child).hasClass('float')) {
 
                                 var localChild = thisPara.firstChild;
 
                                 if (localChild) {
 
-                                    if ((Utils.getNodeName(localChild) === 'div') && ($(localChild).data('positionDiv'))) {
+                                    if ((Utils.getNodeName(localChild) === 'div') && $(localChild).hasClass('float')) {
 
-                                        while ((Utils.getNodeName(localChild.nextSibling) === 'div') && ($(localChild.nextSibling).data('positionDiv'))) {
+                                        while ((Utils.getNodeName(localChild.nextSibling) === 'div') && $(localChild.nextSibling).hasClass('float')) {
                                             localChild = localChild.nextSibling;
                                         }
 
