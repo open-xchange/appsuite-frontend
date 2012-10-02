@@ -769,7 +769,7 @@ define('io.ox/office/editor/editor',
                 endPos = _.copy(selection.endPaM.oxoPosition, true),
                 count = 1;  // default, adding one cell in each row
 
-            var selection = getSelection();
+            undomgr.startGroup();  // starting to group operations for undoing
 
             selection.adjust();
 
@@ -783,7 +783,8 @@ define('io.ox/office/editor/editor',
                 startRow = startPos.pop(),
                 endRow = endPos.pop(),
                 tablePos = _.copy(startPos, true),
-                endPosition = null;
+                endPosition = null,
+                attrs = {};
 
             for (var i = endRow; i >= startRow; i--) {
 
@@ -800,12 +801,35 @@ define('io.ox/office/editor/editor',
                 localEndCol++;  // adding new cell behind existing cell
                 var cellPosition = _.copy(rowPosition, true);
                 cellPosition.push(localEndCol);
-                var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: {gridspan: 1}};
-                // var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
+                attrs.gridspan = 1;  // only 1 grid for the new cell
+                var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
                 applyOperation(newOperation, true, true);
+
+                // Applying new tablegrid, if the current tablegrid is not sufficient
+                var tableDomPoint = Position.getDOMPosition(paragraphs, tablePos),
+                    rowDomPoint = Position.getDOMPosition(paragraphs, rowPosition);
+
+                if ((tableDomPoint) && (tableDomPoint.node) && (Utils.getNodeName(tableDomPoint.node) === 'table')) {
+
+                    var tableGridCount = $(tableDomPoint.node).data('attributes').tablegrid.length,
+                        rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
+
+                    if (rowGridCount > tableGridCount) {
+
+                        var insertmode = 'behind',
+                            tablegrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, localEndCol, insertmode);
+
+                        // Setting new table grid attribute to table
+                        newOperation = { name: Operations.OP_ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        applyOperation(newOperation, true, true);
+                    }
+
+                }
 
                 endPosition = _.copy(cellPosition, true);
             }
+
+            undomgr.endGroup();
 
             endPosition.push(0);
             endPosition.push(0);
@@ -1785,11 +1809,7 @@ define('io.ox/office/editor/editor',
                         var tableNode = tablePos.node,
                             localattrs = {};
                         if ($(tableNode).data('attributes')) {
-                            localattrs = $(tableNode).data('attributes');
-                        }
-
-                        if ($(tableNode).data('attributes').tablegrid) {
-                            localattrs.tablegrid = $(tableNode).data('attributes').tablegrid;
+                            localattrs = _.copy($(tableNode).data('attributes'), true);
                         }
 
                         var tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs };
