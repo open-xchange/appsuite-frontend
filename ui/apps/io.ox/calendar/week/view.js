@@ -502,16 +502,16 @@ define('io.ox/calendar/week/view',
                 } else {
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date')),
-                        start = startDate.format(date.DAYOFWEEK_DATE),
-                        end = endDate.format(date.DAYOFWEEK_DATE),
-                        maxCount = this.columns,
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                        maxCount = 0,
                         style = '';
 
                     // draw across multiple days
-                    while (true && maxCount) {
+                    while (true && maxCount <= this.columns) {
                         var app = this.renderAppointment(model.attributes),
                             sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
-                        maxCount--;
+                        maxCount++;
 
                         // if
                         if (start !== end) {
@@ -522,12 +522,16 @@ define('io.ox/calendar/week/view',
                             endDate = new date.Local(model.get('end_date'));
                         }
 
-                        app.pos = {
+                        // kill overlap appointments with length null
+                        if (startDate.getTime() === endDate.getTime() && maxCount > 1) {
+                            break;
+                        }
+
+                        app.addClass(style).pos = {
                                 id: model.id,
                                 start: startDate.getTime(),
                                 end: endDate.getTime()
                             };
-                        app.addClass(style);
                         if (!draw[sel]) {
                             draw[sel] = [];
                         }
@@ -538,7 +542,7 @@ define('io.ox/calendar/week/view',
                         if (start !== end) {
                             startDate.setDate(startDate.getDate() + 1);
                             startDate.setHours(0, 0, 0, 0);
-                            start = startDate.format(date.DAYOFWEEK_DATE);
+                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
                             style = 'rmnorth ';
                         } else {
                             break;
