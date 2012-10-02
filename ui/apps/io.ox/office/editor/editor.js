@@ -3283,13 +3283,6 @@ define('io.ox/office/editor/editor',
                 var pos = _.copy(position, true);
                 pos[pos.length - 1] -= 1; // decreasing last value by 1, if new paragraphs are inserted
                 allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, pos);
-
-                if (! allParagraphs) {
-                    var domPos = Position.getDOMPosition(paragraphs, pos);
-                    if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'table')) {
-                        allParagraphs = $(domPos.node.parentNode).children();
-                    }
-                }
             }
 
             var newPara = $('<p>');

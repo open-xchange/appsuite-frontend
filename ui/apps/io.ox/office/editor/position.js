@@ -1041,10 +1041,11 @@ define('io.ox/office/editor/position',
         if ((position.length === 1) || (position.length === 2)) {  // only for performance
             allParagraphs = startnode;
         } else {
-            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+
+            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
 
             if (node) {
-                allParagraphs = $(node.parentNode).children();
+                allParagraphs = $(node).children();
             }
         }
 
