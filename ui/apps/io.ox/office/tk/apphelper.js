@@ -210,7 +210,7 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
 
         if (reader) {
 
-            // register the event handlers
+            // register the load event handler, deferred will be resolved with data URL
             reader.onload = function (event) {
                 if (event && event.target && _.isString(event.target.result)) {
                     def.resolve(event.target.result);
@@ -218,9 +218,13 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
                     def.reject();
                 }
             };
+
+            // register error event handlers, deferred will be rejected
             reader.onerror = reader.onabort = function (event) {
                 def.reject();
             };
+
+            // register progress handler, deferred will be notified with percentage
             reader.onprogress = function (event) {
                 if (event.lengthComputable) {
                     def.notify(Math.round((event.loaded / event.total) * 100));
