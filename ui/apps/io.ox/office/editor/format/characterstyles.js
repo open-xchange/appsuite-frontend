@@ -132,8 +132,8 @@ define('io.ox/office/editor/format/characterstyles',
         }
 
         /**
-         * Global setter handler that will be called for every text span whose
-         * attributes have been changed.
+         * Will be called for every text span whose attributes have been
+         * changed.
          *
          * @param {jQuery} span
          *  The <span> element whose character attributes have been changed, as
@@ -144,7 +144,7 @@ define('io.ox/office/editor/format/characterstyles',
          *  effective attribute values merged from style sheets and explicit
          *  attributes.
          */
-        function globalSetHandler(span, attributes) {
+        function updateSpanFormatting(span, attributes) {
             // update calculated line height due to changed font settings
             LineHeight.updateElementLineHeight(span);
         }
@@ -152,7 +152,7 @@ define('io.ox/office/editor/format/characterstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'character', definitions, documentStyles, {
-            globalSetHandler: globalSetHandler,
+            globalSetHandler: updateSpanFormatting,
             ancestorStyleFamily: 'paragraph',
             ancestorElementResolver: function (span) { return span.parentNode; }
         });

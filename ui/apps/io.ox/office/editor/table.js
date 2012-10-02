@@ -52,9 +52,9 @@ define('io.ox/office/editor/table',
             var tableNode = tablePosition.node,
                 validTableGrid = false;
 
-            if ($(tableNode).data('grid')) {
+            if ($(tableNode).data('attributes').tablegrid) {
 
-                tablegrid = $(tableNode).data('grid');
+                tablegrid = $(tableNode).data('attributes').tablegrid;
 
                 if (tablegrid.length > 0) {
                     validTableGrid = true;
@@ -75,7 +75,7 @@ define('io.ox/office/editor/table',
                 var allCols = $(tableNode).children('colgroup').children('col');
 
                 allCols.each(function (index) {
-                    var width = Utils.convertLengthToHmm($(this).width(), 'px');
+                    var width = $(this).css('width'); // -> including % or px or mm (?) -> must be relative value
                     tablegrid.push(width);
                 });
 
@@ -102,32 +102,19 @@ define('io.ox/office/editor/table',
      */
     Table.getTableWidth = function (startnode, tablePos) {
 
-        var width = 0,
+        var tableWidth = null,
             tablePosition = Position.getDOMPosition(startnode, tablePos);
 
         if (tablePosition) {
 
             var tableNode = tablePosition.node;
 
-            if ($(tableNode).data('width')) {
-
-                width = $(tableNode).data('width');
-
-            } else {
-
-                var tablegrid = Table.getTableGrid(startnode, tablePos);
-
-                if (tablegrid) {
-                    for (var i = 0; i < tablegrid.length; i++) {
-                        width += tablegrid[i];
-                    }
-
-                    $(tableNode).data('width', width);
-                }
+            if ($(tableNode).css('width')) {
+                tableWidth = $(tableNode).css('width');
             }
         }
 
-        return width;
+        return tableWidth;
     };
 
     /**
@@ -153,7 +140,7 @@ define('io.ox/office/editor/table',
      */
     Table.getTableGridWithNewColumn = function (startnode, tablePos, gridPosition, insertmode) {
 
-        var tableGrid = Table.getTableGrid(startnode, tablePos),
+        var tableGrid = _.copy(Table.getTableGrid(startnode, tablePos), true),
             tableWidth = 0;
 
         if (! tableGrid) {
@@ -354,7 +341,7 @@ define('io.ox/office/editor/table',
     /**
      * Collecting the attributes of table cells from a jQuery collection of cells.
      *
-     * @param {jQuery} cell´s
+     * @param {jQuery} cells
      *  The jQuery collection containing cell elements, whose attributes shall
      *  be collected in an array.
      *
@@ -381,6 +368,138 @@ define('io.ox/office/editor/table',
         });
 
         return allCellAttributes;
+
+    };
+
+    /**
+     * Collecting for a collection of rows the cell positions that correspond
+     * to a specific grid position.
+     *
+     * @param {jQuery} allRows
+     *  The jQuery collection containing row elements, whose cell positions
+     *  corresponding to a specific grid position shall be collected in an array.
+     *
+     * @param {Number} gridposition
+     *  The integer grid position.
+     *
+     * @param {String} insertmode
+     *  The calculated cell position depends from the insert mode concerning
+     *  the grid position. Allowed values are 'behind' and 'before'.
+     *
+     * @return {any[]} allInsertPositions
+     *  An array, that contains the integer insert positions for each row in the
+     *  correct order.
+     */
+    Table.getAllInsertPositions = function (allRows, gridposition, insertmode) {
+
+        var allInsertPositions = [];
+
+        allRows.each(function (index) {
+
+            var insertPosition = Table.getCellPositionFromGridPosition(this, gridposition);
+
+            if (insertmode === 'behind') {
+                insertPosition++;
+            }
+
+            allInsertPositions.push(insertPosition);
+        });
+
+        return allInsertPositions;
+    };
+
+    /**
+     * Collecting for a collection of rows the cell positions that correspond
+     * to specified grid start position and grid end position. For each row
+     * an array with two integer values is returned, representing the start
+     * and the end position of the cells. If no cells correspond to the specified
+     * grid position end can be '-1' or even start and end can be '-1'. This
+     * happens for example if startgrid and endgrid have high numbers, but the
+     * currently investigated row is very short. In the case of removal of cells,
+     * no cell is removed from such a cell.
+     *
+     * @param {jQuery} allRows
+     *  The jQuery collection containing row elements, whose cell positions
+     *  corresponding to the specified grid positions shall be collected in an array.
+     *
+     * @param {Number} startgrid
+     *  The integer start grid position.
+     *
+     * @param {Number} endgrid
+     *  The integer end grid position.
+     *
+     * @return {any[]} allRemovePositions
+     *  An array, that contains for each row an array with two integer values
+     *  for start and end position of the cells. If no cells correspond to the
+     *  specified grid position end can be '-1' or even start and end can be '-1'.
+     */
+    Table.getAllRemovePositions = function (allRows, startgrid, endgrid) {
+
+        var allRemovePositions = [];
+
+        allRows.each(function (index) {
+
+            var removeRangeInOneRow = [],  // an array collecting the start and end position (integer) of the cells to be removed
+                startCol = Table.getCellPositionFromGridPosition(this, startgrid, false),
+                endCol = Table.getCellPositionFromGridPosition(this, endgrid, false);
+
+            // startCol and endCol might be '-1', if the grid positions are out of range. In this case, no cells are deleted
+            removeRangeInOneRow.push(startCol);
+            removeRangeInOneRow.push(endCol);
+
+            allRemovePositions.push(removeRangeInOneRow);
+        });
+
+        return allRemovePositions;
+    };
+
+    /**
+     * Calculating the relative width of one grid column in relation to the
+     * width of the table. The result is the percentage.
+     *
+     * @param {Number[]} tablegrid
+     *  The grid array.
+     *
+     * @param {Number} width
+     *  The relative width of one column of the grid array.
+     *
+     * @return {Number} percentage
+     *  The percentage of the one specified grid width in relation to the
+     *  complete grid array.
+     */
+    Table.getGridWidthPercentage = function (tablegrid, width) {
+
+        var fullWidth = 0,
+            percentage = 0;
+
+        _(tablegrid).each(function (gridWidth) { fullWidth += gridWidth; });
+
+        percentage = Utils.roundDigits(width * 100 / fullWidth, 1);
+
+        return percentage;
+    };
+
+    /**
+     * Updating the column group elements in a table element. This is necessary
+     * after inserting or deleting columns or cells.
+     *
+     * @param {jQuery} table
+     *  The <table> element whose table attributes have been changed, as jQuery
+     *  object.
+     *
+     * @param {Number[]} tablegrid
+     *  The grid array.
+     */
+    Table.updateColGroup = function (table, tablegrid) {
+
+        var colgroup = table.children('colgroup');
+
+        colgroup.children('col').remove(); // removing all col entries
+
+        for (var i = 0; i < tablegrid.length; i++) {
+            var oneGridWidth = Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%';  // converting to %
+            colgroup.append($('<col>').css('width', oneGridWidth));
+        }
 
     };
 

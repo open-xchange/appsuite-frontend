@@ -152,7 +152,7 @@ define('io.ox/office/editor/undo',
                 return;
             }
 
-            var action = new Action(undoOperation, redoOperation, allowMerge),
+            var action = new Action(_.copy(undoOperation, true), _.copy(redoOperation, true), allowMerge),
                 tryToMerge = true;
 
             // remove undone actions

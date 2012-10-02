@@ -11,37 +11,46 @@
  * @author Oliver Specht <oliver.specht@open-xchange.com>
  */
 
-define('io.ox/office/tk/config', ['io.ox/core/config'], function (CoreConfig) {
+define('io.ox/office/tk/config',
+    ['io.ox/core/config',
+     'io.ox/office/tk/utils'
+     ], function (CoreConfig, Utils) {
 
     'use strict';
-    var documentsConfig = CoreConfig.get("modules")['com.open-xchange.documents'];
-    
-    // class Config =======================================================
+
+    var // the configuration items of the module com.open-xchange.documents
+        documentsConfig = CoreConfig.get('modules')['com.open-xchange.documents'];
+
+    // class Config ===========================================================
 
     /**
-     * The documents Config 'namespace' wraps the configuration of the module com.open-xchange.documents.
-     * @constructor
-     *
+     * The documents Config 'namespace' wraps the configuration of the module
+     * com.open-xchange.documents.
      */
     var Config = {};
+
     /**
-     * Returns the value of the configuration property debugavailable.
+     * Returns the value of the configuration property 'debugavailable'.
      *
-     * @returns
+     * @returns {Boolean}
      *  whether debug mode is enabled.
      */
     Config.isDebugAvailable = function () {
-                
-        return documentsConfig === undefined ? false : documentsConfig.debugavailable;
+        return Utils.getBooleanOption(documentsConfig, 'debugavailable', false);
     };
+
     /**
-     * Returns the value of the configuration property odfsupport.
+     * Returns the value of the configuration property 'odfsupport'.
      *
-     * @returns
+     * @returns {Boolean}
      *  whether ODF documents are supported.
      */
     Config.isODFSupported = function () {
-        return documentsConfig === undefined ? false : documentsConfig.odfsupport;
+        return Utils.getBooleanOption(documentsConfig, 'odfsupport', false);
     };
+
+    // exports ================================================================
+
     return Config;
+
 });

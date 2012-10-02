@@ -24,7 +24,8 @@ define('io.ox/office/editor/controller',
 
         var // self reference
             self = this,
-            // current editor
+
+            // the editor of the passed application
             editor = app.getEditor(),
 
             // all the little controller items
@@ -63,9 +64,8 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.redo(); }
                 },
                 'action/search/quick': {
-                    // highlighting goes always to the rich editor
-                    get: function () { return app.getEditor().hasHighlighting(); },
-                    set: function (query) { app.getEditor().quickSearch(query); },
+                    get: function () { return editor.hasHighlighting(); },
+                    set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
                 'chain/format/paragraph': {
@@ -149,7 +149,7 @@ define('io.ox/office/editor/controller',
 
                 'chain/image': {
                     chain: 'chain/documentReadonly',
-                    enable: function () { return editor.isImagePosition(); }
+                    enable: function () { return editor.isImageSelected(); }
                 },
                 'image/insert/file': {
                     chain: 'chain/documentReadonly',
@@ -164,7 +164,7 @@ define('io.ox/office/editor/controller',
                     enable: function (enabled) { return enabled && (editor.getImageFloatMode() !== 'inline'); },
                     set: function () { editor.deleteSelected(); }
                 },
-                'image/alignment': {
+                'format/image/floatmode': {
                     chain: 'chain/image',
                     get: function () { return editor.getImageFloatMode(); },
                     set: function (floatMode) { editor.setImageFloatMode(floatMode); }
@@ -172,8 +172,7 @@ define('io.ox/office/editor/controller',
 
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
-                    set: function (state) { app.setDebugMode(state); },
-                    done: function (state) { app.getEditor().grabFocus(); }
+                    set: function (state) { app.setDebugMode(state); }
                 },
                 'debug/readonly': {
                     get: function () { return editor.isReadonlyMode(); },
@@ -203,26 +202,8 @@ define('io.ox/office/editor/controller',
 
         BaseController.call(this, items, doneHandler);
 
-        // methods ------------------------------------------------------------
+        // initialization -----------------------------------------------------
 
-        /**
-         * Registers a new editor instance. If the editor has the browser
-         * focus, this controller will use it as target for item actions
-         * triggered by any registered view component.
-         */
-        this.registerEditor = function (newEditor, disabledItems) {
-            newEditor
-                .on('focus', function (event, focused) {
-                    if (focused && (editor !== newEditor)) {
-                        editor = newEditor;
-                        self.enable().disable(disabledItems).update();
-                    }
-                })
-                .on('operation selectionChanged', function () {
-                    self.update();
-                });
-            return this;
-        };
         /**
          * Set/Reset the readonly-Mode at the editor and update all slots
          */
@@ -230,6 +211,8 @@ define('io.ox/office/editor/controller',
             editor.setReadonlyMode(state);
             self.update();
         };
+        // update GUI after operations or changed selection
+        editor.on('operation selection', function () { self.update(); });
 
     } // class Controller
 
