@@ -1068,10 +1068,15 @@ define('io.ox/office/editor/editor',
         };
 
         this.mergeParagraph = function (position) {
+
+            undomgr.startGroup();
+
             var newOperation = {name: Operations.OP_PARA_MERGE, start: _.copy(position)};
             applyOperation(newOperation, true, true);
 
             var imageShift = moveFloatedImages(position);
+
+            undomgr.endGroup();
 
             return imageShift;
         };
@@ -1765,7 +1770,9 @@ define('io.ox/office/editor/editor',
 //            }
             else if (operation.name === Operations.OP_MOVE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var undoOperation = { name: Operations.OP_MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
+                    var localStart = _.copy(operation.start, true);
+                    localStart[localStart.length - 1] += 1;  // taking care, that the move modifies the target position for undeo
+                    var undoOperation = { name: Operations.OP_MOVE, start: _.copy(operation.end, true), end: localStart };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMove(operation.start, operation.end);

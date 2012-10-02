@@ -2126,7 +2126,27 @@ define('io.ox/office/editor/position',
      *  and that are the first children of 'node'.
      */
     Position.getNumberOfFloatedImagesInParagraph = function (node) {
-        return $(node).find('img.float').length;
+
+        var counter = 0,
+            child = node.firstChild,
+            continue_ = true;
+
+        while ((child !== null) && (continue_)) {
+
+            if ((Utils.getNodeName(child) === 'img') && ($(child).hasClass('float'))) {
+                counter++;
+                child = child.nextSibling;
+            } else if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float'))) {
+                // ignoring divs that exist only for positioning image
+                child = child.nextSibling;
+            } else {
+                continue_ = false;
+            }
+        }
+
+        // return $(node).find('img.float').length;  // to be used in the future
+
+        return counter;
     };
 
     /**
