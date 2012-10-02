@@ -43,19 +43,24 @@ define('io.ox/office/editor/controller',
                     set: function () { app.print(); }
                 },
                 'action/rename': {
+                    chain: 'chain/documentReadonly',
                     get: function () {
                         var fileDesc = app.getFileDescriptor();
                         return (fileDesc && fileDesc.filename) ? fileDesc.filename : null;
                     },
                     set: function (fileName) { app.rename(fileName); }
                 },
-
+                'chain/documentReadonly': {
+                    enable: function () { return !editor.isReadonlyMode(); }
+                },
                 'action/undo': {
-                    enable: function () { return editor.hasUndo(); },
+                    chain: 'chain/documentReadonly',
+                    enable: function (enabled) { return enabled && editor.hasUndo(); },
                     set: function () { editor.undo(); }
                 },
                 'action/redo': {
-                    enable: function () { return editor.hasRedo(); },
+                    chain: 'chain/documentReadonly',
+                    enable: function (enabled) { return enabled && editor.hasRedo(); },
                     set: function () { editor.redo(); }
                 },
                 'action/search/quick': {
@@ -63,8 +68,8 @@ define('io.ox/office/editor/controller',
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
-
                 'chain/format/paragraph': {
+                    chain: 'chain/documentReadonly',
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/stylesheet': {
@@ -84,6 +89,7 @@ define('io.ox/office/editor/controller',
                 },
 
                 'chain/format/character': {
+                    chain: 'chain/documentReadonly',
                     get: function () { return editor.getAttributes('character'); }
                 },
                 'format/character/stylesheet': {
@@ -118,9 +124,10 @@ define('io.ox/office/editor/controller',
                 },
 
                 'chain/table': {
-                    enable: function () { return editor.isPositionInTable(); }
+                    enable: function () { return !editor.isReadonlyMode() &&  editor.isPositionInTable(); }
                 },
                 'table/insert': {
+                    chain: 'chain/documentReadonly',
                     set: function (size) { editor.insertTable(size); }
                 },
                 'table/insert/row': {
@@ -141,12 +148,15 @@ define('io.ox/office/editor/controller',
                 },
 
                 'chain/image': {
+                    chain: 'chain/documentReadonly',
                     enable: function () { return editor.isImageSelected(); }
                 },
                 'image/insert/file': {
+                    chain: 'chain/documentReadonly',
                     set: function () { CommonDialogs.insertImageFile(app); }
                 },
                 'image/insert/url': {
+                    chain: 'chain/documentReadonly',
                     set: function () { CommonDialogs.insertImageURL(app); }
                 },
                 'image/delete': {
@@ -163,6 +173,13 @@ define('io.ox/office/editor/controller',
                 'debug/toggle': {
                     get: function () { return app.isDebugMode(); },
                     set: function (state) { app.setDebugMode(state); }
+                },
+                'debug/readonly': {
+                    get: function () { return editor.isReadonlyMode(); },
+                    set: function (state) {
+                        self.setReadonlyMode(state);
+                    },
+                    done: function (state) { app.getEditor().grabFocus(); }
                 },
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
@@ -187,6 +204,13 @@ define('io.ox/office/editor/controller',
 
         // initialization -----------------------------------------------------
 
+        /**
+         * Set/Reset the readonly-Mode at the editor and update all slots
+         */
+        this.setReadonlyMode = function (state) {
+            editor.setReadonlyMode(state);
+            self.update();
+        };
         // update GUI after operations or changed selection
         editor.on('operation selection', function () { self.update(); });
 
