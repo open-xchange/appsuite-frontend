@@ -92,6 +92,9 @@ define('io.ox/office/editor/editor',
             // list of paragraphs as jQuery object
             paragraphs = editdiv.children(),
 
+            // set document into write protected mode
+            readonlyMode = false,
+
             dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
@@ -1064,7 +1067,20 @@ define('io.ox/office/editor/editor',
             // insert an empty <span> with a text node, followed by a dummy <br>
             $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
+        this.setReadonlyMode = function (readonly) {
+            readonlyMode = readonly;
+            if (readonlyMode === true) {
+                editdiv.removeClass('user-select-text');
+                editdiv.attr('contenteditable', false);
+            } else {
+                editdiv.addClass('user-select-text');
+                editdiv.attr('contenteditable', true);
+            }
 
+        };
+        this.isReadonlyMode = function () {
+            return readonlyMode;
+        };
         // PUBLIC TABLE METHODS
 
         this.isPositionInTable = function () {
@@ -1572,7 +1588,7 @@ define('io.ox/office/editor/editor',
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
                     self.trigger('selectionChanged');
-                } else if (focused) {
+                } else if (focused && !readonlyMode) {
                     // If not focused, browser selection might not be available...
                     Utils.warn('Editor.implCheckEventSelection(): missing selection!');
                 }
