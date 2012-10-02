@@ -105,6 +105,14 @@ define('io.ox/office/editor/format/imagestyles',
              * - 'largest': Text floats at the larger side of the image only.
              */
             textwrapside: { def: 'bothsides' }
+        },
+
+        // predefined image attributes for image float modes used in GUI
+        FLOAT_MODE_ATTRIBUTES = {
+            inline:       { inline: true },
+            leftFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
+            rightFloated: { inline: false, anchorhbase: 'column', anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
+            noneFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'center', textwrapmode: 'none' }
         };
 
     // private global functions ===============================================
@@ -196,10 +204,9 @@ define('io.ox/office/editor/format/imagestyles',
             if (topOffset < 50) {
                 verticalOffsetNode.remove();
             } else if (verticalOffsetNode.length === 0) {
-                verticalOffsetNode = $('<div>').addClass('float').css({
-                    width: '0.1px',
-                    height: Utils.convertHmmToCssLength(topOffset, 'px', 0)
-                });
+                verticalOffsetNode = $('<div>', { contenteditable: false })
+                    .addClass('float')
+                    .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) });
             }
 
             // calculate left/right offset (only if image is anchored to column)
@@ -333,6 +340,22 @@ define('io.ox/office/editor/format/imagestyles',
         this.iterateReadWrite = this.iterateReadOnly;
 
     } // class ImageStyles
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Returns the images attributes that are needed to represent the passed
+     * image float mode as used in the GUI.
+     *
+     * @param {String} floatMode
+     *  The GUI image float mode.
+     *
+     * @returns {Object}
+     *  A map with image attributes, as name/value pairs.
+     */
+    ImageStyles.getAttributesFromFloatMode = function (floatMode) {
+        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : null;
+    };
 
     // exports ================================================================
 

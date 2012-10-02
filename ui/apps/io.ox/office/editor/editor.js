@@ -24,8 +24,9 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/operations',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
-     'io.ox/office/editor/format/documentstyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles) {
+     'io.ox/office/editor/format/documentstyles',
+     'io.ox/office/editor/format/imagestyles'
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles, ImageStyles) {
 
     'use strict';
 
@@ -1120,20 +1121,29 @@ define('io.ox/office/editor/editor',
 
         // PUBLIC IMAGE METHODS
 
-        this.isImagePosition = function () {
+        /**
+         * Returns whether the current selection selects a single image.
+         */
+        this.isImageSelected = function () {
             var selection = getSelection();
             return selection && _.isString(selection.endPaM.imageFloatMode);
         };
 
+        /**
+         * Returns the GUI float mode of the image that is currently selected.
+         */
         this.getImageFloatMode = function () {
             var selection = getSelection();
             return selection ? selection.endPaM.imageFloatMode : null;
         };
 
+        /**
+         * Changes the GUI float mode of the image that is currently selected.
+         */
         this.setImageFloatMode = function (floatMode) {
-            var attributes = Image.getAttributesFromFloatMode(floatMode);
+            var attributes = ImageStyles.getAttributesFromFloatMode(floatMode);
             if (_.isObject(attributes)) {
-                this.setAttributes('character', attributes);
+                this.setAttributes('image', attributes);
             }
         };
 
@@ -1578,10 +1588,16 @@ define('io.ox/office/editor/editor',
         /**
          * Returns the current document URL that will be used to access the
          * source document in the database.
+         *
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the URL. Each option
+         *  will be inserted into the URL as name/value pair separated by an
+         *  equality sign. The different options are separated by ampersand
+         *  characters.
          */
-        function getDocumentUrl() {
+        function getDocumentUrl(options) {
             // do not cache the URL, it may change during runtime (versions etc)
-            return app.getDocumentFilterUrl('getfile');
+            return app.getDocumentFilterUrl('getfile', options);
         }
 
         function getPrintableChar(event) {
@@ -2012,15 +2028,13 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.OP_IMAGE_INSERT) {
-                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var endPos = _.clone(operation.position, true),
-                        undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
-                    undomgr.addUndo(undoOperation, operation);
+                var url = /:\/\//.test(operation.imgurl) ? operation.imgurl : getDocumentUrl({ fragment: operation.imgurl });
+                if (implInsertImage(url, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
+                    if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                        var undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.clone(operation.position), end: _.clone(operation.position) };
+                        undomgr.addUndo(undoOperation, operation);
+                    }
                 }
-                var imgurl = operation.imgurl;
-                if (imgurl.indexOf("://") === -1)
-                    imgurl = getDocumentUrl() + '&fragment=' + operation.imgurl;
-                implInsertImage(imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true));
             }
             else if (operation.name === Operations.OP_FIELD_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -2028,7 +2042,6 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.OP_TEXT_DELETE, start: _.copy(operation.position, true), end: endPos };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
                 implInsertField(_.copy(operation.position, true), operation.type, operation.representation);
             }
             else if (operation.name === Operations.OP_PARA_MERGE) {
@@ -3036,137 +3049,31 @@ define('io.ox/office/editor/editor',
 
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
-                image = null,
-                anchorType = null,
-                allMargins = null;
+                image = null;
 
             // insert the image with default settings (inline)
-            if (node && (node.nodeType === 3)) {
-
-                // prepend text before offset in a new span (also if position
-                // points to start or end of text, needed to clone formatting)
-                DOM.splitTextNode(node, domPos.offset);
-
-                // insert the image between the two text nodes
-                image = $('<img>', { src: url }).insertBefore(node.parentNode);
-
-                // apply the passed image attributes
-                if (imageStyles) {
-                    imageStyles.setElementAttributes(image, attributes);
-                }
-
-            } else {
+            if (!node || (node.nodeType !== 3)) {
                 Utils.error('implInsertImage(): expecting text position to insert image.');
-            }
-/*
-            if (attributes) {
-                if (node && (node.nodeType === 3)) {
-                    var paragraph = node.parentNode.parentNode;
-                    attributes.paragraphWidth = Utils.convertLength(paragraph.offsetWidth, 'px', 'mm', 2);
-                }
-
-                anchorType = Image.getAnchorTypeFromAttributes(attributes);
-                attributes = Image.convertAttributeSizes(attributes);
-                allMargins = Image.calculateImageMargins(attributes); // necessary to switch the text flow around the image.
+                return false;
             }
 
-            if (anchorType === null) {
-                anchorType = 'AsCharacter';  // setting fallbacks
-            }
+            // prepend text before offset in a new span (also if position
+            // points to start or end of text, needed to clone formatting)
+            DOM.splitTextNode(node, domPos.offset);
 
-            if ((node) && (node.nodeType === 3)) {
+            // insert the image between the two text nodes
+            image = $('<img>', { src: url }).insertBefore(node.parentNode);
 
-                var floatMode = null,
-                    verticalDivSide = null;
+            // apply the passed image attributes
+            imageStyles.setElementAttributes(image, attributes);
 
-                if (anchorType === 'AsCharacter') {
-                    // prepend text before offset in a new span (also if position
-                    // points to start or end of text, needed to clone formatting)
-                    DOM.splitTextNode(node, domPos.offset);
-                    // insert image before the parent <span> element of the text node
-                    node = node.parentNode;
-                    floatMode = 'inline';
-                } else if (anchorType === 'FloatLeft') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind spans as positionDiv and already inserted images
-                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
-                    attributes.float = 'left';
-                    attributes['margin-left'] = 0;
-                    floatMode = 'leftFloated';
-                    if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
-                        if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalDivSide = 'left';
-                            attributes.clear = 'left';
-                        }
-                    }
-                } else if (anchorType === 'FloatRight') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind divs as positionDiv and already inserted images
-                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
-                    attributes.float = 'right';
-                    attributes['margin-right'] = 0;
-                    floatMode = 'rightFloated';
-                    if ((attributes.anchorvbase === 'paragraph') && (attributes.anchorvoffset) && (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 2) > 0)) {
-                        if (attributes.anchorvoffset.substring(0, attributes.anchorvoffset.length - 6) > 0) {  // avoid overlap of text into image for small vertical offsets
-                            verticalDivSide = 'right';
-                            attributes.clear = 'right';
-                        }
-                    }
-                } else if (anchorType === 'FloatNone') {
-                    // insert image before the first span in the paragraph
-                    node = node.parentNode.parentNode.firstChild;
-                    // inserting new image behind divs as positionDiv and already inserted images
-                    while ((Utils.getNodeName(node) === 'div') && ($(node).data('positionDiv')) || (Utils.getNodeName(node) === 'img')) { node = node.nextSibling; }
-
-                    attributes['margin-left'] = allMargins.fullLeftMargin;
-                    attributes['margin-right'] = allMargins.fullRightMargin;
-                    attributes.float = 'left';  // using left-floating with full margin
-                    // attributes.float = 'none';
-                    floatMode = 'noneFloated';
-                }
-
-                // } else if (anchorType === 'ToPage') {
-                //     // does not produce any disorder, but images are not allowed at editdiv.
-                //     // A new counting for paragraphs = editdiv.children() is required.
-                //     $('<img>', { src: url }).appendTo(editdiv).css(attributes);
-                //     attributes.position = 'absolute';
-                //     paragraphs = editdiv.children();
-                // } else if (anchorType === 'ToParagraph') {
-                //     // insert image before the first span in the paragraph
-                //     node = node.parentNode.parentNode.firstChild;
-                //     attributes.position = 'absolute';
-                //     $('<img>', { src: url }).insertBefore(node).css(attributes);
-                // } else if (anchorType === 'ToCharacter') {
-                //     var textNode = DOM.splitTextNode(node, domPos.offset);
-                //     // Creating a new span that will include the graphic. The span must have a position.
-                //     // var newParent = $('<div>', { position: 'relative', display: 'inline-block' });
-                //     var newParent = $('<span>', { position: 'relative' });
-                //     newParent.insertAfter(textNode.parentNode);
-                //     attributes.position = 'absolute';
-                //     $('<img>', { src: url }).appendTo(newParent).css(attributes);
-                // }
-
-                if (floatMode !== null) {
-
-                    attributes['vertical-align'] = 'baseline';  // only important for inline images, text should be aligned to baseline of image
-                    var imgNode = $('<img>', { src: url }).data({'mode': floatMode, 'imageID': url, 'allMargins': allMargins}).insertBefore(node).css(attributes);
-
-                    if (verticalDivSide !== null) {
-                        // all spans have to be listed before the floated images, but keeping the correct order
-                        var insertNode = imgNode.get(0).parentNode.firstChild;
-                        while ((Utils.getNodeName(insertNode) === 'div') && ($(insertNode).data('positionDiv'))) { insertNode = insertNode.nextSibling; }
-                        $('<div>', { width: '1px', height: attributes.anchorvoffset }).data({'positionDiv': true, 'divID': url}).css({'float': verticalDivSide, 'display': 'inline-block'}).insertBefore(insertNode);
-                    }
-                }
-            }
-*/
             var lastPos = _.copy(position);
             var posLength = position.length - 1;
             lastPos[posLength] = position[posLength] + 1;
             lastOperationEnd = new OXOPaM(lastPos);
             implParagraphChanged(position);
+
+            return true;
         }
 
         /**
@@ -3286,14 +3193,8 @@ define('io.ox/office/editor/editor',
                 undomgr.addUndo(undoOperation, redoOperation);
             }
 
-            if (! end) {  // end is optional
-                end = _.copy(start, true);
-            }
-
-            var // last index in the start position array
-                startLastIndex = start.length - 1,
-                // last index in the end position array
-                endLastIndex = end.length - 1,
+            var // last index in the start/end position arrays
+                startLastIndex = 0, endLastIndex = 0,
                 // the DOM text range to be formatted
                 ranges = null,
                 // the attribute family according to the passed range address
@@ -3306,9 +3207,12 @@ define('io.ox/office/editor/editor',
                 setAttributesOptions = createUndo ? { changeListener: changeListener } : undefined;
 
             // build local copies of the arrays (do not change caller's data)
-            start = _.copy(start);
-            end = _.copy(end);
+            start = _.clone(start);
+            end = _.isArray(end) ? _.clone(end) : _.clone(start);
+            startLastIndex = start.length - 1;
+            endLastIndex = end.length - 1;
 
+            // TODO: remove when object selection engine exists
             var containsImageAttribute = Image.containsImageAttributes(attributes);
 
             // get attribute family according to position
@@ -3333,29 +3237,13 @@ define('io.ox/office/editor/editor',
             // store last position
             lastOperationEnd = new OXOPaM(end);
 
-            if (family !== 'image') {
-                // build the DOM text range, set the formatting attributes, create undo operations
-                styleSheets = self.getStyleSheets(family);
-                if (styleSheets) {
-                    if (createUndo) { undomgr.startGroup(); }
-                    ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)));
-                    styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
-                    if (createUndo) { undomgr.endGroup(); }
-                }
-            } else {
-                var returnObj = Image.setImageAttributes(paragraphs, start, end, attributes);
-
-                if ((returnObj) && (returnObj.imageFloatMode)) {
-
-                    var imageFloatMode = returnObj.imageFloatMode;
-
-                    // store last position
-                    if (imageFloatMode === 'inline') {
-                        lastOperationEnd = new OXOPaM(returnObj.startPosition);
-                    } else {
-                        lastOperationEnd = null;
-                    }
-                }
+            // build the DOM text range, set the formatting attributes, create undo operations
+            styleSheets = self.getStyleSheets(family);
+            if (styleSheets) {
+                if (createUndo) { undomgr.startGroup(); }
+                ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
+                styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                if (createUndo) { undomgr.endGroup(); }
             }
         }
 
@@ -4185,6 +4073,7 @@ define('io.ox/office/editor/editor',
             .on('contextmenu', processContextMenu)
             .on('cut paste', false);
 
+/*
         // POC: image selection
         editdiv.on('click', 'img', function () {
             DOM.clearElementSelections(editdiv);
@@ -4193,6 +4082,7 @@ define('io.ox/office/editor/editor',
         this.on('selection', function () {
             DOM.clearElementSelections(editdiv);
         });
+*/
 
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 

@@ -202,7 +202,7 @@ define('io.ox/office/editor/position',
                     }
 
                     if (imageNode !== null) {
-                        imageFloatMode = Position.getPropertyValue(imageNode, 'mode'); // must be 'inline' mode
+                        imageFloatMode = $(imageNode).data('mode'); // must be 'inline' mode
                     }
                 }
             }
@@ -402,14 +402,14 @@ define('io.ox/office/editor/position',
         if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (! allowNoneTextNodes)) {
             // special handling for non-floated images as children of paragraphs, use text node instead
             if (Position.hasInlineFloatProperty(localNode)) {
-                imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+                imageFloatMode = $(localNode).data('mode');
                 localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
                 useFirstTextNode = false;
             }
 
             // special handling for floated images as children of paragraphs, use text node instead
             if (Position.hasFloatProperty(localNode)) {
-                imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+                imageFloatMode = $(localNode).data('mode');
                 if (isRtlCursorTravel) {
                     localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
                     useFirstTextNode = false;
@@ -422,7 +422,7 @@ define('io.ox/office/editor/position',
 
         // setting some properties for image nodes
         if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (allowNoneTextNodes)) {
-            imageFloatMode = Position.getPropertyValue(localNode, 'mode');
+            imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;
             offset = 0;
         }
@@ -2092,8 +2092,8 @@ define('io.ox/office/editor/position',
      *  property 'mode' set to 'leftFloated' or 'rightFloated' or 'noneFloated'.
      */
     Position.hasFloatProperty = function (node) {
-        var localNode = (node instanceof $) ? node : $(node);
-        return ((localNode.data('mode') === 'leftFloated') || (localNode.data('mode') === 'rightFloated') || (localNode.data('mode') === 'noneFloated'));
+        var floatMode = $(node).data('mode');
+        return _(['leftFloated', 'rightFloated', 'noneFloated']).contains(floatMode);
     };
 
 
@@ -2110,39 +2110,7 @@ define('io.ox/office/editor/position',
      *  property 'mode' set to inline.
      */
     Position.hasInlineFloatProperty = function (node) {
-        var localNode = (node instanceof $) ? node : $(node);
-        return (localNode.data('mode') === 'inline');
-    };
-
-    /**
-     * Checks if a specified node has the data property 'prop' set to 'value'.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  A DOM element object or jQuery element
-     *  If it is a DOM element, it is jQuerified first.
-     *
-     * @returns {Boolean}
-     *  A boolean containing the information, if the specified node has the data
-     *  property 'prop' set to 'value'.
-     */
-    Position.hasPropertyValue = function (node, prop, value) {
-        var localNode = (node instanceof $) ? node : $(node);
-        return (localNode.data(prop) === value);
-    };
-
-    /**
-     * Returns the value of the data property 'prop'.
-     *
-     * @param {HTMLElement|jQuery} node
-     *  A DOM element object or jQuery element, that is checked.
-     *  If it is a DOM element, it is jQuerified first.
-     *
-     * @returns {String}
-     *  The value of the data property 'prop'.
-     */
-    Position.getPropertyValue = function (node, prop) {
-        var localNode = (node instanceof $) ? node : $(node);
-        return localNode.data(prop);
+        return $(node).data('mode') === 'inline';
     };
 
     /**
@@ -2158,26 +2126,6 @@ define('io.ox/office/editor/position',
      */
     Position.getNumberOfFloatedImagesInParagraph = function (node) {
         return $(node).find('img.float').length;
-/*
-        var counter = 0,
-            child = node.firstChild,
-            continue_ = true;
-
-        while ((child !== null) && (continue_)) {
-
-            if ((Utils.getNodeName(child) === 'img') && (Position.hasFloatProperty(child))) {
-                counter++;
-                child = child.nextSibling;
-            } else if ((Utils.getNodeName(child) === 'div') && $(child).hasClass('float')) {
-                // ignoring divs that exist only for positioning image
-                child = child.nextSibling;
-            } else {
-                continue_ = false;
-            }
-        }
-
-        return counter;
-*/
     };
 
     /**

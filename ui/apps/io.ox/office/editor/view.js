@@ -393,7 +393,7 @@ define('io.ox/office/editor/view',
             .addSeparator()
             .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/alignment', { icon: 'icon-io-ox-image-inline', tooltip: gt('Alignment'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('format/image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), auto: true, copyMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })
