@@ -15,11 +15,116 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
 
     'use strict';
 
+    // class ApplicationBase ==================================================
+
+    /**
+     * A mix-in class that defines common public methods for an office
+     * application object.
+     *
+     * @param {Object} options
+     *  A map of options containing initialization data for the new application
+     *  object.
+     */
+    function ApplicationBase(options) {
+
+        var // FileStore file descriptor of the document edited by this application
+            file = Utils.getObjectOption(options, 'file', null);
+
+        // public methods -----------------------------------------------------
+
+        /**
+         * Returns whether this application contains a valid file descriptor.
+         */
+        this.hasFileDescriptor = function () {
+            return _.isObject(file);
+        };
+
+        /**
+         * Returns the file descriptor of the document edited by this
+         * application.
+         */
+        this.getFileDescriptor = function () {
+            return file;
+        };
+
+        /**
+         * Sets the file descriptor of the document edited by this application.
+         * Must not be called if the application already contains a valid file
+         * descriptor.
+         */
+        this.setFileDescriptor = function (newFile) {
+            // only set new file descriptor, do not change it
+            if (_.isNull(file) && _.isObject(newFile)) {
+                file = newFile;
+            }
+        };
+
+        /**
+         * Returns an URL that can be passed to AJAX calls to communicate with
+         * a specific server-side service.
+         *
+         * @param {String} service
+         *  The name of the service.
+         *
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the URL. Each option
+         *  will be inserted into the URL as name/value pair separated by an
+         *  equality sign. The different options are separated by ampersand
+         *  characters.
+         *
+         * @returns {String}
+         *  The created URL.
+         */
+        this.buildServiceUrl = function (service, options) {
+
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({
+                session: ox.session,
+                uid: this.getUniqueId()
+            }, options);
+
+            // build and return the resulting URL
+            return ox.apiRoot + '/' + service + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
+        };
+
+        /**
+         * Returns the URL passed to AJAX calls used to convert a document file
+         * with the 'oxodocumentfilter' service.
+         *
+         * @param {String} action
+         *  The name of the action to be passed to the document filter.
+         *
+         * @param {Object} [options]
+         *  Additional options that affect the creation of the filter URL. Each
+         *  option will be inserted into the URL as name/value pair separated
+         *  by an equality sign. The different options are separated by
+         *  ampersand characters.
+         *
+         * @returns {String}
+         *  The filter URL.
+         */
+        this.getDocumentFilterUrl = function (action, options) {
+
+            // build a default options map, and add the passed options
+            options = Utils.extendOptions({
+                action: action,
+                id: file.id,
+                folder_id: file.folder_id,
+                filename: file.filename,
+                version: file.version
+            }, options);
+
+            // build and return the resulting URL
+            return this.buildServiceUrl('oxodocumentfilter', options);
+        };
+
+    } // class ApplicationBase
+
     // static class AppHelper =================================================
 
     var AppHelper = {};
 
-    // document filters -------------------------------------------------------
+    // AJAX and file system ---------------------------------------------------
 
     /**
      * Extracts the result data object from the passed response object of
@@ -83,6 +188,57 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         return data[attribName];
     };
 
+    /**
+     * Reads the specified file and returns a deferred's promise that will be
+     * resolved or rejected depending on the result of the read operation. The
+     * file will be converted to a data URL containing the file contents as
+     * Base-64 encoded data and passed to the promise object.
+     *
+     * @param {File} file
+     *  The file descriptor.
+     *
+     * @returns {jQuery.Promise}
+     *  The promise of a deferred that will be resolved with the result object
+     *  containing the data URL, or rejected if the read operation failed.
+     */
+    AppHelper.readFileAsDataUrl = function (file) {
+
+        var // deferred result object
+            def = $.Deferred(),
+            // create a browser file reader instance
+            reader = window.FileReader ? new window.FileReader() : null;
+
+        if (reader) {
+
+            // register the event handlers
+            reader.onload = function (event) {
+                if (event && event.target && _.isString(event.target.result)) {
+                    def.resolve(event.target.result);
+                } else {
+                    def.reject();
+                }
+            };
+            reader.onerror = reader.onabort = function (event) {
+                def.reject();
+            };
+            reader.onprogress = function (event) {
+                if (event.lengthComputable) {
+                    def.notify(Math.round((event.loaded / event.total) * 100));
+                }
+            };
+
+            // read the file and generate a data URL
+            reader.readAsDataURL(file);
+
+        } else {
+            // file reader not supported
+            def.reject();
+        }
+
+        // return the deferred result
+        return def.promise();
+    };
+
     // application object -----------------------------------------------------
 
     /**
@@ -92,7 +248,7 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
      * @param {String} moduleName
      *  The application type identifier.
      *
-     * @param {Object} options
+     * @param {Object} [options]
      *  A map of options that may contain a file descriptor in 'options.file'.
      *  If existing, compares it with the file descriptors of all running
      *  applications with the specified module identifier (returned by their
@@ -129,112 +285,26 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
      * @param {String} moduleName
      *  The application type identifier.
      *
-     * @param {Function} initAppHandler
-     *  A callback function intended to initialize the application object.
-     *  Receives the new application object as first parameter, and the passed
-     *  options map as second parameter.
+     * @param {Function} ApplicationClass
+     *  The constructor function of a mix-in class that will extend the core
+     *  application object. Receives the passed options map as first parameter.
      *
-     * @param options
+     * @param {Object} [options]
      *  A map of options containing initialization data for the new application
      *  object.
      *
      * @returns {ox.ui.App}
      *  The new application object.
      */
-    AppHelper.createApplication = function (moduleName, initAppHandler, options) {
+    AppHelper.createApplication = function (moduleName, ApplicationClass, options) {
 
-        var // the OX application object
-            app = ox.ui.createApp({ name: moduleName }),
+        var // the base application object
+            app = ox.ui.createApp({ name: moduleName });
 
-            // file descriptor created by the Files application (InfoStore)
-            file = null;
-
-        // methods ------------------------------------------------------------
-
-        /**
-         * Returns an URL that can be passed to AJAX calls to communicate with
-         * a specific server-side service.
-         *
-         * @param {String} service
-         *  The name of the service.
-         *
-         * @param {Object} [options]
-         *  Additional options that affect the creation of the URL. Each option
-         *  will be inserted into the URL as name/value pair separated by an
-         *  equality sign. The different options are separated by ampersand
-         *  characters.
-         *
-         * @returns {String}
-         *  The URL.
-         */
-        app.buildServiceUrl = function (service, options) {
-
-            // build a default options map, and add the passed options
-            options = Utils.extendOptions({
-                session: ox.session,
-                uid: this.getUniqueId()
-            }, options);
-
-            // build and return the resulting URL
-            return ox.apiRoot + '/' + service + '?' + _(options).map(function (value, name) { return name + '=' + value; }).join('&');
-        };
-
-        /**
-         * Returns the URL passed to AJAX calls used to convert a document file
-         * with the 'oxodocumentfilter' service.
-         *
-         * @param {String} action
-         *  The name of the action to be passed to the document filter.
-         *
-         * @param {Object} [options]
-         *  Additional options that affect the creation of the filter URL. Each
-         *  option will be inserted into the URL as name/value pair separated
-         *  by an equality sign. The different options are separated by
-         *  ampersand characters.
-         *
-         * @returns {String}
-         *  The filter URL.
-         */
-        app.getDocumentFilterUrl = function (action, options) {
-
-            var // the descriptor of the file loaded by the application
-                file = app.getFileDescriptor();
-
-            // build a default options map, and add the passed options
-            options = Utils.extendOptions({
-                action: action,
-                id: file.id,
-                folder_id: file.folder_id,
-                filename: file.filename,
-                version: file.version
-            }, options);
-
-            // build and return the resulting URL
-            return this.buildServiceUrl('oxodocumentfilter', options);
-        };
-
-        app.hasFileDescriptor = function () {
-            return _.isObject(file);
-        };
-
-        app.getFileDescriptor = function () {
-            return file;
-        };
-
-        app.setFileDescriptor = function (newFile) {
-            // only set new file descriptor, do not change it
-            if (_.isNull(file) && _.isObject(newFile)) {
-                file = newFile;
-            }
-        };
-
-        // initialization -----------------------------------------------------
-
-        // initialize file descriptor (options may be empty yet, e.g. in fail restore)
-        app.setFileDescriptor(Utils.getObjectOption(options, 'file'));
-
-        // call the initialization handler
-        initAppHandler(app, options);
+        // mix-in constructor for common methods
+        ApplicationBase.call(app, options);
+        // mix-in constructor for methods specific for the application type
+        ApplicationClass.call(app, options);
 
         return app;
     };
@@ -254,7 +324,7 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
      *  new application object as first parameter, and the passed options map
      *  as second parameter.
      *
-     * @param options
+     * @param {Object} [options]
      *  A map of options containing initialization data for the new application
      *  object.
      *

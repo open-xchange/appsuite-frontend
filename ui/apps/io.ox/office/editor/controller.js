@@ -144,10 +144,10 @@ define('io.ox/office/editor/controller',
                     enable: function () { return editor.isImageSelected(); }
                 },
                 'image/insert/file': {
-                    set: function () { CommonDialogs.insertImageFile(app); }
+                    set: function () { Image.insertFileDialog(app); }
                 },
                 'image/insert/url': {
-                    set: function () { CommonDialogs.insertImageURL(app); }
+                    set: function () { Image.insertURLDialog(app); }
                 },
                 'image/delete': {
                     chain: 'chain/image',

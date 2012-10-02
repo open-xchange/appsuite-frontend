@@ -25,11 +25,14 @@ define('io.ox/office/preview/main',
 
     var MODULE_NAME = 'io.ox/office/preview';
 
-    // initializeApplication() ================================================
+    // class Application ======================================================
 
-    function initializeApplication(app, options) {
+    function Application(options) {
 
-        var win = null,
+        var // self reference
+            self = this,
+
+            win = null,
 
             preview = new Preview(),
 
@@ -68,9 +71,7 @@ define('io.ox/office/preview/main',
                 }
             });
 
-        // ---------------------
-        // - private functions -
-        // ---------------------
+        // private methods ----------------------------------------------------
 
         /**
          * Shows a closable error message above the preview.
@@ -113,9 +114,9 @@ define('io.ox/office/preview/main',
          * current file name.
          */
         function updateTitles() {
-            var file = app.getFileDescriptor(),
+            var file = self.getFileDescriptor(),
                 fileName = (file && file.filename) ? file.filename : gt('Unnamed');
-            app.setTitle(fileName);
+            self.setTitle(fileName);
             win.setTitle(gt('Preview') + ' - ' + fileName);
         }
 
@@ -132,8 +133,7 @@ define('io.ox/office/preview/main',
                 search: false,
                 toolbar: true
             });
-
-            app.setWindow(win);
+            self.setWindow(win);
 
             win.nodes.main
                 .addClass('io-ox-office-preview-main')
@@ -159,16 +159,16 @@ define('io.ox/office/preview/main',
          * down.
          */
         function quitHandler() {
-            app.destroy();
+            self.destroy();
             return $.when();
         }
 
-        // methods ============================================================
+        // methods ------------------------------------------------------------
 
         /**
          * Returns the preview instance.
          */
-        app.getPreview = function () {
+        this.getPreview = function () {
             return preview;
         };
 
@@ -179,7 +179,8 @@ define('io.ox/office/preview/main',
          *  A deferred that is resolved if the application has been made
          *  visible, or rejected if the application is in an invalid state.
          */
-        app.show = function () {
+        this.show = function () {
+
             var def = $.Deferred();
 
             if (win && preview) {
@@ -200,15 +201,16 @@ define('io.ox/office/preview/main',
          * @returns {jQuery.Deferred}
          *  A deferred that reflects the result of the load operation.
          */
-        app.load = function () {
+        this.load = function () {
+
             var def = null;
 
             // do not load twice (may be called repeatedly from app launcher)
-            app.load = app.show;
+            this.load = this.show;
 
             // do not try to load, if file descriptor is missing
-            if (!app.hasFileDescriptor()) {
-                return app.show();
+            if (!this.hasFileDescriptor()) {
+                return this.show();
             }
 
             // show application window
@@ -223,7 +225,7 @@ define('io.ox/office/preview/main',
             // load the file
             $.ajax({
                 type: 'GET',
-                url: app.getDocumentFilterUrl('importdocument', { filter_format: 'html' }),
+                url: this.getDocumentFilterUrl('importdocument', { filter_format: 'html' }),
                 dataType: 'json'
             })
             .pipe(function (response) {
@@ -248,13 +250,13 @@ define('io.ox/office/preview/main',
             return def;
         };
 
-        app.failSave = function () {
-            return { module: MODULE_NAME, point: { file: app.getFileDescriptor() } };
+        this.failSave = function () {
+            return { module: MODULE_NAME, point: { file: this.getFileDescriptor() } };
         };
 
-        app.failRestore = function (point) {
-            app.setFileDescriptor(Utils.getObjectOption(point, 'file'));
-            return app.load();
+        this.failRestore = function (point) {
+            this.setFileDescriptor(Utils.getObjectOption(point, 'file'));
+            return this.load();
         };
 
         /**
@@ -262,30 +264,29 @@ define('io.ox/office/preview/main',
          * quit, but has to be called manually for a regular quit (e.g. from
          * window close button).
          */
-        app.destroy = function () {
+        this.destroy = function () {
             controller.destroy();
             topBar.destroy();
             preview.destroy();
-            app = win = preview = topBar = controller = null;
+            win = preview = topBar = controller = null;
         };
 
-        // ------------------------------------------------
-        // - initialization of createApplication function -
-        // ------------------------------------------------
+        // initialization -----------------------------------------------------
 
         // listen to 'showpage' events and update controller
         preview.on('showpage', function () { controller.update(); });
 
-        return app.setLauncher(launchHandler).setQuit(quitHandler);
+        // set launch and quit handlers
+        this.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // initializeApplication()
+    } // class Application
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-            return AppHelper.getOrCreateApplication(MODULE_NAME, initializeApplication, options);
+            return AppHelper.getOrCreateApplication(MODULE_NAME, Application, options);
         }
     };
 

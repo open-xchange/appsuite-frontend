@@ -67,11 +67,14 @@ define('io.ox/office/editor/main',
         return data.operations;
     }
 
-    // initializeApplication() ================================================
+    // class Application ======================================================
 
-    function initializeApplication(app, options) {
+    function Application(options) {
 
-        var // application window
+        var // self reference
+            self = this,
+
+            // application window
             win = null,
 
             // the editor (model)
@@ -101,7 +104,7 @@ define('io.ox/office/editor/main',
         // private methods ----------------------------------------------------
 
         function initializeFromOptions(options) {
-            app.setFileDescriptor(Utils.getObjectOption(options, 'file'));
+            self.setFileDescriptor(Utils.getObjectOption(options, 'file'));
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
             syncMode = Utils.getBooleanOption(options, 'syncMode', true);
         }
@@ -184,12 +187,12 @@ define('io.ox/office/editor/main',
          * current file name but without any extension.
          */
         function updateTitles() {
-            var file = app.getFileDescriptor(),
+            var file = self.getFileDescriptor(),
                 filename = (file && file.filename) ? file.filename : gt('Unnamed'),
                 extensionPos = filename.lastIndexOf('.'),
                 displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename;
 
-            app.setTitle(displayName);
+            self.setTitle(displayName);
             win.setTitle(displayName);
         }
 
@@ -234,7 +237,7 @@ define('io.ox/office/editor/main',
                 search: true,
                 toolbar: true
             });
-            app.setWindow(win);
+            self.setWindow(win);
 
             // do not detach when hiding for several reasons:
             // - keep editor selection alive
@@ -242,7 +245,7 @@ define('io.ox/office/editor/main',
             win.detachable = false;
 
             // create controller
-            controller = new Controller(app);
+            controller = new Controller(self);
 
             // editor view
             view = new View(win, controller, editor);
@@ -258,11 +261,11 @@ define('io.ox/office/editor/main',
             if (Utils.getStringOption(options, 'file') === 'new') {
                 initFileDef = $.ajax({
                     type: 'GET',
-                    url: app.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
+                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
                     dataType: 'json'
                 }).pipe(function (response) {
                     // creation succeeded: receive file descriptor and set it
-                    app.setFileDescriptor(response.data);
+                    self.setFileDescriptor(response.data);
                 });
             } else {
                 initFileDef = $.when();
@@ -292,7 +295,7 @@ define('io.ox/office/editor/main',
         function quitHandler() {
 
             var // the deferred returned to the framework
-                def = $.Deferred().done(app.destroy);
+                def = $.Deferred().done(self.destroy);
 
             win.busy();
 
@@ -311,10 +314,10 @@ define('io.ox/office/editor/main',
 
                     // notify server about quitting the application
                     // TODO: one-way call, alternative to GET?
-                    if (app.hasFileDescriptor()) {
+                    if (self.hasFileDescriptor()) {
                         $.ajax({
                             type: 'GET',
-                            url: app.getDocumentFilterUrl('closedocument'),
+                            url: self.getDocumentFilterUrl('closedocument'),
                             dataType: 'json'
                         });
                     }
@@ -365,11 +368,11 @@ define('io.ox/office/editor/main',
                 operationsBuffer = []; // initDocument will result in an operation
 
                 // load the file
-                if (app.hasFileDescriptor()) {
+                if (self.hasFileDescriptor()) {
 
                     $.ajax({
                         type: 'GET',
-                        url: app.getDocumentFilterUrl('importdocument'),
+                        url: self.getDocumentFilterUrl('importdocument'),
                         dataType: 'json'
                     })
                     .pipe(extractOperationsList)
@@ -414,7 +417,7 @@ define('io.ox/office/editor/main',
                 });
 
             // do not try to save, if file descriptor is missing
-            if (!app.hasFileDescriptor()) {
+            if (!self.hasFileDescriptor()) {
                 return def.reject();
             }
 
@@ -424,7 +427,7 @@ define('io.ox/office/editor/main',
             .done(function () {
                 $.ajax({
                     type: 'GET',
-                    url: app.getDocumentFilterUrl(action),
+                    url: self.getDocumentFilterUrl(action),
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -460,7 +463,7 @@ define('io.ox/office/editor/main',
             });
 
             //  do not try to save, if file descriptor is missing
-            if (!app.hasFileDescriptor()) {
+            if (!self.hasFileDescriptor()) {
                 return def.reject();
             }
 
@@ -468,8 +471,8 @@ define('io.ox/office/editor/main',
 
             receiveAndSendOperations()
             .done(function () {
-                var url = app.getDocumentFilterUrl('getdocument', { filter_format: format || '' }),
-                    title = app.getFileDescriptor().title || 'file';
+                var url = self.getDocumentFilterUrl('getdocument', { filter_format: format || '' }),
+                    title = self.getFileDescriptor().title || 'file';
                 window.open(url, title);
                 def.resolve();
             })
@@ -517,7 +520,7 @@ define('io.ox/office/editor/main',
 
                 $.ajax({
                     type: 'POST',
-                    url: app.getDocumentFilterUrl('pushoperationupdates'),
+                    url: self.getDocumentFilterUrl('pushoperationupdates'),
                     dataType: 'json',
                     data: dataObject,
                     beforeSend: function (xhr) {
@@ -569,7 +572,7 @@ define('io.ox/office/editor/main',
                 // first, check if the server has new operations for me
                 $.ajax({
                     type: 'GET',
-                    url: app.getDocumentFilterUrl('pulloperationupdates'),
+                    url: self.getDocumentFilterUrl('pulloperationupdates'),
                     dataType: 'json'
                 })
                 .done(function (response) {
@@ -628,14 +631,14 @@ define('io.ox/office/editor/main',
         /**
          * Returns the editor instance.
          */
-        app.getEditor = function () {
+        this.getEditor = function () {
             return editor;
         };
 
         /**
          * Returns the global view object.
          */
-        app.getView = function () {
+        this.getView = function () {
             return view;
         };
 
@@ -646,7 +649,7 @@ define('io.ox/office/editor/main',
          *  A deferred that is resolved if the application has been made
          *  visible, or rejected if the application is in an invalid state.
          */
-        app.show = function () {
+        this.show = function () {
             var def = $.Deferred();
 
             if (win && editor) {
@@ -662,32 +665,33 @@ define('io.ox/office/editor/main',
             return def;
         };
 
-        app.save = function () {
+        this.save = function () {
             return saveOrFlush('exportdocument');
         };
 
-        app.flush = function () {
+        this.flush = function () {
             return saveOrFlush('savedocument');
         };
 
-        app.download = function () {
+        this.download = function () {
             return download();
         };
 
-        app.print = function () {
+        this.print = function () {
             return download('pdf');
         };
 
         /**
          * Renames the currently edited file and updates the UI accordingly
          */
-        app.rename = function (newFilename) {
-            var file = app.getFileDescriptor();
+        this.rename = function (newFilename) {
+
+            var file = this.getFileDescriptor();
 
             if (newFilename && newFilename.length && file && (newFilename !== file.filename)) {
                 $.ajax({
                     type: 'GET',
-                    url: app.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
+                    url: this.getDocumentFilterUrl('renamedocument', { filename: newFilename }),
                     dataType: 'json'
                 })
                 .pipe(function (response) {
@@ -720,17 +724,17 @@ define('io.ox/office/editor/main',
         /**
          * Set a new current file version
          */
-        app.newVersion = function (newVersion) {
-            var file = app.getFileDescriptor();
+        this.newVersion = function (newVersion) {
+            var file = this.getFileDescriptor();
 
             if (file) {
                 file.version = newVersion;
             }
         };
 
-        app.failSave = function () {
+        this.failSave = function () {
             var point = {
-                file: app.getFileDescriptor(),
+                file: this.getFileDescriptor(),
                 toolBarId: view.getToolPane().getVisibleToolBarId(),
                 debugMode: debugMode,
                 syncMode: syncMode
@@ -738,9 +742,9 @@ define('io.ox/office/editor/main',
             return { module: MODULE_NAME, point: point };
         };
 
-        app.failRestore = function (point) {
+        this.failRestore = function (point) {
             initializeFromOptions(point);
-            app.newVersion(0);  // Get top-level version
+            this.newVersion(0);  // Get top-level version
             updateDebugMode();
             return loadAndShow().always(function () {
                 view.getToolPane().showToolBar(Utils.getStringOption(point, 'toolBarId'));
@@ -751,7 +755,7 @@ define('io.ox/office/editor/main',
          * Returns whether the application is in debug mode. See method
          * setDebugMode() for details.
          */
-        app.isDebugMode = function () {
+        this.isDebugMode = function () {
             return debugMode;
         };
 
@@ -761,7 +765,7 @@ define('io.ox/office/editor/main',
          * editor, and shows a plain-text editor and an output console for
          * processed operations.
          */
-        app.setDebugMode = function (state) {
+        this.setDebugMode = function (state) {
             if (debugMode !== state) {
                 debugMode = state;
                 updateDebugMode();
@@ -769,11 +773,11 @@ define('io.ox/office/editor/main',
             return this;
         };
 
-        app.isSynchronizedMode = function () {
+        this.isSynchronizedMode = function () {
             return syncMode;
         };
 
-        app.setSynchronizedMode = function (state) {
+        this.setSynchronizedMode = function (state) {
             if (syncMode !== state) {
                 syncMode = state;
                 startOperationsTimer();
@@ -786,7 +790,7 @@ define('io.ox/office/editor/main',
          * quit, but has to be called manually for a regular quit (e.g. from
          * window close button).
          */
-        app.destroy = function () {
+        this.destroy = function () {
             if (operationsTimer) {
                 window.clearTimeout(operationsTimer);
                 operationsTimer = null;
@@ -794,31 +798,31 @@ define('io.ox/office/editor/main',
             controller.destroy();
             view.destroy();
             editor.destroy();
-            app = win = editor = view = controller = null;
+            win = editor = view = controller = null;
         };
 
         // initialization -----------------------------------------------------
 
         // create the editor model
-        editor = new Editor(app);
+        editor = new Editor(this);
 
         // cache operations from editor
         editor.on('operation', function (event, operation) {
             operationsBuffer.push(operation);
         });
 
-        // configure OX application
+        // configure application
         initializeFromOptions(options);
-        return app.setLauncher(launchHandler).setQuit(quitHandler);
+        this.setLauncher(launchHandler).setQuit(quitHandler);
 
-    } // initializeApplication()
+    } // class Application
 
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()
     return {
         getApp: function (options) {
-            return AppHelper.getOrCreateApplication(MODULE_NAME, initializeApplication, options);
+            return AppHelper.getOrCreateApplication(MODULE_NAME, Application, options);
         }
     };
 

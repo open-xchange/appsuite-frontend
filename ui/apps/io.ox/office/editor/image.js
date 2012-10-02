@@ -12,10 +12,19 @@
  */
 
 define('io.ox/office/editor/image',
-    ['io.ox/office/tk/utils',
-     'io.ox/office/editor/dialog/error'], function (Utils, ErrorDialogs) {
+    ['io.ox/office/tk/apphelper',
+     'io.ox/office/tk/dialogs',
+     'gettext!io.ox/office/main'
+    ], function (AppHelper, Dialogs, gt) {
 
     'use strict';
+
+    /**
+     * Shows an error box if a resource could not be inserted as image.
+     */
+    function insertImageError() {
+        alert(gt("Sorry, image could not be inserted."));
+    }
 
     // static class Image =====================================================
 
@@ -61,12 +70,31 @@ define('io.ox/office/editor/image',
     };
 
     /**
+     * Shows an insert image file dialog
+     *
+     * @param  app the current application
+     */
+    Image.insertFileDialog = function (app) {
+
+        var // options for the file dialog
+            options = {
+                filter: 'image/*',
+                placeholder: gt('URL'),
+                buttonLabel: gt('Insert')
+            };
+
+        Dialogs.showFileDialog(gt('Select Image File'), options).done(function (file) {
+            Image.insertFile(app, file, true);
+        });
+    };
+
+    /**
      * Inserts the image from the specified file into a document.
      *
-     * @param {io.ox.App} app
+     * @param {ox.ui.App} app
      *  The application object representing the edited document.
      *
-     * @param {Object} file
+     * @param {File} file
      *  The file object describing the image file to be inserted.
      *
      * @param {Boolean} [showError]
@@ -74,60 +102,66 @@ define('io.ox/office/editor/image',
      *  errors are silently ignored.
      */
     Image.insertFile = function (app, file, showError) {
-        if (_.isObject(file) && _.isFunction(window.FileReader)) {
-            var fileReader = new window.FileReader();
 
-            fileReader.onload = function (e) {
-                if (e.target.result) {
-                    $.ajax({
-                        type: 'POST',
-                        url: app.getDocumentFilterUrl('addfile', { add_filename: file.name }),
-                        dataType: 'json',
-                        data: { image_data: e.target.result },
-                        beforeSend: function (xhr) {
-                            if (xhr && xhr.overrideMimeType) {
-                                xhr.overrideMimeType('application/j-son;charset=UTF-8');
-                            }
-                        }
-                    })
-                    .done(function (response) {
-                        if (response && response.data) {
+        var // the error handler function that shows an error box if requested
+            errorHandler = showError ? insertImageError : $.noop;
 
-                            // if added_fragment is set to a valid name,
-                            // the insertion of the image was successful
-                            if (_.isString(response.data.added_fragment) && (response.data.added_fragment.length > 0)) {
+        AppHelper.readFileAsDataUrl(file)
+        .done(function (dataUrl) {
 
-                                // set version of FileDescriptor to version that is returned in response
-                                app.getFileDescriptor().version = response.data.version;
-
-                                // create an InsertImage operation with the newly added fragment
-                                app.getEditor().insertImageFile(response.data.added_fragment);
-                            }
-                            else if (showError) {
-                                ErrorDialogs.insertImageError();
-                            }
-                        }
-                    })
-                    .fail(function (response) {
-                        if (showError) {
-                            ErrorDialogs.insertImageError();
-                        }
-                    });
+            $.ajax({
+                type: 'POST',
+                url: app.getDocumentFilterUrl('addfile', { add_filename: file.name }),
+                dataType: 'json',
+                data: { image_data: dataUrl },
+                beforeSend: function (xhr) {
+                    if (xhr && xhr.overrideMimeType) {
+                        xhr.overrideMimeType('application/j-son;charset=UTF-8');
+                    }
                 }
+            })
+            .done(function (response) {
+
+                var // the name of the image fragment in the document on the server
+                    fragmentName = (response && response.data) ? response.data.added_fragment : null;
+
+                // if fragmentName is a valid string, the insertion of the image was successful
+                if (_.isString(fragmentName) && (fragmentName.length > 0)) {
+                    // set version of file descriptor to version that is returned in response
+                    app.getFileDescriptor().version = response.data.version;
+                    // create the insertImage operation with the newly added fragment
+                    app.getEditor().insertImageFile(fragmentName);
+                } else {
+                    errorHandler();
+                }
+            })
+            .fail(errorHandler);
+        })
+        .fail(errorHandler);
+    };
+
+    /**
+     * Shows an insert image file dialog
+     *
+     * @param  app the current application
+     */
+    Image.insertURLDialog = function (app) {
+
+        var // options for the text input dialog
+            options = {
+                placeholder: gt('URL'),
+                buttonLabel: gt('Insert')
             };
 
-            if (showError) {
-                fileReader.onerror = ErrorDialogs.insertImageError;
-            }
-
-            fileReader.readAsDataURL(file);
-        }
+        Dialogs.showTextDialog(gt('Enter Image URL'), options).done(function (url) {
+            Image.insertURL(app, url.trim(), true);
+        });
     };
 
     /**
      * Inserts the image specified by a URL into a document.
      *
-     * @param {io.ox.App} app
+     * @param {ox.ui.App} app
      *  The application object representing the edited document.
      *
      * @param {String} url
@@ -141,7 +175,7 @@ define('io.ox/office/editor/image',
         if (_.isString(url) && /:\/\//.test(url)) {
             app.getEditor().insertImageURL(url);
         } else if (showError) {
-            ErrorDialogs.insertImageError();
+            insertImageError();
         }
     };
 
