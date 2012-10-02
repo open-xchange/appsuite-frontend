@@ -2095,9 +2095,9 @@ define('io.ox/office/editor/editor',
             }
             else if (operation.name === Operations.OP_PARA_MERGE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var sel = _.copy(operation.start);
-                    var paraLen = 0;
-                    Position.getParagraphLength(paragraphs, sel);
+                    var sel = _.copy(operation.start),
+                        paraLen = Position.getParagraphLength(paragraphs, sel);
+
                     sel.push(paraLen);
                     var undoOperation = { name: Operations.OP_PARA_SPLIT, start: sel };
                     undomgr.addUndo(undoOperation, operation);
