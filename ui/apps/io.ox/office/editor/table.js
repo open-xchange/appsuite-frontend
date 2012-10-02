@@ -140,7 +140,7 @@ define('io.ox/office/editor/table',
      */
     Table.getTableGridWithNewColumn = function (startnode, tablePos, gridPosition, insertmode) {
 
-        var tableGrid = Table.getTableGrid(startnode, tablePos),
+        var tableGrid = _.copy(Table.getTableGrid(startnode, tablePos), true),
             tableWidth = 0;
 
         if (! tableGrid) {
@@ -453,7 +453,6 @@ define('io.ox/office/editor/table',
         return allRemovePositions;
     };
 
-
     /**
      * Calculating the relative width of one grid column in relation to the
      * width of the table. The result is the percentage.
@@ -478,6 +477,30 @@ define('io.ox/office/editor/table',
         percentage = Utils.roundDigits(width * 100 / fullWidth, 1);
 
         return percentage;
+    };
+
+    /**
+     * Updating the column group elements in a table element. This is necessary
+     * after inserting or deleting columns or cells.
+     *
+     * @param {jQuery} table
+     *  The <table> element whose table attributes have been changed, as jQuery
+     *  object.
+     *
+     * @param {Number[]} tablegrid
+     *  The grid array.
+     */
+    Table.updateColGroup = function (table, tablegrid) {
+
+        var colgroup = table.children('colgroup');
+
+        colgroup.children('col').remove(); // removing all col entries
+
+        for (var i = 0; i < tablegrid.length; i++) {
+            var oneGridWidth = Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%';  // converting to %
+            colgroup.append($('<col>').css('width', oneGridWidth));
+        }
+
     };
 
     // exports ================================================================
