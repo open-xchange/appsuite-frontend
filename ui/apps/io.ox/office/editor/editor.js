@@ -1071,7 +1071,9 @@ define('io.ox/office/editor/editor',
             var newOperation = {name: Operations.OP_PARA_MERGE, start: _.copy(position)};
             applyOperation(newOperation, true, true);
 
-            moveFloatedImages(position);
+            var imageShift = moveFloatedImages(position);
+
+            return imageShift;
         };
 
         this.insertText = function (text, position) {
@@ -1343,6 +1345,7 @@ define('io.ox/office/editor/editor',
             implStartCheckEventSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
+                var imageShift = 0;
                 selection.adjust();
                 if (selection.hasRange()) {
                     self.deleteSelected(selection);
@@ -1378,7 +1381,7 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = true;
                         }
 
-                        self.mergeParagraph(mergeselection);
+                        imageShift = self.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
                             if (characterPos === 0) {
@@ -1402,6 +1405,10 @@ define('io.ox/office/editor/editor',
                             }
                         }
                     }
+                }
+
+                if (imageShift > 0) {
+                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] += imageShift;
                 }
                 selection.endPaM = _.copy(selection.startPaM, true);
                 event.preventDefault();
@@ -2992,7 +2999,8 @@ define('io.ox/office/editor/editor',
          */
         function moveFloatedImages(position) {
 
-            var domPos = Position.getDOMPosition(paragraphs, position);
+            var domPos = Position.getDOMPosition(paragraphs, position),
+                imageShift = 0;
 
             if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'p')) {
 
@@ -3012,6 +3020,7 @@ define('io.ox/office/editor/editor',
                         if (localPos !== counter) {
                             source.push(localPos);
                             dest.push(counter);  // there might be floated images already in the first paragraph
+                            imageShift++;
 
                             // moving floated images with operation
                             var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
@@ -3030,6 +3039,8 @@ define('io.ox/office/editor/editor',
                     child = nextChild;
                 }
             }
+
+            return imageShift;
         }
 
         // ====================================================================
@@ -3412,8 +3423,7 @@ define('io.ox/office/editor/editor',
         function implMergeParagraph(position) {
 
             var posLength = position.length - 1,
-                para = position[posLength],
-                imageMoves = [];
+                para = position[posLength];
 
             position.push(0); // adding pos to position temporarely
 
@@ -3502,7 +3512,6 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            return imageMoves;
         }
 
         function implDeleteParagraph(position) {
