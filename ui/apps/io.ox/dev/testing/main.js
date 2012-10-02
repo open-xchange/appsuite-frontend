@@ -17,7 +17,18 @@ define('io.ox/dev/testing/main',
      'io.ox/core/extensions'], function (jasmine, ext) {
 
     'use strict';
-
+    
+    function Done() {
+        var f = function () {
+            return f.value;
+        };
+        f.value = false;
+        f.yep = function () {
+            f.value = true;
+        };
+        return f;
+    }
+    
     var app = ox.ui.createApp({
             name: 'io.ox/dev/testing',
             title: 'Unit Tests'
@@ -50,6 +61,7 @@ define('io.ox/dev/testing/main',
 
         // get window
         win = ox.ui.createWindow({
+            name: 'io.ox/dev/testing',
             title: 'Jasmine Tests'
         });
 
@@ -82,7 +94,43 @@ define('io.ox/dev/testing/main',
             ext.point('test/suite').each(function (e) {
                 // run test
                 if (_(suites).indexOf('ALL') > -1 || _(suites).indexOf(e.id) > -1) {
-                    e.test(jasmine);
+                    e.test(jasmine, {
+                        Done: Done,
+                        // Stick in any number of deferreds, optionally end the arguments list with a message and a timeout
+                        // e.g.:
+                        //   utils.waitFor(def1, def2, def3)
+                        //   utils.waitFor(def1, def2, def3, 5000)
+                        //   utils.waitFor(def1, def2, def3, 'Operations timed out', 5000);
+                        //   utils.waitFor(def1)
+                        waitsFor: function () {
+                            // First some arguments magic
+                            var timeout, errorMessage;
+                            var deferreds = [];
+                            var done = new Done();
+                            
+                            _(arguments).each(function (arg) {
+                                if (_.isString(arg)) {
+                                    errorMessage = arg;
+                                } else if (_.isNumber(arg)) {
+                                    timeout = arg;
+                                } else {
+                                    deferreds.push(arg);
+                                }
+                            });
+                            if (deferreds.length === 0) {
+                                return;
+                            } else if (deferreds.length === 1) {
+                                deferreds = deferreds[0];
+                            } else {
+                                deferreds = $.when(deferreds);
+                            }
+                            
+                            deferreds.always(done.yep);
+                            
+                            return jasmine.waitsFor(done, errorMessage || 'timeout', timeout || 5000);
+                        }
+                        
+                    });
                 }
             });
             // go!
@@ -158,7 +206,11 @@ define('io.ox/dev/testing/main',
                         node.css({ color: '#a00', fontWeight: 'bold' });
                         _(result.items_).each(function (item) {
                             if (!item.passed()) {
-                                $('<div>').text(readable(item + '')).appendTo(node);
+                                $('<div>').text(readable(item + '')).on("click", function () {
+                                        $(this).find("pre").remove();
+                                        $(this).append($("<pre>").text(item.trace.stack));
+                                    }
+                                ).appendTo(node);
                                 consoleError('Actual', item.actual, "Expected", item.expected);
                             }
                         });

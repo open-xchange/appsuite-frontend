@@ -104,8 +104,15 @@
 }
 
 
-.calendar-detail .calendar-participant-actions.inline-actions {
-	padding: 1em 0 0.25em 0em;
+.calendar-detail .io-ox-label.participants-block .io-ox-inline-links {
+	float: right;
+	margin: 0px;
+	font-size: 9pt;
+	font-family: "Helvetica Neue", Arial, Helvetica, sans-serif;
+}
+
+.calendar-detail .io-ox-label.participants-block .io-ox-inline-links a{
+	color: #333;
 }
 
 .calendar-detail .io-ox-label.sublabel {

@@ -51,6 +51,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
                         $('<div>').text(gt("Remind date") + " " + task.alarm).addClass("alarm-date")
                 );
             }
+            if (task.percent_completed && task.percent_completed !== 0) {
+                infoPanel.append(
+                        $('<br>'),
+                        $('<div>').text(gt("Progress") + " " + task.percent_completed + "%").addClass("task-progress")
+                    );
+            }
             infoPanel.append(
                 $('<br>'),
                 $('<div>').text(task.status).addClass("status " +  task.badge)
@@ -69,8 +75,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             infoPanel.appendTo(node);
             
             $('<div>').text(task.title).addClass("title clear-title").appendTo(node);
+            if (task.number_of_attachments > 0) {
+                ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
+            }
+            
             var inlineLinks = $('<div>').addClass("tasks-inline-links").appendTo(node);
-            ext.point("io.ox/tasks/detail").invoke("draw", inlineLinks, data);
+            ext.point("io.ox/tasks/detail-inline").invoke("draw", inlineLinks, data);
             $('<div>').text(task.note).addClass("note").appendTo(node);
             
             return node;
@@ -78,11 +88,41 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
     };
     
     // inline links for each task
-    ext.point('io.ox/tasks/detail').extend(new links.InlineLinks({
+    ext.point('io.ox/tasks/detail-inline').extend(new links.InlineLinks({
         index: 100,
         id: 'inline-links',
         ref: 'io.ox/tasks/links/inline'
     }));
+    
+    //attachments
+    ext.point('io.ox/tasks/detail-attach').extend({
+        index: 100,
+        id: 'attachments',
+        draw: function (task) {
+            var attachmentNode = $('<div>').addClass("attachments-container").appendTo(this);
+            $('<span>').text(gt("Attachments") + '\u00A0\u00A0').addClass("attachments").appendTo(attachmentNode);
+            require(['io.ox/core/api/attachment'], function (api) {
+                api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
+                    _(data).each(function (a, index) {
+                        // draw
+                        buildDropdown(attachmentNode, a.filename, a);
+                    });
+                    if (data.length > 1) {
+                        buildDropdown(attachmentNode, gt("all"), data);
+                    }
+                    attachmentNode.delegate("a", "click", function (e) {e.preventDefault(); });
+                });
+            });
+        }
+    });
+    
+    var buildDropdown = function (container, label, data) {
+        new links.DropdownLinks({
+                label: label,
+                classes: 'attachment-item',
+                ref: 'io.ox/tasks/attachment/links'
+            }).draw.call(container, data);
+    };
   
     return taskDetailView;
 });

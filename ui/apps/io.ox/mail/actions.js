@@ -19,7 +19,7 @@ define('io.ox/mail/actions',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
      'io.ox/core/config',
-     'io.ox/core/notifications'], function (ext, links, api, util, gt, config, notifications) {
+     'io.ox/core/notifications', 'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
 
     'use strict';
 
@@ -336,6 +336,74 @@ define('io.ox/mail/actions',
         }
     });
 
+    //all actions
+
+//    new Action('io.ox/mail/actions/createdistlist', {
+//        id: 'create-distlist',
+//        requires: 'some',
+//        action: function (data) {
+//        }
+//    });
+
+    new Action('io.ox/mail/actions/invite', {
+        id: 'invite',
+        requires: 'some',
+        action: function (data) {
+            var collectedRecipients = [],
+                participantsArray = [],
+                currentId = config.get('identifier'),
+                currentFolder = config.get('folder.calendar'),
+                collectedRecipientsArray = data.to.concat(data.cc),
+                dev = $.Deferred(),
+                lengthValue,
+
+                createCalendarApp = function (participants, notetext) {
+                    require(['io.ox/calendar/edit/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            var initData = {participants: participants, title: notetext, folder_id: currentFolder};
+                            this.create(initData);
+//                             to set Dirty
+                            this.model.toSync = initData;
+                        });
+                    });
+                };
+
+            _(collectedRecipientsArray).each(function (single) {
+                collectedRecipients.push(single[1]);
+            });
+
+            lengthValue = collectedRecipients.length;
+
+            _(collectedRecipients).each(function (mail, index) {
+                contactAPI.search(mail).done(function (obj) {
+                    var currentObj = (obj[0]) ? obj[0] : {email1: mail, display_name: mail},
+                        internalUser = {id: currentObj.internal_userid, type: 1},
+                        externalUser = {type: 5, display_name: currentObj.display_name, mail: currentObj.email1};
+
+                    if (currentObj.internal_userid !== currentId) {
+                        if (currentObj.internal_userid !== undefined && currentObj.internal_userid !== 0) {
+                            participantsArray.push(internalUser);
+                        } else if (currentObj.internal_userid === 0) {
+                            participantsArray.push(externalUser);
+                        } else {
+                            participantsArray.push(externalUser);
+                        }
+                    } else {
+                        lengthValue = lengthValue - 1;
+                    }
+
+                    if (participantsArray.length === lengthValue) {
+                        dev.resolve();
+                    }
+                });
+            });
+
+            dev.done(function () {
+                createCalendarApp(participantsArray, data.subject);
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/reminder', {
         id: 'reminder',
         action: function (data) {
@@ -411,10 +479,11 @@ define('io.ox/mail/actions',
 
     // toolbar
 
-    ext.point('io.ox/mail/links/toolbar').extend(new links.Link({
+    ext.point('io.ox/mail/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'compose',
         label: gt('Compose new mail'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/mail/actions/compose'
     }));
 
@@ -599,6 +668,20 @@ define('io.ox/mail/actions',
         index: 400,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
+    }));
+
+//    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+//        id: 'save-as-distlist',
+//        index: 100,
+//        label: gt('Save as distribution list'),
+//        ref: 'io.ox/mail/actions/createdistlist'
+//    }));
+
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'invite-to-appointment',
+        index: 200,
+        label: gt('Invite to appointment'),
+        ref: 'io.ox/mail/actions/invite'
     }));
 
     // DND actions

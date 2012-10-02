@@ -34,10 +34,10 @@ define('io.ox/mail/view-grid-template',
                     $('<div>').append(
                         threadSize = $('<div>').addClass('thread-size'),
                         flag = $('<div>').addClass('flag').text('\u00A0'),
-                        attachment = $('<span>').addClass('attachment'),
+                        attachment = $('<i>').addClass('icon-paper-clip'),
                         priority = $('<span>').addClass('priority'),
                         $('<div>').addClass('subject')
-                            .append(unread = $('<i>').addClass('icon-envelope'))
+                            .append(unread = $('<i>').addClass('icon-bookmark'))
                             .append(subject = $('<span>'))
                     )
                 );

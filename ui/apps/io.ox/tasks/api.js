@@ -21,7 +21,17 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     var api = apiFactory({
         module: "tasks",
         keyGenerator: function (obj) {
-            return obj ? obj.folder_id + '.' + obj.id : '';
+            var folder = null;
+            if (obj.folder) {
+                folder = obj.folder;
+            } else if (obj.folder_id) {
+                folder = obj.folder_id;
+            } else {
+                console.log("no folderAttribute for cache Keygen found, using default");
+                folder = folderApi.getDefaultFolder("tasks");
+            }
+                
+            return obj ? folder + '.' + obj.id : '';
         },
         requests: {
             all: {
@@ -69,7 +79,15 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     },
                     data: modifications,
                     appendColumns: false
+                }).pipe(function () {
+                    console.log("updating caches");
+                    // update cache
+                    return $.when(
+                        api.caches.get.remove(key),
+                        api.caches.list.remove(key)
+                    );
                 }).done(function () {
+                    //trigger refresh, for vGrid etc
                     api.trigger("refresh.list");
                 });
 

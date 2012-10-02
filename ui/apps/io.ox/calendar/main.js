@@ -24,9 +24,7 @@ define("io.ox/calendar/main",
     // application object
     var app = ox.ui.createApp({ name: 'io.ox/calendar' }),
         // app window
-        win,
-        // grid
-        GRID_WIDTH = 330;
+        win;
 
     // launcher
     app.setLauncher(function () {
@@ -34,7 +32,6 @@ define("io.ox/calendar/main",
         // get window
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/calendar',
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
             search: true
         }));
@@ -42,7 +39,7 @@ define("io.ox/calendar/main",
         win.addClass("io-ox-calendar-main");
 
         // folder tree
-        commons.addFolderView(app, { width: GRID_WIDTH, type: 'calendar', view: 'FolderList' });
+        commons.addFolderView(app, { type: 'calendar', view: 'FolderList' });
 
         // go!
         commons.addFolderSupport(app, null, 'calendar')

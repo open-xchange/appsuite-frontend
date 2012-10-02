@@ -62,7 +62,8 @@
 .tasks-detailview .priority,
 .tasks-detailview .status,
 .tasks-detailview .end-date,
-.tasks-detailview .alarm-date {
+.tasks-detailview .alarm-date,
+.tasks-detailview .task-progress {
 	float: right;
 }
 
@@ -72,6 +73,19 @@
 
 .tasks-detailview .status {
 	margin-top: 4px;
+}
+
+.tasks-detailview .attachments {
+	font-family: @font-light;
+    color: #aaa;
+}
+
+.tasks-detailview .attachments-container {
+	margin-top: 0.8em;
+}
+
+.tasks-detailview .attachment-item{
+	color: #333;
 }
 
 .tasks-detailview .note,

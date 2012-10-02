@@ -103,7 +103,7 @@ define("io.ox/mail/api",
             },
             list: {
                 action: "list",
-                columns: "102,600,601,602,603,604,607,610,611,614"
+                columns: "102,600,601,602,603,604,605,607,610,611,614"
             },
             get: {
                 action: "get",
@@ -174,6 +174,14 @@ define("io.ox/mail/api",
             },
             getPost: function (data) {
                 return applyLatest(data);
+            }
+        },
+        params: {
+            all: function (options) {
+                if (options.sort === 'thread') {
+                    options.sort = 610;
+                }
+                return options;
             }
         }
     });
@@ -642,7 +650,7 @@ define("io.ox/mail/api",
     function handleSendXHR2(data, files, deferred) {
         var form = new FormData(),
             flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -690,7 +698,7 @@ define("io.ox/mail/api",
     function handleSendTheGoodOldWay(data, files, deferred) {
         var form = $('.io-ox-mail-write form'),
             flatten = function (recipient) {
-                return '"' + recipient[0].replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
+                return '"' + (recipient[0] || '').replace(/^["']+|["']+$/g, '') + '" <' + recipient[1] + '>';
             };
 
         // clone data (to avoid side-effects)
@@ -731,9 +739,9 @@ define("io.ox/mail/api",
 
         $(form).submit();
 
-        window.callback_new = function (newMailId) {
+        window.callback_new = function (response) {
             $('#' + tmpName).remove();
-            deferred.resolve(newMailId);
+            deferred[(response && response.error ? 'reject' : 'resolve')](response);
             window.callback_new = null;
         };
     }

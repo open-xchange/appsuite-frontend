@@ -36,7 +36,7 @@ define("io.ox/mail/main",
             e.preventDefault();
             var option = $(this).attr('data-option'),
                 grid = e.data.grid;
-            if (/^(603|607|610|102)$/.test(option)) {
+            if (/^(603|607|610|102|thread)$/.test(option)) {
                 grid.prop('sort', option).refresh();
             } else if (/^(asc|desc)$/.test(option)) {
                 grid.prop('order', option).refresh();
@@ -52,7 +52,6 @@ define("io.ox/mail/main",
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         audio,
         left,
@@ -66,16 +65,15 @@ define("io.ox/mail/main",
         win = ox.ui.createWindow({
             name: 'io.ox/mail',
             title: gt("Inbox"),
-            titleWidth: (GRID_WIDTH + 27) + "px",
             toolbar: true,
-            search: true
+            search: true,
+            fullscreen: true
         });
 
-        win.addClass("io-ox-mail-main");
         app.setWindow(win);
 
         // folder tree
-        commons.addFolderView(app, { width: GRID_WIDTH, type: 'mail' });
+        commons.addFolderView(app, { type: 'mail' });
 
         // sound
         audio = $('<audio>', { src: ox.base + '/apps/io.ox/mail/images/ping.mp3' })
@@ -88,21 +86,18 @@ define("io.ox/mail/main",
         // left panel
         left = $("<div>")
             .addClass("leftside border-right")
-            .css({
-                width: GRID_WIDTH + "px"
-            })
             .appendTo(win.nodes.main);
 
         // right panel
         scrollpane = $("<div>")
-            .css({ left: GRID_WIDTH + 1 + "px" })
             .addClass("rightside mail-detail-pane")
             .appendTo(win.nodes.main);
 
         right = scrollpane.scrollable();
 
         // grid
-        grid = new VGrid(left, ext.point('io.ox/mail/vgrid/options').options());
+        var options = ext.point('io.ox/mail/vgrid/options').options();
+        grid = new VGrid(left, options);
 
         // add template
         grid.addTemplate(tmpl.main);
@@ -115,7 +110,7 @@ define("io.ox/mail/main",
         };
 
         // add grid options
-        grid.prop('sort', '610')
+        grid.prop('sort', options.threadView !== false ? 'thread' : '610')
             .prop('order', 'desc')
             .prop('unread', false);
 
@@ -145,32 +140,48 @@ define("io.ox/mail/main",
 
         var option = '<li><a data-option="%s"><i/> %s</a></li>';
 
-        grid.getToolbar().prepend(
-            $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
-            .append(
-                $('<a>', { href: '#' })
-                .attr('data-toggle', 'dropdown')
-                .append(
-                    $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
-                    $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
-                )
-                .dropdown(),
-                $('<ul>').addClass("dropdown-menu")
-                .css({ top: 'auto', bottom: '110%', right: 0, left: 'auto' })
-                .append(
-                    $(_.printf(option, 610, gt('Date'))),
-                    $(_.printf(option, 603, gt('From'))),
-                    $(_.printf(option, 102, gt('Label'))),
-                    $(_.printf(option, 607, gt('Subject'))),
-                    $('<li class="divider">'),
-                    $(_.printf(option, 'asc', gt('Ascending'))),
-                    $(_.printf(option, 'desc', gt('Descending'))),
-                    $('<li class="divider">'),
-                    $(_.printf(option, 'unread', gt('Unread only')))
-                )
-                .on('click', 'a', { grid: grid }, hToolbarOptions)
-            )
-        );
+        ext.point('io.ox/mail/vgrid/toolbar').extend({
+            id: 'dropdown',
+            index: 100,
+            draw: function () {
+                this.prepend(
+                    $('<div>').addClass('grid-options dropdown').css({ display: 'inline-block', 'float': 'right' })
+                    .append(
+                        $('<a>', { href: '#' })
+                        .attr('data-toggle', 'dropdown')
+                        .append(
+                            $('<i class="icon-envelope">').css('marginRight', '0.5em').hide(),
+                            $('<i class="icon-arrow-down">'), $('<i class="icon-arrow-up">')
+                        )
+                        .dropdown(),
+                        $('<ul>').addClass("dropdown-menu")
+                        .append(
+                            options.threadView !== false ? $(_.printf(option, 'thread', gt('Conversations'))) : $(),
+                            $(_.printf(option, 610, gt('Date'))),
+                            $(_.printf(option, 603, gt('From'))),
+                            $(_.printf(option, 102, gt('Label'))),
+                            $(_.printf(option, 607, gt('Subject'))),
+                            $('<li class="divider">'),
+                            $(_.printf(option, 'asc', gt('Ascending'))),
+                            $(_.printf(option, 'desc', gt('Descending'))),
+                            $('<li class="divider">'),
+                            $(_.printf(option, 'unread', gt('Unread only')))
+                        )
+                        .on('click', 'a', { grid: grid }, hToolbarOptions)
+                    )
+                );
+            }
+        });
+
+        ext.point('io.ox/mail/vgrid/toolbar').extend({
+            id: 'count',
+            index: 200,
+            draw: function () {
+                this.append(
+                    $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
+                );
+            }
+        });
 
         grid.on('change:prop:unread', function (e, value) {
             if (value === true) {
@@ -183,9 +194,7 @@ define("io.ox/mail/main",
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
 
-        grid.getToolbar().append(
-            $('<div>').addClass('grid-count').css({ textAlign: 'center', color: '#888' })
-        );
+        ext.point('io.ox/mail/vgrid/toolbar').invoke('draw', grid.getToolbar());
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now
@@ -211,7 +220,7 @@ define("io.ox/mail/main",
         grid.setAllRequest(function () {
             var sort = this.prop('sort'),
                 unread = this.prop('unread');
-            return api[sort === '610' ? 'getAllThreads' : 'getAll']({
+            return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
@@ -221,6 +230,11 @@ define("io.ox/mail/main",
                         return (obj.flags & 32) === 0;
                     });
                 });
+        });
+
+        grid.setListRequest(function (ids) {
+            var sort = this.prop('sort');
+            return api[sort === 'thread' ? 'getThreads' : 'getList'](ids);
         });
 
         win.nodes.title.on('click', '.badge', function (e) {
@@ -323,7 +337,7 @@ define("io.ox/mail/main",
             // be busy
             right.busy(true);
             // which mode?
-            if (grid.getMode() === "all") {
+            if (grid.getMode() === "all" && grid.prop('sort') === 'thread') {
                 // get thread
                 var thread = api.getThread(obj);
                 // get first mail first

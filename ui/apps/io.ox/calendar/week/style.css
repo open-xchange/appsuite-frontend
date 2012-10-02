@@ -200,6 +200,11 @@
         width: 100%;
         background-color: red;
         z-index: 9999;
+        -moz-user-select: -moz-none;
+        -khtml-user-select: none;
+        -webkit-user-select: none;
+        -o-user-select: none;
+        user-select: none;
     }
     
     .timeline .glow {
@@ -249,6 +254,7 @@
         -webkit-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     }
 
     .appointment.modify {
@@ -283,7 +289,7 @@
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
     }
-  
+
     .appointment.reserved {
         background-color: @appointment-reserved;
     }

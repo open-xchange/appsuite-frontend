@@ -60,11 +60,10 @@
 
 /* unread */
 
-.vgrid-cell.mail .subject i.icon-envelope { display: none; }
-.vgrid-cell.mail.unread .subject i.icon-envelope { display: inline-block; margin-right: 0.5em; }
+.vgrid-cell.mail i.icon-bookmark { display: none; }
+.vgrid-cell.mail.unread i.icon-bookmark { display: inline-block; margin-right: 0.5em; }
 
 .vgrid-cell.mail.unread .subject {
-    font-weight: bold;
     color: #08c;
 }
 
@@ -101,10 +100,10 @@
     float: right;
 }
 
-.vgrid-cell.mail .attachment {
-    background: url(images/attachment.png) no-repeat 0px 0px;
-    width: 17px;
-    margin-left: 1em;
+.vgrid-cell.mail .icon-paper-clip {
+    font-size: 20px;
+    width: 18px;
+    margin-left: 0.5em;
     float: right;
 }
 
@@ -234,15 +233,8 @@
     margin-bottom: 0;
 }
 
-.mail-detail .infoblock {
-	padding: 13px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
+.mail-detail .alert {
     margin-bottom: 1em;
-}
-
-.mail-detail .infoblock a {
-    text-decoration: underline;
 }
 
 .mail-detail .date {
@@ -332,6 +324,7 @@
     margin-top: 1em;
     cursor: auto;
     position: relative;
+    overflow: hidden; /* helper for absolutely positioned elements */
 }
 
 /* TODO: remove / temp. fix for bootstrap */
@@ -418,7 +411,7 @@ h4.mail-attachment-preview {
     -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0;
 }
 
-.io-ox-mail-main .window-title .badge {
+.io-ox-mail-window .window-title .badge {
     cursor: pointer;
 }
 

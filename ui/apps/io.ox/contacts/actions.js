@@ -19,7 +19,7 @@ define('io.ox/contacts/actions',
     'use strict';
 
     //  actions
-    var Action = links.Action;
+    var Action = links.Action, Button = links.Button, ButtonGroup = links.ButtonGroup;
 
     new Action('io.ox/contacts/main/delete', {
         index: 100,
@@ -47,11 +47,11 @@ define('io.ox/contacts/actions',
         requires: 'one modify',
         action: function (data) {
             if (data.mark_as_distributionlist === true) {
-                require(['io.ox/contacts/distrib/main'], function (m) {
-                    m.getApp(data).launch().done(function () {
-                        this.edit(data);
-                    });
-                });
+//                require(['io.ox/contacts/distrib/main'], function (m) {
+//                    m.getApp(data).launch().done(function () {
+//                        this.edit(data);
+//                    });
+//                });
             } else {
                 require(['io.ox/contacts/util'], function (util) {
                     util.createEditPage(data);
@@ -141,19 +141,26 @@ define('io.ox/contacts/actions',
 
     // toolbar
 
-    ext.point('io.ox/contacts/links/toolbar').extend(new links.Link({
+    new ButtonGroup('io.ox/contacts/links/toolbar', {
+        id: 'buttongroup',
+        index: 100
+    });
+
+    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
         index: 100,
         id: 'create',
         label: gt('Add contact'),
+        cssClasses: 'btn btn-primary',
         ref: 'io.ox/contacts/main/create'
     }));
 
-    ext.point('io.ox/contacts/links/toolbar').extend(new links.Link({
-        index: 100,
-        id: 'create-dist',
-        label: gt('Add distribution list'),
-        ref: 'io.ox/contacts/main/distrib'
-    }));
+//    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
+//        index: 200,
+//        id: 'create-dist',
+//        cssClasses: 'btn btn-inverse',
+//        label: gt('Add distribution list'),
+//        ref: 'io.ox/contacts/main/distrib'
+//    }));
 
     //  inline links
 

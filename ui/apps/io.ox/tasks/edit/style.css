@@ -1,0 +1,134 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
+ */
+ 
+ //fill out the grid
+ .io-ox-tasks-edit .row-content {
+ 	width: 100%;
+ }
+ 
+ .io-ox-tasks-edit .row-content .progress-field{
+ 	text-align: center;
+ 	height: 20px;
+ 	width: 53.5%;
+ }
+ 
+ .io-ox-tasks-edit .private-flag {
+ 	display: inline;
+ 	width: auto;
+ 	margin: 0 5px 0 0;
+ 	top: 26px;
+ 	color: #000000;
+ 	position: relative;
+ }
+ 
+ .task-edit-wrapper {
+ 	max-width: 800px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+ }
+ 
+ .task-edit-label {
+ 	display: block;
+ 	color: #888;
+	font-family: OpenSans, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	line-height: 1.25em;
+	margin-bottom: 5px;
+ }
+ 
+ .task-edit-row {
+ 	margin-bottom: 9px;
+ }
+ 
+ .io-ox-tasks-edit .tab-pane {
+  	margin-bottom: 85px;
+ }
+ 
+ .io-ox-tasks-edit .tab-content {
+  	overflow: visible;
+ }
+ 
+ .io-ox-tasks-edit .fluid-grid-fix {
+  	line-height: 20px;
+ }
+ 
+ .io-ox-tasks-edit .alarm-date-field,
+ .io-ox-tasks-edit .start-date-time-field,
+ .io-ox-tasks-edit .end-date-time-field,
+ .io-ox-tasks-edit .start-date-field,
+ .io-ox-tasks-edit .end-date-field {
+  	height: 20px;
+ }
+ 
+ .io-ox-tasks-edit .note-field {
+  	height: 120px;
+  	min-height: 120px;
+  	resize: vertical;
+ }
+ 
+ .io-ox-tasks-edit .input-prepend {
+ 	margin: 0;
+ }
+ 
+ .io-ox-tasks-edit .info-wrapper .task-attachment-link {
+ 	margin-bottom: 9px;
+ }
+ .task-remove-attachment {
+ 	float: right;
+	cursor: pointer;
+	width: 20px!important;
+	margin-top: 10px;
+	margin-right: 10px;
+ }
+ 
+ .io-ox-tasks-edit .icon-paper-clip {
+ 	font-size: 30px;
+	width: 20px;
+	margin-right: 0.5em;
+	height: 15px;
+	margin-top: 10px;
+	float: left;
+	position: relative;
+ }
+ 
+ //PickerPopup
+ 
+ .picker-day {
+ 	border: 1px solid #C0C0C0;
+ 	fontsize: 16px; 
+ }
+ 
+ .picker-table {
+ 	width: 100%;
+ }
+ 
+ .picker-label {
+ 	left: 50%;
+ 	position: absolute;
+ }
+ 
+ .picker-button-left {
+ 	float: left;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picker-button-right {
+ 	float: right;
+ 	margin-bottom: 7px;
+ }
+ 
+ .picked-day {
+ 	background-color: #0070FF;
+ 	color: #FFFFFF;
+ }
+ 

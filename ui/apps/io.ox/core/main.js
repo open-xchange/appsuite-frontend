@@ -37,7 +37,8 @@ define("io.ox/core/main",
             });
     };
 
-    var topbar = $('#io-ox-topbar');
+    var topbar = $('#io-ox-topbar'),
+        container = topbar.find('launchers');
 
     function initRefreshAnimation() {
 
@@ -111,38 +112,128 @@ define("io.ox/core/main",
             topbar.find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
         });
 
-        ext.point("io.ox/core/topbar").extend({
-            id: 'default',
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'logo',
+            index: 100,
             draw: function () {
-
-                // logo
                 // add small logo to top bar
-                topbar.append(
+                this.append(
                     $('<div>', { id: 'io-ox-top-logo-small' })
                 );
+            }
+        });
 
-                // sign out
-                desktop.addLauncher("right", $('<i class="icon-off icon-white">'), function (e) {
-                    return logout();
-                }, gt('Sign out'));
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'notifications',
+            index: 10000,
+            draw: function () {
+                notifications.attach(desktop, 'right');
+                notifications.addFaviconNotification();
+            }
+        });
 
-                // help
-                desktop.addLauncher("right", $('<i class="icon-question-sign icon-white" id="io-ox-help-on">'), function () {
-                    require(['io.ox/help/center'], function (center) {
-                        setTimeout(function () {
-                            center.toggle();
-                        }, 1);
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'settings',
+            index: 100,
+            draw: function () {
+                this.append(
+                    $('<li>').append($('<a>').text(gt('Settings')))
+                    .on('click', function () {
+                        ox.launch('io.ox/settings/main');
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'settings',
+            index: 100,
+            draw: function () {
+                this.append(
+                    $('<li>').append($('<a>').text(gt('Settings')))
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'help',
+            index: 200,
+            draw: function () {
+                this.append(
+                    $('<li>').append($('<a>').text(gt('Help')))
+                    .on('click', function () {
+                        require(['io.ox/help/center'], function (center) {
+                            setTimeout(function () {
+                                center.toggle();
+                            }, 1);
+                        });
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'fullscreen',
+            index: 200,
+            draw: function () {
+                this.append(
+                    $('<li>').append($('<a>').text(gt('Fullscreen')))
+                    .on('click', function () {
+                        // Maximize
+                        if (window.BigScreen.request) {
+                            window.BigScreen.toggle();
+                        }
+                    })
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right/dropdown').extend({
+            id: 'logout',
+            index: 1000,
+            draw: function () {
+                this.append(
+                    $('<li class="divider"></li>'),
+                    $('<li>').append($('<a>').text(gt('Sign out')))
+                    .on('click', logout)
+                );
+            }
+        });
+
+        ext.point('io.ox/core/topbar/right').extend({
+            id: 'dropdown',
+            index: 1000,
+            draw: function () {
+                var a, ul;
+                this.append(
+                    $('<div class="launcher right dropdown">').append(
+                        a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
+                            $('<i class="icon-user icon-white">')
+                        ),
+                        ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
+                    )
+                );
+                ext.point('io.ox/core/topbar/right/dropdown').invoke('draw', ul);
+                a.dropdown();
+            }
+        });
+
+        // launchpad
+        ext.point('io.ox/core/topbar/launchpad').extend({
+            id: 'default',
+            draw: function () {
+                desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
+                    return require(["io.ox/launchpad/main"], function (m) {
+                        m.show();
                     });
-                }, gt('Help'));
+                });
+            }
+        });
 
-                // refresh
-                desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                        globalRefresh();
-                        return $.Deferred().resolve();
-                    }, gt('Refresh'))
-                    .attr("id", "io-ox-refresh-icon");
-                // refresh animation
-                initRefreshAnimation();
+        // favorites
+        ext.point('io.ox/core/topbar/favorites').extend({
+            id: 'default',
+            draw: function () {
 
                 var addLauncher = function (app, tooltip) {
                     var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
@@ -154,20 +245,31 @@ define("io.ox/core/main",
                     }, _.isString(tooltip) ? tooltip : void(0))
                     .attr('data-app-name', app.id);
                 };
-                // settings
-                addLauncher({ id: 'io.ox/settings', title: $('<i class="icon-cog icon-white">'), side: 'right' }, gt('Settings'));
 
-                // notifications
-                notifications.attach(desktop, "right");
-                notifications.addFaviconNotification();
-
-                // apps
-                desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
-                    return require(["io.ox/launchpad/main"], function (m) {
-                        m.show();
-                    });
-                });
                 _(appAPI.getFavorites()).each(addLauncher);
+            }
+        });
+
+
+        ext.point('io.ox/core/topbar').extend({
+            id: 'default',
+            draw: function () {
+
+                // right side
+                ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
+
+                // refresh
+                desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                        globalRefresh();
+                        return $.Deferred().resolve();
+                    }, gt('Refresh'))
+                    .attr("id", "io-ox-refresh-icon");
+
+                // refresh animation
+                initRefreshAnimation();
+
+                ext.point('io.ox/core/topbar/launchpad').invoke('draw');
+                ext.point('io.ox/core/topbar/favorites').invoke('draw');
             }
         });
 
@@ -247,7 +349,7 @@ define("io.ox/core/main",
 
         // add some senseless characters to avoid unwanted scrolling
         if (location.hash === '') {
-            location.hash = '#' + (_.getCookie('hash') || '!');
+            location.hash = '#!';
         }
 
         var def = $.Deferred(),

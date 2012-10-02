@@ -207,9 +207,8 @@ define('io.ox/mail/view-detail',
 
             // empty?
             if (source === '') {
-                return $('<div>').addClass('content').append(
-                    $('<div>')
-                    .addClass('infoblock backstripes')
+                return $('<div class="content">').append(
+                    $('<div class="alert alert-info">')
                     .text(gt('This mail has no content'))
                 );
             }
@@ -572,6 +571,15 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    var drawAllDropDown = function (node, label, data) {
+        // use extension pattern
+        var dd = new links.DropdownLinks({
+                label: label,
+                classes: 'all-link',
+                ref: 'io.ox/mail/all/actions'
+            }).draw.call(node, data);
+    };
+
     ext.point('io.ox/mail/detail').extend({
         index: 150,
         id: 'tocopy',
@@ -583,22 +591,23 @@ define('io.ox/mail/view-detail',
                 }, true),
                 showCC = data.cc && data.cc.length > 0,
                 showTO = data.to && (data.to.length > 1 || !justMe),
-                show = showTO || showCC;
+                show = showTO || showCC,
+                container = $('<div>').addClass('to-cc list');
 
             if (show) {
                 this.append(
-                    $('<div>')
-                        .addClass('to-cc list')
-                        .append(
-                            // TO
-                            $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
-                            util.serializeList(data, 'to'),
-                            $.txt(' \u00A0 '),
-                            // CC
-                            showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
-                            util.serializeList(data, 'cc')
-                        )
+                    container.append(
+                        // TO
+                        $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
+                        util.serializeList(data, 'to'),
+                        $.txt(' \u00A0 '),
+                        // CC
+                        showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
+                        util.serializeList(data, 'cc'),
+                        $.txt(' \u00A0 ')
+                    )
                 );
+                drawAllDropDown(container, gt('All'), data);
             }
         }
     });
@@ -722,9 +731,7 @@ define('io.ox/mail/view-detail',
             var self = this;
             if (data.modified === 1) {
                 this.append(
-                    $('<div>')
-                    .addClass('list')
-                    .addClass('infoblock backstripes cursor-pointer')
+                    $('<div class="alert alert-info cursor-pointer">')
                     .append(
                          $('<a>').text(gt('Show images')),
                          $('<i>').text(
@@ -757,6 +764,16 @@ define('io.ox/mail/view-detail',
             this.addClass('view')
             .attr('data-cid', data.folder_id + '.' + data.id)
             .append(that.getContent(data), $('<div>').addClass('mail-detail-clear-both'));
+
+            var content = this.find('.content');
+
+            setTimeout(function () {
+                var scrollHeight = content.get(0).scrollHeight;
+                if (scrollHeight > content.height()) {
+                    content.css('height', scrollHeight + 'px');
+                }
+                content = null;
+            }, 0);
         }
     });
 

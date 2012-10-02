@@ -1,3 +1,118 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
+ * @author David Bauer <david.bauer@open-xchange.com>
+ */
+
+.vertical-gradient(@startColor: #828282, @endColor: #333333) {
+    background-color: mix(@startColor, @endColor, 60%);
+    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
+    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
+    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
+    background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
+    background-repeat: repeat-x;
+    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
+}
+
+.files-scrollable-pane {
+    padding:13px;
+    width: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+}
+
+.files-iconview {
+
+    @innerHeight:   110px;
+    @outerWidth:    138px;
+
+    position: absolute;
+    overflow: auto;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    min-height: 100px;
+
+    .slideshowmenu {
+        position:absolute;
+        top:57px;
+        right:13px;
+
+        div a { cursor: pointer;}
+    }
+
+    .icon-container {
+        margin-right: -13px;
+    }
+
+    .icon-container .alert {
+        margin-right: 13px;
+    }
+
+    .breadcrumb a {
+        cursor:pointer;
+    }
+
+    .file-icon {
+
+        width: @outerWidth;
+        height: @innerHeight + 59;
+        margin: 0 20px 13px 0;
+        cursor: pointer;
+
+        .wrap {
+
+            width: @outerWidth;
+            height: @innerHeight + 20;
+            display: table-cell;
+            text-align: center;
+            vertical-align: bottom;
+
+            img {
+                max-height: @innerHeight; // till backend fix
+            }
+
+            [class^="icon-"] {
+                font-size: 60px;
+                line-height: 0.5em;
+                color: #ccc;
+            }
+
+            i.file-type-doc { color: #0092D0; }
+            i.file-type-xls { color: #2FB145; }
+            i.file-type-ppt { color: #ED4D21; }
+        }
+
+        .title {
+            text-align: center;
+            word-wrap: break-word;
+            height: 2.5em;
+            font-size: 14px;
+            line-height: 1.25em;
+            text-shadow: 0px 1px 2px #CCC
+            color: black;
+            margin: 0.5em 0 0.5em 0;
+        }
+    }
+
+    .file-icon:hover {
+        opacity: 0.5;
+    }
+
+    h4.search-query {
+        margin-bottom: 2em;
+    }
+}
 
 .has-publications {
     width: 27px;
@@ -13,6 +128,7 @@
 
 .file-details .title {
     margin-bottom: 0.5em;
+    word-wrap: break-word;
 }
 
 .file-details .basicInfo em {

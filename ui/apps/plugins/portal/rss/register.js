@@ -44,7 +44,6 @@ define("plugins/portal/rss/register",
             settings.set('needsMigration', false);
             settings.save();
         });
-            
     };
     
     var feeds = [];
@@ -54,7 +53,7 @@ define("plugins/portal/rss/register",
 
     _(tileGroups).each(function (tilegroup) {
         ext.point("io.ox/portal/widget").extend({
-            id: 'rss-' + tilegroup.index,
+            id: 'rss-' + tilegroup.groupname.replace(/[^a-z0-9]/g, '-'),
             index: 100,
             title: tilegroup.groupname,
             load: function () {

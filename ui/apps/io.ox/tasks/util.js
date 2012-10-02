@@ -114,7 +114,6 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     break;
                 }
                 
-                
                 endDate.setTime(prepareTime(endDate));
                 endDate.setHours(6);
                 if (weekDay < 1 || weekDay > 4) {
@@ -139,6 +138,10 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             },
     
             buildDropdownMenu: function (time) {
+                if (!time) {
+                    time = new Date();
+                }
+                
                 //normal times
                 var appendString = "<option finderId='0'>" + gt('in 5 minutes') + "</option>" +
                 "<option finderId='1'>" + gt('in 15 minutes') + "</option>" +
@@ -160,7 +163,6 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 } else if (i < 22) {
                     i = 4;
                 }
-                
                 
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];

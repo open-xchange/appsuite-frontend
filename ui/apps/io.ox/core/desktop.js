@@ -28,7 +28,8 @@ define("io.ox/core/desktop",
     // ref to core screen
     var core = $("#io-ox-core"),
         // top bar
-        topBar = $("#io-ox-topbar"),
+        topbar = $("#io-ox-topbar"),
+        launchers = topbar.find('.launchers'),
         // add launcher
         addLauncher = function (side, label, fn, tooltip) {
             // construct
@@ -86,9 +87,9 @@ define("io.ox/core/desktop",
             } else {
                 // just add
                 if (side === "left") {
-                    node.appendTo(topBar);
+                    node.appendTo(launchers);
                 } else {
-                    node.addClass("right").appendTo(topBar);
+                    node.addClass("right").appendTo(topbar);
                 }
             }
 
@@ -710,7 +711,7 @@ define("io.ox/core/desktop",
                 this.id = id;
                 this.name = name;
                 this.nodes = { title: $(), toolbar: $(), controls: $() };
-                this.search = { query: "" };
+                this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
                 this.detachable = true;
@@ -755,7 +756,10 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return $('<div class="window-controls">').append(
-                            // settings
+                            // fullscreen
+                            this.fullscreenButton = $('<div class="window-control pull-right">').hide()
+                                .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
+                                // settings
                             this.settingsButton = $('<div class="window-control">').hide()
                                 .text('\u270E'),
                             // close
@@ -842,7 +846,8 @@ define("io.ox/core/desktop",
                 this.hide = function () {
                     // detach if there are no iframes
                     this.trigger("beforehide");
-                    if (this.detachable && this.nodes.outer.find("iframe").length === 0) {
+                    // TODO: decide on whether or not to detach nodes
+                    if (false && this.detachable && this.nodes.outer.find("iframe").length === 0) {
                         this.nodes.outer.detach();
                     } else {
                         this.nodes.outer.hide();
@@ -1064,6 +1069,11 @@ define("io.ox/core/desktop",
                     )
                 );
 
+            // add default css class
+            if (opt.name) {
+                win.nodes.outer.addClass(opt.name.replace(/[.\/]/g, '-') + '-window');
+            }
+
             // draw window head
             ext.point(opt.name + '/window-head').invoke('draw', win.nodes);
             ext.point(opt.name + '/window-body').invoke('draw', win.nodes);
@@ -1140,57 +1150,66 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                $('<form>')
-                .on('submit', false)
-                .addClass('form-search')
-                .css({ 'float': 'right' })
-                .append(
-                    $('<label>', { 'for': searchId })
-                    .append(
-                        win.nodes.search = $("<input>", {
-                            type: "text",
-                            placeholder: "Search ...",
-                            tabindex: '1',
-                            size: "40",
-                            id: searchId
-                        })
-                        .tooltip({
-                            animation: false,
-                            title: 'Press &lt;enter> to search,<br>press &lt;esc> to clear',
-                            placement: 'bottom',
-                            trigger: 'focus'
-                        })
-                        .addClass('input-medium search-query')
-                        .on({
-                            keydown: function (e) {
-                                e.stopPropagation();
-                                if (e.which === 27) {
-                                    $(this).val('');
-                                    win.trigger("cancel-search", lastQuery = '');
-                                }
-                            },
-                            search: function (e) {
-                                e.stopPropagation();
-                                if ($(this).val() === "") {
-                                    $(this).blur();
-                                }
-                            },
-                            change: function (e) {
-                                e.stopPropagation();
-                                win.search.query = $(this).val();
-                                // trigger search?
-                                if (win.search.query !== "") {
-                                    if (win.search.query !== lastQuery) {
-                                        triggerSearch(lastQuery = win.search.query);
-                                    }
-                                } else if (lastQuery !== "") {
-                                    win.trigger("cancel-search", lastQuery = "");
-                                }
+                var setActive = function () {
+                    win.search.active = true;
+                    win.nodes.search.closest('form').addClass('active-search');
+                };
+
+                var setInactive = function () {
+                    win.search.active = false;
+                    win.nodes.search.val(win.search.query = '');
+                    win.nodes.search.closest('form').removeClass('active-search');
+                };
+
+                var searchHandler = {
+                    keydown: function (e) {
+                        e.stopPropagation();
+                        if (e.which === 27) {
+                            $(this).val('');
+                            setInactive();
+                            win.trigger("cancel-search", lastQuery = '');
+                        }
+                    },
+                    search: function (e) {
+                        e.stopPropagation();
+                        if ($(this).val() === "") {
+                            $(this).blur();
+                            setInactive();
+                        }
+                    },
+                    change: function (e) {
+                        e.stopPropagation();
+                        win.search.query = $(this).val();
+                        // trigger search?
+                        if (win.search.query !== '') {
+                            setActive();
+                            if (win.search.query !== lastQuery) {
+                                triggerSearch(lastQuery = win.search.query);
                             }
-                        })
+                        } else if (lastQuery !== "") {
+                            setInactive();
+                            win.trigger("cancel-search", lastQuery = "");
+                        }
+                    }
+                };
+
+                $('<form class="form-search pull-right">').append(
+                    $('<div class="input-append">').append(
+                        $('<label>', { 'for': searchId }).append(
+                            win.nodes.search = $('<input type="text" class="input-medium search-query">')
+                            .attr({
+                                tabindex: '1',
+                                placeholder: 'Search ...',
+                                id: searchId
+                            })
+                            .on(searchHandler)
+                            .placeholder()
+                        ),
+                        $('<button type="submit" class="btn"><i class="icon-search"></i></button>')
                     )
                 )
-                .prependTo(win.nodes.controls);
+                .on('submit', false)
+                .appendTo(win.nodes.controls);
             }
 
             // toolbar extension point
@@ -1216,6 +1235,16 @@ define("io.ox/core/desktop",
                 if (opt.close === true) {
                     win.nodes.closeButton.show().on("click", close);
                     win.setQuitOnClose(true);
+                }
+
+                // add fullscreen handler
+                if (opt.fullscreen === true && win.nodes.fullscreenButton) {
+                    win.nodes.fullscreenButton.show().on('click', function () {
+                        // Maximize
+                        if (window.BigScreen.enabled) {
+                            window.BigScreen.toggle(win.nodes.outer.get(0));
+                        }
+                    });
                 }
 
                 // set title

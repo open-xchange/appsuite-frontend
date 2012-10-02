@@ -54,7 +54,6 @@ define('io.ox/settings/main',
         win,
         // grid
         grid,
-        GRID_WIDTH = 330,
         // nodes
         left,
         right,
@@ -73,10 +72,9 @@ define('io.ox/settings/main',
     app.setLauncher(function () {
 
         app.setWindow(win = ox.ui.createWindow({
+            name: 'io.ox/settings',
             title: 'Settings',
-            toolbar: true,
-            titleWidth: (GRID_WIDTH + 27) + "px",
-            name: 'io.ox/settings'
+            toolbar: true
         }));
 
         var saveSettings = function () {
@@ -104,14 +102,9 @@ define('io.ox/settings/main',
 
         left = $('<div>')
             .addClass('leftside border-right')
-            .css({
-                width: GRID_WIDTH + 'px',
-                overflow: 'auto'
-            })
             .appendTo(win.nodes.main);
 
         right = $('<div>')
-            .css({ left: GRID_WIDTH + 1 + 'px', overflow: 'auto' })
             .addClass('rightside default-content-padding settings-detail-pane')
             .appendTo(win.nodes.main);
 
