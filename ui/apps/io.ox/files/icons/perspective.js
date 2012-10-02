@@ -107,7 +107,7 @@ define('io.ox/files/icons/perspective',
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text(file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2"))
+                $('<div class="title">').text(file.title ? file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2") : '')
             );
         }
     });
