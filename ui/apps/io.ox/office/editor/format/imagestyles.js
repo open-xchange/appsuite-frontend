@@ -105,6 +105,14 @@ define('io.ox/office/editor/format/imagestyles',
              * - 'largest': Text floats at the larger side of the image only.
              */
             textwrapside: { def: 'bothsides' }
+        },
+
+        // predefined image attributes for image float modes used in GUI
+        FLOAT_MODE_ATTRIBUTES = {
+            inline:       { inline: true },
+            leftFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
+            rightFloated: { inline: false, anchorhbase: 'column', anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
+            noneFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'center', textwrapmode: 'none' }
         };
 
     // private global functions ===============================================
@@ -126,10 +134,10 @@ define('io.ox/office/editor/format/imagestyles',
 
         var // the paragraph element containing the image
             paragraph = image.parent(),
-            // preceding div element used for vertical offset
-            verticalOffsetNode = image.prev('div.float'),
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
+            // preceding div element used for vertical offset
+            verticalOffsetNode = image.prev('div.float'),
             // first text node in paragraph
             firstTextNode = null,
             // current image width, in 1/100 mm
@@ -160,6 +168,9 @@ define('io.ox/office/editor/format/imagestyles',
             // TODO: Word uses fixed predefined margins in inline mode, we too?
             image.css('margin', '0 1mm');
             // ignore other attributes in inline mode
+
+            // TODO: positioning code still relies on the 'mode' data attribute
+            image.data('mode', 'inline');
 
         } else {
 
@@ -193,10 +204,9 @@ define('io.ox/office/editor/format/imagestyles',
             if (topOffset < 50) {
                 verticalOffsetNode.remove();
             } else if (verticalOffsetNode.length === 0) {
-                verticalOffsetNode = $('<div>').addClass('float').css({
-                    width: '0.1px',
-                    height: Utils.convertHmmToCssLength(topOffset, 'px', 0)
-                });
+                verticalOffsetNode = $('<div>', { contenteditable: false })
+                    .addClass('float')
+                    .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) });
             }
 
             // calculate left/right offset (only if image is anchored to column)
@@ -251,6 +261,8 @@ define('io.ox/office/editor/format/imagestyles',
                 leftMargin = Math.max(attributes.marginl, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
+                // TODO: positioning code still relies on the 'mode' data attribute
+                image.data('mode', 'rightFloated');
                 break;
             case 'right':
                 // image floats at left paragraph margin
@@ -258,12 +270,16 @@ define('io.ox/office/editor/format/imagestyles',
                 rightMargin = Math.max(attributes.marginr, 0);
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
+                // TODO: positioning code still relies on the 'mode' data attribute
+                image.data('mode', 'leftFloated');
                 break;
             default:
                 // no wrapping: will be modeled by left-floated with large CSS margins
                 wrapMode = 'right';
                 leftMargin = leftOffset;
                 rightMargin = Math.max(rightOffset, 0);
+                // TODO: positioning code still relies on the 'mode' data attribute
+                image.data('mode', 'noneFloated');
             }
 
             // set floating mode to image and positioning div
@@ -324,6 +340,22 @@ define('io.ox/office/editor/format/imagestyles',
         this.iterateReadWrite = this.iterateReadOnly;
 
     } // class ImageStyles
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Returns the images attributes that are needed to represent the passed
+     * image float mode as used in the GUI.
+     *
+     * @param {String} floatMode
+     *  The GUI image float mode.
+     *
+     * @returns {Object}
+     *  A map with image attributes, as name/value pairs.
+     */
+    ImageStyles.getAttributesFromFloatMode = function (floatMode) {
+        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : null;
+    };
 
     // exports ================================================================
 

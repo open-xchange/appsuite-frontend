@@ -141,7 +141,7 @@ define('io.ox/office/editor/controller',
                 },
 
                 'chain/image': {
-                    enable: function () { return editor.isImagePosition(); }
+                    enable: function () { return editor.isImageSelected(); }
                 },
                 'image/insert/file': {
                     set: function () { CommonDialogs.insertImageFile(app); }
@@ -154,7 +154,7 @@ define('io.ox/office/editor/controller',
                     enable: function (enabled) { return enabled && (editor.getImageFloatMode() !== 'inline'); },
                     set: function () { editor.deleteSelected(); }
                 },
-                'image/alignment': {
+                'format/image/floatmode': {
                     chain: 'chain/image',
                     get: function () { return editor.getImageFloatMode(); },
                     set: function (floatMode) { editor.setImageFloatMode(floatMode); }
