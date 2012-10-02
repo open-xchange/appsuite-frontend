@@ -1150,20 +1150,16 @@ define('io.ox/office/editor/editor',
             // insert an empty <span> with a text node, followed by a dummy <br>
             $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
+
         this.setReadonlyMode = function (readonly) {
             readonlyMode = readonly;
-            if (readonlyMode === true) {
-                editdiv.removeClass('user-select-text');
-                editdiv.attr('contenteditable', false);
-            } else {
-                editdiv.addClass('user-select-text');
-                editdiv.attr('contenteditable', true);
-            }
-
+            editdiv.toggleClass('user-select-text', !readonlyMode).attr('contenteditable', !readonlyMode);
         };
+
         this.isReadonlyMode = function () {
             return readonlyMode;
         };
+
         // PUBLIC TABLE METHODS
 
         this.isPositionInTable = function () {
