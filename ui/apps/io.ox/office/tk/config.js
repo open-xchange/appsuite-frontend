@@ -36,7 +36,7 @@ define('io.ox/office/tk/config',
      *  whether debug mode is enabled.
      */
     Config.isDebugAvailable = function () {
-        return Utils.getBooleanOption(documentsConfig, 'debugavailable', false);
+        return Utils.getBooleanOption(documentsConfig, 'debugavailable', true);
     };
 
     /**

@@ -73,6 +73,9 @@ define('io.ox/office/editor/editor',
             // shortcut for image styles
             imageStyles = documentStyles.getStyleSheets('image'),
 
+            // shortcut for table styles
+            tableStyles = documentStyles.getStyleSheets('table'),
+
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
 
@@ -95,6 +98,9 @@ define('io.ox/office/editor/editor',
 
             // list of paragraphs as jQuery object
             paragraphs = editdiv.children(),
+
+            // set document into write protected mode
+            readonlyMode = false,
 
             dbgoutEvents = false, dbgoutObjects = false;
 
@@ -766,7 +772,7 @@ define('io.ox/office/editor/editor',
                 endPos = _.copy(selection.endPaM.oxoPosition, true),
                 count = 1;  // default, adding one cell in each row
 
-            var selection = getSelection();
+            undomgr.startGroup();  // starting to group operations for undoing
 
             selection.adjust();
 
@@ -780,7 +786,8 @@ define('io.ox/office/editor/editor',
                 startRow = startPos.pop(),
                 endRow = endPos.pop(),
                 tablePos = _.copy(startPos, true),
-                endPosition = null;
+                endPosition = null,
+                attrs = {};
 
             for (var i = endRow; i >= startRow; i--) {
 
@@ -797,12 +804,35 @@ define('io.ox/office/editor/editor',
                 localEndCol++;  // adding new cell behind existing cell
                 var cellPosition = _.copy(rowPosition, true);
                 cellPosition.push(localEndCol);
-                var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: {gridspan: 1}};
-                // var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
+                attrs.gridspan = 1;  // only 1 grid for the new cell
+                var newOperation = {name: Operations.OP_CELL_INSERT, position: cellPosition, count: count, attrs: attrs};
                 applyOperation(newOperation, true, true);
+
+                // Applying new tablegrid, if the current tablegrid is not sufficient
+                var tableDomPoint = Position.getDOMPosition(paragraphs, tablePos),
+                    rowDomPoint = Position.getDOMPosition(paragraphs, rowPosition);
+
+                if ((tableDomPoint) && (tableDomPoint.node) && (Utils.getNodeName(tableDomPoint.node) === 'table')) {
+
+                    var tableGridCount = $(tableDomPoint.node).data('attributes').tablegrid.length,
+                        rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
+
+                    if (rowGridCount > tableGridCount) {
+
+                        var insertmode = 'behind',
+                            tablegrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, localEndCol, insertmode);
+
+                        // Setting new table grid attribute to table
+                        newOperation = { name: Operations.OP_ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        applyOperation(newOperation, true, true);
+                    }
+
+                }
 
                 endPosition = _.copy(cellPosition, true);
             }
+
+            undomgr.endGroup();
 
             endPosition.push(0);
             endPosition.push(0);
@@ -860,11 +890,19 @@ define('io.ox/office/editor/editor',
                 }
 
                 // Checking, if now the complete table is empty
-
                 if (deletedAllRows) {
                     newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation, true, true);
                 }
+
+                // Setting new table grid attribute to table
+                if (! deletedAllRows) {
+                    var tablegrid = _.copy($(tableNode).data('attributes').tablegrid, true);  // working on a copy, not changing the table attribute yet.
+                    tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
+                    newOperation = { name: Operations.OP_ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                    applyOperation(newOperation, true, true);
+                }
+
             }
 
             undomgr.endGroup();
@@ -900,10 +938,19 @@ define('io.ox/office/editor/editor',
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'TR'),
                 insertmode = 'behind',
                 gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition).start,
-                tableGrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
+                tablegrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
-            var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tableGrid, gridposition: gridPosition, insertmode: insertmode };
+
+            undomgr.startGroup();
+
+            var newOperation = { name: Operations.OP_COLUMN_INSERT, position: tablePos, tablegrid: tablegrid, gridposition: gridPosition, insertmode: insertmode };
             applyOperation(newOperation, true, true);
+
+            // Setting new table grid attribute to table
+            newOperation = { name: Operations.OP_ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+            applyOperation(newOperation, true, true);
+
+            undomgr.endGroup();
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -959,13 +1006,14 @@ define('io.ox/office/editor/editor',
                 selection.startPaM.oxoPosition.pop();
                 paragraphs = editdiv.children();
 
-                var tableGrid = [];
+                var tableGrid = [],
+                    width = 0;  // defaulting to 'auto'
 
                 for (var i = 0; i < size.width; i++) {
                     tableGrid.push(Utils.roundDigits(1 / size.width, 2));
                 }
 
-                var newOperation = {name: Operations.OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid}};
+                var newOperation = {name: Operations.OP_TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid, 'width': width}};
                 applyOperation(newOperation, true, true);
 
                 paragraphs = editdiv.children();
@@ -1102,7 +1150,20 @@ define('io.ox/office/editor/editor',
             // insert an empty <span> with a text node, followed by a dummy <br>
             $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
+        this.setReadonlyMode = function (readonly) {
+            readonlyMode = readonly;
+            if (readonlyMode === true) {
+                editdiv.removeClass('user-select-text');
+                editdiv.attr('contenteditable', false);
+            } else {
+                editdiv.addClass('user-select-text');
+                editdiv.attr('contenteditable', true);
+            }
 
+        };
+        this.isReadonlyMode = function () {
+            return readonlyMode;
+        };
         // PUBLIC TABLE METHODS
 
         this.isPositionInTable = function () {
@@ -1624,7 +1685,7 @@ define('io.ox/office/editor/editor',
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
                     self.trigger('selection', currentSelection);
-                } else if (focused) {
+                } else if (focused && !readonlyMode) {
                     // If not focused, browser selection might not be available...
                     Utils.warn('Editor.implCheckEventSelection(): missing selection!');
                 }
@@ -1764,11 +1825,7 @@ define('io.ox/office/editor/editor',
                         var tableNode = tablePos.node,
                             localattrs = {};
                         if ($(tableNode).data('attributes')) {
-                            localattrs = $(tableNode).data('attributes');
-                        }
-
-                        if ($(tableNode).data('attributes').tablegrid) {
-                            localattrs.tablegrid = $(tableNode).data('attributes').tablegrid;
+                            localattrs = _.copy($(tableNode).data('attributes'), true);
                         }
 
                         var tableUndoOperation = { name: Operations.OP_TABLE_INSERT, position: localStart, attrs: localattrs };
@@ -1912,11 +1969,7 @@ define('io.ox/office/editor/editor',
                     var localPos = _.copy(operation.position, true),
                         table = Position.getDOMPosition(paragraphs, localPos).node,
                         allRows = $(table).children('tbody, thead').children(),
-                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid),
-                        setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: _.copy($(table).data('attributes').tablegrid, true) };
-                        // setTableGridOperation = { name: Operations.OP_ATTRS_SET, attrs: $(table).data('attributes'), start: localPos, end: localPos };
-
-                    undomgr.addUndo(setTableGridOperation);
+                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid);
 
                     for (var i = (allCellRemovePositions.length - 1); i >= 0; i--) {
                         var rowPos = _.copy(localPos, true),
@@ -1993,7 +2046,6 @@ define('io.ox/office/editor/editor',
                     // at very different grid positions. It is only possible to remove the new cells with deleteCells operation.
                     var localPos = _.copy(operation.position, true),
                         table = Position.getDOMPosition(paragraphs, localPos).node,  // -> this is already the new grid with the new column!
-                        tablegrid = _.copy($(table).data('attributes').tablegrid, true),
                         allRows = $(table).children('tbody, thead').children(),
                         allCellInsertPositions = Table.getAllInsertPositions(allRows, operation.gridposition, operation.insertmode);
 
@@ -2006,13 +2058,7 @@ define('io.ox/office/editor/editor',
                         undomgr.addUndo(undoOperation);
                     }
 
-                    // Setting old tablegrid, recreating old table grid
-                    var removeGridPosition = operation.gridposition;
-                    if (operation.insertmode === 'behind') { removeGridPosition++; }
-                    tablegrid.splice(removeGridPosition, 1);
-                    var setTableGridOperation = { name: Operations.OP_TABLEGRID_SET, position: _.copy(operation.position), tablegrid: tablegrid };
-                    // setTableGridOperation = { name: Operations.OP_ATTRS_SET, attrs: $(table).data('attributes'), start: localPos, end: localPos };
-                    undomgr.addUndo(setTableGridOperation, operation);  // only one redo operation
+                    undomgr.addUndo(null, operation);  // only one redo operation
 
                     undomgr.endGroup();
                 }
@@ -2054,9 +2100,6 @@ define('io.ox/office/editor/editor',
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMergeParagraph(operation.start);
-            }
-            else if (operation.name === Operations.OP_TABLEGRID_SET) {
-                implSetTableGrid(operation.position, operation.tablegrid);
             }
             else if (operation.name === "xxxxxxxxxxxxxx") {
                 // TODO
@@ -3247,28 +3290,6 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        // helper operation for undo functionality,
-        // should be replaced by implSetAttributes
-        function implSetTableGrid(position, tablegrid) {
-
-            var localPos = _.copy(position, true),
-                tablePosition = Position.getDOMPosition(paragraphs, localPos);
-
-            if (tablePosition) {
-                var table = tablePosition.node,
-                    colgroup = $(table).children('colgroup');
-
-                colgroup.children('col').remove(); // removing all col entries
-
-                for (var i = 0; i < tablegrid.length; i++) {
-                    var oneGridWidth = Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%';  // converting to %
-                    colgroup.append($('<col>').css('width', oneGridWidth));
-                }
-
-                $(table).data('attributes').tablegrid = tablegrid;  // updating table data
-            }
-        }
-
         function implInsertParagraph(position) {
             var posLength = position.length - 1,
                 para = position[posLength],
@@ -3278,13 +3299,6 @@ define('io.ox/office/editor/editor',
                 var pos = _.copy(position, true);
                 pos[pos.length - 1] -= 1; // decreasing last value by 1, if new paragraphs are inserted
                 allParagraphs = Position.getAllAdjacentParagraphs(paragraphs, pos);
-
-                if (! allParagraphs) {
-                    var domPos = Position.getDOMPosition(paragraphs, pos);
-                    if ((domPos) && (domPos.node) && (Utils.getNodeName(domPos.node) === 'table')) {
-                        allParagraphs = $(domPos.node.parentNode).children();
-                    }
-                }
             }
 
             var newPara = $('<p>');
@@ -3312,27 +3326,10 @@ define('io.ox/office/editor/editor',
 
         function implInsertTable(pos, attrs) {
 
-            var position = _.copy(pos, true),
-                colgroup = $('<colgroup>'),
-                tableWidth = null;
-
-            if ((! attrs.width) || (attrs.width === 0)) {
-                tableWidth = "100%";
-            } else {
-                tableWidth = attrs.width * 100 + 'mm';
-            }
-
-            if (tableWidth !== null) {
-                $(table).css('width', tableWidth);  // setting width
-            }
-
-            for (var i = 0; i < attrs.tablegrid.length; i++) {
-                var oneGridWidth = Table.getGridWidthPercentage(attrs.tablegrid, attrs.tablegrid[i])  + '%';  // converting to %
-                colgroup.append($('<col>').css('width', oneGridWidth));
-            }
+            var position = _.copy(pos, true);
 
             // insert the table into the document
-            var table = $('<table>').data('attributes',  attrs).append(colgroup),
+            var table = $('<table>').append($('<colgroup>')),
                 domPosition = Position.getDOMPosition(paragraphs, position),
                 domParagraph = null,
                 insertBefore = true;
@@ -3360,6 +3357,12 @@ define('io.ox/office/editor/editor',
 
                 paragraphs = editdiv.children();
             }
+
+            // apply the passed table attributes
+            if (tableStyles) {
+                tableStyles.setElementAttributes(table, attrs);
+            }
+
         }
 
         function implSplitParagraph(position) {
@@ -3817,10 +3820,7 @@ define('io.ox/office/editor/editor',
 
             var table = Position.getDOMPosition(paragraphs, localPosition).node,
                 allRows = $(table).children('tbody, thead').children(),
-                allCols = $(table).children('colgroup').children(),
                 endColInFirstRow = -1;
-
-            allCols.slice(startGrid, endGrid + 1).remove();  // updating cols in colgroup
 
             allRows.each(
                 function (i, row) {
@@ -3841,16 +3841,6 @@ define('io.ox/office/editor/editor',
                     }
                 }
             );
-
-            allCols = $(table).children('colgroup').children(); // update allCols selection
-
-            var tablegrid = $(table).data('attributes').tablegrid;
-            tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
-
-            // updating percentages in cols
-            allCols.each(function (i) {
-                $(this).css('width', Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%');
-            });
 
             if ($(table).children('tbody, thead').children().children().length === 0) {   // no more columns
                 // This code should never be reached. If last column shall be deleted, deleteTable is called.
@@ -3900,16 +3890,6 @@ define('io.ox/office/editor/editor',
                     }
                 }
             );
-
-            // setting new widths of the grid elements (saved in tablegrid)
-            var colgroup = $(table).children('colgroup').append($('<col>')), // adding one element to colgroup
-                allCols = colgroup.children('col');
-
-            allCols.each(function (i) {
-                $(this).css('width', Table.getGridWidthPercentage(tablegrid, tablegrid[i])  + '%');
-            });
-
-            $(table).data('attributes').tablegrid = tablegrid;  // updating table data
 
             // Setting cursor to first position in table
             localPosition.push(0);
