@@ -35,21 +35,21 @@ define('io.ox/office/editor/controller',
                     enable: function () { return !editor.isReadonlyMode(); }
                 },
 
-                // global document actions
+                // document file
 
-                'action/export': {
+                'file/export': {
                     set: function () { app.save(); }
                 },
-                'action/flush': {
+                'file/flush': {
                     set: function () { app.flush(); }
                 },
-                'action/download': {
+                'file/download': {
                     set: function () { app.download(); }
                 },
-                'action/print': {
+                'file/print': {
                     set: function () { app.print(); }
                 },
-                'action/rename': {
+                'file/rename': {
                     chain: 'chain/editable',
                     get: function () {
                         var fileDesc = app.getFileDescriptor();
@@ -60,17 +60,17 @@ define('io.ox/office/editor/controller',
 
                 // document control
 
-                'action/undo': {
+                'document/undo': {
                     chain: 'chain/editable',
                     enable: function (enabled) { return enabled && editor.hasUndo(); },
                     set: function () { editor.undo(); }
                 },
-                'action/redo': {
+                'document/redo': {
                     chain: 'chain/editable',
                     enable: function (enabled) { return enabled && editor.hasRedo(); },
                     set: function () { editor.redo(); }
                 },
-                'action/search/quick': {
+                'document/quicksearch': {
                     get: function () { return editor.hasHighlighting(); },
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor

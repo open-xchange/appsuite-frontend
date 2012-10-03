@@ -636,6 +636,13 @@ define('io.ox/office/editor/main',
         };
 
         /**
+         * Returns the controller.
+         */
+        this.getController = function () {
+            return controller;
+        };
+
+        /**
          * Returns the global view object.
          */
         this.getView = function () {

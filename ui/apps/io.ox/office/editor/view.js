@@ -23,8 +23,8 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/component/menubox',
      'io.ox/office/tk/config',
      'io.ox/office/editor/format/lineheight',
-     'gettext!io.ox/office/main'
-
+     'gettext!io.ox/office/main',
+     'io.ox/office/editor/actions'
     ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, Config, LineHeight, gt) {
 
     'use strict';
@@ -199,8 +199,8 @@ define('io.ox/office/editor/view',
         function createToolBar(id, options) {
             // create common controls present in all tool bars
             return toolPane.createToolBar(id, options)
-                .addButton('action/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
-                .addButton('action/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
+                .addButton('document/undo', { icon: 'icon-io-ox-undo', tooltip: gt('Revert Last Operation') })
+                .addButton('document/redo', { icon: 'icon-io-ox-redo', tooltip: gt('Restore Last Operation') })
                 .addSeparator();
         }
 
@@ -240,9 +240,9 @@ define('io.ox/office/editor/view',
             // always refresh search results if edit fields receives focus
             searchQuery = searchField.val();
             if ((event.type === 'focus') || (oldSearchQuery !== searchQuery)) {
-                controller.change('action/search/quick', searchQuery);
+                controller.change('document/quicksearch', searchQuery);
                 oldSearchQuery = searchQuery;
-                matches = !searchQuery.length || controller.get('action/search/quick');
+                matches = !searchQuery.length || controller.get('document/quicksearch');
                 searchField.css('background-color', matches ? '' : '#ffcfcf');
             }
 
@@ -255,32 +255,28 @@ define('io.ox/office/editor/view',
          */
         function renameDocumentHandler() {
 
-            var filename = controller.get('action/rename') || gt('Unnamed'),
+            var filename = controller.get('file/rename') || gt('Unnamed'),
                 extensionPos = filename.lastIndexOf('.'),
                 displayName = (extensionPos !== -1 && extensionPos > 0) ? filename.substring(0, extensionPos) : filename,
                 extension = (displayName.length !== filename.length) ? filename.substring(extensionPos) : '';
 
-            require(['io.ox/core/tk/dialogs'], function (dialogs) {
+            require(['io.ox/office/tk/dialogs'], function (Dialogs) {
 
-                var // the text field for the document name
-                    textField = $('<input>', { placeholder: gt('Document name'), value: displayName }).addClass('nice-input');
+                var // options for the text dialog
+                    options = {
+                        value: displayName,
+                        placeholder: gt('Document name'),
+                        buttonLabel: gt('Rename')
+                    };
 
-                new dialogs.ModalDialog({ width: 400, easyOut: true })
-                .header($('<h4>').text(gt('Rename Document')))
-                .append(textField)
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('rename', gt('Rename'))
-                .show(function () {
-                    textField.focus();
-                    Utils.setTextFieldSelection(textField, true);
-                })
-                .done(function (action, data, node) {
-                    var newName = (action === 'rename') ? $.trim(textField.val()) : '';
+                Dialogs.showTextDialog(gt('Rename Document'), options).done(function (newName) {
+
                     // defer controller action after dialog has been closed to
                     // be able to focus the editor. TODO: better solution?
+                    newName = newName.trim();
                     window.setTimeout(function () {
                         if (newName.length > 0) {
-                            controller.change('action/rename', newName + extension);
+                            controller.change('file/rename', newName + extension);
                         } else {
                             controller.cancel();
                         }
@@ -343,12 +339,7 @@ define('io.ox/office/editor/view',
             nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editor.getNode())
         );
 
-        // create the tool bars and drop-down menus
-        toolPane.addMenu(new MenuBox(appWindow)
-                .addButton('action/download', { icon: 'icon-download', label: gt('Download') })
-                .addButton('action/print',    { icon: 'icon-print',    label: gt('Print') }),
-            { label: gt('File') });
-
+        // create the tool bars
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
@@ -367,10 +358,10 @@ define('io.ox/office/editor/view',
             .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
             .addRadioGroup('format/paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, copyMode: 'icon' })
-                .addOptionButton('left',    { icon: 'icon-align-left',    tooltip: gt('Left') })
-                .addOptionButton('center',  { icon: 'icon-align-center',  tooltip: gt('Center') })
-                .addOptionButton('right',   { icon: 'icon-align-right',   tooltip: gt('Right') })
-                .addOptionButton('justify', { icon: 'icon-align-justify', tooltip: gt('Justify') })
+                .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
+                .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
+                .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
+                .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
             .addRadioGroup('format/paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, copyMode: 'icon' })
@@ -428,7 +419,7 @@ define('io.ox/office/editor/view',
                 .addButton('debug/toggle', { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',   { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addSeparator()
-                .addButton('action/flush', { icon: 'icon-share-alt', label: gt('Flush') });
+                .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
 
         // make the format tool bar visible

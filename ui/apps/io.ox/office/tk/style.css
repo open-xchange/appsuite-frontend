@@ -148,9 +148,14 @@ i.icon-io-ox-italic.de_DE           { background-position: -140px      0; }
 i.icon-io-ox-underline              { background-position: -160px      0; }
 i.icon-io-ox-underline.fr_FR        { background-position: -180px      0; }
 i.icon-io-ox-font-height            { background-position: -200px      0; }
+
 i.icon-io-ox-line-spacing-1         { background-position: -220px      0; }
 i.icon-io-ox-line-spacing-1-5       { background-position: -240px      0; }
 i.icon-io-ox-line-spacing-2         { background-position: -260px      0; }
+i.icon-io-ox-align-left             { background-position: -280px      0; }
+i.icon-io-ox-align-center           { background-position: -300px      0; }
+i.icon-io-ox-align-right            { background-position: -320px      0; }
+i.icon-io-ox-align-justify          { background-position: -340px      0; }
 
 i.icon-io-ox-table                  { background-position:      0  -20px; }
 i.icon-io-ox-table-insert-row       { background-position:  -20px  -20px; }
@@ -572,55 +577,6 @@ div.io-ox-view-component {
                             z-index: 24;
                             background-color: fade(@selected-border-color, 75%);
                         }
-                    }
-                }
-            }
-        }
-    }
-
-    /* top-level tab bar --------------------------------------------------- */
-
-    &.tabbar {
-        padding: 0;
-
-        > span {
-            display: inline-block;
-            position: relative;
-            .vertical-gradient(@tab-accented-fill-color, @tab-fill-color);
-            border-top: 1px solid black;
-
-            > .group {
-                display: inline-block;
-
-                /* style buttons as tabs */
-                > button {
-                    padding-left: 12px;
-                    padding-right: 12px;
-                    border: none;
-    
-                    /* semi-transparency for all contents of the button */
-                    &:not(.selected) > * { .opacity(0.7); }
-    
-                    /* override the default style of selected buttons */
-                    &.selected, &.selected:active {
-                        background: @tab-selected-fill-color !important;
-                        color: @control-text-color;
-                        cursor: default;
-                    }
-                }
-
-                /* text color */
-                > button, > label {
-                    color: @tab-text-color;
-                }
-
-                /* mouse/keyboard effects (not for disabled group) */
-                &:not(.disabled) > button:not(.disabled):not(.selected) {
-                    &:hover, &:focus, &:active {
-                        background: @tab-accented-fill-color;
-
-                        /* remove semi-transparency for all contents of the button */
-                        > * { .opacity(1); }
                     }
                 }
             }
