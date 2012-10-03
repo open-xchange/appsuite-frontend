@@ -102,6 +102,8 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                     }
                 });
             });
-        }
+            
+        },
+        formats: formats
     };
 });
