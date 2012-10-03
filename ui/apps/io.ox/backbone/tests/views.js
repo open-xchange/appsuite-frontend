@@ -341,8 +341,6 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                     };
                     
                     j.spyOn(extension, 'onCustomEvent');
-                    j.spyOn(extension, 'onTitleInvalid');
-                    j.spyOn(extension, 'onTitleValid');
 
                     point.extend(extension);
                     
@@ -357,11 +355,88 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
                 
                 j.it("should allow extensions to use the parent view as an event bus", function () {
-                
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    point.extend({
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        
+                        render: function () {
+                            this.$el.text("Hello");
+                            this.baton.parentView.trigger("event");
+                        }
+                    });
+                    
+                    var receivedEvent = false;
+                    
+                    var View = point.createView();
+                    
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    var view = new View({model: recipe});
+                    view.on('event', function () {
+                        receivedEvent = true;
+                    });
+                    view.render();
+                    
+                    j.expect(receivedEvent).toEqual(true);
+                    
                 });
                     
                 j.it("should allow sub extension points", function () {
-                
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var subpoint1 = point.createSubpoint("section1", {tagName: 'div', className: 's1'});
+                    var subpoint2 = point.createSubpoint("section2", {tagName: 'div', className: 's2'});
+                    
+                    
+                    subpoint1.extend({
+                        id: 'view1.1',
+                        tagName: 'div',
+                        className: 'view11',
+                        render: function () {
+                            this.$el.text("1.1");
+                        }
+                    });
+                    
+                    subpoint1.extend({
+                        id: 'view1.2',
+                        tagName: 'div',
+                        className: 'view12',
+                        render: function () {
+                            this.$el.text("1.2");
+                        }
+                    });
+                    
+                    subpoint2.extend({
+                        id: 'view2.1',
+                        tagName: 'div',
+                        className: 'view21',
+                        render: function () {
+                            this.$el.text("2.1");
+                        }
+                    });
+                    
+                    subpoint2.extend({
+                        id: 'view2.2',
+                        tagName: 'div',
+                        className: 'view22',
+                        render: function () {
+                            this.$el.text("2.2");
+                        }
+                    });
+
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    var $el = new View({model: recipe}).render().$el;
+                    
+                    j.expect($el.find('.s1 .view11').text()).toEqual("1.1");
+                    j.expect($el.find('.s1 .view12').text()).toEqual("1.2");
+                    j.expect($el.find('.s2 .view21').text()).toEqual("2.1");
+                    j.expect($el.find('.s2 .view22').text()).toEqual("2.2");
+                    
                 });
                 
             });

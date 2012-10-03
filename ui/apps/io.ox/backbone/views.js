@@ -219,17 +219,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
 
     }
-
-
-    function BasicView(options) {
-        _.extend(this, options);
-
-        this.update = this.update || function () {
-            this.$el.empty();
-            this.render();
-        };
-    }
-
     function AttributeView(options) {
         _.extend(this, {
 
@@ -275,8 +264,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         point: function (name) {
             return new ViewExtensionPoint(name);
         },
-
-        BasicView: BasicView,
         AttributeView: AttributeView,
 
         ext: ext
