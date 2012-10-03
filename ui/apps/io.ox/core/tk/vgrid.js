@@ -586,9 +586,11 @@ define('io.ox/core/tk/vgrid',
                                 container.css({ visibility: '' }).parent().idle();
                             })
                             .done(function () {
+                                // vars
+                                var id = _.url.hash('id'), ids, cid, index, selectionChanged;
                                 // use url?
-                                if (_.url.hash('id') !== undefined) {
-                                    var ids = _.url.hash('id').split(/,/), cid, index, selectionChanged;
+                                ids = id !== undefined ? id.split(/,/) : [];
+                                if (ids.length && self.selection.contains(ids)) {
                                     // convert ids to objects first - avoids problems with
                                     // non-existing items that cannot be resolved in selections
                                     ids = _(ids).map(deserialize);

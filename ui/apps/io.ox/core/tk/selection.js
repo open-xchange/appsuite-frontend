@@ -520,6 +520,23 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             return getIndex(obj);
         };
 
+        this.isEmpty = function () {
+            for (var id in selectedItems) {
+                return false;
+            }
+            return true;
+        };
+
+        this.contains = function (ids) {
+            return _([].concat(ids)).inject(function (memo, id) {
+                return memo && id in observedItemsIndex;
+            }, true);
+        };
+
+        this.getLastIndex = function () {
+            return lastIndex;
+        };
+
         /**
          * Keyboard support
          */
