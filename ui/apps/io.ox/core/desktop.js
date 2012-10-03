@@ -760,10 +760,10 @@ define("io.ox/core/desktop",
                             this.fullscreenButton = $('<div class="window-control pull-right">').hide()
                                 .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
                                 // settings
-                            this.settingsButton = $('<div class="window-control">').hide()
+                            this.settingsButton = $('<div class="window-control pull-right">').hide()
                                 .text('\u270E'),
                             // close
-                            this.closeButton = $('<div class="window-control">').hide()
+                            this.closeButton = $('<div class="window-control pull-right">').hide()
                                 .append($('<a class="close">&times;</a>'))
                         );
                     }
