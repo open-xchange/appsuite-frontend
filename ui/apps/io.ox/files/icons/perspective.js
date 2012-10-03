@@ -161,6 +161,7 @@ define('io.ox/files/icons/perspective',
                 displayedRows,
                 layout,
                 recalculateLayout,
+                that = this,
 
                 baton = new ext.Baton({ app: app }),
 
@@ -223,9 +224,6 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
-                        $('.breadcrumb').after($('<div class="slideshowmenu pull-right">'));
-                        carousel.addLink($('.slideshowmenu'), app, allIds);
-                        carousel.addFullscreenLink($('.slideshowmenu'), app, allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
@@ -234,6 +232,10 @@ define('io.ox/files/icons/perspective',
                             $('<div class="alert alert-info">').text(response.error)
                         );
                     });
+
+                $('.breadcrumb').after($('<div class="slideshowmenu pull-right">'));
+                carousel.addLink($('.slideshowmenu'), app, allIds);
+                carousel.addFullscreenLink($('.slideshowmenu'), app, allIds);
             };
 
             recalculateLayout = function () {
@@ -278,9 +280,13 @@ define('io.ox/files/icons/perspective',
 
             $(window).resize(_.debounce(recalculateLayout, 300));
 
-            // TODO fix cancel-search
             win.on('search', function () {
                 drawFirst();
+            });
+
+            win.on('cancel-search', function () {
+                // TODO: Abort xhr request if still running
+                that.render(app);
             });
 
 //            // published?

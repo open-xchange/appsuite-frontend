@@ -266,6 +266,7 @@ define('plugins/portal/twitter/register',
             self.empty().append(
                 $('<a>').text(gt('Tweet')).attr({
                     href: 'https://twitter.com/share',
+                    target: '_blank',
                     'class': 'twitter-share-button io-ox-twitter-action-tweet',
                     'data-count': 'none',
                     'data-size': 'large'

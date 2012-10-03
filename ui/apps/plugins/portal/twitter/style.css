@@ -42,7 +42,7 @@
 .io-ox-twitter-reply, .io-ox-twitter-retweet, .io-ox-twitter-favorite {
     display: inline-block;
     float: right;
-    margin-left: 0.5em;
+    margin-left: 1em;
     overflow: hidden;
     padding-left: 16px;
 }
@@ -54,7 +54,7 @@
     position: absolute;
     height: 16px;
     width: 16px;
-    margin-left: -16px;
+    margin-left: -20px;
 }
 .io-ox-twitter-reply:before {
     background-position: 0 0;
