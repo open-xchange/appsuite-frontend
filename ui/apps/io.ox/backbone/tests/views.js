@@ -285,6 +285,7 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                     recipe.trigger('valid:title');
                     j.expect(extension.onTitleValid).toHaveBeenCalled();
 
+
                     
                     recipe.trigger('change:description');
                     j.expect(extension.onDescriptionChange).toHaveBeenCalled();
@@ -322,7 +323,41 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
                 });
                                 
                 j.it("should be able to register listeners for model events", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var extension = {
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        modelEvents: {
+                            "customEvent": "onCustomEvent"
+                        },
+                        
+                        render: function () {
+                            this.$el.text("Hello");
+                        },
+                        onCustomEvent: function () {
+                        }
+                    };
                     
+                    j.spyOn(extension, 'onCustomEvent');
+                    j.spyOn(extension, 'onTitleInvalid');
+                    j.spyOn(extension, 'onTitleValid');
+
+                    point.extend(extension);
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    new View({model: recipe}).render();
+                    
+                    recipe.trigger('customEvent');
+                    j.expect(extension.onCustomEvent).toHaveBeenCalled();
+                    
+                });
+                
+                j.it("should allow extensions to use the parent view as an event bus", function () {
+                
                 });
                     
                 j.it("should allow sub extension points", function () {
@@ -335,9 +370,6 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
             
             });
             
-            j.describe("BasicView", function () {
-            
-            });
         }
     });
     
