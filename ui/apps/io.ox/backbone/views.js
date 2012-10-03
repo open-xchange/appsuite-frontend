@@ -224,7 +224,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             render: function () {
                 var self = this;
-
+                var first = true;
                 _([this.attribute]).chain().flatten().each(function (attribute) {
                     var value = self.model.get(attribute);
                     if (self.transform && self.transform[attribute]) {
@@ -232,12 +232,16 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.transform) {
                         value = self.transform(value);
                     }
-
+                    if (!first) {
+                        self.$el.append($.txt(" "));
+                    }
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(value));
                     } else if (self.initialValue) {
                         self.$el.append($.txt(self.initialValue));
                     }
+                    
+                    first = false;
                 });
 
             },

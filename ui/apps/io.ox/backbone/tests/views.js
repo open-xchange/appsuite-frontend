@@ -442,9 +442,80 @@ define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/m
             });
                 
             j.describe("AttributeView", function () {
-            
+                j.it("should display and update an attribute value", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    point.extend(new views.AttributeView({
+                        id: 'title',
+                        tagName: 'h1',
+                        attribute: 'title'
+                    }));
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23, title: 'original title'});
+                    
+                    var $el = new View({model: recipe}).render().$el;
+                    
+                    j.expect($el.find("h1").text()).toEqual("original title");
+                    
+                    recipe.set("title", "updated title");
+                    
+                    j.expect($el.find("h1").text()).toEqual("updated title");
+                    
+                });
+                
+                j.it("should be able to handle multiple attributes", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    point.extend(new views.AttributeView({
+                        id: 'title',
+                        tagName: 'h1',
+                        attribute: ['title', 'subtitle']
+                    }));
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23, title: 'original title', subtitle: 'subtitle'});
+                    
+                    var $el = new View({model: recipe}).render().$el;
+                    
+                    j.expect($el.find("h1").text()).toEqual("original title subtitle");
+                    
+                    recipe.set("title", "updated title");
+                    
+                    j.expect($el.find("h1").text()).toEqual("updated title subtitle");
+                    
+                    recipe.set("subtitle", "updated subtitle");
+                    
+                    j.expect($el.find("h1").text()).toEqual("updated title updated subtitle");
+                    
+                });
+                
+                j.it("should allow a transformation function to be applied to values", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    point.extend(new views.AttributeView({
+                        id: 'title',
+                        tagName: 'h1',
+                        attribute: 'title',
+                        transform: {
+                            title: function (title) {
+                                return "The great " + title;
+                            }
+                        }
+                    }));
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23, title: 'original title'});
+                    
+                    var $el = new View({model: recipe}).render().$el;
+                    
+                    j.expect($el.find("h1").text()).toEqual("The great original title");
+                    
+                    recipe.set("title", "updated title");
+                    
+                    j.expect($el.find("h1").text()).toEqual("The great updated title");
+                });
             });
-            
         }
     });
     
