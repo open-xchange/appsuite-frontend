@@ -10,9 +10,338 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/views"], function (ext, ModelFactory, views) {
+define("io.ox/backbone/tests/views", ["io.ox/core/extensions", "io.ox/backbone/modelFactory", "io.ox/backbone/views", "io.ox/backbone/tests/recipeApi"], function (ext, ModelFactory, views, api) {
     "use strict";
     
+    var factory = new ModelFactory({
+        ref: "io.ox/backbone/tests/views/factory" + _.now(),
+        api: api
+    });
+    
+    ext.point("test/suite").extend({
+        id: 'backbone-views',
+        index: 100,
+        test: function (j, utils) {
+            
+            j.describe("view extension points", function () {
+                
+                j.it("should provide an extension point to draw into", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    
+                    point.basicExtend({
+                        id: 'testExtension',
+                        draw: function () {
+                            this.append(
+                                $('<div class="find-me">').text("Hello")
+                            );
+                        }
+                    });
+                    
+                    var View = point.createView();
+                    
+                    var $el = new View().render().$el;
+                    
+                    j.expect($el.find('.find-me').text()).toEqual("Hello");
+                    
+                });
+                
+                
+                j.it("should be extensible through new views", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    
+                    point.extend({
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        render: function () {
+                            this.$el.text("Hello");
+                        }
+                    });
+                    
+                    var View = point.createView();
+                    
+                    var $el = new View().render().$el;
+                    
+                    j.expect($el.find('.find-me').text()).toEqual("Hello");
 
+                });
+                
+                j.it("should have extension views mark their node with extension-point, extension-id and objects composite id", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    
+                    point.extend({
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        render: function () {
+                            this.$el.text("Hello");
+                        }
+                    });
+                    
+                    var View = point.createView();
+                    
+                    var $el = new View({model: factory.create({folder: 12, id: 23})}).render().$el;
+                    
+                    var $extensionNode = $el.find('.find-me');
+                    
+                    j.expect($extensionNode.data('extension-id')).toEqual("view");
+                    j.expect($extensionNode.data('extension-point')).toEqual(ref);
+                    j.expect($extensionNode.data('composite-id')).toEqual("id.folder : 23.12");
+                });
+                
+                j.it("should provide access to the baton, model and element to extension views", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var extension = null;
+                    
+                    point.extend({
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        render: function () {
+                            this.$el.text("Hello");
+                            extension = this;
+                        }
+                    });
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    var $el = new View({model: recipe}).render().$el;
+                    
+                    j.expect(extension).not.toEqual(null);
+                    
+                    j.expect(extension.baton).toBeDefined();
+                    j.expect(extension.baton).not.toEqual(null);
+                    j.expect(extension.baton.model).toEqual(recipe);
+                    j.expect(extension.baton instanceof ext.Baton).toEqual(true);
+                    
+                    j.expect(extension.model).toBeDefined();
+                    j.expect(extension.model).not.toEqual(null);
+                    j.expect(extension.model).toEqual(recipe);
+
+                    
+                    j.expect(extension.$el).toBeDefined();
+                    j.expect(extension.$el).not.toEqual(null);
+                    j.expect(extension.$el.text()).toEqual("Hello");
+                    
+                });
+                
+                j.it("should automatically trigger update, invalid and valid methods", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var extension = {
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        render: function () {
+                            this.$el.text("Hello");
+                        },
+                        update: function () {
+                        },
+                        modelInvalid: function () {
+                        },
+                        modelValid: function () {
+                        }
+                    };
+                    
+                    j.spyOn(extension, 'update');
+                    j.spyOn(extension, 'modelInvalid');
+                    j.spyOn(extension, 'modelValid');
+
+                    point.extend(extension);
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    new View({model: recipe}).render();
+                    
+                    recipe.trigger('change');
+                    j.expect(extension.update).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid');
+                    j.expect(extension.modelInvalid).toHaveBeenCalled();
+
+                    
+                    recipe.trigger('valid');
+                    j.expect(extension.modelValid).toHaveBeenCalled();
+
+                });
+                
+                j.it("should allow extensions to observe an attribute", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var extension = {
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        observe: 'title',
+                        
+                        render: function () {
+                            this.$el.text("Hello");
+                        },
+                        onTitleChange: function () {
+                        },
+                        onTitleInvalid: function () {
+                        },
+                        onTitleValid: function () {
+                        }
+                    };
+                    
+                    j.spyOn(extension, 'onTitleChange');
+                    j.spyOn(extension, 'onTitleInvalid');
+                    j.spyOn(extension, 'onTitleValid');
+
+                    point.extend(extension);
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    new View({model: recipe}).render();
+                    
+                    recipe.trigger('change:title');
+                    j.expect(extension.onTitleChange).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid:title');
+                    j.expect(extension.onTitleInvalid).toHaveBeenCalled();
+
+                    
+                    recipe.trigger('valid:title');
+                    j.expect(extension.onTitleValid).toHaveBeenCalled();
+                });
+                
+                j.it("should allow extensions to observe multiple attributes, and deal gracefully with snake-case or snake_case names", function () {
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    var extension = {
+                        id: 'view',
+                        tagName: 'div',
+                        className: 'find-me',
+                        observe: 'title description servings-number recipe_dot_com_rating',
+                        
+                        render: function () {
+                            this.$el.text("Hello");
+                        },
+                        onTitleChange: function () {
+                        },
+                        onTitleInvalid: function () {
+                        },
+                        onTitleValid: function () {
+                        },
+                        onDescriptionChange: function () {
+                        },
+                        onDescriptionInvalid: function () {
+                        },
+                        onDescriptionValid: function () {
+                        },
+                        onServingsNumberChange: function () {
+                        },
+                        onServingsNumberInvalid: function () {
+                        },
+                        onServingsNumberValid: function () {
+                        },
+                        onRecipeDotComRatingChange: function () {
+                        },
+                        onRecipeDotComRatingInvalid: function () {
+                        },
+                        onRecipeDotComRatingValid: function () {
+                        }
+                        
+                    };
+                    
+                    j.spyOn(extension, 'onTitleChange');
+                    j.spyOn(extension, 'onTitleInvalid');
+                    j.spyOn(extension, 'onTitleValid');
+                    
+                    j.spyOn(extension, 'onDescriptionChange');
+                    j.spyOn(extension, 'onDescriptionInvalid');
+                    j.spyOn(extension, 'onDescriptionValid');
+
+                    
+                    j.spyOn(extension, 'onServingsNumberChange');
+                    j.spyOn(extension, 'onServingsNumberInvalid');
+                    j.spyOn(extension, 'onServingsNumberValid');
+
+                    j.spyOn(extension, 'onRecipeDotComRatingChange');
+                    j.spyOn(extension, 'onRecipeDotComRatingInvalid');
+                    j.spyOn(extension, 'onRecipeDotComRatingValid');
+
+                    point.extend(extension);
+                    
+                    var View = point.createView();
+                    var recipe = factory.create({folder: 12, id: 23});
+                    
+                    new View({model: recipe}).render();
+                    
+                    recipe.trigger('change:title');
+                    j.expect(extension.onTitleChange).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid:title');
+                    j.expect(extension.onTitleInvalid).toHaveBeenCalled();
+
+                    recipe.trigger('valid:title');
+                    j.expect(extension.onTitleValid).toHaveBeenCalled();
+
+                    
+                    recipe.trigger('change:description');
+                    j.expect(extension.onDescriptionChange).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid:description');
+                    j.expect(extension.onDescriptionInvalid).toHaveBeenCalled();
+
+                    recipe.trigger('valid:description');
+                    j.expect(extension.onDescriptionValid).toHaveBeenCalled();
+
+                    
+                    
+                    recipe.trigger('change:servings-number');
+                    j.expect(extension.onServingsNumberChange).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid:servings-number');
+                    j.expect(extension.onServingsNumberInvalid).toHaveBeenCalled();
+
+                    
+                    recipe.trigger('valid:servings-number');
+                    j.expect(extension.onServingsNumberValid).toHaveBeenCalled();
+
+                    
+                    
+                    recipe.trigger('change:recipe_dot_com_rating');
+                    j.expect(extension.onRecipeDotComRatingChange).toHaveBeenCalled();
+                    
+                    recipe.trigger('invalid:recipe_dot_com_rating');
+                    j.expect(extension.onRecipeDotComRatingInvalid).toHaveBeenCalled();
+
+                    
+                    recipe.trigger('valid:recipe_dot_com_rating');
+                    j.expect(extension.onTitleValid).toHaveBeenCalled();
+
+                });
+                                
+                j.it("should be able to register listeners for model events", function () {
+                    
+                });
+                    
+                j.it("should allow sub extension points", function () {
+                
+                });
+                
+            });
+                
+            j.describe("AttributeView", function () {
+            
+            });
+            
+            j.describe("BasicView", function () {
+            
+            });
+        }
+    });
+    
+    
+    
     return {};
 });
