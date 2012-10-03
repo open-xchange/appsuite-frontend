@@ -157,7 +157,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             });
         },
         getCompositeId: function () {
-            return (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
+            return "id.folder : " + (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
         },
         isValid: function () {
             return this._valid;

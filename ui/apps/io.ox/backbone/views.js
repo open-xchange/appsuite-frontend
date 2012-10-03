@@ -15,6 +15,43 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
     
     var views;
     
+    function attributeDefinitions(observeDefinition) {
+        
+        if (_.isString(observeDefinition)) {
+            return attributeDefinitions(observeDefinition.split(/\s+/));
+        }
+        
+        return _(observeDefinition).map(function (attributeDefinition) {
+            
+            if (_.isObject(attributeDefinition)) {
+                return attributeDefinition;
+            }
+            
+            var canonicalName = "";
+            var forceUpcase = true;
+            for (var i = 0, length = attributeDefinition.length; i < length; i++) {
+                var c = attributeDefinition.charAt(i);
+                
+                if (c === '-' || c === '_') {
+                    forceUpcase = true;
+                } else {
+                    if (forceUpcase) {
+                        c = c.toUpperCase();
+                        forceUpcase = false;
+                    }
+                    
+                    canonicalName = canonicalName + c;
+                }
+            }
+            
+            return {
+                canonicalName: canonicalName,
+                attributeName: attributeDefinition
+            };
+            
+        });
+    
+    }
     
     function ViewExtensionPoint(name) {
         
@@ -39,9 +76,15 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     });
                 }
                 
-                if (this.validationError) {
+                if (this.modelInvalid) {
                     self.observeModel('invalid', function () {
-                        self.validationError();
+                        self.modelInvalid();
+                    });
+                }
+                
+                if (this.modelValid) {
+                    self.observeModel('invalid', function () {
+                        self.modelValid();
                     });
                 }
                 
@@ -55,12 +98,35 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     });
                 }
                 
+                if (options.observe) {
+                    _(attributeDefinitions(options.observe)).each(function (definition) {
+                        if (self['on' + definition.canonicalName + 'Change']) {
+                            self.observeModel('change:' + definition.attributeName, function () {
+                                self['on' + definition.canonicalName + 'Change'].call(self);
+                            });
+                        }
+                        if (self['on' + definition.canonicalName + 'Invalid']) {
+                            self.observeModel('invalid:' + definition.attributeName, function () {
+                                self['on' + definition.canonicalName + 'Invalid'].call(self);
+                            });
+                        }
+                        
+                        if (self['on' + definition.canonicalName + 'Valid']) {
+                            self.observeModel('valid:' + definition.attributeName, function () {
+                                self['on' + definition.canonicalName + 'Valid'].call(self);
+                            });
+                        }
+                    });
+                }
+                
                 this.$el.attr({
                     'data-extension-id': extOptions.id || id,
                     'data-extension-point': name,
-                    'data-composite-id': this.model.getCompositeId()
+                    'data-composite-id': (this.model && this.model.getCompositeId) ? this.model.getCompositeId() : ''
                 });
                 
+                this.baton = ext.Baton.wrap(this.options);
+
                 if (options.init) {
                     options.init.apply(this, $.makeArray(arguments));
                 }
@@ -68,6 +134,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 if (options.customizeNode) {
                     this.customizeNode();
                 }
+                
             };
             
             options.close = options.close || function () {
@@ -126,7 +193,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
         
         this.createView = function (options) {
-            var id = options.id;
+            options = options || {};
+            
+            var id = options.id || '';
             delete options.id;
             
             options.render = options.render || function () {
@@ -159,21 +228,12 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
     }
     
     
-    function BasicView(options) {
-        _.extend(this, options);
-        
-        this.update = this.update || function () {
-            this.$el.empty();
-            this.render();
-        };
-    }
-    
     function AttributeView(options) {
         _.extend(this, {
             
             render: function () {
                 var self = this;
-                
+                var first = true;
                 _([this.attribute]).chain().flatten().each(function (attribute) {
                     var value = self.model.get(attribute);
                     if (self.transform && self.transform[attribute]) {
@@ -181,12 +241,16 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.transform) {
                         value = self.transform(value);
                     }
-                    
+                    if (!first) {
+                        self.$el.append($.txt(" "));
+                    }
                     if (self.model.isSet(attribute)) {
                         self.$el.append($.txt(value));
                     } else if (self.initialValue) {
                         self.$el.append($.txt(self.initialValue));
                     }
+                    
+                    first = false;
                 });
                 
             },
@@ -214,7 +278,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             return new ViewExtensionPoint(name);
         },
         
-        BasicView: BasicView,
         AttributeView: AttributeView,
         
         ext: ext
