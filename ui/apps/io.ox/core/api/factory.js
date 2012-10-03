@@ -36,6 +36,46 @@ define("io.ox/core/api/factory",
         }, {});
     };
 
+    var updateCaches = function (ids, api) {
+        // be robust
+        ids = ids || [];
+        ids = _.isArray(ids) ? ids : [ids];
+        // find affected mails in simple cache
+        var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+        _(ids).each(function (o) {
+            hash[getKey(o)] = folders[o.folder_id] = true;
+        });
+        // loop over each folder and look for items to remove
+        var defs = _(folders).map(function (value, folder_id) {
+            // grep keys
+            var cache = api.caches.all;
+            return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+                // now get cache entry
+                return cache.get(key).pipe(function (data) {
+                    if (data) {
+                        if ('data' in data) {
+                            data.data = api.localRemove(data.data, hash, getKey);
+                        } else {
+                            data = api.localRemove(data, hash, getKey);
+                        }
+                        return cache.add(key, data);
+                    } else {
+                        return $.when();
+                    }
+                });
+            });
+        });
+        // remove from object caches
+        if (ids.length) {
+            defs.push(api.caches.list.remove(ids));
+            defs.push(api.caches.get.remove(ids));
+        }
+        // clear
+        return $.when.apply($, defs).done(function () {
+            hash = folders = defs = api = null;
+        });
+    };
+
     var factory = function (o) {
 
         // extend default options (deep)
@@ -188,58 +228,15 @@ define("io.ox/core/api/factory",
                         _.call(o.fail.get, e, opt, o);
                     });
                 };
-
                 return (useCache ? caches.get.get(opt, getter) : getter())
                     .pipe(o.pipe.getPost)
                     .done(o.done.get || $.noop);
             },
 
-            updateCachesAfterRemove: function (ids) {
-                // be robust
-                ids = ids || [];
-                ids = _.isArray(ids) ? ids : [ids];
-                // find affected mails in simple cache
-                var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
-                _(ids).each(function (o) {
-                    hash[getKey(o)] = folders[o.folder_id] = true;
+            cacheRemove: function (list, hash, getKey) {
+                return _(list).filter(function (o) {
+                    return hash[getKey(o)] !== true;
                 });
-                // loop over each folder and look for items to remove
-                var defs = _(folders).map(function (value, folder_id) {
-                    // grep keys
-                    var cache = caches.all;
-                    return cache.grepKeys(folder_id + '\t').pipe(function (key) {
-                        // now get cache entry
-                        return cache.get(key).pipe(function (data) {
-                            if (data) {
-                                if ('data' in data) {
-                                    data.data = _(data.data).filter(function (o) {
-                                        return hash[getKey(o)] !== true;
-                                    });
-                                } else {
-                                    data = _(data).filter(function (o) {
-                                        return hash[getKey(o)] !== true;
-                                    });
-                                }
-                                return cache.add(key, data);
-                            } else {
-                                return $.when();
-                            }
-                        });
-                    });
-                });
-                // remove from object caches
-                if (ids.length) {
-                    defs.push(caches.list.remove(ids));
-                    defs.push(caches.get.remove(ids));
-                }
-                // clear
-                return $.when.apply($, defs).done(function () {
-                    hash = folders = defs = null;
-                });
-            },
-
-            prepareRemove: function (ids) {
-                return $.when();
             },
 
             remove: function (ids, local) {
@@ -253,30 +250,22 @@ define("io.ox/core/api/factory",
                     api.trigger('delete', ids);
                 };
                 api.trigger('beforedelete', ids);
-                return api.prepareRemove(ids).pipe(function () {
-                    // remove from caches first
-                    return api.updateCachesAfterRemove(ids).pipe(function () {
-
-                        // delete on server?
-                        if (local !== true) {
-
-                            return http.PUT({
-                                module: o.module,
-                                params: opt,
-                                data: data,
-                                appendColumns: false
-                            })
-                            .done(function () {
-                                // refresh needs to be done after delete or the all request may still get data from the deleted object
-                                api.trigger('refresh.all');
-                                done();
-                            });
-                        } else {
-                            // trigger refresh now
-                            api.trigger('refresh.all');
-                            return done();
-                        }
-                    });
+                // remove from caches first
+                return updateCaches(ids, api).pipe(function () {
+                    // trigger visual refresh
+                    api.trigger('refresh.all');
+                    // delete on server?
+                    if (local !== true) {
+                        return http.PUT({
+                            module: o.module,
+                            params: opt,
+                            data: data,
+                            appendColumns: false
+                        })
+                        .done(done);
+                    } else {
+                        return done();
+                    }
                 });
             },
 
