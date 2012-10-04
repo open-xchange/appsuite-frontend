@@ -3039,12 +3039,6 @@ define('io.ox/office/editor/editor',
                             // moving floated images with operation
                             var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
                             applyOperation(newOperation, true, true);
-                        } else {
-                            // only internal shifting required. image should be shifted before empty paragraphs
-                            // there can be empty text spans before the destination node
-                            while (DOM.isEmptyTextSpan(child.previousSibling)) {
-                                $(child).insertBefore(child.previousSibling);
-                            }
                         }
 
                         counter++;
@@ -3052,6 +3046,10 @@ define('io.ox/office/editor/editor',
 
                     child = nextChild;
                 }
+
+                // finally delete all empty text spans in this paragraph, that are located before floated images
+                Position.removeLeadingEmptyTextSpans(paragraphs, _.copy(position));
+
             }
 
             return imageShift;
