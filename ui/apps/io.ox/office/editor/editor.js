@@ -740,6 +740,7 @@ define('io.ox/office/editor/editor',
                     var targetCell = $(row).children().slice(localStartCol, localStartCol + 1),
                         sourceCells = $(row).children().slice(localStartCol + 1, localEndCol + 1);
 
+                    // ToDo: This has to be done within operations
                     Table.shiftCellContent(targetCell, sourceCells);
 
                     // removing all cells behind the start cell
