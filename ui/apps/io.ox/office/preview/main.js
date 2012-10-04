@@ -33,40 +33,7 @@ define('io.ox/office/preview/main',
             win = null,
 
             preview = new Preview();
-/*
-            controller = new Controller({
-                page: {
-                    enable: function () { return preview.getPageCount() > 0; },
-                    get: function () {
-                        // the gettext comments MUST be located directly before
-                        // gt(), but 'return' cannot be the last token in a line
-                        // -> use a temporary variable to store the result
-                        var msg =
-                            //#. %1$s is the current page index in office document preview
-                            //#. %2$s is the number of pages in office document preview
-                            //#, c-format
-                            gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
-                        return msg;
-                    }
-                },
-                first: {
-                    enable: function () { return preview.firstAvail(); },
-                    set: function () { preview.firstPage(); }
-                },
-                previous: {
-                    enable: function () { return preview.previousAvail(); },
-                    set: function () { preview.previousPage(); }
-                },
-                next: {
-                    enable: function () { return preview.nextAvail(); },
-                    set: function () { preview.nextPage(); }
-                },
-                last: {
-                    enable: function () { return preview.lastAvail(); },
-                    set: function () { preview.lastPage(); }
-                }
-            });
-*/
+
         // private methods ----------------------------------------------------
 
         /**
@@ -155,6 +122,22 @@ define('io.ox/office/preview/main',
          */
         this.getPreview = function () {
             return preview;
+        };
+
+        /**
+         * Returns the localized label text 'm of n' containing the current
+         * page and the number of pages.
+         */
+        this.getPageOfLabel = function () {
+            // the gettext comments MUST be located directly before gt(), but
+            // 'return' cannot be the last token in a line
+            // -> use a temporary variable to store the result
+            var label =
+                //#. %1$s is the current page index in office document preview
+                //#. %2$s is the number of pages in office document preview
+                //#, c-format
+                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
+            return label;
         };
 
         /**
@@ -256,8 +239,9 @@ define('io.ox/office/preview/main',
 
         // initialization -----------------------------------------------------
 
-        // listen to 'showpage' events and update controller
-        //preview.on('showpage', function () { controller.update(); });
+        // listen to 'showpage' events and update the page label
+        preview.on('showpage', function () {
+        });
 
         // set launch and quit handlers
         this.setLauncher(launchHandler).setQuit(quitHandler);

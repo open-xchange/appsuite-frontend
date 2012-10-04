@@ -63,7 +63,7 @@ define('io.ox/office/tk/apphelper',
                     buttonOptions = { index: index += 100, id: key, ref: actionId };
 
                 // do not initialize inactive buttons
-                if (options.getBooleanOption(options, 'active', true)) {
+                if (Utils.getBooleanOption(options, 'active', true)) {
 
                     // create the action, it registers itself at the global registry
                     new Links.Action(actionId, {
