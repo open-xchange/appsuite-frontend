@@ -304,7 +304,7 @@ define('io.ox/office/editor/position',
 
         returnImageNode = returnImageNode ? true : false;
 
-        if (oxoPosition === undefined) {
+        if ((oxoPosition === undefined) || (oxoPosition === null)) {
             // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
             return;
         }
@@ -2227,6 +2227,43 @@ define('io.ox/office/editor/position',
 
         return position;
     };
+
+    /**
+     * After splitting a paragraph, it might be necessary to remove
+     * leading empty text spans at the beginning of the paragraph. This
+     * is especially important, if there are following floated images.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     */
+
+    Position.removeLeadingEmptyTextSpans = function (startnode, position) {
+
+        var paraNode = Position.getCurrentParagraph(startnode, position);
+
+        if ((paraNode) && ($(paraNode).find('img.float').length > 0)) {
+
+            var child = paraNode.firstChild,
+                continue_ = true;
+
+            while ((child !== null) && (continue_)) {
+
+                if (DOM.isEmptyTextSpan(child)) {
+                    var removeElement = child;
+                    child = child.nextSibling;
+                    $(removeElement).remove();
+                } else {
+                    continue_ = false;
+                }
+            }
+        }
+
+    };
+
 
     return Position;
 

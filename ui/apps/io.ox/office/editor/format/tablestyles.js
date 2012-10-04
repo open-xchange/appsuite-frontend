@@ -27,7 +27,7 @@ define('io.ox/office/editor/format/tablestyles',
              * Width of the table, as number in 1/100 of millimeters.
              */
             width: {
-                def: '100%',
+                def: 0,
                 set: function (element, width) {
                     if (width === 0) {
                         element.css('width', '100%');
