@@ -141,10 +141,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                                 }
                                             });
             
-            alarmDate = $('<input>').addClass("alarm-date-field span10").attr({type: 'text', id: 'task-edit-alarm-date-field'});
-            alarmDateTime = $('<input>').addClass("alarm-date-field span12").attr({type: 'text', id: 'task-edit-alarm-date-time-field'});
+            alarmDate = $('<input>').addClass("alarm-date-field span9").attr({type: 'text', id: 'task-edit-alarm-date-field'});
+            alarmDateTime = $('<input>').addClass("alarm-date-time-field span12").attr({type: 'text', id: 'task-edit-alarm-date-time-field'});
             alarmButton = $('<button>')
-                .addClass("btn task-edit-picker fluid-grid-fix")
+                .addClass("btn task-edit-picker span3 fluid-grid-fix")
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -163,7 +163,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             $('<div>').addClass('input-append').append(alarmDate, alarmButton);
             
             util.buildRow(node, [[util.buildLabel(gt("Remind me"), reminderDropdown.attr('id')), reminderDropdown], [util.buildLabel(gt("Date"), alarmDate.attr('id')), alarmDate.parent()], [util.buildLabel(gt("Time"), alarmDateTime.attr('id')), alarmDateTime]],
-                    [5, [4, 1], 2]);
+                    [5, [3, 1], 3]);
             
             //row 3 note
             note = $('<textarea>').addClass("note-field span12").attr('id', 'task-edit-note');
@@ -221,7 +221,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             
             //row 5 start date due date
             startDateButton = $('<button>')
-                .addClass("btn task-edit-picker fluid-grid-fix")
+                .addClass("btn task-edit-picker span3 fluid-grid-fix")
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -239,7 +239,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 .append($('<i>').addClass('icon-calendar'));
 
             endDateButton = $('<button>')
-                .addClass("btn task-edit-picker fluid-grid-fix")
+                .addClass("btn task-edit-picker span3 fluid-grid-fix")
                 .on('click', function (e) {
                     e.stopPropagation();
                     picker.create().done(function (timevalue) {
@@ -256,16 +256,15 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 })
                 .append($('<i>').addClass('icon-calendar'));
 
-            startDate = $('<input>').addClass("start-date-field span10").attr({type: 'text', id: 'task-edit-start-date-field'});
+            startDate = $('<input>').addClass("start-date-field span9").attr({type: 'text', id: 'task-edit-start-date-field'});
             startDateTime = $('<input>').addClass("start-date-time-field span12").attr({type: 'text', id: 'task-edit-start-date-time-field'});
-            endDate = $('<input>').addClass("end-date-field span10").attr({type: 'text', id: 'task-edit-end-date-field'});
+            endDate = $('<input>').addClass("end-date-field span9").attr({type: 'text', id: 'task-edit-end-date-field'});
             endDateTime = $('<input>').addClass("end-date-time-field span12").attr({type: 'text', id: 'task-edit-end-date-time-field'});
             
             $('<div>').addClass('input-append').append(startDate, startDateButton);
             $('<div>').addClass('input-append').append(endDate, endDateButton);
             util.buildRow(node, [[util.buildLabel(gt("Start date"), startDate.attr('id')), startDate.parent()], [util.buildLabel(gt("Time"), startDateTime.attr('id')), startDateTime],
-                                 [util.buildLabel(gt("Due date"), endDate.attr('id')), endDate.parent()], [util.buildLabel(gt("Time"), endDateTime.attr('id')), endDateTime]],
-                                 [4, 2, 4, 2]);
+                                 [util.buildLabel(gt("Due date"), endDate.attr('id')), endDate.parent()], [util.buildLabel(gt("Time"), endDateTime.attr('id')), endDateTime]]);
             
             //row 6 repeat
             repeatLink = $('<a>').text(gt("Repeat")).addClass("repeat-link").attr('href', '#')
