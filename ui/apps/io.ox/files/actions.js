@@ -99,7 +99,6 @@ define("io.ox/files/actions",
         requires: function (e) {
             var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
             return e.collection.has('one') && pattern.test(e.context.data.filename);
-
         },
         action: function (data) {
             ox.launch('io.ox/office/editor/main', { file: data });

@@ -20,7 +20,8 @@ define('io.ox/office/preview/preview',
     // class Preview ==========================================================
 
     /**
-     * The preview.
+     * The preview. Triggers a 'showpage' event passing the current page number
+     * (one-based) when the visible page has been changed.
      */
     function Preview() {
 
