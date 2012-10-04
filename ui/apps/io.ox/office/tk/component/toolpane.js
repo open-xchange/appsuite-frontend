@@ -33,12 +33,8 @@ define('io.ox/office/tk/component/toolpane',
      *
      * @param {Controller} controller
      *  The application controller.
-     *
-     * @param {String} key
-     *  The controller key used to change the visible tool bar. Will be bound
-     *  to the tab control shown above the visible tool bar.
      */
-    function ToolPane(appWindow, controller, key) {
+    function ToolPane(appWindow, controller) {
 
         var // self reference
             self = this,
@@ -153,7 +149,7 @@ define('io.ox/office/tk/component/toolpane',
          *  A reference to this tool pane.
          */
         this.showToolBar = function (id) {
-            controller.change(key, id);
+            controller.change('view/toolbars/show', id);
             return this;
         };
 
@@ -192,7 +188,10 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // add item definition for the tab bar
-        controller.addDefinition(key, { get: function () { return visibleToolBarId; }, set: showToolBar });
+        controller.addDefinition('view/toolbars/show', {
+            get: function () { return visibleToolBarId; },
+            set: showToolBar
+        });
 
         // change visible tool bar with keyboard
         node.on('keydown keypress keyup', toolPaneKeyHandler);

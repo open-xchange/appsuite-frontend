@@ -43,12 +43,6 @@ define('io.ox/office/editor/controller',
                 'file/flush': {
                     set: function () { app.flush(); }
                 },
-                'file/download': {
-                    set: function () { app.download(); }
-                },
-                'file/print': {
-                    set: function () { app.print(); }
-                },
                 'file/rename': {
                     chain: 'chain/editable',
                     get: function () {

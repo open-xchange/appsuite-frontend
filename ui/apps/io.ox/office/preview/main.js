@@ -14,12 +14,10 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
-     'io.ox/office/tk/controller',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css',
-     'io.ox/office/preview/actions'
-    ], function (Utils, AppHelper, Controller, Preview, gt) {
+     'less!io.ox/office/preview/style.css'
+    ], function (Utils, AppHelper, Preview, gt) {
 
     'use strict';
 
@@ -115,7 +113,7 @@ define('io.ox/office/preview/main',
             var file = self.getFileDescriptor(),
                 fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             self.setTitle(fileName);
-            win.setTitle(gt('Preview') + ' - ' + fileName);
+            win.setTitle(fileName);
         }
 
         /**
@@ -265,6 +263,16 @@ define('io.ox/office/preview/main',
         this.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // class Application
+
+    // global initialization --------------------------------------------------
+
+    AppHelper.configureWindowToolBar(MODULE_NAME)
+        .addButtonGroup('page')
+            .addButton('first',    function (app) { app.getPreview().firstPage(); },    { icon: 'icon-fast-backward' })
+            .addButton('previous', function (app) { app.getPreview().previousPage(); }, { icon: 'icon-chevron-left' })
+            .addButton('next',     function (app) { app.getPreview().nextPage(); },     { icon: 'icon-chevron-right' })
+            .addButton('last',     function (app) { app.getPreview().lastPage(); },     { icon: 'icon-fast-forward' })
+            .end();
 
     // exports ================================================================
 

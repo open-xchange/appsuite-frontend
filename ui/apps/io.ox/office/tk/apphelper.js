@@ -11,9 +11,127 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) {
+define('io.ox/office/tk/apphelper',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'io.ox/office/tk/utils'], function (Extensions, Links, Utils) {
 
     'use strict';
+
+    // class ToolBarRegistry  =================================================
+
+    /**
+     * Registers buttons and other control elements in the header tool bar of
+     * the application window. Registration is done once for all instances of
+     * the specified application type. The elements in the tool bar will be
+     * generated according to this registration every time an application
+     * window becomes visible.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    function WindowToolBarConfiguration(moduleName) {
+
+        var // self reference
+            self = this,
+
+            // prefix for action identifiers
+            actionPath = moduleName + '/actions',
+
+            // prefix for links into the window tool bar
+            toolBarPath = moduleName + '/links/toolbar',
+
+            // the index that will be passed to GUI elements inserted into the window tool bar
+            index = 0;
+
+        // class Group --------------------------------------------------------
+
+        var Group = _.makeExtendable(function (id, options) {
+
+            var // extension point of this group
+                point = Extensions.point(toolBarPath + '/' + id),
+                // the index that will be passed to GUI elements inserted into the group
+                index = 0;
+
+            // methods --------------------------------------------------------
+
+            this.registerButton = function (key, handler, options) {
+
+                var // the unique identifier of the action
+                    actionId = actionPath + '/' + id + '/' + key,
+                    // options for the button element
+                    buttonOptions = { index: index += 100, id: key, ref: actionId };
+
+                // do not initialize inactive buttons
+                if (options.getBooleanOption(options, 'active', true)) {
+
+                    // create the action, it registers itself at the global registry
+                    new Links.Action(actionId, {
+                        requires: true,
+                        action: handler
+                    });
+
+                    // initialize button options
+                    buttonOptions.cssClasses = 'btn btn-inverse';
+                    buttonOptions.icon = Utils.getStringOption(options, 'icon');
+                    if (_.isString(buttonOptions.icon)) {
+                        buttonOptions.icon += ' icon-white';
+                    }
+                    buttonOptions.label = Utils.getStringOption(options, 'label');
+
+                    // create the button element in the button group
+                    point.extend(new Links.Button(buttonOptions));
+                }
+
+                return this;
+            };
+
+            this.end = function () { return self; };
+
+            // initialization -------------------------------------------------
+
+            // create the core ButtonGroup object
+            new Links.ButtonGroup(toolBarPath, {
+                id: id,
+                index: index += 100,
+                radio: Utils.getBooleanOption(options, 'radio')
+            });
+
+        }); // class Group
+
+        // class ButtonGroup --------------------------------------------------
+
+        var ButtonGroup = Group.extend({ constructor: function (id) {
+
+            Group.call(this, id);
+
+            this.addButton = this.registerButton;
+
+        }}); // class ButtonGroup
+
+        // class RadioGroup ---------------------------------------------------
+
+        var RadioGroup = Group.extend({ constructor: function (id, handler) {
+
+            Group.call(this, id, { radio: true });
+
+            this.addButton = function (key, options) {
+                return this.registerButton(key, function (app) { handler.call(this, app, key); }, options);
+            };
+
+        }}); // class RadioGroup
+
+        // methods ------------------------------------------------------------
+
+        this.addButtonGroup = function (id) {
+            return new ButtonGroup(id);
+        };
+
+        this.addRadioGroup = function (id, handler) {
+            return new RadioGroup(id, handler);
+        };
+
+    } // class WindowToolBarConfiguration
 
     // class ApplicationBase ==================================================
 
@@ -243,7 +361,21 @@ define('io.ox/office/tk/apphelper', ['io.ox/office/tk/utils'], function (Utils) 
         return def.promise();
     };
 
-    // application object -----------------------------------------------------
+    // application ------------------------------------------------------------
+
+    /**
+     * Returns a configuration object that allows to register buttons and other
+     * control elements in the header tool bar of the application window.
+     * Registration is done once for all instances of the specified application
+     * type. The elements in the tool bar will be generated according to this
+     * registration every time an application window becomes visible.
+     *
+     * @param {String} moduleName
+     *  The application type identifier.
+     */
+    AppHelper.configureWindowToolBar = function (moduleName) {
+        return new WindowToolBarConfiguration(moduleName);
+    };
 
     /**
      * Tries to find a running application which is working on a file described
