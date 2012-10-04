@@ -23,7 +23,7 @@ define(function () {
 
         copyright: '\u00A9 2012 open xchange.',
         version: '7.0.0 Drop #5',
-        buildDate: '2012-09-20',
+        buildDate: '2012-10-04',
 
         plugins: {
             signin: [],
