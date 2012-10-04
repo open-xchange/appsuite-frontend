@@ -3410,7 +3410,9 @@ define('io.ox/office/editor/editor',
                 if (endPos[posLength] > 0) {
                     endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
                 }
-                implDeleteText(startPos, endPos);
+                if (! Position.positionsAreEqual(startPos, endPos)) {
+                    implDeleteText(startPos, endPos);
+                }
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
@@ -3420,7 +3422,10 @@ define('io.ox/office/editor/editor',
             if (endPosition[posLength] > 0) {
                 endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
             }
-            implDeleteText(startPosition, endPosition);
+
+            if (! Position.positionsAreEqual(startPosition, endPosition)) {
+                implDeleteText(startPosition, endPosition);
+            }
 
             // also delete all empty text spans in cloned paragraph before floated images
             var localPos = _.copy(startPosition);
