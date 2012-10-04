@@ -927,13 +927,17 @@ define('io.ox/office/editor/editor',
                 insertdefaultcells = false,
                 position = _.copy(selection.endPaM.oxoPosition, true);
 
-            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR'),
-                referenceRow = rowPos[rowPos.length - 1];
+            var rowPos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'TR');
 
-            rowPos[rowPos.length - 1] += 1;
+            if (rowPos !== null) {
 
-            var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
-            applyOperation(newOperation, true, true);
+                var referenceRow = rowPos[rowPos.length - 1];
+
+                rowPos[rowPos.length - 1] += 1;
+
+                var newOperation = { name: Operations.OP_ROW_INSERT, position: rowPos, count: count, insertdefaultcells: insertdefaultcells, referencerow: referenceRow };
+                applyOperation(newOperation, true, true);
+            }
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -3420,6 +3424,11 @@ define('io.ox/office/editor/editor',
             }
             implDeleteText(startPosition, endPosition);
 
+            // also delete all empty text spans in cloned paragraph before floated images
+            var localPos = _.copy(startPosition);
+            localPos.pop();
+            Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
+
             implParagraphChanged(position);
             implParagraphChanged(startPosition);
             lastOperationEnd = new OXOPaM(startPosition);
@@ -3593,19 +3602,22 @@ define('io.ox/office/editor/editor',
             }
 
             // Finally removing the table itself
-            var tableNode = Position.getDOMPosition(paragraphs, tablePosition).node;
-            $(tableNode).remove();
+            var tablePaM = Position.getDOMPosition(paragraphs, tablePosition);
+            if (tablePaM) {
+                var tableNode = tablePaM.node;
+                $(tableNode).remove();
 
-            var para = tablePosition.pop();
-            if (para > 0) {
-                para -= 1;
+                var para = tablePosition.pop();
+                if (para > 0) {
+                    para -= 1;
+                }
+                tablePosition.push(para);
+                tablePosition.push(Position.getParagraphLength(paragraphs, tablePosition));
+
+                lastOperationEnd = new OXOPaM(tablePosition);
+
+                paragraphs = editdiv.children();
             }
-            tablePosition.push(para);
-            tablePosition.push(Position.getParagraphLength(paragraphs, tablePosition));
-
-            lastOperationEnd = new OXOPaM(tablePosition);
-
-            paragraphs = editdiv.children();
         }
 
         function implDeleteRows(pos, startRow, endRow) {
