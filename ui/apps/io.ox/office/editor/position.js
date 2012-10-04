@@ -304,7 +304,7 @@ define('io.ox/office/editor/position',
 
         returnImageNode = returnImageNode ? true : false;
 
-        if (oxoPosition === undefined) {
+        if ((oxoPosition === undefined) || (oxoPosition === null)) {
             // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
             return;
         }
