@@ -137,7 +137,8 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 return result;
             },
     
-            buildDropdownMenu: function (time) {
+            //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
+            buildDropdownMenu: function (time, bootstrapDropdown) {
                 if (!time) {
                     time = new Date();
                 }
@@ -191,6 +192,11 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                         appendString = appendString + "<option finderId='ww'>" + gt("in one week") + "</option>";
                         circleIncomplete = false;
                     }
+                }
+                
+                if (bootstrapDropdown) {
+                    appendString = appendString.replace(/<option/g, "<li><a href='#'");
+                    appendString = appendString.replace(/option>/g, "a></li>");
                 }
                 
                 return appendString;
