@@ -76,6 +76,9 @@ define('io.ox/office/editor/editor',
             // shortcut for table styles
             tableStyles = documentStyles.getStyleSheets('table'),
 
+            // shortcut for table styles
+            tableCellStyles = documentStyles.getStyleSheets('tablecell'),
+
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
 
@@ -710,6 +713,8 @@ define('io.ox/office/editor/editor',
 
             if (endCol > startCol) {
 
+                undomgr.startGroup();  // starting to group operations for undoing
+
                 var endPosition = null;
 
                 for (var i = endRow; i >= startRow; i--) {  // merging for each row
@@ -744,14 +749,17 @@ define('io.ox/office/editor/editor',
                     var newOperation = {name: Operations.OP_CELLS_DELETE, position: rowPosition, start: removeStartCol, end: localEndCol};
                     applyOperation(newOperation, true, true);
 
-                    // setting new colspan to the remaining cell -> should be done via operation
+                    // setting new colspan to the remaining cell
                     rowPosition.push(localStartCol); // -> position of the new merged cell
 
-                    var cell = Position.getDOMPosition(paragraphs, rowPosition).node;
-                    $(cell).attr('colspan', colSpanSum);
+                    // Setting new table grid attribute to table
+                    newOperation = { name: Operations.OP_ATTRS_SET, attrs: { 'gridspan' : colSpanSum }, start: _.copy(rowPosition, true), end: _.copy(rowPosition, true) };
+                    applyOperation(newOperation, true, true);
 
                     endPosition = _.copy(rowPosition, true);
                 }
+
+                undomgr.endGroup();
 
                 endPosition.push(0);
                 endPosition.push(0);
@@ -1911,9 +1919,6 @@ define('io.ox/office/editor/editor',
                             if ($(cellPosNode).data('attributes')) {
                                 attrs = $(cellPosNode).data('attributes');
                             }
-                            if ($(cellPosNode).attr('colspan')) {
-                                attrs.gridspan = $(cellPosNode).attr('colspan');
-                            }
                         }
 
                         var undoOperation = { name: Operations.OP_CELL_INSERT, position: pos, count: count, attrs: attrs },
@@ -2010,9 +2015,6 @@ define('io.ox/office/editor/editor',
                                 var cellPosNode = cellPos.node;
                                 if ($(cellPosNode).data('attributes')) {
                                     cellAttrs = $(cellPosNode).data('attributes');
-                                }
-                                if ($(cellPosNode).attr('colspan')) {
-                                    cellAttrs.gridspan = $(cellPosNode).attr('colspan');
                                 }
                             }
 
@@ -3729,10 +3731,7 @@ define('io.ox/office/editor/editor',
 
         function implInsertCell(pos, count, attrs) {
 
-            // how about taking care of tablegrid array at table?
-
-            var localPosition = _.copy(pos, true),
-                setGridSpan = false;
+            var localPosition = _.copy(pos, true);
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
                 return;
@@ -3740,10 +3739,6 @@ define('io.ox/office/editor/editor',
 
             if (!_.isNumber(count)) {
                 count = 1; // setting default for number of rows
-            }
-
-            if ((attrs) && (attrs.gridspan)) {
-                setGridSpan = true;
             }
 
             var tableCellDomPos = Position.getDOMPosition(paragraphs, localPosition),
@@ -3757,8 +3752,9 @@ define('io.ox/office/editor/editor',
             var paragraph = $('<p>'),
                 cell = $('<td>').append(paragraph);
 
-            if (setGridSpan) {
-                cell.attr('colspan', attrs.gridspan);
+            // apply the passed table attributes
+            if (tableCellStyles) {
+                tableCellStyles.setElementAttributes(cell, attrs);
             }
 
             // insert empty text node into the paragraph

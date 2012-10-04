@@ -11,7 +11,7 @@
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  */
 
-define('io.ox/office/editor/format/tablestyles',
+define('io.ox/office/editor/format/tablecellstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
@@ -20,55 +20,47 @@ define('io.ox/office/editor/format/tablestyles',
 
     'use strict';
 
-    var // definitions for table attributes
+    var // definitions for table cell attributes
         definitions = {
 
             /**
-             * Width of the table, as number in 1/100 of millimeters.
+             * The number of grid columns spanned by the table cell.
              */
-            width: {
-                def: '100%',
-                set: function (element, width) {
-                    if (width === 0) {
-                        element.css('width', '100%');
-                    } else {
-                        element.css('width', Utils.convertHmmToCssLength(width, 'px', 0));
-                    }
+            gridspan: {
+                def: 1,
+                set: function (element, gridspan) {
+                    element.attr('colspan', gridspan);
                 }
-            },
+            }
 
-            /**
-             * Grid width of columns in relative units. It is an array of numbers
-             */
-            tablegrid: { def: 0 }
         };
 
     // private global functions ===============================================
 
     /**
-     * Will be called for every table element whose attributes have been
-     * changed. Repositions and reformats the table according to the passed
+     * Will be called for every table cell element whose attributes have been
+     * changed. Repositions and reformats the table cell according to the passed
      * attributes.
      *
-     * @param {jQuery} table
-     *  The <table> element whose table attributes have been changed, as jQuery
-     *  object.
+     * @param {jQuery} tablecell
+     *  The <th> or <td> element whose table cell attributes have been changed,
+     *  as jQuery object.
      *
      * @param {Object} attributes
      *  A map of all attributes (name/value pairs), containing the effective
      *  attribute values merged from style sheets and explicit attributes.
      */
-    function updateTableFormatting(table, attributes) {
+    function updateTableCellFormatting(tablecell, attributes) {
 
-        Table.updateColGroup(table, attributes.tablegrid);
+        // Table.updateColGroup(table, attributes.tablegrid);
 
     }
 
-    // class TableStyles ======================================================
+    // class TableCellStyles ======================================================
 
     /**
-     * Contains the style sheets for table formatting attributes. The CSS
-     * formatting will be read from and written to <table> elements.
+     * Contains the style sheets for table cell formatting attributes. The CSS
+     * formatting will be read from and written to <th> and <td> elements.
      *
      * @constructor
      *
@@ -82,37 +74,37 @@ define('io.ox/office/editor/format/tablestyles',
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      */
-    function TableStyles(rootNode, documentStyles) {
+    function TableCellStyles(rootNode, documentStyles) {
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'table', definitions, documentStyles, {
-            globalSetHandler: updateTableFormatting
+        StyleSheets.call(this, 'th, td', definitions, documentStyles, {
+            globalSetHandler: updateTableCellFormatting
         });
 
         // methods ------------------------------------------------------------
 
         /**
-         * Iterates over all table elements covered by the passed DOM ranges
+         * Iterates over all table cell elements covered by the passed DOM ranges
          * for read-only access and calls the passed iterator function.
          */
         this.iterateReadOnly = function (ranges, iterator, context) {
             // DOM.iterateAncestorNodesInRanges() passes the current element to
             // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'table', iterator, context);
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'th, td', iterator, context);
         };
 
         /**
-         * Iterates over all table elements covered by the passed DOM ranges
+         * Iterates over all image elements covered by the passed DOM ranges
          * for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
 
-    } // class TableStyles
+    } // class TableCellStyles
 
     // exports ================================================================
 
     // derive this class from class StyleSheets
-    return StyleSheets.extend({ constructor: TableStyles });
+    return StyleSheets.extend({ constructor: TableCellStyles });
 
 });

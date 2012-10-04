@@ -15,8 +15,9 @@ define('io.ox/office/editor/format/documentstyles',
     ['io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/paragraphstyles',
      'io.ox/office/editor/format/imagestyles',
-     'io.ox/office/editor/format/tablestyles'
-    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles) {
+     'io.ox/office/editor/format/tablestyles',
+     'io.ox/office/editor/format/tablecellstyles'
+    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableCellStyles) {
 
     'use strict';
 
@@ -61,6 +62,7 @@ define('io.ox/office/editor/format/documentstyles',
         containers.paragraph = new ParagraphStyles(rootNode, this);
         containers.image = new ImageStyles(rootNode, this);
         containers.table = new TableStyles(rootNode, this);
+        containers.tablecell = new TableCellStyles(rootNode, this);
 
     } // class DocumentStyles
 
