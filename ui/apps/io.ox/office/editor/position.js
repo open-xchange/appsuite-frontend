@@ -1915,14 +1915,17 @@ define('io.ox/office/editor/position',
             node = Position.getDOMPosition(startnode, position).node;
 
         switch (family) {
-        case "character":
+        case 'character':
             assignedPos = (node.nodeType === 3) ? position : null;
             break;
-        case "paragraph":
+        case 'paragraph':
             assignedPos = (node.nodeName === 'P') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'P');
             break;
-        case "table":
+        case 'table':
             assignedPos = (node.nodeName === 'TABLE') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TABLE');
+            break;
+        case 'tablecell':
+            assignedPos = ((node.nodeName === 'TH') || (node.nodeName === 'TD')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
             break;
         default:
             Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
@@ -1968,6 +1971,8 @@ define('io.ox/office/editor/position',
                 family = 'image';
             } else if (Utils.getNodeName(node) === 'table') {
                 family = 'table';
+            } else if ((Utils.getNodeName(node) === 'th') || (Utils.getNodeName(node) === 'td')) {
+                family = 'tablecell';
             } else {
                 Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
             }

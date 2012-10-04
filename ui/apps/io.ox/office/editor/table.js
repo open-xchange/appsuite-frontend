@@ -49,38 +49,12 @@ define('io.ox/office/editor/table',
 
         if (tablePosition) {
 
-            var tableNode = tablePosition.node,
-                validTableGrid = false;
+            var tableNode = tablePosition.node;
 
             if ($(tableNode).data('attributes').tablegrid) {
-
                 tablegrid = $(tableNode).data('attributes').tablegrid;
-
-                if (tablegrid.length > 0) {
-                    validTableGrid = true;
-                }
-
-                for (var i = 0; i < tablegrid.length; i++) {
-                    if ((! _.isNumber(tablegrid[i])) || (tablegrid[i] + '' === 'NaN'))  {  // NaN returns true in _.isNumber check
-                        validTableGrid = false;
-                        break;
-                    }
-                }
             }
 
-            if (! validTableGrid) {
-
-                tablegrid = [];
-
-                var allCols = $(tableNode).children('colgroup').children('col');
-
-                allCols.each(function (index) {
-                    var width = $(this).css('width'); // -> including % or px or mm (?) -> must be relative value
-                    tablegrid.push(width);
-                });
-
-                $(tableNode).data('grid', tablegrid);
-            }
         }
 
         return tablegrid;
@@ -345,7 +319,7 @@ define('io.ox/office/editor/table',
      *  The jQuery collection containing cell elements, whose attributes shall
      *  be collected in an array.
      *
-     * @return {Object[]} allCellAttributes
+     * @return {any[]} allCellAttributes
      *  An array, that contains the cell attributes in the correct order.
      */
     Table.getCellAttributes = function (cells) {
@@ -359,9 +333,6 @@ define('io.ox/office/editor/table',
             // trying to get attributes from the cell (attributes might be different for each cell)
             if ($(this).data('attributes')) {
                 cellAttrs = $(this).data('attributes');
-            }
-            if ($(this).attr('colspan')) {
-                cellAttrs.gridspan = $(this).attr('colspan');
             }
 
             allCellAttributes.push(cellAttrs);
