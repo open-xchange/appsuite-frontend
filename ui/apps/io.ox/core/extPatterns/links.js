@@ -149,7 +149,8 @@ define("io.ox/core/extPatterns/links",
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
-                if (!multiple && node.children().length > 3) {
+                var length = node.children().length;
+                if (!multiple && length > 5) {
                     node.append(
                         $('<button>', { 'data-toggle': 'more' })
                         .addClass('btn btn-mini btn-primary io-ox-action-link')
