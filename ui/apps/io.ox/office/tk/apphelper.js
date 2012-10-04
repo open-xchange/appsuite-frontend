@@ -42,44 +42,73 @@ define('io.ox/office/tk/apphelper',
             toolBarPath = moduleName + '/links/toolbar',
 
             // the index that will be passed to GUI elements inserted into the window tool bar
-            index = 0;
+            groupIndex = 0;
 
         // class Group --------------------------------------------------------
 
-        var Group = _.makeExtendable(function (id, options) {
+        var Group = _.makeExtendable(function (groupId, options) {
 
             var // extension point of this group
-                point = Extensions.point(toolBarPath + '/' + id),
+                point = Extensions.point(toolBarPath + '/' + groupId),
                 // the index that will be passed to GUI elements inserted into the group
                 index = 0;
 
+            // private methods ------------------------------------------------
+
+            function getButtonOptions(buttonId, options) {
+
+                var // the unique key of the button (group id and button id)
+                    key = groupId + '/' + buttonId,
+                    // options for the button element
+                    buttonOptions = { index: index += 1, id: key, ref: actionPath + '/' + key },
+                    // width of the button, in pixels
+                    width = Utils.getIntegerOption(options, 'width');
+
+                // initialize button options
+                buttonOptions.cssClasses = 'btn btn-inverse';
+                buttonOptions.icon = Utils.getStringOption(options, 'icon');
+                if (_.isString(buttonOptions.icon)) {
+                    buttonOptions.icon += ' icon-white';
+                }
+                buttonOptions.label = Utils.getStringOption(options, 'label');
+                if (width) {
+                    buttonOptions.css = { width: width + 'px' };
+                }
+
+                return buttonOptions;
+            }
+
             // methods --------------------------------------------------------
 
-            this.registerButton = function (key, handler, options) {
+            this.registerButton = function (buttonId, handler, options) {
 
-                var // the unique identifier of the action
-                    actionId = actionPath + '/' + id + '/' + key,
-                    // options for the button element
-                    buttonOptions = { index: index += 100, id: key, ref: actionId };
+                var // options for the button element
+                    buttonOptions = getButtonOptions(buttonId, options);
 
                 // do not initialize inactive buttons
                 if (Utils.getBooleanOption(options, 'active', true)) {
 
                     // create the action, it registers itself at the global registry
-                    new Links.Action(actionId, {
+                    new Links.Action(buttonOptions.ref, {
                         requires: true,
                         action: handler
                     });
 
-                    // initialize button options
-                    buttonOptions.cssClasses = 'btn btn-inverse';
-                    buttonOptions.icon = Utils.getStringOption(options, 'icon');
-                    if (_.isString(buttonOptions.icon)) {
-                        buttonOptions.icon += ' icon-white';
-                    }
-                    buttonOptions.label = Utils.getStringOption(options, 'label');
-
                     // create the button element in the button group
+                    point.extend(new Links.Button(buttonOptions));
+                }
+
+                return this;
+            };
+
+            this.addLabel = function (labelId, options) {
+
+                var // options for the button element
+                    buttonOptions = getButtonOptions(labelId, options);
+
+                // do not initialize inactive labels
+                if (Utils.getBooleanOption(options, 'active', true)) {
+                    buttonOptions.cssClasses += ' disabled';
                     point.extend(new Links.Button(buttonOptions));
                 }
 
@@ -92,8 +121,8 @@ define('io.ox/office/tk/apphelper',
 
             // create the core ButtonGroup object
             new Links.ButtonGroup(toolBarPath, {
-                id: id,
-                index: index += 100,
+                id: groupId,
+                index: groupIndex += 1,
                 radio: Utils.getBooleanOption(options, 'radio')
             });
 
@@ -115,8 +144,8 @@ define('io.ox/office/tk/apphelper',
 
             Group.call(this, id, { radio: true });
 
-            this.addButton = function (key, options) {
-                return this.registerButton(key, function (app) { handler.call(this, app, key); }, options);
+            this.addButton = function (value, options) {
+                return this.registerButton(value, function (app) { handler.call(this, app, value); }, options);
             };
 
         }}); // class RadioGroup
@@ -234,6 +263,22 @@ define('io.ox/office/tk/apphelper',
 
             // build and return the resulting URL
             return this.buildServiceUrl('oxodocumentfilter', options);
+        };
+
+        /**
+         * Returns a control element from the window header tool bar. Note that
+         * the returned control MUST NOT be cached, as it changes every time
+         * the application window has been hidden and shown.
+         *
+         * @param {String} key
+         *  The unique key of the tool bar control, consisting of button group
+         *  identifier and control identifier, separated by a slash character.
+         *
+         * @returns {jQuery}
+         *  The control node associated to the specified key, as jQuery object.
+         */
+        this.getToolBarControl = function (key) {
+            return this.getWindow().nodes.toolbar.find('[data-action="' + key + '"]');
         };
 
     } // class ApplicationBase

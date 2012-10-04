@@ -71,6 +71,7 @@ define("io.ox/core/extPatterns/links",
             this.append(
                 $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
                 .addClass(self.cssClasses || 'btn')
+                .css(self.css || {})
                 .data({ ref: self.ref, context: context })
                 .click(click)
                 .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())

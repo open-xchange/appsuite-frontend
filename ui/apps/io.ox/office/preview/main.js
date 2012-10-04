@@ -73,6 +73,22 @@ define('io.ox/office/preview/main',
         }
 
         /**
+         * Returns the localized label text 'm of n' containing the current
+         * page and the number of pages.
+         */
+        function getPageOfLabel() {
+            // the gettext comments MUST be located directly before gt(), but
+            // 'return' cannot be the last token in a line
+            // -> use a temporary variable to store the result
+            var label =
+                //#. %1$s is the current page index in office document preview
+                //#. %2$s is the number of pages in office document preview
+                //#, c-format
+                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
+            return label;
+        }
+
+        /**
          * Sets application title (launcher) and window title according to the
          * current file name.
          */
@@ -122,22 +138,6 @@ define('io.ox/office/preview/main',
          */
         this.getPreview = function () {
             return preview;
-        };
-
-        /**
-         * Returns the localized label text 'm of n' containing the current
-         * page and the number of pages.
-         */
-        this.getPageOfLabel = function () {
-            // the gettext comments MUST be located directly before gt(), but
-            // 'return' cannot be the last token in a line
-            // -> use a temporary variable to store the result
-            var label =
-                //#. %1$s is the current page index in office document preview
-                //#. %2$s is the number of pages in office document preview
-                //#, c-format
-                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
-            return label;
         };
 
         /**
@@ -241,6 +241,7 @@ define('io.ox/office/preview/main',
 
         // listen to 'showpage' events and update the page label
         preview.on('showpage', function () {
+            self.getToolBarControl('pages/current').text(getPageOfLabel());
         });
 
         // set launch and quit handlers
@@ -251,11 +252,12 @@ define('io.ox/office/preview/main',
     // global initialization --------------------------------------------------
 
     AppHelper.configureWindowToolBar(MODULE_NAME)
-        .addButtonGroup('page')
-            .addButton('first',    function (app) { app.getPreview().firstPage(); },    { icon: 'icon-fast-backward' })
+        .addButtonGroup('pages')
+            .addButton('first', function (app) { app.getPreview().firstPage(); }, { icon: 'icon-fast-backward' })
             .addButton('previous', function (app) { app.getPreview().previousPage(); }, { icon: 'icon-chevron-left' })
-            .addButton('next',     function (app) { app.getPreview().nextPage(); },     { icon: 'icon-chevron-right' })
-            .addButton('last',     function (app) { app.getPreview().lastPage(); },     { icon: 'icon-fast-forward' })
+            .addLabel('current', { width: 100 })
+            .addButton('next', function (app) { app.getPreview().nextPage(); }, { icon: 'icon-chevron-right' })
+            .addButton('last', function (app) { app.getPreview().lastPage(); }, { icon: 'icon-fast-forward' })
             .end();
 
     // exports ================================================================
