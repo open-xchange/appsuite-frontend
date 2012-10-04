@@ -94,10 +94,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         };
                 
         this.setValueInModel = function (valueFromElement) {
-            if (this.model.set(this.attribute, valueFromElement)) {
-                this.$el.removeClass('error');
-                this.nodes.controls.find('.help-block.error').remove();
-            }
+            this.model.set(this.attribute, valueFromElement);
         };
         
         this.updateElement = function () {
@@ -106,6 +103,11 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         
         this.updateModel = function () {
             this.setValueInModel(this.nodes.element.val());
+        };
+        
+        this.removeError = function () {
+            this.nodes.controlGroup.removeClass('error');
+            this.nodes.controls.find('.help-block.error').remove();
         };
         
         this.handleRareModelChange = function () {
@@ -142,6 +144,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         }
         
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
+        this.modelEvents['valid:' + options.attribute] = 'removeError';
         
         
 

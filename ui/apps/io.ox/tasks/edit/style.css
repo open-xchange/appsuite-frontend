@@ -11,15 +11,8 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
  
- //fill out the grid
- .io-ox-tasks-edit .row-content {
- 	width: 100%;
- }
- 
- .io-ox-tasks-edit .row-content .progress-field{
+ .io-ox-tasks-edit .progress-field{
  	text-align: center;
- 	height: 20px;
- 	width: 53.5%;
  }
  
  .io-ox-tasks-edit .private-flag {
@@ -32,11 +25,40 @@
  }
  
  .task-edit-wrapper {
- 	max-width: 800px;
+ 	width: 800px;
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 20px;
  }
+ 
+ @media (min-width: 1200px) {
+ 	.task-edit-wrapper {
+ 		width: 1000px!important;
+ 	}
+ 	.io-ox-tasks-edit .alarm-date-field,
+ 	.io-ox-tasks-edit .start-date-field,
+ 	.io-ox-tasks-edit .end-date-field {
+ 		width: 178px!important;
+ 	}
+ 	.io-ox-tasks-edit .progress-field {
+ 		width: 86px!important;
+ 	}
+ }
+ 
+ @media (max-width: 980px) {
+ 	.task-edit-wrapper {
+ 		width: 700px!important;
+ 	}
+ 	.io-ox-tasks-edit .alarm-date-field,
+ 	.io-ox-tasks-edit .start-date-field,
+ 	.io-ox-tasks-edit .end-date-field {
+ 		width: 125px!important;
+ 	}
+ 	.io-ox-tasks-edit .progress-field {
+ 		width: 49px!important;
+ 	}
+ }
+ 
  
  .task-edit-label {
  	display: block;
@@ -58,16 +80,20 @@
   	overflow: visible;
  }
  
- .io-ox-tasks-edit .fluid-grid-fix {
-  	line-height: 20px;
- }
- 
  .io-ox-tasks-edit .alarm-date-field,
- .io-ox-tasks-edit .start-date-time-field,
- .io-ox-tasks-edit .end-date-time-field,
  .io-ox-tasks-edit .start-date-field,
  .io-ox-tasks-edit .end-date-field {
-  	height: 20px;
+ 	width: 142px;
+  	float: left!important; //fix order of inputfields in combined inputs
+ }
+ 
+ .io-ox-tasks-edit .progress-field {
+ 	width: 61px;
+  	float: left!important; //fix order of inputfields in combined inputs
+ }
+ 
+ .io-ox-tasks-edit .fluid-grid-fix {
+ 	margin-left: -1px; //fix for gap between input and button in combined inputs
  }
  
  .io-ox-tasks-edit .note-field {
@@ -76,7 +102,8 @@
   	resize: vertical;
  }
  
- .io-ox-tasks-edit .input-prepend {
+ .io-ox-tasks-edit .input-append,
+ .io-ox-tasks-edit .task-edit-save{
  	margin: 0;
  }
  
