@@ -14,12 +14,10 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
-     'io.ox/office/tk/controller',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css',
-     'io.ox/office/preview/actions'
-    ], function (Utils, AppHelper, Controller, Preview, gt) {
+     'less!io.ox/office/preview/style.css'
+    ], function (Utils, AppHelper, Preview, gt) {
 
     'use strict';
 
@@ -35,40 +33,7 @@ define('io.ox/office/preview/main',
             win = null,
 
             preview = new Preview();
-/*
-            controller = new Controller({
-                page: {
-                    enable: function () { return preview.getPageCount() > 0; },
-                    get: function () {
-                        // the gettext comments MUST be located directly before
-                        // gt(), but 'return' cannot be the last token in a line
-                        // -> use a temporary variable to store the result
-                        var msg =
-                            //#. %1$s is the current page index in office document preview
-                            //#. %2$s is the number of pages in office document preview
-                            //#, c-format
-                            gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
-                        return msg;
-                    }
-                },
-                first: {
-                    enable: function () { return preview.firstAvail(); },
-                    set: function () { preview.firstPage(); }
-                },
-                previous: {
-                    enable: function () { return preview.previousAvail(); },
-                    set: function () { preview.previousPage(); }
-                },
-                next: {
-                    enable: function () { return preview.nextAvail(); },
-                    set: function () { preview.nextPage(); }
-                },
-                last: {
-                    enable: function () { return preview.lastAvail(); },
-                    set: function () { preview.lastPage(); }
-                }
-            });
-*/
+
         // private methods ----------------------------------------------------
 
         /**
@@ -115,7 +80,7 @@ define('io.ox/office/preview/main',
             var file = self.getFileDescriptor(),
                 fileName = (file && file.filename) ? file.filename : gt('Unnamed');
             self.setTitle(fileName);
-            win.setTitle(gt('Preview') + ' - ' + fileName);
+            win.setTitle(fileName);
         }
 
         /**
@@ -157,6 +122,22 @@ define('io.ox/office/preview/main',
          */
         this.getPreview = function () {
             return preview;
+        };
+
+        /**
+         * Returns the localized label text 'm of n' containing the current
+         * page and the number of pages.
+         */
+        this.getPageOfLabel = function () {
+            // the gettext comments MUST be located directly before gt(), but
+            // 'return' cannot be the last token in a line
+            // -> use a temporary variable to store the result
+            var label =
+                //#. %1$s is the current page index in office document preview
+                //#. %2$s is the number of pages in office document preview
+                //#, c-format
+                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
+            return label;
         };
 
         /**
@@ -258,13 +239,24 @@ define('io.ox/office/preview/main',
 
         // initialization -----------------------------------------------------
 
-        // listen to 'showpage' events and update controller
-        //preview.on('showpage', function () { controller.update(); });
+        // listen to 'showpage' events and update the page label
+        preview.on('showpage', function () {
+        });
 
         // set launch and quit handlers
         this.setLauncher(launchHandler).setQuit(quitHandler);
 
     } // class Application
+
+    // global initialization --------------------------------------------------
+
+    AppHelper.configureWindowToolBar(MODULE_NAME)
+        .addButtonGroup('page')
+            .addButton('first',    function (app) { app.getPreview().firstPage(); },    { icon: 'icon-fast-backward' })
+            .addButton('previous', function (app) { app.getPreview().previousPage(); }, { icon: 'icon-chevron-left' })
+            .addButton('next',     function (app) { app.getPreview().nextPage(); },     { icon: 'icon-chevron-right' })
+            .addButton('last',     function (app) { app.getPreview().lastPage(); },     { icon: 'icon-fast-forward' })
+            .end();
 
     // exports ================================================================
 

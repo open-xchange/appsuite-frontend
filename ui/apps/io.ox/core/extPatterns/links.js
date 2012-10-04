@@ -73,7 +73,8 @@ define("io.ox/core/extPatterns/links",
                 .addClass(self.cssClasses || 'btn')
                 .data({ ref: self.ref, context: context })
                 .click(click)
-                .text(String(self.label))
+                .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
+                .append(_.isUndefined(self.label) ? $() : $('<span>').text(String(self.label)))
             );
         };
     };

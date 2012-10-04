@@ -824,6 +824,21 @@ define('io.ox/office/editor/main',
 
     } // class Application
 
+    // global initialization --------------------------------------------------
+
+    AppHelper.configureWindowToolBar(MODULE_NAME)
+        .addButtonGroup('file')
+            .addButton('download', function (app) { app.download(); }, { label: gt('Download') })
+            .addButton('print',    function (app) { app.print(); },    { label: gt('Print') })
+            .end()
+        .addRadioGroup('showtoolbar', function (app, id) { app.getView().getToolPane().showToolBar(id); })
+            .addButton('insert', { label: gt('Insert') })
+            .addButton('format', { label: gt('Format') })
+            .addButton('table',  { label: gt('Table') })
+            .addButton('image',  { label: gt('Image') })
+            .addButton('debug',  { label: gt('Debug'), active: Config.isDebugAvailable() })
+            .end();
+
     // exports ================================================================
 
     // io.ox.launch() expects an object with the method getApp()

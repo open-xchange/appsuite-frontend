@@ -23,8 +23,7 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/component/menubox',
      'io.ox/office/tk/config',
      'io.ox/office/editor/format/lineheight',
-     'gettext!io.ox/office/main',
-     'io.ox/office/editor/actions'
+     'gettext!io.ox/office/main'
     ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, Config, LineHeight, gt) {
 
     'use strict';
@@ -171,7 +170,7 @@ define('io.ox/office/editor/view',
             nodes = appWindow.nodes,
 
             // tool pane containing all tool bars
-            toolPane = new ToolPane(appWindow, controller, 'view/toolbars/show'),
+            toolPane = new ToolPane(appWindow, controller),
 
             // old value of the search query field
             oldSearchQuery = '',
