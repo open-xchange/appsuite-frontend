@@ -2240,7 +2240,6 @@ define('io.ox/office/editor/position',
      * @param {OXOPaM.oxoPosition} position
      *  The logical position.
      */
-
     Position.removeLeadingEmptyTextSpans = function (startnode, position) {
 
         var paraNode = Position.getCurrentParagraph(startnode, position);
@@ -2264,6 +2263,22 @@ define('io.ox/office/editor/position',
 
     };
 
+    /**
+     * Checking, if two logical positions are equal. Returns true,
+     * if the positions are equal, otherwise false.
+     *
+     * @param {OXOPaM.oxoPosition} pos1
+     *  The first logical position.
+     *
+     * @param {OXOPaM.oxoPosition} pos2
+     *  The second logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if the positions are equal, otherwise false.
+     */
+    Position.positionsAreEqual = function (pos1, pos2) {
+        return (_.copy(pos1).join('') === _.copy(pos2).join(''));
+    };
 
     return Position;
 

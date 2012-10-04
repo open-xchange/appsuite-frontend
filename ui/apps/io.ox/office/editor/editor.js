@@ -3039,12 +3039,6 @@ define('io.ox/office/editor/editor',
                             // moving floated images with operation
                             var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
                             applyOperation(newOperation, true, true);
-                        } else {
-                            // only internal shifting required. image should be shifted before empty paragraphs
-                            // there can be empty text spans before the destination node
-                            while (DOM.isEmptyTextSpan(child.previousSibling)) {
-                                $(child).insertBefore(child.previousSibling);
-                            }
                         }
 
                         counter++;
@@ -3052,6 +3046,10 @@ define('io.ox/office/editor/editor',
 
                     child = nextChild;
                 }
+
+                // finally delete all empty text spans in this paragraph, that are located before floated images
+                Position.removeLeadingEmptyTextSpans(paragraphs, _.copy(position));
+
             }
 
             return imageShift;
@@ -3412,7 +3410,9 @@ define('io.ox/office/editor/editor',
                 if (endPos[posLength] > 0) {
                     endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
                 }
-                implDeleteText(startPos, endPos);
+                if (! Position.positionsAreEqual(startPos, endPos)) {
+                    implDeleteText(startPos, endPos);
+                }
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
@@ -3422,7 +3422,10 @@ define('io.ox/office/editor/editor',
             if (endPosition[posLength] > 0) {
                 endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
             }
-            implDeleteText(startPosition, endPosition);
+
+            if (! Position.positionsAreEqual(startPosition, endPosition)) {
+                implDeleteText(startPosition, endPosition);
+            }
 
             // also delete all empty text spans in cloned paragraph before floated images
             var localPos = _.copy(startPosition);
