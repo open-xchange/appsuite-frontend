@@ -80,7 +80,6 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     data: modifications,
                     appendColumns: false
                 }).pipe(function () {
-                    console.log("updating caches");
                     // update cache
                     return $.when(
                         api.caches.get.remove(key),
