@@ -449,8 +449,6 @@ define('io.ox/core/tk/vgrid',
                     }
                 }
 
-                // update selection
-                self.selection.update();
                 tmp = null;
 
                 // remember bounds
@@ -601,7 +599,6 @@ define('io.ox/core/tk/vgrid',
                                         firstAutoSelect = false;
                                     }
                                     //changed = true;
-                                    //console.log('selectionChanged', selectionChanged, 'changed', changed);
                                     if (selectionChanged || changed) {
                                         // scroll to first selected item
                                         cid = _(ids).first();
@@ -614,6 +611,9 @@ define('io.ox/core/tk/vgrid',
                                     // select first or previous selection
                                     self.selection.selectSmart();
                                     firstAutoSelect = false;
+                                } else {
+                                    // set selection based on last index
+                                    self.selection.selectLastIndex();
                                 }
                             })
                             .done(def.resolve)

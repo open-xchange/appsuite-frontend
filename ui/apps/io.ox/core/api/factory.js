@@ -36,46 +36,6 @@ define("io.ox/core/api/factory",
         }, {});
     };
 
-    var updateCaches = function (ids, api) {
-        // be robust
-        ids = ids || [];
-        ids = _.isArray(ids) ? ids : [ids];
-        // find affected mails in simple cache
-        var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
-        _(ids).each(function (o) {
-            hash[getKey(o)] = folders[o.folder_id] = true;
-        });
-        // loop over each folder and look for items to remove
-        var defs = _(folders).map(function (value, folder_id) {
-            // grep keys
-            var cache = api.caches.all;
-            return cache.grepKeys(folder_id + '\t').pipe(function (key) {
-                // now get cache entry
-                return cache.get(key).pipe(function (data) {
-                    if (data) {
-                        if ('data' in data) {
-                            data.data = api.localRemove(data.data, hash, getKey);
-                        } else {
-                            data = api.localRemove(data, hash, getKey);
-                        }
-                        return cache.add(key, data);
-                    } else {
-                        return $.when();
-                    }
-                });
-            });
-        });
-        // remove from object caches
-        if (ids.length) {
-            defs.push(api.caches.list.remove(ids));
-            defs.push(api.caches.get.remove(ids));
-        }
-        // clear
-        return $.when.apply($, defs).done(function () {
-            hash = folders = defs = api = null;
-        });
-    };
-
     var factory = function (o) {
 
         // extend default options (deep)
@@ -239,6 +199,50 @@ define("io.ox/core/api/factory",
                 });
             },
 
+            updateCaches: function (ids) {
+                // be robust
+                ids = ids || [];
+                ids = _.isArray(ids) ? ids : [ids];
+                // find affected mails in simple cache
+                var hash = {}, folders = {}, getKey = cache.defaultKeyGenerator;
+                _(ids).each(function (o) {
+                    hash[getKey(o)] = folders[o.folder_id] = true;
+                });
+                // loop over each folder and look for items to remove
+                var defs = _(folders).map(function (value, folder_id) {
+                    // grep keys
+                    var cache = api.caches.all;
+                    return cache.grepKeys(folder_id + '\t').pipe(function (key) {
+                        // now get cache entry
+                        return cache.get(key).pipe(function (data) {
+                            if (data) {
+                                if ('data' in data) {
+                                    data.data = api.localRemove(data.data, hash, getKey);
+                                } else {
+                                    data = api.localRemove(data, hash, getKey);
+                                }
+                                return cache.add(key, data);
+                            } else {
+                                return $.when();
+                            }
+                        });
+                    });
+                });
+                // remove from object caches
+                if (ids.length) {
+                    defs.push(api.caches.list.remove(ids));
+                    defs.push(api.caches.get.remove(ids));
+                }
+                // clear
+                return $.when.apply($, defs).done(function () {
+                    // trigger item specific events to be responsive
+                    _(ids).each(function (obj) {
+                        api.trigger('delete:' + _.cid(obj));
+                    });
+                    hash = folders = defs = ids = null;
+                });
+            },
+
             remove: function (ids, local) {
                 // be robust
                 ids = ids || [];
@@ -251,7 +255,7 @@ define("io.ox/core/api/factory",
                 };
                 api.trigger('beforedelete', ids);
                 // remove from caches first
-                return updateCaches(ids, api).pipe(function () {
+                return api.updateCaches(ids).pipe(function () {
                     // trigger visual refresh
                     api.trigger('refresh.all');
                     // delete on server?

@@ -128,7 +128,7 @@ define("io.ox/core/extPatterns/links",
             list = node.parent().children('[data-prio="lo"]'),
             expand = node.attr(A) === 'more';
         list[expand ? 'show' : 'hide']();
-        node.text(expand ? 'Less' : 'More').attr(A, expand ? 'less' : 'more');
+        node.text(expand ? 'Less' : 'More ...').attr(A, expand ? 'less' : 'more');
     };
 
     var InlineLinks = function (options) {
@@ -151,11 +151,11 @@ define("io.ox/core/extPatterns/links",
                 // add toggle unless multi-selection
                 if (!multiple && node.children().length > 3) {
                     node.append(
-                        $('<span>', { 'data-toggle': 'more' })
-                        .addClass('label io-ox-action-link')
+                        $('<button>', { 'data-toggle': 'more' })
+                        .addClass('btn btn-mini btn-primary io-ox-action-link')
                         .css({ cursor: 'pointer', marginLeft: '1.5em' })
                         .click(inlineToggle)
-                        .text('More')
+                        .text('More ...')
                     );
                     node.children('[data-prio="lo"]').hide();
                 }

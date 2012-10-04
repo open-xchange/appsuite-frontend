@@ -51,6 +51,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             selectLast,
             selectNext,
             lastIndex = -1, // trick for smooth updates
+            lastValidIndex = 0,
             fnKey,
             hasMultiple;
 
@@ -96,6 +97,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 toggle(id);
                 // remember
                 last = prev = id;
+                lastValidIndex = getIndex(id);
             }
             // event
             changed();
@@ -215,6 +217,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                 lastIndex = getIndex(id);
                 if (prev === empty) {
                     prev = id;
+                    lastValidIndex = lastIndex;
                 }
                 if (quiet !== true) {
                     self.trigger('select', key);
@@ -287,11 +290,6 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             if (all.length > 0) {
                 lastIndex = -1;
             }
-            // could reselect?
-            if (!reselected && index >= 0) {
-                // causes smooth updates in vgrid when, for example, deleting emails
-                select(observedItems[index]);
-            }
             // fire event?
             if (!_.isEqual(tmp, self.get())) {
                 changed();
@@ -349,7 +347,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             var nodes = container.find('.selectable'),
                 i = 0, $i = nodes.length, node = null;
             for (; i < $i; i++) {
-                node = $(nodes[i]);
+                node = nodes.eq(i);
                 // is selected?
                 if (isSelected(node.attr('data-obj-id'))) {
                     node.find('input.reflect-selection').attr('checked', 'checked').end()
@@ -454,6 +452,8 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
                     select(elem);
                 }
             });
+            // reset last index
+            lastIndex = -1;
             // event
             if (quiet !== true) {
                 changed();
@@ -509,6 +509,13 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
             }
         };
 
+        this.selectLastIndex = function () {
+            var item = observedItems[lastValidIndex] || observedItems[0];
+            if (item !== undefined) {
+                this.select(item);
+            }
+        };
+
         /**
          * Is selected?
          */
@@ -534,7 +541,7 @@ define('io.ox/core/tk/selection', ['io.ox/core/event'], function (Events) {
         };
 
         this.getLastIndex = function () {
-            return lastIndex;
+            return lastValidIndex;
         };
 
         /**
