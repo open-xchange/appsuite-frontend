@@ -15,11 +15,11 @@ define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
      'io.ox/office/tk/controller',
-     'io.ox/office/tk/component/topbar',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
-     'less!io.ox/office/preview/style.css'
-    ], function (Utils, AppHelper, Controller, TopBar, Preview, gt) {
+     'less!io.ox/office/preview/style.css',
+     'io.ox/office/preview/actions'
+    ], function (Utils, AppHelper, Controller, Preview, gt) {
 
     'use strict';
 
@@ -34,10 +34,8 @@ define('io.ox/office/preview/main',
 
             win = null,
 
-            preview = new Preview(),
-
-            topBar = null,
-
+            preview = new Preview();
+/*
             controller = new Controller({
                 page: {
                     enable: function () { return preview.getPageCount() > 0; },
@@ -70,7 +68,7 @@ define('io.ox/office/preview/main',
                     set: function () { preview.lastPage(); }
                 }
             });
-
+*/
         // private methods ----------------------------------------------------
 
         /**
@@ -138,17 +136,6 @@ define('io.ox/office/preview/main',
             win.nodes.main
                 .addClass('io-ox-office-preview-main')
                 .append(preview.getNode());
-
-            // create the top tool bar
-            topBar = new TopBar(win)
-                .addButton('first', { icon: 'icon-fast-backward', whiteIcon: true, tooltip: gt('First page') })
-                .addButton('previous', { icon: 'icon-step-backward', whiteIcon: true, tooltip: gt('Previous page') })
-                .addLabel('page', { tooltip: gt('Page number') })
-                .addButton('next', { icon: 'icon-step-forward', whiteIcon: true, tooltip: gt('Next page') })
-                .addButton('last', { icon: 'icon-fast-forward', whiteIcon: true, tooltip: gt('Last page') });
-
-            // register view components at the controller
-            controller.registerViewComponent(topBar);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);
@@ -265,16 +252,14 @@ define('io.ox/office/preview/main',
          * window close button).
          */
         this.destroy = function () {
-            controller.destroy();
-            topBar.destroy();
             preview.destroy();
-            win = preview = topBar = controller = null;
+            win = preview = null;
         };
 
         // initialization -----------------------------------------------------
 
         // listen to 'showpage' events and update controller
-        preview.on('showpage', function () { controller.update(); });
+        //preview.on('showpage', function () { controller.update(); });
 
         // set launch and quit handlers
         this.setLauncher(launchHandler).setQuit(quitHandler);
