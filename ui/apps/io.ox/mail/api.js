@@ -17,7 +17,8 @@ define("io.ox/mail/api",
      "io.ox/core/cache",
      "io.ox/core/api/factory",
      "io.ox/core/api/folder",
-     "io.ox/core/api/account"], function (http, config, cache, apiFactory, folderAPI, accountAPI) {
+     "io.ox/core/api/account",
+     "io.ox/core/notifications"], function (http, config, cache, apiFactory, folderAPI, accountAPI, notifications) {
 
     "use strict";
 
@@ -387,16 +388,17 @@ define("io.ox/mail/api",
                     api.caches.get.remove(id),
                     api.caches.list.remove(obj),
                     api.caches.list.remove(id),
-                    api.caches.all.grepRemove(id + '\t'), // clear source folder
+                    //api.caches.all.grepRemove(id + '\t'), // clear source folder
                     api.caches.all.grepRemove(targetFolderId + '\t') // clear target folder
                 );
             };
-        },
-        refreshAll = function (obj) {
-            $.when.apply($, obj).done(function () {
-                api.trigger('refresh.all refresh.list');
-            });
         };
+
+    var refreshAll = function (obj) {
+        $.when.apply($, obj).done(function () {
+            api.trigger('refresh.all refresh.list');
+        });
+    };
 
     api.update = function (list, data) {
         return change(list, data, 'update');
@@ -480,20 +482,31 @@ define("io.ox/mail/api",
     };
 
     api.move = function (list, targetFolderId) {
-        return api.update(list, { folder_id: targetFolderId })
-            .pipe(function () {
-                list = _.isArray(list) ? list : [list];
-                return _(list).map(function (obj) {
-                    return (clearCaches(obj, targetFolderId))();
+        // call updateCaches (part of remove process) to be responsive
+        return api.updateCaches(list).pipe(function () {
+            // trigger visual refresh
+            api.trigger('refresh.all');
+            // start update on server
+            return api.update(list, { folder_id: targetFolderId })
+                .pipe(function () {
+                    list = _.isArray(list) ? list : [list];
+                    return _(list).map(function (obj) {
+                        return (clearCaches(obj, targetFolderId))();
+                    });
+                })
+                .done(function () {
+                    notifications.yell('success', 'Mail has been moved');
                 });
-            })
-            .done(refreshAll);
+        });
     };
 
-    api.copy = function (obj, targetFolderId) {
-        return change(obj, { folder_id: targetFolderId }, 'copy')
-            .pipe(clearCaches(obj, targetFolderId))
-            .done(refreshAll);
+    api.copy = function (list, targetFolderId) {
+        return change(list, { folder_id: targetFolderId }, 'copy')
+            .pipe(clearCaches(list, targetFolderId))
+            .done(refreshAll)
+            .done(function () {
+                notifications.yell('success', 'Mail has been copied');
+            });
     };
 
     var react = function (action, obj, view) {
@@ -878,18 +891,25 @@ define("io.ox/mail/api",
         });
         // loop over list and check occurence via hash
         return _(list).filter(function (obj) {
-            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s;
+            var cid = _.cid(obj), found = cid in hash, length = obj.thread.length, s, entire;
             // case #1: found in hash; no thread
             if (found && length <= 1) {
                 return false;
             }
             // case #2: found in hash; root element
             if (found && length > 1) {
-                // copy props from second thread item
-                s = obj.thread[1];
-                _.extend(obj, { folder_id: s.folder_id, id: s.id, flags: s.flags, color_label: s.color_label });
-                obj.thread.splice(0, 1);
-                return true;
+                // delete entire thread?
+                entire = _(obj.thread).chain().map(_.cid)
+                    .inject(function (sum, cid) { return sum + (cid in hash ? 1 : 0); }, 0).value() === length;
+                if (entire) {
+                    return false;
+                } else {
+                    // copy props from second thread item
+                    s = obj.thread[1];
+                    _.extend(obj, { folder_id: s.folder_id, id: s.id, flags: s.flags, color_label: s.color_label });
+                    obj.thread.splice(0, 1);
+                    return true;
+                }
             }
             // case #3: found via reverse lookup
             if (cid in reverse) {
