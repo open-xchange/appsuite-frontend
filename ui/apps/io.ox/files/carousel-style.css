@@ -42,15 +42,19 @@
                 padding:0;
                 margin:0;
                 background:transparent;
-
+                text-align: center;
                 li {
                     text-shadow: none;
-                    word-wrap:break-word;
+                    word-wrap: break-word;
+                    a { color: @link-on-dark; }
                 }
                 li.active {
                     display:inline;
                 }
+                .divider { color: #fff; }
             }
+            
+            h4 { text-align: center; }
         }
     }
 

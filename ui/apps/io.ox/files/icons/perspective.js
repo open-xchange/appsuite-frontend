@@ -41,7 +41,7 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             if (!baton.app.getWindow().search.active) {
                 this.append(
-                    baton.$.breadcrumb = folderAPI.getBreadcrumb(baton.app.folder.get(), baton.app.folder.set)
+                    baton.$.breadcrumb = folderAPI.getBreadcrumb(baton.app.folder.get(), { handler: baton.app.folder.set })
                 );
             }
         }
