@@ -180,8 +180,8 @@ define("io.ox/core/main",
                     $('<li>').append($('<a>').text(gt('Fullscreen')))
                     .on('click', function () {
                         // Maximize
-                        if (window.BigScreen.request) {
-                            window.BigScreen.toggle();
+                        if (BigScreen.enabled) {
+                            BigScreen.request();
                         }
                     })
                 );

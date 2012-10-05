@@ -47,8 +47,8 @@ define('io.ox/files/carousel',
     }
 
     function closeCarousel() {
-        if (window.BigScreen.enabled) {
-            window.BigScreen.exit();
+        if (BigScreen.enabled) {
+            BigScreen.exit();
         }
         $('.carousel').remove();
     }
@@ -200,8 +200,8 @@ define('io.ox/files/carousel',
 
     function drawFullscreenCarousel(app, ids) {
         var win = app.getWindow();
-        if (window.BigScreen.enabled) {
-            window.BigScreen.toggle(win.nodes.outer.get(0));
+        if (BigScreen.enabled) {
+            BigScreen.request(win.nodes.outer.get(0));
             drawCarousel(app, ids);
         }
     }
