@@ -148,12 +148,36 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
 
         _.extend(this, options); // May override any of the above aspects
     }
+    
+    function addErrorHandling(options, object) {
+        if (!object.modelEvents) {
+            object.modelEvents = {};
+        }
+        object.modelEvents['invalid:' + options.attribute] = 'showError';
+        object.modelEvents['valid:' + options.attribute] = 'clearError';
+        
+        _.extend(object, {
+            showError: function (messages) {
+                var helpBlock =  $('<div class="help-block error">');
+                _(messages).each(function (msg) {
+                    helpBlock.append($.txt(msg));
+                });
+                this.$el.append(helpBlock);
+                this.$el.addClass("error");
+            },
+            clearError: function () {
+                this.$el.removeClass("error");
+                this.$el.find('.help-block').remove();
+            }
+        });
+        
+        return object;
+    }
 
     function InputField(options) {
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateInputField';
-        modelEvents['invalid:' + options.attribute] = 'showError';
-        _.extend(this, {
+        var basicImplementation = {
             tagName: 'div',
             render: function () {
                 this.nodes = {};
@@ -166,28 +190,21 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 this.nodes.inputField.val(this.model.get(this.attribute));
             },
             updateModel: function () {
-                if (this.model.set(this.attribute, this.nodes.inputField.val())) {
-                    this.$el.removeClass("error");
-                    this.$el.find('.help-block').remove();
-                }
-            },
-            showError: function (messages) {
-                var helpBlock =  $('<div class="help-block error">');
-                _(messages).each(function (msg) {
-                    helpBlock.append($.txt(msg));
-                });
-                this.$el.append(helpBlock);
-                this.$el.addClass("error");
+                this.model.set(this.attribute, this.nodes.inputField.val());
             }
-        }, options);
+            
+        };
+        
+        _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
 
     function CheckBoxField(options) {
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateCheckbox';
-
-        _.extend(this, {
+        
+        var basicImplementation = {
             tagName: 'div',
+            modelEvents: modelEvents,
             render: function () {
                 var self = this;
                 this.nodes = {};
@@ -202,23 +219,32 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                             this.label
                         )
                 );
+                if (this.model.get(this.attribute)) {
+                    this.nodes.checkbox.attr({checked: "checked"});
+                }
                 this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
                 this.nodes.checkbox.on('change', function () {
                     self.model.set(self.attribute, self.nodes.checkbox.is(':checked'));
                 });
             },
             updateCheckbox: function () {
-                this.nodes.checkbox.attr('checked', this.model.get(this.attribute));
+                if (this.model.get(this.attribute)) {
+                    this.nodes.checkbox.attr({checked: "checked"});
+                } else {
+                    this.nodes.checkbox.removeAttr("checked");
+                }
             }
-        }, options);
+        };
+        
+        _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
 
     function SelectBoxField(options) {
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'updateChoice';
-
-        _.extend(this, {
+        var basicImplementation = {
             tagName: 'div',
+            modelEvents: modelEvents,
             render: function () {
                 var self = this;
                 this.nodes = {};
@@ -233,13 +259,15 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
 
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
-                    self.model.set(self.nodes.select.val());
+                    self.model.set(self.attribute, self.nodes.select.val());
                 });
             },
             updateChoice: function () {
                 this.nodes.select.val(this.model.get(this.attribute));
             }
-        }, options);
+        };
+        
+        _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
     /**
      * Generates a section title with a <label> element
