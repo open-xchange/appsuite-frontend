@@ -193,7 +193,7 @@ define("io.ox/core/api/factory",
                     .done(o.done.get || $.noop);
             },
 
-            cacheRemove: function (list, hash, getKey) {
+            localRemove: function (list, hash, getKey) {
                 return _(list).filter(function (o) {
                     return hash[getKey(o)] !== true;
                 });
