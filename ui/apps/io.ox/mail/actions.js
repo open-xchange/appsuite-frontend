@@ -148,13 +148,12 @@ define('io.ox/mail/actions',
         id: 'move',
         requires: 'toplevel some',
         multiple: function (mail) {
-            var self = this;
             require(["io.ox/core/tk/dialogs", "io.ox/core/tk/folderviews"], function (dialogs, views) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true })
                     .header($('<h3>').text('Move'))
                     .addPrimaryButton("ok", gt("OK"))
                     .addButton("cancel", gt("Cancel"));
-                dialog.getBody().css('maxHeight', '250px');
+                dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();

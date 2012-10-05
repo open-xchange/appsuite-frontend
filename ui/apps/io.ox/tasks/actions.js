@@ -12,9 +12,10 @@
  */
 
 define("io.ox/tasks/actions", ['io.ox/core/extensions',
-                              'io.ox/core/extPatterns/links',
-                              'gettext!io.ox/tasks/actions',
-                              'io.ox/core/notifications'], function (ext, links, gt, notifications) {
+                               'io.ox/tasks/util',
+                               'io.ox/core/extPatterns/links',
+                               'gettext!io.ox/tasks/actions',
+                               'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
 
     "use strict";
     var Action = links.Action;
@@ -189,24 +190,67 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
-        index: 10,
+        index: 100,
+        prio: 'hi',
         label: gt("Edit"),
         ref: 'io.ox/tasks/actions/edit'
     }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 20,
+        index: 200,
+        prio: 'hi',
         label: gt("Delete"),
         ref: 'io.ox/tasks/actions/delete'
     }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'done',
-        index: 30,
+        index: 300,
+        prio: 'hi',
         label: gt("Done"),
         ref: 'io.ox/tasks/actions/done'
     }));
+    
+    ext.point('io.ox/tasks/links/inline').extend({
+        id: 'changeDueDate',
+        index: 400,
+        prio: 'lo',
+        draw: function (data) {
+            this.append(
+                $('<span class="dropdown" class="io-ox-inline-links">')
+                    .append(
+                        // link
+                        $('<a href="#" data-toggle="dropdown">')
+                        .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
+                        // drop down
+                        $('<ul class="dropdown-menu">').append(util.buildDropdownMenu(new Date(), true))
+                )
+            ).delegate('li a', 'click', {task: data}, function (e) {
+                e.preventDefault();
+                var finderId = $(this).attr('finderId');
+                require(['io.ox/tasks/api'], function (api) {
+                    var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
+                        modifications = {end_date: endDate.getTime()},
+                        folder;
+                    //check if startDate is still valid with new endDate, if not, make it fit
+                    if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
+                        modifications.start_date = modifications.end_date;
+                    }
+                    if (e.data.task.folder) {
+                        folder = e.data.task.folder;
+                    } else {
+                        folder = e.data.task.folder_id;
+                    }
+                    
+                    api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
+                        api.trigger("update:" + folder + '.' + e.data.task.id);
+                        notifications.yell('success', gt('Changed due date'));
+                    });
+                });
+            });
+        }
+    });
     
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({

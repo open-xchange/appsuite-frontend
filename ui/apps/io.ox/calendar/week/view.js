@@ -502,16 +502,16 @@ define('io.ox/calendar/week/view',
                 } else {
                     var startDate = new date.Local(model.get('start_date')),
                         endDate = new date.Local(model.get('end_date')),
-                        start = startDate.format(date.DAYOFWEEK_DATE),
-                        end = endDate.format(date.DAYOFWEEK_DATE),
-                        maxCount = this.columns,
+                        start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime(),
+                        end = new date.Local(endDate.getYear(), endDate.getMonth(), endDate.getDate()).getTime(),
+                        maxCount = 0,
                         style = '';
 
                     // draw across multiple days
-                    while (true && maxCount) {
+                    while (true && maxCount <= this.columns) {
                         var app = this.renderAppointment(model.attributes),
                             sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
-                        maxCount--;
+                        maxCount++;
 
                         // if
                         if (start !== end) {
@@ -522,12 +522,16 @@ define('io.ox/calendar/week/view',
                             endDate = new date.Local(model.get('end_date'));
                         }
 
-                        app.pos = {
+                        // kill overlap appointments with length null
+                        if (startDate.getTime() === endDate.getTime() && maxCount > 1) {
+                            break;
+                        }
+
+                        app.addClass(style).pos = {
                                 id: model.id,
                                 start: startDate.getTime(),
                                 end: endDate.getTime()
                             };
-                        app.addClass(style);
                         if (!draw[sel]) {
                             draw[sel] = [];
                         }
@@ -538,7 +542,7 @@ define('io.ox/calendar/week/view',
                         if (start !== end) {
                             startDate.setDate(startDate.getDate() + 1);
                             startDate.setHours(0, 0, 0, 0);
-                            start = startDate.format(date.DAYOFWEEK_DATE);
+                            start = new date.Local(startDate.getYear(), startDate.getMonth(), startDate.getDate()).getTime();
                             style = 'rmnorth ';
                         } else {
                             break;
@@ -814,8 +818,7 @@ define('io.ox/calendar/week/view',
                         self.lassoMode = false;
                         self.onEnterAppointment(e);
                         // write all appointment divs to draggable object
-                        var d = $(this).data('draggable'),
-                            day = Math.floor((e.pageX - paneOffset) / colWidth);
+                        var d = $(this).data('draggable');
                         d.my = {};
                         d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]')
                             .addClass('opac')
@@ -827,92 +830,107 @@ define('io.ox/calendar/week/view',
                             });
                         d.my.firstPos = parseInt(d.my.all.first().closest('.day').attr('date'), 10);
                         d.my.lastPos = parseInt(d.my.all.last().closest('.day').attr('date'), 10);
-                        d.my.helper = null;
-                        d.my.lastDiff = ui.position.top;
+                        d.my.initPos = parseInt($(this).closest('.day').attr('date'), 10);
+                        d.my.firstTop = d.my.all.first().position().top;
+                        d.my.lastHeight = d.my.all.last().outerHeight();
+                        d.my.lastTop = ui.position.top;
+                    },
+                    drag: function (e, ui) {
+                        var d = $(this).data('draggable'),
+                            left = ui.position.left -= ui.originalPosition.left,
+                            move = Math.floor(left / colWidth),
+                            day = d.my.initPos + move,
+                            top = ui.position.top;
+
+                        // correct position
                         if (d.my.firstPos === d.my.lastPos) {
                             d.my.mode = 4;
-                        } else if (day === d.my.firstPos) {
+                        } else if (day === d.my.firstPos + move) {
                             d.my.mode = 3;
-                        } else if (day === d.my.lastPos) {
+                        } else if (day === d.my.lastPos + move) {
                             d.my.mode = 2;
                         } else {
                             d.my.mode = 1;
                         }
-//                        d.my.firstHelper = $(this).clone().hide();
-//                        $('.week-container .day[date="' + (d.my.firstPos - 1) + '"]')
-//                            .append(d.my.firstHelper);
-//                        d.my.lastHelper = $(this).clone().hide();
-//                        $('.week-container .day[date="' + (d.my.lastPos + 1) + '"]')
-//                            .append(d.my.lastHelper);
-                        // last element
-                        if (d.my.mode === 3) {
-                            d.options.axis = 'x';
-                        }
-                    },
-                    drag: function (e, ui) {
-                        var d = $(this).data('draggable'),
-//                            day = Math.floor((e.pageX - paneOffset) / colWidth),
-//                            moveY = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
-                            top = ui.position.top;
-                        // correct position
+
+                        // sync left position
+                        d.my.all
+                            .css('left', left);
+
+                        // elements do not move
                         if (ui.position.top < 0 || d.my.mode <= 2) {
                             ui.position.top = 0;
                         }
-//                        console.log(ui.position.top);
-                        d.my.all
-                            .css('left', ui.position.left -= ui.originalPosition.left);
+
+                        // last element
+                        if (d.my.mode === 2) {
+                            d.options.axis = 'x';
+                        }
 
                         // handling on multi-drag
                         if (d.my.mode < 4) {
-                            if (d.my.lastDiff !== top) {
-                                var diff = top - d.my.lastDiff;
-                                d.my.lastDiff = top;
-//                                if (d.my.mode === 3) {
-//                                    if (top < 0) {
-//                                        if (d.my.helper === null) {
-//                                            console.log('first add');
-//                                            d.my.helper = 1;
-//                                        } else {
-//                                            console.log('first resize', Math.abs(top));
-//                                        }
-//                                        top = 0;
-//                                    }
-//                                    if (top > paneHeight) {
-//                                        console.log('first remove');
-//                                        top = paneHeight;
-//                                    }
-//                                }
+                            if (d.my.lastTop !== top) {
+                                var diff = top - d.my.lastTop,
+                                    firstTop = d.my.firstTop + diff,
+                                    lastHeight = d.my.lastHeight + diff;
 
                                 // calc first position
-//                                var overhead = 0,
-                                var tmpTop = Math.max(0, d.my.all.first().position().top + diff);
-//                                if (tmpTop < 0) {
-//                                    tmpTop = 0;
-//                                    overhead = Math.abs(top);
-//                                }
-//                                console.log(overhead, top, tmpTop,  diff);
-
+                                if (((d.my.firstTop >= 0 && firstTop < 0) || (d.my.firstTop >= paneHeight && firstTop < paneHeight)) && diff < 0) {
+                                    $('.week-container .day[date="' + (--d.my.firstPos) + '"]')
+                                        .append($(this).clone());
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                }
+                                if (((d.my.firstTop < 0 && firstTop >= 0) || (d.my.firstTop < paneHeight && firstTop >= paneHeight)) && diff > 0) {
+//                                    console.log('d.my.firstTop', d.my.firstTop, 'firstTop', firstTop, diff, 'ui.position.top', ui.position.top, d.position.top);
+                                    d.my.firstPos++;
+                                    d.my.all.first().remove();
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                }
+                                if (firstTop < 0) {
+                                    firstTop += paneHeight;
+                                } else if (firstTop >= paneHeight) {
+                                    firstTop -= paneHeight;
+                                }
+                                // update first element
                                 d.my.all.first().css({
-                                    top: tmpTop,
-                                    height: paneHeight - tmpTop
+                                    top: firstTop,
+                                    height: paneHeight - firstTop
                                 });
 
                                 // calc last position
-                                d.my.all.last().height(function (i, h) {
-                                    return Math.min(Math.max(0, h += diff), paneHeight);
+                                if (((d.my.lastHeight <= 0 && lastHeight > 0) || (d.my.lastHeight <= paneHeight && lastHeight > paneHeight)) && diff > 0) {
+                                    $('.week-container .day[date="' + (++d.my.lastPos) + '"]')
+                                        .append($(this).clone());
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                }
+                                if (((d.my.lastHeight > 0 && lastHeight <= 0) || (d.my.lastHeight > paneHeight && lastHeight <= paneHeight)) && diff < 0) {
+                                    d.my.lastPos--;
+                                    d.my.all.last().remove();
+                                    d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
+                                }
+                                if (lastHeight <= 0) {
+                                    lastHeight += paneHeight;
+                                } else if (lastHeight > paneHeight) {
+                                    lastHeight -= paneHeight;
+                                }
+                                d.my.all.last().css({
+                                    top: 0,
+                                    height: lastHeight
                                 });
+
+                                d.my.firstTop += diff;
+                                d.my.lastHeight += diff;
                             }
-                        } else {
-                            d.my.lastDiff = top;
                         }
+                        d.my.lastTop = top;
                     },
                     stop: function (e, ui) {
                         self.lassoMode = true;
-                        $(this).busy();
                         var d = $(this).data('draggable'),
-                            moveY = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
+                            move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
-                            startTS = app.start_date + self.getTimeFromPos(d.my.lastDiff - ui.originalPosition.top) + (moveY * date.DAY);
+                            startTS = app.start_date + self.getTimeFromPos(d.my.lastTop - ui.originalPosition.top) + (move * date.DAY);
+                        d.my.all.busy();
                         _.extend(app, {
                             start_date: startTS,
                             end_date: startTS + (app.end_date - app.start_date),
