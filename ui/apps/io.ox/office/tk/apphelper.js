@@ -528,23 +528,6 @@ define('io.ox/office/tk/apphelper',
         return app;
     };
 
-    // static initialization ==================================================
-
-    // check if any open application has unsaved changes
-    // TODO: this needs to be generalized
-    window.onbeforeunload = function () {
-
-        var // find all applications with unsaved changes
-            dirtyApps = ox.ui.App.filter(function (app) {
-                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
-            });
-
-        // browser will show a confirmation dialog, if onbeforeunload returns a string
-        if (dirtyApps.length > 0) {
-            return gt('There are unsaved changes.');
-        }
-    };
-
     // exports ================================================================
 
     return AppHelper;

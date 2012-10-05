@@ -518,6 +518,20 @@ define("io.ox/core/desktop",
 
     }());
 
+    // check if any open application has unsaved changes
+    window.onbeforeunload = function () {
+
+        var // find all applications with unsaved changes
+            dirtyApps = ox.ui.App.filter(function (app) {
+                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+            });
+
+        // browser will show a confirmation dialog, if onbeforeunload returns a string
+        if (dirtyApps.length > 0) {
+            return gt('There are unsaved changes.');
+        }
+    };
+
     ox.ui.screens = (function () {
 
         var current = null,
