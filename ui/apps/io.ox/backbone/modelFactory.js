@@ -39,7 +39,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
-            this.realm = this.get('_realm');
+            this.realm = this.get('_realm') || this.factory.realm("default");
             this._valid = true;
             this.attributeValidity = {};
 
