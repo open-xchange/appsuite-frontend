@@ -39,7 +39,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
-            this.realm = this.get('_realm');
+            this.realm = this.get('_realm') || this.factory.realm("default");
             this._valid = true;
             this.attributeValidity = {};
 
@@ -94,8 +94,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             if (action === 'delete') {
                 action = 'destroy';
             }
-            if ((action === 'update' || action === 'create') && !this.isValid()) {
-                return $.Deferred().fail({error: gt('Invalid data')});
+            if ((action === 'update' || action === 'create')) {
+                this.validate(this.toJSON());
+                if (!this.isValid()) {
+                    return $.Deferred().reject({error: gt('Invalid data')});
+                }
             }
             return this.factory.internal[action].call(this.factory.internal, model)
                 .done(function (response) {

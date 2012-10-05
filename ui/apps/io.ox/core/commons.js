@@ -165,12 +165,13 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                     });
                 };
             win.on('show', function () {
-                    api.on('refresh.all', refreshAll)
+                    api.on('refresh.all refresh:all:local', refreshAll)
                         .on('refresh.list', refreshList)
                         .trigger('refresh.all');
                 })
                 .on('hide', function () {
-                    api.off('refresh.all', refreshAll).off('refresh.list', refreshList);
+                    api.off('refresh.all refresh:all:local', refreshAll)
+                        .off('refresh.list', refreshList);
                 });
         },
 
@@ -241,11 +242,6 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             } else {
                 return app.folder.setDefault();
             }
-            // reset mode on folder change
-            app.on('folder:change', function () {
-                console.log('mmmh');
-                //grid.setMode('all');
-            });
         },
 
         addGridFolderSupport: function (app, grid) {

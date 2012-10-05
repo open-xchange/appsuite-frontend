@@ -15,13 +15,12 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
-    var setSession = function (session) {
-            ox.session = session;
-        },
-
-        setUser = function (username) {
-            ox.user = username; // might have a domain; depends on what the user entered on login
-        };
+    var set = function (data) {
+        ox.session = data.session || '';
+        ox.user = data.user; // might have a domain; depends on what the user entered on login
+        ox.user_id = data.user_id || 0;
+        ox.language = data.language || 'en_US';
+    };
 
     var that = {
 
@@ -38,11 +37,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     client: 'com.openexchange.ox.gui.dhtml'
                 }
             })
-            .done(function (data) {
-                // store session
-                ox.session = data.session;
-                ox.user = data.user;
-            });
+            .done(set);
         },
 
         login: (function () {
@@ -77,8 +72,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                         })
                         .done(function (data) {
                             // store session
-                            setSession(data.session);
-                            setUser(username);
+                            set(data);
                             // set permanent cookie
                             if (store) {
                                 that.store().done(function () {
@@ -92,8 +86,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                     }
                 } else {
                     // offline
-                    setSession('offline');
-                    setUser(username);
+                    set({ session: 'offline', user: username });
                     def.resolve({ session: ox.session, user: ox.user });
                 }
 

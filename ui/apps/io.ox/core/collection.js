@@ -12,7 +12,7 @@
  */
 
 define('io.ox/core/collection',
-    ['io.ox/core/config', 'io.ox/core/api/folder'], function (config, api) {
+    ['io.ox/core/api/folder'], function (api) {
 
     'use strict';
 
@@ -28,7 +28,7 @@ define('io.ox/core/collection',
                 return false;
             } else if (bits === 1) {
                 // only own objects
-                myself = myself || config.get('identifier');
+                myself = myself || ox.user_id;
                 return owner === myself;
             } else {
                 // all objects or admin
