@@ -70,6 +70,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                 ext.point(validationNamespace + '/' + attribute).extend({
                     id: definition.id || attribute,
                     validate: function (value, errors, attributes) {
+                        console.log("VALIDATE for attribute", attribute);
                         var analysis = [];
                         
                         if (definition.format && formats[definition.format]) {
@@ -91,16 +92,22 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                                 }
                             }
                         }
-                        
-                        if (definition.mandatory) {
-                            if (_.isUndefined(value) || value === null) {
-                                analysis.push('Please enter a value');
-                            }
-                        }
-                                                
                         return analysis;
                     }
                 });
+                
+                if (definition.mandatory) {
+                    ext.point(validationNamespace).extend({
+                        id: attribute + "-is-mandatory",
+                        validate: function (attributes, errors) {
+                            var value = attributes[attribute];
+                            
+                            if (_.isUndefined(value) || value === null) {
+                                errors.add(attribute, 'Please enter a value');
+                            }
+                        }
+                    });
+                }
             });
             
         },
