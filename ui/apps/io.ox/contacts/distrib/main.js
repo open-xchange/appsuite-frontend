@@ -65,13 +65,32 @@ define('io.ox/contacts/distrib/main',
 
         app.edit = function (obj) {
             // load list first
-            return model.factory.getRealm("edit").get(obj).done(function (data) {
+            var considerSaved = false;
+
+            return contactModel.factory.realm("edit").get(obj).done(function (data) {
                 model = data;
                 // set state
                 app.setState({ folder: data.folder_id, id: data.id });
                 // set title, init model/view
                 win.setTitle(gt('Edit distribution list'));
                 view = new ContactCreateDistView({ model: model });
+
+                view.on('save:start', function () {
+                    console.log('hier drin');
+                    win.busy();
+                });
+
+                view.on('save:fail', function () {
+                    win.idle();
+                });
+
+                view.on('save:success', function () {
+
+                    considerSaved = true;
+                    win.idle();
+                    app.quit();
+                });
+
                 // go!
                 show();
             });
