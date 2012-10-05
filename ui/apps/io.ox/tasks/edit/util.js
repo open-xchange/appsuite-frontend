@@ -201,7 +201,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             }
             
             for (var i = 0; i < tempNodes.length; i += 2) {
-                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]]);
+                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
         }
     };
