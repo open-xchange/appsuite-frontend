@@ -30,7 +30,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 console.log("no folderAttribute for cache Keygen found, using default");
                 folder = folderApi.getDefaultFolder("tasks");
             }
-
+                
             return obj ? folder + '.' + obj.id : '';
         },
         requests: {

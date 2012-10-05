@@ -88,6 +88,12 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     });
                 }
 
+                if (this.modelValid) {
+                    self.observeModel('invalid', function () {
+                        self.modelValid();
+                    });
+                }
+
                 if (options.modelEvents) {
                     _(options.modelEvents).each(function (methodNames, evt) {
                         _(methodNames.split(" ")).each(function (methodName) {
@@ -97,12 +103,6 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                         });
                     });
                 }
-
-                this.$el.attr({
-                    'data-extension-id': extOptions.id || id,
-                    'data-extension-point': name,
-                    'data-composite-id': this.model.getCompositeId()
-                });
 
                 if (options.observe) {
                     _(attributeDefinitions(options.observe)).each(function (definition) {

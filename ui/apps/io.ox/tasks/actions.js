@@ -86,7 +86,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-
+    
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
@@ -107,7 +107,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         multiple: function (list) {
             var e = $.Event();
             e.target = this;
-
+            
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
@@ -148,7 +148,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-
+    
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
         requires: 'some',
@@ -161,7 +161,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-
+    
     new Action('io.ox/tasks/actions/save-attachment', {
         id: 'save',
         requires: 'some',
@@ -175,7 +175,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-
+    
     //extension points
     // toolbar
 
@@ -211,7 +211,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         label: gt("Done"),
         ref: 'io.ox/tasks/actions/done'
     }));
-
+    
     ext.point('io.ox/tasks/links/inline').extend({
         id: 'changeDueDate',
         index: 400,
@@ -242,7 +242,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
                     } else {
                         folder = e.data.task.folder_id;
                     }
-
+                    
                     api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
                         api.trigger("update:" + folder + '.' + e.data.task.id);
                         notifications.yell('success', gt('Changed due date'));
@@ -251,7 +251,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-
+    
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'preview',
@@ -259,21 +259,21 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         label: gt('Preview'),
         ref: 'io.ox/tasks/actions/preview-attachment'
     }));
-
+    
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'open',
         index: 200,
         label: gt('Open in new tab'),
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
-
+    
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'download',
         index: 300,
         label: gt('Download'),
         ref: 'io.ox/tasks/actions/download-attachment'
     }));
-
+    
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,

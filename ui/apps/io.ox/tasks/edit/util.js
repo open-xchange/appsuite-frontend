@@ -14,7 +14,7 @@
 define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                                 'io.ox/core/strings'], function (gt, strings) {
     "use strict";
-
+    
     var detailsTab = {}, //utilClass manages the detailsTab
         currencyArray = ['CAD', 'CHF', 'DKK', 'EUR', 'GBP', 'PLN', 'RUB', 'SEK', 'USD', 'JPY', 'RMB'],
         util = {
@@ -25,7 +25,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         buildProgress: function () {
             var progress = $('<input>').attr({type: 'text', id: 'task-edit-progress-field'}).val('0')
                 .addClass("span6 progress-field");
-
+            
             $('<div>').addClass('input-append').append(progress,
                     $('<button>').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
@@ -52,17 +52,17 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                         }
                     })
                     );
-
+            
             return progress;
         },
-
+        
         buildRow: function (parent, nodes, widths, fillGrid) {
-
+            
             //check for impossible number of rows to avoid dividing by 0 or overflowing rows
             if (!nodes || nodes.length === 0 || nodes.length > 12) {
                 return;
             }
-
+            
             //check for valid widths
             if (!widths || nodes.length !== widths.length) {
                 var temp = 12 / nodes.length;
@@ -72,7 +72,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                     widths.push(temp);
                 }
             }
-
+            
             var row = $('<div>').addClass("row-fluid task-edit-row").appendTo(parent);
             for (var i = 0; i < nodes.length; i++) {
                 if (_.isArray(widths[i])) {
@@ -81,13 +81,13 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                     $('<div>').addClass("span" + widths[i]).append(nodes[i]).appendTo(row);
                 }
             }
-
+            
             //fillout gridCells
             if (fillGrid || fillGrid === undefined) {
                 row.children().children().not('label').addClass("span12");
             }
         },
-
+        
         //Tabs
         buildTabs: function (tabs) {
             var table = $('<ul>').addClass("nav nav-tabs"),
@@ -106,7 +106,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         },
         //detail tab
         getDetailsTab: function () {return detailsTab; },
-
+        
         buildDetailsTab: function (tab) {
             //build TabObject
             detailsTab.main = tab;
@@ -122,7 +122,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                 $('<option>').text(currencyArray[i]).appendTo(detailsTab.currency);
             }
             detailsTab.currency.prop('selectedIndex', 3);
-
+            
             //build Output
             this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time") + ' ' + gt("in minutes"),
                                              detailsTab.target_duration.attr('id')), detailsTab.target_duration],
@@ -141,10 +141,10 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                                              detailsTab.billing_information.attr('id')), detailsTab.billing_information]]);
             this.buildRow(detailsTab.main, [[this.buildLabel(gt("Companies"),
                                              detailsTab.companies.attr('id')), detailsTab.companies]]);
-
+            
             return detailsTab;
         },
-
+        
         fillDetailsTab: function (task) {
             if (task.target_duration) {
                 detailsTab.target_duration.val(task.target_duration);
@@ -174,7 +174,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                 }
             }
         },
-
+        
         updateDetailTabValues: function (data) {
             data.target_duration = detailsTab.target_duration.val();
             data.actual_duration = detailsTab.actual_duration.val();
@@ -185,7 +185,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             data.trip_meter = detailsTab.trip_meter.val();
             data.currency = detailsTab.currency.val();
         },
-
+        
         buildAttachmentNode: function (node, attachments) {
             var tempNodes = [];
             node.empty();
@@ -199,12 +199,12 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
                 tempNodes.push({});
             }
-
+            
             for (var i = 0; i < tempNodes.length; i += 2) {
                 this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
         }
     };
-
+    
     return util;
 });

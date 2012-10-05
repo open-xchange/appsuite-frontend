@@ -312,9 +312,317 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
                     j.expect($el.find(".control-group").css("display")).not.toEqual("none");
 
+                });
+            });
+
+            j.describe("InputField", function () {
+                j.it("should be synchronized with its attribute", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title',
+                        control: '<input type="text">' // Actually this is optional. Use it when you need a textarea, for example
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water"
+                    });
+
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el;
+                    var $input = $el.find("input[type=text]");
+
+                    j.expect($input.val()).toEqual("A glass of water");
+
+                    // Now change the model
+
+                    recipe.set("title", "A glass of water á la niçoise");
+                    j.expect($input.val()).toEqual("A glass of water á la niçoise");
+
+                    // And now the input field
+
+                    $input.val("A great glass of water");
+                    $input.trigger("change");
+
+                    j.expect(recipe.get("title")).toEqual("A great glass of water");
+                });
+
+                j.it("should switch to invalid/valid states according to model events", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title',
+                        control: '<input type="text">', // Actually this is optional. Use it when you need a textarea, for example
+                        className: 'find-me'
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water"
+                    });
+
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el.find(".find-me");
+
+                    // Now trigger the invalid event and verify an error is shown
+
+                    recipe.trigger("invalid:title", ["Not a nice title!"]);
+                    j.expect($el.is(".error")).toEqual(true);
+                    j.expect($el.find(".help-block").text()).toMatch(/.*?Not a nice title!.*/);
+
+                    // Now trigger the valid event and verify the error state has ended
+
+                    recipe.trigger("valid:title");
+
+                    j.expect($el.is(".error")).toEqual(false);
+                    j.expect($el.find(".help-block").length).toEqual(0);
+                });
+
+            });
+
+            j.describe("CheckBoxField", function () {
+                j.it("should be synchronized with its attribute", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.CheckBoxField({
+                        id: 'favorite',
+                        attribute: 'favorite',
+                        label: 'Favorite'
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water",
+                        favorite: true
+                    });
+
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el;
+                    var $input = $el.find("input[type=checkbox]");
+                    j.expect($input.is(":checked")).toEqual(true);
+
+                    // Now change the model
+
+                    recipe.set("favorite", false);
+                    j.expect($input.is(":checked")).toEqual(false);
+
+                    // And now the input field
+                    $input.attr({checked: true});
+                    $input.trigger("change");
+
+                    j.expect(recipe.get("favorite")).toEqual(true);
+
+                    $input.attr({checked: false});
+                    $input.trigger("change");
+
+                    j.expect(recipe.get("favorite")).toEqual(false);
+                });
+
+                j.it("should switch to invalid/valid states according to model events", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.CheckBoxField({
+                        id: 'favorite',
+                        attribute: 'favorite',
+                        label: 'Favorite',
+                        className: 'find-me'
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water",
+                        favorite: true
+                    });
+
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el.find(".find-me");
+
+                    // Now trigger the invalid event and verify an error is shown
+
+                    recipe.trigger("invalid:favorite", ["It's not that nice, actually"]);
+                    j.expect($el.is(".error")).toEqual(true);
+                    j.expect($el.find(".help-block").text()).toMatch(/.*?It's not that nice, actually.*/);
+
+                    // Now trigger the valid event and verify the error state has ended
+
+                    recipe.trigger("valid:favorite");
+
+                    j.expect($el.is(".error")).toEqual(false);
+                    j.expect($el.find(".help-block").length).toEqual(0);
+                });
+
+            });
+
+            j.describe("SelectField", function () {
+                j.it("should be synchronized with its attribute", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.SelectBoxField({
+                        id: 'difficulty',
+                        attribute: 'difficulty',
+                        label: 'Difficulty',
+                        selectOptions: {
+                            1: "Easy",
+                            2: "Normal",
+                            3: "Hard"
+                        }
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water",
+                        difficulty: 1
+                    });
+
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el;
+                    var $input = $el.find("select");
+
+                    // Verify the options
+                    j.expect($input.find("option[value=1]").text()).toEqual("Easy");
+                    j.expect($input.find("option[value=2]").text()).toEqual("Normal");
+                    j.expect($input.find("option[value=3]").text()).toEqual("Hard");
+
+
+                    j.expect($input.find("option[value=1]").is(":selected")).toEqual(true);
+
+                    // Now change the model
+
+                    recipe.set("difficulty", 2);
+                    j.expect($input.find("option[value=1]").is(":selected")).toEqual(false);
+                    j.expect($input.find("option[value=2]").is(":selected")).toEqual(true);
+
+                    // And now the input field
+                    $input.val(3);
+                    $input.trigger("change");
+
+                    j.expect(recipe.get("difficulty")).toEqual("3");
 
                 });
 
+                j.it("should switch to invalid/valid states according to model events", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.SelectBoxField({
+                        id: 'difficulty',
+                        attribute: 'difficulty',
+                        label: 'Difficulty',
+                        selectOptions: {
+                            1: "Easy",
+                            2: "Normal",
+                            3: "Hard"
+                        },
+                        className: 'find-me'
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water",
+                        difficulty: 1
+                    });
+
+                    var View = point.createView({
+                        tagName: 'form'
+                    });
+
+                    var $el = new View({model: recipe}).render().$el.find(".find-me");
+
+                    // Now trigger the invalid event and verify an error is shown
+
+                    recipe.trigger("invalid:difficulty", ["It's not that hard, actually"]);
+                    j.expect($el.is(".error")).toEqual(true);
+                    j.expect($el.find(".help-block").text()).toMatch(/.*?It's not that hard, actually.*/);
+
+                    // Now trigger the valid event and verify the error state has ended
+
+                    recipe.trigger("valid:difficulty");
+
+                    j.expect($el.is(".error")).toEqual(false);
+                    j.expect($el.find(".help-block").length).toEqual(0);
+                });
+            });
+
+            j.describe("SectionLegend", function () {
+                j.it("should display a section title", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.SectionLegend({
+                        id: 'legend',
+                        label: 'Legend'
+                    }));
+
+                    var View = point.createView();
+
+                    var $el = new View().render().$el;
+
+                    j.expect($el.find("legend").length).toEqual(1);
+                    j.expect($el.find("legend").text()).toEqual("Legend");
+
+                });
+            });
+
+            j.describe("Section", function () {
+                j.it("should provide an extension point for section entries", function () {
+
+                });
+
+                j.it("should collapse completely if all entries are hidden", function () {
+
+                });
+
+                j.it("should add a more/less toggle if some extensions are hidden", function () {
+
+                });
+
+                j.it("should be completely drawn if no extensions are hidden", function () {
+
+                });
             });
         }
     });
