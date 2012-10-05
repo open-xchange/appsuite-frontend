@@ -70,7 +70,6 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                 ext.point(validationNamespace + '/' + attribute).extend({
                     id: definition.id || attribute,
                     validate: function (value, errors, attributes) {
-                        console.log("VALIDATE for attribute", attribute);
                         var analysis = [];
                         
                         if (definition.format && formats[definition.format]) {
