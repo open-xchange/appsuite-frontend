@@ -251,13 +251,14 @@ define("io.ox/core/api/factory",
                     data = http.simplify(ids);
                 // done
                 var done = function () {
+                    api.trigger('refresh.all');
                     api.trigger('delete', ids);
                 };
                 api.trigger('beforedelete', ids);
                 // remove from caches first
                 return api.updateCaches(ids).pipe(function () {
                     // trigger visual refresh
-                    api.trigger('refresh.all');
+                    api.trigger('refresh:all:local');
                     // delete on server?
                     if (local !== true) {
                         return http.PUT({
@@ -265,6 +266,14 @@ define("io.ox/core/api/factory",
                             params: opt,
                             data: data,
                             appendColumns: false
+                        })
+                        .pipe(function () {
+                            // remove affected folder from cache
+                            var folders = {};
+                            _(ids).each(function (o) { folders[o.folder_id] = o.folder_id; });
+                            return $.when.apply($, _(folders).map(function (id) {
+                                return api.caches.all.grepRemove(id + '\t');
+                            }));
                         })
                         .done(done);
                     } else {
