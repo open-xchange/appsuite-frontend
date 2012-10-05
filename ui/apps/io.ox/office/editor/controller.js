@@ -34,9 +34,18 @@ define('io.ox/office/editor/controller',
                 'chain/editable': {
                     enable: function () { return !editor.isReadonlyMode(); }
                 },
+                'chain/editable/text': {
+                    enable: function (enabled) { return enabled && editor.isTextSelected(); }
+                },
 
                 // document file
 
+                'file/download': {
+                    set: function () { app.download(); }
+                },
+                'file/print': {
+                    set: function () { app.print(); }
+                },
                 'file/export': {
                     set: function () { app.save(); }
                 },
@@ -52,7 +61,7 @@ define('io.ox/office/editor/controller',
                     set: function (fileName) { app.rename(fileName); }
                 },
 
-                // document control
+                // document contents
 
                 'document/undo': {
                     chain: 'chain/editable',
@@ -73,7 +82,7 @@ define('io.ox/office/editor/controller',
                 // paragraphs
 
                 'chain/format/paragraph': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
                 'format/paragraph/stylesheet': {
@@ -95,7 +104,7 @@ define('io.ox/office/editor/controller',
                 // characters
 
                 'chain/format/character': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     get: function () { return editor.getAttributes('character'); }
                 },
                 'format/character/stylesheet': {
@@ -132,11 +141,11 @@ define('io.ox/office/editor/controller',
                 // tables
 
                 'chain/table': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     enable: function (enabled) { return enabled && editor.isPositionInTable(); }
                 },
                 'table/insert': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     set: function (size) { editor.insertTable(size); }
                 },
                 'table/insert/row': {
@@ -167,11 +176,11 @@ define('io.ox/office/editor/controller',
                     get: function () { return editor.getAttributes('image'); }
                 },
                 'image/insert/file': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     set: function () { Image.insertFileDialog(app); }
                 },
                 'image/insert/url': {
-                    chain: 'chain/editable',
+                    chain: 'chain/editable/text',
                     set: function () { Image.insertURLDialog(app); }
                 },
                 'image/delete': {

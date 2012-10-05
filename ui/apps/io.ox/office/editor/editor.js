@@ -1175,6 +1175,14 @@ define('io.ox/office/editor/editor',
             return readonlyMode;
         };
 
+        /**
+         * Returns whether the current selection selects any text.
+         */
+        this.isTextSelected = function () {
+            // TODO: in the future, this depends on real selection mode
+            return !this.isImageSelected();
+        };
+
         // PUBLIC TABLE METHODS
 
         this.isPositionInTable = function () {
