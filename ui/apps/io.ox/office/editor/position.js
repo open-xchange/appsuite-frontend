@@ -144,7 +144,7 @@ define('io.ox/office/editor/position',
      *  The calculated logical position (OXOPaM.oxoPosition) together with
      *  the property nodeName of the dom node parameter.
      */
-    Position.getTextLevelOxoPosition = function (domposition, maindiv, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
+    Position.getTextLevelOxoPosition = function (domposition, maindiv, isEndPoint) {
 
         var node = domposition.node,
             offset = domposition.offset,
@@ -156,9 +156,7 @@ define('io.ox/office/editor/position',
             offset = 0;
         }
 
-        isRtlCursorTravel = isRtlCursorTravel ? true : false;
         isEndPoint = isEndPoint ? true : false;
-        allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
         // check input values
         if (! node) {
@@ -171,7 +169,7 @@ define('io.ox/office/editor/position',
         // Also cells in columns have to be converted at this point.
         if ($(node).is('DIV, P, TR, TD, TH')) {
 
-            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isRtlCursorTravel, isEndPoint, allowNoneTextNodes);
+            var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
 
             if (! returnObj) {
                 Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
@@ -211,7 +209,7 @@ define('io.ox/office/editor/position',
         // calculating the logical position for the specified text node, span, or image
         var oxoPosition = Position.getOxoPosition(maindiv, node, offset);
 
-        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode, isRtlCursorTravel);
+        return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode);
     };
 
     /**
@@ -357,19 +355,13 @@ define('io.ox/office/editor/position',
      *  of a range. This is important for some calculations, where the
      *  dom node is a row inside a table.
      *
-     * @param {Boolean} allowNoneTextNodes
-     *  The information specifies, if a node can be returned, that is
-     *  not a text node. This can be an image or a field, that can be
-     *  located next to a text node and is described with a fully
-     *  qualified logical position.
-     *
      * @returns {Object}
      *  The text node, that will be used in Position.getTextLevelOxoPosition
      *  for the calculation of the logical position.
      *  And additionally some information about the floating state of an
      *  image, if the position describes an image.
      */
-    Position.getTextNodeFromCurrentNode = function (node, offset, isRtlCursorTravel, isEndPoint, allowNoneTextNodes) {
+    Position.getTextNodeFromCurrentNode = function (node, offset, isEndPoint) {
 
         var useFirstTextNode = true,  // can be false for final child in a paragraph
             usePreviousCell = false,
@@ -379,8 +371,6 @@ define('io.ox/office/editor/position',
             offsetSave = offset;
 
         offset = 0;
-
-        allowNoneTextNodes = allowNoneTextNodes ? true : false;
 
         if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
             usePreviousCell = true;
@@ -397,31 +387,8 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // Determining the text node before or after an image node.
-        // But if 'allowNoneTextNodes' is set, the image node can be returnd
-        if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (! allowNoneTextNodes)) {
-            // special handling for non-floated images as children of paragraphs, use text node instead
-            if (Position.hasInlineFloatProperty(localNode)) {
-                imageFloatMode = $(localNode).data('mode');
-                localNode = localNode.previousSibling;  // this works fine for Firefox and Chrome
-                useFirstTextNode = false;
-            }
-
-            // special handling for floated images as children of paragraphs, use text node instead
-            if (Position.hasFloatProperty(localNode)) {
-                imageFloatMode = $(localNode).data('mode');
-                if (isRtlCursorTravel) {
-                    localNode = Utils.findPreviousNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
-                    useFirstTextNode = false;
-                } else {
-                    localNode = Utils.findNextNodeInTree(localNode, Utils.JQ_TEXTNODE_SELECTOR);
-                    useFirstTextNode = true;
-                }
-            }
-        }
-
         // setting some properties for image nodes
-        if ((localNode && (Utils.getNodeName(localNode) === 'img')) && (allowNoneTextNodes)) {
+        if (localNode && (Utils.getNodeName(localNode) === 'img')) {
             imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;
             offset = 0;

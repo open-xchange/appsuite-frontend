@@ -89,7 +89,6 @@ define('io.ox/office/editor/editor',
 
             lastKeyDownEvent,
             lastEventSelection,
-            isRtlCursorTravel,
             currentSelection,
 
             undomgr = new UndoManager(this),
@@ -536,8 +535,7 @@ define('io.ox/office/editor/editor',
 
                 // updating current selection, so that image positions are also available
                 var updateFromBrowser = true,
-                    allowNoneTextNodes = true,
-                    newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
+                    newSelection = getSelection(updateFromBrowser),
                     imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
                     returnImageNode = true,
                     imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
@@ -1278,12 +1276,6 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            if ((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW) || (event.keyCode === KeyCodes.BACKSPACE)) {
-                isRtlCursorTravel = true;
-            } else {
-                isRtlCursorTravel = false;
-            }
-
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
                 var c = getPrintableChar(event);
@@ -1698,9 +1690,8 @@ define('io.ox/office/editor/editor',
         }
 
         function implCheckEventSelection() {
-            var updateFromBrowser = true,
-                allowNoneTextNodes = true;
-            currentSelection = getSelection(updateFromBrowser, allowNoneTextNodes);
+            var updateFromBrowser = true;
+            currentSelection = getSelection(updateFromBrowser);
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
@@ -2140,9 +2131,7 @@ define('io.ox/office/editor/editor',
         // Private selection functions
         // ==================================================================
 
-        function getSelection(updateFromBrowser, allowNoneTextNodes) {
-
-            allowNoneTextNodes = allowNoneTextNodes ? true : false;
+        function getSelection(updateFromBrowser) {
 
             if (currentSelection && !updateFromBrowser)
                 return currentSelection;
@@ -2170,8 +2159,8 @@ define('io.ox/office/editor/editor',
                     isPos2Endpoint = false;
                 }
 
-                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isRtlCursorTravel, isPos1Endpoint, allowNoneTextNodes),
-                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isRtlCursorTravel, isPos2Endpoint, allowNoneTextNodes);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
+                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 
@@ -2352,9 +2341,8 @@ define('io.ox/office/editor/editor',
             // TODO: adjust position according to passed attribute family
             if (para === undefined) {
                 // Set attr to current selection
-                var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    updateFromBrowser = false,
-                    selection = getSelection(updateFromBrowser, allowNoneTextNodes);
+                var updateFromBrowser = false,
+                    selection = getSelection(updateFromBrowser);
 
                 if (selection.hasRange()) {
 
