@@ -532,7 +532,7 @@ define('io.ox/office/editor/editor',
 
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
-                var imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                     returnImageNode = true,
                     imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
