@@ -33,7 +33,12 @@
     }
 
     .item {
-        height:100%;
+        height: 100%;
+        // bit faster (at least for development)
+        -webkit-transition: 0.3s ease-in-out left;
+        -moz-transition: 0.3s ease-in-out left;
+        -o-transition: 0.3s ease-in-out left;
+        transition: 0.3s ease-in-out left;
 
         .carousel-caption {
 

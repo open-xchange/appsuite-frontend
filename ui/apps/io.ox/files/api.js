@@ -220,7 +220,8 @@ define("io.ox/files/api",
 
     api.getUrl = function (file, mode) {
         var url = ox.apiRoot + '/infostore',
-            query = '?action=document&id=' + file.id + '&folder=' + file.folder_id + '&version=' + file.version;
+            query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
+                (file.version !== undefined ? '&version=' + file.version : '');
         switch (mode) {
         case 'open':
             return url + query + '&delivery=view';
