@@ -12,9 +12,10 @@
  */
 
 define("io.ox/tasks/actions", ['io.ox/core/extensions',
-                              'io.ox/core/extPatterns/links',
-                              'gettext!io.ox/tasks/actions',
-                              'io.ox/core/notifications'], function (ext, links, gt, notifications) {
+                               'io.ox/tasks/util',
+                               'io.ox/core/extPatterns/links',
+                               'gettext!io.ox/tasks/actions',
+                               'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
 
     "use strict";
     var Action = links.Action;
@@ -85,7 +86,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
     //attachment actions
     new Action('io.ox/tasks/actions/preview-attachment', {
         id: 'preview',
@@ -106,7 +107,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         multiple: function (list) {
             var e = $.Event();
             e.target = this;
-            
+
             require(['io.ox/core/tk/dialogs',
                      'io.ox/preview/main',
                      'io.ox/core/api/attachment'], function (dialogs, p, attachmentApi) {
@@ -147,7 +148,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/download-attachment', {
         id: 'download',
         requires: 'some',
@@ -160,7 +161,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
     new Action('io.ox/tasks/actions/save-attachment', {
         id: 'save',
         requires: 'some',
@@ -174,7 +175,7 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
             });
         }
     });
-    
+
     //extension points
     // toolbar
 
@@ -189,25 +190,68 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'edit',
-        index: 10,
+        index: 100,
+        prio: 'hi',
         label: gt("Edit"),
         ref: 'io.ox/tasks/actions/edit'
     }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'delete',
-        index: 20,
+        index: 200,
+        prio: 'hi',
         label: gt("Delete"),
         ref: 'io.ox/tasks/actions/delete'
     }));
 
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({
         id: 'done',
-        index: 30,
+        index: 300,
+        prio: 'hi',
         label: gt("Done"),
         ref: 'io.ox/tasks/actions/done'
     }));
-    
+
+    ext.point('io.ox/tasks/links/inline').extend({
+        id: 'changeDueDate',
+        index: 400,
+        prio: 'lo',
+        draw: function (data) {
+            this.append(
+                $('<span class="dropdown" class="io-ox-inline-links">')
+                    .append(
+                        // link
+                        $('<a href="#" data-toggle="dropdown">')
+                        .text(gt('Change due date')).append($('<b class="caret">')).dropdown(),
+                        // drop down
+                        $('<ul class="dropdown-menu">').append(util.buildDropdownMenu(new Date(), true))
+                )
+            ).delegate('li a', 'click', {task: data}, function (e) {
+                e.preventDefault();
+                var finderId = $(this).attr('finderId');
+                require(['io.ox/tasks/api'], function (api) {
+                    var endDate = util.computePopupTime(new Date(), finderId).alarmDate,
+                        modifications = {end_date: endDate.getTime()},
+                        folder;
+                    //check if startDate is still valid with new endDate, if not, make it fit
+                    if (e.data.task.start_date && e.data.task.start_date > endDate.getTime()) {
+                        modifications.start_date = modifications.end_date;
+                    }
+                    if (e.data.task.folder) {
+                        folder = e.data.task.folder;
+                    } else {
+                        folder = e.data.task.folder_id;
+                    }
+
+                    api.update(_.now(), e.data.task.id, modifications, folder).done(function () {
+                        api.trigger("update:" + folder + '.' + e.data.task.id);
+                        notifications.yell('success', gt('Changed due date'));
+                    });
+                });
+            });
+        }
+    });
+
     // Attachments
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'preview',
@@ -215,21 +259,21 @@ define("io.ox/tasks/actions", ['io.ox/core/extensions',
         label: gt('Preview'),
         ref: 'io.ox/tasks/actions/preview-attachment'
     }));
-    
+
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'open',
         index: 200,
         label: gt('Open in new tab'),
         ref: 'io.ox/tasks/actions/open-attachment'
     }));
-    
+
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'download',
         index: 300,
         label: gt('Download'),
         ref: 'io.ox/tasks/actions/download-attachment'
     }));
-    
+
     ext.point('io.ox/tasks/attachment/links').extend(new links.Link({
         id: 'save',
         index: 400,

@@ -258,23 +258,22 @@ define("io.ox/mail/main",
                 return openThreads[i] !== undefined;
             };
 
-            function refresh(list, index, order) {
+            function refresh(list, index) {
                 grid.repaintLabels().done(function () {
                     grid.repaint();
                     if (list) {
-                        grid.selection.insertAt(order === 'desc' ? list.slice(1) : list.slice(0, -1), index + 1);
+                        grid.selection.insertAt(list.slice(1), index + 1);
                     }
                 });
             }
 
             function open(index, cid) {
                 if (openThreads[index + 1] === undefined) {
-                    var thread = api.getThread(cid),
-                        order = api.getThreadOrder(cid);
+                    var thread = api.getThread(cid);
                     if (thread.length > 1) {
                         openThreads[index + 1] = cid;
                         api.getList(thread).done(function (list) {
-                            refresh(list, index, order);
+                            refresh(list, index);
                         });
                     }
                 }
@@ -282,11 +281,10 @@ define("io.ox/mail/main",
 
             function close(index, cid) {
                 if (openThreads[index + 1] !== undefined) {
-                    var thread = api.getThread(cid),
-                        order = api.getThreadOrder(cid);
+                    var thread = api.getThread(cid);
                     delete openThreads[index + 1];
                     api.getList(thread).done(function (list) {
-                        grid.selection.remove(order === 'desc' ? list.slice(1) : list.slice(0, -1));
+                        grid.selection.remove(list.slice(1));
                         refresh();
                     });
                 }
@@ -341,11 +339,11 @@ define("io.ox/mail/main",
                 // get thread
                 var thread = api.getThread(obj);
                 // get first mail first
-                api.get(thread[0])
+                api.get(api.reduce(thread[0]))
                     .done(_.lfo(viewDetail.drawThread, right, thread))
                     .fail(_.lfo(drawFail, obj));
             } else {
-                api.get(obj)
+                api.get(api.reduce(obj))
                     .done(_.lfo(drawMail))
                     .fail(_.lfo(drawFail, obj));
             }
@@ -382,7 +380,7 @@ define("io.ox/mail/main",
             app.folder.getData().done(function (data) {
                 var unread = data.unread, badge;
                 if ((badge = win.nodes.title.find('.badge')).length === 0) {
-                    badge = $('<span class="badge badge-important">').appendTo(win.nodes.title);
+                    badge = $('<span class="badge">').appendTo(win.nodes.title);
                 }
                 if (unread > 0) {
                     badge.text(unread).show();

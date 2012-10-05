@@ -406,7 +406,7 @@ define('io.ox/mail/view-detail',
             function drawThread(node, list, pos, top, bottom, mails) {
                 var i, obj, frag = document.createDocumentFragment(),
                     scrollpane = node.closest('.scrollable').off('scroll'),
-                    nodes, inline, top, height, mail;
+                    nodes, inline, top, mail;
                 // draw inline links for whole thread
                 if (list.length > 1) {
                     inline = $('<div class="mail-detail thread-inline-actions">');
@@ -436,7 +436,7 @@ define('io.ox/mail/view-detail',
                 nodes = frag = node = scrollpane = list = mail = mails = null;
             }
 
-            return function (node, list, mail) {
+            return function (node, list) {
                 // define next step now
                 var next = _.lfo(drawThread);
                 // get list data, esp. to know unseen flag - we need this list for inline link checks anyway

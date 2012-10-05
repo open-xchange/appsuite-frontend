@@ -305,6 +305,10 @@ define("io.ox/core/extensions",
         }
     };
 
+    Baton.wrap = function (object) {
+        return object instanceof Baton ? object : new Baton(object);
+    };
+
     that = {
 
         // get point
