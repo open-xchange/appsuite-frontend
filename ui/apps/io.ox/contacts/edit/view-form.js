@@ -10,7 +10,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
- 
+
 define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/model',
     'io.ox/backbone/views',
@@ -21,13 +21,13 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/contacts/widgets/cityControlGroup',
     'gettext!io.ox/contacts/contacts'
 ], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
-     
+
     "use strict";
-    
+
     // TODO: more compact layout, correct handling of existing images
-    
+
     var dateField, city;
-    
+
     var meta = {
         sections: {
             personal: ['title', 'first_name', 'last_name', 'display_name',
@@ -88,7 +88,7 @@ define('io.ox/contacts/edit/view-form', [
             comment: gt('Comment'),
             userfields: gt('User fields')
         },
-        
+
         special: {
             note: function (options) {
                 options.point.extend(new forms.ControlGroup({
@@ -104,7 +104,7 @@ define('io.ox/contacts/edit/view-form', [
                     }
                 });
             },
-            
+
             birthday: dateField,
             anniversary: dateField,
             city_home: city('city_home', 'postal_code_home'),
@@ -112,8 +112,8 @@ define('io.ox/contacts/edit/view-form', [
             city_other: city('city_other', 'postal_code_other')
         }
     };
-    
-    
+
+
     function dateField(options) {
         options.point.extend(new forms.ControlGroup({
             id: options.field,
@@ -130,7 +130,7 @@ define('io.ox/contacts/edit/view-form', [
             }
         });
     }
-    
+
     function city(cityAttribute, postalCodeAttribute) {
         return function (options) {
             options.point.extend(new CityControlGroup({
@@ -149,13 +149,13 @@ define('io.ox/contacts/edit/view-form', [
             });
         };
     }
-     
+
     var point = views.point('io.ox/contacts/edit/view'),
         ContactEditView = point.createView({
             tagName: 'div',
             className: 'edit-contact'
         });
-    
+
     point.extend(new PictureUpload({
         id: 'io.ox/contacts/edit/view/picture',
         index: 100,
@@ -166,8 +166,8 @@ define('io.ox/contacts/edit/view-form', [
             }).addClass("span2");
         }
     }));
-    
-    
+
+
     point.extend(new views.AttributeView({
         id: 'io.ox/contacts/edit/view/display_name_header',
         index: 150,
@@ -175,7 +175,7 @@ define('io.ox/contacts/edit/view-form', [
         className: 'clear-title',
         attribute: 'display_name'
     }));
-    
+
     point.basicExtend({
         id: 'io.ox/contacts/edit/view/headerBreak',
         index: 200,
@@ -183,7 +183,7 @@ define('io.ox/contacts/edit/view-form', [
             this.append($('<div>').css({clear: 'both'}));
         }
     });
-    
+
     // Show backend errors
     point.extend(new forms.ErrorAlert({
         id: 'io.ox/contacts/edit/view/backendErrors',
@@ -206,9 +206,9 @@ define('io.ox/contacts/edit/view-form', [
             $node.css({marginBottom: '20px'});
         }
     }));
-    
+
     // Save
-    
+
     views.ext.point("io.ox/contacts/edit/view/inline").extend(new links.Button({
         id: "save",
         index: 100,
@@ -217,12 +217,13 @@ define('io.ox/contacts/edit/view-form', [
         cssClasses: "btn btn-primary",
         tabIndex: 10
     }));
-    
+
     // Edit Actions
-    
+
     new actions.Action('io.ox/contacts/actions/edit/save', {
         id: 'save',
         action: function (options) {
+            console.log(options);
             options.parentView.trigger('save:start');
             options.model.save().done(function () {
                 options.parentView.trigger('save:success');
@@ -231,32 +232,32 @@ define('io.ox/contacts/edit/view-form', [
             });
         }
     });
-    
-    
-    
+
+
+
     var index = 400;
-    
+
     _(meta.sections).each(function (fields, id) {
         var uid = 'io.ox/contacts/edit/' + id,
             section = {};
-            
+
         point.extend(new forms.Section({
             id: id,
             index: index,
             title: meta.i18n[id],
             ref: uid
         }));
-        
+
         section.point = views.point(uid);
         index += 100;
-        
+
         var fieldIndex = 100;
         _(fields).each(function (field) {
-            
+
             var isAlwaysVisible = _(meta.alwaysVisible).indexOf(field) > -1,
                 isRare = _(meta.rare).indexOf(field) > -1;
-            
-            
+
+
             if (meta.special[field]) {
                 meta.special[field]({
                     point: section.point,
@@ -280,15 +281,15 @@ define('io.ox/contacts/edit/view-form', [
                     }
                 });
             }
-            
+
             fieldIndex += 100;
         });
-        
+
     });
-    
-    
+
+
     return {
         ContactEditView: ContactEditView
     };
-     
+
 });
