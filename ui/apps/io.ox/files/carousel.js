@@ -34,6 +34,8 @@ define('io.ox/files/carousel',
             end: 0,
             counter: 0,
             cur: 0,
+            first: 0,
+            last: 0,
             direction: 'next'
         },
 
@@ -45,7 +47,7 @@ define('io.ox/files/carousel',
             fullScreen: false,
             list: [],
             app: null,
-            step: 4
+            step: 3
         },
 
         init: function (config) {
@@ -73,12 +75,16 @@ define('io.ox/files/carousel',
             var self = this;
             var pos = this.pos;
 
+            pos.first = parseInt($('.carousel .item:first').attr('data-index'), 10);
+            pos.last = parseInt($('.carousel .item:last').attr('data-index'), 10);
             // Hide left control on start
             $('.carousel-control.left').hide();
 
             $('.carousel').on('slid', function () {
                 var oldpos = pos.cur;
-                pos.cur = parseInt($('.item.active').attr('data-index'), 10);
+                pos.cur = parseInt($('.carousel .item.active').attr('data-index'), 10);
+                pos.first = parseInt($('.carousel .item:first').attr('data-index'), 10);
+                pos.last = parseInt($('.carousel .item:last').attr('data-index'), 10);
 
                 if (oldpos < pos.cur)
                 {
@@ -99,7 +105,7 @@ define('io.ox/files/carousel',
                         $('.carousel-control.left').show();
                     }
                 }
-                if (pos.cur === self.list.length)
+                if (pos.cur === (self.list.length - 1))
                 {
                     $('.carousel-control.right').hide();
                 }
@@ -110,14 +116,23 @@ define('io.ox/files/carousel',
                         $('.carousel-control.right').show();
                     }
                 }
-                if (pos.cur === (pos.end - 1) && (pos.cur + 1) < self.list.length)
+                if (pos.direction === 'next' && pos.cur === (pos.end - 1) && (pos.cur + 1) < self.list.length)
                 {
                     self.getItems();
                     if (pos.cur > self.config.step)
                     {
-                        var del = '.item[data-index="' + (pos.cur - self.config.step + 1) + '"]';
+                        var del = '.carousel .item[data-index="' + (pos.cur - self.config.step + 1) + '"]';
                         $(del).prevAll().remove();
                     }
+                }
+
+
+
+                if (pos.direction === 'prev' && pos.cur === pos.first && pos.cur !== 0)
+                {
+                    self.getItems();
+                    var del = '.carousel .item[data-index="' + (pos.cur + self.config.step + 1) + '"]';
+                    $(del).nextAll().remove();
                 }
             });
 
@@ -171,27 +186,42 @@ define('io.ox/files/carousel',
             if (pos.direction === 'next') {
                 if (this.list.length >= (this.config.step + this.pos.end))
                 {
-                    pos.end += this.config.step;
+                    pos.end = pos.last + this.config.step;
                 }
                 else
                 {
                     pos.end = this.list.length;
                 }
             }
-            if (pos.direction === 'prev') {
-                // TODO
+            else {
+                pos.end = pos.first;
+                pos.start = pos.first - this.config.step;
+                console.log(
+                    'pos.start', pos.start, 'pos.end', pos.end, 'pos.cur', pos.cur,
+                    'first', pos.first, 'last', pos.last
+                );
             }
+
+
             api.getList(this.list.slice(pos.start, pos.end)).done(function (files) {
                 var nodes = [];
+                var i = pos.start;
                 _(files).each(function (file, index) {
                     var isfirst = false;
                     if (index === 0 && pos.start === 0) isfirst = true;
-                    nodes.push(self.addItem(file, self.pos.counter, isfirst));
-                    self.pos.counter++;
-                    self.pos.start = pos.end;
+                    nodes.push(self.addItem(file, i, isfirst));
+                    i++;
                 });
-                $('.carousel-inner').idle().append(nodes);
-                $('.item .breadcrumb li a').off('click').on('click', self.close);
+                if (pos.direction === 'prev')
+                {
+                    $('.carousel-inner').idle().prepend(nodes);
+                }
+                else
+                {
+                    $('.carousel-inner').idle().append(nodes);
+                    pos.start = pos.end;
+                }
+                $('.carousel .item .breadcrumb li a').off('click').on('click', self.close);
             });
         },
 
@@ -224,7 +254,14 @@ define('io.ox/files/carousel',
         },
 
         nextItem: function () {
-            $('.carousel').carousel('next');
+            if (carouselSlider.pos.cur !== (carouselSlider.list.length - 1))
+            {
+                $('.carousel').carousel('next');
+            }
+            else
+            {
+                $('.carousel').carousel('pause');
+            }
         },
 
 
