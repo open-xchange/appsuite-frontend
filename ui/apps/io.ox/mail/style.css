@@ -265,6 +265,7 @@
         height: 1.25em;
         border: 1px solid rgba(0, 0, 0, 0.15);
         cursor: pointer;
+        z-index: 10001; // to be above attachment dropdowns
     }
     
     .flag-dropdown ul {
