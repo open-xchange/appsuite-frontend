@@ -137,8 +137,6 @@ define('io.ox/files/carousel',
 
             // TODO: Replace Images when resizing window
             //$(window).resize(_.debounce(this.replaceImages, 300));
-
-            this.inner.on('img', 'error', this.imgError);
         },
 
         filterImagesList: function (list) {
@@ -193,7 +191,8 @@ define('io.ox/files/carousel',
 
             if (item.children().length === 0) {
                 item.append(
-                    $('<img>', { alt: '', src: this.addURL(file) }),
+                    $('<img>', { alt: '', src: this.addURL(file) })
+                        .on('error', this.imgError) /* error doesn't seem to bubble */,
                     $('<div class="carousel-caption">').append(
                         $('<h4>').text(file.filename),
                         folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
