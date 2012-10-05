@@ -38,8 +38,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 folder: folderApi.getDefaultFolder("tasks"),
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
-                order: "asc"
-                //cache: true // allow DB cache
+                order: "asc",
+                cache: true // allow DB cache
             },
             list: {
                 action: "list",
@@ -87,7 +87,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     );
                 }).done(function () {
                     //trigger refresh, for vGrid etc
-                    api.trigger("refresh.list");
+                    api.trigger("refresh.all");
                 });
 
             };
@@ -126,10 +126,16 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     
     // global refresh
     api.refresh = function () {
-        api.getTasks().done(function () {
-            // trigger local refresh
-            api.trigger("refresh.all");
-        });
+        if (ox.online) {
+            // clear "all & list" caches
+            api.caches.all.clear();
+            api.caches.list.clear();
+            api.getTasks().done(function () {
+                // trigger local refresh
+                api.trigger("refresh.all");
+            });
+        }
+        
     };
     
     return api;
