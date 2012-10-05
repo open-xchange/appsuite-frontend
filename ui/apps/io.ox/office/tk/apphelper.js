@@ -14,7 +14,9 @@
 define('io.ox/office/tk/apphelper',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils'], function (Extensions, Links, Utils) {
+     'io.ox/office/tk/utils',
+     'gettext!io.ox/office/main'
+     ], function (Extensions, Links, Utils, gt) {
 
     'use strict';
 
@@ -524,6 +526,23 @@ define('io.ox/office/tk/apphelper',
         }
 
         return app;
+    };
+
+    // static initialization ==================================================
+
+    // check if any open application has unsaved changes
+    // TODO: this needs to be generalized
+    window.onbeforeunload = function () {
+
+        var // find all applications with unsaved changes
+            dirtyApps = ox.ui.App.filter(function (app) {
+                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+            });
+
+        // browser will show a confirmation dialog, if onbeforeunload returns a string
+        if (dirtyApps.length > 0) {
+            return gt('There are unsaved changes.');
+        }
     };
 
     // exports ================================================================

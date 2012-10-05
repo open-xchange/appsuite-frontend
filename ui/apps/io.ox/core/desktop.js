@@ -487,8 +487,27 @@ define("io.ox/core/desktop",
             });
         };
 
+        /**
+         * Returns an array containing all running applications that pass a
+         * truth test.
+         *
+         * @param {Function} iterator
+         *  The test iterator function. Receives an application object as first
+         *  parameter, returns true for all applications that will be included
+         *  in the result set.
+         *
+         * @param {Object} [context]
+         *  The context object the iterator will be bound to.
+         *
+         * @returns {App[]}
+         *  All running applications that passed the truth test.
+         */
+        App.filter = function (iterator, context) {
+            return _(ox.ui.running).filter(iterator, context);
+        };
+
         App.get = function (name) {
-            return _(ox.ui.running).filter(function (app) {
+            return App.filter(function (app) {
                 return app.getName() === name;
             });
         };
