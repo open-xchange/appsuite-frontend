@@ -2543,10 +2543,7 @@ define('io.ox/office/editor/editor',
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
                     // updating current selection, so that image positions are also available
-                    var updateFromBrowser = true,
-                        allowNoneTextNodes = true,
-                        newSelection = getSelection(updateFromBrowser, allowNoneTextNodes),
-                        imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true),
                         newOperation = { name: Operations.OP_ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
 
