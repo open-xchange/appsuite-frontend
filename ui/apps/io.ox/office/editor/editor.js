@@ -336,8 +336,8 @@ define('io.ox/office/editor/editor',
         this.deleteSelected = function (_selection) {
 
             // implCheckSelection();
-            var buttonEvent = _selection ? false : true;
-            var selection = _selection || getSelection();
+            var buttonEvent = _selection ? false : true,
+                selection = _selection || getSelection();
 
             if (selection.hasRange()) {
 
@@ -532,21 +532,17 @@ define('io.ox/office/editor/editor',
 
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
-
-                // updating current selection, so that image positions are also available
-                var updateFromBrowser = true,
-                    newSelection = getSelection(updateFromBrowser),
-                    imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
+                var imageStartPosition = _.copy(newSelection.startPaM.oxoPosition, true),
                     returnImageNode = true,
                     imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
                 // only delete, if imageStartPosition is really an image position
                 if (Utils.getNodeName(imageNode) === 'img') {
-                    // delete an corresponding span
+                    // delete an corresponding div
                     var divNode = imageNode.parentNode.firstChild;
                     while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
                         if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
-                            // removing node
+                            // removing div node
                             $(divNode).remove();
                             break;
                         } else {
@@ -1180,7 +1176,7 @@ define('io.ox/office/editor/editor',
                     document.execCommand('enableInlineTableEditing', false, false);
                 } catch (ex) {
                 }
-    
+
                 // disable IE table manipulation handlers in edit mode
                 Utils.getDomNode(editdiv).onresizestart = function () { return false; };
             }
