@@ -20,10 +20,8 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
-     'gettext!io.ox/files/files',
-     'io.ox/core/config',
-     'io.ox/files/carousel'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config, carousel) {
+     'gettext!io.ox/files/files'
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt) {
 
     'use strict';
 
@@ -67,6 +65,32 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             this.append(
                 baton.$.iconContainer = $('<div class="icon-container">')
+            );
+        }
+    });
+
+    function startSlideshow(e) {
+        e.preventDefault();
+        require(['io.ox/files/carousel'], function (carousel) {
+            var app = e.data.app;
+            carousel.init({
+                fullScreen: !!e.data.fullScreen,
+                list: app.getFiles(),
+                app: app
+            });
+        });
+    }
+
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'slideshow',
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
+                    .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
+                $.txt(' ('),
+                $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
+                    .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
+                $.txt(')')
             );
         }
     });
@@ -168,6 +192,10 @@ define('io.ox/files/icons/perspective',
                 $('<div class="files-iconview">').append(iconview)
             );
 
+            app.getFiles = function () {
+                return allIds;
+            };
+
             layout = calculateLayout(iconview, options);
 
             dialog.delegate(iconview, '.file-icon', iconClick);
@@ -209,6 +237,14 @@ define('io.ox/files/icons/perspective',
                 ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
                 iconContainer = baton.$.iconContainer;
 
+                // add inline link
+                var inline;
+                iconview.find('.breadcrumb').after(
+                    inline = $('<div class="slideshowmenu pull-right">')
+                );
+
+                ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
+
                 // add element to provoke scrolling
                 iconContainer.append(
                     $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
@@ -222,8 +258,6 @@ define('io.ox/files/icons/perspective',
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
                         redraw(allIds.slice(start, end));
-                        $('.breadcrumb').after($('<div class="slideshowmenu pull-right">'));
-                        carousel.addLinks($('.slideshowmenu'), app, allIds);
                     })
                     .fail(function (response) {
                         iconview.idle();
