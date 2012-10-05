@@ -196,10 +196,6 @@ define('io.ox/files/carousel',
             else {
                 pos.end = pos.first;
                 pos.start = pos.first - this.config.step;
-                console.log(
-                    'pos.start', pos.start, 'pos.end', pos.end, 'pos.cur', pos.cur,
-                    'first', pos.first, 'last', pos.last
-                );
             }
 
 
