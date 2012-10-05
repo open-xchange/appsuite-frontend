@@ -200,7 +200,7 @@ define('io.ox/files/carousel',
                 item = $('<div class="item">').attr('data-index', index),
                 img = $('<img>', { alt: file.title, src: this.addURL(file) }),
                 caption = $('<div class="carousel-caption">'),
-                breadcrumb = folderAPI.getBreadcrumb(file.folder_id, self.app.folder.set);
+                breadcrumb = folderAPI.getBreadcrumb(file.folder_id, { handler: self.app.folder.set, subfolder: false, last: false });
 
             if (isfirst)
             {
