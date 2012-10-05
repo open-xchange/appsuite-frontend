@@ -38,8 +38,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             computePopupTime: function (time, finderId) {
                 var endDate = new Date(time.getTime()),
                     weekDay = endDate.getDay(),
-                    alarmDate = new Date(time.getTime()),
-                    offset = alarmDate.getTimezoneOffset() * -1 * 60000;
+                    alarmDate = new Date(time.getTime());
                 
                 switch (finderId) {
                 case "0":
@@ -127,9 +126,6 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
-                
-                alarmDate.setTime(alarmDate.getTime() + offset);
-                endDate.setTime(endDate.getTime() + offset);
                 var result = {
                         endDate: endDate,
                         alarmDate: alarmDate
