@@ -26,14 +26,28 @@ define('io.ox/contacts/model',
         model: {
 
             addMember: function (member) {
-
+                if (this.get('distribution_list') === undefined) {
+                    this.set('distribution_list', []);
+                }
                 this.get('distribution_list').push(member);
                 this.trigger("change");
                 this.trigger("change:distribution_list");
             },
 
-            removeMember: function (member) {
-                console.log(member);
+            removeMember: function (mail, name) {
+
+                var distListLength = this.get('distribution_list').length,
+                    currentDistlist = this.get('distribution_list');
+
+                _(currentDistlist).each(function (val, key) {
+                    if (val.mail === mail && val.display_name === name) {
+                        currentDistlist.splice(key, 1);
+                    }
+                });
+
+                this.trigger("change");
+                this.trigger("change:distribution_list");
+
             }
 
         },
