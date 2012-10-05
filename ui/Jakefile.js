@@ -158,7 +158,7 @@ var jshintOptions = {
     validthis: true,
     white: true, // THIS IS TURNED ON - otherwise we have too many dirty check-ins
     predef: ['$', '_', 'Modernizr', 'define', 'require', 'ox', 'assert',
-             'include', 'doT', 'Backbone']
+             'include', 'doT', 'Backbone', 'BigScreen']
 };
 
 function hint (data, getSrc) {
@@ -244,8 +244,9 @@ file(utils.dest("signin.appcache"), ["force"]);
 
 utils.concat("boot.js",
     [utils.string("// NOJSHINT\ndependencies = "), "tmp/dependencies.json",
-     debug ? utils.string(';STATIC_APPS=(' + process.env.STATIC_APPS + ');') :
-             utils.string(';'),
+     debug ? utils.string(';STATIC_APPS=(' +
+                          (process.env.STATIC_APPS || 'true') + ');')
+           : utils.string(';'),
      "src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 

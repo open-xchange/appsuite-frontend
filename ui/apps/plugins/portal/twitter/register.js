@@ -147,11 +147,13 @@ define('plugins/portal/twitter/register',
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
         var $myTweet = $('<div class="tweet">').data('entry', tweet).append(
-            $('<a class="io-ox-twitter-follow btn" href="https://twitter.com/intent/user">').append(
-                $('<span>').text(gt('Follow')),
-                $('<i>')
+            $('<a class="io-ox-twitter-follow btn btn-small" href="https://twitter.com/intent/user">').append(
+                '<i>&nbsp;</i>',
+                $('<span>').text(gt('Follow'))
             ),
-            $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description}),
+            $('<a>').attr({href: profileLink}).append(
+                $('<img>', {src: tweet.user.profile_image_url, 'class': 'profilePicture', alt: tweet.user.description})
+            ),
             $('<div class="text">').append(
                 $('<strong class="io-ox-twitter-name">').text(tweet.user.name),
                 '<br />',
@@ -262,7 +264,13 @@ define('plugins/portal/twitter/register',
             script.src   = 'http://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
             
             self.empty().append(
-                $('<a class="io-ox-twitter-action-tweet btn btn-primary">').text(gt('Tweet')),
+                $('<a>').text(gt('Tweet')).attr({
+                    href: 'https://twitter.com/share',
+                    target: '_blank',
+                    'class': 'twitter-share-button io-ox-twitter-action-tweet',
+                    'data-count': 'none',
+                    'data-size': 'large'
+                }),
                 $('<div>').addClass('clear-title').text('Twitter'),
                 script
             );

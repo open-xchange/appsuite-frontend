@@ -7,10 +7,16 @@
             </div>
             
             <p class="lead">
-                
+                In OX7 we use the popular backbone library as a basis for our model/view handling. 
             </p>
             
-            <section>
+            <section id="basics">
+                <h2>Model/View Basics</h2>
+                <p>
+                    
+                </p>
+            </section>
+            <section id="getting_and_setting">
                 <h2>Getting and setting attributes</h2>
                 <pre class="experiment">
 var Recipe = Backbone.Model.extend({});
@@ -823,10 +829,8 @@ require(["io.ox/backbone/views"], function (views) {
         render: function () {
             this.$el.text(this.model.get('title'));
         },
-        modelEvents: {
-            'change:title': 'updateTitle'
-        },
-        updateTitle: function () {
+        observe: 'title',
+        onTitleChange: function () {
             this.$el.text(this.model.get('title'));
         }
         
@@ -842,10 +846,8 @@ require(["io.ox/backbone/views"], function (views) {
                 self.$el.append($('&lt;li&gt;').text(ingredient));
             });
         },
-        modelEvents: {
-            'change:ingredients': 'updateIngredients'
-        },
-        updateIngredients: function () {
+        observe: 'ingredients',
+        onIngredientsChange: function () {
             this.empty();
             _(this.model.get('ingredients')).each(function (ingredient) {
                 self.$el.append($('&lt;li&gt;').text(ingredient));
@@ -860,10 +862,8 @@ require(["io.ox/backbone/views"], function (views) {
         render: function () {
             this.$el.text(this.model.get('description'));
         },
-        modelEvents: {
-            'change:description': 'updateDescription'
-        },
-        updateDescription: function () {
+        observe: 'description',
+        onDescriptionChange: function () {
             this.$el.text(this.model.get('description'));
         }
         
@@ -876,10 +876,8 @@ require(["io.ox/backbone/views"], function (views) {
         render: function () {
             this.$el.text("Servings: " + this.model.get('servings'));
         },
-        modelEvents: {
-            'change:servings': 'updateServings'
-        },
-        updateServings: function () {
+        observe: 'servings',
+        onServingsChange: function () {
             this.$el.text("Servings: " + this.model.get('servings'));
         }
         

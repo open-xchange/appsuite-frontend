@@ -36,12 +36,23 @@
     @outerWidth:    138px;
 
     position: absolute;
-    overflow: auto;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     min-height: 100px;
+
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    -webkit-tap-highlight-color: transparent;
+
+    .slideshowmenu {
+        position:absolute;
+        top:57px;
+        right:13px;
+
+        div a { cursor: pointer;}
+    }
 
     .icon-container {
         margin-right: -13px;
@@ -78,9 +89,8 @@
                 font-size: 60px;
                 line-height: 0.5em;
                 color: #ccc;
-                color: rgba(0, 0, 0, 0.5);
             }
-            
+
             i.file-type-doc { color: #0092D0; }
             i.file-type-xls { color: #2FB145; }
             i.file-type-ppt { color: #ED4D21; }
