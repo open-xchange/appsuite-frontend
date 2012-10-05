@@ -127,9 +127,15 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                 var o = oldAttributes[key];
                 var c = currentAttributes[key];
-
+                
                 if (o !== c) {
-                    retval[key] = c;
+                    if (_.isArray(o) && _.isArray(c)) {
+                        if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
+                            retval[key] = c;
+                        }
+                    } else {
+                        retval[key] = c;
+                    }
                 }
 
             });
@@ -200,7 +206,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                 var loaded = factory.create(data);
                 models[loaded.id] = loaded;
-                serverAttributes[loaded.id] = loaded.toJSON();
+                serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 def.resolve(loaded);
             }).fail(def.reject);
 
