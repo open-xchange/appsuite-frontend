@@ -49,6 +49,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         validate: function (attributes) {
             var self = this,
                 errors = new ValidationErrors();
+
+            attributes = attributes || this.toJSON();
+
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
             if (errors.hasErrors()) {
                 var validAttributes = {};
