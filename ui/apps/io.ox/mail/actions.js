@@ -537,59 +537,27 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/markread'
     }));
 
-    // change label
-
-    var colorNames = {
-        'NONE':      gt('None'),
-        'RED':       gt('Red'),
-        'BLUE':      gt('Blue'),
-        'GREEN':     gt('Green'),
-        'GREY':      gt('Grey'),
-        'BROWN':     gt('Brown'),
-        'AQUA':      gt('Aqua'),
-        'ORANGE':    gt('Orange'),
-        'PINK':      gt('Pink'),
-        'LIGHTBLUE': gt('Lightblue'),
-        'YELLOW':    gt('Yellow')
-    };
-
-    function changeLabel(e) {
-        return api.update(e.data.data, { color_label: e.data.color, value: true });
-    }
-
     new Action('io.ox/mail/actions/label', {
         id: 'label',
         requires: 'toplevel some',
         multiple: $.noop
     });
 
-    ext.point('io.ox/mail/links/inline').extend(new links.Link({
-        index: 600,
-        prio: 'lo',
-        id: 'label',
-        ref: 'io.ox/mail/actions/label',
-        draw: function (data) {
-            this.append(
-                $('<span class="dropdown" class="io-ox-inline-links" data-prio="lo">')
-                .append(
-                    // link
-                    $('<a href="#" data-toggle="dropdown">')
-                    .text(gt('Label')).append($('<b class="caret">')).dropdown(),
-                    // drop down
-                    $('<ul class="dropdown-menu">')
-                    .append(
-                        _(api.COLORS).reduce(function (memo, index, color) {
-                            return memo.add($('<li>').append(
-                                $('<a>').text(colorNames[color])
-                                .on('click', { data: data, color: index }, changeLabel)
-                                .addClass(data.color_label === index ? 'active-label' : undefined)
-                            ));
-                        }, $())
-                    )
-                )
-            );
-        }
-    }));
+//    ext.point('io.ox/mail/links/inline').extend(new links.Link({
+//        index: 600,
+//        prio: 'lo',
+//        id: 'label',
+//        ref: 'io.ox/mail/actions/label',
+//        draw: function (data) {
+//            this.append(
+//                $('<span class="dropdown" class="io-ox-inline-links" data-prio="lo">')
+//                .append(
+//                    // link
+//
+//                )
+//            );
+//        }
+//    }));
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 700,
