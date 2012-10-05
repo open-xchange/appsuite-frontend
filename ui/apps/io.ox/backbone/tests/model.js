@@ -442,6 +442,20 @@ define("io.ox/backbone/tests/model", ["io.ox/core/extensions", "io.ox/backbone/m
                     });
                 });
                 
+                j.it("should be able to handle array attributes", function () {
+                    var recipe;
+                    
+                    utils.waitsFor(factory.realm("" + _.now()).get({id: 1, folder: 12}).done(function (loaded) {
+                        recipe = loaded;
+                    }));
+                    
+                    j.runs(function () {
+                        recipe.addIngredient("new ingredient");
+                        j.expect(recipe.isDirty()).toEqual(true);
+                        j.expect(recipe.changedSinceLoading()).toEqual({ingredients: ["A glass", "Some Water", "new ingredient"]});
+                    });
+                });
+                
             });
         }
     });
