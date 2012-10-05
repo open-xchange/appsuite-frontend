@@ -247,7 +247,7 @@ utils.concat("boot.js",
      debug ? utils.string(';STATIC_APPS=(' +
                           (process.env.STATIC_APPS || 'true') + ');')
            : utils.string(';'),
-     "src/css.js", "src/jquery.plugins.js", "src/util.js", "src/boot.js"],
+     "src/css.js", "src/jquery.plugins.js", "apps/io.ox/core/gettext.js", "src/util.js", "src/boot.js"],
     { to: "tmp", type: "source" });
 
 
@@ -273,7 +273,7 @@ utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
         "event.js", "extensions.js", "http.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
-        "config.js", "session.js", "gettext.js",
+        "config.js", "session.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
         "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",

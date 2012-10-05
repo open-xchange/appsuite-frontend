@@ -14,13 +14,19 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/extPatterns/links", "io.ox/core/cache"], function (Events, ext, links, cache) {
+    ["io.ox/core/event",
+     "io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
+     "io.ox/core/cache",
+     "gettext!core"], function (Events, ext, links, cache, gt) {
 
     "use strict";
 
     /**
      * Core UI
      */
+
+    console.warn(gt('i18n test string - do not translate this'));
 
     // current window
     var currentWindow = null;
