@@ -24,211 +24,266 @@ define('io.ox/files/carousel',
 
     "use strict";
 
-    var allIds,
-        pos = {
-        begin: 0,
-        end: 9,
-        step: 10,
-        cur: 0,
-        direction: 'right',
-        last: 0
-    };
+    var carouselSlider = {
 
-    function checkImage(file) {
-        if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(file.filename) &&
-        (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+        app: null,
+        win: null,
 
-    function closeCarousel() {
-        if (BigScreen.enabled) {
-            BigScreen.exit();
-        }
-        $('.carousel').remove();
-    }
+        pos: {
+            start: 0,
+            end: 0,
+            counter: 0,
+            cur: 0,
+            direction: 'next'
+        },
 
-    function iconError() {
-        $(this).replaceWith($('<i>').addClass('icon-picture file-type-ppt'));
-    }
+        container: $('<div class="carousel slide">'),
 
-    function carouselCaption(app, file) {
-        return $('<div class="carousel-caption">')
-        .append($('<h4>').text(file.title))
-        .append(
-            folderAPI.getBreadcrumb(file.folder_id, app.folder.set).on('click', closeCarousel)
-        );
-    }
+        inner: $('<div class="carousel-inner">'),
 
-    function carouselItem(app, file, i) {
-        var url = api.getUrl(file, 'open') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
-        return $('<div class="item">').attr('data-index', i)
-            .append($('<img>', { alt: file.title, src: url}).on('error', iconError))
-            .append(carouselCaption(app, file));
-    }
+        config: {
+            fullScreen: false,
+            list: [],
+            app: null,
+            step: 4
+        },
 
-    function previousItem()
-    {
-        $('.carousel').carousel('prev');
+        init: function (config) {
 
-    }
+            $.extend(this.config, config);
 
-    function nextItem()
-    {
-        $('.carousel').carousel('next');
-    }
+            this.app = config.app;
+            this.win = this.app.getWindow();
+            this.list = config.list;
 
-    function previousControl()
-    {
-        return $('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev')
-            .on('click', previousItem);
-    }
-
-    function nextControl()
-    {
-        return $('<a class="carousel-control right">').text('›').attr('data-slide', 'next')
-            .on('click', nextItem);
-    }
-
-    function closeControl()
-    {
-        return $('<button class="btn btn-primary closecarousel">').text(gt('Close'))
-            .on('click', closeCarousel);
-    }
-
-    function nextImages(app, ids)
-    {
-        pos.cur = pos.end;
-        pos.end = pos.end + pos.step;
-        api.getList(allIds.slice(pos.cur + 1, pos.end)).done(function (files) {
-            var i = parseInt($('.carousel-inner .item:last').attr('data-index'), 10);
-            i++;
-            _(files).each(function (file) {
-                if (checkImage(file)) {
-                    $('.carousel-inner').append(carouselItem(app, file, i));
+            if (this.config.fullScreen === true)
+            {
+                if (window.BigScreen.enabled) {
+                    window.BigScreen.toggle(this.win.nodes.outer.get(0));
                 }
-                i++;
-            });
-        });
-    }
+            }
+            this.pos.cur = 0;
+            this.filterImagesList();
+            this.show();
+            this.eventHandler();
+        },
 
-    function drawCarousel(app, ids) {
-        var win = app.getWindow();
-        allIds = ids;
-        win.busy();
+        eventHandler: function ()
+        {
+            var self = this;
+            var pos = this.pos;
 
-        var innerCarousel = $('<div class="carousel-inner">');
-
-        api.getList(ids.slice(pos.begin, (pos.end + 1))).done(function (files) {
-            var i = 0;
-            _(files).each(function (file) {
-                if (checkImage(file)) {
-                    innerCarousel.append(carouselItem(app, file, i));
-                }
-                i++;
-            });
-
-            win.nodes.outer.append(
-                $('<div class="carousel slide">')
-                    .append(innerCarousel)
-                    .append(previousControl)
-                    .append(nextControl)
-                    .append(closeControl)
-            );
-
-            $('.carousel .item:first').addClass('active');
+            // Hide left control on start
             $('.carousel-control.left').hide();
 
-            // TODO: Overwrite Bootstrap Stuff?
+            $('.carousel').on('slid', function () {
+                var oldpos = pos.cur;
+                pos.cur = parseInt($('.item.active').attr('data-index'), 10);
 
-            $('.carousel').on('slide', function (e) {
-                pos.last = pos.cur;
-                pos.cur = parseInt($(e.relatedTarget).attr('data-index'), 10);
-                if (pos.cur > pos.last)
+                if (oldpos < pos.cur)
                 {
-                    pos.direction = 'left';
+                    pos.direction = 'next';
                 }
-                if (pos.cur < pos.last)
+                else
                 {
-                    pos.direction = 'right';
+                    pos.direction = 'prev';
                 }
-            });
-
-            $('.carousel').on('slid', function (e) {
                 if (pos.cur === 0)
                 {
                     $('.carousel-control.left').hide();
                 }
                 else
                 {
-                    $('.carousel-control.left').show();
+                    if ($('.carousel-control.left').is(':hidden'))
+                    {
+                        $('.carousel-control.left').show();
+                    }
                 }
-                var pre = pos.end - 2;
-                if (pos.cur === pre)
-                {
-                    nextImages(app, ids);
-                }
-                if (pos.cur === pos.end)
+                if (pos.cur === self.list.length)
                 {
                     $('.carousel-control.right').hide();
                 }
                 else
                 {
-                    $('.carousel-control.right').show();
+                    if ($('.carousel-control.right').is(':hidden'))
+                    {
+                        $('.carousel-control.right').show();
+                    }
+                }
+                if (pos.cur === (pos.end - 1) && (pos.cur + 1) < self.list.length)
+                {
+                    self.getItems();
+                    if (pos.cur > self.config.step)
+                    {
+                        var del = '.item[data-index="' + (pos.cur - self.config.step + 1) + '"]';
+                        $(del).prevAll().remove();
+                    }
                 }
             });
 
+            $('.carousel-control.left').on('click', this.prevItem);
+            $('.carousel-control.right').on('click', this.nextItem);
+
+            $('.closecarousel').on('click', this.close);
+
             $(document).keyup(function (e) {
-                if (e.keyCode === 27) closeCarousel();
+                if (e.keyCode === 27) self.close();
+                if (e.keyCode === 39) self.nextItem();
+                if (e.keyCode === 37) self.prevItem();
             });
 
-            // Deactivate Bootstraps Interval
-            //$('.carousel').each(function () {
-            //    $(this).carousel({
-            //        interval: false
-            //    });
-            //});
+            // TODO: Replace Images when resizing window
+            $(window).resize(_.debounce(this.replaceImages, 300));
 
-            win.idle();
-        });
-    }
-
-    function drawFullscreenCarousel(app, ids) {
-        var win = app.getWindow();
-        if (BigScreen.enabled) {
-            BigScreen.request(win.nodes.outer.get(0));
-            drawCarousel(app, ids);
-        }
-    }
-
-    return {
-        addLink: function (el, app, ids) {
-            return el
-                .append($('<div class="pull-left">')
-                    .append(
-                    $('<a class="pull-right slideshow">').text(gt('View Slideshow'))
-                        .on('click', function () { drawCarousel(app, ids); }
-                    )
-                )
-            );
+            $('.carousel-inner').on('img', 'error', this.imgError);
         },
-        addFullscreenLink: function (el, app, ids) {
-            return el
-                .append($('<div class="pull-left">')
-                    .append($('<span>').html('&nbsp;('))
-                    .append(
-                    $('<a class="slideshow">').text(gt('Fullscreen'))
-                        .on('click', function () { drawFullscreenCarousel(app, ids); })
-                    )
-                    .append($('<span>').text(')')
-                )
+
+        replaceImages: function ()
+        {
+
+        },
+
+        filterImagesList: function ()
+        {
+            this.list = $.grep(this.list, function (o) {
+                return (/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
+            });
+        },
+
+        addURL: function (file) {
+            return api.getUrl(file, 'open') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+        },
+
+        imgError: function () {
+            $(this).replaceWith($('<i>').addClass('icon-picture file-type-ppt'));
+        },
+
+        removeItems: function ()
+        {
+
+        },
+
+        getItems: function ()
+        {
+            var self = this;
+            var pos = this.pos;
+
+            if (pos.direction === 'next') {
+                if (this.list.length >= (this.config.step + this.pos.end))
+                {
+                    pos.end += this.config.step;
+                }
+                else
+                {
+                    pos.end = this.list.length;
+                }
+            }
+            if (pos.direction === 'prev') {
+                // TODO
+            }
+            api.getList(this.list.slice(pos.start, pos.end)).done(function (files) {
+                var nodes = [];
+                _(files).each(function (file, index) {
+                    var isfirst = false;
+                    if (index === 0 && pos.start === 0) isfirst = true;
+                    nodes.push(self.addItem(file, self.pos.counter, isfirst));
+                    self.pos.counter++;
+                    self.pos.start = pos.end;
+                });
+                $('.carousel-inner').idle().append(nodes);
+                $('.item .breadcrumb li a').off('click').on('click', self.close);
+            });
+        },
+
+        addItem: function (file, index, isfirst) {
+            var self = this,
+                item = $('<div class="item">').attr('data-index', index),
+                img = $('<img>', { alt: file.title, src: this.addURL(file) }),
+                caption = $('<div class="carousel-caption">'),
+                breadcrumb = folderAPI.getBreadcrumb(file.folder_id, self.app.folder.set);
+
+            if (isfirst)
+            {
+                item.addClass('active');
+            }
+
+            caption.append($('<h4>').text(file.title))
+                   .append(breadcrumb);
+
+            item.append(img)
+                .append(caption);
+
+            return item;
+        },
+
+        prevItem: function () {
+            if (this.pos.cur !== 0)
+            {
+                $('.carousel').carousel('prev');
+            }
+        },
+
+        nextItem: function () {
+            $('.carousel').carousel('next');
+        },
+
+
+        prevControl: function () {
+            return $('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev');
+        },
+
+        nextControl: function () {
+            return $('<a class="carousel-control right">').text('›').attr('data-slide', 'next');
+        },
+
+        closeControl: function () {
+            return $('<button class="btn btn-primary closecarousel">').text(gt('Close'));
+        },
+
+        show: function () {
+            this.win.busy().nodes.outer.append(
+                this.container
+                    .empty()
+                    .append(this.inner.busy())
+                    .append(this.prevControl)
+                    .append(this.nextControl)
+                    .append(this.closeControl)
             );
+            this.win.idle();
+            this.getItems(0, this.config.step);
+        },
+
+        close: function () {
+            if (window.BigScreen.enabled) {
+                window.BigScreen.exit();
+            }
+            $('.carousel').remove();
         }
     };
 
+    return {
+        addLinks: function (el, app, ids) {
+            return el
+                .append($('<div class="pull-left">')
+                    .append($('<a class="slideshow">').text(gt('View Slideshow'))
+                    .on('click', function () {
+                        carouselSlider.init({
+                            fullScreen: false,
+                            list: ids,
+                            app: app
+                        });
+                    }))
+                    .append($('<span>').html('&nbsp;('))
+                    .append($('<a class="slideshow">').text(gt('Fullscreen'))
+                    .on('click', function () {
+                        carouselSlider.init({
+                            fullScreen: true,
+                            list: ids,
+                            app: app
+                        });
+                    }))
+                    .append($('<span>').text(')'))
+                );
+        }
+    };
 });
