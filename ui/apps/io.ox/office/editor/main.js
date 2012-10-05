@@ -395,7 +395,7 @@ define('io.ox/office/editor/main',
                     })
                     .pipe(extractOperationsList)
                     .done(function (operations) {
-                        if (operations) {
+                        if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
                             editor.enableUndo(true);
@@ -596,7 +596,7 @@ define('io.ox/office/editor/main',
                 .done(function (response) {
                     if (response && response.data) {
                         var operations = JSON.parse(response.data);
-                        if (operations.length) {
+                        if (_.isArray(operations) && (operations.length > 0)) {
                             // We might need to do some "T" here!
                             applyOperations(operations);
                         }
