@@ -206,7 +206,8 @@ define('io.ox/office/editor/format/imagestyles',
             } else if (verticalOffsetNode.length === 0) {
                 verticalOffsetNode = $('<div>', { contenteditable: false })
                     .addClass('float')
-                    .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) });
+                    .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) })
+                    .insertBefore(image);
             }
 
             // calculate left/right offset (only if image is anchored to column)
