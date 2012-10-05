@@ -126,7 +126,7 @@ define("io.ox/conversations/main",
             // const
             POLL_FREQ = 2000,
             // current user id
-            myself = String(config.get("identifier")),
+            myself = String(ox.user_id),
             // DOM nodes
             pane, controls, textarea,
             // functions

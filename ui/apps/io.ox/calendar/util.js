@@ -12,9 +12,11 @@
  */
 
 define("io.ox/calendar/util",
-    ["io.ox/core/date", "gettext!io.ox/calendar/calendar",
-     'io.ox/core/api/user', 'io.ox/contacts/api',
-     'io.ox/core/api/group', 'io.ox/core/config'], function (date, gettext, userAPI, contactAPI, groupAPI, config) {
+    ["io.ox/core/date",
+     'gettext!io.ox/calendar/calendar',
+     'io.ox/core/api/user',
+     'io.ox/contacts/api',
+     'io.ox/core/api/group'], function (date, gettext, userAPI, contactAPI, groupAPI) {
 
     "use strict";
 
@@ -515,7 +517,7 @@ define("io.ox/calendar/util",
                 arrayOfIds = [],
                 idsFromGroupMembers = [],
                 arrayOfGroupMembers = [],
-                currentUser = config.get('identifier');
+                currentUser = ox.user_id;
 
             _.each(participants, function (single) {
                 if (single.type === 5) {
@@ -557,7 +559,7 @@ define("io.ox/calendar/util",
                 collectedIdsFromGroups = [],
                 returnArray = [],
                 arrayOfIds = [],
-                currentUser = config.get('identifier');
+                currentUser = ox.user_id;
 
             _.each(participants, function (single) {
                 if (single.type === 2) {

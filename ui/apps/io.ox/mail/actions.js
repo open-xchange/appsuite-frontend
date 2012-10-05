@@ -350,7 +350,7 @@ define('io.ox/mail/actions',
         action: function (data) {
             var collectedRecipients = [],
                 participantsArray = [],
-                currentId = config.get('identifier'),
+                currentId = ox.user_id,
                 currentFolder = config.get('folder.calendar'),
                 collectedRecipientsArray = data.to.concat(data.cc),
                 dev = $.Deferred(),
