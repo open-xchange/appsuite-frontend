@@ -17,9 +17,8 @@ define("io.ox/core/desktop",
     ["io.ox/core/event",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "io.ox/core/cache",
-     "gettext!io.ox/core/main"
-    ], function (Events, ext, links, cache, gt) {
+     "io.ox/core/cache"
+    ], function (Events, ext, links, cache) {
 
     "use strict";
 
@@ -533,7 +532,8 @@ define("io.ox/core/desktop",
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
         if (dirtyApps.length > 0) {
-            return gt('There are unsaved changes.');
+            // TODO! i18n (too early to import in core/desktop)
+            return 'There are unsaved changes.';
         }
     };
 
