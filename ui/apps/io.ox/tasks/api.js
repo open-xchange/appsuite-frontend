@@ -39,14 +39,17 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
                 order: "asc",
-                cache: true // allow DB cache
+                cache: true, // allow DB cache
+                timezone: "UTC"
             },
             list: {
                 action: "list",
-                columns: "1,20,200,202,203,300,309"
+                columns: "1,20,200,202,203,300,309",
+                timezone: "UTC"
             },
             get: {
-                action: "get"
+                action: "get",
+                timezone: "UTC"
             }
         }
     });
@@ -55,7 +58,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
     api.create = function (task) {
                 return http.PUT({
                     module: "tasks",
-                    params: {action: "new"},
+                    params: {action: "new",
+                             timezone: "UTC"},
                     data: task,
                     appendColumns: false
                 });
@@ -75,7 +79,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     params: {action: "update",
                         folder: useFolder,
                         id: taskId,
-                        timestamp: timestamp
+                        timestamp: timestamp,
+                        timezone: "UTC"
                     },
                     data: modifications,
                     appendColumns: false
@@ -105,7 +110,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 folder: api.getDefaultFolder(),
                 columns: "1,20,200,202,203,300,309",
                 sort: "202",
-                order: "asc"
+                order: "asc",
+                timezone: "UTC"
             }
         }).pipe(function (list) {
             // sorted by end_date filter over due Tasks
