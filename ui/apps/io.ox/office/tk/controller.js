@@ -55,7 +55,6 @@ define('io.ox/office/tk/controller', ['io.ox/office/tk/utils'], function (Utils)
             // cached results for chain operations
             chainedResults = {};
 
-
         // class Item ---------------------------------------------------------
 
         function Item(key, definition) {

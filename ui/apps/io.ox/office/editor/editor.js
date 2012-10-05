@@ -1167,13 +1167,35 @@ define('io.ox/office/editor/editor',
             $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
 
-        this.setReadonlyMode = function (readonly) {
-            readonlyMode = readonly;
+        this.setReadonlyMode = function (state) {
+            readonlyMode = state;
             editdiv.toggleClass('user-select-text', !readonlyMode).attr('contenteditable', !readonlyMode);
+
+            // disable resize handlers etc. everytime the edit mode has been enabled
+            if (!readonlyMode) {
+                // disable FireFox table manipulation handlers in edit mode
+                // (the commands must be executed after the editable div is in the DOM)
+                try {
+                    document.execCommand('enableObjectResizing', false, false);
+                    document.execCommand('enableInlineTableEditing', false, false);
+                } catch (ex) {
+                }
+    
+                // disable IE table manipulation handlers in edit mode
+                Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+            }
         };
 
         this.isReadonlyMode = function () {
             return readonlyMode;
+        };
+
+        /**
+         * Returns whether the current selection selects any text.
+         */
+        this.isTextSelected = function () {
+            // TODO: in the future, this depends on real selection mode
+            return !this.isImageSelected();
         };
 
         // PUBLIC TABLE METHODS
@@ -3060,17 +3082,7 @@ define('io.ox/office/editor/editor',
             setSelection(new OXOSelection());
             lastOperationEnd = new OXOPaM([0, 0]);
             self.clearUndo();
-
-            // disable FireFox table manipulation handlers in edit mode
-            // (the commands must be executed after the editable div is in the DOM)
-            try {
-                document.execCommand('enableObjectResizing', false, false);
-                document.execCommand('enableInlineTableEditing', false, false);
-            } catch (ex) {
-            }
-
-            // disable IE table manipulation handlers in edit mode
-            Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+            self.setReadonlyMode(false);
         }
 
         function implInsertText(text, position) {

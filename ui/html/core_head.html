@@ -23,6 +23,7 @@ window.ox = {
     abs: location.protocol + '//' + location.host,
     apiRoot: root + '/api',
     base: 'v=@ version @',
+    language: 'en_US',
     online: navigator.onLine !== undefined ? navigator.onLine : true,
     root: root,
     serverConfig: {},
@@ -31,6 +32,7 @@ window.ox = {
     t0: new Date().getTime(), // for profiling
     ui: { session: {} },
     user: '',
+    user_id: 0,
     version: '@ version @',
     windowState: 'foreground'
 };

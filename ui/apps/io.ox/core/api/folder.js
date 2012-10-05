@@ -286,7 +286,7 @@ define('io.ox/core/api/folder',
                     opt.data.permissions = [{
                         group: false,
                         bits: 403710016,
-                        entity: config.get('identifier')
+                        entity: ox.user_id
                     }];
                 } else {
                     opt.data.permissions = parent.permissions;
@@ -391,7 +391,7 @@ define('io.ox/core/api/folder',
                         }
                         // only shared BY me, not TO me
                         return data.type === 1 || data.type === 7 ||
-                            (data.module === 'infostore' && data.created_by === config.get('identifier'));
+                            (data.module === 'infostore' && data.created_by === ox.user_id);
                     }
                 }
             }
@@ -403,7 +403,7 @@ define('io.ox/core/api/folder',
         can: function (action, data, obj) {
             var compareValue = 1;
             if (obj) {
-                myself = myself || config.get('identifier');
+                myself = myself || ox.user_id;
                 if (myself === _.firstOf(obj.created_by, 0)) {
                     compareValue--;
                 }

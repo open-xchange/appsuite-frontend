@@ -15,8 +15,7 @@ define('io.ox/mail/write/test/text_forward',
     ['io.ox/mail/main',
      'io.ox/mail/api',
      'io.ox/core/api/user',
-     'io.ox/core/config',
-     'io.ox/core/extensions'], function (mailer, mailAPI, userAPI, config, ext) {
+     'io.ox/core/extensions'], function (mailer, mailAPI, userAPI, ext) {
 
     'use strict';
 
@@ -85,7 +84,7 @@ define('io.ox/mail/write/test/text_forward',
                     var loaded = new Done();
                     j.waitsFor(loaded, 'adding recipent', TIMEOUT);
 
-                    var myself = config.get('identifier');
+                    var myself = ox.user_id;
                     userAPI.get({ id: myself })
                     .done(function (myself) {
                         loaded.yep();

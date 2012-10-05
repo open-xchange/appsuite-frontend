@@ -388,7 +388,6 @@ define("io.ox/mail/api",
                     api.caches.get.remove(id),
                     api.caches.list.remove(obj),
                     api.caches.list.remove(id),
-                    //api.caches.all.grepRemove(id + '\t'), // clear source folder
                     api.caches.all.grepRemove(targetFolderId + '\t') // clear target folder
                 );
             };

@@ -15,14 +15,13 @@ define('io.ox/mail/write/test',
     ['io.ox/mail/write/main',
      'io.ox/mail/api',
      'io.ox/core/api/user',
-     'io.ox/core/config',
      'io.ox/core/extensions',
      'io.ox/mail/write/test/html_send',
      'io.ox/mail/write/test/text_send',
      'io.ox/mail/write/test/html_reply',
      'io.ox/mail/write/test/text_reply',
      'io.ox/mail/write/test/html_forward',
-     'io.ox/mail/write/test/text_forward'], function (writer, mailAPI, userAPI, config, ext) {
+     'io.ox/mail/write/test/text_forward'], function (writer, mailAPI, userAPI, ext) {
 
     'use strict';
 
@@ -276,8 +275,7 @@ define('io.ox/mail/write/test',
                 if (!_.browser.IE) {
 
                     j.it('sends mail successfully', function () {
-                        var data = app.getMail().data, done = new Done(),
-                            myself = config.get('identifier');
+                        var data = app.getMail().data, done = new Done(), myself = ox.user_id;
                         j.waitsFor(done, 'mail being send', TIMEOUT);
                         // get myself
                         userAPI.get({ id: myself })

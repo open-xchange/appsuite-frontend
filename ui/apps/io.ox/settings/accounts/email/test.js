@@ -165,7 +165,7 @@ define("io.ox/settings/accounts/email/test",
             j.describe("Creates a new Emailaccount via ui", function () {
 
                 var app = null, accountPane, buttonAdd, buttonAddAutoconf, buttonAddPassword, dialogAutoconf, dialogPassword,
-                    buttonSave, detailPane, dataId, identifier, dialogSuccess, buttonClose;
+                    buttonSave, detailPane, dataId, dialogSuccess, buttonClose;
 
                 j.it('opens settings app ', function () {
 

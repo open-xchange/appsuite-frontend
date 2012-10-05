@@ -858,8 +858,8 @@ define('io.ox/office/editor/main',
 
     AppHelper.configureWindowToolBar(MODULE_NAME)
         .addButtonGroup('file')
-            .addButton('download', function (app) { app.download(); }, { label: gt('Download') })
-            .addButton('print',    function (app) { app.print(); },    { label: gt('Print') })
+            .addButton('download', 'file/download', { label: gt('Download') })
+            .addButton('print',    'file/print',    { label: gt('Print') })
             .end()
         .addRadioGroup('showtoolbar', function (app, id) { app.getView().getToolPane().showToolBar(id); })
             .addButton('insert', { label: gt('Insert') })
