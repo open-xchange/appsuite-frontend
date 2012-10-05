@@ -258,8 +258,6 @@ define("io.ox/files/actions",
         label: gt('View')
     });
 
-    // links
-
     ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 50,
         id: "officenew",

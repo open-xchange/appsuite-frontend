@@ -337,12 +337,18 @@
                 (getter || api.get)(api.reduce(data)).done(function (data) {
                     node.triggerHandler('redraw', data);
                 });
+            },
+
+            remove = function () {
+                node.remove();
             };
 
+        api.on('delete:' + cid, remove);
         api.on('update:' + cid, update);
 
         return node.on('dispose', function () {
                 api.off('update:' + cid, update);
+                api.off('delete:' + cid, remove);
                 api = update = data = node = null;
             });
     };

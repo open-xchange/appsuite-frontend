@@ -304,7 +304,11 @@ define("io.ox/core/extensions",
             this.isDefaultPrevented = returnTrue;
         }
     };
-
+    
+    Baton.wrap = function (object) {
+        return object instanceof Baton ? object : new Baton(object);
+    };
+        
     that = {
 
         // get point

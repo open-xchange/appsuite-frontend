@@ -12,20 +12,20 @@
  */
 define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                             "io.ox/core/date"], function (gt, date) {
-    
+
     "use strict";
-    
+
     var lookupArray = [60000 * 5,           //five minutes
                        60000 * 15,          //fifteen minutes
                        60000 * 30,          //thirty minutes
                        60000 * 60],         //one hour]
-                       
+
         lookupDaytimeStrings = ["this morning",
                                 "by noon",
                                 "this afternoon",
                                 "tonight",
                                 "late in the evening"],
-                                
+
         lookupWeekdayStrings = ["on Sunday",
                                  "on Monday",
                                  "on Tuesday",
@@ -33,14 +33,14 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                                  "on Thursday",
                                  "on Friday",
                                  "on Saturday"];
-    
+
     var util = {
             computePopupTime: function (time, finderId) {
                 var endDate = new Date(time.getTime()),
                     weekDay = endDate.getDay(),
                     alarmDate = new Date(time.getTime()),
                     offset = alarmDate.getTimezoneOffset() * -1 * 60000;
-                
+
                 switch (finderId) {
                 case "0":
                 case "1":
@@ -123,11 +123,11 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     weekDay = (((endDate.getDay() - 5) % 7) + 7) % 7;
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * (7 - weekDay));
                 }
-                
+
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
-                
+
                 alarmDate.setTime(alarmDate.getTime() + offset);
                 endDate.setTime(endDate.getTime() + offset);
                 var result = {
@@ -137,7 +137,8 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 return result;
             },
     
-            buildDropdownMenu: function (time) {
+            //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
+            buildDropdownMenu: function (time, bootstrapDropdown) {
                 if (!time) {
                     time = new Date();
                 }
@@ -147,11 +148,11 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 "<option finderId='1'>" + gt('in 15 minutes') + "</option>" +
                 "<option finderId='2'>" + gt('in 30 minutes') + "</option>" +
                 "<option finderId='3'>" + gt('in one hour') + "</option>";
-                
+
                 // variable daytimes
                 var i = time.getHours(),
                     temp;
-                
+
                 if (i < 6) {
                     i = 0;
                 } else if (i < 12) {
@@ -169,15 +170,15 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     appendString = appendString + "<option finderId='d" + i + "'>" + gt(temp) + "</option>";
                     i++;
                 }
-                
+
                 //weekdays
                 var circleIncomplete = true,
                     startday = time.getDay();
-                
+
                 i = (time.getDay() + 2) % 7;
-                
+
                 appendString = appendString + "<option finderId='t'>" + gt("tomorrow") + "</option>";
-                
+
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
                     appendString = appendString + "<option finderId='w" + i + "'>" + gt(temp) + "</option>";
@@ -186,16 +187,21 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     } else {
                         i = 0;
                     }
-                    
+
                     if (i === startday) {
                         appendString = appendString + "<option finderId='ww'>" + gt("in one week") + "</option>";
                         circleIncomplete = false;
                     }
                 }
                 
+                if (bootstrapDropdown) {
+                    appendString = appendString.replace(/<option/g, "<li><a href='#'");
+                    appendString = appendString.replace(/option>/g, "a></li>");
+                }
+                
                 return appendString;
             },
-            
+
             //change status number to status text. format enddate to presentable string
             //if detail alarm and startdate get converted too and status text is set for more states than overdue and success
             interpretTask: function (task, detail)
@@ -204,9 +210,9 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 if (task.status === 3) {
                     task.status = gt("Done");
                     task.badge = "badge badge-success";
-                    
+
                 } else {
-                    
+
                     var now = new Date();
                     if (task.end_date !== undefined && task.end_date !== null && now.getTime() > task.end_date) {//no state for task over time, so manual check is needed
                         task.status = gt("Over due");
@@ -235,41 +241,41 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                         task.badge = '';
                     }
                 }
-                
-                
+
+
 
                 if (task.title === undefined || task.title === null) {
                     task.title = '\u2014';
                 }
-                
+
                 if (task.end_date !== undefined && task.end_date !== null) {
                     task.end_date = new date.Local(task.end_date).format();
                 } else {
                     task.end_date = '';
                 }
-                
+
                 if (detail) {
                     if (task.start_date !== undefined && task.start_date !== null) {
                         task.start_date = new date.Local(task.start_date).format();
                     } else {
                         task.start_date = '';
                     }
-                    
+
                     if (task.alarm !== undefined && task.alarm !== null) {
                         task.alarm = new date.Local(task.alarm).format();
                     } else {
                         task.alarm = '';
                     }
                 }
-                
+
                 return task;
             },
-            
+
             sortTasks: function (tasks) {//done tasks last, overduetasks first, same date alphabetical
                 tasks = _.copy(tasks, true);//make loacl copy
                 var resultArray = [],
                     alphabetArray = [];
-                
+
                 for (var i = 0; i < tasks.length; i++) {
                     if (tasks[i].status === 3) {
                         resultArray.push(tasks[i]);
@@ -277,7 +283,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                         alphabetArray.push(tasks[i]);
                     }
                 }
-                
+
                 alphabetArray.sort(function (a, b) {
                         if (a.end_date > b.end_date || a.end_date === null) {
                             return 1;
@@ -289,22 +295,22 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                             return -1;
                         }
                     });
-                
+
                 resultArray.unshift(alphabetArray);
                 return _.flatten(resultArray);
-                
+
             }
-            
-            
+
+
         };
-        
+
     var prepareTime = function (time) {
         time.setMilliseconds(0);
         time.setSeconds(0);
         time.setMinutes(0);
-            
+
         return time;
     };
-        
+
     return util;
 });

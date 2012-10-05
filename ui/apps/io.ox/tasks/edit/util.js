@@ -27,7 +27,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                 .addClass("span6 progress-field");
             
             $('<div>').addClass('input-append').append(progress,
-                    $('<button>').addClass('fluid-grid-fix btn').append($('<i>').addClass('icon-minus'))
+                    $('<button>').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-minus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp -= 25;
@@ -39,7 +39,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                             progress.trigger('change');
                         }
                     }),
-                    $('<button>').addClass('fluid-grid-fix btn').append($('<i>').addClass('icon-plus'))
+                    $('<button>').addClass('span3 btn fluid-grid-fix').append($('<i>').addClass('icon-plus'))
                     .on('click', function () {
                         var temp = parseInt(progress.val(), 10);
                         temp += 25;
@@ -84,7 +84,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             
             //fillout gridCells
             if (fillGrid || fillGrid === undefined) {
-                row.children().children().addClass("row-content");
+                row.children().children().not('label').addClass("span12");
             }
         },
         
@@ -110,13 +110,13 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
         buildDetailsTab: function (tab) {
             //build TabObject
             detailsTab.main = tab;
-            detailsTab.target_duration = $('<input>').attr({type: 'text', id: 'task-edit-target-duration'}).addClass('target-duration span12');
-            detailsTab.actual_duration = $('<input>').attr({type: 'text', id: 'task-edit-actual-duration'}).addClass('actual-duration span12');
-            detailsTab.target_costs = $('<input>').attr({type: 'text', id: 'task-edit-target-costs'}).addClass('target-costs span12');
-            detailsTab.actual_costs = $('<input>').attr({type: 'text', id: 'task-edit-actual-costs'}).addClass('actual-costs span12');
-            detailsTab.billing_information = $('<input>').attr({type: 'text', id: 'task-edit-billing-information'}).addClass('billing-information span12');
-            detailsTab.companies = $('<input>').attr({type: 'text', id: 'task-edit-companies'}).addClass('companies span12');
-            detailsTab.trip_meter = $('<input>').attr({type: 'text', id: 'task-edit-trip-meter'}).addClass('trip_meter span12');
+            detailsTab.target_duration = $('<input>').attr({type: 'text', id: 'task-edit-target-duration'}).addClass('target-duration');
+            detailsTab.actual_duration = $('<input>').attr({type: 'text', id: 'task-edit-actual-duration'}).addClass('actual-duration');
+            detailsTab.target_costs = $('<input>').attr({type: 'text', id: 'task-edit-target-costs'}).addClass('target-costs');
+            detailsTab.actual_costs = $('<input>').attr({type: 'text', id: 'task-edit-actual-costs'}).addClass('actual-costs');
+            detailsTab.billing_information = $('<input>').attr({type: 'text', id: 'task-edit-billing-information'}).addClass('billing-information');
+            detailsTab.companies = $('<input>').attr({type: 'text', id: 'task-edit-companies'}).addClass('companies');
+            detailsTab.trip_meter = $('<input>').attr({type: 'text', id: 'task-edit-trip-meter'}).addClass('trip_meter');
             detailsTab.currency = $('<select>').addClass('currency').attr('id', 'task-edit-currency');
             for (var i = 0; i < currencyArray.length; i++) {
                 $('<option>').text(currencyArray[i]).appendTo(detailsTab.currency);
@@ -134,7 +134,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
                                              detailsTab.actual_costs.attr('id')), detailsTab.actual_costs],
                                             [this.buildLabel(gt("Currency"),
                                              detailsTab.currency.attr('id')), detailsTab.currency]],
-                                            [5, 5, 2]);
+                                            [6, 4, 2]);
             this.buildRow(detailsTab.main, [[this.buildLabel(gt("Distance"),
                                              detailsTab.trip_meter.attr('id')), detailsTab.trip_meter]]);
             this.buildRow(detailsTab.main, [[this.buildLabel(gt("Billing information"),
@@ -201,7 +201,7 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             }
             
             for (var i = 0; i < tempNodes.length; i += 2) {
-                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]]);
+                this.buildRow(node, [tempNodes[i], tempNodes[i + 1]], [6, 6], false);
             }
         }
     };
