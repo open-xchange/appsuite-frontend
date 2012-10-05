@@ -261,29 +261,5 @@ define('io.ox/files/carousel',
         }
     };
 
-    return {
-        addLinks: function (el, app, ids) {
-            return el
-                .append($('<div class="pull-left">')
-                    .append($('<a class="slideshow">').text(gt('View Slideshow'))
-                    .on('click', function () {
-                        carouselSlider.init({
-                            fullScreen: false,
-                            list: ids,
-                            app: app
-                        });
-                    }))
-                    .append($('<span>').html('&nbsp;('))
-                    .append($('<a class="slideshow">').text(gt('Fullscreen'))
-                    .on('click', function () {
-                        carouselSlider.init({
-                            fullScreen: true,
-                            list: ids,
-                            app: app
-                        });
-                    }))
-                    .append($('<span>').text(')'))
-                );
-        }
-    };
+    return carouselSlider;
 });
