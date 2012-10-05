@@ -14,7 +14,12 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/extPatterns/links", "io.ox/core/cache"], function (Events, ext, links, cache) {
+    ["io.ox/core/event",
+     "io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
+     "io.ox/core/cache",
+     "gettext!io.ox/core/main"
+    ], function (Events, ext, links, cache, gt) {
 
     "use strict";
 
@@ -487,8 +492,27 @@ define("io.ox/core/desktop",
             });
         };
 
+        /**
+         * Returns an array containing all running applications that pass a
+         * truth test.
+         *
+         * @param {Function} iterator
+         *  The test iterator function. Receives an application object as first
+         *  parameter, returns true for all applications that will be included
+         *  in the result set.
+         *
+         * @param {Object} [context]
+         *  The context object the iterator will be bound to.
+         *
+         * @returns {App[]}
+         *  All running applications that passed the truth test.
+         */
+        App.filter = function (iterator, context) {
+            return _(ox.ui.running).filter(iterator, context);
+        };
+
         App.get = function (name) {
-            return _(ox.ui.running).filter(function (app) {
+            return App.filter(function (app) {
                 return app.getName() === name;
             });
         };
@@ -498,6 +522,20 @@ define("io.ox/core/desktop",
         };
 
     }());
+
+    // check if any open application has unsaved changes
+    window.onbeforeunload = function () {
+
+        var // find all applications with unsaved changes
+            dirtyApps = ox.ui.App.filter(function (app) {
+                return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
+            });
+
+        // browser will show a confirmation dialog, if onbeforeunload returns a string
+        if (dirtyApps.length > 0) {
+            return gt('There are unsaved changes.');
+        }
+    };
 
     ox.ui.screens = (function () {
 

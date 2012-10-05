@@ -14,7 +14,8 @@
 define('io.ox/office/tk/apphelper',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils'], function (Extensions, Links, Utils) {
+     'io.ox/office/tk/utils'
+     ], function (Extensions, Links, Utils) {
 
     'use strict';
 
