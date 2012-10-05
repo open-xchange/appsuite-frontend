@@ -269,6 +269,8 @@
     
     .flag-dropdown ul {
         font: 13px/18 @font-normal;
+        right: 0;
+        left: auto;
     }
 
     .priority {

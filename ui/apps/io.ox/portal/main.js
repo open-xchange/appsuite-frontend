@@ -14,7 +14,6 @@
 
 define.async('io.ox/portal/main',
     ['io.ox/core/extensions',
-     'io.ox/core/config',
      'io.ox/core/api/user',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
@@ -24,7 +23,7 @@ define.async('io.ox/portal/main',
      'io.ox/keychain/api',
      'settings!io.ox/portal',
      'less!io.ox/portal/style.css'],
-function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
+function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
     'use strict';
 
@@ -441,7 +440,7 @@ function (ext, config, userAPI, date, tasks, control, gt, dialogs, keychain, set
         ext.point('plugins/portal/intro').extend({
             id: 'default-intro',
             node: function () {
-                var username = userAPI.getTextNode(config.get('identifier')).nodeValue;
+                var username = userAPI.getTextNode(ox.user_id).nodeValue;
                 return $('<div>').append(
                     $('<span class="io-ox-portal-settings">').append(
                         $('<button class="btn btn-primary">')
