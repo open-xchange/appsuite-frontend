@@ -119,13 +119,10 @@ define("io.ox/core/gettext", [], function () {
         return gettext;
     }
 
+    // probably we can clean that up here since we now have "ox.language" right from the start
     var lang = new $.Deferred();
 
     gt.setLanguage = function (language) {
-        // is supported?
-        if (!(language in ox.serverConfig.languages)) {
-            language = 'en_US';
-        }
         gt.setLanguage = function (lang2) {
             if (lang2 !== language) {
                 throw new Error("Multiple setLanguage calls");

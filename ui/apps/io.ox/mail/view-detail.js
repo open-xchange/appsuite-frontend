@@ -547,12 +547,46 @@ define('io.ox/mail/view-detail',
         }
     });
 
+    var colorNames = {
+        NONE:      gt('None'),
+        RED:       gt('Red'),
+        BLUE:      gt('Blue'),
+        GREEN:     gt('Green'),
+        GREY:      gt('Grey'),
+        BROWN:     gt('Brown'),
+        AQUA:      gt('Aqua'),
+        ORANGE:    gt('Orange'),
+        PINK:      gt('Pink'),
+        LIGHTBLUE: gt('Lightblue'),
+        YELLOW:    gt('Yellow')
+    };
+
+    function changeLabel(e) {
+        return api.update(e.data.data, { color_label: e.data.color, value: true });
+    }
+
     ext.point('io.ox/mail/detail').extend({
         index: 125,
         id: 'flag',
         draw: function (data) {
             this.append(
-                $('<div>').addClass('flag flag_' + util.getFlag(data) + ' clear-title').text('\u00A0')
+                $('<div class="dropdown flag-dropdown clear-title flag">')
+                .addClass('flag_' + util.getFlag(data))
+                .append(
+                    // box
+                    $('<a href="#" class="abs dropdown-toggle" data-toggle="dropdown">'),
+                    // drop down
+                    $('<ul class="dropdown-menu">')
+                    .append(
+                        _(api.COLORS).reduce(function (memo, index, color) {
+                            return memo.add($('<li>').append(
+                                $('<a href="#">').text(colorNames[color])
+                                .on('click', { data: data, color: index }, changeLabel)
+                                .addClass(data.color_label === index ? 'active-label' : undefined)
+                            ));
+                        }, $())
+                    )
+                )
             );
         }
     });

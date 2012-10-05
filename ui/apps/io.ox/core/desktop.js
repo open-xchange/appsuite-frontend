@@ -17,14 +17,16 @@ define("io.ox/core/desktop",
     ["io.ox/core/event",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "io.ox/core/cache"
-    ], function (Events, ext, links, cache) {
+     "io.ox/core/cache",
+     "gettext!core"], function (Events, ext, links, cache, gt) {
 
     "use strict";
 
     /**
      * Core UI
      */
+
+    console.warn(gt('i18n test string - do not translate this'));
 
     // current window
     var currentWindow = null;
@@ -532,8 +534,7 @@ define("io.ox/core/desktop",
 
         // browser will show a confirmation dialog, if onbeforeunload returns a string
         if (dirtyApps.length > 0) {
-            // TODO! i18n (too early to import in core/desktop)
-            return 'There are unsaved changes.';
+            return gt('There are unsaved changes.');
         }
     };
 

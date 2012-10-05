@@ -13,11 +13,10 @@
 define('io.ox/calendar/week/view',
     ['io.ox/calendar/util',
      'io.ox/core/date',
-     'io.ox/core/config',
      'gettext!io.ox/calendar/view',
      'io.ox/core/api/folder',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, config, gt, folder) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, gt, folder) {
 
     'use strict';
 
@@ -1006,7 +1005,7 @@ define('io.ox/calendar/week/view',
 
         renderAppointment: function (a) {
 
-            myself = myself || config.get('identifier');
+            myself = myself || ox.user_id;
 
             // check confirmations
             var state = (_(a.participants).find(function (o) {

@@ -14,9 +14,8 @@ define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
-     'io.ox/core/config',
      'gettext!io.ox/calendar/view',
-     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, config, gt) {
+     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
 
     'use strict';
 
@@ -63,7 +62,7 @@ define('io.ox/calendar/month/view',
 
         renderAppointment: function (a) {
 
-            myself = myself || config.get('identifier');
+            myself = myself || ox.user_id;
 
             // check confirmations
             var state = (_(a.participants).find(function (o) {
