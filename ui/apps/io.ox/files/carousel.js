@@ -39,6 +39,8 @@ define('io.ox/files/carousel',
             direction: 'next'
         },
 
+        firstStart: true,
+
         container: $('<div class="carousel slide">'),
 
         inner: $('<div class="carousel-inner">'),
@@ -125,9 +127,6 @@ define('io.ox/files/carousel',
                         $(del).prevAll().remove();
                     }
                 }
-
-
-
                 if (pos.direction === 'prev' && pos.cur === pos.first && pos.cur !== 0)
                 {
                     self.getItems();
@@ -195,7 +194,8 @@ define('io.ox/files/carousel',
             }
             else {
                 pos.end = pos.first;
-                pos.start = pos.first - this.config.step;
+                pos.start = pos.first - this.config.step - 1;
+                if (pos.first < this.config.step) pos.start = 0;
             }
 
 
@@ -203,11 +203,10 @@ define('io.ox/files/carousel',
                 var nodes = [];
                 var i = pos.start;
                 _(files).each(function (file, index) {
-                    var isfirst = false;
-                    if (index === 0 && pos.start === 0) isfirst = true;
-                    nodes.push(self.addItem(file, i, isfirst));
+                    nodes.push(self.addItem(file, i));
                     i++;
                 });
+
                 if (pos.direction === 'prev')
                 {
                     $('.carousel-inner').idle().prepend(nodes);
@@ -228,9 +227,10 @@ define('io.ox/files/carousel',
                 caption = $('<div class="carousel-caption">'),
                 breadcrumb = folderAPI.getBreadcrumb(file.folder_id, { handler: self.app.folder.set, subfolder: false, last: false });
 
-            if (isfirst)
+            if (this.firstStart)
             {
                 item.addClass('active');
+                this.firstStart = false;
             }
 
             caption.append($('<h4>').text(file.title))
@@ -243,7 +243,7 @@ define('io.ox/files/carousel',
         },
 
         prevItem: function () {
-            if (this.pos.cur !== 0)
+            if (carouselSlider.pos.cur !== 0)
             {
                 $('.carousel').carousel('prev');
             }
@@ -277,13 +277,13 @@ define('io.ox/files/carousel',
             this.win.busy().nodes.outer.append(
                 this.container
                     .empty()
-                    .append(this.inner.busy())
+                    .append(this.inner.empty().busy())
                     .append(this.prevControl)
                     .append(this.nextControl)
                     .append(this.closeControl)
             );
             this.win.idle();
-            this.getItems(0, this.config.step);
+            this.getItems();
         },
 
         close: function () {
