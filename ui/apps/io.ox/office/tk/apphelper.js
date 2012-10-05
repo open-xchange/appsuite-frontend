@@ -19,7 +19,7 @@ define('io.ox/office/tk/apphelper',
 
     'use strict';
 
-    // class ToolBarRegistry  =================================================
+    // class ToolBarRegistry ==================================================
 
     /**
      * Registers buttons and other control elements in the header tool bar of
@@ -135,7 +135,10 @@ define('io.ox/office/tk/apphelper',
 
             Group.call(this, id);
 
-            this.addButton = this.registerButton;
+            this.addButton = function (buttonId, handler, options) {
+                var callback = _.isFunction(handler) ? handler : _.isString(handler) ? function (app) { app.getController().change(handler); } : null;
+                return this.registerButton(buttonId, callback, options);
+            };
 
         }}); // class ButtonGroup
 
