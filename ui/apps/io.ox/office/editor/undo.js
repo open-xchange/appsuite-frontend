@@ -65,13 +65,13 @@ define('io.ox/office/editor/undo',
             this.undo = function () {
                 // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
                 if (this.undoOperation) {
-                    editor.publicApplyOperation(this.undoOperation, true, true);
+                    editor.applyOperation(this.undoOperation, true, true);
                 }
             };
 
             this.redo = function () {
                 if (this.redoOperation) {
-                    editor.publicApplyOperation(this.redoOperation, true, true);
+                    editor.applyOperation(this.redoOperation, true, true);
                 }
             };
 

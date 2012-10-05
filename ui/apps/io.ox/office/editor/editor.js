@@ -182,17 +182,14 @@ define('io.ox/office/editor/editor',
             return editdiv;
         };
 
-        this.publicApplyOperation = function (operation, bRecord, notify) {
-            applyOperation(operation, bRecord, notify);
+        this.applyOperation = function (operation, record, notify) {
+            applyOperation(operation, record, notify);
         };
 
-        this.applyOperations = function (theOperations, bRecord, notify) {
-
-            if (_(theOperations).isArray()) {
-                _(theOperations).each(function (operation) {
-                    applyOperation(operation, bRecord, notify);
-                }, this);
-            }
+        this.applyOperations = function (operations, record, notify) {
+            _(operations).each(function (operation) {
+                applyOperation(operation, record, notify);
+            });
         };
 
         this.initDocument = function () {
@@ -1726,10 +1723,10 @@ define('io.ox/office/editor/editor',
             return event && NAVIGATION_KEYS.contains(event.keyCode);
         }
 
-        // Maybe only applyOperation_s_, where param might be operation or operation[] ?
-        // Central dispatcher function for operations.
-
-        function applyOperation(operation, bRecord, bNotify) {
+        /**
+         * Central dispatcher function for operations.
+         */
+        function applyOperation(operation, record, notify) {
 
             if (!_.isObject(operation)) {
                 Utils.error('Editor.applyOperation(): expecting operation object');
@@ -1753,7 +1750,7 @@ define('io.ox/office/editor/editor',
 
             implDbgOutObject({type: 'operation', value: operation});
 
-            if (bRecord) {
+            if (record) {
                 operations.push(operation);
             }
 
@@ -2126,7 +2123,7 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            if (bNotify && !blockOperationNotifications) {
+            if (notify && !blockOperationNotifications) {
                 // Will give everybody the same copy - how to give everybody his own copy?
                 self.trigger("operation", notifyOperation);
             }

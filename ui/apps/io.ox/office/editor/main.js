@@ -143,6 +143,24 @@ define('io.ox/office/editor/main',
         }
 
         /**
+         * Sends a 'closedocument' notification to the server.
+         *
+         * @param {Boolean} [synchronous=false]
+         *  If set to true, the notification will be sent synchronously.
+         */
+        function sendCloseNotification(synchronous) {
+            // TODO: one-way call, alternative to GET?
+            if (self.hasFileDescriptor()) {
+                $.ajax({
+                    type: 'GET',
+                    url: self.getDocumentFilterUrl('closedocument'),
+                    dataType: 'json',
+                    async: !synchronous
+                });
+            }
+        }
+
+        /**
          * Shows a closable error message above the editor.
          *
          * @param {String} message
@@ -311,23 +329,23 @@ define('io.ox/office/editor/main',
 
                 // wait for the final synchronization
                 sendDef.always(function () {
-
                     // notify server about quitting the application
-                    // TODO: one-way call, alternative to GET?
-                    if (self.hasFileDescriptor()) {
-                        $.ajax({
-                            type: 'GET',
-                            url: self.getDocumentFilterUrl('closedocument'),
-                            dataType: 'json'
-                        });
-                    }
-
+                    sendCloseNotification();
                     win.idle();
                     def[resolved ? 'resolve' : 'reject']();
                 });
             });
 
             return def;
+        }
+
+        /**
+         * Handler for the 'unload' event of the browser window. Sends a
+         * 'closedocument' notification to the server.
+         */
+        function unloadHandler() {
+            // send notification synchronously, otherwise browser may cancel it
+            sendCloseNotification(true);
         }
 
         /**
@@ -377,7 +395,7 @@ define('io.ox/office/editor/main',
                     })
                     .pipe(extractOperationsList)
                     .done(function (operations) {
-                        if (operations) {
+                        if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
                             editor.enableUndo(true);
@@ -578,7 +596,7 @@ define('io.ox/office/editor/main',
                 .done(function (response) {
                     if (response && response.data) {
                         var operations = JSON.parse(response.data);
-                        if (operations.length) {
+                        if (_.isArray(operations) && (operations.length > 0)) {
                             // We might need to do some "T" here!
                             applyOperations(operations);
                         }
@@ -739,6 +757,13 @@ define('io.ox/office/editor/main',
             }
         };
 
+        /**
+         * Returns whether there are unsaved operations left.
+         */
+        this.hasUnsavedChanges = function () {
+            return operationsBuffer.length > 0;
+        };
+
         this.failSave = function () {
             var point = {
                 file: this.getFileDescriptor(),
@@ -802,6 +827,8 @@ define('io.ox/office/editor/main',
                 window.clearTimeout(operationsTimer);
                 operationsTimer = null;
             }
+            // unregister the unload handler for this application
+            $(window).off('unload', unloadHandler);
             controller.destroy();
             view.destroy();
             editor.destroy();
@@ -817,6 +844,9 @@ define('io.ox/office/editor/main',
         editor.on('operation', function (event, operation) {
             operationsBuffer.push(operation);
         });
+
+        // wait for unload events and send notification to server
+        $(window).on('unload', unloadHandler);
 
         // configure application
         initializeFromOptions(options);
