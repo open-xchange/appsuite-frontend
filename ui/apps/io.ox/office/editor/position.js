@@ -2222,6 +2222,8 @@ define('io.ox/office/editor/position',
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();
+                } else if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float'))) {
+                    child = child.nextSibling;
                 } else {
                     continue_ = false;
                 }
