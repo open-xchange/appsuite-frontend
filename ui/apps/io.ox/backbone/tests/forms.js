@@ -609,6 +609,35 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
             
             j.describe("Section", function () {
                 j.it("should provide an extension point for section entries", function () {
+                     // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+                    
+                    var sectionRef = ref + "/section1";
+                    var sectionPoint = views.point(sectionRef);
+                    
+                    // Let's plug in our test instance
+                    point.extend(new forms.Section({
+                        id: 'section1',
+                        title: 'Section',
+                        ref: sectionRef
+                    }));
+                    
+                    // And extend the section with a node
+                    
+                    sectionPoint.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title'
+                    }));
+
+                    var View = point.createView();
+
+                    var $el = new View().render().$el;
+
+                    j.expect($el.find(".sectionheader .sectiontitle").text()).toEqual('Section');
+                    
+                    console.log($el);
                     
                 });
                 

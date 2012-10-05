@@ -587,38 +587,37 @@ define('io.ox/core/api/folder',
             });
         };
 
-        var add = function (folder, i, list, hasHandler) {
-            var li = $('<li>'), elem;
-            if (i === list.length - 1) {
+        var add = function (folder, i, list, options) {
+            var li = $('<li>'), elem, isLast = i === list.length - 1;
+            if (isLast && options.last) {
                 elem = li.addClass('active');
-                if (hasHandler) {
-                    dropdown(elem, folder.id);
-                }
             } else {
                 elem = $('<a href="#">');
-                li.append(
-                    elem, $('<span class="divider">').text(' / ')
-                );
+                li.append(elem, isLast ? $() : $('<span class="divider">').text(' / '));
+            }
+            if (isLast && options.subfolder && options.handler !== undefined) {
+                dropdown(elem, folder.id);
             }
             elem.attr('data-folder-id', folder.id).text(folder.title);
             this.append(li);
         };
 
-        return function (id, handler) {
+        return function (id, options) {
             var ul;
+            options = _.extend({ subfolder: true, last: true }, options);
             try {
                 return (ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
                     e.preventDefault();
                     var id = $(this).attr('data-folder-id');
                     if (id !== undefined) {
-                        handler(id);
+                        _.call(options.handler, id);
                     }
                 }));
             }
             finally {
                 api.getPath({ folder: id }).done(function (list) {
                     _(list).each(function (o, i, list) {
-                        add.call(ul, o, i, list, handler !== undefined);
+                        add.call(ul, o, i, list, options);
                     });
                     ul = null;
                 });
