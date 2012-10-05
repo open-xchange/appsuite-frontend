@@ -88,7 +88,7 @@ $(document).ready(function () {
             $("#background_loader").fadeIn(DURATION, function () {
                 var ref = _.url.hash('ref'),
                     location = "#?" + enc(
-                            _.rot("session=" + ox.session + "&user=" + ox.user + (ref ? "&ref=" + enc(ref) : ''), 1)
+                            _.rot("session=" + ox.session + "&user=" + ox.user + "&user_id=" + ox.user_id + "&language=" + ox.language + (ref ? "&ref=" + enc(ref) : ''), 1)
                     );
                 // use redirect servlet for real login request
                 // this even makes chrome and safari asking for storing credentials
@@ -120,11 +120,7 @@ $(document).ready(function () {
         $("#io-ox-login-screen").hide();
         $(this).busy();
         // get configuration & core
-        require("io.ox/core/config").load()
-        .done(function () {
-            // Set user's language (as opposed to the browser's language)
-            var lang = require("io.ox/core/config").get("language");
-            require("io.ox/core/gettext").setLanguage(lang);
+        require("io.ox/core/config").load().done(function () {
             $.when(
                 require(["io.ox/core/main"]),
                 require("themes").set("default")
@@ -302,10 +298,11 @@ $(document).ready(function () {
         }
 
         // got session via hash?
-        if (_.url.hash("session")) {
-            ox.session = _.url.hash("session");
-            ox.user = _.url.hash("user");
-            ref = _.url.hash("ref");
+        if (_.url.hash('session')) {
+            ox.session = _.url.hash('session');
+            ox.user = _.url.hash('user');
+            ox.language = _.url.hash('language');
+            ref = _.url.hash('ref');
             _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
@@ -331,8 +328,8 @@ $(document).ready(function () {
             node = $("#io-ox-language-list");
             for (id in lang) {
                 node.append(
-                    $("<a/>", { href: "#" })
-                    .on("click", { id: id }, fnChangeLanguage)
+                    $('<a href="#">')
+                    .on('click', { id: id }, fnChangeLanguage)
                     .text(lang[id])
                 );
                 node.append(document.createTextNode("\u00A0 "));
@@ -465,6 +462,9 @@ $(document).ready(function () {
     $("#background_loader").busy();
 
     var boot = function () {
+
+        // Set user's language (as opposed to the browser's language)
+        require("io.ox/core/gettext").setLanguage(ox.language);
 
         // get pre core & server config
         require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
