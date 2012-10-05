@@ -449,6 +449,8 @@ define('io.ox/core/tk/vgrid',
                     }
                 }
 
+                // update selection (just to get css classes back)
+                self.selection.update();
                 tmp = null;
 
                 // remember bounds
@@ -535,6 +537,43 @@ define('io.ox/core/tk/vgrid',
             return { folder_id: c[0], id: c[1], recurrence_position: c[2] };
         };
 
+        function updateSelection(changed) {
+            // vars
+            var id = _.url.hash('id'), ids, cid, index, selectionChanged;
+            // use url?
+            ids = id !== undefined ? id.split(/,/) : [];
+            if (ids.length && self.selection.contains(ids)) {
+                // convert ids to objects first - avoids problems with
+                // non-existing items that cannot be resolved in selections
+                //console.debug('case #1:', ids);
+                ids = _(ids).map(deserialize);
+                selectionChanged = !self.selection.equals(ids);
+                if (selectionChanged) {
+                    // set
+                    self.selection.set(ids);
+                    firstAutoSelect = false;
+                }
+                //changed = true;
+                if (selectionChanged || changed) {
+                    // scroll to first selected item
+                    cid = _(ids).first();
+                    index = self.selection.getIndex(cid) || 0;
+                    if (!isVisible(index)) {
+                        setIndex(index - 2); // not at the very top
+                    }
+                }
+            } else if (firstAutoSelect) {
+                // select first or previous selection
+                //console.debug('case #2: smart');
+                self.selection.selectSmart();
+                firstAutoSelect = false;
+            } else {
+                // set selection based on last index
+                //console.debug('case #3: last index');
+                self.selection.selectLastIndex();
+            }
+        }
+
         loadAll = function () {
 
             if (paused) {
@@ -562,70 +601,31 @@ define('io.ox/core/tk/vgrid',
             }
 
             // get all IDs
-            var load = loadIds[currentMode] || loadIds.all,
-                def = $.Deferred(),
-                changed;
+            var load = loadIds[currentMode] || loadIds.all;
 
-            load.call(self)
+            return load.call(self)
                 .done(function (list) {
-
                     // get list
                     if (!isArray(list)) {
                         // try to use 'data' property
                         self.prop('total', list.more);
                         list = list.data;
                     }
-
                     if (isArray(list)) {
-                        changed = list.length !== all.length || !_.isEqual(all, list);
-                        apply(list)
+                        return apply(list)
                             .always(function () {
                                 // stop being busy
                                 container.css({ visibility: '' }).parent().idle();
                             })
                             .done(function () {
-                                // vars
-                                var id = _.url.hash('id'), ids, cid, index, selectionChanged;
-                                // use url?
-                                ids = id !== undefined ? id.split(/,/) : [];
-                                if (ids.length && self.selection.contains(ids)) {
-                                    // convert ids to objects first - avoids problems with
-                                    // non-existing items that cannot be resolved in selections
-                                    ids = _(ids).map(deserialize);
-                                    selectionChanged = !self.selection.equals(ids);
-                                    if (selectionChanged) {
-                                        // set
-                                        self.selection.set(ids);
-                                        firstAutoSelect = false;
-                                    }
-                                    //changed = true;
-                                    if (selectionChanged || changed) {
-                                        // scroll to first selected item
-                                        cid = _(ids).first();
-                                        index = self.selection.getIndex(cid) || 0;
-                                        if (!isVisible(index)) {
-                                            setIndex(index - 2); // not at the very top
-                                        }
-                                    }
-                                } else if (firstAutoSelect) {
-                                    // select first or previous selection
-                                    self.selection.selectSmart();
-                                    firstAutoSelect = false;
-                                } else {
-                                    // set selection based on last index
-                                    self.selection.selectLastIndex();
-                                }
-                            })
-                            .done(def.resolve)
-                            .fail(def.reject);
+                                updateSelection(list.length !== all.length || !_.isEqual(all, list));
+                            });
                     } else {
                         console.warn('VGrid.all() must provide an array!');
-                        def.fail(def.reject);
+                        return $.Deferred().reject();
                     }
                 })
                 .fail(handleFail);
-
-            return def;
         };
 
         init = function () {
