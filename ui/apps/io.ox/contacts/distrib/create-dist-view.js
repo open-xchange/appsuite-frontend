@@ -36,20 +36,12 @@ define('io.ox/contacts/distrib/create-dist-view',
         index: 100,
         attribute: 'display_name',
         label: 'Title',
-        control: '<input type="text" class="input-xlarge">'
-
-    }));
-
-    point.extend({
-        id: 'savebutton',
-        index: 100,
-        tagName: 'form',
-        className: 'form-inline',
-        render: function () {
-            var self = this,
-                newMember;
-            this.$el.append(
-                $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
+        control: '<input type="text" class="input-xlarge">',
+        buildControls: function () {
+            var self = this;
+            return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
+                    this.buildElement(),
+                    $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
                     self.options.parentView.trigger('save:start');
                     self.options.model.save().done(function () {
                         self.options.parentView.trigger('save:success');
@@ -57,9 +49,11 @@ define('io.ox/contacts/distrib/create-dist-view',
                         self.options.parentView.trigger('save:fail');
                     });
                 })
-            );
+            ));
         }
-    });
+
+    }));
+
 
     point.extend({
         id: 'add-members',
@@ -237,7 +231,8 @@ define('io.ox/contacts/distrib/create-dist-view',
 
         onDistributionListChange: function () {
             var self = this;
-            self.$el.find('.item-list').empty();
+            this.$el.find('.item-list').empty();
+
             _(this.model.get("distribution_list")).each(function (member) {
 
                 self.$el.find('.item-list').append(
@@ -279,13 +274,12 @@ define('io.ox/contacts/distrib/create-dist-view',
 
     });
 
-    ext.point('io.ox/contacts/distrib/create-dist-view/validation/display_name').extend({
-        id: 'display_name_has_to_be_filled',
+    ext.point('io.ox/contacts/model/validation/distribution_list').extend({
+        id: 'check_for_duplicates',
         validate: function (value) {
+//            console.log(value);
+//            console.log('im validate');
 
-            if (value === '') {
-                return "the Display name has to be filled";
-            }
         }
     });
 
