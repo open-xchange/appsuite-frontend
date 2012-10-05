@@ -14,7 +14,12 @@
  */
 
 define("io.ox/core/desktop",
-    ["io.ox/core/event", "io.ox/core/extensions", "io.ox/core/extPatterns/links", "io.ox/core/cache"], function (Events, ext, links, cache) {
+    ["io.ox/core/event",
+     "io.ox/core/extensions",
+     "io.ox/core/extPatterns/links",
+     "io.ox/core/cache",
+     "gettext!io.ox/core/main"
+    ], function (Events, ext, links, cache, gt) {
 
     "use strict";
 
