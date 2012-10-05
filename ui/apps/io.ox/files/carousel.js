@@ -6,11 +6,11 @@
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
  *
- * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Copyright (C) Open-Xchange Inc., 2006-2012
  * Mail: info@open-xchange.com
  *
  * @author David Bauer <david.bauer@open-xchange.com>
- *
+ * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
 define('io.ox/files/carousel',
@@ -90,14 +90,12 @@ define('io.ox/files/carousel',
             $('.carousel-control.left').hide();
 
             // before transition
-            $('.carousel').on('slide', function () {
-                // instead of hide/show we should unbind/rebind click handlers
-                $('.carousel-control.left').hide();
-                $('.carousel-control.right').hide();
+            this.container.on('slide', function () {
+                self.pos.sliding = true;
             });
 
             // after transition
-            $('.carousel').on('slid', function () {
+            this.container.on('slid', function () {
 
                 var oldpos = pos.cur;
                 pos.cur = parseInt(self.container.find('.item.active').attr('data-index'), 10);
@@ -106,9 +104,14 @@ define('io.ox/files/carousel',
 
                 if (pos.cur > 0) {
                     $('.carousel-control.left').show();
+                } else {
+                    $('.carousel-control.left').hide();
                 }
+
                 if (pos.cur < (self.list.length - 1)) {
                     $('.carousel-control.right').show();
+                } else {
+                    $('.carousel-control.right').hide();
                 }
 
                 if (pos.direction === 'next' && pos.cur === (pos.end - 1) && (pos.cur + 1) < self.list.length) {
@@ -118,6 +121,8 @@ define('io.ox/files/carousel',
                     self.getItems();
                     self.container.find('.item[data-index="' + (pos.start + self.config.step) + '"]').nextAll().empty();
                 }
+
+                self.pos.sliding = false;
             });
 
             $('.carousel-control.left').on('click', this.prevItem);
@@ -198,13 +203,13 @@ define('io.ox/files/carousel',
         },
 
         prevItem: function () {
-            if (carouselSlider.pos.cur !== 0) {
+            if (!carouselSlider.pos.sliding && carouselSlider.pos.cur > 0) {
                 $('.carousel').carousel('prev');
             }
         },
 
         nextItem: function () {
-            if (carouselSlider.pos.cur !== (carouselSlider.list.length - 1)) {
+            if (!carouselSlider.pos.sliding && carouselSlider.pos.cur < (carouselSlider.list.length - 1)) {
                 $('.carousel').carousel('next');
             }
         },
