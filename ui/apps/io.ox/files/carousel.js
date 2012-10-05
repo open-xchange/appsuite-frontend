@@ -29,7 +29,7 @@ define('io.ox/files/carousel',
         app: null,
         win: null,
 
-        pos: {
+        defaults: {
             start: 0,
             end: 0,
             counter: 0,
@@ -38,6 +38,8 @@ define('io.ox/files/carousel',
             last: 0,
             direction: 'next'
         },
+
+        pos: {},
 
         firstStart: true,
 
@@ -58,16 +60,14 @@ define('io.ox/files/carousel',
 
             this.app = config.app;
             this.win = this.app.getWindow();
-            this.list = config.list;
+            this.list = this.filterImagesList(config.list);
+            this.pos = _.extend({}, this.defaults); // get a fresh copy
+            this.firstStart = true; // should have a better name
 
-            if (this.config.fullScreen === true)
-            {
-                if (window.BigScreen.enabled) {
-                    window.BigScreen.toggle(this.win.nodes.outer.get(0));
-                }
+            if (this.config.fullScreen === true && BigScreen.enabled) {
+                BigScreen.request(this.win.nodes.outer.get(0));
             }
-            this.pos.cur = 0;
-            this.filterImagesList();
+
             this.show();
             this.eventHandler();
         },
@@ -138,7 +138,7 @@ define('io.ox/files/carousel',
             $('.carousel-control.left').on('click', this.prevItem);
             $('.carousel-control.right').on('click', this.nextItem);
 
-            $('.closecarousel').on('click', this.close);
+            $('.closecarousel').on('click', $.proxy(this.close, this));
 
             $(document).keyup(function (e) {
                 if (e.keyCode === 27) self.close();
@@ -149,7 +149,7 @@ define('io.ox/files/carousel',
             // TODO: Replace Images when resizing window
             $(window).resize(_.debounce(this.replaceImages, 300));
 
-            $('.carousel-inner').on('img', 'error', this.imgError);
+            this.inner.on('img', 'error', this.imgError);
         },
 
         replaceImages: function ()
@@ -157,9 +157,8 @@ define('io.ox/files/carousel',
 
         },
 
-        filterImagesList: function ()
-        {
-            this.list = $.grep(this.list, function (o) {
+        filterImagesList: function (list) {
+            return $.grep(list, function (o) {
                 return (/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
             });
         },
@@ -170,11 +169,6 @@ define('io.ox/files/carousel',
 
         imgError: function () {
             $(this).replaceWith($('<i>').addClass('icon-picture file-type-ppt'));
-        },
-
-        removeItems: function ()
-        {
-
         },
 
         getItems: function ()
@@ -198,25 +192,18 @@ define('io.ox/files/carousel',
                 if (pos.first < this.config.step) pos.start = 0;
             }
 
+            console.log('DEBUG > getItems', pos.start, pos.end);
 
             api.getList(this.list.slice(pos.start, pos.end)).done(function (files) {
-                var nodes = [];
-                var i = pos.start;
-                _(files).each(function (file, index) {
-                    nodes.push(self.addItem(file, i));
-                    i++;
-                });
-
-                if (pos.direction === 'prev')
-                {
-                    $('.carousel-inner').idle().prepend(nodes);
-                }
-                else
-                {
-                    $('.carousel-inner').idle().append(nodes);
+                var nodes = _(files).inject(function (memo, file, i) {
+                    return memo.add(self.addItem(file, pos.start + i));
+                }, $());
+                if (pos.direction === 'prev') {
+                    self.inner.idle().prepend(nodes);
+                } else {
+                    self.inner.idle().append(nodes);
                     pos.start = pos.end;
                 }
-                $('.carousel .item .breadcrumb li a').off('click').on('click', self.close);
             });
         },
 
@@ -243,23 +230,19 @@ define('io.ox/files/carousel',
         },
 
         prevItem: function () {
-            if (carouselSlider.pos.cur !== 0)
-            {
+            if (carouselSlider.pos.cur !== 0) {
                 $('.carousel').carousel('prev');
             }
         },
 
         nextItem: function () {
-            if (carouselSlider.pos.cur !== (carouselSlider.list.length - 1))
-            {
+            if (carouselSlider.pos.cur !== (carouselSlider.list.length - 1)) {
                 $('.carousel').carousel('next');
             }
-            else
-            {
+            else {
                 $('.carousel').carousel('pause');
             }
         },
-
 
         prevControl: function () {
             return $('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev');
@@ -275,22 +258,25 @@ define('io.ox/files/carousel',
 
         show: function () {
             this.win.busy().nodes.outer.append(
-                this.container
-                    .empty()
-                    .append(this.inner.empty().busy())
-                    .append(this.prevControl)
-                    .append(this.nextControl)
-                    .append(this.closeControl)
+                this.container.append(
+                    this.inner.busy(),
+                    this.prevControl(),
+                    this.nextControl(),
+                    this.closeControl()
+                )
+                .on('click', '.breadcrumb li a', $.proxy(this.close, this))
             );
             this.win.idle();
             this.getItems();
         },
 
         close: function () {
-            if (window.BigScreen.enabled) {
-                window.BigScreen.exit();
+            if (BigScreen.enabled) {
+                BigScreen.exit();
             }
-            $('.carousel').remove();
+            this.inner.empty().remove();
+            this.container.empty().remove();
+            this.list = [];
         }
     };
 
