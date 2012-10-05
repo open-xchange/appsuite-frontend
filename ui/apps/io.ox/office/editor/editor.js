@@ -1701,7 +1701,9 @@ define('io.ox/office/editor/editor',
         }
 
         function implCheckEventSelection() {
-            currentSelection = getSelection(true);
+            var updateFromBrowser = true,
+                allowNoneTextNodes = true;
+            currentSelection = getSelection(updateFromBrowser, allowNoneTextNodes);
             if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
@@ -2200,7 +2202,6 @@ define('io.ox/office/editor/editor',
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = Position.getCellDOMSelections(paragraphs, oxosel);
             } else {
-                // var oldSelection = getSelection();
                 ranges = Position.getDOMSelection(paragraphs, oxosel, useNonTextNode);
             }
 
@@ -2355,7 +2356,6 @@ define('io.ox/office/editor/editor',
             if (para === undefined) {
                 // Set attr to current selection
                 var allowNoneTextNodes = true,  // allowing also images on which attributes can be set (only with buttonEvent?)
-                    // updateFromBrowser = buttonEvent,
                     updateFromBrowser = false,
                     selection = getSelection(updateFromBrowser, allowNoneTextNodes);
 
