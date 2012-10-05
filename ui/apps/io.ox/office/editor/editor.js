@@ -823,6 +823,7 @@ define('io.ox/office/editor/editor',
 
                     if (rowGridCount > tableGridCount) {
 
+                        localEndCol--;  // behind is evaluated in getTableGridWithNewColumn
                         var insertmode = 'behind',
                             tablegrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, localEndCol, insertmode);
 
