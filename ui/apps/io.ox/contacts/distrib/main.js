@@ -76,7 +76,6 @@ define('io.ox/contacts/distrib/main',
                 view = new ContactCreateDistView({ model: model });
 
                 view.on('save:start', function () {
-                    console.log('hier drin');
                     win.busy();
                 });
 
