@@ -101,7 +101,7 @@ define('io.ox/office/editor/position',
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
                     if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
                         textLength -= $(prevNode).text().length;
-                        textLength++;  // 'div' has only a length of '1'
+                        textLength++;  // 'span' with spanType 'field' has only a length of '1'
                     }
                 }
                 characterPositionEvaluated = true;

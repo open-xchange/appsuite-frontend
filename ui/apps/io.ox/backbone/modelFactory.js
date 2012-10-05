@@ -39,7 +39,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
-            this.realm = this.get('_realm');
+            this.realm = this.get('_realm') || this.factory.realm("default");
             this._valid = true;
             this.attributeValidity = {};
 
@@ -131,7 +131,13 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 var c = currentAttributes[key];
 
                 if (o !== c) {
-                    retval[key] = c;
+                    if (_.isArray(o) && _.isArray(c)) {
+                        if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
+                            retval[key] = c;
+                        }
+                    } else {
+                        retval[key] = c;
+                    }
                 }
 
             });
@@ -157,7 +163,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             });
         },
         getCompositeId: function () {
-            return (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
+            return "id.folder : " + (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
         },
         isValid: function () {
             return this._valid;
@@ -203,7 +209,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                 var loaded = factory.create(data);
                 models[loaded.id] = loaded;
-                serverAttributes[loaded.id] = loaded.toJSON();
+                serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 def.resolve(loaded);
             }).fail(def.reject);
 

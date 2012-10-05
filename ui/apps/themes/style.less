@@ -686,32 +686,6 @@ a.button.default-action {
     top: 110%; bottom: auto; right: 0; left: auto;
 }
 
-.vgrid.top-toolbar .vgrid-toolbar {
-    top: 0;
-    border-bottom: 1px solid mix(@color, @background, 200%/15);
-}
-
-.vgrid.bottom-toolbar .vgrid-toolbar {
-    bottom: 0;
-    border-top: 1px solid mix(@color, @background, 200%/15);
-}
-
-.vgrid.top-toolbar .vgrid-scrollpane {
-    top: 35px;
-}
-
-.vgrid.bottom-toolbar .vgrid-scrollpane {
-    bottom: 35px;
-}
-
-.vgrid.bottom-toolbar .dropdown-menu {
-    top: auto; bottom: 110%; right: 0; left: auto;
-}
-
-.vgrid.top-toolbar .dropdown-menu {
-    top: 110%; bottom: auto; right: 0; left: auto;
-}
-
 .vgrid-cell {
     position: absolute;
     right: 0;
@@ -1095,8 +1069,8 @@ span.hint {
     height: 0.5em; /* some min height */
 }
 
-.io-ox-inline-links a,
-.io-ox-inline-links span.dropdown {
+.io-ox-inline-links > a,
+.io-ox-inline-links > span.dropdown {
     color: @inline-link-color;
     text-decoration: none;
     padding: 0 0 0 0.5em;

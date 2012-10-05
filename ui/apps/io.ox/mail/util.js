@@ -231,7 +231,13 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
         },
 
         isUnread: function (data) {
-            return data.unreadCount !== undefined ? data.unreadCount > 0 : (data.flags & 32) !== 32;
+            if (data && data.thread) {
+                return _(data.thread).inject(function (memo, data) {
+                    return memo || (data.flags & 32) !== 32;
+                }, false);
+            } else {
+                return (data.flags & 32) !== 32;
+            }
         },
 
         isDeleted: function (data) {
