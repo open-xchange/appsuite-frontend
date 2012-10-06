@@ -117,7 +117,7 @@ define('io.ox/calendar/edit/main',
             self.setWindow(ox.ui.createWindow({
                 name: 'io.ox/calendar/edit',
                 title: gt('Create Appointment'),
-                toolbar: true,
+                toolbar: false,
                 search: false,
                 close: true
             }));
