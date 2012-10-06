@@ -168,7 +168,6 @@ define('io.ox/calendar/edit/main',
 
             });
 
-
         },
         onShowWindow: function () {
             console.log('onshowwindow');
