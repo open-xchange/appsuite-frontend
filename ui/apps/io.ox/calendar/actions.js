@@ -15,7 +15,7 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar/actions'], function (ext, links, api, util, gt) {
+     'gettext!io.ox/calendar/actions', 'io.ox/core/config'], function (ext, links, api, util, gt, config) {
 
     'use strict';
 
@@ -89,12 +89,13 @@ define('io.ox/calendar/actions',
 
     new Action('io.ox/calendar/detail/actions/save-as-distlist', {
         action: function (params) {
-            var def = $.Deferred();
+            var contactsFolder = config.get('folder.contacts'),
+                def = $.Deferred();
             util.createDistlistArrayFromPartisipantList(params.participants, def);
             def.done(function (initdata) {
                 require(['io.ox/contacts/distrib/main'], function (m) {
                     m.getApp().launch().done(function () {
-                        this.create(params.folder_id, initdata);
+                        this.create(contactsFolder, initdata);
                     });
                 });
             });

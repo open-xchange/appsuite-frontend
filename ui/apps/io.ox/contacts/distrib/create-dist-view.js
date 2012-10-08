@@ -38,17 +38,19 @@ define('io.ox/contacts/distrib/create-dist-view',
         label: 'Title',
         control: '<input type="text" class="input-xlarge">',
         buildControls: function () {
-            var self = this;
+            var self = this,
+                buttonText = (_.isEmpty(self.model.get('distribution_list'))) ?  gt("Create list") : gt("Edit");
+
             return this.nodes.controls || (this.nodes.controls = $('<div class="controls">').append(
                     this.buildElement(),
-                    $('<button class="btn btn-primary">').text(gt("Create list")).on("click", function () {
-                    self.options.parentView.trigger('save:start');
-                    self.options.model.save().done(function () {
-                        self.options.parentView.trigger('save:success');
-                    }).fail(function () {
-                        self.options.parentView.trigger('save:fail');
-                    });
-                })
+                    $('<button class="btn btn-primary">').text(buttonText).on("click", function () {
+                        self.options.parentView.trigger('save:start');
+                        self.options.model.save().done(function () {
+                            self.options.parentView.trigger('save:success');
+                        }).fail(function () {
+                            self.options.parentView.trigger('save:fail');
+                        });
+                    })
             ));
         }
 
@@ -90,12 +92,15 @@ define('io.ox/contacts/distrib/create-dist-view',
                             newMember = self.copyContact(self.$el, nameValue, mailValue);
                         }
                     }
+
+                    if (self.checkForDuplicates(newMember)) {
+                        self.model.addMember(newMember);
+                    }
+
                     // reset the fields
                     self.$el.find('[data-holder="data-holder"]').removeData();
                     self.$el.find('input#mail').val('');
                     self.$el.find('input#name').val('');
-
-                    self.model.addMember(newMember);
 
                 })
 
@@ -112,6 +117,41 @@ define('io.ox/contacts/distrib/create-dist-view',
                     );
                 });
             }
+        },
+
+        checkForDuplicates: function (newMember) {
+            var self = this,
+                currentMembers = self.model.get('distribution_list'),
+                selector = false;
+
+            _(currentMembers).each(function (val, key) {
+                if (val.mail === newMember.mail && val.display_name === newMember.display_name) {
+                    self.drawAlert(newMember.mail, self.$el);
+                    selector = true;
+                }
+            });
+
+            if (selector) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+
+        drawAlert: function (mail, displayBox) {
+            displayBox.parent().find('.sectiontitle .alert.alert-block').remove();
+            displayBox.parent().find('.sectiontitle').append(
+                $('<div>')
+                .addClass('alert alert-block fade in')
+                .append(
+                    $('<a>').attr({ href: '#', 'data-dismiss': 'alert' })
+                    .addClass('close')
+                    .html('&times;'),
+                    $('<p>').text(
+                        gt('The email address ' + mail + ' is already in the list')
+                    )
+                )
+            );
         },
 
         drawEmptyItem: function (node) {
