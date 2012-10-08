@@ -510,11 +510,15 @@ define("io.ox/mail/api",
     };
 
     var react = function (action, obj, view) {
+        // get proper view first
+        view = $.trim(view || 'text').toLowerCase();
+        view = view === 'text/plain' ? 'text' : view;
+        view = view === 'text/html' ? 'html' : view;
         return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
-                    view: view || 'text'
+                    view: view
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
