@@ -257,7 +257,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                     var loaded = factory.create(data);
                     models[loaded.id] = loaded;
-                    serverAttributes[loaded.id] = loaded.toJSON();
+                    serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 });
                 resolveResult();
 
@@ -277,7 +277,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                     }
                 });
                 model.set(data);
-                serverAttributes[uid] = model.toJSON();
+                serverAttributes[uid] = JSON.parse(JSON.stringify(model.toJSON()));
             }
         };
 
