@@ -107,7 +107,12 @@ define("io.ox/participants/model",
         },
         getImage: function () {
             return util.getImage(this.toJSON());
-            return util.getDisplayName(this.toJSON());
+        },
+        getEmail: function () {
+            return util.getMail(this.toJSON());
+        },
+        getImage: function () {
+            return util.getImage(this.toJSON());
         }
     });
 

@@ -15,7 +15,6 @@ define("io.ox/participants/views",
         },
         render: function () {
             this.$el.attr('data-cid', this.model.cid);
-
             var self = this,
                 $wrapper = $('<div class="participant-wrapper">'),
                 $img = $('<div>'),
@@ -50,7 +49,6 @@ define("io.ox/participants/views",
             this.$el.append($wrapper);
 
             this.model.on('change', function () {
-                console.log('change');
                 $text.text(self.model.getDisplayName());
                 self.setTypeStyle();
             });
