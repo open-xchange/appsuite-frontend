@@ -407,6 +407,8 @@ define('io.ox/office/editor/editor',
 
                     this.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
 
+                    this.clearUndo();  // Todo: Remove this asap
+
                 } else if (Position.isSameTableLevel(paragraphs, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // This selection is inside a table in a browser, where no cell selection is possible (Chrome). Selected
                     // can be parts of paragraphs inside a cell and also all paragraphs in other cells. This selection is
@@ -583,6 +585,8 @@ define('io.ox/office/editor/editor',
             var newOperation = { name: Operations.OP_TABLE_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
 
+            this.clearUndo();  // ToDo: Remove this asap
+
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
@@ -614,6 +618,8 @@ define('io.ox/office/editor/editor',
             }
 
             applyOperation(newOperation, true, true);
+
+            this.clearUndo();  // ToDo: Remove this asap
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -907,6 +913,8 @@ define('io.ox/office/editor/editor',
             }
 
             undomgr.endGroup();
+
+            this.clearUndo();  // ToDo: Remove this asap
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
