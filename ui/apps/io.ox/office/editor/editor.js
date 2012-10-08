@@ -272,7 +272,7 @@ define('io.ox/office/editor/editor',
                     // all matching ranges of the query text in the element text
                     offsetRanges = [], offset = 0, index = 0;
 
-                // find all occurences of the query text in the element
+                // find all occurrences of the query text in the element
                 while ((offset = elementText.indexOf(query, offset)) >= 0) {
                     // try to merge with last offset range
                     if (offsetRanges.length && (_(offsetRanges).last().end >= offset)) {

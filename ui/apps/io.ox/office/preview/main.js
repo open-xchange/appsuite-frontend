@@ -14,10 +14,12 @@
 define('io.ox/office/preview/main',
     ['io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
+     'io.ox/office/tk/controller',
+     'io.ox/office/tk/component/appwindowtoolbar',
      'io.ox/office/preview/preview',
      'gettext!io.ox/office/main',
      'less!io.ox/office/preview/style.css'
-    ], function (Utils, AppHelper, Preview, gt) {
+    ], function (Utils, AppHelper, Controller, AppWindowToolBar, Preview, gt) {
 
     'use strict';
 
@@ -30,9 +32,48 @@ define('io.ox/office/preview/main',
         var // self reference
             self = this,
 
+            // the application window
             win = null,
 
-            preview = new Preview();
+            // the previewer (model)
+            preview = new Preview(),
+
+            // the controller
+            controller = new Controller({
+
+                    'pages/first': {
+                        enable: function () { return preview.getPage() > 1; },
+                        set: function () { preview.firstPage(); }
+                    },
+                    'pages/previous': {
+                        enable: function () { return preview.getPage() > 1; },
+                        set: function () { preview.previousPage(); }
+                    },
+                    'pages/next': {
+                        enable: function () { return preview.getPage() < preview.getPageCount(); },
+                        set: function () { preview.nextPage(); }
+                    },
+                    'pages/last': {
+                        enable: function () { return preview.getPage() < preview.getPageCount(); },
+                        set: function () { preview.lastPage(); }
+                    },
+
+                    'pages/current': {
+                        enable: function () { return false; },
+                        get: function () {
+                            // the gettext comments MUST be located directly before gt(), but
+                            // 'return' cannot be the last token in a line
+                            // -> use a temporary variable to store the result
+                            var label =
+                                //#. %1$s is the current page index in office document preview
+                                //#. %2$s is the number of pages in office document preview
+                                //#, c-format
+                                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
+                            return label;
+                        }
+                    }
+
+                });
 
         // private methods ----------------------------------------------------
 
@@ -73,22 +114,6 @@ define('io.ox/office/preview/main',
         }
 
         /**
-         * Returns the localized label text 'm of n' containing the current
-         * page and the number of pages.
-         */
-        function getPageOfLabel() {
-            // the gettext comments MUST be located directly before gt(), but
-            // 'return' cannot be the last token in a line
-            // -> use a temporary variable to store the result
-            var label =
-                //#. %1$s is the current page index in office document preview
-                //#. %2$s is the number of pages in office document preview
-                //#, c-format
-                gt('%1$s of %2$s', preview.getPage(), preview.getPageCount());
-            return label;
-        }
-
-        /**
          * Sets application title (launcher) and window title according to the
          * current file name.
          */
@@ -118,6 +143,9 @@ define('io.ox/office/preview/main',
                 .addClass('io-ox-office-preview-main')
                 .append(preview.getNode());
 
+            // register a component that updates the window header tool bar
+            controller.registerViewComponent(new AppWindowToolBar(win));
+
             // disable FF spell checking
             $('body').attr('spellcheck', false);
         }
@@ -138,6 +166,13 @@ define('io.ox/office/preview/main',
          */
         this.getPreview = function () {
             return preview;
+        };
+
+        /**
+         * Returns the controller.
+         */
+        this.getController = function () {
+            return controller;
         };
 
         /**
@@ -239,10 +274,8 @@ define('io.ox/office/preview/main',
 
         // initialization -----------------------------------------------------
 
-        // listen to 'showpage' events and update the page label
-        preview.on('showpage', function () {
-            self.getToolBarControl('pages/current').text(getPageOfLabel());
-        });
+        // listen to 'showpage' events and update all GUI elements
+        preview.on('showpage', function () { controller.update(); });
 
         // set launch and quit handlers
         this.setLauncher(launchHandler).setQuit(quitHandler);
@@ -253,11 +286,11 @@ define('io.ox/office/preview/main',
 
     AppHelper.configureWindowToolBar(MODULE_NAME)
         .addButtonGroup('pages')
-            .addButton('first', function (app) { app.getPreview().firstPage(); }, { icon: 'icon-fast-backward' })
-            .addButton('previous', function (app) { app.getPreview().previousPage(); }, { icon: 'icon-chevron-left' })
-            .addLabel('current', { width: 100 })
-            .addButton('next', function (app) { app.getPreview().nextPage(); }, { icon: 'icon-chevron-right' })
-            .addButton('last', function (app) { app.getPreview().lastPage(); }, { icon: 'icon-fast-forward' })
+            .addButton('pages/first', { icon: 'icon-fast-backward' })
+            .addButton('pages/previous', { icon: 'icon-chevron-left' })
+            .addLabel('pages/current', { width: 100 })
+            .addButton('pages/next', { icon: 'icon-chevron-right' })
+            .addButton('pages/last', { icon: 'icon-fast-forward' })
             .end();
 
     // exports ================================================================

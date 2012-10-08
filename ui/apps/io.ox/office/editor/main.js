@@ -18,12 +18,13 @@ define('io.ox/office/editor/main',
      'io.ox/office/tk/utils',
      'io.ox/office/tk/apphelper',
      'io.ox/office/tk/config',
+     'io.ox/office/tk/component/toolpane',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view',
      'io.ox/office/editor/controller',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, AppHelper, Config, Editor, View, Controller, gt) {
+    ], function (FilesAPI, Utils, AppHelper, Config, ToolPane, Editor, View, Controller, gt) {
 
     'use strict';
 
@@ -882,10 +883,10 @@ define('io.ox/office/editor/main',
 
     AppHelper.configureWindowToolBar(MODULE_NAME)
         .addButtonGroup('file')
-            .addButton('download', 'file/download', { label: gt('Download') })
-            .addButton('print',    'file/print',    { label: gt('Print') })
+            .addButton('file/download', { label: gt('Download') })
+            .addButton('file/print',    { label: gt('Print') })
             .end()
-        .addRadioGroup('showtoolbar', function (app, id) { app.getView().getToolPane().showToolBar(id); })
+        .addRadioGroup(ToolPane.KEY_SHOW_TOOLBAR)
             .addButton('insert', { label: gt('Insert') })
             .addButton('format', { label: gt('Format') })
             .addButton('table',  { label: gt('Table') })

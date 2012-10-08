@@ -20,11 +20,11 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/control/combofield',
      'io.ox/office/tk/dropdown/gridsizer',
      'io.ox/office/tk/component/toolpane',
-     'io.ox/office/tk/component/menubox',
+     'io.ox/office/tk/component/appwindowtoolbar',
      'io.ox/office/tk/config',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, MenuBox, Config, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, AppWindowToolBar, Config, LineHeight, gt) {
 
     'use strict';
 
@@ -99,22 +99,26 @@ define('io.ox/office/editor/view',
 
     }}); // class StyleSheetChooser
 
-    // class ColorChooser ================================================
+    // class ColorChooser =====================================================
 
-    var ColorChooser = RadioGroup.extend({ constructor: function () {
+    var ColorChooser = RadioGroup.extend({ constructor: function (options) {
 
         var // self reference
             self = this;
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, { width: 120, tooltip: gt('ParaColor'), dropDown: true, sorted: false });
+        RadioGroup.call(this, Utils.extendOptions({
+            width: 120,
+            tooltip: gt('Color'),
+            dropDown: true
+        }, options));
 
         // initialization -----------------------------------------------------
 
         _([{Entry: "Red", Value: "FF0000"}, {Entry: "Green", Value: "00FF00"}, {Entry: "Blue", Value: "0000FF"}, {Entry: "White", Value: "FFFFFF"}]).each(function (entry) {
 
-            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' }, userData: entry.Value });
+            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' } });
         }, this);
 
 
@@ -455,10 +459,13 @@ define('io.ox/office/editor/view',
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addButton('debug/readonly', { label: gt('Readonly'), tooltip: 'Toggle Readonly Mode',     toggle: true })
                 .addSeparator()
-                .addGroup('paragraph/fillcolor', new ColorChooser())
+                .addGroup('paragraph/fillcolor', new ColorChooser({ tooltip: gt('Paragraph fill color') }))
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
+
+        // register a component that updates the window header tool bar
+        controller.registerViewComponent(new AppWindowToolBar(appWindow));
 
         // make the format tool bar visible
         toolPane.showToolBar('format');

@@ -526,9 +526,9 @@ div.io-ox-view-component {
                 display: inline-block;
 
                 /* group spacing */
-    	        + .group {
-    	            margin-left: -1px;
-    	        }
+                + .group {
+                    margin-left: -1px;
+                }
 
                 &.separator {
                     width: 10px;
@@ -587,30 +587,30 @@ div.io-ox-view-component {
 
     &.menubox {
         display: inline-block;
-	
+
         > .group {
             display: list-item;
 
-	        /* group spacing */
-	        &.separator {
-	            height: 6px;
-	        }
+            /* group spacing */
+            &.separator {
+                height: 6px;
+            }
 
-	        /* menu items as buttons */
-	        > button {
-	            width: 100%;
-	            border-color: transparent;
-	            text-align: left;
+            /* menu items as buttons */
+            > button {
+                width: 100%;
+                border-color: transparent;
+                text-align: left;
 
-	            /* mouse hover and focus effect */
-	            &:hover:not(:active), &:focus:not(:active) {
-	                background-color: fade(@control-border-color, 25%);
-	            }
+                /* mouse hover and focus effect */
+                &:hover:not(:active), &:focus:not(:active) {
+                    background-color: fade(@control-border-color, 25%);
+                }
 
-	            /* active effect (button currently clicked) */
-	            &:active {
-	                background-color: fade(@control-border-color, 50%);
-	            }
+                /* active effect (button currently clicked) */
+                &:active {
+                    background-color: fade(@control-border-color, 50%);
+                }
             }
         }
     }
@@ -619,10 +619,10 @@ div.io-ox-view-component {
 /* Alert  ------------------------------------------------------------ */
 
 .io-ox-office-main {
-	.alert.io-ox-office-alert {
-		position: absolute;
+    .alert.io-ox-office-alert {
+        position: absolute;
         z-index: 100;
         width: 100%;
         .box-sizing(border-box);
-	}
+    }
 }

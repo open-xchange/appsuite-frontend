@@ -149,7 +149,7 @@ define('io.ox/office/tk/component/toolpane',
          *  A reference to this tool pane.
          */
         this.showToolBar = function (id) {
-            controller.change('view/toolbars/show', id);
+            controller.change(ToolPane.KEY_SHOW_TOOLBAR, id);
             return this;
         };
 
@@ -188,7 +188,7 @@ define('io.ox/office/tk/component/toolpane',
         // initialization -----------------------------------------------------
 
         // add item definition for the tab bar
-        controller.addDefinition('view/toolbars/show', {
+        controller.addDefinition(ToolPane.KEY_SHOW_TOOLBAR, {
             get: function () { return visibleToolBarId; },
             set: showToolBar
         });
@@ -197,6 +197,10 @@ define('io.ox/office/tk/component/toolpane',
         node.on('keydown keypress keyup', toolPaneKeyHandler);
 
     } // class ToolPane
+
+    // constants --------------------------------------------------------------
+
+    ToolPane.KEY_SHOW_TOOLBAR = 'view/toolbars/show';
 
     // exports ================================================================
 

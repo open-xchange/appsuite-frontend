@@ -12,165 +12,21 @@
  */
 
 define('io.ox/office/tk/apphelper',
-    ['io.ox/core/extensions',
-     'io.ox/core/extPatterns/links',
-     'io.ox/office/tk/utils'
-     ], function (Extensions, Links, Utils) {
+    ['io.ox/office/tk/utils',
+     'io.ox/office/tk/toolbarconfig'
+     ], function (Utils, ToolBarConfiguration) {
 
     'use strict';
-
-    // class ToolBarRegistry ==================================================
-
-    /**
-     * Registers buttons and other control elements in the header tool bar of
-     * the application window. Registration is done once for all instances of
-     * the specified application type. The elements in the tool bar will be
-     * generated according to this registration every time an application
-     * window becomes visible.
-     *
-     * @param {String} moduleName
-     *  The application type identifier.
-     */
-    function WindowToolBarConfiguration(moduleName) {
-
-        var // self reference
-            self = this,
-
-            // prefix for action identifiers
-            actionPath = moduleName + '/actions',
-
-            // prefix for links into the window tool bar
-            toolBarPath = moduleName + '/links/toolbar',
-
-            // the index that will be passed to GUI elements inserted into the window tool bar
-            groupIndex = 0;
-
-        // class Group --------------------------------------------------------
-
-        var Group = _.makeExtendable(function (groupId, options) {
-
-            var // extension point of this group
-                point = Extensions.point(toolBarPath + '/' + groupId),
-                // the index that will be passed to GUI elements inserted into the group
-                index = 0;
-
-            // private methods ------------------------------------------------
-
-            function getButtonOptions(buttonId, options) {
-
-                var // the unique key of the button (group id and button id)
-                    key = groupId + '/' + buttonId,
-                    // options for the button element
-                    buttonOptions = { index: index += 1, id: key, ref: actionPath + '/' + key },
-                    // width of the button, in pixels
-                    width = Utils.getIntegerOption(options, 'width');
-
-                // initialize button options
-                buttonOptions.cssClasses = 'btn btn-inverse';
-                buttonOptions.icon = Utils.getStringOption(options, 'icon');
-                if (_.isString(buttonOptions.icon)) {
-                    buttonOptions.icon += ' icon-white';
-                }
-                buttonOptions.label = Utils.getStringOption(options, 'label');
-                if (width) {
-                    buttonOptions.css = { width: width + 'px' };
-                }
-
-                return buttonOptions;
-            }
-
-            // methods --------------------------------------------------------
-
-            this.registerButton = function (buttonId, handler, options) {
-
-                var // options for the button element
-                    buttonOptions = getButtonOptions(buttonId, options);
-
-                // do not initialize inactive buttons
-                if (Utils.getBooleanOption(options, 'active', true)) {
-
-                    // create the action, it registers itself at the global registry
-                    new Links.Action(buttonOptions.ref, {
-                        requires: true,
-                        action: handler
-                    });
-
-                    // create the button element in the button group
-                    point.extend(new Links.Button(buttonOptions));
-                }
-
-                return this;
-            };
-
-            this.addLabel = function (labelId, options) {
-
-                var // options for the button element
-                    buttonOptions = getButtonOptions(labelId, options);
-
-                // do not initialize inactive labels
-                if (Utils.getBooleanOption(options, 'active', true)) {
-                    buttonOptions.cssClasses += ' disabled';
-                    point.extend(new Links.Button(buttonOptions));
-                }
-
-                return this;
-            };
-
-            this.end = function () { return self; };
-
-            // initialization -------------------------------------------------
-
-            // create the core ButtonGroup object
-            new Links.ButtonGroup(toolBarPath, {
-                id: groupId,
-                index: groupIndex += 1,
-                radio: Utils.getBooleanOption(options, 'radio')
-            });
-
-        }); // class Group
-
-        // class ButtonGroup --------------------------------------------------
-
-        var ButtonGroup = Group.extend({ constructor: function (id) {
-
-            Group.call(this, id);
-
-            this.addButton = function (buttonId, handler, options) {
-                var callback = _.isFunction(handler) ? handler : _.isString(handler) ? function (app) { app.getController().change(handler); } : null;
-                return this.registerButton(buttonId, callback, options);
-            };
-
-        }}); // class ButtonGroup
-
-        // class RadioGroup ---------------------------------------------------
-
-        var RadioGroup = Group.extend({ constructor: function (id, handler) {
-
-            Group.call(this, id, { radio: true });
-
-            this.addButton = function (value, options) {
-                return this.registerButton(value, function (app) { handler.call(this, app, value); }, options);
-            };
-
-        }}); // class RadioGroup
-
-        // methods ------------------------------------------------------------
-
-        this.addButtonGroup = function (id) {
-            return new ButtonGroup(id);
-        };
-
-        this.addRadioGroup = function (id, handler) {
-            return new RadioGroup(id, handler);
-        };
-
-    } // class WindowToolBarConfiguration
 
     // class ApplicationBase ==================================================
 
     /**
      * A mix-in class that defines common public methods for an office
      * application object.
+     *
+     * @constructor
+     *
+     * @extends ox.ui.App
      *
      * @param {Object} options
      *  A map of options containing initialization data for the new application
@@ -271,22 +127,6 @@ define('io.ox/office/tk/apphelper',
 
             // build and return the resulting URL
             return this.buildServiceUrl('oxodocumentfilter', options);
-        };
-
-        /**
-         * Returns a control element from the window header tool bar. Note that
-         * the returned control MUST NOT be cached, as it changes every time
-         * the application window has been hidden and shown.
-         *
-         * @param {String} key
-         *  The unique key of the tool bar control, consisting of button group
-         *  identifier and control identifier, separated by a slash character.
-         *
-         * @returns {jQuery}
-         *  The control node associated to the specified key, as jQuery object.
-         */
-        this.getToolBarControl = function (key) {
-            return this.getWindow().nodes.toolbar.find('[data-action="' + key + '"]');
         };
 
     } // class ApplicationBase
@@ -427,7 +267,7 @@ define('io.ox/office/tk/apphelper',
      *  The application type identifier.
      */
     AppHelper.configureWindowToolBar = function (moduleName) {
-        return new WindowToolBarConfiguration(moduleName);
+        return new ToolBarConfiguration(moduleName);
     };
 
     /**

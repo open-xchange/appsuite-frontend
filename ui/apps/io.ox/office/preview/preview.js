@@ -85,22 +85,6 @@ define('io.ox/office/preview/preview',
             return pages.length;
         };
 
-        this.firstAvail = function () {
-            return curPage > 1;
-        };
-
-        this.previousAvail = function () {
-            return this.firstAvail();
-        };
-
-        this.nextAvail = function () {
-            return this.lastAvail();
-        };
-
-        this.lastAvail = function () {
-            return curPage < pages.length;
-        };
-
         /**
          * Navigating to the first page
          */
