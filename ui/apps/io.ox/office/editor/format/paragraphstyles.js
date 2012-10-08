@@ -50,6 +50,12 @@ define('io.ox/office/editor/format/paragraphstyles',
                         LineHeight.setElementLineHeight($(this), lineHeight);
                     });
                 }
+            },
+            parafill: {
+                def: 'FFFFFF',
+                set: function (element, value) {
+                    element.css('background-color', '#' + value);
+                }
             }
 
         };
