@@ -11,7 +11,7 @@ CACHE:
 @base@/src/offline.js
 # core - bootstrap
 @base@/apps/io.ox/core/bootstrap/basics.js
-@base@/apps/io.ox/core/bootstrap/css/bootstrap.css
+@base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
 @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
 @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme

@@ -126,7 +126,9 @@ define('io.ox/calendar/edit/template',
                         )
                 );
                 this.setValueInField();
-                this.nodes.dayField.datepicker({format: dateAPI.DATE});
+                // get the right date format
+                var dateFormat = dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
+                this.nodes.dayField.datepicker({format: dateFormat});
                 this.nodes.timeField.combobox(comboboxHours);
 
                 this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));

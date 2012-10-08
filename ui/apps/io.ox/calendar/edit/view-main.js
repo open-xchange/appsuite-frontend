@@ -36,7 +36,9 @@ define('io.ox/calendar/edit/view-main',
         "months": dateAPI.locale.months,
         "monthsShort": dateAPI.locale.monthsShort
     };
+
     var dates = $.fn.datepicker.dates;
+    /*
     $.fn.datepicker.DPGlobal.formatDate = function (date, format, language) {
         if (!date) {
             return null;
@@ -62,7 +64,7 @@ define('io.ox/calendar/edit/view-main',
     $.fn.datepicker.DPGlobal.parseFormat = function (format) {
         return format;
     };
-
+*/
 
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
         tagName: 'div',

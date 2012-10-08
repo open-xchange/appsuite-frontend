@@ -99,8 +99,13 @@ define("io.ox/participants/model",
         },
 
         getDisplayName: function () {
-            console.log(this.toJSON());
             return util.getDisplayName(this.toJSON());
+        },
+        getEmail: function () {
+            return util.getMail(this.toJSON());
+        },
+        getImage: function () {
+            return util.getImage(this.toJSON());
         }
     });
 
