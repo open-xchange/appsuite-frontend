@@ -86,9 +86,6 @@ define('io.ox/office/editor/main',
             // controller as single connection point between editor and view elements
             controller = null,
 
-            // deferred objects causing the quit handler to delay destruction of the application
-            quitDelays = [],
-
             // buffer for user operations
             operationsBuffer = [],
 
@@ -107,39 +104,6 @@ define('io.ox/office/editor/main',
             self.setFileDescriptor(Utils.getObjectOption(options, 'file'));
             debugMode = Utils.getBooleanOption(options, 'debugMode', false);
             syncMode = Utils.getBooleanOption(options, 'syncMode', true);
-        }
-
-        /**
-         * Creates a deferred object that will be stored internally and used by
-         * the quit handler to delay closing the application. The creator of a
-         * quit delay has to resolve or reject the deferred when the blocking
-         * operation is finished.
-         *
-         * @returns {Object}
-         *  A wrapper object that offers the methods resolve() and reject(). By
-         *  calling resolve() the caller agrees to close the application, and
-         *  by calling reject() the application will stay alive.
-         */
-        function createQuitDelay() {
-
-            var // the underlying deferred
-                deferred = $.Deferred();
-
-            // push the deferred into the array of all quit delays
-            quitDelays.push(deferred);
-
-            // register a handler that removes the deferred from the array
-            deferred.always(function () {
-                quitDelays = _(quitDelays).without(deferred);
-            });
-
-            // Return a wrapper object that reconfigures the resolve() and
-            // reject() calls to always resolve the deferred. With this 'trick'
-            // $.when() will finish all delays even if one of them fails.
-            return {
-                resolve: function () { deferred.resolve(true); },
-                reject: function () { deferred.resolve(false); }
-            };
         }
 
         /**
@@ -226,126 +190,6 @@ define('io.ox/office/editor/main',
                 // resize editor pane
                 windowResizeHandler();
             }
-        }
-
-        /**
-         * Recalculates the size of the editor frame according to the current
-         * view port size.
-         */
-        function windowResizeHandler() {
-            var debugHeight = debugMode ? win.nodes.debugPane.outerHeight() : 0;
-            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top - debugHeight);
-        }
-
-        /**
-         * The handler function that will be called while launching the
-         * application. Creates and initializes a new application window.
-         */
-        function launchHandler() {
-
-            var // deferred used to initialize file descriptor
-                initFileDef = null,
-                // deferred returned to caller
-                def = $.Deferred();
-
-            // create the application window
-            win = ox.ui.createWindow({
-                name: MODULE_NAME,
-                close: true,
-                search: true,
-                toolbar: true
-            });
-            self.setWindow(win);
-
-            // do not detach when hiding for several reasons:
-            // - keep editor selection alive
-            // - prevent resize handles for tables and objects (re-enabled after detach/insert)
-            win.detachable = false;
-
-            // create controller
-            controller = new Controller(self);
-
-            // editor view
-            view = new View(win, controller, editor);
-            updateDebugMode();
-
-            // register window event handlers
-            Utils.registerWindowResizeHandler(win, windowResizeHandler);
-
-            // disable Firefox spell checking. TODO: better solution...
-            $('body').attr('spellcheck', false);
-
-            // 'new document' action: create the new file in InfoStore
-            if (Utils.getStringOption(options, 'file') === 'new') {
-                initFileDef = $.ajax({
-                    type: 'GET',
-                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
-                    dataType: 'json'
-                }).pipe(function (response) {
-                    // creation succeeded: receive file descriptor and set it
-                    self.setFileDescriptor(response.data);
-                });
-            } else {
-                initFileDef = $.when();
-            }
-
-            // load the file
-            initFileDef.done(function () {
-                loadAndShow().then(function () { def.resolve(); }, function () { def.reject(); });
-            }).fail(function () {
-                def.reject();
-            });
-
-            return def;
-        }
-
-        /**
-         * The handler function that will be called when the application shuts
-         * down. If the edited document has unsaved changes, a dialog will be
-         * shown asking whether to save or drop the changes.
-         *
-         * @returns {jQuery.Deferred}
-         *  A deferred that will be resolved if the application can be closed
-         *  (either if it is unchanged, or the user has chosen to save or lose
-         *  the changes), or will be rejected if the application must remain
-         *  alive (user has cancelled the dialog, save operation failed).
-         */
-        function quitHandler() {
-
-            var // the deferred returned to the framework
-                def = $.Deferred().done(self.destroy);
-
-            win.busy();
-
-            // Wait for all registered quit delays ($.when() resolves immediately,
-            // if the array is empty). All deferreds will resolve with a boolean
-            // result (never reject, see createQuitDelay() function).
-            $.when.apply(this, quitDelays).done(function () {
-
-                var // each deferred returns its result as a boolean
-                    resolved = _(arguments).all(_.identity),
-                    // finally send any pending operations (but not in debug offline mode)
-                    sendDef = (syncMode && operationsBuffer.length) ? sendOperations() : $.when();
-
-                // wait for the final synchronization
-                sendDef.always(function () {
-                    // notify server about quitting the application
-                    sendCloseNotification();
-                    win.idle();
-                    def[resolved ? 'resolve' : 'reject']();
-                });
-            });
-
-            return def;
-        }
-
-        /**
-         * Handler for the 'unload' event of the browser window. Sends a
-         * 'closedocument' notification to the server.
-         */
-        function unloadHandler() {
-            // send notification synchronously, otherwise browser may cancel it
-            sendCloseNotification(true);
         }
 
         /**
@@ -441,7 +285,7 @@ define('io.ox/office/editor/main',
 
             win.busy();
 
-            receiveAndSendOperations()
+            synchronizeOperations()
             .done(function () {
                 $.ajax({
                     type: 'GET',
@@ -487,7 +331,7 @@ define('io.ox/office/editor/main',
 
             win.busy();
 
-            receiveAndSendOperations()
+            synchronizeOperations()
             .done(function () {
                 var url = self.getDocumentFilterUrl('getdocument', { filter_format: format || '' }),
                     title = self.getFileDescriptor().title || 'file';
@@ -502,41 +346,78 @@ define('io.ox/office/editor/main',
         }
 
         /**
-         * Sends all operations contained in the operationsBuffer array to the
-         * server, and creates a quit delay object causing the quit handler to
-         * wait for the AJAX request.
+         * Reads new operations from the server, applies them in the editor,
+         * sends all local operations to the server, and restarts the timer
+         * that re-triggers this method automatically.
          *
-         * @returns {jQuery.Deferred}
-         *  A deferred that will be resolved or rejected when the AJAX request
-         *  has returned.
+         * @param {Boolean} [sendOnly=false]
+         *  If set to true, operations will not be read from the server, only
+         *  the own operations will be sent to the server.
+         *
+         * @returns {jQuery.Promise}
+         *  The promise object of a deferred that will be resolved when all
+         *  operations have been synchronized with the server.
          */
-        var sendOperations = (function () { // local scope for the deferred
+        var synchronizeOperations = (function () {
 
-            var // the result deferred
-                def = null;
+            /**
+             * Reads new operations from the server, and applies them in the
+             * editor.
+             *
+             * @returns {jQuery.Promise}
+             *  The promise object of a deferred that will be resolved or
+             *  rejected according to the AJAX request.
+             */
+            function receiveOperations() {
 
-            // create and return the actual sendOperations() function
-            return function () {
+                var // read operations from server
+                    request = $.ajax({
+                        type: 'GET',
+                        url: self.getDocumentFilterUrl('pulloperationupdates'),
+                        dataType: 'json'
+                    });
 
-                // return existing deferred if the AJAX request is still running
-                if (def && (def.state() === 'pending')) {
-                    return def;
-                }
+                // log the state in the debug view
+                view.logSyncState('receiving');
 
-                var // deep copy of the current buffer
+                // apply received operations in the editor
+                request.done(function (response) {
+                    if (response && response.data) {
+                        var operations = JSON.parse(response.data);
+                        if (_.isArray(operations) && (operations.length > 0)) {
+                            // We might need to do some "T" here!
+                            applyOperations(operations);
+                        }
+                    }
+                });
+                return request.promise();
+            }
+
+            /**
+             * Sends all operations contained in the operations buffer to the
+             * server.
+             *
+             * @returns {jQuery.Promise}
+             *  The promise object of a deferred that will be resolved or
+             *  rejected according to the AJAX request.
+             */
+            function sendOperations() {
+
+                var // local deep copy of the current operations buffer
                     sendOps = _.copy(operationsBuffer, true),
                     // the data object to be passed to the AJAX request
                     dataObject = { operations: JSON.stringify(sendOps) },
-                    // a deferred that will cause the quit handler to wait for the AJAX request
-                    quitDelay = createQuitDelay();
+                    // the AJAX request
+                    request = null;
 
-                // create a new result deferred
-                def = $.Deferred();
-
-                // We might receive new operations while sending the current ones...
+                // we might receive new operations while sending the current ones
                 operationsBuffer = [];
 
-                $.ajax({
+                // log the state in the debug view
+                view.logSyncState('sending');
+
+                // send operations to server
+                request = $.ajax({
                     type: 'POST',
                     url: self.getDocumentFilterUrl('pushoperationupdates'),
                     dataType: 'json',
@@ -547,101 +428,223 @@ define('io.ox/office/editor/main',
                         }
                     }
                 })
-                .done(function (response) {
-                    quitDelay.resolve();
-                    def.resolve(response);
-                })
-                .fail(function (response) {
+                .fail(function () {
                     // Try again later. TODO: NOT TESTED YET!
-                    operationsBuffer = $.extend(true, operationsBuffer, sendOps);
-                    // TODO: reject? (causing the application to stay alive?)
-                    quitDelay.resolve();
-                    def.reject(response);
+                    operationsBuffer = sendOps.concat(operationsBuffer);
                 });
-
-                return def;
-            };
-
-        }());
-
-        var receiveAndSendOperations = (function () { // local scope for the deferred
+                return request.promise();
+            }
 
             var // the result deferred
-                def = null;
+                syncDef = null;
 
-            // create and return the actual receiveAndSendOperations() function
-            return function () {
+            // return the actual synchronizeOperations() function
+            return function (sendOnly) {
 
                 // return existing deferred if the AJAX request is still running
-                if (def && (def.state() === 'pending')) {
-                    return def;
+                if (syncDef && (syncDef.state() === 'pending')) {
+                    return syncDef.promise();
                 }
 
-                var // a deferred that will cause the quit handler to wait for the AJAX request
-                    quitDelay = createQuitDelay(),
-                    // the deferred waiting for the GET operation
-                    getDef = $.Deferred(),
-                    // the deferred waiting for sendOperations()
-                    sendDef = $.Deferred().always(startOperationsTimer);
+                // create a new result deferred
+                syncDef = $.Deferred()
+                    .always(startOperationsTimer)
+                    .done(function () { view.logSyncState('synchronized'); })
+                    .fail(function () { view.logSyncState('failed'); });
 
-                // the result deferred
-                def = $.when(getDef, sendDef);
-
-                // first, check if the server has new operations for me
-                $.ajax({
-                    type: 'GET',
-                    url: self.getDocumentFilterUrl('pulloperationupdates'),
-                    dataType: 'json'
-                })
+                // first, check if the server has new operations
+                (sendOnly ? $.when() : receiveOperations())
                 .done(function (response) {
-                    if (response && response.data) {
-                        var operations = JSON.parse(response.data);
-                        if (_.isArray(operations) && (operations.length > 0)) {
-                            // We might need to do some "T" here!
-                            applyOperations(operations);
-                        }
-                    }
-                    // Then, send our operations in case we have some...
+                    // send own operations
                     if (operationsBuffer.length) {
                         // We might first need to do some "T" here!
                         // resolving sendDef starts the operations timer
                         sendOperations().then(
-                            function () { sendDef.resolve(); },
-                            function () { sendDef.reject(); }
+                            function () { syncDef.resolve(); },
+                            function () { syncDef.reject(); }
                         );
                     } else {
                         // nothing to send, but the deferred must be resolved
-                        sendDef.resolve();
+                        syncDef.resolve();
                     }
-                    getDef.resolve(response);
                 })
-                .fail(function (response) {
-                    getDef.reject(response);
-                })
-                .always(function () {
-                    // always resolve the quit delay, ignore failed GET operation
-                    quitDelay.resolve();
+                .fail(function () {
+                    syncDef.reject();
                 });
 
-                return def;
+                return syncDef.promise();
             };
 
         }());
 
-        function startOperationsTimer(timeout) {
-
-            // restart running timer, prevents sending too many updates while the user is typing
+        /**
+         * Clears the timer that calls the method synchronizeOperations()
+         * periodically.
+         */
+        function stopOperationsTimer() {
             if (operationsTimer) {
                 window.clearTimeout(operationsTimer);
+                operationsTimer = null;
+                view.logSyncState('offline');
             }
+        }
 
-            // offline mode: do not start a new timer
-            if (syncMode) {
+        /**
+         * Starts a timer that calls the method synchronizeOperations()
+         * periodically.
+         *
+         * @param {Number} [timeout=1000]
+         *  The time period, in milliseconds.
+         */
+        function startOperationsTimer(timeout) {
+
+            // clear running timer, prevents sending too many updates while the user is typing
+            stopOperationsTimer();
+
+            // do not start a new timer in debug offline mode
+            if (syncMode && self.hasFileDescriptor()) {
                 operationsTimer = window.setTimeout(function () {
                     operationsTimer = null;
-                    receiveAndSendOperations();
+                    synchronizeOperations();
                 }, timeout || 1000);
             }
+        }
+
+        /**
+         * Recalculates the size of the editor frame according to the current
+         * view port size.
+         */
+        function windowResizeHandler() {
+            var debugHeight = debugMode ? win.nodes.debugPane.outerHeight() : 0;
+            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top - debugHeight);
+        }
+
+        /**
+         * The handler function that will be called while launching the
+         * application. Creates and initializes a new application window.
+         */
+        function launchHandler() {
+
+            var // deferred used to initialize file descriptor
+                initFileDef = null,
+                // deferred returned to caller
+                def = $.Deferred();
+
+            // create the application window
+            win = ox.ui.createWindow({
+                name: MODULE_NAME,
+                close: true,
+                search: true,
+                toolbar: true
+            });
+            self.setWindow(win);
+
+            // do not detach when hiding for several reasons:
+            // - keep editor selection alive
+            // - prevent resize handles for tables and objects (re-enabled after detach/insert)
+            win.detachable = false;
+
+            // create controller
+            controller = new Controller(self);
+
+            // editor view
+            view = new View(win, controller, editor);
+            updateDebugMode();
+
+            // register window event handlers
+            Utils.registerWindowResizeHandler(win, windowResizeHandler);
+
+            // disable Firefox spell checking. TODO: better solution...
+            $('body').attr('spellcheck', false);
+
+            // 'new document' action: create the new file in InfoStore
+            if (Utils.getStringOption(options, 'file') === 'new') {
+                initFileDef = $.ajax({
+                    type: 'GET',
+                    url: self.buildServiceUrl('oxodocumentfilter', { action: 'createdefaultdocument', folder_id: Utils.getOption(options, 'folder_id'), document_type: 'text' }),
+                    dataType: 'json'
+                }).pipe(function (response) {
+                    // creation succeeded: receive file descriptor and set it
+                    self.setFileDescriptor(response.data);
+                });
+            } else {
+                initFileDef = $.when();
+            }
+
+            // load the file
+            initFileDef.done(function () {
+                loadAndShow().then(function () { def.resolve(); }, function () { def.reject(); });
+            }).fail(function () {
+                def.reject();
+            });
+
+            return def;
+        }
+
+        /**
+         * The handler function that will be called when the application shuts
+         * down. If the edited document has unsaved changes, a dialog will be
+         * shown asking whether to save or drop the changes.
+         *
+         * @returns {jQuery.Deferred}
+         *  A deferred that will be resolved if the application can be closed
+         *  (either if it is unchanged, or the user has chosen to save or lose
+         *  the changes), or will be rejected if the application must remain
+         *  alive (user has cancelled the dialog, save operation failed).
+         */
+        function quitHandler() {
+
+            var // the deferred used to synchronize operations
+                syncDef = null,
+                // the deferred returned to the framework
+                def = $.Deferred();
+
+            win.busy();
+            def.done(function () {
+                // deinitialize application on quit
+                sendCloseNotification();
+                self.destroy();
+            }).fail(function () {
+                // back to living application
+                win.idle();
+                startOperationsTimer();
+            });
+
+            // send any pending operations (but not in debug offline mode)
+            syncDef = syncMode ? synchronizeOperations(true) : $.when();
+            // stop the operations timer started by the synchronizeOperations() method
+            stopOperationsTimer();
+
+            // wait for the operations received from server
+            syncDef.always(function () {
+
+                // still pending operations: ask user whether to close the application
+                if (self.hasUnsavedChanges()) {
+                    require(['io.ox/office/tk/dialogs'], function (Dialogs) {
+
+                        Dialogs.showYesNoDialog({
+                            message: gt('This document contains unsaved changes. Do you really want to close?')
+                        }).then(
+                            function () { def.resolve(); },
+                            function () { def.reject(); }
+                        );
+                    });
+                } else {
+                    // all operations saved, close application without dialog
+                    def.resolve();
+                }
+            });
+
+            return def;
+        }
+
+        /**
+         * Handler for the 'unload' event of the browser window. Sends a
+         * 'closedocument' notification to the server.
+         */
+        function unloadHandler() {
+            // send notification synchronously, otherwise browser may cancel it
+            sendCloseNotification(true);
         }
 
         // methods ------------------------------------------------------------
@@ -764,6 +767,14 @@ define('io.ox/office/editor/main',
             return operationsBuffer.length > 0;
         };
 
+        /**
+         * Will be called automatically from the OX framework to create and
+         * return a restore point containing the current state of the
+         * application.
+         *
+         * @return {Object}
+         *  The restore point containing the application state.
+         */
         this.failSave = function () {
             var point = {
                 file: this.getFileDescriptor(),
@@ -774,6 +785,13 @@ define('io.ox/office/editor/main',
             return { module: MODULE_NAME, point: point };
         };
 
+        /**
+         * Will be called automatically from the OX framework to restore the
+         * state of the application after a browser refresh.
+         *
+         * @param {Object} point
+         *  The restore point containing the application state.
+         */
         this.failRestore = function (point) {
             initializeFromOptions(point);
             this.newVersion(0);  // Get top-level version
