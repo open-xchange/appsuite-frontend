@@ -377,6 +377,9 @@ define('io.ox/office/editor/main',
                         dataType: 'json'
                     });
 
+                // log the state in the debug view
+                view.logSyncState('receiving');
+
                 // apply received operations in the editor
                 request.done(function (response) {
                     if (response && response.data) {
@@ -387,7 +390,6 @@ define('io.ox/office/editor/main',
                         }
                     }
                 });
-
                 return request.promise();
             }
 
@@ -411,6 +413,9 @@ define('io.ox/office/editor/main',
                 // we might receive new operations while sending the current ones
                 operationsBuffer = [];
 
+                // log the state in the debug view
+                view.logSyncState('sending');
+
                 // send operations to server
                 request = $.ajax({
                     type: 'POST',
@@ -427,7 +432,6 @@ define('io.ox/office/editor/main',
                     // Try again later. TODO: NOT TESTED YET!
                     operationsBuffer = sendOps.concat(operationsBuffer);
                 });
-
                 return request.promise();
             }
 
@@ -443,7 +447,10 @@ define('io.ox/office/editor/main',
                 }
 
                 // create a new result deferred
-                syncDef = $.Deferred().always(startOperationsTimer);
+                syncDef = $.Deferred()
+                    .always(startOperationsTimer)
+                    .done(function () { view.logSyncState('synchronized'); })
+                    .fail(function () { view.logSyncState('failed'); });
 
                 // first, check if the server has new operations
                 (sendOnly ? $.when() : receiveOperations())
@@ -478,6 +485,7 @@ define('io.ox/office/editor/main',
             if (operationsTimer) {
                 window.clearTimeout(operationsTimer);
                 operationsTimer = null;
+                view.logSyncState('offline');
             }
         }
 
@@ -494,7 +502,7 @@ define('io.ox/office/editor/main',
             stopOperationsTimer();
 
             // do not start a new timer in debug offline mode
-            if (syncMode) {
+            if (syncMode && self.hasFileDescriptor()) {
                 operationsTimer = window.setTimeout(function () {
                     operationsTimer = null;
                     synchronizeOperations();

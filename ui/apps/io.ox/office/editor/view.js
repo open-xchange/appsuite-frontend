@@ -299,10 +299,13 @@ define('io.ox/office/editor/view',
             }
         }
 
+        /**
+         * Logs the passed selection to the info output console.
+         */
         function logSelection(selection) {
             if (infoNode) {
-                infoNode.find('tr').eq(0).children('td').eq(1).text((selection && selection.startPaM) ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
-                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.endPaM) ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
             }
         }
 
@@ -320,6 +323,19 @@ define('io.ox/office/editor/view',
          */
         this.logOperations = function (operations) {
             _(operations).each(logOperation);
+            return this;
+        };
+
+        /**
+         * Logs the passed state of the operations buffer.
+         *
+         * @param {String} state
+         *  The state of the operations buffer.
+         */
+        this.logSyncState = function (state) {
+            if (infoNode) {
+                infoNode.find('tr').eq(0).children('td').eq(1).text(state);
+            }
             return this;
         };
 
@@ -395,6 +411,7 @@ define('io.ox/office/editor/view',
 
             infoNode = $('<table>').css('table-layout', 'fixed').append(
                 $('<colgroup>').append($('<col>', { width: '40px' })),
+                $('<tr>').append($('<td>').text('state'), $('<td>')),
                 $('<tr>').append($('<td>').text('start'), $('<td>')),
                 $('<tr>').append($('<td>').text('end'), $('<td>'))
             );
