@@ -1232,10 +1232,7 @@ define('io.ox/office/editor/editor',
          * Changes the GUI float mode of the image that is currently selected.
          */
         this.setImageFloatMode = function (floatMode) {
-            var attributes = ImageStyles.getAttributesFromFloatMode(floatMode);
-            if (_.isObject(attributes)) {
-                this.setAttributes('image', attributes);
-            }
+            this.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode));
         };
 
         // ==================================================================

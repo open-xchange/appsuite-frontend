@@ -24,14 +24,30 @@ define('io.ox/office/tk/dialogs',
     /**
      * Creates and returns an empty modal dialog object.
      *
-     * @param {String} title
-     *  The title of the dialog window.
-     *
      * @returns {CoreDialogs.ModalDialog}
      *  The new dialog object.
      */
-    function createModalDialog(title) {
-        return new CoreDialogs.ModalDialog({ width: 400, easyOut: true }).header($('<h4>').text(title));
+    function createModalDialog(options) {
+
+        var // create the dialog instance
+            dialog = new CoreDialogs.ModalDialog({ width: 400, easyOut: true }),
+            // the title text
+            title = Utils.getStringOption(options, 'title');
+
+        // add title
+        if (_.isString(title)) {
+            dialog.header($('<h4>').text(title));
+        }
+
+        return dialog;
+    }
+
+    /**
+     * Adds OK and Cancel buttons to the passed dialog.
+     */
+    function addDialogButtons(dialog, options) {
+        dialog.addButton('cancel', Utils.getStringOption(options, 'cancelLabel', gt('Cancel')))
+            .addPrimaryButton('ok', Utils.getStringOption(options, 'okLabel', gt('OK')));
     }
 
     // static class Dialogs ===================================================
@@ -41,21 +57,101 @@ define('io.ox/office/tk/dialogs',
     // methods ----------------------------------------------------------------
 
     /**
-     * Shows a simple text input dialog.
-     *
-     * @param {String} title
-     *  The title of the dialog window.
+     * Shows a simple OK/Cancel dialog with customizable button texts.
      *
      * @param {Object} [options]
      *  Additional options that control the appearance and behavior of the
      *  dialog. The following options are supported:
-     *  @param {String} [value='']
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *  @param {String} [options.message]
+     *      If specified, the message shown in the dialog body.
+     *  @param {String} [options.okLabel=gt('OK')]
+     *      The label of the primary OK button that resolves the promise object
+     *      returned by this method.
+     *  @param {String} [options.cancelLabel=gt('Cancel')]
+     *      The label of the Cancel button that rejects the promise object
+     *      returned by this method.
+     *
+     * @returns {jQuery.Promise}
+     *  The promise of a deferred object that will be resolved if the dialog
+     *  has been confirmed, or rejected if the dialog has been canceled.
+     */
+    Dialogs.showOkCancelDialog = function (options) {
+
+        var // the dialog object
+            dialog = createModalDialog(options),
+
+            // the message text
+            message = Utils.getStringOption(options, 'message'),
+
+            // the result deferred
+            def = $.Deferred();
+
+        // add the message text
+        if (_.isString(message)) {
+            dialog.text(message);
+        }
+
+        // add OK and Cancel buttons
+        addDialogButtons(dialog, options);
+
+        // show the dialog and register listeners for the results
+        dialog.show().done(function (action, data, node) {
+            def[(action === 'ok') ? 'resolve' : 'reject']();
+        });
+
+        return def.promise();
+    };
+
+    /**
+     * Shows a simple Yes/No dialog with customizable button texts. This is a
+     * slightly modified version of the Dialogs.showOkCancelDialog() method
+     * with modified defaults for the dialog buttons.
+     *
+     * @param {Object} [options]
+     *  Additional options that control the appearance and behavior of the
+     *  dialog. The following options are supported:
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *  @param {String} [options.message]
+     *      If specified, the message shown in the dialog body.
+     *  @param {String} [options.okLabel=gt('Yes')]
+     *      The label of the primary Yes button that resolves the promise
+     *      object returned by this method.
+     *  @param {String} [options.cancelLabel=gt('No')]
+     *      The label of the No button that rejects the promise object returned
+     *      by this method.
+     *
+     * @returns {jQuery.Promise}
+     *  The promise of a deferred object that will be resolved if the dialog
+     *  has been confirmed, or rejected if the dialog has been canceled.
+     */
+    Dialogs.showYesNoDialog = function (options) {
+        return Dialogs.showOkCancelDialog(Utils.extendOptions({ okLabel: gt('Yes'), cancelLabel: gt('No') }, options));
+    };
+
+    /**
+     * Shows a simple text input dialog.
+     *
+     * @param {Object} [options]
+     *  Additional options that control the appearance and behavior of the
+     *  dialog. The following options are supported:
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *  @param {String} [options.value='']
      *      The initial value of the text field.
-     *  @param {String} [placeholder='']
+     *  @param {String} [options.placeholder='']
      *      The place-holder text that will be shown in the empty text field.
-     *  @param {String} [buttonLabel=gt('OK')]
+     *  @param {String} [options.okLabel=gt('OK')]
      *      The label of the primary button that triggers the intended action
      *      by resolving the promise object returned by this method.
+     *  @param {String} [options.cancelLabel=gt('Cancel')]
+     *      The label of the Cancel button that rejects the promise object
+     *      returned by this method.
      *
      * @returns {jQuery.Promise}
      *  The promise of a deferred object that will be resolved if the primary
@@ -63,7 +159,7 @@ define('io.ox/office/tk/dialogs',
      *  The done handlers registered at the promise object will receive the
      *  entered text.
      */
-    Dialogs.showTextDialog = function (title, options) {
+    Dialogs.showTextDialog = function (options) {
 
         var // the text input field
             input = $('<input>', {
@@ -71,30 +167,23 @@ define('io.ox/office/tk/dialogs',
                     value: Utils.getStringOption(options, 'value', '')
                 }),
 
-            // the label of the primary button
-            buttonLabel = Utils.getStringOption(options, 'buttonLabel', gt('OK')),
-
             // the dialog object
-            dialog = createModalDialog(title)
-                .append(input.addClass('nice-input'))
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('action', buttonLabel),
+            dialog = createModalDialog(options).append(input.addClass('nice-input')),
 
             // the result deferred
             def = $.Deferred();
 
+        // add OK and Cancel buttons
+        addDialogButtons(dialog, options);
+
         // show the dialog and register listeners for the results
-        dialog.show(function () {
-            input.focus();
-        })
+        dialog.show(function () { input.focus(); })
         .done(function (action, data, node) {
-            if (action === 'action') {
+            if (action === 'ok') {
                 def.resolve(input.val());
             } else {
                 def.reject();
             }
-        }).fail(function () {
-            def.reject();
         });
 
         return def.promise();
@@ -103,20 +192,23 @@ define('io.ox/office/tk/dialogs',
     /**
      * Shows a generic file selector dialog.
      *
-     * @param {String} title
-     *  The title of the dialog window.
-     *
      * @param {Object} [options]
      *  Additional options that control the appearance and behavior of the
      *  dialog. The following options are supported:
-     *  @param {String} [filter='*']
+     *  @param {String} [options.title]
+     *      If specified, the title of the dialog window that will be shown in
+     *      a larger font.
+     *  @param {String} [options.filter='*']
      *      The filter string restricting the type of files that will be able
      *      to select.
-     *  @param {String} [placeholder='']
+     *  @param {String} [options.placeholder='']
      *      The place-holder text that will be shown in the empty text field.
-     *  @param {String} [buttonLabel=gt('OK')]
+     *  @param {String} [options.okLabel=gt('OK')]
      *      The label of the primary button that triggers the intended action
      *      by resolving the promise object returned by this method.
+     *  @param {String} [options.cancelLabel=gt('Cancel')]
+     *      The label of the Cancel button that rejects the promise object
+     *      returned by this method.
      *
      * @returns {jQuery.Promise}
      *  The promise of a deferred object that will be resolved if the primary
@@ -124,7 +216,7 @@ define('io.ox/office/tk/dialogs',
      *  The done handlers registered at the promise object will receive the
      *  file descriptor object of the selected file.
      */
-    Dialogs.showFileDialog = function (title, options) {
+    Dialogs.showFileDialog = function (options) {
 
         var // the text input field
             input = $('<input>', {
@@ -135,14 +227,8 @@ define('io.ox/office/tk/dialogs',
                     accept: Utils.getStringOption(options, 'filter', '*')
                 }),
 
-            // the label of the primary button
-            buttonLabel = Utils.getStringOption(options, 'buttonLabel', gt('OK')),
-
             // the dialog object
-            dialog = createModalDialog(title)
-                .append(input.addClass('nice-input'))
-                .addButton('cancel', gt('Cancel'))
-                .addPrimaryButton('action', buttonLabel),
+            dialog = createModalDialog(options).append(input.addClass('nice-input')),
 
             // the file descriptor of the file currently selected
             file = null,
@@ -150,21 +236,20 @@ define('io.ox/office/tk/dialogs',
             // the result deferred
             def = $.Deferred();
 
+        // add OK and Cancel buttons
+        addDialogButtons(dialog, options);
+
         // register a change handler at the input field that extracts the file descriptor
         input.change(function (event) { file = event.target.files[0] || null; });
 
         // show the dialog and register listeners for the results
-        dialog.show(function () {
-            input.focus();
-        })
+        dialog.show(function () { input.focus(); })
         .done(function (action, data, node) {
-            if ((action === 'action') && _.isObject(file)) {
+            if ((action === 'ok') && _.isObject(file)) {
                 def.resolve(file);
             } else {
                 def.reject();
             }
-        }).fail(function () {
-            def.reject();
         });
 
         return def.promise();

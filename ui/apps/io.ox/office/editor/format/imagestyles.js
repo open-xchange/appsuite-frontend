@@ -89,16 +89,16 @@ define('io.ox/office/editor/format/imagestyles',
              * Specifies how text floats around the image.
              * - 'none': Text does not float around the image.
              * - 'square': Text floats around the bounding box of the image.
-             * - 'tight': Text flows around a complex outline area.
-             * - 'through': Text floats through the entire image.
+             * - 'tight': Text aligns to the left/right outline of the image.
+             * - 'through': Text aligns to the entire outline of the image.
              * - 'topandbottom': Text floats above and below the image only.
              */
             textwrapmode: { def: 'none' },
 
             /**
              * Specifies on which side text floats around the image. Effective
-             * only if the attribute 'textwrapmode' is either 'square' or
-             * 'tight'.
+             * only if the attribute 'textwrapmode' is either 'square',
+             * 'tight', or 'through'.
              * - 'bothsides': Text floats at the left and right side.
              * - 'left': Text floats at the left side of the image only.
              * - 'right': Text floats at the right side of the image only.
@@ -113,9 +113,20 @@ define('io.ox/office/editor/format/imagestyles',
             leftFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'left', textwrapmode: 'square', textwrapside: 'right' },
             rightFloated: { inline: false, anchorhbase: 'column', anchorhalign: 'right', textwrapmode: 'square', textwrapside: 'left' },
             noneFloated:  { inline: false, anchorhbase: 'column', anchorhalign: 'center', textwrapmode: 'none' }
-        };
+        },
+
+        // values for the 'textwrapmode' attribute allowing to wrap the text around the image
+        WRAPPED_TEXT_VALUES = _(['square', 'tight', 'through']);
 
     // private global functions ===============================================
+
+    /**
+     * Returns whether the passed 'textwrapmode' attribute allows to wrap the
+     * text around the image.
+     */
+    function isTextWrapped(textWrapMode) {
+        return WRAPPED_TEXT_VALUES.contains(textWrapMode);
+    }
 
     /**
      * Will be called for every image element whose attributes have been
@@ -232,7 +243,7 @@ define('io.ox/office/editor/format/imagestyles',
             rightOffset = paraWidth - leftOffset - imageWidth;
 
             // determine text wrapping side
-            if ((attributes.textwrapmode === 'square') || (attributes.textwrapmode === 'tight')) {
+            if (isTextWrapped(attributes.textwrapmode)) {
                 switch (attributes.textwrapside) {
                 case 'left':
                     wrapMode = 'left';
@@ -346,7 +357,7 @@ define('io.ox/office/editor/format/imagestyles',
 
     /**
      * Returns the images attributes that are needed to represent the passed
-     * image float mode as used in the GUI.
+     * GUI image float mode.
      *
      * @param {String} floatMode
      *  The GUI image float mode.
@@ -355,7 +366,36 @@ define('io.ox/office/editor/format/imagestyles',
      *  A map with image attributes, as name/value pairs.
      */
     ImageStyles.getAttributesFromFloatMode = function (floatMode) {
-        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : null;
+        return (floatMode in FLOAT_MODE_ATTRIBUTES) ? FLOAT_MODE_ATTRIBUTES[floatMode] : {};
+    };
+
+    /**
+     * Returns the images attributes that are needed to represent the passed
+     * image float mode as used in the GUI.
+     *
+     * @param {String} floatMode
+     *  The GUI image float mode.
+     *
+     * @returns {Object}
+     *  A map with image attributes, as name/value pairs.
+     */
+    ImageStyles.getFloatModeFromAttributes = function (attributes) {
+        
+        // inline mode overrules floating attributes
+        if (attributes.inline) {
+            return 'inline';
+        }
+
+        // floating mode depends on text wrapping side
+        if (isTextWrapped(attributes.textwrapmode)) {
+            switch (attributes.textwrapside) {
+            case 'left':
+                return 'leftFloated';
+            case 'right':
+                return 'rightFloated';
+            }
+        }
+        return 'noneFloated';
     };
 
     // exports ================================================================
