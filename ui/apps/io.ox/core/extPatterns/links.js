@@ -123,12 +123,8 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
-    var inlineToggle = function (e) {
-        var node = $(this), A = 'data-toggle',
-            list = node.parent().children('[data-prio="lo"]'),
-            expand = node.attr(A) === 'more';
-        list[expand ? 'show' : 'hide']();
-        node.text(expand ? 'Less' : 'More ...').attr(A, expand ? 'less' : 'more');
+    var wrapAsListItem = function () {
+        return $('<li>').append(this).get(0);
     };
 
     var InlineLinks = function (options) {
@@ -149,17 +145,19 @@ define("io.ox/core/extPatterns/links",
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
-                var length = node.children().length;
-                if (!multiple && length > 5) {
+                var all = node.children(), lo = node.children('[data-prio="lo"]');
+                if (!multiple && all.length > 5 && lo.length > 1) {
                     node.append(
-                        $('<button>', { 'data-toggle': 'more' })
-                        .addClass('btn btn-mini btn-primary io-ox-action-link')
-                        .css({ cursor: 'pointer', marginLeft: '1.5em' })
-                        .click(inlineToggle)
-                        .text('More ...')
+                        $('<span class="io-ox-action-link dropdown">').append(
+                            $('<a href="#" data-toggle="dropdown">')
+                            .text('More ... ').append($('<b class="caret">')),
+                            $('<ul class="dropdown-menu dropdown-right">').append(
+                                lo.map(wrapAsListItem)
+                            )
+                        )
                     );
-                    node.children('[data-prio="lo"]').hide();
                 }
+                all = lo = null;
                 if (options.customizeNode) {
                     options.customizeNode(node);
                 }
