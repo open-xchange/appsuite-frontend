@@ -26,18 +26,24 @@ define('io.ox/contacts/model',
         model: {
 
             addMember: function (member) {
+
+                var currentDistListArray;
                 if (this.get('distribution_list') === undefined) {
                     this.set('distribution_list', []);
                 }
-                this.get('distribution_list').push(member);
+
+                currentDistListArray = this.get('distribution_list');
+                currentDistListArray.push(member);
+
+                this.set('distribution_list', currentDistListArray);
+
                 this.trigger("change");
                 this.trigger("change:distribution_list");
             },
 
             removeMember: function (mail, name) {
 
-                var distListLength = this.get('distribution_list').length,
-                    currentDistlist = this.get('distribution_list');
+                var currentDistlist = this.get('distribution_list');
 
                 _(currentDistlist).each(function (val, key) {
                     if (val.mail === mail && val.display_name === name) {
@@ -45,11 +51,12 @@ define('io.ox/contacts/model',
                     }
                 });
 
+                this.set('distribution_list', currentDistlist);
+
                 this.trigger("change");
                 this.trigger("change:distribution_list");
 
             }
-
         },
 
         update: function (model) {
