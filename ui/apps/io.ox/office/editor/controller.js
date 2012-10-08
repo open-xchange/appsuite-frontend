@@ -98,7 +98,11 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.lineheight; },
                     set: function (lineHeight) { editor.setAttribute('paragraph', 'lineheight', lineHeight); }
                 },
-
+                'paragraph/fillcolor': {
+                    chain: 'paragraph/attributes',
+                    get: function (attributes) { return attributes.parafill; },
+                    set: function (fill) { editor.setAttribute('paragraph', 'parafill', fill); }
+                },
                 // characters
 
                 'character/attributes': {

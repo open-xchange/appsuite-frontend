@@ -99,6 +99,27 @@ define('io.ox/office/editor/view',
 
     }}); // class StyleSheetChooser
 
+    // class ColorChooser ================================================
+
+    var ColorChooser = RadioGroup.extend({ constructor: function () {
+
+        var // self reference
+            self = this;
+
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, { width: 120, tooltip: gt('ParaColor'), dropDown: true, sorted: false });
+
+        // initialization -----------------------------------------------------
+
+        _([{Entry: "Red", Value: "FF0000"}, {Entry: "Green", Value: "00FF00"}, {Entry: "Blue", Value: "0000FF"}, {Entry: "White", Value: "FFFFFF"}]).each(function (entry) {
+
+            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' }, userData: entry.Value });
+        }, this);
+
+
+    }}); // class ColorChooser
+
     // class FontFamilyChooser ================================================
 
     var FontFamilyChooser = ComboField.extend({ constructor: function () {
@@ -433,6 +454,8 @@ define('io.ox/office/editor/view',
                 .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addButton('debug/readonly', { label: gt('Readonly'), tooltip: 'Toggle Readonly Mode',     toggle: true })
+                .addSeparator()
+                .addGroup('paragraph/fillcolor', new ColorChooser())
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
