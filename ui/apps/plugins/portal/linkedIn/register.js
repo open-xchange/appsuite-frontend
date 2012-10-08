@@ -123,7 +123,7 @@ define("plugins/portal/linkedIn/register",
             ).addClass('io-ox-portal-tile-linkedin');
 
             if (message) {
-                $('<div class="ioox-portal-preview">').append(
+                $('<div class="io-ox-portal-preview">').append(
                     $('<span class="io-ox-portal-preview-firstline">').text(message.from.person.firstName + " " + message.from.person.lastName + ": "),
                     $('<span class="io-ox-portal-preview-secondline">').text(message.subject),
                     $('<span class="">').text(' '),
