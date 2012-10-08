@@ -615,3 +615,14 @@ div.io-ox-view-component {
         }
     }
 }
+
+/* Alert  ------------------------------------------------------------ */
+
+.io-ox-office-main {
+	.alert.io-ox-office-alert {
+		position: absolute;
+        z-index: 100;
+        width: 100%;
+        .box-sizing(border-box);
+	}
+}

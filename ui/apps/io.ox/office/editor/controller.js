@@ -13,8 +13,9 @@
 
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
-     'io.ox/office/editor/image'
-    ], function (BaseController, Image) {
+     'io.ox/office/editor/image',
+     'io.ox/office/editor/format/imagestyles'
+    ], function (BaseController, Image, ImageStyles) {
 
     'use strict';
 
@@ -31,10 +32,10 @@ define('io.ox/office/editor/controller',
             // all the little controller items
             items = {
 
-                'chain/editable': {
-                    enable: function () { return !editor.isReadonlyMode(); }
+                'document/editable': {
+                    enable: function () { return editor.isEditMode(); }
                 },
-                'chain/editable/text': {
+                'document/editable/text': {
                     enable: function (enabled) { return enabled && editor.isTextSelected(); }
                 },
 
@@ -53,23 +54,20 @@ define('io.ox/office/editor/controller',
                     set: function () { app.flush(); }
                 },
                 'file/rename': {
-                    chain: 'chain/editable',
-                    get: function () {
-                        var fileDesc = app.getFileDescriptor();
-                        return (fileDesc && fileDesc.filename) ? fileDesc.filename : null;
-                    },
+                    chain: 'document/editable',
+                    get: function () { return app.getFileName(); },
                     set: function (fileName) { app.rename(fileName); }
                 },
 
                 // document contents
 
                 'document/undo': {
-                    chain: 'chain/editable',
+                    chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.hasUndo(); },
                     set: function () { editor.undo(); }
                 },
                 'document/redo': {
-                    chain: 'chain/editable',
+                    chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.hasRedo(); },
                     set: function () { editor.redo(); }
                 },
@@ -81,117 +79,128 @@ define('io.ox/office/editor/controller',
 
                 // paragraphs
 
-                'chain/format/paragraph': {
-                    chain: 'chain/editable/text',
+                'paragraph/attributes': {
+                    chain: 'document/editable/text',
                     get: function () { return editor.getAttributes('paragraph'); }
                 },
-                'format/paragraph/stylesheet': {
-                    chain: 'chain/format/paragraph',
+                'paragraph/stylesheet': {
+                    chain: 'paragraph/attributes',
                     get: function (attributes) { return attributes.style; },
                     set: function (styleId) { editor.setAttribute('paragraph', 'style', styleId); }
                 },
-                'format/paragraph/alignment': {
-                    chain: 'chain/format/paragraph',
+                'paragraph/alignment': {
+                    chain: 'paragraph/attributes',
                     get: function (attributes) { return attributes.alignment; },
                     set: function (alignment) { editor.setAttribute('paragraph', 'alignment', alignment); }
                 },
-                'format/paragraph/lineheight': {
-                    chain: 'chain/format/paragraph',
+                'paragraph/lineheight': {
+                    chain: 'paragraph/attributes',
                     get: function (attributes) { return attributes.lineheight; },
                     set: function (lineHeight) { editor.setAttribute('paragraph', 'lineheight', lineHeight); }
                 },
-
+                'paragraph/fillcolor': {
+                    chain: 'paragraph/attributes',
+                    get: function (attributes) { return attributes.parafill; },
+                    set: function (fill) { editor.setAttribute('paragraph', 'parafill', fill); }
+                },
                 // characters
 
-                'chain/format/character': {
-                    chain: 'chain/editable/text',
+                'character/attributes': {
+                    chain: 'document/editable/text',
                     get: function () { return editor.getAttributes('character'); }
                 },
-                'format/character/stylesheet': {
-                    chain: 'chain/format/character',
+                'character/stylesheet': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.style; },
                     set: function (styleId) { editor.setAttribute('character', 'style', styleId); }
                 },
-                'format/character/font/family': {
-                    chain: 'chain/format/character',
+                'character/fontname': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.fontname; },
                     set: function (fontName) { editor.setAttribute('character', 'fontname', fontName); }
                 },
-                'format/character/font/height': {
-                    chain: 'chain/format/character',
+                'character/fontsize': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.fontsize; },
                     set: function (fontSize) { editor.setAttribute('character', 'fontsize', fontSize); }
                 },
-                'format/character/font/bold': {
-                    chain: 'chain/format/character',
+                'character/bold': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.bold; },
                     set: function (state) { editor.setAttribute('character', 'bold', state); }
                 },
-                'format/character/font/italic': {
-                    chain: 'chain/format/character',
+                'character/italic': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.italic; },
                     set: function (state) { editor.setAttribute('character', 'italic', state); }
                 },
-                'format/character/font/underline': {
-                    chain: 'chain/format/character',
+                'character/underline': {
+                    chain: 'character/attributes',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('character', 'underline', state); }
                 },
 
                 // tables
 
-                'chain/table': {
-                    chain: 'chain/editable/text',
-                    enable: function (enabled) { return enabled && editor.isPositionInTable(); }
-                },
                 'table/insert': {
-                    chain: 'chain/editable/text',
+                    chain: 'document/editable/text',
                     set: function (size) { editor.insertTable(size); }
                 },
+
+                'document/editable/table': {
+                    chain: 'document/editable/text',
+                    enable: function (enabled) { return enabled && editor.isPositionInTable(); }
+                },
                 'table/insert/row': {
-                    chain: 'chain/table',
+                    chain: 'document/editable/table',
                     set: function () { editor.insertRow(); }
                 },
                 'table/insert/column': {
-                    chain: 'chain/table',
+                    chain: 'document/editable/table',
                     set: function () { editor.insertColumn(); }
                 },
                 'table/delete/row': {
-                    chain: 'chain/table',
+                    chain: 'document/editable/table',
                     set: function () { editor.deleteRows(); }
                 },
                 'table/delete/column': {
-                    chain: 'chain/table',
+                    chain: 'document/editable/table',
                     set: function () { editor.deleteColumns(); }
+                },
+
+                'table/attributes': {
+                    chain: 'document/editable/table',
+                    get: function () { return editor.getAttributes('table'); }
                 },
 
                 // images
 
-                'chain/image': {
-                    chain: 'chain/editable',
-                    enable: function (enabled) { return enabled && editor.isImageSelected(); }
-                },
-                'chain/format/image': {
-                    chain: 'chain/image',
-                    get: function () { return editor.getAttributes('image'); }
-                },
                 'image/insert/file': {
-                    chain: 'chain/editable/text',
+                    chain: 'document/editable/text',
                     set: function () { Image.insertFileDialog(app); }
                 },
                 'image/insert/url': {
-                    chain: 'chain/editable/text',
+                    chain: 'document/editable/text',
                     set: function () { Image.insertURLDialog(app); }
                 },
+
+                'document/editable/image': {
+                    chain: 'document/editable',
+                    enable: function (enabled) { return enabled && editor.isImageSelected(); }
+                },
                 'image/delete': {
-                    chain: 'chain/image',
-                    enable: function (enabled) { return enabled && (editor.getImageFloatMode() !== 'inline'); },
+                    chain: 'document/editable/image',
                     set: function () { editor.deleteSelected(); }
                 },
-                'format/image/floatmode': {
-                    chain: 'chain/image',
-                    get: function () { return editor.getImageFloatMode(); },
-                    set: function (floatMode) { editor.setImageFloatMode(floatMode); }
+
+                'image/attributes': {
+                    chain: 'document/editable/image',
+                    get: function () { return editor.getAttributes('image'); }
+                },
+                'image/floatmode': {
+                    chain: 'image/attributes',
+                    get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
                 // debug
@@ -205,8 +214,8 @@ define('io.ox/office/editor/controller',
                     set: function (state) { app.setSynchronizedMode(state); }
                 },
                 'debug/readonly': {
-                    get: function () { return editor.isReadonlyMode(); },
-                    set: function (state) { self.setReadonlyMode(state); }
+                    get: function () { return editor.isEditMode(); },
+                    set: function (state) { self.setEditMode(state); }
                 }
             };
 
@@ -231,8 +240,8 @@ define('io.ox/office/editor/controller',
          * Changes the read-only mode at the editor and updates all controller
          * items.
          */
-        this.setReadonlyMode = function (state) {
-            editor.setReadonlyMode(state);
+        this.setEditMode = function (state) {
+            editor.setEditMode(state);
             this.update();
         };
 

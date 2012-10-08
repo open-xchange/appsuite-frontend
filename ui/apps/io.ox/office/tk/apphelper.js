@@ -210,6 +210,10 @@ define('io.ox/office/tk/apphelper',
             }
         };
 
+        this.getFileName = function () {
+            return (file && _.isString(file.filename)) ? file.filename : null;
+        };
+
         /**
          * Returns an URL that can be passed to AJAX calls to communicate with
          * a specific server-side service.

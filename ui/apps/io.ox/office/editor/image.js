@@ -75,15 +75,13 @@ define('io.ox/office/editor/image',
      * @param  app the current application
      */
     Image.insertFileDialog = function (app) {
-
-        var // options for the file dialog
-            options = {
-                filter: 'image/*',
-                placeholder: gt('URL'),
-                buttonLabel: gt('Insert')
-            };
-
-        Dialogs.showFileDialog(gt('Select Image File'), options).done(function (file) {
+        Dialogs.showFileDialog({
+            title: gt('Select Image File'),
+            filter: 'image/*',
+            placeholder: gt('URL'),
+            okLabel: gt('Insert')
+        })
+        .done(function (file) {
             Image.insertFile(app, file, true);
         });
     };
@@ -146,14 +144,12 @@ define('io.ox/office/editor/image',
      * @param  app the current application
      */
     Image.insertURLDialog = function (app) {
-
-        var // options for the text input dialog
-            options = {
-                placeholder: gt('URL'),
-                buttonLabel: gt('Insert')
-            };
-
-        Dialogs.showTextDialog(gt('Enter Image URL'), options).done(function (url) {
+        Dialogs.showTextDialog({
+            title: gt('Enter Image URL'),
+            placeholder: gt('URL'),
+            okLabel: gt('Insert')
+        })
+        .done(function (url) {
             Image.insertURL(app, url.trim(), true);
         });
     };

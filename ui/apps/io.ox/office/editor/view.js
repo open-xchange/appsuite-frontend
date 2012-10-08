@@ -99,6 +99,27 @@ define('io.ox/office/editor/view',
 
     }}); // class StyleSheetChooser
 
+    // class ColorChooser ================================================
+
+    var ColorChooser = RadioGroup.extend({ constructor: function () {
+
+        var // self reference
+            self = this;
+
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, { width: 120, tooltip: gt('ParaColor'), dropDown: true, sorted: false });
+
+        // initialization -----------------------------------------------------
+
+        _([{Entry: "Red", Value: "FF0000"}, {Entry: "Green", Value: "00FF00"}, {Entry: "Blue", Value: "0000FF"}, {Entry: "White", Value: "FFFFFF"}]).each(function (entry) {
+
+            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' }, userData: entry.Value });
+        }, this);
+
+
+    }}); // class ColorChooser
+
     // class FontFamilyChooser ================================================
 
     var FontFamilyChooser = ComboField.extend({ constructor: function () {
@@ -261,14 +282,12 @@ define('io.ox/office/editor/view',
 
             require(['io.ox/office/tk/dialogs'], function (Dialogs) {
 
-                var // options for the text dialog
-                    options = {
-                        value: displayName,
-                        placeholder: gt('Document name'),
-                        buttonLabel: gt('Rename')
-                    };
-
-                Dialogs.showTextDialog(gt('Rename Document'), options).done(function (newName) {
+                Dialogs.showTextDialog({
+                    title: gt('Rename Document'),
+                    value: displayName,
+                    placeholder: gt('Document name'),
+                    okLabel: gt('Rename')
+                }).done(function (newName) {
 
                     // defer controller action after dialog has been closed to
                     // be able to focus the editor. TODO: better solution?
@@ -301,10 +320,13 @@ define('io.ox/office/editor/view',
             }
         }
 
+        /**
+         * Logs the passed selection to the info output console.
+         */
         function logSelection(selection) {
             if (infoNode) {
-                infoNode.find('tr').eq(0).children('td').eq(1).text(selection ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
-                infoNode.find('tr').eq(1).children('td').eq(1).text(selection ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(1).children('td').eq(1).text((selection && selection.startPaM) ? JSON.stringify(selection.startPaM.oxoPosition) : '- empty -');
+                infoNode.find('tr').eq(2).children('td').eq(1).text((selection && selection.endPaM) ? JSON.stringify(selection.endPaM.oxoPosition) : '- empty -');
             }
         }
 
@@ -322,6 +344,19 @@ define('io.ox/office/editor/view',
          */
         this.logOperations = function (operations) {
             _(operations).each(logOperation);
+            return this;
+        };
+
+        /**
+         * Logs the passed state of the operations buffer.
+         *
+         * @param {String} state
+         *  The state of the operations buffer.
+         */
+        this.logSyncState = function (state) {
+            if (infoNode) {
+                infoNode.find('tr').eq(0).children('td').eq(1).text(state);
+            }
             return this;
         };
 
@@ -346,24 +381,24 @@ define('io.ox/office/editor/view',
             .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') });
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('format/paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
+            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
             .addSeparator()
-            .addGroup('format/character/font/family', new FontFamilyChooser())
+            .addGroup('character/fontname', new FontFamilyChooser())
             .addSeparator()
-            .addGroup('format/character/font/height', new FontHeightChooser())
+            .addGroup('character/fontsize', new FontHeightChooser())
             .addSeparator()
-            .addButton('format/character/font/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
-            .addButton('format/character/font/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
-            .addButton('format/character/font/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
+            .addButton('character/bold',      { icon: 'icon-io-ox-bold',      tooltip: gt('Bold'),      toggle: true })
+            .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
+            .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addRadioGroup('format/paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, copyMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
                 .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
                 .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
-            .addRadioGroup('format/paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, copyMode: 'icon' })
                 .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
@@ -383,7 +418,7 @@ define('io.ox/office/editor/view',
             .addSeparator()
             .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('format/image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), auto: true, copyMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })
@@ -397,6 +432,7 @@ define('io.ox/office/editor/view',
 
             infoNode = $('<table>').css('table-layout', 'fixed').append(
                 $('<colgroup>').append($('<col>', { width: '40px' })),
+                $('<tr>').append($('<td>').text('state'), $('<td>')),
                 $('<tr>').append($('<td>').text('start'), $('<td>')),
                 $('<tr>').append($('<td>').text('end'), $('<td>'))
             );
@@ -418,6 +454,8 @@ define('io.ox/office/editor/view',
                 .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addButton('debug/readonly', { label: gt('Readonly'), tooltip: 'Toggle Readonly Mode',     toggle: true })
+                .addSeparator()
+                .addGroup('paragraph/fillcolor', new ColorChooser())
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
