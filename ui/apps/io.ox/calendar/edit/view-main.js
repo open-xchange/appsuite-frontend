@@ -20,7 +20,7 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/calendar/edit/template',
        'gettext!io.ox/calendar/edit/main',
        'io.ox/backbone/views',
-       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, participantsModule, recurrenceModule, tmpl, gt, views, forms) {
+       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, recurrenceModule, tmpl, gt, views, forms) {
 
     'use strict';
 
@@ -62,29 +62,6 @@ define('io.ox/calendar/edit/view-main',
         return format;
     };
 */
-
-    var CommonView = views.point('io.ox/calendar/edit/section').createView({
-        tagName: 'div',
-        className: 'io-ox-calendar-edit container-fluid',
-        render: function () {
-            var self = this;
-
-            var rows = [];
-            function getRow(index) {
-                if (rows.length > index + 1) {
-                    return rows[index];
-                }
-                for (var i = 0; i < index + 1 - rows.length; i++) {
-                    rows.push($('<div class="row-fluid">'));
-                }
-                return rows[index];
-            }
-
-            this.point.each(function (extension) {
-                var node = getRow(extension.forceLine || rows.length);
-                extension.invoke('draw', node, {model: self.model, parentView: self});
-            });
-
 
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
         tagName: 'div',
