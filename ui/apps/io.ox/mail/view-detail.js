@@ -642,7 +642,7 @@ define('io.ox/mail/view-detail',
                         $.txt(' \u00A0 ')
                     )
                 );
-                drawAllDropDown(container, gt('All'), data);
+                drawAllDropDown(container, gt('All recipients'), data);
             }
         }
     });

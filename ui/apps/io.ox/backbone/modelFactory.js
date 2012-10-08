@@ -49,7 +49,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         validate: function (attributes) {
             var self = this,
                 errors = new ValidationErrors();
-            
+
             attributes = attributes || this.toJSON();
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
 
@@ -133,7 +133,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                 var o = oldAttributes[key];
                 var c = currentAttributes[key];
-                
+
                 if (o !== c) {
                     if (_.isArray(o) && _.isArray(c)) {
                         if (_(o).difference(c).length !== 0 || _(c).difference(o).length !== 0) {
