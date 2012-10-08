@@ -562,7 +562,8 @@ define('io.ox/mail/view-detail',
     };
 
     function changeLabel(e) {
-        return api.update(e.data.data, { color_label: e.data.color, value: true });
+        e.preventDefault();
+        return api.update(e.data.data, { color_label: e.data.color });
     }
 
     ext.point('io.ox/mail/detail').extend({
