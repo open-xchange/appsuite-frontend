@@ -1,0 +1,80 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+.mediaplayer_container {
+    background-color:rgba(0,0,0,0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index:10000;
+    height:100%;
+
+    .mediaplayer_wrapper {
+        position: relative;
+        width:400px;
+        height:100%;
+        margin:0 auto;
+    }
+
+    .mediaplayer_inner {
+        position: absolute;
+        top: 60px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        width:386px;
+        margin:auto;
+        background:black;
+    }
+
+    .mediaplayer_player {
+        position: relative;
+        margin:0 auto;
+        margin-top: 13px;
+        background:#111;
+        height:200px;
+        width:360px;
+        background-color:white;
+    }
+
+    .mediaplayer_playlist {
+        margin:13px;
+        overflow-y:scroll;
+        li {
+            list-style:none;
+            background:#333;
+            a {
+                padding:5px;
+                display:block;
+                color:white;
+
+                &:hover {
+                    background-color:#222;
+                    text-decoration:none;
+                }
+            }
+        }
+    }
+
+    .closemediaplayer {
+        position:absolute;
+        top:13px;
+        right:13px;
+    }
+}
+
+
