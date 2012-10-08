@@ -81,6 +81,22 @@ define('io.ox/files/icons/perspective',
         });
     }
 
+//    function startMediaplayer(e) {
+//        e.preventDefault();
+//        require(['io.ox/files/mediaplayer'], function (//mediaplayer) {
+//            var app = e.data.app;
+//            mediaplayer.init({
+//                list: app.getFiles(),
+//                app: app
+//            });
+//        });
+//    }
+
+    function setContentType(ids)
+    {
+
+    }
+
     ext.point('io.ox/files/icons/actions').extend({
         id: 'slideshow',
         draw: function (baton) {
@@ -91,6 +107,8 @@ define('io.ox/files/icons/perspective',
                 $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
                     .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
                 $.txt(')')
+ //               $('<a href="#" class="mediaplayer">').text(gt('//Mediaplayer'))
+ //                   .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
             );
         }
     });
@@ -101,6 +119,9 @@ define('io.ox/files/icons/perspective',
         else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
         else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
         else if ((/mp3$/i).test(name)) { node.addClass('icon-music'); }
+        else if ((/mp4$/i).test(name)) { node.addClass('icon-film'); }
+        else if ((/ogv$/i).test(name)) { node.addClass('icon-film'); }
+        else if ((/webm$/i).test(name)) { node.addClass('icon-film'); }
         else { node.addClass('icon-file'); }
         return node;
     }
@@ -115,7 +136,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&content_type=' + file.file_mimetype;
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -124,14 +145,14 @@ define('io.ox/files/icons/perspective',
                 options = baton.options,
                 img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
-            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|bmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+            if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options));
             } else {
                 img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text(file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2"))
+                $('<div class="title">').text((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2"))
             );
         }
     });
@@ -169,7 +190,6 @@ define('io.ox/files/icons/perspective',
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
-
             var options = ext.point('io.ox/mail/icons/options').options();
             var win = app.getWindow(),
                 iconview = $('<div class="files-scrollable-pane">'),
