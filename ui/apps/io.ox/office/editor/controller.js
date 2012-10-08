@@ -13,8 +13,9 @@
 
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
-     'io.ox/office/editor/image'
-    ], function (BaseController, Image) {
+     'io.ox/office/editor/image',
+     'io.ox/office/editor/format/imagestyles'
+    ], function (BaseController, Image, ImageStyles) {
 
     'use strict';
 
@@ -189,7 +190,6 @@ define('io.ox/office/editor/controller',
                 },
                 'image/delete': {
                     chain: 'document/editable/image',
-                    enable: function (enabled) { return enabled && (editor.getImageFloatMode() !== 'inline'); },
                     set: function () { editor.deleteSelected(); }
                 },
 
@@ -199,8 +199,8 @@ define('io.ox/office/editor/controller',
                 },
                 'image/floatmode': {
                     chain: 'image/attributes',
-                    get: function () { return editor.getImageFloatMode(); },
-                    set: function (floatMode) { editor.setImageFloatMode(floatMode); }
+                    get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
                 // debug

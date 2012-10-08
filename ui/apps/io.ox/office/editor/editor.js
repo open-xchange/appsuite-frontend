@@ -1238,21 +1238,6 @@ define('io.ox/office/editor/editor',
             return selection && _.isString(selection.endPaM.imageFloatMode);
         };
 
-        /**
-         * Returns the GUI float mode of the image that is currently selected.
-         */
-        this.getImageFloatMode = function () {
-            var selection = getSelection();
-            return selection ? selection.endPaM.imageFloatMode : null;
-        };
-
-        /**
-         * Changes the GUI float mode of the image that is currently selected.
-         */
-        this.setImageFloatMode = function (floatMode) {
-            this.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode));
-        };
-
         // ==================================================================
         // END of Editor API
         // ==================================================================
