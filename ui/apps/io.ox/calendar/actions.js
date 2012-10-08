@@ -340,7 +340,7 @@ define('io.ox/calendar/actions',
         index: 100,
         prio: 'hi',
         id: 'send mail',
-        label: gt('Send mail to all'),
+        label: gt('Send mail to all participants'),
         ref: 'io.ox/calendar/detail/actions/sendmail'
     }));
 

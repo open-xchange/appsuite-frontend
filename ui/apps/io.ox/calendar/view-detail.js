@@ -292,8 +292,8 @@ define("io.ox/calendar/view-detail",
         index: 550,
         id: 'inline-actions-participantrelated',
         draw: function (data) {
-            var preDiv = this.find('.io-ox-label.participants-block');
-            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', preDiv, data);
+
+            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
         }
     });
 

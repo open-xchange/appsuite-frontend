@@ -341,6 +341,7 @@ define('io.ox/mail/actions',
 //        id: 'create-distlist',
 //        requires: 'some',
 //        action: function (data) {
+////            console.log(data);
 //        }
 //    });
 
