@@ -149,7 +149,7 @@ define('io.ox/calendar/edit/main',
                 $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                 self.getWindow().show(_.bind(self.onShowWindow, self));
             });
-            /*
+
             folderAPI.get({folder: data.folder_id}).done(function (folder) {
                 if (folderAPI.is('private', folder)) {
                     // it's a private folder for the current user, add him by default
@@ -167,10 +167,11 @@ define('io.ox/calendar/edit/main',
 
 
             });
-            */
+
 
         },
         onShowWindow: function () {
+            console.log('onshowwindow');
             var self = this;
             if (self.model.get('title')) {
                 $('.window-title').text(self.model.get('title'));
@@ -180,7 +181,8 @@ define('io.ox/calendar/edit/main',
                 $('.window-title').text(value);
                 self.setTitle(value);
             });
-            $('#' + self.view.guid + '_title').get(0).focus();
+            //$('#' + self.view.guid + '_title').get(0).focus();
+
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {

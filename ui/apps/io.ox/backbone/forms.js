@@ -194,9 +194,11 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                     this.$el.append($('<label>').text(this.header));
                 }
                 this.$el.append(
-                        $('<label class="checkbox">').append(
-                            this.nodes.checkbox = $('<input type="checkbox">')
-                                .after(this.label)
+                        $('<label class="checkbox">')
+                        .css('display', 'inline-block')
+                        .append(
+                            this.nodes.checkbox = $('<input type="checkbox">'),
+                            this.label
                         )
                 );
                 this.nodes.checkbox.attr('checked', this.model.get(this.attribute));

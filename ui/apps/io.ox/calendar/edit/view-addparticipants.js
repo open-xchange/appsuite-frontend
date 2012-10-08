@@ -12,13 +12,12 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/calendar/edit/module-participants',
-       'io.ox/core/tk/autocomplete',
+      ['io.ox/core/tk/autocomplete',
        'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
        'io.ox/participants/model',
        'io.ox/participants/views',
-       'gettext!io.ox/calendar/edit/main'], function (participants, autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
+       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
 
     'use strict';
 

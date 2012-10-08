@@ -12,7 +12,7 @@
  */
 define('io.ox/calendar/edit/module-conflicts',
       ['io.ox/calendar/edit/model-appointment',
-       'io.ox/calendar/edit/module-participants',
+       'io.ox/calendar/edit/module-participants', //TODO remove this
        'io.ox/calendar/api',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',

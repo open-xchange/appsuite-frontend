@@ -22,6 +22,7 @@ define("io.ox/participants/model",
             image1_url: ''
         },
         initialize: function () {
+            this.fetch();
             if (this.get('type') === this.TYPE_EXTERNAL_USER) {
                 this.id = this.get('mail');
                 this.set('id', this.get('mail'));
@@ -76,6 +77,7 @@ define("io.ox/participants/model",
                     } else {
                         self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
                     }
+
                     self.trigger('change', self);
                     df.resolve();
                 });

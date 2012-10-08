@@ -325,8 +325,14 @@ define('io.ox/calendar/edit/template',
 
                 var collection = options.model.getParticipants();
 
-                node.append($('<input type="text" class="add-participant">'));
-                node.append($('<button class="btn" type="button" data-action="add">').append($('<i class="icon-plus">')));
+                node.append(
+                    $('<div class="input-append">').append(
+                        $('<input type="text" class="add-participant">'),
+                        $('<button class="btn" type="button" data-action="add">')
+                            .append($('<i class="icon-plus">'))
+                    )
+                );
+                //node.append($('<button class="btn" type="button" data-action="add">').append($('<i class="icon-plus">')));
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render();
