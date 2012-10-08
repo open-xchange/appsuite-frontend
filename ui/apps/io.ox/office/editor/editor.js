@@ -267,7 +267,6 @@ define('io.ox/office/editor/editor',
 
             // search in all paragraphs (TODO: other elements, e.g. headers, ...?)
             Utils.iterateSelectedDescendantNodes(editdiv, 'p', function (node) {
-/*
 
                 var // the concatenated text from all text nodes
                     elementText = $(node).text().replace(/\s/g, ' ').toLowerCase(),
@@ -291,8 +290,11 @@ define('io.ox/office/editor/editor',
                 index = 0;
                 Utils.iterateDescendantTextNodes(node, function (textNode) {
 
+                    var // do not declare in the for-loop header, this makes uglify.js very sad...
+                        offsetRange = null;
+
                     // convert as many offset ranges as contained by the current text node
-                    for (var offsetRange; index < offsetRanges.length; index += 1) {
+                    for (; index < offsetRanges.length; index += 1) {
                         offsetRange = offsetRanges[index];
 
                         // start point may have been converted in the previous text node
@@ -321,7 +323,6 @@ define('io.ox/office/editor/editor',
                     return Utils.BREAK;
                 }
 
-*/
             }, this);
 
             // set the highlighting
