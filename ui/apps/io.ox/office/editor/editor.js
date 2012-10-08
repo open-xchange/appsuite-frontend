@@ -141,7 +141,8 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = /*paragraphStyles = */characterStyles = imageStyles = null;
+            documentStyles = characterStyles = imageStyles = null;
+            //documentStyles = paragraphStyles = characterStyles = imageStyles = null;
         };
 
         // OPERATIONS API
@@ -266,6 +267,7 @@ define('io.ox/office/editor/editor',
 
             // search in all paragraphs (TODO: other elements, e.g. headers, ...?)
             Utils.iterateSelectedDescendantNodes(editdiv, 'p', function (node) {
+/*
 
                 var // the concatenated text from all text nodes
                     elementText = $(node).text().replace(/\s/g, ' ').toLowerCase(),
@@ -319,6 +321,7 @@ define('io.ox/office/editor/editor',
                     return Utils.BREAK;
                 }
 
+*/
             }, this);
 
             // set the highlighting
