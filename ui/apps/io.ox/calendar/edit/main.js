@@ -168,17 +168,16 @@ define('io.ox/calendar/edit/main',
 
             });
 
-
         },
         onShowWindow: function () {
             console.log('onshowwindow');
             var self = this;
             if (self.model.get('title')) {
-                $('.window-title').text(self.model.get('title'));
+                self.getWindow().setTitle(self.model.get('title'));
                 self.setTitle(self.model.get('title'));
             }
             self.model.on('change:title', function (model, value, source) {
-                $('.window-title').text(value);
+                self.getWindow().setTitle(value);
                 self.setTitle(value);
             });
             //$('#' + self.view.guid + '_title').get(0).focus();

@@ -781,17 +781,17 @@ define("io.ox/core/desktop",
                         return this.head.append(
                             $('<div class="css-table-row">').append(
                                 // title
-                                $('<div class="css-table-cell cell-33">').append(
+                                $('<div class="css-table-cell cell-30">').append(
                                     this.title = ext.point(name + '/window-title')
                                         .invoke('draw', this).first().value() || $()
                                 ),
                                 // toolbar
-                                $("<div class='css-table-cell cell-33 cell-center'>").append(
+                                $("<div class='css-table-cell cell-40 cell-center'>").append(
                                     this.toolbar = ext.point(name + '/window-toolbar')
                                         .invoke('draw', this).first().value() || $()
                                 ),
                                 // controls
-                                $("<div class='css-table-cell cell-33 cell-right'>").append(
+                                $("<div class='css-table-cell cell-30 cell-right'>").append(
                                     this.controls = ext.point(name + '/window-controls')
                                         .invoke('draw', this).first().value() || $()
                                 )
@@ -1219,13 +1219,21 @@ define("io.ox/core/desktop",
             }
 
             // toolbar extension point
-            if (opt.toolbar === true && opt.name) {
+            if (opt.toolbar === true) {
                 // add "create" link
-                // ToolbarLinks VS ToolbarButtons
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
+                if (opt.name) {
+                    // ToolbarLinks VS ToolbarButtons
+                    ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                        id: 'links',
+                        ref: opt.name + '/links/toolbar'
+                    }));
+                }
+            } else {
+                // hide toolbar
+                console.log('hide toolbar!', win.nodes);
+                win.nodes.head.find('.css-table-cell')
+                    .eq(0).removeClass('cell-30').addClass('cell-70').end()
+                    .eq(1).remove();
             }
 
             // fix height/position/appearance
