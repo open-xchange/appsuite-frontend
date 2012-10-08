@@ -32,7 +32,7 @@ define('io.ox/office/editor/controller',
             items = {
 
                 'document/editable': {
-                    enable: function () { return !editor.isReadonlyMode(); }
+                    enable: function () { return editor.isEditMode(); }
                 },
                 'document/editable/text': {
                     enable: function (enabled) { return enabled && editor.isTextSelected(); }
@@ -214,8 +214,8 @@ define('io.ox/office/editor/controller',
                     set: function (state) { app.setSynchronizedMode(state); }
                 },
                 'debug/readonly': {
-                    get: function () { return editor.isReadonlyMode(); },
-                    set: function (state) { self.setReadonlyMode(state); }
+                    get: function () { return editor.isEditMode(); },
+                    set: function (state) { self.setEditMode(state); }
                 }
             };
 
@@ -240,8 +240,8 @@ define('io.ox/office/editor/controller',
          * Changes the read-only mode at the editor and updates all controller
          * items.
          */
-        this.setReadonlyMode = function (state) {
-            editor.setReadonlyMode(state);
+        this.setEditMode = function (state) {
+            editor.setEditMode(state);
             this.update();
         };
 

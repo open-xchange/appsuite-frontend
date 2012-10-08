@@ -383,7 +383,13 @@ define('io.ox/office/editor/main',
                 // apply received operations in the editor
                 request.done(function (response) {
                     if (response && response.data) {
-                        var operations = JSON.parse(response.data);
+                        var // response data
+                            data = AppHelper.extractAjaxResultData(response),
+                            // operations
+                            operations = extractOperationsList(response);
+
+                        controller.setEditMode(data && data.canEdit);
+
                         if (_.isArray(operations) && (operations.length > 0)) {
                             // We might need to do some "T" here!
                             applyOperations(operations);

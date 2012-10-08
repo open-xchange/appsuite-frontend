@@ -25,8 +25,10 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/documentstyles',
-     'io.ox/office/editor/format/imagestyles'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles, ImageStyles) {
+     'io.ox/office/editor/format/imagestyles',
+     'io.ox/office/tk/alert',
+     'gettext!io.ox/office/main'
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, DocumentStyles, ImageStyles, Alert, gt) {
 
     'use strict';
 
@@ -102,7 +104,9 @@ define('io.ox/office/editor/editor',
             paragraphs = editdiv.children(),
 
             // set document into write protected mode
-            readonlyMode = false,
+            // can be null, false and true
+            // init with null for 'read only' and mode not yet determined by the server
+            editMode = null,
 
             dbgoutEvents = false, dbgoutObjects = false;
 
@@ -1171,12 +1175,14 @@ define('io.ox/office/editor/editor',
             $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
 
-        this.setReadonlyMode = function (state) {
-            readonlyMode = state;
-            editdiv.toggleClass('user-select-text', !readonlyMode).attr('contenteditable', !readonlyMode);
+        this.setEditMode = function (state) {
+            var showReadonlyInfo = state === false && editMode !== false;
+
+            editMode = state;
+            editdiv.toggleClass('user-select-text', !!editMode).attr('contenteditable', !!editMode);
 
             // disable resize handlers etc. everytime the edit mode has been enabled
-            if (!readonlyMode) {
+            if (editMode) {
                 // disable FireFox table manipulation handlers in edit mode
                 // (the commands must be executed after the editable div is in the DOM)
                 try {
@@ -1188,10 +1194,14 @@ define('io.ox/office/editor/editor',
                 // disable IE table manipulation handlers in edit mode
                 Utils.getDomNode(editdiv).onresizestart = function () { return false; };
             }
+
+            if (showReadonlyInfo) {
+                Alert.showWarning(gt('Read Only Mode'), gt('Another user is currently editing this document.'), editdiv.parent(), 10000);
+            }
         };
 
-        this.isReadonlyMode = function () {
-            return readonlyMode;
+        this.isEditMode = function () {
+            return editMode;
         };
 
         /**
@@ -1609,7 +1619,9 @@ define('io.ox/office/editor/editor',
             }
 
             var selection = getSelection();
-            selection.adjust();
+            if (selection) {
+                selection.adjust();
+            }
 
             /*
             Utils.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + isNavigationKeyEvent(event));
@@ -1720,7 +1732,7 @@ define('io.ox/office/editor/editor',
                 lastEventSelection = currentSelection;
                 if (currentSelection) {
                     self.trigger('selection', currentSelection);
-                } else if (focused && !readonlyMode) {
+                } else if (focused && editMode) {
                     // If not focused, browser selection might not be available...
                     Utils.warn('Editor.implCheckEventSelection(): missing selection!');
                 }
@@ -3083,7 +3095,7 @@ define('io.ox/office/editor/editor',
             setSelection(new OXOSelection());
             lastOperationEnd = new OXOPaM([0, 0]);
             self.clearUndo();
-            self.setReadonlyMode(false);
+            self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
 
         function implInsertText(text, position) {
