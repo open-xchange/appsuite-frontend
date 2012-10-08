@@ -1798,7 +1798,7 @@ define('io.ox/office/editor/editor',
             else if (operation.name === Operations.OP_MOVE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var localStart = _.copy(operation.start, true);
-                    localStart[localStart.length - 1] += 1;  // taking care, that the move modifies the target position for undeo
+                    // localStart[localStart.length - 1] += 2;  // taking care, that the move modifies the target position for undo
                     var undoOperation = { name: Operations.OP_MOVE, start: _.copy(operation.end, true), end: localStart };
                     undomgr.addUndo(undoOperation, operation);
                 }
@@ -3035,13 +3035,7 @@ define('io.ox/office/editor/editor',
 
                         var localPos = Position.getObjectPositionInParagraph(para, child),
                             source = _.copy(position, true),
-                            dest = _.copy(position, true),
-                            imageDiv = child.previousSibling,
-                            useImageDiv = true;
-
-                        if ((! imageDiv) || (Utils.getNodeName(imageDiv) !== 'div')) {
-                            useImageDiv = false; // should never be reached
-                        }
+                            dest = _.copy(position, true);
 
                         if (localPos > (counter - 1)) {  // only shifting images, that are not already at the beginning of the paragraph
                             source.push(localPos);
@@ -3051,11 +3045,6 @@ define('io.ox/office/editor/editor',
                             // moving floated images with operation
                             var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
                             applyOperation(newOperation, true, true);
-
-                            // moving also the corresponding div before the moved image
-                            if (useImageDiv) {
-                                $(imageDiv).insertBefore(child);
-                            }
                         }
 
                         counter++;
@@ -3998,12 +3987,19 @@ define('io.ox/office/editor/editor',
 
             var returnImageNode = true,
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
-                destPos = Position.getDOMPosition(paragraphs, dest);
-                // destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode);
+                destPos = Position.getDOMPosition(paragraphs, dest),
+                // destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode),
+                insertBefore = true;
+
+            if (destPos.offset > 0) {
+                insertBefore = false;
+            }
 
             if ((sourcePos) && (destPos)) {
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
+                    useImageDiv = true,
+                    imageDiv = sourceNode.previousSibling,
                     doMove = true;
 
                 // ignoring offset in first version,
@@ -4022,14 +4018,29 @@ define('io.ox/office/editor/editor',
                         Utils.warn('Editor.implMove(): moved object is not an image: ' + Utils.getNodeName(sourceNode));
                     }
 
+                    // moving also the divs belonging to images
+                    if (Utils.getNodeName(sourceNode) === 'img') {
+                        if ((! imageDiv) || (Utils.getNodeName(imageDiv) !== 'div')) {
+                            useImageDiv = false; // should never be reached
+                        }
+                    }
+
                     if (doMove) {
                         // there can be empty text spans before the destination node
                         while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
                             destNode = destNode.previousSibling;
                         }
 
-                        // inserting the sourceNode before the destNode
-                        $(sourceNode).insertBefore(destNode);
+                        if (insertBefore) {
+                            $(sourceNode).insertBefore(destNode);
+                        } else {
+                            $(sourceNode).insertAfter(destNode);
+                        }
+
+                        // moving also the corresponding div before the moved image
+                        if (useImageDiv) {
+                            $(imageDiv).insertBefore(sourceNode);
+                        }
                     }
                 }
             }
