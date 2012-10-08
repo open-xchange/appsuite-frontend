@@ -3037,10 +3037,16 @@ define('io.ox/office/editor/editor',
                     if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
 
                         var localPos = Position.getObjectPositionInParagraph(para, child),
-                        source = _.copy(position, true),
-                        dest = _.copy(position, true);
+                            source = _.copy(position, true),
+                            dest = _.copy(position, true),
+                            imageDiv = child.previousSibling,
+                            useImageDiv = true;
 
-                        if (localPos !== counter) {
+                        if ((! imageDiv) || (Utils.getNodeName(imageDiv) !== 'div')) {
+                            useImageDiv = false; // should never be reached
+                        }
+
+                        if (localPos > (counter - 1)) {  // only shifting images, that are not already at the beginning of the paragraph
                             source.push(localPos);
                             dest.push(counter);  // there might be floated images already in the first paragraph
                             imageShift++;
@@ -3048,6 +3054,11 @@ define('io.ox/office/editor/editor',
                             // moving floated images with operation
                             var newOperation = {name: Operations.OP_MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
                             applyOperation(newOperation, true, true);
+
+                            // moving also the corresponding div before the moved image
+                            if (useImageDiv) {
+                                $(imageDiv).insertBefore(child);
+                            }
                         }
 
                         counter++;
@@ -3412,6 +3423,11 @@ define('io.ox/office/editor/editor',
                 if (! Position.positionsAreEqual(startPos, endPos)) {
                     implDeleteText(startPos, endPos);
                 }
+
+                // delete all image divs that are no longer associated with following floated images
+                var localStartPos = _.copy(startPos);
+                localStartPos.pop();
+                Position.removeLeadingImageDivs(paragraphs, localStartPos);
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
@@ -3426,7 +3442,7 @@ define('io.ox/office/editor/editor',
                 implDeleteText(startPosition, endPosition);
             }
 
-            // also delete all empty text spans in cloned paragraph before floated images
+            // delete all empty text spans in cloned paragraph before floated images
             var localPos = _.copy(startPosition);
             localPos.pop();
             Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
@@ -3481,39 +3497,18 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((Utils.getNodeName(child) === 'div') && $(child).hasClass('float')) {
-
-                                var localChild = thisPara.firstChild;
-
-                                if (localChild) {
-
-                                    if ((Utils.getNodeName(localChild) === 'div') && $(localChild).hasClass('float')) {
-
-                                        while ((Utils.getNodeName(localChild.nextSibling) === 'div') && $(localChild.nextSibling).hasClass('float')) {
-                                            localChild = localChild.nextSibling;
-                                        }
-
-                                        localChild = localChild.nextSibling;  // using next sibling, to be able to use insertBefore
-                                    }
-
-
-                                    thisPara.insertBefore(child, localChild);
-
-                                } else {
-                                    thisPara.appendChild(child);
-                                }
-                            } else {
-
-                                if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
-                                    imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
-                                }
-
-                                thisPara.appendChild(child);
+                            if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+                                imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
                             }
+
+                            thisPara.appendChild(child);
                         }
 
                         child = nextChild;
                     }
+
+                    // delete all empty text spans in merged paragraph before floated images
+                    Position.removeLeadingEmptyTextSpans(paragraphs, _.copy(position, true));
 
                     var localPosition = _.copy(position, true);
                     localPosition[posLength] += 1;  // posLength is 0 for non-tables
@@ -4002,15 +3997,17 @@ define('io.ox/office/editor/editor',
 
             // workaround: improve last position of destination by 1 to get the correct image
             // -> might (should) be superfluous in the future.
-            dest[dest.length - 1] += 1;
+            source[source.length - 1] += 1;
 
             var returnImageNode = true,
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
-                destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode);
+                destPos = Position.getDOMPosition(paragraphs, dest);
+                // destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode);
 
             if ((sourcePos) && (destPos)) {
                 var sourceNode = sourcePos.node,
-                    destNode = destPos.node;
+                    destNode = destPos.node,
+                    doMove = true;
 
                 // ignoring offset in first version,
                 // and using complete spans instead of text nodes.
@@ -4024,16 +4021,19 @@ define('io.ox/office/editor/editor',
                     }
 
                     if (Utils.getNodeName(sourceNode) !== 'img') {
+                        doMove = false; // supporting only images at the moment
                         Utils.warn('Editor.implMove(): moved object is not an image: ' + Utils.getNodeName(sourceNode));
                     }
 
-                    // there can be empty text spans before the destination node
-                    while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
-                        destNode = destNode.previousSibling;
-                    }
+                    if (doMove) {
+                        // there can be empty text spans before the destination node
+                        while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
+                            destNode = destNode.previousSibling;
+                        }
 
-                    // inserting the sourceNode before the destNode
-                    $(sourceNode).insertBefore(destNode);
+                        // inserting the sourceNode before the destNode
+                        $(sourceNode).insertBefore(destNode);
+                    }
                 }
             }
         }

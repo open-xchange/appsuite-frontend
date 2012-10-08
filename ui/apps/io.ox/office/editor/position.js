@@ -2233,6 +2233,45 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * After splitting a paragraph, it might be necessary to remove
+     * leading divs belonging to floated images at the beginning of
+     * the paragraph.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     */
+    Position.removeLeadingImageDivs = function (startnode, position) {
+
+        var paraNode = Position.getCurrentParagraph(startnode, position);
+
+        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
+
+            var child = paraNode.firstChild,
+                continue_ = true;
+
+            while ((child !== null) && (continue_)) {
+
+                var nextChild = child.nextSibling;
+
+                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (Utils.getNodeName(nextChild) !== 'img')) {
+                    var removeElement = child;
+                    child = child.nextSibling;
+                    $(removeElement).remove();
+                } else if ((Utils.getNodeName(child) === 'img') && ($(child).hasClass('float'))) {
+                    child = child.nextSibling;
+                } else {
+                    continue_ = false;
+                }
+            }
+        }
+
+    };
+
+    /**
      * Checking, if two logical positions are equal. Returns true,
      * if the positions are equal, otherwise false.
      *
