@@ -167,6 +167,12 @@ define('io.ox/office/editor/operations',
                 }
             }
 
+            // other helper nodes
+            else {
+                // continue with next child node (do not increase position)
+                return;
+            }
+
             // increase last index (one after last character of the current element)
             position = increaseLastIndex(endPosition);
 

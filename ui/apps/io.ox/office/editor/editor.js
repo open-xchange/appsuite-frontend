@@ -2097,7 +2097,7 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.IMAGE_INSERT) {
-                if (implInsertImage(url, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
+                if (implInsertImage(operation.imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
                     if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                         var undoOperation = { name: Operations.TEXT_DELETE, start: _.clone(operation.position), end: _.clone(operation.position) };
                         undomgr.addUndo(undoOperation, operation);
@@ -3103,7 +3103,7 @@ define('io.ox/office/editor/editor',
 
             // insert the image with default settings (inline)
             if (!node || (node.nodeType !== 3)) {
-                Utils.error('implInsertImage(): expecting text position to insert image.');
+                Utils.error('Editor.implInsertImage(): expecting text position to insert image.');
                 return false;
             }
 
