@@ -3434,6 +3434,8 @@ define('io.ox/office/editor/editor',
             var localPos = _.copy(startPosition);
             localPos.pop();
             Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
+            // in some special undo/redo cases there can be a non-empty text span before floated images
+            // Position.moveNonEmptyTextSpans(paragraphs, localPos);
 
             implParagraphChanged(position);
             implParagraphChanged(startPosition);
@@ -3991,10 +3993,16 @@ define('io.ox/office/editor/editor',
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
                 destPos = Position.getDOMPosition(paragraphs, dest),
                 // destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode),
-                insertBefore = true;
+                insertBefore = true,
+                splitNode = false;
 
-            if (destPos.offset > 0) {
+            if (destPos.offset === 0) {
+                insertBefore = true;
+            } else if (destPos.offset === (destPos.node.length - 1)) {
                 insertBefore = false;
+            } else {
+                splitNode = true;  // splitting node is required
+                insertBefore = false;  // to be removed
             }
 
             if ((sourcePos) && (destPos)) {
