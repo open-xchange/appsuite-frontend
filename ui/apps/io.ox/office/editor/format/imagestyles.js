@@ -212,16 +212,22 @@ define('io.ox/office/editor/format/imagestyles',
             // add or remove leading div used for positioning
             // TODO: support for multiple images (also overlapping) per side
             topOffset -= topMargin;
-            if (topOffset < 50) {
+            if (topOffset < 600) {
+                // offset less than 6mm: expand top margin to top of paragraph,
+                // otherwise the first text line overwrites the image
+                topMargin += topOffset;
+                // remove offset node
                 verticalOffsetNode.remove();
-            } else if (verticalOffsetNode.length === 0) {
-                // set minimum height of offset node, otherwise text overlaps image
-                // TODO: this depends on current line height
-                topOffset = Math.max(topOffset, 600);
-                verticalOffsetNode = $('<div>', { contenteditable: false })
-                    .addClass('float')
-                    .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) })
-                    .insertBefore(image);
+            } else {
+                // create offset node if not existing yet
+                if (verticalOffsetNode.length === 0) {
+                    verticalOffsetNode = $('<div>', { contenteditable: false })
+                        .addClass('float')
+                        .width(1)
+                        .insertBefore(image);
+                }
+                // set height of the offset node
+                verticalOffsetNode.height(Utils.convertHmmToLength(topOffset, 'px', 0));
             }
 
             // calculate left/right offset (only if image is anchored to column)
