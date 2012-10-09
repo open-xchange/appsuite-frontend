@@ -2965,24 +2965,23 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Returns all text nodes and images contained in the specified element.
+         * Returns all text spans and images contained in the specified
+         * paragraph element.
          *
-         * @param {HTMLElement|jQuery} element
-         *  A DOM element object whose descendant text nodes will be returned. If
-         *  this object is a jQuery collection, uses the first node it contains.
+         * @param {HTMLElement|jQuery} paragraph
+         *  A paragraph element object whose children nodes will be returned.
+         *  If this object is a jQuery collection, uses the first node it
+         *  contains.
          *
          * @returns {Node[]}
-         *  An array of text nodes and image nodes contained in the passed element,
-         *  in the correct order.
+         *  An array of text spans and image elements contained in the passed
+         *  paragraph element, in the correct order.
          */
-        function collectTextNodesAndImagesAndFields(element) {
+        function collectTextNodesAndImagesAndFields(paragraph) {
             var nodes = [];
-            Utils.iterateSelectedDescendantNodes(element, function () {
-                // collecting all text nodes, imgs and divs, but ignoring text nodes inside divs.
-                return ((this.nodeType === 3) && (! Position.isTextInField(this))) || (Utils.getNodeName(this) === 'img') || ((Utils.getNodeName(this) === 'span') && ($(this).data('spanType') === 'field'));
-            }, function (node) {
+            Utils.iterateSelectedDescendantNodes(paragraph, 'span, img', function (node) {
                 nodes.push(node);
-            });
+            }, undefined, { children: true });
             return nodes;
         }
 
@@ -3126,15 +3125,16 @@ define('io.ox/office/editor/editor',
          *  with a reasonable value.
          */
         function implInsertField(position, type, representation) {
+
             var domPos = Position.getDOMPosition(paragraphs, position),
-            node = domPos ? domPos.node : null;
+                textNode = domPos ? domPos.node : null;
 
-            DOM.splitTextNode(node, domPos.offset);
+            // split the text node at the specified position
+            DOM.splitTextNode(textNode, domPos.offset);
 
-            var newNode = DOM.splitTextNode(node, 0);
-            // insert field before the parent <span> element of the text node
-            newNode = newNode.parentNode;
-            $(newNode).data('spanType', 'field').text(representation);
+            // insert a new text field between the text nodes
+            textNode = DOM.splitTextNode(textNode, 0, { field: true });
+            textNode.nodeValue = representation;
         }
 
         /**
@@ -3391,8 +3391,7 @@ define('io.ox/office/editor/editor',
                 // delete all image divs that are no longer associated with following floated images
                 var localStartPos = _.copy(startPos);
                 localStartPos.pop();
-                // Position.removeLeadingImageDivs(paragraphs, localStartPos);
-                Position.removeUnusedImageDivs(paragraphs, localStartPos);
+                Position.removeLeadingImageDivs(paragraphs, localStartPos);
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
@@ -3903,23 +3902,28 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            var oneParagraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = collectTextNodesAndImagesAndFields(oneParagraph);
+            var paragraph = Position.getCurrentParagraph(paragraphs, startPosition);
+            var searchNodes = collectTextNodesAndImagesAndFields(paragraph);
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
                 var isImage = false,
-                    isField = false;
+                    isField = false,
+                    text = '';
                 node = searchNodes[i];
                 if (Utils.getNodeName(node) === 'img') {
                     nodeLen = 1;
                     isImage = true;
-                } else if ((Utils.getNodeName(node) === 'span') && ($(node).data('spanType') === 'field')) {
+                } else if (DOM.isFieldSpan(node)) {
                     nodeLen = 1;
                     isField = true;
+                } else if (DOM.isTextSpan(node)) {
+                    text = $(node).text();
+                    nodeLen = text.length;
                 } else {
-                    nodeLen = node.nodeValue.length;
+                    Utils.warn('Editor.implDeleteText(): unexpected node in paragraph');
+                    nodeLen = 0;
                 }
                 if ((nodeStart + nodeLen) > start) {
                     delStart = 0;
@@ -3932,16 +3936,16 @@ define('io.ox/office/editor/editor',
                     }
                     if ((delEnd - delStart) === nodeLen) {
                         // remove element completely.
-                        if ((isImage) || (isField)) {
-                            oneParagraph.removeChild(node);
+                        if (isImage || isField) {
+                            paragraph.removeChild(node);
                         } else {
-                            node.nodeValue = '';
+                            // clear simple text span but do not remove it from the DOM
+                            $(node).text('');
                         }
                     }
                     else {
-                        var oldText = node.nodeValue;
-                        var newText = oldText.slice(0, delStart) + oldText.slice(delEnd);
-                        node.nodeValue = newText;
+                        text = text.slice(0, delStart) + text.slice(delEnd);
+                        $(node).text(text);
                     }
                 }
                 nodeStart += nodeLen;
