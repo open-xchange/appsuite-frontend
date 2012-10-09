@@ -52,9 +52,9 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
             parafill: {
-                def: 'FFFFFF',
+                def: '',
                 set: function (element, value) {
-                    element.css('background-color', '#' + value);
+                    element.css('background-color', value ? 'transparent' : '#' + value);
                 }
             }
 
