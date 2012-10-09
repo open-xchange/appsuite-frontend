@@ -260,7 +260,7 @@ define('io.ox/files/icons/perspective',
                 // add inline link
                 var inline;
                 iconview.find('.breadcrumb').after(
-                    inline = $('<div class="slideshowmenu pull-right">')
+                    inline = $('<div class="inline-actions">')
                 );
 
                 ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
@@ -309,11 +309,16 @@ define('io.ox/files/icons/perspective',
             app.queues = {};
 
             app.queues.create = upload.createQueue({
-                processFile: function (file) {
-                    win.busy();
-                    return api.uploadFile({file: file, folder: app.folder.get()})
-                        .done(drawFirst)
-                        .always(win.idle);
+                start: function () {
+                    win.busy(0);
+                },
+                progress: function (file, position, files) {
+                    win.busy((position + 1) / files.length);
+                    return api.uploadFile({ file: file, folder: app.folder.get() });
+                },
+                stop: function () {
+                    drawFirst();
+                    win.idle();
                 }
             });
 
