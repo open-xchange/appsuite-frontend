@@ -104,6 +104,7 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.parafill; },
                     set: function (fill) { editor.setAttribute('paragraph', 'parafill', fill); }
                 },
+
                 // characters
 
                 'character/attributes': {
@@ -200,7 +201,9 @@ define('io.ox/office/editor/controller',
                 },
                 'image/floatmode': {
                     chain: 'image/attributes',
-                    get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    // TODO: enable this when image selection works correctly
+                    // get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    get: function () { return editor.getImageFloatMode(); },
                     set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 

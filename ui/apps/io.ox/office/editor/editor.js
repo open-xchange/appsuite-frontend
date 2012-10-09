@@ -1244,6 +1244,14 @@ define('io.ox/office/editor/editor',
             return selection && _.isString(selection.endPaM.imageFloatMode);
         };
 
+        /**
+         * Returns whether the current selection selects a single image.
+         */
+        this.getImageFloatMode = function () {
+            var selection = getSelection();
+            return selection ? selection.endPaM.imageFloatMode : null;
+        };
+
         // ==================================================================
         // END of Editor API
         // ==================================================================

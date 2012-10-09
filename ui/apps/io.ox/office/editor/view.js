@@ -116,9 +116,14 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
 
-        _([{Entry: "Red", Value: "FF0000"}, {Entry: "Green", Value: "00FF00"}, {Entry: "Blue", Value: "0000FF"}, {Entry: "White", Value: "FFFFFF"}]).each(function (entry) {
-
-            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' } });
+        _([
+            { label: 'Transparent', value: '' },
+            { label: 'Red',         value: 'FF0000' },
+            { label: 'Green',       value: '00FF00' },
+            { label: 'Blue',        value: '0000FF' },
+            { label: 'White',       value: 'FFFFFF' }
+        ]).each(function (entry) {
+            self.createOptionButton(entry.value, { label: entry.label, css: { height: '36px', padding: '2px 12px' } });
         }, this);
 
 
@@ -457,7 +462,7 @@ define('io.ox/office/editor/view',
             createToolBar('debug', { label: gt('Debug') })
                 .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Editable Mode',            toggle: true })
+                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser({ tooltip: gt('Paragraph fill color') }))
                 .addSeparator()
