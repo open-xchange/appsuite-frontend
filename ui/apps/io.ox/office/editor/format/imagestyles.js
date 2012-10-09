@@ -212,8 +212,8 @@ define('io.ox/office/editor/format/imagestyles',
             // add or remove leading div used for positioning
             // TODO: support for multiple images (also overlapping) per side
             topOffset -= topMargin;
-            if (topOffset < 600) {
-                // offset less than 6mm: expand top margin to top of paragraph,
+            if (topOffset < 700) {
+                // offset less than 7mm: expand top margin to top of paragraph,
                 // otherwise the first text line overwrites the image
                 topMargin += topOffset;
                 // remove offset node
