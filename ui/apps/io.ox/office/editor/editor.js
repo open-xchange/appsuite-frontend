@@ -4012,12 +4012,6 @@ define('io.ox/office/editor/editor',
                 // and using complete spans instead of text nodes.
 
                 if ((sourceNode) && (destNode)) {
-                    if (sourceNode.nodeType === 3) {
-                        sourceNode = sourceNode.parentNode;
-                    }
-                    if (destNode.nodeType === 3) {
-                        destNode = destNode.parentNode;
-                    }
 
                     if (Utils.getNodeName(sourceNode) !== 'img') {
                         doMove = false; // supporting only images at the moment
@@ -4032,6 +4026,16 @@ define('io.ox/office/editor/editor',
                     }
 
                     if (doMove) {
+
+                        if (splitNode) {
+                            var newTextNode = DOM.splitTextNode(destNode, destPos.offset + 1);
+                            destNode = newTextNode.parentNode;
+                        } else {
+                            if (destNode.nodeType === 3) {
+                                destNode = destNode.parentNode;
+                            }
+                        }
+
                         // there can be empty text spans before the destination node
                         if (DOM.isTextSpan(destNode)) {
                             while (destNode.previousSibling && DOM.isEmptySpan(destNode.previousSibling)) {
