@@ -399,8 +399,10 @@ define("io.ox/mail/main",
         // Uploads
         app.queues = {
             'importEML': upload.createQueue({
-                processFile: function (file) {
+                start: function () {
                     win.busy();
+                },
+                progress: function (file) {
                     return api.importEML({ file: file, folder: app.folder.get() })
                         .done(function (data) {
                             var first = _(data.data || []).first() || {};
@@ -410,8 +412,10 @@ define("io.ox/mail/main",
                                 grid.selection.set(first);
                                 notifications.yell('success', gt('Mail has been imported'));
                             }
-                        })
-                        .always(win.idle);
+                        });
+                },
+                stop: function () {
+                    win.idle();
                 }
             })
         };

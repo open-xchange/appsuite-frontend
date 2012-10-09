@@ -162,24 +162,29 @@ define('io.ox/files/list/perspective',
             app.queues = {};
 
             app.queues.create = upload.createQueue({
-                processFile: function (file) {
+                start: function () {
                     win.busy();
-                    return api.uploadFile({file: file, folder: app.folder.get()})
-                        .done(function (data) {
-                            // select new item
-                            grid.selection.set([data]);
-                            grid.refresh();
-                            // TODO: Error Handling
-                        })
-                        .always(win.idle);
+                },
+                progress: function (file) {
+                    return api.uploadFile({ file: file, folder: app.folder.get() }).done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    });
+                },
+                stop: function () {
+                    win.idle();
                 }
             });
 
             app.queues.update = upload.createQueue({
-                processFile: function (fileData) {
+                start: function () {
                     win.busy();
+                },
+                progress: function (data) {
                     return api.uploadNewVersion({
-                            file: fileData,
+                            file: data,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder,
                             timestamp: app.currentFile.last_modified
@@ -189,8 +194,10 @@ define('io.ox/files/list/perspective',
                             grid.selection.set([data]);
                             grid.refresh();
                             // TODO: Error Handling
-                        })
-                        .always(win.idle);
+                        });
+                },
+                stop: function () {
+                    win.idle();
                 }
             });
 

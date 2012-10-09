@@ -910,13 +910,22 @@ define("io.ox/core/desktop",
                 var BUSY_SELECTOR = 'input, select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
-                this.busy = function () {
+                this.busy = function (pct) {
                     // use self instead of this to make busy/idle robust for callback use
+                    var blocker;
                     if (self) {
+                        blocker = self.nodes.blocker;
                         $('body').focus(); // steal focus
                         self.nodes.main.find(BUSY_SELECTOR)
                             .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
-                        self.nodes.blocker.busy().show();
+                        if (_.isNumber(pct)) {
+                            pct = Math.max(0, Math.min(pct, 1));
+                            blocker.idle().find('.bar').css('width', (pct * 100) + '%').parent().show();
+                            blocker.show();
+                        } else {
+                            blocker.find('.progress').hide();
+                            blocker.busy().show();
+                        }
                         self.trigger('busy');
                     }
                     return this;
@@ -925,7 +934,7 @@ define("io.ox/core/desktop",
                 this.idle = function (enable) {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
-                        self.nodes.blocker.idle().hide();
+                        self.nodes.blocker.find('.progress').hide().end().idle().hide();
                         self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
                             .removeAttr('disabled').removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
@@ -1067,7 +1076,8 @@ define("io.ox/core/desktop",
                     .css({ width: width + unit })
                     .append(
                         // blocker
-                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
+                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
+                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide()),
                         // window HEAD
                         win.nodes.head = $('<div class="window-head css-table">'),
                         // window BODY
