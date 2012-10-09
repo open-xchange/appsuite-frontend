@@ -369,6 +369,38 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <span> element wrapping an object.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element wrapping an object.
+     */
+    DOM.isObjectSpan = function (node) {
+        var childNodes = Utils.getDomNode(node).childNodes;
+        // the span may contain other nodes beside the object, e.g. a selection
+        // frame, but the first node is always the object itself
+        return (Utils.getNodeName(node) === 'span') && (childNodes.length > 0) && (childNodes[0].nodeType === 1);
+    };
+
+    /**
+     * Returns whether the passed node is a <span> element wrapping an image.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element wrapping an image.
+     */
+    DOM.isImageSpan = function (node) {
+        // object spans contain the object element as first child
+        return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'img');
+    };
+
+    /**
      * Splits the passed text node into two text nodes.
      *
      * @param {Text} textNode
