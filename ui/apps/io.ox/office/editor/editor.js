@@ -2250,16 +2250,17 @@ define('io.ox/office/editor/editor',
             // sequences of sibling text spans (needed for white-space handling)
             $(paragraph).contents().each(function () {
 
-                var isTextSpan = DOM.isTextSpan(this),
-                    isPreviousTextSpan = isTextSpan && this.previousSibling && DOM.isTextSpan(this.previousSibling),
-                    isNextTextSpan = isTextSpan && this.nextSibling && DOM.isTextSpan(this.nextSibling);
+                // check if current node is a text span (portion or field)
+                if (DOM.isTextSpan(this)) {
 
-                if (isTextSpan) {
-                    if ((this.firstChild.nodeValue.length === 0) && (isPreviousTextSpan || isNextTextSpan)) {
+                    if (DOM.isEmptySpan(this) && ((this.previousSibling && DOM.isPortionSpan(this.previousSibling)) || (this.nextSibling && DOM.isPortionSpan(this.nextSibling)))) {
+                        // remove this span, if it is an empty portion and has a sibling text portion
                         $(this).remove();
-                    } else if (isPreviousTextSpan) {
+                    } else if (this.previousSibling && DOM.isTextSpan(this.previousSibling)) {
+                        // append to array that contains the previous text node (portion or field)
                         _(siblingTextNodes).last().push(this.firstChild);
                     } else {
+                        // start a new sequence of text nodes
                         siblingTextNodes.push([this.firstChild]);
                     }
                 }
@@ -3934,7 +3935,7 @@ define('io.ox/office/editor/editor',
                 } else if (DOM.isFieldSpan(node)) {
                     nodeLen = 1;
                     isField = true;
-                } else if (DOM.isTextSpan(node)) {
+                } else if (DOM.isPortionSpan(node)) {
                     text = $(node).text();
                     nodeLen = text.length;
                 } else {
@@ -4032,8 +4033,10 @@ define('io.ox/office/editor/editor',
 
                     if (doMove) {
                         // there can be empty text spans before the destination node
-                        while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
-                            destNode = destNode.previousSibling;
+                        if (DOM.isTextSpan(destNode)) {
+                            while (destNode.previousSibling && DOM.isEmptySpan(destNode.previousSibling)) {
+                                destNode = destNode.previousSibling;
+                            }
                         }
 
                         if (insertBefore) {
