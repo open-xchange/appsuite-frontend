@@ -123,9 +123,8 @@ define('io.ox/office/editor/view',
             { label: 'Blue',        value: '0000FF' },
             { label: 'White',       value: 'FFFFFF' }
         ]).each(function (entry) {
-            self.createOptionButton(entry.value, { label: entry.label, css: { height: '36px', padding: '2px 12px' } });
+            self.createOptionButton(entry.value, { label: entry.label });
         }, this);
-
 
     }}); // class ColorChooser
 
@@ -491,8 +490,8 @@ define('io.ox/office/editor/view',
         // set the quick-search tooltip
         Utils.setControlTooltip(nodes.search, gt('Quick Search'), 'bottom');
 
-        // update all view components
-        controller.update();
+        // update all view components every time the window will be shown
+        appWindow.on('show', function () { controller.update(); });
 
     } // class View
 

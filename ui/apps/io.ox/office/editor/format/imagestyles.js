@@ -212,9 +212,12 @@ define('io.ox/office/editor/format/imagestyles',
             // add or remove leading div used for positioning
             // TODO: support for multiple images (also overlapping) per side
             topOffset -= topMargin;
-            if (topOffset < 600) {
+            if (topOffset < 50) {
                 verticalOffsetNode.remove();
             } else if (verticalOffsetNode.length === 0) {
+                // set minimum height of offset node, otherwise text overlaps image
+                // TODO: this depends on current line height
+                topOffset = Math.max(topOffset, 600);
                 verticalOffsetNode = $('<div>', { contenteditable: false })
                     .addClass('float')
                     .css({ width: '0.1px', height: Utils.convertHmmToCssLength(topOffset, 'px', 0) })
