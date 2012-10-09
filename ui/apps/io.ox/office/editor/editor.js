@@ -2083,7 +2083,7 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.IMAGE_INSERT) {
-                var url = /:\/\//.test(operation.imgurl) ? operation.imgurl : getDocumentUrl({ fragment: operation.imgurl });
+                var url = /:\/\//.test(operation.imgurl) ? operation.imgurl : getDocumentUrl({ get_filename: operation.imgurl });
                 if (implInsertImage(url, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
                     if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                         var undoOperation = { name: Operations.TEXT_DELETE, start: _.clone(operation.position), end: _.clone(operation.position) };

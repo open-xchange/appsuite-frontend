@@ -111,7 +111,7 @@ define('io.ox/office/editor/image',
                 type: 'POST',
                 url: app.getDocumentFilterUrl('addfile', { add_filename: file.name }),
                 dataType: 'json',
-                data: { image_data: dataUrl },
+                data: { add_filedata: dataUrl },
                 beforeSend: function (xhr) {
                     if (xhr && xhr.overrideMimeType) {
                         xhr.overrideMimeType('application/j-son;charset=UTF-8');
@@ -121,12 +121,12 @@ define('io.ox/office/editor/image',
             .done(function (response) {
 
                 var // the name of the image fragment in the document on the server
-                    fragmentName = (response && response.data) ? response.data.added_fragment : null;
+                    fragmentName = (response && response.data) ? response.data.added_filename : null;
 
                 // if fragmentName is a valid string, the insertion of the image was successful
                 if (_.isString(fragmentName) && (fragmentName.length > 0)) {
                     // set version of file descriptor to version that is returned in response
-                    app.getFileDescriptor().version = response.data.version;
+                    // app.getFileDescriptor().version = response.data.version;
                     // create the insertImage operation with the newly added fragment
                     app.getEditor().insertImageFile(fragmentName);
                 } else {
