@@ -15,7 +15,9 @@ define('io.ox/office/editor/table',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/position',
-     'io.ox/office/editor/oxopam'], function (Utils, DOM, Position, OXOPaM) {
+     'io.ox/office/editor/oxopam',
+     'io.ox/office/editor/format/stylesheets'
+    ], function (Utils, DOM, Position, OXOPaM, StyleSheets) {
 
     'use strict';
 
@@ -44,20 +46,14 @@ define('io.ox/office/editor/table',
      */
     Table.getTableGrid = function (startnode, tablePos) {
 
-        var tablegrid = [],
-            tablePosition = Position.getDOMPosition(startnode, tablePos);
+        var tablePosition = Position.getDOMPosition(startnode, tablePos),
+            tableGrid = null;
 
         if (tablePosition) {
-
-            var tableNode = tablePosition.node;
-
-            if ($(tableNode).data('attributes').tablegrid) {
-                tablegrid = $(tableNode).data('attributes').tablegrid;
-            }
-
+            tableGrid = StyleSheets.getExplicitAttributes(tablePosition.node).tablegrid;
         }
 
-        return tablegrid;
+        return tableGrid || [];
     };
 
     /**
@@ -323,23 +319,9 @@ define('io.ox/office/editor/table',
      *  An array, that contains the cell attributes in the correct order.
      */
     Table.getCellAttributes = function (cells) {
-
-        var allCellAttributes = [];
-
-        cells.each(function (index) {
-
-            var cellAttrs = {};
-
-            // trying to get attributes from the cell (attributes might be different for each cell)
-            if ($(this).data('attributes')) {
-                cellAttrs = $(this).data('attributes');
-            }
-
-            allCellAttributes.push(cellAttrs);
-        });
-
-        return allCellAttributes;
-
+        return cells.map(function () {
+            return StyleSheets.getExplicitAttributes(this);
+        }).get();
     };
 
     /**

@@ -797,6 +797,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      * @param {Object} [options]
      *  A map of options to control the iteration. Supports the following
      *  options:
+     *  @param {Boolean} [options.children]
+     *      If set to true, only direct child nodes will be visited.
      *  @param {Boolean} [options.reverse]
      *      If set to true, the descendant nodes are visited in reversed order.
      *
@@ -806,7 +808,9 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
      */
     Utils.iterateDescendantNodes = function (element, iterator, context, options) {
 
-        var // iteration direction
+        var // only child nodes
+            children = Utils.getBooleanOption(options, 'children', false),
+            // iteration direction
             reverse = Utils.getBooleanOption(options, 'reverse', false);
 
         // visit all child nodes
@@ -816,8 +820,8 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
             // call iterator for child node; if it returns Utils.BREAK, exit loop and return too
             if (iterator.call(context, child) === Utils.BREAK) { return Utils.BREAK; }
 
-            // iterate child nodes; if iterator for any descendant node returns Utils.BREAK, return too
-            if ((child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
+            // iterate grand child nodes; if iterator for any descendant node returns Utils.BREAK, return too
+            if (!children && (child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
         }
     };
 

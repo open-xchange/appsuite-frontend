@@ -214,7 +214,7 @@ define('io.ox/office/editor/controller',
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
                 },
-                'debug/readonly': {
+                'debug/editable': {
                     get: function () { return editor.isEditMode(); },
                     set: function (state) { self.setEditMode(state); }
                 }

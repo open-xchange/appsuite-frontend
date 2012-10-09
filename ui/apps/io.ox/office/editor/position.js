@@ -15,7 +15,8 @@ define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
-     'io.ox/office/editor/oxoselection'], function (Utils, DOM, OXOPaM, OXOSelection) {
+     'io.ox/office/editor/oxoselection'
+    ], function (Utils, DOM, OXOPaM, OXOSelection) {
 
     'use strict';
 
@@ -96,12 +97,13 @@ define('io.ox/office/editor/position',
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     textLength += $(prevNode).text().length;
                     if ((Utils.getNodeName(prevNode) === 'img') || ((prevNode.firstChild) && (Utils.getNodeName(prevNode.firstChild) === 'img'))) {
-                        textLength++;
+                        // images are counted as single character
+                        textLength += 1;
                     }
                     // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
-                    if ((Utils.getNodeName(prevNode) === 'span') && ($(prevNode).data('spanType') === 'field')) {
-                        textLength -= $(prevNode).text().length;
-                        textLength++;  // 'span' with spanType 'field' has only a length of '1'
+                    if (DOM.isFieldSpan(prevNode)) {
+                        // field spans have only a length of 1
+                        textLength -= ($(prevNode).text().length - 1);
                     }
                 }
                 characterPositionEvaluated = true;
@@ -151,7 +153,7 @@ define('io.ox/office/editor/position',
             selectedNodeName = node.nodeName,
             imageFloatMode = null;
 
-        if (Position.isTextInField(node)) {
+        if (DOM.isFieldSpan(node.parentNode)) {
             node = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
             offset = 0;
         }
@@ -251,14 +253,14 @@ define('io.ox/office/editor/position',
 
         if (Utils.getNodeName(node) === 'img') {
             characterPositionOffset = 1;
-        } else if ((Utils.getNodeName(node) === 'span') && ($(node).data('spanType') === 'field')) {
+        } else if (DOM.isFieldSpan(node)) {
             characterPositionOffset = 1;
         } else if (Utils.getNodeName(node) === 'span') {
             characterPositionOffset = $(node).text().length;
-        } else if ((node.nodeType === 3) && (Utils.getNodeName(node.parentNode) === 'span') && ($(node.parentNode).data('spanType') === 'field')) {
+        } else if ((node.nodeType === 3) && DOM.isFieldSpan(node.parentNode)) {
             characterPositionOffset = 1;
         } else if (node.nodeType === 3) {
-            characterPositionOffset = $(node).text().length;
+            characterPositionOffset = node.nodeValue.length;
         }
 
         if ((!useRangeMode) && (characterPositionOffset > 0)) {
@@ -477,7 +479,8 @@ define('io.ox/office/editor/position',
             var textLength = 0,
                 bFound = false,
                 isImage = false,
-                isField = false;
+                isField = false,
+                exactSum = false;
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
@@ -500,42 +503,28 @@ define('io.ox/office/editor/position',
                         lastChild = true;
                     }
 
-                    if ((nodeList[i].nodeName === 'IMG') || ((nodeList[i].firstChild) && (nodeList[i].firstChild.nodeName === 'IMG'))) {
+                    if ((Utils.getNodeName(currentNode) === 'img') || ((currentNode.firstChild) && (Utils.getNodeName(currentNode.firstChild) === 'img'))) {
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && $(nodeList[i]).hasClass('float')) {
+                    } else if ((Utils.getNodeName(currentNode) === 'div') && $(currentNode).hasClass('float')) {
                         // ignoring spans that exist only for positioning image
                         continue;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                    } else if (DOM.isFieldSpan(currentNode)) {
                         currentLength = 1;
                         isField = true;
                     } else {  // this is a span. it can contain text node or image node
-                        currentLength = $(nodeList[i]).text().length;
+                        currentLength = $(currentNode).text().length;
                         isImage = false;
                         isField = false;
                     }
 
                     if (textLength + currentLength >= pos) {
 
-                        if (returnImageNode) {
-                            if  ((textLength + currentLength) === pos) {
-                                var j = i + 1,
-                                    nextNode = nodeList[j];
-
-                                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
-                                    bFound = true;
-                                    node = nextNode;
-                                    isImage = true;
-                                    break;  // leaving the for-loop
-                                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {
-                                    bFound = true;
-                                    node = nextNode;
-                                    isField = true;
-                                    break;  // leaving the for-loop
-                                }
-                            }
+                        if (textLength + currentLength === pos) {
+                            exactSum = true;
                         }
+
                         bFound = true;
                         node = currentNode;
                         break;  // leaving the for-loop
@@ -555,19 +544,33 @@ define('io.ox/office/editor/position',
                 return;
             }
 
+            // which node shall be returned, if the position is at the border between two nodes?
+            if ((returnImageNode) && (exactSum)) {  // special handling for images, that exactly fit the position
+
+                var nextNode = node.nextSibling;
+
+                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {  // if the next node is an image, this should be preferred
+                    node = nextNode;
+                    isImage = true;
+                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {  // also preferring following fields
+                    node = nextNode;
+                    isField = true;
+                }
+            }
+
             if ((isImage) || (isField)) {
-                if (! returnImageNode) {
+                if (! returnImageNode) {  // this can lead to to dom positions, that do not fit to the oxo position
                     // if the position is an image or field, the dom position shall be the following text node
                     if (isImage) {
                         childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
                         offset = 0;
                     } else if (isField) {
-                        childNode = node.nextSibling.firstChild; // following the div field must be a text span
+                        childNode = node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
                         offset = 0;
-
                     }
                 } else {
                     childNode = node;
+                    offset = pos - textLength;  // offset might be'1', if (textLength + currentLength) > pos . It is always '0', if exactSum is 'true'.
                 }
             } else {
                 childNode = node;
@@ -575,11 +578,6 @@ define('io.ox/office/editor/position',
                     childNode = childNode.firstChild;  // using text node instead of span node
                 }
                 offset = pos - textLength;
-            }
-
-            // only text nodes shall be returned, never image nodes (only, if 'returnImageNode' is set to true)
-            if ((childNode.nodeType !== 3) && (! returnImageNode)) {
-                Utils.warn('Position.getNextChildNode(): Failed to get text node at position: ' + pos + '(' + childNode.nodeName + ')');
             }
 
         } else {
@@ -852,55 +850,6 @@ define('io.ox/office/editor/position',
         }
 
         return pos;
-    };
-
-    /**
-     * Checks, if a text node is a node inside a 'span', that contains the css data
-     * 'spanType' set to 'field'.
-     *
-     * @param {HTMLElement} element
-     *  A DOM element object.
-     *
-     * @returns {Boolean}
-     *  If element is a text node, that has an ancestor 'div', that contains the
-     *  css data 'divType' set to 'field', 'true' is returned, otherwise false.
-     */
-    Position.isTextInField = function (element) {
-
-        var isTextInField = false;
-
-        if (element.nodeType === 3) {
-            var spanNode = $(element).closest('span');
-
-            if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
-                isTextInField = true;
-            }
-        }
-
-        return isTextInField;
-    };
-
-    /**
-     * Checks, if an arbitrary node is a node inside a 'span', that contains the css data
-     * 'spanType' set to 'field'.
-     *
-     * @param {HTMLElement} element
-     *  A DOM element object.
-     *
-     * @returns {Boolean}
-     *  If element is a node, that has an ancestor 'span', that contains the
-     *  css data 'spanType' set to 'field', 'true' is returned, otherwise false.
-     */
-    Position.isNodeInField = function (element) {
-
-        var isNodeInField = false,
-            spanNode = $(element).closest('span');
-
-        if ((spanNode.get(0)) && (spanNode.data('spanType') === 'field')) {
-            isNodeInField = true;
-        }
-
-        return isNodeInField;
     };
 
     /**
@@ -1321,7 +1270,7 @@ define('io.ox/office/editor/position',
                     paraLen += $(nodeList[i]).text().length;
                     if (Utils.getNodeName(nodeList[i]) === 'img') {
                         paraLen++;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                    } else if (DOM.isFieldSpan(nodeList[i])) {
                         paraLen -= $(nodeList[i]).text().length;
                         paraLen++;
                     }
@@ -2180,7 +2129,7 @@ define('io.ox/office/editor/position',
                     position += $(nodeList[i]).text().length;
                     if (Utils.getNodeName(nodeList[i]) === 'img') {
                         position++;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'span') && ($(nodeList[i]).data('spanType') === 'field')) {
+                    } else if (DOM.isFieldSpan(nodeList[i])) {
                         position -= $(nodeList[i]).text().length;
                         position++;
                     }
@@ -2266,6 +2215,41 @@ define('io.ox/office/editor/position',
                 } else {
                     continue_ = false;
                 }
+            }
+        }
+
+    };
+
+    /**
+     * After splitting a paragraph, it might be necessary to remove
+     * divs from images, because they no longer belong to a following
+     * image.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     */
+    Position.removeUnusedImageDivs = function (startnode, position) {
+
+        var paraNode = Position.getCurrentParagraph(startnode, position);
+
+        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
+
+            var child = paraNode.firstChild;
+
+            while (child !== null) {
+
+                var nextChild = child.nextSibling;
+
+                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (Utils.getNodeName(nextChild) !== 'img')) {
+                    var removeElement = child;
+                    $(removeElement).remove();
+                }
+
+                child = nextChild;
             }
         }
 

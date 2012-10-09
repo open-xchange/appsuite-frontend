@@ -337,6 +337,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <span> element representing a text
+     * field.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element representing a text field.
+     */
+    DOM.isFieldSpan = function (node) {
+        return DOM.isTextSpan(node) && $(node).hasClass('field');
+    };
+
+    /**
      * Splits the passed text node into two text nodes.
      *
      * @param {Text} textNode
@@ -357,6 +372,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      inserted before the passed text node. The position of the new text
      *      node may be important when iterating and manipulating a range of
      *      DOM nodes.
+     *  @param {Boolean} [options.field]
+     *      If set to true, the parent <span> element of the NEW text node will
+     *      be converted to a text field span.
      *
      * @returns {Text}
      *  The newly created text node. Will be located before or after the passed
@@ -383,6 +401,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             newSpan.text(leftText);
             textNode.nodeValue = rightText;
         }
+
+        // set type of the new span
+        newSpan.toggleClass('field', Utils.getBooleanOption(options, 'field', false));
 
         // return the new text node
         return newSpan[0].firstChild;
