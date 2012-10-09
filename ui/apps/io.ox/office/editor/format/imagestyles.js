@@ -212,7 +212,7 @@ define('io.ox/office/editor/format/imagestyles',
             // add or remove leading div used for positioning
             // TODO: support for multiple images (also overlapping) per side
             topOffset -= topMargin;
-            if (topOffset < 600) {
+            if (topOffset < 700) {
                 verticalOffsetNode.remove();
             } else if (verticalOffsetNode.length === 0) {
                 verticalOffsetNode = $('<div>', { contenteditable: false })

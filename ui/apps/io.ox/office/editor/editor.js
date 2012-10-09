@@ -1071,6 +1071,9 @@ define('io.ox/office/editor/editor',
                 };
 
             applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.insertImageURL = function (imageURL) {
@@ -1083,6 +1086,9 @@ define('io.ox/office/editor/editor',
                 };
 
             applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.splitParagraph = function (position) {
