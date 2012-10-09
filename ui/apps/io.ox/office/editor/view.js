@@ -121,7 +121,8 @@ define('io.ox/office/editor/view',
             { label: 'Red',         value: 'FF0000' },
             { label: 'Green',       value: '00FF00' },
             { label: 'Blue',        value: '0000FF' },
-            { label: 'White',       value: 'FFFFFF' }
+            { label: 'White',       value: 'FFFFFF' },
+            { label: 'Black',       value: '000000' }
         ]).each(function (entry) {
             self.createOptionButton(entry.value, { label: entry.label });
         }, this);
@@ -464,6 +465,8 @@ define('io.ox/office/editor/view',
                 .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser({ tooltip: gt('Paragraph fill color') }))
+                .addSeparator()
+                .addGroup('character/color', new ColorChooser())
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
