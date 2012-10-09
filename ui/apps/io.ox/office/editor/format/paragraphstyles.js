@@ -54,7 +54,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             parafill: {
                 def: '',
                 set: function (element, value) {
-                    element.css('background-color', value ? 'transparent' : '#' + value);
+                    element.css('background-color', value ? ('#' + value) : 'transparent');
                 }
             }
 
