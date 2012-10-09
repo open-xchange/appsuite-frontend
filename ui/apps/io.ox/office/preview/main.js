@@ -146,6 +146,9 @@ define('io.ox/office/preview/main',
             // register a component that updates the window header tool bar
             controller.registerViewComponent(new AppWindowToolBar(win));
 
+            // update all view components every time the window will be shown
+            win.on('show', function () { controller.update(); });
+
             // disable FF spell checking
             $('body').attr('spellcheck', false);
         }

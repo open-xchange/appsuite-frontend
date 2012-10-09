@@ -106,8 +106,26 @@ define('io.ox/office/tk/component/appwindowtoolbar',
          *  A reference to this view component.
          */
         this.update = function (key, value) {
+
+            var // the control node
+                node = null;
+
+            // only react on string values for labels and radio groups
             if (_.isString(value)) {
-                getControlNode(key).text(value);
+
+                // try simple button working as label
+                node = getControlNode(key);
+                if (node.length > 0) {
+                    node.text(value);
+                } else {
+                    // try option button in a radio group
+                    node = getControlNode(key + '/' + value);
+                    if (node.length > 0) {
+                        // activate the button, deactivate all other buttons
+                        node.addClass('active').siblings('button').removeClass('active');
+                    }
+
+                }
             }
             return this;
         };

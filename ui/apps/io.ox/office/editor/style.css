@@ -31,7 +31,7 @@
 
 .debug-highlight-mixin(@color) {
     outline: 1px @color solid;
-    background-color: fade(@color, 20%);
+    background-color: fade(lighten(@color, 10%), 50%) !important;
 }
 
 .io-ox-office-title {

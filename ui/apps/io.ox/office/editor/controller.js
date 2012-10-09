@@ -245,8 +245,10 @@ define('io.ox/office/editor/controller',
          * items.
          */
         this.setEditMode = function (state) {
-            editor.setEditMode(state);
-            this.update();
+            if (state !== editor.isEditMode()) {
+                editor.setEditMode(state);
+                this.update();
+            }
         };
 
         // initialization -----------------------------------------------------
