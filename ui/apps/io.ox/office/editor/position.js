@@ -2272,6 +2272,41 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * After splitting a paragraph, it might be necessary to remove
+     * divs from images, because they no longer belong to a following
+     * image.
+     *
+     * @param {Node} startnode
+     *  The start node corresponding to the logical position.
+     *  (Can be a jQuery object for performance reasons.)
+     *
+     * @param {OXOPaM.oxoPosition} position
+     *  The logical position.
+     */
+    Position.removeUnusedImageDivs = function (startnode, position) {
+
+        var paraNode = Position.getCurrentParagraph(startnode, position);
+
+        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
+
+            var child = paraNode.firstChild;
+
+            while (child !== null) {
+
+                var nextChild = child.nextSibling;
+
+                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (Utils.getNodeName(nextChild) !== 'img')) {
+                    var removeElement = child;
+                    $(removeElement).remove();
+                }
+
+                child = nextChild;
+            }
+        }
+
+    };
+
+    /**
      * Checking, if two logical positions are equal. Returns true,
      * if the positions are equal, otherwise false.
      *
