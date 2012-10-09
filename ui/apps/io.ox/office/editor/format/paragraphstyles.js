@@ -51,6 +51,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                     });
                 }
             },
+
             parafill: {
                 def: '',
                 set: function (element, value) {
