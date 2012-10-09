@@ -212,7 +212,7 @@ define('io.ox/office/editor/format/imagestyles',
             // add or remove leading div used for positioning
             // TODO: support for multiple images (also overlapping) per side
             topOffset -= topMargin;
-            if (topOffset < 50) {
+            if (topOffset < 600) {
                 verticalOffsetNode.remove();
             } else if (verticalOffsetNode.length === 0) {
                 verticalOffsetNode = $('<div>', { contenteditable: false })
@@ -380,7 +380,7 @@ define('io.ox/office/editor/format/imagestyles',
      *  A map with image attributes, as name/value pairs.
      */
     ImageStyles.getFloatModeFromAttributes = function (attributes) {
-        
+
         // inline mode overrules floating attributes
         if (attributes.inline) {
             return 'inline';
