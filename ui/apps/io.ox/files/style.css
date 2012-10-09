@@ -69,7 +69,7 @@
 
         width: @outerWidth;
         height: @innerHeight + 59;
-        margin: 0 20px 13px 0;
+        margin: 0 18px 13px 0; // 18px allows 4 columns on IPhone
         cursor: pointer;
 
         .wrap {

@@ -10,6 +10,7 @@ CACHE:
 @base@/src/offline.js
 # theme
 @base@/apps/themes/login/login.css
+@base@/apps/themes/login/login-responsive.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/opensans-300.woff
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff

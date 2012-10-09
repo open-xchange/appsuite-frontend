@@ -1483,13 +1483,13 @@ div.external-user-image {
 @media (max-width: 900px) {
 
     // SMALL SCREENS
-    /*
     .window-head.css-table { display: block; }
-    .window-head .css-table-row { display: block; }
-    .window-head .css-table-cell { display: block; width: 100%; }
-    .window-head { height: 110px; }
-    .window-body { top: 110px; }
-    */
+    .window-head .css-table-row { display: block; position: absolute; top: 0; right: 0; bottom: 10px; left: 0; }
+    .window-head .css-table-cell:nth-child(1) { display: block; position: absolute; top: 0; right: 50%; bottom: 50%; left: 0; width: auto; }
+    .window-head .css-table-cell:nth-child(3) { display: block; position: absolute; top: 0; right: 0; bottom: 50%; left: 50%; width: auto; }
+    .window-head .css-table-cell:nth-child(2) { display: block; position: absolute; top: 50%; right: 0; bottom: 0; left: 0; width: auto; text-align: left; padding-left: 13px; }
+    .window-head { height: 80px; }
+    .window-body { top: 80px; }
     
     .io-ox-sidepopup.right, .io-ox-sidepopup.left {
         left: 0; right: 0;
@@ -1501,10 +1501,34 @@ div.external-user-image {
     
     .leftside { width: 250px; }
     .rightside { left: 250px; }
-    .default-content-padding { padding: 13px; }
+    .default-content-padding { padding: 26px 13px 26px 13px; }
 }
 
-@media screen and (min-height: 800px) {
+@media screen and (min-width: 900px) and (min-height: 800px) {
     .window-head { height: 59px; }
     .window-body { top: 60px; }
+}
+
+@media (max-width: 700px) {
+    
+    // TINY SCREENS
+    .vsplit .leftside { width: 100%; }
+    .vsplit .rightside { left: 100%; width: 100%; top: 41px; }
+    .vsplit .rightside-navbar {
+        position: absolute; top: 0; left: 100%; width: 100%; height: 30px;
+        background-color: #eee; border-bottom: 1px solid #ccc;
+        padding: 5px 13px 5px 13px;
+    }
+    
+    .vsplit.vsplit-right .leftside { left: -100%; }
+    .vsplit.vsplit-right .rightside { left: 0%; }
+    .vsplit.vsplit-right .rightside-navbar { left: 0%; }
+
+    .vsplit .leftside, .vsplit .rightside, .vsplit .rightside-navbar {
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+        -webkit-transition: left 0.3s;
+        -moz-transition: left 0.3s;
+        transition: left 0.3s;
+    }
 }

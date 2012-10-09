@@ -66,8 +66,7 @@ define("io.ox/mail/main",
             name: 'io.ox/mail',
             title: gt("Inbox"),
             toolbar: true,
-            search: true,
-            fullscreen: true
+            search: true
         });
 
         app.setWindow(win);
@@ -83,17 +82,9 @@ define("io.ox/mail/main",
             audio.get(0).play();
         });
 
-        // left panel
-        left = $("<div>")
-            .addClass("leftside border-right")
-            .appendTo(win.nodes.main);
-
-        // right panel
-        scrollpane = $("<div>")
-            .addClass("rightside mail-detail-pane")
-            .appendTo(win.nodes.main);
-
-        right = scrollpane.scrollable();
+        var vsplit = commons.vsplit(win.nodes.main);
+        left = vsplit.left.addClass('border-right');
+        right = vsplit.right.addClass('mail-detail-pane').scrollable();
 
         // grid
         var options = ext.point('io.ox/mail/vgrid/options').options();
