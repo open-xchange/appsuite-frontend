@@ -3391,7 +3391,7 @@ define('io.ox/office/editor/editor',
                 // delete all image divs that are no longer associated with following floated images
                 var localStartPos = _.copy(startPos);
                 localStartPos.pop();
-                Position.removeLeadingImageDivs(paragraphs, localStartPos);
+                Position.removeUnusedImageDivs(paragraphs, localStartPos);
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
