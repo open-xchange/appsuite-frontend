@@ -27,12 +27,16 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {jQuery} element
      *  The DOM element, as jQuery object.
      *
+     * @param {Boolean} [clone]
+     *  If set to true, the returned attribute map will be a clone of the
+     *  original map.
+     *
      * @returns {Object}
      *  The attribute map if existing, otherwise an empty object.
      */
     function getElementAttributes(element, clone) {
         var attributes = element.data('attributes');
-        return _.isObject(attributes) ? attributes : {};
+        return _.isObject(attributes) ? ((clone === true) ? _.copy(attributes, true) : attributes) : {};
     }
 
     /**
@@ -529,8 +533,9 @@ define('io.ox/office/editor/format/stylesheets',
          *  sheet referred by the passed element.
          */
         this.getElementStyleAttributes = function (element, family) {
-            var $element = $(element);
-            return getStyleAttributes(getElementAttributes($element).style, family, $element);
+            var $element = $(element),
+                attributes = getElementAttributes($element);
+            return getStyleAttributes(attributes.style, family, $element);
         };
 
         /**
@@ -894,15 +899,32 @@ define('io.ox/office/editor/format/stylesheets',
     // static methods ---------------------------------------------------------
 
     /**
+     * Returns the explicit attributes stored in the passed element node.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  The element whose attributes will be returned. If this object is a
+     *  jQuery collection, uses the first DOM node it contains.
+     *
+     * @returns {Object}
+     *  The explicit attributes contained in the passed element, as a deep
+     *  clone of the original attribute map.
+     */
+    StyleSheets.getExplicitAttributes = function (element) {
+        return getElementAttributes($(element), true);
+    };
+
+    /**
      * Returns whether the passed elements contain equal formatting attributes.
      *
-     * @param {HTMLElement} element1
-     *  The first DOM element whose formatting attributes will be compared with
-     *  the attributes of the other passed element.
+     * @param {HTMLElement|jQuery} element1
+     *  The first element whose formatting attributes will be compared with the
+     *  attributes of the other passed element. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
      *
-     * @param {HTMLElement} element2
-     *  The second DOM element whose formatting attributes will be compared
-     *  with the attributes of the other passed element.
+     * @param {HTMLElement|jQuery} element2
+     *  The second element whose formatting attributes will be compared with
+     *  the attributes of the other passed element. If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
      *
      * @returns {Boolean}
      *  Whether both elements contain equal formatting attributes.

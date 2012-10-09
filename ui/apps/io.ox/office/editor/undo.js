@@ -169,7 +169,7 @@ define('io.ox/office/editor/undo',
                 if (tryToMerge && currentAction && action.allowMerge) {
                     var prevUndo = actions[currentAction - 1];
                     if (prevUndo.allowMerge && (prevUndo.redoOperation.name === action.redoOperation.name)) {
-                        if (action.redoOperation.name === Operations.OP_TEXT_INSERT) {
+                        if (action.redoOperation.name === Operations.TEXT_INSERT) {
                             if (isSameParagraph(action.redoOperation.start, prevUndo.redoOperation.start, false)) {
                                 var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
                                 var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
