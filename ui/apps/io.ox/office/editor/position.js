@@ -15,7 +15,8 @@ define('io.ox/office/editor/position',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/oxopam',
-     'io.ox/office/editor/oxoselection'], function (Utils, DOM, OXOPaM, OXOSelection) {
+     'io.ox/office/editor/oxoselection'
+    ], function (Utils, DOM, OXOPaM, OXOSelection) {
 
     'use strict';
 
@@ -478,7 +479,8 @@ define('io.ox/office/editor/position',
             var textLength = 0,
                 bFound = false,
                 isImage = false,
-                isField = false;
+                isField = false,
+                exactSum = false;
 
             // Checking if this paragraph has children
             if (! node.hasChildNodes()) {
@@ -501,42 +503,28 @@ define('io.ox/office/editor/position',
                         lastChild = true;
                     }
 
-                    if ((nodeList[i].nodeName === 'IMG') || ((nodeList[i].firstChild) && (nodeList[i].firstChild.nodeName === 'IMG'))) {
+                    if ((Utils.getNodeName(currentNode) === 'img') || ((currentNode.firstChild) && (Utils.getNodeName(currentNode.firstChild) === 'img'))) {
                         // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
                         currentLength = 1;
                         isImage = true;
-                    } else if ((Utils.getNodeName(nodeList[i]) === 'div') && $(nodeList[i]).hasClass('float')) {
+                    } else if ((Utils.getNodeName(currentNode) === 'div') && $(currentNode).hasClass('float')) {
                         // ignoring spans that exist only for positioning image
                         continue;
-                    } else if (DOM.isFieldSpan(nodeList[i])) {
+                    } else if (DOM.isFieldSpan(currentNode)) {
                         currentLength = 1;
                         isField = true;
                     } else {  // this is a span. it can contain text node or image node
-                        currentLength = $(nodeList[i]).text().length;
+                        currentLength = $(currentNode).text().length;
                         isImage = false;
                         isField = false;
                     }
 
                     if (textLength + currentLength >= pos) {
 
-                        if (returnImageNode) {
-                            if  ((textLength + currentLength) === pos) {
-                                var j = i + 1,
-                                    nextNode = nodeList[j];
-
-                                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {
-                                    bFound = true;
-                                    node = nextNode;
-                                    isImage = true;
-                                    break;  // leaving the for-loop
-                                } else if (nextNode && DOM.isFieldSpan(nextNode)) {
-                                    bFound = true;
-                                    node = nextNode;
-                                    isField = true;
-                                    break;  // leaving the for-loop
-                                }
-                            }
+                        if (textLength + currentLength === pos) {
+                            exactSum = true;
                         }
+
                         bFound = true;
                         node = currentNode;
                         break;  // leaving the for-loop
@@ -556,19 +544,33 @@ define('io.ox/office/editor/position',
                 return;
             }
 
+            // which node shall be returned, if the position is at the border between two nodes?
+            if ((returnImageNode) && (exactSum)) {  // special handling for images, that exactly fit the position
+
+                var nextNode = node.nextSibling;
+
+                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {  // if the next node is an image, this should be preferred
+                    node = nextNode;
+                    isImage = true;
+                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {  // also preferring following fields
+                    node = nextNode;
+                    isField = true;
+                }
+            }
+
             if ((isImage) || (isField)) {
-                if (! returnImageNode) {
+                if (! returnImageNode) {  // this can lead to to dom positions, that do not fit to the oxo position
                     // if the position is an image or field, the dom position shall be the following text node
                     if (isImage) {
                         childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
                         offset = 0;
                     } else if (isField) {
-                        childNode = node.nextSibling.firstChild; // following the div field must be a text span
+                        childNode = node.nextSibling.firstChild; // following the div field must be a text span (like inline images)
                         offset = 0;
-
                     }
                 } else {
                     childNode = node;
+                    offset = pos - textLength;  // offset might be'1', if (textLength + currentLength) > pos . It is always '0', if exactSum is 'true'.
                 }
             } else {
                 childNode = node;
@@ -576,11 +578,6 @@ define('io.ox/office/editor/position',
                     childNode = childNode.firstChild;  // using text node instead of span node
                 }
                 offset = pos - textLength;
-            }
-
-            // only text nodes shall be returned, never image nodes (only, if 'returnImageNode' is set to true)
-            if ((childNode.nodeType !== 3) && (! returnImageNode)) {
-                Utils.warn('Position.getNextChildNode(): Failed to get text node at position: ' + pos + '(' + childNode.nodeName + ')');
             }
 
         } else {
