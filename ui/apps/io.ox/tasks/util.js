@@ -267,8 +267,12 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 return task;
             },
             
-            sortTasks: function (tasks) {//done tasks last, overduetasks first, same date alphabetical
-                tasks = _.copy(tasks, true);//make loacl copy
+            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same date alphabetical
+                tasks = _.copy(tasks, true);//make local copy
+                if (!order) {
+                    order = 'asc';
+                }
+                
                 var resultArray = [],
                     alphabetArray = [];
                 
@@ -291,12 +295,13 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                             return -1;
                         }
                     });
-                
-                resultArray.unshift(alphabetArray);
+                if (order === 'desc') {
+                    resultArray.push(alphabetArray);
+                } else {
+                    resultArray.unshift(alphabetArray);
+                }
                 return _.flatten(resultArray);
-                
             }
-            
             
         };
         

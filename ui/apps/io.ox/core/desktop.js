@@ -1230,7 +1230,6 @@ define("io.ox/core/desktop",
                 }
             } else {
                 // hide toolbar
-                console.log('hide toolbar!', win.nodes);
                 win.nodes.head.find('.css-table-cell')
                     .eq(0).removeClass('cell-30').addClass('cell-70').end()
                     .eq(1).remove();

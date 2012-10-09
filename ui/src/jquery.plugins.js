@@ -335,7 +335,7 @@
 
             update = function () {
                 (getter || api.get)(api.reduce(data)).done(function (data) {
-                    node.triggerHandler('redraw', data);
+                    node && node.triggerHandler('redraw', data);
                 });
             },
 

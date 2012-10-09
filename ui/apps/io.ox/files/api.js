@@ -23,6 +23,34 @@ define("io.ox/files/api",
 
     "use strict";
 
+    var mime_types = {
+        'jpg' : 'image/jpeg',
+        'jpeg': 'image/jpeg',
+        'png' : 'image/png',
+        'gif' : 'image/gif',
+        'tif' : 'image/tiff',
+        'tiff': 'image/tiff',
+        'mp3' : 'audio/mpeg3',
+        'ogg' : 'audio/ogg',
+        'mp4' : 'video/mp4',
+        'm4v' : 'video/mp4',
+        'ogv' : 'video/ogg',
+        'ogm' : 'video/ogg',
+        'webm': 'video/webm'
+    };
+
+    var fixContentType = function (data) {
+        if (data.file_mimetype === 'application/octet-stream')
+        {
+            var ext = _((data.filename || '').split('.'))
+                .last().toLowerCase();
+            if (ext in mime_types) {
+                data.file_mimetype = mime_types[ext];
+            }
+        }
+        return data;
+    };
+
     // generate basic API
     var api = apiFactory({
         module: "infostore",
@@ -30,7 +58,7 @@ define("io.ox/files/api",
             all: {
                 action: "all",
                 folder: config.get("folder.infostore"),
-                columns: "20,1,702",
+                columns: "20,1,702,703",
                 sort: "700",
                 order: "asc"
             },
@@ -49,6 +77,16 @@ define("io.ox/files/api",
                 getData: function (query) {
                     return { pattern: query };
                 }
+            }
+        },
+        pipe: {
+            all: function (data) {
+                _(data).each(fixContentType);
+                return data;
+            },
+            list: function (data) {
+                _(data).each(fixContentType);
+                return data;
             }
         }
     });
