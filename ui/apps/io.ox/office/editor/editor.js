@@ -2097,7 +2097,6 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.IMAGE_INSERT) {
-                var url = /:\/\//.test(operation.imgurl) ? operation.imgurl : getDocumentUrl({ get_filename: operation.imgurl });
                 if (implInsertImage(url, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
                     if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                         var undoOperation = { name: Operations.TEXT_DELETE, start: _.clone(operation.position), end: _.clone(operation.position) };
@@ -3099,6 +3098,7 @@ define('io.ox/office/editor/editor',
 
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
+                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
                 image = null;
 
             // insert the image with default settings (inline)
@@ -3112,7 +3112,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image between the two text nodes
-            image = $('<img>', { src: url }).insertBefore(node.parentNode);
+            image = $('<img>', { src: absUrl }).data('url', url).insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);

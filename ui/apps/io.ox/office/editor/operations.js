@@ -137,7 +137,7 @@ define('io.ox/office/editor/operations',
                 // end position of the image node (closed range, single character)
                 endPosition = _.clone(position);
                 // operation to create the image (including its attributes)
-                operations.push({ name: Operations.IMAGE_INSERT, position: position, imgurl: '', attrs: attributes });
+                operations.push({ name: Operations.IMAGE_INSERT, position: position, imgurl: $(node).data('url'), attrs: attributes });
             }
 
             // text fields
@@ -153,8 +153,8 @@ define('io.ox/office/editor/operations',
                 }
             }
 
-            // simple text spans
-            else {
+            // simple text portions
+            else if (DOM.isPortionSpan(node)) {
                 // empty text node: continue with next child node
                 if (text.length === 0) { return; }
                 // end position of the text span (closed range)
