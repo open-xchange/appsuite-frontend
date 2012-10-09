@@ -36,6 +36,7 @@ define('io.ox/office/editor/controller',
                     enable: function () { return editor.isEditMode(); }
                 },
                 'document/editable/text': {
+                    chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.isTextSelected(); }
                 },
 
