@@ -301,7 +301,7 @@ $(document).ready(function () {
         if (_.url.hash('session')) {
             ox.session = _.url.hash('session');
             ox.user = _.url.hash('user');
-            ox.user_id = _.url.hash('user_id');
+            ox.user_id = parseInt(_.url.hash('user_id') || '0', 10);
             ox.language = _.url.hash('language');
             ref = _.url.hash('ref');
             _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
