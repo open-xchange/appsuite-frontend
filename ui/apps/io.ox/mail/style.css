@@ -263,6 +263,7 @@
         position: relative;
         width: 1.25em;
         height: 1.25em;
+        margin-left: 1em;
         border: 1px solid rgba(0, 0, 0, 0.15);
         cursor: pointer;
         z-index: 10001; // to be above attachment dropdowns
@@ -443,4 +444,5 @@ h4.mail-attachment-preview {
     .scrollable-pane::after {
         content: ''
     }
+    .mail-detail .contact-picture { display: none; }
 }

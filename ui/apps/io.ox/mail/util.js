@@ -92,14 +92,14 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             field = field || 'from';
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
-                tmp = $('<div>'), node, obj, sender;
+                tmp = $('<div>'), obj, sender;
 
             for (; i < $i; i++) {
                 obj = {
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                node = $('<a>', { href: '#', title: obj.email1 })
+                $('<a>', { href: '#', title: obj.email1 })
                     .addClass('person-link')
                     .css('whiteSpace', 'nowrap')
                     .text(obj.display_name)
@@ -110,10 +110,13 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
                 // add 'on behalf of'?
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
                     sender = this.parseRecipients(data.headers.Sender);
-                    tmp.prepend(
-                        this.serializeList({ sender: sender }, 'sender'),
-                        $.txt(' on behalf of ')
-                    );
+                    // only show if display names differ (otherwise it looks like a senseless duplicate)
+                    if (sender[0][0] !== data.from[0][0]) {
+                        tmp.prepend(
+                            this.serializeList({ sender: sender }, 'sender'),
+                            $.txt(' on behalf of ')
+                        );
+                    }
                 }
 
                 if (i < $i - 1) {
