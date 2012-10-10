@@ -2190,194 +2190,29 @@ define('io.ox/office/editor/editor',
 
                     } else if (Position.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // The included paragraphs are neighbours.
-
-                        // 1) selected part or rest of para in first para (pos to end)
-                        var startposLength = selection.startPaM.oxoPosition.length - 1,
-                            endposLength = selection.endPaM.oxoPosition.length - 1,
-                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-
-                        localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                        setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-
-                        // 2) completly selected paragraphs
-                        for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                            var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
-                            localstartPosition[startposLength - 1] = i;
-                            localstartPosition[startposLength] = 0;
-
-                            // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
-                            // Removing position temporarely
-                            var pos = localstartPosition.pop();
-                            var isTable = Position.getDOMPosition(paragraphs, localstartPosition).node.nodeName === 'TABLE' ? true : false;
-
-                            if (isTable) {
-                                setAttributesToCompleteTable(family, attributes, localstartPosition);
-                            } else {
-                                localstartPosition.push(pos);
-                                localendPosition = _.copy(localstartPosition, true);
-                                localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                                setAttributes(family, attributes, localstartPosition, localendPosition);
-                            }
-                        }
-
-                        // 3) selected part in last para
-                        if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                            var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                            localstartPosition[endposLength] = 0;
-
-                            setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
-                        }
+                        setAttributesInSameParagraphLevel(selection, family, attributes);
 
                     } else if (Position.isCellSelection(selection.startPaM, selection.endPaM)) {
                         // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
-                        var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                            endPos = _.copy(selection.endPaM.oxoPosition, true);
+                        setAttributesInCellSelection(selection, family, attributes);
 
-                        startPos.pop();
-                        startPos.pop();
-                        endPos.pop();
-                        endPos.pop();
-
-                        var startCol = startPos.pop(),
-                            startRow = startPos.pop(),
-                            endCol = endPos.pop(),
-                            endRow = endPos.pop();
-
-                        for (var i = startRow; i <= endRow; i++) {
-                            for (var j = startCol; j <= endCol; j++) {
-                                var position = _.copy(startPos, true);
-                                position.push(i);
-                                position.push(j);
-                                var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, position);
-                                var endPosition = Position.getLastPositionInCurrentCell(paragraphs, position);
-                                setAttributes(family, attributes, startPosition, endPosition);
-                            }
-                        }
                     } else if (Position.isSameTableLevel(paragraphs, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // This selection is inside a table in a browser, where no cell selection is possible (Chrome). Selected
                         // can be parts of paragraphs inside a cell and also all paragraphs in other cells. This selection is
                         // important to be able to support something similar like cell selection, that is only possible
                         // in Firefox. So changes made in Firefox tables are displayed correctly in Chrome and vice versa.
-                        var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                            endPos = _.copy(selection.endPaM.oxoPosition, true);
-
-                        // 1) selected part in first cell
-                        var startposLength = selection.startPaM.oxoPosition.length - 1,
-                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-
-                        localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                        setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-                        setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
-
-                        // 2) completely selected cells
-                        var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
-                            columnIndex = rowIndex + 1,
-                            startRow = startPos[rowIndex],
-                            startColumn = startPos[columnIndex],
-                            endRow = endPos[rowIndex],
-                            endColumn = endPos[columnIndex],
-                            lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
-
-                        while (startPos.length > columnIndex) {
-                            startPos.pop();  // Removing position and paragraph optionally
-                        }
-
-
-                        for (var j = startRow; j <= endRow; j++) {
-                            var startCol = (j === startRow) ? startColumn + 1 : 0;
-                            var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
-
-                            for (var i = startCol; i <= endCol; i++) {
-                                startPos[rowIndex] = j;  // row
-                                startPos[columnIndex] = i;  // column
-                                var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, startPos);
-                                var endPosition = Position.getLastPositionInCurrentCell(paragraphs, startPos);
-                                setAttributes(family, attributes, startPosition, endPosition);
-                            }
-                        }
-
-                        // 3) selected part in final cell
-                        var endposLength = selection.endPaM.oxoPosition.length - 1,
-                            localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-
-                        localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
-                        localstartPosition[endposLength] = 0;
-
-                        setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
-                        setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
+                        setAttributesInSameTableLevel(selection, family, attributes);
 
                     } else {
-
                         // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
                         // Should this be supported? How about tables in tables?
                         // This probably works not reliable for tables in tables.
-
-                        // 1) selected part or rest of para in first para (pos to end)
-                        var startposLength = selection.startPaM.oxoPosition.length - 1,
-                            endposLength = selection.endPaM.oxoPosition.length - 1,
-                            localendPosition = selection.endPaM.oxoPosition,
-                            isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
-
-                        if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                            // TODO: This is not sufficient
-                            localendPosition = _.copy(selection.startPaM.oxoPosition, true);
-                            if (isTable) {
-                                // Assigning attribute to all following paragraphs in this cell and to all following cells!
-                                setAttributesToFollowingCellsInTable(family, attributes, localendPosition);
-                                setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
-                            }
-                            localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
-                        }
-                        setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
-
-                        // 2) completly selected paragraphs
-                        for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                            var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
-                            localstartPosition[0] = i;
-                            localstartPosition[1] = 0;
-
-                            isTable = Position.isPositionInTable(paragraphs, localstartPosition);
-
-                            if (isTable) {
-                                setAttributesToCompleteTable(family, attributes, localstartPosition);
-                            } else {
-                                localendPosition = _.copy(localstartPosition, true);
-                                localendPosition[1] = Position.getParagraphLength(paragraphs, localendPosition);
-                                setAttributes(family, attributes, localstartPosition, localendPosition);
-                            }
-                        }
-
-                        // 3) selected part in last para
-                        if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                            var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
-                            localstartPosition[endposLength] = 0;
-
-                            isTable = Position.isPositionInTable(paragraphs, localstartPosition);
-
-                            if (isTable) {
-                                // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
-                                setAttributesToPreviousCellsInTable(family, attributes, selection.endPaM.oxoPosition);
-                                setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
-                            }
-                            setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
-                        }
+                        setAttributesInDifferentParagraphLevels(selection, family, attributes);
                     }
                 }
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                    var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                        imageEndPostion = _.copy(imageStartPosition, true),
-                        newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
-
-                    applyOperation(newOperation, true, true);
-
-                    // setting the cursor position
-                    if (lastOperationEnd) {
-                        // var useImageNode = true;
-                        var useImageNode = false;
-                        setSelection(new OXOSelection(lastOperationEnd), useImageNode);
-                    }
+                    setAttributesToSelectedImage(selection, attributes);
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -3069,6 +2904,193 @@ define('io.ox/office/editor/editor',
                 imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                 // deleting the image with an operation
                 self.deleteText(imageStartPosition, imageEndPosition);
+            }
+        }
+
+        function setAttributesInSameParagraphLevel(selection, family, attributes) {
+
+            // 1) selected part or rest of para in first para (pos to end)
+            var startposLength = selection.startPaM.oxoPosition.length - 1,
+                endposLength = selection.endPaM.oxoPosition.length - 1,
+                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+
+            localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
+            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
+
+            // 2) completly selected paragraphs
+            for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
+                var localstartPosition = _.copy(selection.startPaM.oxoPosition, true);
+                localstartPosition[startposLength - 1] = i;
+                localstartPosition[startposLength] = 0;
+
+                // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
+                // Removing position temporarely
+                var pos = localstartPosition.pop();
+                var isTable = Position.getDOMPosition(paragraphs, localstartPosition).node.nodeName === 'TABLE' ? true : false;
+
+                if (isTable) {
+                    setAttributesToCompleteTable(family, attributes, localstartPosition);
+                } else {
+                    localstartPosition.push(pos);
+                    localendPosition = _.copy(localstartPosition, true);
+                    localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
+                    setAttributes(family, attributes, localstartPosition, localendPosition);
+                }
+            }
+
+            // 3) selected part in last para
+            if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+                localstartPosition[endposLength] = 0;
+
+                setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
+            }
+        }
+
+        function setAttributesInCellSelection(selection, family, attributes) {
+
+            var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+            startPos.pop();
+            startPos.pop();
+            endPos.pop();
+            endPos.pop();
+
+            var startCol = startPos.pop(),
+                startRow = startPos.pop(),
+                endCol = endPos.pop(),
+                endRow = endPos.pop();
+
+            for (var i = startRow; i <= endRow; i++) {
+                for (var j = startCol; j <= endCol; j++) {
+                    var position = _.copy(startPos, true);
+                    position.push(i);
+                    position.push(j);
+                    var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, position);
+                    var endPosition = Position.getLastPositionInCurrentCell(paragraphs, position);
+                    setAttributes(family, attributes, startPosition, endPosition);
+                }
+            }
+        }
+
+        function setAttributesInSameTableLevel(selection, family, attributes) {
+
+            var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+            // 1) selected part in first cell
+            var startposLength = selection.startPaM.oxoPosition.length - 1,
+                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+
+            localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
+            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
+            setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
+
+            // 2) completely selected cells
+            var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
+                columnIndex = rowIndex + 1,
+                startRow = startPos[rowIndex],
+                startColumn = startPos[columnIndex],
+                endRow = endPos[rowIndex],
+                endColumn = endPos[columnIndex],
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
+
+            while (startPos.length > columnIndex) {
+                startPos.pop();  // Removing position and paragraph optionally
+            }
+
+
+            for (var j = startRow; j <= endRow; j++) {
+                var startCol = (j === startRow) ? startColumn + 1 : 0;
+                var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
+
+                for (var i = startCol; i <= endCol; i++) {
+                    startPos[rowIndex] = j;  // row
+                    startPos[columnIndex] = i;  // column
+                    var startPosition = Position.getFirstPositionInCurrentCell(paragraphs, startPos);
+                    var endPosition = Position.getLastPositionInCurrentCell(paragraphs, startPos);
+                    setAttributes(family, attributes, startPosition, endPosition);
+                }
+            }
+
+            // 3) selected part in final cell
+            var endposLength = selection.endPaM.oxoPosition.length - 1,
+                localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+
+            localstartPosition[endposLength - 1] = selection.endPaM.oxoPosition[endposLength - 1];
+            localstartPosition[endposLength] = 0;
+
+            setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
+            setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
+        }
+
+        function setAttributesInDifferentParagraphLevels(selection, family, attributes) {
+
+            // 1) selected part or rest of para in first para (pos to end)
+            var startposLength = selection.startPaM.oxoPosition.length - 1,
+                endposLength = selection.endPaM.oxoPosition.length - 1,
+                localendPosition = selection.endPaM.oxoPosition,
+                isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
+
+            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                // TODO: This is not sufficient
+                localendPosition = _.copy(selection.startPaM.oxoPosition, true);
+                if (isTable) {
+                    // Assigning attribute to all following paragraphs in this cell and to all following cells!
+                    setAttributesToFollowingCellsInTable(family, attributes, localendPosition);
+                    setAttributesToFollowingParagraphsInCell(family, attributes, localendPosition);
+                }
+                localendPosition[startposLength] = Position.getParagraphLength(paragraphs, localendPosition);
+            }
+            setAttributes(family, attributes, selection.startPaM.oxoPosition, localendPosition);
+
+            // 2) completly selected paragraphs
+            for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                var localstartPosition = []; //_.copy(selection.startPaM.oxoPosition, true);
+                localstartPosition[0] = i;
+                localstartPosition[1] = 0;
+
+                isTable = Position.isPositionInTable(paragraphs, localstartPosition);
+
+                if (isTable) {
+                    setAttributesToCompleteTable(family, attributes, localstartPosition);
+                } else {
+                    localendPosition = _.copy(localstartPosition, true);
+                    localendPosition[1] = Position.getParagraphLength(paragraphs, localendPosition);
+                    setAttributes(family, attributes, localstartPosition, localendPosition);
+                }
+            }
+
+            // 3) selected part in last para
+            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                var localstartPosition = _.copy(selection.endPaM.oxoPosition, true);
+                localstartPosition[endposLength] = 0;
+
+                isTable = Position.isPositionInTable(paragraphs, localstartPosition);
+
+                if (isTable) {
+                    // Assigning attribute to all previous cells and to all previous paragraphs in this cell!
+                    setAttributesToPreviousCellsInTable(family, attributes, selection.endPaM.oxoPosition);
+                    setAttributesToPreviousParagraphsInCell(family, attributes, selection.endPaM.oxoPosition);
+                }
+                setAttributes(family, attributes, localstartPosition, selection.endPaM.oxoPosition);
+            }
+        }
+
+        function setAttributesToSelectedImage(selection, attributes) {
+            var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                imageEndPostion = _.copy(imageStartPosition, true),
+                newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
+
+            applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            if (lastOperationEnd) {
+                // var useImageNode = true;
+                var useImageNode = false;
+                setSelection(new OXOSelection(lastOperationEnd), useImageNode);
             }
         }
 
