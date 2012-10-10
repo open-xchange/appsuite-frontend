@@ -123,18 +123,18 @@ define('io.ox/office/editor/view',
             { label: 'Blue',         value: {rgbColor: '0000FF'}},
             { label: 'White',        value: {rgbColor: 'FFFFFF'}},
             { label: 'Black',        value: {rgbColor: '000000'}},
-            { label: 'Dark1',        value: {themeFill: 'dk1'}},
-            { label: 'Dark2',        value: {themeFill: 'dk2'}},
-            { label: 'Light1',        value: {themeFill: 'lt1'}},
-            { label: 'Light2',        value: {themeFill: 'lt2'}},
+            { label: 'Dark1',        value: {themeFill: 'dark1'}},
+            { label: 'Dark2',        value: {themeFill: 'dark2'}},
+            { label: 'Light1',        value: {themeFill: 'light1'}},
+            { label: 'Light2',        value: {themeFill: 'light2'}},
             { label: 'Accent1',      value: {themeFill: 'accent1'}},
             { label: 'Accent2',      value: {themeFill: 'accent2'}},
             { label: 'Accent3',      value: {themeFill: 'accent3'}},
             { label: 'Accent4',      value: {themeFill: 'accent4'}},
             { label: 'Accent5',      value: {themeFill: 'accent5'}},
             { label: 'Accent6',      value: {themeFill: 'accent6'}},
-            { label: 'Link',        value: {themeFill: 'hlink'}},
-            { label: 'Followed Link',        value: {themeFill: 'folHlink'}}
+            { label: 'Link',        value: {themeFill: 'hyperlink'}},
+            { label: 'Followed Link',        value: {themeFill: 'followedHyperlink'}}
         ]).each(function (entry) {
 
             self.createOptionButton(entry.value, { label: entry.label });
