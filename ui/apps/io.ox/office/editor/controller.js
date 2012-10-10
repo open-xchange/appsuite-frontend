@@ -101,8 +101,18 @@ define('io.ox/office/editor/controller',
                 },
                 'paragraph/fillcolor': {
                     chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.parafill; },
-                    set: function (fill) { editor.setAttribute('paragraph', 'parafill', fill); }
+                    get: function (attributes) { return attributes.parafill && attributes.parafill.rgbColor; },
+                    set: function (fill) {
+                        if (fill.themeFill) {
+                            var themes = editor.getThemes();
+                            if (themes) {
+                                var theme = themes.getTheme();
+                                if (theme)
+                                    fill.rgbColor = theme[fill.themeFill];
+                            }
+                        }
+                        editor.setAttribute('paragraph', 'parafill', fill);
+                    }
                 },
 
                 // characters

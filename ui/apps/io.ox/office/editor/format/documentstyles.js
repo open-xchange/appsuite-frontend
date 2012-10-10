@@ -16,8 +16,9 @@ define('io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/paragraphstyles',
      'io.ox/office/editor/format/imagestyles',
      'io.ox/office/editor/format/tablestyles',
-     'io.ox/office/editor/format/tablecellstyles'
-    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableCellStyles) {
+     'io.ox/office/editor/format/tablecellstyles',
+     'io.ox/office/editor/format/themes'
+    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableCellStyles, Themes) {
 
     'use strict';
 
@@ -37,7 +38,9 @@ define('io.ox/office/editor/format/documentstyles',
     function DocumentStyles(rootNode) {
 
         var // style sheet containers mapped by attribute family
-            containers = {};
+            containers = {},
+            // document themes
+            themes = {};
 
         // methods ------------------------------------------------------------
 
@@ -52,9 +55,18 @@ define('io.ox/office/editor/format/documentstyles',
             return (family in containers) ? containers[family] : null;
         };
 
+        /**
+         * Returns the themes container.
+         *
+         */
+        this.getThemes = function () {
+            return themes;
+        };
+
         this.destroy = function () {
             _(containers).invoke('destroy');
             containers = null;
+            themes = null;
         };
 
         // initialization -----------------------------------------------------
@@ -64,6 +76,7 @@ define('io.ox/office/editor/format/documentstyles',
         containers.image = new ImageStyles(rootNode, this);
         containers.table = new TableStyles(rootNode, this);
         containers.tablecell = new TableCellStyles(rootNode, this);
+        themes = new Themes(rootNode, this);
 
     } // class DocumentStyles
 

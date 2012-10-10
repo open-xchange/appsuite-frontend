@@ -88,6 +88,7 @@ define('io.ox/office/editor/operations',
         CELL_INSERT: 'insertCell',
 
         INSERT_STYLE: 'insertStylesheet',
+        INSERT_THEME: 'insertTheme',
         ATTRS_SET: 'setAttributes',
 
         IMAGE_INSERT: 'insertImage',
