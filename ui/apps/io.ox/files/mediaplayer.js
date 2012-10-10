@@ -50,9 +50,11 @@ define('io.ox/files/mediaplayer',
             this.app = config.app;
             this.win = this.app.getWindow();
             this.list = this.filterMediaList(config.list);
-
-            this.show();
-            this.eventHandler();
+            if (this.list.length > 0)
+            {
+                this.show();
+                this.eventHandler();
+            }
         },
 
         eventHandler: function () {

@@ -13,6 +13,9 @@
  *
  */
 
+@playerWidth: 480px;
+@playerMargin: 13px;
+
 .mediaplayer_container {
     background-color:rgba(0,0,0,0.5);
     position: absolute;
@@ -23,9 +26,9 @@
     height:100%;
 
     .mediaplayer_wrapper {
-        width:400px;
         height:100%;
         margin:0 auto;
+        width: @playerWidth + (@playerMargin * 2);
     }
 
     .mediaplayer_inner {
@@ -33,13 +36,14 @@
         top:0;
         left: 0;
         right: 0;
-        width:506px;
+        width: @playerWidth + (@playerMargin * 2);
+        height:100%;
         margin:auto;
         background:black;
 
         .mediaplayer_track {
             height: 150px;
-            margin: 13px;
+            margin: @playerMargin;
             background: #222;
 
             i {
@@ -53,7 +57,7 @@
                 position:absolute;
                 top:30px;
                 margin-left: 150px;
-                margin-right: 26px;
+                margin-right: @playerMargin * 2;
                 color:#f5f5f5;
                 font-size: 18px;
             }
@@ -63,9 +67,9 @@
     .mediaplayer_player {
         position: relative;
         margin:0 auto;
-        margin-top: 13px;
+        margin-top: @playerMargin;
         background:#111;
-        width:480px;
+        width:@playerWidth;
     }
 
     .mediaplayer_playlist {
@@ -95,8 +99,7 @@
     .closemediaplayer {
         position:absolute;
         top:13px;
-        right:13px;
-
+        margin-left:428px
     }
 }
 
