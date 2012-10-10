@@ -419,12 +419,13 @@ define('io.ox/calendar/week/view',
             return this;
         },
 
-        getScrollPos: function () {
+        setScrollPos: function () {
             var slotHeight = this.cellHeight * this.fragmentation,
                 workStartPos = slotHeight * this.workStart,
                 workHeight = slotHeight * this.workEnd - workStartPos,
                 newPos = (this.pane.height() - workHeight) / 2;
-            return workStartPos - newPos;
+            // adjust scoll position
+            this.pane.scrollTop(workStartPos - newPos);
         },
 
         renderTimeline: function (tl) {
@@ -552,14 +553,14 @@ define('io.ox/calendar/week/view',
 
             }, this);
 
+
             // calculate full-time appointment container height
             var ftHeight = (fulltimeColPos.length <= this.fulltimeMax ? fulltimeColPos.length : (this.fulltimeMax + 0.5)) * (this.fulltimeHeight + 1) + 1;
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.add().css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
 
-            // adjust scoll position
-            this.pane.scrollTop(this.getScrollPos());
+//            this.setScrollPos();
 
             // loop over all single days
             $.each(draw, function (day, apps) {
@@ -1003,8 +1004,8 @@ define('io.ox/calendar/week/view',
                 });
         },
 
+        // render an single appointment
         renderAppointment: function (a) {
-
             myself = myself || ox.user_id;
 
             // check confirmations
@@ -1030,6 +1031,7 @@ define('io.ox/calendar/week/view',
                 );
         },
 
+        // round an integer to the next grid size
         roundToGrid: function (pos, typ) {
             var h = this.gridHeight();
             switch (typ) {
@@ -1046,6 +1048,7 @@ define('io.ox/calendar/week/view',
             return Math[typ](pos / h) * h;
         },
 
+        // calculate css position paramter (top and left) of an appointment
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
@@ -1060,6 +1063,7 @@ define('io.ox/calendar/week/view',
             };
         },
 
+        // get timestamp from date marker
         getTimeFromDateTag: function (days, utc)  {
             if (utc) {
                 return date.Local.utc(this.curTimeUTC + (days * date.DAY));
@@ -1067,6 +1071,7 @@ define('io.ox/calendar/week/view',
             return this.curTimeUTC + (days * date.DAY);
         },
 
+        // calc daily timestamp from mouse position
         getTimeFromPos: function (pos) {
             return this.roundToGrid(pos) / this.height() * date.DAY;
         },
