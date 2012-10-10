@@ -91,7 +91,7 @@ define('io.ox/office/tk/apphelper',
             // build a default options map, and add the passed options
             options = Utils.extendOptions({
                 session: ox.session,
-                uid: this.getUniqueId()
+                uid: this.get('uniqueID')
             }, options);
 
             // build and return the resulting URL
