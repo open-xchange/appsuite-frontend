@@ -359,182 +359,26 @@ define('io.ox/office/editor/editor',
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
                 } else if (Position.isSameParagraphLevel(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
-
-                    // The included paragraphs are neighbours.
-                    var endPosition = _.copy(selection.startPaM.oxoPosition, true),
-                        startposLength = selection.startPaM.oxoPosition.length - 1,
-                        endposLength = selection.endPaM.oxoPosition.length - 1;
-
-                    // 1) delete selected part or rest of para in first para (pos to end)
-                    endPosition[endposLength] = Position.getParagraphLength(paragraphs, endPosition);
-                    this.deleteText(selection.startPaM.oxoPosition, endPosition);
-
-                    // 2) delete completly selected paragraphs completely
-                    for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
-                        var startPosition = _.copy(selection.startPaM.oxoPosition, true);
-                        startPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
-
-                        // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
-                        startPosition.pop();
-                        var isTable = Position.getDOMPosition(paragraphs, startPosition).node.nodeName === 'TABLE' ? true : false;
-
-                        if (isTable) {
-                            this.deleteTable(startPosition);
-                        } else {
-                            this.deleteParagraph(startPosition);
-                        }
-                    }
-
-                    // 3) delete selected part in last para (start to pos) and merge first and last para
-                    if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
-                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
-                        startPosition[endposLength] = 0;
-                        endPosition = _.copy(startPosition, true);
-                        endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
-                        this.deleteText(startPosition, endPosition);
-
-                        var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                        mergeselection.pop();
-                        this.mergeParagraph(mergeselection);
-                    }
+                    // More than one paragraph concerned from deletion, but in same level in document or table cell.
+                    deleteSelectedInSameParagraphLevel(selection);
 
                 } else if (Position.isCellSelection(selection.startPaM, selection.endPaM)) {
                     // This cell selection is a rectangle selection of cells in a table (only supported in Firefox).
-                    var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                        endPos = _.copy(selection.endPaM.oxoPosition, true);
-
-                    startPos.pop();
-                    startPos.pop();
-                    endPos.pop();
-                    endPos.pop();
-
-                    var startCol = startPos.pop(),
-                        startRow = startPos.pop(),
-                        endCol = endPos.pop(),
-                        endRow = endPos.pop();
-
-                    this.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
-
-                    this.clearUndo();  // Todo: Remove this asap
+                    deleteSelectedInCellSelection(selection);
 
                 } else if (Position.isSameTableLevel(paragraphs, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // This selection is inside a table in a browser, where no cell selection is possible (Chrome). Selected
                     // can be parts of paragraphs inside a cell and also all paragraphs in other cells. This selection is
                     // important to be able to support something similar like cell selection, that is only possible
                     // in Firefox. So changes made in Firefox tables are displayed correctly in Chrome and vice versa.
-                    var startPos = _.copy(selection.startPaM.oxoPosition, true),
-                        endPos = _.copy(selection.endPaM.oxoPosition, true),
-                        startposLength = selection.startPaM.oxoPosition.length - 1;
-
-                    // 1) delete selected part or rest of para in first para (pos to end)
-                    var localEndPosition = _.copy(selection.startPaM.oxoPosition, true);
-                    localEndPosition[startposLength] = Position.getParagraphLength(paragraphs, localEndPosition);
-                    this.deleteText(selection.startPaM.oxoPosition, localEndPosition);
-                    localEndPosition.pop();
-                    deleteFollowingParagraphsInCell(localEndPosition);
-
-                    // 2) completely selected cells
-                    var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
-                        columnIndex = rowIndex + 1,
-                        startRow = startPos[rowIndex],
-                        startColumn = startPos[columnIndex],
-                        endRow = endPos[rowIndex],
-                        endColumn = endPos[columnIndex],
-                        lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
-
-                    for (var j = startRow; j <= endRow; j++) {
-                        var startCol = (j === startRow) ? startColumn + 1 : 0;
-                        var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
-
-                        for (var i = startCol; i <= endCol; i++) {
-                            startPos[rowIndex] = j;  // row
-                            startPos[columnIndex] = i;  // column
-                            startPos[columnIndex + 1] = 0;
-                            startPos[columnIndex + 2] = 0;
-                            deleteAllParagraphsInCell(startPos);
-                        }
-                    }
-
-                    var startPosition = _.copy(selection.endPaM.oxoPosition, true),
-                        endposLength = selection.endPaM.oxoPosition.length - 1;
-
-                    startPosition[endposLength] = 0;
-                    localEndPosition = _.copy(startPosition, true);
-                    localEndPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
-
-                    this.deleteText(startPosition, localEndPosition);
-
-                    // delete all previous paragraphs in this cell!
-                    localEndPosition.pop();
-                    deletePreviousParagraphsInCell(localEndPosition);
+                    deleteSelectedInSameTableLevel(selection);
 
                 } else {
-
                     // The included paragraphs are not neighbours. For example one paragraph top level and one in table.
                     // Should this be supported? How about tables in tables?
                     // This probably works not reliable for tables in tables.
+                    deleteSelectedInDifferentParagraphLevels(selection);
 
-                    var endPosition = _.copy(selection.endPaM.oxoPosition, true),
-                        startposLength = selection.startPaM.oxoPosition.length - 1,
-                        endposLength = selection.endPaM.oxoPosition.length - 1,
-                        isTable = false;
-
-                    // 1) delete selected part or rest of para in first para (pos to end)
-                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-                        isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
-                        endPosition = _.copy(selection.startPaM.oxoPosition);
-                        if (isTable) {
-                            var localEndPosition = _.copy(endPosition);
-                            localEndPosition.pop();
-                            deleteFollowingParagraphsInCell(localEndPosition);
-                            localEndPosition.pop();
-                            deleteFollowingCellsInTable(localEndPosition);
-                        }
-                        endPosition[startposLength] = Position.getParagraphLength(paragraphs, endPosition);
-                    }
-                    this.deleteText(selection.startPaM.oxoPosition, endPosition);
-
-                    // 2) delete completly slected paragraphs completely
-                    for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
-                        // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
-                        var startPosition = [];
-                        startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                        isTable = Position.isPositionInTable(paragraphs, startPosition);
-                        if (isTable) {
-                            this.deleteTable(startPosition);
-                        } else {
-                            this.deleteParagraph(startPosition);
-                        }
-                    }
-
-                    // 3) delete selected part in last para (start to pos) and merge first and last para
-                    if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
-
-                        var startPosition = _.copy(selection.endPaM.oxoPosition, true);
-                        startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
-                        startPosition[endposLength] = 0;
-                        endPosition = _.copy(startPosition, true);
-                        endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
-
-                        isTable = Position.isPositionInTable(paragraphs, endPosition);
-
-                        this.deleteText(startPosition, endPosition);
-
-                        if (isTable) {
-                            // delete all previous cells and all previous paragraphs in this cell!
-                            endPosition.pop();
-                            deletePreviousParagraphsInCell(endPosition);
-                            endPosition.pop();
-                            deletePreviousCellsInTable(endPosition);
-                        }
-
-                        if (! isTable) {
-                            var mergeselection = _.copy(selection.startPaM.oxoPosition);
-                            mergeselection.pop();
-                            this.mergeParagraph(mergeselection);
-                        }
-                    }
                 }
 
                 undomgr.endGroup();
@@ -543,29 +387,7 @@ define('io.ox/office/editor/editor',
 
                 // deleting images without selection (only workaround until image selection with mouse is possible)
                 // This deleting of images is only possible with the button, not with an key down event.
-                var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                    returnImageNode = true,
-                    imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
-
-                // only delete, if imageStartPosition is really an image position
-                if (Utils.getNodeName(imageNode) === 'img') {
-                    // delete an corresponding div
-                    var divNode = imageNode.parentNode.firstChild;
-                    while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
-                        if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
-                            // removing div node
-                            $(divNode).remove();
-                            break;
-                        } else {
-                            divNode = divNode.nextSibling;
-                        }
-                    }
-
-                    var imageEndPosition = _.copy(imageStartPosition, true);
-                    imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
-                    // deleting the image with an operation
-                    this.deleteText(imageStartPosition, imageEndPosition);
-                }
+                deleteSelectedImage(selection);
             }
         };
 
@@ -3047,6 +2869,207 @@ define('io.ox/office/editor/editor',
             }
 
             return imageShift;
+        }
+
+        function deleteSelectedInSameParagraphLevel(selection) {
+            // The included paragraphs are neighbours.
+            var endPosition = _.copy(selection.startPaM.oxoPosition, true),
+                startposLength = selection.startPaM.oxoPosition.length - 1,
+                endposLength = selection.endPaM.oxoPosition.length - 1;
+
+            // 1) delete selected part or rest of para in first para (pos to end)
+            endPosition[endposLength] = Position.getParagraphLength(paragraphs, endPosition);
+            self.deleteText(selection.startPaM.oxoPosition, endPosition);
+
+            // 2) delete completly selected paragraphs completely
+            for (var i = selection.startPaM.oxoPosition[startposLength - 1] + 1; i < selection.endPaM.oxoPosition[endposLength - 1]; i++) {
+                var startPosition = _.copy(selection.startPaM.oxoPosition, true);
+                startPosition[startposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
+
+                // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
+                startPosition.pop();
+                var isTable = Position.getDOMPosition(paragraphs, startPosition).node.nodeName === 'TABLE' ? true : false;
+
+                if (isTable) {
+                    self.deleteTable(startPosition);
+                } else {
+                    self.deleteParagraph(startPosition);
+                }
+            }
+
+            // 3) delete selected part in last para (start to pos) and merge first and last para
+            if (selection.startPaM.oxoPosition[startposLength - 1] !== selection.endPaM.oxoPosition[endposLength - 1]) {
+                var startPosition = _.copy(selection.endPaM.oxoPosition, true);
+                startPosition[endposLength - 1] = selection.startPaM.oxoPosition[startposLength - 1] + 1;
+                startPosition[endposLength] = 0;
+                endPosition = _.copy(startPosition, true);
+                endPosition[startposLength] = selection.endPaM.oxoPosition[endposLength];
+                self.deleteText(startPosition, endPosition);
+
+                var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                mergeselection.pop();
+                self.mergeParagraph(mergeselection);
+            }
+        }
+
+        function deleteSelectedInCellSelection(selection) {
+
+            var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                endPos = _.copy(selection.endPaM.oxoPosition, true);
+
+            startPos.pop();
+            startPos.pop();
+            endPos.pop();
+            endPos.pop();
+
+            var startCol = startPos.pop(),
+                startRow = startPos.pop(),
+                endCol = endPos.pop(),
+                endRow = endPos.pop();
+
+            self.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
+
+            self.clearUndo();  // Todo: Remove this asap
+        }
+
+        function deleteSelectedInSameTableLevel(selection) {
+
+            var startPos = _.copy(selection.startPaM.oxoPosition, true),
+                endPos = _.copy(selection.endPaM.oxoPosition, true),
+                startposLength = selection.startPaM.oxoPosition.length - 1;
+
+            // 1) delete selected part or rest of para in first para (pos to end)
+            var localEndPosition = _.copy(selection.startPaM.oxoPosition, true);
+            localEndPosition[startposLength] = Position.getParagraphLength(paragraphs, localEndPosition);
+            self.deleteText(selection.startPaM.oxoPosition, localEndPosition);
+            localEndPosition.pop();
+            deleteFollowingParagraphsInCell(localEndPosition);
+
+            // 2) completely selected cells
+            var rowIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPos, 'TR'),
+                columnIndex = rowIndex + 1,
+                startRow = startPos[rowIndex],
+                startColumn = startPos[columnIndex],
+                endRow = endPos[rowIndex],
+                endColumn = endPos[columnIndex],
+                lastColumn = Position.getLastColumnIndexInTable(paragraphs, startPos);
+
+            for (var j = startRow; j <= endRow; j++) {
+                var startCol = (j === startRow) ? startColumn + 1 : 0;
+                var endCol =  (j === endRow) ? endColumn - 1 : lastColumn;
+
+                for (var i = startCol; i <= endCol; i++) {
+                    startPos[rowIndex] = j;  // row
+                    startPos[columnIndex] = i;  // column
+                    startPos[columnIndex + 1] = 0;
+                    startPos[columnIndex + 2] = 0;
+                    deleteAllParagraphsInCell(startPos);
+                }
+            }
+
+            var startPosition = _.copy(selection.endPaM.oxoPosition, true),
+                endposLength = selection.endPaM.oxoPosition.length - 1;
+
+            startPosition[endposLength] = 0;
+            localEndPosition = _.copy(startPosition, true);
+            localEndPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+
+            self.deleteText(startPosition, localEndPosition);
+
+            // delete all previous paragraphs in this cell!
+            localEndPosition.pop();
+            deletePreviousParagraphsInCell(localEndPosition);
+        }
+
+        function deleteSelectedInDifferentParagraphLevels(selection) {
+
+            var endPosition = _.copy(selection.endPaM.oxoPosition, true),
+                startposLength = selection.startPaM.oxoPosition.length - 1,
+                endposLength = selection.endPaM.oxoPosition.length - 1,
+                isTable = false;
+
+            // 1) delete selected part or rest of para in first para (pos to end)
+            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+                isTable = Position.isPositionInTable(paragraphs, selection.startPaM.oxoPosition);
+                endPosition = _.copy(selection.startPaM.oxoPosition);
+                if (isTable) {
+                    var localEndPosition = _.copy(endPosition);
+                    localEndPosition.pop();
+                    deleteFollowingParagraphsInCell(localEndPosition);
+                    localEndPosition.pop();
+                    deleteFollowingCellsInTable(localEndPosition);
+                }
+                endPosition[startposLength] = Position.getParagraphLength(paragraphs, endPosition);
+            }
+            self.deleteText(selection.startPaM.oxoPosition, endPosition);
+
+            // 2) delete completly slected paragraphs completely
+            for (var i = selection.startPaM.oxoPosition[0] + 1; i < selection.endPaM.oxoPosition[0]; i++) {
+                // startPaM.oxoPosition[0]+1 instead of i, because we always remove a paragraph
+                var startPosition = [];
+                startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                isTable = Position.isPositionInTable(paragraphs, startPosition);
+                if (isTable) {
+                    self.deleteTable(startPosition);
+                } else {
+                    self.deleteParagraph(startPosition);
+                }
+            }
+
+            // 3) delete selected part in last para (start to pos) and merge first and last para
+            if (selection.startPaM.oxoPosition[0] !== selection.endPaM.oxoPosition[0]) {
+
+                var startPosition = _.copy(selection.endPaM.oxoPosition, true);
+                startPosition[0] = selection.startPaM.oxoPosition[0] + 1;
+                startPosition[endposLength] = 0;
+                endPosition = _.copy(startPosition, true);
+                endPosition[endposLength] = selection.endPaM.oxoPosition[endposLength];
+
+                isTable = Position.isPositionInTable(paragraphs, endPosition);
+
+                self.deleteText(startPosition, endPosition);
+
+                if (isTable) {
+                    // delete all previous cells and all previous paragraphs in this cell!
+                    endPosition.pop();
+                    deletePreviousParagraphsInCell(endPosition);
+                    endPosition.pop();
+                    deletePreviousCellsInTable(endPosition);
+                }
+
+                if (! isTable) {
+                    var mergeselection = _.copy(selection.startPaM.oxoPosition);
+                    mergeselection.pop();
+                    self.mergeParagraph(mergeselection);
+                }
+            }
+
+        }
+
+        function deleteSelectedImage(selection) {
+            var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+                returnImageNode = true,
+                imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+
+            // only delete, if imageStartPosition is really an image position
+            if (Utils.getNodeName(imageNode) === 'img') {
+                // delete an corresponding div
+                var divNode = imageNode.parentNode.firstChild;
+                while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
+                    if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
+                        // removing div node
+                        $(divNode).remove();
+                        break;
+                    } else {
+                        divNode = divNode.nextSibling;
+                    }
+                }
+
+                var imageEndPosition = _.copy(imageStartPosition, true);
+                imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
+                // deleting the image with an operation
+                self.deleteText(imageStartPosition, imageEndPosition);
+            }
         }
 
         // ====================================================================
