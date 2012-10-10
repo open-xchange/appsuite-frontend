@@ -127,6 +127,9 @@ $(document).ready(function () {
             ).done(function (core) {
                 // go!
                 core.launch();
+            })
+            .fail(function (e) {
+                console.error('Cannot launch core!', e);
             });
         });
     };
