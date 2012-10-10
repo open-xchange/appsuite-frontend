@@ -450,6 +450,7 @@ define("io.ox/core/desktop",
         if (dirtyApps.length > 0) {
             return gt('There are unsaved changes.');
         }
+    };
 
     /**
      * Create app
