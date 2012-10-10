@@ -46,7 +46,10 @@ define("io.ox/mail/main",
         },
 
         // application object
-        app = ox.ui.createApp({ name: 'io.ox/mail' }),
+        app = ox.ui.createApp({
+            name: 'io.ox/mail',
+            title: 'Mail'
+        }),
 
         // app window
         win,

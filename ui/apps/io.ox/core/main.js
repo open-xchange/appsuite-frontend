@@ -38,7 +38,43 @@ define("io.ox/core/main",
     };
 
     var topbar = $('#io-ox-topbar'),
-        container = topbar.find('launchers');
+        launchers = topbar.find('.launchers');
+
+    // add launcher
+    var addLauncher = function (side, label, fn, tooltip) {
+        // construct
+        var node = $('<div class="launcher">')
+            .append(_.isString(label) ? $.txt(label) : label)
+            .hover(
+                function () { $(this).addClass('hover'); },
+                function () { $(this).removeClass('hover'); }
+            )
+            .on('click', function () {
+                var self = $(this), content;
+                // set fixed width, hide label, be busy
+                content = self.contents();
+                self.css('width', self.width() + 'px').text('\u00A0').busy();
+                // call launcher
+                (fn.call(this) || $.when()).done(function () {
+                    // revert visual changes
+                    self.idle().empty().append(content).css('width', '');
+                });
+            });
+
+        // tooltip
+        if (tooltip) {
+            node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
+        }
+
+        // just add
+        if (side === 'left') {
+            node.appendTo(launchers);
+        } else {
+            node.addClass('right').appendTo(topbar);
+        }
+
+        return node;
+    };
 
     function initRefreshAnimation() {
 
@@ -86,31 +122,45 @@ define("io.ox/core/main",
 
     function launch() {
 
-        ox.on('application:launch application:resume', function (e, app) {
-            var name = app.getName(),
-                id = app.getId(),
-                launcher = $();
-            // remove active class
-            topbar.find('.launcher').removeClass('active');
-            // has named launcher?
-            launcher = topbar.find('.launcher[data-app-name=' + $.escape(name) + ']');
-            // has no launcher?
-            if (!launcher.length && !(launcher = topbar.find('.launcher[data-app-id=' + $.escape(id) + ']')).length) {
-                launcher = desktop.addLauncher('left', app.getTitle(), app.launch).attr('data-app-id', id);
+        /**
+         * Listen to events on apps collection
+         */
+
+        ox.ui.apps.on('add', function (model, collection, e) {
+            var node, placeholder;
+            // create launcher
+            node = addLauncher('left', model.get('title'), function () { model.launch(); })
+                .attr('data-app-name', model.get('name') || model.id)
+                .attr('data-app-guid', model.guid);
+            // is launcher?
+            if (model instanceof ox.ui.AppPlaceholder) {
+                node.addClass('placeholder');
+            } else {
+                placeholder = launchers.children('.placeholder[data-app-name="' + $.escape(model.get('name')) + '"]');
+                if (placeholder.length) {
+                    node.insertBefore(placeholder);
+                }
+                placeholder.remove();
             }
-            // mark as active
-            launcher.addClass('active');
         });
 
-        ox.on('application:quit', function (e, app) {
-            var id = app.getId();
-            topbar.find('.launcher[data-app-id=' + $.escape(id) + ']').remove();
+        ox.ui.apps.on('remove', function (model, collection, e) {
+            launchers.children('[data-app-guid="' + model.guid + '"]').remove();
         });
 
-        ox.on('application:change:title', function (e, app) {
-            var id = app.getId(), title = app.getTitle();
-            topbar.find('.launcher[data-app-id=' + $.escape(id) + ']').text(title);
+        ox.ui.apps.on('launch resume', function (model, collection, e) {
+            // mark last active app
+            launchers.children().removeClass('active')
+                .filter('.launcher[data-app-guid="' + model.guid + '"]').addClass('active');
         });
+
+        ox.ui.apps.on('change:title', function (model, value) {
+            launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+        });
+
+        /**
+         * Extenions
+         */
 
         ext.point('io.ox/core/topbar/right').extend({
             id: 'logo',
@@ -127,7 +177,7 @@ define("io.ox/core/main",
             id: 'notifications',
             index: 10000,
             draw: function () {
-                notifications.attach(desktop, 'right');
+                notifications.attach(addLauncher);
                 notifications.addFaviconNotification();
             }
         });
@@ -222,7 +272,7 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar/launchpad').extend({
             id: 'default',
             draw: function () {
-                desktop.addLauncher("left", $('<i class="icon-th icon-white">'), function () {
+                addLauncher("left", $('<i class="icon-th icon-white">'), function () {
                     return require(["io.ox/launchpad/main"], function (m) {
                         m.show();
                     });
@@ -234,22 +284,11 @@ define("io.ox/core/main",
         ext.point('io.ox/core/topbar/favorites').extend({
             id: 'default',
             draw: function () {
-
-                var addLauncher = function (app, tooltip) {
-                    var launcher = desktop.addLauncher(app.side || 'left', app.title, function () {
-                        return require([app.id + '/main'], function (m) {
-                            var app = m.getApp();
-                            launcher.attr('data-app-id', app.getId());
-                            app.launch();
-                        });
-                    }, _.isString(tooltip) ? tooltip : void(0))
-                    .attr('data-app-name', app.id);
-                };
-
-                _(appAPI.getFavorites()).each(addLauncher);
+                _(appAPI.getFavorites()).each(function (obj) {
+                    ox.ui.apps.add(new ox.ui.AppPlaceholder({ id: obj.id, title: obj.title }));
+                });
             }
         });
-
 
         ext.point('io.ox/core/topbar').extend({
             id: 'default',
@@ -259,11 +298,10 @@ define("io.ox/core/main",
                 ext.point('io.ox/core/topbar/right').invoke('draw', topbar);
 
                 // refresh
-                desktop.addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
-                        globalRefresh();
-                        return $.Deferred().resolve();
-                    }, gt('Refresh'))
-                    .attr("id", "io-ox-refresh-icon");
+                addLauncher("right", $('<i class="icon-refresh icon-white">'), function () {
+                    globalRefresh();
+                    return $.when();
+                }, gt('Refresh')).attr("id", "io-ox-refresh-icon");
 
                 // refresh animation
                 initRefreshAnimation();
@@ -285,8 +323,8 @@ define("io.ox/core/main",
                         position: "absolute",
                         width: "270px",
                         height: "140px",
-                        right: "70px",
-                        bottom: "150px"
+                        right: "50px",
+                        bottom: "50px"
                     })
                     .append(
                         $("<div>", { id: "io-ox-welcome-upsell" })
@@ -301,6 +339,7 @@ define("io.ox/core/main",
             }
         });
 
+        /*
         ext.point("io.ox/core/desktop").extend({
             id: "welcome",
             draw: function () {
@@ -330,6 +369,7 @@ define("io.ox/core/main",
                 _.tick(1, "minute", update);
             }
         });
+        */
 
         var drawDesktop = function () {
             ext.point("io.ox/core/desktop").invoke("draw", $("#io-ox-desktop"), {});
@@ -353,7 +393,7 @@ define("io.ox/core/main",
         }
 
         var def = $.Deferred(),
-            autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : [],
+            autoLaunch = _.url.hash("app") ? _.url.hash("app").split(/,/) : ['io.ox/mail'],
             autoLaunchModules = _(autoLaunch)
                 .map(function (m) {
                     return m.split(/:/)[0] + '/main';
@@ -428,6 +468,7 @@ define("io.ox/core/main",
     }
 
     return {
-        launch: launch
+        launch: launch,
+        addLauncher: addLauncher
     };
 });

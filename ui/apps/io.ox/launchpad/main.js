@@ -80,7 +80,6 @@ define('io.ox/launchpad/main',
             if ((running = getRunningApps(e.data.id)).length) {
                 running[0].app.launch();
             } else {
-                console.log("APP DATA: ", e, this);
                 $.when(
                     require([e.data.entryModule || e.data.id + "/main"]),
                     pad.fadeOut(FADE_DURATION >> 1)
@@ -136,7 +135,7 @@ define('io.ox/launchpad/main',
                 $('<div>').addClass('manage-apps')
                 .append(
                     $('<a>', { href: '#', tabindex: '1' })
-                    .addClass('button default-action')
+                    .addClass('btn btn-primary')
                     .text('Manage applications')
                     .on('click', fnOpenAppStore)
                 )
