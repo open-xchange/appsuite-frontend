@@ -141,7 +141,7 @@ define('io.ox/files/carousel',
 
         filterImagesList: function (list) {
             return $.grep(list, function (o) {
-                return (/^((?![.]_?).)*\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
+                return (/\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename);
             });
         },
 
