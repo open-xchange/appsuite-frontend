@@ -641,6 +641,28 @@ define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
     };
 
     /**
+     * Returns an integer attribute of the passed element.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM element whose attribute will be returned. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {String} name
+     *  The name of the element attribute.
+     *
+     * @param {Number} def
+     *  A default value in case the element does not contain the specified
+     *  attribute.
+     *
+     * @returns {Number}
+     *  The attribute value parsed as integer, or the default value.
+     */
+    Utils.getElementAttributeAsInteger = function (node, name, def) {
+        var attr = $(node).attr(name);
+        return _.isString(attr) ? parseInt(attr, 10) : def;
+    };
+
+    /**
      * Returns an integer indicating how the two passed nodes are located to
      * each other.
      *
