@@ -73,8 +73,6 @@ define('io.ox/files/mediaplayer',
 
             $(document).keyup(function (e) {
                 if (e.keyCode === 27) self.close();
-                if (e.keyCode === 39 || e.keyCode === 40) self.nextItem(); // right / down
-                if (e.keyCode === 37 || e.keyCode === 38) self.prevItem(); // left / up
             });
 
         },
@@ -173,7 +171,45 @@ define('io.ox/files/mediaplayer',
             $('video, audio').mediaelementplayer({
                 width: 480,
                 audioWidth: 480,
-                plugins: ['flash'],
+                plugins: ['flash', 'silverlight'],
+                timerRate: 250,
+                features: ['playpause', 'progress', 'current', 'volume'],
+                keyActions: [{
+                    keys: [32, 179], // SPACE
+                    action: function (player, media) {
+                        if (media.paused || media.ended) {
+                            media.play();
+                        } else {
+                            media.pause();
+                        }
+                    }
+                },
+                {
+                    keys: [38], // UP
+                    action: function (player, media) {
+                        var newVolume = Math.min(media.volume + 0.1, 1);
+                        media.setVolume(newVolume);
+                    }
+                },
+                {
+                    keys: [40], // DOWN
+                    action: function (player, media) {
+                        var newVolume = Math.max(media.volume - 0.1, 0);
+                        media.setVolume(newVolume);
+                    }
+                },
+                {
+                    keys: [37, 227], // LEFT
+                    action: function (player, media) {
+                        self.prevItem();
+                    }
+                },
+                {
+                    keys: [39, 228], // RIGHT
+                    action: function (player, media) {
+                        self.nextItem();
+                    }
+                }],
                 success: function (me, domObject) {
                     self.mediaelement = me;
                     self.mediaelement.addEventListener('ended', function () {
