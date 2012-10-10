@@ -67,6 +67,7 @@ define('io.ox/office/editor/format/documentstyles',
         this.destroy = function () {
             _(containers).invoke('destroy');
             containers = null;
+            _([themes]).invoke('destroy');
             themes = null;
         };
 
