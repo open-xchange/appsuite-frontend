@@ -696,6 +696,10 @@ define('io.ox/core/tk/vgrid',
                         return self.selection.serialize(obj);
                     }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
+                // proppagate select event?
+                if (list.length >= 1) {
+                    node.trigger('select', list);
+                }
             })
             .on('select:first', function () {
                 setIndex(0);

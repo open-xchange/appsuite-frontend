@@ -430,3 +430,17 @@ h4.mail-attachment-preview {
 .touch .mail-detail .content.plain-text {
     font-size: @touch-font-size;
 }
+
+@media (max-width: 700px) {
+    .mail-detail-pane .mail-detail.view {
+        border: 0px none;
+        border-bottom: 2px solid #555;
+        margin: 0;
+    }
+    .mail-detail-pane .mail-detail.thread-inline-actions {
+        margin-bottom: 20px;
+    }
+    .scrollable-pane::after {
+        content: ''
+    }
+}

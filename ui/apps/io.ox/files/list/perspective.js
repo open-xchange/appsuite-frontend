@@ -49,15 +49,9 @@ define('io.ox/files/list/perspective',
             var win = app.getWindow(),
                 left, right, grid;
 
-            // left panel
-            left = $("<div>")
-                .addClass("leftside border-right")
-                .appendTo(this.main);
-
-            // right panel
-            right = $("<div>")
-                .addClass("rightside default-content-padding")
-                .appendTo(this.main);
+            var vsplit = commons.vsplit(this.main);
+            left = vsplit.left.addClass('border-right');
+            right = vsplit.right.addClass('default-content-padding').scrollable();
 
             // grid
             grid = new VGrid(left);

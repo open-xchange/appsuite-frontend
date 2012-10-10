@@ -1242,14 +1242,13 @@ define("io.ox/core/desktop",
                 // hide toolbar
                 win.nodes.head.find('.css-table-cell')
                     .eq(0).removeClass('cell-30').addClass('cell-70').end()
-                    .eq(1).remove();
+                    .eq(1).hide();
             }
 
             // fix height/position/appearance
             if (opt.chromeless) {
 
-                win.nodes.head.remove();
-                win.nodes.toolbar.remove();
+                win.nodes.head.hide();
                 win.nodes.body.css("top", "0px");
 
             } else {
