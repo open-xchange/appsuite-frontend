@@ -26,11 +26,15 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
                 ifModified: true // E-Tag and LastModified Magic
             }).done(function (code) {
                 if (code) {
-                    self.delegate = new Function("return " + code)();
-                    if (self.transformDelegate) {
-                        self.delegate = self.transformDelegate(self.delegate);
+                    try {
+                        self.delegate = new Function("return " + code)();
+                        if (self.transformDelegate) {
+                            self.delegate = self.transformDelegate(self.delegate);
+                        }
+                        self.redrawDelegate();
+                    } catch (e) {
+                        console.error(e);
                     }
-                    self.redrawDelegate();
                 }
             }).always(function () {
                 self.pending = false;
