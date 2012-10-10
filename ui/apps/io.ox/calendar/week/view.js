@@ -310,7 +310,7 @@ define('io.ox/calendar/week/view',
 
             // create timelabels
             var times = [];
-            for (var i = 1; i <= this.slots; i++) {
+            for (var i = 1; i < this.slots; i++) {
                 times.push(
                     $('<div>')
                         .addClass('time')
@@ -331,6 +331,39 @@ define('io.ox/calendar/week/view',
                     $('<div>').addClass('fulltime-lable'),
                     this.fulltimePane
                 );
+
+            // create days container
+            var container = $('<div>').addClass('week-container');
+
+            // create and animate timeline
+            this.timeline = $('<div>').addClass('timeline');
+            this.renderTimeline(this.timeline);
+            this.tlInterval = setInterval(this.renderTimeline, 60000, this.timeline);
+            container.append(this.timeline);
+
+            // create days
+            for (var d = 0; d < this.columns; d++) {
+
+                var day = $('<div>')
+                        .addClass('day').width(100 / this.columns + '%')
+                        .attr('date', d);
+
+                // add days to fulltime panel
+                this.fulltimePane.append(day.clone());
+
+                // create timeslots
+                for (var i = 1; i <= this.slots * this.fragmentation; i++) {
+                    day.append(
+                        $('<div>')
+                            .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
+                            .height(this.cellHeight)
+                    );
+                }
+
+                container.append(day);
+            }
+
+            this.pane.append(container);
 
             // create toolbar
             this.$el.append(
@@ -383,48 +416,16 @@ define('io.ox/calendar/week/view',
                     )
             );
 
-            // create days container
-            var container = $('<div>').addClass('week-container');
-
-            // create and animate timeline
-            this.timeline = $('<div>').addClass('timeline');
-            this.renderTimeline(this.timeline);
-            this.tlInterval = setInterval(this.renderTimeline, 60000, this.timeline);
-            container.append(this.timeline);
-
-            // create days
-            for (var d = 0; d < this.columns; d++) {
-
-                var day = $('<div>')
-                        .addClass('day').width(100 / this.columns + '%')
-                        .attr('date', d);
-
-                // add days to fulltime panel
-                this.fulltimePane.append(day.clone());
-
-                // create timeslots
-                for (var i = 1; i <= this.slots * this.fragmentation; i++) {
-                    day.append(
-                        $('<div>')
-                            .addClass('timeslot ' + (i > (this.workStart * this.fragmentation) && i <= (this.workEnd * this.fragmentation) ? 'in' : 'out'))
-                            .height(this.cellHeight)
-                    );
-                }
-
-                container.append(day);
-            }
-
-            this.pane.append(container);
-
             return this;
         },
 
-        getScrollPos: function () {
+        setScrollPos: function () {
             var slotHeight = this.cellHeight * this.fragmentation,
                 workStartPos = slotHeight * this.workStart,
                 workHeight = slotHeight * this.workEnd - workStartPos,
                 newPos = (this.pane.height() - workHeight) / 2;
-            return workStartPos - newPos;
+            // adjust scoll position
+            this.pane.scrollTop(workStartPos - newPos);
         },
 
         renderTimeline: function (tl) {
@@ -557,9 +558,6 @@ define('io.ox/calendar/week/view',
             this.fulltimePane.css({ height: fulltimeColPos.length * (this.fulltimeHeight + 1) + 'px'});
             this.fulltimeCon.add().css({ height: ftHeight + 'px' });
             this.pane.css({ top: ftHeight + 'px' });
-
-            // adjust scoll position
-            this.pane.scrollTop(this.getScrollPos());
 
             // loop over all single days
             $.each(draw, function (day, apps) {
@@ -1003,8 +1001,8 @@ define('io.ox/calendar/week/view',
                 });
         },
 
+        // render an single appointment
         renderAppointment: function (a) {
-
             myself = myself || ox.user_id;
 
             // check confirmations
@@ -1030,6 +1028,7 @@ define('io.ox/calendar/week/view',
                 );
         },
 
+        // round an integer to the next grid size
         roundToGrid: function (pos, typ) {
             var h = this.gridHeight();
             switch (typ) {
@@ -1046,6 +1045,7 @@ define('io.ox/calendar/week/view',
             return Math[typ](pos / h) * h;
         },
 
+        // calculate css position paramter (top and left) of an appointment
         calcPos: function (ap) {
             var start = new date.Local(ap.pos.start),
                 end = new date.Local(ap.pos.end),
@@ -1060,6 +1060,7 @@ define('io.ox/calendar/week/view',
             };
         },
 
+        // get timestamp from date marker
         getTimeFromDateTag: function (days, utc)  {
             if (utc) {
                 return date.Local.utc(this.curTimeUTC + (days * date.DAY));
@@ -1067,6 +1068,7 @@ define('io.ox/calendar/week/view',
             return this.curTimeUTC + (days * date.DAY);
         },
 
+        // calc daily timestamp from mouse position
         getTimeFromPos: function (pos) {
             return this.roundToGrid(pos) / this.height() * date.DAY;
         },

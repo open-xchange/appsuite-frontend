@@ -167,10 +167,7 @@ define('io.ox/office/editor/table',
         allCells.each(function (index) {
 
             if (index <= cellPosition) {
-                var colSpan = 1;
-                if ($(this).attr('colspan')) {
-                    colSpan = parseInt($(this).attr('colspan'), 10);
-                }
+                var colSpan = Utils.getElementAttributeAsInteger(this, 'colspan', 1);
 
                 gridPosition += colSpan;
 
@@ -229,10 +226,7 @@ define('io.ox/office/editor/table',
         allCells.each(function (index) {
             cellPosition = index;
             if (gridSum < colSpanTarget) {
-                var colSpan = 1;
-                if ($(this).attr('colspan')) {
-                    colSpan = parseInt($(this).attr('colspan'), 10);
-                }
+                var colSpan = Utils.getElementAttributeAsInteger(this, 'colspan', 1);
 
                 gridSum += colSpan;
 
@@ -275,14 +269,8 @@ define('io.ox/office/editor/table',
 
         var sum = 0;
 
-        cellSelection.each(function (index) {
-
-            var colSpan = 1;
-            if ($(this).attr('colspan')) {
-                colSpan = parseInt($(this).attr('colspan'), 10);
-            }
-
-            sum += colSpan;
+        cellSelection.each(function () {
+            sum += Utils.getElementAttributeAsInteger(this, 'colspan', 1);
         });
 
         return sum;

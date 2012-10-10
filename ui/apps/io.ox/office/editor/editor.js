@@ -71,6 +71,7 @@ define('io.ox/office/editor/editor',
             // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             imageStyles = documentStyles.getStyleSheets('image'),
             tableStyles = documentStyles.getStyleSheets('table'),
+            tableRowStyles = documentStyles.getStyleSheets('tablerow'),
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
 
             // all highlighted DOM ranges (e.g. in quick search)
@@ -134,7 +135,7 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = characterStyles = imageStyles = tableStyles = tableCellStyles = null;
+            documentStyles = characterStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
 
         // OPERATIONS API
@@ -407,8 +408,6 @@ define('io.ox/office/editor/editor',
             var newOperation = { name: Operations.TABLE_DELETE, start: _.copy(position, true) };
             applyOperation(newOperation, true, true);
 
-            this.clearUndo();  // ToDo: Remove this asap
-
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
@@ -439,9 +438,8 @@ define('io.ox/office/editor/editor',
                 newOperation = { name: Operations.ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
-            applyOperation(newOperation, true, true);
-
             this.clearUndo();  // ToDo: Remove this asap
+            applyOperation(newOperation, true, true);
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -545,38 +543,18 @@ define('io.ox/office/editor/editor',
                         localEndCol = endCol;
 
                     if ((! isCellSelection) && (i < endRow) && (i > startCol))  {
-                        // removing complete rows
+                        // merging complete rows
                         localStartCol = 0;
                         localEndCol = Position.getLastColumnIndexInRow(paragraphs, rowPosition);
                     }
 
-                    // Counting the colSpan off all cells in the range
-                    var row = Position.getDOMPosition(paragraphs, rowPosition).node,
-                        allSelectedCells = $(row).children().slice(localStartCol, localEndCol + 1),
-                        colSpanSum = Table.getColSpanSum(allSelectedCells);
-
-                    // Shifting the content of all following cells to the first cell
-                    var targetCell = $(row).children().slice(localStartCol, localStartCol + 1),
-                        sourceCells = $(row).children().slice(localStartCol + 1, localEndCol + 1);
-
-                    // ToDo: This has to be done within operations
-                    Table.shiftCellContent(targetCell, sourceCells);
-
-                    // removing all cells behind the start cell
-                    var removeStartCol = localStartCol;
-                    removeStartCol++;  // do not remove the first cell
-
-                    var newOperation = {name: Operations.CELLS_DELETE, position: rowPosition, start: removeStartCol, end: localEndCol};
+                    var count = localEndCol - localStartCol,
+                        cellPosition = _.copy(rowPosition, true);
+                    cellPosition.push(localStartCol);
+                    var newOperation = {name: Operations.CELL_MERGE, position: cellPosition, count: count};
                     applyOperation(newOperation, true, true);
 
-                    // setting new colspan to the remaining cell
-                    rowPosition.push(localStartCol); // -> position of the new merged cell
-
-                    // Setting new table grid attribute to table
-                    newOperation = { name: Operations.ATTRS_SET, attrs: { 'gridspan' : colSpanSum }, start: _.copy(rowPosition, true), end: _.copy(rowPosition, true) };
-                    applyOperation(newOperation, true, true);
-
-                    endPosition = _.copy(rowPosition, true);
+                    endPosition = _.copy(cellPosition, true);
                 }
 
                 undomgr.endGroup();
@@ -692,6 +670,8 @@ define('io.ox/office/editor/editor',
             var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
                 newOperation;
 
+            this.clearUndo();  // ToDo: Remove this asap
+
             undomgr.startGroup();  // starting to group operations for undoing
 
             if (isCompleteTable) {
@@ -736,8 +716,6 @@ define('io.ox/office/editor/editor',
             }
 
             undomgr.endGroup();
-
-            this.clearUndo();  // ToDo: Remove this asap
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -1697,51 +1675,18 @@ define('io.ox/office/editor/editor',
             else if (operation.name === Operations.TABLE_DELETE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
 
-                    var localStart = _.copy(operation.start, true);
-                    var tablePos = Position.getDOMPosition(paragraphs, localStart);
+                    var tablePos = Position.getDOMPosition(paragraphs, operation.start);
                     if (tablePos) {
                         undomgr.startGroup();
-                        var tableNode = tablePos.node,
-                            localattrs = StyleSheets.getExplicitAttributes(tableNode);
-
-                        var tableUndoOperation = { name: Operations.TABLE_INSERT, position: localStart, attrs: localattrs };
-
-                        // restoring also all rows and cells (only one with each operation, because attributes can be different)
-
-                        var lastRow = $(tableNode).children('tbody, thead').children().length - 1;
-
-                        for (var i = lastRow; i >= 0; i--) {
-                            var localPos = _.copy(operation.start, true);  // table position
-                            localPos.push(i);  // row position
-
-                            var tableRow = Position.getDOMPosition(paragraphs, localPos);
-                            if (tableRow) {
-                                var row = tableRow.node,
-                                rowAttrs = StyleSheets.getExplicitAttributes(row);
-
-                                // all cells of this row have to be restored (without redo operation)
-                                var allCells = $(row).children(),
-                                    allCellsAttributes = Table.getCellAttributes(allCells);
-
-                                for (var j = allCellsAttributes.length - 1; j >= 0; j--) {
-                                    var count = 1,  // always only one cell in undo, cells can have different attributes
-                                        cellAttrs = allCellsAttributes[j],
-                                        cellPos = _.copy(localPos, true);
-
-                                    cellPos.push(j);
-
-                                    var localUndoOperation = { name: Operations.CELL_INSERT, position: cellPos, count: count, attrs: cellAttrs };
-
-                                    undomgr.addUndo(localUndoOperation);  // no redo operation
-                                }
-
-                                var undoOperation = { name: Operations.ROW_INSERT, position: localPos, count: 1, insertdefaultcells: false, attrs: rowAttrs };
-
-                                undomgr.addUndo(undoOperation);
-                            }
-                        }
-
-                        undomgr.addUndo(tableUndoOperation, operation);
+                        // add the redo operation
+                        undomgr.addUndo(null, operation);
+                        // generate undo operations for the entire table
+                        var undoOperations = (new Operations.Generator()).generateTableOperations(tablePos.node, _.clone(operation.start));
+                        // undo manager applies operations in reversed order
+                        undoOperations.reverse();
+                        _(undoOperations).each(function (operation) {
+                            undomgr.addUndo(operation);
+                        });
                         undomgr.endGroup();
                     }
                 }
@@ -1865,6 +1810,15 @@ define('io.ox/office/editor/editor',
                 }
                 implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
             }
+            else if (operation.name === Operations.CELL_MERGE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var content = null,
+                        gridspan = null,
+                        undoOperation = { name: Operations.CELL_SPLIT, position: _.copy(operation.position, true), content: content, gridspan: gridspan };
+                    undomgr.addUndo(undoOperation, operation);
+                }
+                implMergeCell(_.copy(operation.position, true), operation.count);
+            }
             else if (operation.name === Operations.CELL_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var pos = _.copy(operation.position, true),
@@ -1874,7 +1828,7 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.CELLS_DELETE, position: pos, start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
+                implInsertCell(_.copy(operation.position, true), operation.count, operation.attrs);
             }
             else if (operation.name === Operations.ROW_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1884,7 +1838,7 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.ROWS_DELETE, position: pos, start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
+                implInsertRow(_.copy(operation.position, true), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.COLUMN_INSERT) {
 
@@ -2765,9 +2719,8 @@ define('io.ox/office/editor/editor',
                 endCol = endPos.pop(),
                 endRow = endPos.pop();
 
-            self.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
-
             self.clearUndo();  // Todo: Remove this asap
+            self.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
         }
 
         function deleteSelectedInSameTableLevel(selection) {
@@ -3710,7 +3663,7 @@ define('io.ox/office/editor/editor',
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
-                setRowHeight = false,
+//                setRowHeight = false,
                 useReferenceRow = _.isNumber(referencerow) ? true : false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
@@ -3723,9 +3676,9 @@ define('io.ox/office/editor/editor',
                 count = 1; // setting default for number of rows
             }
 
-            if ((attrs) && (attrs.height)) {
-                setRowHeight = true;
-            }
+//            if ((attrs) && (attrs.height)) {
+//                setRowHeight = true;
+//            }
 
             var tablePos = _.copy(localPosition, true);
             tablePos.pop();
@@ -3763,10 +3716,13 @@ define('io.ox/office/editor/editor',
                 row = $('<tr>');
             }
 
-            if (setRowHeight) {
-                var height = attrs.height / 100 + 'mm';  // converting to mm
-                row.css('height', height);
-            }
+            // apply the passed table attributes
+            tableRowStyles.setElementAttributes(row, attrs);
+
+//            if (setRowHeight) {
+//                var height = attrs.height / 100 + 'mm';  // converting to mm
+//                row.css('height', height);
+//            }
 
             if (tableRowNode) {
                 // inserting the new row(s) after the existing row at the specified position
@@ -4119,6 +4075,27 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
+        }
+
+        function implMergeCell(cellposition, count) {
+
+            var rowPosition = _.copy(cellposition, true),
+                localStartCol = rowPosition.pop(),
+                localEndCol = localStartCol + count,
+                // Counting the colSpan off all cells in the range
+                row = Position.getDOMPosition(paragraphs, rowPosition).node,
+                allSelectedCells = $(row).children().slice(localStartCol, localEndCol + 1),
+                colSpanSum = Table.getColSpanSum(allSelectedCells),
+                // Shifting the content of all following cells to the first cell
+                targetCell = $(row).children().slice(localStartCol, localStartCol + 1),
+                sourceCells = $(row).children().slice(localStartCol + 1, localEndCol + 1);
+
+            Table.shiftCellContent(targetCell, sourceCells);
+
+            sourceCells.remove();
+
+            // apply the passed table attributes
+            tableCellStyles.setElementAttributes(targetCell, { 'gridspan' : colSpanSum });
         }
 
         function implDbgOutEvent(event) {

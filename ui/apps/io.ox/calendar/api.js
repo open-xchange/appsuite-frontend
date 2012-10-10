@@ -86,7 +86,7 @@ define("io.ox/calendar/api",
                     order: "asc",
                     timezone: "UTC"
                 };
-            
+
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
@@ -176,13 +176,12 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
-
                             return data;
                         });
                 });
             }
         },
-        
+
         create: function (o) {
             return http.PUT({
                 module: 'calendar',

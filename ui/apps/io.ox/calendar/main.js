@@ -45,7 +45,7 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to month view
+                // switch to week view
                 require(['io.ox/calendar/week/perspective'], function (perspective) {
                     perspective.show(app);
                 });

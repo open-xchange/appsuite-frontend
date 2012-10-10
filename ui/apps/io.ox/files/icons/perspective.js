@@ -30,7 +30,7 @@ define('io.ox/files/icons/perspective',
         thumbnailHeight: 90,
         fileIconWidth: 158,
         fileIconHeight: 182,
-        fileFilterRegExp: '^((?![.]_?).)'
+        fileFilterRegExp: '^[^.].*$'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -100,14 +100,24 @@ define('io.ox/files/icons/perspective',
     ext.point('io.ox/files/icons/actions').extend({
         id: 'slideshow',
         draw: function (baton) {
+            console.log(baton.app.getFiles());
             this.append(
                 $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
                     .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
-                $.txt(' ('),
-                $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
-                    .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
-                $.txt(') '),
-                $('<a href="#" class="mediaplayer">').text(gt('Mediaplayer'))
+                $('<span class="slideshow_fullscreen">').append(
+                    $.txt('('),
+                    $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
+                        .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
+                    $.txt(')')
+                )
+            );
+        }
+    });
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'mediaplayer',
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="mediaplayer">').text(gt('Musicplayer'))
                     .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
             );
         }
@@ -174,6 +184,20 @@ define('io.ox/files/icons/perspective',
 
     function filterFiles(files, options) {
         return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
+    }
+
+    function filterMediaList(list) {
+        return $.grep(list, function (o) { return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename); });
+    }
+
+    function filterImagesList(list) {
+        return $.grep(list, function (o) { return (/\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename); });
+    }
+
+    function activateInlineLinks(list) {
+
+        if (filterImagesList(list).length > 0) $('span.slideshow_fullscreen, a.slideshow').show();
+        if (filterMediaList(list).length > 0) $('a.mediaplayer').show();
     }
 
     function calculateLayout(el, options) {
@@ -277,6 +301,7 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
+                        activateInlineLinks(allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
