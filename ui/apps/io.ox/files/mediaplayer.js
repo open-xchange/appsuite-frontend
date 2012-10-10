@@ -25,7 +25,7 @@ define('io.ox/files/mediaplayer',
 
     "use strict";
 
-    var mediaPlayer = {
+    var mediaplayer = {
 
         app: null,
         win: null,
@@ -86,7 +86,7 @@ define('io.ox/files/mediaplayer',
 
         filterMediaList: function (list) {
             return $.grep(list, function (o) {
-                return (/\.(mp3|mp4|m4a|m4b|mov|wmv|wav|mpg|m4v|ogg)$/i).test(o.filename);
+                return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
             });
         },
 
@@ -171,27 +171,27 @@ define('io.ox/files/mediaplayer',
                     }
                 },
                 {
-                    keys: [38], // UP
+                    keys: [39, 228], // RIGHT
                     action: function (player, media) {
                         var newVolume = Math.min(media.volume + 0.1, 1);
                         media.setVolume(newVolume);
                     }
                 },
                 {
-                    keys: [40], // DOWN
+                    keys: [37, 227], // LEFT
                     action: function (player, media) {
                         var newVolume = Math.max(media.volume - 0.1, 0);
                         media.setVolume(newVolume);
                     }
                 },
                 {
-                    keys: [37, 227], // LEFT
+                    keys: [38], // UP
                     action: function (player, media) {
                         self.selectTrack('prev');
                     }
                 },
                 {
-                    keys: [39, 228], // RIGHT
+                    keys: [40], // DOWN
                     action: function (player, media) {
                         self.selectTrack('next');
                     }
@@ -214,5 +214,5 @@ define('io.ox/files/mediaplayer',
         }
     };
 
-    return mediaPlayer;
+    return mediaplayer;
 });
