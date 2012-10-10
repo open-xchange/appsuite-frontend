@@ -101,8 +101,8 @@ define('io.ox/office/editor/table',
      * @param {Number} gridPosition
      *  The grid number that is the basis for the new grid
      *
-     * @param {Boolean} insertmode
-     *  The insertmode can be 'before' or 'behind'. This is relevant for
+     * @param {String} insertmode
+     *  The insert mode can be 'before' or 'behind'. This is relevant for
      *  the position of the added column.
      *
      * @returns {[]}

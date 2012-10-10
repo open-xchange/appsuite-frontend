@@ -204,9 +204,7 @@ define('io.ox/office/editor/operations',
     };
 
     /**
-     * Generates the operations needed to recreate the structure and contents
-     * of the passed table node. Note that the operation to create the table
-     * itself will NOT be generated.
+     * Generates the operations needed to recreate the passed table element.
      *
      * @param {Object[]} operations
      *  (in/out) An array of operations that will generate the structure and
@@ -226,11 +224,18 @@ define('io.ox/office/editor/operations',
     Operations.generateOperationsForTable = function (operations, table, position) {
 
         var // attributes of the table
-            attributes = StyleSheets.getExplicitAttributes(table);
+            attributes = StyleSheets.getExplicitAttributes(table),
+            // all row elements of the table
+            rows = $(table).find('> tbody > tr');
 
         // operation to create the table element
         operations.push({ name: Operations.TABLE_INSERT, position: _.clone(position), attrs: attributes });
 
+        // initial position of the first row (creates a clone of the array)
+        position = createLastIndex(position);
+
+        // operation to create the table rows with default cells and paragraphs
+        operations.push({ name: Operations.ROW_INSERT, position: position, count: rows.length, insertdefaultcells: true });
     };
 
     /**
