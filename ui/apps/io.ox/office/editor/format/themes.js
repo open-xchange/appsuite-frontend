@@ -107,6 +107,10 @@ define('io.ox/office/editor/format/themes',
             return themes;
         };
 
+        this.destroy = function () {
+            this.events.destroy();
+        };
+
         // add event hub
         Events.extend(this);
     } // class Themes
