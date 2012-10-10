@@ -206,7 +206,6 @@ define('io.ox/files/list/perspective',
             dropZone.include();
 
             win.on("hide", function () {
-                console.log('hide');
                 dropZone.remove();
                 shortcutPoint.deactivate();
             });
