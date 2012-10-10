@@ -447,8 +447,8 @@ define("io.ox/files/actions",
         id: 'create',
         index: 10,
         label: gt("Drop here to upload a <b>new file</b>"),
-        action: function (file, app) {
-            app.queues.create.offer(file);
+        multiple: function (files, app) {
+            app.queues.create.offer(files);
         }
     });
 

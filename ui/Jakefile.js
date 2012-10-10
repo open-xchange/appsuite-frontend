@@ -292,6 +292,10 @@ utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
 utils.copy(utils.list("lib", "jquery-ui.min.js"),
     { to: utils.dest("apps/io.ox/core/tk") });
 
+//Mediaelement.js
+
+utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
+
 // Ace editor
 
 utils.copy(utils.list("lib", "ace/"), {to: utils.dest("apps")});

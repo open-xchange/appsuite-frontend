@@ -400,7 +400,39 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
             if (options.visible === true) {
                 loadTree();
             }
-        }
+        },
+
+        vsplit: (function () {
+
+            var click = function (e) {
+                $(this).closest('.vsplit').removeClass('vsplit-right');
+            };
+
+            var select = function (e) {
+                var node = $(this);
+                setTimeout(function () {
+                    node.closest('.vsplit').addClass('vsplit-right');
+                }, 100);
+            };
+
+            return function (parent) {
+                var sides = {};
+                parent.addClass('vsplit').append(
+                    // left
+                    sides.left = $('<div class="leftside">').on('select', select),
+                    // navigation
+                    $('<div class="rightside-navbar">').append(
+                        $('<a href="#" class="btn">').append(
+                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt('Back')
+                        ).on('click', click)
+                    ),
+                    // right
+                    sides.right = $('<div class="rightside">')
+                );
+                //
+                return sides;
+            };
+        }())
     };
 
     return commons;

@@ -20,10 +20,8 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
-     'gettext!io.ox/files/files',
-     'io.ox/core/config',
-     'io.ox/files/carousel'
-     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt, config, carousel) {
+     'gettext!io.ox/files/files'
+     ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt) {
 
     'use strict';
 
@@ -41,7 +39,7 @@ define('io.ox/files/icons/perspective',
         draw: function (baton) {
             if (!baton.app.getWindow().search.active) {
                 this.append(
-                    baton.$.breadcrumb = folderAPI.getBreadcrumb(baton.app.folder.get(), baton.app.folder.set)
+                    baton.$.breadcrumb = folderAPI.getBreadcrumb(baton.app.folder.get(), { handler: baton.app.folder.set })
                 );
             }
         }
@@ -71,12 +69,59 @@ define('io.ox/files/icons/perspective',
         }
     });
 
+    function startSlideshow(e) {
+        e.preventDefault();
+        require(['io.ox/files/carousel'], function (carousel) {
+            var app = e.data.app;
+            carousel.init({
+                fullScreen: !!e.data.fullScreen,
+                list: app.getFiles(),
+                app: app
+            });
+        });
+    }
+
+    function startMediaplayer(e) {
+        e.preventDefault();
+        require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+            var app = e.data.app;
+            mediaplayer.init({
+                list: app.getFiles(),
+                app: app
+            });
+        });
+    }
+
+    function setContentType(ids)
+    {
+
+    }
+
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'slideshow',
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
+                    .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
+                $.txt(' ('),
+                $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
+                    .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
+                $.txt(') '),
+                $('<a href="#" class="mediaplayer">').text(gt('Mediaplayer'))
+                    .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
+            );
+        }
+    });
+
     function drawGeneric(name) {
         var node = $('<i>');
         if (/docx?$/i.test(name)) { node.addClass('icon-align-left file-type-doc'); }
         else if (/xlsx?$/i.test(name)) { node.addClass('icon-table file-type-xls'); }
         else if (/pptx?$/i.test(name)) { node.addClass('icon-picture file-type-ppt'); }
         else if ((/mp3$/i).test(name)) { node.addClass('icon-music'); }
+        else if ((/mp4$/i).test(name)) { node.addClass('icon-film'); }
+        else if ((/ogv$/i).test(name)) { node.addClass('icon-film'); }
+        else if ((/webm$/i).test(name)) { node.addClass('icon-film'); }
         else { node.addClass('icon-file'); }
         return node;
     }
@@ -91,7 +136,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
+        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&content_type=' + file.file_mimetype;
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -100,14 +145,14 @@ define('io.ox/files/icons/perspective',
                 options = baton.options,
                 img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
-            if ((/^((?![.]_?).)*\.(gif|tiff|jpe?g|bmp|png)$/i).test(file.filename) && (/^(image\/(gif|png|jpe?g|gmp)|(application\/octet-stream))$/i).test(file.file_mimetype)) {
+            if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options));
             } else {
                 img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text(file.title ? file.title.replace(/^(.{10}).+(.{9})$/, "$1…$2") : '')
+                $('<div class="title">').text((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2"))
             );
         }
     });
@@ -145,7 +190,6 @@ define('io.ox/files/icons/perspective',
     return _.extend(new ox.ui.Perspective('icons'), {
 
         draw: function (app) {
-
             var options = ext.point('io.ox/mail/icons/options').options();
             var win = app.getWindow(),
                 iconview = $('<div class="files-scrollable-pane">'),
@@ -159,7 +203,6 @@ define('io.ox/files/icons/perspective',
                 displayedRows,
                 layout,
                 recalculateLayout,
-                that = this,
 
                 baton = new ext.Baton({ app: app }),
 
@@ -168,6 +211,10 @@ define('io.ox/files/icons/perspective',
             this.main.append(
                 $('<div class="files-iconview">').append(iconview)
             );
+
+            app.getFiles = function () {
+                return allIds;
+            };
 
             layout = calculateLayout(iconview, options);
 
@@ -210,6 +257,14 @@ define('io.ox/files/icons/perspective',
                 ext.point('io.ox/files/icons').invoke('draw', iconview, baton);
                 iconContainer = baton.$.iconContainer;
 
+                // add inline link
+                var inline;
+                iconview.find('.breadcrumb').after(
+                    inline = $('<div class="inline-actions">')
+                );
+
+                ext.point('io.ox/files/icons/actions').invoke('draw', inline, baton);
+
                 // add element to provoke scrolling
                 iconContainer.append(
                     $('<div class="scroll-spacer">').css({ height: '50px', clear: 'both' })
@@ -230,10 +285,6 @@ define('io.ox/files/icons/perspective',
                             $('<div class="alert alert-info">').text(response.error)
                         );
                     });
-
-                $('.breadcrumb').after($('<div class="slideshowmenu pull-right">'));
-                carousel.addLink($('.slideshowmenu'), app, allIds);
-                carousel.addFullscreenLink($('.slideshowmenu'), app, allIds);
             };
 
             recalculateLayout = function () {
@@ -258,11 +309,16 @@ define('io.ox/files/icons/perspective',
             app.queues = {};
 
             app.queues.create = upload.createQueue({
-                processFile: function (file) {
-                    win.busy();
-                    return api.uploadFile({file: file, folder: app.folder.get()})
-                        .done(drawFirst)
-                        .always(win.idle);
+                start: function () {
+                    win.busy(0);
+                },
+                progress: function (file, position, files) {
+                    win.busy((position + 1) / files.length);
+                    return api.uploadFile({ file: file, folder: app.folder.get() });
+                },
+                stop: function () {
+                    drawFirst();
+                    win.idle();
                 }
             });
 
@@ -284,7 +340,7 @@ define('io.ox/files/icons/perspective',
 
             win.on('cancel-search', function () {
                 // TODO: Abort xhr request if still running
-                that.render(app);
+                drawFirst();
             });
 
 //            // published?

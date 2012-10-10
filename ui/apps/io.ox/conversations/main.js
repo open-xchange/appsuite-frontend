@@ -26,7 +26,7 @@ define("io.ox/conversations/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/conversations' }),
+    var app = ox.ui.createApp({ name: 'io.ox/conversations', title: 'Conversations' }),
         // app window
         win,
         // grid
@@ -44,7 +44,7 @@ define("io.ox/conversations/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/conversations',
-            title: "Conversations",
+            title: 'Conversations',
             toolbar: true
         });
 

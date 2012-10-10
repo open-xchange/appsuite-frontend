@@ -337,12 +337,59 @@ define('io.ox/mail/actions',
 
     //all actions
 
-//    new Action('io.ox/mail/actions/createdistlist', {
-//        id: 'create-distlist',
-//        requires: 'some',
-//        action: function (data) {
-//        }
-//    });
+    new Action('io.ox/mail/actions/createdistlist', {
+        id: 'create-distlist',
+        requires: 'some',
+        action: function (data) {
+
+            var collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
+                collectedRecipients = [],
+                dev = $.Deferred(),
+                arrayOfMembers = [],
+                currentId = ox.user_id,
+                lengthValue,
+                contactsFolder = config.get('folder.contacts'),
+
+                createDistlist = function (members) {
+                    require(['io.ox/contacts/distrib/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            this.create(contactsFolder, {distribution_list: members});
+                        });
+                    });
+                };
+
+            _(collectedRecipientsArray).each(function (single) {
+                collectedRecipients.push(single[1]);
+            });
+
+            lengthValue = collectedRecipients.length;
+
+            _(collectedRecipients).each(function (mail, index) {
+                contactAPI.search(mail).done(function (obj) {
+
+                    var currentObj = (obj[0]) ? {id: obj[0].id, folder_id: obj[0].folder_id, display_name: obj[0].display_name, mail: obj[0].email1, mail_field: 1} : {mail: mail, display_name: mail, mail_field: 0};
+
+                    if (obj[0]) {
+                        if (obj[0].internal_userid !== currentId) {
+                            arrayOfMembers.push(currentObj);
+                        } else {
+                            lengthValue = lengthValue - 1;
+                        }
+                    } else {
+                        arrayOfMembers.push(currentObj);
+                    }
+
+                    if (arrayOfMembers.length === lengthValue) {
+                        dev.resolve();
+                    }
+                });
+            });
+
+            dev.done(function () {
+                createDistlist(arrayOfMembers);
+            });
+        }
+    });
 
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
@@ -352,7 +399,7 @@ define('io.ox/mail/actions',
                 participantsArray = [],
                 currentId = ox.user_id,
                 currentFolder = config.get('folder.calendar'),
-                collectedRecipientsArray = data.to.concat(data.cc),
+                collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
                 dev = $.Deferred(),
                 lengthValue,
 
@@ -637,12 +684,12 @@ define('io.ox/mail/actions',
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
-//    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-//        id: 'save-as-distlist',
-//        index: 100,
-//        label: gt('Save as distribution list'),
-//        ref: 'io.ox/mail/actions/createdistlist'
-//    }));
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'save-as-distlist',
+        index: 100,
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/mail/actions/createdistlist'
+    }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
         id: 'invite-to-appointment',

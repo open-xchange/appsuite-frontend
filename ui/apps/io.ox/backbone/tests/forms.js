@@ -609,19 +609,135 @@ define("io.ox/backbone/tests/forms", ["io.ox/core/extensions", "io.ox/backbone/m
 
             j.describe("Section", function () {
                 j.it("should provide an extension point for section entries", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    var sectionRef = ref + "/section1";
+                    var sectionPoint = views.point(sectionRef);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.Section({
+                        id: 'section1',
+                        title: 'Section',
+                        ref: sectionRef
+                    }));
+
+                    // And extend the section with a node
+
+                    sectionPoint.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title'
+                    }));
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water",
+                        difficulty: 1
+                    });
+
+                    var View = point.createView();
+
+                    var $el = new View({model: recipe}).render().$el;
+
+                    j.expect($el.find(".sectionheader .sectiontitle").text()).toEqual('Section');
 
                 });
 
                 j.it("should collapse completely if all entries are hidden", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
+
+                    var sectionRef = ref + "/section1";
+                    var sectionPoint = views.point(sectionRef);
+
+                    // Let's plug in our test instance
+                    point.extend(new forms.Section({
+                        id: 'section1',
+                        title: 'Section',
+                        ref: sectionRef
+                    }));
+
+                    // And extend the section with a node
+
+                    sectionPoint.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title',
+                        className: 'find-me'
+                    }), {
+                        hidden: true
+                    });
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water"
+                    });
+
+                    var View = point.createView();
+
+                    var $el = new View({model: recipe}).render().$el;
+
+                    j.expect($el.find(".sectionheader.collapsed a").text()).toEqual("Section");
+                    j.expect($el.find(".find-me").closest('.form-horizontal').css("display")).toEqual("none");
+
+                    // Unhide the section
+                    $el.find(".sectionheader.collapsed a").click();
+                    j.expect($el.find(".find-me").closest('.form-horizontal').css("display")).toEqual("block");
 
                 });
 
                 j.it("should add a more/less toggle if some extensions are hidden", function () {
+                    // Firstly we need an extension point
+                    var ref = "io.ox/backbone/tests/testView-" + _.now();
+                    var point = views.point(ref);
 
-                });
+                    var sectionRef = ref + "/section1";
+                    var sectionPoint = views.point(sectionRef);
 
-                j.it("should be completely drawn if no extensions are hidden", function () {
+                    // Let's plug in our test instance
+                    point.extend(new forms.Section({
+                        id: 'section1',
+                        title: 'Section',
+                        ref: sectionRef
+                    }));
 
+                    // And extend the section with two nodes, one hidden, one not
+
+                    sectionPoint.extend(new forms.InputField({
+                        id: 'title',
+                        attribute: 'title',
+                        label: 'Title',
+                        className: 'find-me-title'
+                    }));
+
+                    sectionPoint.extend(new forms.InputField({
+                        id: 'description',
+                        attribute: 'description',
+                        label: 'Description',
+                        className: 'find-me-description'
+                    }), {
+                        hidden: true
+                    });
+
+                    // Draw the models state
+                    var recipe = factory.create({
+                        title: "A glass of water"
+                    });
+
+                    var View = point.createView();
+
+                    var $el = new View({model: recipe}).render().$el;
+
+                    j.expect($el.find(".sectiontitle").text()).toEqual("Section");
+                    j.expect($el.find(".sectionheader a").text()).toEqual("Show more");
+                    j.expect($el.find(".find-me-description").parent().css("display")).toEqual("none");
+
+                    // Unhide the section
+                    $el.find(".sectionheader a").click();
+                    j.expect($el.find(".find-me-description").parent().css("display")).toEqual("block");
                 });
             });
         }
