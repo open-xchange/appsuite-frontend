@@ -1814,9 +1814,7 @@ define('io.ox/office/editor/editor',
 //            }
             else if (operation.name === Operations.MOVE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localStart = _.copy(operation.start, true);
-                    // localStart[localStart.length - 1] += 2;  // taking care, that the move modifies the target position for undo
-                    var undoOperation = { name: Operations.MOVE, start: _.copy(operation.end, true), end: localStart };
+                    var undoOperation = { name: Operations.MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMove(operation.start, operation.end);
@@ -2546,7 +2544,6 @@ define('io.ox/office/editor/editor',
                 }
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                    // updating current selection, so that image positions are also available
                     var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true),
                         newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
@@ -3292,7 +3289,19 @@ define('io.ox/office/editor/editor',
             styleSheets = self.getStyleSheets(family);
             if (styleSheets) {
                 if (createUndo) { undomgr.startGroup(); }
-                ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
+                if (family === 'image') {
+                    var useNonTextNode = true,
+                        startPaM = Position.getDOMPosition(paragraphs, start, useNonTextNode),
+                        endPaM = Position.getDOMPosition(paragraphs, end, useNonTextNode),
+                        // Image position described by the parent plus offset
+                        startPoint = DOM.Point.createPointForNode(startPaM.node),
+                        endPoint = DOM.Point.createPointForNode(endPaM.node);
+
+                    endPoint.offset += 1;
+                    ranges = [new DOM.Range(startPoint, endPoint)];
+                } else {
+                    ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
+                }
                 styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
                 if (createUndo) { undomgr.endGroup(); }
             }
