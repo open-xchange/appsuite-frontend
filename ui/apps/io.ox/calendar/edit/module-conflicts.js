@@ -11,20 +11,21 @@
  * @author Mario Scheliga <mario.scheliga@open-xchange.com>
  */
 define('io.ox/calendar/edit/module-conflicts',
-      ['io.ox/calendar/edit/model-appointment',
-       'io.ox/calendar/edit/module-participants', //TODO remove this
+      ['io.ox/calendar/model',
+       'io.ox/participants/model',
        'io.ox/calendar/api',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',
        'io.ox/core/extensions',
-       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, ext, gt) {
+       'io.ox/backbone/views',
+       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, ext, views, gt) {
 
     'use strict';
 
     var ConflictModel = AppointmentModel.extend({
         initialize: function () {
             var self = this,
-                conflicting_participants = new participantsModule.Collection(self.get('participants'));
+                conflicting_participants = new participantsModule.Participants(self.get('participants'));
             self.set('conflicting_participants', conflicting_participants);
         },
         fetch: function (options) {
@@ -65,18 +66,18 @@ define('io.ox/calendar/edit/module-conflicts',
         }
     });
 
-    var ConflictsView = Backbone.View.extend({
+    var ConflictsView = views.point('io.ox/calendar/edit/conflicts').createView({
         tagName: 'div',
         events: {
-            'click a.btn-danger[data-action=ignore]': 'onIgnore',
-            'click a.btn[data-action=cancel]': 'onCancel'
+          //  'click a.btn-danger[data-action=ignore]': 'onIgnore',
+          //  'click a.btn[data-action=cancel]': 'onCancel'
         },
         initialize: function () {
-
+            console.log('init');
         },
         render: function () {
             var conflictList = vgridtpl.drawSimpleGrid(this.collection.toJSON());
-
+            var self = this;
             // show info about conflicting appointment
             require(
                     ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
@@ -93,15 +94,25 @@ define('io.ox/calendar/edit/module-conflicts',
 
                     }
                 );
-            this.$el.empty(); /*.append(
-                conflictList,
-                tmpl.render('io.ox/calendar/edit/conflicts', {})
-            );*/
 
-            this.$el.append(conflictList);
-            ext.point('io.ox/calendar/edit/conflicts').invoke('draw', this.$el, {
-              // nothing
+            var rows = [];
+
+            function getRow(index) {
+                if (rows.length > index + 1) {
+                    return rows[index];
+                }
+                for (var i = 0; i < index + 1 - rows.length; i++) {
+                    rows.push($('<div class="row-fluid">'));
+                }
+                return rows[index];
+            }
+
+            this.point.each(function (extension) {
+                var node = getRow(extension.forceLine || rows.length);
+                extension.invoke('draw', node, {model: self.model, parentView: self});
             });
+			this.$el.append(conflictList);
+            this.$el.append(rows);
 
             // remove buttons, when resources are in the conflicts
             var isResource = this.collection.any(function (conflict) {
@@ -110,8 +121,7 @@ define('io.ox/calendar/edit/module-conflicts',
                 });
             });
             if (isResource) {
-                this.$('[data-action="cancel"]').hide();
-                this.$('[data-action="ignore"]').hide();
+                this.$('.btn').hide();
             }
 
             this.isResource = isResource;
@@ -124,6 +134,7 @@ define('io.ox/calendar/edit/module-conflicts',
             this.trigger('cancel');
         }
     });
+
 
     return {
         Model: ConflictModel,

@@ -24,6 +24,7 @@ define('io.ox/calendar/edit/template',
     'use strict';
 
     var point = views.point('io.ox/calendar/edit/section');
+    var pointConflicts = views.point('io.ox/calendar/edit/conflicts');
 
     var convertImageStyle = function (url) {
         if (_.isString(url) && url.length > 1) {
@@ -38,6 +39,40 @@ define('io.ox/calendar/edit/template',
         index: 100,
         id: 'io.ox/calendar/edit/section/error'
     }));
+
+    /**
+     * extpoint
+     * conflicts
+     */
+    pointConflicts.basicExtend({
+        index: 100,
+        id: 'io.ox/calendar/edit/conflicts/main',
+        draw: function (data) {
+            this.append(
+                $('<div class="row">')
+                    .css('margin-top', '10px').append(
+                            $('<span class="span12">')
+                                .css('text-align', 'right').append(
+                                    $('<a class="btn">')
+                                        .text(gt('Cancel'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            data.parentView.onCancel();
+                                        }),
+                                    '&nbsp;',
+                                    $('<a class="btn btn-danger">')
+                                        .addClass('btn')
+                                        .text(gt('Ignore conflicts'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            data.parentView.onIgnore();
+                                        })
+                            )
+                    )
+            );
+        }
+    });
+
 
     point.basicExtend({
         index: 120,
@@ -378,26 +413,7 @@ define('io.ox/calendar/edit/template',
             });
         }
     });
-    /**
-     * extpoint
-     * conflicts
-     */
-    ext.point('io.ox/calendar/edit/conflicts').extend({
-        index: 1,
-        id: 'conflicts',
-        draw: function (data) {
-            this.append($('<div class="row-fluid show-grid">')
-                .css('margin-top', '10px').append(
-                    $('<span class="span12">').css('text-align', 'right').append(
-                        $('<a class="btn">')
-                            .attr('data-action', 'cancel')
-                            .text(gt('Cancel')),
-                        $('<a class="btn btn-danger">')
-                            .addClass('btn')
-                            .attr('data-action', 'ignore')
-                            .text(gt('Ignore conflicts')))));
-        }
-    });
+
     /**
      * extension point
      * user drawing in participant view

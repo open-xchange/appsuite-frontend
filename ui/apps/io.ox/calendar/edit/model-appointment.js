@@ -75,11 +75,13 @@ define('io.ox/calendar/edit/model-appointment',
             return df;
         },
         save: function () {
+
+            console.log('model save');
             var self = this,
                 df = new $.Deferred();
 
             self.validate();
-
+            console.log(self.isDirty(), self.isNew(), self.isValid());
             if (self.isDirty() && !self.isNew() && self.isValid()) {
                 return self._update();
             } else if (self.isDirty() && self.isNew() && self.isValid()) {
@@ -91,6 +93,7 @@ define('io.ox/calendar/edit/model-appointment',
                 df.reject('Nothing to save');
                 return df;
             }
+
         },
         _update: function () {
             var self = this,
@@ -196,9 +199,10 @@ define('io.ox/calendar/edit/model-appointment',
                 self.toSync[key] = self.get(key);
             });
         },
-        isDirty: function () {
+        /*isDirty: function () {
             return _(this.toSync).size() > 0;
-        },
+        },*/
+
         _resetDirty: function () {
             this.toSync = {};
         }

@@ -35,7 +35,7 @@ define('io.ox/calendar/edit/main',
                 df = new $.Deferred();
 
             //be gently
-            if (self.model.isDirty()) {
+            if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))
@@ -43,10 +43,10 @@ define('io.ox/calendar/edit/main',
                         .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug('Action', action);
                             if (action === 'delete') {
                                 self.dispose();
                                 df.resolve();
+
                             } else {
                                 df.reject();
                             }
@@ -71,7 +71,34 @@ define('io.ox/calendar/edit/main',
         },
         edit: function (data) {
             var self = this;
-            var cont = function (data) {
+            function cont(data) {
+                self.model = appointmentModel.factory.create(data);
+                appointmentModel.setDefaultParticipants(self.model).done(function () {
+                    self.view = new MainView({model: self.model});
+                    self.view.on('save', _.bind(self.onSave, self));
+
+                    self.view.on('save:success', function () {
+                        self.considerSaved = true;
+                        self.view.idle();
+                        self.quit();
+                    });
+
+                    self.setTitle(gt('Edit Appointment'));
+
+                    // create app window
+                    self.setWindow(ox.ui.createWindow({
+                        name: 'io.ox/calendar/edit',
+                        title: gt('Create Appointment'),
+                        toolbar: true,
+                        search: false,
+                        close: true
+                    }));
+
+                    $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                    self.getWindow().show(_.bind(self.onShowWindow, self));
+                });
+            }
+            /*var cont = function (data) {
                 self.model = new AppointmentModel(data);
                 var participants = self.model.get('participants');
 
@@ -96,6 +123,9 @@ define('io.ox/calendar/edit/main',
                     }
 
                     self.view = new MainView({model: self.model});
+                    self.view.on('save', function () {
+                        console.log('on save event');
+                    });
                     self.view.on('save', _.bind(self.onSave, self));
 
                     // create app window
@@ -112,7 +142,7 @@ define('io.ox/calendar/edit/main',
 
                 });
 
-            };
+            };*/
 
             if (data) {
 
@@ -123,17 +153,28 @@ define('io.ox/calendar/edit/main',
                 api.get(self.getState())
                     .done(cont)
                     .fail(function (err) {
+                        console.log(err);
                         // FIXME: use general error class, teardown gently for the user
                         throw new Error(err.error);
                     });
             }
         },
+        considerSaved: false,
         create: function (data) {
             var self = this;
+
+
             self.model = appointmentModel.factory.create(data);
             appointmentModel.setDefaultParticipants(self.model).done(function () {
                 self.view = new MainView({model: self.model});
                 self.view.on('save', _.bind(self.onSave, self));
+
+                self.view.on('save:success', function () {
+                    self.considerSaved = true;
+                    self.view.idle();
+                    self.quit();
+                });
+
                 self.setTitle(gt('Create Appointment'));
 
                 // create app window
@@ -149,45 +190,14 @@ define('io.ox/calendar/edit/main',
                 self.getWindow().show(_.bind(self.onShowWindow, self));
             });
 
-            self.model = appointmentModel.factory.create(data);
-            appointmentModel.setDefaultParticipants(self.model).done(function () {
-                self.view = new MainView({model: self.model});
-                self.view.on('save', _.bind(self.onSave, self));
-                self.setTitle(gt('Create Appointment'));
-
-                // create app window
-                self.setWindow(ox.ui.createWindow({
-                    name: 'io.ox/calendar/edit',
-                    title: gt('Create Appointment'),
-                    toolbar: true,
-                    search: false,
-                    close: true
-                }));
-
-                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                self.getWindow().show(_.bind(self.onShowWindow, self));
-            });
-            /*
-            folderAPI.get({folder: data.folder_id}).done(function (folder) {
-                if (folderAPI.is('private', folder)) {
-                    // it's a private folder for the current user, add him by default
-                    // as participant
-                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1, ui_removable: false}]);
-
-                } else if (folderAPI.is('public', folder)) {
-                    // if public folder, current user will be added
-                    self.model.set('participants', [{id: configAPI.get('identifier'), type: 1}]);
-
-                } else if (folderAPI.is('shared', folder)) {
-                    // in a shared folder the owner (created_by) will be added by default
-                    self.model.set('participants', [{id: folder.created_by, type: 1}]);
-                }
-
-            });
-            */
+        },
+        getDirtyStatus : function () {
+            if (this.considerSaved) {
+                return false;
+            }
+            return !_.isEmpty(this.model.changedSinceLoading());
         },
         onShowWindow: function () {
-            console.log('onshowwindow');
             var self = this;
             if (self.model.get('title')) {
                 self.getWindow().setTitle(self.model.get('title'));
@@ -207,8 +217,9 @@ define('io.ox/calendar/edit/main',
             self.model.save()
                 .done(
                     function (data) {
+                        self.considerSaved = true;
                         self.getWindow().idle();
-                        self.trigger('save', data);
+                        self.trigger('save', data); // don't know why
                         self.quit();
                     }
                 )
@@ -216,7 +227,7 @@ define('io.ox/calendar/edit/main',
                     function (err) {
                         self.getWindow().idle();
                         var errContainer = $('<div>').addClass('alert alert-error');
-                        $(self.view.el).find('.error-display').empty().append(errContainer);
+                        $(self.view.el).find('[data-extension-id="io.ox/calendar/edit/section/error"]').empty().append(errContainer);
 
                         if (err.conflicts !== null && err.conflicts !== undefined) {
                             errContainer.text(gt('Conflicts detected'));
@@ -236,11 +247,11 @@ define('io.ox/calendar/edit/main',
                                         });
                                         conView.on('cancel', function () {
                                             $(conView.el).remove();
-                                            $(self.view.el).find('.error-display').empty();
+                                            $(self.view.el).find('[data-extension-id="io.ox/calendar/edit/section/error"]').empty();
                                         });
 
                                         if (conView.isResource) {
-                                            errContainer.text(gt('Resource Conflicts detected!'));
+                                            errContainer.text(gt('Resource conflicts detected!'));
                                         }
                                     });
 

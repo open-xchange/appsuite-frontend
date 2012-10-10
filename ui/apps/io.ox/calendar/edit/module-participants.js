@@ -21,6 +21,7 @@ define('io.ox/calendar/edit/module-participants',
 
     'use strict';
 
+// THIS FILE IS OBSOLET AND JUST LEFT FOR INFORMATIONS
 
     // take util function
     var convertImage = function (dir, value) {
