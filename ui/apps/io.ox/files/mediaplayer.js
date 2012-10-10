@@ -103,7 +103,6 @@ define('io.ox/files/mediaplayer',
         },
 
         drawTrackInfo: function (data) {
-            console.log(data);
             this.trackdisplay.find('h3').text(data);
         },
 
@@ -120,29 +119,16 @@ define('io.ox/files/mediaplayer',
             this.playlist.append(item);
         },
 
-        prevItem: function () {
-            var current = $('.mediaplayer_playlist li.active');
-            var prev = current.prev();
-            if (prev.length > 0)
+        selectTrack: function (dir) {
+            var current = this.playlist.find('li.active');
+            var selected = (dir === 'prev' ? current.prev() : current.next());
+            if (selected.length > 0)
             {
-                var preva = prev.find('a');
-                this.loadTrack(preva.attr('href'), preva.attr('data-mimetype'));
+                var link = selected.find('a');
+                this.loadTrack(link.attr('href'), link.attr('data-mimetype'));
                 current.removeClass('active');
-                prev.addClass('active');
-                this.drawTrackInfo(preva.text());
-            }
-        },
-
-        nextItem: function () {
-            var current = $('.mediaplayer_playlist li.active');
-            var next = current.next();
-            if (next.length > 0)
-            {
-                var nexta = next.find('a');
-                this.loadTrack(nexta.attr('href'), nexta.attr('data-mimetype'));
-                current.removeClass('active');
-                next.addClass('active');
-                this.drawTrackInfo(nexta.text());
+                selected.addClass('active');
+                this.drawTrackInfo(link.text());
             }
         },
 
@@ -201,19 +187,19 @@ define('io.ox/files/mediaplayer',
                 {
                     keys: [37, 227], // LEFT
                     action: function (player, media) {
-                        self.prevItem();
+                        self.selectTrack('prev');
                     }
                 },
                 {
                     keys: [39, 228], // RIGHT
                     action: function (player, media) {
-                        self.nextItem();
+                        self.selectTrack('next');
                     }
                 }],
                 success: function (me, domObject) {
                     self.mediaelement = me;
                     self.mediaelement.addEventListener('ended', function () {
-                        self.nextItem();
+                        self.selectTrack('next');
                     }, false);
                 }
             });
