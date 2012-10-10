@@ -40,7 +40,7 @@ define('io.ox/office/editor/format/tablestyles',
             /**
              * Grid width of columns in relative units. It is an array of numbers
              */
-            tablegrid: { def: 0 }
+            tablegrid: { def: [] }
         };
 
     // private global functions ===============================================

@@ -38,8 +38,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
             computePopupTime: function (time, finderId) {
                 var endDate = new Date(time.getTime()),
                     weekDay = endDate.getDay(),
-                    alarmDate = new Date(time.getTime()),
-                    offset = alarmDate.getTimezoneOffset() * -1 * 60000;
+                    alarmDate = new Date(time.getTime());
 
                 switch (finderId) {
                 case "0":
@@ -113,7 +112,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                     }
                     break;
                 }
-                
+
                 endDate.setTime(prepareTime(endDate));
                 endDate.setHours(6);
                 if (weekDay < 1 || weekDay > 4) {
@@ -127,22 +126,19 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 if (alarmDate.getTime() > endDate.getTime()) {//endDate should not be before alarmDate
                     endDate.setTime(endDate.getTime() + 60000 * 60 * 24 * 7);
                 }
-
-                alarmDate.setTime(alarmDate.getTime() + offset);
-                endDate.setTime(endDate.getTime() + offset);
                 var result = {
                         endDate: endDate,
                         alarmDate: alarmDate
                     };
                 return result;
             },
-    
+
             //builds dropdownmenu nodes, if bootstrapDropdown is set listnodes are created else option nodes
             buildDropdownMenu: function (time, bootstrapDropdown) {
                 if (!time) {
                     time = new Date();
                 }
-                
+
                 //normal times
                 var appendString = "<option finderId='0'>" + gt('in 5 minutes') + "</option>" +
                 "<option finderId='1'>" + gt('in 15 minutes') + "</option>" +
@@ -164,7 +160,7 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 } else if (i < 22) {
                     i = 4;
                 }
-                
+
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
                     appendString = appendString + "<option finderId='d" + i + "'>" + gt(temp) + "</option>";
@@ -193,12 +189,12 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                         circleIncomplete = false;
                     }
                 }
-                
+
                 if (bootstrapDropdown) {
                     appendString = appendString.replace(/<option/g, "<li><a href='#'");
                     appendString = appendString.replace(/option>/g, "a></li>");
                 }
-                
+
                 return appendString;
             },
 
@@ -271,8 +267,12 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                 return task;
             },
 
-            sortTasks: function (tasks) {//done tasks last, overduetasks first, same date alphabetical
-                tasks = _.copy(tasks, true);//make loacl copy
+            sortTasks: function (tasks, order) {//done tasks last, overduetasks first, same date alphabetical
+                tasks = _.copy(tasks, true);//make local copy
+                if (!order) {
+                    order = 'asc';
+                }
+
                 var resultArray = [],
                     alphabetArray = [];
 
@@ -295,12 +295,13 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                             return -1;
                         }
                     });
-
-                resultArray.unshift(alphabetArray);
+                if (order === 'desc') {
+                    resultArray.push(alphabetArray);
+                } else {
+                    resultArray.unshift(alphabetArray);
+                }
                 return _.flatten(resultArray);
-
             }
-
 
         };
 

@@ -22,7 +22,7 @@ define("io.ox/calendar/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/calendar' }),
+    var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win;
 

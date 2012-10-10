@@ -112,9 +112,10 @@ define("io.ox/contacts/distrib/test",
                     j.waitsFor(function () {
                         inputName = createForm.find('input[data-type="name"]');
                         inputMail = createForm.find('input[data-type="mail"]');
-                        saveButton = createForm.find('a[data-action="save"]');
+                        saveButton = createForm.find('button.btn.btn-primary');
                         addButton = createForm.find('a[data-action="add"]');
-                        displayName = createForm.find('input[data-property="display_name"]');
+                        displayName = createForm.find('input.input-xlarge.control');
+
                         if (inputName[0] && inputMail[0] && addButton[0] && saveButton[0] && displayName[0]) {
                             return true;
                         }

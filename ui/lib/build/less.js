@@ -42,7 +42,7 @@ less.tree.Import.prototype.getChildren =
 less.tree.Media.prototype.getChildren =
     function() { return [this.features, this.ruleset]; };
 less.tree.mixin.Call.prototype.getChildren =
-    function() { return [].concat(this.selector, this.args); };
+    function() { return [].concat(this.selector, this.arguments); };
 less.tree.mixin.Definition.prototype.getChildren = function() {
     return this.selectors.concat(_.compact(_.pluck(this.params, "value")),
                                  this.rules);

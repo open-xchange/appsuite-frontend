@@ -22,7 +22,7 @@ define("io.ox/files/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files' }),
+    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' }),
         // app window
         win;
 

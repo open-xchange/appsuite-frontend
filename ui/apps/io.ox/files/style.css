@@ -12,17 +12,6 @@
  * @author David Bauer <david.bauer@open-xchange.com>
  */
 
-.vertical-gradient(@startColor: #828282, @endColor: #333333) {
-    background-color: mix(@startColor, @endColor, 60%);
-    background-image: -moz-linear-gradient(top, @startColor, @endColor); // FF 3.6+
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(@startColor), to(@endColor)); // Safari 4+, Chrome 2+
-    background-image: -webkit-linear-gradient(top, @startColor, @endColor); // Safari 5.1+, Chrome 10+
-    background-image: -o-linear-gradient(top, @startColor, @endColor); // Opera 11.10
-    background-image: linear-gradient(to bottom, @startColor, @endColor); // Standard, IE10
-    background-repeat: repeat-x;
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@startColor),argb(@endColor))); // IE9 and down
-}
-
 .files-scrollable-pane {
     padding:13px;
     width: 100%;
@@ -46,10 +35,9 @@
     -webkit-overflow-scrolling: touch;
     -webkit-tap-highlight-color: transparent;
 
-    .slideshowmenu {
-        position:absolute;
-        top:57px;
-        right:13px;
+    .inline-actions {
+        text-align: right;
+        margin: 1em 0 1em 0;
 
         div a { cursor: pointer;}
     }
@@ -70,7 +58,7 @@
 
         width: @outerWidth;
         height: @innerHeight + 59;
-        margin: 0 20px 13px 0;
+        margin: 0 18px 13px 0; // 18px allows 4 columns on IPhone
         cursor: pointer;
 
         .wrap {

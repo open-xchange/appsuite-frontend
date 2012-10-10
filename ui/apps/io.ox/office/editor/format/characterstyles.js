@@ -87,7 +87,7 @@ define('io.ox/office/editor/format/characterstyles',
             color: {
                 def: '000000',
                 set: function (element, value) {
-                    element.css('color', '#' + value);
+                    element.css('color', '#' + value.rgbColor);
                 }
             }
         };
