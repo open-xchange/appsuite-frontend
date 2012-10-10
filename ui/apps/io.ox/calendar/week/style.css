@@ -56,11 +56,11 @@
 
     .toolbar .pagination {
         margin: 0px;
-        height: 34px;
     }
     
     .toolbar .pagination a {
         line-height: 32px;
+        height: 34px;
     }
     
     .week-view-container {
