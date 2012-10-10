@@ -101,7 +101,7 @@ define('io.ox/office/editor/view',
 
     // class ColorChooser =====================================================
 
-    var ColorChooser = RadioGroup.extend({ constructor: function (themes, options) {
+    var ColorChooser = RadioGroup.extend({ constructor: function (themes, type, options) {
 
         var // self reference
             self = this;
@@ -115,36 +115,52 @@ define('io.ox/office/editor/view',
         }, options));
 
         function changed() {
-            //self.createOptionButton("Neuer Eintrag", { label: "Neuer Eintrag" });
+            // add theme based colors
+            if (themes) {
+                var docThemes = themes.getThemes();
+                if (Array.isArray(docThemes) && docThemes.length > 0) {
+                    // use first entry of the themes array
+                    var theme = docThemes[0];
+                    
+                    var filter = [];
+                    if (type  === 'fill')
+                        filter = [ "name", "colorSchemeName", "text1", "text2", "background1", "background2" ];
+                    else if (type === 'color')
+                        filter = [ "name", "colorSchemeName", "dark1", "dark2", "light1", "light2" ];
+                    
+                    var themeEntry;
+                    for (themeEntry in theme) {
+                        if (!_.contains(filter, themeEntry)) {
+                            var color = theme[themeEntry];
+                            
+                            if (color && color.length > 0)
+                                self.createOptionButton({ themeFill: themeEntry }, { tooltip: themeEntry, css: {"background-color": '#' + color }});
+                        }
+                    }
+                }
+            }
+            // add predefined colors
+            _([
+                { label: 'Transparent',  value: {rgbColor: '' }},
+                { label: 'Dark Red',     value: {rgbColor: 'C00000'}},
+                { label: 'Red',          value: {rgbColor: 'FF0000'}},
+                { label: 'Orange',       value: {rgbColor: 'FFC000'}},
+                { label: 'Yellow',       value: {rgbColor: 'FFFF00'}},
+                { label: 'Light Green',  value: {rgbColor: '92D050'}},
+                { label: 'Green',        value: {rgbColor: '00B050'}},
+                { label: 'Light Blue',   value: {rgbColor: '00B0F0'}},
+                { label: 'Blue',         value: {rgbColor: '0070C0'}},
+                { label: 'Dark Blue',    value: {rgbColor: '002060'}},
+                { label: 'Purple',       value: {rgbColor: '7030A0'}}
+            ]).each(function (entry) {
+
+                self.createOptionButton(entry.value, { tooltip: entry.label, css: {"background-color": '#' + entry.value.rgbColor }});
+            });
         }
 
         // initialization -----------------------------------------------------
-
-        _([
-            { label: 'Transparent',  value: {rgbColor: '' }},
-            { label: 'Red',          value: {rgbColor: 'FF0000'}},
-            { label: 'Green',        value: {rgbColor: '00FF00'}},
-            { label: 'Blue',         value: {rgbColor: '0000FF'}},
-            { label: 'White',        value: {rgbColor: 'FFFFFF'}},
-            { label: 'Black',        value: {rgbColor: '000000'}},
-            { label: 'Dark1',        value: {themeFill: 'dark1'}},
-            { label: 'Dark2',        value: {themeFill: 'dark2'}},
-            { label: 'Light1',        value: {themeFill: 'light1'}},
-            { label: 'Light2',        value: {themeFill: 'light2'}},
-            { label: 'Accent1',      value: {themeFill: 'accent1'}},
-            { label: 'Accent2',      value: {themeFill: 'accent2'}},
-            { label: 'Accent3',      value: {themeFill: 'accent3'}},
-            { label: 'Accent4',      value: {themeFill: 'accent4'}},
-            { label: 'Accent5',      value: {themeFill: 'accent5'}},
-            { label: 'Accent6',      value: {themeFill: 'accent6'}},
-            { label: 'Link',        value: {themeFill: 'hyperlink'}},
-            { label: 'Followed Link',        value: {themeFill: 'followedHyperlink'}}
-        ]).each(function (entry) {
-
-            self.createOptionButton(entry.value, { label: entry.label });
-        }, this);
-
         themes.on('change', changed);
+        
     }}); // class ColorChooser
 
     // class FontFamilyChooser ================================================
@@ -430,7 +446,7 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
-
+        
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
@@ -482,9 +498,9 @@ define('io.ox/office/editor/view',
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
-                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), { tooltip: gt('Paragraph fill color') }))
+                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph fill color') }))
                 .addSeparator()
-                .addGroup('character/color', new ColorChooser(editor.getThemes()))
+                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'color', { tooltip: gt('Text Color') }))
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
