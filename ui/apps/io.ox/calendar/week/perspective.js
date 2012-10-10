@@ -121,7 +121,6 @@ define('io.ox/calendar/week/perspective',
         },
 
         changeFolder: function (e, data) {
-            console.log('changeFolder', data);
             this.folder = data;
             this.refresh();
         },
@@ -152,26 +151,23 @@ define('io.ox/calendar/week/perspective',
                     this.refresh();
                 }, this);
 
-            this.main
-                .empty()
-                .append(this.view.render().el);
-
+            this.main.append(this.view.render().el);
 
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });
 
+            var refresh = $.proxy(this.refresh, this);
+
             // watch for api refresh
-            api.on('refresh.all', $.proxy(this.refresh, this));
-
-            this.app
-                .on('folder:change', $.proxy(this.refresh, this))
+            api.on('refresh.all', refresh);
+            // watch for folder change
+            app.on('folder:change', refresh)
                 .getWindow()
-                .on('show', $.proxy(this.refresh, this));
+                .on('show', refresh);
 
-//            this.refresh();
-            this.view.setScrollPos();
+            refresh();
         }
     });
 
