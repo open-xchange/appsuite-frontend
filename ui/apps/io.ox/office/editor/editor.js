@@ -4049,26 +4049,22 @@ define('io.ox/office/editor/editor',
         function implMove(_source, _dest) {
 
             var source = _.copy(_source, true),
-                dest = _.copy(_dest, true);
-
-            // workaround: improve last position of destination by 1 to get the correct image
-            // -> might (should) be superfluous in the future.
-            source[source.length - 1] += 1;
-
-            var returnImageNode = true,
+                dest = _.copy(_dest, true),
+                returnImageNode = true,
                 sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
-                destPos = Position.getDOMPosition(paragraphs, dest),
-                // destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode),
+                destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode),
                 insertBefore = true,
                 splitNode = false;
 
             if (destPos.offset === 0) {
                 insertBefore = true;
-            } else if (destPos.offset === (destPos.node.length - 1)) {
+            } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
+                insertBefore = false;
+            } else if ((Utils.getNodeName(destPos.node) === 'img') && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
-                insertBefore = false;  // to be removed
+                insertBefore = false;  // inserting after new created text node
             }
 
             if ((sourcePos) && (destPos)) {
@@ -4077,9 +4073,6 @@ define('io.ox/office/editor/editor',
                     useImageDiv = true,
                     imageDiv = sourceNode.previousSibling,
                     doMove = true;
-
-                // ignoring offset in first version,
-                // and using complete spans instead of text nodes.
 
                 if ((sourceNode) && (destNode)) {
 
