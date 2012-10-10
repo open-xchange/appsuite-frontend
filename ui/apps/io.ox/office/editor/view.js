@@ -116,7 +116,12 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
 
-        _([{Entry: "Red", Value: "FF0000"}, {Entry: "Green", Value: "00FF00"}, {Entry: "Blue", Value: "0000FF"}, {Entry: "White", Value: "FFFFFF"}]).each(function (entry) {
+        _([{Entry: "Red", Value: {rgbColor: "FF0000"}},
+           {Entry: "Green", Value: {rgbColor: "00FF00"}},
+           {Entry: "Blue", Value: {rgbColor: "0000FF"}},
+           {Entry: "White", Value: {rgbColor: "FFFFFF"}},
+           {Entry: "Accent1", Value: {themeFill: "accent1"}},
+           {Entry: "Accent2", Value: {themeFill: "accent2"}}]).each(function (entry) {
 
             self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' } });
         }, this);

@@ -1123,6 +1123,14 @@ define('io.ox/office/editor/editor',
         };
 
         /**
+         * Returns the themes container.
+         *
+         */
+        this.getThemes = function () {
+            return documentStyles.getThemes();
+        };
+
+        /**
          * Returns the values of all formatting attributes of the specified
          * attribute family in the current selection.
          *
@@ -1823,6 +1831,12 @@ define('io.ox/office/editor/editor',
                     // TODO!!!
                 }
                 implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default']);
+            }
+            else if (operation.name === Operations.INSERT_THEME) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    // TODO!!!
+                }
+                implInsertTheme(operation.themeName, operation.colorScheme);
             }
             else if (operation.name === Operations.ATTRS_SET) {
                 // undo/redo is done inside implSetAttributes()
@@ -3176,6 +3190,24 @@ define('io.ox/office/editor/editor',
             if (styleSheets) {
                 styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
             }
+        }
+        /**
+        * Inserts a new theme into the document.
+        *
+        * @param {String} themeName
+        *  The name of the scheme.
+        *
+        * @param {String} colorScheme
+        *  The attributes of the scheme.
+        */
+        function implInsertTheme(themeName, colorScheme) {
+            var // the themes container
+            themes = self.getThemes();
+
+            if (themes) {
+                themes.addTheme(themeName, colorScheme);
+            }
+
         }
 
         /**
