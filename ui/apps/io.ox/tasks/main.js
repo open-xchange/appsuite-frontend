@@ -61,17 +61,9 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         // folder tree
         commons.addFolderView(app, { type: 'tasks', view: 'FolderList' });
 
-
-        // left panel
-        left = $("<div>")
-            .addClass("leftside border-right")
-            .appendTo(win.nodes.main);
-
-        // right panel
-        right = $("<div>")
-            .addClass("rightside default-content-padding")
-            .appendTo(win.nodes.main)
-            .scrollable();
+        var vsplit = commons.vsplit(win.nodes.main);
+        left = vsplit.left.addClass('border-right');
+        right = vsplit.right.addClass('default-content-padding').scrollable();
 
         // grid
         grid = new VGrid(left);
@@ -97,7 +89,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                 } else {
                     datacopy = util.sortTasks(data, order);
                 }
-                
+
                 if (!done) {
                     datacopy = _(datacopy).filter(function (obj) {
                         return obj.status !== 3;
@@ -118,7 +110,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                 return listcopy;
             });
         });
-        
+
         var showTask, drawTask, drawFail;
 
         //detailview lfo callbacks
@@ -150,12 +142,12 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
         app.getGrid = function () {
             return grid;
         };
-        
+
         // add grid options
         grid.prop('done', true);
         grid.prop('sort', 'state');
         grid.prop('order', 'asc');
-        
+
         function updateGridOptions() {
             var dropdown = grid.getToolbar().find('.grid-options'),
                 list = dropdown.find('ul'),
@@ -180,14 +172,14 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
 
         grid.on('change:prop', updateGridOptions);
         updateGridOptions();
-        
+
         ext.point('io.ox/tasks/vgrid/toolbar').invoke('draw', grid.getToolbar());
-        
+
         //ready for show
         commons.addFolderSupport(app, grid, 'tasks')
             .done(commons.showWindow(win, grid));
     });
-    
+
     //extension points
     ext.point('io.ox/tasks/vgrid/toolbar').extend({
         id: 'dropdown',
