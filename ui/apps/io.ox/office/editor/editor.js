@@ -26,10 +26,9 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/stylesheets',
      'io.ox/office/editor/format/documentstyles',
-     'io.ox/office/editor/format/imagestyles',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, DocumentStyles, ImageStyles, Alert, gt) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, DocumentStyles, Alert, gt) {
 
     'use strict';
 
@@ -46,7 +45,7 @@ define('io.ox/office/editor/editor',
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
         ]);
 
-    // class OXOEditor ========================================================
+    // class Editor ===========================================================
 
     /**'io.ox/office/editor/position',
      * The text editor.
@@ -56,7 +55,7 @@ define('io.ox/office/editor/editor',
      * - 'operation': When a new operation has been applied.
      * - 'selection': When the selection has been changed.
      */
-    function OXOEditor(app) {
+    function Editor(app) {
 
         var // self reference for local functions
             self = this,
@@ -67,19 +66,11 @@ define('io.ox/office/editor/editor',
             // container for all style sheets of all attribute families
             documentStyles = new DocumentStyles(editdiv),
 
-            // shortcut for paragraph styles
-            // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
-
-            // shortcut for character styles
+            // shortcuts for style sheet containers
             characterStyles = documentStyles.getStyleSheets('character'),
-
-            // shortcut for image styles
+            // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             imageStyles = documentStyles.getStyleSheets('image'),
-
-            // shortcut for table styles
             tableStyles = documentStyles.getStyleSheets('table'),
-
-            // shortcut for table styles
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
 
             // all highlighted DOM ranges (e.g. in quick search)
@@ -102,6 +93,7 @@ define('io.ox/office/editor/editor',
             blockOperationNotifications = false,
 
             // list of paragraphs as jQuery object
+            // TODO: remove this (for performance), always access child elements on demand
             paragraphs = editdiv.children(),
 
             // set document into write protected mode
@@ -142,8 +134,7 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = characterStyles = imageStyles = null;
-            //documentStyles = paragraphStyles = characterStyles = imageStyles = null;
+            documentStyles = characterStyles = imageStyles = tableStyles = tableCellStyles = null;
         };
 
         // OPERATIONS API
@@ -239,7 +230,7 @@ define('io.ox/office/editor/editor',
          * Removes all highlighting (e.g. from quick-search) from the document.
          */
         this.removeHighlighting = function () {
-            if (characterStyles && highlightRanges.length) {
+            if (highlightRanges.length) {
                 characterStyles.clearAttributesInRanges(highlightRanges, 'highlight', { special: true });
                 editdiv.removeClass('highlight');
             }
@@ -327,7 +318,7 @@ define('io.ox/office/editor/editor',
             }, this);
 
             // set the highlighting
-            if (characterStyles && highlightRanges.length) {
+            if (highlightRanges.length) {
                 editdiv.addClass('highlight');
                 characterStyles.setAttributesInRanges(highlightRanges, { highlight: true }, { special: true });
 
@@ -2310,9 +2301,7 @@ define('io.ox/office/editor/editor',
             if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
                 // initialize character formatting from current paragraph style
-                if (characterStyles) {
-                    characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
-                }
+                characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
             }
 
             // append dummy <br> if the paragraph contains no text, or remove
@@ -3111,7 +3100,7 @@ define('io.ox/office/editor/editor',
             // points to start or end of text, needed to clone formatting)
             DOM.splitTextNode(node, domPos.offset);
 
-            // insert the image between the two text nodes
+            // insert the image between the two text nodes (store original URL for later use)
             image = $('<img>', { src: absUrl }).data('url', url).insertBefore(node.parentNode);
 
             // apply the passed image attributes
@@ -3367,10 +3356,7 @@ define('io.ox/office/editor/editor',
             }
 
             // apply the passed table attributes
-            if (tableStyles) {
-                tableStyles.setElementAttributes(table, attrs);
-            }
-
+            tableStyles.setElementAttributes(table, attrs);
         }
 
         function implSplitParagraph(position) {
@@ -3744,9 +3730,7 @@ define('io.ox/office/editor/editor',
                 cell = $('<td>').append(paragraph);
 
             // apply the passed table attributes
-            if (tableCellStyles) {
-                tableCellStyles.setElementAttributes(cell, attrs);
-            }
+            tableCellStyles.setElementAttributes(cell, attrs);
 
             // insert empty text node into the paragraph
             validateParagraphNode(paragraph);
@@ -4109,9 +4093,9 @@ define('io.ox/office/editor/editor',
 
         // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 
-    } // end of OXOEditor()
+    } // cxlass Editor
 
     // exports ================================================================
 
-    return OXOEditor;
+    return Editor;
 });

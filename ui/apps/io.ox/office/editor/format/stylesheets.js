@@ -884,6 +884,10 @@ define('io.ox/office/editor/format/stylesheets',
             return this;
         };
 
+        this.destroy = function () {
+            this.events.destroy();
+        };
+
         // initialization -----------------------------------------------------
 
         // add event hub
