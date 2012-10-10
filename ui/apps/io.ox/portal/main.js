@@ -79,7 +79,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         setOrder(arguments);
 
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/portal' }),
+        var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
             // app window
             win,
             intro = $('<div class="io-ox-portal-intro">'),

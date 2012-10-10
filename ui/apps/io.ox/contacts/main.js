@@ -28,7 +28,10 @@ define("io.ox/contacts/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/contacts' }),
+    var app = ox.ui.createApp({
+            name: 'io.ox/contacts',
+            title: 'Address Book'
+        }),
         // app window
         win,
         // grid
@@ -54,24 +57,20 @@ define("io.ox/contacts/main",
 
         app.setWindow(win);
 
+        var vsplit = commons.vsplit(win.nodes.main);
+        left = vsplit.left;
+        right = vsplit.right.addClass('default-content-padding').scrollable();
+
         // left panel
-        win.nodes.main.append(
-            left = $('<div class="leftside">').append(
-                // grid container
-                gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
-                // thumb index
-                thumbs = $('<div class="atb contact-grid-index border-right">')
-            )
+        left.append(
+            // grid container
+            gridContainer = $('<div class="abs border-left border-right contact-grid-container">'),
+            // thumb index
+            thumbs = $('<div class="atb contact-grid-index border-right">')
         );
 
         // folder tree
         commons.addFolderView(app, { type: 'contacts', view: 'FolderList' });
-
-        // right panel
-        right = $("<div>")
-            .addClass("rightside default-content-padding")
-            .appendTo(win.nodes.main)
-            .scrollable();
 
         // grid
         grid = new VGrid(gridContainer);

@@ -31,167 +31,91 @@ define("io.ox/core/desktop",
     // current window
     var currentWindow = null;
 
-    // ref to core screen
-    var core = $("#io-ox-core"),
-        // top bar
-        topbar = $("#io-ox-topbar"),
+    // top bar
+    var topbar = $("#io-ox-topbar"),
         launchers = topbar.find('.launchers'),
-        // add launcher
-        addLauncher = function (side, label, fn, tooltip) {
-            // construct
-            var node = $("<div>")
-            .addClass("launcher")
-            .append(_.isString(label) ? $.txt(label) : label)
-            .hover(
-                function () {
-                    $(this).addClass("hover");
-                },
-                function () {
-                    $(this).removeClass("hover");
-                }
-            )
-            .on("click", function () {
-                var self = $(this), content;
-                if (!_.isFunction(fn)) {
-                    // for development only - should never happen
-                    self.css("backgroundColor", "#800000");
-                    setTimeout(function () {
-                        self.css("backgroundColor", "");
-                    }, 500);
-                } else {
-                    // set fixed width, hide label, be busy
-                    content = self.contents();
-                    self.css("width", self.width() + "px").text("\u00A0").busy();
-                    // call launcher
-                    (fn.call(this) || $.when()).done(function () {
-                        // revert visual changes
-                        self.idle().empty().append(content).css("width", "");
-                    });
-                }
-            });
 
-            function getTarget(app) {
-                var topbar = $("#io-ox-topbar"), target,
-                    id = app.getName() || app.id;
-                if ((target = topbar.find('.launcher[data-app-id=' + $.escape(id) + ']')).length) {
-                    return target;
-                } else {
-                    return null;
-                }
-            }
+        appGuid = 0,
+        appCache = new cache.SimpleCache('app-cache', true);
 
-            // tooltip
-            if (tooltip) {
-                node.tooltip({ title: tooltip, placement: 'bottom', animation: false });
-            }
+    // Apps collection
+    ox.ui.apps = new Backbone.Collection();
 
-            // add
-            var c = currentWindow, target;
-            if (side === "left" && c && c.app && (target = getTarget(c.app))) {
-                // animate space
-                node.hide().insertAfter(target).fadeIn(1000);
-            } else {
-                // just add
-                if (side === "left") {
-                    node.appendTo(launchers);
-                } else {
-                    node.addClass("right").appendTo(topbar);
-                }
-            }
+    var AbstractApp = Backbone.Model.extend({
 
-            return node;
-        };
+        defaults: {
+            title: ''
+        },
 
-    // show
-    core.show();
-
-    // TODO: improve this stupid approach
-    ox.ui.running = [];
-
-    /**
-     * Create app
-     */
-    ox.ui.createApp = (function () {
-
-        var appCache = new cache.SimpleCache('app-cache', true),
-            appGuid = 0;
-
-        function App(options) {
-
-            var opt = $.extend({
-                title: "",
-                icon: null,
-                id: 'app-' + (appGuid++)
-            }, options || {});
-
-            // dummy function
-            var dummyFn = function () {
-                    return $.Deferred().resolve();
-                },
-                // launcher function
-                launchFn = dummyFn,
-                // quit function
-                quitFn = dummyFn,
-                // app main window
-                win = null,
-                // running
-                running = false,
-                runningId = null,
-                // save/restore
-                uniqueID = _.now() + '.' + String(Math.random()).substr(3, 4),
-                savePoint = '',
-                saveRestorePointTimer = null,
-                // self
-                self = this;
-
-            /* save point handling */
-
-            this.getUniqueId = function () {
-                return uniqueID;
+        initialize: function () {
+            var self = this;
+            this.guid = appGuid++;
+            this.id = this.id || 'app-' + appGuid;
+            this.getInstance = function () {
+                return self;
             };
+        },
 
-            function saveRestorePoint() {
-                if (self.failSave) {
-                    appCache.get('savepoints').done(function (list) {
-                        // might be null, so:
-                        list = list || [];
+        getName: function () {
+            return this.get('name');
+        },
 
-                        var data = self.failSave(),
-                            ids = _(list).pluck('id'),
-                            pos = _(ids).indexOf(uniqueID);
+        setTitle: function (title) {
+            this.set('title', title);
+            return this;
+        },
 
-                        data.id = uniqueID;
+        getTitle: function () {
+            return this.get('title');
+        },
 
-                        if (pos > -1) {
-                            // replace
-                            list.splice(pos, 1, data);
-                        } else {
-                            // add
-                            list.push(data);
-                        }
-                        appCache.add('savepoints', list);
-                    });
-                }
-            }
+        call: $.noop
+    });
 
-            function removeRestorePoint() {
-                appCache.get('savepoints').done(function (list) {
-                    list = list || [];
-                    var ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(uniqueID);
+    ox.ui.AppPlaceholder = AbstractApp.extend({
 
-                    if (pos > -1) {
-                        list.splice(pos, 1);
-                    }
-                    appCache.add('savepoints', list);
-                });
-            }
+        initialize: function () {
+            // call super constructor
+            AbstractApp.prototype.initialize.apply(this, arguments);
+        },
 
-            $(window).on('unload', saveRestorePoint);
-            saveRestorePointTimer = setInterval(saveRestorePoint, 10 * 1000); // 10 secs
+        launch: function () {
+            var self = this;
+            return ox.launch((this.get('name') || this.id) + '/main').done(function () {
+                self.quit();
+            });
+        },
 
-            // add event hub
-            Events.extend(this);
+        quit: function (force) {
+            // mark as not running
+            this.set('state', 'stopped');
+            // remove from list
+            ox.ui.apps.remove(this);
+        }
+    });
+
+    ox.ui.App = AbstractApp.extend({
+
+        defaults: {
+            window: null,
+            state: 'ready',
+            saveRestorePointTimer: null,
+            launch: function () { return $.when(); },
+            quit: function () { return $.when(); }
+        },
+
+        initialize: function () {
+
+            var self = this;
+
+            // call super constructor
+            AbstractApp.prototype.initialize.apply(this, arguments);
+
+            this.set('uniqueID', _.now() + '.' + String(Math.random()).substr(3, 4));
+
+            var save = $.proxy(this.saveRestorePoint, this);
+            $(window).on('unload', save);
+            this.set('saveRestorePointTimer', setInterval(save, 10 * 1000)); // 10 secs
 
             // add folder management
             this.folder = (function () {
@@ -309,174 +233,185 @@ define("io.ox/core/desktop",
 
                 return that;
             }());
+        },
 
-            this.getInstance = function () {
-                return self; // not this!
-            };
+        setLauncher: function (fn) {
+            this.set('launch', fn);
+            return this;
+        },
 
-            this.getId = function () {
-                return opt.id;
-            };
+        setQuit: function (fn) {
+            this.set('quit', fn);
+            return this;
+        },
 
-            this.setLauncher = function (fn) {
-                launchFn = fn;
-                return this;
-            };
+        setWindow: function (win) {
+            this.set('window', win);
+            win.app = this;
+            // add app name
+            if (this.has('name')) {
+                win.nodes.outer.attr('data-app-name', this.get('name'));
+            }
+            return this;
+        },
 
-            this.setQuit = function (fn) {
-                quitFn = fn;
-                return this;
-            };
+        getWindow: function () {
+            return this.get('window');
+        },
 
-            this.setWindow = function (w) {
-                win = w;
-                win.app = this;
-                // add app name
-                if ('name' in opt) {
-                    win.nodes.outer.attr('data-app-name', opt.name);
+        getWindowNode: function () {
+            return this.has('window') ? this.get('window').nodes.main : $();
+        },
+
+        getWindowTitle: function () {
+            return this.has('window') ? this.has('window').getTitle() : '';
+        },
+
+        setState: function (obj) {
+            for (var id in obj) {
+                _.url.hash(id, String(obj[id]));
+            }
+        },
+
+        getState: function () {
+            return _.url.hash();
+        },
+
+        launch: function () {
+
+            var deferred = $.when(), self = this;
+
+            // update hash
+            if (this.get('name') !== _.url.hash('app')) {
+                _.url.hash('folder', null);
+                _.url.hash('perspective', null);
+                _.url.hash('id', null);
+            }
+            if (this.has('name')) {
+                _.url.hash('app', this.get('name'));
+            }
+
+            if (this.get('state') === 'ready') {
+                this.set('state', 'initializing');
+                (deferred = this.get('launch').apply(this, arguments) || $.when())
+                .done(function () {
+                    ox.ui.apps.add(self);
+                    self.set('state', 'running');
+                    self.trigger('launch', self);
+                });
+            } else if (this.has('window')) {
+                // toggle app window
+                this.get('window').show();
+                this.trigger('resume', this);
+            }
+
+            return deferred.pipe(function () {
+                return $.Deferred().resolveWith(self, arguments);
+            });
+        },
+
+        quit: function (force) {
+            // call quit function
+            var def = force ? $.when() : (this.get('quit').call(this) || $.when()), win, self = this;
+            return def.done(function () {
+                // not destroyed?
+                if (force && self.destroy) {
+                    self.destroy();
                 }
-                return this;
-            };
-
-            this.getName = function () {
-                return opt.name;
-            };
-
-            this.setTitle = function (title) {
-                opt.title = title;
-                ox.trigger('application:change:title', this, title);
-                return this;
-            };
-
-            this.getTitle = function () {
-                return opt.title;
-            };
-
-            this.getWindow = function () {
-                return win;
-            };
-
-            this.getWindowNode = function () {
-                return $(win.nodes.main);
-            };
-
-            this.getWindowTitle = function () {
-                return win ? win.getTitle() : '';
-            };
-
-            this.setState = function (obj) {
-                for (var id in obj) {
-                    _.url.hash(id, String(obj[id]));
-                }
-            };
-
-            this.getName = function () {
-                return opt.name;
-            };
-
-            this.getState = function () {
-                return _.url.hash();
-            };
-
-            this.launch = function () {
-
-                var deferred = $.when();
-
                 // update hash
-                if (opt.name !== _.url.hash('app')) {
-                    _.url.hash('folder', null);
-                    _.url.hash('perspective', null);
-                    _.url.hash('id', null);
+                _.url.hash('app', null);
+                _.url.hash('folder', null);
+                _.url.hash('perspective', null);
+                _.url.hash('id', null);
+                // don't save
+                clearInterval(self.get('saveRestorePointTimer'));
+                self.removeRestorePoint();
+                $(window).off('unload', $.proxy(self.saveRestorePoint, self));
+                // destroy stuff
+                self.folder.destroy();
+                if (self.has('window')) {
+                    win = self.get('window');
+                    win.trigger("quit");
+                    ox.ui.windowManager.trigger("window.quit", win);
+                    win.destroy();
                 }
-                if (opt.name) {
-                    _.url.hash('app', opt.name);
+                // remove from list
+                ox.ui.apps.remove(self);
+                // mark as not running
+                self.set('state', 'stopped');
+                // remove app's properties
+                for (var id in self) {
+                    delete self[id];
                 }
+                // don't leak
+                self = win = null;
+            });
+        },
 
-                if (!running) {
-                    // mark as running
-                    running = true;
-                    // go!
-                    (deferred = launchFn.apply(this, arguments) || $.when())
-                    .done(function () {
-                        ox.ui.running.push(self);
-                        ox.trigger('application:launch', self);
-                    });
+        saveRestorePoint: function () {
+            var self = this;
+            if (this.failSave) {
+                appCache.get('savepoints').done(function (list) {
+                    // might be null, so:
+                    list = list || [];
 
-                } else if (win) {
-                    // toggle app window
-                    win.show();
-                    ox.trigger('application:resume', self);
-                }
+                    var data = self.failSave(),
+                        ids = _(list).pluck('id'),
+                        pos = _(ids).indexOf(self.get('uniqueID'));
 
-                return deferred.pipe(function () {
-                    return $.Deferred().resolveWith(self, arguments);
+                    data.id = self.get('uniqueID');
+
+                    if (pos > -1) {
+                        // replace
+                        list.splice(pos, 1, data);
+                    } else {
+                        // add
+                        list.push(data);
+                    }
+                    appCache.add('savepoints', list);
                 });
-            };
+            }
+        },
 
-            this.quit = function (force) {
-                // call quit function
-                var def = force ? $.when() : (quitFn() || $.when());
-                return def.done(function () {
-                    // not destroyed?
-                    if (force && self.destroy) {
-                        self.destroy();
-                    }
-                    // update hash
-                    _.url.hash('app', null);
-                    _.url.hash('folder', null);
-                    _.url.hash('perspective', null);
-                    _.url.hash('id', null);
-                    // remove from list
-                    ox.ui.running = _(ox.ui.running).without(self);
-                    // mark as not running
-                    running = false;
-                    // don't save
-                    clearInterval(saveRestorePointTimer);
-                    removeRestorePoint();
-                    $(window).off('unload', saveRestorePoint);
-                    // event
-                    ox.trigger('application:quit', self);
-                    // destroy stuff
-                    self.events.destroy();
-                    self.folder.destroy();
-                    if (win) {
-                        win.trigger("quit");
-                        ox.ui.windowManager.trigger("window.quit", win);
-                        win.destroy();
-                    }
-                    // remove app's properties
-                    for (var id in self) {
-                        delete self[id];
-                    }
-                    // don't leak
-                    self = win = launchFn = quitFn = null;
-                });
-            };
+        removeRestorePoint: function () {
+            var self = this;
+            appCache.get('savepoints').done(function (list) {
+                list = list || [];
+                var ids = _(list).pluck('id'),
+                    pos = _(ids).indexOf(self.get('uniqueID'));
+
+                if (pos > -1) {
+                    list.splice(pos, 1);
+                }
+                appCache.add('savepoints', list);
+            });
         }
+    });
 
-        ox.ui.App = App;
+    // static methods
+    _.extend(ox.ui.App, {
 
-        App.canRestore = function () {
+        canRestore: function () {
             // use get instead of contains since it might exist as empty list
             return appCache.get('savepoints').pipe(function (list) {
                 return list && list.length;
             });
-        };
+        },
 
-        App.getSavePoints = function () {
+        getSavePoints: function () {
             return appCache.get('savepoints').pipe(function (list) {
                 return list || [];
             });
-        };
+        },
 
-        App.restore = function () {
-            App.getSavePoints().done(function (data) {
+        restore: function () {
+            this.getSavePoints().done(function (data) {
                 $.when.apply($,
                     _(data).map(function (obj) {
                         return require([obj.module + '/main']).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
-                                obj.id = this.getUniqueId();
+                                obj.id = this.id;
                                 if (this.failRestore) {
                                     // restore
                                     this.failRestore(obj.point);
@@ -491,44 +426,23 @@ define("io.ox/core/desktop",
                     appCache.add('savepoints', data || []);
                 });
             });
-        };
+        },
 
-        /**
-         * Returns an array containing all running applications that pass a
-         * truth test.
-         *
-         * @param {Function} iterator
-         *  The test iterator function. Receives an application object as first
-         *  parameter, returns true for all applications that will be included
-         *  in the result set.
-         *
-         * @param {Object} [context]
-         *  The context object the iterator will be bound to.
-         *
-         * @returns {App[]}
-         *  All running applications that passed the truth test.
-         */
-        App.filter = function (iterator, context) {
-            return _(ox.ui.running).filter(iterator, context);
-        };
-
-        App.get = function (name) {
-            return App.filter(function (app) {
+        get: function (name) {
+            return ox.ui.apps.filter(function (app) {
                 return app.getName() === name;
             });
-        };
+        }
+    });
 
-        return function (options) {
-            return new App(options);
-        };
-
-    }());
+    // show
+    $("#io-ox-core").show();
 
     // check if any open application has unsaved changes
     window.onbeforeunload = function () {
 
         var // find all applications with unsaved changes
-            dirtyApps = ox.ui.App.filter(function (app) {
+            dirtyApps = ox.ui.apps.filter(function (app) {
                 return _.isFunction(app.hasUnsavedChanges) && app.hasUnsavedChanges();
             });
 
@@ -536,6 +450,12 @@ define("io.ox/core/desktop",
         if (dirtyApps.length > 0) {
             return gt('There are unsaved changes.');
         }
+
+    /**
+     * Create app
+     */
+    ox.ui.createApp = function (options) {
+        return new ox.ui.App(options);
     };
 
     ox.ui.screens = (function () {
@@ -814,17 +734,17 @@ define("io.ox/core/desktop",
                         return this.head.append(
                             $('<div class="css-table-row">').append(
                                 // title
-                                $('<div class="css-table-cell cell-33">').append(
+                                $('<div class="css-table-cell cell-30">').append(
                                     this.title = ext.point(name + '/window-title')
                                         .invoke('draw', this).first().value() || $()
                                 ),
                                 // toolbar
-                                $("<div class='css-table-cell cell-33 cell-center'>").append(
+                                $("<div class='css-table-cell cell-40 cell-center'>").append(
                                     this.toolbar = ext.point(name + '/window-toolbar')
                                         .invoke('draw', this).first().value() || $()
                                 ),
                                 // controls
-                                $("<div class='css-table-cell cell-33 cell-right'>").append(
+                                $("<div class='css-table-cell cell-30 cell-right'>").append(
                                     this.controls = ext.point(name + '/window-controls')
                                         .invoke('draw', this).first().value() || $()
                                 )
@@ -943,13 +863,22 @@ define("io.ox/core/desktop",
                 var BUSY_SELECTOR = 'input, select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
-                this.busy = function () {
+                this.busy = function (pct) {
                     // use self instead of this to make busy/idle robust for callback use
+                    var blocker;
                     if (self) {
+                        blocker = self.nodes.blocker;
                         $('body').focus(); // steal focus
                         self.nodes.main.find(BUSY_SELECTOR)
                             .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
-                        self.nodes.blocker.busy().show();
+                        if (_.isNumber(pct)) {
+                            pct = Math.max(0, Math.min(pct, 1));
+                            blocker.idle().find('.bar').css('width', (pct * 100) + '%').parent().show();
+                            blocker.show();
+                        } else {
+                            blocker.find('.progress').hide();
+                            blocker.busy().show();
+                        }
                         self.trigger('busy');
                     }
                     return this;
@@ -958,7 +887,7 @@ define("io.ox/core/desktop",
                 this.idle = function (enable) {
                     // use self instead of this to make busy/idle robust for callback use
                     if (self) {
-                        self.nodes.blocker.idle().hide();
+                        self.nodes.blocker.find('.progress').hide().end().idle().hide();
                         self.nodes.main.find(BUSY_SELECTOR).filter('.' + TOGGLE_CLASS)
                             .removeAttr('disabled').removeClass(TOGGLE_CLASS);
                         self.trigger('idle');
@@ -1100,7 +1029,8 @@ define("io.ox/core/desktop",
                     .css({ width: width + unit })
                     .append(
                         // blocker
-                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide(),
+                        win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
+                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide()),
                         // window HEAD
                         win.nodes.head = $('<div class="window-head css-table">'),
                         // window BODY
@@ -1252,20 +1182,26 @@ define("io.ox/core/desktop",
             }
 
             // toolbar extension point
-            if (opt.toolbar === true && opt.name) {
+            if (opt.toolbar === true) {
                 // add "create" link
-                // ToolbarLinks VS ToolbarButtons
-                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                    id: 'links',
-                    ref: opt.name + '/links/toolbar'
-                }));
+                if (opt.name) {
+                    // ToolbarLinks VS ToolbarButtons
+                    ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                        id: 'links',
+                        ref: opt.name + '/links/toolbar'
+                    }));
+                }
+            } else {
+                // hide toolbar
+                win.nodes.head.find('.css-table-cell')
+                    .eq(0).removeClass('cell-30').addClass('cell-70').end()
+                    .eq(1).hide();
             }
 
             // fix height/position/appearance
             if (opt.chromeless) {
 
-                win.nodes.head.remove();
-                win.nodes.toolbar.remove();
+                win.nodes.head.hide();
                 win.nodes.body.css("top", "0px");
 
             } else {
@@ -1314,9 +1250,6 @@ define("io.ox/core/desktop",
         return def;
     };
 
-
-    return {
-        addLauncher: addLauncher
-    };
+    return {};
 
 });

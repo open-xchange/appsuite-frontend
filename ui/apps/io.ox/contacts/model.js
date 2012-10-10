@@ -12,13 +12,52 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/model',
-      ['io.ox/backbone/modelFactory', 'io.ox/backbone/validation', 'io.ox/contacts/api', 'gettext!io.ox/contacts/contacts'], function (ModelFactory, Validators, api, gt) {
+      ['io.ox/backbone/modelFactory', 'io.ox/backbone/validation',
+       'io.ox/contacts/api', 'gettext!io.ox/contacts/contacts'
+
+       ], function (ModelFactory, Validators, api, gt) {
 
     'use strict';
-    
+
     var factory = new ModelFactory({
         api: api,
         ref: 'io.ox/contacts/model',
+
+        model: {
+
+            addMember: function (member) {
+
+                var currentDistListArray = this.get('distribution_list');
+
+                if (currentDistListArray === undefined) {
+                    this.set('distribution_list', [member]);
+                } else {
+                    currentDistListArray.push(member);
+                    this.set('distribution_list', currentDistListArray);
+                }
+
+                this.trigger("change");
+                this.trigger("change:distribution_list");
+            },
+
+            removeMember: function (mail, name) {
+
+                var currentDistlist = this.get('distribution_list');
+
+                _(currentDistlist).each(function (val, key) {
+                    if (val.mail === mail && val.display_name === name) {
+                        currentDistlist.splice(key, 1);
+                    }
+                });
+
+                this.set('distribution_list', currentDistlist);
+
+                this.trigger("change");
+                this.trigger("change:distribution_list");
+
+            }
+        },
+
         update: function (model) {
             // Some special handling for profile pictures
             var data = model.changedSinceLoading();
@@ -41,14 +80,14 @@ define('io.ox/contacts/model',
             } else {
                 json = model.toJSON();
             }
-            
+
             return api.create(json, file);
         },
         destroy: function (model) {
             return api.remove({id: model.id, folder_id: model.get('folder_id')});
         }
     });
-    
+
     Validators.validationFor('io.ox/contacts/model', {
         display_name: { format: 'string', mandatory: true},
         first_name: { format: 'string'},
@@ -160,7 +199,7 @@ define('io.ox/contacts/model',
         addressBusiness: { format: 'string'},
         addressOther: { format: 'string'}
     });
-    
+
     var fields = {
         display_name: gt('Display name'),
         first_name: gt('First name'),
@@ -272,7 +311,7 @@ define('io.ox/contacts/model',
         addressBusiness: gt('Address Business'),
         addressOther: gt('Address Other')
     };
-    
+
     return {
         Contact: factory.model,
         Contacts: factory.collection,

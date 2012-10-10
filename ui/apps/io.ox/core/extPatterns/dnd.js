@@ -17,6 +17,12 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             }
         }
 
+        function handleMultiDrop(e, action, files) {
+            if (action.extension && action.extension.multiple) {
+                action.extension.multiple.apply(action.extension, [files].concat(args));
+            }
+        }
+
         function initDropZone() {
             var actions = [];
 
@@ -46,6 +52,7 @@ define("io.ox/core/extPatterns/dnd", ["io.ox/core/extensions", "io.ox/core/tk/up
             });
 
             dropZone.on("drop", handleDrop);
+            dropZone.on("drop-multiple", handleMultiDrop);
 
             if (included) {
                 dropZone.include();

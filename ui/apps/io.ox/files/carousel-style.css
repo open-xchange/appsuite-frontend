@@ -33,7 +33,12 @@
     }
 
     .item {
-        height:100%;
+        height: 100%;
+        // bit faster (at least for development)
+        -webkit-transition: 0.3s ease-in-out left;
+        -moz-transition: 0.3s ease-in-out left;
+        -o-transition: 0.3s ease-in-out left;
+        transition: 0.3s ease-in-out left;
 
         .carousel-caption {
 
@@ -42,15 +47,19 @@
                 padding:0;
                 margin:0;
                 background:transparent;
-
+                text-align: center;
                 li {
                     text-shadow: none;
-                    word-wrap:break-word;
+                    word-wrap: break-word;
+                    a { color: @link-on-dark; }
                 }
                 li.active {
                     display:inline;
                 }
+                .divider { color: #fff; }
             }
+            
+            h4 { text-align: center; }
         }
     }
 

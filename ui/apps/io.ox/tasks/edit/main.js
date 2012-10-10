@@ -127,10 +127,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                                 } else {
                                                     var dates = reminderUtil.computePopupTime(new Date(),
                                                             reminderDropdown.find(":selected").attr("finderId"));
-                                                    //util.computePopupTime uses Date with added Offset,
-                                                    //for use with date.Local this Offset must be unset
-                                                    var offset = dates.alarmDate.getTimezoneOffset() * 60000;
-                                                    dates.alarmDate.setTime(dates.alarmDate.getTime() + offset);
                                                     if (!editTask.alarm) {
                                                         editTask.alarm = new date.Local(dates.alarmDate.getTime());
                                                     } else {
@@ -517,7 +513,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             } else {
                 result.alarm = undefined;
             }
-
             return result;
         };
 
@@ -565,6 +560,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     return -1;
                 }
             }
+            
             util.updateDetailTabValues(editTask);
             if (editTask.actual_costs < -130000 || editTask.actual_costs > 130000) {
                 return -2;
@@ -591,7 +587,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             if (editTask.target_duration  && isNaN(editTask.target_duration)) {
                 return -2;
             }
-            
             return editTask;
         };
         

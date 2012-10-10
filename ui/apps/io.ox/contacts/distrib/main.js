@@ -47,31 +47,74 @@ define('io.ox/contacts/distrib/main',
         }
 
         app.create = function (folderId, initdata) {
+            var considerSaved = false;
             // set state
             app.setState({ folder: folderId });
             // set title, init model/view
             win.setTitle(gt('Create distribution list'));
 
-            model = contactModel.factory.create({
-                folder_id: folderId,
-                mark_as_distributionlist: true
-            });
+            if (initdata) {
+                model = contactModel.factory.create({
+                    folder_id: folderId,
+                    mark_as_distributionlist: true,
+                    distribution_list: initdata.distribution_list
+                });
+            } else {
+                model = contactModel.factory.create({
+                    folder_id: folderId,
+                    mark_as_distributionlist: true
+                });
+            }
 
             view = new ContactCreateDistView({ model: model });
+
+            view.on('save:start', function () {
+                win.busy();
+            });
+
+            view.on('save:fail', function () {
+                win.idle();
+            });
+
+            view.on('save:success', function () {
+
+                considerSaved = true;
+                win.idle();
+                app.quit();
+            });
+
             // go!
             show();
-            return $.when();
+//            return $.when();
         };
 
         app.edit = function (obj) {
             // load list first
-            return model.factory.getRealm("edit").get(obj).done(function (data) {
+            var considerSaved = false;
+
+            return contactModel.factory.realm("edit").get(obj).done(function (data) {
                 model = data;
                 // set state
                 app.setState({ folder: data.folder_id, id: data.id });
                 // set title, init model/view
                 win.setTitle(gt('Edit distribution list'));
                 view = new ContactCreateDistView({ model: model });
+
+                view.on('save:start', function () {
+                    win.busy();
+                });
+
+                view.on('save:fail', function () {
+                    win.idle();
+                });
+
+                view.on('save:success', function () {
+
+                    considerSaved = true;
+                    win.idle();
+                    app.quit();
+                });
+
                 // go!
                 show();
             });
@@ -95,33 +138,33 @@ define('io.ox/contacts/distrib/main',
             }
         });
 
-        app.setQuit(function () {
-
-            var def = $.Deferred();
-
-            if (model.isDirty()) {
-                require(["io.ox/core/tk/dialogs"], function (dialogs) {
-                    new dialogs.ModalDialog()
-                        .text(gt("Do you really want to lose your changes?"))
-                        .addButton("cancel", gt('Cancel'))
-                        .addPrimaryButton("delete", gt('Lose changes'))
-                        .show()
-                        .done(function (action) {
-                            console.debug("Action", action);
-                            if (action === 'delete') {
-                                def.resolve();
-                            } else {
-                                def.reject();
-                            }
-                        });
-                });
-            } else {
-                def.resolve();
-            }
-
-            //clean
-            return def;
-        });
+//        app.setQuit(function () {
+//
+//            var def = $.Deferred();
+//
+//            if (model.isDirty()) {
+//                require(["io.ox/core/tk/dialogs"], function (dialogs) {
+//                    new dialogs.ModalDialog()
+//                        .text(gt("Do you really want to lose your changes?"))
+//                        .addButton("cancel", gt('Cancel'))
+//                        .addPrimaryButton("delete", gt('Lose changes'))
+//                        .show()
+//                        .done(function (action) {
+//                            console.debug("Action", action);
+//                            if (action === 'delete') {
+//                                def.resolve();
+//                            } else {
+//                                def.reject();
+//                            }
+//                        });
+//                });
+//            } else {
+//                def.resolve();
+//            }
+//
+//            //clean
+//            return def;
+//        });
 
         return app;
     }

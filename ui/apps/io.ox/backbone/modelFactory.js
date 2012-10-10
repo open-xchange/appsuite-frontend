@@ -50,6 +50,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             var self = this,
                 errors = new ValidationErrors();
 
+            attributes = attributes || this.toJSON();
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
 
             if (errors.hasErrors()) {
@@ -166,7 +167,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             });
         },
         getCompositeId: function () {
-            return "id.folder : " + (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
+            return (this.get('folder') || this.get('folder_id')) + '.' + (this.get('id') || 'new-object');
         },
         isValid: function () {
             return this._valid;
@@ -256,7 +257,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
                     var loaded = factory.create(data);
                     models[loaded.id] = loaded;
-                    serverAttributes[loaded.id] = loaded.toJSON();
+                    serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 });
                 resolveResult();
 
@@ -276,7 +277,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                     }
                 });
                 model.set(data);
-                serverAttributes[uid] = model.toJSON();
+                serverAttributes[uid] = JSON.parse(JSON.stringify(model.toJSON()));
             }
         };
 

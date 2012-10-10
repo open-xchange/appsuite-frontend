@@ -243,11 +243,11 @@
         word-wrap: break-word;
     }
 
-    .unread .from .person-link {
+    &.unread .from .person-link {
         font-weight: bold;
     }
 
-    .unread .subject {
+    &.unread .subject {
         font-family: @font-normal;
         font-weight: bold;
     }
@@ -265,6 +265,7 @@
         height: 1.25em;
         border: 1px solid rgba(0, 0, 0, 0.15);
         cursor: pointer;
+        z-index: 10001; // to be above attachment dropdowns
     }
     
     .flag-dropdown ul {
@@ -428,4 +429,18 @@ h4.mail-attachment-preview {
 
 .touch .mail-detail .content.plain-text {
     font-size: @touch-font-size;
+}
+
+@media (max-width: 700px) {
+    .mail-detail-pane .mail-detail.view {
+        border: 0px none;
+        border-bottom: 2px solid #555;
+        margin: 0;
+    }
+    .mail-detail-pane .mail-detail.thread-inline-actions {
+        margin-bottom: 20px;
+    }
+    .scrollable-pane::after {
+        content: ''
+    }
 }
