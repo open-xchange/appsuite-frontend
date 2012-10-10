@@ -82,8 +82,14 @@ define('io.ox/office/editor/format/characterstyles',
                     element.toggleClass('highlight', state);
                 },
                 special: true
-            }
+            },
 
+            color: {
+                def: '000000',
+                set: function (element, value) {
+                    element.css('color', '#' + value);
+                }
+            }
         };
 
     // class CharacterStyles ==================================================

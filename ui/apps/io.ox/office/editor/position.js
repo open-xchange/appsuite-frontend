@@ -2071,33 +2071,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Searching for the first text span in a paragraph.
-     *
-     * @param {HTMLElement} node
-     *  A DOM element object, typically a paragraph, in which
-     *  the text span is searched.
-     *
-     * @returns {HTMLElement} node
-     *  The first text span inside the paragraph.
-     */
-    Position.getFirstTextSpanInParagraph = function (node) {
-
-        var child = node.firstChild,
-            continue_ = true;
-
-        while ((child !== null) && (continue_)) {
-
-            if (DOM.isTextSpan(child)) {
-                continue_ = false;
-            } else {
-                child = child.nextSibling;
-            }
-        }
-
-        return child;
-    };
-
-    /**
      * Determining the position of a node (for example an image)
      * in a paragraph.
      *
@@ -2167,7 +2140,7 @@ define('io.ox/office/editor/position',
 
             while ((child !== null) && (continue_)) {
 
-                if (DOM.isEmptyTextSpan(child)) {
+                if (DOM.isEmptySpan(child)) {
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();

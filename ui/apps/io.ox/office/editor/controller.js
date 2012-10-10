@@ -114,6 +114,7 @@ define('io.ox/office/editor/controller',
                         editor.setAttribute('paragraph', 'parafill', fill);
                     }
                 },
+
                 // characters
 
                 'character/attributes': {
@@ -149,6 +150,11 @@ define('io.ox/office/editor/controller',
                     chain: 'character/attributes',
                     get: function (attributes) { return attributes.underline; },
                     set: function (state) { editor.setAttribute('character', 'underline', state); }
+                },
+                'character/color': {
+                    chain: 'character/attributes',
+                    get: function (attributes) { return attributes.color; },
+                    set: function (state) { editor.setAttribute('character', 'color', state); }
                 },
 
                 // tables
@@ -210,7 +216,9 @@ define('io.ox/office/editor/controller',
                 },
                 'image/floatmode': {
                     chain: 'image/attributes',
-                    get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    // TODO: enable this when image selection works correctly
+                    // get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    get: function () { return editor.getImageFloatMode(); },
                     set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
@@ -252,8 +260,10 @@ define('io.ox/office/editor/controller',
          * items.
          */
         this.setEditMode = function (state) {
-            editor.setEditMode(state);
-            this.update();
+            if (state !== editor.isEditMode()) {
+                editor.setEditMode(state);
+                this.update();
+            }
         };
 
         // initialization -----------------------------------------------------

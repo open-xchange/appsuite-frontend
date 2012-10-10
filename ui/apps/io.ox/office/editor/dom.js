@@ -307,7 +307,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
     /**
      * Returns whether the passed node is a <span> element containing a single
-     * text node.
+     * text node. The <span> element may represent regular text portions, an
+     * empty text span, or a text field.
      *
      * @param {Node|jQuery} node
      *  The DOM node to be checked. If this object is a jQuery collection, uses
@@ -322,8 +323,24 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <span> element representing a
+     * regular text portion, or an empty text span.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element representing a text field.
+     */
+    DOM.isPortionSpan = function (node) {
+        return DOM.isTextSpan(node) && !$(node).hasClass('field');
+    };
+
+    /**
      * Returns whether the passed node is a <span> element containing an empty
-     * text node.
+     * text portion. Does NOT return true for text fields with an empty
+     * representation text.
      *
      * @param {Node|jQuery} node
      *  The DOM node to be checked. If this object is a jQuery collection, uses
@@ -332,8 +349,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Boolean}
      *  Whether the passed node is a span element with an empty text node.
      */
-    DOM.isEmptyTextSpan = function (node) {
-        return DOM.isTextSpan(node) && (node.firstChild.nodeValue.length === 0);
+    DOM.isEmptySpan = function (node) {
+        return DOM.isPortionSpan(node) && (node.firstChild.nodeValue.length === 0);
     };
 
     /**
@@ -349,6 +366,38 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isFieldSpan = function (node) {
         return DOM.isTextSpan(node) && $(node).hasClass('field');
+    };
+
+    /**
+     * Returns whether the passed node is a <span> element wrapping an object.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element wrapping an object.
+     */
+    DOM.isObjectSpan = function (node) {
+        var childNodes = Utils.getDomNode(node).childNodes;
+        // the span may contain other nodes beside the object, e.g. a selection
+        // frame, but the first node is always the object itself
+        return (Utils.getNodeName(node) === 'span') && (childNodes.length > 0) && (childNodes[0].nodeType === 1);
+    };
+
+    /**
+     * Returns whether the passed node is a <span> element wrapping an image.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element wrapping an image.
+     */
+    DOM.isImageSpan = function (node) {
+        // object spans contain the object element as first child
+        return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'img');
     };
 
     /**
@@ -412,7 +461,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns the text node of the next or previous sibling of the passed
      * node. Checks that the sibling node is a span element, and contains
-     * exactly one text node.
+     * exactly one text node. Works for regular text portions, empty text
+     * spans, and text fields.
      *
      * @param {Node|jQuery} node
      *  The original DOM node. If this node is a text node, checks that it is
@@ -733,6 +783,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
             // check preconditions
             if (!siblingTextNode ||
+                    // merge only regular text portions and empty text nodes (no fields)
+                    !DOM.isPortionSpan(textNode.parentNode) ||
+                    !DOM.isPortionSpan(siblingTextNode.parentNode) ||
                     // do not merge with next text node, if it is contained in the current range,
                     // this prevents unnecessary merge/split (merge will be done in next iteration step)
                     (next && (DOM.Point.comparePoints(DOM.Point.createPointForNode(siblingTextNode), ranges[index].end) < 0)) ||

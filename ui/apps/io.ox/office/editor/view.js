@@ -116,16 +116,29 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
 
-        _([{Entry: "Red", Value: {rgbColor: "FF0000"}},
-           {Entry: "Green", Value: {rgbColor: "00FF00"}},
-           {Entry: "Blue", Value: {rgbColor: "0000FF"}},
-           {Entry: "White", Value: {rgbColor: "FFFFFF"}},
-           {Entry: "Accent1", Value: {themeFill: "accent1"}},
-           {Entry: "Accent2", Value: {themeFill: "accent2"}}]).each(function (entry) {
+        _([
+            { label: 'Transparent',  value: {rgbColor: '' }},
+            { label: 'Red',          value: {rgbColor: 'FF0000'}},
+            { label: 'Green',        value: {rgbColor: '00FF00'}},
+            { label: 'Blue',         value: {rgbColor: '0000FF'}},
+            { label: 'White',        value: {rgbColor: 'FFFFFF'}},
+            { label: 'Black',        value: {rgbColor: '000000'}},
+            { label: 'Dark1',        value: {themeFill: 'dk1'}},
+            { label: 'Dark2',        value: {themeFill: 'dk2'}},
+            { label: 'Light1',        value: {themeFill: 'lt1'}},
+            { label: 'Light2',        value: {themeFill: 'lt2'}},
+            { label: 'Accent1',      value: {themeFill: 'accent1'}},
+            { label: 'Accent2',      value: {themeFill: 'accent2'}},
+            { label: 'Accent3',      value: {themeFill: 'accent3'}},
+            { label: 'Accent4',      value: {themeFill: 'accent4'}},
+            { label: 'Accent5',      value: {themeFill: 'accent5'}},
+            { label: 'Accent6',      value: {themeFill: 'accent6'}},
+            { label: 'Link',        value: {themeFill: 'hlink'}},
+            { label: 'Followed Link',        value: {themeFill: 'folHlink'}}
+        ]).each(function (entry) {
 
-            self.createOptionButton(entry.Value, { label: entry.Entry, css: { height: '36px', padding: '2px 12px' } });
+            self.createOptionButton(entry.value, { label: entry.label });
         }, this);
-
 
     }}); // class ColorChooser
 
@@ -462,9 +475,11 @@ define('io.ox/office/editor/view',
             createToolBar('debug', { label: gt('Debug') })
                 .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Editable Mode',            toggle: true })
+                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser({ tooltip: gt('Paragraph fill color') }))
+                .addSeparator()
+                .addGroup('character/color', new ColorChooser())
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }
@@ -491,8 +506,8 @@ define('io.ox/office/editor/view',
         // set the quick-search tooltip
         Utils.setControlTooltip(nodes.search, gt('Quick Search'), 'bottom');
 
-        // update all view components
-        controller.update();
+        // update all view components every time the window will be shown
+        appWindow.on('show', function () { controller.update(); });
 
     } // class View
 

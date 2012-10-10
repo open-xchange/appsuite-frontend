@@ -124,45 +124,54 @@ define('io.ox/office/editor/operations',
         position = createLastIndex(position);
 
         // iterate all child elements of the root node and create operations
-        Utils.iterateDescendantNodes(paragraph, function (node) {
+        Utils.iterateSelectedDescendantNodes(paragraph, 'span, img', function (node) {
 
-            var // element name of the current node
-                name = Utils.getNodeName(node),
-                // explicit attributes of the current element
+            var // explicit attributes of the current element
                 attributes = StyleSheets.getExplicitAttributes(node),
-                // end position of a text span
+                // end position of a text span (closed range)
                 endPosition = null,
                 // text contents of a text span
                 text = $(node).text();
 
+            // images (TODO: pack into span, TODO: any objects)
+            if (Utils.getNodeName(node) === 'img') {
+                // end position of the image node (closed range, single character)
+                endPosition = _.clone(position);
+                // operation to create the image (including its attributes)
+                operations.push({ name: Operations.IMAGE_INSERT, position: position, imgurl: $(node).data('url'), attrs: attributes });
+            }
+
             // text fields
-            if (DOM.isFieldSpan(node)) {
+            else if (DOM.isFieldSpan(node)) {
                 // end position of the field span (closed range, single character)
-                endPosition = position;
+                endPosition = _.clone(position);
                 // operation to create the field span element
                 // TODO: field type
                 operations.push({ name: Operations.FIELD_INSERT, position: position, representation: text });
+                // operation to change the formatting attributes
+                if (!_.isEmpty(attributes)) {
+                    operations.push({ name: Operations.ATTRS_SET, start: position, end: endPosition, attrs: attributes });
+                }
             }
 
-            // simple text spans
-            else if (DOM.isTextSpan(node)) {
+            // simple text portions
+            else if (DOM.isPortionSpan(node)) {
                 // empty text node: continue with next child node
                 if (text.length === 0) { return; }
                 // end position of the text span (closed range)
                 endPosition = increaseLastIndex(position, text.length - 1);
                 // operation to create the text span
                 operations.push({ name: Operations.TEXT_INSERT, start: position, text: text });
+                // operation to change the formatting attributes
+                if (!_.isEmpty(attributes)) {
+                    operations.push({ name: Operations.ATTRS_SET, start: position, end: endPosition, attrs: attributes });
+                }
             }
 
-            // unknown node: continue with next child node
+            // other helper nodes
             else {
-                Utils.warn('Operations.generateOperationsForParagraph(): unexpected node "' + name + '" at position ' + JSON.stringify(position) + '.');
+                // continue with next child node (do not increase position)
                 return;
-            }
-
-            // operation to change the formatting attributes
-            if (!_.isEmpty(attributes)) {
-                operations.push({ name: Operations.ATTRS_SET, start: position, end: endPosition, attrs: attributes });
             }
 
             // increase last index (one after last character of the current element)

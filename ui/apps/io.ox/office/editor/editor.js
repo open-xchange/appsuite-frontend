@@ -1071,6 +1071,9 @@ define('io.ox/office/editor/editor',
                 };
 
             applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.insertImageURL = function (imageURL) {
@@ -1083,6 +1086,9 @@ define('io.ox/office/editor/editor',
                 };
 
             applyOperation(newOperation, true, true);
+
+            // setting the cursor position
+            setSelection(new OXOSelection(lastOperationEnd));
         };
 
         this.splitParagraph = function (position) {
@@ -1250,6 +1256,14 @@ define('io.ox/office/editor/editor',
         this.isImageSelected = function () {
             var selection = getSelection();
             return selection && _.isString(selection.endPaM.imageFloatMode);
+        };
+
+        /**
+         * Returns whether the current selection selects a single image.
+         */
+        this.getImageFloatMode = function () {
+            var selection = getSelection();
+            return selection ? selection.endPaM.imageFloatMode : null;
         };
 
         // ==================================================================
@@ -1808,9 +1822,7 @@ define('io.ox/office/editor/editor',
 //            }
             else if (operation.name === Operations.MOVE) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
-                    var localStart = _.copy(operation.start, true);
-                    // localStart[localStart.length - 1] += 2;  // taking care, that the move modifies the target position for undo
-                    var undoOperation = { name: Operations.MOVE, start: _.copy(operation.end, true), end: localStart };
+                    var undoOperation = { name: Operations.MOVE, start: _.copy(operation.end, true), end: _.copy(operation.start, true) };
                     undomgr.addUndo(undoOperation, operation);
                 }
                 implMove(operation.start, operation.end);
@@ -2097,8 +2109,7 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.IMAGE_INSERT) {
-                var url = /:\/\//.test(operation.imgurl) ? operation.imgurl : getDocumentUrl({ get_filename: operation.imgurl });
-                if (implInsertImage(url, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
+                if (implInsertImage(operation.imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
                     if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                         var undoOperation = { name: Operations.TEXT_DELETE, start: _.clone(operation.position), end: _.clone(operation.position) };
                         undomgr.addUndo(undoOperation, operation);
@@ -2250,16 +2261,17 @@ define('io.ox/office/editor/editor',
             // sequences of sibling text spans (needed for white-space handling)
             $(paragraph).contents().each(function () {
 
-                var isTextSpan = DOM.isTextSpan(this),
-                    isPreviousTextSpan = isTextSpan && this.previousSibling && DOM.isTextSpan(this.previousSibling),
-                    isNextTextSpan = isTextSpan && this.nextSibling && DOM.isTextSpan(this.nextSibling);
+                // check if current node is a text span (portion or field)
+                if (DOM.isTextSpan(this)) {
 
-                if (isTextSpan) {
-                    if ((this.firstChild.nodeValue.length === 0) && (isPreviousTextSpan || isNextTextSpan)) {
+                    if (DOM.isEmptySpan(this) && ((this.previousSibling && DOM.isPortionSpan(this.previousSibling)) || (this.nextSibling && DOM.isPortionSpan(this.nextSibling)))) {
+                        // remove this span, if it is an empty portion and has a sibling text portion
                         $(this).remove();
-                    } else if (isPreviousTextSpan) {
+                    } else if (this.previousSibling && DOM.isTextSpan(this.previousSibling)) {
+                        // append to array that contains the previous text node (portion or field)
                         _(siblingTextNodes).last().push(this.firstChild);
                     } else {
+                        // start a new sequence of text nodes
                         siblingTextNodes.push([this.firstChild]);
                     }
                 }
@@ -2546,7 +2558,6 @@ define('io.ox/office/editor/editor',
                 }
                 else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                    // updating current selection, so that image positions are also available
                     var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                         imageEndPostion = _.copy(imageStartPosition, true),
                         newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
@@ -3098,11 +3109,12 @@ define('io.ox/office/editor/editor',
 
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
+                absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
                 image = null;
 
             // insert the image with default settings (inline)
             if (!node || (node.nodeType !== 3)) {
-                Utils.error('implInsertImage(): expecting text position to insert image.');
+                Utils.error('Editor.implInsertImage(): expecting text position to insert image.');
                 return false;
             }
 
@@ -3111,7 +3123,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image between the two text nodes
-            image = $('<img>', { src: url }).insertBefore(node.parentNode);
+            image = $('<img>', { src: absUrl }).data('url', url).insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
@@ -3309,7 +3321,19 @@ define('io.ox/office/editor/editor',
             styleSheets = self.getStyleSheets(family);
             if (styleSheets) {
                 if (createUndo) { undomgr.startGroup(); }
-                ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
+                if (family === 'image') {
+                    var useNonTextNode = true,
+                        startPaM = Position.getDOMPosition(paragraphs, start, useNonTextNode),
+                        endPaM = Position.getDOMPosition(paragraphs, end, useNonTextNode),
+                        // Image position described by the parent plus offset
+                        startPoint = DOM.Point.createPointForNode(startPaM.node),
+                        endPoint = DOM.Point.createPointForNode(endPaM.node);
+
+                    endPoint.offset += 1;
+                    ranges = [new DOM.Range(startPoint, endPoint)];
+                } else {
+                    ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
+                }
                 styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
                 if (createUndo) { undomgr.endGroup(); }
             }
@@ -3423,7 +3447,7 @@ define('io.ox/office/editor/editor',
                 // delete all image divs that are no longer associated with following floated images
                 var localStartPos = _.copy(startPos);
                 localStartPos.pop();
-                Position.removeLeadingImageDivs(paragraphs, localStartPos);
+                Position.removeUnusedImageDivs(paragraphs, localStartPos);
             }
             var startPosition = _.copy(position, true);
             startPosition[posLength - 1] += 1;
@@ -3952,7 +3976,7 @@ define('io.ox/office/editor/editor',
                 } else if (DOM.isFieldSpan(node)) {
                     nodeLen = 1;
                     isField = true;
-                } else if (DOM.isTextSpan(node)) {
+                } else if (DOM.isPortionSpan(node)) {
                     text = $(node).text();
                     nodeLen = text.length;
                 } else {
@@ -4029,12 +4053,6 @@ define('io.ox/office/editor/editor',
                 // and using complete spans instead of text nodes.
 
                 if ((sourceNode) && (destNode)) {
-                    if (sourceNode.nodeType === 3) {
-                        sourceNode = sourceNode.parentNode;
-                    }
-                    if (destNode.nodeType === 3) {
-                        destNode = destNode.parentNode;
-                    }
 
                     if (Utils.getNodeName(sourceNode) !== 'img') {
                         doMove = false; // supporting only images at the moment
@@ -4049,9 +4067,21 @@ define('io.ox/office/editor/editor',
                     }
 
                     if (doMove) {
+
+                        if (splitNode) {
+                            var newTextNode = DOM.splitTextNode(destNode, destPos.offset + 1);
+                            destNode = newTextNode.parentNode;
+                        } else {
+                            if (destNode.nodeType === 3) {
+                                destNode = destNode.parentNode;
+                            }
+                        }
+
                         // there can be empty text spans before the destination node
-                        while (DOM.isTextSpan(destNode) && (destNode.previousSibling) && DOM.isEmptyTextSpan(destNode.previousSibling)) {
-                            destNode = destNode.previousSibling;
+                        if (DOM.isTextSpan(destNode)) {
+                            while (destNode.previousSibling && DOM.isEmptySpan(destNode.previousSibling)) {
+                                destNode = destNode.previousSibling;
+                            }
                         }
 
                         if (insertBefore) {
