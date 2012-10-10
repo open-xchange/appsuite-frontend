@@ -552,6 +552,9 @@ define('io.ox/office/editor/position',
                 if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {  // if the next node is an image, this should be preferred
                     node = nextNode;
                     isImage = true;
+                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div') && (nextNode.nextSibling) && (Utils.getNodeName(nextNode.nextSibling) === 'img')) {
+                    node = nextNode.nextSibling;
+                    isImage = true;
                 } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {  // also preferring following fields
                     node = nextNode;
                     isField = true;
