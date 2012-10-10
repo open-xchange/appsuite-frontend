@@ -67,7 +67,7 @@ define("io.ox/contacts/test",
                 });
 
                 j.waitsFor(function () {
-                    createButton = $(".window-toolbar a[data-action='create']");
+                    createButton = $(".window-toolbar button[data-action='create']");
                     if (createButton[0]) {
                         return true;
                     }
@@ -88,13 +88,13 @@ define("io.ox/contacts/test",
 
                 j.it('looks for the form and autofills ', function () {
                     for (var i in testObject) {
-                        formFrame.find("input[data-property='" + i + "']").val(testObject[i]).trigger('change');
+                        formFrame.find("input[name='" + i + "']").val(testObject[i]).trigger('change');
                     }
                     j.expect(formFrame[0]).toBeTruthy();
                 });
 
                 j.it('checks for alert div ', function () {
-                    testfield = $('[data-property="email1"]');
+                    testfield = $('[name="email1"]');
 
                     j.waitsFor(function () {
                         if (testfield[0]) {
@@ -107,7 +107,7 @@ define("io.ox/contacts/test",
                     });
 
                     j.waitsFor(function () {
-                        alert = formFrame.find('.alert');
+                        alert = formFrame.find('.help-block.error');
                         if (alert[0]) {
                             return true;
                         }
@@ -123,12 +123,6 @@ define("io.ox/contacts/test",
 
                     j.runs(function () {
                         testfield.val('tester@test.de').trigger('change');
-                    });
-
-                    j.runs(function () {
-                        closeButton = alert.find('a.close');
-                        j.expect(closeButton).toBeTruthy();
-                        closeButton.trigger('click');
                     });
 
                 });

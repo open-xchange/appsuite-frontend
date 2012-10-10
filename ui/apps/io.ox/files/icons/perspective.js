@@ -81,16 +81,16 @@ define('io.ox/files/icons/perspective',
         });
     }
 
-//    function startMediaplayer(e) {
-//        e.preventDefault();
-//        require(['io.ox/files/mediaplayer'], function (//mediaplayer) {
-//            var app = e.data.app;
-//            mediaplayer.init({
-//                list: app.getFiles(),
-//                app: app
-//            });
-//        });
-//    }
+    function startMediaplayer(e) {
+        e.preventDefault();
+        require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+            var app = e.data.app;
+            mediaplayer.init({
+                list: app.getFiles(),
+                app: app
+            });
+        });
+    }
 
     function setContentType(ids)
     {
@@ -106,9 +106,9 @@ define('io.ox/files/icons/perspective',
                 $.txt(' ('),
                 $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
                     .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
-                $.txt(')')
- //               $('<a href="#" class="mediaplayer">').text(gt('//Mediaplayer'))
- //                   .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
+                $.txt(') '),
+                $('<a href="#" class="mediaplayer">').text(gt('Mediaplayer'))
+                    .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
             );
         }
     });
