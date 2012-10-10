@@ -79,17 +79,31 @@
     line-height: 40px;
     text-align: center;
     white-space: nowrap;
-    display: inline-block !important;
+    display: inline-block;
     -webkit-tap-highlight-color: transparent;
 }
 
 #io-ox-topbar .launcher-dropdown {
     float: left;
+    display: none;
+}
+
+#io-ox-topbar .launcher-dropdown li {
+    text-align: left;
+}
+
+#io-ox-topbar .launcher-dropdown ul {
+    left: 13px;
 }
 
 #io-ox-topbar .launcher-dropdown a.dropdown-toggle {
     color: white;
     text-decoration: none;
+    outline: none;
+}
+
+#io-ox-topbar .launcher-dropdown li.active-app a {
+    font-weight: bold;
 }
 
 #io-ox-topbar .launcher {
@@ -122,7 +136,7 @@
     background-color: @topbar-launcher-background-hover;
 }
 
-#io-ox-topbar .launcher.active {
+#io-ox-topbar .launcher.active-app {
     color: @topbar-launcher-color-active;
     background-color: @topbar-launcher-background-active;
 }
@@ -1502,7 +1516,8 @@ div.external-user-image {
     
     .input-medium.search-query { width: 80px; }
     
-    .launchers { display: none; }
+    #io-ox-topbar .launchers { display: none; }
+    #io-ox-topbar .launcher-dropdown { display: inherit; }
     
     #io-ox-notifications { width: 320px; right: -320px; }
     #io-ox-notifications-overlay { right: 320px; }

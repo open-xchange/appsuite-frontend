@@ -38,7 +38,8 @@ define("io.ox/core/main",
     };
 
     var topbar = $('#io-ox-topbar'),
-        launchers = topbar.find('.launchers');
+        launchers = topbar.find('.launchers'),
+        launcherDropdown = topbar.find('.launcher-dropdown ul');
 
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
@@ -126,36 +127,50 @@ define("io.ox/core/main",
          * Listen to events on apps collection
          */
 
-        ox.ui.apps.on('add', function (model, collection, e) {
-            var node, placeholder;
-            // create launcher
-            node = addLauncher('left', model.get('title'), function () { model.launch(); })
-                .attr('data-app-name', model.get('name') || model.id)
+        function add(node, container, model) {
+            var placeholder;
+            node.attr('data-app-name', model.get('name') || model.id)
                 .attr('data-app-guid', model.guid);
             // is launcher?
             if (model instanceof ox.ui.AppPlaceholder) {
                 node.addClass('placeholder');
             } else {
-                placeholder = launchers.children('.placeholder[data-app-name="' + $.escape(model.get('name')) + '"]');
+                placeholder = container.children('.placeholder[data-app-name="' + $.escape(model.get('name')) + '"]');
                 if (placeholder.length) {
                     node.insertBefore(placeholder);
                 }
                 placeholder.remove();
             }
+        }
+
+        ox.ui.apps.on('add', function (model, collection, e) {
+            // create topbar launcher
+            var node = addLauncher('left', model.get('title'), function () { model.launch(); });
+            add(node, launchers, model);
+            // add list item
+            node = $('<li>').append(
+                $('<a href="#">').text(model.get('title'))
+            );
+            node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
+            add(node, launcherDropdown, model);
         });
 
         ox.ui.apps.on('remove', function (model, collection, e) {
             launchers.children('[data-app-guid="' + model.guid + '"]').remove();
+            launcherDropdown.children('[data-app-guid="' + model.guid + '"]').remove();
         });
 
         ox.ui.apps.on('launch resume', function (model, collection, e) {
             // mark last active app
-            launchers.children().removeClass('active')
-                .filter('.launcher[data-app-guid="' + model.guid + '"]').addClass('active');
+            launchers.children().removeClass('active-app')
+                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
+            launcherDropdown.children().removeClass('active-app')
+                .filter('[data-app-guid="' + model.guid + '"]').addClass('active-app');
         });
 
         ox.ui.apps.on('change:title', function (model, value) {
             launchers.children('[data-app-guid="' + model.guid + '"]').text(value);
+            launcherDropdown.children('[data-app-guid="' + model.guid + '"] a').text(value);
         });
 
         /**
