@@ -101,7 +101,7 @@ define('io.ox/office/editor/view',
 
     // class ColorChooser =====================================================
 
-    var ColorChooser = RadioGroup.extend({ constructor: function (options) {
+    var ColorChooser = RadioGroup.extend({ constructor: function (themes, options) {
 
         var // self reference
             self = this;
@@ -113,6 +113,10 @@ define('io.ox/office/editor/view',
             tooltip: gt('Color'),
             dropDown: true
         }, options));
+
+        function changed() {
+            //self.createOptionButton("Neuer Eintrag", { label: "Neuer Eintrag" });
+        }
 
         // initialization -----------------------------------------------------
 
@@ -140,6 +144,7 @@ define('io.ox/office/editor/view',
             self.createOptionButton(entry.value, { label: entry.label });
         }, this);
 
+        themes.on('change', changed);
     }}); // class ColorChooser
 
     // class FontFamilyChooser ================================================
@@ -477,9 +482,9 @@ define('io.ox/office/editor/view',
                 .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
                 .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
-                .addGroup('paragraph/fillcolor', new ColorChooser({ tooltip: gt('Paragraph fill color') }))
+                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), { tooltip: gt('Paragraph fill color') }))
                 .addSeparator()
-                .addGroup('character/color', new ColorChooser())
+                .addGroup('character/color', new ColorChooser(editor.getThemes()))
                 .addSeparator()
                 .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
         }

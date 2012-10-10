@@ -12,9 +12,10 @@
  */
 
 define('io.ox/office/editor/format/themes',
-    ['io.ox/office/tk/utils',
+    ['io.ox/core/event',
+     'io.ox/office/tk/utils',
      'io.ox/office/editor/dom'
-    ], function (Utils, DOM) {
+    ], function (Events, Utils, DOM) {
 
     'use strict';
 
@@ -78,6 +79,10 @@ define('io.ox/office/editor/format/themes',
             theme.accent6 = colorScheme.accent6;
             theme.hyperlink = colorScheme.hyperlink;
             theme.followedHyperlink = colorScheme.followedHyperlink;
+
+            // notify listeners
+            this.trigger('change');
+
             return this;
         };
         /**
@@ -101,6 +106,9 @@ define('io.ox/office/editor/format/themes',
         this.getThemes = function () {
             return themes;
         };
+
+        // add event hub
+        Events.extend(this);
     } // class Themes
     // exports ================================================================
 
