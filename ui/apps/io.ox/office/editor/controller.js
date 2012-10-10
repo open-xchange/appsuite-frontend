@@ -154,7 +154,17 @@ define('io.ox/office/editor/controller',
                 'character/color': {
                     chain: 'character/attributes',
                     get: function (attributes) { return attributes.color; },
-                    set: function (state) { editor.setAttribute('character', 'color', state); }
+                    set: function (state) {
+                        if (state.themeFill) {
+                            var themes = editor.getThemes();
+                            if (themes) {
+                                var theme = themes.getTheme();
+                                if (theme)
+                                    state.rgbColor = theme[state.themeFill];
+                            }
+                        }
+                        editor.setAttribute('character', 'color', state);
+                    }
                 },
 
                 // tables
