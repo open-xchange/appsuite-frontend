@@ -183,6 +183,7 @@ define('io.ox/files/mediaplayer',
 
         close: function () {
             this.player.empty().remove();
+            this.trackdisplay.empty().remove();
             this.playlist.empty().remove();
             this.container.empty().remove();
             this.list = [];
