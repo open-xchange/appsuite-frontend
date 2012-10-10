@@ -343,6 +343,11 @@ define('io.ox/files/icons/perspective',
                 drawFirst();
             });
 
+            win.on("hide", function () {
+                dropZone.remove();
+                shortcutPoint.deactivate();
+            });
+
 //            // published?
 //            app.folder.getData().done(function (data) {
 //                win.nodes.title.find('.has-publications').remove();
