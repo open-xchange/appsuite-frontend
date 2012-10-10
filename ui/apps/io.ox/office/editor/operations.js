@@ -86,6 +86,8 @@ define('io.ox/office/editor/operations',
         ROW_INSERT: 'insertRow',
         COLUMN_INSERT: 'insertColumn',
         CELL_INSERT: 'insertCell',
+        CELL_SPLIT: 'splitCell',
+        CELL_MERGE: 'mergeCell',
 
         INSERT_STYLE: 'insertStylesheet',
         INSERT_THEME: 'insertTheme',

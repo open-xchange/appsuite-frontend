@@ -546,38 +546,18 @@ define('io.ox/office/editor/editor',
                         localEndCol = endCol;
 
                     if ((! isCellSelection) && (i < endRow) && (i > startCol))  {
-                        // removing complete rows
+                        // merging complete rows
                         localStartCol = 0;
                         localEndCol = Position.getLastColumnIndexInRow(paragraphs, rowPosition);
                     }
 
-                    // Counting the colSpan off all cells in the range
-                    var row = Position.getDOMPosition(paragraphs, rowPosition).node,
-                        allSelectedCells = $(row).children().slice(localStartCol, localEndCol + 1),
-                        colSpanSum = Table.getColSpanSum(allSelectedCells);
-
-                    // Shifting the content of all following cells to the first cell
-                    var targetCell = $(row).children().slice(localStartCol, localStartCol + 1),
-                        sourceCells = $(row).children().slice(localStartCol + 1, localEndCol + 1);
-
-                    // ToDo: This has to be done within operations
-                    Table.shiftCellContent(targetCell, sourceCells);
-
-                    // removing all cells behind the start cell
-                    var removeStartCol = localStartCol;
-                    removeStartCol++;  // do not remove the first cell
-
-                    var newOperation = {name: Operations.CELLS_DELETE, position: rowPosition, start: removeStartCol, end: localEndCol};
+                    var count = localEndCol - localStartCol,
+                        cellPosition = _.copy(rowPosition, true);
+                    cellPosition.push(localStartCol);
+                    var newOperation = {name: Operations.CELL_MERGE, position: cellPosition, count: count};
                     applyOperation(newOperation, true, true);
 
-                    // setting new colspan to the remaining cell
-                    rowPosition.push(localStartCol); // -> position of the new merged cell
-
-                    // Setting new table grid attribute to table
-                    newOperation = { name: Operations.ATTRS_SET, attrs: { 'gridspan' : colSpanSum }, start: _.copy(rowPosition, true), end: _.copy(rowPosition, true) };
-                    applyOperation(newOperation, true, true);
-
-                    endPosition = _.copy(rowPosition, true);
+                    endPosition = _.copy(cellPosition, true);
                 }
 
                 undomgr.endGroup();
@@ -1866,6 +1846,15 @@ define('io.ox/office/editor/editor',
                 }
                 implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
             }
+            else if (operation.name === Operations.CELL_MERGE) {
+                if (undomgr.isEnabled() && !undomgr.isInUndo()) {
+                    var content = null,
+                        gridspan = null,
+                        undoOperation = { name: Operations.CELL_SPLIT, position: _.copy(operation.position, true), content: content, gridspan: gridspan };
+                    undomgr.addUndo(undoOperation, operation);
+                }
+                implMergeCell(_.copy(operation.position, true), operation.count);
+            }
             else if (operation.name === Operations.CELL_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
                     var pos = _.copy(operation.position, true),
@@ -1875,7 +1864,7 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.CELLS_DELETE, position: pos, start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertCell(_.copy(operation.position), operation.count, operation.attrs);
+                implInsertCell(_.copy(operation.position, true), operation.count, operation.attrs);
             }
             else if (operation.name === Operations.ROW_INSERT) {
                 if (undomgr.isEnabled() && !undomgr.isInUndo()) {
@@ -1885,7 +1874,7 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.ROWS_DELETE, position: pos, start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertRow(_.copy(operation.position), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
+                implInsertRow(_.copy(operation.position, true), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.COLUMN_INSERT) {
 
@@ -4123,6 +4112,27 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
+        }
+
+        function implMergeCell(cellposition, count) {
+
+            var rowPosition = _.copy(cellposition, true),
+                localStartCol = rowPosition.pop(),
+                localEndCol = localStartCol + count,
+                // Counting the colSpan off all cells in the range
+                row = Position.getDOMPosition(paragraphs, rowPosition).node,
+                allSelectedCells = $(row).children().slice(localStartCol, localEndCol + 1),
+                colSpanSum = Table.getColSpanSum(allSelectedCells),
+                // Shifting the content of all following cells to the first cell
+                targetCell = $(row).children().slice(localStartCol, localStartCol + 1),
+                sourceCells = $(row).children().slice(localStartCol + 1, localEndCol + 1);
+
+            Table.shiftCellContent(targetCell, sourceCells);
+
+            sourceCells.remove();
+
+            // apply the passed table attributes
+            tableCellStyles.setElementAttributes(targetCell, { 'gridspan' : colSpanSum });
         }
 
         function implDbgOutEvent(event) {
