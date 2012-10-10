@@ -71,6 +71,7 @@ define('io.ox/office/editor/editor',
             // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             imageStyles = documentStyles.getStyleSheets('image'),
             tableStyles = documentStyles.getStyleSheets('table'),
+            tableRowStyles = documentStyles.getStyleSheets('tablerow'),
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
 
             // all highlighted DOM ranges (e.g. in quick search)
@@ -134,7 +135,7 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = characterStyles = imageStyles = tableStyles = tableCellStyles = null;
+            documentStyles = characterStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
 
         // OPERATIONS API
@@ -3710,7 +3711,7 @@ define('io.ox/office/editor/editor',
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
-                setRowHeight = false,
+//                setRowHeight = false,
                 useReferenceRow = _.isNumber(referencerow) ? true : false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
@@ -3723,9 +3724,9 @@ define('io.ox/office/editor/editor',
                 count = 1; // setting default for number of rows
             }
 
-            if ((attrs) && (attrs.height)) {
-                setRowHeight = true;
-            }
+//            if ((attrs) && (attrs.height)) {
+//                setRowHeight = true;
+//            }
 
             var tablePos = _.copy(localPosition, true);
             tablePos.pop();
@@ -3763,10 +3764,13 @@ define('io.ox/office/editor/editor',
                 row = $('<tr>');
             }
 
-            if (setRowHeight) {
-                var height = attrs.height / 100 + 'mm';  // converting to mm
-                row.css('height', height);
-            }
+            // apply the passed table attributes
+            tableRowStyles.setElementAttributes(row, attrs);
+
+//            if (setRowHeight) {
+//                var height = attrs.height / 100 + 'mm';  // converting to mm
+//                row.css('height', height);
+//            }
 
             if (tableRowNode) {
                 // inserting the new row(s) after the existing row at the specified position
