@@ -62,37 +62,23 @@ define('io.ox/office/editor/format/themes',
             var theme = themes[themes.length - 1];
             theme.name = name;
             theme.colorSchemeName = colorScheme.schemeName;
-            theme.dk1 = colorScheme.dk1;
-            theme.dk2 = colorScheme.dk2;
-            theme.lt1 = colorScheme.lt1;
-            theme.lt2 = colorScheme.lt2;
+            theme.dark1 = colorScheme.dark1;
+            theme.dark2 = colorScheme.dark2;
+            theme.light1 = colorScheme.light1;
+            theme.light2 = colorScheme.light2;
+            theme.text1 = colorScheme.text1;
+            theme.text2 = colorScheme.text2;
+            theme.background1 = colorScheme.background1;
+            theme.background2 = colorScheme.background2;
             theme.accent1 = colorScheme.accent1;
             theme.accent2 = colorScheme.accent2;
             theme.accent3 = colorScheme.accent3;
             theme.accent4 = colorScheme.accent4;
             theme.accent5 = colorScheme.accent5;
             theme.accent6 = colorScheme.accent6;
-            theme.hlink = colorScheme.hlink;
-            theme.folHlink = colorScheme.folHlink;
+            theme.hyperlink = colorScheme.hyperlink;
+            theme.followedHyperlink = colorScheme.followedHyperlink;
             return this;
-        };
-        /**
-         * Gives access to a single theme.
-         *
-         * @param name the name of the theme to return. If omitted the 'current' theme is returned
-         * @returns {Themes}
-         *  A reference to this instance.
-         */
-        this.getTheme = function (name) {
-            if (!name) {
-                return themes[0];
-            } else {
-                var index = 0;
-                for (; index < themes.length; index++)
-                    if (themes[index].name === name) {
-                        return themes[index];
-                    }
-            }
         };
         /**
          * Gives access to a single theme.
