@@ -1200,6 +1200,24 @@ define('io.ox/office/editor/editor',
                     var paraLen = Position.getParagraphLength(paragraphs, startPosition);
 
                     if (startPosition[lastValue] < paraLen) {
+                        var localPos = _.copy(selection.startPaM.oxoPosition, true),
+                            minDeletePos = 0,
+                            domPos;
+
+                        // Getting the first position, that is not a floated image,
+                        // because DELETE has to ignore floated images.
+                        localPos.pop();
+                        domPos = Position.getDOMPosition(paragraphs, localPos);
+
+                        if (domPos) {
+                            minDeletePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                        }
+
+                        if (selection.startPaM.oxoPosition[lastValue] < minDeletePos) {
+                            selection.startPaM.oxoPosition[lastValue] = minDeletePos;
+                            selection.endPaM.oxoPosition[lastValue] = minDeletePos;
+                        }
+
                         selection.endPaM.oxoPosition[lastValue]++;
                         self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
