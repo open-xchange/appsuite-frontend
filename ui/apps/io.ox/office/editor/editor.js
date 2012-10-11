@@ -68,7 +68,7 @@ define('io.ox/office/editor/editor',
 
             // shortcuts for style sheet containers
             characterStyles = documentStyles.getStyleSheets('character'),
-            // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
+            paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             imageStyles = documentStyles.getStyleSheets('image'),
             tableStyles = documentStyles.getStyleSheets('table'),
             tableRowStyles = documentStyles.getStyleSheets('tablerow'),
@@ -135,7 +135,7 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = characterStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
+            documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
 
         // OPERATIONS API
@@ -1200,6 +1200,24 @@ define('io.ox/office/editor/editor',
                     var paraLen = Position.getParagraphLength(paragraphs, startPosition);
 
                     if (startPosition[lastValue] < paraLen) {
+                        var localPos = _.copy(selection.startPaM.oxoPosition, true),
+                            minDeletePos = 0,
+                            domPos;
+
+                        // Getting the first position, that is not a floated image,
+                        // because DELETE has to ignore floated images.
+                        localPos.pop();
+                        domPos = Position.getDOMPosition(paragraphs, localPos);
+
+                        if (domPos) {
+                            minDeletePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                        }
+
+                        if (selection.startPaM.oxoPosition[lastValue] < minDeletePos) {
+                            selection.startPaM.oxoPosition[lastValue] = minDeletePos;
+                            selection.endPaM.oxoPosition[lastValue] = minDeletePos;
+                        }
+
                         selection.endPaM.oxoPosition[lastValue]++;
                         self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
@@ -2049,8 +2067,8 @@ define('io.ox/office/editor/editor',
             // insert an empty text span if there is no other content (except the dummy <br>)
             if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
-                // initialize character formatting from current paragraph style
-                characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                // initialize paragraph and character formatting from current paragraph style
+                paragraphStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
             }
 
             // append dummy <br> if the paragraph contains no text, or remove
@@ -3356,9 +3374,8 @@ define('io.ox/office/editor/editor',
                 if (endPos[posLength] > 0) {
                     endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
                 }
-                if (! Position.positionsAreEqual(startPos, endPos)) {
-                    implDeleteText(startPos, endPos);
-                }
+
+                implDeleteText(startPos, endPos);
 
                 // delete all image divs that are no longer associated with following floated images
                 var localStartPos = _.copy(startPos);
@@ -3370,11 +3387,9 @@ define('io.ox/office/editor/editor',
             startPosition[posLength] = 0;
             var endPosition = _.copy(position, true);
             endPosition[posLength - 1] = startPosition[posLength - 1];
-            if (endPosition[posLength] > 0) {
-                endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
-            }
+            endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
 
-            if (! Position.positionsAreEqual(startPosition, endPosition)) {
+            if (endPosition[posLength] > -1) {
                 implDeleteText(startPosition, endPosition);
             }
 
