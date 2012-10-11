@@ -119,8 +119,9 @@
             }
         }
 
-        /* default image formatting */
-        img {
+        /* default formatting for inline object spans */
+        span.inline {
+            display: inline-block;
             vertical-align: baseline;
         }
 

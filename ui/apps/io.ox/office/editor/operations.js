@@ -237,14 +237,14 @@ define('io.ox/office/editor/operations',
             }
             generateSetAttributesOperation(paragraph, position);
 
-            // process all child elements of the root node and create operations
+            // process all spans in the paragraph and create operations
             position = appendNewIndex(position);
-            Utils.iterateSelectedDescendantNodes(paragraph, 'span, img', function (node) {
+            Utils.iterateSelectedDescendantNodes(paragraph, 'span', function (span) {
 
                 var // whether node is a regular text portion
-                    isPortionSpan = DOM.isPortionSpan(node),
+                    isPortionSpan = DOM.isPortionSpan(span),
                     // text contents of a text span
-                    text = isPortionSpan ? $(node).text() : '';
+                    text = isPortionSpan ? $(span).text() : '';
 
                 // operation to create a (non-empty) generic text portion
                 if (text.length > 0) {
@@ -254,23 +254,27 @@ define('io.ox/office/editor/operations',
                     } else {
                         lastOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
                     }
-                    attributeRanges.push({ node: node, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
+                    attributeRanges.push({ node: span, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
                     position = increaseLastIndex(position, text.length);
                 }
 
                 // operation to create a text field
                 // TODO: field type
-                else if (DOM.isFieldSpan(node)) {
+                else if (DOM.isFieldSpan(span)) {
                     lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
-                    attributeRanges.push({ node: node, position: position });
+                    attributeRanges.push({ node: span, position: position });
                     position = increaseLastIndex(position);
                 }
 
                 // operation to create an image (including its attributes)
-                // TODO: pack into span, TODO: any objects
-                else if (Utils.getNodeName(node) === 'img') {
-                    lastOperation = generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
+                else if (DOM.isImageSpan(span)) {
+                    lastOperation = generateOperationWithAttributes(span, Operations.IMAGE_INSERT, { position: position, imgurl: $(span).data('url') });
                     position = increaseLastIndex(position);
+                }
+
+                // TODO: other objects
+                else {
+                    Utils.warn('Operations.Generator.generateParagraphOperations(): unknown span element');
                 }
 
             }, this, { children: true });
@@ -414,7 +418,7 @@ define('io.ox/office/editor/operations',
                     break;
 
                 default:
-                    Utils.warn('Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
+                    Utils.warn('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
                     // continue with next child node (do not increase position)
                     return;
                 }
