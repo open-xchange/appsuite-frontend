@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+ 
 #io-ox-core.wallpaper {
     .radial-gradient(@wallpaper-color1, @wallpaper-color2, @wallpaper-color3);
 }
@@ -147,16 +147,16 @@
 }
 
 @-webkit-keyframes launcherColours {
-    from { background-color: transparent; color: #aaa; }
-      to { background-color: @topbar-progress-color; color: #fff; }
+    from { color: #fff; }
+      to { color: #555; }
 }
 
 @-moz-keyframes launcherColours {
-    from { background-color: transparent; color: #aaa; }
-      to { background-color: @topbar-progress-color; color: #fff; }
+    from { color: #fff; }
+      to { color: #555; }
 }
 
-#io-ox-topbar .launcher.io-ox-progress {
+#io-ox-topbar .launcher.io-ox-progress i {
     -moz-animation-direction: alternate;
     -moz-animation-duration: 0.75s;
     -moz-animation-iteration-count: infinite;
