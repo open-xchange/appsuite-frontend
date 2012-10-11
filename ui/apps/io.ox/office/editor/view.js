@@ -107,7 +107,7 @@ define('io.ox/office/editor/view',
             self = this;
 
         // private methods ----------------------------------------------------
-
+        
         function changed() {
             // add theme based colors
             if (themes) {
@@ -144,7 +144,7 @@ define('io.ox/office/editor/view',
         }, options));
 
         // initialization -----------------------------------------------------
-
+        
         // add predefined colors
         _([
             { label: 'Transparent',  value: {rgbColor: '' }},
