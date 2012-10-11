@@ -100,7 +100,6 @@ define('io.ox/files/icons/perspective',
     ext.point('io.ox/files/icons/actions').extend({
         id: 'slideshow',
         draw: function (baton) {
-            console.log(baton.app.getFiles());
             this.append(
                 $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
                     .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
