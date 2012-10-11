@@ -1509,10 +1509,18 @@ div.external-user-image {
         left: 0%; width: 200%; right: auto;
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-duration: 350ms;
+    }
+    
+    .vsplit-slide {
+        -webkit-transform: translateX(-50%);
+        -webkit-animation-name: slideright;
+    }
+
+    .vsplit-reverse {
         -webkit-transform: translateX(0);
         -webkit-animation-name: slideleft;
     }
-    
+
     .touch .vsplit {
         -webkit-backface-visibility: hidden;
     }
@@ -1523,11 +1531,6 @@ div.external-user-image {
         position: absolute; top: 0; left: 50%; width: 50%; height: 30px;
         background-color: #eee; border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
-    }
-    
-    .vsplit.vsplit-right {
-        -webkit-transform: translateX(-50%);
-        -webkit-animation-name: slideright;
     }
 
     .input-medium.search-query { width: 80px; }
