@@ -19,7 +19,9 @@ define('io.ox/calendar/edit/template',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
          'io.ox/calendar/edit/binding-util',
-         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, BinderUtils, pViews) {
+         'io.ox/calendar/edit/recurrence-view',
+         'io.ox/participants/views',
+         "io.ox/dev/utils/live-coding-extension"], function (ext, gt, util, dateAPI, views, forms, BinderUtils, RecurrenceView, pViews, LiveCoding) {
 
     'use strict';
 
@@ -340,12 +342,12 @@ define('io.ox/calendar/edit/template',
         id: 'io.ox/calendar/edit/section/participants_legend',
         className: 'span12',
         label: gt('Participants'),
-        index: 1100
+        index: 1300
     }));
 
     point.basicExtend({
         id: 'io.ox/calendar/edit/section/participants_list',
-        index: 1200,
+        index: 1400,
         draw: function (options) {
             this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
         }
@@ -353,7 +355,7 @@ define('io.ox/calendar/edit/template',
 
     point.basicExtend({
         id: 'io.ox/calendar/edit/section/add-participant',
-        index: 1300,
+        index: 1500,
         draw: function (options) {
             var node = this;
             require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
@@ -411,6 +413,28 @@ define('io.ox/calendar/edit/template',
                     }
                 });
             });
+        }
+    });
+
+
+    /**
+     * extpoint
+     * conflicts
+     */
+    ext.point('io.ox/calendar/edit/conflicts').extend({
+        index: 1,
+        id: 'conflicts',
+        draw: function (data) {
+            this.append($('<div class="row-fluid show-grid">')
+                .css('margin-top', '10px').append(
+                    $('<span class="span12">').css('text-align', 'right').append(
+                        $('<a class="btn">')
+                            .attr('data-action', 'cancel')
+                            .text(gt('Cancel')),
+                        $('<a class="btn btn-danger">')
+                            .addClass('btn')
+                            .attr('data-action', 'ignore')
+                            .text(gt('Ignore conflicts')))));
         }
     });
 
@@ -695,79 +719,24 @@ define('io.ox/calendar/edit/template',
     }), {
         forceLine: 7
     });
-
+    
     point.extend(new forms.SectionLegend({
-        id: 'io.ox/calendar/edit/section/participants_legend',
+        id: "recurrence_legend",
         className: 'span12',
-        label: gt('Participants'),
+        label: gt("Recurrence"),
         index: 1100
     }));
 
-    point.basicExtend({
-        id: 'io.ox/calendar/edit/section/participants_list',
-        index: 1200,
-        draw: function (options) {
-            this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
-        }
-    });
-
-    point.basicExtend({
-        id: 'io.ox/calendar/edit/section/add-participant',
-        index: 1300,
-        draw: function (options) {
-            var node = this;
-            require(['io.ox/calendar/edit/view-addparticipants'], function (AddParticipantsView) {
-
-                var collection = options.model.getParticipants();
-
-                node.append($('<input type="text" class="add-participant">'));
-                node.append($('<button class="btn" type="button" data-action="add">').append($('<i class="icon-plus">')));
-
-                var autocomplete = new AddParticipantsView({el: node});
-                autocomplete.render();
-
-                autocomplete.on('select', function (data) {
-                    var alreadyParticipant = false, obj,
-                    userId;
-                    alreadyParticipant = collection.any(function (item) {
-                        if (data.type === 5) {
-                            return (item.get('mail') === data.mail && item.get('type') === data.type) || (item.get('mail') === data.email1 && item.get('type') === data.type);
-                        } else {
-                            return (item.id === data.id && item.get('type') === data.type);
-                        }
-                    });
-                    if (!alreadyParticipant) {
-                        if (data.type !== 5) {
-
-                            if (data.mark_as_distributionlist) {
-                                _.each(data.distribution_list, function (val) {
-                                    var def = $.Deferred();
-                                    if (val.folder_id === 6) {
-                                        util.getUserIdByInternalId(val.id, def);
-                                        def.done(function (id) {
-                                            userId = id;
-                                            obj = {id: userId, type: 1 };
-                                            collection.add(obj);
-                                        });
-                                    } else {
-                                        obj = {type: 5, mail: val.mail, display_name: val.display_name};
-                                        collection.add(obj);
-                                    }
-                                });
-                            } else {
-                                collection.add(data);
-                            }
-
-                        } else {
-                            obj = {type: data.type, mail: data.mail || data.email1, display_name: data.display_name, image1_url: data.image1_url || ''};
-                            collection.add(obj);
-                        }
-                    }
-                });
-            });
-        }
-    });
-
+    /*point.extend(new RecurrenceView({
+        id: 'recurrence',
+        className: 'span12',
+        index: 1200
+    }));*/
+    point.basicExtend(new LiveCoding.View({
+        url: "/~fla/scratchpad/extension.js",
+        id: 'recurrence',
+        index: 1200
+    }));
 
 /*
 //    ext.point('io.ox/calendar/edit/section').extend({
