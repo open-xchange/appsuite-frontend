@@ -1142,7 +1142,10 @@ span.hint {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.io-ox-sidepopup-pane { z-index: 1; }
+.io-ox-sidepopup-pane {
+    top: 56px;
+    padding-top: 0px;
+}
 
 .io-ox-sidepopup.right {
     left: 49.5%;
@@ -1162,7 +1165,15 @@ span.hint {
     box-shadow: 10px 0px 30px -10px #aaa;
 }
 
-.io-ox-sidepopup-close { position: absolute; top: 8px; z-index: 2; }
+.io-ox-sidepopup-close {
+    text-align: right;
+    margin: 13px 30px;
+}
+
+.io-ox-sidepopup-close .btn {
+    margin-left: 13px;
+}
+
 .io-ox-sidepopup.left .io-ox-sidepopup-close { right: 25px; }
 .io-ox-sidepopup.right .io-ox-sidepopup-close { right: 25px; }
 
