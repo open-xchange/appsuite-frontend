@@ -3096,7 +3096,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image between the two text nodes (store original URL for later use)
-            image = $('<span>').append($('<img>', { src: absUrl })).data('url', url).insertBefore(node.parentNode);
+            image = $('<span>').append($('<img>', { src: absUrl })).data('url', url).addClass('inline').insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
