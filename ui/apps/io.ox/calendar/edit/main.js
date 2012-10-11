@@ -74,7 +74,7 @@ define('io.ox/calendar/edit/main',
             function cont(data) {
                 self.model = appointmentModel.factory.create(data);
                 appointmentModel.setDefaultParticipants(self.model).done(function () {
-                    self.view = new MainView({model: self.model});
+                    self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create'});
                     self.view.on('save', _.bind(self.onSave, self));
 
                     self.view.on('save:success', function () {

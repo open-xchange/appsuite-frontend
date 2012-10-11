@@ -205,12 +205,13 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             delete options.id;
             
             options.render = options.render || function () {
-                this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [{model: this.model, parentView: this}]));
+                this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                 return this;
             };
 
             options.initialize = options.initialize || function () {
                 Events.extend(this);
+                this.baton = ext.Baton.wrap(_.extend({}, this.options, {parentView: this}));
                 if (this.init) {
                     this.init.apply(this, $.makeArray(arguments));
                 }

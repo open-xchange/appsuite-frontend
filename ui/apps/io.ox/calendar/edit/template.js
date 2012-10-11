@@ -106,9 +106,9 @@ define('io.ox/calendar/edit/template',
 
     point.basicExtend({
         id: 'io.ox/calendar/edit/section/save',
-        draw: function (data) {
-            this.append($('<button class="btn btn-primary span2">').text(gt("Create")).css({marginTop: '25px', float: 'right'}).on('click', function () {
-                data.parentView.trigger('save', data);
+        draw: function (baton) {
+            this.append($('<button class="btn btn-primary span2">').text(baton.mode === 'edit' ? gt("Save") : gt("Create")).css({marginTop: '25px', float: 'right'}).on('click', function () {
+                baton.parentView.trigger('save', baton);
             }));
         },
         forceLine: 3

@@ -53,7 +53,7 @@ define('io.ox/calendar/edit/view-main',
 
             this.point.each(function (extension) {
                 var node = getRow(extension.forceLine || rows.length);
-                extension.invoke('draw', node, {model: self.model, parentView: self});
+                extension.invoke('draw', node, self.baton);
             });
 
             this.$el.append(rows);
