@@ -19,7 +19,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         ox.session = data.session || '';
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
-        ox.language = data.language || 'en_US';
+        ox.language = data.locale || 'en_US';
     };
 
     var that = {
