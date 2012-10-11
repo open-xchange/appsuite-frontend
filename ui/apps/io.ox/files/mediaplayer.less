@@ -159,4 +159,26 @@
     }
 }
 
+// Animation for minimized button in launcher
+@-webkit-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+
+@-moz-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+#io-ox-topbar .launcher.minimizedmediaplayer i {
+    -moz-animation-direction: alternate;
+    -moz-animation-duration: 1.25s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: playerColours;
+    -moz-animation-timing-function: ease-in-out;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-duration: 1.25s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: playerColours;
+    -webkit-animation-timing-function: ease-in-out;
+}
 
