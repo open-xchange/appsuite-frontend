@@ -36,28 +36,28 @@ define('io.ox/office/editor/undo',
     // class Action ===========================================================
 
     /**
-     * An instance of Action is used by the undo manager to store undo and
-     * redo operations and to apply them in the editor.
+     * An instance of Action is used by the undo manager to store undo and redo
+     * operations and to apply them in the editor.
      *
      * @constructor
      *
      * @param {Object|Object[]} [undoOperations]
-     *  One ore more operations that form a logical undo action. When the
-     *  undo action is executed, the operations will be applied in the
-     *  exact order as passed in this parameter; they will NOT be applied
-     *  in reversed order as would be the case if the operations had been
-     *  added in multiple undo actions. The parameter may be a single
-     *  operation object, an array of operation objects, or omitted.
+     *  One ore more operations that form a logical undo action. When the undo
+     *  action is executed, the operations will be applied in the exact order
+     *  as passed in this parameter; they will NOT be applied in reversed order
+     *  as it would be the case if the operations have been added in multiple
+     *  undo actions. The parameter may be a single operation object, an array
+     *  of operation objects, or omitted.
      *
      * @param {Object|Object[]} [redoOperations]
-     *  One ore more operations that form a logical redo action. When the
-     *  redo action is executed, the operations will be applied in the
-     *  exact order as passed in this parameter. The parameter may be a
-     *  single operation object, an array of operation objects, or omitted.
+     *  One ore more operations that form a logical redo action. When the redo
+     *  action is executed, the operations will be applied in the exact order
+     *  as passed in this parameter. The parameter may be a single operation
+     *  object, an array of operation objects, or omitted.
      */
     function Action(undoOperations, redoOperations) {
-        this.undoOperations = _.isArray(undoOperations) ? undoOperations : _.isObject(undoOperations) ? [undoOperations] : [];
-        this.redoOperations = _.isArray(redoOperations) ? redoOperations : _.isObject(redoOperations) ? [redoOperations] : [];
+        this.undoOperations = _.isArray(undoOperations) ? undoOperations : _.isObject(undoOperations) ? [_.copy(undoOperations, true)] : [];
+        this.redoOperations = _.isArray(redoOperations) ? redoOperations : _.isObject(redoOperations) ? [_.copy(redoOperations, true)] : [];
     }
 
     /**
@@ -70,12 +70,25 @@ define('io.ox/office/editor/undo',
             (this.redoOperations.length === 1) && (this.redoOperations[0].name === Operations.TEXT_INSERT);
     };
 
+    /**
+     * Tries to merge this action with the passed action. Merging works only
+     * if both actions represent a single 'insertText' operation, and the
+     * passed action appends a single character directly after the text of this
+     * action.
+     *
+     * @param {Operation} nextAction
+     *  The action that will be tried to merge into this action.
+     *
+     * @returns {Boolean}
+     *  Whether the passed action has been merged successfully into this
+     *  action.
+     */
     Action.prototype.tryMergeInsertCharacter = function (nextAction) {
 
         var // check if this and the passed action is an 'insertText' action
             validActions = this.isInsertTextAction() && nextAction.isInsertTextAction(),
 
-            // the redo actions of this action and the passed action
+            // the redo operation of this action and the passed action
             thisRedo = this.redoOperations[0],
             nextRedo = nextAction.redoOperations[0],
 
@@ -104,6 +117,9 @@ define('io.ox/office/editor/undo',
         return false;
     };
 
+    /**
+     * Applies the undo operations of this action at the passed editor.
+     */
     Action.prototype.undo = function (editor) {
         // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         _(this.undoOperations).each(function (operation) {
@@ -111,6 +127,9 @@ define('io.ox/office/editor/undo',
         });
     };
 
+    /**
+     * Applies the redo operations of this action at the passed editor.
+     */
     Action.prototype.redo = function (editor) {
         _(this.redoOperations).each(function (operation) {
             editor.applyOperation(operation, true, true);
@@ -137,7 +156,7 @@ define('io.ox/office/editor/undo',
             groupLevel = 0,
             groupedActions = null,
             enabled = true,
-            processingUndoRedo = false;
+            processing = false;
 
         // private methods ----------------------------------------------------
 
@@ -197,11 +216,11 @@ define('io.ox/office/editor/undo',
         };
 
         this.isEnabled = function () {
-            return enabled;
+            return enabled && !processing;
         };
 
-        this.enable = function (b) {
-            enabled = b;
+        this.enable = function (state) {
+            enabled = state;
             if (!enabled) {
                 this.clear();
             }
@@ -257,10 +276,6 @@ define('io.ox/office/editor/undo',
             }
         };
 
-        this.isInUndo = function () {
-            return processingUndoRedo;
-        };
-
         /**
          * Creates a new undo action that will apply the passed undo and redo
          * operations in the editor.
@@ -283,13 +298,10 @@ define('io.ox/office/editor/undo',
          */
         this.addUndo = function (undoOperations, redoOperations) {
 
-            if (this.isInUndo()) {
-                Utils.error('UndoManager.addUndo(): creating undo while processing undo!');
-                return;
-            }
+            if (!this.isEnabled()) { return; }
 
             var // the new action object
-                action = new Action(_.copy(undoOperations, true), _.copy(redoOperations, true));
+                action = new Action(undoOperations, redoOperations);
 
             if (groupedActions) {
                 // action grouping is active
@@ -307,43 +319,63 @@ define('io.ox/office/editor/undo',
             }
         };
 
-        this.hasUndo = function () {
-            return currentAction > 0;
+        /**
+         * Returns the number of undo actions available on the undo stack.
+         */
+        this.undoAvailable = function () {
+            return currentAction;
         };
 
-        this.undo = function () {
-
-            if (!this.hasUndo())
-                return;
-
-            processingUndoRedo = true;
+        /**
+         * Executes the specified number of undo actions.
+         *
+         * @param {Number} [count=1]
+         *  The number of undo actions to be executed.
+         */
+        this.undo = function (count) {
+            processing = true;
             try {
-                actions[--currentAction].undo(editor);
+                count = _.isNumber(count) ? count : 1;
+                while ((currentAction > 0) && (count > 0)) {
+                    currentAction -= 1;
+                    actions[currentAction].undo(editor);
+                    count -= 1;
+                }
             } finally {
-                processingUndoRedo = false;
+                processing = false;
             }
         };
 
-        this.hasRedo = function () {
-            return currentAction < actions.length;
+        /**
+         * Returns the number of redo actions available on the redo stack.
+         */
+        this.redoAvailable = function () {
+            return actions.length - currentAction;
         };
 
-        this.redo = function () {
-
-            if (!this.hasRedo())
-                return;
-
-            processingUndoRedo = true;
+        /**
+         * Executes the specified number of redo actions.
+         *
+         * @param {Number} [count=1]
+         *  The number of redo actions to be executed.
+         */
+        this.redo = function (count) {
+            processing = true;
             try {
-                actions[currentAction++].redo(editor);
+                count = _.isNumber(count) ? count : 1;
+                while ((currentAction < actions.length) && (count > 0)) {
+                    actions[currentAction].redo(editor);
+                    currentAction += 1;
+                    count -= 1;
+                }
             } finally {
-                processingUndoRedo = false;
+                processing = false;
             }
         };
 
     } // class UndoManager
 
-   // exports ================================================================
+   // exports =================================================================
 
     return UndoManager;
 
