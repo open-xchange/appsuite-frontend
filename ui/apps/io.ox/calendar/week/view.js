@@ -100,12 +100,14 @@ define('io.ox/calendar/week/view',
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
             if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
-                var cid = $(e.currentTarget).attr('data-cid'),
-                    obj = _.cid(cid),
+                var cid = $(e.currentTarget).data('cid'),
+                    obj = _.cid(cid + ''),
                     self = this;
-                this.trigger('showAppointment', e, obj);
-                if (this.clickTimer === null) {
-                    this.clickTimer = setTimeout(function () {
+                self.trigger('showAppointment', e, obj);
+
+                if (self.clickTimer === null && self.clicks === 0) {
+                    self.clickTimer = setTimeout(function () {
+                        clearTimeout(self.clickTimer);
                         self.clicks = 0;
                         self.clickTimer = null;
 
@@ -114,17 +116,16 @@ define('io.ox/calendar/week/view',
                             .not($('[data-cid="' + cid + '"]'))
                             .addClass('opac');
                         $('[data-cid="' + cid + '"]').addClass('current');
-
-                    }, 250);
+                    }, 300);
                 }
+                self.clicks++;
 
-                if (this.clicks === 1) {
-                    clearTimeout(this.clickTimer);
-                    this.clickTimer = null;
-                    this.clicks = -1;
+                if (self.clickTimer !== null && self.clicks === 2) {
+                    clearTimeout(self.clickTimer);
+                    self.clicks = 0;
+                    self.clickTimer = null;
                     self.trigger('openEditAppointment', e, obj);
                 }
-                this.clicks++;
             }
         },
 
@@ -421,11 +422,10 @@ define('io.ox/calendar/week/view',
 
         setScrollPos: function () {
             var slotHeight = this.cellHeight * this.fragmentation,
-                workStartPos = slotHeight * this.workStart,
-                workHeight = slotHeight * this.workEnd - workStartPos,
+                workHeight = slotHeight * (this.workEnd - this.workStart),
                 newPos = (this.pane.height() - workHeight) / 2;
             // adjust scoll position
-            this.pane.scrollTop(workStartPos - newPos);
+            this.pane.scrollTop((slotHeight * this.workStart) - newPos);
         },
 
         renderTimeline: function (tl) {

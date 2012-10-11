@@ -167,6 +167,8 @@ define('io.ox/calendar/week/perspective',
                 .getWindow()
                 .on('show', refresh);
 
+            this.view.setScrollPos();
+
             refresh();
         }
     });
