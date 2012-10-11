@@ -350,7 +350,7 @@ define('io.ox/office/editor/format/imagestyles',
         this.iterateReadOnly = function (ranges, iterator, context) {
             // DOM.iterateAncestorNodesInRanges() passes the current element to
             // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'img', iterator, context);
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.IMAGE_SPAN_SELECTOR, iterator, context);
         };
 
         /**
