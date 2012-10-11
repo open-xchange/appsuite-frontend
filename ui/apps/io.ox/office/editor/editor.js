@@ -1671,10 +1671,11 @@ define('io.ox/office/editor/editor',
             else if (operation.name === Operations.TABLE_DELETE) {
                 if (undomgr.isEnabled()) {
                     var tablePos = Position.getDOMPosition(paragraphs, operation.start);
-                    if (tablePos) {
+                    if (tablePos && (Utils.getNodeName(tablePos.node) === 'table')) {
                         // generate undo operations for the entire table
-                        var undoOperations = (new Operations.Generator()).generateTableOperations(tablePos.node, operation.start);
-                        undomgr.addUndo(undoOperations, operation);
+                        var generator = new Operations.Generator();
+                        generator.generateTableOperations(tablePos.node, operation.start);
+                        undomgr.addUndo(generator.getOperations(), operation);
                     }
                 }
                 implDeleteTable(operation.start);
@@ -1803,7 +1804,7 @@ define('io.ox/office/editor/editor',
                         undoOperation = { name: Operations.ROWS_DELETE, position: pos, start: start, end: end };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertRow(_.copy(operation.position, true), operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
+                implInsertRow(operation.position, operation.count, operation.insertdefaultcells, operation.referencerow, operation.attrs);
             }
             else if (operation.name === Operations.COLUMN_INSERT) {
 
@@ -3625,8 +3626,7 @@ define('io.ox/office/editor/editor',
 
             if (useReferenceRow) {
 
-                var refRowNode = $(table).children('tbody, thead').children().get(referencerow),
-                row = $(refRowNode);
+                row = $(table).children('tbody, thead').children().eq(referencerow);
 
             } else if (insertdefaultcells) {
 
@@ -3647,21 +3647,18 @@ define('io.ox/office/editor/editor',
                 row = $('<tr>');
             }
 
-            // apply the passed table attributes
-            tableRowStyles.setElementAttributes(row, attrs);
-
-//            if (setRowHeight) {
-//                var height = attrs.height / 100 + 'mm';  // converting to mm
-//                row.css('height', height);
-//            }
-
-            if (tableRowNode) {
-                // inserting the new row(s) after the existing row at the specified position
-                _.times(count, function () { $(tableRowNode).before(row.clone(true)); });
-            } else {
-                // appending the new row(s) to the table
-                _.times(count, function () { $(table).append(row.clone(true)); });
-            }
+            _.times(count, function () {
+                var newRow = row.clone(true);
+                if (tableRowNode) {
+                    // insert the new row before the existing row at the specified position
+                    $(tableRowNode).before(newRow);
+                } else {
+                    // append the new row to the table
+                    $(table).append(newRow);
+                }
+                // apply the passed attributes
+                tableRowStyles.setElementAttributes(newRow, attrs);
+            });
 
             // removing content, if the row was cloned from a reference row
             if (useReferenceRow) {

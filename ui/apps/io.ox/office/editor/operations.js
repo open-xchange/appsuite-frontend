@@ -227,9 +227,6 @@ define('io.ox/office/editor/operations',
          *  If set to true, no 'insertParagraph' operation will be generated.
          *  The generated operations will assume that an empty paragraph
          *  element exists at the passed logical position.
-         *
-         * @returns {Object[]}
-         *  The operations array with all operations generated so far.
          */
         this.generateParagraphOperations = function (paragraph, position, initialParagraph) {
 
@@ -293,8 +290,6 @@ define('io.ox/office/editor/operations',
             _(attributeRanges).each(function (range) {
                 generateSetAttributesOperation(range.node, range.position, range.endPosition);
             });
-
-            return operations;
         };
 
         /**
@@ -308,9 +303,6 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table cell. The generated
          *  operations will contain positions starting with this address.
-         *
-         * @returns {Object[]}
-         *  The operations array with all operations generated so far.
          */
         this.generateTableCellOperations = function (cell, position) {
 
@@ -319,8 +311,6 @@ define('io.ox/office/editor/operations',
 
             // generate operations for the contents of the cell
             this.generateContentOperations(cell, position);
-
-            return operations;
         };
 
         /**
@@ -333,9 +323,6 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table row. The generated
          *  operations will contain positions starting with this address.
-         *
-         * @returns {Object[]}
-         *  The operations array with all operations generated so far.
          */
         this.generateTableRowOperations = function (row, position) {
 
@@ -346,11 +333,8 @@ define('io.ox/office/editor/operations',
             position = appendNewIndex(position);
             $(row).children().each(function () {
                 self.generateTableCellOperations(this, position);
-                // cell may span several columns
-                position = increaseLastIndex(position, Utils.getElementAttributeAsInteger(this, 'colspan', 1));
+                position = increaseLastIndex(position);
             });
-
-            return operations;
         };
 
         /**
@@ -363,9 +347,6 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table node. The generated operations
          *  will contain positions starting with this address.
-         *
-         * @returns {Object[]}
-         *  The operations array with all operations generated so far.
          */
         this.generateTableOperations = function (table, position) {
 
@@ -378,8 +359,6 @@ define('io.ox/office/editor/operations',
                 self.generateTableRowOperations(this, position);
                 position = increaseLastIndex(position);
             });
-
-            return operations;
         };
 
         /**
@@ -398,9 +377,6 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed node. The generated operations
          *  will contain positions starting with this address.
-         *
-         * @returns {Object[]}
-         *  The operations array with all operations generated so far.
          */
         this.generateContentOperations = function (node, position) {
 
@@ -434,8 +410,6 @@ define('io.ox/office/editor/operations',
                 position = increaseLastIndex(position);
 
             }, this, { children: true });
-
-            return operations;
         };
 
     }; // class Operations.Generator
