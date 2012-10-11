@@ -4001,7 +4001,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((Utils.getNodeName(destPos.node) === 'img') && (destPos.offset === 1)) {
+            } else if ((DOM.isImageSpan(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -4013,12 +4013,8 @@ define('io.ox/office/editor/editor',
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
                     useImageDiv = true,
-                    imageDiv = sourceNode.parentNode.previousSibling,  // img -> span -> div
+                    imageDiv = sourceNode.previousSibling,  // span -> div
                     doMove = true;
-
-                if (Utils.getNodeName(sourceNode) === 'img') {
-                    sourceNode = sourceNode.parentNode; // using image span instead of image node
-                }
 
                 if ((sourceNode) && (destNode)) {
 
