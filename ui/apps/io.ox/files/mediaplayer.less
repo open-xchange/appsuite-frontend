@@ -54,7 +54,7 @@
             height:100%;
             margin:auto;
             background:@playerPrimaryColor;
-            padding:13px;
+            padding:@playerMargin;
 
             .mediaplayer_buttons {
                 margin-bottom:@playerMargin;
@@ -89,10 +89,40 @@
             }
 
             .mediaplayer_player {
+
                 background:@playerSecondaryColor;
                 width:@playerWidth;
-                margin-top:@playerMargin;
                 margin-bottom:@playerMargin;
+
+                // MediaElement Container
+                .mejs-container {
+                    background: #08c;
+
+                    // Controls Background
+                    .mejs-controls {
+                        @mediaplayerSliderBackground: darken(#08c, 5%);
+
+                        background:rgba(0, 136, 204, 0.2);
+
+                        .mejs-time-rail {
+                            .mejs-time-total {
+                                    background:@mediaplayerSliderBackground;
+                                .mejs-time-loaded {
+
+                                    background:lighten(#08c, 10%);
+                                }
+                                .mejs-time-current { }
+                            }
+                        }
+                        .mejs-horizontal-volume-slider {
+                            .mejs-horizontal-volume-total {
+                                background:@mediaplayerSliderBackground;
+                            }
+                            .mejs-horizontal-volume-current { }
+                        }
+                    }
+                }
+
             }
 
             .mediaplayer_playlist {
@@ -129,4 +159,26 @@
     }
 }
 
+// Animation for minimized button in launcher
+@-webkit-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+
+@-moz-keyframes playerColours {
+    from { color: #fff; }
+      to { color: #bbb; }
+}
+#io-ox-topbar .launcher.minimizedmediaplayer i {
+    -moz-animation-direction: alternate;
+    -moz-animation-duration: 1.25s;
+    -moz-animation-iteration-count: infinite;
+    -moz-animation-name: playerColours;
+    -moz-animation-timing-function: ease-in-out;
+    -webkit-animation-direction: alternate;
+    -webkit-animation-duration: 1.25s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: playerColours;
+    -webkit-animation-timing-function: ease-in-out;
+}
 

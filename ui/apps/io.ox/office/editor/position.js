@@ -93,8 +93,7 @@ define('io.ox/office/editor/position',
             if (evaluateCharacterPosition) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     if ((DOM.isFieldSpan(prevNode)) || (DOM.isImageSpan(prevNode))) {
-                        // images and fields are counted as single character
-                        textLength += 1;
+                        textLength += 1;  // images and fields are counted as single character
                     } else {
                         textLength += $(prevNode).text().length;
                     }
@@ -147,7 +146,11 @@ define('io.ox/office/editor/position',
             imageFloatMode = null;
 
         if (DOM.isFieldSpan(node.parentNode)) {
-            node = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
+            offset = 0;
+        }
+
+        if (DOM.isImageSpan(node)) {
+            imageFloatMode = $(node).data('mode');
             offset = 0;
         }
 
@@ -182,9 +185,10 @@ define('io.ox/office/editor/position',
                 Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                 return;
             }
+
         } else {
 
-            if ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span'))  {
+            if (((node.nodeType === 3) || (Utils.getNodeName(node) === 'span')) && (! imageFloatMode)) {
                 if ($(node).text().length === offset) {
                     // Checking if an inline image follows
                     var imageSpanNode = null;
