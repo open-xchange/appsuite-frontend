@@ -68,7 +68,7 @@ define('io.ox/office/editor/editor',
 
             // shortcuts for style sheet containers
             characterStyles = documentStyles.getStyleSheets('character'),
-            // paragraphStyles = documentStyles.getStyleSheets('paragraph'),
+            paragraphStyles = documentStyles.getStyleSheets('paragraph'),
             imageStyles = documentStyles.getStyleSheets('image'),
             tableStyles = documentStyles.getStyleSheets('table'),
             tableRowStyles = documentStyles.getStyleSheets('tablerow'),
@@ -135,7 +135,7 @@ define('io.ox/office/editor/editor',
         this.destroy = function () {
             this.events.destroy();
             documentStyles.destroy();
-            documentStyles = characterStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
+            documentStyles = characterStyles = paragraphStyles = imageStyles = tableStyles = tableRowStyles = tableCellStyles = null;
         };
 
         // OPERATIONS API
@@ -2049,8 +2049,8 @@ define('io.ox/office/editor/editor',
             // insert an empty text span if there is no other content (except the dummy <br>)
             if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
-                // initialize character formatting from current paragraph style
-                characterStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                // initialize paragraph and character formatting from current paragraph style
+                paragraphStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
             }
 
             // append dummy <br> if the paragraph contains no text, or remove

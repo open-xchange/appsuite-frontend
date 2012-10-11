@@ -870,6 +870,11 @@ define('io.ox/office/editor/format/stylesheets',
 
             }, this);
 
+            // update CSS formatting of descendant elements
+            _(descendantStyleFamilies).each(function (family) {
+                documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
+            });
+
             return this;
         };
 
