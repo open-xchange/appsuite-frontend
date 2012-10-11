@@ -205,6 +205,13 @@ define('io.ox/office/editor/operations',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the array of operations that has been generated so far.
+         */
+        this.getOperations = function () {
+            return operations;
+        };
+
+        /**
          * Generates all operations needed to recreate the passed paragraph.
          *
          * @param {HTMLParagraphElement|jQuery} paragraph

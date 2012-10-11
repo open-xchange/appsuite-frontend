@@ -438,7 +438,6 @@ define('io.ox/office/editor/editor',
                 newOperation = { name: Operations.ROWS_DELETE, position: tablePos, start: start, end: end };
             }
 
-            this.clearUndo();  // ToDo: Remove this asap
             applyOperation(newOperation, true, true);
 
             // setting the cursor position
@@ -1716,39 +1715,16 @@ define('io.ox/office/editor/editor',
                         end = operation.end || start,
                         generator = new Operations.Generator();
 
-                    undomgr.startGroup();
-                    for (var i = end; i >= start; i--) {
-                        var localPos = _.copy(operation.position, true);  // table position
+                    for (var i = start; i <= end; i += 1) {
+                        var localPos = _.clone(operation.position);  // table position
                         localPos.push(i);  // row position
 
                         var tableRow = Position.getDOMPosition(paragraphs, localPos);
                         if (tableRow) {
-                            var row = tableRow.node,
-                                rowAttrs = StyleSheets.getExplicitAttributes(row);
-
-                            // all cells of this row have to be restored (without redo operation)
-                            var allCells = $(row).children(),
-                                allCellsAttributes = Table.getCellAttributes(allCells);
-
-                            for (var j = allCellsAttributes.length - 1; j >= 0; j--) {
-                                var count = 1,  // always only one cell in undo, cells can have different attributes
-                                    cellAttrs = allCellsAttributes[j],
-                                    cellPos = _.copy(localPos, true);
-
-                                cellPos.push(j);
-
-                                var localUndoOperation = { name: Operations.CELL_INSERT, position: cellPos, count: count, attrs: cellAttrs };
-
-                                undomgr.addUndo(localUndoOperation);  // no redo operation
-                            }
-
-                            var undoOperation = { name: Operations.ROW_INSERT, position: localPos, count: 1, insertdefaultcells: false, attrs: rowAttrs },
-                                redoOperation = { name: Operations.ROWS_DELETE, position: _.copy(operation.position, true), start: i, end: i };  // only one row in each redo
-
-                            undomgr.addUndo(undoOperation, redoOperation);
+                            generator.generateTableRowOperations(tableRow.node, localPos);
                         }
                     }
-                    undomgr.endGroup();
+                    undomgr.addUndo(generator.getOperations(), operation);
                 }
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
@@ -1865,7 +1841,7 @@ define('io.ox/office/editor/editor',
                 implSplitParagraph(operation.start);
             }
             else if (operation.name === Operations.IMAGE_INSERT) {
-                if (implInsertImage(operation.imgurl, _.copy(operation.position, true), _.copy(operation.attrs, true))) {
+                if (implInsertImage(operation.imgurl, operation.position, operation.attrs)) {
                     if (undomgr.isEnabled()) {
                         var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
                         undomgr.addUndo(undoOperation, operation);
@@ -1873,11 +1849,12 @@ define('io.ox/office/editor/editor',
                 }
             }
             else if (operation.name === Operations.FIELD_INSERT) {
-                if (undomgr.isEnabled()) {
-                    var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
-                    undomgr.addUndo(undoOperation, operation);
+                if (implInsertField(operation.position, operation.type, operation.representation)) {
+                    if (undomgr.isEnabled()) {
+                        var undoOperation = { name: Operations.TEXT_DELETE, start: operation.position, end: operation.position };
+                        undomgr.addUndo(undoOperation, operation);
+                    }
                 }
-                implInsertField(operation.position, operation.type, operation.representation);
             }
             else if (operation.name === Operations.PARA_MERGE) {
                 if (undomgr.isEnabled()) {
@@ -2551,46 +2528,6 @@ define('io.ox/office/editor/editor',
             }
 
             return str;
-        }
-
-        /**
-         * Returns all text nodes contained in the specified element.
-         *
-         * @param {HTMLElement|jQuery} element
-         *  A DOM element object whose descendant text nodes will be returned. If
-         *  this object is a jQuery collection, uses the first node it contains.
-         *
-         * @returns {TextNode[]}
-         *  An array of text nodes contained in the passed element, in the correct
-         *  order.
-         */
-        function collectTextNodes(element) {
-            var textNodes = [];
-            Utils.iterateDescendantTextNodes(element, function (textNode) {
-                textNodes.push(textNode);
-            });
-            return textNodes;
-        }
-
-        /**
-         * Returns all text spans and images contained in the specified
-         * paragraph element.
-         *
-         * @param {HTMLElement|jQuery} paragraph
-         *  A paragraph element object whose children nodes will be returned.
-         *  If this object is a jQuery collection, uses the first node it
-         *  contains.
-         *
-         * @returns {Node[]}
-         *  An array of text spans and image elements contained in the passed
-         *  paragraph element, in the correct order.
-         */
-        function collectTextNodesAndImagesAndFields(paragraph) {
-            var nodes = [];
-            Utils.iterateSelectedDescendantNodes(paragraph, 'span', function (node) {
-                nodes.push(node);
-            }, undefined, { children: true });
-            return nodes;
         }
 
         /**
@@ -3940,7 +3877,7 @@ define('io.ox/office/editor/editor',
             }
 
             var paragraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = collectTextNodesAndImagesAndFields(paragraph);
+            var searchNodes = $(paragraph).children('span').get();
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;

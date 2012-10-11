@@ -45,9 +45,9 @@ define('io.ox/office/editor/undo',
      *  One ore more operations that form a logical undo action. When the undo
      *  action is executed, the operations will be applied in the exact order
      *  as passed in this parameter; they will NOT be applied in reversed order
-     *  as would be the case if the operations had been added in multiple undo
-     *  actions. The parameter may be a single operation object, an array of
-     *  operation objects, or omitted.
+     *  as it would be the case if the operations have been added in multiple
+     *  undo actions. The parameter may be a single operation object, an array
+     *  of operation objects, or omitted.
      *
      * @param {Object|Object[]} [redoOperations]
      *  One ore more operations that form a logical redo action. When the redo
@@ -70,6 +70,19 @@ define('io.ox/office/editor/undo',
             (this.redoOperations.length === 1) && (this.redoOperations[0].name === Operations.TEXT_INSERT);
     };
 
+    /**
+     * Tries to merge this action with the passed action. Merging works only
+     * if both actions represent a single 'insertText' operation, and the
+     * passed action appends a single character directly after the text of this
+     * action.
+     *
+     * @param {Operation} nextAction
+     *  The action that will be tried to merge into this action.
+     *
+     * @returns {Boolean}
+     *  Whether the passed action has been merged successfully into this
+     *  action.
+     */
     Action.prototype.tryMergeInsertCharacter = function (nextAction) {
 
         var // check if this and the passed action is an 'insertText' action
@@ -104,6 +117,9 @@ define('io.ox/office/editor/undo',
         return false;
     };
 
+    /**
+     * Applies the undo operations of this action at the passed editor.
+     */
     Action.prototype.undo = function (editor) {
         // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
         _(this.undoOperations).each(function (operation) {
@@ -111,6 +127,9 @@ define('io.ox/office/editor/undo',
         });
     };
 
+    /**
+     * Applies the redo operations of this action at the passed editor.
+     */
     Action.prototype.redo = function (editor) {
         _(this.redoOperations).each(function (operation) {
             editor.applyOperation(operation, true, true);
@@ -300,10 +319,19 @@ define('io.ox/office/editor/undo',
             }
         };
 
+        /**
+         * Returns the number of undo actions available on the undo stack.
+         */
         this.undoAvailable = function () {
             return currentAction;
         };
 
+        /**
+         * Executes the specified number of undo actions.
+         *
+         * @param {Number} [count=1]
+         *  The number of undo actions to be executed.
+         */
         this.undo = function (count) {
             processing = true;
             try {
@@ -318,10 +346,19 @@ define('io.ox/office/editor/undo',
             }
         };
 
+        /**
+         * Returns the number of redo actions available on the redo stack.
+         */
         this.redoAvailable = function () {
             return actions.length - currentAction;
         };
 
+        /**
+         * Executes the specified number of redo actions.
+         *
+         * @param {Number} [count=1]
+         *  The number of redo actions to be executed.
+         */
         this.redo = function (count) {
             processing = true;
             try {
@@ -338,7 +375,7 @@ define('io.ox/office/editor/undo',
 
     } // class UndoManager
 
-   // exports ================================================================
+   // exports =================================================================
 
     return UndoManager;
 
