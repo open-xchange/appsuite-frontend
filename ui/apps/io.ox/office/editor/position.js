@@ -691,9 +691,7 @@ define('io.ox/office/editor/position',
      * @param {String} selector
      *  The selector against which the dom node is compared.
      *
-     * @returns {Number | Node}
-     *  The index in the logical position or -1, if no corresponding
-     *  dom node can be found.
+     * @returns {Object}
      */
     Position.getLastNodeInformationInPositionByNodeName = function (startnode, position, selector) {
 

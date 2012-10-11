@@ -442,9 +442,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      inserted before the passed text node. The position of the new text
      *      node may be important when iterating and manipulating a range of
      *      DOM nodes.
-     *  @param {Boolean} [options.field]
-     *      If set to true, the parent <span> element of the NEW text node will
-     *      be converted to a text field span.
      *
      * @returns {Text}
      *  The newly created text node. Will be located before or after the passed
@@ -471,9 +468,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             newSpan.text(leftText);
             textNode.nodeValue = rightText;
         }
-
-        // set type of the new span
-        newSpan.toggleClass('field', Utils.getBooleanOption(options, 'field', false));
 
         // return the new text node
         return newSpan[0].firstChild;
@@ -804,9 +798,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
             // check preconditions
             if (!siblingTextNode ||
-                    // merge only regular text portions and empty text nodes (no fields)
-                    !DOM.isPortionSpan(textNode.parentNode) ||
-                    !DOM.isPortionSpan(siblingTextNode.parentNode) ||
+                    // do not mix portion spans and field spans
+                    (DOM.isPortionSpan(textNode.parentNode) !== DOM.isPortionSpan(siblingTextNode.parentNode)) ||
                     // do not merge with next text node, if it is contained in the current range,
                     // this prevents unnecessary merge/split (merge will be done in next iteration step)
                     (next && (DOM.Point.comparePoints(DOM.Point.createPointForNode(siblingTextNode), ranges[index].end) < 0)) ||
