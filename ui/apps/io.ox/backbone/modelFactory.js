@@ -39,11 +39,17 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
+            var self = this;
             this.realm = this.get('_realm') || this.factory.realm("default");
             this._valid = true;
             this.attributeValidity = {};
+            this.id = obj.id;
 
             delete this.attributes._realm;
+            
+            this.on("change:id", function () {
+                self.id = self.get("id");
+            });
 
         },
         validate: function (attributes) {
@@ -90,7 +96,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         },
         sync: function (action, model, callbacks) {
             var self = this;
-
+            
             // action is one of 'update', 'create', 'delete' or 'read'
             if (action === 'delete') {
                 action = 'destroy';
@@ -197,6 +203,15 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 return serverAttributes[uid] || {};
             }
         };
+        
+        this.create = function (options) {
+            var loaded = new factory.model(options);
+            var uid = factory.internal.toUniqueIdFromObject(options);
+            
+            models[uid] = loaded;
+            serverAttributes[uid] = JSON.parse(JSON.stringify(loaded.toJSON()));
+            return loaded;
+        };
 
         this.get = function () {
             var args = $.makeArray(arguments);
@@ -210,7 +225,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             factory.internal.load.apply(factory.internal, args).done(function (data) {
                 data._realm = self;
 
-                var loaded = factory.create(data);
+                var loaded = new factory.model(data);
                 models[loaded.id] = loaded;
                 serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 def.resolve(loaded);
@@ -439,6 +454,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
         this.create = this.create || function (options) {
             options = options || {};
+            if (options.id) {
+                // Assume this was loaded
+                var realm = this.realm('default');
+                return realm.create.call(realm, options);
+            }
             return new this.model(options);
         };
 
@@ -454,13 +474,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         _(this.internal.updateEvents).each(function (eventName) {
 
             self.api.on(eventName, function () {
-                console.log("Caught event", eventName);
                 var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
                     uid = self.internal.toUniqueIdFromGet.apply(self, args);
 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
-                        console.log(realm, uid, loaded);
                         realm.refresh(uid, loaded);
                     });
                 });

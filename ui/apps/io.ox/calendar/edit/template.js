@@ -732,11 +732,11 @@ define('io.ox/calendar/edit/template',
         className: 'span12',
         index: 1200
     }));*/
-    point.basicExtend(new LiveCoding.View({
+    /*point.basicExtend(new LiveCoding.View({
         url: "/~fla/scratchpad/extension.js",
         id: 'recurrence',
         index: 1200
-    }));
+    }));*/
 
 /*
 //    ext.point('io.ox/calendar/edit/section').extend({
