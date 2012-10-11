@@ -20,7 +20,8 @@ define('io.ox/files/mediaplayer',
      'mediaelement/mediaelement-and-player',
      'io.ox/files/actions',
      'less!io.ox/files/mediaplayer.less',
-     'less!mediaelement/mediaelementplayer.css'
+     'less!mediaelement/mediaelementplayer.css',
+     'apps/io.ox/core/tk/jquery-ui.min.js'
     ], function (commons, gt, api, folderAPI) {
 
     "use strict";
@@ -152,6 +153,7 @@ define('io.ox/files/mediaplayer',
             this.win.idle();
             this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
             this.getItems();
+            this.playlist.sortable();
             $('video, audio').mediaelementplayer({
                 width: 480,
                 audioWidth: 480,
