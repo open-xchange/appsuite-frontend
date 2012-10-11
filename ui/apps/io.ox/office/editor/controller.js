@@ -65,14 +65,12 @@ define('io.ox/office/editor/controller',
                 'document/undo': {
                     chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.undoAvailable() > 0; },
-                    get: function () { return editor.undoAvailable(); },
-                    set: function (count) { editor.undo(count); }
+                    set: function () { editor.undo(1); }
                 },
                 'document/redo': {
                     chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.redoAvailable() > 0; },
-                    get: function () { return editor.redoAvailable(); },
-                    set: function (count) { editor.redo(count); }
+                    set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
                     get: function () { return editor.hasHighlighting(); },
