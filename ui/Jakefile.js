@@ -267,13 +267,17 @@ utils.concat("boot.js", [
         "lib/backbone.custom.js",
         "lib/doT.js",
         "lib/tinycon/tinycon.min.js",
+        "apps/io.ox/core/event.js",
+        "apps/io.ox/core/http.js",
+        "apps/io.ox/core/session.js",
+        "apps/io.ox/core/gettext.js",
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "event.js", "extensions.js", "http.js",
+        "extensions.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
-        "config.js", "session.js",
+        "config.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
         "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
