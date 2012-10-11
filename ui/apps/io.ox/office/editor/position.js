@@ -85,9 +85,6 @@ define('io.ox/office/editor/position',
             textLength = 0;
 
         // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
-        // Attention: Column and Row are not in the order in oxoPosition, in which they appear in html.
-        // Column must be integrated after row -> a buffer is required.
-
         for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
             if ($(node).is('TABLE, P, TR, TH, TD')) {
                 oxoPosition.unshift($(node).prevAll().length);  // zero based
@@ -95,15 +92,11 @@ define('io.ox/office/editor/position',
             }
             if (evaluateCharacterPosition) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
-                    textLength += $(prevNode).text().length;
-                    if ((Utils.getNodeName(prevNode) === 'img') || ((prevNode.firstChild) && (Utils.getNodeName(prevNode.firstChild) === 'img'))) {
-                        // images are counted as single character
+                    if ((DOM.isFieldSpan(prevNode)) || (DOM.isImageSpan(prevNode))) {
+                        // images and fields are counted as single character
                         textLength += 1;
-                    }
-                    // textLength += $('IMG', prevNode).length;  // TODO: if IMGs are allowed in spans, ...
-                    if (DOM.isFieldSpan(prevNode)) {
-                        // field spans have only a length of 1
-                        textLength -= ($(prevNode).text().length - 1);
+                    } else {
+                        textLength += $(prevNode).text().length;
                     }
                 }
                 characterPositionEvaluated = true;
@@ -194,15 +187,15 @@ define('io.ox/office/editor/position',
             if ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span'))  {
                 if ($(node).text().length === offset) {
                     // Checking if an inline image follows
-                    var imageNode = null;
-                    if ((node.parentNode) && (node.parentNode.nextSibling) && (Utils.getNodeName(node.parentNode.nextSibling) === 'img')) {
-                        imageNode = node.parentNode.nextSibling;
-                    } else if ((node.nextSibling) && (Utils.getNodeName(node.nextSibling) === 'img')) {
-                        imageNode = node.nextSibling;
+                    var imageSpanNode = null;
+                    if ((node.parentNode) && (node.parentNode.nextSibling) && (DOM.isImageSpan(node.parentNode.nextSibling))) {
+                        imageSpanNode = node.parentNode.nextSibling;
+                    } else if ((node.nextSibling) && (DOM.isImageSpan(node.nextSibling))) {
+                        imageSpanNode = node.nextSibling;
                     }
 
-                    if (imageNode !== null) {
-                        imageFloatMode = $(imageNode).data('mode'); // must be 'inline' mode
+                    if (imageSpanNode !== null) {
+                        imageFloatMode = $(imageSpanNode).data('mode'); // must be 'inline' mode
                     }
                 }
             }
@@ -252,6 +245,8 @@ define('io.ox/office/editor/position',
         // endposition are not equal.
 
         if (Utils.getNodeName(node) === 'img') {
+            characterPositionOffset = 1;
+        } else if (DOM.isImageSpan(node)) {
             characterPositionOffset = 1;
         } else if (DOM.isFieldSpan(node)) {
             characterPositionOffset = 1;
@@ -390,7 +385,7 @@ define('io.ox/office/editor/position',
         }
 
         // setting some properties for image nodes
-        if (localNode && (Utils.getNodeName(localNode) === 'img')) {
+        if (localNode && (DOM.isImageSpan(localNode))) {
             imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;
             offset = 0;
@@ -503,13 +498,12 @@ define('io.ox/office/editor/position',
                         lastChild = true;
                     }
 
-                    if ((Utils.getNodeName(currentNode) === 'img') || ((currentNode.firstChild) && (Utils.getNodeName(currentNode.firstChild) === 'img'))) {
-                        // if ((nodeList[i].nodeName === 'IMG') || ($('IMG', nodeList[i]).length > 0)) {  // TODO: if IMGs are allowed in spans, ...
-                        currentLength = 1;
-                        isImage = true;
-                    } else if ((Utils.getNodeName(currentNode) === 'div') && $(currentNode).hasClass('float')) {
+                    if ((Utils.getNodeName(currentNode) === 'div') && $(currentNode).hasClass('float')) {
                         // ignoring spans that exist only for positioning image
                         continue;
+                    } else if (DOM.isImageSpan(currentNode)) {
+                        currentLength = 1;
+                        isImage = true;
                     } else if (DOM.isFieldSpan(currentNode)) {
                         currentLength = 1;
                         isField = true;
@@ -549,13 +543,13 @@ define('io.ox/office/editor/position',
 
                 var nextNode = node.nextSibling;
 
-                if ((nextNode) && (Utils.getNodeName(nextNode) === 'img')) {  // if the next node is an image, this should be preferred
+                if ((nextNode) && (DOM.isImageSpan(nextNode))) {  // if the next node is an image span, this should be preferred
                     node = nextNode;
                     isImage = true;
-                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div') && (nextNode.nextSibling) && (Utils.getNodeName(nextNode.nextSibling) === 'img')) {
+                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div') && (nextNode.nextSibling) && (DOM.isImageSpan(nextNode.nextSibling))) {
                     node = nextNode.nextSibling;
                     isImage = true;
-                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'span') && ($(nextNode).data('spanType') === 'field')) {  // also preferring following fields
+                } else if ((nextNode) && (DOM.isFieldSpan(nextNode))) {  // also preferring following fields
                     node = nextNode;
                     isField = true;
                 }
@@ -1270,14 +1264,11 @@ define('io.ox/office/editor/position',
             if (paragraph.hasChildNodes()) {
                 var nodeList = paragraph.childNodes;
                 for (var i = 0; i < nodeList.length; i++) {
-                    paraLen += $(nodeList[i]).text().length;
-                    if (Utils.getNodeName(nodeList[i]) === 'img') {
+                    if ((DOM.isImageSpan(nodeList[i])) || (DOM.isFieldSpan(nodeList[i]))) {
                         paraLen++;
-                    } else if (DOM.isFieldSpan(nodeList[i])) {
-                        paraLen -= $(nodeList[i]).text().length;
-                        paraLen++;
+                    } else {
+                        paraLen += $(nodeList[i]).text().length;
                     }
-                    // paraLen += $('IMG', nodeList[i]).length;  // TODO: if IMGs are allowed in spans, ...
                 }
             }
         }
@@ -1322,9 +1313,10 @@ define('io.ox/office/editor/position',
             if (paragraph.hasChildNodes()) {
                 var nodeList = paragraph.childNodes;
                 for (var i = 0; i < nodeList.length; i++) {
-                    paraText += $(nodeList[i]).text();
-                    if (nodeList[i].nodeName === 'IMG') {
+                    if (DOM.isImageSpan(nodeList[i])) {
                         paraText += 'I';  // placeholder for an image
+                    } else {
+                        paraText += $(nodeList[i]).text();
                     }
                 }
             }
@@ -1889,7 +1881,7 @@ define('io.ox/office/editor/position',
                 family = 'character';
             } else if (Utils.getNodeName(node) === 'p') {
                 family = 'paragraph';
-            } else if (Utils.getNodeName(node) === 'img') {
+            } else if ((Utils.getNodeName(node) === 'img') || (DOM.isImageSpan(node))) {
                 family = 'image';
             } else if (Utils.getNodeName(node) === 'table') {
                 family = 'table';
@@ -2062,7 +2054,7 @@ define('io.ox/office/editor/position',
 
         while ((child !== null) && (continue_)) {
 
-            if ((Utils.getNodeName(child) === 'img') && ($(child).hasClass('float'))) {
+            if ((DOM.isImageSpan(child)) && ($(child).hasClass('float'))) {
                 counter++;
                 child = child.nextSibling;
             } else if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float'))) {
@@ -2107,12 +2099,10 @@ define('io.ox/office/editor/position',
                         found = true;
                         break;
                     }
-                    position += $(nodeList[i]).text().length;
-                    if (Utils.getNodeName(nodeList[i]) === 'img') {
+                    if ((DOM.isImageSpan(nodeList[i])) || (DOM.isFieldSpan(nodeList[i]))) {
                         position++;
-                    } else if (DOM.isFieldSpan(nodeList[i])) {
-                        position -= $(nodeList[i]).text().length;
-                        position++;
+                    } else {
+                        position += $(nodeList[i]).text().length;
                     }
                 }
             }
@@ -2141,7 +2131,7 @@ define('io.ox/office/editor/position',
 
         var paraNode = Position.getCurrentParagraph(startnode, position);
 
-        if ((paraNode) && ($(paraNode).find('img.float').length > 0)) {
+        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
 
             var child = paraNode.firstChild,
                 continue_ = true;
@@ -2187,11 +2177,11 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (Utils.getNodeName(nextChild) !== 'img')) {
+                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (! DOM.isImageSpan(nextChild))) {
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();
-                } else if ((Utils.getNodeName(child) === 'img') && ($(child).hasClass('float'))) {
+                } else if ((DOM.isImageSpan(child)) && ($(child).hasClass('float'))) {
                     child = child.nextSibling;
                 } else {
                     continue_ = false;
@@ -2225,7 +2215,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (Utils.getNodeName(nextChild) !== 'img')) {
+                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (! DOM.isImageSpan(nextChild))) {
                     var removeElement = child;
                     $(removeElement).remove();
                 }

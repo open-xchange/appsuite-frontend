@@ -273,7 +273,7 @@ define("io.ox/core/main",
                 this.append(
                     $('<div class="launcher right dropdown">').append(
                         a = $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                            $('<i class="icon-user icon-white">')
+                            $('<i class="icon-cog icon-white">')
                         ),
                         ul = $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">')
                     )

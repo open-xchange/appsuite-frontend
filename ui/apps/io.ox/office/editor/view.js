@@ -106,13 +106,7 @@ define('io.ox/office/editor/view',
         var // self reference
             self = this;
 
-        // base constructor ---------------------------------------------------
-
-        RadioGroup.call(this, Utils.extendOptions({
-            width: 120,
-            tooltip: gt('Color'),
-            dropDown: true
-        }, options));
+        // private methods ----------------------------------------------------
 
         function changed() {
             // add theme based colors
@@ -139,26 +133,36 @@ define('io.ox/office/editor/view',
                     }
                 }
             }
-            // add predefined colors
-            _([
-                { label: 'Transparent',  value: '' },
-                { label: 'Dark Red',     value: {rgbColor: 'C00000'}},
-                { label: 'Red',          value: {rgbColor: 'FF0000'}},
-                { label: 'Orange',       value: {rgbColor: 'FFC000'}},
-                { label: 'Yellow',       value: {rgbColor: 'FFFF00'}},
-                { label: 'Light Green',  value: {rgbColor: '92D050'}},
-                { label: 'Green',        value: {rgbColor: '00B050'}},
-                { label: 'Light Blue',   value: {rgbColor: '00B0F0'}},
-                { label: 'Blue',         value: {rgbColor: '0070C0'}},
-                { label: 'Dark Blue',    value: {rgbColor: '002060'}},
-                { label: 'Purple',       value: {rgbColor: '7030A0'}}
-            ]).each(function (entry) {
-
-                self.createOptionButton(entry.value, { tooltip: entry.label, css: {"background-color": '#' + entry.value.rgbColor }});
-            });
         }
 
+        // base constructor ---------------------------------------------------
+
+        RadioGroup.call(this, Utils.extendOptions({
+            width: 50,
+            tooltip: gt('Color'),
+            dropDown: true
+        }, options));
+
         // initialization -----------------------------------------------------
+
+        // add predefined colors
+        _([
+            { label: 'Transparent',  value: {rgbColor: '' }},
+            { label: 'Dark Red',     value: {rgbColor: 'C00000'}},
+            { label: 'Red',          value: {rgbColor: 'FF0000'}},
+            { label: 'Orange',       value: {rgbColor: 'FFC000'}},
+            { label: 'Yellow',       value: {rgbColor: 'FFFF00'}},
+            { label: 'Light Green',  value: {rgbColor: '92D050'}},
+            { label: 'Green',        value: {rgbColor: '00B050'}},
+            { label: 'Light Blue',   value: {rgbColor: '00B0F0'}},
+            { label: 'Blue',         value: {rgbColor: '0070C0'}},
+            { label: 'Dark Blue',    value: {rgbColor: '002060'}},
+            { label: 'Purple',       value: {rgbColor: '7030A0'}}
+        ]).each(function (entry) {
+
+            self.createOptionButton(entry.value, { tooltip: entry.label, css: {"background-color": '#' + entry.value.rgbColor }});
+        });
+
         themes.on('change', changed);
 
     }}); // class ColorChooser

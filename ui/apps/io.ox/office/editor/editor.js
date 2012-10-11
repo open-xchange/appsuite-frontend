@@ -2595,7 +2595,7 @@ define('io.ox/office/editor/editor',
          */
         function collectTextNodesAndImagesAndFields(paragraph) {
             var nodes = [];
-            Utils.iterateSelectedDescendantNodes(paragraph, 'span, img', function (node) {
+            Utils.iterateSelectedDescendantNodes(paragraph, 'span', function (node) {
                 nodes.push(node);
             }, undefined, { children: true });
             return nodes;
@@ -2624,7 +2624,7 @@ define('io.ox/office/editor/editor',
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+                    if ((DOM.isImageSpan(child)) && ($(child).data('mode') !== 'inline')) {
 
                         var localPos = Position.getObjectPositionInParagraph(para, child),
                             source = _.copy(position, true),
@@ -2836,15 +2836,10 @@ define('io.ox/office/editor/editor',
             // only delete, if imageStartPosition is really an image position
             if (Utils.getNodeName(imageNode) === 'img') {
                 // delete an corresponding div
-                var divNode = imageNode.parentNode.firstChild;
-                while ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
-                    if ($(divNode).data('divID') === $(imageNode).data('imageID')) {
-                        // removing div node
-                        $(divNode).remove();
-                        break;
-                    } else {
-                        divNode = divNode.nextSibling;
-                    }
+                var divNode = imageNode.parentNode.previousSibling;
+                if ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
+                    // removing div node
+                    $(divNode).remove();
                 }
 
                 var imageEndPosition = _.copy(imageStartPosition, true);
@@ -3101,7 +3096,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image between the two text nodes (store original URL for later use)
-            image = $('<img>', { src: absUrl }).data('url', url).insertBefore(node.parentNode);
+            image = $('<span>').append($('<img>', { src: absUrl })).data('url', url).insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
@@ -3503,7 +3498,7 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((Utils.getNodeName(child) === 'img') && ($(child).data('mode') !== 'inline')) {
+                            if ((DOM.isImageSpan(child)) && ($(child).data('mode') !== 'inline')) {
                                 imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
                             }
 
@@ -3955,7 +3950,7 @@ define('io.ox/office/editor/editor',
                     isField = false,
                     text = '';
                 node = searchNodes[i];
-                if (Utils.getNodeName(node) === 'img') {
+                if (DOM.isImageSpan(node)) {
                     nodeLen = 1;
                     isImage = true;
                 } else if (DOM.isFieldSpan(node)) {
@@ -4024,21 +4019,24 @@ define('io.ox/office/editor/editor',
             }
 
             if ((sourcePos) && (destPos)) {
+
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
                     useImageDiv = true,
-                    imageDiv = sourceNode.previousSibling,
+                    imageDiv = sourceNode.parentNode.previousSibling,  // img -> span -> div
                     doMove = true;
+
+                if (Utils.getNodeName(sourceNode) === 'img') {
+                    sourceNode = sourceNode.parentNode; // using image span instead of image node
+                }
 
                 if ((sourceNode) && (destNode)) {
 
-                    if (Utils.getNodeName(sourceNode) !== 'img') {
+                    if (! DOM.isImageSpan(sourceNode)) {
                         doMove = false; // supporting only images at the moment
-                        Utils.warn('Editor.implMove(): moved object is not an image: ' + Utils.getNodeName(sourceNode));
-                    }
-
-                    // moving also the divs belonging to images
-                    if (Utils.getNodeName(sourceNode) === 'img') {
+                        Utils.warn('Editor.implMove(): moved object is not an image span: ' + Utils.getNodeName(sourceNode));
+                    } else {
+                        // moving also the divs belonging to images
                         if ((! imageDiv) || (Utils.getNodeName(imageDiv) !== 'div')) {
                             useImageDiv = false; // should never be reached
                         }

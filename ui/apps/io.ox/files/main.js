@@ -16,7 +16,7 @@ define("io.ox/files/main",
     ["io.ox/core/commons",
      "gettext!io.ox/files/files",
      "io.ox/files/actions",
-     "less!io.ox/files/style.css"
+     "less!io.ox/files/style.less"
     ], function (commons, gt) {
 
     "use strict";

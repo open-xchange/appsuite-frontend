@@ -10,7 +10,7 @@
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
-
+ 
 #io-ox-core.wallpaper {
     .radial-gradient(@wallpaper-color1, @wallpaper-color2, @wallpaper-color3);
 }
@@ -113,8 +113,13 @@
     cursor: pointer;
 }
 
-#io-ox-topbar .launcher i[class^="icon-"] {
+#io-ox-topbar i[class^="icon-"] {
     color: white;
+    font-size: 20px;
+    text-decoration: none;
+    line-height: 1em;
+    position: relative;
+    top: 4px;
 }
 
 #io-ox-topbar .launcher.right {
@@ -142,16 +147,16 @@
 }
 
 @-webkit-keyframes launcherColours {
-    from { background-color: transparent; color: #aaa; }
-      to { background-color: @topbar-progress-color; color: #fff; }
+    from { color: #fff; }
+      to { color: #555; }
 }
 
 @-moz-keyframes launcherColours {
-    from { background-color: transparent; color: #aaa; }
-      to { background-color: @topbar-progress-color; color: #fff; }
+    from { color: #fff; }
+      to { color: #555; }
 }
 
-#io-ox-topbar .launcher.io-ox-progress {
+#io-ox-topbar .launcher.io-ox-progress i {
     -moz-animation-direction: alternate;
     -moz-animation-duration: 0.75s;
     -moz-animation-iteration-count: infinite;
@@ -1495,26 +1500,44 @@ div.external-user-image {
 // TINY SCREENS
 @media (max-width: 700px) {
     
-    .vsplit .leftside { width: 100%; }
-    .vsplit .rightside { left: 100%; width: 100%; top: 41px; }
+    @-webkit-keyframes slideleft {
+        from { -webkit-transform: translateX(-50%); }
+        to { -webkit-transform: translateX(0); }
+    }
+    
+    @-webkit-keyframes slideright {
+        from { -webkit-transform: translateX(0); }
+        to { -webkit-transform: translateX(-50%); }
+    }
+    
+    .vsplit {
+        left: 0%; width: 200%; right: auto;
+        -webkit-animation-timing-function: ease-out;
+        -webkit-animation-duration: 350ms;
+    }
+    
+    .vsplit-slide {
+        -webkit-transform: translateX(-50%);
+        -webkit-animation-name: slideright;
+    }
+
+    .vsplit-reverse {
+        -webkit-transform: translateX(0);
+        -webkit-animation-name: slideleft;
+    }
+
+    .touch .vsplit {
+        -webkit-backface-visibility: hidden;
+    }
+    
+    .vsplit .leftside { width: 50%; right: auto; }
+    .vsplit .rightside { left: 50%; width: 50%; top: 41px; right: auto; }
     .vsplit .rightside-navbar {
-        position: absolute; top: 0; left: 100%; width: 100%; height: 30px;
+        position: absolute; top: 0; left: 50%; width: 50%; height: 30px;
         background-color: #eee; border-bottom: 1px solid #ccc;
         padding: 5px 13px 5px 13px;
     }
-    
-    .vsplit.vsplit-right .leftside { left: -100%; }
-    .vsplit.vsplit-right .rightside { left: 0%; }
-    .vsplit.vsplit-right .rightside-navbar { left: 0%; }
 
-    .vsplit .leftside, .vsplit .rightside, .vsplit .rightside-navbar {
-        -webkit-transform: translate3d(0, 0, 0);
-        transform: translate3d(0, 0, 0);
-        -webkit-transition: left 0.3s;
-        -moz-transition: left 0.3s;
-        transition: left 0.3s;
-    }
-    
     .input-medium.search-query { width: 80px; }
     
     #io-ox-topbar .launchers { display: none; }
