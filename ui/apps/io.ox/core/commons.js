@@ -405,13 +405,13 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
         vsplit: (function () {
 
             var click = function (e) {
-                $(this).closest('.vsplit').removeClass('vsplit-right');
+                $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
             };
 
             var select = function (e) {
                 var node = $(this);
                 setTimeout(function () {
-                    node.closest('.vsplit').addClass('vsplit-right');
+                    node.closest('.vsplit').addClass('vsplit-slide').removeClass('vsplit-reverse');
                 }, 100);
             };
 

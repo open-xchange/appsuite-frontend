@@ -1,0 +1,132 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+@playerWidth: 480px;
+@playerMargin: 13px;
+@windowTopHeight: 60px;
+
+
+@playerBg:                  rgba(0,0,0,0.2);
+@playerPrimaryColor:        #fff;
+@playerSecondaryColor:      #eee;
+@playerHighlightColor:      #eaeaea;
+@playerHighlightTextColor:  #000;
+
+@playerTextColor:           #111;
+
+@playerSelectionColor:      #08c;
+@playerSelectionTextColor:  #fff;
+
+
+.mediaplayer_container {
+    background-color:@playerBg;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index:10000;
+    height:100%;
+
+    .mediaplayer_wrapper {
+        height:100%;
+        margin:0 auto;
+        width: @playerWidth;
+        box-shadow: 0 0 50px 1px #000;
+
+        .mediaplayer_inner {
+            position: absolute;
+            top:  0;
+            left: 0;
+            right:0;
+            width: @playerWidth;
+            height:100%;
+            margin:auto;
+            background:@playerPrimaryColor;
+            padding:13px;
+
+            .mediaplayer_buttons {
+                margin-bottom:@playerMargin;
+                button { margin-left:@playerMargin; }
+            }
+
+            .mediaplayer_track {
+                height: 120px;
+                display:table-cell;
+                vertical-align: middle;
+                width: 480px;
+                background: @playerSecondaryColor;
+                margin-bottom:@playerMargin;
+
+                i {
+                    position:absolute;
+                    top:68px;
+                    font-size:75px;
+                    margin-left:40px;
+                    margin-top:30px;
+                    color:#ccc;
+                }
+
+                h3 {
+                    margin-left: 150px;
+                    width:330px;
+                    color:@playerTextColor;
+                    font-size: 18px;
+                    font-family: OpenSans;
+                    font-weight: 200;
+                }
+            }
+
+            .mediaplayer_player {
+                background:@playerSecondaryColor;
+                width:@playerWidth;
+                margin-top:@playerMargin;
+                margin-bottom:@playerMargin;
+            }
+
+            .mediaplayer_playlist {
+                overflow-y:scroll;
+                height:100%;
+                margin:0;
+                padding:0;
+                li {
+                    list-style:none;
+                    background:@playerSecondaryColor;
+                    margin-bottom:1px;
+                    a {
+                        padding:@playerMargin;
+                        display:block;
+                        color:@playerTextColor;
+
+                        &:hover {
+                            text-decoration:none;
+                        }
+                    }
+                    &:hover {
+                        background-color:@playerHighlightColor;
+
+                    }
+                    &.active {
+                        background-color:@playerSelectionColor;
+                        a {
+                            color:@playerSelectionTextColor;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+

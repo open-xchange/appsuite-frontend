@@ -478,7 +478,7 @@ define('io.ox/mail/view-detail',
                 api.getPictureURL(data.from[0][1])
                     .done(function (url) {
                         if (url) {
-                            picture.css('background-image', 'url(' + url + ')').show();
+                            picture.css({ backgroundImage: 'url(' + url + ')', display: '' });
                         }
                         if (/dummypicture\.png$/.test(url)) {
                             picture.addClass('default-picture');
