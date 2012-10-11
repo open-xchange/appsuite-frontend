@@ -205,12 +205,12 @@ define('io.ox/files/mediaplayer',
         },
 
         minimize: function () {
-            var self = this;
             $('#io-ox-topbar').append(
                 $('<div class="launcher right minimizedmediaplayer">').append(
-                    $('<i>').addClass('icon-music icon-white')
+                    $('<i>').addClass('icon-play icon-white')
                 ).on('click', function () {
-                    self.container.show();
+                    ox.launch('io.ox/files/main');
+                    $('.mediaplayer_container').show();
                     $(this).remove();
                 })
             );
