@@ -92,6 +92,73 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
         start_date : { format: 'date', mandatory: true},
         end_date: { format: 'date', mandatory: true}
     });
+    
+    // Recurrence
+    
+    // First, some constants
+    // A series is of a certain recurrence type
+    // daily, weekly, monhtly, yearly, no_recurrence
+    var RECURRENCE_TYPES = {
+        NO_RECURRENCE: 0,
+        DAILY: 1,
+        WEEKLY: 2,
+        MONTHLY: 3,
+        YEARLY: 4
+    };
+
+    // Sometimes we need to reference a certain day, so
+    // here are the weekdays, bitmap-style
+
+    var DAYS = {
+        SUNDAY: 1,
+        MONDAY: 2,
+        TUESDAY: 4,
+        WEDNESDAY: 8,
+        THURSDAY: 16,
+        FRIDAY: 32,
+        SATURDAY: 64
+    };
+    
+    DAYS.i18n = {
+        SUNDAY: gt("sunday"),
+        MONDAY: gt("monday"),
+        TUESDAY: gt("tuesday"),
+        WEDNESDAY: gt("wednesday"),
+        THURSDAY: gt("thursday"),
+        FRIDAY: gt("friday"),
+        SATURDAY: gt("saturday")
+    };
+    
+    // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
+    DAYS.pack = function () {
+        var result = 0;
+        _(arguments).each(function (day) {
+            var dayConst = DAYS[day.toUpperCase()];
+
+            if (_.isUndefined(dayConst)) {
+                throw "Invalid day: " + day;
+            }
+            result = result | dayConst;
+        });
+        return result;
+    };
+
+    // Usage: DAYS.unpack(bitmask) -> {'MONDAY': 1, 'WEDNESDAY': 1, 'FRIDAY': 1}
+    DAYS.unpack = function (bitmask) {
+        var days = {};
+        _(DAYS.values).each(function (day) {
+            var dayConst = DAYS[day];
+            if (bitmask & dayConst) {
+                days[day] = 1;
+            } else {
+                days[day] = 0;
+            }
+        });
+
+        return days;
+    };
+
+    DAYS.values = ["SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
 
     return {
         setDefaultParticipants: function (model) {
@@ -114,6 +181,8 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
         },
         factory: factory,
         Appointment: factory.model,
-        Appointments: factory.collection
+        Appointments: factory.collection,
+        RECURRENCE_TYPES: RECURRENCE_TYPES,
+        DAYS: DAYS
     };
 });

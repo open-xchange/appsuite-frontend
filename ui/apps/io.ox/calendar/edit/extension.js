@@ -5,6 +5,7 @@ define("io.ox/calendar/edit/extension", function () {
     var Events = require("io.ox/core/event");
     var KeyListener = require("io.ox/core/tk/keys");
     var gt = require('gettext!io.ox/calendar/edit/main');
+    var dateAPI = require("io.ox/core/date");
 
     var Widgets = {
         toggle: function ($anchor, attribute, options) {
@@ -344,7 +345,87 @@ define("io.ox/calendar/edit/extension", function () {
 
             this.on("change:" + attribute, drawState);
         },
-        datePicker: $.noop
+        dateFormat: dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase(),
+        datePicker: function ($anchor, attribute, options) {
+            var self = this;
+            var originalContent = $anchor.html();
+            self[attribute] = options.initial || _.now();
+
+            function renderDate() {
+                var value = self[attribute];
+                if (value) {
+                    var myTime = dateAPI.Local.localTime(parseInt(value, 10));
+                    if (_.isNull(myTime)) {
+                        value = '';
+                    } else {
+                        value = new dateAPI.Local(myTime).format(dateAPI.DATE);
+                    }
+                } else {
+                    value = '';
+                }
+                return value;
+            }
+
+            function drawState() {
+                var value = renderDate();
+                $anchor.text(value);
+                self.trigger("redraw", self);
+            }
+
+            $anchor.on('click', function () {
+                var $dateInput = $('<input type="text" class="input-small">').css({
+                    marginBottom: 0
+                }).val(renderDate());
+                var keys = new KeyListener($dateInput);
+
+                $dateInput.datepicker({format: CalendarWidgets.dateFormat});
+
+                $anchor.after($dateInput);
+                $anchor.hide();
+
+                $dateInput.select();
+                keys.include();
+
+                // On change
+                function updateValue() {
+                    var value = dateAPI.Local.parse($dateInput.val(), dateAPI.DATE);
+                    if (!_.isNull(value) && value.getTime() !== 0) {
+                        self[attribute] = dateAPI.Local.utc(value.getTime());
+                        self.trigger("change", self);
+                        self.trigger("change:" + attribute, self);
+                    }
+                    keys.destroy();
+                    try {
+                        $dateInput.datepicker("hide");
+                        $dateInput.remove();
+                    } catch (e) { }
+                    $anchor.show();
+
+                }
+                $dateInput.on("change", function () {
+                    updateValue();
+                });
+
+                // Enter
+                $dateInput.on("enter", function () {
+                    updateValue();
+                });
+
+                // Escape
+                keys.on("esc", function () {
+                    $dateInput.val(self[attribute]);
+                    keys.destroy();
+                    try {
+                        $dateInput.remove();
+                    } catch (e) { }
+                    $anchor.show();
+                });
+            });
+
+            drawState();
+
+            this.on("change:" + attribute, drawState);
+        }
     };
 
     return {
@@ -503,12 +584,12 @@ define("io.ox/calendar/edit/extension", function () {
                     ending: endingOptions,
                     until: CalendarWidgets.datePicker
                 }),
-                after: new ConfigSentence('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="recurrence_count" data-widget="number">after <span class="number-control">2</span> appointments</a>.', {
+                after: new ConfigSentence('The series <a href="#" data-attribute="ending" data-widget="options">ends</a> <a href="#" data-attribute="occurrences" data-widget="number">after <span class="number-control">2</span> appointments</a>.', {
                     id: 'after',
                     ending: endingOptions,
-                    recurrence_count: {
-                        singular: '%1$d appointment',
-                        plural: '%1$d appointments',
+                    occurrences: {
+                        singular: 'after %1$d appointment',
+                        plural: 'after %1$d appointments',
                         initial: 3
                     }
                 })
@@ -522,15 +603,14 @@ define("io.ox/calendar/edit/extension", function () {
                             otherSentence.set('ending', choice);
                         }
                     });
-
                     switch (choice) {
-                    case 1:
+                    case "1":
                         self.setEnding(self.ends.never);
                         break;
-                    case 2:
+                    case "2":
                         self.setEnding(self.ends.date);
                         break;
-                    case 3:
+                    case "3":
                         self.setEnding(self.ends.after);
                         break;
                     }
@@ -576,6 +656,7 @@ define("io.ox/calendar/edit/extension", function () {
                     self.nodes.recurrenceSpan.empty().append(sentence.$el);
                     self.userWantsOptionList = false;
                     self.updateOptionListState();
+                    self.updateEndsSpan();
                 });
 
                 return $el;
@@ -638,10 +719,19 @@ define("io.ox/calendar/edit/extension", function () {
             });
 
             this.nodes.endsSpan = $('<span>');
+            self.updateEndsSpan();
 
-            _("recurrence_type days month day_in_month interval recurrence_count until".split(" ")).each(function (attr) {
+            _("recurrence_type days month day_in_month interval occurrences until".split(" ")).each(function (attr) {
                 self.observeModel("change:" + attr, self.updateState, self);
             });
+
+            self.observeModel("change:start_date", self.updateSuggestions, self);
+            self.updateSuggestions();
+
+        },
+        updateSuggestions: function () {
+            var startDate = new dateAPI.Local(dateAPI.Local.utc(this.model.get("start_date")));
+            window.$startDate = startDate;
 
         },
         updateRecurrenceSpan: function () {
@@ -752,11 +842,24 @@ define("io.ox/calendar/edit/extension", function () {
                     break;
 
                 }
+
+                if (this.model.get('occurrences')) {
+                    this.setEnding(this.ends.after);
+                    this.endsChoice.set('occurrences', this.model.get("occurrences"));
+                } else if (this.model.get('until')) {
+                    this.setEnding(this.ends.date);
+                    this.endsChoice.set("until", this.model.get("until"));
+                } else {
+                    this.setEnding(this.ends.never);
+                }
+
                 this.sentence.set('value', 1);
             }
 
             this.updateOptionListState();
             this.updateRecurrenceSpan();
+            this.updateEndsSpan();
+
             this.updatingState = false;
         },
         updateModel: function () {
@@ -817,7 +920,6 @@ define("io.ox/calendar/edit/extension", function () {
                     this.model.set(yearly);
                     break;
                 case "yearlyDate":
-                    // FIXME
                     var yearly = _.extend({}, blankSlate, {
                         recurrence_type: RECURRENCE_TYPES.YEARLY,
                         day_in_month: this.choice.dayInMonth,
@@ -827,9 +929,35 @@ define("io.ox/calendar/edit/extension", function () {
                     this.model.set(yearly);
                     break;
                 }
+                if (this.endsChoice) {
+                    switch (this.endsChoice.id) {
+                    case "never":
+                        this.model.set({
+                            occurrences: null,
+                            until: null
+                        });
+                        break;
+                    case "date":
+                        this.model.set({
+                            occurrences: null,
+                            until: this.endsChoice.until
+                        });
+                        break;
+                    case "after":
+                        this.model.set({
+                            occurrences: this.endsChoice.occurrences,
+                            until: null
+                        });
+                        break;
+                    }
+                }
             } else {
                 // No Recurrence
                 this.model.set(blankSlate);
+                this.model.set({
+                    occurrences: null,
+                    until: null
+                });
             }
 
             this.updatingModel = false;
@@ -859,9 +987,8 @@ define("io.ox/calendar/edit/extension", function () {
             this.$el.append(
                 this.sentence.$el,
                 this.nodes.recurrenceSpan,
-                $.txt("."),
+                $.txt(". "),
                 this.nodes.endsSpan,
-                $.txt("."),
                 "<br>",
                 $('<small class="muted">').append(
                     this.nodes.showMore
