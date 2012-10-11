@@ -275,14 +275,14 @@ utils.concat("boot.js", [
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "extensions.js",
+        "async.js", "extensions.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
+        "settings.js", // settings plugin
         "config.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
         "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
-        "extPatterns/actions.js", "extPatterns/links.js",
-        "settings.js" // settings plugin
+        "extPatterns/actions.js", "extPatterns/links.js"
     ]), { type: "source" }
 );
 
