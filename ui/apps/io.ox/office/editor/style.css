@@ -119,17 +119,23 @@
             }
         }
 
-        /* default formatting for inline object spans */
+        /* inlined objects */
         span.inline {
             display: inline-block;
-            vertical-align: baseline;
+            vertical-align: bottom;
         }
 
+        /* floated elements (object spans and offset helper divs) */
         .float {
             display: block;
 
             &.left { float: left; clear: left; }
             &.right { float: right; clear: right; }
+        }
+
+        /* crop object contents at object border */
+        span.inline, span.float {
+            overflow: hidden;
         }
 
         /* selection box for objects/images */
@@ -197,7 +203,7 @@
                 .debug-highlight-mixin(#f8f);
             }
 
-            img, table, p > div {
+            table, .inline, .float {
                 .debug-highlight-mixin(#f88);
                 outline-offset: 1px;
             }
