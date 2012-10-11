@@ -28,93 +28,6 @@ define('io.ox/calendar/edit/template',
     var point = views.point('io.ox/calendar/edit/section');
     var pointConflicts = views.point('io.ox/calendar/edit/conflicts');
 
-    var convertImageStyle = function (url) {
-        if (_.isString(url) && url.length > 1) {
-            url = url.replace(/^\/ajax/, ox.apiRoot);
-            return 'url("' + url + '")';
-        } else {
-            return '';
-        }
-    };
-
-    point.extend(new forms.ErrorAlert({
-        index: 100,
-        id: 'io.ox/calendar/edit/section/error'
-    }));
-
-    /**
-     * extpoint
-     * conflicts
-     */
-    pointConflicts.basicExtend({
-        index: 100,
-        id: 'io.ox/calendar/edit/conflicts/main',
-        draw: function (data) {
-            this.append(
-                $('<div class="row">')
-                    .css('margin-top', '10px').append(
-                            $('<span class="span12">')
-                                .css('text-align', 'right').append(
-                                    $('<a class="btn">')
-                                        .text(gt('Cancel'))
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            data.parentView.onCancel();
-                                        }),
-                                    '&nbsp;',
-                                    $('<a class="btn btn-danger">')
-                                        .addClass('btn')
-                                        .text(gt('Ignore conflicts'))
-                                        .on('click', function (e) {
-                                            e.preventDefault();
-                                            data.parentView.onIgnore();
-                                        })
-                            )
-                    )
-            );
-        }
-    });
-
-
-    point.basicExtend({
-        index: 120,
-        id: 'additionalinfo',
-        draw: function (data) {
-            this.append($('<div>').addClass('additional-info'));
-        }
-    });
-
-    point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/title',
-        index: 200,
-        className: 'span12',
-        control: '<input type="text" class="span12">',
-        attribute: 'title',
-        label: gt('Subject')
-    }));
-
-    point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/location',
-        className: 'span10',
-        index: 300,
-        control: '<input type="text" class="span12">',
-        attribute: 'location',
-        label: gt('Location')
-    }), {
-        forceLine: 3
-    });
-
-    point.basicExtend({
-        id: 'io.ox/calendar/edit/section/save',
-        draw: function (baton) {
-            this.append($('<button class="btn btn-primary span2">').text(baton.mode === 'edit' ? gt("Save") : gt("Create")).css({marginTop: '25px', float: 'right'}).on('click', function () {
-                baton.parentView.trigger('save', baton);
-            }));
-        },
-        forceLine: 3
-    });
-
-
     function DateField(options) {
         var hours_typeahead = [];
         var filldate = new dateAPI.Local();
@@ -149,6 +62,8 @@ define('io.ox/calendar/edit/template',
         _.extend(this, {
             tagName: 'div',
             render: function () {
+
+                console.log('data', this);
                 this.nodes = {};
                 this.$el.append(
                         this.nodes.controlGroup = $('<div class="control-group">').append(
@@ -173,15 +88,20 @@ define('io.ox/calendar/edit/template',
                 return this;
             },
             setValueInField: function () {
+                // TODO make this nice, conversion to UTC is not the right way here
                 var value = this.model.get(this.attribute);
+                var cValue = (this.baton.lasso) ? dateAPI.Local.utc(value): value;
                 this.nodes.timezoneField.text(dateAPI.Local.getTTInfoLocal(value).abbr);
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
+                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
+                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
             },
             updateModelDate: function () {
+
+                console.log('updateModelDate',  this.nodes.dayField.val());
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
             },
             updateModelTime: function () {
+                console.log('updateModelTime', this.nodes.timeField.val());
                 this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
             },
             showError: function (messages) {
@@ -213,6 +133,98 @@ define('io.ox/calendar/edit/template',
         }, options);
     }
 
+    var convertImageStyle = function (url) {
+        if (_.isString(url) && url.length > 1) {
+            url = url.replace(/^\/ajax/, ox.apiRoot);
+            return 'url("' + url + '")';
+        } else {
+            return '';
+        }
+    };
+
+    // conflicts
+    pointConflicts.basicExtend({
+        index: 100,
+        id: 'io.ox/calendar/edit/conflicts/main',
+        draw: function (data) {
+            this.append(
+                $('<div class="row">')
+                    .css('margin-top', '10px').append(
+                            $('<span class="span12">')
+                                .css('text-align', 'right').append(
+                                    $('<a class="btn">')
+                                        .text(gt('Cancel'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            data.parentView.onCancel();
+                                        }),
+                                    '&nbsp;',
+                                    $('<a class="btn btn-danger">')
+                                        .addClass('btn')
+                                        .text(gt('Ignore conflicts'))
+                                        .on('click', function (e) {
+                                            e.preventDefault();
+                                            data.parentView.onIgnore();
+                                        })
+                            )
+                    )
+            );
+        }
+    });
+
+    // alert error
+    point.extend(new forms.ErrorAlert({
+        index: 100,
+        id: 'io.ox/calendar/edit/section/error'
+    }));
+
+    // do we need this?
+    point.basicExtend({
+        index: 120,
+        id: 'additionalinfo',
+        draw: function (data) {
+            this.append($('<div>').addClass('additional-info'));
+        }
+    });
+
+    // title
+    point.extend(new forms.InputField({
+        id: 'io.ox/calendar/edit/section/title',
+        index: 200,
+        className: 'span12',
+        control: '<input type="text" class="span12">',
+        attribute: 'title',
+        label: gt('Subject')
+    }));
+
+    // location input
+    point.extend(new forms.InputField({
+        id: 'io.ox/calendar/edit/section/location',
+        className: 'span10',
+        index: 300,
+        control: '<input type="text" class="span12">',
+        attribute: 'location',
+        label: gt('Location')
+    }), {
+        forceLine: 3
+    });
+
+    // save button
+    point.basicExtend({
+        id: 'io.ox/calendar/edit/section/save',
+        draw: function (baton) {
+            this.append($('<button class="btn btn-primary span2">')
+                .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
+                .css({marginTop: '25px', float: 'right'})
+                .on('click', function () {
+                    baton.parentView.trigger('save', baton);
+                })
+            );
+        },
+        forceLine: 3
+    });
+
+    // start date
     point.extend(new DateField({
         id: 'io.ox/calendar/edit/section/start-date',
         index: 400,
@@ -223,6 +235,7 @@ define('io.ox/calendar/edit/template',
         forceLine: 4
     });
 
+    // end date
     point.extend(new DateField({
         id: 'io.ox/calendar/edit/section/end-date',
         className: 'span6',
@@ -233,6 +246,7 @@ define('io.ox/calendar/edit/template',
         forceLine: 4
     });
 
+    // full time
     point.extend(new forms.CheckBoxField({
         id: 'io.ox/calendar/edit/section/full_time',
         className: 'span12',
@@ -241,6 +255,7 @@ define('io.ox/calendar/edit/template',
         index: 600
     }));
 
+    // note
     point.extend(new forms.InputField({
         id: 'io.ox/calendar/edit/section/note',
         index: 700,
@@ -250,6 +265,8 @@ define('io.ox/calendar/edit/template',
         label: gt("Description")
     }));
 
+
+    // alarms
     (function () {
         var reminderListValues = [
             {value: 0, format: 'minutes'},
@@ -311,6 +328,7 @@ define('io.ox/calendar/edit/template',
 
     }());
 
+    // shown as
     point.extend(new forms.SelectBoxField({
         id: 'io.ox/calendar/edit/section/shown_as',
         index: 900,
@@ -327,6 +345,7 @@ define('io.ox/calendar/edit/template',
         forceLine: 7
     });
 
+    // private?
     point.extend(new forms.CheckBoxField({
         id: 'io.ox/calendar/edit/section/private_flag',
         className: 'span4',
@@ -338,6 +357,7 @@ define('io.ox/calendar/edit/template',
         forceLine: 7
     });
 
+    // participants label
     point.extend(new forms.SectionLegend({
         id: 'io.ox/calendar/edit/section/participants_legend',
         className: 'span12',
@@ -345,6 +365,7 @@ define('io.ox/calendar/edit/template',
         index: 1300
     }));
 
+    // participants
     point.basicExtend({
         id: 'io.ox/calendar/edit/section/participants_list',
         index: 1400,
@@ -353,6 +374,7 @@ define('io.ox/calendar/edit/template',
         }
     });
 
+    // add participants
     point.basicExtend({
         id: 'io.ox/calendar/edit/section/add-participant',
         index: 1500,
@@ -369,7 +391,6 @@ define('io.ox/calendar/edit/template',
                             .append($('<i class="icon-plus">'))
                     )
                 );
-                //node.append($('<button class="btn" type="button" data-action="add">').append($('<i class="icon-plus">')));
 
                 var autocomplete = new AddParticipantsView({el: node});
                 autocomplete.render();
@@ -417,315 +438,58 @@ define('io.ox/calendar/edit/template',
     });
 
 
-    /**
-     * extpoint
-     * conflicts
-     */
-    ext.point('io.ox/calendar/edit/conflicts').extend({
-        index: 1,
-        id: 'conflicts',
-        draw: function (data) {
-            this.append($('<div class="row-fluid show-grid">')
-                .css('margin-top', '10px').append(
-                    $('<span class="span12">').css('text-align', 'right').append(
-                        $('<a class="btn">')
-                            .attr('data-action', 'cancel')
-                            .text(gt('Cancel')),
-                        $('<a class="btn btn-danger">')
-                            .addClass('btn')
-                            .attr('data-action', 'ignore')
-                            .text(gt('Ignore conflicts')))));
-        }
-    });
-
-    /**
-     * extension point
-     * user drawing in participant view
-     */
-    ext.point('io.ox/calendar/edit/participants/user').extend({
-        index: 1,
-        id: 'participant_user',
-        draw: function (model) {
-
-            this.append(
-                $('<div class="contact-image">')
-                    .css("background-image", convertImageStyle(model.get('image1_url'))),
-                $('<div>').append(
-                    $('<a class="person-link">')
-                        .text(util.getDisplayName(model.toJSON()))
-                ),
-                $('<div class="email">')
-                    .text(util.getMail(model.toJSON())),
-                // only append remove icon if user is removable
-                model.get('ui_removable') !== false ? $('<a class="remove">')
-                    .attr('href', '#').append(
-                        $('<div class="icon">').append('<i class="icon-remove"></i>')
-                    ) : $()
-            );
-        }
-    });
-    /**
-     * extension point
-     * groups in particpant view
-     */
-    ext.point('io.ox/calendar/edit/participants/usergroup').extend({
-        index: 1,
-        id: 'participant_group',
-        draw: function (model) {
-            this.append(
-                $('<div class="group-image">'),
-                $('<div>')
-                     .text(util.getDisplayName(model.toJSON())),
-                gt("Group"),
-                $('<a class="remove">')
-                    .attr('href', '#').append(
-                        $('<div class="icon">').append(
-                            '<i class="icon-remove"></i>')
-                        )
-             );
-        }
-    });
-
-    point.basicExtend({
-        id: 'io.ox/calendar/edit/section/save',
-        draw: function (data) {
-            this.append($('<button class="btn btn-primary span2">').text(gt("Create")).css({marginTop: '25px', float: 'right'}).on('click', function () {
-                data.parentView.trigger('save', data);
-            }));
-        },
-        forceLine: 3
-    });
 
 
-    function DateField(options) {
-        var hours_typeahead = [];
-        var filldate = new dateAPI.Local();
-        filldate.setHours(0);
-        filldate.setMinutes(0);
-        for (var i = 0; i < 24; i++) {
-            hours_typeahead.push(filldate.format(dateAPI.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
-            hours_typeahead.push(filldate.format(dateAPI.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
-        }
+//    /**
+//     * extension point
+//     * user drawing in participant view
+//     */
+//    ext.point('io.ox/calendar/edit/participants/user').extend({
+//        index: 1,
+//        id: 'participant_user',
+//        draw: function (model) {
+//
+//            this.append(
+//                $('<div class="contact-image">')
+//                    .css("background-image", convertImageStyle(model.get('image1_url'))),
+//                $('<div>').append(
+//                    $('<a class="person-link">')
+//                        .text(util.getDisplayName(model.toJSON()))
+//                ),
+//                $('<div class="email">')
+//                    .text(util.getMail(model.toJSON())),
+//                // only append remove icon if user is removable
+//                model.get('ui_removable') !== false ? $('<a class="remove">')
+//                    .attr('href', '#').append(
+//                        $('<div class="icon">').append('<i class="icon-remove"></i>')
+//                    ) : $()
+//            );
+//        }
+//    });
+//    /**
+//     * extension point
+//     * groups in particpant view
+//     */
+//    ext.point('io.ox/calendar/edit/participants/usergroup').extend({
+//        index: 1,
+//        id: 'participant_group',
+//        draw: function (model) {
+//            this.append(
+//                $('<div class="group-image">'),
+//                $('<div>')
+//                     .text(util.getDisplayName(model.toJSON())),
+//                gt("Group"),
+//                $('<a class="remove">')
+//                    .attr('href', '#').append(
+//                        $('<div class="icon">').append(
+//                            '<i class="icon-remove"></i>')
+//                        )
+//             );
+//        }
+//    });
 
-        var comboboxHours = {
-            source: hours_typeahead,
-            items: 48,
-            menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-            sorter: function (items) {
-                items = _(items).sortBy(function (item) {
-                    var pd = dateAPI.Local.parse(item, dateAPI.TIME);
-                    return pd.getTime();
-                });
-                return items;
-            },
-            autocompleteBehavoir: false
-        };
-        var modelEvents = {};
-        modelEvents['change:' + options.attribute] = 'setValueInField';
-        modelEvents['invalid:' + options.attribute] = 'showError';
-        modelEvents.valid = 'removeError';
-        modelEvents['change:full_time'] = 'onFullTimeChange';
 
-        _.extend(this, {
-            tagName: 'div',
-            render: function () {
-                this.nodes = {};
-                this.$el.append(
-                        this.nodes.controlGroup = $('<div class="control-group">').append(
-                            $('<label>').text(this.label),
-                            $('<div class="control">').append(
-                                this.nodes.dayField = $('<input type="text" class="input-small">'),
-                                '&nbsp;',
-                                this.nodes.timeField = $('<input type="text" class="input-mini">'),
-                                '&nbsp;',
-                                this.nodes.timezoneField = $('<span class="label">').text(dateAPI.Local.getTTInfoLocal(this.model.get(this.attribute)).abbr)
-                            )
-                        )
-                );
-                this.setValueInField();
-                // get the right date format
-                var dateFormat = dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
-                this.nodes.dayField.datepicker({format: dateFormat});
-                this.nodes.timeField.combobox(comboboxHours);
 
-                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
-                return this;
-            },
-            setValueInField: function () {
-                var value = this.model.get(this.attribute);
-                this.nodes.timezoneField.text(dateAPI.Local.getTTInfoLocal(value).abbr);
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', value, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', value, this.attribute, this.model));
-            },
-            updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
-            },
-            updateModelTime: function () {
-                this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
-            },
-            showError: function (messages) {
-                this.removeError();
-                this.nodes.controlGroup.addClass("error");
-                var helpBlock =  this.nodes.helpBlock = $('<div class="help-block error">');
-                _(messages).each(function (msg) {
-                    helpBlock.append($.txt(msg));
-                });
-                this.$el.append(helpBlock);
-            },
-            removeError: function () {
-                if (this.nodes.helpBlock) {
-                    this.nodes.helpBlock.remove();
-                    delete this.nodes.helpBlock;
-                    this.nodes.controlGroup.removeClass("error");
-                }
-            },
-            onFullTimeChange: function () {
-                if (this.model.get('full_time')) {
-                    this.nodes.timeField.hide();
-                    this.nodes.timezoneField.hide();
-                } else {
-                    this.nodes.timeField.show();
-                    this.nodes.timezoneField.show();
-                }
-            },
-            modelEvents: modelEvents
-        }, options);
-    }
-
-    point.extend(new DateField({
-        id: 'io.ox/calendar/edit/section/start-date',
-        index: 400,
-        className: 'span6',
-        attribute: 'start_date',
-        label: gt('Starts on')
-    }), {
-        forceLine: 4
-    });
-
-    point.extend(new DateField({
-        id: 'io.ox/calendar/edit/section/end-date',
-        className: 'span6',
-        index: 500,
-        attribute: 'end_date',
-        label: gt('Ends on')
-    }), {
-        forceLine: 4
-    });
-
-    point.extend(new forms.CheckBoxField({
-        id: 'io.ox/calendar/edit/section/full_time',
-        className: 'span12',
-        label: gt('All day'),
-        attribute: 'full_time',
-        index: 600
-    }));
-
-    point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/note',
-        index: 700,
-        className: 'span12',
-        control: '<textarea class="note">',
-        attribute: 'note',
-        label: gt("Description")
-    }));
-
-    (function () {
-        var reminderListValues = [
-            {value: 0, format: 'minutes'},
-            {value: 15, format: 'minutes'},
-            {value: 30, format: 'minutes'},
-            {value: 45, format: 'minutes'},
-
-            {value: 60, format: 'hours'},
-            {value: 120, format: 'hours'},
-            {value: 240, format: 'hours'},
-            {value: 360, format: 'hours'},
-            {value: 420, format: 'hours'},
-            {value: 720, format: 'hours'},
-
-            {value: 1440, format: 'days'},
-            {value: 2880, format: 'days'},
-            {value: 4320, format: 'days'},
-            {value: 5760, format: 'days'},
-            {value: 7200, format: 'days'},
-            {value: 8640, format: 'days'},
-            {value: 10080, format: 'weeks'},
-            {value: 20160, format: 'weeks'},
-            {value: 30240, format: 'weeks'},
-            {value: 40320, format: 'weeks'}
-        ];
-
-        var options = {};
-        _(reminderListValues).each(function (item, index) {
-            var i;
-            switch (item.format) {
-            case 'minutes':
-                options[item.value] = gt.format(gt.ngettext('%1$d Minute', '%1$d Minutes', item.value), gt.noI18n(item.value));
-                break;
-            case 'hours':
-                i = Math.floor(item.value / 60);
-                options[item.value] = gt.format(gt.ngettext('%1$d Hour', '%1$d Hours', i), gt.noI18n(i));
-                break;
-            case 'days':
-                i  = Math.floor(item.value / 60 / 24);
-                options[item.value] = gt.format(gt.ngettext('%1$d Day', '%1$d Days', i), gt.noI18n(i));
-                break;
-            case 'weeks':
-                i = Math.floor(item.value / 60 / 24 / 7);
-                options[item.value] = gt.format(gt.ngettext('%1$d Week', '%1$d Weeks', i), gt.noI18n(i));
-                break;
-            }
-        });
-
-        point.extend(new forms.SelectBoxField({
-            id: 'io.ox/calendar/edit/section/alarm',
-            index: 800,
-            className: "span4",
-            attribute: 'alarm',
-            label: gt("Reminder"),
-            selectOptions: options
-        }), {
-            forceLine: 7
-        });
-
-    }());
-
-    point.extend(new forms.SelectBoxField({
-        id: 'io.ox/calendar/edit/section/shown_as',
-        index: 900,
-        className: "span4",
-        attribute: 'shown_as',
-        label: gt("Shown as"),
-        selectOptions: {
-            1: gt('Reserved'),
-            2: gt('Temporary'),
-            3: gt('Absent'),
-            4: gt('Free')
-        }
-    }), {
-        forceLine: 7
-    });
-
-    point.extend(new forms.CheckBoxField({
-        id: 'io.ox/calendar/edit/section/private_flag',
-        className: 'span4',
-        header: gt('Type'),
-        label: gt('Private'),
-        attribute: 'private_flag',
-        index: 1000
-    }), {
-        forceLine: 7
-    });
-    
-    point.extend(new forms.SectionLegend({
-        id: "recurrence_legend",
-        className: 'span12',
-        label: gt("Recurrence"),
-        index: 1100
-    }));
 
     point.extend(new RecurrenceView({
         id: 'recurrence',

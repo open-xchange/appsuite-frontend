@@ -10,15 +10,16 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/calendar/model', ['io.ox/calendar/api',
-                                'io.ox/backbone/modelFactory',
-                                'io.ox/core/extensions',
-                                'gettext!io.ox/calendar/calendar',
-                                'io.ox/backbone/validation',
-                                'io.ox/participants/model',
-                                'io.ox/core/date',
-                                'io.ox/core/api/folder',
-                                'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, dateAPI, folderAPI, configAPI) {
+define('io.ox/calendar/model',
+        ['io.ox/calendar/api',
+        'io.ox/backbone/modelFactory',
+        'io.ox/core/extensions',
+        'gettext!io.ox/calendar/calendar',
+        'io.ox/backbone/validation',
+        'io.ox/participants/model',
+        'io.ox/core/date',
+        'io.ox/core/api/folder',
+        'io.ox/core/config'], function (api, ModelFactory, ext, gt, Validators, pModel, dateAPI, folderAPI, configAPI) {
 
     "use strict";
 

@@ -86,7 +86,7 @@ define("io.ox/calendar/api",
                     order: "asc",
                     timezone: "UTC"
                 };
-            
+
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
@@ -139,7 +139,7 @@ define("io.ox/calendar/api",
 
         update: function (o) {
             var folder_id = o.folder_id || o.folder;
-            
+
             var key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o)) {
                 return $.when();
@@ -184,13 +184,13 @@ define("io.ox/calendar/api",
                 });
             }
         },
-        
+
         create: function (o) {
             return http.PUT({
                 module: 'calendar',
                 params: {
-                    action: 'new',
-                    timezone: "UTC"
+                    action: 'new'/*,
+                    timezone: "UTC"*/
                 },
                 data: o
             })

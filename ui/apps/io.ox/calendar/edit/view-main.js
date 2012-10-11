@@ -39,7 +39,6 @@ define('io.ox/calendar/edit/view-main',
         className: 'io-ox-calendar-edit container-fluid',
         render: function () {
             var self = this;
-
             var rows = [];
             function getRow(index) {
                 if (rows.length > index + 1) {

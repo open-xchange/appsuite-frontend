@@ -95,6 +95,8 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             }
         },
         sync: function (action, model, callbacks) {
+            console.log('factory', action, model);
+
             var self = this;
             
             // action is one of 'update', 'create', 'delete' or 'read'

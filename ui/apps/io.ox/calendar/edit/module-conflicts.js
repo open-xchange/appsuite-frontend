@@ -68,13 +68,6 @@ define('io.ox/calendar/edit/module-conflicts',
 
     var ConflictsView = views.point('io.ox/calendar/edit/conflicts').createView({
         tagName: 'div',
-        events: {
-          //  'click a.btn-danger[data-action=ignore]': 'onIgnore',
-          //  'click a.btn[data-action=cancel]': 'onCancel'
-        },
-        initialize: function () {
-            console.log('init');
-        },
         render: function () {
             var conflictList = vgridtpl.drawSimpleGrid(this.collection.toJSON());
             var self = this;

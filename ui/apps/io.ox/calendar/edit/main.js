@@ -18,7 +18,8 @@ define('io.ox/calendar/edit/main',
        'gettext!io.ox/calendar/edit/main',
        'io.ox/core/api/folder',
        'io.ox/core/config',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI) {
+       'io.ox/core/date',
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI, date) {
 
     'use strict';
     function AppointmentModel() {
@@ -70,13 +71,13 @@ define('io.ox/calendar/edit/main',
             this.model.off('change:title');
         },
         edit: function (data) {
+            console.log('edit appointment', data);
             var self = this;
             function cont(data) {
                 self.model = appointmentModel.factory.create(data);
                 appointmentModel.setDefaultParticipants(self.model).done(function () {
                     self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create'});
                     self.view.on('save', _.bind(self.onSave, self));
-
                     self.view.on('save:success', function () {
                         self.considerSaved = true;
                         self.view.idle();
@@ -163,10 +164,10 @@ define('io.ox/calendar/edit/main',
         create: function (data) {
             var self = this;
 
-
+            console.log('create app', data);
             self.model = appointmentModel.factory.create(data);
             appointmentModel.setDefaultParticipants(self.model).done(function () {
-                self.view = new MainView({model: self.model});
+                self.view = new MainView({model: self.model, lasso: data.lasso || false});
                 self.view.on('save', _.bind(self.onSave, self));
 
                 self.view.on('save:success', function () {
