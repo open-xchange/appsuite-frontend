@@ -121,18 +121,18 @@ define('io.ox/office/editor/view',
                 if (Array.isArray(docThemes) && docThemes.length > 0) {
                     // use first entry of the themes array
                     var theme = docThemes[0];
-                    
+
                     var filter = [];
                     if (type  === 'fill')
                         filter = [ "name", "colorSchemeName", "text1", "text2", "background1", "background2" ];
                     else if (type === 'color')
                         filter = [ "name", "colorSchemeName", "dark1", "dark2", "light1", "light2" ];
-                    
+
                     var themeEntry;
                     for (themeEntry in theme) {
                         if (!_.contains(filter, themeEntry)) {
                             var color = theme[themeEntry];
-                            
+
                             if (color && color.length > 0)
                                 self.createOptionButton({ themeFill: themeEntry }, { tooltip: themeEntry, css: {"background-color": '#' + color }});
                         }
@@ -141,7 +141,7 @@ define('io.ox/office/editor/view',
             }
             // add predefined colors
             _([
-                { label: 'Transparent',  value: {rgbColor: '' }},
+                { label: 'Transparent',  value: '' },
                 { label: 'Dark Red',     value: {rgbColor: 'C00000'}},
                 { label: 'Red',          value: {rgbColor: 'FF0000'}},
                 { label: 'Orange',       value: {rgbColor: 'FFC000'}},
@@ -160,7 +160,7 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
         themes.on('change', changed);
-        
+
     }}); // class ColorChooser
 
     // class FontFamilyChooser ================================================
@@ -446,7 +446,7 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end();
-        
+
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()

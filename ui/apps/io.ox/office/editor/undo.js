@@ -19,12 +19,110 @@ define('io.ox/office/editor/undo',
 
     'use strict';
 
+    // private global functions ===============================================
+
+    function isSameParagraph(pos1, pos2) {
+        if (pos1.length !== pos2.length)
+            return false;
+        if (pos1.length < 2)
+            return false;
+        var n = pos1.length - 2;
+        for (var i = 0; i <= n; i++)
+            if (pos1[n] !== pos2[n])
+                return false;
+        return true;
+    }
+
+    // class Action ===========================================================
+
+    /**
+     * An instance of Action is used by the undo manager to store undo and
+     * redo operations and to apply them in the editor.
+     *
+     * @constructor
+     *
+     * @param {Object|Object[]} [undoOperations]
+     *  One ore more operations that form a logical undo action. When the
+     *  undo action is executed, the operations will be applied in the
+     *  exact order as passed in this parameter; they will NOT be applied
+     *  in reversed order as would be the case if the operations had been
+     *  added in multiple undo actions. The parameter may be a single
+     *  operation object, an array of operation objects, or omitted.
+     *
+     * @param {Object|Object[]} [redoOperations]
+     *  One ore more operations that form a logical redo action. When the
+     *  redo action is executed, the operations will be applied in the
+     *  exact order as passed in this parameter. The parameter may be a
+     *  single operation object, an array of operation objects, or omitted.
+     */
+    function Action(undoOperations, redoOperations) {
+        this.undoOperations = _.isArray(undoOperations) ? undoOperations : _.isObject(undoOperations) ? [undoOperations] : [];
+        this.redoOperations = _.isArray(redoOperations) ? redoOperations : _.isObject(redoOperations) ? [redoOperations] : [];
+    }
+
+    /**
+     * Returns whether this action is an 'insertText' action (an action with a
+     * single 'insertText' redo operation and a single 'deleteText' undo
+     * operation).
+     */
+    Action.prototype.isInsertTextAction = function () {
+        return (this.undoOperations.length === 1) && (this.undoOperations[0].name === Operations.TEXT_DELETE) &&
+            (this.redoOperations.length === 1) && (this.redoOperations[0].name === Operations.TEXT_INSERT);
+    };
+
+    Action.prototype.tryMergeInsertCharacter = function (nextAction) {
+
+        var // check if this and the passed action is an 'insertText' action
+            validActions = this.isInsertTextAction() && nextAction.isInsertTextAction(),
+
+            // the redo actions of this action and the passed action
+            thisRedo = this.redoOperations[0],
+            nextRedo = nextAction.redoOperations[0],
+
+            // last array index in logical positions (pointing to the character offset)
+            lastIndex = 0;
+
+        // check that the operations are valid for merging the actions
+        if (validActions && (nextRedo.text.length === 1) && isSameParagraph(thisRedo.start, nextRedo.start)) {
+
+            lastIndex = thisRedo.start.length - 1;
+
+            // check that the new action adds the character directly after the text of this action
+            if (thisRedo.start[lastIndex] + thisRedo.text.length === nextRedo.start[lastIndex]) {
+
+                // check that the last character of this action is not a space character (merge actions word by word)
+                if (thisRedo.text.substr(-1) !== ' ') {
+
+                    // merge undo operation (delete one more characters)
+                    this.undoOperations[0].end[lastIndex] += 1;
+                    // merge redo operation (add the character)
+                    thisRedo.text += nextRedo.text;
+                    return true;
+                }
+            }
+        }
+        return false;
+    };
+
+    Action.prototype.undo = function (editor) {
+        // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
+        _(this.undoOperations).each(function (operation) {
+            editor.applyOperation(operation, true, true);
+        });
+    };
+
+    Action.prototype.redo = function (editor) {
+        _(this.redoOperations).each(function (operation) {
+            editor.applyOperation(operation, true, true);
+        });
+    };
+
     // class UndoManager ======================================================
 
     /**
      * The undo manager is used by the editor to administer the operation
      * handling concerning undo and redo. Also the grouping and merging of
-     * operations is a task of the undo-manager.
+     * operations is a task of the undo manager.
      *
      * @constructor
      *
@@ -37,59 +135,61 @@ define('io.ox/office/editor/undo',
             // maxActions = 1000,   // not clear if really wanted/needed...
             currentAction = 0,
             groupLevel = 0,
-            currentGroupActions = [],
+            groupedActions = null,
             enabled = true,
             processingUndoRedo = false;
 
-        // class Action -------------------------------------------------------
-
-        /**
-         * An instance of Action is used by the undo manager to undo and redo an
-         * operation in the editor.
-         *
-         * @constructor
-         *
-         * @param {Object} undoOperation
-         *  An operation object, that is used to undo an already executed operation.
-         *
-         * @param {Object} redoOperation
-         *  An operation object, that is used to undo the undo operation.
-         */
-        function Action(undoOperation, redoOperation, allowMerge) {
-
-            // Need to store as member, because of the feature to merge undo actions afterwards...
-            this.undoOperation = undoOperation;
-            this.redoOperation = redoOperation;
-            this.allowMerge = allowMerge === true;
-
-            this.undo = function () {
-                // Doc is being modified, so we need to notify/transfer/merge this operation. Is there a better way for undo?
-                if (this.undoOperation) {
-                    editor.applyOperation(this.undoOperation, true, true);
-                }
-            };
-
-            this.redo = function () {
-                if (this.redoOperation) {
-                    editor.applyOperation(this.redoOperation, true, true);
-                }
-            };
-
-        } // class Action
-
         // private methods ----------------------------------------------------
 
-        function isSameParagraph(pos1, pos2, includeLastPos) {
-            if (pos1.length !== pos2.length)
-                return false;
-            if (pos1.length < (includeLastPos ? 1 : 2))
-                return false;
-            var n = pos1.length - (includeLastPos ? 1 : 2);
-            for (var i = 0; i <= n; i++)
-                if (pos1[n] !== pos2[n])
-                    return false;
-            return true;
+        function startActionGroup() {
+
+            // count nested calls but use the same array for all actions
+            groupLevel += 1;
+
+            // create an array object for the grouped actions that contains
+            // custom undo() and redo() methods
+            if (!groupedActions) {
+                groupedActions = [];
+                groupedActions.undo = function (editor) {
+                    var index = this.length;
+                    while (index-- > 0) {
+                        this[index].undo(editor);
+                    }
+                };
+                groupedActions.redo = function (editor) {
+                    _(this).invoke('redo', editor);
+                };
+            }
         }
+
+        function endActionGroup() {
+
+            // one level up in nested calls of startActionGroup()/endActionGroup()
+            groupLevel -= 1;
+
+            // push action group array to global action stack on last call
+            if ((groupLevel === 0) && (groupedActions.length > 0)) {
+                actions.push(groupedActions);
+                currentAction = actions.length;
+                groupedActions = null;
+            }
+        }
+
+        function pushAction(actionStack, nextAction) {
+
+            var // last action on passed action stack
+                lastAction = actionStack[actionStack.length - 1];
+
+            // try to merge an 'insertText' operation for a single character with the last action on stack
+            if (_.isObject(lastAction) && _.isFunction(lastAction.tryMergeInsertCharacter) && lastAction.tryMergeInsertCharacter(nextAction)) {
+                return;
+            }
+
+            // action has not been merged: append
+            actionStack.push(nextAction);
+        }
+
+        // methods ------------------------------------------------------------
 
         this.clear = function () {
             actions = [];
@@ -112,32 +212,48 @@ define('io.ox/office/editor/undo',
          * is open will be collected and act like a single undo action. Can be
          * called repeatedly. Every call of this method must be followed by a
          * matching call of the method UndoManager.endGroup().
+         *
+         * @deprecated
+         *  Use method UndoManager.enterGroup() instead.
          */
         this.startGroup = function () {
-            // I don't think we really need complex structure with nested arrays here.
-            // Once we start a group, undo will always undo everything within
-            // Just using ++/-- so other code don't need to take care whether or
-            // not grouping is already active...
-            groupLevel++;
+            startActionGroup();
         };
 
         /**
          * Closes an undo group that has been opened with the method
          * UndoManager.startGroup() before.
+         *
+         * @deprecated
+         *  Use method UndoManager.enterGroup() instead.
          */
         this.endGroup = function () {
-
-            if (!groupLevel) {
+            if (groupLevel > 0) {
+                endActionGroup();
+            } else {
                 Utils.error('UndoManager.endGroup(): not in undo group!');
-                return;
             }
+        };
 
-            groupLevel--;
-
-            if ((groupLevel === 0) && (currentGroupActions.length > 0)) {
-                actions.push(currentGroupActions);
-                currentAction = actions.length;
-                currentGroupActions = [];
+        /**
+         * Opens an undo action group and executes the specified callback
+         * function. All undo operations added by the callback function will be
+         * collected in the action group and act like a single undo action.
+         * Nested calls are supported.
+         *
+         * @param {Function} callback
+         *  The callback function that will be executed while the undo action
+         *  group is open.
+         *
+         * @param {Object} [context]
+         *  The context the callback function will be bound to.
+         */
+        this.enterGroup = function (callback, context) {
+            startActionGroup();
+            try {
+                callback.call(context);
+            } finally {
+                endActionGroup();
             }
         };
 
@@ -145,49 +261,48 @@ define('io.ox/office/editor/undo',
             return processingUndoRedo;
         };
 
-        this.addUndo = function (undoOperation, redoOperation, allowMerge) {
+        /**
+         * Creates a new undo action that will apply the passed undo and redo
+         * operations in the editor.
+         *
+         * @constructor
+         *
+         * @param {Object|Object[]} [undoOperations]
+         *  One ore more operations that form a logical undo action. When the
+         *  undo action is executed, the operations will be applied in the
+         *  exact order as passed in this parameter; they will NOT be applied
+         *  in reversed order as would be the case if the operations had been
+         *  added in multiple undo actions. The parameter may be a single
+         *  operation object, an array of operation objects, or omitted.
+         *
+         * @param {Object|Object[]} [redoOperations]
+         *  One ore more operations that form a logical redo action. When the
+         *  redo action is executed, the operations will be applied in the
+         *  exact order as passed in this parameter. The parameter may be a
+         *  single operation object, an array of operation objects, or omitted.
+         */
+        this.addUndo = function (undoOperations, redoOperations) {
 
             if (this.isInUndo()) {
                 Utils.error('UndoManager.addUndo(): creating undo while processing undo!');
                 return;
             }
 
-            var action = new Action(_.copy(undoOperation, true), _.copy(redoOperation, true), allowMerge),
-                tryToMerge = true;
+            var // the new action object
+                action = new Action(_.copy(undoOperations, true), _.copy(redoOperations, true));
 
-            // remove undone actions
-            if (currentAction < actions.length) {
-                actions.splice(currentAction);
-                tryToMerge = false;
-            }
-
-            if (groupLevel) {
-                currentGroupActions.push(action);
-            }
-            else {
-                var bDone = false;
-                if (tryToMerge && currentAction && action.allowMerge) {
-                    var prevUndo = actions[currentAction - 1];
-                    if (prevUndo.allowMerge && (prevUndo.redoOperation.name === action.redoOperation.name)) {
-                        if (action.redoOperation.name === Operations.TEXT_INSERT) {
-                            if (isSameParagraph(action.redoOperation.start, prevUndo.redoOperation.start, false)) {
-                                var nCharPosInArray = prevUndo.redoOperation.start.length - 1;
-                                var prevCharEnd = prevUndo.redoOperation.start[nCharPosInArray] + prevUndo.redoOperation.text.length;
-                                if (prevCharEnd === action.redoOperation.start[nCharPosInArray]) {
-                                    var lastChar = prevUndo.redoOperation.text[prevUndo.redoOperation.text.length - 1];     // text len can't be 0 in undo action...
-                                    if (lastChar !== ' ') {
-                                        // Merge Undo...
-                                        prevUndo.redoOperation.text +=  action.redoOperation.text;
-                                        prevUndo.undoOperation.end[nCharPosInArray] += action.redoOperation.text.length;
-                                        bDone = true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (!bDone)
+            if (groupedActions) {
+                // action grouping is active
+                pushAction(groupedActions, action);
+            } else {
+                // top-level action
+                if (currentAction < actions.length) {
+                    // remove undone actions, do not try to merge with last existing action
+                    actions.splice(currentAction);
                     actions.push(action);
+                } else {
+                    pushAction(actions, action);
+                }
                 currentAction = actions.length;
             }
         };
@@ -202,16 +317,11 @@ define('io.ox/office/editor/undo',
                 return;
 
             processingUndoRedo = true;
-            var action = actions[--currentAction];
-            if (_.isArray(action)) {
-                for (var i = action.length; i;) {
-                    action[--i].undo();
-                }
+            try {
+                actions[--currentAction].undo(editor);
+            } finally {
+                processingUndoRedo = false;
             }
-            else {
-                action.undo();
-            }
-            processingUndoRedo = false;
         };
 
         this.hasRedo = function () {
@@ -224,14 +334,11 @@ define('io.ox/office/editor/undo',
                 return;
 
             processingUndoRedo = true;
-            var action = actions[currentAction++];
-            if (_.isArray(action)) {
-                _.invoke(action, 'redo');
+            try {
+                actions[currentAction++].redo(editor);
+            } finally {
+                processingUndoRedo = false;
             }
-            else {
-                action.redo();
-            }
-            processingUndoRedo = false;
         };
 
     } // class UndoManager

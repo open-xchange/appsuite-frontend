@@ -755,16 +755,16 @@ define('io.ox/office/editor/editor',
                 tablegrid = Table.getTableGridWithNewColumn(paragraphs, tablePos, gridPosition, insertmode);
 
 
-            undomgr.startGroup();
+            undomgr.enterGroup(function () {
 
-            var newOperation = { name: Operations.COLUMN_INSERT, position: tablePos, tablegrid: tablegrid, gridposition: gridPosition, insertmode: insertmode };
-            applyOperation(newOperation, true, true);
+                var newOperation = { name: Operations.COLUMN_INSERT, position: tablePos, tablegrid: tablegrid, gridposition: gridPosition, insertmode: insertmode };
+                applyOperation(newOperation, true, true);
 
-            // Setting new table grid attribute to table
-            newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
-            applyOperation(newOperation, true, true);
+                // Setting new table grid attribute to table
+                newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                applyOperation(newOperation, true, true);
 
-            undomgr.endGroup();
+            }, this);
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -889,14 +889,16 @@ define('io.ox/office/editor/editor',
 
         this.mergeParagraph = function (position) {
 
-            undomgr.startGroup();
+            var imageShift = null;
 
-            var newOperation = {name: Operations.PARA_MERGE, start: _.copy(position)};
-            applyOperation(newOperation, true, true);
+            undomgr.enterGroup(function () {
 
-            var imageShift = moveFloatedImages(position);
+                var newOperation = {name: Operations.PARA_MERGE, start: _.copy(position)};
+                applyOperation(newOperation, true, true);
 
-            undomgr.endGroup();
+                imageShift = moveFloatedImages(position);
+
+            }, this);
 
             return imageShift;
         };
@@ -975,7 +977,6 @@ define('io.ox/office/editor/editor',
             setAttributes(family, attributes);
             if (createUndo) { undomgr.endGroup(); }
         };
-
 
         this.getParagraphCount = function () {
             return paragraphs.size();
@@ -1594,9 +1595,7 @@ define('io.ox/office/editor/editor',
                     endPos[endPos.length - 1] += operation.text.length;
                     endPos[endPos.length - 1] -= 1;    // switching from range mode to operation mode
                     var undoOperation = { name: Operations.TEXT_DELETE, start: _.copy(operation.start, true), end: endPos };
-                    var redoOperation = _.copy(operation, true);
-                    var allowMerge = operation.text.length === 1;
-                    undomgr.addUndo(undoOperation, redoOperation, allowMerge);
+                    undomgr.addUndo(undoOperation, _.copy(operation, true));
                 }
                 implInsertText(operation.text, operation.start);
             }
@@ -1677,17 +1676,9 @@ define('io.ox/office/editor/editor',
 
                     var tablePos = Position.getDOMPosition(paragraphs, operation.start);
                     if (tablePos) {
-                        undomgr.startGroup();
-                        // add the redo operation
-                        undomgr.addUndo(null, operation);
                         // generate undo operations for the entire table
                         var undoOperations = (new Operations.Generator()).generateTableOperations(tablePos.node, _.clone(operation.start));
-                        // undo manager applies operations in reversed order
-                        undoOperations.reverse();
-                        _(undoOperations).each(function (operation) {
-                            undomgr.addUndo(operation);
-                        });
-                        undomgr.endGroup();
+                        undomgr.addUndo(undoOperations, operation);
                     }
                 }
                 implDeleteTable(operation.start);
@@ -3228,6 +3219,9 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
+            var // undo and redo operations going into one action
+                undoOperations = [], redoOperations = [];
+
             // change listener used to build the undo operations
             function changeListener(element, oldAttributes, newAttributes) {
 
@@ -3256,8 +3250,9 @@ define('io.ox/office/editor/editor',
                     }
                 });
 
-                // add a new undo action for the current element
-                undomgr.addUndo(undoOperation, redoOperation);
+                // add operations to arrays
+                undoOperations.push(undoOperation);
+                redoOperations.push(redoOperation);
             }
 
             var // last index in the start/end position arrays
@@ -3307,7 +3302,8 @@ define('io.ox/office/editor/editor',
             // build the DOM text range, set the formatting attributes, create undo operations
             styleSheets = self.getStyleSheets(family);
             if (styleSheets) {
-                if (createUndo) { undomgr.startGroup(); }
+
+                // calculate DOM ranges from selection
                 if (family === 'image') {
                     var useNonTextNode = true,
                         startPaM = Position.getDOMPosition(paragraphs, start, useNonTextNode),
@@ -3321,8 +3317,12 @@ define('io.ox/office/editor/editor',
                 } else {
                     ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
                 }
+
+                // change attributes in document and create the undo/redo action
                 styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
-                if (createUndo) { undomgr.endGroup(); }
+                if (createUndo) {
+                    undomgr.addUndo(undoOperations, redoOperations);
+                }
             }
         }
 

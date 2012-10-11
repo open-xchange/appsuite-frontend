@@ -386,6 +386,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <span> element wrapping an object
+     * in inline mode.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a span element wrapping an object and is
+     *  rendered inlined.
+     */
+    DOM.isInlineObjectSpan = function (node) {
+        return DOM.isObjectSpan(node) && node.hasClass('inline');
+    };
+
+    /**
      * Returns whether the passed node is a <span> element wrapping an image.
      *
      * @param {Node|jQuery} node
@@ -399,6 +415,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         // object spans contain the object element as first child
         return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'img');
     };
+
+    /**
+     * A jQuery selector that matches <span> elements containing an image.
+     */
+    DOM.IMAGE_SPAN_SELECTOR = function () { return DOM.isImageSpan(this); };
 
     /**
      * Splits the passed text node into two text nodes.
