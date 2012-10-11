@@ -19,7 +19,7 @@ define('io.ox/files/mediaplayer',
      'io.ox/core/api/folder',
      'mediaelement/mediaelement-and-player',
      'io.ox/files/actions',
-     'less!io.ox/files/mediaplayer.css',
+     'less!io.ox/files/mediaplayer.less',
      'less!mediaelement/mediaelementplayer.css'
     ], function (commons, gt, api, folderAPI) {
 
@@ -32,8 +32,6 @@ define('io.ox/files/mediaplayer',
         mediaelement: null,
 
         container: $('<div class="mediaplayer_container">'),
-        wrapper: $('<div class="mediaplayer_wrapper">'),
-        inner: $('<div class="mediaplayer_inner">'),
         trackdisplay: $('<div class="mediaplayer_track">'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
@@ -49,6 +47,7 @@ define('io.ox/files/mediaplayer',
             $.extend(this.config, config);
             this.app = config.app;
             this.win = this.app.getWindow();
+            this.close();
             this.list = this.filterMediaList(config.list);
             if (this.list.length > 0)
             {
@@ -70,6 +69,7 @@ define('io.ox/files/mediaplayer',
             });
 
             $('.closemediaplayer').on('click', $.proxy(this.close, this));
+            $('.minimizemediaplayer').on('click', $.proxy(this.minimize, this));
 
             $(document).keyup(function (e) {
                 if (e.keyCode === 27) self.close();
@@ -132,22 +132,21 @@ define('io.ox/files/mediaplayer',
             }
         },
 
-        closeControl: function () {
-            return $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'));
-        },
-
         show: function () {
             var self = this;
             this.win.busy().nodes.outer.append(
                 this.container.append(
-                    this.wrapper.append(
-                        this.inner.append(
+                    $('<div class="mediaplayer_wrapper">').append(
+                        $('<div class="mediaplayer_inner">').append(
                             this.trackdisplay,
                             this.player,
                             this.playlist
                         )
                     ).append(
-                        this.closeControl()
+                        $('<div class="mediaplayer_buttons">').append(
+                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
+                            $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
+                        )
                     )
                 )
             );
@@ -205,11 +204,25 @@ define('io.ox/files/mediaplayer',
             });
         },
 
+        minimize: function () {
+            var self = this;
+            $('#io-ox-topbar').append(
+                $('<div class="launcher right minimizedmediaplayer">').append(
+                    $('<i>').addClass('icon-music icon-white')
+                ).on('click', function () {
+                    self.container.show();
+                    $(this).remove();
+                })
+            );
+            this.container.hide();
+        },
+
         close: function () {
+            $('#io-ox-topbar > .minimizedmediaplayer').remove();
             this.player.empty().remove();
             this.trackdisplay.empty().remove();
             this.playlist.empty().remove();
-            this.container.empty().remove();
+            this.container.empty().show().remove();
             this.list = [];
         }
     };

@@ -1,0 +1,135 @@
+/**
+ *
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2011
+ * Mail: info@open-xchange.com
+ *
+ * @author David Bauer <david.bauer@open-xchange.com>
+ *
+ */
+
+@playerWidth: 480px;
+@playerMargin: 13px;
+@windowTopHeight: 60px;
+
+
+@playerBg:                  rgba(0,0,0,0.2);
+@playerPrimaryColor:        #fff;
+@playerSecondaryColor:      #ddd;
+@playerHighlightColor:      #eee;
+@playerHighlightTextColor:  #000;
+
+@playerTextColor:           #111;
+
+@playerSelectionColor:      #08c;
+@playerSelectionTextColor:  #fff;
+
+
+.mediaplayer_container {
+    background-color:@playerBg;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index:10000;
+    height:100%;
+
+    .mediaplayer_wrapper {
+        position:relative;
+        height:100%;
+        margin:0 auto;
+        width: @playerWidth + (@playerMargin * 2);
+        box-shadow: 0 0 50px 1px #000;
+
+        .mediaplayer_inner {
+            position: absolute;
+            top:0;
+            left: 0;
+            right: 0;
+            width: @playerWidth + (@playerMargin * 2);
+            height:100%;
+            margin:auto;
+            background:@playerPrimaryColor;
+
+            .mediaplayer_track {
+                height: 150px;
+                margin: @windowTopHeight @playerMargin @playerMargin @playerMargin;
+                background: @playerHighlightColor;
+
+                i {
+                    font-size:100px;
+                    position:relative;
+                    top: 45px;
+                    left: 30px;
+                    color:#ccc;
+                }
+
+                h3 {
+                    position:absolute;
+                    top: @windowTopHeight + 10px;
+                    margin-left: 150px;
+                    margin-right: @playerMargin * 2;
+                    color:@playerTextColor;
+                    font-size: 18px;
+                    font-family: OpenSans;
+                    font-weight: 200;
+                }
+            }
+
+            .mediaplayer_player {
+                position: relative;
+                margin:0 auto;
+                margin-top: @playerMargin;
+                background:@playerSecondaryColor;
+                width:@playerWidth;
+            }
+
+            .mediaplayer_playlist {
+                margin:@playerMargin;
+                overflow-y:scroll;
+                height:100%;
+                li {
+                    list-style:none;
+                    background:@playerSecondaryColor;
+                    margin-bottom:1px;
+                    padding:5px @playerMargin;
+
+                    a {
+                        padding:5px;
+                        display:block;
+                        color:@playerTextColor;
+
+                        &:hover {
+                            text-decoration:none;
+                        }
+                    }
+                    &:hover {
+                        background-color:@playerHighlightColor;
+
+                    }
+                    &.active {
+                        background-color:@playerSelectionColor;
+                        color:@playerHighlightTextColor;
+                    }
+                }
+            }
+        }
+
+        .mediaplayer_buttons {
+            position:relative;
+            float:right;
+            margin-top:@playerMargin;
+
+            button {
+                margin-right:@playerMargin;
+            }
+        }
+    }
+}
+
+
