@@ -27,13 +27,14 @@ define("io.ox/dev/utils/live-coding-extension", ["io.ox/backbone/views"], functi
             }).done(function (code) {
                 if (code) {
                     try {
-                        self.delegate = new Function("return " + code)();
+                        self.delegate = new Function(code)();
                         if (self.transformDelegate) {
                             self.delegate = self.transformDelegate(self.delegate);
                         }
                         self.redrawDelegate();
                     } catch (e) {
-                        console.error(e);
+                        self.pending = false;
+                        throw e;
                     }
                 }
             }).always(function () {

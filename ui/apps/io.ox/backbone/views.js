@@ -131,9 +131,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             this.$el.trigger('dispose'); // Can't hurt
         };
 
-        options.observeModel = options.observeModel || function (evt, handler) {
+        options.observeModel = options.observeModel || function (evt, handler, context) {
             var self = this;
-            this.model.on(evt, handler);
+            this.model.on(evt, handler, context);
             this.$el.on('dispose', function () {
                 self.model.off(evt, handler);
             });

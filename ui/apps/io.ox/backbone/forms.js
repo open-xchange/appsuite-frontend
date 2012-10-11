@@ -157,7 +157,8 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         
         _.extend(object, {
             showError: function (messages) {
-                var helpBlock =  $('<div class="help-block error">');
+                var helpBlock =  this.$el.find(".help-block") || $('<div class="help-block error">');
+                helpBlock.empty();
                 _(messages).each(function (msg) {
                     helpBlock.append($.txt(msg));
                 });

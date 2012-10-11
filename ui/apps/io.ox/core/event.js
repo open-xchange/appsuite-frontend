@@ -66,7 +66,9 @@ define('io.ox/core/event', function () {
 
         // destroy event hub
         this.destroy = function () {
-            hub.off();
+            if (hub) {
+                hub.off();
+            }
             try {
                 // remove shortcuts
                 delete context.events;
