@@ -28,7 +28,9 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
     defStart.setHours(defStart.getHours() + 1);
     defEnd.setMinutes(0);
     defEnd.setHours(defEnd.getHours() + 2);
-
+    
+    var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
+    
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
@@ -72,8 +74,29 @@ define('io.ox/calendar/model', ['io.ox/calendar/api',
 
                 return participants;
             }
-            // TODO: Add convenience methods for recurrence handling
-            // TODO: Add convenience methods for turning full day appointments into regular appointments and back
+        },
+        
+        getUpdatedAttributes: function (model) {
+            var attributesToSave = model.changedSinceLoading();
+            attributesToSave.id = model.id;
+            if (!attributesToSave.folder) {
+                attributesToSave.folder = model.get('folder') || model.get('folder_id');
+            }
+            
+            var anyRecurrenceFieldChanged = _(RECURRENCE_FIELDS).any(function (attribute) {
+                console.log(attribute, attributesToSave[attribute], !_.isUndefined(attributesToSave[attribute]));
+                return !_.isUndefined(attributesToSave[attribute]);
+            });
+            
+            if (anyRecurrenceFieldChanged) {
+                _(RECURRENCE_FIELDS).each(function (attribute) {
+                    var value = model.get(attribute);
+                    if (!_.isUndefined(value)) {
+                        attributesToSave[attribute] = value;
+                    }
+                });
+            }
+            return attributesToSave;
         }
     });
 
