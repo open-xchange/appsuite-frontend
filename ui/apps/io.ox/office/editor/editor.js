@@ -2761,13 +2761,13 @@ define('io.ox/office/editor/editor',
         function deleteSelectedImage(selection) {
             var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                 returnImageNode = true,
-                imageNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                imageSpanNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
             // only delete, if imageStartPosition is really an image position
-            if (Utils.getNodeName(imageNode) === 'img') {
+            if (DOM.isImageSpan(imageSpanNode)) {
                 // delete an corresponding div
-                var divNode = imageNode.parentNode.previousSibling;
-                if ((Utils.getNodeName(divNode) === 'div') && $(divNode).hasClass('float')) {
+                var divNode = imageSpanNode.previousSibling;
+                if ((Utils.getNodeName(divNode) === 'div') && ($(divNode).hasClass('float'))) {
                     // removing div node
                     $(divNode).remove();
                 }
@@ -3595,7 +3595,6 @@ define('io.ox/office/editor/editor',
         function implInsertRow(pos, count, insertdefaultcells, referencerow, attrs) {
 
             var localPosition = _.copy(pos, true),
-//                setRowHeight = false,
                 useReferenceRow = _.isNumber(referencerow) ? true : false;
 
             if (! Position.isPositionInTable(paragraphs, localPosition)) {
@@ -3607,10 +3606,6 @@ define('io.ox/office/editor/editor',
             if (!_.isNumber(count)) {
                 count = 1; // setting default for number of rows
             }
-
-//            if ((attrs) && (attrs.height)) {
-//                setRowHeight = true;
-//            }
 
             var tablePos = _.copy(localPosition, true);
             tablePos.pop();
@@ -3944,7 +3939,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((Utils.getNodeName(destPos.node) === 'img') && (destPos.offset === 1)) {
+            } else if ((DOM.isImageSpan(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -3956,12 +3951,8 @@ define('io.ox/office/editor/editor',
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
                     useImageDiv = true,
-                    imageDiv = sourceNode.parentNode.previousSibling,  // img -> span -> div
+                    imageDiv = sourceNode.previousSibling,  // span -> div
                     doMove = true;
-
-                if (Utils.getNodeName(sourceNode) === 'img') {
-                    sourceNode = sourceNode.parentNode; // using image span instead of image node
-                }
 
                 if ((sourceNode) && (destNode)) {
 

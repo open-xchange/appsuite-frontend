@@ -311,11 +311,14 @@ $(document).ready(function () {
             loadCore();
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            require("io.ox/core/session").autoLogin()
-                .done(function () {
+            return require("io.ox/core/session").autoLogin().done(function () {
+                // Set user's language (as opposed to the browser's language)
+                require("io.ox/core/gettext").setLanguage(ox.language);
+                require([ox.base + "/pre-core.js"]).done(function () {
                     gotoCore(true);
-                })
-                .fail(fail);
+                });
+            })
+            .fail(fail);
         } else {
             fail();
         }
@@ -467,11 +470,8 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // Set user's language (as opposed to the browser's language)
-        require("io.ox/core/gettext").setLanguage(ox.language);
-
         // get pre core & server config
-        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
+        require([ox.base + "/src/serverconfig.js"])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;

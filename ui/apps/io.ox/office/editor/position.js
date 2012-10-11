@@ -143,15 +143,18 @@ define('io.ox/office/editor/position',
         var node = domposition.node,
             offset = domposition.offset,
             selectedNodeName = node.nodeName,
-            imageFloatMode = null;
+            imageFloatMode = null,
+            checkImageFloatMode = true;
 
         if (DOM.isFieldSpan(node.parentNode)) {
             offset = 0;
+            checkImageFloatMode = false;
         }
 
         if (DOM.isImageSpan(node)) {
-            imageFloatMode = $(node).data('mode');
             offset = 0;
+            imageFloatMode = $(node).data('mode');
+            checkImageFloatMode = false;
         }
 
         isEndPoint = isEndPoint ? true : false;
@@ -188,21 +191,21 @@ define('io.ox/office/editor/position',
 
         } else {
 
-            if (((node.nodeType === 3) || (Utils.getNodeName(node) === 'span')) && (! imageFloatMode)) {
-                if ($(node).text().length === offset) {
-                    // Checking if an inline image follows
-                    var imageSpanNode = null;
-                    if ((node.parentNode) && (node.parentNode.nextSibling) && (DOM.isImageSpan(node.parentNode.nextSibling))) {
-                        imageSpanNode = node.parentNode.nextSibling;
-                    } else if ((node.nextSibling) && (DOM.isImageSpan(node.nextSibling))) {
-                        imageSpanNode = node.nextSibling;
-                    }
-
-                    if (imageSpanNode !== null) {
-                        imageFloatMode = $(imageSpanNode).data('mode'); // must be 'inline' mode
+            if (checkImageFloatMode) {
+                var localNode = node;
+                if (localNode.nodeType === 3) {
+                    localNode = localNode.parentNode;
+                }
+                if (Utils.getNodeName(localNode) === 'span') {
+                    if ($(localNode).text().length === offset) {
+                        // Checking if an inline image follows
+                        if ((localNode.nextSibling) && (DOM.isImageSpan(localNode.nextSibling))) {
+                            imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
+                        }
                     }
                 }
             }
+
         }
 
         // calculating the logical position for the specified text node, span, or image
