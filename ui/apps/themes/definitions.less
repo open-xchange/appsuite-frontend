@@ -131,6 +131,12 @@
           user-select: @select;
 }
 
+.box-shadow(@shadow) {
+    -webkit-box-shadow: @shadow;
+    -moz-box-shadow: @shadow;
+    box-shadow: @shadow;
+}
+
 .vertical-gradient(@startColor: #888888, @endColor: #333333) {
     background-color: mix(@startColor, @endColor, 60%);
     background-image: -moz-linear-gradient(top, @startColor, @endColor);
