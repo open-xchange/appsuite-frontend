@@ -3419,9 +3419,8 @@ define('io.ox/office/editor/editor',
                 if (endPos[posLength] > 0) {
                     endPos[posLength] -= 1;  // using operation mode when calling implDeleteText directly
                 }
-                if (! Position.positionsAreEqual(startPos, endPos)) {
-                    implDeleteText(startPos, endPos);
-                }
+
+                implDeleteText(startPos, endPos);
 
                 // delete all image divs that are no longer associated with following floated images
                 var localStartPos = _.copy(startPos);
@@ -3433,11 +3432,9 @@ define('io.ox/office/editor/editor',
             startPosition[posLength] = 0;
             var endPosition = _.copy(position, true);
             endPosition[posLength - 1] = startPosition[posLength - 1];
-            if (endPosition[posLength] > 0) {
-                endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
-            }
+            endPosition[posLength] -= 1;  // using operation mode when calling implDeleteText directly
 
-            if (! Position.positionsAreEqual(startPosition, endPosition)) {
+            if (endPosition[posLength] > -1) {
                 implDeleteText(startPosition, endPosition);
             }
 
