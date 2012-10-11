@@ -138,14 +138,13 @@ define('io.ox/files/mediaplayer',
                 this.container.append(
                     $('<div class="mediaplayer_wrapper">').append(
                         $('<div class="mediaplayer_inner">').append(
+                            $('<div class="mediaplayer_buttons pull-right">').append(
+                                $('<button class="btn minimizemediaplayer">').text(gt('Minimize')),
+                                $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
+                            ),
                             this.trackdisplay,
                             this.player,
                             this.playlist
-                        )
-                    ).append(
-                        $('<div class="mediaplayer_buttons">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
                         )
                     )
                 )

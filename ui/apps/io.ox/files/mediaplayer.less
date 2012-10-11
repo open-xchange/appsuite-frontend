@@ -20,8 +20,8 @@
 
 @playerBg:                  rgba(0,0,0,0.2);
 @playerPrimaryColor:        #fff;
-@playerSecondaryColor:      #ddd;
-@playerHighlightColor:      #eee;
+@playerSecondaryColor:      #eee;
+@playerHighlightColor:      #eaeaea;
 @playerHighlightTextColor:  #000;
 
 @playerTextColor:           #111;
@@ -40,40 +40,47 @@
     height:100%;
 
     .mediaplayer_wrapper {
-        position:relative;
         height:100%;
         margin:0 auto;
-        width: @playerWidth + (@playerMargin * 2);
+        width: @playerWidth;
         box-shadow: 0 0 50px 1px #000;
 
         .mediaplayer_inner {
             position: absolute;
-            top:0;
+            top:  0;
             left: 0;
-            right: 0;
-            width: @playerWidth + (@playerMargin * 2);
+            right:0;
+            width: @playerWidth;
             height:100%;
             margin:auto;
             background:@playerPrimaryColor;
+            padding:13px;
+
+            .mediaplayer_buttons {
+                margin-bottom:@playerMargin;
+                button { margin-left:@playerMargin; }
+            }
 
             .mediaplayer_track {
-                height: 150px;
-                margin: @windowTopHeight @playerMargin @playerMargin @playerMargin;
-                background: @playerHighlightColor;
+                height: 120px;
+                display:table-cell;
+                vertical-align: middle;
+                width: 480px;
+                background: @playerSecondaryColor;
+                margin-bottom:@playerMargin;
 
                 i {
-                    font-size:100px;
-                    position:relative;
-                    top: 45px;
-                    left: 30px;
+                    position:absolute;
+                    top:68px;
+                    font-size:75px;
+                    margin-left:40px;
+                    margin-top:30px;
                     color:#ccc;
                 }
 
                 h3 {
-                    position:absolute;
-                    top: @windowTopHeight + 10px;
                     margin-left: 150px;
-                    margin-right: @playerMargin * 2;
+                    width:330px;
                     color:@playerTextColor;
                     font-size: 18px;
                     font-family: OpenSans;
@@ -82,25 +89,23 @@
             }
 
             .mediaplayer_player {
-                position: relative;
-                margin:0 auto;
-                margin-top: @playerMargin;
                 background:@playerSecondaryColor;
                 width:@playerWidth;
+                margin-top:@playerMargin;
+                margin-bottom:@playerMargin;
             }
 
             .mediaplayer_playlist {
-                margin:@playerMargin;
                 overflow-y:scroll;
                 height:100%;
+                margin:0;
+                padding:0;
                 li {
                     list-style:none;
                     background:@playerSecondaryColor;
                     margin-bottom:1px;
-                    padding:5px @playerMargin;
-
                     a {
-                        padding:5px;
+                        padding:@playerMargin;
                         display:block;
                         color:@playerTextColor;
 
@@ -114,19 +119,11 @@
                     }
                     &.active {
                         background-color:@playerSelectionColor;
-                        color:@playerHighlightTextColor;
+                        a {
+                            color:@playerSelectionTextColor;
+                        }
                     }
                 }
-            }
-        }
-
-        .mediaplayer_buttons {
-            position:relative;
-            float:right;
-            margin-top:@playerMargin;
-
-            button {
-                margin-right:@playerMargin;
             }
         }
     }

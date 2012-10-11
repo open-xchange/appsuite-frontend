@@ -116,7 +116,7 @@ define('io.ox/files/icons/perspective',
         id: 'mediaplayer',
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="mediaplayer">').text(gt('Musicplayer'))
+                $('<a href="#" class="mediaplayer">').text(gt('Play audio files'))
                     .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
             );
         }
