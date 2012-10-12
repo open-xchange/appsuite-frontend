@@ -879,8 +879,7 @@ define('io.ox/office/editor/editor',
                 newOperation = {
                     name: Operations.IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
-                    imgurl: imageFragment,
-                    attrs: {inline: true}
+                    imgurl: imageFragment
                 };
 
             applyOperation(newOperation, true, true);
@@ -894,8 +893,7 @@ define('io.ox/office/editor/editor',
                 newOperation = {
                     name: Operations.IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
-                    imgurl: imageURL,
-                    attrs: {inline: true}
+                    imgurl: imageURL
                 };
 
             applyOperation(newOperation, true, true);

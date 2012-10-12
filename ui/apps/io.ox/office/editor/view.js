@@ -396,11 +396,13 @@ define('io.ox/office/editor/view',
         );
 
         // create the tool bars
+/*
         createToolBar('insert', { label: gt('Insert') })
             .addGroup('table/insert', new TableSizeChooser())
             .addSeparator()
             .addButton('image/insert/file', { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image File') })
             .addButton('image/insert/url',  { icon: 'icon-io-ox-image-insert', tooltip: gt('Insert Image URL') });
+*/
 
         createToolBar('format', { label: gt('Format') })
             .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))

@@ -999,14 +999,14 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             left: (offset.left - rootOffset.left - 2) + 'px',
             top: (offset.top - rootOffset.top - 2) + 'px'
         }).append(
-            $('<div>').addClass('handler tl'),
-            $('<div>').addClass('handler t'),
-            $('<div>').addClass('handler tr'),
-            $('<div>').addClass('handler r'),
-            $('<div>').addClass('handler br'),
-            $('<div>').addClass('handler b'),
-            $('<div>').addClass('handler bl'),
-            $('<div>').addClass('handler l')
+            $('<div>').addClass('handle tl'),
+            $('<div>').addClass('handle t'),
+            $('<div>').addClass('handle tr'),
+            $('<div>').addClass('handle r'),
+            $('<div>').addClass('handle br'),
+            $('<div>').addClass('handle b'),
+            $('<div>').addClass('handle bl'),
+            $('<div>').addClass('handle l')
         );
 
         // insert selector box into the root node
