@@ -42,6 +42,7 @@
         
         left: 50%;
         width: @playerWidth;
+        
         margin-left: 0 - (@playerWidth / 2) - @playerMargin;
         padding: @playerMargin;
         
@@ -49,31 +50,26 @@
         .vertical-gradient(#111, #333);
 
         .mediaplayer_buttons {
-            margin-bottom:@playerMargin;
+            margin-bottom: @playerMargin;
+            text-align: right;
             button { margin-left:@playerMargin; }
         }
 
         .mediaplayer_track {
             height: 120px;
-            display:table-cell;
             vertical-align: middle;
-            width: 480px;
+            width: 100%;
             background: @playerTrackColor;
-            margin-bottom: @playerMargin;
 
+            .album { width: 120px; text-align: center; }
+            
             i {
-                position:absolute;
-                top:68px;
-                font-size:75px;
-                margin-left:40px;
-                margin-top:30px;
-                color:#333;
+                font-size: 75px;
+                color: #333;
             }
 
-            h3 {
-                margin-left: 150px;
-                width:330px;
-                color:@playerTextColor;
+            .track {
+                color: @playerTextColor;
                 font-size: 18px;
                 font-family: OpenSans;
                 font-weight: 200;
@@ -83,7 +79,7 @@
         .mediaplayer_player {
 
             background:@playerSecondaryColor;
-            width:@playerWidth;
+            width: 100%;
             margin-bottom:@playerMargin;
 
             // MediaElement Container
@@ -136,6 +132,10 @@
                     padding:@playerMargin;
                     display:block;
                     color:@playerTextColor;
+                    
+                    hite-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
 
                     &:hover {
                         text-decoration:none;
@@ -166,6 +166,7 @@
     from { color: #fff; }
       to { color: #bbb; }
 }
+
 #io-ox-topbar .launcher.minimizedmediaplayer i {
     -moz-animation-direction: alternate;
     -moz-animation-duration: 1.25s;
@@ -179,3 +180,10 @@
     -webkit-animation-timing-function: ease-in-out;
 }
 
+@media (max-width: 700px) {
+    .mediaplayer_container .mediaplayer_inner {
+        @width: 320px - 2 * @playerMargin;
+        width: @width;
+        margin-left: 0 - @width / 2 - @playerMargin;
+    }
+}
