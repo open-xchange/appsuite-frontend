@@ -253,7 +253,7 @@ define("io.ox/core/main",
                     .on('click', function () {
                         // Maximize
                         if (BigScreen.enabled) {
-                            BigScreen.request();
+                            BigScreen.toggle();
                         }
                     })
                 );

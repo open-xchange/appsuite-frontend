@@ -1218,7 +1218,7 @@ define("io.ox/core/desktop",
                     win.nodes.fullscreenButton.show().on('click', function () {
                         // Maximize
                         if (BigScreen.enabled) {
-                            BigScreen.request(win.nodes.outer.get(0));
+                            BigScreen.toggle(win.nodes.outer.get(0));
                         }
                     });
                 }

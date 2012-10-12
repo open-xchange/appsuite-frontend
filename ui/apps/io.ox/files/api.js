@@ -71,7 +71,7 @@ define("io.ox/files/api",
             },
             search: {
                 action: "search",
-                columns: "20,1,702",
+                columns: "20,1,702,703",
                 sort: "700",
                 order: "asc",
                 getData: function (query) {
@@ -85,6 +85,10 @@ define("io.ox/files/api",
                 return data;
             },
             list: function (data) {
+                _(data).each(fixContentType);
+                return data;
+            },
+            search: function (data) {
                 _(data).each(fixContentType);
                 return data;
             }
