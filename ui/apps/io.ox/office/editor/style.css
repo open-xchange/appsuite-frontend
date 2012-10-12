@@ -136,11 +136,12 @@
         /* objects */
         span.inline, span.float {
             position: relative;
+            overflow: hidden;
 
             /* crop object contents at object border */
             > div.object {
-                overflow: hidden;
                 position: relative;
+                overflow: hidden;
 
                 > * {
                     position: relative;
