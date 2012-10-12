@@ -170,9 +170,9 @@ define("io.ox/core/desktop",
                                         } else {
                                             grid.refresh();
                                         }
-                                        // update hash
-                                        _.url.hash('folder', folder);
                                     }
+                                    // update hash
+                                    _.url.hash('folder', folder);
                                     self.trigger('folder:change', folder, data);
                                     def.resolve(data);
                                 })
