@@ -11,7 +11,10 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/links'], function (ext, extLinks) {
+define('io.ox/core/commons',
+    ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
+     'gettext!io.ox/core'], function (ext, extLinks, gt) {
 
     'use strict';
 
@@ -405,6 +408,7 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
         vsplit: (function () {
 
             var click = function (e) {
+                e.preventDefault();
                 $(this).closest('.vsplit').addClass('vsplit-reverse').removeClass('vsplit-slide');
             };
 
@@ -423,7 +427,7 @@ define('io.ox/core/commons', ['io.ox/core/extensions', 'io.ox/core/extPatterns/l
                     // navigation
                     $('<div class="rightside-navbar">').append(
                         $('<a href="#" class="btn">').append(
-                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt('Back')
+                            $('<i class="icon-chevron-left">'), $.txt(' '), $.txt(gt('Back'))
                         ).on('click', click)
                     ),
                     // right

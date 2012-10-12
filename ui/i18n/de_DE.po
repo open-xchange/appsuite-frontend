@@ -2800,8 +2800,8 @@ msgid "All attachments"
 msgstr "Alle Anlagen"
 
 #: manually added
-msgid ""
-msgstr ""
+msgid "Back"
+msgstr "Zurück"
 
 #: manually added
 msgid ""
