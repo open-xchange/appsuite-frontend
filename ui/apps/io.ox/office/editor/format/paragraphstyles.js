@@ -15,8 +15,9 @@ define('io.ox/office/editor/format/paragraphstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/format/lineheight',
-     'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, LineHeight, StyleSheets) {
+     'io.ox/office/editor/format/stylesheets',
+     'io.ox/office/editor/format/color'
+    ], function (Utils, DOM, LineHeight, StyleSheets, Color) {
 
     'use strict';
 
@@ -55,7 +56,10 @@ define('io.ox/office/editor/format/paragraphstyles',
             parafill: {
                 def: '',
                 set: function (element, value) {
-                    element.css('background-color', value && value.rgbColor ? ('#' + value.rgbColor) : 'transparent');
+                    var rgbColor;
+                    if (value.type)
+                        rgbColor = Color.getRGBColor(value, this.getDocumentStyles().getThemes());
+                    element.css('background-color', rgbColor ? ('#' + rgbColor) : 'transparent');
                 }
             }
 

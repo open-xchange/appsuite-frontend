@@ -16,8 +16,9 @@ define('io.ox/office/editor/format/characterstyles',
      'io.ox/office/tk/fonts',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/format/lineheight',
-     'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, Fonts, DOM, LineHeight, StyleSheets) {
+     'io.ox/office/editor/format/stylesheets',
+     'io.ox/office/editor/format/color'
+    ], function (Utils, Fonts, DOM, LineHeight, StyleSheets, Color) {
 
     'use strict';
 
@@ -87,7 +88,10 @@ define('io.ox/office/editor/format/characterstyles',
             color: {
                 def: '000000',
                 set: function (element, value) {
-                    element.css('color', '#' + value.rgbColor);
+                    var rgbColor;
+                    if (value.type)
+                        rgbColor = Color.getRGBColor(value, this.getDocumentStyles().getThemes());
+                    element.css('color', '#' + rgbColor);
                 }
             }
         };
