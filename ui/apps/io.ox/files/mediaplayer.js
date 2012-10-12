@@ -34,7 +34,7 @@ define('io.ox/files/mediaplayer',
 
         container: $('<div class="abs mediaplayer_container">'),
         trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
-                '<div class="css-table-cell album"></div><div class="css-table-cell track"></div>' +
+                '<div class="css-table-cell album"></div><div class="css-table-cell"><div class="track"></div></div>' +
                 '</div></div>'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),

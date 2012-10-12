@@ -70,9 +70,12 @@
             
             .track {
                 color: @playerTextColor;
-                font-size: 18px;
                 font-family: OpenSans;
+                font-size: 18px;
+                line-height: 18px;
                 font-weight: 200;
+                max-height: 54px;
+                overflow: hidden;
             }
         }
 
@@ -133,7 +136,7 @@
                     display:block;
                     color:@playerTextColor;
                     
-                    hite-space: nowrap;
+                    white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
 
@@ -190,12 +193,14 @@
         margin-left: 0 - @width / 2 - @playerMargin;
     }
     
-    .mediaplayer_container .mediaplayer_inner .mediaplayer_track .album {
-        width: 90px;
-        font-size: 50px;
-    }
-    
-    .mediaplayer_container .mediaplayer_inner .mediaplayer_track .track {
-        font-size: 14px;
+    .mediaplayer_container .mediaplayer_inner {
+        .mediaplayer_track {
+            height: 60px;
+            .album { width: 70px; font-size: 50px; }
+            .track { font-size: 14px; }
+        }    
+        .mediaplayer_playlist {
+            top: 219px - 60px;
+        }
     }
 }

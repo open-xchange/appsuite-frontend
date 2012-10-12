@@ -158,8 +158,12 @@
          * Redirect
          */
         redirect: function (path) {
-            var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
-            location.href = href;
+            location.href = _.url.get(path);
+        },
+
+        get: function (path) {
+            var l = location;
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
         }
     };
 
