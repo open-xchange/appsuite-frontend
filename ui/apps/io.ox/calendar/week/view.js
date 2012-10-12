@@ -15,9 +15,9 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
-     'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery-ui.min.js',
+     'apps/io.ox/core/tk/jquery.ui.touch-punch.min.js'], function (util, date, gt, folder, views) {
 
     'use strict';
 
@@ -809,8 +809,8 @@ define('io.ox/calendar/week/view',
                         var el = $(this),
                             d = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
-                            //app = _.cid(el.data('cid') + ''),
-                            tmpTS = self.getTimeFromDateTag(d.my.day, true);
+                            // TODO: FIX update call to UTC
+                            tmpTS = date.Local.utc(self.getTimeFromDateTag(d.my.day));
                         d.my.all.removeClass('opac');
                         switch (d.my.handle) {
                         case 'n':
@@ -1086,11 +1086,8 @@ define('io.ox/calendar/week/view',
         },
 
         // get timestamp from date marker
-        getTimeFromDateTag: function (days, utc)  {
-            if (utc) {
-                return date.Local.utc(this.curTimeUTC + (days * date.DAY));
-            }
-            return this.curTimeUTC + (days * date.DAY);
+        getTimeFromDateTag: function (tag)  {
+            return this.curTimeUTC + (tag * date.DAY);
         },
 
         // calc daily timestamp from mouse position

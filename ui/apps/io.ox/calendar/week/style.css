@@ -175,7 +175,6 @@
     }
     
     .timeslot {
-        min-width: 120px;
         border-bottom: 1px solid #ccc;
     }
     
@@ -239,6 +238,8 @@
     .weekday {
         display: inline-block;
         padding-left: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .appointment {
