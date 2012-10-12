@@ -629,18 +629,19 @@ define('io.ox/calendar/week/view',
                         pos = self.calcPos(app),
                         idx = Math.min(app.pos.max, positions.length),
                         width = Math.min((self.appWidth / idx) * (1 + (self.overlap * (idx - 1))), self.appWidth),
-                        left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0;
+                        left = idx > 1 ? ((self.appWidth - width) / (idx - 1)) * app.pos.index : 0,
+                        border = (left > 0 || (left === 0 && width < self.appWidth));
 
                     app.css({
                         top: pos.top,
                         left: left + '%',
-                        height: pos.height,
+                        height: pos.height - (border ? 0 : 1),
                         width: width + '%',
                         minHeight: self.cellHeight + 'px',
                         maxWidth: self.appWidth + '%',
                         zIndex: j
                     })
-                    .addClass((left > 0 || (left === 0 && width < self.appWidth)) ? 'border' : '');
+                    .addClass(border ? 'border' : '');
                 }
                 self.$('.week-container ' + day).append(apps);
             });
