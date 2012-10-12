@@ -15,8 +15,9 @@ define('io.ox/calendar/week/view',
      'io.ox/core/date',
      'gettext!io.ox/calendar/view',
      'io.ox/core/api/folder',
+     'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, gt, folder) {
+     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, gt, folder, views) {
 
     'use strict';
 
@@ -60,10 +61,10 @@ define('io.ox/calendar/week/view',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
             'click .appointment': 'onClickAppointment',
-            'dblclick .week-container>.day' : 'onCreateAppointment',
-            'dblclick .fulltime>.day': 'onCreateAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment',
+            'dblclick .week-container>.day' : 'onCreateAppointment',
+            'dblclick .fulltime>.day': 'onCreateAppointment',
             'click .toolbar .control.next': 'onControlView',
             'click .toolbar .control.prev': 'onControlView',
             'click .toolbar .link.today': 'onControlView',
@@ -161,10 +162,6 @@ define('io.ox/calendar/week/view',
                 return;
             }
 
-            var curTar = $(e.currentTarget),
-                curDay = parseInt(curTar.attr('date'), 10),
-                mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
-
             // switch mouse events
             switch (e.type) {
             case 'mousedown':
@@ -174,6 +171,11 @@ define('io.ox/calendar/week/view',
                 break;
 
             case 'mousemove':
+
+                var curTar = $(e.currentTarget),
+                    curDay = parseInt(curTar.attr('date'), 10),
+                    mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
+
                 // normal move
                 if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
@@ -182,7 +184,6 @@ define('io.ox/calendar/week/view',
                         dayChange = curDay !== lData.lastDay,
                         dayDiff = Math.abs(curDay - lData.startDay),
                         lassoStart = this.roundToGrid(lData.start, (down && dayDiff === 0) || right ? 'n' : 's');
-
                     if (dayDiff > 0) {
 
                         if (dayChange) {
@@ -246,10 +247,11 @@ define('io.ox/calendar/week/view',
                         });
                         lData.start = lassoStart;
                     }
-                    lData.stop = down ? this.roundToGrid(mouseY, 's') : this.roundToGrid(mouseY, 'n');
+                    lData.stop = this.roundToGrid(mouseY, (down && dayDiff === 0) || right ? 's' : 'n');
                     lData.lastDay = curDay;
                 }
 
+                // first move
                 if (this.lasso === true && $(e.target).is('.timeslot')) {
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
@@ -276,8 +278,16 @@ define('io.ox/calendar/week/view',
             case 'mouseup':
                 if (_.isObject(this.lasso) && e.which === 1) {
                     var lData = this.lasso.data(),
-                        start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.start),
-                        end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay)) + this.getTimeFromPos(lData.stop);
+                        start = this.getTimeFromDateTag(Math.min(lData.startDay, lData.lastDay)),
+                        end = this.getTimeFromDateTag(Math.max(lData.startDay, lData.lastDay));
+
+                    if (lData.startDay === lData.lastDay) {
+                        start += this.getTimeFromPos(Math.min(lData.start, lData.stop));
+                        end += this.getTimeFromPos(Math.max(lData.start, lData.stop));
+                    } else {
+                        start += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.stop : lData.start);
+                        end += this.getTimeFromPos(lData.startDay > lData.lastDay ? lData.start : lData.stop);
+                    }
 
                     // delete div and reset object
                     $.each(lData.helper, function (i, el) {
@@ -319,6 +329,20 @@ define('io.ox/calendar/week/view',
                         .height(this.cellHeight * this.fragmentation)
                 );
             }
+
+//            var Blubview = views.point('io.ox/calendar/week/section').createView({
+//                tagName: 'div',
+//                className: 'lable',
+//                render: function () {
+//                    var self = this;
+//                    this.point.each(function (extension) {
+//                        extension.invoke('draw', this.el, self.baton);
+//                    });
+//                    return this;
+//                }
+//            });
+//
+//            new Blubview();
 
             // create panes
             this.pane = $('<div>')
