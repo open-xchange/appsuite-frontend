@@ -41,16 +41,16 @@ define('io.ox/files/mediaplayer',
 
         config: {
             list: [],
-            app: null
+            app: null,
+            videoSupport: false
         },
 
         init: function (config) {
-
-            $.extend(this.config, config);
+            _.extend(this.config, config);
             this.app = config.app;
             this.win = this.app.getWindow();
             this.restore();
-            this.list = this.filterMediaList(config.list);
+            this.list = this.filterMediaList(config.list, config.videoSupport);
             if (this.list.length > 0)
             {
                 this.show();
@@ -67,7 +67,7 @@ define('io.ox/files/mediaplayer',
                 e.preventDefault();
                 self.loadTrack($(this).attr('href'), $(this).attr('data-mimetype'));
                 $(this).parent().addClass('active').siblings().removeClass('active');
-                self.drawTrackInfo($(this).text());
+                if (!self.config.videoSupport) self.drawTrackInfo($(this).text());
             });
 
             $('.closemediaplayer').on('click', $.proxy(this.close, this));
@@ -87,9 +87,15 @@ define('io.ox/files/mediaplayer',
             this.mediaelement.play();
         },
 
-        filterMediaList: function (list) {
+        filterMediaList: function (list, videoSupport) {
             return $.grep(list, function (o) {
-                return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
+                if (videoSupport) {
+                    return (/\.(mp4|mov|avi|wmv|mpe?g|ogv|webm)$/i).test(o.filename);
+                }
+                else
+                {
+                    return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
+                }
             });
         },
 
@@ -106,7 +112,15 @@ define('io.ox/files/mediaplayer',
         },
 
         drawTrackInfo: function (data) {
-            this.trackdisplay.find('h3').text(data);
+            if (!this.config.videoSupport) this.trackdisplay.find('h3').text(data);
+        },
+
+        drawPlayer: function (url, mimetype) {
+            var el = '<audio>';
+            if (this.config.videoSupport) el = '<video>';
+            this.player.empty().append(
+                $(el, { src: url, type: mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
+            );
         },
 
         drawItem: function (file, i) {
@@ -125,9 +139,7 @@ define('io.ox/files/mediaplayer',
             else
             {
                 if (i === 0) {
-                    this.player.empty().append(
-                        $('<audio>', { src: url, type: file.file_mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
-                    );
+                    this.drawPlayer(url, file.file_mimetype);
                     this.drawTrackInfo(file.filename);
                     item.addClass('active');
                 }
@@ -150,6 +162,7 @@ define('io.ox/files/mediaplayer',
 
         show: function () {
             var self = this;
+            var features = ['playpause', 'progress', 'current', 'volume'];
             if (this.player.find('.mejs-audio').length > 0)
             {
                 this.getItems();
@@ -170,15 +183,24 @@ define('io.ox/files/mediaplayer',
                     )
                 );
                 this.win.idle();
-                this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
+                if (this.config.videoSupport) {
+                    this.trackdisplay.remove();
+                    this.container.find('.minimizemediaplayer').remove();
+                    features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
+                }
+                else
+                {
+                    this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
+                }
                 this.getItems();
                 this.playlist.sortable({ axis: 'y' });
-                $('video, audio').mediaelementplayer({
+                this.player.find('video, audio').mediaelementplayer({
+                    height: 500,
                     width: 480,
                     audioWidth: 480,
                     plugins: ['flash', 'silverlight'],
                     timerRate: 250,
-                    features: ['playpause', 'progress', 'current', 'volume'],
+                    features: features,
                     keyActions: [{
                         keys: [32, 179], // SPACE
                         action: function (player, media) {
@@ -240,9 +262,16 @@ define('io.ox/files/mediaplayer',
         },
 
         restore: function () {
-            $('#io-ox-topbar > .minimizedmediaplayer').remove();
-            this.list = [];
-            this.container.show();
+            if (this.config.videoSupport) {
+                this.close();
+            }
+            else
+            {
+                $('#io-ox-topbar > .minimizedmediaplayer').remove();
+                this.list = [];
+                this.container.show();
+            }
+
         },
 
         close: function () {

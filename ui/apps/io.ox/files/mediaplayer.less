@@ -33,18 +33,18 @@
 
 
 .mediaplayer_container {
-    
+
     z-index: 10001; /* at least 1 higher than slideshow overlay */
-    
+
     background-color:@playerBg;
-    
+
     .mediaplayer_inner {
-        
+
         left: 50%;
         width: @playerWidth;
         margin-left: 0 - (@playerWidth / 2) - @playerMargin;
         padding: @playerMargin;
-        
+
         .box-shadow(0px 0px 50px 5px #000);
         .vertical-gradient(#111, #333);
 
@@ -85,14 +85,16 @@
             background:@playerSecondaryColor;
             width:@playerWidth;
             margin-bottom:@playerMargin;
-
+            .mejs-video {
+                margin-top:43px;
+            }
             // MediaElement Container
             .mejs-container {
                 background: #08c;
 
                 // Controls Background
                 .mejs-controls {
-                
+
                     @mediaplayerSliderBackground: darken(@link-color, 10%);
 
                     background-color: #333;
@@ -119,15 +121,10 @@
         }
 
         .mediaplayer_playlist {
-            
-            position: absolute;
-            top: 219px;
-            left: 13px;
-            right: 13px;
-            bottom: 13px;
+
             margin: 0;
             overflow-y: auto;
-            
+
             li {
                 list-style:none;
                 background:@playerSecondaryColor;
