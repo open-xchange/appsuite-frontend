@@ -33,7 +33,9 @@ define('io.ox/files/mediaplayer',
         mediaelement: null,
 
         container: $('<div class="abs mediaplayer_container">'),
-        trackdisplay: $('<div class="mediaplayer_track">'),
+        trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
+                '<div class="css-table-cell album"></div><div class="css-table-cell track"></div>' +
+                '</div></div>'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
 
@@ -104,7 +106,7 @@ define('io.ox/files/mediaplayer',
         },
 
         drawTrackInfo: function (data) {
-            this.trackdisplay.find('h3').text(data);
+            this.trackdisplay.find('.track').text(data);
         },
 
         drawItem: function (file, i) {
@@ -138,7 +140,7 @@ define('io.ox/files/mediaplayer',
             this.win.busy().nodes.outer.append(
                 this.container.append(
                     $('<div class="atb mediaplayer_inner">').append(
-                        $('<div class="mediaplayer_buttons pull-right">').append(
+                        $('<div class="mediaplayer_buttons">').append(
                             $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
                             $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
                         ),
@@ -149,12 +151,12 @@ define('io.ox/files/mediaplayer',
                 )
             );
             this.win.idle();
-            this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
+            this.trackdisplay.find('.album').empty().append($('<i class="icon-music">'));
             this.getItems();
             this.playlist.sortable({ axis: 'y' });
             $('video, audio').mediaelementplayer({
-                width: 480,
-                audioWidth: 480,
+                // since we cannot resize later on ...
+                audioWidth: $(window).width() <= 400 ? 294 : 480,
                 plugins: ['flash', 'silverlight'],
                 timerRate: 250,
                 features: ['playpause', 'progress', 'current', 'volume'],
@@ -219,7 +221,7 @@ define('io.ox/files/mediaplayer',
         close: function () {
             $('#io-ox-topbar > .minimizedmediaplayer').remove();
             this.player.empty().remove();
-            this.trackdisplay.empty().remove();
+            //this.trackdisplay.empty().remove(); // really?
             this.playlist.empty().remove();
             this.container.empty().show().remove();
             this.list = [];
