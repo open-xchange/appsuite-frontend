@@ -15,8 +15,9 @@ define('io.ox/office/editor/format/tablecellstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
+     'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, StyleSheets) {
+    ], function (Utils, DOM, Table, Color, StyleSheets) {
 
     'use strict';
 
@@ -31,11 +32,88 @@ define('io.ox/office/editor/format/tablecellstyles',
                 set: function (element, gridspan) {
                     element.attr('colspan', gridspan);
                 }
+            },
+
+            /**
+             * The borders of the table cell.
+             * top, left, right, bottom, insideh, insidev
+             * get style ('none', 'single', 'double', 'dotted',
+             * 'dashed', 'outset', 'inset'), color and width.
+             * html supports: 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'
+             * element.css('border','3px dashed #00ff00');
+             */
+
+            /**
+             * Style, width and color of the left table cell border
+             */
+            borderleft: {
+                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
+                set: function (element, borderleft) {
+                    var border = getCssBorderAttributes(borderleft, this.getDocumentStyles());
+                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                }
+            },
+
+            /**
+             * Style, width and color of the right table cell border
+             */
+            borderright: {
+                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
+                set: function (element, borderright) {
+                    var border = getCssBorderAttributes(borderright, this.getDocumentStyles());
+                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                }
+            },
+
+            /**
+             * Style, width and color of the top table cell border
+             */
+            bordertop: {
+                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
+                set: function (element, bordertop) {
+                    var border = getCssBorderAttributes(bordertop, this.getDocumentStyles());
+                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                }
+            },
+
+            /**
+             * Style, width and color of the bottom table cell border
+             */
+            borderbottom: {
+                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
+                set: function (element, borderbottom) {
+                    var border = getCssBorderAttributes(borderbottom, this.getDocumentStyles());
+                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                }
             }
 
         };
 
     // private global functions ===============================================
+
+    function getCssBorderAttributes(border, documentStyles) {
+
+        var style = '',
+            width = '',
+            color = '';
+
+        if ((border) && (border.style)) {
+            style = border.style;
+            if (style === 'single') {
+                style = 'solid';
+            }
+        }
+
+        if ((border) && (border.width)) {
+            width = Utils.convertHmmToCssLength(width, 'px');
+        }
+
+        if ((border) && (border.color)) {
+            color = '#' + Color.getRgbColor(border.color, documentStyles.getTheme());
+        }
+
+        return { style: style, width: width, color: color };
+    }
 
     /**
      * Will be called for every table cell element whose attributes have been
