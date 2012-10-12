@@ -298,6 +298,24 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: 'multiple',
+        action: function (list)
+        {
+            _(list).each(function (data) {
+                data.url = api.getUrl(data, 'view');
+            });
+            require(['io.ox/files/carousel'], function (slideshow) {
+                slideshow.init({
+                    fullScreen: false,
+                    list: list,
+                    attachmentMode: true
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/download-attachment', {
         id: 'download',
         requires: 'some',
@@ -661,6 +679,13 @@ define('io.ox/mail/actions',
         index: 100,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'slideshow',
+        index: 150,
+        label: gt('Slideshow'),
+        ref: 'io.ox/mail/actions/slideshow-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({

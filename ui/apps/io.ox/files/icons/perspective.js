@@ -76,7 +76,8 @@ define('io.ox/files/icons/perspective',
             carousel.init({
                 fullScreen: !!e.data.fullScreen,
                 list: app.getFiles(),
-                app: app
+                app: app,
+                attachmentMode: false
             });
         });
     }
