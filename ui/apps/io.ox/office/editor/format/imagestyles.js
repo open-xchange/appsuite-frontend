@@ -66,6 +66,14 @@ define('io.ox/office/editor/format/imagestyles',
              */
             marginr: { def: 0 },
 
+            cropw: { def: 0 },
+
+            croph: { def: 0 },
+
+            cropx: { def: 0 },
+
+            cropy: { def: 0 },
+
             /**
              * If set to true, the image is rendered as inline element ('as
              * character'), otherwise it is anchored relative to another
@@ -151,14 +159,30 @@ define('io.ox/office/editor/format/imagestyles',
             verticalOffsetNode = span.prev('div.float'),
             // first text node in paragraph
             firstTextNode = null,
-            // current image width, in 1/100 mm
-            imageWidth = Utils.convertLengthToHmm(span.width(), 'px'),
+            // current object width, in 1/100 mm
+            objectWidth = Utils.convertLengthToHmm(span.width(), 'px'),
             // offset from top/left/right margin of paragraph element, in 1/100 mm
             topOffset = 0, leftOffset = 0, rightOffset = 0,
             // margins to be applied at the image
             topMargin = 0, bottomMargin = 0, leftMargin = 0, rightMargin = 0,
             // text wrapping side (left/right/none)
             wrapMode = 'none';
+
+        // cropping
+
+        if ((attributes.cropw > 0) && (attributes.croph > 0)) {
+            // TODO: validation
+            span.children('div.object').css({
+                width: Utils.convertHmmToCssLength(attributes.cropw, 'px', 0),
+                height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0),
+                marginTop: Utils.convertHmmToCssLength(-attributes.cropy, 'px', 0),
+                marginLeft: Utils.convertHmmToCssLength(-attributes.cropx, 'px', 0)
+            });
+        } else {
+            // TODO: remove cropping
+        }
+
+        // position
 
         if (attributes.inline) {
 
@@ -231,10 +255,10 @@ define('io.ox/office/editor/format/imagestyles',
             if (attributes.anchorhbase === 'column') {
                 switch (attributes.anchorhalign) {
                 case 'center':
-                    leftOffset = (paraWidth - imageWidth) / 2;
+                    leftOffset = (paraWidth - objectWidth) / 2;
                     break;
                 case 'right':
-                    leftOffset = paraWidth - imageWidth;
+                    leftOffset = paraWidth - objectWidth;
                     break;
                 case 'offset':
                     leftOffset = attributes.anchorhoffset;
@@ -246,7 +270,7 @@ define('io.ox/office/editor/format/imagestyles',
                 // TODO: other anchor bases (page/character/margins/...)
                 leftOffset = 0;
             }
-            rightOffset = paraWidth - leftOffset - imageWidth;
+            rightOffset = paraWidth - leftOffset - objectWidth;
 
             // determine text wrapping side
             if (isTextWrapped(attributes.textwrapmode)) {
