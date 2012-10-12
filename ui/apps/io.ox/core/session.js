@@ -15,16 +15,22 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
 
     'use strict';
 
+    var getBrowserLanguage = function () {
+        var language = (navigator.language || navigator.userLanguage).substr(0, 2);
+        return _.chain(ox.serverConfig.languages).keys().find(function (id) {
+                return id.substr(0, 2) === language;
+            }).value();
+    };
+
+    var check = function (language) {
+        return language in ox.serverConfig.languages ? language : false;
+    };
+
     var set = function (data) {
         ox.session = data.session || '';
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
-        ox.language = data.locale || 'en_US';
-        // check language if possible
-        if (ox.serverConfig && !(ox.language in ox.serverConfig.languages)) {
-            ox.language = 'en_US';
-            console.warn('Invalid language', data.locale, 'Fallback to en_US');
-        }
+        ox.language = check(data.locale) || check(getBrowserLanguage()) || 'en_US';
     };
 
     var that = {
