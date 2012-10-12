@@ -293,7 +293,7 @@ utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
 
 // jQuery UI
 
-utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.ui.touch-punch.min.js"]),
+utils.copy(utils.list("lib", "jquery-ui.min.js"),
     { to: utils.dest("apps/io.ox/core/tk") });
 
 //Mediaelement.js

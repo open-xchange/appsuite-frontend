@@ -31,6 +31,7 @@ define('io.ox/files/mediaplayer',
         app: null,
         win: null,
         mediaelement: null,
+        currenttrack: null,
 
         container: $('<div class="abs mediaplayer_container">'),
         trackdisplay: $('<div class="mediaplayer_track css-table"><div class="css-table-row">' +
@@ -42,16 +43,16 @@ define('io.ox/files/mediaplayer',
 
         config: {
             list: [],
-            app: null
+            app: null,
+            videoSupport: false
         },
 
         init: function (config) {
-
-            $.extend(this.config, config);
+            _.extend(this.config, config);
             this.app = config.app;
             this.win = this.app.getWindow();
-            this.close();
-            this.list = this.filterMediaList(config.list);
+            this.restore();
+            this.list = this.filterMediaList(config.list, config.videoSupport);
             if (this.list.length > 0)
             {
                 this.show();
@@ -68,7 +69,7 @@ define('io.ox/files/mediaplayer',
                 e.preventDefault();
                 self.loadTrack($(this).attr('href'), $(this).attr('data-mimetype'));
                 $(this).parent().addClass('active').siblings().removeClass('active');
-                self.drawTrackInfo($(this).text());
+                if (!self.config.videoSupport) self.drawTrackInfo($(this).text());
             });
 
             $('.closemediaplayer').on('click', $.proxy(this.close, this));
@@ -81,15 +82,22 @@ define('io.ox/files/mediaplayer',
         },
 
         loadTrack: function (url, mimetype) {
+            this.currentTrack = url;
             this.mediaelement.pause();
             this.mediaelement.setSrc([{src: url, type: mimetype}]);
             this.mediaelement.load();
             this.mediaelement.play();
         },
 
-        filterMediaList: function (list) {
+        filterMediaList: function (list, videoSupport) {
             return $.grep(list, function (o) {
-                return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
+                if (videoSupport) {
+                    return (/\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm)$/i).test(o.filename);
+                }
+                else
+                {
+                    return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename);
+                }
             });
         },
 
@@ -106,18 +114,37 @@ define('io.ox/files/mediaplayer',
         },
 
         drawTrackInfo: function (data) {
-            this.trackdisplay.find('.track').text(data);
+            if (!this.config.videoSupport) this.trackdisplay.find('.track').text(data);
+        },
+
+        drawPlayer: function (url, mimetype) {
+            var el = '<audio>';
+            if (this.config.videoSupport) el = '<video>';
+            this.player.empty().append(
+                $(el, { src: url, type: mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
+            );
         },
 
         drawItem: function (file, i) {
             var url = this.addURL(file);
             var item = $('<li>').append($('<a>', { href: url, 'data-mimetype': file.file_mimetype }).text(file.filename));
-            if (i === 0) {
-                this.player.empty().append(
-                    $('<audio>', { src: url, type: file.file_mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
-                );
-                this.drawTrackInfo(file.filename);
-                item.addClass('active');
+            if (this.player.find('.mejs-audio').length > 0)
+            {
+                if (i === 0) {
+                    this.playlist.empty();
+                }
+                if (this.currentTrack === url)
+                {
+                    item.addClass('active');
+                }
+            }
+            else
+            {
+                if (i === 0) {
+                    this.drawPlayer(url, file.file_mimetype);
+                    this.drawTrackInfo(file.filename);
+                    item.addClass('active');
+                }
             }
             this.playlist.append(item);
         },
@@ -137,79 +164,97 @@ define('io.ox/files/mediaplayer',
 
         show: function () {
             var self = this;
-            this.win.busy().nodes.outer.append(
-                this.container.append(
-                    $('<div class="atb mediaplayer_inner">').append(
-                        $('<div class="mediaplayer_buttons">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
-                        ),
-                        this.trackdisplay,
-                        this.player,
-                        this.playlist
+            var features = ['playpause', 'progress', 'current', 'volume'];
+            if (this.player.find('.mejs-audio').length > 0)
+            {
+                this.getItems();
+            }
+            else
+            {
+                this.win.busy().nodes.outer.append(
+                    this.container.append(
+                        $('<div class="atb mediaplayer_inner">').append(
+                            $('<div class="mediaplayer_buttons pull-right">').append(
+                                $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
+                                $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
+                            ),
+                            this.trackdisplay,
+                            this.player,
+                            this.playlist
+                        )
                     )
-                )
-            );
-            this.win.idle();
-            this.trackdisplay.find('.album').empty().append($('<i class="icon-music">'));
-            this.getItems();
-            this.playlist.sortable({ axis: 'y' });
-            $('video, audio').mediaelementplayer({
-                // since we cannot resize later on ...
-                audioWidth: $(window).width() <= 400 ? 294 : 480,
-                plugins: ['flash', 'silverlight'],
-                timerRate: 250,
-                features: ['playpause', 'progress', 'current', 'volume'],
-                keyActions: [{
-                    keys: [32, 179], // SPACE
-                    action: function (player, media) {
-                        if (media.paused || media.ended) {
-                            media.play();
-                        } else {
-                            media.pause();
-                        }
-                    }
-                },
-                {
-                    keys: [39, 228], // RIGHT
-                    action: function (player, media) {
-                        var newVolume = Math.min(media.volume + 0.1, 1);
-                        media.setVolume(newVolume);
-                    }
-                },
-                {
-                    keys: [37, 227], // LEFT
-                    action: function (player, media) {
-                        var newVolume = Math.max(media.volume - 0.1, 0);
-                        media.setVolume(newVolume);
-                    }
-                },
-                {
-                    keys: [38], // UP
-                    action: function (player, media) {
-                        self.selectTrack('prev');
-                    }
-                },
-                {
-                    keys: [40], // DOWN
-                    action: function (player, media) {
-                        self.selectTrack('next');
-                    }
-                }],
-                success: function (me, domObject) {
-                    self.mediaelement = me;
-                    self.mediaelement.addEventListener('ended', function () {
-                        self.selectTrack('next');
-                    }, false);
+                );
+                this.win.idle();
+                if (this.config.videoSupport) {
+                    this.trackdisplay.remove();
+                    this.container.find('.minimizemediaplayer').remove();
+                    features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
                 }
-            });
+                else
+                {
+                    this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
+                }
+                this.getItems();
+                this.playlist.sortable({ axis: 'y' });
+                this.player.find('video, audio').mediaelementplayer({
+                    // since we cannot resize later on ...
+                    audioWidth: $(window).width() <= 400 ? 294 : 480,
+                    height: 500,
+                    plugins: ['flash', 'silverlight'],
+                    timerRate: 250,
+                    features: features,
+                    keyActions: [{
+                        keys: [32, 179], // SPACE
+                        action: function (player, media) {
+                            if (media.paused || media.ended) {
+                                media.play();
+                            } else {
+                                media.pause();
+                            }
+                        }
+                    },
+                    {
+                        keys: [39, 228], // RIGHT
+                        action: function (player, media) {
+                            var newVolume = Math.min(media.volume + 0.1, 1);
+                            media.setVolume(newVolume);
+                        }
+                    },
+                    {
+                        keys: [37, 227], // LEFT
+                        action: function (player, media) {
+                            var newVolume = Math.max(media.volume - 0.1, 0);
+                            media.setVolume(newVolume);
+                        }
+                    },
+                    {
+                        keys: [38], // UP
+                        action: function (player, media) {
+                            self.selectTrack('prev');
+                        }
+                    },
+                    {
+                        keys: [40], // DOWN
+                        action: function (player, media) {
+                            self.selectTrack('next');
+                        }
+                    }],
+                    success: function (me, domObject) {
+                        self.mediaelement = me;
+                        self.mediaelement.addEventListener('ended', function () {
+                            self.selectTrack('next');
+                        }, false);
+                    }
+                });
+            }
         },
 
         minimize: function () {
+            $('#io-ox-topbar > .minimizedmediaplayer').remove();
             $('#io-ox-topbar').append(
                 $('<div class="launcher right minimizedmediaplayer">').append(
                     $('<i>').addClass('icon-play icon-white')
-                ).on('click', function () {
+                ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();
                     $(this).remove();
@@ -218,10 +263,23 @@ define('io.ox/files/mediaplayer',
             this.container.hide();
         },
 
+        restore: function () {
+            if (this.config.videoSupport) {
+                this.close();
+            }
+            else
+            {
+                $('#io-ox-topbar > .minimizedmediaplayer').remove();
+                this.list = [];
+                this.container.show();
+            }
+
+        },
+
         close: function () {
             $('#io-ox-topbar > .minimizedmediaplayer').remove();
             this.player.empty().remove();
-            //this.trackdisplay.empty().remove(); // really?
+            this.trackdisplay.empty().remove();
             this.playlist.empty().remove();
             this.container.empty().show().remove();
             this.list = [];

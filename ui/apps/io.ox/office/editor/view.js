@@ -500,9 +500,9 @@ define('io.ox/office/editor/view',
                 .on('selection', function (event, selection) { logSelection(selection); });
 
             createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle',          { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',            { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('document/editRights',   { icon: 'icon-pencil',   tooltip: 'Acquire Edit Rights',      toggle: false })
+                .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
+                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph fill color') }))
                 .addSeparator()

@@ -76,7 +76,8 @@ define('io.ox/files/icons/perspective',
             carousel.init({
                 fullScreen: !!e.data.fullScreen,
                 list: app.getFiles(),
-                app: app
+                app: app,
+                attachmentMode: false
             });
         });
     }
@@ -87,14 +88,10 @@ define('io.ox/files/icons/perspective',
             var app = e.data.app;
             mediaplayer.init({
                 list: app.getFiles(),
-                app: app
+                app: app,
+                videoSupport: !!e.data.videoSupport
             });
         });
-    }
-
-    function setContentType(ids)
-    {
-
     }
 
     ext.point('io.ox/files/icons/actions').extend({
@@ -112,15 +109,30 @@ define('io.ox/files/icons/perspective',
             );
         }
     });
+
     ext.point('io.ox/files/icons/actions').extend({
-        id: 'mediaplayer',
+        id: 'audioplayer',
         draw: function (baton) {
             this.append(
                 $('<a href="#" class="mediaplayer">').text(gt('Play audio files'))
-                    .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
+                    .on('click', { app: baton.app, fullScreen: true, videoSupport: false }, startMediaplayer)
             );
         }
     });
+
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'videoplayer',
+        draw: function (baton) {
+            console.log('ADD VIDEO', baton);
+            this.append(
+                $('<a href="#" class="mediaplayer">').show().text(gt('Play video files'))
+                    .on('click', { app: baton.app, fullScreen: true, videoSupport: true }, startMediaplayer)
+            );
+        }
+    });
+
+
+
 
     function drawGeneric(name) {
         var node = $('<i>');

@@ -33,24 +33,23 @@
 
 
 .mediaplayer_container {
-    
+
     z-index: 10001; /* at least 1 higher than slideshow overlay */
-    
+
     background-color:@playerBg;
-    
+
     .mediaplayer_inner {
-        
+
         left: 50%;
         width: @playerWidth;
-        
         margin-left: 0 - (@playerWidth / 2) - @playerMargin;
         padding: @playerMargin;
-        
+
         .box-shadow(0px 0px 50px 5px #000);
         .vertical-gradient(#111, #333);
 
         .mediaplayer_buttons {
-            margin-bottom: @playerMargin;
+            margin-bottom:@playerMargin;
             text-align: right;
             button { margin-left:@playerMargin; }
         }
@@ -67,7 +66,7 @@
                 font-size: 75px;
                 color: #333;
             }
-            
+
             .track {
                 color: @playerTextColor;
                 font-family: OpenSans;
@@ -81,17 +80,20 @@
 
         .mediaplayer_player {
 
-            background:@playerSecondaryColor;
+            background: @playerSecondaryColor;
             width: 100%;
-            margin-bottom:@playerMargin;
-
+            margin-bottom: @playerMargin;
+            
+            .mejs-video {
+                margin-top:43px;
+            }
             // MediaElement Container
             .mejs-container {
                 background: #08c;
 
                 // Controls Background
                 .mejs-controls {
-                
+
                     @mediaplayerSliderBackground: darken(@link-color, 10%);
 
                     background-color: #333;
@@ -118,7 +120,7 @@
         }
 
         .mediaplayer_playlist {
-            
+
             position: absolute;
             top: 219px;
             left: 13px;
@@ -126,7 +128,7 @@
             bottom: 13px;
             margin: 0;
             overflow-y: auto;
-            
+
             li {
                 list-style:none;
                 background:@playerSecondaryColor;
@@ -135,7 +137,6 @@
                     padding:@playerMargin;
                     display:block;
                     color:@playerTextColor;
-                    
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -169,7 +170,6 @@
     from { color: #fff; }
       to { color: #bbb; }
 }
-
 #io-ox-topbar .launcher.minimizedmediaplayer i {
     -moz-animation-direction: alternate;
     -moz-animation-duration: 1.25s;
@@ -186,19 +186,19 @@
 // SMALL DEVICES
 
 @media (max-width: 700px) {
- 
+
     .mediaplayer_container .mediaplayer_inner {
         @width: 320px - 2 * @playerMargin;
         width: @width;
         margin-left: 0 - @width / 2 - @playerMargin;
     }
-    
+
     .mediaplayer_container .mediaplayer_inner {
         .mediaplayer_track {
             height: 60px;
             .album { width: 70px; font-size: 50px; }
             .track { font-size: 14px; }
-        }    
+        }
         .mediaplayer_playlist {
             top: 219px - 60px;
         }

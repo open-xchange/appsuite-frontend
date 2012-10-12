@@ -843,22 +843,6 @@ define('io.ox/office/editor/main',
         };
 
         /**
-         * Triggers the acquire edit rights action.
-         * If the edit rights were aquired is determined by the server response to the pull operation action
-         */
-        this.acquireEditRights = function () {
-
-            $.ajax({
-                type: 'GET',
-                url: self.getDocumentFilterUrl('acquireeditrights'),
-                dataType: 'json'
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-            });
-        };
-
-        /**
          * Destroys the application. Will be called automatically in a forced
          * quit, but has to be called manually for a regular quit (e.g. from
          * window close button).

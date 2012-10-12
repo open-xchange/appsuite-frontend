@@ -3061,7 +3061,11 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
-            image = $('<span>', { contenteditable: false }).append($('<div>').append($('<img>', { src: absUrl }))).data('url', url).addClass('inline').insertBefore(node.parentNode);
+            image = $('<span>', { contenteditable: false })
+                .addClass('inline')
+                .data('url', url)
+                .append($('<div>').addClass('object').append($('<img>', { src: absUrl })))
+                .insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
@@ -4091,16 +4095,10 @@ define('io.ox/office/editor/editor',
 
 /*
         // POC: image selection
-        editdiv.on('click', 'img', function () {
-            DOM.clearElementSelections(editdiv);
-            DOM.addElementSelection(editdiv, this, { moveable: true, sizeable: true });
-        });
-        this.on('selection', function () {
-            DOM.clearElementSelections(editdiv);
+        editdiv.on('click', 'span.inline, span.float', function () {
+            DOM.addObjectSelection(this, { moveable: true, sizeable: true });
         });
 */
-
-        // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
 
     } // cxlass Editor
 
