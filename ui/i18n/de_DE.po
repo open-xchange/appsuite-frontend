@@ -1248,6 +1248,14 @@ msgstr "Schließen"
 msgid "View Slideshow"
 msgstr "Diashow starten"
 
+#: apps/io.ox/files/icons/perspective.js:104
+msgid "Play audio files"
+msgstr "Audiodateien abspielen"
+
+#: apps/io.ox/files/mediaplayer.js:142
+msgid "Minimize"
+msgstr "Minimieren"
+
 #: apps/io.ox/files/list/perspective.js:39
 #: apps/io.ox/files/list/perspective.js:237
 msgid "This folder has publications"
