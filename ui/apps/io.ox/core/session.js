@@ -20,6 +20,11 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         ox.user = data.user; // might have a domain; depends on what the user entered on login
         ox.user_id = data.user_id || 0;
         ox.language = data.locale || 'en_US';
+        // check language if possible
+        if (ox.serverConfig && !(ox.language in ox.serverConfig.languages)) {
+            ox.language = 'en_US';
+            console.warn('Invalid language', data.locale, 'Fallback to en_US');
+        }
     };
 
     var that = {
