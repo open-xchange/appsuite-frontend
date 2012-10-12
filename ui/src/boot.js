@@ -101,7 +101,7 @@ $(document).ready(function () {
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
                         .removeAttr('target')
-                        .find('input[type=hidden][name=location]').val(_.url.get(location)).end()
+                        .find('input[type=hidden][name=location]').val(ox.base + '/' + location /* _.url.get(location) */).end()
                         .submit();
                 }
             });
@@ -160,7 +160,7 @@ $(document).ready(function () {
                 // restore form
                 restore();
                 // reset focus
-                $("#io-ox-login-" + (focus || (relogin ? "password" : "username"))).focus().select();
+                $("#io-ox-login-" + (_.isString(focus) ? focus : (relogin ? "password" : "username"))).focus().select();
             },
             // get user name / password
             username = $("#io-ox-login-username").val(),

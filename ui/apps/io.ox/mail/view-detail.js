@@ -722,6 +722,7 @@ define('io.ox/mail/view-detail',
                 // add "[n] more ..."
                 if (length > 5) {
                     outer.append(
+                        //#. 'more' like in 'x more attachments' / 'weitere' in German
                         $('<a href="#">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments),
                         $.txt(' ')
                     );

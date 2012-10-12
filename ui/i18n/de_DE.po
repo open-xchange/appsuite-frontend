@@ -1882,6 +1882,10 @@ msgstr "Visitenkarte anhängen"
 msgid "More ..."
 msgstr "Weitere ..."
 
+#: apps/io.ox/mail/write/view-main.js:475
+msgid "more"
+msgstr "weitere"
+
 #: apps/io.ox/mail/write/view-main.js:485
 msgid "Text format"
 msgstr "Textformat"

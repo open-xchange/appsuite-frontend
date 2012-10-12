@@ -15,14 +15,8 @@
 
     "use strict";
 
-    // browser detection
-    // adopted from prototype.js
-    var ua = navigator.userAgent,
-        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
-        webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1,
-        // shortcut
-        slice = Array.prototype.slice,
+    // shortcut
+    var slice = Array.prototype.slice,
         // deserialize
         deserialize = function (str, delimiter) {
             var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
@@ -98,6 +92,12 @@
         'Safari': '5'
     };
 
+    // browser detection - adopted from prototype.js
+    var ua = navigator.userAgent,
+        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
+        webkit = ua.indexOf('AppleWebKit/') > -1,
+        chrome = ua.indexOf('Chrome/') > -1;
+
     // add namespaces
     _.browser = {
         /** is IE? */
@@ -108,7 +108,7 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome ? ua.split('Version/')[1].split(' ')[0].split('.')[0]: undefined,
+        Safari: webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
         /** Chrome */
         Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
