@@ -18,7 +18,7 @@ define('plugins/portal/facebook/register',
      'io.ox/core/flowControl',
      'io.ox/core/strings',
      'io.ox/keychain/api',
-     'gettext!plugins/portal/facebook',
+     'gettext!plugins/portal',
      'less!plugins/portal/facebook/style.css'], function (ext, proxy, control, strings, keychain, gt) {
 
     'use strict';

@@ -13,7 +13,7 @@
 define('io.ox/calendar/week/view',
     ['io.ox/calendar/util',
      'io.ox/core/date',
-     'gettext!io.ox/calendar/view',
+     'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
      'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',

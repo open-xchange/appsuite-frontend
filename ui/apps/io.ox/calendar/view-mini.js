@@ -12,8 +12,8 @@
  */
 
 define("io.ox/calendar/view-mini",
-    ["io.ox/calendar/util", "gettext!io.ox/calendar/calendar"
-    ], function (util, gettext) {
+    ["io.ox/calendar/util",
+     "gettext!io.ox/calendar"], function (util, gettext) {
 
     "use strict";
 

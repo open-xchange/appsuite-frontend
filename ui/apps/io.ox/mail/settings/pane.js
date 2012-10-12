@@ -14,7 +14,7 @@
 define('io.ox/mail/settings/pane',
        ['settings!io.ox/mail', 'io.ox/mail/settings/model',
         'dot!io.ox/mail/settings/form.html', 'io.ox/core/extensions',
-        'gettext!io.ox/mail/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, gt, api) {
+        'gettext!io.ox/mail', 'io.ox/core/api/account'], function (settings, mailSettingsModel, tmpl, ext, gt, api) {
 
     'use strict';
 

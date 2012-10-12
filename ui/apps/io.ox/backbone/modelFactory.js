@@ -10,9 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/backbone/model'], function (ext, gt) {
-    "use strict";
+define("io.ox/backbone/modelFactory",
+    ["io.ox/core/extensions",
+     'gettext!io.ox/core'], function (ext, gt) {
 
+    "use strict";
 
     function ValidationErrors() {
         this.errors = {};

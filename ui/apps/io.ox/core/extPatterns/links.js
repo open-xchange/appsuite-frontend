@@ -13,7 +13,10 @@
  */
 
 define("io.ox/core/extPatterns/links",
-    ["io.ox/core/extensions", "io.ox/core/collection", "io.ox/core/extPatterns/actions"], function (ext, Collection, actions) {
+    ["io.ox/core/extensions",
+     "io.ox/core/collection",
+     "io.ox/core/extPatterns/actions",
+     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
 
     "use strict";
 
@@ -152,7 +155,7 @@ define("io.ox/core/extPatterns/links",
                     node.append(
                         $('<span class="io-ox-action-link dropdown">').append(
                             $('<a href="#" data-toggle="dropdown">')
-                            .text('More ... ').append($('<b class="caret">')),
+                            .text(gt('More') +  ' ...').append($('<b class="caret">')),
                             $('<ul class="dropdown-menu dropdown-right">').append(
                                 lo.map(wrapAsListItem)
                             )

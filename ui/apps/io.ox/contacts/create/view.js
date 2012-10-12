@@ -17,15 +17,16 @@ define('io.ox/contacts/create/view',
       'io.ox/backbone/forms',
       'io.ox/core/tk/dialogs',
       'io.ox/contacts/widgets/pictureUpload',
-      'gettext!io.ox/contacts/contacts'], function (model, views, forms, dialogs, PictureUpload, gt) {
+      'gettext!io.ox/contacts'], function (model, views, forms, dialogs, PictureUpload, gt) {
+
     "use strict";
-    
+
     var point = views.point('io.ox/contacts/create/view'),
         ContactCreateView = point.createView({
             tagName: 'form',
             className: 'form-horizontal create-contact'
         });
-        
+
     // Picture Magic
     point.extend(new PictureUpload({
         id: 'picture',
@@ -38,7 +39,7 @@ define('io.ox/contacts/create/view',
             }).addClass("span2");
         }
     }));
-    
+
     point.extend(new views.AttributeView({
         id: 'display_name_header',
         index: 150,
@@ -46,7 +47,7 @@ define('io.ox/contacts/create/view',
         className: 'clear-title',
         attribute: 'display_name'
     }));
-    
+
     point.basicExtend({
         id: 'headerBreak',
         index: 200,
@@ -54,13 +55,13 @@ define('io.ox/contacts/create/view',
             this.append($('<div>').css({clear: 'both'}));
         }
     });
-    
+
     // Show backend errors
     point.extend(new forms.ErrorAlert({
         id: 'backendErrors',
         index: 250
     }));
-    
+
     // Let's do some metaprogramming here
     var index = 300;
     _(['first_name', 'last_name', 'display_name', 'email1', 'cellular_telephone1']).each(function (fieldName) {
@@ -70,12 +71,12 @@ define('io.ox/contacts/create/view',
             control: '<input type="text" class="input-xlarge" name="' + fieldName + '">',
             attribute: fieldName
         }));
-        
+
         index += 100;
     });
-    
+
     //
-    
+
     return {
         ContactCreateView: ContactCreateView,
         getPopup: function (contactModel) {
@@ -84,9 +85,9 @@ define('io.ox/contacts/create/view',
             } else {
                 contactModel = model.factory.wrap(contactModel);
             }
-            
+
             var view = new ContactCreateView({model: contactModel});
-            
+
             // create modal popup
             var pane = new dialogs.CreateDialog({ easyOut: true, async: true, width: 500 });
             // header

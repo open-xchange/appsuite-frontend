@@ -18,7 +18,7 @@ define('plugins/notifications/calendar/register',
      'io.ox/core/extensions',
      'io.ox/core/api/user',
      'dot!plugins/notifications/calendar/template.html',
-     'gettext!plugins/notifications/calendar'
+     'gettext!plugins/notifications'
     ], function (notificationController, calApi, util, ext, userApi, tpl, gt) {
 
     'use strict';

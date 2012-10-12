@@ -16,7 +16,7 @@
 define("plugins/portal/appointments/register", [
     "io.ox/core/extensions",
     "io.ox/core/date",
-    "gettext!plugins/portal/appointments",
+    "gettext!plugins/portal",
     'io.ox/core/strings',
     "less!plugins/portal/appointments/style.css"
 ], function (ext, date, gt, strings) {

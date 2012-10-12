@@ -12,7 +12,10 @@
  */
 
 define("io.ox/calendar/view-grid-template",
-    ["io.ox/calendar/util", "io.ox/core/tk/vgrid", "io.ox/core/extensions", "gettext!io.ox/calendar/calendar",
+    ["io.ox/calendar/util",
+     "io.ox/core/tk/vgrid",
+     "io.ox/core/extensions",
+     "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"], function (util, VGrid, ext, gt) {
 
     "use strict";

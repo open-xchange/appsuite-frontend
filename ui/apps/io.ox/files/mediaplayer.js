@@ -14,7 +14,7 @@
 
 define('io.ox/files/mediaplayer',
     ['io.ox/core/commons',
-     'gettext!io.ox/files/files',
+     'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
      'mediaelement/mediaelement-and-player',

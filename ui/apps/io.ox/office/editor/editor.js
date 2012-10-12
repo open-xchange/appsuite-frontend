@@ -859,6 +859,8 @@ define('io.ox/office/editor/editor',
 
             applyOperation(newOperation, true, true);
 
+            sendImageSize(_.copy(selection.startPaM.oxoPosition));
+
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
         };
@@ -872,6 +874,8 @@ define('io.ox/office/editor/editor',
                 };
 
             applyOperation(newOperation, true, true);
+
+            sendImageSize(_.copy(selection.startPaM.oxoPosition));
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -2152,6 +2156,30 @@ define('io.ox/office/editor/editor',
                 var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: _endPosition};
                 // var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
+            }
+        }
+
+        // ==================================================================
+        // Private image methods
+        // ==================================================================
+
+        function sendImageSize(position) {
+
+            // sending size of image to the server in an operation -> necessary after loading the image
+            var returnImageNode = true,
+                imagePos = Position.getDOMPosition(paragraphs, _.copy(position), returnImageNode);
+
+            if ((imagePos) && (imagePos.node) && (DOM.isImageSpan(imagePos.node))) {
+
+                $('img', imagePos.node).one('load', function () {
+                    var width = Utils.convertLengthToHmm($(imagePos.node).width(), 'px'),
+                        height = Utils.convertLengthToHmm($(imagePos.node).height(), 'px'),
+                        // updating the logical position of the image spanb, maybe it changed in the meantime while loading the image
+                        updatePosition = Position.getOxoPosition(editdiv, imagePos.node, 0),
+                        newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
+
+                    applyOperation(newOperation, true, true);
+                });
             }
         }
 

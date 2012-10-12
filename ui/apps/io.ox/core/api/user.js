@@ -46,7 +46,13 @@ define("io.ox/core/api/user",
             }
         }
     });
-    
+
+    api.getName = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return data.display_name || data.email1 || '';
+        });
+    };
+
     api.getTextNode = function (id) {
         var node = document.createTextNode("");
         api.get({ id: id })
