@@ -213,14 +213,14 @@ define('io.ox/office/editor/format/stylesheets',
                     collectAttributes(styleSheets[styleSheet.parentId]);
                     // add own attributes of the specified attribute family
                     if (family in styleSheet.attributes) {
-                        _(attributes).extend(styleSheet.attributes[family]);
+                        attributes = Utils.extendOptions(attributes, styleSheet.attributes[family]);
                     }
                 } else {
                     // no more parent style sheets: start with default values from definitions
                     attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
                     // collect styles from ancestor elements if specified
                     if (ancestorStyleSheets && ancestorElement) {
-                        _(attributes).extend(ancestorStyleSheets.getElementStyleAttributes(ancestorElement, family));
+                        attributes = Utils.extendOptions(attributes, ancestorStyleSheets.getElementStyleAttributes(ancestorElement, family));
                     }
                 }
             }
@@ -573,7 +573,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // get attributes of the style sheets
                 styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                 // the resulting attributes according to style sheet and explicit formatting
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
 
             // filter by supported attributes
             _(mergedAttributes).each(function (value, name)  {
@@ -733,7 +733,7 @@ define('io.ox/office/editor/format/stylesheets',
                 setElementAttributes($element, elementAttributes);
 
                 // update element formatting
-                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
                 updateElementFormatting($element, mergedAttributes, updateAttributeNames);
 
                 // update CSS formatting of descendant elements, if another
@@ -865,7 +865,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // get attributes of the style sheet
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                     // the resulting attributes to be updated at each element
-                    mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+                    mergedAttributes = utils.extendOptions(styleAttributes, elementAttributes);
 
                 // update element formatting according to current attribute values
                 updateElementFormatting($element, mergedAttributes);
