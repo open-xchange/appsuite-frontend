@@ -640,9 +640,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  ancestor node by itself. If this object is a jQuery collection, uses
      *  the first node it contains.
      *
-     * @param {String} selector
+     * @param {String|Function|Node|jQuery} selector
      *  A jQuery selector that will be used to find an element while traversing
-     *  the chain of parents of the node currently iterated.
+     *  the chain of parents of the node currently iterated. The selector will
+     *  be passed to the jQuery method jQuery.is() for each node. If this
+     *  selector is a function, it will be called with the current DOM node
+     *  bound to the symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every found ancestor
@@ -1013,14 +1017,14 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             left: (offset.left - rootOffset.left - 2) + 'px',
             top: (offset.top - rootOffset.top - 2) + 'px'
         }).append(
-            $('<div>').addClass('handler tl'),
-            $('<div>').addClass('handler t'),
-            $('<div>').addClass('handler tr'),
-            $('<div>').addClass('handler r'),
-            $('<div>').addClass('handler br'),
-            $('<div>').addClass('handler b'),
-            $('<div>').addClass('handler bl'),
-            $('<div>').addClass('handler l')
+            $('<div>').addClass('handle tl'),
+            $('<div>').addClass('handle t'),
+            $('<div>').addClass('handle tr'),
+            $('<div>').addClass('handle r'),
+            $('<div>').addClass('handle br'),
+            $('<div>').addClass('handle b'),
+            $('<div>').addClass('handle bl'),
+            $('<div>').addClass('handle l')
         );
 
         // insert selector box into the root node

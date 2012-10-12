@@ -10,10 +10,14 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/calendar/model", ['io.ox/calendar/api', 'io.ox/backbone/modelFactory', 'io.ox/core/extensions', 'gettext!io.ox/calendar/calendar'], function (api, ModelFactory, ext, gt) {
-    
+define("io.ox/calendar/model",
+    ['io.ox/calendar/api',
+     'io.ox/backbone/modelFactory',
+     'io.ox/core/extensions',
+     'gettext!io.ox/calendar'], function (api, ModelFactory, ext, gt) {
+
     "use strict";
-    
+
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
@@ -23,7 +27,7 @@ define("io.ox/calendar/model", ['io.ox/calendar/api', 'io.ox/backbone/modelFacto
             // TODO: Add convenience methods for turning full day appointments into regular appointments and back
         }
     });
-    
+
     ext.point("io.ox/calendar/model/validation").extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
@@ -33,12 +37,12 @@ define("io.ox/calendar/model", ['io.ox/calendar/api', 'io.ox/backbone/modelFacto
             }
         }
     });
-    
+
     return {
         factory: factory,
         Appointment: factory.model,
         Appointments: factory.collection
     };
-    
-    
+
+
 });

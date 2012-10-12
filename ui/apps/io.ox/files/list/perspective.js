@@ -18,7 +18,7 @@ define('io.ox/files/list/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
-     'gettext!io.ox/files/files',
+     'gettext!io.ox/files',
      "io.ox/core/bootstrap/basics"
      ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, gt) {
 

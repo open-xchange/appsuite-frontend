@@ -17,7 +17,7 @@ define('plugins/notifications/mail/register',
      'io.ox/core/extensions',
      'io.ox/core/config',
      'dot!plugins/notifications/mail/template.html',
-     'gettext!plugins/notifications/mail'
+     'gettext!plugins/notifications'
     ], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
 
     'use strict';

@@ -16,7 +16,7 @@ define("io.ox/files/actions",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      'io.ox/office/tk/config',
-     "gettext!io.ox/files/files"], function (api, ext, links, OfficeConfig, gt) {
+     "gettext!io.ox/files"], function (api, ext, links, OfficeConfig, gt) {
 
     'use strict';
 

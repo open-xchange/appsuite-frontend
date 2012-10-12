@@ -13,7 +13,7 @@
 
 define("io.ox/calendar/util",
     ["io.ox/core/date",
-     'gettext!io.ox/calendar/calendar',
+     'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
      'io.ox/core/api/group'], function (date, gettext, userAPI, contactAPI, groupAPI) {

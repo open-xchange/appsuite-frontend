@@ -16,7 +16,7 @@ define('plugins/portal/tumblr/register',
      'io.ox/mail/util',
      'settings!plugins/portal/tumblr',
      'io.ox/core/date',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, mailUtil, settings, date, gt) {
+     'gettext!io.ox/portal'], function (MediaPlayer, mailUtil, settings, date, gt) {
 
     'use strict';
 

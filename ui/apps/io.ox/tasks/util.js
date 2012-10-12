@@ -10,8 +10,9 @@
  *
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
-define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
-                            "io.ox/core/date"], function (gt, date) {
+define("io.ox/tasks/util",
+    ['gettext!io.ox/tasks',
+     'io.ox/core/date'], function (gt, date) {
 
     "use strict";
 
@@ -20,19 +21,19 @@ define("io.ox/tasks/util", ['gettext!io.ox/tasks/util',
                        60000 * 30,          //thirty minutes
                        60000 * 60],         //one hour]
 
-        lookupDaytimeStrings = ["this morning",
-                                "by noon",
-                                "this afternoon",
-                                "tonight",
-                                "late in the evening"],
+        lookupDaytimeStrings = [gt('this morning'),
+                                gt('by noon'),
+                                gt('this afternoon'),
+                                gt('tonight'),
+                                gt('late in the evening')],
 
-        lookupWeekdayStrings = ["on Sunday",
-                                 "on Monday",
-                                 "on Tuesday",
-                                 "on Wednesday",
-                                 "on Thursday",
-                                 "on Friday",
-                                 "on Saturday"];
+        lookupWeekdayStrings = [gt('next Sunday'),
+                                gt('next Monday'),
+                                gt('next Tuesday'),
+                                gt('next Wednesday'),
+                                gt('next Thursday'),
+                                gt('next Friday'),
+                                gt('next Saturday')];
 
     var util = {
             computePopupTime: function (time, finderId) {

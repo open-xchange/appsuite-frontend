@@ -15,7 +15,7 @@
 
 define('io.ox/files/carousel',
     ['io.ox/core/commons',
-     'gettext!io.ox/files/files',
+     'gettext!io.ox/files',
      'io.ox/files/api',
      'io.ox/core/api/folder',
      'io.ox/files/actions',

@@ -17,7 +17,7 @@ define('plugins/portal/reddit/settings/plugin',
         'text!plugins/portal/reddit/settings/tpl/subreddit.html',
         'text!plugins/portal/reddit/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/reddit',
-        'gettext!io.ox/portal/reddit'
+        'gettext!io.ox/portal'
         ], function (ext, dialogs, subredditSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';

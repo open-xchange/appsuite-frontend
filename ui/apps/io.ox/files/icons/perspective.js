@@ -20,7 +20,7 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
-     'gettext!io.ox/files/files'
+     'gettext!io.ox/files'
      ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt) {
 
     'use strict';

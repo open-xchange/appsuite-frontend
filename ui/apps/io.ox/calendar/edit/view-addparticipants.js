@@ -16,7 +16,7 @@ define('io.ox/calendar/edit/view-addparticipants',
        'io.ox/core/tk/autocomplete',
        'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
-       'gettext!io.ox/calendar/edit/main'], function (participants, autocomplete, AutocompleteAPI, mailUtil, gt) {
+       'gettext!io.ox/calendar/edit'], function (participants, autocomplete, AutocompleteAPI, mailUtil, gt) {
 
     'use strict';
 

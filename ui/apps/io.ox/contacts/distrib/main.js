@@ -16,7 +16,7 @@ define('io.ox/contacts/distrib/main',
     ['io.ox/contacts/api',
      'io.ox/contacts/model',
      'io.ox/contacts/distrib/create-dist-view',
-     'gettext!io.ox/contacts/contacts',
+     'gettext!io.ox/contacts',
      'io.ox/contacts/util',
      'less!io.ox/contacts/distrib/style.css'
      ], function (api, contactModel, ContactCreateDistView, gt, util) {
