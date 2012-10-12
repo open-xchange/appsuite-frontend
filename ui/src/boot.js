@@ -101,7 +101,7 @@ $(document).ready(function () {
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
                         .removeAttr('target')
-                        .find('input[type=hidden][name=location]').val(ox.base + '/' + location /* _.url.get(location) */).end()
+                        .find('input[type=hidden][name=location]').val(ox.root + '/' + location /* _.url.get(location) */).end()
                         .submit();
                 }
             });
