@@ -3031,10 +3031,7 @@ define('io.ox/office/editor/editor',
             var domPos = Position.getDOMPosition(paragraphs, position),
                 node = domPos ? domPos.node : null,
                 absUrl = /:\/\//.test(url) ? url : getDocumentUrl({ get_filename: url }),
-                image = null,
-                imgAttr = {},
-                cssImgAttr = {},
-                spanAttr = {};
+                image = null;
 
             // check position
             if (!node || (node.nodeType !== 3)) {
@@ -3046,19 +3043,8 @@ define('io.ox/office/editor/editor',
             // points to start or end of text, needed to clone formatting)
             DOM.splitTextNode(node, domPos.offset);
 
-            if (attributes.cropw && attributes.croph) {
-                // support for cropping
-                imgAttr = { width: Utils.convertHmmToCssLength(attributes.cropw, 'px', 0),
-                            height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0) };
-                cssImgAttr = { margin: '-' + Utils.convertHmmToCssLength(attributes.cropy, 'px', 0) + ' 0 0 ' +
-                                       '-' + Utils.convertHmmToCssLength(attributes.cropx, 'px', 0) };
-                spanAttr = { contenteditable: false };
-            }
-            else {
-                imgAttr = { src: absUrl };
-            }
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
-            image = $('<span>', spanAttr).append($('<div>', imgAttr).css(cssImgAttr).append($('<img>', { src: absUrl }))).data('url', url).addClass('inline').insertBefore(node.parentNode);
+            image = $('<span>').append($('<img>', { src: absUrl })).data('url', url).addClass('inline').insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
