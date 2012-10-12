@@ -669,52 +669,50 @@ define('io.ox/office/editor/editor',
             var isCompleteTable = ((startGrid === 0) && (endGrid === maxGrid)) ? true : false,
                 newOperation;
 
-            this.clearUndo();  // ToDo: Remove this asap
+            undomgr.enterGroup(function () {
 
-            undomgr.startGroup();  // starting to group operations for undoing
-
-            if (isCompleteTable) {
-                newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
-                applyOperation(newOperation, true, true);
-            } else {
-                newOperation = { name: Operations.COLUMNS_DELETE, position: tablePos, startgrid: startGrid, endgrid: endGrid };
-                applyOperation(newOperation, true, true);
-
-                // Checking, if there are empty rows
-                var maxRow = $(tableNode).children('tbody, thead').children().length - 1,
-                    deletedAllRows = true;
-
-                for (var i = maxRow; i >= 0; i--) {
-                    var rowPos = _.copy(tablePos, true);
-                    rowPos.push(i);
-                    var currentRowNode = Position.getDOMPosition(paragraphs, rowPos).node;
-
-                    if ($(currentRowNode).children().length === 0) {
-                        newOperation = {  name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
-                        applyOperation(newOperation, true, true);
-                    } else {
-                        deletedAllRows = false;
-                    }
-                }
-
-                // Checking, if now the complete table is empty
-                if (deletedAllRows) {
+                if (isCompleteTable) {
                     newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
                     applyOperation(newOperation, true, true);
-                }
-
-                // Setting new table grid attribute to table
-                if (! deletedAllRows) {
-                    var // StyleSheets.getExplicitAttributes() returns deep copy of the table attributes
-                        tablegrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
-                    tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
-                    newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                } else {
+                    newOperation = { name: Operations.COLUMNS_DELETE, position: tablePos, startgrid: startGrid, endgrid: endGrid };
                     applyOperation(newOperation, true, true);
+
+                    // Checking, if there are empty rows
+                    var maxRow = $(tableNode).children('tbody, thead').children().length - 1,
+                        deletedAllRows = true;
+
+                    for (var i = maxRow; i >= 0; i--) {
+                        var rowPos = _.copy(tablePos, true);
+                        rowPos.push(i);
+                        var currentRowNode = Position.getDOMPosition(paragraphs, rowPos).node;
+
+                        if ($(currentRowNode).children().length === 0) {
+                            newOperation = {  name: Operations.ROWS_DELETE, position: _.copy(tablePos, true), start: i, end: i };
+                            applyOperation(newOperation, true, true);
+                        } else {
+                            deletedAllRows = false;
+                        }
+                    }
+
+                    // Checking, if now the complete table is empty
+                    if (deletedAllRows) {
+                        newOperation = { name: Operations.TABLE_DELETE, start: _.copy(tablePos, true) };
+                        applyOperation(newOperation, true, true);
+                    }
+
+                    // Setting new table grid attribute to table
+                    if (! deletedAllRows) {
+                        var // StyleSheets.getExplicitAttributes() returns deep copy of the table attributes
+                            tablegrid = StyleSheets.getExplicitAttributes(tableNode).tablegrid;
+                        tablegrid.splice(startGrid, endGrid - startGrid + 1);  // removing column(s) in tablegrid (automatically updated in table node)
+                        newOperation = { name: Operations.ATTRS_SET, attrs: { 'tablegrid' : tablegrid }, start: _.copy(tablePos, true), end: _.copy(tablePos, true) };
+                        applyOperation(newOperation, true, true);
+                    }
+
                 }
 
-            }
-
-            undomgr.endGroup();
+            }); // undomgr.enterGroup();
 
             // setting the cursor position
             setSelection(new OXOSelection(lastOperationEnd));
@@ -1685,46 +1683,42 @@ define('io.ox/office/editor/editor',
                 implInsertTable(operation.position, operation.attrs);
             }
             else if (operation.name === Operations.TABLE_DELETE) {
-                if (undomgr.isEnabled()) {
-                    var tablePos = Position.getDOMPosition(paragraphs, operation.start);
-                    if (tablePos && (Utils.getNodeName(tablePos.node) === 'table')) {
+                var table = Position.getTableElement(paragraphs, operation.start);
+                if (table) {
+                    if (undomgr.isEnabled()) {
                         // generate undo operations for the entire table
                         var generator = new Operations.Generator();
-                        generator.generateTableOperations(tablePos.node, operation.start);
+                        generator.generateTableOperations(table, operation.start);
                         undomgr.addUndo(generator.getOperations(), operation);
                     }
+                    implDeleteTable(operation.start);
                 }
-                implDeleteTable(operation.start);
             }
             else if (operation.name === Operations.CELLRANGE_DELETE) {
                 implDeleteCellRange(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.CELLS_DELETE) {
-                if (undomgr.isEnabled()) {
-                    var start = operation.start,
-                        end = operation.end || start;
+                var tableRow = Position.getTableRowElement(paragraphs, operation.position);
+                if (tableRow) {
+                    if (undomgr.isEnabled()) {
+                        var cells = $(tableRow).children(),
+                            start = operation.start,
+                            end = operation.end || start,
+                            generator = new Operations.Generator();
 
-                    undomgr.startGroup();
-
-                    // ToDo: Removal of complete row not yet supported
-                    // Every cell has to be recreated with its own operation, because it might have different attributes
-                    for (var i = end; i >= start; i--) {
-                        var count = 1,  // always only one cell
-                            pos = _.copy(operation.position, true);
-                        pos.push(i);
-
-                        // trying to get attributes from the cell (attributes might be different for each cell)
-                        var cellPos = Position.getDOMPosition(paragraphs, pos),
-                            attrs = cellPos ? StyleSheets.getExplicitAttributes(cellPos.node) : {};
-
-                        var undoOperation = { name: Operations.CELL_INSERT, position: pos, count: count, attrs: attrs },
-                            redoOperation = { name: Operations.CELLS_DELETE, position: operation.position, start: i, end: i};  // only one cell in each redo
-
-                        undomgr.addUndo(undoOperation, redoOperation);
+                        if ((start <= 0) && (end + 1 >= cells.length)) {
+                            // deleting the entire row element
+                            generator.generateTableRowOperations(tableRow, operation.position);
+                        } else {
+                            // deleting a few cells in the row
+                            cells.slice(start, end + 1).each(function (index) {
+                                generator.generateTableCellOperations(this, operation.position.concat([start + index]));
+                            });
+                        }
+                        undomgr.addUndo(generator.getOperations(), operation);
                     }
-                    undomgr.endGroup();
+                    implDeleteCells(operation.position, operation.start, operation.end);
                 }
-                implDeleteCells(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.ROWS_DELETE) {
                 if (undomgr.isEnabled()) {
@@ -1733,12 +1727,10 @@ define('io.ox/office/editor/editor',
                         generator = new Operations.Generator();
 
                     for (var i = start; i <= end; i += 1) {
-                        var localPos = _.clone(operation.position);  // table position
-                        localPos.push(i);  // row position
-
-                        var tableRow = Position.getDOMPosition(paragraphs, localPos);
+                        var localPos = operation.position.concat([i]),
+                            tableRow = Position.getTableRowElement(paragraphs, localPos);
                         if (tableRow) {
-                            generator.generateTableRowOperations(tableRow.node, localPos);
+                            generator.generateTableRowOperations(tableRow, localPos);
                         }
                     }
                     undomgr.addUndo(generator.getOperations(), operation);
@@ -1746,51 +1738,43 @@ define('io.ox/office/editor/editor',
                 implDeleteRows(operation.position, operation.start, operation.end);
             }
             else if (operation.name === Operations.COLUMNS_DELETE) {
-                if (undomgr.isEnabled()) {
-                    // COLUMN_INSERT cannot be the answer to COLUMNS_DELETE, because using COLUMNS_DELETE can
-                    // remove more than one cell in a row. It is only possible to add the removed cells with insertCell operation.
-                    undomgr.startGroup();
+                var table = Position.getTableElement(paragraphs, operation.position);
+                if (table) {
+                    if (undomgr.isEnabled()) {
 
-                    var localPos = _.copy(operation.position, true),
-                        table = Position.getDOMPosition(paragraphs, localPos).node,
-                        allRows = $(table).children('tbody, thead').children(),
-                        allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid);
+                        var allRows = $(table).find('> tbody > tr'),
+                            allCellRemovePositions = Table.getAllRemovePositions(allRows, operation.startgrid, operation.endgrid),
+                            generator = new Operations.Generator();
 
-                    for (var i = (allCellRemovePositions.length - 1); i >= 0; i--) {
-                        var rowPos = _.copy(localPos, true),
-                            oneRowCellArray =  allCellRemovePositions[i],
-                            end = oneRowCellArray.pop(),
-                            start = oneRowCellArray.pop();  // more than one cell might be deleted in a row
-                        rowPos.push(i);
+                        allRows.each(function (index) {
 
-                        if ((start === -1) && (end === -1)) {  // no cell will be removed in this row
-                            continue;
-                        }
+                            var rowPos = operation.position.concat([index]),
+                                cells = $(this).children(),
+                                oneRowCellArray =  allCellRemovePositions[index],
+                                end = oneRowCellArray.pop(),
+                                start = oneRowCellArray.pop();  // more than one cell might be deleted in a row
 
-                        if (end === -1) { // removing all cells behind startcol
-                            var rowNode = Position.getDOMPosition(paragraphs, rowPos).node;
-                            end = $(rowNode).children.length - 1;
-                        }
+                            // start<0: no cell will be removed in this row
+                            if (start >= 0) {
 
-                        for (var j = end; j >= start; j--) {
+                                if (end < 0) {
+                                    // remove all cells until end of row
+                                    end = cells.length;
+                                } else {
+                                    // closed range to half-open range
+                                    end = Math.min(end + 1, cells.length);
+                                }
 
-                            var cellPosition = _.copy(rowPos, true);
-                            cellPosition.push(j);
-
-                            // trying to get attributes from the cell (attributes might be different for each cell)
-                            var cellPos = Position.getDOMPosition(paragraphs, cellPosition),
-                                cellAttrs = cellPos ? StyleSheets.getExplicitAttributes(cellPos.node) : {};
-
-                            var undoOperation = { name: Operations.CELL_INSERT, position: cellPosition, count: 1, attrs: cellAttrs }; // only one cell per operation
-                            undomgr.addUndo(undoOperation);
-                        }
+                                // generate operations for all covered cells
+                                cells.slice(start, end).each(function (index) {
+                                    generator.generateTableCellOperations(this, rowPos.concat([start + index]));
+                                });
+                            }
+                        });
+                        undomgr.addUndo(generator.getOperations(), operation);
                     }
-
-                    undomgr.addUndo(null, operation);  // only one redo operation
-
-                    undomgr.endGroup();
+                    implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
                 }
-                implDeleteColumns(operation.position, operation.startgrid, operation.endgrid);
             }
             else if (operation.name === Operations.CELL_MERGE) {
                 if (undomgr.isEnabled()) {
@@ -2656,7 +2640,6 @@ define('io.ox/office/editor/editor',
                 endCol = endPos.pop(),
                 endRow = endPos.pop();
 
-            self.clearUndo();  // Todo: Remove this asap
             self.deleteCellRange(startPos, [startRow, startCol], [endRow, endCol]);
         }
 

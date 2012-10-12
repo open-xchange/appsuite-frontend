@@ -394,6 +394,54 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Tries to get a DOM table row element from the specified logical
+     * position. The passed position must point to a table row element.
+     * Otherwise, a warning will be printed to the debug console.
+     *
+     * @param {jQuery} paragraphs
+     *  The list of top-level content nodes.
+     *
+     * @param {Number[]} position
+     *  The logical position of the target table row element.
+     *
+     * @returns {HTMLTableRowElement|Null}
+     *  The DOM table row element at the passed logical position, if existing,
+     *  otherwise null.
+     */
+    Position.getTableRowElement = function (paragraphs, position) {
+        var table = Position.getTableElement(paragraphs, position.slice(0, -1)),
+            tableRow = table && $(table).find('> tbody > tr').get(position[position.length - 1]);
+        if (table && !tableRow) {
+            Utils.warn('Position.getTableRowElement(): expected element not found at position ' + JSON.stringify(position) + '.');
+        }
+        return tableRow || null;
+    };
+
+    /**
+     * Tries to get a DOM table cell element from the specified logical
+     * position. The passed position must point to a table cell element.
+     * Otherwise, a warning will be printed to the debug console.
+     *
+     * @param {jQuery} paragraphs
+     *  The list of top-level content nodes.
+     *
+     * @param {Number[]} position
+     *  The logical position of the target table cell element.
+     *
+     * @returns {HTMLTableCellElement|Null}
+     *  The DOM table cell element at the passed logical position, if existing,
+     *  otherwise null.
+     */
+    Position.getTableCellElement = function (paragraphs, position) {
+        var tableRow = Position.getTableRowElement(paragraphs, position.slice(0, -1)),
+            tableCell = tableRow && $(tableRow).children('td').get(position[position.length - 1]);
+        if (tableRow && !tableCell) {
+            Utils.warn('Position.getTableCellElement(): expected element not found at position ' + JSON.stringify(position) + '.');
+        }
+        return tableCell || null;
+    };
+
+    /**
      * Helper function for Position.getTextLevelOxoPosition. If the node is not
      * a text node, this function determines the correct text node, that
      * is used for calculation of the logical position instead of the
