@@ -279,7 +279,7 @@ define('io.ox/files/mediaplayer',
         close: function () {
             $('#io-ox-topbar > .minimizedmediaplayer').remove();
             this.player.empty().remove();
-            this.trackdisplay.empty().remove();
+            this.trackdisplay.remove(); // no empty; kills inner stuff
             this.playlist.empty().remove();
             this.container.empty().show().remove();
             this.list = [];

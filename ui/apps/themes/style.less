@@ -1514,33 +1514,49 @@ div.external-user-image {
     .window-body { top: 60px; }
 }
 
+@-webkit-keyframes slideleft {
+    from { -webkit-transform: translateX(-50%); }
+    to { -webkit-transform: translateX(0); }
+}
+
+@-webkit-keyframes slideright {
+    from { -webkit-transform: translateX(0); }
+    to { -webkit-transform: translateX(-50%); }
+}
+
+@keyframes slideleft {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+}
+
+@keyframes slideright {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+    
 // TINY SCREENS
 @media (max-width: 700px) {
-    
-    @-webkit-keyframes slideleft {
-        from { -webkit-transform: translateX(-50%); }
-        to { -webkit-transform: translateX(0); }
-    }
-    
-    @-webkit-keyframes slideright {
-        from { -webkit-transform: translateX(0); }
-        to { -webkit-transform: translateX(-50%); }
-    }
     
     .vsplit {
         left: 0%; width: 200%; right: auto;
         -webkit-animation-timing-function: ease-out;
         -webkit-animation-duration: 350ms;
+        animation-timing-function: ease-out;
+        animation-duration: 350ms;
     }
     
     .vsplit-slide {
         -webkit-transform: translateX(-50%);
         -webkit-animation-name: slideright;
+        transform: translateX(-50%);
+        animation-name: slideright;
     }
-
+    
     .vsplit-reverse {
         -webkit-transform: translateX(0);
         -webkit-animation-name: slideleft;
+        transform: translateX(0);
+        animation-name: slideleft;
     }
 
     .touch .vsplit {

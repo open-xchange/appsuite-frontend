@@ -123,7 +123,6 @@ define('io.ox/files/icons/perspective',
     ext.point('io.ox/files/icons/actions').extend({
         id: 'videoplayer',
         draw: function (baton) {
-            console.log('ADD VIDEO', baton);
             this.append(
                 $('<a href="#" class="mediaplayer">').show().text(gt('Play video files'))
                     .on('click', { app: baton.app, fullScreen: true, videoSupport: true }, startMediaplayer)
