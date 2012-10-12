@@ -108,10 +108,6 @@ define('io.ox/office/editor/format/paragraphstyles',
          * ranges for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
-        
-        this.getDocumentStyles = function () {
-            return documentStyles;
-        };
 
     } // class ParagraphStyles
 

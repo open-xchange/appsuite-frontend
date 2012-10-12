@@ -105,11 +105,11 @@ define('io.ox/office/editor/format/tablecellstyles',
         }
 
         if ((border) && (border.width)) {
-            width = Utils.convertHmmToCssLength(width, 'px');
+            width = Utils.convertHmmToCssLength(border.width, 'px');
         }
 
         if ((border) && (border.color)) {
-            color = '#' + Color.getRgbColor(border.color, documentStyles.getTheme());
+            color = '#' + Color.getRGBColor(border.color, documentStyles.getThemes());
         }
 
         return { style: style, width: width, color: color };

@@ -169,10 +169,6 @@ define('io.ox/office/editor/format/characterstyles',
 
         // methods ------------------------------------------------------------
 
-        this.getDocumentStyles = function () {
-            return documentStyles;
-        };
-        
         /**
          * Iterates over all text nodes covered by the passed DOM ranges and
          * calls the passed iterator function for their parent <span> elements.

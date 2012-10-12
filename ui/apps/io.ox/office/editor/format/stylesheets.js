@@ -354,6 +354,16 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
+         * Returns the document styles.
+         *
+         * @returns {DocumentStyles}
+         *  A document style object.
+         */
+        this.getDocumentStyles = function () {
+            return documentStyles;
+        };
+
+        /**
          * Adds a new style sheet to this container. An existing style sheet
          * with the specified identifier will be replaced.
          *
