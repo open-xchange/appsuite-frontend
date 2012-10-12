@@ -31,6 +31,7 @@ define('io.ox/files/mediaplayer',
         app: null,
         win: null,
         mediaelement: null,
+        currenttrack: null,
 
         container: $('<div class="abs mediaplayer_container">'),
         trackdisplay: $('<div class="mediaplayer_track">'),
@@ -48,7 +49,7 @@ define('io.ox/files/mediaplayer',
             $.extend(this.config, config);
             this.app = config.app;
             this.win = this.app.getWindow();
-            this.close();
+            this.restore();
             this.list = this.filterMediaList(config.list);
             if (this.list.length > 0)
             {
@@ -79,6 +80,7 @@ define('io.ox/files/mediaplayer',
         },
 
         loadTrack: function (url, mimetype) {
+            this.currentTrack = url;
             this.mediaelement.pause();
             this.mediaelement.setSrc([{src: url, type: mimetype}]);
             this.mediaelement.load();
@@ -110,12 +112,25 @@ define('io.ox/files/mediaplayer',
         drawItem: function (file, i) {
             var url = this.addURL(file);
             var item = $('<li>').append($('<a>', { href: url, 'data-mimetype': file.file_mimetype }).text(file.filename));
-            if (i === 0) {
-                this.player.empty().append(
-                    $('<audio>', { src: url, type: file.file_mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
-                );
-                this.drawTrackInfo(file.filename);
-                item.addClass('active');
+            if (this.player.find('.mejs-audio').length > 0)
+            {
+                if (i === 0) {
+                    this.playlist.empty();
+                }
+                if (this.currentTrack === url)
+                {
+                    item.addClass('active');
+                }
+            }
+            else
+            {
+                if (i === 0) {
+                    this.player.empty().append(
+                        $('<audio>', { src: url, type: file.file_mimetype, preload: 'metadata', controls: 'control', autoplay: 'true' })
+                    );
+                    this.drawTrackInfo(file.filename);
+                    item.addClass('active');
+                }
             }
             this.playlist.append(item);
         },
@@ -135,85 +150,99 @@ define('io.ox/files/mediaplayer',
 
         show: function () {
             var self = this;
-            this.win.busy().nodes.outer.append(
-                this.container.append(
-                    $('<div class="atb mediaplayer_inner">').append(
-                        $('<div class="mediaplayer_buttons pull-right">').append(
-                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
-                            $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
-                        ),
-                        this.trackdisplay,
-                        this.player,
-                        this.playlist
+            if (this.player.find('.mejs-audio').length > 0)
+            {
+                this.getItems();
+            }
+            else
+            {
+                this.win.busy().nodes.outer.append(
+                    this.container.append(
+                        $('<div class="atb mediaplayer_inner">').append(
+                            $('<div class="mediaplayer_buttons pull-right">').append(
+                                $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
+                                $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
+                            ),
+                            this.trackdisplay,
+                            this.player,
+                            this.playlist
+                        )
                     )
-                )
-            );
-            this.win.idle();
-            this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
-            this.getItems();
-            this.playlist.sortable({ axis: 'y' });
-            $('video, audio').mediaelementplayer({
-                width: 480,
-                audioWidth: 480,
-                plugins: ['flash', 'silverlight'],
-                timerRate: 250,
-                features: ['playpause', 'progress', 'current', 'volume'],
-                keyActions: [{
-                    keys: [32, 179], // SPACE
-                    action: function (player, media) {
-                        if (media.paused || media.ended) {
-                            media.play();
-                        } else {
-                            media.pause();
+                );
+                this.win.idle();
+                this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
+                this.getItems();
+                this.playlist.sortable({ axis: 'y' });
+                $('video, audio').mediaelementplayer({
+                    width: 480,
+                    audioWidth: 480,
+                    plugins: ['flash', 'silverlight'],
+                    timerRate: 250,
+                    features: ['playpause', 'progress', 'current', 'volume'],
+                    keyActions: [{
+                        keys: [32, 179], // SPACE
+                        action: function (player, media) {
+                            if (media.paused || media.ended) {
+                                media.play();
+                            } else {
+                                media.pause();
+                            }
                         }
+                    },
+                    {
+                        keys: [39, 228], // RIGHT
+                        action: function (player, media) {
+                            var newVolume = Math.min(media.volume + 0.1, 1);
+                            media.setVolume(newVolume);
+                        }
+                    },
+                    {
+                        keys: [37, 227], // LEFT
+                        action: function (player, media) {
+                            var newVolume = Math.max(media.volume - 0.1, 0);
+                            media.setVolume(newVolume);
+                        }
+                    },
+                    {
+                        keys: [38], // UP
+                        action: function (player, media) {
+                            self.selectTrack('prev');
+                        }
+                    },
+                    {
+                        keys: [40], // DOWN
+                        action: function (player, media) {
+                            self.selectTrack('next');
+                        }
+                    }],
+                    success: function (me, domObject) {
+                        self.mediaelement = me;
+                        self.mediaelement.addEventListener('ended', function () {
+                            self.selectTrack('next');
+                        }, false);
                     }
-                },
-                {
-                    keys: [39, 228], // RIGHT
-                    action: function (player, media) {
-                        var newVolume = Math.min(media.volume + 0.1, 1);
-                        media.setVolume(newVolume);
-                    }
-                },
-                {
-                    keys: [37, 227], // LEFT
-                    action: function (player, media) {
-                        var newVolume = Math.max(media.volume - 0.1, 0);
-                        media.setVolume(newVolume);
-                    }
-                },
-                {
-                    keys: [38], // UP
-                    action: function (player, media) {
-                        self.selectTrack('prev');
-                    }
-                },
-                {
-                    keys: [40], // DOWN
-                    action: function (player, media) {
-                        self.selectTrack('next');
-                    }
-                }],
-                success: function (me, domObject) {
-                    self.mediaelement = me;
-                    self.mediaelement.addEventListener('ended', function () {
-                        self.selectTrack('next');
-                    }, false);
-                }
-            });
+                });
+            }
         },
 
         minimize: function () {
+            $('#io-ox-topbar > .minimizedmediaplayer').remove();
             $('#io-ox-topbar').append(
                 $('<div class="launcher right minimizedmediaplayer">').append(
                     $('<i>').addClass('icon-play icon-white')
-                ).on('click', function () {
+                ).one('click', function () {
                     ox.launch('io.ox/files/main');
                     $('.mediaplayer_container').show();
                     $(this).remove();
                 })
             );
             this.container.hide();
+        },
+
+        restore: function () {
+            $('#io-ox-topbar > .minimizedmediaplayer').remove();
+            this.list = [];
+            this.container.show();
         },
 
         close: function () {
