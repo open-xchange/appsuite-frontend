@@ -413,7 +413,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isImageSpan = function (node) {
         // object spans contain the object element as first child
-        return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'img');
+        return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'div') && (Utils.getNodeName(node.firstChild.firstChild) === 'img');
     };
 
     /**
