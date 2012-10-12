@@ -151,7 +151,7 @@
             cursor: default;
             &.moveable { cursor: move; }
     
-            > div.handler {
+            > div.handle {
                 position: absolute;
                 width: 5px;
                 height: 5px;
