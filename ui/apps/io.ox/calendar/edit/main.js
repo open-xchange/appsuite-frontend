@@ -225,12 +225,17 @@ define('io.ox/calendar/edit/main',
                     function (err) {
                         self.getWindow().idle();
                         var errContainer = $('<div>').addClass('alert alert-error');
-                        $(self.view.el).find('[data-extension-id="io.ox/calendar/edit/section/error"]').empty().append(errContainer);
+                        $(self.view.el)
+                            .find('[data-extension-id="io.ox/calendar/edit/section/error"]')
+                                .empty().append(errContainer);
 
                         if (err.conflicts !== null && err.conflicts !== undefined) {
                             errContainer.text(gt('Conflicts detected'));
 
                             require(['io.ox/calendar/edit/module-conflicts'], function (conflictsModule) {
+                                console.log('conflict', conflictsModule);
+                                conflictsModule.getAll(err.conflicts);
+                                /*
                                 var conflicts = new conflictsModule.Collection(err.conflicts);
                                 conflicts.fetch()
                                     .done(function () {
@@ -252,6 +257,7 @@ define('io.ox/calendar/edit/main',
                                             errContainer.text(gt('Resource conflicts detected!'));
                                         }
                                     });
+                                */
 
                             });
                         } else if (err.error !== undefined) {

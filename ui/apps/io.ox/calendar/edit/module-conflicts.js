@@ -22,6 +22,45 @@ define('io.ox/calendar/edit/module-conflicts',
 
     'use strict';
 
+    var Conflicts = {
+        get: function (options) {
+            var df = new $.Deferred();
+            console.log('do it');
+            CalendarAPI.get(options)
+                .done(function (data) {
+                    console.log('conflicts', data);
+                    df.resolve(data);
+                    /*if (data.data) {
+                        data.data.conflicting_participants = self.get('conflicting_participants');
+                        self.set(data.data);
+                        df.resolve(self, data);
+                    } else if (data.error) {
+                        if (data.error.categories === 'PERMISSION_DENIED') {
+                            self.set('title', gt('Unknown'));
+                            self.set('location', gt('No read permission!'));
+                            df.resolve(self, data);
+                            //self.set('additional_info', [gt('Permission denied, this appointment is private.')]);
+                        }
+                    }*/
+                })
+                .fail(function (err) {
+                    df.reject(err);
+                });
+            return df;
+        },
+        getAll : function (options) {
+            var self = this;
+            http.pause();
+            _.each(options, function (data) {
+                self.get(data);
+            });
+            http.resume();
+        }
+
+    };
+
+    return Conflicts;
+    /*
     var ConflictModel = AppointmentModel.Appointment.extend({
         initialize: function () {
             var self = this,
@@ -133,5 +172,7 @@ define('io.ox/calendar/edit/module-conflicts',
         Collection: ConflictCollection,
         CollectionView: ConflictsView
     };
+
+    */
 
 });
