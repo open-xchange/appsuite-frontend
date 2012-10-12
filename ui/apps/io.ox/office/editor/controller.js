@@ -154,17 +154,7 @@ define('io.ox/office/editor/controller',
                 'character/color': {
                     chain: 'character/attributes',
                     get: function (attributes) { return attributes.color; },
-                    set: function (state) {
-                        if (state.themeFill) {
-                            var themes = editor.getThemes();
-                            if (themes) {
-                                var theme = themes.getTheme();
-                                if (theme)
-                                    state.rgbColor = theme[state.themeFill];
-                            }
-                        }
-                        editor.setAttribute('character', 'color', state);
-                    }
+                    set: function (color) { editor.setAttribute('character', 'color', color); }
                 },
 
                 // tables
@@ -242,9 +232,10 @@ define('io.ox/office/editor/controller',
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
                 },
-                'debug/editable': {
-                    get: function () { return editor.isEditMode(); },
-                    set: function (state) { self.setEditMode(state); }
+                'document/editRights': {
+                    enable: function () { return  !editor.isEditMode(); },
+                    get: function () { return !editor.isEditMode(); },
+                    set: function (state) { app.acquireEditRights(); }
                 }
             };
 

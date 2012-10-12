@@ -688,16 +688,22 @@ define('io.ox/mail/view-detail',
                 $(this).css({ display: 'inline-block', backgroundColor: 'white' });
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
+        return dd;
     };
+
+    function showAllAttachments(e) {
+        $(this).closest('.attachment-list').children().css('display', 'inline-block');
+        $(this).remove();
+    }
 
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
         draw: function (data) {
 
-            var attachments = util.getAttachments(data);
+            var attachments = util.getAttachments(data), length = attachments.length;
 
-            if (attachments.length > 0) {
+            if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
                     $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
                 );
@@ -708,12 +714,22 @@ define('io.ox/mail/view-detail',
                             return match.toLowerCase();
                         });
                     // draw
-                    drawAttachmentDropDown(outer, label, a);
+                    var dd = drawAttachmentDropDown(outer, label, a);
+                    if (i > 3 && length > 5) {
+                        dd.hide();
+                    }
                 });
+                // add "[n] more ..."
+                if (length > 5) {
+                    outer.append(
+                        $('<a href="#">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments),
+                        $.txt(' ')
+                    );
+                }
                 // how 'all' drop down?
-                if (attachments.length > 1) {
+                if (length > 1) {
                     attachments.subject = data.subject;
-                    drawAttachmentDropDown(outer, gt('All'), attachments);
+                    drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
                 }
                 this.append(outer);
             }

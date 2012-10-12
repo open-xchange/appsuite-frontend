@@ -48,20 +48,29 @@ define('io.ox/files/carousel',
             fullScreen: false,
             list: [],
             app: null,
-            step: 3
+            step: 3,
+            attachmentMode: false
         },
 
         init: function (config) {
-
+            $('.window-container .carousel').remove();
             $.extend(this.config, config);
 
             this.app = config.app;
-            this.win = this.app.getWindow();
+            if (config.attachmentMode)
+            {
+                this.win = $('.window-container.io-ox-mail-window');
+            }
+            else
+            {
+                this.win = this.app.getWindow();
+
+            }
             this.list = this.filterImagesList(config.list);
             this.pos = _.extend({}, this.defaults); // get a fresh copy
             this.firstStart = true; // should have a better name
 
-            if (this.config.fullScreen === true && BigScreen.enabled) {
+            if (config.fullScreen === true && BigScreen.enabled && !!config.attachmentMode) {
                 BigScreen.request(this.win.nodes.outer.get(0));
             }
 
@@ -190,14 +199,24 @@ define('io.ox/files/carousel',
             }
 
             if (item.children().length === 0) {
-                item.append(
-                    $('<img>', { alt: '', src: this.addURL(file) })
-                        .on('error', this.imgError) /* error doesn't seem to bubble */,
-                    $('<div class="carousel-caption">').append(
-                        $('<h4>').text(file.filename),
-                        folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
-                    )
-                );
+                if (this.config.attachmentMode === false) {
+                    item.append(
+                        $('<img>', { alt: '', src: this.addURL(file) })
+                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                        $('<div class="carousel-caption">').append(
+                            $('<h4>').text(file.filename),
+                            folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
+                        )
+                    );
+                }
+                else
+                {
+                    item.append(
+                        $('<img>', { alt: '', src: file.url })
+                            .on('error', this.imgError) /* error doesn't seem to bubble */,
+                        $('<div class="carousel-caption">').append($('<h4>').text(file.filename))
+                    );
+                }
             }
         },
 
@@ -226,7 +245,17 @@ define('io.ox/files/carousel',
         },
 
         show: function () {
-            this.win.busy().nodes.outer.append(
+            var win;
+            if (this.config.attachmentMode)
+            {
+                win = $('.window-container');
+            }
+            else
+            {
+                win = this.win.nodes.outer;
+            }
+            win.busy();
+            win.append(
                 this.container.append(
                     this.inner,
                     this.prevControl(),
@@ -235,17 +264,19 @@ define('io.ox/files/carousel',
                 )
                 .on('click', '.breadcrumb li a', $.proxy(this.close, this))
             );
-            this.win.idle();
+            win.idle();
             this.getItems();
         },
 
         close: function () {
+            var self = this;
             if (BigScreen.enabled) {
                 BigScreen.exit();
             }
-            this.inner.empty().remove();
-            this.container.empty().remove();
-            this.list = [];
+            self.inner.empty().remove();
+            self.container.empty().remove();
+            self.list = [];
+            $('.carousel').remove();
         }
     };
 

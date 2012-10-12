@@ -2789,7 +2789,23 @@ msgstr "Aufgaben"
 #: manually added
 #: apps/io.ox/core/main.js:1
 msgid "Conversations"
-msgstr "Gespräche"
+msgstr "Konversationen"
+
+#: manually added
+msgid "All attachments"
+msgstr "Alle Anlagen"
+
+#: manually added
+msgid ""
+msgstr ""
+
+#: manually added
+msgid ""
+msgstr ""
+
+#: manually added
+msgid ""
+msgstr ""
 
 #: manually added
 msgid ""

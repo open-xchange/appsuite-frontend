@@ -170,9 +170,9 @@ define("io.ox/core/desktop",
                                         } else {
                                             grid.refresh();
                                         }
-                                        // update hash
-                                        _.url.hash('folder', folder);
                                     }
+                                    // update hash
+                                    _.url.hash('folder', folder);
                                     self.trigger('folder:change', folder, data);
                                     def.resolve(data);
                                 })
@@ -1218,7 +1218,7 @@ define("io.ox/core/desktop",
                     win.nodes.fullscreenButton.show().on('click', function () {
                         // Maximize
                         if (BigScreen.enabled) {
-                            BigScreen.request(win.nodes.outer.get(0));
+                            BigScreen.toggle(win.nodes.outer.get(0));
                         }
                     });
                 }

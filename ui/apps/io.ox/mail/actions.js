@@ -299,6 +299,27 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return _(e.context).reduce(function (memo, obj) {
+                return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, true);
+        },
+        multiple: function (list) {
+            _(list).each(function (data) {
+                data.url = api.getUrl(data, 'view');
+            });
+            require(['io.ox/files/carousel'], function (slideshow) {
+                slideshow.init({
+                    fullScreen: false,
+                    list: list,
+                    attachmentMode: true
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/download-attachment', {
         id: 'download',
         requires: 'some',
@@ -658,29 +679,36 @@ define('io.ox/mail/actions',
     // Attachments
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'preview',
+        id: 'slideshow',
         index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/mail/actions/slideshow-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 200,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
-        index: 200,
+        index: 300,
         label: gt('Open in new tab'),
         ref: 'io.ox/mail/actions/open-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
-        index: 300,
+        index: 400,
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
-        index: 400,
+        index: 500,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));

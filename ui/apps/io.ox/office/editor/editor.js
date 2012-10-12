@@ -986,7 +986,8 @@ define('io.ox/office/editor/editor',
         };
 
         this.setEditMode = function (state) {
-            var showReadonlyInfo = state === false && editMode !== false;
+            var showReadOnlyInfo = state === false && editMode !== false,
+                showEditModeInfo = state === true && editMode === false;
 
             editMode = state;
             editdiv.toggleClass('user-select-text', !!editMode).attr('contenteditable', !!editMode);
@@ -1005,8 +1006,15 @@ define('io.ox/office/editor/editor',
                 Utils.getDomNode(editdiv).onresizestart = function () { return false; };
             }
 
-            if (showReadonlyInfo) {
-                Alert.showWarning(gt('Read Only Mode'), gt('Another user is currently editing this document.'), editdiv.parent(), 10000);
+            if (showReadOnlyInfo) {
+                Alert.showWarning(gt('Read Only Mode'),
+                        gt('Another user is currently editing this document.'),
+                        editdiv.parent(),
+                        -1,
+                        {label: gt('Acquire Edit Rights'), key: 'document/editRights', controller: app.getController()}
+                    );
+            } else if (showEditModeInfo) {
+                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), editdiv.parent(), 5000);
             }
         };
 
@@ -3053,7 +3061,11 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
-            image = $('<span>', { contenteditable: false }).append($('<div>').append($('<img>', { src: absUrl }))).data('url', url).addClass('inline').insertBefore(node.parentNode);
+            image = $('<span>', { contenteditable: false })
+                .addClass('inline')
+                .data('url', url)
+                .append($('<div>').addClass('object').append($('<img>', { src: absUrl })))
+                .insertBefore(node.parentNode);
 
             // apply the passed image attributes
             imageStyles.setElementAttributes(image, attributes);
@@ -4080,21 +4092,13 @@ define('io.ox/office/editor/editor',
             .on('drop', processDrop)
             .on('contextmenu', processContextMenu)
             .on('cut paste', false);
-
 /*
         // POC: image selection
-        editdiv.on('click', 'img', function () {
-            DOM.clearElementSelections(editdiv);
-            DOM.addElementSelection(editdiv, this, { moveable: true, sizeable: true });
-        });
-        this.on('selection', function () {
-            DOM.clearElementSelections(editdiv);
+        editdiv.on('click', 'span.inline, span.float', function () {
+            DOM.addObjectSelection(this, { moveable: true, sizeable: true });
         });
 */
-
-        // implInitDocument(); Done in main.js - to early here for IE, div not in DOM yet.
-
-    } // cxlass Editor
+    } // class Editor
 
     // exports ================================================================
 

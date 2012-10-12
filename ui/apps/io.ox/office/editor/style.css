@@ -133,55 +133,70 @@
             &.right { float: right; clear: right; }
         }
 
-        /* crop object contents at object border */
+        /* objects */
         span.inline, span.float {
-            >div {
-                overflow: hidden;
-            }
-        }
-
-        /* selection box for objects/images */
-        div.selection {
-            @border-color: #44f;
-    
-            .box-sizing(border-box);
-            position: absolute;
-            border: 3px fade(@border-color, 70%) solid;
-
+            position: relative;
             cursor: default;
-            &.moveable { cursor: move; }
-    
-            > div.handle {
+
+            /* crop object contents at object border */
+            > div.object {
                 position: absolute;
-                width: 5px;
-                height: 5px;
-                background-color: white;
-                border: 1px @border-color solid;
-                .border-radius(3px);
-    
-                .v-beg() { top: -5px; }
-                .v-cen() { top: 50%; margin-top: -3px; }
-                .v-end() { bottom: -5px; }
-    
-                .h-beg() { left: -5px; }
-                .h-cen() { left: 50%; margin-left: -3px; }
-                .h-end() { right: -5px; }
-    
-                &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
-                &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
-                &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
-                &.r  { .v-cen(); .h-end(); cursor: e-resize;  }
-                &.br { .v-end(); .h-end(); cursor: se-resize; }
-                &.b  { .v-end(); .h-cen(); cursor: s-resize;  }
-                &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
-                &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+                
+                img {
+                    position: relative;
+                    max-width: none;
+                }
             }
-            
-            &:not(.sizeable) > div.handler {
-                cursor: inherit;
+
+            /* selection box for objects/images */
+            > div.selection {
+                @border-color: #44f;
+        
+                position: absolute;
+                top: -1px;
+                bottom: -1px;
+                left: -1px;
+                right: -1px;
+                border: 3px fade(@border-color, 70%) solid;
+    
+                // cursor: default;
+                &.moveable { cursor: move; }
+        
+                > div.handle {
+                    position: absolute;
+                    width: 5px;
+                    height: 5px;
+                    background-color: white;
+                    border: 1px @border-color solid;
+                    .border-radius(3px);
+        
+                    .v-beg() { top: -5px; }
+                    .v-cen() { top: 50%; margin-top: -3px; }
+                    .v-end() { bottom: -5px; }
+        
+                    .h-beg() { left: -5px; }
+                    .h-cen() { left: 50%; margin-left: -3px; }
+                    .h-end() { right: -5px; }
+        
+                    &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
+                    &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
+                    &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
+                    &.r  { .v-cen(); .h-end(); cursor: e-resize;  }
+                    &.br { .v-end(); .h-end(); cursor: se-resize; }
+                    &.b  { .v-end(); .h-cen(); cursor: s-resize;  }
+                    &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
+                    &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
+                }
+                
+                &:not(.sizeable) > div.handler {
+                    cursor: inherit;
+                }
             }
         }
-    
+
         /* prevent dotted focus rectangle around page area */
         &:focus, &:active {
             outline: none;
