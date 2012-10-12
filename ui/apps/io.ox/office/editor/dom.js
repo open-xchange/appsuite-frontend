@@ -968,23 +968,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // object selection =======================================================
 
     /**
-     * Clears all element selection boxes from the passed root node.
+     * Adds a new selection box for the specified object node.
      *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root element containing all elements that can be selected.
-     */
-    DOM.clearElementSelections = function (rootNode) {
-        $(rootNode).children('div.selection').remove();
-    };
-
-    /**
-     * Adds a new selection box for the specified element.
-     *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root element containing all elements that can be selected.
-     *
-     * @param {HTMLElement|jQuery} element
-     *  The element for which a new selection box will be inserted.
+     * @param {HTMLElement|jQuery} object
+     *  The object node for which a new selection box will be inserted.
      *
      * @param {Object} [options]
      *  A map of options to control the appearance of the selection box.
@@ -997,38 +984,34 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
      */
-    DOM.addElementSelection = function (rootNode, element, options) {
+    DOM.addObjectSelection = function (object, options) {
 
-        var // position of the root node
-            rootOffset = $(rootNode).offset(),
-            // position of the element
-            offset = $(element).offset(),
-            // the container element used to visualize the selection
-            selectorBox = $('<div>', { contentEditable: false }).addClass('selection');
+        var // the container element used to visualize the selection
+            selectorBox = $('<div>').addClass('selection');
 
-        // add classes according to passed options
-        if (Utils.getBooleanOption(options, 'moveable')) { selectorBox.addClass('moveable'); }
-        if (Utils.getBooleanOption(options, 'sizeable')) { selectorBox.addClass('sizeable'); }
+        // add classes according to passed options, and resize handles
+        selectorBox
+            .toggleClass('moveable', Utils.getBooleanOption(options, 'moveable', false))
+            .toggleClass('sizeable', Utils.getBooleanOption(options, 'sizeable', false));
 
-        // set position and size of the selector box, add resize handles
-        selectorBox.css({
-            width: ($(element).width() + 2) + 'px',
-            height: ($(element).height() + 2) + 'px',
-            left: (offset.left - rootOffset.left - 2) + 'px',
-            top: (offset.top - rootOffset.top - 2) + 'px'
-        }).append(
-            $('<div>').addClass('handle tl'),
-            $('<div>').addClass('handle t'),
-            $('<div>').addClass('handle tr'),
-            $('<div>').addClass('handle r'),
-            $('<div>').addClass('handle br'),
-            $('<div>').addClass('handle b'),
-            $('<div>').addClass('handle bl'),
-            $('<div>').addClass('handle l')
-        );
+        // add resize handles
+        _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
+            selectorBox.append($('<div>').addClass('handle ' + pos));
+        });
 
-        // insert selector box into the root node
-        $(rootNode).append(selectorBox);
+        // insert selector box into the object container
+        DOM.removeObjectSelection(object);
+        $(object).first().append(selectorBox);
+    };
+
+    /**
+     * Removes the selection box from the specified object node.
+     *
+     * @param {HTMLElement|jQuery} object
+     *  The object node whose selection box will be removed.
+     */
+    DOM.removeObjectSelection = function (object) {
+        $(object).first().children('div.selection').remove();
     };
 
     // exports ================================================================
