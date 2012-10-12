@@ -17,7 +17,7 @@ define('io.ox/calendar/week/perspective',
          'io.ox/core/http',
          'io.ox/core/tk/dialogs',
          'io.ox/calendar/view-detail',
-         'gettext!io.ox/calendar/view'
+         'gettext!io.ox/calendar'
          ], function (View, api, util, http, dialogs, detailView, gt) {
 
     'use strict';

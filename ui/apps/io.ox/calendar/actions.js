@@ -15,7 +15,8 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar/actions', 'io.ox/core/config'], function (ext, links, api, util, gt, config) {
+     'gettext!io.ox/calendar',
+     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
 
     'use strict';
 
@@ -243,7 +244,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
-        label: gt('Create'),
+        label: gt('New appointment'),
         cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
     }));
@@ -265,7 +266,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
-        label: gt('Work Week'),
+        label: gt('Workweek'),
         cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
     }));

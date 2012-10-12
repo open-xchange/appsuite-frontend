@@ -12,9 +12,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/model',
-      ['io.ox/backbone/modelFactory', 'io.ox/backbone/validation',
-       'io.ox/contacts/api', 'gettext!io.ox/contacts/contacts'
-
+      ['io.ox/backbone/modelFactory',
+       'io.ox/backbone/validation',
+       'io.ox/contacts/api',
+       'gettext!io.ox/contacts'
        ], function (ModelFactory, Validators, api, gt) {
 
     'use strict';

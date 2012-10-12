@@ -11,10 +11,10 @@
  * @author Tobias Prinz <tobias.prinz@open-xchange.com>
  */
 
-define('io.ox/core/strings', ['gettext!io.ox/core/main'], function (gt) {
+define('io.ox/core/strings', ['gettext!io.ox/core'], function (gt) {
 
     "use strict";
-    
+
     var n_size = [/*#. Bytes*/      gt('B'),
                   /*#. Kilobytes*/  gt('KB'),
                   /*#. Megabytes*/  gt('MB'),
@@ -24,7 +24,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core/main'], function (gt) {
                   /*#. Exabytes*/   gt('EB'),
                   /*#. Zettabytes*/ gt('ZB'),
                   /*#. Yottabytes*/ gt('YB')];
-    
+
     return {
 
         shorten: function (string, maxlen) {
@@ -48,7 +48,7 @@ define('io.ox/core/strings', ['gettext!io.ox/core/main'], function (gt) {
 
             return string.substring(0, left)  + "..." + string.substring(right, string.length);
         },
-        
+
         fileSize: function (size) {
             var i = 0, $i = n_size.length;
             while (size > 1024 && i < $i) {

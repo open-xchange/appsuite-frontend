@@ -18,7 +18,7 @@ define("io.ox/core/desktop",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
      "io.ox/core/cache",
-     "gettext!core"], function (Events, ext, links, cache, gt) {
+     "gettext!io.ox/core"], function (Events, ext, links, cache, gt) {
 
     "use strict";
 
@@ -1169,7 +1169,7 @@ define("io.ox/core/desktop",
                             win.nodes.search = $('<input type="text" class="input-medium search-query">')
                             .attr({
                                 tabindex: '1',
-                                placeholder: 'Search ...',
+                                placeholder: gt('Search') + ' ...',
                                 id: searchId
                             })
                             .on(searchHandler)

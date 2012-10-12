@@ -11,11 +11,12 @@
  * @author Daniel Dickhaus <daniel.dickhaus@open-xchange.com>
  */
 
-define("io.ox/tasks/actions", ['io.ox/core/extensions',
-                               'io.ox/tasks/util',
-                               'io.ox/core/extPatterns/links',
-                               'gettext!io.ox/tasks/actions',
-                               'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
+define("io.ox/tasks/actions",
+    ['io.ox/core/extensions',
+     'io.ox/tasks/util',
+     'io.ox/core/extPatterns/links',
+     'gettext!io.ox/tasks',
+     'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
 
     "use strict";
     var Action = links.Action;

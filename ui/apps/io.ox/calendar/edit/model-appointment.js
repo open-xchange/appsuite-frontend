@@ -14,7 +14,7 @@
 define('io.ox/calendar/edit/model-appointment',
       ['io.ox/calendar/api',
        'io.ox/core/date',
-       'gettext!io.ox/calendar/edit/main'], function (CalendarAPI, dateAPI, gt) {
+       'gettext!io.ox/calendar/edit'], function (CalendarAPI, dateAPI, gt) {
 
     'use strict';
 

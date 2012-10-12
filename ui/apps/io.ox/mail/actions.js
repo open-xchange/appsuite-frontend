@@ -17,7 +17,7 @@ define('io.ox/mail/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'gettext!io.ox/mail/mail',
+     'gettext!io.ox/mail',
      'io.ox/core/config',
      'io.ox/core/notifications',
      'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
@@ -651,7 +651,7 @@ define('io.ox/mail/actions',
         index: 1200,
         prio: 'lo',
         id: 'saveEML',
-        label: gt('Save as EML'),
+        label: gt('Save as file'),
         ref: 'io.ox/mail/actions/save'
     }));
 

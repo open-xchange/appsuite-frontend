@@ -194,7 +194,7 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     .dropdown(),
                     $('<ul>').addClass("dropdown-menu")
                     .append(
-                        $('<li>').append("<a data-option='state'><i/> " + gt('State') + "</a>"),
+                        $('<li>').append("<a data-option='state'><i/> " + gt('Status') + "</a>"), // state becomes Bundesland :)
                         $('<li>').append("<a data-option='202'><i/> " + gt('Due date') + "</a>"),
                         $('<li>').append("<a data-option='200'><i/> " + gt('Subject') + "</a>"),
                         $('<li>').append("<a data-option='309'><i/> " + gt('Priority') + "</a>"),

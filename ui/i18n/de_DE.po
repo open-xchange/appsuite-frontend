@@ -115,8 +115,8 @@ msgid "Repeat"
 msgstr "Wiederholen"
 
 #: apps/io.ox/calendar/edit/view-main.js:81
-msgid "edit"
-msgstr "bearbeiten"
+msgid "Edit"
+msgstr "Bearbeiten"
 
 #: apps/io.ox/calendar/edit/view-main.js:84
 msgid "Change timezone"
@@ -184,7 +184,7 @@ msgid ""
 "To add participants manually, just provide a valid email address (e.g john."
 "doe@example.com or \"John Doe\" <jd@example.com>)"
 msgstr ""
-"Zum manuellen HInzufügen von Teilnehmern geben Sie einfach eine gültige E-Mail-Adresse an (z.B. john."
+"Zum manuellen Hinzufügen von Teilnehmern geben Sie einfach eine gültige E-Mail-Adresse an (z.B. john."
 "doe@beispiel.com oder \"John Doe\" <jd@beispiel.com>)"
 
 #: apps/io.ox/calendar/edit/view-main.js:99
@@ -1489,8 +1489,8 @@ msgid "View Source"
 msgstr "Quelle anzeigen"
 
 #: apps/io.ox/mail/actions.js:607
-msgid "Save as EML"
-msgstr "Als EML speichern"
+msgid "Save as file"
+msgstr "Als Datei speichern"
 
 #: apps/io.ox/mail/actions.js:616 apps/io.ox/mail/write/view-main.js:516
 #: apps/io.ox/tasks/actions.js:260
@@ -2117,6 +2117,54 @@ msgstr "Aufgabe konnte nicht geladen werden"
 msgid "Show done tasks"
 msgstr "Erledigte Aufgaben anzeigen"
 
+#: apps/io.ox/tasks/util.js:24
+msgid "this morning"
+msgstr "heute Morgen"
+
+#: apps/io.ox/tasks/util.js:25
+msgid "by noon"
+msgstr "heute Mittag"
+
+#: apps/io.ox/tasks/util.js:26
+msgid "this afternoon"
+msgstr "heute Nachmittag"
+
+#: apps/io.ox/tasks/util.js:27
+msgid "tonight"
+msgstr "heute Abend"
+
+#: apps/io.ox/tasks/util.js:28
+msgid "late in the evening"
+msgstr "später Abend"
+
+#: apps/io.ox/tasks/util.js:30
+msgid "next Sunday"
+msgstr "nächsten Sonntag"
+
+#: apps/io.ox/tasks/util.js:31
+msgid "next Monday"
+msgstr "nächsten Montag"
+
+#: apps/io.ox/tasks/util.js:32
+msgid "next Tuesday"
+msgstr "nächsten Dienstag"
+
+#: apps/io.ox/tasks/util.js:33
+msgid "next Wednesday"
+msgstr "nächsten Mittwoch"
+
+#: apps/io.ox/tasks/util.js:34
+msgid "next Thursday"
+msgstr "nächsten Donnerstag"
+
+#: apps/io.ox/tasks/util.js:35
+msgid "next Friday"
+msgstr "nächsten Freitag"
+
+#: apps/io.ox/tasks/util.js:36
+msgid "next Saturday"
+msgstr "nächsten Samstag"
+
 #: apps/io.ox/tasks/util.js:143
 msgid "in 5 minutes"
 msgstr "in 5 Minuten"
@@ -2139,7 +2187,7 @@ msgstr "vorübergehend"
 
 #: apps/io.ox/tasks/util.js:176
 msgid "tomorrow"
-msgstr "Morgen"
+msgstr "morgen"
 
 #: apps/io.ox/tasks/util.js:188
 msgid "in one week"
@@ -2659,3 +2707,82 @@ msgstr "Neue Tweets konnten nicht geladen werden."
 msgid "Tweet"
 msgstr "Tweet"
 
+#: manually added
+msgid "Save as distribution list"
+msgstr "Als Verteilerliste speichern"
+
+#: manually added
+msgid "Week"
+msgstr "Woche"
+
+#: manually added
+msgid "Workweek"
+msgstr "Arbeitswoche"
+
+#: manually added
+msgid "Month"
+msgstr "Monat"
+
+#: manually added
+msgid "Change status"
+msgstr "Status ändern"
+
+#: manually added
+msgid "More"
+msgstr "Weitere"
+
+#: manually added
+msgid "New appointment"
+msgstr "Termin anlegen"
+
+#: apps/io.ox/mail/view-detail.js:640
+msgctxt "CC"
+msgid "Copy"
+msgid_plural "Copy"
+msgstr[0] "In Kopie"
+msgstr[1] "In Kopie"
+
+#: manually added
+msgid "Your applications"
+msgstr "Ihre Anwendungen"
+
+#: manually added
+msgid "Manage applications"
+msgstr "Anwendungen verwalten"
+
+#: manually added
+msgid "Running applications"
+msgstr "Laufende Anwendungen"
+
+#: manually added
+msgid "Expert mode"
+msgstr "Expertenmodus"
+
+#: manually added
+#: apps/io.ox/core/main.js:1
+msgid "Address Book"
+msgstr "Adressbuch"
+
+#: manually added
+#: apps/io.ox/core/main.js:1
+msgid "Calendar"
+msgstr "Kalender"
+
+#: manually added
+#: apps/io.ox/core/main.js:1
+msgid "Files"
+msgstr "Dateien"
+
+#: manually added
+#: apps/io.ox/core/main.js:1
+msgid "Tasks"
+msgstr "Aufgaben"
+
+#: manually added
+#: apps/io.ox/core/main.js:1
+msgid "Conversations"
+msgstr "Gespräche"
+
+#: manually added
+msgid ""
+msgstr ""
