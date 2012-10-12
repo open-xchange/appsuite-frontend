@@ -64,9 +64,15 @@ define("io.ox/core/gettext", [], function () {
         po.plural = new Function("n", "return " + po.plural + ";");
 
         function gettext(text) {
+            var args;
             text = gettext.pgettext("", text);
-            return arguments.length < 2 ? text :
-                gettext.format.apply(gettext, arguments);
+            if (arguments.length < 2) {
+                return text;
+            } else {
+                args = Array.prototype.slice.call(arguments);
+                args.splice(0, 1, text);
+                return gettext.format.apply(gettext, args);
+            }
         }
 
         if (_.url.hash('debug-i18n')) {

@@ -16,11 +16,11 @@ define('plugins/portal/mail/register',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/core/strings',
-     'gettext!plugins/portal/mail',
+     'gettext!plugins/portal',
      'less!plugins/portal/mail/style.css'], function (ext, links, strings, gt) {
 
     'use strict';
-    
+
     var sidepopup; //only one detailsidepopup is needed
     // actions
     ext.point('io.ox/portal/widget/mail/actions/compose').extend({
@@ -136,7 +136,7 @@ define('plugins/portal/mail/register',
                                 'io.ox/mail/view-grid-template'], function (dialogs, viewGrid) {
 
                         viewGrid.drawSimpleGrid(list).appendTo(node);
-                        
+
                         if (!sidepopup) {
                             sidepopup = new dialogs.SidePopup({ modal: false });
                         }

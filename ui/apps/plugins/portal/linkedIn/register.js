@@ -17,7 +17,7 @@ define("plugins/portal/linkedIn/register",
      'io.ox/oauth/proxy',
      'io.ox/core/strings',
      'io.ox/keychain/api',
-     'gettext!plugins/portal/linkedIn',
+     'gettext!plugins/portal',
      'less!plugins/portal/linkedIn/style.css'], function (ext, http, proxy, strings, keychain, gt) {
 
     "use strict";

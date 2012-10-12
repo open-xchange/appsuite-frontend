@@ -14,7 +14,7 @@
 
 define("io.ox/files/main",
     ["io.ox/core/commons",
-     "gettext!io.ox/files/files",
+     "gettext!io.ox/files",
      "io.ox/files/actions",
      "less!io.ox/files/style.less"
     ], function (commons, gt) {

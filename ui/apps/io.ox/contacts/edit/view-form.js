@@ -19,7 +19,7 @@ define('io.ox/contacts/edit/view-form', [
     'io.ox/core/extPatterns/links',
     'io.ox/contacts/widgets/pictureUpload',
     'io.ox/contacts/widgets/cityControlGroup',
-    'gettext!io.ox/contacts/contacts'
+    'gettext!io.ox/contacts'
 ], function (model, views, forms, actions, links, PictureUpload, CityControlGroup, gt) {
 
     "use strict";

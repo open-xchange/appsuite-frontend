@@ -13,7 +13,7 @@
 
 define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          "io.ox/tasks/api",
-                                         'gettext!plugins/portal/tasks',
+                                         'gettext!plugins/portal',
                                          'io.ox/core/strings',
                                          'io.ox/tasks/util',
                                          'io.ox/tasks/view-grid-template',
@@ -21,7 +21,7 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                                          'less!plugins/portal/tasks/style.css'],
                                          function (ext, taskApi, gt, strings, util, viewGrid, dialogs) {
     "use strict";
-    
+
     //var for detailView sidepane.Needs to be closed on DetailView delete action
     var sidepane,
     loadTile = function () {
@@ -29,24 +29,24 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         taskApi.getAll({}, false).done(function (taskarray) {
                 prevDef.resolve(taskarray);
             });
-        
+
         return prevDef;
     },
-    
+
     drawTile = function (taskarray, $node) {
         if (taskarray.length > 0)
             {
             var task = taskarray[0];
-            
+
             for (var i = 0; i < taskarray.length; i++) {
                 if (taskarray[i].end_date !== null && taskarray[i].status !== 3) {
                     task = taskarray[i];
                     i = taskarray.length;
                 }
             }
-            
+
             task = util.interpretTask(task);
-        
+
             $node.append(
                     $('<div class="io-ox-clear io-ox-portal-preview">').append(
                             $("<span>").text(gt("Next due task") + ': '),
@@ -55,16 +55,16 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                             $("<span>").text(strings.shorten(task.note, 100)).addClass("io-ox-portal-tasks-preview-note")
                     )
             );
-            
+
             if (task.end_date === "") {
                 $node.find(".io-ox-portal-tasks-preview-date").remove();
             }
         } else {
             $node.append($('<div class="io-ox-clear io-ox-portal-preview">').text(gt("You don't have any tasks.")));
         }
-        
+
     },
-    
+
     load = function () {
         var def = new $.Deferred();
         taskApi.getAll({}, false).done(function (taskarray) {
@@ -72,18 +72,18 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
         });
         return def;
     },
-    
+
     draw = function (tasks) {
         var node = $('<div class="io-ox-portal-tasks">').appendTo(this);
         $('<h1>').addClass('clear-title').text(gt("Your tasks")).appendTo(node);
-        
+
         fillGrid(tasks, node);
-        
+
         //repaint function called on done and delete events
         var repaint = function (e) {
             var dom = e.data.node,
                 draw = e.data.draw;
-            
+
             load().done(function (inputTasks) {
                 if (sidepane && draw === false) {
                     sidepane.close();
@@ -97,33 +97,33 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                 }
             });
         };
-        
-        
+
+
         taskApi.on("refresh.list", {node: node}, repaint)
                .on("delete", {node: node, draw: false}, repaint);
-        
+
         node.on("dispose", function () {
             taskApi.off("refresh.list", repaint)
                    .off("delete", repaint);
         });
-        
+
         if (tasks.length === 0) {
             $('<div>').text(gt("You don't have any tasks.")).appendTo(node);
         }
-        
+
         return $.Deferred().resolve();
     },
-    
+
     //method to fill the grid used for initial drawing and refresh
     fillGrid = function (tasks, node) {
-        
+
         //interpret values for status etc
         tasks = util.sortTasks(tasks);
         for (var i = 0; i < tasks.length; i++) {
             tasks[i] = util.interpretTask(tasks[i]);
         }
         viewGrid.drawSimpleGrid(tasks).addClass("portal-tasks-grid").appendTo(node);
-            
+
         //detailView Popup
         if (!sidepane) {
             sidepane = new dialogs.SidePopup({ modal: false });
@@ -137,11 +137,11 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
                              id: data.id}).done(function (taskData) {
                     viewDetail.draw(taskData).appendTo(pane);
                 });
-                
+
             });
         });
     };
-    
+
 
     ext.point("io.ox/portal/widget").extend({
         id: 'tasks',

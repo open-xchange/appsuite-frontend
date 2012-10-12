@@ -14,7 +14,7 @@
 define('io.ox/portal/mediaplugin',
     ['io.ox/core/extensions',
      'io.ox/core/flowControl',
-     'gettext!io.ox/portal/mediaplugin',
+     'gettext!io.ox/portal',
      'less!io.ox/portal/mediaplugin.css',
      'less!io.ox/core/fancybox/jquery.fancybox-1.3.4.css',
      'apps/io.ox/core/fancybox/jquery.fancybox-1.3.4.pack.js'], function (ext, control, gt) {

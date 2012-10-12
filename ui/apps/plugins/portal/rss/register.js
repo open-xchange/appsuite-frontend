@@ -21,18 +21,18 @@ define("plugins/portal/rss/register",
     'io.ox/rss/api',
     'io.ox/core/date',
     'settings!io.ox/rss',
-    'gettext!plugins/portal/rss',
+    'gettext!plugins/portal',
     'less!plugins/portal/rss/style.css'], function (ext, strings, accountApi, serviceApi, messageApi, keychain, rss, date, settings, gt) {
 
     "use strict";
-    
+
     var migrateIfNecessary = function () {
         if (!settings.get('needsMigration')) {
             return;
         }
         var members = [];
         var group = {groupname: gt('RSS Feeds'), index: 100, members: members};
-        
+
         accountApi.all('com.openexchange.messaging.rss').done(function (accounts) {
             var index = 0;
             _(accounts).each(function (account) {
@@ -45,9 +45,9 @@ define("plugins/portal/rss/register",
             settings.save();
         });
     };
-    
+
     var feeds = [];
-    
+
     var tileGroups = settings.get('groups');
     tileGroups = _(tileGroups).sortBy(function (group) { return group.index || 0; });
 
@@ -59,26 +59,26 @@ define("plugins/portal/rss/register",
             load: function () {
                 var def = $.Deferred();
                 var requests = [];
-            
+
                 migrateIfNecessary();
-            
+
                 _(tilegroup.members).each(function (member) {
                     requests.push(member.url);
                 });
-                
+
                 rss.getMany(requests, "date")
                     .done(def.resolve)
                     .fail(def.reject);
                 return def;
             },
-        
+
             draw: function (feed) {
                 var togglePreview = function () {
                     $(this).parent().find('.io-ox-portal-rss-content').toggleClass('portal-preview');
                     $(this).parent().find('.io-ox-portal-previewToggle').toggleClass('icon-chevron-down');
                 };
                 var $node = $('<div class="io-ox-portal-rss">').appendTo(this);
-            
+
                 $('<h1 class="clear-title">').text(tilegroup.groupname).appendTo($node);
 
                 _(feed).each(function (entry) {

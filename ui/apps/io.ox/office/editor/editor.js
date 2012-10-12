@@ -856,8 +856,7 @@ define('io.ox/office/editor/editor',
                 newOperation = {
                     name: Operations.IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
-                    imgurl: imageFragment,
-                    attrs: {inline: true}
+                    imgurl: imageFragment
                 };
 
             applyOperation(newOperation, true, true);
@@ -873,8 +872,7 @@ define('io.ox/office/editor/editor',
                 newOperation = {
                     name: Operations.IMAGE_INSERT,
                     position: _.copy(selection.startPaM.oxoPosition),
-                    imgurl: imageURL,
-                    attrs: {inline: true}
+                    imgurl: imageURL
                 };
 
             applyOperation(newOperation, true, true);
@@ -1688,7 +1686,7 @@ define('io.ox/office/editor/editor',
                     var undoOperation = { name: Operations.TABLE_DELETE, start: operation.position };
                     undomgr.addUndo(undoOperation, operation);
                 }
-                implInsertTable(_.copy(operation.position), operation.attrs);
+                implInsertTable(operation.position, operation.attrs);
             }
             else if (operation.name === Operations.TABLE_DELETE) {
                 if (undomgr.isEnabled()) {
@@ -2254,7 +2252,7 @@ define('io.ox/office/editor/editor',
                         localPos.pop();
                     }
 
-                    var isTable = Position.getDOMPosition(paragraphs, localPos).node.nodeName === 'TABLE' ? true : false;
+                    var isTable = Position.getDOMPosition(paragraphs, localPos).node.nodeName === 'TABLE';
 
                     if (i < lastParaInCell) {
                         if (isTable) {
@@ -3580,9 +3578,8 @@ define('io.ox/office/editor/editor',
             }
 
             // Finally removing the table itself
-            var tablePaM = Position.getDOMPosition(paragraphs, tablePosition);
-            if (tablePaM) {
-                var tableNode = tablePaM.node;
+            var tableNode = Position.getTableElement(paragraphs, tablePosition);
+            if (tableNode) {
                 $(tableNode).remove();
 
                 var para = tablePosition.pop();
@@ -3614,7 +3611,7 @@ define('io.ox/office/editor/editor',
 
             $(table).children('tbody, thead').children().slice(startRow, endRow + 1).remove();
 
-            if ($(table).children().children().length === 0) {
+            if ($(table).children('tbody, thead').children().length === 0) {
                 // This code should never be reached. If last row shall be deleted, deleteTable is called.
                 self.deleteTable(localPosition);
                 $(table).remove();

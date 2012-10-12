@@ -14,7 +14,7 @@
  */
 
 define("io.ox/preview/main",
-    ["io.ox/core/extensions", "gettext!io.ox/preview/preview"], function (ext, gt) {
+    ["io.ox/core/extensions", "gettext!io.ox/preview"], function (ext, gt) {
 
     "use strict";
 

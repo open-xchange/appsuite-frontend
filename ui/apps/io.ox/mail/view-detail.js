@@ -21,7 +21,7 @@ define('io.ox/mail/view-detail',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail/mail',
+     'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, settings, gt) {
@@ -636,8 +636,8 @@ define('io.ox/mail/view-detail',
                         $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
                         util.serializeList(data, 'to'),
                         $.txt(' \u00A0 '),
-                        // CC
-                        showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
+                        //#. CC list - use npgettext cause pgettext is broken
+                        showCC ? $('<span>').addClass('io-ox-label').text(gt.npgettext('CC', 'Copy', 'Copy', 1) + '\u00A0\u00A0') : [],
                         util.serializeList(data, 'cc'),
                         $.txt(' \u00A0 ')
                     )

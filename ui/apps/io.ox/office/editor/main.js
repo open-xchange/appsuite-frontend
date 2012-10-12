@@ -887,7 +887,7 @@ define('io.ox/office/editor/main',
             .addButton('file/print',    { label: gt('Print') })
             .end()
         .addRadioGroup(ToolPane.KEY_SHOW_TOOLBAR)
-            .addButton('insert', { label: gt('Insert') })
+            .addButton('insert', { label: gt('Insert'), active: false })
             .addButton('format', { label: gt('Format') })
             .addButton('table',  { label: gt('Table') })
             .addButton('image',  { label: gt('Image') })

@@ -14,7 +14,7 @@ define('io.ox/calendar/edit/module-recurrence',
       ['io.ox/calendar/util',
        'io.ox/calendar/edit/binding-util',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (util, BinderUtils, tmpl, gt) {
+       'gettext!io.ox/calendar/edit'], function (util, BinderUtils, tmpl, gt) {
 
     'use strict';
 
@@ -75,7 +75,7 @@ define('io.ox/calendar/edit/module-recurrence',
             self.$el.empty().append(tmpl('repeatoption', {
                 strings: {
                     REPEAT: gt('Repeat'),
-                    EDIT: gt('edit')
+                    EDIT: gt('Edit')
                 },
                 uid: _.uniqueId('io_ox_calendar_edit_')
             }));

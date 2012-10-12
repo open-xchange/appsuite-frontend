@@ -17,7 +17,7 @@ define('io.ox/calendar/edit/module-conflicts',
        'io.ox/core/http',
        'io.ox/calendar/view-grid-template',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, tmpl, gt) {
+       'gettext!io.ox/calendar/edit'], function (AppointmentModel, participantsModule, CalendarAPI, http, vgridtpl, tmpl, gt) {
 
     'use strict';
 

@@ -15,7 +15,7 @@ define('plugins/portal/reddit/register',
     ['io.ox/portal/mediaplugin',
      'settings!plugins/portal/reddit',
      'io.ox/core/date',
-     'gettext!io.ox/portal/mediaplugin'], function (MediaPlayer, settings, date, gt) {
+     'gettext!io.ox/portal'], function (MediaPlayer, settings, date, gt) {
 
     'use strict';
 

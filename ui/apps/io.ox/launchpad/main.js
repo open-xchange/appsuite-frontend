@@ -17,7 +17,7 @@ define('io.ox/launchpad/main',
     ['io.ox/core/desktop',
      'io.ox/core/api/apps',
      'io.ox/core/config',
-     'gettext!io.ox/core/launchpad',
+     'gettext!io.ox/core',
      'less!io.ox/launchpad/style.css'], function (desktop, api, config, gt) {
 
     'use strict';
@@ -131,9 +131,9 @@ define('io.ox/launchpad/main',
 
             clear();
 
-            var hRunning = $('<h1>').text('Running applications'),
+            var hRunning = $('<h1>').text(gt('Running applications')),
                 secRunning = $('<div>').addClass('section'),
-                hApps = $('<h1>').text('Your applications'),
+                hApps = $('<h1>').text(gt('Your applications')),
                 secInstalled = $('<div>').addClass('section'),
                 running;
 
@@ -151,7 +151,7 @@ define('io.ox/launchpad/main',
                 .append(
                     $('<a>', { href: '#', tabindex: '1' })
                     .addClass('btn btn-primary')
-                    .text('Manage applications')
+                    .text(gt('Manage applications'))
                     .on('click', fnOpenAppStore)
                 )
             );

@@ -17,7 +17,7 @@ define('io.ox/calendar/edit/module-participants',
        'io.ox/contacts/api',
        'io.ox/core/extensions',
        'dot!io.ox/calendar/edit/common.html',
-       'gettext!io.ox/calendar/edit/main'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, tmpl, gt) {
+       'gettext!io.ox/calendar/edit'], function (userAPI, groupAPI, resourceAPI, contactAPI, ext, tmpl, gt) {
 
     'use strict';
 

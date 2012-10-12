@@ -16,7 +16,7 @@ define("io.ox/editor/main",
      "io.ox/core/api/folder",
      "io.ox/core/tk/model",
      "io.ox/core/tk/view",
-     "gettext!io.ox/editor/main",
+     "gettext!io.ox/editor",
      "less!io.ox/editor/style.css"
     ], function (api, folderAPI, Model, View, gt) {
 

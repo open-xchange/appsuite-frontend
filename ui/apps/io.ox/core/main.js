@@ -19,7 +19,7 @@ define("io.ox/core/main",
      "io.ox/core/extensions",
      "io.ox/core/date",
      'io.ox/core/notifications',
-     "gettext!io.ox/core/main",
+     "gettext!io.ox/core",
      "io.ox/core/bootstrap/basics"], function (desktop, session, http, appAPI, ext, date, notifications, gt) {
 
     "use strict";
@@ -41,11 +41,18 @@ define("io.ox/core/main",
         launchers = topbar.find('.launchers'),
         launcherDropdown = topbar.find('.launcher-dropdown ul');
 
+    // whatever ...
+    gt('Address Book');
+    gt('Calendar');
+    gt('Tasks');
+    gt('Files');
+    gt('Conversations');
+
     // add launcher
     var addLauncher = function (side, label, fn, tooltip) {
         // construct
         var node = $('<div class="launcher">')
-            .append(_.isString(label) ? $.txt(label) : label)
+            .append(_.isString(label) ? $.txt(gt(label)) : label)
             .hover(
                 function () { $(this).addClass('hover'); },
                 function () { $(this).removeClass('hover'); }

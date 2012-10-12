@@ -17,7 +17,8 @@ define('io.ox/settings/main',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons) {
+      'gettext!io.ox/core',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
 
@@ -73,7 +74,7 @@ define('io.ox/settings/main',
 
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
-            title: 'Settings',
+            title: gt('Settings'),
             toolbar: true
         }));
 
@@ -90,7 +91,7 @@ define('io.ox/settings/main',
             forms.createCheckbox({
                 dataid: 'settings-expertcb',
                 initialValue: expertmode,
-                label: 'Expert\u00a0mode' // mmmh, nbsp sucks here
+                label: gt('Expert mode')
             })
             .on('update.model', function (e, options) {
                 expertmode = options.value;
