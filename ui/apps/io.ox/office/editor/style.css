@@ -136,15 +136,16 @@
         /* objects */
         span.inline, span.float {
             position: relative;
-            overflow: hidden;
 
             /* crop object contents at object border */
             > div.object {
-                position: relative;
+                position: absolute;
+                width: 100%;
+                height: 100%;
                 overflow: hidden;
-
-                > * {
-                    position: relative;
+                
+                img {
+                    max-width: none;
                 }
             }
 

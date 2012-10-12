@@ -28,7 +28,7 @@ define('io.ox/office/editor/format/imagestyles',
             width: {
                 def: 0,
                 set: function (element, width) {
-                    element.css('width', Utils.convertHmmToCssLength(width, 'px', 0));
+                    element.width(Utils.convertHmmToLength(width, 'px', 0));
                 }
             },
 
@@ -38,7 +38,7 @@ define('io.ox/office/editor/format/imagestyles',
             height: {
                 def: 0,
                 set: function (element, height) {
-                    element.css('height', Utils.convertHmmToCssLength(height, 'px', 0));
+                    element.height(Utils.convertHmmToLength(height, 'px', 0));
                 }
             },
 
@@ -172,11 +172,12 @@ define('io.ox/office/editor/format/imagestyles',
 
         if ((attributes.cropw > 0) && (attributes.croph > 0)) {
             // TODO: validation
-            span.children('div.object').css({
+            span.find('img').css({
+                position: 'absolute',
+                left: Utils.convertHmmToCssLength(-attributes.cropx, 'px', 0),
+                top: Utils.convertHmmToCssLength(-attributes.cropy, 'px', 0),
                 width: Utils.convertHmmToCssLength(attributes.cropw, 'px', 0),
-                height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0),
-                marginTop: Utils.convertHmmToCssLength(-attributes.cropy, 'px', 0),
-                marginLeft: Utils.convertHmmToCssLength(-attributes.cropx, 'px', 0)
+                height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0)
             });
         } else {
             // TODO: remove cropping

@@ -865,7 +865,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // get attributes of the style sheet
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                     // the resulting attributes to be updated at each element
-                    mergedAttributes = utils.extendOptions(styleAttributes, elementAttributes);
+                    mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
 
                 // update element formatting according to current attribute values
                 updateElementFormatting($element, mergedAttributes);
