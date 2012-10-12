@@ -868,8 +868,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 return result;
             }
 
-            // call passed iterator for all text nodes
-            if (node.nodeType === 3) {
+            // call passed iterator for all text nodes in span elements
+            if ((node.nodeType === 3) && (Utils.getNodeName(node.parentNode) === 'span')) {
                 // calculate/validate start/end offset in the text node
                 start = (node === range.start.node) ? Utils.minMax(range.start.offset, 0, node.nodeValue.length) : 0;
                 end = (node === range.end.node) ? Utils.minMax(range.end.offset, start, node.nodeValue.length) : node.nodeValue.length;
