@@ -135,7 +135,9 @@
 
         /* crop object contents at object border */
         span.inline, span.float {
-            overflow: hidden;
+            >div {
+                overflow: hidden;
+            }
         }
 
         /* selection box for objects/images */
@@ -149,7 +151,7 @@
             cursor: default;
             &.moveable { cursor: move; }
     
-            > div.handler {
+            > div.handle {
                 position: absolute;
                 width: 5px;
                 height: 5px;
