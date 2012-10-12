@@ -19,7 +19,8 @@ define('io.ox/mail/actions',
      'io.ox/mail/util',
      'gettext!io.ox/mail/mail',
      'io.ox/core/config',
-     'io.ox/core/notifications', 'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
+     'io.ox/core/notifications',
+     'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
 
     'use strict';
 

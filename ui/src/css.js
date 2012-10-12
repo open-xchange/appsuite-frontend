@@ -16,7 +16,7 @@
  */
 
 (function() {
-    
+
     function dirname(filename) {
         return filename.replace(/(?:^|(\/))[^\/]+$/, "$1");
     }
@@ -70,17 +70,17 @@
                 if (queue.length) console.error('recursive require', queue);
             }
         };
-        
+
         var classicRequire = req.config({
-            context: "classic", 
+            context: "classic",
             baseUrl: ox.base + "/apps"
         });
         classicRequire.load = oldload;
-        
+
         define('classic', {load: function (name, parentRequire, load, config) {
             classicRequire([name], load);
         } });
-        
+
         define('text', { load: function (name, parentRequire, load, config) {
             req(['/text;' + name], load);
         } });
@@ -88,7 +88,7 @@
             req(['/raw;' + name], load);
         } });
     }());
-    
+
     // css plugin
     define("css", {
         load: function (name, parentRequire, load, config) {
@@ -264,8 +264,6 @@ define("gettext", function (gettext) {
         }
     };
 });
-
-define('settings', ['io.ox/core/settings'], function (api) { return api; });
 
 /*
  * dot.js template loader

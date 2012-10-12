@@ -32,7 +32,7 @@ define('io.ox/files/mediaplayer',
         win: null,
         mediaelement: null,
 
-        container: $('<div class="mediaplayer_container">'),
+        container: $('<div class="abs mediaplayer_container">'),
         trackdisplay: $('<div class="mediaplayer_track">'),
         player: $('<div class="mediaplayer_player">'),
         playlist: $('<ul class="mediaplayer_playlist">'),
@@ -137,23 +137,21 @@ define('io.ox/files/mediaplayer',
             var self = this;
             this.win.busy().nodes.outer.append(
                 this.container.append(
-                    $('<div class="mediaplayer_wrapper">').append(
-                        $('<div class="mediaplayer_inner">').append(
-                            $('<div class="mediaplayer_buttons pull-right">').append(
-                                $('<button class="btn minimizemediaplayer">').text(gt('Minimize')),
-                                $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
-                            ),
-                            this.trackdisplay,
-                            this.player,
-                            this.playlist
-                        )
+                    $('<div class="atb mediaplayer_inner">').append(
+                        $('<div class="mediaplayer_buttons pull-right">').append(
+                            $('<button class="btn btn-inverse minimizemediaplayer">').text(gt('Minimize')),
+                            $('<button class="btn btn-primary closemediaplayer">').text(gt('Close'))
+                        ),
+                        this.trackdisplay,
+                        this.player,
+                        this.playlist
                     )
                 )
             );
             this.win.idle();
             this.trackdisplay.append($('<i class="icon-music"></i>'), $('<h3>'));
             this.getItems();
-            this.playlist.sortable();
+            this.playlist.sortable({ axis: 'y' });
             $('video, audio').mediaelementplayer({
                 width: 480,
                 audioWidth: 480,

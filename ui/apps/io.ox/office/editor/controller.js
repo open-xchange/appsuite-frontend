@@ -64,13 +64,13 @@ define('io.ox/office/editor/controller',
 
                 'document/undo': {
                     chain: 'document/editable',
-                    enable: function (enabled) { return enabled && editor.hasUndo(); },
-                    set: function () { editor.undo(); }
+                    enable: function (enabled) { return enabled && editor.undoAvailable() > 0; },
+                    set: function () { editor.undo(1); }
                 },
                 'document/redo': {
                     chain: 'document/editable',
-                    enable: function (enabled) { return enabled && editor.hasRedo(); },
-                    set: function () { editor.redo(); }
+                    enable: function (enabled) { return enabled && editor.redoAvailable() > 0; },
+                    set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
                     get: function () { return editor.hasHighlighting(); },

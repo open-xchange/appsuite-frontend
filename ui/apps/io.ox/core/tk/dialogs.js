@@ -321,6 +321,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
             isProcessed,
             open,
             close,
+            closeAll,
             closeByEscapeKey,
             closeByScroll,
             closeByClick,
@@ -329,20 +330,19 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
 
             overlay,
 
-            pane = $("<div>")
-                .addClass("io-ox-sidepopup-pane default-content-padding abs"),
+            pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
-            closeIcon = $('<span>').addClass('io-ox-sidepopup-close close').html('&times'),
+            closer = $('<div class="io-ox-sidepopup-close">').append(
+                    $('<button class="btn">').text('Close')
+                ),
 
-            popup = $("<div>")
-                .addClass("io-ox-sidepopup abs")
-                .append(closeIcon, pane),
+            popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
 
             arrow = options.arrow === false ? $() :
-                $("<div>")
-                .addClass("io-ox-sidepopup-arrow")
-                .append($("<div>").addClass("border"))
-                .append($("<div>").addClass("triangle")),
+                $('<div class="io-ox-sidepopup-arrow">').append(
+                    $('<div class="border">'),
+                    $('<div class="triangle">')
+                ),
 
             target = null,
 
@@ -354,7 +354,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
         Events.extend(this);
 
         if (options.modal) {
-            overlay = $("<div>").addClass("io-ox-sidepopup-overlay abs").append(popup, arrow);
+            overlay = $('<div class="io-ox-sidepopup-overlay abs">').append(popup, arrow);
         }
 
         // public nodes
@@ -409,8 +409,14 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
             }, 100);
         };
 
-        closeIcon.on('click', function (e) {
-            pane.trigger('click'); // route click to 'pane' since closeIcon is above pane
+        closeAll = function (e) {
+            e.data.target.find('.io-ox-sidepopup').trigger('close');
+        };
+
+        popup.on('close', close);
+
+        closer.find('.btn').on('click', function (e) {
+            pane.trigger('click'); // route click to 'pane' since closer is above pane
             close(e); // close side popup
             return false;
         });
@@ -449,6 +455,15 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
                 processEvent(e);
                 // clear timer
                 clearTimeout(timer);
+
+                // add "Close all"
+                if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
+                    closer.find('.close-all').remove();
+                    closer.prepend(
+                        $('<button class="btn close-all">').text('Close all')
+                        .on('click', { target: self.nodes.target }, closeAll)
+                    );
+                }
 
                 // add handlers to close popup
                 self.nodes.click.on("click", closeByClick);

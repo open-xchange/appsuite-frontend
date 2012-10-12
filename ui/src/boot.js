@@ -300,6 +300,12 @@ $(document).ready(function () {
             }
         }
 
+        function loadCoreFiles() {
+            // Set user's language (as opposed to the browser's language)
+            require("io.ox/core/gettext").setLanguage(ox.language);
+            return require([ox.base + "/pre-core.js"]);
+        }
+
         // got session via hash?
         if (_.url.hash('session')) {
             ox.session = _.url.hash('session');
@@ -308,14 +314,17 @@ $(document).ready(function () {
             ox.language = _.url.hash('language');
             ref = _.url.hash('ref');
             _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
-            loadCore();
+            loadCoreFiles().done(function () {
+                loadCore();
+            });
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            require("io.ox/core/session").autoLogin()
-                .done(function () {
+            return require("io.ox/core/session").autoLogin().done(function () {
+                loadCoreFiles().done(function () {
                     gotoCore(true);
-                })
-                .fail(fail);
+                });
+            })
+            .fail(fail);
         } else {
             fail();
         }
@@ -467,11 +476,8 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // Set user's language (as opposed to the browser's language)
-        require("io.ox/core/gettext").setLanguage(ox.language);
-
         // get pre core & server config
-        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
+        require([ox.base + "/src/serverconfig.js"])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;

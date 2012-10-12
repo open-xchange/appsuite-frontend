@@ -18,140 +18,137 @@
 @windowTopHeight: 60px;
 
 
-@playerBg:                  rgba(0,0,0,0.2);
+@playerBg:                  rgba(0,0,0,0.1);
 @playerPrimaryColor:        #fff;
-@playerSecondaryColor:      #eee;
-@playerHighlightColor:      #eaeaea;
-@playerHighlightTextColor:  #000;
+@playerSecondaryColor:      #444;
+@playerHighlightColor:      #555;
+@playerHighlightTextColor:  #fff;
 
-@playerTextColor:           #111;
+@playerTextColor:           #fff;
 
 @playerSelectionColor:      #08c;
 @playerSelectionTextColor:  #fff;
 
+@playerTrackColor:          #222;
+
 
 .mediaplayer_container {
+    
+    z-index: 10001; /* at least 1 higher than slideshow overlay */
+    
     background-color:@playerBg;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index:10000;
-    height:100%;
-
-    .mediaplayer_wrapper {
-        height:100%;
-        margin:0 auto;
+    
+    .mediaplayer_inner {
+        
+        left: 50%;
         width: @playerWidth;
-        box-shadow: 0 0 50px 1px #000;
+        margin-left: 0 - (@playerWidth / 2) - @playerMargin;
+        padding: @playerMargin;
+        
+        .box-shadow(0px 0px 50px 5px #000);
+        .vertical-gradient(#111, #333);
 
-        .mediaplayer_inner {
-            position: absolute;
-            top:  0;
-            left: 0;
-            right:0;
-            width: @playerWidth;
-            height:100%;
-            margin:auto;
-            background:@playerPrimaryColor;
-            padding:@playerMargin;
+        .mediaplayer_buttons {
+            margin-bottom:@playerMargin;
+            button { margin-left:@playerMargin; }
+        }
 
-            .mediaplayer_buttons {
-                margin-bottom:@playerMargin;
-                button { margin-left:@playerMargin; }
+        .mediaplayer_track {
+            height: 120px;
+            display:table-cell;
+            vertical-align: middle;
+            width: 480px;
+            background: @playerTrackColor;
+            margin-bottom: @playerMargin;
+
+            i {
+                position:absolute;
+                top:68px;
+                font-size:75px;
+                margin-left:40px;
+                margin-top:30px;
+                color:#333;
             }
 
-            .mediaplayer_track {
-                height: 120px;
-                display:table-cell;
-                vertical-align: middle;
-                width: 480px;
-                background: @playerSecondaryColor;
-                margin-bottom:@playerMargin;
-
-                i {
-                    position:absolute;
-                    top:68px;
-                    font-size:75px;
-                    margin-left:40px;
-                    margin-top:30px;
-                    color:#ccc;
-                }
-
-                h3 {
-                    margin-left: 150px;
-                    width:330px;
-                    color:@playerTextColor;
-                    font-size: 18px;
-                    font-family: OpenSans;
-                    font-weight: 200;
-                }
+            h3 {
+                margin-left: 150px;
+                width:330px;
+                color:@playerTextColor;
+                font-size: 18px;
+                font-family: OpenSans;
+                font-weight: 200;
             }
+        }
 
-            .mediaplayer_player {
+        .mediaplayer_player {
 
-                background:@playerSecondaryColor;
-                width:@playerWidth;
-                margin-bottom:@playerMargin;
+            background:@playerSecondaryColor;
+            width:@playerWidth;
+            margin-bottom:@playerMargin;
 
-                // MediaElement Container
-                .mejs-container {
-                    background: #08c;
+            // MediaElement Container
+            .mejs-container {
+                background: #08c;
 
-                    // Controls Background
-                    .mejs-controls {
-                        @mediaplayerSliderBackground: darken(#08c, 5%);
+                // Controls Background
+                .mejs-controls {
+                
+                    @mediaplayerSliderBackground: darken(@link-color, 10%);
 
-                        background:rgba(0, 136, 204, 0.2);
+                    background-color: #333;
 
-                        .mejs-time-rail {
-                            .mejs-time-total {
-                                    background:@mediaplayerSliderBackground;
-                                .mejs-time-loaded {
-
-                                    background:lighten(#08c, 10%);
-                                }
-                                .mejs-time-current { }
-                            }
-                        }
-                        .mejs-horizontal-volume-slider {
-                            .mejs-horizontal-volume-total {
+                    .mejs-time-rail {
+                        .mejs-time-total {
                                 background:@mediaplayerSliderBackground;
+                            .mejs-time-loaded {
+
+                                background: lighten(@link-color, 10%);
                             }
-                            .mejs-horizontal-volume-current { }
+                            .mejs-time-current { }
                         }
+                    }
+                    .mejs-horizontal-volume-slider {
+                        .mejs-horizontal-volume-total {
+                            background:@mediaplayerSliderBackground;
+                        }
+                        .mejs-horizontal-volume-current { }
                     }
                 }
-
             }
 
-            .mediaplayer_playlist {
-                overflow-y:scroll;
-                height:100%;
-                margin:0;
-                padding:0;
-                li {
-                    list-style:none;
-                    background:@playerSecondaryColor;
-                    margin-bottom:1px;
-                    a {
-                        padding:@playerMargin;
-                        display:block;
-                        color:@playerTextColor;
+        }
 
-                        &:hover {
-                            text-decoration:none;
-                        }
-                    }
+        .mediaplayer_playlist {
+            
+            position: absolute;
+            top: 219px;
+            left: 13px;
+            right: 13px;
+            bottom: 13px;
+            margin: 0;
+            overflow-y: auto;
+            
+            li {
+                list-style:none;
+                background:@playerSecondaryColor;
+                margin-bottom:1px;
+                a {
+                    padding:@playerMargin;
+                    display:block;
+                    color:@playerTextColor;
+
                     &:hover {
-                        background-color:@playerHighlightColor;
-
+                        text-decoration:none;
                     }
-                    &.active {
-                        background-color:@playerSelectionColor;
-                        a {
-                            color:@playerSelectionTextColor;
-                        }
+                }
+                &:hover {
+                    background-color:@playerHighlightColor;
+
+                }
+                &.active {
+                    background-color:@playerSelectionColor;
+                    a {
+                        color:@playerSelectionTextColor;
                     }
                 }
             }

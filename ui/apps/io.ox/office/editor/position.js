@@ -93,8 +93,7 @@ define('io.ox/office/editor/position',
             if (evaluateCharacterPosition) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     if ((DOM.isFieldSpan(prevNode)) || (DOM.isImageSpan(prevNode))) {
-                        // images and fields are counted as single character
-                        textLength += 1;
+                        textLength += 1;  // images and fields are counted as single character
                     } else {
                         textLength += $(prevNode).text().length;
                     }
@@ -144,11 +143,18 @@ define('io.ox/office/editor/position',
         var node = domposition.node,
             offset = domposition.offset,
             selectedNodeName = node.nodeName,
-            imageFloatMode = null;
+            imageFloatMode = null,
+            checkImageFloatMode = true;
 
         if (DOM.isFieldSpan(node.parentNode)) {
-            node = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR);
             offset = 0;
+            checkImageFloatMode = false;
+        }
+
+        if (DOM.isImageSpan(node)) {
+            offset = 0;
+            imageFloatMode = $(node).data('mode');
+            checkImageFloatMode = false;
         }
 
         isEndPoint = isEndPoint ? true : false;
@@ -182,23 +188,24 @@ define('io.ox/office/editor/position',
                 Utils.error('Position.getTextLevelOxoPosition(): Failed to determine text node from node: ' + node.nodeName + " with offset: " + offset);
                 return;
             }
+
         } else {
 
-            if ((node.nodeType === 3) || (Utils.getNodeName(node) === 'span'))  {
-                if ($(node).text().length === offset) {
-                    // Checking if an inline image follows
-                    var imageSpanNode = null;
-                    if ((node.parentNode) && (node.parentNode.nextSibling) && (DOM.isImageSpan(node.parentNode.nextSibling))) {
-                        imageSpanNode = node.parentNode.nextSibling;
-                    } else if ((node.nextSibling) && (DOM.isImageSpan(node.nextSibling))) {
-                        imageSpanNode = node.nextSibling;
-                    }
-
-                    if (imageSpanNode !== null) {
-                        imageFloatMode = $(imageSpanNode).data('mode'); // must be 'inline' mode
+            if (checkImageFloatMode) {
+                var localNode = node;
+                if (localNode.nodeType === 3) {
+                    localNode = localNode.parentNode;
+                }
+                if (Utils.getNodeName(localNode) === 'span') {
+                    if ($(localNode).text().length === offset) {
+                        // Checking if an inline image follows
+                        if ((localNode.nextSibling) && (DOM.isImageSpan(localNode.nextSibling))) {
+                            imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
+                        }
                     }
                 }
             }
+
         }
 
         // calculating the logical position for the specified text node, span, or image
@@ -691,9 +698,7 @@ define('io.ox/office/editor/position',
      * @param {String} selector
      *  The selector against which the dom node is compared.
      *
-     * @returns {Number | Node}
-     *  The index in the logical position or -1, if no corresponding
-     *  dom node can be found.
+     * @returns {Object}
      */
     Position.getLastNodeInformationInPositionByNodeName = function (startnode, position, selector) {
 
