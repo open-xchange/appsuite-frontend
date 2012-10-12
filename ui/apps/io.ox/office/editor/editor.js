@@ -4092,15 +4092,13 @@ define('io.ox/office/editor/editor',
             .on('drop', processDrop)
             .on('contextmenu', processContextMenu)
             .on('cut paste', false);
-
 /*
         // POC: image selection
         editdiv.on('click', 'span.inline, span.float', function () {
             DOM.addObjectSelection(this, { moveable: true, sizeable: true });
         });
 */
-
-    } // cxlass Editor
+    } // class Editor
 
     // exports ================================================================
 

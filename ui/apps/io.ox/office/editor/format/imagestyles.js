@@ -173,14 +173,18 @@ define('io.ox/office/editor/format/imagestyles',
         if ((attributes.cropw > 0) && (attributes.croph > 0)) {
             // TODO: validation
             span.find('img').css({
-                position: 'absolute',
                 left: Utils.convertHmmToCssLength(-attributes.cropx, 'px', 0),
                 top: Utils.convertHmmToCssLength(-attributes.cropy, 'px', 0),
                 width: Utils.convertHmmToCssLength(attributes.cropw, 'px', 0),
                 height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0)
             });
         } else {
-            // TODO: remove cropping
+            span.find('img').css({
+                left: 0,
+                top: 0,
+                width: span.width() + 'px',
+                height: span.height() + 'px'
+            });
         }
 
         // position
