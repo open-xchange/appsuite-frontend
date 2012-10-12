@@ -202,7 +202,7 @@ define('io.ox/files/icons/perspective',
     }
 
     function filterImagesList(list) {
-        return $.grep(list, function (o) { return (/\.(gif|tiff|jpe?g|gmp|png)$/i).test(o.filename); });
+        return $.grep(list, function (o) { return (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(o.filename); });
     }
 
     function activateInlineLinks(list) {
