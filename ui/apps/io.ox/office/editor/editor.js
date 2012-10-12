@@ -986,7 +986,8 @@ define('io.ox/office/editor/editor',
         };
 
         this.setEditMode = function (state) {
-            var showReadonlyInfo = state === false && editMode !== false;
+            var showReadOnlyInfo = state === false && editMode !== false,
+                showEditModeInfo = state === true && editMode === false;
 
             editMode = state;
             editdiv.toggleClass('user-select-text', !!editMode).attr('contenteditable', !!editMode);
@@ -1005,8 +1006,15 @@ define('io.ox/office/editor/editor',
                 Utils.getDomNode(editdiv).onresizestart = function () { return false; };
             }
 
-            if (showReadonlyInfo) {
-                Alert.showWarning(gt('Read Only Mode'), gt('Another user is currently editing this document.'), editdiv.parent(), 10000);
+            if (showReadOnlyInfo) {
+                Alert.showWarning(gt('Read Only Mode'),
+                        gt('Another user is currently editing this document.'),
+                        editdiv.parent(),
+                        -1,
+                        {label: gt('Acquire Edit Rights'), key: 'document/editRights', controller: app.getController()}
+                    );
+            } else if (showEditModeInfo) {
+                Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), editdiv.parent(), 5000);
             }
         };
 

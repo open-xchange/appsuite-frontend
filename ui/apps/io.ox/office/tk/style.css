@@ -624,5 +624,11 @@ div.io-ox-view-component {
         z-index: 100;
         width: 100%;
         .box-sizing(border-box);
+        
+        button {
+        	float: right;
+        	position: relative;
+        	right: -21px;
+        }
     }
 }
