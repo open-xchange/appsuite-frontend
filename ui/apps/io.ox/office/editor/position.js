@@ -338,6 +338,60 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Tries to get a DOM element from the specified logical position. The
+     * passed position must match the passed selector. Otherwise, a warning
+     * will be printed to the debug console.
+     *
+     * @param {jQuery} paragraphs
+     *  The list of top-level content nodes.
+     *
+     * @param {Number[]} position
+     *  The logical position of the target element.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to match the element at the
+     *  specified position. The selector will be passed to the jQuery method
+     *  jQuery.is() for each node. If this selector is a function, it will be
+     *  called with the current DOM node bound to the symbol 'this'. See the
+     *  jQuery API documentation at http://api.jquery.com/is for details.
+     *
+     * @returns {HTMLElement|Null}
+     *  The DOM element at the passed logical position, if it matches the
+     *  passed selector, otherwise null.
+     */
+    Position.getSelectedElement = function (paragraphs, position, selector) {
+
+        var // the DOM node located at the passed position
+            domPos = Position.getDOMPosition(paragraphs, position);
+
+        if (domPos && domPos.node && $(domPos.node).is(selector)) {
+            return domPos.node;
+        }
+
+        Utils.warn('Position.getSelectedElement(): expected element not found at position ' + JSON.stringify(position) + '.');
+        return null;
+    };
+
+    /**
+     * Tries to get a DOM table element from the specified logical position.
+     * The passed position must point to a table element. Otherwise, a warning
+     * will be printed to the debug console.
+     *
+     * @param {jQuery} paragraphs
+     *  The list of top-level content nodes.
+     *
+     * @param {Number[]} position
+     *  The logical position of the target table element.
+     *
+     * @returns {HTMLTableElement|Null}
+     *  The DOM table element at the passed logical position, if existing,
+     *  otherwise null.
+     */
+    Position.getTableElement = function (paragraphs, position) {
+        return Position.getSelectedElement(paragraphs, position, 'table');
+    };
+
+    /**
      * Helper function for Position.getTextLevelOxoPosition. If the node is not
      * a text node, this function determines the correct text node, that
      * is used for calculation of the logical position instead of the
