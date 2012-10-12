@@ -39,8 +39,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * Predefined values for the 'color' attribute.
      */
     var Color = {
-            BLACK: { type: 'rgb', value: '000000', transform: {} },
-            WHITE: { type: 'rgb', value: 'FFFFFF', transform: {} }
+            BLACK: { type: 'rgb', value: '000000', transform: [] },
+            WHITE: { type: 'rgb', value: 'FFFFFF', transform: [] }
         };
 
     /**
