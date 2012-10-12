@@ -75,14 +75,16 @@ define('io.ox/office/editor/format/stylesheets',
      *      used if neither the style sheet of an element nor its explicit
      *      attributes collection specify a value for the attribute.
      *  - 'set': An optional setter function that applies the passed attribute
-     *      value to a DOM element. The function receives the DOM element as
+     *      value to a DOM element. Will be called in the context of the style
+     *      sheet container instance. The function receives the DOM element as
      *      jQuery object in the first parameter, and the attribute value in
      *      the second parameter. An alternative way to update the element
      *      formatting using a complete map of all attribute values is to
      *      specify a global setter handler (see options below).
      *  - 'preview': An optional function that initializes an options map that
      *      will be used to create a list item in a GUI style sheet selector
-     *      control. The function receives the options map to be extended in
+     *      control. Will be called in the context of the style sheet container
+     *      instance. The function receives the options map to be extended in
      *      the first parameter, and the attribute value in the second
      *      parameter.
      *
@@ -259,7 +261,7 @@ define('io.ox/office/editor/format/stylesheets',
             // updates a single attribute, if it has a registered setter in its definition
             function updateSingleAttribute(name, value) {
                 if ((name in definitions) && _.isFunction(definitions[name].set)) {
-                    definitions[name].set(element, value);
+                    definitions[name].set.call(self, element, value);
                 }
             }
 
@@ -882,7 +884,7 @@ define('io.ox/office/editor/format/stylesheets',
             _(attributes).each(function (value, name) {
                 var definition = definitions[name];
                 if (definition && _.isFunction(definition.preview)) {
-                    definition.preview(options, value);
+                    definition.preview.call(self, options, value);
                 }
             });
 
