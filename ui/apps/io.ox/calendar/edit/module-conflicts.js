@@ -22,7 +22,7 @@ define('io.ox/calendar/edit/module-conflicts',
 
     'use strict';
 
-    var ConflictModel = AppointmentModel.extend({
+    var ConflictModel = AppointmentModel.Appointment.extend({
         initialize: function () {
             var self = this,
                 conflicting_participants = new participantsModule.Participants(self.get('participants'));
@@ -70,7 +70,6 @@ define('io.ox/calendar/edit/module-conflicts',
         tagName: 'div',
         render: function () {
             var conflictList = vgridtpl.drawSimpleGrid(this.collection.toJSON());
-            var self = this;
             // show info about conflicting appointment
             require(
                     ["io.ox/core/tk/dialogs", "io.ox/calendar/view-grid-template"],
@@ -102,7 +101,7 @@ define('io.ox/calendar/edit/module-conflicts',
 
             this.point.each(function (extension) {
                 var node = getRow(extension.forceLine || rows.length);
-                extension.invoke('draw', node, {model: self.model, parentView: self});
+                extension.invoke('draw', node, this.baton);
             });
 			this.$el.append(conflictList);
             this.$el.append(rows);

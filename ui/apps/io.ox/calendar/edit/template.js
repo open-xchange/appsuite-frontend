@@ -62,8 +62,6 @@ define('io.ox/calendar/edit/template',
         _.extend(this, {
             tagName: 'div',
             render: function () {
-
-                console.log('data', this);
                 this.nodes = {};
                 this.$el.append(
                         this.nodes.controlGroup = $('<div class="control-group">').append(
@@ -88,20 +86,16 @@ define('io.ox/calendar/edit/template',
                 return this;
             },
             setValueInField: function () {
-                // TODO make this nice, conversion to UTC is not the right way here
                 var value = this.model.get(this.attribute);
-                var cValue = (this.baton.lasso) ? dateAPI.Local.utc(value): value;
+                var cValue = (this.baton.mode === 'edit') ? dateAPI.Local.localTime(value): value;
                 this.nodes.timezoneField.text(dateAPI.Local.getTTInfoLocal(value).abbr);
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
                 this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
             },
             updateModelDate: function () {
-
-                console.log('updateModelDate',  this.nodes.dayField.val());
                 this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
             },
             updateModelTime: function () {
-                console.log('updateModelTime', this.nodes.timeField.val());
                 this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
             },
             showError: function (messages) {

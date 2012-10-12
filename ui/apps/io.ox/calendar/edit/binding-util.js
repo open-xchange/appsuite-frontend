@@ -24,7 +24,6 @@ define('io.ox/calendar/edit/binding-util',
             }
         },
         convertTime: function (direction, value, attribute, model) {
-            console.log("converttime ", direction);
             if (direction === 'ModelToView') {
                 return BinderUtils._toTime(value, attribute, model, direction);
             } else {
@@ -55,26 +54,22 @@ define('io.ox/calendar/edit/binding-util',
             }
 
             formatted = new dateAPI.Local(mydate).format(dateAPI.DATE);
-            console.log('_toDate ', value, attribute, formatted);
             return formatted;
         },
-        _toTime: function (value, attribute, model) {
-
+        _toTime: function (value, attribute) {
             var myTime, formatted;
             if (!value) {
                 return null;
             }
-            myTime = /*dateAPI.Local.utc*/(parseInt(value, 10)); // for edit this is right, but nor for lasso
+            myTime = dateAPI.Local.utc(parseInt(value, 10));
 
             if (_.isNull(myTime)) {
                 return value;
             }
             formatted =  new dateAPI.Local(myTime).format(dateAPI.TIME);
-            console.log('_toTime ', value, attribute, formatted);
             return formatted;
         },
         _timeStrToDate: function (value, attribute, model) {
-
             var myValue = parseInt(model.get(attribute), 10) || false;
             if (!myValue) {
                 return value;
@@ -86,7 +81,6 @@ define('io.ox/calendar/edit/binding-util',
                 return mydate.getTime();
             }
 
-
             if (parsedDate.getTime() === 0) {
                 return model.get(attribute);
             }
@@ -95,7 +89,6 @@ define('io.ox/calendar/edit/binding-util',
             mydate.setMinutes(parsedDate.getMinutes());
             mydate.setSeconds(parsedDate.getSeconds());
 
-            console.log('_timeStrToDate ', value, attribute, dateAPI.Local.localTime(mydate.getTime()));
             return dateAPI.Local.localTime(mydate.getTime());
         },
         _dateStrToDate: function (value, attribute, model) {
@@ -119,7 +112,7 @@ define('io.ox/calendar/edit/binding-util',
             mydate.setDate(parsedDate.getDate());
             mydate.setMonth(parsedDate.getMonth());
             mydate.setYear(parsedDate.getYear());
-            console.log('_dateStrToDate ', value, attribute,  dateAPI.Local.localTime(mydate.getTime()));
+
             return dateAPI.Local.localTime(mydate.getTime());
         }
     };

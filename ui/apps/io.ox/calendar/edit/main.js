@@ -71,7 +71,6 @@ define('io.ox/calendar/edit/main',
             this.model.off('change:title');
         },
         edit: function (data) {
-            console.log('edit appointment', data);
             var self = this;
             function cont(data) {
                 self.model = appointmentModel.factory.create(data);
@@ -163,8 +162,6 @@ define('io.ox/calendar/edit/main',
         considerSaved: false,
         create: function (data) {
             var self = this;
-
-            console.log('create app', data);
             self.model = appointmentModel.factory.create(data);
             appointmentModel.setDefaultParticipants(self.model).done(function () {
                 self.view = new MainView({model: self.model, lasso: data.lasso || false});

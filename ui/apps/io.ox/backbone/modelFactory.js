@@ -46,7 +46,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             this.id = obj.id;
 
             delete this.attributes._realm;
-            
+
             this.on("change:id", function () {
                 self.id = self.get("id");
             });
@@ -95,10 +95,9 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             }
         },
         sync: function (action, model, callbacks) {
-            console.log('factory', action, model);
 
             var self = this;
-            
+
             // action is one of 'update', 'create', 'delete' or 'read'
             if (action === 'delete') {
                 action = 'destroy';
@@ -205,11 +204,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 return serverAttributes[uid] || {};
             }
         };
-        
+
         this.create = function (options) {
             var loaded = new factory.model(options);
             var uid = factory.internal.toUniqueIdFromObject(options);
-            
+
             models[uid] = loaded;
             serverAttributes[uid] = JSON.parse(JSON.stringify(loaded.toJSON()));
             return loaded;

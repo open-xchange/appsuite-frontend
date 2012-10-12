@@ -76,7 +76,6 @@ define('io.ox/calendar/edit/model-appointment',
         },
         save: function () {
 
-            console.log('model save');
             var self = this,
                 df = new $.Deferred();
 

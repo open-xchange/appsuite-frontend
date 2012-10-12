@@ -29,9 +29,9 @@ define('io.ox/calendar/model',
     defStart.setHours(defStart.getHours() + 1);
     defEnd.setMinutes(0);
     defEnd.setHours(defEnd.getHours() + 2);
-    
+
     var RECURRENCE_FIELDS = "recurrence_type interval days day_in_month month until occurrences".split(" ");
-    
+
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
@@ -76,19 +76,18 @@ define('io.ox/calendar/model',
                 return participants;
             }
         },
-        
+
         getUpdatedAttributes: function (model) {
             var attributesToSave = model.changedSinceLoading();
             attributesToSave.id = model.id;
             if (!attributesToSave.folder) {
                 attributesToSave.folder = model.get('folder') || model.get('folder_id');
             }
-            
+
             var anyRecurrenceFieldChanged = _(RECURRENCE_FIELDS).any(function (attribute) {
-                console.log(attribute, attributesToSave[attribute], !_.isUndefined(attributesToSave[attribute]));
                 return !_.isUndefined(attributesToSave[attribute]);
             });
-            
+
             if (anyRecurrenceFieldChanged) {
                 _(RECURRENCE_FIELDS).each(function (attribute) {
                     var value = model.get(attribute);
@@ -104,21 +103,21 @@ define('io.ox/calendar/model',
     ext.point("io.ox/calendar/model/validation").extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
+            /*if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
                 this.add('start_date', gt("The start date must be before the end date."));
                 this.add('end_date', gt("The start date must be before the end date."));
-            }
+            }*/
         }
     });
 
     Validators.validationFor('io.ox/calendar/model', {
-        title: { format: 'string', mandatory: true},
+        title: { format: 'string', mandatory: true}/*,
         start_date : { format: 'date', mandatory: true},
-        end_date: { format: 'date', mandatory: true}
+        end_date: { format: 'date', mandatory: true}*/
     });
-    
+
     // Recurrence
-    
+
     // First, some constants
     // A series is of a certain recurrence type
     // daily, weekly, monhtly, yearly, no_recurrence
@@ -142,7 +141,7 @@ define('io.ox/calendar/model',
         FRIDAY: 32,
         SATURDAY: 64
     };
-    
+
     DAYS.i18n = {
         SUNDAY: gt("sunday"),
         MONDAY: gt("monday"),
@@ -152,7 +151,7 @@ define('io.ox/calendar/model',
         FRIDAY: gt("friday"),
         SATURDAY: gt("saturday")
     };
-    
+
     // Usage: DAYS.pack('monday', 'wednesday', 'friday') -> some bitmask
     DAYS.pack = function () {
         var result = 0;
