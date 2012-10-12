@@ -68,7 +68,7 @@ define('plugins/portal/facebook/register',
             proxy.request({
                 api: 'facebook',
                 url: 'https://graph.facebook.com/fql?q=' + JSON.stringify({
-                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 1",
+                    newsfeed: "SELECT actor_id, message, description , created_time, source_id FROM stream WHERE filter_key in (SELECT filter_key FROM stream_filter WHERE uid=me() AND type = 'newsfeed') AND is_hidden = 0 LIMIT 5",
                     profiles: "SELECT id, name FROM profile WHERE id IN (SELECT actor_id, source_id FROM #newsfeed)"
                 })
             }).pipe(JSON.parse).done(function (resultsets) {
@@ -82,16 +82,19 @@ define('plugins/portal/facebook/register',
                     $previewNode.append(
                         $('<div>').text(gt('No wall posts yet.')));
                 } else {
-                    var post = wall[0];
-                    var message = post.message || post.description || '';
-                    if (message.length > 150) {
-                        message = message.substring(0, 150) + '...';
-                    }
-                    $previewNode.append(
-                        $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
-                        $('<span class="io-ox-portal-preview-thirdline">').text(message));
+                    console.log("Preview:", wall);
+                    _(wall).each(function (post) {
+                        var message = post.message || post.description || '';
+                        if (message.length > 150) {
+                            message = message.substring(0, 150) + '...';
+                        }
+                        $previewNode.append(
+                            $('<span class="io-ox-portal-preview-firstline">').append($('<b>').text(getProfile(profiles, post.actor_id).name + ': ')),
+                            $('<span class="io-ox-portal-preview-thirdline">').text(message),
+                            '<br />'
+                        );
+                    });
                 }
-
                 deferred.resolve($previewNode);
             }).fail(function () {
                 deferred.resolve(control.CANCEL);

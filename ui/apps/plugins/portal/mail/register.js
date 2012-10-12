@@ -66,7 +66,7 @@ define('plugins/portal/mail/register',
                         if (mails.length === 0) {
                             mailsLoaded.resolve(null);
                         } else {
-                            var mail = _.extend({ view: 'text', unseen: true }, mails[0]);
+                            var mail = _.extend({ view: 'text', unseen: true }, mails);
                             mailApi.get(mail).then(mailsLoaded.resolve, mailsLoaded.reject);
                         }
                     })
@@ -74,25 +74,28 @@ define('plugins/portal/mail/register',
             });
             return mailsLoaded;
         },
-        drawTile: function (mail) {
+        drawTile: function (mails) {
             var deferred = $.Deferred();
             var $node = $(this);
-            require(["io.ox/mail/api"], function (mailApi) {
-                $node.addClass('mail-portal-tile');
-                var subject = mail.subject;
-                var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
-                var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 999);
-
-                $node.append(
+            var $previewbox = $('<div class="io-ox-clear io-ox-portal-preview">');
+            $node
+                .addClass('mail-portal-tile')
+                .append(
                     $('<h1 class="tile-heading">').text(gt("Inbox")),
-                    $('<div class="io-ox-clear io-ox-portal-preview">').append(
+                    $previewbox);
+            require(["io.ox/mail/api"], function (mailApi) {
+                _(mails).each(function (mail) {
+                    var subject = mail.subject;
+                    var from = mail.from[0][1] + ":"; //brittle, but I could not care less. Don't ask me why the fuck I cannot _(mail.from).reduce(...) this.
+                    var mailtext = mailApi.beautifyMailText(mail.attachments[0].content, 999);
+                    $previewbox.append(
                         $('<span class="io-ox-mail-preview-from io-ox-portal-preview-firstline">').text(from),
                         ' ',
                         $('<span class="io-ox-mail-preview-subject io-ox-portal-preview-secondline">').text(subject),
                         ' ',
                         $('<span class="io-ox-mail-preview-text io-ox-portal-preview-thirdline">').html(mailtext)
-                    )
-                );
+                    );
+                });
                 deferred.resolve();
             });
 

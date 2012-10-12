@@ -90,7 +90,7 @@ define('plugins/portal/twitter/register',
         });
     };
     var loadTile = function () {
-        return loadFromTwitter({count: 1, include_entities: true});
+        return loadFromTwitter({count: 5, include_entities: true});
     };
     var drawTile = function (tweets, $node) {
         if (!tweets) {
@@ -100,14 +100,15 @@ define('plugins/portal/twitter/register',
             $node.append(
                 $('<div class="io-ox-portal-preview">').text(gt('No tweets yet.')));
         } else {
-            var tweet = tweets[0];
-            var message = $('<div>').html(tweet.text).text();
-            $node.append(
-                $('<div class="io-ox-portal-preview">').append(
-                    $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
-                    $('<span class="io-ox-portal-preview-thirdline">').text(message)
-                )
-            );
+            _(tweets).each(function (tweet) {
+                var message = $('<div>').html(tweet.text).text();
+                $node.append(
+                    $('<div class="io-ox-portal-preview">').append(
+                        $('<span class="io-ox-portal-preview-firstline">').text('@' + tweet.user.name + ': '),
+                        $('<span class="io-ox-portal-preview-thirdline">').text(message)
+                    )
+                );
+            });
         }
     };
 

@@ -92,37 +92,8 @@
 
 @tile-margin: 1px;
 @tile-width: 270px;
-@tile-height: 180px;
-/*
-@media all and (min-width: 320px) {
-    .io-ox-portal-tiles { width: 1*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 640px) {
-    .io-ox-portal-tiles { width: 2*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 960px) {
-    .io-ox-portal-tiles { width: 3*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1280px) {
-    .io-ox-portal-tiles { width: 4*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1600px) {
-    .io-ox-portal-tiles { width: 5*(@tile-width + 2*@tile-margin);}
-}
-@media all and (min-width: 1920px) {
-    .io-ox-portal-tiles { width: 6*(@tile-width + 2*@tile-margin); }
-}
-@media all and (min-width: 2240px) {
-    .io-ox-portal-tiles { width: 7*(@tile-width + 2*@tile-margin); }
-}
-@media all and (min-width: 2560px) {
-    .io-ox-portal-tiles { width: 8*(@tile-width + 2*@tile-margin); }
-}
-.io-ox-portal-widget-tile-border {
-    height: @tile-height;
-    width: @tile-width;
-}
-*/
+@tile-height: 360px;
+
 .io-ox-portal-widget-tile-border {
     margin: 0;
     padding: 0 @padding @padding 0;
@@ -170,30 +141,6 @@
     height: 100%;
 }
 
-/*@media all and (min-height: 180px) {
-    .io-ox-portal-widget-tile-border { height: 99%; }
-}
-@media all and (min-height: 360px) {
-    .io-ox-portal-widget-tile-border { height: 49%; }
-}
-@media all and (min-height: 540px) {
-    .io-ox-portal-widget-tile-border { height: 32%; }
-}
-@media all and (min-height: 720px) {
-    .io-ox-portal-widget-tile-border { height: 24%; }
-}
-@media all and (min-height: 900px) {
-    .io-ox-portal-widget-tile-border { height: 19%; }
-}
-@media all and (min-height: 1080px) {
-    .io-ox-portal-widget-tile-border { height: 16%; }
-}
-@media all and (min-height: 1260px) {
-    .io-ox-portal-widget-tile-border { height: 14%; }
-}
-@media all and (min-height: 1440px) {
-    .io-ox-portal-widget-tile-border { height: 12%; }
-}*/
 .io-ox-portal-widget-tile {
     background: #cce;
     float: left;
@@ -205,7 +152,6 @@
 }
 .io-ox-portal-preview {
     overflow: hidden;
-    height: 6em; 
     line-height: 1.5em;
     text-overflow: ellipsis;
 }
@@ -231,7 +177,7 @@
     margin-bottom: @large-padding;
 }
 .io-ox-portal-content .vgrid-cell.mail {
-    height: 4em;
+    height: 8em;
 }
 .io-ox-portal-tile-active {
 }

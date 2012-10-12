@@ -251,7 +251,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
             addFillers(fillers, count, minIndex, maxIndex);
             point.sort();
-            addFillers(4, 12, maxIndex, maxIndex + 4);
+            addFillers(fillers, count, maxIndex, maxIndex + 100);
 
             point.each(function (extension) {
                 if (!extension.isEnabled) {
