@@ -723,8 +723,7 @@ define('io.ox/mail/view-detail',
                 if (length > 5) {
                     outer.append(
                         //#. 'more' like in 'x more attachments' / 'weitere' in German
-                        $('<a href="#">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments),
-                        $.txt(' ')
+                        $('<a href="#" class="n-more">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments)
                     );
                 }
                 // how 'all' drop down?
