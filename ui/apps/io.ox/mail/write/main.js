@@ -154,7 +154,7 @@ define('io.ox/mail/write/main',
         };
 
         function focus(name) {
-            app.getWindowNode().find('input[name=' + name + ']').focus().select();
+            app.getWindowNode().find('input[name="' + name + '"], input[data-type="' + name + '"]').focus().select();
         }
 
         // launcher
