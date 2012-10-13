@@ -348,7 +348,7 @@ define("io.ox/mail/api",
                     action: apiAction,
                     id: obj.id,
                     folder: obj.folder || obj.folder_id,
-                    timestamp: 0
+                    timestamp: _.now() // to be safe
                 },
                 data: data,
                 appendColumns: false

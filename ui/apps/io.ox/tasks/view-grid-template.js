@@ -49,7 +49,7 @@ define('io.ox/tasks/view-grid-template',
                     fields.end_date.text(data.end_date);
                     fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
                         .text($.trim(data.status) || '\u00A0');
-                    fields.user[data.participants.length ? 'show' : 'hide']();
+                    fields.user[data.participants && data.participants.length ? 'show' : 'hide']();
                     if (data.percent_completed > 0 && data.percent_completed < 100) {
                         fields.progress.find('.bar').css('width', data.percent_completed + '%').end().show();
                     } else {
