@@ -224,7 +224,7 @@
     }
 
     &.thread-inline-actions .io-ox-inline-links {
-        margin-bottom: 0;
+        margin: 0;
     }
 
     .alert {
