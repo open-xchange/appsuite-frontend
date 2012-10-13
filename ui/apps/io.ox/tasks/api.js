@@ -30,7 +30,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 console.log("no folderAttribute for cache Keygen found, using default");
                 folder = folderApi.getDefaultFolder("tasks");
             }
-                
+
             return obj ? folder + '.' + obj.id : '';
         },
         requests: {
@@ -44,7 +44,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             },
             list: {
                 action: "list",
-                columns: "1,20,200,202,203,300,309",
+                columns: "1,20,200,202,203,220,300,301,309",
                 timezone: "UTC"
             },
             get: {
@@ -141,7 +141,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 api.trigger("refresh.all");
             });
         }
-        
+
     };
 
     return api;
