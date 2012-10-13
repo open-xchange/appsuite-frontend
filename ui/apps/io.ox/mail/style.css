@@ -288,7 +288,7 @@
         height: 64px;
         margin: 0 0 1em 1.5em;
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: top right;
         background-size: contain;
     }
 
@@ -301,6 +301,7 @@
     .io-ox-label {
         font-family: @font-light;
         color: #aaa;
+        white-space: nowrap;
     }
 
     .to-cc .person-link {
