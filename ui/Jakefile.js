@@ -281,7 +281,10 @@ utils.concat("pre-core.js",
         "config.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
-        "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
+        "api/folder.js", "desktop.js",
+        "commons.js",
+        "commons-folderview.js",
+        "collection.js", "notifications",
         "extPatterns/actions.js", "extPatterns/links.js"
     ]), { type: "source" }
 );

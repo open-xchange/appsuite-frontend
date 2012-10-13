@@ -1,12 +1,11 @@
 /**
- * All content on this website (including text, images, source
- * code and any other original works), unless otherwise noted,
- * is licensed under a Creative Commons License.
+ * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
+ * LICENSE. This work is protected by copyright and/or other applicable
+ * law. Any use of the work other than as authorized under this license
+ * or copyright law is prohibited.
  *
  * http://creativecommons.org/licenses/by-nc-sa/2.5/
- *
- * Copyright (C) 2004-2012 Open-Xchange, Inc.
- * Mail: info@open-xchange.com
+ * © 2012 Open-Xchange Inc., Tarrytown, NY, USA. info@open-xchange.com
  *
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
@@ -14,7 +13,8 @@
 define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'gettext!io.ox/core'], function (ext, extLinks, gt) {
+     'gettext!io.ox/core',
+     'io.ox/core/commons-folderview'], function (ext, extLinks, gt, folderview) {
 
     'use strict';
 
@@ -254,156 +254,7 @@ define('io.ox/core/commons',
             });
         },
 
-        /**
-         * Add folder view
-         */
-        addFolderView: function (app, options) {
-
-            var container,
-                visible = false,
-                permanent = false,
-                top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
-                fnChangeFolder, fnHide, fnShow, togglePermanent,
-                fnToggle, toggle, loadTree, initTree,
-                name = app.getName(),
-                POINT = name + '/folderview';
-
-            ext.point(POINT + '/options').extend({
-                id: 'defaults',
-                index: 100,
-                rootFolderId: '1',
-                type: undefined,
-                view: 'ApplicationFolderTree',
-                visible: false,
-                permanent: false
-            });
-
-            // apply all options
-            _(ext.point(POINT + '/options').all()).each(function (obj) {
-                options = _.extend(obj, options || {});
-            });
-
-            // draw container
-            ext.point(POINT + '/sidepanel').extend({
-                id: 'default',
-                index: 100,
-                draw: function () {
-                    return $('<div>')
-                        .addClass('abs border-right foldertree-sidepanel')
-                        .css({
-                            right: 'auto',
-                            zIndex: 3
-                        });
-                }
-            });
-
-            // get container
-            container = ext.point(POINT + '/sidepanel').invoke('draw').first().value() || $();
-            container.hide().appendTo(app.getWindow().nodes.body);
-
-            fnChangeFolder = function (e, selection) {
-                var folder = selection[0];
-                if (folder.module === options.type) {
-                    app.folder.unset();
-                    if (permanent) {
-                        app.folder.set(folder.id);
-                    } else {
-                        top = container.scrollTop();
-                        container.fadeOut('fast', function () {
-                            app.folder.set(folder.id);
-                        });
-                        visible = false;
-                    }
-                }
-            };
-
-            fnHide = function () {
-                app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
-                top = container.scrollTop();
-                container.hide();
-                visible = false;
-            };
-
-            fnShow = function () {
-                if (!visible) {
-                    app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
-                    container.show().scrollTop(top);
-                    visible = true;
-                }
-                return $.when();
-            };
-
-            togglePermanent = function () {
-                var width;
-                if (permanent) {
-                    app.getWindow().nodes.body.css('left', '0px');
-                    container.css({ width: container.attr('data-width') + 'px', left: '0px' });
-                } else {
-                    // show permanent folder view
-                    container.attr('data-width', container.width());
-                    width = 250; //container.outerWidth();
-                    app.getWindow().nodes.body.css('left', width + 'px');
-                    container.css({ width: width + 'px', left: -width + 'px' });
-                }
-                permanent = !permanent;
-            };
-
-            toggle = function (e) {
-                if (visible) {
-                    fnHide();
-                    if (permanent || options.permanent) { togglePermanent(); }
-                } else {
-                    fnShow();
-                    if (options.permanent || (e && e.altKey)) { togglePermanent(); }
-                }
-            };
-
-            fnToggle = function (e) {
-                if (!e.isDefaultPrevented()) {
-                    toggle(e);
-                }
-            };
-
-            initTree = function (views) {
-                var tree = app.folderView = new views[options.view](container, {
-                        type: options.type,
-                        rootFolderId: options.rootFolderId
-                    });
-                tree.selection.on('change', fnChangeFolder);
-                return tree.paint()
-                    .done(function () {
-                        tree.selection.set(app.folder.get(), true);
-                        app.getWindow().nodes.title.on('click', fnToggle);
-                        container.idle();
-                        initTree = loadTree = null;
-                    });
-            };
-
-            loadTree = function (e) {
-                if (!e || !e.isDefaultPrevented()) {
-                    toggle(e);
-                    app.showFolderView = fnShow;
-                    app.toggleFolderView = toggle;
-                    app.getWindow().nodes.title.off('click', loadTree);
-                    return require(['io.ox/core/tk/folderviews']).pipe(initTree);
-                } else {
-                    return $.when();
-                }
-            };
-
-            app.showFolderView = loadTree;
-            app.toggleFolderView = loadTree;
-            app.togglePermanentFolderView = togglePermanent;
-            app.folderView = null;
-
-            app.getWindow().nodes.title
-                .css('cursor', 'pointer')
-                .on('click', loadTree);
-
-            if (options.visible === true) {
-                loadTree();
-            }
-        },
+        addFolderView: folderview.add,
 
         vsplit: (function () {
 

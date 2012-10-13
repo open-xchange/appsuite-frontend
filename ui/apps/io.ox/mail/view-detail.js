@@ -515,18 +515,16 @@ define('io.ox/mail/view-detail',
         index: 120,
         id: 'fromlist',
         draw: function (data) {
-            var list = util.serializeList(data, 'from');
+            var list = util.serializeList(data, 'from'), node;
             this.append($('<div class="from list">').append(list));
-            list.each(function () {
-                var node = $(this), obj = node.data('person');
-                if (ox.ui.App.get('io.ox/mail').length) {
-                    node.after(
-                        $('<i class="icon-search">').on('click', obj, searchSender)
-                            .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
-                    );
-                }
-            });
-            list = null;
+            if (ox.ui.App.get('io.ox/mail').length) {
+                node = list.last();
+                node.after(
+                    $('<i class="icon-search">').on('click', node.data('person'), searchSender)
+                        .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
+                );
+            }
+            list = node = null;
         }
     });
 

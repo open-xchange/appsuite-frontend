@@ -255,16 +255,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
 
                 // add message
                 if (validType.test(type)) {
-                    container.empty().append(
-                        $('<div class="alert alert-' + type + '">')
-                        .append($('<b>').text(message || ''))
-                    );
-                    if (!active) {
-                        $('body').on('click', fader);
-                    }
-                    active = true;
-                    clear();
-                    timer = setTimeout(fader, TIMEOUT);
+                    // put at end of stack not to run into opening click
+                    setTimeout(function () {
+                        container.empty().append(
+                            $('<div class="alert alert-' + type + '">')
+                            .append($('<b>').text(message || ''))
+                        );
+                        if (!active) {
+                            $('body').on('click', fader);
+                        }
+                        active = true;
+                        clear();
+                        timer = setTimeout(fader, TIMEOUT);
+                    }, 0);
                 }
             };
         }())

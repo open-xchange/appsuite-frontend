@@ -18,8 +18,9 @@ define('io.ox/core/tk/folderviews',
      'io.ox/core/api/user',
      'io.ox/core/extensions',
      'io.ox/core/event',
-     'io.ox/core/config'
-    ], function (Selection, api, account, userAPI, ext, Events, config) {
+     'io.ox/core/config',
+     'gettext!io.ox/core'
+    ], function (Selection, api, account, userAPI, ext, Events, config, gt) {
 
     'use strict';
 
@@ -429,48 +430,49 @@ define('io.ox/core/tk/folderviews',
         this.internal.repaint = function () {
             return this.root.repaint();
         };
-    }
 
-    function fnCreateFolder(e) {
-        e.preventDefault();
-        require(['io.ox/core/tk/dialogs'], function (dialogs) {
-            new dialogs.ModalDialog({
-                width: 400,
-                easyOut: true
-            })
-            .header(
-                $('<h4>').text('Add new folder')
-            )
-            .append(
-                $('<input>', { placeholder: 'Folder name', value: '' }).addClass('nice-input')
-            )
-            .addButton('cancel', 'Cancel')
-            .addPrimaryButton('add', 'Add folder')
-            .show(function () {
-                this.find('input').focus();
-            })
-            .done(function (action) {
-                if (action === 'add') {
-                    // be responsive
-                    e.data.tree.busy();
-                    // call API
-                    api.create({
-                        folder: e.data.folder,
-                        data: {
-                            module: 'mail',
-                            title: 'New folder ' + _.now()
-                        }
+        this.add = function (folder) {
+            var self = this;
+            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
+            if (folder) {
+                require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                    new dialogs.ModalDialog({
+                        width: 400,
+                        easyOut: true
                     })
-                    .done(function (data) {
-                        e.data.tree.idle().repaint()
-                            .done(function () {
-                                e.data.tree.selection.set(String(data));
-                                e.data = null;
+                    .header(
+                        $('<h4>').text(gt('Add new folder'))
+                    )
+                    .append(
+                        $('<input>', { placeholder: 'Folder name', value: '' }).addClass('nice-input')
+                    )
+                    .addButton('cancel', 'Cancel')
+                    .addPrimaryButton('add', gt('Add folder'))
+                    .show(function () {
+                        this.find('input').focus();
+                    })
+                    .done(function (action) {
+                        if (action === 'add') {
+                            // be responsive
+                            self.busy();
+                            // call API
+                            api.create({
+                                folder: folder,
+                                data: {
+                                    module: 'mail',
+                                    title: gt('New folder') + ' ' + _.now()
+                                }
+                            })
+                            .done(function (data) {
+                                self.idle().repaint().done(function () {
+                                    self.selection.set(String(data));
+                                });
                             });
+                        }
                     });
-                }
-            });
-        });
+                });
+            }
+        };
     }
 
     function ApplicationFolderTree(container, opt) {
@@ -616,43 +618,6 @@ define('io.ox/core/tk/folderviews',
                 label.css('fontWeight', '');
                 counter.hide();
             }
-        }
-    });
-
-    // default extension point
-    ext.point('io.ox/application-foldertree/links').extend({
-        index: 100,
-        id: 'create-folder',
-        draw:  function (data) {
-            this.append(
-                $('<div>')
-                .append(
-                    $('<a>', { href: '#' })
-                    .addClass('action-link')
-                    .text('Add new folder ...')
-                    .on('click', { folder: data.rootFolderId, tree: data.tree }, fnCreateFolder)
-                )
-            );
-        }
-    });
-
-    ext.point('io.ox/application-foldertree/links').extend({
-        index: 100,
-        id: 'create-mailaccount',
-        draw:  function (data) {
-            this.append(
-                $('<div>')
-                .append(
-                    $('<a>', { href: '#' })
-                    .addClass('action-link')
-                    .text('Add mail account ...')
-                    .on('click', function (e) {
-                        require(['io.ox/mail/accounts/settings'], function (m) {
-                            m.mailAutoconfigDialog(e);
-                        });
-                    })
-                )
-            );
         }
     });
 
