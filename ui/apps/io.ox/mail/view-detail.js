@@ -700,7 +700,7 @@ define('io.ox/mail/view-detail',
 
             if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
-                    $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
+                    $('<span>').addClass('io-ox-label').text(gt.ngettext('Attachment', 'Attachments', length) + '\u00A0\u00A0')
                 );
                 _(attachments).each(function (a, i) {
                     var label = (a.filename || ('Attachment #' + i))
@@ -710,6 +710,7 @@ define('io.ox/mail/view-detail',
                         });
                     // draw
                     var dd = drawAttachmentDropDown(outer, label, a);
+                    // cut off long lists?
                     if (i > 3 && length > 5) {
                         dd.hide();
                     }

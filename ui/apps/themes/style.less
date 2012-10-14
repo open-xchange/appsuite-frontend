@@ -1074,9 +1074,9 @@ span.hint {
 .io-ox-inline-links {
     font-size: @inline-link-font-size;
     text-align: right;
-    margin: 1.5em 0 1.5em 0;
+    margin: @inline-links-margin;
     clear: both;
-    -webkit-user-select: none; -moz-user-select: none; user-select: none;
+    .user-select(none);
 }
 
 .io-ox-inline-links.empty {

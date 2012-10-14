@@ -173,13 +173,15 @@ define("io.ox/core/extPatterns/links",
     var z = 0;
     var drawDropDown = function (options, context) {
         var args = $.makeArray(arguments),
-            $parent = $("<div>").addClass('dropdown')
+            $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
                 .appendTo(this),
             $toggle = $("<a>", { href: '#' })
                 .attr('data-toggle', 'dropdown')
                 .data('context', context)
-                .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+                .text(options.label)
+                .append($('<span>').text(' '), $('<b>').addClass('caret'))
+                .appendTo($parent);
 
         $toggle.addClass(options.classes);
         $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
