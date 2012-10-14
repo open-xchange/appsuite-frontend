@@ -138,19 +138,37 @@ define('io.ox/core/commons-folderview',
             }
         });
 
+        function renameFolder(e) {
+            e.preventDefault();
+            e.data.app.folderView.rename();
+        }
+
+        ext.point(POINT + '/sidepanel/toolbar/options').extend({
+            id: 'rename',
+            index: 100,
+            draw: function (baton) {
+                this.append($('<li>').append(
+                    $('<a href="#">').text(gt('Rename'))
+                    .on('click', { app: baton.app }, renameFolder)
+                ));
+            }
+        });
+
         function deleteFolder(e) {
             e.preventDefault();
             e.data.app.folderView.remove();
         }
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
-            id: 'delete-folder',
-            index: 100,
+            id: 'delete',
+            index: 1000,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Delete folder'))
-                    .on('click', { app: baton.app }, deleteFolder)
-                ));
+                this.append(
+                    $('<li>').append(
+                        $('<a href="#">').text(gt('Delete'))
+                        .on('click', { app: baton.app }, deleteFolder)
+                    )
+                );
             }
         });
     }
@@ -252,6 +270,19 @@ define('io.ox/core/commons-folderview',
                     api.on('delete', function (e, id, folder_id) {
                         tree.select(folder_id).done(function () {
                             tree.removeNode(id);
+                        });
+                    });
+                    api.on('update:prepare', function () {
+                        tree.busy();
+                    });
+                    api.on('update:fail', function (e, error) {
+                        tree.idle();
+                        notifications.yell(error);
+                    });
+                    api.on('update', function (e, id, newId, data) {
+                        tree.repaintNode(data.folder_id).done(function () {
+                            tree.idle();
+                            tree.select(newId);
                         });
                     });
                     initTree = loadTree = null;

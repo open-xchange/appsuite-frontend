@@ -162,6 +162,19 @@ define('io.ox/core/tk/folderviews',
             updateArrow();
         };
 
+        this.refresh = function (newId, changed) {
+            // might have a new id
+            id = newId;
+            return $.when(
+                ready = api.get({ folder: newId }),
+                this.loadChildren(true)
+            )
+            .pipe(function (data) {
+                // repaint parent node since a changed title also changes the folder order
+                tree.getNode(data.folder_id).repaint();
+            });
+        };
+
         // update promise
         this.reload = function () {
             ready = api.get({ folder: id });
@@ -191,8 +204,6 @@ define('io.ox/core/tk/folderviews',
                                         // compare
                                         if (!_.isEqual(list, freshList)) {
                                             self.reload();
-                                            _(children).invoke('reload');
-                                            self.repaint();
                                         }
                                         refreshHash[id] = false;
                                     });
@@ -424,74 +435,6 @@ define('io.ox/core/tk/folderviews',
             container.empty();
             container = this.container = this.selection = this.internal = null;
         };
-    }
-
-    /**
-     * Folder tree class
-     */
-    function FolderTree(container, opt) {
-
-        // add hard filter for trees (e.g. just show mail folders)
-        opt = $.extend({
-            filter: function (obj) {
-                return obj.module === opt.type || (opt.type === 'mail' && (/^default\d+(\W|$)/i).test(obj.id));
-                    // module == type? plus: special handling for external mail accounts
-            }
-        }, opt);
-
-        FolderStructure.call(this, container, opt);
-
-        // tree node hash
-        this.treeNodes = {};
-
-        // root tree node
-        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
-
-        this.internal.paint = function () {
-            return this.root.paint();
-        };
-
-        this.internal.repaint = function () {
-            return this.root.repaint();
-        };
-
-        this.getNode = function (id) {
-            return this.treeNodes[id];
-        };
-
-        this.removeNode = function (id) {
-            if (id in this.treeNodes) {
-                this.treeNodes[id].destroy();
-            }
-        };
-
-        function deferredEach(list, done) {
-            var top = list.shift(), node, self = this;
-            if (top && (node = this.getNode(top.id))) {
-                node.open().done(function () {
-                    deferredEach.call(self, list, done);
-                });
-            } else {
-                done();
-            }
-        }
-
-        this.select = function (data) {
-            // unpack array; pluck 'id'
-            data = _.isArray(data) ? data[0] : data;
-            data = _.isString(data) ? data : data.id;
-            // get path
-            var self = this;
-            return api.getPath({ folder: data }).pipe(function (list) {
-                var def = $.Deferred();
-                deferredEach.call(self, list, function () {
-                    self.selection.set(data);
-                    def.resolve();
-                });
-                return def;
-            });
-            // TODO: open all parent folders & set proper scrollTop
-        };
 
         function fnKeyPress(e) {
             if (e.which === 13) {
@@ -579,6 +522,123 @@ define('io.ox/core/tk/folderviews',
                         });
                 });
             }
+        };
+
+        this.renameProcess = function (folder, changes) {
+            api.update({ folder: folder, changes: changes });
+        };
+
+        this.rename = function (folder) {
+            var self = this;
+            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
+            if (folder) {
+                $.when(
+                    api.get({ folder: folder }),
+                    require(['io.ox/core/tk/dialogs'])
+                )
+                .done(function (folder, dialogs) {
+                    new dialogs.ModalDialog({
+                        width: 400,
+                        easyOut: true
+                    })
+                    .header(
+                        $('<h4>').text(gt('Rename folder'))
+                    )
+                    .build(function () {
+                        this.getContentNode().append(
+                            $('<div class="row-fluid">').append(
+                                api.getBreadcrumb(folder.id, { subfolders: false }),
+                                $('<input>', { type: 'text' })
+                                .val(folder.title)
+                                .attr('placeholder', gt('Folder name'))
+                                .addClass('span12')
+                                .on('keypress', { popup: this }, fnKeyPress)
+                            )
+                        );
+                    })
+                    .addButton('cancel', 'Cancel')
+                    .addPrimaryButton('add', gt('Rename'))
+                    .show(function () {
+                        this.find('input').focus();
+                    })
+                    .done(function (action) {
+                        if (action === 'add') {
+                            self.renameProcess(folder.id, { title: this.find('input').val() });
+                        }
+                    });
+                });
+            }
+        };
+    }
+
+    /**
+     * Folder tree class
+     */
+    function FolderTree(container, opt) {
+
+        // add hard filter for trees (e.g. just show mail folders)
+        opt = $.extend({
+            filter: function (obj) {
+                return obj.module === opt.type || (opt.type === 'mail' && (/^default\d+(\W|$)/i).test(obj.id));
+                    // module == type? plus: special handling for external mail accounts
+            }
+        }, opt);
+
+        FolderStructure.call(this, container, opt);
+
+        // tree node hash
+        this.treeNodes = {};
+
+        // root tree node
+        this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
+
+        this.internal.paint = function () {
+            return this.root.paint();
+        };
+
+        this.internal.repaint = function () {
+            return this.root.repaint();
+        };
+
+        this.getNode = function (id) {
+            return this.treeNodes[id];
+        };
+
+        this.removeNode = function (id) {
+            if (id in this.treeNodes) {
+                this.treeNodes[id].destroy();
+            }
+        };
+
+        this.repaintNode = function (id) {
+            return id in this.treeNodes ? this.treeNodes[id].repaint() : $.when();
+        };
+
+        function deferredEach(list, done) {
+            var top = list.shift(), node, self = this;
+            if (top && (node = this.getNode(top.id))) {
+                node.open().done(function () {
+                    deferredEach.call(self, list, done);
+                });
+            } else {
+                done();
+            }
+        }
+
+        this.select = function (data) {
+            // unpack array; pluck 'id'
+            data = _.isArray(data) ? data[0] : data;
+            data = _.isString(data) ? data : data.id;
+            // get path
+            var self = this;
+            return api.getPath({ folder: data }).pipe(function (list) {
+                var def = $.Deferred();
+                deferredEach.call(self, list, function () {
+                    self.selection.set(data);
+                    def.resolve();
+                });
+                return def;
+            });
         };
     }
 

@@ -352,6 +352,48 @@ define('io.ox/core/api/folder',
             });
         },
 
+        update: function (options) {
+
+            // options
+            var opt = $.extend({
+                folder: '1',
+                changes: {}
+            }, options || {});
+
+            return this.get({ folder: opt.folder }).pipe(function (data) {
+                // trigger event
+                api.trigger('update:prepare', opt.folder);
+                // remove from caches
+                return $.when(
+                    folderCache.remove(data.id),
+                    subFolderCache.remove(data.folder_id),
+                    visibleCache.remove(data.module)
+                )
+                .pipe(function () {
+                    // update folder on server (unless no changes are given)
+                    return http.PUT({
+                        module: 'folders',
+                        params: {
+                            action: 'update',
+                            id: opt.folder,
+                            tree: '1'
+                        },
+                        data: opt.changes || {}
+                    })
+                    .done(function (id) {
+                        // get fresh folder data (use maybe changed id)
+                        api.get({ folder: id}, false).done(function () {
+                            // trigger event
+                            api.trigger('update', opt.folder, id, data);
+                        });
+                    });
+                })
+                .fail(function (error) {
+                    api.trigger('update:fail', error, opt.folder);
+                });
+            });
+        },
+
         derive: {
 
             bits: function (data, offset) {
