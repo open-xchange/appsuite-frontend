@@ -13,7 +13,8 @@
 define('io.ox/core/commons-folderview',
     ['io.ox/core/extensions',
      'io.ox/core/notifications',
-      'gettext!io.ox/core'], function (ext, notifications, gt) {
+     'io.ox/core/api/folder',
+      'gettext!io.ox/core'], function (ext, notifications, api, gt) {
 
     'use strict';
 
@@ -72,10 +73,20 @@ define('io.ox/core/commons-folderview',
                 this.append(
                     $('<div class="toolbar-action pull-left dropdown dropup">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></a>'),
-                        ul = $('<ul class="dropdown-menu">')
+                        ul = $('<ul class="dropdown-menu">').append(
+                            $('<li class="dropdown-header">').text('')
+                        )
                     )
                 );
                 ext.point(POINT + '/sidepanel/toolbar/options').invoke('draw', ul, baton);
+                // listen to selection event to update dropdown header
+                baton.tree.selection.on('change', function (e, selection) {
+                    if (selection.length) {
+                        api.get({ folder: selection[0].id }).done(function (data) {
+                            ul.find('.dropdown-header').text(data.title);
+                        });
+                    }
+                });
             }
         });
 
@@ -220,13 +231,19 @@ define('io.ox/core/commons-folderview',
 
         initTree = function (views) {
 
-            var tree = app.folderView = new views[options.view](container, {
+            // init tree before running toolbar extensions
+            var tree = baton.tree = app.folderView = new views[options.view](container, {
                     type: options.type,
                     rootFolderId: options.rootFolderId
                 });
-            tree.selection.on('change', fnChangeFolder);
+
+            // draw toolbar
+            ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar, baton);
+
+            // paint now
             return tree.paint().done(function () {
-                tree.selection.set(app.folder.get(), true);
+                tree.selection.set(app.folder.get());
+                tree.selection.on('change', fnChangeFolder);
                 app.getWindow().nodes.title.on('click', fnToggle);
                 sidepanel.idle();
                 initTree = loadTree = null;
@@ -263,9 +280,6 @@ define('io.ox/core/commons-folderview',
         ext.point(POINT + '/sidepanel').invoke('draw', app.getWindow().nodes.body, baton);
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
-
-        // draw toolbar
-        ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar, baton);
 
         app.getWindow().nodes.title
             .css('cursor', 'pointer')

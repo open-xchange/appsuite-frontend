@@ -1084,8 +1084,6 @@ span.hint {
     height: 0.5em; /* some min height */
 }
 
-.dropdown-right { right: 0; left: auto; }
-
 .io-ox-inline-links > a,
 .io-ox-inline-links > span.dropdown {
     color: @inline-link-color;
@@ -1523,6 +1521,19 @@ div.external-user-image {
     background-size: cover;
     background-repeat: no-repeat;
     float: left;
+}
+
+/** DROPDOWNS **/
+
+.dropdown-right { right: 0; left: auto; }
+
+.dropdown-header {
+    display: block;
+    padding: 3px 20px 6px 20px;
+    font-weight: bold;
+    cursor: default;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 6px;
 }
 
 /** BOOTSTRAP FIXES **/
