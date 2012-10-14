@@ -259,6 +259,42 @@ define('io.ox/core/api/folder',
             return opt.cache === false ? getter() : visibleCache.get(opt.type, getter);
         },
 
+        remove: function (options) {
+
+            var opt = _.extend({
+                folder: null
+            }, options || {});
+
+            // get folder
+            return this.get({ folder: opt.folder }).pipe(function (data) {
+
+                var id = data.id, folder_id = data.folder_id;
+
+                // clear caches first
+                return $.when(
+                    folderCache.remove(id),
+                    subFolderCache.remove(id),
+                    subFolderCache.remove(folder_id),
+                    visibleCache.remove(data.module)
+                )
+                .pipe(function () {
+                    // trigger event
+                    api.trigger('delete', id, folder_id);
+                    // delete on server
+                    return http.PUT({
+                        module: 'folders',
+                        params: {
+                            action: 'delete',
+                            folder_id: opt.folder,
+                            tree: '1'
+                        },
+                        data: [opt.folder],
+                        appendColumns: false
+                    });
+                });
+            });
+        },
+
         create: function (options) {
 
             // options

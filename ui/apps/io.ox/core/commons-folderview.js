@@ -140,7 +140,7 @@ define('io.ox/core/commons-folderview',
 
         function deleteFolder(e) {
             e.preventDefault();
-            notifications.yell('info', 'Coming soon ...');
+            e.data.app.folderView.remove();
         }
 
         ext.point(POINT + '/sidepanel/toolbar/options').extend({
@@ -249,6 +249,11 @@ define('io.ox/core/commons-folderview',
                     tree.selection.on('change', fnChangeFolder);
                     app.getWindow().nodes.title.on('click', fnToggle);
                     sidepanel.idle();
+                    api.on('delete', function (e, id, folder_id) {
+                        tree.select(folder_id).done(function () {
+                            tree.removeNode(id);
+                        });
+                    });
                     initTree = loadTree = null;
                 });
             });

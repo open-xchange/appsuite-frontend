@@ -59,7 +59,7 @@ define('io.ox/core/tk/folderviews',
             },
 
             hasChildren = function () {
-                return data.subfolders || data.subscr_subflds;
+                return children === null ? (data.subfolders || data.subscr_subflds) : !!children.length;
             },
 
             isOpen = function () {
@@ -157,6 +157,11 @@ define('io.ox/core/tk/folderviews',
             return children;
         };
 
+        this.removeChild = function (treeNode) {
+            children = _(children).without(treeNode);
+            updateArrow();
+        };
+
         // update promise
         this.reload = function () {
             ready = api.get({ folder: id });
@@ -232,14 +237,21 @@ define('io.ox/core/tk/folderviews',
         };
 
         this.destroy = function () {
+            // remove from parent node
+            var node = tree.getNode(data.folder_id);
+            if (node) {
+                node.removeChild(this);
+            }
+            // traverse children
+            _(children).each(function (child) {
+                child.destroy();
+            });
             // remove DOM nodes
             _(nodes).each(function (node) {
                 node.remove();
             });
-            // recurse
-            _(children).each(function (child) {
-                child.destroy();
-            });
+            // remove from hash
+            delete tree.treeNodes[this.id];
             // clear
             ready = children = nodes = tree = self = container = data = null;
         };
@@ -447,6 +459,12 @@ define('io.ox/core/tk/folderviews',
             return this.treeNodes[id];
         };
 
+        this.removeNode = function (id) {
+            if (id in this.treeNodes) {
+                this.treeNodes[id].destroy();
+            }
+        };
+
         function deferredEach(list, done) {
             var top = list.shift(), node, self = this;
             if (top && (node = this.getNode(top.id))) {
@@ -481,6 +499,25 @@ define('io.ox/core/tk/folderviews',
             }
         }
 
+        this.addProcess = function (folder, title) {
+            var self = this;
+            // be responsive
+            this.busy();
+            // call API
+            return api.create({
+                folder: folder,
+                data: {
+                    module: 'mail',
+                    title: $.trim(title) || gt('New folder')
+                }
+            })
+            .done(function (data) {
+                self.idle().repaint().done(function () {
+                    self.select(data);
+                });
+            });
+        };
+
         this.add = function (folder) {
             var self = this;
             folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
@@ -510,25 +547,36 @@ define('io.ox/core/tk/folderviews',
                         this.find('input').focus();
                     })
                     .done(function (action) {
-                        var title = $.trim(this.find('input').val()) || gt('New folder');
                         if (action === 'add') {
-                            // be responsive
-                            self.busy();
-                            // call API
-                            api.create({
-                                folder: folder,
-                                data: {
-                                    module: 'mail',
-                                    title: title
-                                }
-                            })
-                            .done(function (data) {
-                                self.idle().repaint().done(function () {
-                                    self.select(data);
-                                });
-                            });
+                            self.addProcess(folder, this.find('input').val());
                         }
                     });
+                });
+            }
+        };
+
+        this.removeProcess = function (folder) {
+            api.remove({ folder: folder.id });
+        };
+
+        this.remove = function (folder) {
+            var self = this;
+            folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
+            if (folder) {
+                $.when(
+                    api.get({ folder: folder }),
+                    require(['io.ox/core/tk/dialogs'])
+                ).done(function (folder, dialogs) {
+                    new dialogs.ModalDialog()
+                        .text(gt('Do you really want to delete folder "%s"?', folder.title))
+                        .addPrimaryButton('delete', gt('Delete'))
+                        .addButton('cancel', gt('Cancel'))
+                        .show()
+                        .done(function (action) {
+                            if (action === 'delete') {
+                                self.removeProcess(folder);
+                            }
+                        });
                 });
             }
         };
