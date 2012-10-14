@@ -117,6 +117,21 @@ define('io.ox/core/tk/folderviews',
                 nodes.arrow.css('backgroundImage', 'none');
             },
 
+            openNode = function () {
+                if (!hasChildren() || open) { return $.when(); }
+                open = true;
+                nodes.sub.show();
+                updateArrow();
+                return children === null ? paintChildren() : $.when();
+            },
+
+            closeNode = function () {
+                if (!hasChildren() || !open) { return; }
+                open = false;
+                nodes.sub.hide();
+                updateArrow();
+            },
+
             // open/close tree node
             toggleState = function (e) {
                 // not valid click?
@@ -124,24 +139,18 @@ define('io.ox/core/tk/folderviews',
                     return;
                 }
                 e.preventDefault();
-                if (hasChildren()) {
-                    if (open) {
-                        open = false;
-                        nodes.sub.hide();
-                        updateArrow();
-                    } else {
-                        open = true;
-                        nodes.sub.show();
-                        updateArrow();
-                        if (children === null) {
-                            paintChildren();
-                        }
-                    }
-                }
+                if (!open) { openNode(); } else { closeNode(); }
             };
+
+        // store in hash for quick access
+        tree.treeNodes[id] = this;
 
         // make accessible
         this.id = id;
+
+        // open & close
+        this.open = openNode;
+        this.close = closeNode;
 
         // get sub folders
         this.getChildren = function () {
@@ -420,6 +429,9 @@ define('io.ox/core/tk/folderviews',
 
         FolderStructure.call(this, container, opt);
 
+        // tree node hash
+        this.treeNodes = {};
+
         // root tree node
         this.root = new TreeNode(this, this.options.rootFolderId, this.container, 0);
 
@@ -431,6 +443,44 @@ define('io.ox/core/tk/folderviews',
             return this.root.repaint();
         };
 
+        this.getNode = function (id) {
+            return this.treeNodes[id];
+        };
+
+        function deferredEach(list, done) {
+            var top = list.shift(), node, self = this;
+            if (top && (node = this.getNode(top.id))) {
+                node.open().done(function () {
+                    deferredEach.call(self, list, done);
+                });
+            } else {
+                done();
+            }
+        }
+
+        this.select = function (data) {
+            // unpack array; pluck 'id'
+            data = _.isArray(data) ? data[0] : data;
+            data = _.isString(data) ? data : data.id;
+            // get path
+            var self = this;
+            return api.getPath({ folder: data }).pipe(function (list) {
+                var def = $.Deferred();
+                deferredEach.call(self, list, function () {
+                    self.selection.set(data);
+                    def.resolve();
+                });
+                return def;
+            });
+            // TODO: open all parent folders & set proper scrollTop
+        };
+
+        function fnKeyPress(e) {
+            if (e.which === 13) {
+                e.data.popup.process('add');
+            }
+        }
+
         this.add = function (folder) {
             var self = this;
             folder = folder || _.chain(self.selection.get()).pluck('id').first().value();
@@ -441,17 +491,26 @@ define('io.ox/core/tk/folderviews',
                         easyOut: true
                     })
                     .header(
-                        $('<h4>').text(gt('Add new folder'))
+                        $('<h4>').text(gt('Add new subfolder'))
                     )
-                    .append(
-                        $('<input>', { placeholder: 'Folder name', value: '' }).addClass('nice-input')
-                    )
+                    .build(function () {
+                        this.getContentNode().append(
+                            $('<div class="row-fluid">').append(
+                                api.getBreadcrumb(folder, { subfolders: false }),
+                                $('<input>', { type: 'text' })
+                                .attr('placeholder', gt('Folder name'))
+                                .addClass('span12')
+                                .on('keypress', { popup: this }, fnKeyPress)
+                            )
+                        );
+                    })
                     .addButton('cancel', 'Cancel')
                     .addPrimaryButton('add', gt('Add folder'))
                     .show(function () {
                         this.find('input').focus();
                     })
                     .done(function (action) {
+                        var title = $.trim(this.find('input').val()) || gt('New folder');
                         if (action === 'add') {
                             // be responsive
                             self.busy();
@@ -460,12 +519,12 @@ define('io.ox/core/tk/folderviews',
                                 folder: folder,
                                 data: {
                                     module: 'mail',
-                                    title: gt('New folder') + ' ' + _.now()
+                                    title: title
                                 }
                             })
                             .done(function (data) {
                                 self.idle().repaint().done(function () {
-                                    self.selection.set(String(data));
+                                    self.select(data);
                                 });
                             });
                         }
@@ -688,6 +747,10 @@ define('io.ox/core/tk/folderviews',
         this.internal.repaint = function () {
             this.container.empty();
             paint();
+        };
+
+        this.select = function (data) {
+            this.selection.set(data);
         };
     }
 

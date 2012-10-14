@@ -304,13 +304,13 @@ define('io.ox/core/api/folder',
                 })
                 .pipe(function (data) {
                     // wait for updating sub folder cache
-                    return api.getSubFolders({
-                        folder: opt.folder,
-                        cache: false
-                    })
-                    .pipe(function () {
+                    return $.when(
+                        api.get({ folder: data, cache: false }),
+                        api.getSubFolders({ folder: opt.folder, cache: false })
+                    )
+                    .pipe(function (get, getSubFolders) {
                         // return proper data
-                        return data;
+                        return get[0];
                     });
                 });
             });
@@ -590,15 +590,19 @@ define('io.ox/core/api/folder',
         var add = function (folder, i, list, options) {
             var li = $('<li>'), elem, isLast = i === list.length - 1;
             if (isLast && options.last) {
-                elem = li.addClass('active');
+                elem = li.addClass('active').text(folder.title);
             } else {
-                elem = $('<a href="#">');
-                li.append(elem, isLast ? $() : $('<span class="divider">').text(' / '));
+                if (options.handler === undefined) {
+                    elem = li.addClass('active').text(folder.title); // otherwise it looks so clickable
+                } else {
+                    li.append(elem = $('<a href="#">').text(folder.title));
+                }
+                li.append(isLast ? $() : $('<span class="divider">').text(' / '));
             }
             if (isLast && options.subfolder && options.handler !== undefined) {
                 dropdown(elem, folder.id);
             }
-            elem.attr('data-folder-id', folder.id).text(folder.title);
+            elem.attr('data-folder-id', folder.id);
             this.append(li);
         };
 

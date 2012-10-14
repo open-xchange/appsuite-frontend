@@ -84,7 +84,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
                 self.trigger('action ' + action, data);
                 // resolve & close?
                 if (!async) {
-                    deferred.resolve(action, data, self.getContentNode().get(0));
+                    deferred.resolveWith(nodes.popup, [action, data, self.getContentNode().get(0)]);
                     close();
                 }
 
@@ -97,6 +97,8 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
 
         // add event hub
         Events.extend(this);
+
+        this.process = process;
 
         this.data = function (d) {
             data = d !== undefined ? d : {};
@@ -128,6 +130,13 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
             var p = nodes.body;
             p.find(".plain-text").remove();
             p.append($("<h4>").addClass("plain-text").text(str || ""));
+            return this;
+        };
+
+        this.build = function (fn) {
+            if (_.isFunction(fn)) {
+                fn.call(this);
+            }
             return this;
         };
 

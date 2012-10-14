@@ -334,9 +334,11 @@
             node = $('<div>').attr('data-cid', cid),
 
             update = function () {
-                (getter || api.get)(api.reduce(data)).done(function (data) {
-                    node && node.triggerHandler('redraw', data);
-                });
+                if ((getter = getter || (api ? api.get : null))) {
+                    getter(api.reduce(data)).done(function (data) {
+                        node && node.triggerHandler('redraw', data);
+                    });
+                }
             },
 
             remove = function () {
@@ -349,7 +351,7 @@
         return node.on('dispose', function () {
                 api.off('update:' + cid, update);
                 api.off('delete:' + cid, remove);
-                api = update = data = node = null;
+                api = update = data = node = getter = null;
             });
     };
 

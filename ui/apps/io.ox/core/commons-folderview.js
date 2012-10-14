@@ -104,7 +104,8 @@ define('io.ox/core/commons-folderview',
             }
         });
 
-        function addFolder(e) {
+        function addSubFolder(e) {
+            e.preventDefault();
             e.data.app.folderView.add();
         }
 
@@ -114,13 +115,14 @@ define('io.ox/core/commons-folderview',
             index: 100,
             draw: function (baton) {
                 this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Add folder'))
-                    .on('click', { app: baton.app }, addFolder)
+                    $('<a href="#">').text(gt('Add subfolder'))
+                    .on('click', { app: baton.app }, addSubFolder)
                 ));
             }
         });
 
         function addAccount(e) {
+            e.preventDefault();
             require(['io.ox/mail/accounts/settings'], function (m) {
                 m.mailAutoconfigDialog(e);
             });
@@ -137,6 +139,7 @@ define('io.ox/core/commons-folderview',
         });
 
         function deleteFolder(e) {
+            e.preventDefault();
             notifications.yell('info', 'Coming soon ...');
         }
 
@@ -241,12 +244,13 @@ define('io.ox/core/commons-folderview',
             ext.point(POINT + '/sidepanel/toolbar').invoke('draw', baton.$.toolbar, baton);
 
             // paint now
-            return tree.paint().done(function () {
-                tree.selection.set(app.folder.get());
-                tree.selection.on('change', fnChangeFolder);
-                app.getWindow().nodes.title.on('click', fnToggle);
-                sidepanel.idle();
-                initTree = loadTree = null;
+            return tree.paint().pipe(function () {
+                return tree.select(app.folder.get()).done(function () {
+                    tree.selection.on('change', fnChangeFolder);
+                    app.getWindow().nodes.title.on('click', fnToggle);
+                    sidepanel.idle();
+                    initTree = loadTree = null;
+                });
             });
         };
 
