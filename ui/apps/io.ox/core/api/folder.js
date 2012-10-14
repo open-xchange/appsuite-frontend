@@ -197,7 +197,7 @@ define('io.ox/core/api/folder',
 
             // options
             var opt = _.extend({
-                    type: 'mail',
+                    type: 'contacts',
                     cache: true
                 }, options || {}),
 
@@ -206,9 +206,9 @@ define('io.ox/core/api/folder',
                             module: 'folders',
                             appendColumns: true,
                             params: {
-                                tree: '1',
                                 action: 'allVisible',
-                                content_type: opt.type
+                                content_type: opt.type,
+                                tree: '1'
                             }
                         })
                         .pipe(function (data, timestamp) {
@@ -279,7 +279,7 @@ define('io.ox/core/api/folder',
                 )
                 .pipe(function () {
                     // trigger event
-                    api.trigger('delete', id, folder_id);
+                    api.trigger('delete:prepare', id, folder_id);
                     // delete on server
                     return http.PUT({
                         module: 'folders',
@@ -290,8 +290,14 @@ define('io.ox/core/api/folder',
                         },
                         data: [opt.folder],
                         appendColumns: false
+                    })
+                    .done(function () {
+                        api.trigger('delete', id, folder_id);
                     });
                 });
+            })
+            .fail(function (error) {
+                api.trigger('delete:fail', opt.folder);
             });
         },
 
@@ -299,23 +305,19 @@ define('io.ox/core/api/folder',
 
             // options
             var opt = $.extend({
-                folder: '1',
-                tree: '1',
-                event: true
+                folder: null
             }, options || {});
 
             // default data
             opt.data = $.extend({
-                module: 'mail',
                 title: 'New Folder',
                 subscribed: 1
             }, opt.data || {});
 
             // get parent folder to inherit permissions
-            return api.get({
-                folder: opt.folder
-            })
-            .pipe(function (parent) {
+            return api.get({ folder: opt.folder }).pipe(function (parent) {
+                // inherit module
+                var module = (opt.data.module = opt.data.module || parent.module);
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -342,13 +344,17 @@ define('io.ox/core/api/folder',
                     // wait for updating sub folder cache
                     return $.when(
                         api.get({ folder: data, cache: false }),
-                        api.getSubFolders({ folder: opt.folder, cache: false })
+                        api.getSubFolders({ folder: opt.folder, cache: false }),
+                        module !== 'mail' ? api.getVisible({ type: module, cache: false }) : $.when()
                     )
-                    .pipe(function (get, getSubFolders) {
+                    .pipe(function (getRequest) {
                         // return proper data
-                        return get[0];
+                        return getRequest[0];
                     });
                 });
+            })
+            .fail(function (error) {
+                api.trigger('create:fail', error, opt.folder);
             });
         },
 

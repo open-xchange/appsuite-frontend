@@ -270,7 +270,8 @@ define('io.ox/core/tk/folderviews',
         this.repaint = function () {
             if (painted) {
                 // add now
-                container.append(nodes.folder, nodes.sub);
+                if (container.index(nodes.folder) === -1) { container.append(nodes.folder); }
+                if (container.index(nodes.sub) === -1) { container.append(nodes.sub); }
                 // get folder
                 return ready
                     .pipe(function (promise) {
@@ -450,7 +451,6 @@ define('io.ox/core/tk/folderviews',
             return api.create({
                 folder: folder,
                 data: {
-                    module: 'mail',
                     title: $.trim(title) || gt('New folder')
                 }
             })
@@ -825,7 +825,7 @@ define('io.ox/core/tk/folderviews',
 
         function paint() {
 
-            api.getVisible({ type: opt.type }).done(function (data) {
+            return api.getVisible({ type: opt.type }).done(function (data) {
                 var id, section,
                     drawSection = function (node, list) {
                         // loop over folders
@@ -845,20 +845,26 @@ define('io.ox/core/tk/folderviews',
                         drawSection(section, data[id]);
                     }
                 }
+            })
+            .done(function () {
+                self.selection.update();
             });
         }
 
         this.internal.paint = function () {
-            paint();
+            return paint();
         };
 
         this.internal.repaint = function () {
-            this.container.empty();
-            paint();
+            self.container.empty();
+            return paint();
         };
+
+        this.removeNode = this.repaintNode = this.internal.repaint;
 
         this.select = function (data) {
             this.selection.set(data);
+            return $.when();
         };
     }
 

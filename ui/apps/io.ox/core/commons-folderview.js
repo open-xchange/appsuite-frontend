@@ -98,6 +98,7 @@ define('io.ox/core/commons-folderview',
                 this.append(
                     $('<a href="#" class="toolbar-action pull-right"><i class="' + className + '"></a>')
                     .on('click', function (e) {
+                        e.preventDefault();
                         $(this).find('i').attr('class', baton.app.togglePermanentFolderView() ? 'icon-chevron-right' : 'icon-chevron-left');
                     })
                 );
@@ -132,9 +133,11 @@ define('io.ox/core/commons-folderview',
             id: 'add-account',
             index: 200,
             draw: function (baton) {
-                this.append($('<li>').append(
-                    $('<a href="#">').text(gt('Add mail account')).on('click', addAccount)
-                ));
+                if (baton.options.type === 'mail') {
+                    this.append($('<li>').append(
+                        $('<a href="#">').text(gt('Add mail account')).on('click', addAccount)
+                    ));
+                }
             }
         });
 
@@ -267,23 +270,26 @@ define('io.ox/core/commons-folderview',
                     tree.selection.on('change', fnChangeFolder);
                     app.getWindow().nodes.title.on('click', fnToggle);
                     sidepanel.idle();
-                    api.on('delete', function (e, id, folder_id) {
-                        tree.select(folder_id).done(function () {
-                            tree.removeNode(id);
-                        });
+                    api.on('delete:prepare', function (e, id, folder_id) {
+                        tree.select(folder_id);
+                        tree.busy();
+                    });
+                    api.on('delete', function (e, id) {
+                        tree.removeNode(id);
+                        tree.idle();
                     });
                     api.on('update:prepare', function () {
                         tree.busy();
-                    });
-                    api.on('update:fail', function (e, error) {
-                        tree.idle();
-                        notifications.yell(error);
                     });
                     api.on('update', function (e, id, newId, data) {
                         tree.repaintNode(data.folder_id).done(function () {
                             tree.idle();
                             tree.select(newId);
                         });
+                    });
+                    api.on('delete:fail update:fail create:fail', function (e, error) {
+                        tree.idle();
+                        notifications.yell(error);
                     });
                     initTree = loadTree = null;
                 });
