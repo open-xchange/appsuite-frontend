@@ -15,12 +15,6 @@
 /* generic mix-in classes                                                    */
 /* ========================================================================= */
 
-.box-sizing(@sizing-mode) {
-    -webkit-box-sizing: @sizing-mode;
-    -moz-box-sizing: @sizing-mode;
-    box-sizing: @sizing-mode;
-}
-
 .border-radius(@radius) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
@@ -51,36 +45,10 @@
     border-bottom-right-radius: @radius;
 }
 
-.box-shadow(@shadow) {
-    -webkit-box-shadow: @shadow;
-    -moz-box-shadow: @shadow;
-    box-shadow: @shadow;
-}
-
 .box-shadow(@outset-shadow, @inset-shadow) {
     -webkit-box-shadow: @outset-shadow, inset @inset-shadow;
     -moz-box-shadow: @outset-shadow, inset @inset-shadow;
     box-shadow: @outset-shadow, inset @inset-shadow;
-}
-
-.impl-linear-gradient(@start-point, @start-color, @end-color, @ie-gradient-type) {
-    background-color: mix(@start-color, @end-color, 50%);
-    background: -webkit-linear-gradient(@start-point, @start-color, @end-color);
-    background: -moz-linear-gradient(@start-point, @start-color, @end-color);
-    background: -ms-linear-gradient(@start-point, @start-color, @end-color);
-    background: -o-linear-gradient(@start-point, @start-color, @end-color);
-    background: linear-gradient(@start-point, @start-color, @end-color);
-    filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=%d)",@start-color,@end-color,@ie-gradient-type));
-}
-
-.horizontal-gradient(@left-color, @right-color) {
-    .impl-linear-gradient(left, @left-color, @right-color, 1);
-    background-repeat: repeat-y;
-}
-
-.vertical-gradient(@top-color, @bottom-color) {
-    .impl-linear-gradient(top, @top-color, @bottom-color, 0);
-    background-repeat: repeat-x;
 }
 
 .opacity(@opacity) {
@@ -175,7 +143,7 @@ i.icon-io-ox-image-inline           { background-position: -280px  -20px; }
 /* ========================================================================= */
 
 /* background color for panes */
-@pane-fill-color: #f5f5f5;
+@pane-fill-color: #e5e5e5;
 
 /* second color for pane background gradient */
 @pane-accented-fill-color: #ffffff;
@@ -190,7 +158,7 @@ i.icon-io-ox-image-inline           { background-position: -280px  -20px; }
 @control-text-color: #333333;
 
 /* border color for selected controls */
-@selected-border-color: #b5b5ff;
+@selected-border-color: #85b5ff;
 
 /* fill color for input controls */
 @input-fill-color: white;
@@ -227,7 +195,7 @@ div.io-ox-pane {
         padding: 0;
         background-color: @pane-fill-color;
         overflow: auto;
-        
+
         div.page {
             position: relative;
             margin: 30px auto;
@@ -528,17 +496,71 @@ div.io-ox-view-component {
 
     /* tool bars ----------------------------------------------------------- */
 
-    &.toolbar > span {
-        display: inline-block;
-        position: relative;
+    &.toolbar {
+        padding: 4px 0;
 
-        /* show groups in a horizontal bar */
-        > .group {
+        > span {
             display: inline-block;
+            position: relative;
 
-            /* group spacing */
-            &.separator {
-                width: 10px;
+            /* show groups in a horizontal bar */
+            > .group {
+                display: inline-block;
+
+                /* group spacing */
+                + .group {
+                    margin-left: -1px;
+                }
+
+                &.separator {
+                    width: 10px;
+                }
+
+                /* collapse borders of top-level control elements inside group */
+                > label, > button, > input {
+                    ~ label, ~ button, ~ input {
+                        margin-left: -1px;
+                    }
+                }
+
+                /* selected toggle/radio buttons */
+                > button.selected {
+                    z-index: 20;
+                    background-color: fade(@selected-border-color, 50%);
+                    border-color: @selected-border-color;
+                }
+
+                /* keyboard/mouse effects (not for disabled buttons) */
+                &:not(.disabled) > button:not(.disabled) {
+
+                    /* mouse/keyboard effects */
+                    &:hover, &:focus, &:active {
+                        z-index: 2;
+                        border-color: @control-border-color;
+                    }
+
+                    /* active effect (control currently clicked) */
+                    &:active {
+                        z-index: 4;
+                        background-color: fade(@control-border-color, 25%);
+                    }
+
+                    /* selected toggle/radio buttons */
+                    &.selected {
+
+                        /* mouse/keyboard effects */
+                        &:hover, &:focus, &:active {
+                            z-index: 22;
+                            border-color: darken(@selected-border-color, 10%);
+                        }
+
+                        /* active effect (button currently clicked) */
+                        &:active {
+                            z-index: 24;
+                            background-color: fade(@selected-border-color, 75%);
+                        }
+                    }
+                }
             }
         }
     }
@@ -576,78 +598,35 @@ div.io-ox-view-component {
     }
 }
 
-/* regular tool bars ------------------------------------------------------- */
-
-div.io-ox-pane:not(.borderless) div.io-ox-view-component.toolbar {
-    padding: 4px 0;
-
-    > span > .group {
-
-        /* group spacing */
-        + .group {
-            margin-left: -1px;
-        }
-
-        /* collapse borders of top-level control elements inside group */
-        > label, > button, > input {
-            ~ label, ~ button, ~ input {
-                margin-left: -1px;
-            }
-        }
-
-        /* selected toggle/radio buttons */
-        > button.selected {
-            z-index: 20;
-            background-color: fade(@selected-border-color, 50%);
-            border-color: @selected-border-color;
-        }
-
-        /* keyboard/mouse effects (not for disabled buttons) */
-        &:not(.disabled) > button:not(.disabled) {
-
-            /* mouse/keyboard effects */
-            &:hover, &:focus, &:active {
-                z-index: 2;
-                border-color: @control-border-color;
-            }
-
-            /* active effect (control currently clicked) */
-            &:active {
-                z-index: 4;
-                background-color: fade(@control-border-color, 25%);
-            }
-
-            /* selected toggle/radio buttons */
-            &.selected {
-
-                /* mouse/keyboard effects */
-                &:hover, &:focus, &:active {
-                    z-index: 22;
-                    border-color: darken(@selected-border-color, 10%);
-                }
-
-                /* active effect (button currently clicked) */
-                &:active {
-                    z-index: 24;
-                    background-color: fade(@selected-border-color, 75%);
-                }
-            }
-        }
-    }
-}
-
 /* borderless tool bars ---------------------------------------------------- */
-    
+
 div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
     padding: 0;
 
     > span > .group {
+        @selected-accent-color: #bbddff;
+        @selected-color: #99ccff;
+
+        + .group {
+            margin-left: 0;
+        }
+
+        > label, > button, > input {
+            ~ label, ~ button, ~ input {
+                margin-left: 0;
+            }
+        }
+
+        > button, > label {
+            height: 36px;
+            border: none;
+            line-height: 36px;
+        }
 
         /* selected toggle/radio buttons */
         > button.selected {
-            z-index: 20;
-            background-color: fade(@selected-border-color, 50%);
-            border-color: @selected-border-color;
+            .vertical-gradient(@selected-accent-color, @selected-color);
+            border: none;
         }
 
         /* keyboard/mouse effects (not for disabled buttons) */
@@ -655,14 +634,14 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
 
             /* mouse/keyboard effects */
             &:hover, &:focus, &:active {
-                z-index: 2;
-                border-color: @control-border-color;
+                background: @pane-fill-color;
+                border: none;
             }
 
             /* active effect (control currently clicked) */
             &:active {
-                z-index: 4;
-                background-color: fade(@control-border-color, 25%);
+                background: darken(@pane-fill-color, 5%);
+                border: none;
             }
 
             /* selected toggle/radio buttons */
@@ -670,14 +649,14 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
 
                 /* mouse/keyboard effects */
                 &:hover, &:focus, &:active {
-                    z-index: 22;
-                    border-color: darken(@selected-border-color, 10%);
+                    background: @selected-color;
+                    border: none;
                 }
 
                 /* active effect (button currently clicked) */
                 &:active {
-                    z-index: 24;
-                    background-color: fade(@selected-border-color, 75%);
+                    background: darken(@selected-color, 5%);
+                    border: none;
                 }
             }
         }
@@ -693,8 +672,8 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
     .box-sizing(border-box);
 
     button {
-		float: right;
-		position: relative;
-		right: -21px;
-	}
+        float: right;
+        position: relative;
+        right: -21px;
+    }
 }

@@ -38,16 +38,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             },
 
             /**
-             * The borders of the table cell.
-             * top, left, right, bottom, insideh, insidev
-             * get style ('none', 'single', 'double', 'dotted',
-             * 'dashed', 'outset', 'inset'), color and width.
-             * html supports: 'none', 'hidden', 'dotted', 'dashed', 'solid', 'double', 'groove', 'ridge', 'inset', 'outset'
-             * element.css('border','3px dashed #00ff00');
-             */
-
-            /**
-             * Style, width and color of the left table cell border
+             * Style, width and color of the left table cell border.
              */
             borderleft: {
                 def: NO_BORDER,
@@ -57,7 +48,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             },
 
             /**
-             * Style, width and color of the right table cell border
+             * Style, width and color of the right table cell border.
              */
             borderright: {
                 def: NO_BORDER,
@@ -67,7 +58,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             },
 
             /**
-             * Style, width and color of the top table cell border
+             * Style, width and color of the top table cell border.
              */
             bordertop: {
                 def: NO_BORDER,
@@ -77,7 +68,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             },
 
             /**
-             * Style, width and color of the bottom table cell border
+             * Style, width and color of the bottom table cell border.
              */
             borderbottom: {
                 def: NO_BORDER,

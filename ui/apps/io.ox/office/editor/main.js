@@ -848,14 +848,16 @@ define('io.ox/office/editor/main',
          */
         this.acquireEditRights = function () {
 
-            $.ajax({
-                type: 'GET',
-                url: self.getDocumentFilterUrl('acquireeditrights'),
-                dataType: 'json'
-            })
-            .fail(function (response) {
-                showAjaxError(response);
-            });
+            if (this.hasFileDescriptor()) {
+                $.ajax({
+                    type: 'GET',
+                    url: self.getDocumentFilterUrl('acquireeditrights'),
+                    dataType: 'json'
+                })
+                .fail(function (response) {
+                    showAjaxError(response);
+                });
+            }
         };
 
         /**

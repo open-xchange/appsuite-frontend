@@ -60,7 +60,7 @@ define('io.ox/office/editor/controller',
                     set: function (fileName) { app.rename(fileName); }
                 },
                 'file/editrights': {
-                    enable: function () { return !editor.isEditMode(); },
+                    enable: function () { return !editor.isEditMode() && app.hasFileDescriptor(); },
                     set: function (state) { app.acquireEditRights(); }
                 },
 
