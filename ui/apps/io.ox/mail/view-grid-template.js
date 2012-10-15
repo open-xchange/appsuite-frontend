@@ -78,15 +78,20 @@ define('io.ox/mail/view-grid-template',
                 var self = this.removeClass('vgrid-label').addClass('thread-summary').empty(),
                     thread = api.getThread(prev);
                 return api.getList(thread).done(function (list) {
-                    _(list.slice(1)).each(function (data) {
+                    var length = list.length;
+                    _(list.slice(1)).each(function (data, index) {
                         self.append(
-                            $('<div>')
-                            .addClass('thread-summary-item selectable')
+                            $('<div class="thread-summary-item selectable">')
                             .addClass(util.isUnread(data) ? 'unread' : undefined)
                             .attr('data-obj-id', _.cid(data))
                             .append(
-                                $('<div>').addClass('date').text(util.getTime(data.received_date)),
-                                $('<div>').append(util.getFrom(data).removeClass('person'))
+                                $('<div class="thread-summary-right">')
+                                    .addClass('date').text(util.getTime(data.received_date)),
+                                $('<div class="thread-summary-left">').append(
+                                    $('<span class="thread-summary-pos">').text((length - index - 1) + '.'),
+                                    $('<span class="thread-summary-from">').append(util.getFrom(data).removeClass('person'), $.txt(' ')),
+                                    $('<span class="thread-summary-subject">').text(data.subject)
+                                )
                             )
                         );
                     });

@@ -129,7 +129,7 @@
 }
 
 .vgrid-cell .thread-summary-item {
-    padding: 5px 12px 5px 25px;
+    padding: 5px 13px 5px 13px;
     border-bottom: 1px solid #fff;
     background-color: #eee;
     cursor: pointer;
@@ -156,6 +156,13 @@
 .vgrid-cell .thread-summary-item:last-child {
     border-bottom: 0px none;
 }
+
+.vgrid-cell .thread-summary-pos { display: inline-block; min-width: 1.5em; color: #777; }
+.vgrid-cell .thread-summary-from { font-weight: bold; }
+.vgrid-cell .thread-summary-subject { }
+
+.vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vgrid-cell .thread-summary-right { float: right; }
 
 /* Detail view */
 
