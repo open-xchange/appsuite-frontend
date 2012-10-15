@@ -42,9 +42,12 @@ define("io.ox/participants/views",
 
             $wrapper.append($img,
                 $text.text(this.model.getDisplayName()),
-                $mail,
-                $removeButton
+                $mail
             );
+            
+            if (this.options.closeButon || _.isUndefined(this.options.closeButton)) {
+                $wrapper.append($removeButton);
+            }
 
             this.$el.append($wrapper);
 
