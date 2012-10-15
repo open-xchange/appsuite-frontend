@@ -66,13 +66,13 @@ define('io.ox/office/editor/format/imagestyles',
              */
             marginr: { def: 0 },
 
-            cropw: { def: 0 },
+            cropl: { def: 0 },
 
-            croph: { def: 0 },
+            cropt: { def: 0 },
 
-            cropx: { def: 0 },
+            cropr: { def: 0 },
 
-            cropy: { def: 0 },
+            cropb: { def: 0 },
 
             /**
              * If set to true, the image is rendered as inline element ('as
@@ -136,6 +136,67 @@ define('io.ox/office/editor/format/imagestyles',
         return WRAPPED_TEXT_VALUES.contains(textWrapMode);
     }
 
+    
+    /**
+     * Calculates the original image size from the visible size and the cropping values.
+     *
+     * @param Number visWidth
+     * The width of the visible area of the image (1/100mm)
+     *
+     * @param Number visHeight
+     * The height of the visible area of the image (1/100mm)
+     *
+     * @param Number cropl
+     * The left cropping in percent (0-100)
+     *
+     * @param Number cropt
+     * The top cropping in percent (0-100)
+     *
+     * @param Number cropr
+     * The right cropping in percent (0-100)
+     *
+     * @param Number cropb
+     * The bottom cropping in percent (0-100)
+     *
+     * @return Object
+     * The orgWidth and orgHeight of the image (1/100mm)
+     */
+    function calcOriginalImageSizeFromCropping(visWidth, visHeight, cropl, cropt, cropr, cropb) {
+        var orgWidth, orgHeight;
+        
+        orgWidth = visWidth * (1 / ((100 - (cropl + cropr)) / 100));
+        orgHeight = visHeight * (1 / ((100 - (cropt + cropb)) / 100));
+
+        return { width : orgWidth, height: orgHeight };
+    }
+    
+    /**
+     * Calculates the left, top corner for the cropped image
+     *
+     * @param {Number} orgWidth
+     * The original image width of the image (1/100mm)
+     *
+     * @param {Number} orgHeight
+     * The original image height of the image (1/100mm)
+     *
+     * @param {Number} cropl
+     * The left cropping in percent (0-100)
+     *
+     * @param {Number} cropt
+     * The top cropping in percent (0-100)
+     *
+     * @return {Object}
+     * The left, top position of the original image in (1/100mm)
+     */
+    function calcLeftTopForOriginalImage(orgWidth, orgHeight, cropl, cropt) {
+        var left, top;
+        
+        left = Math.round((orgWidth * cropl) / 100);
+        top = Math.round((orgHeight * cropt) / 100);
+        
+        return { left: left, top: top };
+    }
+
     /**
      * Will be called for every image element whose attributes have been
      * changed. Repositions and reformats the image according to the passed
@@ -161,6 +222,8 @@ define('io.ox/office/editor/format/imagestyles',
             firstTextNode = null,
             // current object width, in 1/100 mm
             objectWidth = Utils.convertLengthToHmm(span.width(), 'px'),
+            // current object height, in 1/100 mm
+            objectHeight = Utils.convertLengthToHmm(span.height(), 'px'),
             // offset from top/left/right margin of paragraph element, in 1/100 mm
             topOffset = 0, leftOffset = 0, rightOffset = 0,
             // margins to be applied at the image
@@ -170,13 +233,19 @@ define('io.ox/office/editor/format/imagestyles',
 
         // cropping
 
-        if ((attributes.cropw > 0) && (attributes.croph > 0)) {
+        if ((attributes.cropl !== 0) || (attributes.cropt !== 0) ||
+            (attributes.cropr !== 0) || (attributes.cropb !== 0)) {
             // TODO: validation
+            var orgSize = calcOriginalImageSizeFromCropping(objectWidth, objectHeight,
+                    attributes.cropl, attributes.cropt, attributes.cropr, attributes.cropb);
+            var leftTop = calcLeftTopForOriginalImage(orgSize.width, orgSize.height,
+                    attributes.cropl, attributes.cropt);
+                
             span.find('img').css({
-                left: Utils.convertHmmToCssLength(-attributes.cropx, 'px', 0),
-                top: Utils.convertHmmToCssLength(-attributes.cropy, 'px', 0),
-                width: Utils.convertHmmToCssLength(attributes.cropw, 'px', 0),
-                height: Utils.convertHmmToCssLength(attributes.croph, 'px', 0)
+                left: Utils.convertHmmToCssLength(-leftTop.left, 'px', 0),
+                top: Utils.convertHmmToCssLength(-leftTop.top, 'px', 0),
+                width: Utils.convertHmmToCssLength(orgSize.width, 'px', 0),
+                height: Utils.convertHmmToCssLength(orgSize.height, 'px', 0)
             });
         } else {
             span.find('img').css({
