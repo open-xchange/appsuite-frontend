@@ -344,7 +344,7 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Converts the passed attribute color object to a CSS color value.
+         * Converts the passed color attribute object to a CSS color value.
          * Scheme colors will be resolved by using the current theme.
          *
          * @param {Object} color
@@ -356,6 +356,35 @@ define('io.ox/office/editor/format/stylesheets',
         this.getCssColor = function (color) {
             // use the static helper function from module Colors, pass current theme
             return Color.getCssColor(color, documentStyles.getCurrentTheme());
+        };
+
+        /**
+         * Converts the passed border attribute object to a CSS border value.
+         * Scheme colors will be resolved by using the current theme.
+         *
+         * @param {Object} border
+         *  The border object as used in operations.
+         *
+         * @returns {String}
+         *  The CSS border value converted from the passed border object.
+         */
+        this.getCssBorder = function (border) {
+
+            var style = Utils.getStringOption(border, 'style', 'none'),
+                width = Utils.getIntegerOption(border, 'width', 0),
+                color = Utils.getObjectOption(border, 'color', Color.AUTO);
+
+            // convert operation styles to CSS styles
+            if (style === 'single') { style = 'solid'; }
+
+            // convert 1/100mm to pixels
+            width = Utils.convertHmmToCssLength(width, 'px', 1);
+
+            // convert color object to CSS color
+            color = this.getCssColor(color);
+
+            // combine the values to a single string
+            return style + ' ' + width + ' ' + color;
         };
 
         /**

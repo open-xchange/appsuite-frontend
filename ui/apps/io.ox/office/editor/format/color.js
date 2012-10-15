@@ -43,7 +43,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     var Color = {
             TRANSPARENT: {},
             BLACK: { type: 'rgb', value: '000000' },
-            WHITE: { type: 'rgb', value: 'FFFFFF' }
+            WHITE: { type: 'rgb', value: 'FFFFFF' },
+            AUTO: { type: 'auto' }
         };
 
     /**
