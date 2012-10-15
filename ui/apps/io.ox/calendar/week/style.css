@@ -238,7 +238,7 @@
 
     .weekday {
         display: inline-block;
-        padding-left: 13px;
+        padding-left: 10px;
         overflow: hidden;
         text-overflow: ellipsis;
 }
