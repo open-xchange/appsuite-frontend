@@ -118,7 +118,12 @@ function addMessage(filename, node, method, getSrc) {
         locations: [src]
     };
     for (var i = 0; i < method.length; i++) {
-        if (method[i]) msg[method[i]] = getStr(args[i]);
+        if (!method[i]) continue;
+        if (!pro.when_constant(args[i], addArg)) return pro.MAP.skip;
+    }
+    function addArg(ast, val) {
+        msg[method[i]] = val;
+        return true;
     }
     
     exports.addMessage(msg, filename);
