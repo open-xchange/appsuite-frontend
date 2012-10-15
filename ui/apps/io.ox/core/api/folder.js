@@ -15,7 +15,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/cache',
      'io.ox/core/config',
      'io.ox/core/api/account',
-     'io.ox/core/event'], function (http, cache, config, account, Events) {
+     'io.ox/core/event',
+     'gettext!io.ox/core/api'], function (http, cache, config, account, Events, gt) {
 
     'use strict';
 
@@ -650,17 +651,17 @@ define('io.ox/core/api/folder',
                         // add first folder as dropdown
                         first = list[0];
                         li.after(
-                            $('<span class="divider">').text(' / '),
+                            $('<span class="divider">').text(gt.noI18n(' / ')),
                             $('<li class="dropdown">').append(
                                 $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                                    $.txt(first.title + ' ... '),
+                                    $.txt(gt.noI18n(first.title + ' ... ')),
                                     $('<b class="caret">')
                                 ),
                                 $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
                                     _(list).map(function (folder) {
                                         return $('<li>').append(
                                             $('<a href="#">')
-                                            .attr('data-folder-id', folder.id).text(folder.title)
+                                            .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                         );
                                     })
                                 )
@@ -674,14 +675,14 @@ define('io.ox/core/api/folder',
         var add = function (folder, i, list, options) {
             var li = $('<li>'), elem, isLast = i === list.length - 1;
             if (isLast && options.last) {
-                elem = li.addClass('active').text(folder.title);
+                elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
                 if (options.handler === undefined) {
-                    elem = li.addClass('active').text(folder.title); // otherwise it looks so clickable
+                    elem = li.addClass('active').text(gt.noI18n(folder.title)); // otherwise it looks so clickable
                 } else {
-                    li.append(elem = $('<a href="#">').text(folder.title));
+                    li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
                 }
-                li.append(isLast ? $() : $('<span class="divider">').text(' / '));
+                li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
             }
             if (isLast && options.subfolder && options.handler !== undefined) {
                 dropdown(elem, folder.id);

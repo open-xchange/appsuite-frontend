@@ -198,7 +198,7 @@ define("io.ox/files/list/view-detail",
         index: 10,
         draw: function (file) {
             this.append(
-                $("<div>").addClass("title clear-title").text(file.title || file.filename || '\u00A0')
+                $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
             );
         },
         edit: function (file, context) {
@@ -221,7 +221,7 @@ define("io.ox/files/list/view-detail",
             this.data("keyListener", keyListener);
         },
         endEdit: function (file) {
-            this.find(".title").empty().text(file.title || file.filename || '\u00A0');
+            this.find(".title").empty().text(gt.noI18n(file.title || file.filename || '\u00A0'));
             this.data("keyListener").remove();
             this.data("keyListener", null);
         },
@@ -232,7 +232,7 @@ define("io.ox/files/list/view-detail",
             update: function (file) {
                 this.empty();
                 this.append(
-                    $("<div>").addClass("title clear-title").text(file.title || file.filename || '\u00A0')
+                    $("<div>").addClass("title clear-title").text(gt.noI18n(file.title || file.filename || '\u00A0'))
                 );
             }
         }
@@ -253,9 +253,9 @@ define("io.ox/files/list/view-detail",
                 _.each(extension.fields, function (index, field) {
                     var content = null;
                     $line.append(
-                        $("<em>").text(extension.label(field) + ':'),
+                        $("<em>").text(gt.noI18n(extension.label(field) + ':')),
                         content = $('<span>'),
-                        $.txt('\u00A0 ')
+                        $.txt(gt.noI18n('\u00A0 '))
                     );
                     extension.draw(field, file, content);
                     count++;
@@ -296,7 +296,7 @@ define("io.ox/files/list/view-detail",
             return gt("File name");
         },
         draw: function (field, file, $element) {
-            $element.text(file.filename || 'N/A');
+            $element.text(gt.noI18n(file.filename || 'N/A'));
         }
     });
 
@@ -308,7 +308,7 @@ define("io.ox/files/list/view-detail",
             return gt("Size");
         },
         draw: function (field, file, $element) {
-            $element.text(bytesToSize(file.file_size));
+            $element.text(gt.noI18n(bytesToSize(file.file_size)));
         }
     });
 
@@ -336,7 +336,7 @@ define("io.ox/files/list/view-detail",
             var d = new date.Local(date.Local.utc(file.last_modified));
             $element.append(
                 userAPI.getLink(file.created_by),
-                $.txt(' \u2013 ' + d.format(date.FULL_DATE)) // 2013 = ndash
+                $.txt(gt.noI18n(' \u2013 ' + d.format(date.FULL_DATE))) // 2013 = ndash
             );
         }
     });
@@ -433,7 +433,7 @@ define("io.ox/files/list/view-detail",
                     whiteSpace: "pre-wrap",
                     paddingRight: "2em"
                 }).addClass("description")
-                .text(file.description || '')
+                .text(gt.noI18n(file.description || ''))
             );
         },
         edit: function (file, context) {
@@ -458,7 +458,7 @@ define("io.ox/files/list/view-detail",
                     whiteSpace: "pre-wrap",
                     paddingRight: "2em"
                 }).addClass("description")
-                .text(file.description || '')
+                .text(gt.noI18n(file.description || ''))
             );
             this.data("keyListener").remove();
             this.data("keyListener", null);
@@ -491,7 +491,7 @@ define("io.ox/files/list/view-detail",
                 type: "file"
             });
 
-            var $button = $("<button/>").text("Upload").addClass("btn btn-primary pull-right").on("click", function () {
+            var $button = $("<button/>").text(gt("Upload")).addClass("btn btn-primary pull-right").on("click", function () {
                 _($input[0].files).each(function (fileData) {
                     $button.addClass("disabled").text(gt("Uploading..."));
                     $commentArea.addClass("disabled");
@@ -568,7 +568,7 @@ define("io.ox/files/list/view-detail",
                             .addClass("row-fluid version " + (version.current_version ? 'current' : ''))
                             .append(
                                 $("<div>").addClass("span1").append(
-                                    $("<span>").text(version.version).addClass("versionLabel")
+                                    $("<span>").text(gt.noI18n(version.version)).addClass("versionLabel")
                                 )
                             ),
                         $detailsPane = $("<div>").addClass("span11").appendTo($entryRow);
@@ -624,7 +624,7 @@ define("io.ox/files/list/view-detail",
             span: 4
         },
         draw: function (version) {
-            this.text(bytesToSize(version.file_size)).css({textAlign: "right"});
+            this.text(gt.noI18n(bytesToSize(version.file_size))).css({textAlign: "right"});
         }
     });
 
@@ -647,7 +647,7 @@ define("io.ox/files/list/view-detail",
             span: 8
         },
         draw: function (version) {
-            this.addClass('version-comment').text(version.version_comment || '\u00A0');
+            this.addClass('version-comment').text(gt.noI18n(version.version_comment || '\u00A0'));
         }
     });
 
@@ -660,7 +660,7 @@ define("io.ox/files/list/view-detail",
         },
         draw: function (version) {
             var d = new date.Local(date.Local.utc(version.creation_date));
-            this.append($("<span>").text(d.format(date.DATE_TIME))
+            this.append($("<span>").text(gt.noI18n(d.format(date.DATE_TIME)))
                                    .addClass("pull-right"));
         }
     });
