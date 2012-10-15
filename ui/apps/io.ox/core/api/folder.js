@@ -311,7 +311,7 @@ define('io.ox/core/api/folder',
 
             // default data
             opt.data = $.extend({
-                title: 'New Folder',
+                title: gt('New Folder'),
                 subscribed: 1
             }, opt.data || {});
 
@@ -675,7 +675,7 @@ define('io.ox/core/api/folder',
         var add = function (folder, i, list, options) {
             var li = $('<li>'), elem, isLast = i === list.length - 1;
             if (isLast && options.last) {
-                elem = li.addClass('active').text(folder.title);
+                elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
                 if (options.handler === undefined) {
                     elem = li.addClass('active').text(gt.noI18n(folder.title));
