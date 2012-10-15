@@ -11,9 +11,7 @@
  */
 
 .window-content.week-view * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    .box-sizing(border-box);
 }
 
 .window-content.week-view {
@@ -107,7 +105,7 @@
     }
     
     .scrollpane {
-        .overflow(scroll);
+        .overflow-y(scroll);
         position: absolute;
         top: 40px;
         left: 0;
