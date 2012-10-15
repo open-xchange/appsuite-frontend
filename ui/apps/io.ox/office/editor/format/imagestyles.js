@@ -136,7 +136,7 @@ define('io.ox/office/editor/format/imagestyles',
         return WRAPPED_TEXT_VALUES.contains(textWrapMode);
     }
 
-    
+
     /**
      * Calculates the original image size from the visible size and the cropping values.
      *
@@ -163,13 +163,13 @@ define('io.ox/office/editor/format/imagestyles',
      */
     function calcOriginalImageSizeFromCropping(visWidth, visHeight, cropl, cropt, cropr, cropb) {
         var orgWidth, orgHeight;
-        
+
         orgWidth = visWidth * (1 / ((100 - (cropl + cropr)) / 100));
         orgHeight = visHeight * (1 / ((100 - (cropt + cropb)) / 100));
 
         return { width : orgWidth, height: orgHeight };
     }
-    
+
     /**
      * Calculates the left, top corner for the cropped image
      *
@@ -190,10 +190,10 @@ define('io.ox/office/editor/format/imagestyles',
      */
     function calcLeftTopForOriginalImage(orgWidth, orgHeight, cropl, cropt) {
         var left, top;
-        
+
         left = Math.round((orgWidth * cropl) / 100);
         top = Math.round((orgHeight * cropt) / 100);
-        
+
         return { left: left, top: top };
     }
 
@@ -202,28 +202,28 @@ define('io.ox/office/editor/format/imagestyles',
      * changed. Repositions and reformats the image according to the passed
      * attributes.
      *
-     * @param {jQuery} span
-     *  The <span> element containing an image whose image attributes have been
+     * @param {jQuery} div
+     *  The <div> element containing an image whose image attributes have been
      *  changed, as jQuery object.
      *
      * @param {Object} attributes
      *  A map of all attributes (name/value pairs), containing the effective
      *  attribute values merged from style sheets and explicit attributes.
      */
-    function updateImageFormatting(span, attributes) {
+    function updateImageFormatting(div, attributes) {
 
-        var // the paragraph element containing the image span
-            paragraph = span.parent(),
+        var // the paragraph element containing the image div
+            paragraph = div.parent(),
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
             // preceding div element used for vertical offset
-            verticalOffsetNode = span.prev('div.float'),
+            verticalOffsetNode = div.prev('div.float'),
             // first text node in paragraph
             firstTextNode = null,
             // current object width, in 1/100 mm
-            objectWidth = Utils.convertLengthToHmm(span.width(), 'px'),
+            objectWidth = Utils.convertLengthToHmm(div.width(), 'px'),
             // current object height, in 1/100 mm
-            objectHeight = Utils.convertLengthToHmm(span.height(), 'px'),
+            objectHeight = Utils.convertLengthToHmm(div.height(), 'px'),
             // offset from top/left/right margin of paragraph element, in 1/100 mm
             topOffset = 0, leftOffset = 0, rightOffset = 0,
             // margins to be applied at the image
@@ -240,19 +240,19 @@ define('io.ox/office/editor/format/imagestyles',
                     attributes.cropl, attributes.cropt, attributes.cropr, attributes.cropb);
             var leftTop = calcLeftTopForOriginalImage(orgSize.width, orgSize.height,
                     attributes.cropl, attributes.cropt);
-                
-            span.find('img').css({
+
+            div.find('img').css({
                 left: Utils.convertHmmToCssLength(-leftTop.left, 'px', 0),
                 top: Utils.convertHmmToCssLength(-leftTop.top, 'px', 0),
                 width: Utils.convertHmmToCssLength(orgSize.width, 'px', 0),
                 height: Utils.convertHmmToCssLength(orgSize.height, 'px', 0)
             });
         } else {
-            span.find('img').css({
+            div.find('img').css({
                 left: 0,
                 top: 0,
-                width: span.width() + 'px',
-                height: span.height() + 'px'
+                width: div.width() + 'px',
+                height: div.height() + 'px'
             });
         }
 
@@ -261,7 +261,7 @@ define('io.ox/office/editor/format/imagestyles',
         if (attributes.inline) {
 
             // from floating mode to inline mode
-            if (span.hasClass('float')) {
+            if (div.hasClass('float')) {
 
                 // remove leading div used for positioning
                 verticalOffsetNode.remove();
@@ -271,26 +271,26 @@ define('io.ox/office/editor/format/imagestyles',
                 DOM.splitTextNode(firstTextNode, 0);
 
                 // remove floating classes, move image behind floated images
-                span.removeClass('float left right').insertBefore(firstTextNode.parentNode);
+                div.removeClass('float left right').insertBefore(firstTextNode.parentNode);
             }
 
             // TODO: Word uses fixed predefined margins in inline mode, we too?
-            span.addClass('inline').css('margin', '0 1mm');
+            div.addClass('inline').css('margin', '0 1mm');
             // ignore other attributes in inline mode
 
             // TODO: positioning code still relies on the 'mode' data attribute
-            span.data('mode', 'inline');
+            div.data('mode', 'inline');
 
         } else {
 
             // from inline mode to floating mode
-            if (span.hasClass('inline')) {
+            if (div.hasClass('inline')) {
 
                 // first text node in paragraph
                 firstTextNode = Utils.findFirstTextNode(paragraph);
 
                 // move image before the first text node
-                span.removeClass('inline').insertBefore(firstTextNode.parentNode);
+                div.removeClass('inline').insertBefore(firstTextNode.parentNode);
             }
 
             // calculate top offset (only if image is anchored to paragraph)
@@ -319,7 +319,7 @@ define('io.ox/office/editor/format/imagestyles',
             } else {
                 // create offset node if not existing yet
                 if (verticalOffsetNode.length === 0) {
-                    verticalOffsetNode = $('<div>', { contenteditable: false }).width(1).insertBefore(span);
+                    verticalOffsetNode = $('<div>', { contenteditable: false }).width(1).insertBefore(div);
                 }
                 // set height of the offset node
                 verticalOffsetNode.height(Utils.convertHmmToLength(topOffset, 'px', 0));
@@ -378,7 +378,7 @@ define('io.ox/office/editor/format/imagestyles',
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (leftOffset - leftMargin < 600) { leftMargin = Math.max(leftOffset, 0); }
                 // TODO: positioning code still relies on the 'mode' data attribute
-                span.data('mode', 'rightFloated');
+                div.data('mode', 'rightFloated');
                 break;
             case 'right':
                 // image floats at left paragraph margin
@@ -387,7 +387,7 @@ define('io.ox/office/editor/format/imagestyles',
                 // if there is less than 6mm space available for text, occupy all space (no wrapping)
                 if (rightOffset - rightMargin < 600) { rightMargin = Math.max(rightOffset, 0); }
                 // TODO: positioning code still relies on the 'mode' data attribute
-                span.data('mode', 'leftFloated');
+                div.data('mode', 'leftFloated');
                 break;
             default:
                 // no wrapping: will be modeled by left-floated with large CSS margins
@@ -395,16 +395,16 @@ define('io.ox/office/editor/format/imagestyles',
                 leftMargin = leftOffset;
                 rightMargin = Math.max(rightOffset, 0);
                 // TODO: positioning code still relies on the 'mode' data attribute
-                span.data('mode', 'noneFloated');
+                div.data('mode', 'noneFloated');
             }
 
             // set floating mode to image and positioning div
-            span.add(verticalOffsetNode)
+            div.add(verticalOffsetNode)
                 .removeClass('left right')
                 .addClass('float ' + ((wrapMode === 'left') ? 'right' : 'left'));
 
-            // apply CSS formatting to image span element
-            span.css({
+            // apply CSS formatting to image div element
+            div.css({
                 marginTop: Utils.convertHmmToCssLength(topMargin, 'px', 0),
                 marginBottom: Utils.convertHmmToCssLength(bottomMargin, 'px', 0),
                 marginLeft: Utils.convertHmmToCssLength(leftMargin, 'px', 0),
@@ -448,7 +448,7 @@ define('io.ox/office/editor/format/imagestyles',
         this.iterateReadOnly = function (ranges, iterator, context) {
             // DOM.iterateAncestorNodesInRanges() passes the current element to
             // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.IMAGE_SPAN_SELECTOR, iterator, context);
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.IMAGE_NODE_SELECTOR, iterator, context);
         };
 
         /**

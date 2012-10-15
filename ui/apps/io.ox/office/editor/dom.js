@@ -369,21 +369,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns whether the passed node is a <span> element wrapping an object.
+     * Returns whether the passed node is a <div> element wrapping an object.
      *
      * @param {Node|jQuery} node
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a span element wrapping an object.
+     *  Whether the passed node is a div element wrapping an object.
      */
-    DOM.isObjectSpan = function (node) {
-        return $(node).is('span.object');
+    DOM.isObjectNode = function (node) {
+        return $(node).is('div.object');
     };
 
     /**
-     * Returns whether the passed node is a <span> element wrapping an object
+     * Returns whether the passed node is a <div> element wrapping an object
      * in inline mode.
      *
      * @param {Node|jQuery} node
@@ -391,37 +391,37 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  the first DOM node it contains.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a span element wrapping an object and is
+     *  Whether the passed node is a div element wrapping an object and is
      *  rendered inlined.
      */
-    DOM.isInlineObjectSpan = function (node) {
-        return DOM.isObjectSpan(node) && $(node).hasClass('inline');
+    DOM.isInlineObjectNode = function (node) {
+        return DOM.isObjectNode(node) && $(node).hasClass('inline');
     };
 
     /**
-     * A jQuery selector that matches <span> elements containing an image.
+     * A jQuery selector that matches <div> elements containing an image.
      */
-    DOM.OBJECT_SPAN_SELECTOR = function () { return DOM.isObjectSpan(this); };
+    DOM.OBJECT_NODE_SELECTOR = function () { return DOM.isObjectNode(this); };
 
     /**
-     * Returns whether the passed node is a <span> element wrapping an image.
+     * Returns whether the passed node is a <div> element wrapping an image.
      *
      * @param {Node|jQuery} node
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a span element wrapping an image.
+     *  Whether the passed node is a div element wrapping an image.
      */
-    DOM.isImageSpan = function (node) {
-        // object spans contain the object element as first child
-        return DOM.isObjectSpan(node) && ($(node).find('img').length > 0);
+    DOM.isImageNode = function (node) {
+        // object div contains another div (class content) that contains an image
+        return DOM.isObjectNode(node) && ($(node).find('img').length > 0);
     };
 
     /**
-     * A jQuery selector that matches <span> elements containing an image.
+     * A jQuery selector that matches <div> elements containing an image.
      */
-    DOM.IMAGE_SPAN_SELECTOR = function () { return DOM.isImageSpan(this); };
+    DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
 
     /**
      * Splits the passed text node into two text nodes.

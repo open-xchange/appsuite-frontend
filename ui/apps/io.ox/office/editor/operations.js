@@ -271,7 +271,7 @@ define('io.ox/office/editor/operations',
                 }
 
                 // operation to create an image (including its attributes)
-                else if (DOM.isImageSpan(span)) {
+                else if (DOM.isImageNode(span)) {
                     lastOperation = generateOperationWithAttributes(span, Operations.IMAGE_INSERT, { position: position, imgurl: $(span).data('url') });
                     position = increaseLastIndex(position);
                 }

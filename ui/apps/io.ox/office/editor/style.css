@@ -109,7 +109,7 @@
         }
 
         /* objects */
-        span.object {
+        div.object {
             position: relative;
             cursor: default;
 

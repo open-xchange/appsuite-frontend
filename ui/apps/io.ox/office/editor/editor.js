@@ -2181,12 +2181,12 @@ define('io.ox/office/editor/editor',
             var returnImageNode = true,
                 imagePos = Position.getDOMPosition(paragraphs, _.copy(position), returnImageNode);
 
-            if ((imagePos) && (imagePos.node) && (DOM.isImageSpan(imagePos.node))) {
+            if ((imagePos) && (imagePos.node) && (DOM.isImageNode(imagePos.node))) {
 
                 $('img', imagePos.node).one('load', function () {
                     var width = Utils.convertLengthToHmm($(this).width(), 'px'),
                         height = Utils.convertLengthToHmm($(this).height(), 'px'),
-                        // updating the logical position of the image spanb, maybe it changed in the meantime while loading the image
+                        // updating the logical position of the image div, maybe it changed in the meantime while loading the image
                         updatePosition = Position.getOxoPosition(editdiv, this, 0),
                         newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
@@ -2594,7 +2594,7 @@ define('io.ox/office/editor/editor',
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if ((DOM.isImageSpan(child)) && ($(child).data('mode') !== 'inline')) {
+                    if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
 
                         var localPos = Position.getObjectPositionInParagraph(para, child),
                             source = _.copy(position, true),
@@ -2800,14 +2800,14 @@ define('io.ox/office/editor/editor',
         function deleteSelectedImage(selection) {
             var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
                 returnImageNode = true,
-                imageSpanNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                imageDivNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
 
             // only delete, if imageStartPosition is really an image position
-            if (DOM.isImageSpan(imageSpanNode)) {
+            if (DOM.isImageNode(imageDivNode)) {
                 // delete an corresponding div
-                var divNode = imageSpanNode.previousSibling;
+                var divNode = imageDivNode.previousSibling;
                 if ($(divNode).is('div.float')) {
-                    // removing div node
+                    // removing position div node
                     $(divNode).remove();
                 }
 
@@ -3065,7 +3065,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
-            image = $('<span>', { contenteditable: false })
+            image = $('<div>', { contenteditable: false })
                 .addClass('object inline')
                 .data('url', url)
                 .append($('<div>').addClass('content').append($('<img>', { src: absUrl })))
@@ -3416,8 +3416,6 @@ define('io.ox/office/editor/editor',
             var localPos = _.copy(startPosition);
             localPos.pop();
             Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
-            // in some special undo/redo cases there can be a non-empty text span before floated images
-            // Position.moveNonEmptyTextSpans(paragraphs, localPos);
 
             implParagraphChanged(position);
             implParagraphChanged(startPosition);
@@ -3469,7 +3467,7 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((DOM.isImageSpan(child)) && ($(child).data('mode') !== 'inline')) {
+                            if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
                                 imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
                             }
 
@@ -3902,7 +3900,7 @@ define('io.ox/office/editor/editor',
             }
 
             var paragraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = $(paragraph).children('span').get();
+            var searchNodes = $(paragraph).children('span, div.object').get();
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
@@ -3911,7 +3909,7 @@ define('io.ox/office/editor/editor',
                     isField = false,
                     text = '';
                 node = searchNodes[i];
-                if (DOM.isImageSpan(node)) {
+                if (DOM.isImageNode(node)) {
                     nodeLen = 1;
                     isImage = true;
                 } else if (DOM.isFieldSpan(node)) {
@@ -3972,7 +3970,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((DOM.isImageSpan(destPos.node)) && (destPos.offset === 1)) {
+            } else if ((DOM.isImageNode(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -3984,18 +3982,18 @@ define('io.ox/office/editor/editor',
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
                     useImageDiv = true,
-                    imageDiv = sourceNode.previousSibling,  // span -> div
+                    imagePosDiv = sourceNode.previousSibling,
                     doMove = true;
 
                 if ((sourceNode) && (destNode)) {
 
-                    if (! DOM.isImageSpan(sourceNode)) {
+                    if (! DOM.isImageNode(sourceNode)) {
                         doMove = false; // supporting only images at the moment
-                        Utils.warn('Editor.implMove(): moved object is not an image span: ' + Utils.getNodeName(sourceNode));
+                        Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // moving also the divs belonging to images
-                        if ((! imageDiv) || (! $(imageDiv).is('div'))) {
-                            useImageDiv = false; // should never be reached
+                        if ((! imagePosDiv) || (! $(imagePosDiv).is('div'))) {
+                            imagePosDiv = false; // should never be reached
                         }
                     }
 
@@ -4025,7 +4023,7 @@ define('io.ox/office/editor/editor',
 
                         // moving also the corresponding div before the moved image
                         if (useImageDiv) {
-                            $(imageDiv).insertBefore(sourceNode);
+                            $(imagePosDiv).insertBefore(sourceNode);
                         }
                     }
                 }
@@ -4087,6 +4085,7 @@ define('io.ox/office/editor/editor',
             .on('mousedown', function () { processMouseDown(this); })
             .on('mouseup', function () { processMouseUp(this); })
             .on('dragstart dragover drop contextmenu cut paste', false);
+
 
     } // class Editor
 
