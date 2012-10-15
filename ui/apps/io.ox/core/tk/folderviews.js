@@ -556,7 +556,7 @@ define('io.ox/core/tk/folderviews',
                             )
                         );
                     })
-                    .addButton('cancel', 'Cancel')
+                    .addButton('cancel', gt('Cancel'))
                     .addPrimaryButton('add', gt('Rename'))
                     .show(function () {
                         this.find('input').focus();
@@ -776,11 +776,11 @@ define('io.ox/core/tk/folderviews',
             // set icon
             icon.attr('src', src);
             // set title
-            label.text(data.title + '');
+            label.text(gt.noI18n(data.title));
             // set counter (mail only)
             if (options.type === 'mail' && data.unread) {
                 label.css('fontWeight', 'bold');
-                counter.text(data.unread || '').show();
+                counter.text(gt.noI18n(data.unread || '')).show();
             } else {
                 label.css('fontWeight', '');
                 counter.hide();
@@ -839,7 +839,7 @@ define('io.ox/core/tk/folderviews',
                         self.container.append(
                             section = $('<div>').addClass('section')
                             .append(
-                                $('<div>').addClass('section-title').text(sections[id])
+                                $('<div>').addClass('section-title').text(gt(sections[id]))
                             )
                         );
                         drawSection(section, data[id]);
