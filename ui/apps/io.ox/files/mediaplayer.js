@@ -142,7 +142,7 @@ define('io.ox/files/mediaplayer',
             {
                 if (i === 0) {
                     this.drawPlayer(url, file.file_mimetype);
-                    this.drawTrackInfo(file.filename);
+                    this.drawTrackInfo(gt.noI18n(file.filename));
                     item.addClass('active');
                 }
             }
@@ -196,6 +196,7 @@ define('io.ox/files/mediaplayer',
                 }
                 this.getItems();
                 this.playlist.sortable({ axis: 'y' });
+                this.player.find('video, audio').parent().addClass('noI18n');
                 this.player.find('video, audio').mediaelementplayer({
                     // since we cannot resize later on ...
                     audioWidth: $(window).width() <= 400 ? 294 : 480,
