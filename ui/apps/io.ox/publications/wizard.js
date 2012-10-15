@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
+define('io.ox/publications/wizard', ['io.ox/publications/api', 'gettext!io.ox/publications'], function (api, gt) {
 
     'use strict';
 
@@ -19,7 +19,7 @@ define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
         e.preventDefault();
         // send email
         var pub = e.data.publication,
-            data = { subject: 'New publication', attachments: [{ content: pub.url }] };
+            data = { subject: gt('New publication'), attachments: [{ content: pub.url }] };
         // hide dialog
         e.data.dialog.modal('hide');
         // open compose
@@ -47,16 +47,16 @@ define('io.ox/publications/wizard', ['io.ox/publications/api'], function (api) {
                     // header
                     $('<div>').addClass('modal-header')
                     .append($('<a>').addClass('close').attr('data-dismiss', 'modal').text('x'))
-                    .append($('<h3>').text('Publication created')),
+                    .append($('<h3>').text(gt('Publication created'))),
                     // body
                     $('<div>').addClass('modal-body')
                     .append($('<a>', { href: pub.url, target: '_blank' }).text(pub.url)),
                     // footer
                     $('<div>').addClass('modal-footer')
                     .append(
-                        $('<a>', { href: '#' }).addClass('btn btn-primary').text('Close')
+                        $('<a>', { href: '#' }).addClass('btn btn-primary').text(gt('Close'))
                         .on('click', { dialog: dialog }, hCloseDialog),
-                        $('<a>', { href: '#' }).addClass('btn').text('Send email')
+                        $('<a>', { href: '#' }).addClass('btn').text(gt('Send email'))
                         .on('click', { publication: pub, dialog: dialog }, hSendPublicationByMail)
                     )
                 )

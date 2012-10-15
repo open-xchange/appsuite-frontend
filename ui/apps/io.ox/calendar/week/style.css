@@ -91,6 +91,7 @@
         width: 100%;
         overflow-y: scroll;
         overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
     }
     
     .fulltime-lable {
@@ -107,15 +108,15 @@
     }
     
     .scrollpane {
-        overflow-y: scroll;
-        overflow-x: hidden;
+        overflow: scroll;
+        -webkit-overflow-scrolling: touch;
         position: absolute;
         top: 40px;
         left: 0;
         right: 0; 
         bottom: @weekview-footer-height; 
     }
-
+    
     .footer-container {
         position: absolute;
         height: @weekview-footer-height;
@@ -175,7 +176,6 @@
     }
     
     .timeslot {
-        min-width: 120px;
         border-bottom: 1px solid #ccc;
     }
     
@@ -239,7 +239,9 @@
     .weekday {
         display: inline-block;
         padding-left: 13px;
-    }
+        overflow: hidden;
+        text-overflow: ellipsis;
+}
     
     .appointment {
         position: absolute;

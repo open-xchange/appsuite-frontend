@@ -17,7 +17,8 @@ define('io.ox/calendar/week/view',
      'io.ox/core/api/folder',
      'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
-     'apps/io.ox/core/tk/jquery-ui.min.js'], function (util, date, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery-ui.min.js',
+     'apps/io.ox/core/tk/jquery.ui.touch-punch.min.js'], function (util, date, gt, folder, views) {
 
     'use strict';
 
@@ -48,7 +49,6 @@ define('io.ox/calendar/week/view',
         kwInfo:         $(),    // current KW
         showAll:        $(),    // show all folders check-box
         showAllCon:     $(),    // container
-        tlInterval:     {},     // timeline interval
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
@@ -346,25 +346,22 @@ define('io.ox/calendar/week/view',
 
             // create panes
             this.pane = $('<div>')
-                .addClass('scrollpane')
-                .append($('<div>').addClass('lable').append(times));
-            this.fulltimePane = $('<div>')
-                .addClass('fulltime');
+                .addClass('scrollpane');
+
             this.fulltimeCon = $('<div>')
                 .addClass('fulltime-container')
                 .append(
                     $('<div>').addClass('fulltime-lable'),
-                    this.fulltimePane
+                    this.fulltimePane = $('<div>').addClass('fulltime')
                 );
 
             // create days container
             var container = $('<div>').addClass('week-container');
 
             // create and animate timeline
-            this.timeline = $('<div>').addClass('timeline');
+            container.append(this.timeline = $('<div>').addClass('timeline'));
             this.renderTimeline(this.timeline);
-            this.tlInterval = setInterval(this.renderTimeline, 60000, this.timeline);
-            container.append(this.timeline);
+            setInterval(this.renderTimeline, 60000, this.timeline);
 
             // create days
             for (var d = 0; d < this.columns; d++) {
@@ -388,7 +385,7 @@ define('io.ox/calendar/week/view',
                 container.append(day);
             }
 
-            this.pane.append(container);
+            this.pane.append($('<div>').addClass('lable').append(times), container);
 
             // create toolbar
             this.$el.append(
@@ -809,8 +806,8 @@ define('io.ox/calendar/week/view',
                         var el = $(this),
                             d = el.data('resizable'),
                             app = self.collection.get(el.data('cid')).attributes,
-                            //app = _.cid(el.data('cid') + ''),
-                            tmpTS = self.getTimeFromDateTag(d.my.day, true);
+                            // TODO: FIX update call to UTC
+                            tmpTS = date.Local.utc(self.getTimeFromDateTag(d.my.day));
                         d.my.all.removeClass('opac');
                         switch (d.my.handle) {
                         case 'n':
@@ -1086,11 +1083,8 @@ define('io.ox/calendar/week/view',
         },
 
         // get timestamp from date marker
-        getTimeFromDateTag: function (days, utc)  {
-            if (utc) {
-                return date.Local.utc(this.curTimeUTC + (days * date.DAY));
-            }
-            return this.curTimeUTC + (days * date.DAY);
+        getTimeFromDateTag: function (tag)  {
+            return this.curTimeUTC + (tag * date.DAY);
         },
 
         // calc daily timestamp from mouse position

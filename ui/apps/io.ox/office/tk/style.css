@@ -691,4 +691,10 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
     z-index: 100;
     width: 100%;
     .box-sizing(border-box);
+
+    button {
+		float: right;
+		position: relative;
+		right: -21px;
+	}
 }
