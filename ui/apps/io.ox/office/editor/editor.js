@@ -1011,7 +1011,7 @@ define('io.ox/office/editor/editor',
                         gt('Another user is currently editing this document.'),
                         editdiv.parent(),
                         -1,
-                        {label: gt('Acquire Edit Rights'), key: 'document/editrights', controller: app.getController()}
+                        {label: gt('Acquire Edit Rights'), key: 'file/editrights', controller: app.getController()}
                     );
             } else if (showEditModeInfo) {
                 Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), editdiv.parent(), 5000);
@@ -1662,7 +1662,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled()) {
                     // TODO!!!
                 }
-                implInsertTheme(operation.themeName, operation.colorScheme);
+                implInsertTheme(operation.themename, operation.attr);
             }
             else if (operation.name === Operations.ATTRS_SET) {
                 // undo/redo is done inside implSetAttributes()
@@ -3160,19 +3160,13 @@ define('io.ox/office/editor/editor',
          * Inserts a new theme into the document.
          *
          * @param {String} themeName
-         *  The name of the scheme.
+         *  The name of the theme.
          *
-         * @param {String} colorScheme
-         *  The attributes of the scheme.
+         * @param {Object} attributes
+         *  The formatting settings of the theme.
          */
-        function implInsertTheme(themeName, colorScheme) {
-
-            var // the themes container
-                themes = self.getThemes();
-
-            if (themes) {
-                themes.addTheme(themeName, colorScheme);
-            }
+        function implInsertTheme(themeName, attributes) {
+            self.getThemes().addTheme(themeName, attributes);
         }
 
         /**

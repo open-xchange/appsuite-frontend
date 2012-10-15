@@ -422,7 +422,7 @@ define('io.ox/office/editor/format/stylesheets',
 
             // set new default style sheet
             if (Utils.getIntegerOption(options, 'defStyle', false)) {
-
+                defaultStyleId = id;
             }
 
             // prepare attribute map (empty attributes for all supported families)

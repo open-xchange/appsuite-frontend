@@ -70,25 +70,25 @@
             position: relative;
             margin: 0;
             line-height: 0;
+        
+            /* default text formatting */
+            > span {
+                font-family: sans-serif;
+                font-size: 11pt;
+                line-height: normal;
+
+                /* highlighted portions (quick search) */
+                &.highlight {
+                    .opacity(1);
+                    background-color: yellow !important;
+                    color: black !important;
+                }
+            }
         }
 
         /* no text cursor in read-only mode */
         &:not(.user-select-text) p, &:not(.user-select-text) div.p {
             cursor: default;
-        }
-
-        /* default text formatting */
-        p > span, div.p > span {
-            font-family: sans-serif;
-            font-size: 11pt;
-            line-height: normal;
-
-            /* highlighted portions (quick search) */
-            &.highlight {
-                .opacity(1);
-                background-color: yellow !important;
-                color: black !important;
-            }
         }
 
         /* default table formatting */
@@ -112,6 +112,12 @@
         span.object {
             position: relative;
             cursor: default;
+
+            /* inlined objects */
+            &.inline {
+                display: inline-block;
+                vertical-align: bottom;
+            }
 
             /* crop object contents at object border */
             > div.content {
@@ -170,12 +176,6 @@
                     cursor: inherit;
                 }
             }
-        }
-
-        /* inlined objects */
-        span.inline {
-            display: inline-block;
-            vertical-align: bottom;
         }
 
         /* floated elements (object spans and offset helper divs) */

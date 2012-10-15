@@ -53,13 +53,11 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
 
-            parafill: {
-                def: '',
+            fillcolor: {
+                def: Color.TRANSPARENT,
                 set: function (element, value) {
-                    var rgbColor;
-                    if (value.type)
-                        rgbColor = Color.getRGBColor(value, this.getDocumentStyles().getThemes());
-                    element.css('background-color', rgbColor ? ('#' + rgbColor) : 'transparent');
+                    var cssColor = Color.getCssColor(value, this.getDocumentStyles().getThemes());
+                    element.css('background-color', cssColor);
                 }
             }
 

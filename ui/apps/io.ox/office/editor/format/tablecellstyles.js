@@ -109,7 +109,7 @@ define('io.ox/office/editor/format/tablecellstyles',
         }
 
         if ((border) && (border.color)) {
-            color = '#' + Color.getRGBColor(border.color, documentStyles.getThemes());
+            color = Color.getCssColor(border.color, documentStyles.getThemes());
         }
 
         return { style: style, width: width, color: color };
