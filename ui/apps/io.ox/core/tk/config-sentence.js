@@ -73,15 +73,15 @@ define("io.ox/core/tk/config-sentence", ["io.ox/core/tk/keys"], function (KeyLis
                 function updateValue() {
                     var value = parseInt($numberInput.val(), 10);
                     if (!isNaN(value)) {
+                        try {
+                            $content.remove();
+                        } catch (e) { }
+                        $anchor.show();
                         self[attribute] = value;
                         self.trigger("change", self);
                         self.trigger("change:" + attribute, self);
                     }
                     keys.destroy();
-                    try {
-                        $content.remove();
-                    } catch (e) { }
-                    $anchor.show();
 
                 }
                 $numberInput.on("blur", function () {

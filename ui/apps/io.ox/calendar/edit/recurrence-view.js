@@ -423,7 +423,7 @@ define("io.ox/calendar/edit/recurrence-view", ["io.ox/calendar/model", "io.ox/co
                 this.nodes.optionList = $('<dl>');
 
                 function prepareMenuEl(sentence) {
-                    var $el = sentence.$el.find("a").first().clone().show();
+                    var $el = sentence.$el.clone();
                     $el.find('*').off();
                     $el.on('mouseenter', function () {
                         var $ghost = sentence.$el.clone();
