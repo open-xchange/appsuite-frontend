@@ -11,7 +11,7 @@
  * @author Matthias Biggeleben <matthias.biggeleben@open-xchange.com>
  */
 
-define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
+define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], function (Events, gt) {
 
     'use strict';
 
@@ -342,7 +342,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
             pane = $('<div class="io-ox-sidepopup-pane default-content-padding abs">'),
 
             closer = $('<div class="io-ox-sidepopup-close">').append(
-                    $('<button class="btn">').text('Close')
+                    $('<button class="btn">').text(gt('Close'))
                 ),
 
             popup = $('<div class="io-ox-sidepopup abs">').append(closer, pane),
@@ -469,7 +469,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event'], function (Events) {
                 if (self.nodes.closest.is('.io-ox-sidepopup-pane')) {
                     closer.find('.close-all').remove();
                     closer.prepend(
-                        $('<button class="btn close-all">').text('Close all')
+                        $('<button class="btn close-all">').text(gt('Close all'))
                         .on('click', { target: self.nodes.target }, closeAll)
                     );
                 }

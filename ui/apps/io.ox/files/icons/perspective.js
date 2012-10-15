@@ -52,7 +52,7 @@ define('io.ox/files/icons/perspective',
             if (baton.app.getWindow().search.active) {
                 this.append(
                     $('<li class="breadcrumb">').append(
-                        $('<li class="active">').text('Searched for: ' + baton.app.getWindow().search.query)
+                        $('<li class="active">').text(gt('Searched for') + ': ' + baton.app.getWindow().search.query)
                     )
                 );
             }
@@ -101,10 +101,10 @@ define('io.ox/files/icons/perspective',
                 $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
                     .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
                 $('<span class="slideshow_fullscreen">').append(
-                    $.txt('('),
+                    $.txt(gt.noI18n('(')),
                     $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
                         .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
-                    $.txt(')')
+                    $.txt(gt.noI18n(')'))
                 )
             );
         }
@@ -172,7 +172,7 @@ define('io.ox/files/icons/perspective',
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2"))
+                $('<div class="title">').text(gt.noI18n((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2")))
             );
         }
     });
