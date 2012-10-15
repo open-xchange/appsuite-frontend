@@ -58,10 +58,16 @@ define('io.ox/office/editor/format/documentstyles',
 
         /**
          * Returns the themes container.
-         *
          */
         this.getThemes = function () {
             return themes;
+        };
+
+        /**
+         * Returns the current theme.
+         */
+        this.getCurrentTheme = function () {
+            return themes.getTheme();
         };
 
         this.destroy = function () {

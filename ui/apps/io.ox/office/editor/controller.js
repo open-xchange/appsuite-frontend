@@ -59,14 +59,13 @@ define('io.ox/office/editor/controller',
                     get: function () { return app.getFileName(); },
                     set: function (fileName) { app.rename(fileName); }
                 },
+                'file/editrights': {
+                    enable: function () { return !editor.isEditMode(); },
+                    set: function (state) { app.acquireEditRights(); }
+                },
 
                 // document contents
 
-                'document/editrights': {
-                    enable: function () { return !editor.isEditMode(); },
-                    get: function () { return !editor.isEditMode(); },
-                    set: function (state) { app.acquireEditRights(); }
-                },
                 'document/undo': {
                     chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.undoAvailable() > 0; },
@@ -106,18 +105,8 @@ define('io.ox/office/editor/controller',
                 },
                 'paragraph/fillcolor': {
                     chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.parafill && attributes.parafill.rgbColor; },
-                    set: function (fill) {
-                        if (fill.themeFill) {
-                            var themes = editor.getThemes();
-                            if (themes) {
-                                var theme = themes.getTheme();
-                                if (theme)
-                                    fill.rgbColor = theme[fill.themeFill];
-                            }
-                        }
-                        editor.setAttribute('paragraph', 'parafill', fill);
-                    }
+                    get: function (attributes) { return attributes.fillcolor; },
+                    set: function (color) { editor.setAttribute('paragraph', 'fillcolor', color); }
                 },
 
                 // characters

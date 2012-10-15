@@ -19,7 +19,32 @@ define('io.ox/office/editor/format/themes',
 
     'use strict';
 
-    // class Themes ==================================================
+    // class Theme ============================================================
+
+    function Theme(attributes) {
+
+        var // the color scheme of this theme
+            colorScheme = _.copy(Utils.getObjectOption(attributes, 'colorscheme', {}), true);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the RGB color value of the specified scheme color.
+         *
+         * @param {String} name
+         *  The name of the scheme color.
+         *
+         * @return {String|Null}
+         *  The RGB value of the scheme color as hexadecimal string, if
+         *  existing, otherwise null.
+         */
+        this.getSchemeColor = function (name) {
+            return _.isString(colorScheme[name]) ? colorScheme[name] : null;
+        };
+
+    } // class Theme
+
+    // class Themes ===========================================================
 
     /**
      * Contains the definitions of themes.
@@ -36,13 +61,13 @@ define('io.ox/office/editor/format/themes',
      */
     function Themes(rootNode, documentStyles) {
 
-        var // self reference
-        self = this,
+        var // themes, mapped by identifier
+            themes = {},
 
-        // style sheets, mapped by identifier
-        themes = [];
+            // default theme (first inserted theme)
+            defaultTheme = null;
+
         // methods ------------------------------------------------------------
-
 
         /**
          * Adds a new style sheet to this container. An existing style sheet
@@ -51,69 +76,52 @@ define('io.ox/office/editor/format/themes',
          * @param {String} name
          *  The name of of the new style theme.
          *
-         * @param {Object} colorScheme
-         *  The attributes of the color scheme of the theme.
+         * @param {Object} attributes
+         *  The formatting attributes of the theme.
          *
          * @returns {Themes}
          *  A reference to this instance.
          */
-        this.addTheme = function (name, colorScheme) {
+        this.addTheme = function (name, attributes) {
 
-            themes[themes.length] = {};
-            var theme = themes[themes.length - 1];
-            theme.name = name;
-            theme.colorSchemeName = colorScheme.schemeName;
-            theme.dark1 = colorScheme.dark1;
-            theme.dark2 = colorScheme.dark2;
-            theme.light1 = colorScheme.light1;
-            theme.light2 = colorScheme.light2;
-            theme.text1 = colorScheme.text1;
-            theme.text2 = colorScheme.text2;
-            theme.background1 = colorScheme.background1;
-            theme.background2 = colorScheme.background2;
-            theme.accent1 = colorScheme.accent1;
-            theme.accent2 = colorScheme.accent2;
-            theme.accent3 = colorScheme.accent3;
-            theme.accent4 = colorScheme.accent4;
-            theme.accent5 = colorScheme.accent5;
-            theme.accent6 = colorScheme.accent6;
-            theme.hyperlink = colorScheme.hyperlink;
-            theme.followedHyperlink = colorScheme.followedHyperlink;
+            var // create a theme object with all passed attributes
+                theme = new Theme(attributes);
+
+            // store new theme in container
+            themes[name] = theme;
+            defaultTheme = defaultTheme || theme;
 
             // notify listeners
             this.trigger('change');
 
             return this;
         };
+
         /**
          * Gives access to a single theme.
          *
-         * @param name the name of the theme to return. If omitted the 'current' theme is returned
-         * @returns {Themes}
-         *  A reference to this instance.
+         * @param {String} [name]
+         *  The name of the theme to return. If omitted the 'current' theme is
+         *  returned.
+         *
+         * @returns {Theme}
+         *  The specified, and the current theme.
          */
         this.getTheme = function (name) {
-            if (!name) {
-                return themes[0];
-            } else {
-                return themes[name];
-            }
-        };
-        /**
-         * Gives access to all themes.
-         *
-         */
-        this.getThemes = function () {
-            return themes;
+            return (name in themes) ? themes[name] : defaultTheme;
         };
 
         this.destroy = function () {
             this.events.destroy();
         };
 
+        // initialization -----------------------------------------------------
+
         // add event hub
         Events.extend(this);
+
     } // class Themes
+
     // exports ================================================================
 
     return Themes;

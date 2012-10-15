@@ -22,9 +22,10 @@ define('io.ox/office/editor/view',
      'io.ox/office/tk/component/toolpane',
      'io.ox/office/tk/component/appwindowtoolbar',
      'io.ox/office/tk/config',
+     'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/lineheight',
      'gettext!io.ox/office/main'
-    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, AppWindowToolBar, Config, LineHeight, gt) {
+    ], function (Utils, Fonts, Button, RadioGroup, TextField, ComboField, GridSizer, ToolPane, AppWindowToolBar, Config, Color, LineHeight, gt) {
 
     'use strict';
 
@@ -108,30 +109,42 @@ define('io.ox/office/editor/view',
 
         // private methods ----------------------------------------------------
 
-        function changed() {
-            // add theme based colors
-            if (themes) {
-                var docThemes = themes.getThemes();
-                if (Array.isArray(docThemes) && docThemes.length > 0) {
-                    // use first entry of the themes array
-                    var theme = docThemes[0];
+        function fillList() {
 
-                    var filter = [];
-                    if (type  === 'fill')
-                        filter = [ "name", "colorSchemeName", "text1", "text2", "background1", "background2" ];
-                    else if (type === 'color')
-                        filter = [ "name", "colorSchemeName", "dark1", "dark2", "light1", "light2" ];
+            var theme = themes.getTheme(),
+                filter = null;
 
-                    var themeEntry;
-                    for (themeEntry in theme) {
-                        if (!_.contains(filter, themeEntry)) {
-                            var color = theme[themeEntry];
+            self.clearOptionButtons();
 
-                            if (color && color.length > 0)
-                                self.createOptionButton({ type: 'scheme', value: themeEntry }, { tooltip: themeEntry, css: {"background-color": '#' + color }});
-                        }
-                    }
+            // add trnsparent color (only for fill, not for text color)
+            if (type === 'fill') {
+                self.createOptionButton(Color.TRANSPARENT, { tooltip: gt('Transparent') });
+            }
+
+            // add predefined colors
+            _(ColorChooser.BUILTIN_COLORS).each(function (entry) {
+                self.createOptionButton(entry.color, { tooltip: entry.name, css: { backgroundColor: Color.getCssColor(entry.color, theme) }});
+            });
+
+            // add theme colors
+            if (theme) {
+
+                switch (type) {
+                case 'fill':
+                    filter = ['text1', 'text2', 'background1', 'background2'];
+                    break;
+                case 'text':
+                    filter = ['dark1', 'dark2', 'light1', 'light2'];
+                    break;
+                default:
+                    filter = [];
                 }
+
+                _(theme.colorscheme).each(function (rgbColor, name) {
+                    if (!_(filter).contains(name)) {
+                        self.createOptionButton({ type: 'scheme', value: name }, { tooltip: name, css: { backgroundColor: '#' + rgbColor } });
+                    }
+                });
             }
         }
 
@@ -145,29 +158,23 @@ define('io.ox/office/editor/view',
 
         // initialization -----------------------------------------------------
 
-        // add predefined colors
-        _([
-            { label: 'Transparent',  value: {type: 'rgb', value: null }},
-            { label: 'Dark Red',     value: {type: 'rgb', value: 'C00000'}},
-            { label: 'Red',          value: {type: 'rgb', value: 'FF0000'}},
-            { label: 'Orange',       value: {type: 'rgb', value: 'FFC000'}},
-            { label: 'Yellow',       value: {type: 'rgb', value: 'FFFF00'}},
-            { label: 'Light Green',  value: {type: 'rgb', value: '92D050'}},
-            { label: 'Green',        value: {type: 'rgb', value: '00B050'}},
-            { label: 'Light Blue',   value: {type: 'rgb', value: '00B0F0'}},
-            { label: 'Blue',         value: {type: 'rgb', value: '0070C0'}},
-            { label: 'Dark Blue',    value: {type: 'rgb', value: '002060'}},
-            { label: 'Purple',       value: {type: 'rgb', value: '7030A0'}}
-        ]).each(function (entry) {
-            if (entry.value.value)
-                self.createOptionButton(entry.value, { tooltip: entry.label, css: {"background-color": '#' + entry.value.value }});
-            else if (type === 'fill')
-                self.createOptionButton(entry.value, { tooltip: entry.label });
-        });
-
-        themes.on('change', changed);
+        fillList();
+        themes.on('change', fillList);
 
     }}); // class ColorChooser
+
+    ColorChooser.BUILTIN_COLORS = [
+        { name: gt('Dark Red'),    color: { type: 'rgb', value: 'C00000' } },
+        { name: gt('Red'),         color: { type: 'rgb', value: 'FF0000' } },
+        { name: gt('Orange'),      color: { type: 'rgb', value: 'FFC000' } },
+        { name: gt('Yellow'),      color: { type: 'rgb', value: 'FFFF00' } },
+        { name: gt('Light Green'), color: { type: 'rgb', value: '92D050' } },
+        { name: gt('Green'),       color: { type: 'rgb', value: '00B050' } },
+        { name: gt('Light Blue'),  color: { type: 'rgb', value: '00B0F0' } },
+        { name: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
+        { name: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
+        { name: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
+    ];
 
     // class FontFamilyChooser ================================================
 
@@ -504,15 +511,14 @@ define('io.ox/office/editor/view',
             createToolBar('debug', { label: gt('Debug') })
                 .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/editable',   { icon: 'icon-pencil',     tooltip: 'Edit Mode',                toggle: true })
-//                .addSeparator()
-//                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars', toggle: true })
+                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars',     toggle: true })
+                .addSeparator()
+                .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
+                .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph fill color') }))
                 .addSeparator()
-                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'color', { tooltip: gt('Text Color') }))
-                .addSeparator()
-                .addButton('file/flush', { icon: 'icon-share-alt', label: gt('Flush') });
+                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }));
         }
 
         // register a component that updates the window header tool bar

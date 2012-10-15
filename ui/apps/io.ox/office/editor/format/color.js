@@ -38,51 +38,45 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     // static class Color =====================================================
 
     /**
-     * Predefined values for the 'color' attribute.
+     * Predefined color objects.
      */
     var Color = {
-            BLACK: { type: 'rgb', value: '000000', transform: [] },
-            WHITE: { type: 'rgb', value: 'FFFFFF', transform: [] }
+            TRANSPARENT: {},
+            BLACK: { type: 'rgb', value: '000000' },
+            WHITE: { type: 'rgb', value: 'FFFFFF' },
+            AUTO: { type: 'auto' }
         };
 
     /**
-     * Tries to map the 'color' attribute to a real RGB color value.
+     * Converts the passed attribute color object to a CSS color value.
      *
-     * @param {jQuery} color
-     * The 'color' attribute used to map to the real RGB value
+     * @param {Object} color
+     *  The color object as used in operations.
      *
-     * @param {Themes} themeContainer
-     * The themes container to be used to map possible theme
-     * colors to real RGB values.
+     * @param {Themes} theme
+     *  The theme object used to map scheme color names to color values.
+     *
+     * @returns {String}
+     *  The CSS color value converted from the passed color object.
      */
-    Color.getRGBColor = function (color, themeContainer) {
+    Color.getCssColor = function (color, theme) {
 
-        var type = Utils.getStringOption(color, 'type');
-        var theme, themeColor,
-            rgbColor = Color.BLACK.value; // fallback color is BLACK
+        var type = Utils.getStringOption(color, 'type'),
+            rgbColor = null;
 
         switch (type) {
         case 'rgb':
             rgbColor = color.value;
             break;
         case 'scheme':
-            if (themeContainer) {
-                var themes = themeContainer.getThemes();
-                if (Array.isArray(themes) && themes.length > 0) {
-                    theme = themes[0];
-                    if (theme) {
-                        themeColor = theme[color.value];
-                        rgbColor = themeColor ? themeColor : rgbColor;
-                    }
-                }
-            }
+            rgbColor = theme && theme.getSchemeColor(color.value);
             break;
         case 'auto':
             rgbColor = Color.BLACK.value;
             break;
         }
 
-        return rgbColor;
+        return _.isString(rgbColor) ? ('#' + rgbColor) : 'transparent';
     };
 
     // exports ================================================================

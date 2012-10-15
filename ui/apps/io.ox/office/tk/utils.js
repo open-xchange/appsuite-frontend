@@ -11,7 +11,10 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-define('io.ox/office/tk/utils', ['io.ox/core/gettext'], function (gettext) {
+define('io.ox/office/tk/utils',
+    ['io.ox/core/gettext',
+     'less!io.ox/office/tk/style.css'
+    ], function (gettext) {
 
     'use strict';
 

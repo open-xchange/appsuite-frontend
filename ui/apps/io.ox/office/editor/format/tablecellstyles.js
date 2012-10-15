@@ -21,7 +21,10 @@ define('io.ox/office/editor/format/tablecellstyles',
 
     'use strict';
 
-    var // definitions for table cell attributes
+    var // border default
+        NO_BORDER = { style: 'none' },
+
+        // definitions for table cell attributes
         definitions = {
 
             /**
@@ -47,10 +50,9 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the left table cell border
              */
             borderleft: {
-                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
-                set: function (element, borderleft) {
-                    var border = getCssBorderAttributes(borderleft, this.getDocumentStyles());
-                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                def: NO_BORDER,
+                set: function (element, border) {
+                    element.css('border-left', this.getCssBorder(border));
                 }
             },
 
@@ -58,10 +60,9 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the right table cell border
              */
             borderright: {
-                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
-                set: function (element, borderright) {
-                    var border = getCssBorderAttributes(borderright, this.getDocumentStyles());
-                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                def: NO_BORDER,
+                set: function (element, border) {
+                    element.css('border-right', this.getCssBorder(border));
                 }
             },
 
@@ -69,10 +70,9 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the top table cell border
              */
             bordertop: {
-                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
-                set: function (element, bordertop) {
-                    var border = getCssBorderAttributes(bordertop, this.getDocumentStyles());
-                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                def: NO_BORDER,
+                set: function (element, border) {
+                    element.css('border-top', this.getCssBorder(border));
                 }
             },
 
@@ -80,10 +80,9 @@ define('io.ox/office/editor/format/tablecellstyles',
              * Style, width and color of the bottom table cell border
              */
             borderbottom: {
-                def: { style: 'solid', width: '2px', color: { type : 'auto' } },
-                set: function (element, borderbottom) {
-                    var border = getCssBorderAttributes(borderbottom, this.getDocumentStyles());
-                    element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
+                def: NO_BORDER,
+                set: function (element, border) {
+                    element.css('border-bottom', this.getCssBorder(border));
                 }
             }
 
@@ -91,36 +90,12 @@ define('io.ox/office/editor/format/tablecellstyles',
 
     // private global functions ===============================================
 
-    function getCssBorderAttributes(border, documentStyles) {
-
-        var style = '',
-            width = '',
-            color = '';
-
-        if ((border) && (border.style)) {
-            style = border.style;
-            if (style === 'single') {
-                style = 'solid';
-            }
-        }
-
-        if ((border) && (border.width)) {
-            width = Utils.convertHmmToCssLength(border.width, 'px');
-        }
-
-        if ((border) && (border.color)) {
-            color = '#' + Color.getRGBColor(border.color, documentStyles.getThemes());
-        }
-
-        return { style: style, width: width, color: color };
-    }
-
     /**
      * Will be called for every table cell element whose attributes have been
-     * changed. Repositions and reformats the table cell according to the passed
-     * attributes.
+     * changed. Repositions and reformats the table cell according to the
+     * passed attributes.
      *
-     * @param {jQuery} tablecell
+     * @param {jQuery} cell
      *  The <th> or <td> element whose table cell attributes have been changed,
      *  as jQuery object.
      *
@@ -128,10 +103,7 @@ define('io.ox/office/editor/format/tablecellstyles',
      *  A map of all attributes (name/value pairs), containing the effective
      *  attribute values merged from style sheets and explicit attributes.
      */
-    function updateTableCellFormatting(tablecell, attributes) {
-
-        // Table.updateColGroup(table, attributes.tablegrid);
-
+    function updateTableCellFormatting(cell, attributes) {
     }
 
     // class TableCellStyles ======================================================
