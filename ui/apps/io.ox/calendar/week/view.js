@@ -325,7 +325,7 @@ define('io.ox/calendar/week/view',
                 times.push(
                     $('<div>')
                         .addClass('time')
-                        .append($('<div>').addClass('number').text((i < 10 ? '0' + i : i) + '.00'))
+                        .append($('<div>').addClass('number').text(gt.noI18n((i < 10 ? '0' + i : i) + '.00')))
                         .height(this.cellHeight * this.fragmentation)
                 );
             }
@@ -471,7 +471,7 @@ define('io.ox/calendar/week/view',
                 days.push(
                         $('<div>')
                         .addClass('weekday')
-                        .text(tmpDate.format(date.DAYOFWEEK_DATE))
+                        .text(gt.noI18n(tmpDate.format(date.DAYOFWEEK_DATE)))
                         .width(100 / this.columns + '%')
                 );
                 // mark today
@@ -482,7 +482,12 @@ define('io.ox/calendar/week/view',
                 tmpDate.add(date.DAY);
             }
             this.footer.empty().append(days);
-            this.kwInfo.text(new date.Local(this.curTimeUTC).formatInterval(new date.Local(this.curTimeUTC + ((this.columns - 1) * date.DAY)), date.DATE));
+            this.kwInfo.text(
+                gt.noI18n(
+                    new date.Local(this.curTimeUTC)
+                        .formatInterval(new date.Local(this.curTimeUTC + ((this.columns - 1) * date.DAY)), date.DATE)
+                )
+            );
 
             if (hasToday) {
                 this.timeline.show();
@@ -1045,8 +1050,8 @@ define('io.ox/calendar/week/view',
                     $('<div>')
                         .addClass('appointment-content')
                         .css('lineHeight', (a.full_time ? this.fulltimeHeight : this.cellHeight) + 'px')
-                        .append($('<div>').addClass('title').text(a.title))
-                        .append($('<div>').addClass('location').text(a.location || ''))
+                        .append($('<div>').addClass('title').text(gt.noI18n(a.title)))
+                        .append($('<div>').addClass('location').text(gt.noI18n(a.location || '')))
                 );
         },
 
