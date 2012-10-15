@@ -68,7 +68,8 @@ define("io.ox/calendar/view-grid-template",
                                         .on('click', { internal_userid: participant.get('id') }, fnClickPerson)
                                 );
                                 if (index < (list.length - 1)) {
-                                    conflicts.append($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
+                                    conflicts.append($('<span>').addClass('delimiter')
+                                        .append($.txt(_.noI18n('\u00A0\u2022 ')))); // '&nbsp;&bull; '
                                 }
                             });
                     });

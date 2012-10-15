@@ -23,12 +23,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
             this.model.on('change', _.bind(this.onChange, this));
         },
         render: function () {
-            this.$el.text(this.model.get('count'));
+            this.$el.text(_.noI18n(this.model.get('count')));
             return this;
         },
         onChange: function () {
             this.$el.addClass('badge-info');
-            this.$el.text(this.model.get('count'));
+            this.$el.text(_.noI18n(this.model.get('count')));
         },
         setNotifier: function (b) {
             if (b) {

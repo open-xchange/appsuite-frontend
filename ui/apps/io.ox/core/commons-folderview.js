@@ -74,7 +74,7 @@ define('io.ox/core/commons-folderview',
                     $('<div class="toolbar-action pull-left dropdown dropup">').append(
                         $('<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-cog"></a>'),
                         ul = $('<ul class="dropdown-menu">').append(
-                            $('<li class="dropdown-header">').text('')
+                            $('<li class="dropdown-header">')
                         )
                     )
                 );
@@ -83,7 +83,7 @@ define('io.ox/core/commons-folderview',
                 baton.tree.selection.on('change', function (e, selection) {
                     if (selection.length) {
                         api.get({ folder: selection[0].id }).done(function (data) {
-                            ul.find('.dropdown-header').text(data.title);
+                            ul.find('.dropdown-header').text(_.noI18n(data.title));
                         });
                     }
                 });

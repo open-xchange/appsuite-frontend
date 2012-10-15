@@ -246,7 +246,7 @@
     .subject, .thread-size, .flag {
         font-size: 16pt;
         margin: @inline-links-margin;
-        word-wrap: break-word;
+        word-break: break-all;
     }
 
     &.unread .from .person-link {

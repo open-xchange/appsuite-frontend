@@ -132,7 +132,11 @@ define("io.ox/mail/main",
                 .find('.icon-arrow-up').css('opacity', opacity[1]).end();
         }
 
-        var option = '<li><a data-option="%s"><i/> %s</a></li>';
+        var option = $('<li><a href="#"><i/></a></li>');
+
+        function buildOption(value, text) {
+            return option.clone().find('a').attr('data-option', value).append($.txt(text)).end();
+        }
 
         ext.point('io.ox/mail/vgrid/toolbar').extend({
             id: 'dropdown',
@@ -150,16 +154,16 @@ define("io.ox/mail/main",
                         .dropdown(),
                         $('<ul>').addClass("dropdown-menu")
                         .append(
-                            options.threadView !== false ? $(_.printf(option, 'thread', gt('Conversations'))) : $(),
-                            $(_.printf(option, 610, gt('Date'))),
-                            $(_.printf(option, 603, gt('From'))),
-                            $(_.printf(option, 102, gt('Label'))),
-                            $(_.printf(option, 607, gt('Subject'))),
+                            options.threadView !== false ? buildOption('thread', gt('Conversations')) : $(),
+                            buildOption(610, gt('Date')),
+                            buildOption(603, gt('From')),
+                            buildOption(102, gt('Label')),
+                            buildOption(607, gt('Subject')),
                             $('<li class="divider">'),
-                            $(_.printf(option, 'asc', gt('Ascending'))),
-                            $(_.printf(option, 'desc', gt('Descending'))),
+                            buildOption('asc', gt('Ascending')),
+                            buildOption('desc', gt('Descending')),
                             $('<li class="divider">'),
-                            $(_.printf(option, 'unread', gt('Unread only')))
+                            buildOption('unread', gt('Unread only'))
                         )
                         .on('click', 'a', { grid: grid }, hToolbarOptions)
                     )
@@ -192,10 +196,11 @@ define("io.ox/mail/main",
 
         grid.on('change:ids', function (e, all) {
             // get node & clear now
-            var node = grid.getToolbar().find('.grid-count').text(''),
+            var node = grid.getToolbar().find('.grid-count').text(_.noI18n('')),
                 total = grid.prop('total'),
                 set = function (count) {
-                    node.text(count + ' ' + gt.ngettext('mail', 'mails', count));
+                    var str = gt.ngettext('%1$d mail', '%1$d mails', count);
+                    node.text(gt.format(str, _.noI18n(count)));
                 };
             if (total !== undefined) {
                 set(total);

@@ -134,7 +134,7 @@ define("io.ox/core/desktop",
                         folder = null;
                         // update window title?
                         if (win) {
-                            win.setTitle('');
+                            win.setTitle(_.noI18n(''));
                         }
                         // update grid?
                         if (grid) {
@@ -157,7 +157,7 @@ define("io.ox/core/desktop",
                                     api.on('change:' + folder, { folder: folder }, hChanged);
                                     // update window title & toolbar?
                                     if (win) {
-                                        win.setTitle(data.title);
+                                        win.setTitle(_.noI18n(data.title));
                                         win.updateToolbar();
                                     }
                                     // update grid?
@@ -721,10 +721,10 @@ define("io.ox/core/desktop",
                                 .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
                                 // settings
                             this.settingsButton = $('<div class="window-control pull-right">').hide()
-                                .text('\u270E'),
+                                .text(_.noI18n('\u270E')),
                             // close
                             this.closeButton = $('<div class="window-control pull-right">').hide()
-                                .append($('<a class="close">&times;</a>'))
+                                .append($('<a class="close">').text(_.noI18n('\u00D7')))
                         );
                     }
                 });
@@ -788,7 +788,7 @@ define("io.ox/core/desktop",
                             self.state.visible = true;
                             self.state.open = true;
                             self.trigger("show");
-                            document.title = ox.serverConfig.pageTitle + self.getTitle();
+                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), self.getTitle());
                             if (firstShow) {
                                 self.trigger("open");
                                 self.state.running = true;
@@ -817,7 +817,7 @@ define("io.ox/core/desktop",
                     ox.ui.windowManager.trigger("window.hide", this);
                     if (currentWindow === this) {
                         currentWindow = null;
-                        document.title = ox.serverConfig.pageTitle;
+                        document.title = _.noI18n(ox.serverConfig.pageTitle);
                     }
                     return this;
                 };
@@ -921,26 +921,21 @@ define("io.ox/core/desktop",
 
                 var title = "";
 
-                function applyTitle() {
-                    var spans = self.nodes.title.find("span");
-                    spans.eq(0).empty().append(
-                        typeof title === "string" ?
-                            document.createTextNode(title) :
-                            title
-                    );
-                }
-
                 this.getTitle = function () {
-                    return self.nodes.title.find("span").eq(0).contents().text();
+                    return title;
                 };
 
-                this.setTitle = function (t) {
-                    title = _.isString(t) ? t : '';
-                    applyTitle();
-                    if (this === currentWindow) {
-                        document.title = ox.serverConfig.pageTitle + t;
+                this.setTitle = function (str) {
+                    if (_.isString(str)) {
+                        title = str;
+                        self.nodes.title.find('span').first().text(title);
+                        if (this === currentWindow) {
+                            document.title = gt('%1$s %2$s', _.noI18n(ox.serverConfig.pageTitle), title);
+                        }
+                        this.trigger('change:title');
+                    } else {
+                        console.error('window.setTitle(str) exprects string!', str);
                     }
-                    this.trigger('change:title');
                     return this;
                 };
 

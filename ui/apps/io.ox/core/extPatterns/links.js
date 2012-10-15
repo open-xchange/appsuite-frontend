@@ -154,8 +154,11 @@ define("io.ox/core/extPatterns/links",
                 if (!multiple && all.length > 5 && lo.length > 1) {
                     node.append(
                         $('<span class="io-ox-action-link dropdown">').append(
-                            $('<a href="#" data-toggle="dropdown">')
-                            .text(gt('More') +  ' ...').append($('<b class="caret">')),
+                            $('<a href="#" data-toggle="dropdown">').append(
+                                $.txt(gt('More')),
+                                $.txt(_.noI18n(' ...')),
+                                $('<b class="caret">')
+                            ),
                             $('<ul class="dropdown-menu dropdown-right">').append(
                                 lo.map(wrapAsListItem)
                             )
@@ -176,15 +179,17 @@ define("io.ox/core/extPatterns/links",
             $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
                 .appendTo(this),
-            $toggle = $("<a>", { href: '#' })
-                .attr('data-toggle', 'dropdown')
+            $toggle = $('<a href="#" data-toggle="dropdown">')
                 .data('context', context)
                 .text(options.label)
-                .append($('<span>').text(' '), $('<b>').addClass('caret'))
+                .append(
+                    $('<span>').text(_.noI18n(' ')),
+                    $('<b>').addClass('caret')
+                )
                 .appendTo($parent);
 
         $toggle.addClass(options.classes);
-        $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
+        $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
 
         // create & add node first, since the rest is async
         var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);

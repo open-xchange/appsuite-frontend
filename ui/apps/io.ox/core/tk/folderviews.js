@@ -776,7 +776,7 @@ define('io.ox/core/tk/folderviews',
             // set icon
             icon.attr('src', src);
             // set title
-            label.text(gt.noI18n(data.title));
+            label.text(_.noI18n(data.title));
             // set counter (mail only)
             if (options.type === 'mail' && data.unread) {
                 label.css('fontWeight', 'bold');
@@ -788,7 +788,7 @@ define('io.ox/core/tk/folderviews',
         }
     });
 
-    var sections = { 'private': 'Private', 'public': 'Public ', 'shared': 'Shared' };
+    var sections = { 'private': gt('Private'), 'public': gt('Public'), 'shared': gt('Shared') };
 
     function FolderList(container, opt) {
 

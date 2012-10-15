@@ -152,11 +152,12 @@ define("io.ox/core/main",
 
         ox.ui.apps.on('add', function (model, collection, e) {
             // create topbar launcher
-            var node = addLauncher('left', model.get('title'), function () { model.launch(); });
+            var node = addLauncher('left', model.get('title'), function () { model.launch(); }),
+                title = model.get('title');
             add(node, launchers, model);
             // add list item
             node = $('<li>').append(
-                $('<a href="#">').text(model.get('title'))
+                $('<a href="#">').text(gt(title))
             );
             node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
             add(node, launcherDropdown, model);

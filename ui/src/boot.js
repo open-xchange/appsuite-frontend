@@ -482,7 +482,7 @@ $(document).ready(function () {
                 // store server config
                 ox.serverConfig = data;
                 // set page title now
-                document.title = ox.serverConfig.pageTitle || '';
+                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                 // continue
                 autoLogin();
             });

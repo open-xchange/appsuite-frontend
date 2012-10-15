@@ -44,9 +44,9 @@ define('io.ox/mail/accounts/view-form',
             PASSWORD_OUT: gt('Password')
         },
 
-        optionsServerType = [gt('imap'), gt('pop3')],
+        optionsServerType = _(['imap', 'pop3']).map(gt.noI18n),
 
-        optionsRefreshRatePop = [gt('3'), gt('5'), gt('10'), gt(' 15'), gt('30'), gt('60'), gt('360')],
+        optionsRefreshRatePop = _([3, 5, 10, 15, 30, 60, 360]).map(gt.noI18n),
 
         AccountDetailView = Backbone.View.extend({
             tagName: "div",

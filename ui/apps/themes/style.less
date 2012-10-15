@@ -889,6 +889,7 @@ a.button {
 
 .person, .person-link {
     color: @person-link-color;
+    word-break: break-all;
 }
 
 .ellipsis {
@@ -1537,7 +1538,12 @@ div.external-user-image {
 }
 
 /** BOOTSTRAP FIXES **/
-.dropdown li { display: block; text-shadow: none; } // fixes dropdown in breadcrumb
+
+// fixes dropdown in breadcrumb
+.dropdown li { display: block; text-shadow: none; }
+
+// icons in dropdowns
+li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 

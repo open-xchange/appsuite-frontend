@@ -33,7 +33,7 @@ define('io.ox/mail/view-grid-template',
                     ),
                     $('<div>').append(
                         threadSize = $('<div>').addClass('thread-size'),
-                        flag = $('<div>').addClass('flag').text('\u00A0'),
+                        flag = $('<div>').addClass('flag').text(_.noI18n('\u00A0')),
                         attachment = $('<i>').addClass('icon-paper-clip'),
                         priority = $('<span>').addClass('priority'),
                         $('<div>').addClass('subject')
@@ -45,16 +45,16 @@ define('io.ox/mail/view-grid-template',
             },
             set: function (data, fields, index) {
                 fields.priority.empty().append(util.getPriority(data));
-                fields.subject.text(_.prewrap($.trim(data.subject)));
+                fields.subject.text(_.noI18n($.trim(data.subject)));
                 if (!data.threadSize || data.threadSize <= 1) {
-                    fields.threadSize.text('').css('display', 'none');
+                    fields.threadSize.text(_.noI18n('')).css('display', 'none');
                 } else {
-                    fields.threadSize.text(data.threadSize).css('display', '');
+                    fields.threadSize.text(_.noI18n(data.threadSize)).css('display', '');
                 }
                 fields.from.empty().append(
-                    util.getFrom(data, account.is(data.folder_id, 'sent') ? 'to' : 'from', true)
+                    util.getFrom(data, account.is(data.folder_id, 'sent') ? 'to' : 'from')
                 );
-                fields.date.text(util.getTime(data.received_date));
+                fields.date.text(_.noI18n(util.getTime(data.received_date)));
                 fields.attachment.css('display', data.attachment ? '' : 'none');
                 fields.flag.get(0).className = 'flag flag_' + (data.color_label || 0);
                 if (util.isUnread(data)) {
@@ -86,11 +86,11 @@ define('io.ox/mail/view-grid-template',
                             .attr('data-obj-id', _.cid(data))
                             .append(
                                 $('<div class="thread-summary-right">')
-                                    .addClass('date').text(util.getTime(data.received_date)),
+                                    .addClass('date').text(_.noI18n(util.getTime(data.received_date))),
                                 $('<div class="thread-summary-left">').append(
-                                    $('<span class="thread-summary-pos">').text((length - index - 1) + '.'),
+                                    $('<span class="thread-summary-pos">').text(_.noI18n((length - index - 1) + '.')),
                                     $('<span class="thread-summary-from">').append(util.getFrom(data).removeClass('person'), $.txt(' ')),
-                                    $('<span class="thread-summary-subject">').text(data.subject)
+                                    $('<span class="thread-summary-subject">').text(_.noI18n(data.subject))
                                 )
                             )
                         );

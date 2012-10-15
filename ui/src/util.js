@@ -392,10 +392,6 @@
             );
         },
 
-        prewrap: function (text) {
-            return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
-        },
-
         // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
@@ -487,6 +483,10 @@
 
         fallback: function (o, defaultValue) {
             return _.isSet(o) ? o : defaultValue;
+        },
+
+        noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
+            return '\u200b' + text + '\u200c';
         }
     });
 

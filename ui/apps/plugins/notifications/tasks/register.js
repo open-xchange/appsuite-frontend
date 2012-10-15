@@ -130,7 +130,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                         badge: task.badge,
                         taskId: task.id,
                         folderId: task.folder_id,
-                        title: task.title,
+                        title: _.noI18n(task.title),
                         end_date: task.end_date,
                         status: task.status
                     };
