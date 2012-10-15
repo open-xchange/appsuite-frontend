@@ -19,6 +19,31 @@ define('io.ox/office/editor/format/themes',
 
     'use strict';
 
+    // class Theme ============================================================
+
+    function Theme(attributes) {
+
+        var // the color scheme of this theme
+            colorScheme = _.copy(Utils.getObjectOption(attributes, 'colorscheme', {}), true);
+
+        // methods ------------------------------------------------------------
+
+        /**
+         * Returns the RGB color value of the specified scheme color.
+         *
+         * @param {String} name
+         *  The name of the scheme color.
+         *
+         * @return {String|Null}
+         *  The RGB value of the scheme color as hexadecimal string, if
+         *  existing, otherwise null.
+         */
+        this.getSchemeColor = function (name) {
+            return _.isString(colorScheme[name]) ? colorScheme[name] : null;
+        };
+
+    } // class Theme
+
     // class Themes ===========================================================
 
     /**
@@ -59,16 +84,12 @@ define('io.ox/office/editor/format/themes',
          */
         this.addTheme = function (name, attributes) {
 
-            var // the color scheme of the theme
-                colorscheme = Utils.getObjectOption(attributes, 'colorscheme', {}),
-                // create a theme object with all colors of the passed scheme
-                theme = { colorscheme: _.copy(colorscheme, true) };
+            var // create a theme object with all passed attributes
+                theme = new Theme(attributes);
 
+            // store new theme in container
             themes[name] = theme;
-
-            if (!defaultTheme) {
-                defaultTheme = theme;
-            }
+            defaultTheme = defaultTheme || theme;
 
             // notify listeners
             this.trigger('change');
@@ -79,9 +100,12 @@ define('io.ox/office/editor/format/themes',
         /**
          * Gives access to a single theme.
          *
-         * @param name the name of the theme to return. If omitted the 'current' theme is returned
-         * @returns {Themes}
-         *  A reference to this instance.
+         * @param {String} [name]
+         *  The name of the theme to return. If omitted the 'current' theme is
+         *  returned.
+         *
+         * @returns {Theme}
+         *  The specified, and the current theme.
          */
         this.getTheme = function (name) {
             return (name in themes) ? themes[name] : defaultTheme;

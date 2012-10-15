@@ -70,9 +70,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             break;
         case 'scheme':
             theme = themes ? themes.getTheme() : null;
-            if (theme) {
-                rgbColor = theme.colorscheme[color.value] || rgbColor;
-            }
+            rgbColor = theme && theme.getSchemeColor(color.value);
             break;
         case 'auto':
             rgbColor = Color.BLACK.value;
