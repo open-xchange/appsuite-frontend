@@ -15,9 +15,8 @@ define('io.ox/office/editor/format/tablecellstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
-     'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, Color, StyleSheets) {
+    ], function (Utils, DOM, Table, StyleSheets) {
 
     'use strict';
 
