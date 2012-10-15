@@ -387,20 +387,14 @@ define('io.ox/office/editor/operations',
             position = appendNewIndex(position);
             Utils.iterateDescendantNodes(node, function (node) {
 
-                switch (Utils.getNodeName(node)) {
-
-                // operations to create a paragraph (first paragraph node exists in every root node)
-                case 'p':
+                if (DOM.isParagraphNode(node)) {
+                    // operations to create a paragraph (first paragraph node exists in every root node)
                     this.generateParagraphOperations(node, position, initialParagraph);
                     initialParagraph = false;
-                    break;
-
-                // operations to create a table with its structure and contents
-                case 'table':
+                } else if ($(node).is('table')) {
+                    // operations to create a table with its structure and contents
                     this.generateTableOperations(node, position);
-                    break;
-
-                default:
+                } else {
                     Utils.warn('Operations.Generator.generateContentOperations(): unexpected node "' + Utils.getNodeName(node) + '" at position ' + JSON.stringify(position) + '.');
                     // continue with next child node (do not increase position)
                     return;

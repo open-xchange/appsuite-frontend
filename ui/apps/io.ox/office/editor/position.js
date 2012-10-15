@@ -84,9 +84,9 @@ define('io.ox/office/editor/position',
             characterPositionEvaluated = false,
             textLength = 0;
 
-        // currently supported elements: 'p', 'table', 'th', 'td', 'tr'
+        // currently supported elements: 'div.p', 'table', 'th', 'td', 'tr'
         for (; node && (node !== maindiv.get(0)); node = node.parentNode) {
-            if ($(node).is('TABLE, P, TR, TH, TD')) {
+            if ($(node).is('div.p, table, tr, th, td')) {
                 oxoPosition.unshift($(node).prevAll().length);  // zero based
                 evaluateCharacterPosition = false;
             }
@@ -151,6 +151,10 @@ define('io.ox/office/editor/position',
             checkImageFloatMode = false;
         }
 
+        if (DOM.isImageSpan(node.parentNode)) {  // inside the div of an image
+            node = node.parentNode;
+        }
+
         if (DOM.isImageSpan(node)) {
             offset = 0;
             imageFloatMode = $(node).data('mode');
@@ -168,7 +172,7 @@ define('io.ox/office/editor/position',
         // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
         // These DIVs need to be converted to the correct paragraph first.
         // Also cells in columns have to be converted at this point.
-        if ($(node).is('DIV, P, TR, TD, TH')) {
+        if ($(node).is('div.page, div.p, tr, td, th')) {
 
             var returnObj = Position.getTextNodeFromCurrentNode(node, offset, isEndPoint);
 
@@ -196,7 +200,7 @@ define('io.ox/office/editor/position',
                 if (localNode.nodeType === 3) {
                     localNode = localNode.parentNode;
                 }
-                if (Utils.getNodeName(localNode) === 'span') {
+                if ($(localNode).is('span')) {
                     if ($(localNode).text().length === offset) {
                         // Checking if an inline image follows
                         if ((localNode.nextSibling) && (DOM.isImageSpan(localNode.nextSibling))) {
@@ -251,13 +255,13 @@ define('io.ox/office/editor/position',
         // if node is a text node, a span or an image, then startposition and
         // endposition are not equal.
 
-        if (Utils.getNodeName(node) === 'img') {
+        if ($(node).is('img')) {
             characterPositionOffset = 1;
         } else if (DOM.isImageSpan(node)) {
             characterPositionOffset = 1;
         } else if (DOM.isFieldSpan(node)) {
             characterPositionOffset = 1;
-        } else if (Utils.getNodeName(node) === 'span') {
+        } else if ($(node).is('span')) {
             characterPositionOffset = $(node).text().length;
         } else if ((node.nodeType === 3) && DOM.isFieldSpan(node.parentNode)) {
             characterPositionOffset = 1;
@@ -445,7 +449,7 @@ define('io.ox/office/editor/position',
      * Helper function for Position.getTextLevelOxoPosition. If the node is not
      * a text node, this function determines the correct text node, that
      * is used for calculation of the logical position instead of the
-     * specified node. This could be a 'DIV', 'TABLE', 'P', ... . It is
+     * specified node. This could be a 'div.page', 'div.p', 'table', ... . It is
      * often browser dependent, which node type is used after a double
      * or a triple click.
      *
@@ -478,7 +482,7 @@ define('io.ox/office/editor/position',
 
         offset = 0;
 
-        if ((Utils.getNodeName(node) === 'tr') && (isEndPoint)) {
+        if (($(node).is('tr')) && (isEndPoint)) {
             usePreviousCell = true;
         }
 
@@ -488,7 +492,7 @@ define('io.ox/office/editor/position',
         }
 
         // special handling for <br>, use last preceding text node instead
-        if (localNode && (Utils.getNodeName(localNode) === 'br')) {
+        if (localNode && ($(localNode).is('br'))) {
             localNode = localNode.previousSibling;
             useFirstTextNode = false;
         }
@@ -552,7 +556,7 @@ define('io.ox/office/editor/position',
      *  Typically (in the case of a full complete logical position)
      *  text nodes and the corresponding offset are returned. But there are
      *  some cases, in which not the text node, but the image or div, that
-     *  can also be located inside a 'p', shall be returned. In this cases
+     *  can also be located inside a 'div.p', shall be returned. In this cases
      *  returnImageNode has to be set to 'true'. The default is 'false', so
      *  that text nodes are returned.
      *
@@ -573,13 +577,13 @@ define('io.ox/office/editor/position',
                 return;
             }
             childNode = node.get(pos);
-        } else if (node.nodeName === 'TABLE') {
+        } else if ($(node).is('table')) {
             childNode = $('> TBODY > TR, > THEAD > TR', node).get(pos);
-        } else if (node.nodeName === 'TR') {
+        } else if ($(node).is('tr')) {
             childNode = $('> TH, > TD', node).get(pos);  // this is a table cell
-        } else if ((node.nodeName === 'TH') || (node.nodeName === 'TD') || ((node.nodeName === 'DIV') && !$(node).hasClass('float'))) {
+        } else if ($(node).is('th, td, div.page')) {
             childNode = $(node).children().get(pos);
-        } else if (node.nodeName === 'P') {
+        } else if (DOM.isParagraphNode(node)) {
             var textLength = 0,
                 bFound = false,
                 isImage = false,
@@ -655,7 +659,7 @@ define('io.ox/office/editor/position',
                 if ((nextNode) && (DOM.isImageSpan(nextNode))) {  // if the next node is an image span, this should be preferred
                     node = nextNode;
                     isImage = true;
-                } else if ((nextNode) && (Utils.getNodeName(nextNode) === 'div') && (nextNode.nextSibling) && (DOM.isImageSpan(nextNode.nextSibling))) {
+                } else if ((nextNode) && ($(nextNode).is('div')) && (nextNode.nextSibling) && (DOM.isImageSpan(nextNode.nextSibling))) {
                     node = nextNode.nextSibling;
                     isImage = true;
                 } else if ((nextNode) && (DOM.isFieldSpan(nextNode))) {  // also preferring following fields
@@ -986,10 +990,10 @@ define('io.ox/office/editor/position',
                 domNode = nextChild.node;
 
                 if (domNode) {
-                    if (domNode.nodeName === 'TABLE') {
+                    if ($(domNode).is('table')) {
                         positionInTable = true;
                         break;
-                    } else if (domNode.nodeName === 'P') {
+                    } else if (DOM.isParagraphNode(domNode)) {
                         break;
                     }
                 }
@@ -1015,7 +1019,7 @@ define('io.ox/office/editor/position',
      *  otherwise null.
      */
     Position.getCurrentTable = function (startnode, position) {
-        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'table');
     };
 
     /**
@@ -1034,7 +1038,7 @@ define('io.ox/office/editor/position',
      *  otherwise null.
      */
     Position.getCurrentParagraph = function (startnode, position) {
-        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+        return Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
     };
 
     /**
@@ -1062,7 +1066,7 @@ define('io.ox/office/editor/position',
             allParagraphs = startnode;
         } else {
 
-            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
+            var node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
             if (node) {
                 allParagraphs = $(node).children();
@@ -1094,7 +1098,7 @@ define('io.ox/office/editor/position',
     Position.getCountOfAdjacentParagraphsAndTables = function (startnode, position) {
 
         var lastIndex = -1,
-        node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P, TABLE');
+        node = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p, table');
 
         if (node) {
             lastIndex = $(node.parentNode).children().length - 1;
@@ -1122,7 +1126,7 @@ define('io.ox/office/editor/position',
     Position.getAllParagraphsFromTableCell = function (startnode, position) {
 
         var allParagraphs = null,
-            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
         if (cell) {
             allParagraphs = $(cell).children();
@@ -1150,7 +1154,7 @@ define('io.ox/office/editor/position',
     Position.getLastRowIndexInTable = function (startnode, position) {
 
         var rowIndex = -1,
-            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'table');
 
         if (table) {
             rowIndex = $('> TBODY > TR, > THEAD > TR', table).length;
@@ -1180,7 +1184,7 @@ define('io.ox/office/editor/position',
     Position.getLastColumnIndexInTable = function (startnode, position) {
 
         var columnIndex = -1,
-            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'table');
 
         if (table) {
             var row = $('> TBODY > TR, > THEAD > TR', table).get(0);  // first row
@@ -1210,7 +1214,7 @@ define('io.ox/office/editor/position',
     Position.getLastGridIndexInTable = function (startnode, position) {
 
         var gridIndex = -1,
-            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TABLE');
+            table = Position.getLastNodeFromPositionByNodeName(startnode, position, 'table');
 
         if (table) {
             gridIndex = $(table).children('colgroup').children('col').length - 1;
@@ -1239,7 +1243,7 @@ define('io.ox/office/editor/position',
     Position.getLastColumnIndexInRow = function (startnode, position) {
 
         var columnIndex = -1,
-            row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TR');
+            row = Position.getLastNodeFromPositionByNodeName(startnode, position, 'tr');
 
         if (row) {
             columnIndex = $('> TH, > TD', row).length - 1;
@@ -1267,7 +1271,7 @@ define('io.ox/office/editor/position',
      *  logical position does not contain a row.
      */
     Position.getRowIndexInTable = function (startnode, position) {
-        return Position.getLastValueFromPositionByNodeName(startnode, position, 'TR');
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'tr');
     };
 
     /**
@@ -1289,7 +1293,7 @@ define('io.ox/office/editor/position',
      *  logical position does not contain a column/cell.
      */
     Position.getColumnIndexInRow = function (startnode, position) {
-        return Position.getLastValueFromPositionByNodeName(startnode, position, 'TH, TD');
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'th, td');
     };
 
     /**
@@ -1313,7 +1317,7 @@ define('io.ox/office/editor/position',
      *  logical position does not contain a paragraph.
      */
     Position.getParagraphIndex = function (startnode, position) {
-        return Position.getLastValueFromPositionByNodeName(startnode, position, 'P');
+        return Position.getLastValueFromPositionByNodeName(startnode, position, 'div.p');
     };
 
     /**
@@ -1337,7 +1341,7 @@ define('io.ox/office/editor/position',
     Position.getLastParaIndexInCell = function (startnode, position) {
 
         var lastPara = -1,
-            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'TH, TD');
+            cell = Position.getLastNodeFromPositionByNodeName(startnode, position, 'th, td');
 
         if (cell) {
             lastPara = $(cell).children().length - 1;
@@ -1365,7 +1369,7 @@ define('io.ox/office/editor/position',
     Position.getParagraphLength = function (startnode, position) {
 
         var paraLen = 0,
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
 
         if (paragraph) {
             if (paragraph.hasChildNodes()) {
@@ -1414,7 +1418,7 @@ define('io.ox/office/editor/position',
     Position.getParagraphText = function (startnode, position, start, end) {
 
         var paraText = '',
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'P');
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
 
         if (paragraph) {
             if (paragraph.hasChildNodes()) {
@@ -1455,7 +1459,7 @@ define('io.ox/office/editor/position',
         if (localPos.pop() === 0) {   // start position
             if (localPos.pop() === 0) {   // start paragraph
                 var domPos = Position.getDOMPosition(localPos);
-                if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                if ((domPos) && ($(domPos.node).is('th, td'))) {
                     isCellStartPosition = true;
                 }
             }
@@ -1488,7 +1492,7 @@ define('io.ox/office/editor/position',
             var lastPara = localPos.pop();
             if (lastPara ===  Position.getLastParaIndexInCell(startnode, localPos)) {   // last paragraph
                 var domPos = Position.getDOMPosition(localPos);
-                if ((domPos) && (domPos.node.nodeName === 'TD' || domPos.node.nodeName === 'TH')) {
+                if ((domPos) && ($(domPos.node).is('th, td'))) {
                     isCellEndPosition = true;
                 }
             }
@@ -1600,8 +1604,8 @@ define('io.ox/office/editor/position',
         var isSameTableLevel = true;
 
         if (posA.length === posB.length) {
-            var tableA = Position.getLastPositionFromPositionByNodeName(startnode, posA, 'TABLE'),
-                tableB = Position.getLastPositionFromPositionByNodeName(startnode, posB, 'TABLE');
+            var tableA = Position.getLastPositionFromPositionByNodeName(startnode, posA, 'table'),
+                tableB = Position.getLastPositionFromPositionByNodeName(startnode, posB, 'table');
 
             // Both have to be identical
             if (tableA.length === tableB.length) {
@@ -1665,11 +1669,11 @@ define('io.ox/office/editor/position',
      */
     Position.getLastPositionInParagraph = function (startnode, paragraph) {
 
-        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'P, TABLE');
+        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'div.p, table');
 
         if ((paraPosition) && (paraPosition.length > 0)) {
 
-            while (Position.getDOMPosition(startnode, paraPosition).node.nodeName === 'TABLE') {
+            while ($(Position.getDOMPosition(startnode, paraPosition).node).is('table')) {
                 paraPosition.push(Position.getLastRowIndexInTable(startnode, paraPosition));
                 paraPosition.push(Position.getLastColumnIndexInRow(startnode, paraPosition));
                 paraPosition.push(Position.getLastParaIndexInCell(startnode, paraPosition));
@@ -1699,11 +1703,11 @@ define('io.ox/office/editor/position',
      */
     Position.getFirstPositionInParagraph = function (startnode, paragraph) {
 
-        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'P, TABLE');
+        var paraPosition = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'div.p, table');
 
         if ((paraPosition) && (paraPosition.length > 0)) {
 
-            while (Position.getDOMPosition(startnode, paraPosition).node.nodeName === 'TABLE') {
+            while ($(Position.getDOMPosition(startnode, paraPosition).node).is('table')) {
                 paraPosition.push(0);  // row
                 paraPosition.push(0);  // column
                 paraPosition.push(0);  // paragraph
@@ -1736,7 +1740,7 @@ define('io.ox/office/editor/position',
 
         var endOfTable = false;
 
-        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
+        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
 
         if ((paragraph) && (paragraph.length > 0)) {
 
@@ -1789,7 +1793,7 @@ define('io.ox/office/editor/position',
         var beginOfTable = false,
             continueSearch = true;
 
-        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
+        paragraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
 
         while ((paragraph) && (paragraph.length > 0) && (continueSearch)) {
 
@@ -1821,7 +1825,7 @@ define('io.ox/office/editor/position',
 
                 // is there a paragraph/table directly before this first cell?
                 if (paragraph[paragraph.length - 1] === 0) {  // <- this is the first paragraph/table
-                    var localParagraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'TH, TD');
+                    var localParagraph = Position.getLastPositionFromPositionByNodeName(startnode, paragraph, 'th, td');
                     if ((localParagraph) && (localParagraph.length > 0)) {
                         paragraph = localParagraph;
                         beginOfTable = false;
@@ -1857,7 +1861,7 @@ define('io.ox/office/editor/position',
 
         var position = _.copy(cellPosition, true);
 
-        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
         position.push(0);  // first paragraph or table
         position = Position.getFirstPositionInParagraph(startnode, position);
 
@@ -1882,7 +1886,7 @@ define('io.ox/office/editor/position',
 
         var position = _.copy(cellPosition, true);
 
-        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
+        position = Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
         position.push(Position.getLastParaIndexInCell(startnode, position));  // last paragraph or table
         position = Position.getLastPositionInParagraph(startnode, position);
 
@@ -1937,16 +1941,16 @@ define('io.ox/office/editor/position',
             assignedPos = (node.nodeType === 3) ? position : null;
             break;
         case 'paragraph':
-            assignedPos = (Utils.getNodeName(node) === 'p') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'P');
+            assignedPos = (DOM.isParagraphNode(node)) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'div.p');
             break;
         case 'table':
-            assignedPos = (Utils.getNodeName(node) === 'table') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TABLE');
+            assignedPos = ($(node).is('table')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'table');
             break;
         case 'tablerow':
-            assignedPos = (Utils.getNodeName(node) === 'tr') ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TR');
+            assignedPos = ($(node).is('tr')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'tr');
             break;
         case 'tablecell':
-            assignedPos = ((Utils.getNodeName(node) === 'th') || (Utils.getNodeName(node) === 'td')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'TH, TD');
+            assignedPos = ($(node).is('th, td')) ? position : Position.getLastPositionFromPositionByNodeName(startnode, position, 'th, td');
             break;
         default:
             Utils.error('Position.getFamilyAssignedPosition(): Invalid family type: ' + family);
@@ -1986,15 +1990,15 @@ define('io.ox/office/editor/position',
 
             if (node.nodeType === 3) {
                 family = 'character';
-            } else if (Utils.getNodeName(node) === 'p') {
+            } else if (DOM.isParagraphNode(node)) {
                 family = 'paragraph';
-            } else if ((Utils.getNodeName(node) === 'img') || (DOM.isImageSpan(node))) {
+            } else if (($(node).is('img')) || (DOM.isImageSpan(node))) {
                 family = 'image';
-            } else if (Utils.getNodeName(node) === 'table') {
+            } else if ($(node).is('table')) {
                 family = 'table';
-            } else if (Utils.getNodeName(node) === 'tr') {
+            } else if ($(node).is('tr')) {
                 family = 'tablerow';
-            } else if ((Utils.getNodeName(node) === 'th') || (Utils.getNodeName(node) === 'td')) {
+            } else if ($(node).is('th, td')) {
                 family = 'tablecell';
             } else {
                 Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
@@ -2164,7 +2168,7 @@ define('io.ox/office/editor/position',
             if ((DOM.isImageSpan(child)) && ($(child).hasClass('float'))) {
                 counter++;
                 child = child.nextSibling;
-            } else if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float'))) {
+            } else if ($(child).is('div.float')) {
                 // ignoring divs that exist only for positioning image
                 child = child.nextSibling;
             } else {
@@ -2249,7 +2253,7 @@ define('io.ox/office/editor/position',
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();
-                } else if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float'))) {
+                } else if ($(child).is('div.float')) {
                     child = child.nextSibling;
                 } else {
                     continue_ = false;
@@ -2284,7 +2288,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (! DOM.isImageSpan(nextChild))) {
+                if ($(child).is('div.float') && (! DOM.isImageSpan(nextChild))) {
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();
@@ -2322,7 +2326,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ((Utils.getNodeName(child) === 'div') && ($(child).hasClass('float')) && (! DOM.isImageSpan(nextChild))) {
+                if ($(child).is('div.float') && (! DOM.isImageSpan(nextChild))) {
                     var removeElement = child;
                     $(removeElement).remove();
                 }
