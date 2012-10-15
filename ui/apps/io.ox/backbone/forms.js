@@ -125,6 +125,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         };
 
         this.onValidationError = function (messages) {
+            console.log("ON VALIDATION ERROR");
             var helpBlock =  $('<div class="help-block error">');
             _(messages).each(function (msg) {
                 helpBlock.append($.txt(msg));
@@ -157,7 +158,8 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         
         _.extend(object, {
             showError: function (messages) {
-                var helpBlock =  this.$el.find(".help-block") || $('<div class="help-block error">');
+                this.$el.find('.help-block').remove();
+                var helpBlock = $('<div class="help-block error">');
                 helpBlock.empty();
                 _(messages).each(function (msg) {
                     helpBlock.append($.txt(msg));
