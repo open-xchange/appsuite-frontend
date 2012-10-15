@@ -127,7 +127,7 @@ define('io.ox/files/mediaplayer',
 
         drawItem: function (file, i) {
             var url = this.addURL(file);
-            var item = $('<li>').append($('<a>', { href: url, 'data-mimetype': file.file_mimetype }).text(file.filename));
+            var item = $('<li>').append($('<a>', { href: url, 'data-mimetype': file.file_mimetype }).text(gt.noI18n(file.filename)));
             if (this.player.find('.mejs-audio').length > 0)
             {
                 if (i === 0) {

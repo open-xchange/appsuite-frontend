@@ -204,7 +204,7 @@ define('io.ox/files/carousel',
                         $('<img>', { alt: '', src: this.addURL(file) })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
                         $('<div class="carousel-caption">').append(
-                            $('<h4>').text(file.filename),
+                            $('<h4>').text(gt.noI18n(file.filename)),
                             folderAPI.getBreadcrumb(file.folder_id, { handler: this.app.folder.set, subfolder: false, last: false })
                         )
                     );
@@ -214,7 +214,7 @@ define('io.ox/files/carousel',
                     item.append(
                         $('<img>', { alt: '', src: file.url })
                             .on('error', this.imgError) /* error doesn't seem to bubble */,
-                        $('<div class="carousel-caption">').append($('<h4>').text(file.filename))
+                        $('<div class="carousel-caption">').append($('<h4>').text(gt.noI18n(file.filename)))
                     );
                 }
             }
@@ -233,11 +233,11 @@ define('io.ox/files/carousel',
         },
 
         prevControl: function () {
-            return $('<a class="carousel-control left">').text('‹').attr('data-slide', 'prev');
+            return $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev');
         },
 
         nextControl: function () {
-            return $('<a class="carousel-control right">').text('›').attr('data-slide', 'next');
+            return $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next');
         },
 
         closeControl: function () {
