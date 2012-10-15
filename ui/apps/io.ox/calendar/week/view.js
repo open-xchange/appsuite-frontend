@@ -41,19 +41,20 @@ define('io.ox/calendar/week/view',
         workEnd:        18,     // full hour for end position of working time marker
 
         curTimeUTC:     0,      // current timestamp
-        pane:           $(),    // main scroll pane
-        fulltimePane:   $(),    // full-time appointments pane
-        fulltimeCon:    $(),    // full-time container
-        timeline:       $(),    // timeline
-        footer:         $(),    // footer
-        kwInfo:         $(),    // current KW
-        showAll:        $(),    // show all folders check-box
-        showAllCon:     $(),    // container
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         lassoMode:      true,   // is lasso active
         folder:         {},     // current folder
+
+        pane:           $('<div>').addClass('scrollpane'),              // main scroll pane
+        fulltimePane:   $('<div>').addClass('fulltime'),                // full-time appointments pane
+        fulltimeCon:    $('<div>').addClass('fulltime-container'),      // full-time container
+        timeline:       $('<div>').addClass('timeline'),                // timeline
+        footer:         $('<div>').addClass('footer'),                  // footer
+        kwInfo:         $('<span>').addClass('info'),                   // current KW
+        showAll:        $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
+        showAllCon:     $('<div>').addClass('showall'),                 // container
 
         // define view events
         events: {
@@ -329,6 +330,7 @@ define('io.ox/calendar/week/view',
                         .height(this.cellHeight * this.fragmentation)
                 );
             }
+            times = $('<div>').addClass('lable').append(times);
 
 //            var Blubview = views.point('io.ox/calendar/week/section').createView({
 //                tagName: 'div',
@@ -345,21 +347,16 @@ define('io.ox/calendar/week/view',
 //            new Blubview();
 
             // create panes
-            this.pane = $('<div>')
-                .addClass('scrollpane');
-
-            this.fulltimeCon = $('<div>')
-                .addClass('fulltime-container')
-                .append(
-                    $('<div>').addClass('fulltime-lable'),
-                    this.fulltimePane = $('<div>').addClass('fulltime')
-                );
+            this.fulltimeCon.append(
+                $('<div>').addClass('fulltime-lable'),
+                this.fulltimePane
+            );
 
             // create days container
             var container = $('<div>').addClass('week-container');
 
             // create and animate timeline
-            container.append(this.timeline = $('<div>').addClass('timeline'));
+            container.append(this.timeline);
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
 
@@ -381,27 +378,24 @@ define('io.ox/calendar/week/view',
                             .height(this.cellHeight)
                     );
                 }
-
                 container.append(day);
             }
 
-            this.pane.append($('<div>').addClass('lable').append(times), container);
+            this.pane.append(times, container);
 
             // create toolbar
             this.$el.append(
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        this.kwInfo = $('<span>').addClass('info'),
-                        this.showAllCon = $('<div>')
-                            .addClass('showall')
+                        this.kwInfo,
+                        this.showAllCon
                             .append(
                                 $('<label>')
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll = $('<input/>')
-                                            .attr('type', 'checkbox')
+                                        this.showAll
                                             .prop('checked', true)
                                     )
                             ),
@@ -433,7 +427,7 @@ define('io.ox/calendar/week/view',
                             .addClass('footer-container')
                             .append(
                                 $('<div>').addClass('footer-lable'),
-                                this.footer = $('<div>').addClass('footer')
+                                this.footer
                             )
                     )
             );
