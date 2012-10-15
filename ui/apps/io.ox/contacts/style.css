@@ -26,7 +26,7 @@
 
 .contact-grid-container {
     left: 37px;
-    overflow: auto;
+    .overflow(auto);
 }
 
 .contact-grid-index {
@@ -166,7 +166,7 @@
 }
 
 .contact-edit{
-	overflow: auto;
+	.overflow(auto);
 }
 
 .change-pic-link {

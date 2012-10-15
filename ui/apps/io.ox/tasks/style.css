@@ -35,8 +35,7 @@
     display: inline-block;
     float: right;
     position: relative;
-    overflow:visible;
-    
+    .overflow(visible);
 }
 
 .vgrid-cell.tasks .priority i.icon-star { 

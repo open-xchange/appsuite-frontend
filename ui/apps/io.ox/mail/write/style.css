@@ -341,7 +341,7 @@
     background-color: #555;
     background-color: rgba(0, 0, 0, 0.40);
     z-index: 10000;
-    overflow: auto;
+    .overflow(auto);
 }
 
 

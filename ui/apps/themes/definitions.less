@@ -159,4 +159,17 @@
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
 }
 
+.overflow(@type: auto) {
+    overflow: @type;
+    -webkit-overflow-scrolling: touch;
+} 
 
+.overflow-x(@type: auto) {
+    overflow-x: @type;
+    -webkit-overflow-scrolling: touch;
+} 
+
+.overflow-y(@type: auto) {
+    overflow-y: @type;
+    -webkit-overflow-scrolling: touch;
+} 

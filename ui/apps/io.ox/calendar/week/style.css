@@ -78,7 +78,7 @@
         position: relative;
         display: inline-block;
         border-right: 1px solid #ccc;
-        overflow: hidden;
+        .overflow(hidden);
         background-color: #fff;
         -webkit-transition: background-color 0.4s;
         -moz-transition: background-color 0.4s;
@@ -89,9 +89,8 @@
         position: relative;
         border-bottom: 1px solid #ccc;
         width: 100%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
+        .overflow-y(scroll);
+        .overflow-x(hidden);
     }
     
     .fulltime-lable {
@@ -108,8 +107,7 @@
     }
     
     .scrollpane {
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
+        .overflow(scroll);
         position: absolute;
         top: 40px;
         left: 0;
@@ -125,7 +123,7 @@
         right: 0;
         bottom: 0; 
         width: 100%;
-        overflow-y: scroll;
+        .overflow-y(scroll);
     }
     
     .footer-lable {
@@ -239,9 +237,9 @@
     .weekday {
         display: inline-block;
         padding-left: 13px;
-        overflow: hidden;
+        .overflow(hidden);
         text-overflow: ellipsis;
-}
+    }
     
     .appointment {
         position: absolute;
@@ -266,7 +264,7 @@
         font-size: 12px;
         color: white;
         padding: 0px 7px 0px 7px;
-        overflow: hidden;
+        .overflow(hidden);
         text-overflow: ellipsis;
     }
     
