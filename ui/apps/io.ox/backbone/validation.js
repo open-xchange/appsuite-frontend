@@ -96,7 +96,7 @@ define("io.ox/backbone/validation", ["io.ox/core/extensions"], function (ext) {
                 });
                 
                 if (definition.mandatory) {
-                    ext.point(validationNamespace).extend({
+                    ext.point(validationNamespace + "/save").extend({
                         id: attribute + "-is-mandatory",
                         validate: function (attributes, errors) {
                             var value = attributes[attribute];

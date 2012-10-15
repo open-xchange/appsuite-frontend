@@ -52,13 +52,16 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             });
 
         },
-        validate: function (attributes) {
+        validate: function (attributes, isSave) {
             var self = this,
                 errors = new ValidationErrors();
 
             attributes = attributes || this.toJSON();
 
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
+            if (isSave) {
+                this.factory.point("validation/save").invoke("validate", errors, attributes, errors, this);
+            }
             if (errors.hasErrors()) {
                 var validAttributes = {};
                 _(attributes).chain().keys().each(function (key) {
@@ -103,7 +106,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                this.validate(this.toJSON());
+                this.validate(this.toJSON(), true);
                 if (!this.isValid()) {
                     return $.Deferred().reject({error: gt('Invalid data')});
                 }
