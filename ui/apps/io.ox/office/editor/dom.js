@@ -999,7 +999,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Adds a new selection box for the specified object node.
      *
      * @param {HTMLElement|jQuery} object
-     *  The object node for which a new selection box will be inserted.
+     *  The object node for which a new selection box will be inserted. If the
+     *  passed value is a jQuery collection, uses the first DOM node it
+     *  contains.
      *
      * @param {Object} [options]
      *  A map of options to control the appearance of the selection box.
@@ -1036,7 +1038,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Removes the selection box from the specified object node.
      *
      * @param {HTMLElement|jQuery} object
-     *  The object node whose selection box will be removed.
+     *  The object node whose selection box will be removed. If the passed
+     *  value is a jQuery collection, uses the first DOM node it contains.
      */
     DOM.removeObjectSelection = function (object) {
         $(object).first().children('div.selection').remove();

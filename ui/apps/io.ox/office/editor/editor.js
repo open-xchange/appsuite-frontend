@@ -1083,28 +1083,16 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function processMouseDown(event) {
+        function processMouseDown(sourceNode) {
             implCheckEventSelection(); // just in case the user was faster than the timer...
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
         }
 
-        function processMouseUp(event) {
+        function processMouseUp(sourceNode) {
             implCheckEventSelection();
             lastEventSelection = getSelection();
             implStartCheckEventSelection();
-        }
-
-        function processDragOver(event) {
-            event.preventDefault();
-        }
-
-        function processDrop(event) {
-            event.preventDefault();
-        }
-
-        function processContextMenu(event) {
-            event.preventDefault();
         }
 
         function processKeyDown(event) {
@@ -1577,6 +1565,22 @@ define('io.ox/office/editor/editor',
          */
         function isNavigationKeyEvent(event) {
             return event && NAVIGATION_KEYS.contains(event.keyCode);
+        }
+
+        /**
+         * Selects the specified object node.
+         *
+         * @param {HTMLElement|jQuery} objectNode
+         *  The root node of the object to be selected. If the passed value is
+         *  a jQuery collection, uses the first DOM node it contains.
+         */
+        function selectObject(objectNode) {
+
+            // draw the object selection box
+            DOM.addObjectSelection(objectNode, { moveable: false, sizeable: false });
+
+            // set the browser selection
+            DOM.setBrowserSelection(DOM.Range.createRangeForNode(objectNode));
         }
 
         /**
@@ -4080,18 +4084,10 @@ define('io.ox/office/editor/editor',
             .on('blur', function () { processFocus(false); })
             .on('keydown', processKeyDown)
             .on('keypress', processKeyPressed)
-            .on('mousedown', processMouseDown)
-            .on('mouseup', processMouseUp)
-            .on('dragover', processDragOver)
-            .on('drop', processDrop)
-            .on('contextmenu', processContextMenu)
-            .on('cut paste', false);
-/*
-        // POC: image selection
-        editdiv.on('click', DOM.OBJECT_SPAN_SELECTOR, function () {
-            DOM.addObjectSelection(this, { moveable: true, sizeable: true });
-        });
-*/
+            .on('mousedown', function () { processMouseDown(this); })
+            .on('mouseup', function () { processMouseUp(this); })
+            .on('dragstart dragover drop contextmenu cut paste', false);
+
     } // class Editor
 
     // exports ================================================================
