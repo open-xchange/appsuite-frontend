@@ -502,9 +502,9 @@ define('io.ox/office/editor/view',
                 .on('selection', function (event, selection) { logSelection(selection); });
 
             createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/editable',   { icon: 'icon-pencil',     tooltip: 'Edit Mode',                toggle: true })
+                .addButton('debug/toggle',          { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',            { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
+                .addButton('document/editrights',   { icon: 'icon-pencil',     tooltip: 'Acquire Edit Rights',      toggle: false })
 //                .addSeparator()
 //                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars', toggle: true })
                 .addSeparator()
