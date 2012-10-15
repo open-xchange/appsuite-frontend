@@ -125,6 +125,14 @@ define('io.ox/office/preview/main',
         }
 
         /**
+         * Handles resize events of the browser window, and adjusts the size of
+         * the application pane node.
+         */
+        function windowResizeHandler(event) {
+            win.nodes.appPane.height(window.innerHeight - win.nodes.appPane.offset().top);
+        }
+
+        /**
          * The handler function that will be called while launching the
          * application. Creates and initializes a new application window.
          */
@@ -139,15 +147,17 @@ define('io.ox/office/preview/main',
             });
             self.setWindow(win);
 
-            win.nodes.main
-                .addClass('io-ox-office-preview-main')
-                .append(preview.getNode());
+            win.nodes.appPane = $('<div>').addClass('io-ox-pane apppane').append(preview.getNode());
+            win.nodes.main.addClass('io-ox-office-preview-main').append(win.nodes.appPane);
 
             // register a component that updates the window header tool bar
             controller.registerViewComponent(new AppWindowToolBar(win));
 
             // update all view components every time the window will be shown
             win.on('show', function () { controller.update(); });
+
+            // listen to browser window resize events when the OX window is visible
+            Utils.registerWindowResizeHandler(win, windowResizeHandler);
 
             // disable FF spell checking
             $('body').attr('spellcheck', false);

@@ -17,7 +17,6 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
 
     // private static functions ===============================================
 
-    // static class Color ================================================
     /**
      * Calculates the resulting RGB color from a source RGB color value
      * and a transform object describing the transformation rule.
@@ -35,6 +34,9 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     function transformRGBColor(rgbColor, transform) {
         return rgbColor; // TODO: support transformations
     }
+
+    // static class Color =====================================================
+
     /**
      * Predefined values for the 'color' attribute.
      */
@@ -79,7 +81,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             rgbColor = Color.BLACK.value;
             break;
         }
-        
+
         return rgbColor;
     };
 

@@ -379,10 +379,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a span element wrapping an object.
      */
     DOM.isObjectSpan = function (node) {
-        var childNodes = Utils.getDomNode(node).childNodes;
-        // the span may contain other nodes beside the object, e.g. a selection
-        // frame, but the first node is always the object itself
-        return (Utils.getNodeName(node) === 'span') && (childNodes.length > 0) && (childNodes[0].nodeType === 1);
+        return $(node).is('span.object');
     };
 
     /**
@@ -398,8 +395,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  rendered inlined.
      */
     DOM.isInlineObjectSpan = function (node) {
-        return DOM.isObjectSpan(node) && node.hasClass('inline');
+        return DOM.isObjectSpan(node) && $(node).hasClass('inline');
     };
+
+    /**
+     * A jQuery selector that matches <span> elements containing an image.
+     */
+    DOM.OBJECT_SPAN_SELECTOR = function () { return DOM.isObjectSpan(this); };
 
     /**
      * Returns whether the passed node is a <span> element wrapping an image.
@@ -413,7 +415,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isImageSpan = function (node) {
         // object spans contain the object element as first child
-        return DOM.isObjectSpan(node) && (Utils.getNodeName(node.firstChild) === 'div') && (Utils.getNodeName(node.firstChild.firstChild) === 'img');
+        return DOM.isObjectSpan(node) && ($(node).find('img').length > 0);
     };
 
     /**
@@ -508,6 +510,32 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         // extract the text node from the sibling element
         return (node && DOM.isTextSpan(node)) ? node.firstChild : null;
+    };
+
+    // paragraphs =============================================================
+
+    /**
+     * Returns whether the passed node is a paragraph element.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a paragraph element.
+     */
+    DOM.isParagraphNode = function (node) {
+        return $(node).is('div.p');
+    };
+
+    /**
+     * Creates a new paragraph element.
+     *
+     * @returns {jQuery}
+     *  A paragraph element, as jQuery object.
+     */
+    DOM.createParagraphNode = function () {
+        return $('<div>').addClass('p');
     };
 
     // range iteration ========================================================

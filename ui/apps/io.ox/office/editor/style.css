@@ -41,11 +41,10 @@
     padding-right: 5px;
     border: 1px solid transparent;
     cursor: pointer;
-    
+
     &:hover {
         border-color: #d5d5d5;
-        border-radius: 4px;
-        -moz-border-radius: 4px;
+        .border-radius(4px);
     }
 }
 
@@ -53,19 +52,8 @@
     margin: 0;
     padding: 0;
 
-    .io-ox-office-apppane {
-    	margin: 0;
-    	padding: 0;
-    	background-color: #e5e5e5;
-    	overflow-y: auto;
-    }
-    
-    .io-ox-office-editor {
-        position: relative;
+    div.page {
         .box-sizing(border-box);
-        width: 210mm;
-        margin: 30px auto;
-        border: 1px solid gray;
 
         /* text cursor over entire page, but not in read-only mode */
         &.user-select-text {
@@ -73,23 +61,24 @@
         }
 
         /* default page formatting */
+        width: 210mm;
+        min-height: 297mm;
         padding: 15mm;
-        background-color: white;
 
         /* default paragraph formatting */
-        p {
+        p, div.p {
             position: relative;
             margin: 0;
             line-height: 0;
         }
 
         /* no text cursor in read-only mode */
-        &:not(.user-select-text) p {
+        &:not(.user-select-text) p, &:not(.user-select-text) div.p {
             cursor: default;
         }
 
         /* default text formatting */
-        p > span {
+        p > span, div.p > span {
             font-family: sans-serif;
             font-size: 11pt;
             line-height: normal;
@@ -119,6 +108,70 @@
             }
         }
 
+        /* objects */
+        span.object {
+            position: relative;
+            cursor: default;
+
+            /* crop object contents at object border */
+            > div.content {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+
+                img {
+                    position: relative;
+                    max-width: none;
+                }
+            }
+
+            /* selection box for objects/images */
+            > div.selection {
+                @border-color: #44f;
+
+                position: absolute;
+                top: -1px;
+                bottom: -1px;
+                left: -1px;
+                right: -1px;
+                border: 3px fade(@border-color, 70%) solid;
+
+                // cursor: default;
+                &.moveable { cursor: move; }
+
+                > div.handle {
+                    position: absolute;
+                    width: 5px;
+                    height: 5px;
+                    background-color: white;
+                    border: 1px @border-color solid;
+                    .border-radius(3px);
+
+                    .v-beg() { top: -5px; }
+                    .v-cen() { top: 50%; margin-top: -3px; }
+                    .v-end() { bottom: -5px; }
+
+                    .h-beg() { left: -5px; }
+                    .h-cen() { left: 50%; margin-left: -3px; }
+                    .h-end() { right: -5px; }
+
+                    &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
+                    &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
+                    &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
+                    &.r  { .v-cen(); .h-end(); cursor: e-resize;  }
+                    &.br { .v-end(); .h-end(); cursor: se-resize; }
+                    &.b  { .v-end(); .h-cen(); cursor: s-resize;  }
+                    &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
+                    &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
+                }
+
+                &:not(.sizeable) > div.handler {
+                    cursor: inherit;
+                }
+            }
+        }
+
         /* inlined objects */
         span.inline {
             display: inline-block;
@@ -133,70 +186,6 @@
             &.right { float: right; clear: right; }
         }
 
-        /* objects */
-        span.inline, span.float {
-            position: relative;
-            cursor: default;
-
-            /* crop object contents at object border */
-            > div.object {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
-                
-                img {
-                    position: relative;
-                    max-width: none;
-                }
-            }
-
-            /* selection box for objects/images */
-            > div.selection {
-                @border-color: #44f;
-        
-                position: absolute;
-                top: -1px;
-                bottom: -1px;
-                left: -1px;
-                right: -1px;
-                border: 3px fade(@border-color, 70%) solid;
-    
-                // cursor: default;
-                &.moveable { cursor: move; }
-        
-                > div.handle {
-                    position: absolute;
-                    width: 5px;
-                    height: 5px;
-                    background-color: white;
-                    border: 1px @border-color solid;
-                    .border-radius(3px);
-        
-                    .v-beg() { top: -5px; }
-                    .v-cen() { top: 50%; margin-top: -3px; }
-                    .v-end() { bottom: -5px; }
-        
-                    .h-beg() { left: -5px; }
-                    .h-cen() { left: 50%; margin-left: -3px; }
-                    .h-end() { right: -5px; }
-        
-                    &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
-                    &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
-                    &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
-                    &.r  { .v-cen(); .h-end(); cursor: e-resize;  }
-                    &.br { .v-end(); .h-end(); cursor: se-resize; }
-                    &.b  { .v-end(); .h-cen(); cursor: s-resize;  }
-                    &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
-                    &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
-                }
-                
-                &:not(.sizeable) > div.handler {
-                    cursor: inherit;
-                }
-            }
-        }
-
         /* prevent dotted focus rectangle around page area */
         &:focus, &:active {
             outline: none;
@@ -208,7 +197,7 @@
 
         &.debug-highlight {
 
-            p {
+            p, div.p {
                 .debug-highlight-mixin(#8f8);
             }
 
@@ -220,7 +209,7 @@
                 .debug-highlight-mixin(#f8f);
             }
 
-            table, .inline, .float {
+            table, .object {
                 .debug-highlight-mixin(#f88);
                 outline-offset: 1px;
             }
@@ -250,10 +239,10 @@
                     font-size: 8pt;
                     line-height: normal;
                     white-space: nowrap;
-    
+
                     td {
                         padding: 0 1mm;
-    
+
                         &:first-child {
                             background-color: #d5d5d5;
                             color: white;

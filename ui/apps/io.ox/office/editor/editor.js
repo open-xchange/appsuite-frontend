@@ -61,7 +61,7 @@ define('io.ox/office/editor/editor',
             self = this,
 
             // the container element for the document contents
-            editdiv = $('<div>', { contenteditable: true }).addClass('io-ox-office-editor user-select-text'),
+            editdiv = $('<div>', { contenteditable: true }).addClass('page user-select-text'),
 
             // container for all style sheets of all attribute families
             documentStyles = new DocumentStyles(editdiv),
@@ -1011,7 +1011,7 @@ define('io.ox/office/editor/editor',
                         gt('Another user is currently editing this document.'),
                         editdiv.parent(),
                         -1,
-                        {label: gt('Acquire Edit Rights'), key: 'document/editRights', controller: app.getController()}
+                        {label: gt('Acquire Edit Rights'), key: 'document/editrights', controller: app.getController()}
                     );
             } else if (showEditModeInfo) {
                 Alert.showSuccess(gt('Edit Mode'), gt('You have edit rights.'), editdiv.parent(), 5000);
@@ -3062,9 +3062,9 @@ define('io.ox/office/editor/editor',
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
             image = $('<span>', { contenteditable: false })
-                .addClass('inline')
+                .addClass('object inline')
                 .data('url', url)
-                .append($('<div>').addClass('object').append($('<img>', { src: absUrl })))
+                .append($('<div>').addClass('content').append($('<img>', { src: absUrl })))
                 .insertBefore(node.parentNode);
 
             // apply the passed image attributes
@@ -4094,7 +4094,7 @@ define('io.ox/office/editor/editor',
             .on('cut paste', false);
 /*
         // POC: image selection
-        editdiv.on('click', 'span.inline, span.float', function () {
+        editdiv.on('click', DOM.OBJECT_SPAN_SELECTOR, function () {
             DOM.addObjectSelection(this, { moveable: true, sizeable: true });
         });
 */

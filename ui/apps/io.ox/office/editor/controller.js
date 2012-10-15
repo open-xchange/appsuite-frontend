@@ -62,6 +62,11 @@ define('io.ox/office/editor/controller',
 
                 // document contents
 
+                'document/editrights': {
+                    enable: function () { return !editor.isEditMode(); },
+                    get: function () { return !editor.isEditMode(); },
+                    set: function (state) { app.acquireEditRights(); }
+                },
                 'document/undo': {
                     chain: 'document/editable',
                     enable: function (enabled) { return enabled && editor.undoAvailable() > 0; },
@@ -232,11 +237,11 @@ define('io.ox/office/editor/controller',
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
                 },
-                'document/editRights': {
-                    enable: function () { return  !editor.isEditMode(); },
-                    get: function () { return !editor.isEditMode(); },
-                    set: function (state) { app.acquireEditRights(); }
+                'debug/borderless': {
+                    get: function () { return app.getView().getToolPane().getNode().hasClass('borderless'); },
+                    set: function (state) { return app.getView().getToolPane().getNode().toggleClass('borderless', state); }
                 }
+
             };
 
         // private methods ----------------------------------------------------

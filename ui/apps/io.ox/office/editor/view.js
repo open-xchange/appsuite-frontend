@@ -419,7 +419,7 @@ define('io.ox/office/editor/view',
         // create all panes
         nodes.main.addClass('io-ox-office-main').append(
             nodes.toolPane = toolPane.getNode(),
-            nodes.appPane = $('<div>').addClass('io-ox-office-apppane').append(editor.getNode())
+            nodes.appPane = $('<div>').addClass('io-ox-pane apppane').append(editor.getNode())
         );
 
         // create the tool bars
@@ -502,9 +502,11 @@ define('io.ox/office/editor/view',
                 .on('selection', function (event, selection) { logSelection(selection); });
 
             createToolBar('debug', { label: gt('Debug') })
-                .addButton('debug/toggle',   { icon: 'icon-eye-open', tooltip: 'Debug Mode',               toggle: true })
-                .addButton('debug/sync',     { icon: 'icon-refresh',  tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/editable', { icon: 'icon-pencil',   tooltip: 'Edit Mode',                toggle: true })
+                .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
+                .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
+                .addButton('debug/editable',   { icon: 'icon-pencil',     tooltip: 'Edit Mode',                toggle: true })
+//                .addSeparator()
+//                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars', toggle: true })
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph fill color') }))
                 .addSeparator()

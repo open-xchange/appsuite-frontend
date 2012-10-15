@@ -29,7 +29,7 @@ define('io.ox/office/preview/preview',
             self = this,
 
             // the root node containing the previewed document
-            node = $('<div>').addClass('io-ox-office-preview-page'),
+            node = $('<div>').addClass('page'),
 
             // all slides to be shown in the preview
             pages = $(),
