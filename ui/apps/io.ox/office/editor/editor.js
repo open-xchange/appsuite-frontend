@@ -2180,10 +2180,10 @@ define('io.ox/office/editor/editor',
             if ((imagePos) && (imagePos.node) && (DOM.isImageSpan(imagePos.node))) {
 
                 $('img', imagePos.node).one('load', function () {
-                    var width = Utils.convertLengthToHmm($(imagePos.node).width(), 'px'),
-                        height = Utils.convertLengthToHmm($(imagePos.node).height(), 'px'),
+                    var width = Utils.convertLengthToHmm($(this).width(), 'px'),
+                        height = Utils.convertLengthToHmm($(this).height(), 'px'),
                         // updating the logical position of the image spanb, maybe it changed in the meantime while loading the image
-                        updatePosition = Position.getOxoPosition(editdiv, imagePos.node, 0),
+                        updatePosition = Position.getOxoPosition(editdiv, this, 0),
                         newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
                     applyOperation(newOperation, true, true);
