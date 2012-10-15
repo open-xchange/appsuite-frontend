@@ -40,23 +40,31 @@ define('io.ox/calendar/edit/view-main',
         render: function () {
             var self = this;
             var rows = [];
-            function getRow(index) {
-                if (rows.length > index + 1) {
-                    return rows[index];
-                }
-                for (var i = 0; i < index + 1 - rows.length; i++) {
-                    rows.push($('<div class="row-fluid">'));
-                }
-                return rows[index];
-            }
-
+            var rowPerExtensionId = {};
+            
             this.point.each(function (extension) {
-                var node = getRow(extension.forceLine || rows.length);
-                extension.invoke('draw', node, self.baton);
+                var row = null;
+                if (extension.nextTo) {
+                    row = rowPerExtensionId[extension.nextTo];
+                    if (!row) {
+                        row = [];
+                        rows.push(row);
+                    }
+                } else {
+                    row = [];
+                    rows.push(row);
+                }
+                rowPerExtensionId[extension.id] = row;
+                row.push(extension);
+            });
+            _(rows).each(function (row) {
+                var $rowNode = $('<div class="row-fluid">').appendTo(self.$el);
+                _(row).each(function (extension) {
+                    extension.invoke("draw", $rowNode, self.baton);
+                });
             });
 
-            this.$el.append(rows);
-
+            
             return this;
         }
     });

@@ -146,7 +146,9 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         return ViewClass;
     }
     
-    function buildExtension(ViewClass, options) {
+    function buildExtension(ViewClass, options, extOptions) {
+        extOptions = extOptions || {};
+        
         return _.extend({}, {
             id: ViewClass.extId,
             index: options.index,
@@ -155,7 +157,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                 view.render();
                 this.append(view.$el);
             }
-        });
+        }, extOptions);
     }
     
     function ViewExtensionPoint(name) {
@@ -170,7 +172,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             extOptions = extOptions || {};
 
-            this.basicExtend(buildExtension(ViewClass, options), extOptions);
+            this.basicExtend(buildExtension(ViewClass, options, extOptions));
 
             return this;
         };

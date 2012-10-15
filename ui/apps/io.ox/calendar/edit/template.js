@@ -20,8 +20,7 @@ define('io.ox/calendar/edit/template',
          'io.ox/backbone/forms',
          'io.ox/calendar/edit/binding-util',
          'io.ox/calendar/edit/recurrence-view',
-         'io.ox/participants/views',
-         "io.ox/dev/utils/live-coding-extension"], function (ext, gt, util, dateAPI, views, forms, BinderUtils, RecurrenceView, pViews, LiveCoding) {
+         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, BinderUtils, RecurrenceView, pViews) {
 
     'use strict';
 
@@ -169,7 +168,7 @@ define('io.ox/calendar/edit/template',
     // alert error
     point.extend(new forms.ErrorAlert({
         index: 100,
-        id: 'io.ox/calendar/edit/section/error'
+        id: 'error'
     }));
 
     // do we need this?
@@ -183,7 +182,7 @@ define('io.ox/calendar/edit/template',
 
     // title
     point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/title',
+        id: 'title',
         index: 200,
         className: 'span12',
         control: '<input type="text" class="span12">',
@@ -193,19 +192,17 @@ define('io.ox/calendar/edit/template',
 
     // location input
     point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/location',
+        id: 'location',
         className: 'span10',
         index: 300,
         control: '<input type="text" class="span12">',
         attribute: 'location',
         label: gt('Location')
-    }), {
-        forceLine: 3
-    });
+    }));
 
     // save button
     point.basicExtend({
-        id: 'io.ox/calendar/edit/section/save',
+        id: 'save',
         draw: function (baton) {
             this.append($('<button class="btn btn-primary span2">')
                 .text(baton.mode === 'edit' ? gt("Save") : gt("Create"))
@@ -215,34 +212,32 @@ define('io.ox/calendar/edit/template',
                 })
             );
         },
-        forceLine: 3
+        nextTo: 'location'
     });
 
     // start date
     point.extend(new DateField({
-        id: 'io.ox/calendar/edit/section/start-date',
+        id: 'start-date',
         index: 400,
         className: 'span6',
         attribute: 'start_date',
         label: gt('Starts on')
-    }), {
-        forceLine: 4
-    });
+    }));
 
     // end date
     point.extend(new DateField({
-        id: 'io.ox/calendar/edit/section/end-date',
+        id: 'end-date',
         className: 'span6',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')
     }), {
-        forceLine: 4
+        nextTo: 'start-date'
     });
 
     // full time
     point.extend(new forms.CheckBoxField({
-        id: 'io.ox/calendar/edit/section/full_time',
+        id: 'full_time',
         className: 'span12',
         label: gt('All day'),
         attribute: 'full_time',
@@ -251,14 +246,21 @@ define('io.ox/calendar/edit/template',
 
     // note
     point.extend(new forms.InputField({
-        id: 'io.ox/calendar/edit/section/note',
+        id: 'note',
         index: 700,
         className: 'span12',
         control: '<textarea class="note">',
         attribute: 'note',
         label: gt("Description")
     }));
-
+    
+    point.basicExtend({
+        id: 'noteSeparator',
+        index: 750,
+        draw: function () {
+            this.append($('<span>&nbsp;</span>').css({height: '10px'}));
+        }
+    });
 
     // alarms
     (function () {
@@ -310,21 +312,19 @@ define('io.ox/calendar/edit/template',
         });
 
         point.extend(new forms.SelectBoxField({
-            id: 'io.ox/calendar/edit/section/alarm',
+            id: 'alarm',
             index: 800,
             className: "span4",
             attribute: 'alarm',
             label: gt("Reminder"),
             selectOptions: options
-        }), {
-            forceLine: 7
-        });
+        }));
 
     }());
 
     // shown as
     point.extend(new forms.SelectBoxField({
-        id: 'io.ox/calendar/edit/section/shown_as',
+        id: 'shown_as',
         index: 900,
         className: "span4",
         attribute: 'shown_as',
@@ -336,24 +336,38 @@ define('io.ox/calendar/edit/template',
             4: gt('Free')
         }
     }), {
-        forceLine: 7
+        nextTo: 'alarm'
     });
 
     // private?
     point.extend(new forms.CheckBoxField({
-        id: 'io.ox/calendar/edit/section/private_flag',
+        id: 'private_flag',
         className: 'span4',
         header: gt('Type'),
         label: gt('Private'),
         attribute: 'private_flag',
         index: 1000
     }), {
-        forceLine: 7
+        nextTo: 'shown_as'
     });
+    
+    // recurrence
+    point.extend(new forms.SectionLegend({
+        id: 'recurrence_legend',
+        className: 'span12',
+        label: gt('Recurrence'),
+        index: 1100
+    }));
+    
+    point.extend(new RecurrenceView({
+        id: 'recurrence',
+        className: 'span12',
+        index: 1200
+    }));
 
     // participants label
     point.extend(new forms.SectionLegend({
-        id: 'io.ox/calendar/edit/section/participants_legend',
+        id: 'participants_legend',
         className: 'span12',
         label: gt('Participants'),
         index: 1300
@@ -361,7 +375,7 @@ define('io.ox/calendar/edit/template',
 
     // participants
     point.basicExtend({
-        id: 'io.ox/calendar/edit/section/participants_list',
+        id: 'participants_list',
         index: 1400,
         draw: function (options) {
             this.append(new pViews.UserContainer({collection: options.model.getParticipants()}).render().$el);
@@ -370,7 +384,7 @@ define('io.ox/calendar/edit/template',
 
     // add participants
     point.basicExtend({
-        id: 'io.ox/calendar/edit/section/add-participant',
+        id: 'add-participant',
         index: 1500,
         draw: function (options) {
             var node = this;
@@ -484,12 +498,7 @@ define('io.ox/calendar/edit/template',
 
 
 
-
-    point.extend(new RecurrenceView({
-        id: 'recurrence',
-        className: 'span12',
-        index: 1200
-    }));
+    
 
 /*
 //    ext.point('io.ox/calendar/edit/section').extend({
