@@ -1662,7 +1662,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled()) {
                     // TODO!!!
                 }
-                implInsertTheme(operation.themename, operation.attr);
+                implInsertTheme(operation.themename, operation.attrs);
             }
             else if (operation.name === Operations.ATTRS_SET) {
                 // undo/redo is done inside implSetAttributes()
@@ -1908,9 +1908,9 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
 
-                // for (var i = 0; i < domSelection.length; i++) {
-                //     window.console.log("getSelection: Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
-                // }
+                for (var i = 0; i < domSelection.length; i++) {
+                    window.console.log("getSelection: Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
+                }
 
                 domRange = _(domSelection).last();
 
@@ -1931,7 +1931,7 @@ define('io.ox/office/editor/editor',
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 
-                // window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
+                window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
 
                 // Keeping selections synchron. Without setting selection now, there are cursor travel problems in Firefox.
                 // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
