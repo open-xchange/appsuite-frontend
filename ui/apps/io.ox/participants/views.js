@@ -9,7 +9,6 @@ define("io.ox/participants/views",
 
     var ParticipantEntryView = Backbone.View.extend({
         tagName: 'div',
-        className: 'span6',
         events: {
             'click .remove': 'onRemove'
         },
@@ -124,7 +123,7 @@ define("io.ox/participants/views",
             return this;
         },
         createParticipantNode: function (participant) {
-            return new ParticipantEntryView({model: participant}).render().$el;
+            return new ParticipantEntryView({model: participant, className: 'span6'}).render().$el;
         },
         updateContainer: function () {
             this.nodes = {};

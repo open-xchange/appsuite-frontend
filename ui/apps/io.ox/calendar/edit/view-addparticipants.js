@@ -86,7 +86,7 @@ define('io.ox/calendar/edit/view-addparticipants',
                             var pmodel = new pModel.Participant(obj.data);
                             var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false});
                             var markup = pview.render().el;
-
+                            
                             this.append(markup);
                         }
                     },
