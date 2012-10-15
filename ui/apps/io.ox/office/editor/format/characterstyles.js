@@ -81,6 +81,9 @@ define('io.ox/office/editor/format/characterstyles',
                 def: Color.BLACK,
                 set: function (element, color) {
                     element.css('color', this.getCssColor(color));
+                },
+                preview: function (options, color) {
+                    options.labelCss.color = this.getCssColor(color);
                 }
             },
 

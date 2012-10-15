@@ -83,7 +83,6 @@ define('io.ox/office/editor/editor',
             focused = false,
 
             lastKeyDownEvent,
-            lastEventSelection,
             currentSelection,
 
             undomgr = new UndoManager(this),
@@ -1083,23 +1082,28 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function processMouseDown(sourceNode) {
-            implCheckEventSelection(); // just in case the user was faster than the timer...
-            lastEventSelection = getSelection();
-            implStartCheckEventSelection();
+        function processMouseDown(event) {
+
+            var // mouse click on an object node
+                objectNode = $(event.target).closest('div.object');
+
+            // object clicked: set browser selection to object node, draw selection
+            if ((objectNode.length > 0) && (editdiv[0].contains(objectNode[0]))) {
+                event.preventDefault();
+                DOM.setBrowserSelection(new DOM.Range(DOM.Point.createPointForNode(objectNode)));
+                DOM.drawObjectSelection(objectNode, { moveable: false, sizeable: false });
+            }
+
+            updateSelection();
         }
 
-        function processMouseUp(sourceNode) {
-            implCheckEventSelection();
-            lastEventSelection = getSelection();
-            implStartCheckEventSelection();
+        function processMouseUp() {
+            updateSelection();
         }
 
         function processKeyDown(event) {
 
             implDbgOutEvent(event);
-            // implCheckSelection();
-            implCheckEventSelection();
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1136,28 +1140,28 @@ define('io.ox/office/editor/editor',
                 }
                 else if (c === 'G') {
                     var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'AsCharacter', inline: true}};
+                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'AsCharacter', inline: true}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'R') {
                     var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'S') {
                     var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'V') {
                     var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: "Pictures/10000000000000500000005076371D39.jpg", attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
+                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === 'F') {
                     var selection = getSelection();
-                    // {"type":" DATE \\* MERGEFORMAT ","name":"insertField","position":[0,24],"representation":"05.09.2012"}
-                    var newOperation = {name: Operations.FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: " DATE \\* MERGEFORMAT ", representation: "07.09.2012"};
+                    // {'type':' DATE \\* MERGEFORMAT ','name':'insertField','position':[0,24],'representation':'05.09.2012'}
+                    var newOperation = {name: Operations.FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: ' DATE \\* MERGEFORMAT ', representation: '07.09.2012'};
                     applyOperation(newOperation, true, true);
                 }
                 else if (c === '1') {
@@ -1180,9 +1184,8 @@ define('io.ox/office/editor/editor',
 
             var selection = getSelection();
 
-            lastEventSelection = _.copy(selection, true);
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
-            implStartCheckEventSelection();
+            updateSelection();
 
             if (event.keyCode === KeyCodes.DELETE) {
                 var imageShift = 0;
@@ -1418,9 +1421,7 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            implCheckEventSelection();
-            lastEventSelection = _.copy(selection, true);
-            implStartCheckEventSelection();
+            updateSelection();
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1537,23 +1538,16 @@ define('io.ox/office/editor/editor',
             return '';
         }
 
-        function implStartCheckEventSelection() {
-            // I Don't think we need some way to stop the timer, as the user won't be able to close this window "immediatly" after a mouse click or key press...
-            window.setTimeout(function () { implCheckEventSelection(); }, 10);
-        }
-
-        function implCheckEventSelection() {
-            var updateFromBrowser = true;
-            currentSelection = getSelection(updateFromBrowser);
-            if (!currentSelection || !lastEventSelection || !currentSelection.isEqual(lastEventSelection)) {
-                lastEventSelection = currentSelection;
+        function updateSelection() {
+            window.setTimeout(function () {
+                currentSelection = getSelection(true);
                 if (currentSelection) {
                     self.trigger('selection', currentSelection);
                 } else if (focused && editMode) {
-                    // If not focused, browser selection might not be available...
-                    Utils.warn('Editor.implCheckEventSelection(): missing selection!');
+                    // if not focused, browser selection might not be available...
+                    Utils.warn('Editor.updateSelection(): missing selection!');
                 }
-            }
+            }, 0);
         }
 
         /**
@@ -1614,7 +1608,7 @@ define('io.ox/office/editor/editor',
                 operations.push(operation);
             }
 
-            if (operation.name === "initDocument") {
+            if (operation.name === 'initDocument') {
                 implInitDocument();
             }
             else if (operation.name === Operations.TEXT_INSERT) {
@@ -1887,7 +1881,7 @@ define('io.ox/office/editor/editor',
 
             if (notify && !blockOperationNotifications) {
                 // Will give everybody the same copy - how to give everybody his own copy?
-                self.trigger("operation", notifyOperation);
+                self.trigger('operation', notifyOperation);
             }
 
             blockOperations = false;
@@ -1912,13 +1906,13 @@ define('io.ox/office/editor/editor',
 
             if (domSelection.length) {
 
-                for (var i = 0; i < domSelection.length; i++) {
-                    window.console.log("getSelection: Browser selection (" + i + "): " + domSelection[i].start.node.nodeName + " : " + domSelection[i].start.offset + " to " + domSelection[i].end.node.nodeName + " : " + domSelection[i].end.offset);
-                }
+                _(domSelection).each(function (range, index) {
+                    Utils.log('getSelection(): range[' + index + '], start=' + range.start.node.nodeName + ':' + range.start.offset + ' , end=' + range.end.node.nodeName + ':' + range.end.offset);
+                });
 
                 domRange = _(domSelection).last();
 
-                // allowing "special" multiselection for tables (rectangle cell selection)
+                // allowing 'special' multiselection for tables (rectangle cell selection)
                 if ($(domRange.start.node).is('tr')) {
                     domRange.start = _(domSelection).first().start;
                 }
@@ -1935,7 +1929,7 @@ define('io.ox/office/editor/editor',
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 
-                window.console.log("getSelection: Calculated Oxo Position: " + currentSelection.startPaM.oxoPosition + " : " + currentSelection.endPaM.oxoPosition);
+                Utils.log('getSelection: Calculated Oxo Position: ' + currentSelection.startPaM.oxoPosition + ' : ' + currentSelection.endPaM.oxoPosition);
 
                 // Keeping selections synchron. Without setting selection now, there are cursor travel problems in Firefox.
                 // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
@@ -1951,7 +1945,7 @@ define('io.ox/office/editor/editor',
 
             useNonTextNode = useNonTextNode ? true : false;
 
-            // window.console.log("setSelection: Input of Oxo Selection: " + oxosel.startPaM.oxoPosition + " : " + oxosel.endPaM.oxoPosition);
+            // window.console.log('setSelection: Input of Oxo Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
 
             currentSelection = _.copy(oxosel, true);
 
@@ -1963,7 +1957,7 @@ define('io.ox/office/editor/editor',
             }
 
             // for (var i = 0; i < ranges.length; i++) {
-            //     window.console.log("setSelection: Calculated browser selection (" + i + "): " + ranges[i].start.node.nodeName + " : " + ranges[i].start.offset + " to " + ranges[i].end.node.nodeName + " : " + ranges[i].end.offset);
+            //     window.console.log('setSelection: Calculated browser selection (' + i + '): ' + ranges[i].start.node.nodeName + ' : ' + ranges[i].start.offset + ' to ' + ranges[i].end.node.nodeName + ' : ' + ranges[i].end.offset);
             // }
 
             if (ranges.length) {
@@ -4060,7 +4054,7 @@ define('io.ox/office/editor/editor',
 
             var dbg = fillstr(event.type, 10, ' ', true) + ' sel:[' + getFormattedPositionString(selection.startPaM.oxoPosition) + '/' + getFormattedPositionString(selection.endPaM.oxoPosition) + ']';
 
-            if ((event.type === "keypress") || (event.type === "keydown")) {
+            if ((event.type === 'keypress') || (event.type === 'keydown')) {
                 dbg += ' key:[keyCode=' + fillstr(event.keyCode.toString(), 3, '0') + ' charCode=' + fillstr(event.charCode.toString(), 3, '0') + ' shift=' + event.shiftKey + ' ctrl=' + event.ctrlKey + ' alt=' + event.altKey + ']';
             }
 
@@ -4082,10 +4076,9 @@ define('io.ox/office/editor/editor',
             .on('blur', function () { processFocus(false); })
             .on('keydown', processKeyDown)
             .on('keypress', processKeyPressed)
-            .on('mousedown', function () { processMouseDown(this); })
-            .on('mouseup', function () { processMouseUp(this); })
+            .on('mousedown', processMouseDown)
+            .on('mouseup', processMouseUp)
             .on('dragstart dragover drop contextmenu cut paste', false);
-
 
     } // class Editor
 

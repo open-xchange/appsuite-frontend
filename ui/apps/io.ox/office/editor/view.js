@@ -43,16 +43,23 @@ define('io.ox/office/editor/view',
      *
      * @extends RadioGroup
      *
-     * @param {StyleSheets} styleSheets
-     *  A style sheet container.
+     * @param {Editor} editor
+     *  The editor instance containing the style sheet container visualized by
+     *  this control.
+     *
+     * @param {String} family
+     *  The attribute family of the style sheet container visualized by this
+     *  control.
      *
      * @param {Object} [options]
      *  Additional options passed to the RadioGroup constructor.
      */
-    var StyleSheetChooser = RadioGroup.extend({ constructor: function (styleSheets, options) {
+    var StyleSheetChooser = RadioGroup.extend({ constructor: function (editor, family, options) {
 
         var // self reference
-            self = this;
+            self = this,
+            // the style sheet container
+            styleSheets = editor.getStyleSheets(family);
 
         /**
          * Called for each list item to get the sorting index, which has been
@@ -97,6 +104,8 @@ define('io.ox/office/editor/view',
         // add all known style sheets, listen to 'change' events
         fillList();
         styleSheets.on('change', fillList);
+        // also reinitialize the preview if theme settings have been changed
+        editor.getThemes().on('change', fillList);
 
     }}); // class StyleSheetChooser
 
@@ -439,7 +448,7 @@ define('io.ox/office/editor/view',
 */
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor.getStyleSheets('paragraph'), { tooltip: gt('Paragraph Style') }))
+            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor, 'paragraph', { tooltip: gt('Paragraph Style') }))
             .addSeparator()
             .addGroup('character/fontname', new FontFamilyChooser())
             .addSeparator()

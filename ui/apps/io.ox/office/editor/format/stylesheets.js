@@ -939,9 +939,9 @@ define('io.ox/office/editor/format/stylesheets',
             _(attributes).each(function (value, name) {
                 var definition = definitions[name];
                 if (definition && _.isFunction(definition.preview)) {
-                    definition.preview.call(self, options, value);
+                    definition.preview.call(this, options, value);
                 }
-            });
+            }, this);
 
             return this;
         };

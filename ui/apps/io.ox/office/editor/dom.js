@@ -996,10 +996,11 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     // object selection =======================================================
 
     /**
-     * Adds a new selection box for the specified object node.
+     * Inserts a new selection box into the specified object node, or modifies
+     * an existing selector box according to the passed options.
      *
      * @param {HTMLElement|jQuery} object
-     *  The object node for which a new selection box will be inserted. If the
+     *  The object node for which a selection box will be inserted. If the
      *  passed value is a jQuery collection, uses the first DOM node it
      *  contains.
      *
@@ -1014,24 +1015,24 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
      */
-    DOM.addObjectSelection = function (object, options) {
+    DOM.drawObjectSelection = function (object, options) {
 
         var // the container element used to visualize the selection
-            selectorBox = $('<div>').addClass('selection');
+            selectionBox = $(object).first().children('div.selection');
 
-        // add classes according to passed options, and resize handles
-        selectorBox
+        // create a new selection box if missing
+        if (selectionBox.length === 0) {
+            $(object).first().append(selectionBox = $('<div>').addClass('selection'));
+            // add resize handles
+            _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
+                selectionBox.append($('<div>').addClass('handle ' + pos));
+            });
+        }
+
+        // set classes according to passed options, and resize handles
+        selectionBox = $('<div>').addClass('selection')
             .toggleClass('moveable', Utils.getBooleanOption(options, 'moveable', false))
             .toggleClass('sizeable', Utils.getBooleanOption(options, 'sizeable', false));
-
-        // add resize handles
-        _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
-            selectorBox.append($('<div>').addClass('handle ' + pos));
-        });
-
-        // insert selector box into the object container
-        DOM.removeObjectSelection(object);
-        $(object).first().append(selectorBox);
     };
 
     /**
@@ -1041,7 +1042,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  The object node whose selection box will be removed. If the passed
      *  value is a jQuery collection, uses the first DOM node it contains.
      */
-    DOM.removeObjectSelection = function (object) {
+    DOM.clearObjectSelection = function (object) {
         $(object).first().children('div.selection').remove();
     };
 

@@ -112,6 +112,7 @@
         div.object {
             position: relative;
             cursor: default;
+            font-size: 0;
 
             /* inlined objects */
             &.inline {
@@ -143,7 +144,7 @@
                 right: -1px;
                 border: 3px fade(@border-color, 70%) solid;
 
-                // cursor: default;
+                cursor: default;
                 &.moveable { cursor: move; }
 
                 > div.handle {
