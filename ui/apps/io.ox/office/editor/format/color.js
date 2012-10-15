@@ -52,16 +52,15 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {Object} color
      *  The color object as used in operations.
      *
-     * @param {Themes} themes
-     *  The themes container used to map theme color names to color values.
+     * @param {Themes} theme
+     *  The theme object used to map scheme color names to color values.
      *
      * @returns {String}
      *  The CSS color value converted from the passed color object.
      */
-    Color.getCssColor = function (color, themes) {
+    Color.getCssColor = function (color, theme) {
 
         var type = Utils.getStringOption(color, 'type'),
-            theme,
             rgbColor = null;
 
         switch (type) {
@@ -69,7 +68,6 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             rgbColor = color.value;
             break;
         case 'scheme':
-            theme = themes ? themes.getTheme() : null;
             rgbColor = theme && theme.getSchemeColor(color.value);
             break;
         case 'auto':

@@ -49,7 +49,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             borderleft: {
                 def: { style: 'solid', width: '2px', color: { type : 'auto' } },
                 set: function (element, borderleft) {
-                    var border = getCssBorderAttributes(borderleft, this.getDocumentStyles());
+                    var border = getCssBorderAttributes(borderleft, this);
                     element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
                 }
             },
@@ -60,7 +60,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             borderright: {
                 def: { style: 'solid', width: '2px', color: { type : 'auto' } },
                 set: function (element, borderright) {
-                    var border = getCssBorderAttributes(borderright, this.getDocumentStyles());
+                    var border = getCssBorderAttributes(borderright);
                     element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
                 }
             },
@@ -71,7 +71,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             bordertop: {
                 def: { style: 'solid', width: '2px', color: { type : 'auto' } },
                 set: function (element, bordertop) {
-                    var border = getCssBorderAttributes(bordertop, this.getDocumentStyles());
+                    var border = getCssBorderAttributes(bordertop);
                     element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
                 }
             },
@@ -82,7 +82,7 @@ define('io.ox/office/editor/format/tablecellstyles',
             borderbottom: {
                 def: { style: 'solid', width: '2px', color: { type : 'auto' } },
                 set: function (element, borderbottom) {
-                    var border = getCssBorderAttributes(borderbottom, this.getDocumentStyles());
+                    var border = getCssBorderAttributes(borderbottom);
                     element.css('border-left', border.width + ' ' + border.style + ' ' + border.color);
                 }
             }
@@ -91,7 +91,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
     // private global functions ===============================================
 
-    function getCssBorderAttributes(border, documentStyles) {
+    function getCssBorderAttributes(border, styleSheets) {
 
         var style = '',
             width = '',
@@ -109,7 +109,7 @@ define('io.ox/office/editor/format/tablecellstyles',
         }
 
         if ((border) && (border.color)) {
-            color = Color.getCssColor(border.color, documentStyles.getThemes());
+            color = styleSheets.getCssColor(border.color);
         }
 
         return { style: style, width: width, color: color };

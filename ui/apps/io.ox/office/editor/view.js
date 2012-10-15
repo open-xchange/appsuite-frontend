@@ -123,7 +123,7 @@ define('io.ox/office/editor/view',
 
             // add predefined colors
             _(ColorChooser.BUILTIN_COLORS).each(function (entry) {
-                self.createOptionButton(entry.color, { tooltip: entry.name, css: { backgroundColor: Color.getCssColor(entry.color, themes) }});
+                self.createOptionButton(entry.color, { tooltip: entry.name, css: { backgroundColor: Color.getCssColor(entry.color, theme) }});
             });
 
             // add theme colors

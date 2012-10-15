@@ -14,8 +14,9 @@
 define('io.ox/office/editor/format/stylesheets',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/editor/dom'
-    ], function (Events, Utils, DOM) {
+     'io.ox/office/editor/dom',
+     'io.ox/office/editor/format/color'
+    ], function (Events, Utils, DOM, Color) {
 
     'use strict';
 
@@ -213,14 +214,14 @@ define('io.ox/office/editor/format/stylesheets',
                     collectAttributes(styleSheets[styleSheet.parentId]);
                     // add own attributes of the specified attribute family
                     if (family in styleSheet.attributes) {
-                        attributes = Utils.extendOptions(attributes, styleSheet.attributes[family]);
+                        _(attributes).extend(styleSheet.attributes[family]);
                     }
                 } else {
                     // no more parent style sheets: start with default values from definitions
                     attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
                     // collect styles from ancestor elements if specified
                     if (ancestorStyleSheets && ancestorElement) {
-                        attributes = Utils.extendOptions(attributes, ancestorStyleSheets.getElementStyleAttributes(ancestorElement, family));
+                        _(attributes).extend(ancestorStyleSheets.getElementStyleAttributes(ancestorElement, family));
                     }
                 }
             }
@@ -333,6 +334,31 @@ define('io.ox/office/editor/format/stylesheets',
         // methods ------------------------------------------------------------
 
         /**
+         * Returns the document styles.
+         *
+         * @returns {DocumentStyles}
+         *  A document style object.
+         */
+        this.getDocumentStyles = function () {
+            return documentStyles;
+        };
+
+        /**
+         * Converts the passed attribute color object to a CSS color value.
+         * Scheme colors will be resolved by using the current theme.
+         *
+         * @param {Object} color
+         *  The color object as used in operations.
+         *
+         * @returns {String}
+         *  The CSS color value converted from the passed color object.
+         */
+        this.getCssColor = function (color) {
+            // use the static helper function from module Colors, pass current theme
+            return Color.getCssColor(color, documentStyles.getCurrentTheme());
+        };
+
+        /**
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
          *
@@ -351,16 +377,6 @@ define('io.ox/office/editor/format/stylesheets',
                 }
             });
             return names;
-        };
-
-        /**
-         * Returns the document styles.
-         *
-         * @returns {DocumentStyles}
-         *  A document style object.
-         */
-        this.getDocumentStyles = function () {
-            return documentStyles;
         };
 
         /**
@@ -583,7 +599,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // get attributes of the style sheets
                 styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                 // the resulting attributes according to style sheet and explicit formatting
-                mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 
             // filter by supported attributes
             _(mergedAttributes).each(function (value, name)  {
@@ -743,7 +759,7 @@ define('io.ox/office/editor/format/stylesheets',
                 setElementAttributes($element, elementAttributes);
 
                 // update element formatting
-                mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
                 updateElementFormatting($element, mergedAttributes, updateAttributeNames);
 
                 // update CSS formatting of descendant elements, if another
@@ -875,7 +891,7 @@ define('io.ox/office/editor/format/stylesheets',
                     // get attributes of the style sheet
                     styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
                     // the resulting attributes to be updated at each element
-                    mergedAttributes = Utils.extendOptions(styleAttributes, elementAttributes);
+                    mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 
                 // update element formatting according to current attribute values
                 updateElementFormatting($element, mergedAttributes);

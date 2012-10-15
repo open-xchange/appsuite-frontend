@@ -79,9 +79,8 @@ define('io.ox/office/editor/format/characterstyles',
 
             color: {
                 def: Color.BLACK,
-                set: function (element, value) {
-                    var cssColor = Color.getCssColor(value, this.getDocumentStyles().getThemes());
-                    element.css('color', cssColor);
+                set: function (element, color) {
+                    element.css('color', this.getCssColor(color));
                 }
             },
 

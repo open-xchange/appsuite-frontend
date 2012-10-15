@@ -55,9 +55,8 @@ define('io.ox/office/editor/format/paragraphstyles',
 
             fillcolor: {
                 def: Color.TRANSPARENT,
-                set: function (element, value) {
-                    var cssColor = Color.getCssColor(value, this.getDocumentStyles().getThemes());
-                    element.css('background-color', cssColor);
+                set: function (element, color) {
+                    element.css('background-color', this.getCssColor(color));
                 }
             }
 
