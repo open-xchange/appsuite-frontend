@@ -252,6 +252,7 @@ define("io.ox/files/list/view-detail",
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
+                    $line.append(
                         $("<em>").text(extension.label(field)),
                         content = $('<span>'),
                         $.txt('\u00A0 ')
