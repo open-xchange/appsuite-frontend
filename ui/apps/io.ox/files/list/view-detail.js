@@ -252,8 +252,7 @@ define("io.ox/files/list/view-detail",
                 var count = 0;
                 _.each(extension.fields, function (index, field) {
                     var content = null;
-                    $line.append(
-                        $("<em>").text(extension.label(field) + ':'),
+                        $("<em>").text(extension.label(field)),
                         content = $('<span>'),
                         $.txt('\u00A0 ')
                     );
@@ -293,7 +292,7 @@ define("io.ox/files/list/view-detail",
         index: 100,
         fields: ["filename"],
         label: function () {
-            return gt("File name");
+            return gt("File name:");
         },
         draw: function (field, file, $element) {
             $element.text(file.filename || 'N/A');
@@ -305,7 +304,7 @@ define("io.ox/files/list/view-detail",
         index: 200,
         fields: ["file_size"],
         label: function () {
-            return gt("Size");
+            return gt("Size:");
         },
         draw: function (field, file, $element) {
             $element.text(bytesToSize(file.file_size));
@@ -318,7 +317,7 @@ define("io.ox/files/list/view-detail",
 //        index: 300,
 //        fields: ["version"],
 //        label: function (field) {
-//            return gt("Version");
+//            return gt("Version:");
 //        },
 //        draw: function (field, file, $element) {
 //            $element.text(file.version);
@@ -330,7 +329,7 @@ define("io.ox/files/list/view-detail",
         index: 400,
         fields: ["last_modified"],
         label: function () {
-            return gt("Last Modified");
+            return gt("Last Modified:");
         },
         draw: function (field, file, $element) {
             var d = new date.Local(date.Local.utc(file.last_modified));
