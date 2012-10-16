@@ -22,7 +22,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * and a transform object describing the transformation rule.
      *
      * @param {String} rgbColor
-     *  The source RGB color as a HEX string without trailing #
+     *  The source color as a hexadecimal string (RRGGBB).
      *
      *  @param {Object} transform
      *  The transformation object describing the transformation rule
@@ -41,7 +41,6 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * Predefined color objects.
      */
     var Color = {
-            TRANSPARENT: {},
             BLACK: { type: 'rgb', value: '000000' },
             WHITE: { type: 'rgb', value: 'FFFFFF' },
             AUTO: { type: 'auto' }
@@ -53,15 +52,21 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {Object} color
      *  The color object as used in operations.
      *
+     * @param {String} context
+     *  The context needed to resolve the color type 'auto'. Supported contexts
+     *  are 'text' for text colors (mapped to to black), 'line' for line
+     *  colors (e.g. table borders, maps to black), and 'fill' for fill colors
+     *  (e.g. paragraph background and table cells, maps to transparent).
+     *
      * @param {Themes} theme
      *  The theme object used to map scheme color names to color values.
      *
      * @returns {String}
      *  The CSS color value converted from the passed color object.
      */
-    Color.getCssColor = function (color, theme) {
+    Color.getCssColor = function (color, context, theme) {
 
-        var type = Utils.getStringOption(color, 'type'),
+        var type = Utils.getStringOption(color, 'type', 'none'),
             rgbColor = null;
 
         switch (type) {
@@ -72,8 +77,21 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
             rgbColor = theme && theme.getSchemeColor(color.value);
             break;
         case 'auto':
-            rgbColor = Color.BLACK.value;
+            switch (context) {
+            case 'text':
+            case 'line':
+                rgbColor = Color.BLACK.value;
+                break;
+            case 'fill':
+                // transparent: keep rgbColor empty
+                break;
+            default:
+                Utils.warn('Color.getCssColor(): unknown color context: ' + context);
+                rgbColor = Color.BLACK.value;
+            }
             break;
+        default:
+            Utils.warn('Color.getCssColor(): unknown color type: ' + type);
         }
 
         return _.isString(rgbColor) ? ('#' + rgbColor) : 'transparent';

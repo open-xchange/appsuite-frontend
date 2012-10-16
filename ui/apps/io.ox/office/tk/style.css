@@ -358,6 +358,7 @@ div.io-ox-view-component {
                 background-color: @pane-fill-color;
                 border: 1px solid @control-border-color;
                 .border-radius(0);
+                .box-shadow(0 5px 10px fade(black, 20%));
 
                 /* the Scrollable mix-in class */
                 &.scrollable {
@@ -604,8 +605,8 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
     padding: 0;
 
     > span > .group {
-        @selected-accent-color: #ddeeff;
-        @selected-color: #99ccff;
+        @selected-accent-color: #dfefff;
+        @selected-color: #8fbfff;
 
         + .group {
             margin-left: 0;
@@ -633,14 +634,14 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
         &:not(.disabled) > button:not(.disabled) {
 
             /* mouse/keyboard effects */
-            &:hover, &:focus, &:active {
-                background: @pane-fill-color;
+            &:hover, &:focus {
+                .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color);
                 border: none;
             }
 
             /* active effect (control currently clicked) */
             &:active {
-                background: darken(@pane-fill-color, 5%);
+                .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color);
                 border: none;
             }
 
@@ -648,14 +649,14 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
             &.selected {
 
                 /* mouse/keyboard effects */
-                &:hover, &:focus, &:active {
-                    background: @selected-color;
+                &:hover, &:focus {
+                    .vertical-gradient(darken(@selected-accent-color, 5%), @selected-color);
                     border: none;
                 }
 
                 /* active effect (button currently clicked) */
                 &:active {
-                    background: darken(@selected-color, 5%);
+                    .vertical-gradient(darken(@selected-accent-color, 10%), @selected-color);
                     border: none;
                 }
             }

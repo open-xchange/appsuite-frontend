@@ -383,6 +383,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A selector function that matches <div> elements refered by the 'this'
+     * symbol representing an object (floating or inline). Can be used in the
+     * jQuery method is() and in the DOM iterator methods supporting selectors.
+     */
+    DOM.OBJECT_NODE_SELECTOR = function () { return DOM.isObjectNode(this); };
+
+    /**
      * Returns whether the passed node is a <div> element wrapping an object
      * in inline mode.
      *
@@ -397,11 +404,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.isInlineObjectNode = function (node) {
         return DOM.isObjectNode(node) && $(node).hasClass('inline');
     };
-
-    /**
-     * A jQuery selector that matches <div> elements containing an image.
-     */
-    DOM.OBJECT_NODE_SELECTOR = function () { return DOM.isObjectNode(this); };
 
     /**
      * Returns whether the passed node is a <div> element wrapping an image.
@@ -419,9 +421,92 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A jQuery selector that matches <div> elements containing an image.
+     * A selector function that matches <div> elements refered by the 'this'
+     * symbol representing an image object (floating or inline). Can be used in
+     * the jQuery method is() and in the DOM iterator methods supporting
+     * selectors.
      */
     DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
+
+    /**
+     * Returns whether the passed node is a <div> element with class list-label.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element with class list-label.
+     */
+    DOM.isListlabelNode = function (node) {
+        return $(node).is('div.list-label');
+    };
+
+    /**
+     * Creates a new text portion element.
+     *
+     * @returns {jQuery}
+     *  A span element with class field, as jQuery object.
+     */
+    DOM.createFieldSpanNode = function () {
+        return $('<span>').addClass('field');
+    };
+
+    /**
+     * Splits the passed text span element into two text span elements. Clones
+     * all formatting to the new span element.
+     *
+     * @param {HTMLSpanElement|jQuery} span
+     *  The text span to be split. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @param {Number} offset
+     *  The character position where the text span will be split. If this
+     *  position is at the start or end of the text in the span, an empty text
+     *  span will be inserted.
+     *
+     * @param {Object} [options]
+     *  A map of options to control the split operation. Supports the following
+     *  options:
+     *  @param {Boolean} [options.append]
+     *      If set to true, the right part of the text will be inserted after
+     *      the passed text span; otherwise the left part of the text will be
+     *      inserted before the passed text span. The position of the new text
+     *      span may be important when iterating and manipulating a range of
+     *      DOM nodes.
+     *
+     * @returns {jQuery}
+     *  The newly created text span element, as jQuery object. Will be located
+     *  before or after the passed text span, depending on the 'options.append'
+     *  option.
+     */
+    DOM.splitTextSpan = function (span, offset, options) {
+
+        var // the new span for the split text portion, as jQuery object
+            newSpan = $(span).clone(true),
+            // the existing text node (must not be invalidated, e.g. by using jQuery.text())
+            textNode = Utils.getDomNode(span).firstChild,
+            // text for the left span
+            leftText = textNode.nodeValue.substr(0, offset),
+            // text for the right span
+            rightText = textNode.nodeValue.substr(offset);
+
+        // insert the span and update the text nodes
+        if (Utils.getBooleanOption(options, 'append', false)) {
+            newSpan.insertAfter(span);
+            // no jQuery.text() here (that would kill the existing text node)
+            textNode.nodeValue = leftText;
+            newSpan.text(rightText);
+        } else {
+            newSpan.insertBefore(span);
+            newSpan.text(leftText);
+            // no jQuery.text() here (that would kill the existing text node)
+            textNode.nodeValue = rightText;
+        }
+
+        // return the new text span
+        return newSpan;
+    };
 
     /**
      * Splits the passed text node into two text nodes.
@@ -432,8 +517,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Number} offset
      *  The character position where the text node will be split. If this
      *  position is at the start or end of the text of the node, an empty text
-     *  node may be inserted if required (see the 'options.createEmpty' option
-     *  below).
+     *  node will be inserted.
      *
      * @param {Object} [options]
      *  A map of options to control the split operation. Supports the following
@@ -450,28 +534,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  text node, depending on the 'options.append' option.
      */
     DOM.splitTextNode = function (textNode, offset, options) {
-
-        var // parent <span> element of the text node
-            span = textNode.parentNode,
-            // the new span for the split text portion, as jQuery object
-            newSpan = $(span).clone(true),
-            // text for the left span
-            leftText = textNode.nodeValue.substr(0, offset),
-            // text for the right span
-            rightText = textNode.nodeValue.substr(offset);
-
-        // insert the span and update the text nodes
-        if (Utils.getBooleanOption(options, 'append')) {
-            newSpan.insertAfter(span);
-            textNode.nodeValue = leftText;
-            newSpan.text(rightText);
-        } else {
-            newSpan.insertBefore(span);
-            newSpan.text(leftText);
-            textNode.nodeValue = rightText;
-        }
-
-        // return the new text node
+        var newSpan = DOM.splitTextSpan(textNode.parentNode, offset, options);
         return newSpan[0].firstChild;
     };
 
@@ -999,10 +1062,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Inserts a new selection box into the specified object node, or modifies
      * an existing selector box according to the passed options.
      *
-     * @param {HTMLElement|jQuery} object
+     * @param {HTMLElement|jQuery} objects
      *  The object node for which a selection box will be inserted. If the
-     *  passed value is a jQuery collection, uses the first DOM node it
-     *  contains.
+     *  passed value is a jQuery collection, draws selection boxes for all
+     *  contained objects.
      *
      * @param {Object} [options]
      *  A map of options to control the appearance of the selection box.
@@ -1015,35 +1078,43 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
      */
-    DOM.drawObjectSelection = function (object, options) {
+    DOM.drawObjectSelection = function (objects, options) {
 
-        var // the container element used to visualize the selection
-            selectionBox = $(object).first().children('div.selection');
+        $(objects).each(function () {
 
-        // create a new selection box if missing
-        if (selectionBox.length === 0) {
-            $(object).first().append(selectionBox = $('<div>').addClass('selection'));
-            // add resize handles
-            _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
-                selectionBox.append($('<div>').addClass('handle ' + pos));
-            });
-        }
+            var // the container element used to visualize the selection
+                selectionBox = $(this).children('div.selection'),
+                // whether object is moveable
+                moveable = Utils.getBooleanOption(options, 'moveable', false),
+                // whether object is sizeable
+                sizeable = Utils.getBooleanOption(options, 'sizeable', false);
 
-        // set classes according to passed options, and resize handles
-        selectionBox = $('<div>').addClass('selection')
-            .toggleClass('moveable', Utils.getBooleanOption(options, 'moveable', false))
-            .toggleClass('sizeable', Utils.getBooleanOption(options, 'sizeable', false));
+            // create a new selection box if missing
+            if (selectionBox.length === 0) {
+                $(this).append(selectionBox = $('<div>').addClass('selection'));
+                // add resize handles
+                _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
+                    selectionBox.append($('<div>').addClass('handle ' + pos));
+                });
+            }
+
+            // set classes according to passed options, and resize handles
+            selectionBox = $('<div>').addClass('selection')
+                .toggleClass('moveable', moveable)
+                .toggleClass('sizeable', sizeable);
+        });
     };
 
     /**
      * Removes the selection box from the specified object node.
      *
-     * @param {HTMLElement|jQuery} object
+     * @param {HTMLElement|jQuery} objects
      *  The object node whose selection box will be removed. If the passed
-     *  value is a jQuery collection, uses the first DOM node it contains.
+     *  value is a jQuery collection, removes the selection boxes from all
+     *  contained objects.
      */
-    DOM.clearObjectSelection = function (object) {
-        $(object).first().children('div.selection').remove();
+    DOM.clearObjectSelection = function (objects) {
+        $(objects).children('div.selection').remove();
     };
 
     // exports ================================================================

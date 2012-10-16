@@ -144,7 +144,10 @@ define('io.ox/office/editor/format/stylesheets',
             ancestorStyleFamily = Utils.getStringOption(options, 'ancestorStyleFamily'),
 
             // element resolver for style sheets referred by ancestor DOM elements
-            ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver');
+            ancestorElementResolver = Utils.getFunctionOption(options, 'ancestorElementResolver'),
+
+            // timeout handler for postponed change events
+            triggerTimeout = null;
 
         // private methods ----------------------------------------------------
 
@@ -285,6 +288,21 @@ define('io.ox/office/editor/format/stylesheets',
             }
         }
 
+        /**
+         * Triggers a 'change' event that notifies listeners about added,
+         * removed, or changed style sheets. Multiple calls of this method are
+         * collected, and a single 'change' event will be triggered after the
+         * current script has been executed.
+         */
+        function triggerChangeEvent() {
+            if (!triggerTimeout) {
+                triggerTimeout = window.setTimeout(function () {
+                    triggerTimeout = null;
+                    self.trigger('change');
+                }, 0);
+            }
+        }
+
         // abstract interface -------------------------------------------------
 
         /**
@@ -350,12 +368,15 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} color
          *  The color object as used in operations.
          *
+         * @param {String} context
+         *  The context needed to resolve the color type 'auto'.
+         *
          * @returns {String}
          *  The CSS color value converted from the passed color object.
          */
-        this.getCssColor = function (color) {
+        this.getCssColor = function (color, context) {
             // use the static helper function from module Colors, pass current theme
-            return Color.getCssColor(color, documentStyles.getCurrentTheme());
+            return Color.getCssColor(color, context, documentStyles.getCurrentTheme());
         };
 
         /**
@@ -381,7 +402,7 @@ define('io.ox/office/editor/format/stylesheets',
             width = Utils.convertHmmToCssLength(width, 'px', 1);
 
             // convert color object to CSS color
-            color = this.getCssColor(color);
+            color = this.getCssColor(color, 'line');
 
             // combine the values to a single string
             return style + ' ' + width + ' ' + color;
@@ -466,7 +487,7 @@ define('io.ox/office/editor/format/stylesheets',
             styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
 
             // set new default style sheet
-            if (Utils.getIntegerOption(options, 'defStyle', false)) {
+            if (Utils.getBooleanOption(options, 'defStyle', false)) {
                 defaultStyleId = id;
             }
 
@@ -486,7 +507,7 @@ define('io.ox/office/editor/format/stylesheets',
             }
 
             // notify listeners
-            this.trigger('change');
+            triggerChangeEvent();
 
             return this;
         };
@@ -522,7 +543,7 @@ define('io.ox/office/editor/format/stylesheets',
                 delete styleSheets[id];
 
                 // notify listeners
-                this.trigger('change');
+                triggerChangeEvent();
             }
             return this;
         };
@@ -848,6 +869,54 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
+         * Clears specific formatting attributes in the specified DOM element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The element whose attributes will be removed. If this object is a
+         *  jQuery collection, uses the first DOM node it contains.
+         *
+         * @param {String|String[]} [attributeNames]
+         *  A single attribute name, or an an array of attribute names. It is
+         *  not possible to clear the style sheet name. If omitted, clears all
+         *  explicit element formatting attributes.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, allows to clear special attributes (attributes
+         *      that are marked with the 'special' flag in the attribute
+         *      definitions passed to the constructor).
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
+        this.clearElementAttributes = function (element, attributeNames, options) {
+
+            var // build a map with null values from passed name list
+                attributes = {};
+
+            // fill attribute map from passed array of attribute names
+            if (_.isString(attributeNames)) {
+                // string passed: clear single attribute
+                attributes[attributeNames] = null;
+            } else if (_.isArray(attributeNames)) {
+                // array passed: clear all specified attributes
+                _(attributeNames).each(function (name) {
+                    attributes[name] = null;
+                });
+            } else {
+                // no valid attribute names passed: clear all attributes
+                _(definitions).each(function (definition, name) {
+                    attributes[name] = null;
+                });
+            }
+
+            // use method setElementAttributes() to do the real work
+            return this.setElementAttributes(element, attributes, options);
+        };
+
+        /**
          * Clears specific formatting attributes in the specified DOM ranges.
          *
          * @param {DOM.Range[]} ranges
@@ -873,27 +942,46 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.clearAttributesInRanges = function (ranges, attributeNames, options) {
 
-            var // build a map with null values from passed name list
-                attributes = {};
+            // iterate all covered elements and clear their attributes
+            this.iterateReadWrite(ranges, function (element) {
+                this.clearElementAttributes(element, attributeNames, options);
+            }, this);
 
-            // fill attribute map from passed array of attribute names
-            if (_.isString(attributeNames)) {
-                // string passed: clear single attribute
-                attributes[attributeNames] = null;
-            } else if (_.isArray(attributeNames)) {
-                // array passed: clear all specified attributes
-                _(attributeNames).each(function (name) {
-                    attributes[name] = null;
-                });
-            } else {
-                // no valid attribute names passed: clear all attributes
-                _(definitions).each(function (definition, name) {
-                    attributes[name] = null;
-                });
-            }
+            return this;
+        };
 
-            // use method setAttributesInRanges() to do the real work
-            return this.setAttributesInRanges(ranges, attributes, options);
+        /**
+         * Updates the CSS formatting in the specified DOM element, according
+         * to its current attribute and style settings.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The element to be updated. If this object is a jQuery collection,
+         *  uses the first DOM node it contains.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
+        this.updateElementFormatting = function (element) {
+
+            var // the element, as jQuery object
+                $element = $(element),
+                // explicit element attributes
+                elementAttributes = getElementAttributes($element),
+                // get attributes of the style sheet
+                styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
+                // the resulting attributes to be updated at each element
+                mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
+
+            // update element formatting according to current attribute values
+            updateElementFormatting($element, mergedAttributes);
+
+            // update CSS formatting of descendant elements
+            var ranges = [DOM.Range.createRangeForNode(element)];
+            _(descendantStyleFamilies).each(function (family) {
+                documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
+            });
+
+            return this;
         };
 
         /**
@@ -912,25 +1000,8 @@ define('io.ox/office/editor/format/stylesheets',
 
             // iterate all covered elements and update their CSS formatting
             this.iterateReadWrite(ranges, function (element) {
-
-                var // the element, as jQuery object
-                    $element = $(element),
-                    // explicit element attributes
-                    elementAttributes = getElementAttributes($element),
-                    // get attributes of the style sheet
-                    styleAttributes = getStyleAttributes(elementAttributes.style, styleFamily, $element),
-                    // the resulting attributes to be updated at each element
-                    mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
-
-                // update element formatting according to current attribute values
-                updateElementFormatting($element, mergedAttributes);
-
+                this.updateElementFormatting(element);
             }, this);
-
-            // update CSS formatting of descendant elements
-            _(descendantStyleFamilies).each(function (family) {
-                documentStyles.getStyleSheets(family).updateFormattingInRanges(ranges);
-            });
 
             return this;
         };

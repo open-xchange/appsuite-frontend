@@ -90,9 +90,26 @@ define('io.ox/files/mediaplayer',
         },
 
         filterMediaList: function (list, videoSupport) {
+            var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
+
+            _.each(_.browser, function (value, key) {
+                if (!value) return;
+                switch (key) {
+                case 'Chrome':
+                    pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+                    break;
+                case 'Safari':
+                    break;
+                case 'Firefox':
+                    break;
+                case 'IE':
+                    break;
+                }
+            });
+
             return $.grep(list, function (o) {
                 if (videoSupport) {
-                    return (/\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm)$/i).test(o.filename);
+                    return (new RegExp(pattern, 'i')).test(o.filename);
                 }
                 else
                 {
@@ -116,6 +133,16 @@ define('io.ox/files/mediaplayer',
         drawTrackInfo: function (data) {
             if (!this.config.videoSupport) this.trackdisplay.find('.track').text(data);
         },
+
+        quicktimeFallbackObject: function (url) {
+            return $('<object>', { 'classid' : 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B', 'codebase': 'http://www.apple.com/qtactivex/qtplugin.cab' })
+                .append($('<param>', { 'name': 'src', 'value': url, height: 240, width: 320}));
+        },
+
+        quicktimeFallbackEmbed: function (url) {
+            return $('<embed>', { src: url });
+        },
+
 
         drawPlayer: function (url, mimetype) {
             var el = '<audio>';
@@ -200,8 +227,9 @@ define('io.ox/files/mediaplayer',
                 this.player.find('video, audio').mediaelementplayer({
                     // since we cannot resize later on ...
                     audioWidth: $(window).width() <= 400 ? 294 : 480,
-                    height: 500,
+                    videoWidth: $(window).width() <= 400 ? 294 : 480,
                     plugins: ['flash', 'silverlight'],
+                    enableAutosize: false,
                     timerRate: 250,
                     features: features,
                     keyActions: [{
@@ -278,12 +306,14 @@ define('io.ox/files/mediaplayer',
         },
 
         close: function () {
-            $('#io-ox-topbar > .minimizedmediaplayer').remove();
-            this.player.empty().remove();
-            this.trackdisplay.remove(); // no empty; kills inner stuff
-            this.playlist.empty().remove();
-            this.container.empty().show().remove();
-            this.list = [];
+            if ($('#io-ox-topbar > .minimizedmediaplayer').length === 0)
+            {
+                this.player.empty().remove();
+                this.trackdisplay.remove(); // no empty; kills inner stuff
+                this.playlist.empty().remove();
+                this.container.empty().show().remove();
+                this.list = [];
+            }
         }
     };
 

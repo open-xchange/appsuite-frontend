@@ -14,13 +14,42 @@
 define('io.ox/office/editor/format/themes',
     ['io.ox/core/event',
      'io.ox/office/tk/utils',
-     'io.ox/office/editor/dom'
-    ], function (Events, Utils, DOM) {
+     'io.ox/office/editor/dom',
+     'gettext!io.ox/office/main'
+    ], function (Events, Utils, DOM, gt) {
 
     'use strict';
 
+    var // all known scheme color names, in a specific order, with readable names
+        SCHEME_COLOR_DEFINITIONS = [
+            { name: 'dark1',             label: gt('Dark 1') },
+            { name: 'light1',            label: gt('Light 1') },
+            { name: 'dark2',             label: gt('Dark 2') },
+            { name: 'light2',            label: gt('Light 2') },
+            { name: 'text1',             label: gt('Text 1') },
+            { name: 'text2',             label: gt('Text 2') },
+            { name: 'background1',       label: gt('Background 1') },
+            { name: 'background2',       label: gt('Background 2') },
+            { name: 'accent1',           label: gt('Accent 1') },
+            { name: 'accent2',           label: gt('Accent 2') },
+            { name: 'accent3',           label: gt('Accent 3') },
+            { name: 'accent4',           label: gt('Accent 4') },
+            { name: 'accent5',           label: gt('Accent 5') },
+            { name: 'accent6',           label: gt('Accent 6') },
+            { name: 'hyperlink',         label: gt('Hyperlink') },
+            { name: 'followedHyperlink', label: gt('Followed Hyperlink') }
+        ];
+
     // class Theme ============================================================
 
+    /**
+     * Contains the definitions of a single theme in a document.
+     *
+     * @constructor
+     *
+     * @param {Object} attributes
+     *  The theme attributes as received from the 'insertTheme' operation.
+     */
     function Theme(attributes) {
 
         var // the color scheme of this theme
@@ -42,12 +71,31 @@ define('io.ox/office/editor/format/themes',
             return _.isString(colorScheme[name]) ? colorScheme[name] : null;
         };
 
+        /**
+         * Returns an array containing all existing scheme colors in a specific
+         * order.
+         *
+         * @returns {Object[]}
+         *  An array with all scheme colors, as name/value pairs containing the
+         *  color name and the RGB value as string.
+         */
+        this.getSchemeColors = function () {
+            var schemeColors = [];
+            _(SCHEME_COLOR_DEFINITIONS).each(function (definition) {
+                var value = colorScheme[definition.name];
+                if (_.isString(value)) {
+                    schemeColors.push(_({ value: value }).extend(definition));
+                }
+            });
+            return schemeColors;
+        };
+
     } // class Theme
 
     // class Themes ===========================================================
 
     /**
-     * Contains the definitions of themes.
+     * Contains the definitions of all themes in a document.
      *
      * @constructor
      *
@@ -58,11 +106,34 @@ define('io.ox/office/editor/format/themes',
      */
     function Themes(rootNode, documentStyles) {
 
-        var // themes, mapped by identifier
+        var // self reference
+            self = this,
+
+            // themes, mapped by identifier
             themes = {},
 
             // default theme (first inserted theme)
-            defaultTheme = null;
+            defaultTheme = null,
+
+            // timeout handler for postponed change events
+            triggerTimeout = null;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Triggers a 'change' event that notifies listeners about added,
+         * removed, or changed themes. Multiple calls of this method are
+         * collected, and a single 'change' event will be triggered after the
+         * current script has been executed.
+         */
+        function triggerChangeEvent() {
+            if (!triggerTimeout) {
+                triggerTimeout = window.setTimeout(function () {
+                    triggerTimeout = null;
+                    self.trigger('change');
+                }, 0);
+            }
+        }
 
         // methods ------------------------------------------------------------
 
@@ -89,7 +160,7 @@ define('io.ox/office/editor/format/themes',
             defaultTheme = defaultTheme || theme;
 
             // notify listeners
-            this.trigger('change');
+            triggerChangeEvent();
 
             return this;
         };

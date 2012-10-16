@@ -80,10 +80,10 @@ define('io.ox/office/editor/format/characterstyles',
             color: {
                 def: Color.BLACK,
                 set: function (element, color) {
-                    element.css('color', this.getCssColor(color));
+                    element.css('color', this.getCssColor(color, 'text'));
                 },
                 preview: function (options, color) {
-                    options.labelCss.color = this.getCssColor(color);
+                    options.labelCss.color = this.getCssColor(color, 'text');
                 }
             },
 

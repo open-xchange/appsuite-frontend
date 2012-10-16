@@ -374,8 +374,9 @@ define('io.ox/calendar/week/view',
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
-                        .addClass('day').width(100 / this.columns + '%')
-                        .attr('date', d);
+                    .addClass('day')
+                    .width(100 / this.columns + '%')
+                    .attr('date', d);
 
                 // add days to fulltime panel
                 this.fulltimePane
@@ -523,7 +524,6 @@ define('io.ox/calendar/week/view',
                     if (row === fulltimeColPos.length) {
                         fulltimeColPos.push(model.get('end_date'));
                     }
-
                     app.css({
                         height: this.fulltimeHeight,
                         width: (100 / this.columns) * fulltimeWidth + '%',
@@ -911,7 +911,6 @@ define('io.ox/calendar/week/view',
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');
                                 }
                                 if (((d.my.firstTop < 0 && firstTop >= 0) || (d.my.firstTop < paneHeight && firstTop >= paneHeight)) && diff > 0) {
-//                                    console.log('d.my.firstTop', d.my.firstTop, 'firstTop', firstTop, diff, 'ui.position.top', ui.position.top, d.position.top);
                                     d.my.firstPos++;
                                     d.my.all.first().remove();
                                     d.my.all = $('[data-cid="' + ui.helper.data('cid') + '"]');

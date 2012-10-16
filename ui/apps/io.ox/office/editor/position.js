@@ -146,7 +146,23 @@ define('io.ox/office/editor/position',
             imageFloatMode = null,
             checkImageFloatMode = true;
 
-        if (DOM.isFieldSpan(node.parentNode)) {
+        isEndPoint = isEndPoint ? true : false;
+
+        // check input values
+        if (! node) {
+            Utils.error('Position.getTextLevelOxoPosition(): Invalid DOM position. Node not defined');
+            return;
+        }
+
+        // 1. Handling all selections, in which the node is below paragraph level
+
+        if ((node.nodeType === 3) && (DOM.isListlabelNode(node.parentNode))) {
+            node = node.parentNode.nextSibling;
+            offset = 0;
+            checkImageFloatMode = false;
+        }
+
+        if ((node.nodeType === 3) && (DOM.isFieldSpan(node.parentNode))) {
             offset = 0;
             checkImageFloatMode = false;
         }
@@ -161,13 +177,7 @@ define('io.ox/office/editor/position',
             checkImageFloatMode = false;
         }
 
-        isEndPoint = isEndPoint ? true : false;
-
-        // check input values
-        if (! node) {
-            Utils.error('Position.getTextLevelOxoPosition(): Invalid DOM position. Node not defined');
-            return;
-        }
+        // 2. Handling all selections, in which the node is above paragraph level
 
         // Sometimes (double click in FireFox) a complete paragraph is selected with DIV + Offset 3 and DIV + Offset 4.
         // These DIVs need to be converted to the correct paragraph first.
@@ -184,6 +194,7 @@ define('io.ox/office/editor/position',
             var newNode = returnObj.domPoint;
 
             imageFloatMode = returnObj.imageFloatMode;
+            checkImageFloatMode = false;
 
             if (newNode) {
                 node = newNode.node;
@@ -193,26 +204,25 @@ define('io.ox/office/editor/position',
                 return;
             }
 
-        } else {
+        }
 
-            if (checkImageFloatMode) {
-                var localNode = node;
-                if (localNode.nodeType === 3) {
-                    localNode = localNode.parentNode;
-                }
-                if ($(localNode).is('span')) {
-                    if ($(localNode).text().length === offset) {
-                        // Checking if an inline image follows
-                        if ((localNode.nextSibling) && (DOM.isImageNode(localNode.nextSibling))) {
-                            imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
-                        }
+        // 3. Special handling to enable image selection, if the following position is an image
+        if (checkImageFloatMode) {
+            var localNode = node;
+            if (localNode.nodeType === 3) {
+                localNode = localNode.parentNode;
+            }
+            if ($(localNode).is('span')) {
+                if ($(localNode).text().length === offset) {
+                    // Checking if an inline image follows
+                    if ((localNode.nextSibling) && (DOM.isImageNode(localNode.nextSibling))) {
+                        imageFloatMode = $(localNode.nextSibling).data('mode'); // must be 'inline' mode
                     }
                 }
             }
-
         }
 
-        // calculating the logical position for the specified text node, span, or image
+        // 4. Calculating the logical position for the specified text node, span, or image
         var oxoPosition = Position.getOxoPosition(maindiv, node, offset);
 
         return new OXOPaM(oxoPosition, selectedNodeName, imageFloatMode);
@@ -500,13 +510,13 @@ define('io.ox/office/editor/position',
         // setting some properties for image nodes
         if (localNode && (DOM.isImageNode(localNode))) {
             imageFloatMode = $(localNode).data('mode');
-            foundValidNode = true;
+            foundValidNode = true;  // image nodes are valid
             offset = 0;
         }
 
         // checking, if a valid node was already found
         if ((localNode) && (localNode.nodeType === 3)) {
-            foundValidNode = true;
+            foundValidNode = true;  // text nodes are valid
         }
 
         var foundNode = localNode;

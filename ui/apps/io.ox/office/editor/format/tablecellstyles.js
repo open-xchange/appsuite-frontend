@@ -15,8 +15,9 @@ define('io.ox/office/editor/format/tablecellstyles',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
      'io.ox/office/editor/table',
+     'io.ox/office/editor/format/color',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, Table, StyleSheets) {
+    ], function (Utils, DOM, Table, Color, StyleSheets) {
 
     'use strict';
 
@@ -73,6 +74,16 @@ define('io.ox/office/editor/format/tablecellstyles',
                 def: NO_BORDER,
                 set: function (element, border) {
                     element.css('border-bottom', this.getCssBorder(border));
+                }
+            },
+
+            /**
+             * Fill color of the table cell.
+             */
+            fillcolor: {
+                def: Color.AUTO,
+                set: function (element, color) {
+                    element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             }
 
