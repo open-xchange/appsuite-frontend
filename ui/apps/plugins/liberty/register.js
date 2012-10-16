@@ -1,6 +1,8 @@
 define("plugins/liberty/register", ["io.ox/core/extensions"], function (ext) {
     "use strict";
     
+    require("themes").set("liberty");
+    
     $.get('/ox7/api/noms/apps?action=clear', function (data) {
 		console.log("Was successful refreshing the app cache");
 	});
