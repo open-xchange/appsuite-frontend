@@ -189,6 +189,22 @@ define("io.ox/preview/officePreview/main",
             win.nodes.main.addClass("io-ox-office-preview-background").append($pageIndicator);
 
             win.show(function () {
+                
+                win.nodes.body.addClass("full-height-tablet full-height-phone");
+                win.nodes.head.addClass("hidden-tablet hidden-phone");
+                
+                win.nodes.body.on("click", function (evt) {
+                    
+                    // Which half was clicked?
+                    
+                    if (evt.pageX > $(window).width() / 2) {
+                        app.nextPage();
+                    } else {
+                        app.previousPage();
+                    }
+                    
+                });
+                
                 win.nodes.toolbar.append(
                     $("<div>").append($previousButton, $.txt(' '), $nextButton)).css({ left: "47%" }
                 );
