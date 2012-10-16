@@ -998,8 +998,8 @@ define('io.ox/office/editor/editor',
         };
 
         this.setEditMode = function (state) {
-            var showReadOnlyInfo = state === false && editMode !== false,
-                showEditModeInfo = state === true && editMode === false;
+            var showReadOnlyInfo = ox.online && state === false && editMode !== false,
+                showEditModeInfo = ox.online && state === true && editMode === false;
 
             editMode = state;
             editdiv.toggleClass('user-select-text', !!editMode).attr('contenteditable', !!editMode);
