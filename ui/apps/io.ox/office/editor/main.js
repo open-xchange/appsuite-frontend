@@ -573,9 +573,7 @@ define('io.ox/office/editor/main',
             Utils.registerWindowResizeHandler(win, windowResizeHandler);
 
             // register for browser offline mode event
-            $(window).on('offline', function (e) {
-                controller.setEditMode(false);
-            });
+            $(window).on('offline', offlineHandler);
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
@@ -668,6 +666,14 @@ define('io.ox/office/editor/main',
         function unloadHandler() {
             // send notification synchronously, otherwise browser may cancel it
             sendCloseNotification(true);
+        }
+
+        /**
+         * Handler for the 'offline' mode event of the browser.
+         * Sets the editor into read only mode.
+         */
+        function offlineHandler() {
+            controller.setEditMode(false);
         }
 
         // methods ------------------------------------------------------------
@@ -888,6 +894,8 @@ define('io.ox/office/editor/main',
             }
             // unregister the unload handler for this application
             $(window).off('unload', unloadHandler);
+            // unregister the offline handler for this application
+            $(window).off('offline', offlineHandler);
             controller.destroy();
             view.destroy();
             editor.destroy();
