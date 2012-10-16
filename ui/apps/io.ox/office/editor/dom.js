@@ -424,6 +424,16 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
 
     /**
+     * Creates a new text portion element.
+     *
+     * @returns {jQuery}
+     *  A span element with class field, as jQuery object.
+     */
+    DOM.createFieldSpanNode = function () {
+        return $('<span>').addClass('field');
+    };
+
+    /**
      * Splits the passed text node into two text nodes.
      *
      * @param {Text} textNode

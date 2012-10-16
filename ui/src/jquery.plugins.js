@@ -329,9 +329,9 @@
     // factory
     $.createViewContainer = function (data, api, getter) {
 
-        var cid = _.cid(data),
+        var cid,
 
-            node = $('<div>').attr('data-cid', cid),
+            node = $('<div>').attr('data-cid', _([].concat(data)).map(_.cid).join(',')),
 
             update = function () {
                 if ((getter = getter || (api ? api.get : null))) {
@@ -341,16 +341,38 @@
                 }
             },
 
+            redraw = _.debounce(function () {
+                node && node.triggerHandler('redraw', data);
+            }, 10),
+
             remove = function () {
                 node.remove();
             };
 
-        api.on('delete:' + cid, remove);
-        api.on('update:' + cid, update);
+        if (_.isArray(data)) {
+            // multiple items
+            _.chain(data).map(_.cid).each(function (cid) {
+                api.on('delete:' + cid, redraw);
+                api.on('update:' + cid, redraw);
+            });
+        } else {
+            // single item
+            cid = _.cid(data);
+            api.on('delete:' + cid, remove);
+            api.on('update:' + cid, update);
+        }
 
         return node.on('dispose', function () {
-                api.off('update:' + cid, update);
-                api.off('delete:' + cid, remove);
+                if (_.isArray(data)) {
+                    _.chain(data).map(_.cid).each(function (cid) {
+                        api.off('delete:' + cid, redraw);
+                        api.off('update:' + cid, redraw);
+                    });
+                } else {
+                    cid = _.cid(data);
+                    api.off('delete:' + cid, remove);
+                    api.off('update:' + cid, update);
+                }
                 api = update = data = node = getter = null;
             });
     };

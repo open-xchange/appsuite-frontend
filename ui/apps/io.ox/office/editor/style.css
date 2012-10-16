@@ -84,6 +84,15 @@
                     color: black !important;
                 }
             }
+            > div.list-label {
+                display : inline-block;
+                line-height: 12pt;
+                /*font-size: 15pt;
+                background-color: red;
+                width: 40pt;
+                text-align: right;
+                font-family: 'Symbol';*/
+            }
         }
 
         /* no text cursor in read-only mode */

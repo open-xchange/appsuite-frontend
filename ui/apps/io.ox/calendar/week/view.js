@@ -18,7 +18,7 @@ define('io.ox/calendar/week/view',
      'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.ui.touch-punch.min.js'], function (util, date, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, gt, folder, views) {
 
     'use strict';
 
@@ -41,33 +41,36 @@ define('io.ox/calendar/week/view',
         workEnd:        18,     // full hour for end position of working time marker
 
         curTimeUTC:     0,      // current timestamp
-        pane:           $(),    // main scroll pane
-        fulltimePane:   $(),    // full-time appointments pane
-        fulltimeCon:    $(),    // full-time container
-        timeline:       $(),    // timeline
-        footer:         $(),    // footer
-        kwInfo:         $(),    // current KW
-        showAll:        $(),    // show all folders check-box
-        showAllCon:     $(),    // container
         clickTimer:     null,   // timer to separate single and double click
         clicks:         0,      // click counter
         lasso:          false,  // lasso object
         lassoMode:      true,   // is lasso active
         folder:         {},     // current folder
 
+        pane:           $('<div>').addClass('scrollpane'),              // main scroll pane
+        fulltimePane:   $('<div>').addClass('fulltime'),                // full-time appointments pane
+        fulltimeCon:    $('<div>').addClass('fulltime-container'),      // full-time container
+        timeline:       $('<div>').addClass('timeline'),                // timeline
+        footer:         $('<div>').addClass('footer'),                  // footer
+        kwInfo:         $('<span>').addClass('info'),                   // current KW
+        showAll:        $('<input/>').attr('type', 'checkbox'),         // show all folders check-box
+        showAllCon:     $('<div>').addClass('showall'),                 // container
+
         // define view events
         events: {
             'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
+            'swipeleft .timeslot' : 'onControlView',
+            'swiperight .timeslot' : 'onControlView',
             'click .appointment': 'onClickAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment',
             'dblclick .week-container>.day' : 'onCreateAppointment',
             'dblclick .fulltime>.day': 'onCreateAppointment',
-            'click .toolbar .control.next': 'onControlView',
-            'click .toolbar .control.prev': 'onControlView',
-            'click .toolbar .link.today': 'onControlView',
+            'tap .toolbar .control.next': 'onControlView',
+            'tap .toolbar .control.prev': 'onControlView',
+            'tap .toolbar .link.today': 'onControlView',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
@@ -86,13 +89,15 @@ define('io.ox/calendar/week/view',
         },
 
         onControlView: function (e) {
-            if ($(e.currentTarget).is('.next')) {
+            var cT = $(e.currentTarget),
+                t = $(e.target);
+            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if ($(e.currentTarget).is('.prev')) {
+            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight')) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if ($(e.currentTarget).is('.today')) {
+            if (cT.hasClass('today')) {
                 this.curTimeUTC = this.columns === 1 ? util.getTodayStart() : util.getWeekStart();
             }
             this.trigger('onRefreshView', this.curTimeUTC);
@@ -100,7 +105,7 @@ define('io.ox/calendar/week/view',
 
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
-            if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
+            if ($(e.currentTarget).hasClass('appointment') && this.lasso === false) {
                 var cid = $(e.currentTarget).data('cid'),
                     obj = _.cid(cid + ''),
                     self = this;
@@ -130,18 +135,24 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        onEditAppointment: function (e) {
+            var cid = $(e.currentTarget).data('cid'),
+                obj = _.cid(cid + '');
+            this.trigger('openEditAppointment', e, obj);
+        },
+
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
             if (!folder.can('create', this.folder)) {
                 return;
             }
-            if ($(e.target).is('.timeslot')) {
+            if ($(e.target).hasClass('timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.getTimeFromPos(e.target.offsetTop + e.offsetY),
                     startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date')) + pos;
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
             }
-            if ($(e.target).is('.day')) {
+            if ($(e.target).hasClass('day')) {
                 // calculate timestamp for current position
                 var startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date'));
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
@@ -165,7 +176,7 @@ define('io.ox/calendar/week/view',
             // switch mouse events
             switch (e.type) {
             case 'mousedown':
-                if (this.lasso === false && $(e.target).is('.timeslot')) {
+                if (this.lasso === false && $(e.target).hasClass('timeslot')) {
                     this.lasso = true;
                 }
                 break;
@@ -252,7 +263,7 @@ define('io.ox/calendar/week/view',
                 }
 
                 // first move
-                if (this.lasso === true && $(e.target).is('.timeslot')) {
+                if (this.lasso === true && $(e.target).hasClass('timeslot')) {
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
@@ -329,6 +340,7 @@ define('io.ox/calendar/week/view',
                         .height(this.cellHeight * this.fragmentation)
                 );
             }
+            times = $('<div>').addClass('lable').append(times);
 
 //            var Blubview = views.point('io.ox/calendar/week/section').createView({
 //                tagName: 'div',
@@ -345,21 +357,16 @@ define('io.ox/calendar/week/view',
 //            new Blubview();
 
             // create panes
-            this.pane = $('<div>')
-                .addClass('scrollpane');
-
-            this.fulltimeCon = $('<div>')
-                .addClass('fulltime-container')
-                .append(
-                    $('<div>').addClass('fulltime-lable'),
-                    this.fulltimePane = $('<div>').addClass('fulltime')
-                );
+            this.fulltimeCon.empty().append(
+                $('<div>').addClass('fulltime-lable'),
+                this.fulltimePane.empty()
+            );
 
             // create days container
             var container = $('<div>').addClass('week-container');
 
             // create and animate timeline
-            container.append(this.timeline = $('<div>').addClass('timeline'));
+            container.append(this.timeline);
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
 
@@ -371,7 +378,8 @@ define('io.ox/calendar/week/view',
                         .attr('date', d);
 
                 // add days to fulltime panel
-                this.fulltimePane.append(day.clone());
+                this.fulltimePane
+                    .append(day.clone());
 
                 // create timeslots
                 for (var i = 1; i <= this.slots * this.fragmentation; i++) {
@@ -381,27 +389,25 @@ define('io.ox/calendar/week/view',
                             .height(this.cellHeight)
                     );
                 }
-
                 container.append(day);
             }
 
-            this.pane.append($('<div>').addClass('lable').append(times), container);
+            this.pane.empty().append(times, container);
 
             // create toolbar
-            this.$el.append(
+            this.$el.empty().append(
                 $('<div>')
                     .addClass('toolbar')
                     .append(
-                        this.kwInfo = $('<span>').addClass('info'),
-                        this.showAllCon = $('<div>')
-                            .addClass('showall')
+                        this.kwInfo,
+                        this.showAllCon
+                            .empty()
                             .append(
                                 $('<label>')
                                     .addClass('checkbox')
                                     .text(gt('show all'))
                                     .prepend(
-                                        this.showAll = $('<input/>')
-                                            .attr('type', 'checkbox')
+                                        this.showAll
                                             .prop('checked', true)
                                     )
                             ),
@@ -433,7 +439,7 @@ define('io.ox/calendar/week/view',
                             .addClass('footer-container')
                             .append(
                                 $('<div>').addClass('footer-lable'),
-                                this.footer = $('<div>').addClass('footer')
+                                this.footer
                             )
                     )
             );

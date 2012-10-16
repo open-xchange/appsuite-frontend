@@ -217,17 +217,19 @@ define("io.ox/mail/main",
         });
 
         grid.setAllRequest(function () {
-            var sort = this.prop('sort'),
-                unread = this.prop('unread');
+
+            var sort = this.prop('sort'), unread = this.prop('unread');
+
             return api[sort === 'thread' ? 'getAllThreads' : 'getAll']({
                     folder: this.prop('folder'),
                     sort: sort,
                     order: this.prop('order')
                 }, 'auto')
-                .pipe(function (data) {
-                    return !unread ? data : _(data).filter(function (obj) {
-                        return (obj.flags & 32) === 0;
-                    });
+                .pipe(function (response) {
+                    if (unread) {
+                        response.data = _(response.data).filter(util.isUnread);
+                    }
+                    return response;
                 });
         });
 
@@ -370,7 +372,7 @@ define("io.ox/mail/main",
 
         api.on('delete', repaint);
 
-        commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right);
+        commons.wireGridAndSelectionChange(grid, 'io.ox/mail', showMail, right, api);
         commons.wireGridAndWindow(grid, win);
         commons.wireFirstRefresh(app, api);
         commons.wireGridAndRefresh(grid, api, win);

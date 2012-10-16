@@ -108,7 +108,8 @@ define('io.ox/office/editor/format/paragraphstyles',
         function updateParaFormatting(para, attributes) {
             // take care of numberings
             if (attributes.ilvl && attributes.numId) {
-                var numberingElement = $('<div style="display: inline;"></div>');
+                var numberingElement = $('<div>');
+                numberingElement.addClass('list-label');
                 numberingElement.text(this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]));
                 $(para).prepend(numberingElement);
             }
