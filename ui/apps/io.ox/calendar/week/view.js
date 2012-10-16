@@ -359,7 +359,7 @@ define('io.ox/calendar/week/view',
             // create panes
             this.fulltimeCon.empty().append(
                 $('<div>').addClass('fulltime-lable'),
-                this.fulltimePane
+                this.fulltimePane.empty()
             );
 
             // create days container
@@ -378,7 +378,8 @@ define('io.ox/calendar/week/view',
                         .attr('date', d);
 
                 // add days to fulltime panel
-                this.fulltimePane.append(day.clone());
+                this.fulltimePane
+                    .append(day.clone());
 
                 // create timeslots
                 for (var i = 1; i <= this.slots * this.fragmentation; i++) {
