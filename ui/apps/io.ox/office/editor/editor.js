@@ -3089,6 +3089,16 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM([0, 0]);
             self.clearUndo();
             self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
+
+            // Special handling for first paragraph, that has been inserted
+            // above and thus exists already before any style sheets have been
+            // inserted into the document. It may still refer implicitly to the
+            // default paragraph style, therefore its CSS formatting must be
+            // updated after the document has been loaded.
+            // TODO: better solution needed when style cheets may change at runtime
+            paragraphStyles.one('change', function () {
+                paragraphStyles.updateElementFormatting(editdiv.children('div.p').first());
+            });
         }
 
         function implInsertText(text, position) {

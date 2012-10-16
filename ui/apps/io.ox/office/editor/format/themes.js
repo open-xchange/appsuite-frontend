@@ -106,11 +106,34 @@ define('io.ox/office/editor/format/themes',
      */
     function Themes(rootNode, documentStyles) {
 
-        var // themes, mapped by identifier
+        var // self reference
+            self = this,
+
+            // themes, mapped by identifier
             themes = {},
 
             // default theme (first inserted theme)
-            defaultTheme = null;
+            defaultTheme = null,
+
+            // timeout handler for postponed change events
+            triggerTimeout = null;
+
+        // private methods ----------------------------------------------------
+
+        /**
+         * Triggers a 'change' event that notifies listeners about added,
+         * removed, or changed themes. Multiple calls of this method are
+         * collected, and a single 'change' event will be triggered after the
+         * current script has been executed.
+         */
+        function triggerChangeEvent() {
+            if (!triggerTimeout) {
+                triggerTimeout = window.setTimeout(function () {
+                    triggerTimeout = null;
+                    self.trigger('change');
+                }, 0);
+            }
+        }
 
         // methods ------------------------------------------------------------
 
@@ -137,7 +160,7 @@ define('io.ox/office/editor/format/themes',
             defaultTheme = defaultTheme || theme;
 
             // notify listeners
-            this.trigger('change');
+            triggerChangeEvent();
 
             return this;
         };
