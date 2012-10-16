@@ -66,7 +66,7 @@
         padding: 15mm;
 
         /* default paragraph formatting */
-        p, div.p {
+        div.p {
             position: relative;
             margin: 0;
             line-height: 0;
@@ -87,7 +87,7 @@
         }
 
         /* no text cursor in read-only mode */
-        &:not(.user-select-text) p, &:not(.user-select-text) div.p {
+        &:not(.user-select-text) div.p {
             cursor: default;
         }
 
@@ -129,13 +129,14 @@
 
                 img {
                     position: relative;
+                    /* remove max-width:100% derived from Bootstrap */
                     max-width: none;
                 }
             }
 
             /* selection box for objects/images */
             > div.selection {
-                @border-color: #44f;
+                @border-color: #3f7fff;
 
                 position: absolute;
                 top: -1px;
@@ -173,7 +174,7 @@
                     &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
                 }
 
-                &:not(.sizeable) > div.handler {
+                &:not(.sizeable) > div.handle {
                     cursor: inherit;
                 }
             }
@@ -198,7 +199,7 @@
 
         &.debug-highlight {
 
-            p, div.p {
+            div.p {
                 .debug-highlight-mixin(#8f8);
             }
 

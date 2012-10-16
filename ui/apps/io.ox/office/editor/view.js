@@ -30,9 +30,23 @@ define('io.ox/office/editor/view',
     'use strict';
 
     var // shortcut for the KeyCodes object
-        KeyCodes = Utils.KeyCodes;
+        KeyCodes = Utils.KeyCodes,
 
-    // class StyleSheetChooser ================================================
+        // predefined color definitions
+        BUILTIN_COLOR_DEFINITIONS = [
+            { label: gt('Dark Red'),    color: { type: 'rgb', value: 'C00000' } },
+            { label: gt('Red'),         color: { type: 'rgb', value: 'FF0000' } },
+            { label: gt('Orange'),      color: { type: 'rgb', value: 'FFC000' } },
+            { label: gt('Yellow'),      color: { type: 'rgb', value: 'FFFF00' } },
+            { label: gt('Light Green'), color: { type: 'rgb', value: '92D050' } },
+            { label: gt('Green'),       color: { type: 'rgb', value: '00B050' } },
+            { label: gt('Light Blue'),  color: { type: 'rgb', value: '00B0F0' } },
+            { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
+            { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
+            { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
+        ];
+
+        // class StyleSheetChooser ================================================
 
     /**
      * A drop-down list control used to select a style sheet from a list. The
@@ -131,8 +145,8 @@ define('io.ox/office/editor/view',
             }
 
             // add predefined colors
-            _(ColorChooser.BUILTIN_COLORS).each(function (entry) {
-                self.createOptionButton(entry.color, { tooltip: entry.name, css: { backgroundColor: Color.getCssColor(entry.color, theme) }});
+            _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
+                self.createOptionButton(definition.color, { tooltip: definition.label, css: { backgroundColor: Color.getCssColor(definition.color, theme) }});
             });
 
             // add theme colors
@@ -149,9 +163,9 @@ define('io.ox/office/editor/view',
                     filter = [];
                 }
 
-                _(theme.colorscheme).each(function (rgbColor, name) {
-                    if (!_(filter).contains(name)) {
-                        self.createOptionButton({ type: 'scheme', value: name }, { tooltip: name, css: { backgroundColor: '#' + rgbColor } });
+                _(theme.getSchemeColors()).each(function (schemeColor) {
+                    if (!_(filter).contains(schemeColor.name)) {
+                        self.createOptionButton({ type: 'scheme', value: schemeColor.name }, { tooltip: schemeColor.label, css: { backgroundColor: '#' + schemeColor.value } });
                     }
                 });
             }
@@ -171,19 +185,6 @@ define('io.ox/office/editor/view',
         themes.on('change', fillList);
 
     }}); // class ColorChooser
-
-    ColorChooser.BUILTIN_COLORS = [
-        { name: gt('Dark Red'),    color: { type: 'rgb', value: 'C00000' } },
-        { name: gt('Red'),         color: { type: 'rgb', value: 'FF0000' } },
-        { name: gt('Orange'),      color: { type: 'rgb', value: 'FFC000' } },
-        { name: gt('Yellow'),      color: { type: 'rgb', value: 'FFFF00' } },
-        { name: gt('Light Green'), color: { type: 'rgb', value: '92D050' } },
-        { name: gt('Green'),       color: { type: 'rgb', value: '00B050' } },
-        { name: gt('Light Blue'),  color: { type: 'rgb', value: '00B0F0' } },
-        { name: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
-        { name: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
-        { name: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
-    ];
 
     // class FontFamilyChooser ================================================
 

@@ -41,7 +41,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * Predefined color objects.
      */
     var Color = {
-            TRANSPARENT: {},
+            TRANSPARENT: { type: 'none' },
             BLACK: { type: 'rgb', value: '000000' },
             WHITE: { type: 'rgb', value: 'FFFFFF' },
             AUTO: { type: 'auto' }
@@ -61,10 +61,13 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      */
     Color.getCssColor = function (color, theme) {
 
-        var type = Utils.getStringOption(color, 'type'),
+        var type = Utils.getStringOption(color, 'type', 'none'),
             rgbColor = null;
 
         switch (type) {
+        case 'none':
+            // transparent: keep rgbColor empty
+            break;
         case 'rgb':
             rgbColor = color.value;
             break;
@@ -74,6 +77,8 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         case 'auto':
             rgbColor = Color.BLACK.value;
             break;
+        default:
+            Utils.warn('Color.getCssColor(): unknown color type: ' + type);
         }
 
         return _.isString(rgbColor) ? ('#' + rgbColor) : 'transparent';
