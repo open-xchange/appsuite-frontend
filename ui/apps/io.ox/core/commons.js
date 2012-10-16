@@ -38,22 +38,29 @@ define('io.ox/core/commons',
 
             var points = {};
 
-            return function (id, node, selection) {
+            function draw(id, selection) {
+                // inline links
+                var links = $('<div>');
+                (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                    .draw.call(links, selection);
+                return $().add(
+                    $('<div>').addClass('summary').html(
+                        gt('<b>%1$d</b> elements selected', selection.length)
+                    )
+                )
+                .add(links.children().first());
+            }
+
+            return function (id, node, selection, api) {
                 if (selection.length > 1) {
-                    // clear
-                    node.idle().empty();
-                    // inline links
-                    var links = $('<div>');
-                    (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                        .draw.call(links, selection);
                     // draw
-                    node.append(
-                        $('<div>')
+                    node.idle().empty().append(
+                        (api ? $.createViewContainer(selection, api) : $('<div>'))
+                        .on('redraw', function () {
+                            $(this).empty().append(draw(id, selection));
+                        })
                         .addClass('io-ox-multi-selection')
-                        .append(
-                            $('<div>').addClass('summary').html('<b>' + selection.length + '</b> elements selected'),
-                            links.children().first()
-                        )
+                        .append(draw(id, selection))
                         .center()
                     );
                 }
@@ -61,13 +68,7 @@ define('io.ox/core/commons',
         }()),
 
         wireGridAndSelectionChange: function (grid, id, draw, node, api) {
-            var last = '',
-                update = function (e, data) {
-                    if (_.cid(e.data.item) === _.cid(data)) {
-                        draw(e.data.item);
-                    }
-                };
-
+            var last = '';
             grid.selection.on('change', function (e, selection) {
                 var len = selection.length,
                     // work with reduced string-based set
@@ -76,14 +77,12 @@ define('io.ox/core/commons',
                     }));
                 // has anything changed?
                 if (flat !== last) {
-                    if (api) { api.off('update', update); }
                     if (len === 1) {
                         node.css('height', '');
                         draw(selection[0]);
-                        if (api) { api.on('update', { item: selection[0] }, update); }
                     } else if (len > 1) {
                         node.css('height', '100%');
-                        commons.multiSelection(id, node, this.unfold());
+                        commons.multiSelection(id, node, this.unfold(), api);
                     } else {
                         node.css('height', '').idle().empty();
                     }

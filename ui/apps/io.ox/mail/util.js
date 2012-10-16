@@ -240,10 +240,16 @@ define('io.ox/mail/util',
             }
         },
 
+        count: function (data) {
+            return _(data).reduce(function (memo, obj) {
+                return memo + (obj.thread ? obj.thread.length : 1);
+            }, 0);
+        },
+
         isUnread: function (data) {
             if (data && data.thread) {
-                return _(data.thread).inject(function (memo, data) {
-                    return memo || (data.flags & 32) !== 32;
+                return _(data.thread).reduce(function (memo, obj) {
+                    return memo || (obj.flags & 32) !== 32;
                 }, false);
             } else {
                 return (data.flags & 32) !== 32;
