@@ -111,7 +111,12 @@ define('io.ox/office/editor/view',
 
         // base constructor ---------------------------------------------------
 
-        RadioGroup.call(this, Utils.extendOptions(options, { width: 120, dropDown: true, sorted: true, sortFunctor: sortFunctor }));
+        RadioGroup.call(this, Utils.extendOptions(options, {
+            width: 120,
+            dropDown: true,
+            sorted: true,
+            sortFunctor: sortFunctor
+        }));
 
         // initialization -----------------------------------------------------
 

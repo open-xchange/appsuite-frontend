@@ -194,7 +194,7 @@ div.io-ox-pane {
         margin: 0;
         padding: 0;
         background-color: @pane-fill-color;
-        overflow: auto;
+        .overflow(auto);
 
         div.page {
             position: relative;
@@ -266,6 +266,9 @@ div.io-ox-view-component {
 
         /* control caption elements (always spans as children) */
         label, button {
+            /* lousy attempt to prevent overflowing captions. TODO: better solution */
+            overflow: hidden;
+
             > span {
                 display: inline-block;
                 vertical-align: top;
