@@ -94,6 +94,7 @@ define('io.ox/office/editor/operations',
 
         INSERT_STYLE: 'insertStylesheet',
         INSERT_THEME: 'insertTheme',
+        INSERT_LIST: 'insertList',
         ATTRS_SET: 'setAttributes',
 
         IMAGE_INSERT: 'insertImage',

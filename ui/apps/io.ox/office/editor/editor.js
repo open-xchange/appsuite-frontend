@@ -927,6 +927,13 @@ define('io.ox/office/editor/editor',
         };
 
         /**
+         * Returns the lists container.
+         */
+        this.getLists = function () {
+            return documentStyles.getLists();
+        };
+
+        /**
          * Returns the values of all formatting attributes of the specified
          * attribute family in the current selection.
          *
@@ -1661,6 +1668,12 @@ define('io.ox/office/editor/editor',
                     // TODO!!!
                 }
                 implInsertTheme(operation.themename, operation.attrs);
+            }
+            else if (operation.name === Operations.INSERT_LIST) {
+                if (undomgr.isEnabled()) {
+                    // TODO!!!
+                }
+                implInsertList(operation.listName, operation.listDefinition);
             }
             else if (operation.name === Operations.ATTRS_SET) {
                 // undo/redo is done inside implSetAttributes()
@@ -3165,6 +3178,25 @@ define('io.ox/office/editor/editor',
          */
         function implInsertTheme(themeName, attributes) {
             self.getThemes().addTheme(themeName, attributes);
+        }
+
+        /**
+         * Inserts a new theme into the document.
+         *
+         * @param {String} themeName
+         *  The name of the scheme.
+         *
+         * @param {String} colorScheme
+         *  The attributes of the scheme.
+         */
+        function implInsertList(listName, listDefinition) {
+
+            var // the themes container
+                lists = self.getLists();
+
+            if (lists) {
+                lists.addList(listName, listDefinition);
+            }
         }
 
         /**

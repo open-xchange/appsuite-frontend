@@ -52,12 +52,9 @@ define('io.ox/office/editor/format/themes',
      * @constructor
      *
      * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing all elements formatted by the style sheets of
-     *  this container. If this object is a jQuery collection, uses the first
-     *  node it contains.
      *
      * @param {DocumentStyles} documentStyles
-     *  Collection with the style containers of all style families.
+     *  Collection with the style containers of all style families, themes and lists.
      */
     function Themes(rootNode, documentStyles) {
 
@@ -70,11 +67,11 @@ define('io.ox/office/editor/format/themes',
         // methods ------------------------------------------------------------
 
         /**
-         * Adds a new style sheet to this container. An existing style sheet
+         * Adds a new theme to this container. An existing theme
          * with the specified identifier will be replaced.
          *
          * @param {String} name
-         *  The name of of the new style theme.
+         *  The name of of the new theme.
          *
          * @param {Object} attributes
          *  The formatting attributes of the theme.

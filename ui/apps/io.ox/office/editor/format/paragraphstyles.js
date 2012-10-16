@@ -58,6 +58,16 @@ define('io.ox/office/editor/format/paragraphstyles',
                 set: function (element, color) {
                     element.css('background-color', this.getCssColor(color));
                 }
+            },
+            ilvl: {
+                def: '',
+                set: function (element, value) {
+                }
+            },
+            numId: {
+                def: '',
+                set: function (element, value) {
+                }
             }
 
         };
@@ -82,9 +92,31 @@ define('io.ox/office/editor/format/paragraphstyles',
      */
     function ParagraphStyles(rootNode, documentStyles) {
 
+        /**
+         * Will be called for every paragraph whose attributes have been
+         * changed.
+         *
+         * @param {jQuery} para
+         *  The <p> element whose character attributes have been changed, as
+         *  jQuery object.
+         *
+         * @param {Object} attributes
+         *  A map of all attributes (name/value pairs), containing the
+         *  effective attribute values merged from style sheets and explicit
+         *  attributes.
+         */
+        function updateParaFormatting(para, attributes) {
+            // take care of numberings
+            if (attributes.ilvl && attributes.numId) {
+                var numberingElement = $('<div style="display: inline;"></div>');
+                numberingElement.text(this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]));
+                $(para).prepend(numberingElement);
+            }
+        }
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'paragraph', definitions, documentStyles, {
+            globalSetHandler: updateParaFormatting,
             descendantStyleFamilies: 'character'
         });
 

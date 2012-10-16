@@ -18,8 +18,9 @@ define('io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/tablestyles',
      'io.ox/office/editor/format/tablerowstyles',
      'io.ox/office/editor/format/tablecellstyles',
-     'io.ox/office/editor/format/themes'
-    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, Themes) {
+     'io.ox/office/editor/format/themes',
+     'io.ox/office/editor/format/lists'
+    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, Themes, Lists) {
 
     'use strict';
 
@@ -41,7 +42,9 @@ define('io.ox/office/editor/format/documentstyles',
         var // style sheet containers mapped by attribute family
             containers = {},
             // document themes
-            themes = {};
+            themes = {},
+            // list definitions
+            lists = {};
 
         // methods ------------------------------------------------------------
 
@@ -69,12 +72,20 @@ define('io.ox/office/editor/format/documentstyles',
         this.getCurrentTheme = function () {
             return themes.getTheme();
         };
+        /** Returns the lists container.
+        *
+        */
+        this.getLists = function () {
+            return lists;
+        };
 
         this.destroy = function () {
             _(containers).invoke('destroy');
             containers = null;
             _([themes]).invoke('destroy');
             themes = null;
+            _([lists]).invoke('destroy');
+            lists = null;
         };
 
         // initialization -----------------------------------------------------
@@ -86,6 +97,7 @@ define('io.ox/office/editor/format/documentstyles',
         containers.tablerow = new TableRowStyles(rootNode, this);
         containers.tablecell = new TableCellStyles(rootNode, this);
         themes = new Themes(rootNode, this);
+        lists = new Lists(rootNode, this);
 
     } // class DocumentStyles
 
