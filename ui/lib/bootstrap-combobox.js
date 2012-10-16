@@ -23,28 +23,47 @@ $(document).ready(function () {
         this.matcher = this.options.matcher || this.matcher;
         this.sorter = this.options.sorter || this.sorter;
         this.highlighter = this.options.highlighter || this.highlighter;
-        this.$menu = $(this.options.menu).appendTo('body');
+        this.$menu = $(this.options.menu).insertAfter(this.$element);
         this.source = this.options.source;
         this.shown = false;
+        this.$ul = $(this.$menu);
         this.listen();
     };
 
     Combobox.prototype = $.extend({}, $.fn.typeahead.Constructor.prototype, {
         constructor: Combobox,
         listen: function () {
+            var self = this;
             this.$element
                 .on('blur',     $.proxy(this.blur, this))
                 .on('focus',    $.proxy(this.focus, this))
                 .on('keypress', $.proxy(this.keypress, this))
                 .on('keyup',    $.proxy(this.keyup, this));
 
+
             if ($.browser.webkit || $.browser.msie) {
                 this.$element.on('keydown', $.proxy(this.keypress, this));
             }
+            // bind to mousedown to intercept the blur event
+            this.$menu.on('mousedown', function (e) {
+               var clickX = e.offsetX,
+                   liWidth = self.$li.first().outerWidth(),
+                   ulWidth = self.$ul.outerWidth();
+
+               // lookup if the scrollbar was clicked, if yes, prevent the blur
+               if (clickX >= liWidth && clickX <= ulWidth) {
+                   e.preventDefault();
+               }
+            });
 
             this.$menu
-                .on('click', $.proxy(this.click, this)) // better than click
                 .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
+
+        },
+        click: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+            this.select();
         },
         focus: function (e) {
             this.lookup();
@@ -58,7 +77,6 @@ $(document).ready(function () {
             }, 0);
         },
         keyup: function (e) {
-
             switch (e.keyCode) {
             case 40: // down arrow
             case 38: // up arrow
@@ -120,15 +138,14 @@ $(document).ready(function () {
             } else {
                 //items.first().addClass('active');
             }
-
+            this.$li = items;
             this.$menu.html(items);
             return this;
         },
         show: function () {
-            var pos = $.extend({}, this.$element.offset(), {
+            var pos = $.extend({}, {top: this.$element[0].offsetTop, left: this.$element[0].offsetLeft}, {
                 height: this.$element[0].offsetHeight
             });
-
             this.$menu.css({
                 top: pos.top + pos.height,
                 left: pos.left
@@ -164,8 +181,7 @@ $(document).ready(function () {
         },
         lookup: function (event) {
             var self = this,
-                items,
-                q;
+                items;
 
             this.query = this.$element.val();
 
@@ -214,7 +230,7 @@ $(document).ready(function () {
         source: [],
         items: 8,
         menu: '<ul class="typeahead dropdown-menu"></ul>',
-        item: '<li><a href="#"></a></li>',
+        item: '<li><a></a></li>',
         autocompleteBehavoir: false
     };
 

@@ -16,11 +16,10 @@ define('io.ox/calendar/edit/view-main',
        'io.ox/core/extensions',
        'io.ox/core/date',
        'io.ox/calendar/edit/view-addparticipants',
-       'io.ox/calendar/edit/module-recurrence',
        'io.ox/calendar/edit/template',
        'gettext!io.ox/calendar/edit/main',
        'io.ox/backbone/views',
-       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, recurrenceModule, tmpl, gt, views, forms) {
+       'io.ox/backbone/forms'], function (BinderUtils, util, ext, dateAPI, AddParticipantsView, tmpl, gt, views, forms) {
 
     'use strict';
 
@@ -41,7 +40,7 @@ define('io.ox/calendar/edit/view-main',
             var self = this;
             var rows = [];
             var rowPerExtensionId = {};
-            
+
             this.point.each(function (extension) {
                 var row = null;
                 if (extension.nextTo) {
@@ -64,7 +63,7 @@ define('io.ox/calendar/edit/view-main',
                 });
             });
 
-            
+
             return this;
         }
     });

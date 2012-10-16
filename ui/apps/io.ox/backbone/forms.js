@@ -26,6 +26,9 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 var self = this;
 
                 function showBackendError(error) {
+                    if (!self.isRelevant(error)) {
+                        return;
+                    }
                     var alert = $.alert(self.errorTitle, self.formatError(error));
                     self.$el.append(alert);
 
@@ -36,7 +39,9 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
 
                 this.observeModel('backendError', showBackendError);
             },
-
+            isRelevant: function (response) {
+                return true;
+            },
             errorTitle: gt('An error occurred'),
 
             formatError: function (error) {
@@ -109,7 +114,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             this.nodes.controlGroup.removeClass('error');
             this.nodes.controls.find('.help-block.error').remove();
         };
-        
+
         this.handleRareModelChange = function () {
             if (this.model.isSet(this.attribute)) {
                 this.nodes.controlGroup.show();
@@ -148,14 +153,14 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         this.modelEvents['valid:' + options.attribute] = 'removeError';
         _.extend(this, options); // May override any of the above aspects
     }
-    
+
     function addErrorHandling(options, object) {
         if (!object.modelEvents) {
             object.modelEvents = {};
         }
         object.modelEvents['invalid:' + options.attribute] = 'showError';
         object.modelEvents['valid:' + options.attribute] = 'clearError';
-        
+
         _.extend(object, {
             showError: function (messages) {
                 this.$el.find('.help-block').remove();
@@ -172,7 +177,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 this.$el.find('.help-block').remove();
             }
         });
-        
+
         return object;
     }
 
@@ -183,7 +188,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             tagName: 'div',
             render: function () {
                 this.nodes = {};
-                this.$el.append($('<label>').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.inputField = $(this.control || '<input type="text">'));
                 this.nodes.inputField.val(this.model.get(this.attribute));
                 this.nodes.inputField.on('change', _.bind(this.updateModel, this));
             },
@@ -194,9 +199,9 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             updateModel: function () {
                 this.model.set(this.attribute, this.nodes.inputField.val());
             }
-            
+
         };
-        
+
         _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
 
@@ -211,10 +216,11 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 var self = this;
                 this.nodes = {};
                 if (this.header) {
-                    this.$el.append($('<label>').text(this.header));
+                    this.$el.append($('<label>').addClass(this.headerClassName || '').text(this.header));
                 }
                 this.$el.append(
                         $('<label class="checkbox">')
+                        .addClass(this.labelClassName || '')
                         .css('display', 'inline-block')
                         .append(
                             this.nodes.checkbox = $('<input type="checkbox">'),
@@ -237,7 +243,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 }
             }
         };
-        
+
         _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
 
@@ -257,7 +263,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                     );
                 });
 
-                this.$el.append($('<label>').text(this.label), this.nodes.select);
+                this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
 
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
@@ -268,7 +274,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 this.nodes.select.val(this.model.get(this.attribute));
             }
         };
-        
+
         _.extend(this, addErrorHandling(options, basicImplementation), options);
     }
     /**

@@ -51,6 +51,10 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 self.id = self.get("id");
             });
 
+            if (this.init) {
+                this.init();
+            }
+
         },
         validate: function (attributes, evt, options) {
             options = options || {};
@@ -115,13 +119,16 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                     return $.Deferred().reject({error: gt('Invalid data')});
                 }
             }
+            this.trigger(action + ':start');
             return this.factory.internal[action].call(this.factory.internal, model)
                 .done(function (response) {
                     callbacks.success(model, response);
+                    self.trigger(action, response);
                 })
                 .fail(function (response) {
                     callbacks.error(model, response);
                     self.trigger('backendError', response);
+                    self.trigger(action + ':fail', response);
                 });
         },
 

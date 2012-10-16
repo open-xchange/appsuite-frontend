@@ -42,6 +42,16 @@ define('io.ox/calendar/model',
                 recurrence_type: 0,
                 alarm: 15
             },
+            init: function () {
+                var self = this;
+                this.on('create:fail update:fail', function (response) {
+                    console.log('backend Error conflict mopped', response);
+                    if (response.conflicts) {
+                        console.log('trigger');
+                        self.trigger('conflicts', response.conflicts);
+                    }
+                });
+            },
             getParticipants: function () {
                 if (this._participants) {
                     return this._participants;
