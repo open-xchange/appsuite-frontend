@@ -22,9 +22,10 @@ define('io.ox/office/editor/main',
      'io.ox/office/editor/editor',
      'io.ox/office/editor/view',
      'io.ox/office/editor/controller',
+     'io.ox/office/tk/alert',
      'gettext!io.ox/office/main',
      'less!io.ox/office/editor/style.css'
-    ], function (FilesAPI, Utils, AppHelper, Config, ToolPane, Editor, View, Controller, gt) {
+    ], function (FilesAPI, Utils, AppHelper, Config, ToolPane, Editor, View, Controller, Alert, gt) {
 
     'use strict';
 
@@ -397,6 +398,16 @@ define('io.ox/office/editor/main',
                         }
                     }
                 });
+                // check if network connection is still alive.
+                // verify the ajax error response for browsers that don't support the 'offline' event.
+                request.fail(function (response, text) {
+                    var readOnlyMode = response && response.status === 0 && response.readyState === 0;
+                    if (readOnlyMode && editor.isEditMode()) {
+                        controller.setEditMode(false);
+                        Alert.showWarning(gt('Network Problems'), gt('Switched to read only mode.'), win.nodes.appPane, 10000);
+                    }
+                });
+
                 return request.promise();
             }
 
@@ -560,6 +571,11 @@ define('io.ox/office/editor/main',
 
             // register window event handlers
             Utils.registerWindowResizeHandler(win, windowResizeHandler);
+
+            // register for browser offline mode event
+            $(window).on('offline', function (e) {
+                controller.setEditMode(false);
+            });
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);

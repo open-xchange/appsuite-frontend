@@ -112,6 +112,7 @@ define('io.ox/office/editor/format/lists',
          *
          */
         this.formatNumber = function (listId, ilvl, levelIndexes) {
+            var ret = {};
             var currentList = this.getList(listId);
             if (currentList === undefined) {
                 return "?";
@@ -121,8 +122,9 @@ define('io.ox/office/editor/format/lists',
                 return "??";
             }
             var numberFormat = levelFormat.numberFormat;
-            var retString = this.formatNumberType(levelIndexes === undefined ? 0 : levelIndexes[ilvl], numberFormat);
-            return retString;
+            ret.text = this.formatNumberType(levelIndexes === undefined ? 0 : levelIndexes[ilvl], numberFormat);
+
+            return ret;
         };
 
         this.formatNumberType = function (seqNo, numberFormat) {
@@ -144,7 +146,7 @@ define('io.ox/office/editor/format/lists',
                 retString = "I";
                 break;
             case "bullet":
-                retString = "*";
+                retString = "●";
                 break;
             default:
             }

@@ -1539,11 +1539,12 @@ div.external-user-image {
 
 /** BOOTSTRAP FIXES **/
 
-// fixes dropdown in breadcrumb
-.dropdown li { display: block; text-shadow: none; }
-
-// icons in dropdowns
-li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
+.dropdown {
+    // fixes dropdown in breadcrumb
+    li { display: block; text-shadow: none; }
+    // icons in dropdowns
+    li [class^="icon-"], li [class*=" icon-"] { width: 2em; text-align: left; }
+}
 
 /** MEDIA QUERIES AT THE VERY BOTTOM -- EITHER MISTRANSFORMED OR EATEN BY LESS.JS **/
 

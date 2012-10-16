@@ -114,7 +114,7 @@ define('io.ox/files/icons/perspective',
         id: 'audioplayer',
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="mediaplayer">').text(gt('Play audio files'))
+                $('<a href="#" class="mediaplayer audio">').text(gt('Play audio files'))
                     .on('click', { app: baton.app, fullScreen: true, videoSupport: false }, startMediaplayer)
             );
         }
@@ -124,7 +124,7 @@ define('io.ox/files/icons/perspective',
         id: 'videoplayer',
         draw: function (baton) {
             this.append(
-                $('<a href="#" class="mediaplayer">').show().text(gt('Play video files'))
+                $('<a href="#" class="mediaplayer video">').text(gt('Play video files'))
                     .on('click', { app: baton.app, fullScreen: true, videoSupport: true }, startMediaplayer)
             );
         }
@@ -196,18 +196,33 @@ define('io.ox/files/icons/perspective',
         return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
     }
 
-    function filterMediaList(list) {
-        return $.grep(list, function (o) { return (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(o.filename); });
-    }
-
-    function filterImagesList(list) {
-        return $.grep(list, function (o) { return (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(o.filename); });
+    function filterList(mediatype, list) {
+        var pattern = {
+            audio: '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)',
+            video: '\\.(mp3|m4a|m4b|wma|wav|ogg)',
+            image: '\\.(gif|bmp|tiff|jpe?g|gmp|png)'
+        };
+        _.each(_.browser, function (value, key) {
+            if (!value) return;
+            switch (key) {
+            case 'Chrome':
+                pattern.video = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+                break;
+            case 'Safari':
+                break;
+            case 'Firefox':
+                break;
+            case 'IE':
+                break;
+            }
+        });
+        return $.grep(list, function (o) { return (new RegExp(pattern[mediatype], 'i')).test(o.filename); });
     }
 
     function activateInlineLinks(list) {
-
-        if (filterImagesList(list).length > 0) $('span.slideshow_fullscreen, a.slideshow').show();
-        if (filterMediaList(list).length > 0) $('a.mediaplayer').show();
+        if (filterList('image', list).length > 0) $('span.slideshow_fullscreen, a.slideshow').show();
+        if (filterList('audio', list).length > 0) $('a.mediaplayer.audio').show();
+        if (filterList('video', list).length > 0) $('a.mediaplayer.video').show();
     }
 
     function calculateLayout(el, options) {

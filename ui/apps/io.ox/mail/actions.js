@@ -308,7 +308,7 @@ define('io.ox/mail/actions',
         },
         multiple: function (list) {
             _(list).each(function (data) {
-                data.url = api.getUrl(data, 'view');
+                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
             });
             require(['io.ox/files/carousel'], function (slideshow) {
                 slideshow.init({

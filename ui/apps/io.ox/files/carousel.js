@@ -123,7 +123,7 @@ define('io.ox/files/carousel',
                     $('.carousel-control.right').hide();
                 }
 
-                if (pos.direction === 'next' && pos.cur === (pos.end - 1) && (pos.cur + 1) < self.list.length) {
+                if (pos.direction === 'next' && pos.cur >= (pos.end - 1) && (pos.cur + 1) < self.list.length) {
                     self.getItems();
                     self.container.find('.item[data-index="' + (pos.start - self.config.step - 1) + '"]').prevAll().empty();
                 } else if (pos.direction === 'prev' && pos.cur <= pos.start && pos.cur > 0) {
