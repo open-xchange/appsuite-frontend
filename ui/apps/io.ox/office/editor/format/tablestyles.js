@@ -106,7 +106,7 @@ define('io.ox/office/editor/format/tablestyles',
                     // -> td and th do not exist after operation insertTable
                     $('th, td', element).css('border-top', this.getCssBorder(border));
                     // setting hidden border for the table
-                    element.css({'border' : 'hidden', 'border-collapse' : 'collapse'});
+                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
                 }
             },
 
@@ -120,7 +120,7 @@ define('io.ox/office/editor/format/tablestyles',
                     // -> td and th do not exist after operation insertTable
                     $('th, td', element).css('border-left', this.getCssBorder(border));
                     // setting hidden border for the table
-                    element.css({'border' : 'hidden', 'border-collapse' : 'collapse'});
+                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
                 }
             }
 
