@@ -27,7 +27,7 @@ define(function () {
 
         plugins: {
             signin: [],
-            core: ['halo', 'liberty'],
+            core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
             keychain: ["io.ox/mail/accounts/keychain", 'io.ox/oauth/keychain'],
             keychainSettings: ['io.ox/mail/accounts/settings', 'io.ox/oauth/settings'],
