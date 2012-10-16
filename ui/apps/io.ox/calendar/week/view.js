@@ -18,7 +18,7 @@ define('io.ox/calendar/week/view',
      'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.ui.touch-punch.min.js'], function (util, date, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, gt, folder, views) {
 
     'use strict';
 
@@ -61,14 +61,16 @@ define('io.ox/calendar/week/view',
             'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
+            'swipeleft .week-container>.day' : 'onControlView',
+            'swiperight .week-container>.day' : 'onControlView',
             'click .appointment': 'onClickAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment',
             'dblclick .week-container>.day' : 'onCreateAppointment',
             'dblclick .fulltime>.day': 'onCreateAppointment',
-            'click .toolbar .control.next': 'onControlView',
-            'click .toolbar .control.prev': 'onControlView',
-            'click .toolbar .link.today': 'onControlView',
+            'tap .toolbar .control.next': 'onControlView',
+            'tap .toolbar .control.prev': 'onControlView',
+            'tap .toolbar .link.today': 'onControlView',
             'change .toolbar .showall input[type="checkbox"]' : 'onControlView'
         },
 
@@ -87,13 +89,15 @@ define('io.ox/calendar/week/view',
         },
 
         onControlView: function (e) {
-            if ($(e.currentTarget).is('.next')) {
+            var cT = $(e.currentTarget),
+                t = $(e.target);
+            if (cT.hasClass('next') || (t.hasClass('day') && e.type === 'swipeleft')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if ($(e.currentTarget).is('.prev')) {
+            if (cT.hasClass('prev') || (t.hasClass('day') && e.type === 'swiperight')) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if ($(e.currentTarget).is('.today')) {
+            if (cT.hasClass('today')) {
                 this.curTimeUTC = this.columns === 1 ? util.getTodayStart() : util.getWeekStart();
             }
             this.trigger('onRefreshView', this.curTimeUTC);
@@ -101,7 +105,7 @@ define('io.ox/calendar/week/view',
 
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
-            if ($(e.currentTarget).is('.appointment') && this.lasso === false) {
+            if ($(e.currentTarget).hasClass('appointment') && this.lasso === false) {
                 var cid = $(e.currentTarget).data('cid'),
                     obj = _.cid(cid + ''),
                     self = this;
@@ -131,18 +135,24 @@ define('io.ox/calendar/week/view',
             }
         },
 
+        onEditAppointment: function (e) {
+            var cid = $(e.currentTarget).data('cid'),
+                obj = _.cid(cid + '');
+            this.trigger('openEditAppointment', e, obj);
+        },
+
         // handler for double-click events on grid
         onCreateAppointment: function (e) {
             if (!folder.can('create', this.folder)) {
                 return;
             }
-            if ($(e.target).is('.timeslot')) {
+            if ($(e.target).hasClass('timeslot')) {
                 // calculate timestamp for current position
                 var pos = this.getTimeFromPos(e.target.offsetTop + e.offsetY),
                     startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date')) + pos;
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.HOUR});
             }
-            if ($(e.target).is('.day')) {
+            if ($(e.target).hasClass('day')) {
                 // calculate timestamp for current position
                 var startTS = this.getTimeFromDateTag($(e.currentTarget).attr('date'));
                 this.trigger('openCreateAppointment', e, {start_date: startTS, end_date: startTS + date.DAY, full_time: true});
@@ -166,7 +176,7 @@ define('io.ox/calendar/week/view',
             // switch mouse events
             switch (e.type) {
             case 'mousedown':
-                if (this.lasso === false && $(e.target).is('.timeslot')) {
+                if (this.lasso === false && $(e.target).hasClass('timeslot')) {
                     this.lasso = true;
                 }
                 break;
@@ -253,7 +263,7 @@ define('io.ox/calendar/week/view',
                 }
 
                 // first move
-                if (this.lasso === true && $(e.target).is('.timeslot')) {
+                if (this.lasso === true && $(e.target).hasClass('timeslot')) {
                     this.lasso = $('<div>')
                         .addClass('appointment lasso')
                         .css({
