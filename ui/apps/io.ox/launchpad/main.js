@@ -183,6 +183,7 @@ define('io.ox/launchpad/main',
         // show launch pad
         show = function () {
             if (ox.ui.screens.current() !== 'launchpad') {
+                console.log("SHOW");
                 init();
                 paint();
                 ox.ui.screens.show('launchpad');
