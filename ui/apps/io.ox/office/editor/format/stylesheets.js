@@ -350,12 +350,15 @@ define('io.ox/office/editor/format/stylesheets',
          * @param {Object} color
          *  The color object as used in operations.
          *
+         * @param {String} context
+         *  The context needed to resolve the color type 'auto'.
+         *
          * @returns {String}
          *  The CSS color value converted from the passed color object.
          */
-        this.getCssColor = function (color) {
+        this.getCssColor = function (color, context) {
             // use the static helper function from module Colors, pass current theme
-            return Color.getCssColor(color, documentStyles.getCurrentTheme());
+            return Color.getCssColor(color, context, documentStyles.getCurrentTheme());
         };
 
         /**
@@ -381,7 +384,7 @@ define('io.ox/office/editor/format/stylesheets',
             width = Utils.convertHmmToCssLength(width, 'px', 1);
 
             // convert color object to CSS color
-            color = this.getCssColor(color);
+            color = this.getCssColor(color, 'line');
 
             // combine the values to a single string
             return style + ' ' + width + ' ' + color;
@@ -466,7 +469,7 @@ define('io.ox/office/editor/format/stylesheets',
             styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
 
             // set new default style sheet
-            if (Utils.getIntegerOption(options, 'defStyle', false)) {
+            if (Utils.getBooleanOption(options, 'defStyle', false)) {
                 defaultStyleId = id;
             }
 

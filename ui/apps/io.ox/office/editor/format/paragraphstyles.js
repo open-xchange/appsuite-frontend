@@ -54,16 +54,18 @@ define('io.ox/office/editor/format/paragraphstyles',
             },
 
             fillcolor: {
-                def: Color.TRANSPARENT,
+                def: Color.AUTO, // auto for paragraph fill resolves to 'transparent'
                 set: function (element, color) {
-                    element.css('background-color', this.getCssColor(color));
+                    element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             },
+
             ilvl: {
                 def: '',
                 set: function (element, value) {
                 }
             },
+
             numId: {
                 def: '',
                 set: function (element, value) {

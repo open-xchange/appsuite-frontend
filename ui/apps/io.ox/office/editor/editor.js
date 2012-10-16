@@ -83,7 +83,11 @@ define('io.ox/office/editor/editor',
             focused = false,
 
             lastKeyDownEvent,
-            currentSelection,
+
+            // current selection as OXOSelection instance
+            currentSelection = null,
+            // all selected object nodes, as jQuery collection
+            selectedObjects = $(),
 
             undomgr = new UndoManager(this),
 
@@ -124,6 +128,8 @@ define('io.ox/office/editor/editor',
         this.grabFocus = function (initSelection) {
             editdiv.focus();
             if (initSelection) {
+                // TODO: find first text position (instead of [0,0])
+                // there may be a floated image in the first paragraph, or a leading table
                 setSelection(new OXOSelection(new OXOPaM([0, 0]), new OXOPaM([0, 0])));
             }
         };
@@ -1083,7 +1089,7 @@ define('io.ox/office/editor/editor',
                 focused = state;
                 if (focused && currentSelection) {
                     // Update Browser Selection, might got lost.
-                    setSelection(currentSelection);
+                    setSelection(currentSelection, selectedObjects.length > 0);
                 }
                 self.trigger('focus', state);
             }
@@ -1092,20 +1098,67 @@ define('io.ox/office/editor/editor',
         function processMouseDown(event) {
 
             var // mouse click on an object node
-                objectNode = $(event.target).closest('div.object');
+                object = $(event.target).closest('div.object');
 
-            // object clicked: set browser selection to object node, draw selection
-            if ((objectNode.length > 0) && (editdiv[0].contains(objectNode[0]))) {
+            // click on object node: set browser selection to object node, draw selection
+            if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
+                // prevent default click handling of the browser
                 event.preventDefault();
-                DOM.setBrowserSelection(new DOM.Range(DOM.Point.createPointForNode(objectNode)));
-                DOM.drawObjectSelection(objectNode, { moveable: false, sizeable: false });
+                // but set focus to the document container (may be loacted in GUI edit fields)
+                self.grabFocus();
+                // select single objects only (multi selection not supported yet)
+                selectObjects(object, false);
+            } else {
+                deselectAllObjects();
             }
 
+            // calculate logical selection from browser selection
             updateSelection();
         }
 
         function processMouseUp() {
             updateSelection();
+        }
+
+        /**
+         * Deselects all selected object nodes and destroys the browser
+         * selection that represents the selected objects.
+         */
+        function deselectAllObjects() {
+            // remove the selection boxes
+            DOM.clearObjectSelection(selectedObjects);
+            // clear collection of selected objects
+            selectedObjects = $();
+        }
+
+        /**
+         * Selects the specified object node and updates the browser selection
+         * that represents the selected objects.
+         *
+         * @param {HTMLElement|jQuery} objectNode
+         *  The root node of the object to be selected. If the passed value is
+         *  a jQuery collection, all contained objects will be selected.
+         */
+        function selectObjects(objects, extend) {
+
+            var // the browser sleection representing all selected ojects
+                browserSelection = [];
+
+            // remove old object selection, unless selection will be extended
+            if (extend !== true) {
+                deselectAllObjects();
+            }
+
+            // collect selected objects
+            selectedObjects = selectedObjects.add(objects);
+            // draw the selection box into the passed objects
+            DOM.drawObjectSelection(objects, { moveable: false, sizeable: false });
+
+            // build browser selection from objects
+            selectedObjects.each(function () {
+                browserSelection.push(new DOM.Range(DOM.Point.createPointForNode(this)));
+            });
+            DOM.setBrowserSelection(browserSelection);
         }
 
         function processKeyDown(event) {
@@ -1920,7 +1973,7 @@ define('io.ox/office/editor/editor',
             if (domSelection.length) {
 
                 _(domSelection).each(function (range, index) {
-                    Utils.log('getSelection(): range[' + index + '], start=' + range.start.node.nodeName + ':' + range.start.offset + ' , end=' + range.end.node.nodeName + ':' + range.end.offset);
+                    Utils.log('getSelection(): range[' + index + '], start=' + range.start.node.nodeName + ':' + range.start.offset + ', end=' + range.end.node.nodeName + ':' + range.end.offset);
                 });
 
                 domRange = _(domSelection).last();
@@ -1941,10 +1994,9 @@ define('io.ox/office/editor/editor',
                     endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
+                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + ']');
 
-                Utils.log('getSelection: Calculated Oxo Position: ' + currentSelection.startPaM.oxoPosition + ' : ' + currentSelection.endPaM.oxoPosition);
-
-                // Keeping selections synchron. Without setting selection now, there are cursor travel problems in Firefox.
+                // Keeping selections synchronuous. Without setting selection now, there are cursor travel problems in Firefox.
                 // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
                 // setSelection(currentSelection);
 
@@ -1965,6 +2017,8 @@ define('io.ox/office/editor/editor',
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = Position.getCellDOMSelections(paragraphs, oxosel);
+//            } else if (Position.isObjectSelection(oxosel)) {
+                // TODO
             } else {
                 ranges = Position.getDOMSelection(paragraphs, oxosel, useNonTextNode);
             }

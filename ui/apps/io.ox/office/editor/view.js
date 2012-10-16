@@ -125,7 +125,7 @@ define('io.ox/office/editor/view',
 
     // class ColorChooser =====================================================
 
-    var ColorChooser = RadioGroup.extend({ constructor: function (themes, type, options) {
+    var ColorChooser = RadioGroup.extend({ constructor: function (themes, context, options) {
 
         var // self reference
             self = this;
@@ -139,24 +139,25 @@ define('io.ox/office/editor/view',
 
             self.clearOptionButtons();
 
-            // add trnsparent color (only for fill, not for text color)
-            if (type === 'fill') {
-                self.createOptionButton(Color.TRANSPARENT, { tooltip: gt('Transparent') });
+            // add transparent color if supported
+            if (Color.getCssColor(Color.AUTO, context) === 'transparent') {
+                self.createOptionButton(Color.AUTO, { tooltip: gt('Transparent') });
             }
 
             // add predefined colors
             _(BUILTIN_COLOR_DEFINITIONS).each(function (definition) {
-                self.createOptionButton(definition.color, { tooltip: definition.label, css: { backgroundColor: Color.getCssColor(definition.color, theme) }});
+                self.createOptionButton(definition.color, { tooltip: definition.label, css: { backgroundColor: Color.getCssColor(definition.color, context, theme) }});
             });
 
             // add theme colors
             if (theme) {
 
-                switch (type) {
-                case 'fill':
+                switch (context) {
+                case 'paragraph':
                     filter = ['text1', 'text2', 'background1', 'background2'];
                     break;
-                case 'text':
+                case 'character':
+                case 'border':
                     filter = ['dark1', 'dark2', 'light1', 'light2'];
                     break;
                 default:
@@ -526,7 +527,7 @@ define('io.ox/office/editor/view',
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
                 .addSeparator()
-                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph fill color') }))
+                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color') }))
                 .addSeparator()
                 .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }));
         }

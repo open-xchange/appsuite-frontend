@@ -358,6 +358,7 @@ div.io-ox-view-component {
                 background-color: @pane-fill-color;
                 border: 1px solid @control-border-color;
                 .border-radius(0);
+                .box-shadow(0 5px 10px fade(black, 20%));
 
                 /* the Scrollable mix-in class */
                 &.scrollable {

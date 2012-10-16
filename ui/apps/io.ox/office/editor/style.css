@@ -11,12 +11,6 @@
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
  */
 
-.box-sizing(@sizing-mode) {
-    -webkit-box-sizing: @sizing-mode;
-    -moz-box-sizing: @sizing-mode;
-    box-sizing: @sizing-mode;
-}
-
 .border-radius(@radius) {
     -webkit-border-radius: @radius;
     -moz-border-radius: @radius;
@@ -153,6 +147,7 @@
                 left: -1px;
                 right: -1px;
                 border: 3px fade(@border-color, 70%) solid;
+                .box-shadow(0 5px 10px fade(black, 20%));
 
                 cursor: default;
                 &.moveable { cursor: move; }
