@@ -151,7 +151,7 @@ define('io.ox/calendar/actions',
 
 
     new Action('io.ox/calendar/detail/actions/delete', {
-        id: 'edit',
+        id: 'delete',
         requires: 'one modify',
         action: function (params) {
             var o = {
@@ -163,10 +163,11 @@ define('io.ox/calendar/actions',
             }
             api.get(o)
                 .done(function (data) {
-                    require(['io.ox/calendar/edit/model-appointment'], function (Model) {
+                    console.log('data', data);
+                    require(['io.ox/calendar/model'], function (Model) {
                         // different warnings especially for events with
                         // external users should handled here
-                        var myModel = new Model(data);
+                        var myModel = new Model.Appointment(data);
                         if (data.recurrence_type > 0) {
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()

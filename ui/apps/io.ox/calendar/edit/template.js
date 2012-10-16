@@ -18,9 +18,8 @@ define('io.ox/calendar/edit/template',
          'io.ox/core/date',
          'io.ox/backbone/views',
          'io.ox/backbone/forms',
-         'io.ox/calendar/edit/binding-util',
          'io.ox/calendar/edit/recurrence-view',
-         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, BinderUtils, RecurrenceView, pViews) {
+         'io.ox/participants/views'], function (ext, gt, util, dateAPI, views, forms, RecurrenceView, pViews) {
 
     'use strict';
 
@@ -32,105 +31,6 @@ define('io.ox/calendar/edit/template',
         id: 'conflicts',
         className: 'additional-info'
     });
-
-    function DateField(options) {
-        var hours_typeahead = [];
-        var filldate = new dateAPI.Local();
-        filldate.setHours(0);
-        filldate.setMinutes(0);
-        for (var i = 0; i < 24; i++) {
-            hours_typeahead.push(filldate.format(dateAPI.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
-            hours_typeahead.push(filldate.format(dateAPI.TIME));
-            filldate.add(1000 * 60 * 30); //half hour
-        }
-
-        var comboboxHours = {
-            source: hours_typeahead,
-            items: 48,
-            menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
-            sorter: function (items) {
-                items = _(items).sortBy(function (item) {
-                    var pd = dateAPI.Local.parse(item, dateAPI.TIME);
-                    return pd.getTime();
-                });
-                return items;
-            },
-            autocompleteBehavoir: false
-        };
-        var modelEvents = {};
-        modelEvents['change:' + options.attribute] = 'setValueInField';
-        modelEvents['invalid:' + options.attribute] = 'showError';
-        modelEvents.valid = 'removeError';
-        modelEvents['change:full_time'] = 'onFullTimeChange';
-
-        _.extend(this, {
-            tagName: 'div',
-            render: function () {
-                this.nodes = {};
-                this.$el.append(
-                        this.nodes.controlGroup = $('<div class="control-group">').append(
-                            $('<label>').text(this.label),
-                            $('<div class="control">').append(
-                                this.nodes.dayField = $('<input type="text" class="input-small">'),
-                                '&nbsp;',
-                                this.nodes.timeField = $('<input type="text" class="input-mini">'),
-                                '&nbsp;',
-                                this.nodes.timezoneField = $('<span class="label">').text(dateAPI.Local.getTTInfoLocal(this.model.get(this.attribute)).abbr)
-                            )
-                        )
-                );
-                this.setValueInField();
-                // get the right date format
-                var dateFormat = dateAPI.getFormat(dateAPI.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
-                this.nodes.dayField.datepicker({format: dateFormat});
-                this.nodes.timeField.combobox(comboboxHours);
-
-                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
-                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
-                return this;
-            },
-            setValueInField: function () {
-                var value = this.model.get(this.attribute);
-                var cValue = (this.baton.mode === 'edit') ? dateAPI.Local.localTime(value): value;
-                this.nodes.timezoneField.text(dateAPI.Local.getTTInfoLocal(value).abbr);
-                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
-                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
-            },
-            updateModelDate: function () {
-                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
-            },
-            updateModelTime: function () {
-                this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
-            },
-            showError: function (messages) {
-                this.removeError();
-                this.nodes.controlGroup.addClass("error");
-                var helpBlock =  this.nodes.helpBlock = $('<div class="help-block error">');
-                _(messages).each(function (msg) {
-                    helpBlock.append($.txt(msg));
-                });
-                this.$el.append(helpBlock);
-            },
-            removeError: function () {
-                if (this.nodes.helpBlock) {
-                    this.nodes.helpBlock.remove();
-                    delete this.nodes.helpBlock;
-                    this.nodes.controlGroup.removeClass("error");
-                }
-            },
-            onFullTimeChange: function () {
-                if (this.model.get('full_time')) {
-                    this.nodes.timeField.hide();
-                    this.nodes.timezoneField.hide();
-                } else {
-                    this.nodes.timeField.show();
-                    this.nodes.timezoneField.show();
-                }
-            },
-            modelEvents: modelEvents
-        }, options);
-    }
 
     // conflicts
     pointConflicts.extend({
@@ -236,7 +136,7 @@ define('io.ox/calendar/edit/template',
     });
 
     // start date
-    point.extend(new DateField({
+    point.extend(new forms.DatePicker({
         id: 'start-date',
         index: 400,
         className: 'span6',
@@ -245,7 +145,7 @@ define('io.ox/calendar/edit/template',
     }));
 
     // end date
-    point.extend(new DateField({
+    point.extend(new forms.DatePicker({
         id: 'end-date',
         className: 'span6',
         index: 500,

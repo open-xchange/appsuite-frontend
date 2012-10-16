@@ -23,16 +23,6 @@ define('io.ox/calendar/edit/view-main',
 
     'use strict';
 
-    //customize datepicker
-    //just localize the picker
-    $.fn.datepicker.dates.en = {
-        "days": dateAPI.locale.days,
-        "daysShort": dateAPI.locale.daysShort,
-        "daysMin": dateAPI.locale.daysStandalone,
-        "months": dateAPI.locale.months,
-        "monthsShort": dateAPI.locale.monthsShort
-    };
-
     var CommonView = views.point('io.ox/calendar/edit/section').createView({
         tagName: 'div',
         className: 'io-ox-calendar-edit container-fluid',

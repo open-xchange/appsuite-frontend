@@ -35,6 +35,16 @@ define('io.ox/calendar/model',
     var factory = new ModelFactory({
         ref: 'io.ox/calendar/model',
         api: api,
+        destroy: function (model) {
+            var options = {
+                id: model.id,
+                folder: model.get('folder_id') || model.get('folder')
+            };
+            if (model.recurrence_position) {
+                _.extend(options, {recurrence_position: model.get('recurrence_position')});
+            }
+            return api.remove(options);
+        },
         model: {
             defaults: {
                 start_date: dateAPI.Local.localTime(defStart.getTime()),
@@ -45,9 +55,7 @@ define('io.ox/calendar/model',
             init: function () {
                 var self = this;
                 this.on('create:fail update:fail', function (response) {
-                    console.log('backend Error conflict mopped', response);
                     if (response.conflicts) {
-                        console.log('trigger');
                         self.trigger('conflicts', response.conflicts);
                     }
                 });
@@ -113,17 +121,17 @@ define('io.ox/calendar/model',
     ext.point("io.ox/calendar/model/validation").extend({
         id: 'start-date-before-end-date',
         validate: function (attributes) {
-            /*if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
+            if (attributes.start_date && attributes.end_date && attributes.end_date < attributes.start_date) {
                 this.add('start_date', gt("The start date must be before the end date."));
                 this.add('end_date', gt("The start date must be before the end date."));
-            }*/
+            }
         }
     });
 
     Validators.validationFor('io.ox/calendar/model', {
-        title: { format: 'string', mandatory: true}/*,
+        title: { format: 'string', mandatory: true},
         start_date : { format: 'date', mandatory: true},
-        end_date: { format: 'date', mandatory: true}*/
+        end_date: { format: 'date', mandatory: true}
     });
 
     // Recurrence

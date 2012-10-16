@@ -441,9 +441,221 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                 return $(this.container || '<form class="form-horizontal">');
             }
         }, options);
-
-
     }
+
+    function DatePicker(options) {
+        var BinderUtils = {
+            convertDate: function (direction, value, attribute, model) {
+                if (direction === 'ModelToView') {
+                    return BinderUtils._toDate(value, attribute, model);
+                } else {
+                    return BinderUtils._dateStrToDate(value, attribute, model);
+                }
+            },
+            convertTime: function (direction, value, attribute, model) {
+                if (direction === 'ModelToView') {
+                    return BinderUtils._toTime(value, attribute, model, direction);
+                } else {
+                    return BinderUtils._timeStrToDate(value, attribute, model);
+                }
+            },
+            numToString: function (direction, value, attribute, model) {
+                if (direction === 'ModelToView') {
+                    return value + '';
+                } else {
+                    return parseInt(value, 10);
+                }
+            },
+
+            _toDate: function (value, attribute, model) {
+
+                var mydate, formatted;
+                if (!value) {
+                    return null;
+                }
+                if (!_.isNumber(value)) {
+                    return value; //do nothing
+                }
+                mydate = date.Local.utc(parseInt(value, 10));
+
+                if (_.isNull(mydate)) {
+                    return value;
+                }
+
+                formatted = new date.Local(mydate).format(date.DATE);
+                return formatted;
+            },
+            _toTime: function (value, attribute) {
+                var myTime, formatted;
+                if (!value) {
+                    return null;
+                }
+                myTime = date.Local.utc(parseInt(value, 10));
+
+                if (_.isNull(myTime)) {
+                    return value;
+                }
+                formatted =  new date.Local(myTime).format(date.TIME);
+                return formatted;
+            },
+            _timeStrToDate: function (value, attribute, model) {
+                var myValue = parseInt(model.get(attribute), 10) || false;
+                if (!myValue) {
+                    return value;
+                }
+                var mydate = new date.Local(date.Local.utc(myValue));
+                var parsedDate = date.Local.parse(value, date.TIME);
+
+                if (_.isNull(parsedDate)) {
+                    return mydate.getTime();
+                }
+
+                if (parsedDate.getTime() === 0) {
+                    return model.get(attribute);
+                }
+
+                mydate.setHours(parsedDate.getHours());
+                mydate.setMinutes(parsedDate.getMinutes());
+                mydate.setSeconds(parsedDate.getSeconds());
+
+                return date.Local.localTime(mydate.getTime());
+            },
+            _dateStrToDate: function (value, attribute, model) {
+
+                var myValue = parseInt(model.get(attribute), 10) || false;
+                if (!myValue) {
+                    return value;
+                }
+                var mydate = new date.Local(date.Local.utc(myValue));
+                var parsedDate = date.Local.parse(value, date.DATE);
+
+                if (_.isNull(parsedDate)) {
+                    return value;
+                }
+
+                // just reject the change, if it's not parsable
+                if (parsedDate.getTime() === 0) {
+                    return model.get(attribute);
+                }
+
+                mydate.setDate(parsedDate.getDate());
+                mydate.setMonth(parsedDate.getMonth());
+                mydate.setYear(parsedDate.getYear());
+
+                return date.Local.localTime(mydate.getTime());
+            }
+        };
+
+
+        //customize datepicker
+        //just localize the picker, use en as default with current languages
+        $.fn.datepicker.dates.en = {
+            "days": date.locale.days,
+            "daysShort": date.locale.daysShort,
+            "daysMin": date.locale.daysStandalone,
+            "months": date.locale.months,
+            "monthsShort": date.locale.monthsShort
+        };
+
+        var hours_typeahead = [];
+        var filldate = new date.Local();
+        filldate.setHours(0);
+        filldate.setMinutes(0);
+        for (var i = 0; i < 24; i++) {
+            hours_typeahead.push(filldate.format(date.TIME));
+            filldate.add(1000 * 60 * 30); //half hour
+            hours_typeahead.push(filldate.format(date.TIME));
+            filldate.add(1000 * 60 * 30); //half hour
+        }
+
+        var comboboxHours = {
+            source: hours_typeahead,
+            items: 48,
+            menu: '<ul class="typeahead dropdown-menu calendaredit"></ul>',
+            sorter: function (items) {
+                items = _(items).sortBy(function (item) {
+                    var pd = date.Local.parse(item, date.TIME);
+                    return pd.getTime();
+                });
+                return items;
+            },
+            autocompleteBehavoir: false
+        };
+        var modelEvents = {};
+        modelEvents['change:' + options.attribute] = 'setValueInField';
+        modelEvents['invalid:' + options.attribute] = 'showError';
+        modelEvents.valid = 'removeError';
+        modelEvents['change:full_time'] = 'onFullTimeChange';
+
+        _.extend(this, {
+            tagName: 'div',
+            render: function () {
+                this.nodes = {};
+                this.$el.append(
+                        this.nodes.controlGroup = $('<div class="control-group">').append(
+                            $('<label>').text(this.label),
+                            $('<div class="control">').append(
+                                this.nodes.dayField = $('<input type="text" class="input-small">'),
+                                '&nbsp;',
+                                this.nodes.timeField = $('<input type="text" class="input-mini">'),
+                                '&nbsp;',
+                                this.nodes.timezoneField = $('<span class="label">').text(date.Local.getTTInfoLocal(this.model.get(this.attribute)).abbr)
+                            )
+                        )
+                );
+                this.setValueInField();
+                // get the right date format
+                var dateFormat = date.getFormat(date.DATE).replace(/\by\b/, 'yyyy').toLowerCase();
+                this.nodes.dayField.datepicker({format: dateFormat});
+                this.nodes.timeField.combobox(comboboxHours);
+
+                this.nodes.dayField.on("change", _.bind(this.updateModelDate, this));
+                this.nodes.timeField.on("change", _.bind(this.updateModelTime, this));
+                return this;
+            },
+            setValueInField: function () {
+                var value = this.model.get(this.attribute);
+                var cValue = (this.baton.mode === 'edit') ? date.Local.localTime(value): value;
+                this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
+                this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
+                this.nodes.timeField.val(BinderUtils.convertTime('ModelToView', cValue, this.attribute, this.model));
+            },
+            updateModelDate: function () {
+                this.model.set(this.attribute, BinderUtils.convertDate('ViewToModel', this.nodes.dayField.val(), this.attribute, this.model));
+            },
+            updateModelTime: function () {
+                this.model.set(this.attribute, BinderUtils.convertTime('ViewToModel', this.nodes.timeField.val(), this.attribute, this.model));
+            },
+            showError: function (messages) {
+                this.removeError();
+                this.nodes.controlGroup.addClass("error");
+                var helpBlock =  this.nodes.helpBlock = $('<div class="help-block error">');
+                _(messages).each(function (msg) {
+                    helpBlock.append($.txt(msg));
+                });
+                this.$el.append(helpBlock);
+            },
+            removeError: function () {
+                if (this.nodes.helpBlock) {
+                    this.nodes.helpBlock.remove();
+                    delete this.nodes.helpBlock;
+                    this.nodes.controlGroup.removeClass("error");
+                }
+            },
+            onFullTimeChange: function () {
+                if (this.model.get('full_time')) {
+                    this.nodes.timeField.hide();
+                    this.nodes.timezoneField.hide();
+                } else {
+                    this.nodes.timeField.show();
+                    this.nodes.timezoneField.show();
+                }
+            },
+            modelEvents: modelEvents
+        }, options);
+    }
+
+
 
     var forms = {
         ErrorAlert: ErrorAlert,
@@ -453,6 +665,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
         CheckBoxField: CheckBoxField,
         SelectBoxField: SelectBoxField,
         SectionLegend: SectionLegend,
+        DatePicker: DatePicker,
         utils: {
             string2date: function (string) {
                 var reg = /((\d{2})|(\d))\.((\d{2})|(\d))\.((\d{4})|(\d{2}))/;

@@ -107,7 +107,6 @@ define('io.ox/calendar/edit/main',
                 api.get(self.getState())
                     .done(cont)
                     .fail(function (err) {
-                        console.log(err);
                         // FIXME: use general error class, teardown gently for the user
                         throw new Error(err.error);
                     });
@@ -164,7 +163,6 @@ define('io.ox/calendar/edit/main',
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {
-            console.log('on save');
             this.considerSaved = true;
             this.getWindow().idle();
             this.quit();
