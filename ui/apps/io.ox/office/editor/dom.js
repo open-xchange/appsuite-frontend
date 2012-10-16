@@ -429,6 +429,20 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
 
     /**
+     * Returns whether the passed node is a <div> element with class list-label.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element with class list-label.
+     */
+    DOM.isListlabelNode = function (node) {
+        return $(node).is('div.list-label');
+    };
+
+    /**
      * Creates a new text portion element.
      *
      * @returns {jQuery}

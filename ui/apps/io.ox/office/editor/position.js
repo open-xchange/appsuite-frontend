@@ -148,9 +148,21 @@ define('io.ox/office/editor/position',
 
         isEndPoint = isEndPoint ? true : false;
 
+        // check input values
+        if (! node) {
+            Utils.error('Position.getTextLevelOxoPosition(): Invalid DOM position. Node not defined');
+            return;
+        }
+
         // 1. Handling all selections, in which the node is below paragraph level
 
-        if (DOM.isFieldSpan(node.parentNode)) {
+        if ((node.nodeType === 3) && (DOM.isListlabelNode(node.parentNode))) {
+            node = node.parentNode.nextSibling;
+            offset = 0;
+            checkImageFloatMode = false;
+        }
+
+        if ((node.nodeType === 3) && (DOM.isFieldSpan(node.parentNode))) {
             offset = 0;
             checkImageFloatMode = false;
         }
@@ -163,12 +175,6 @@ define('io.ox/office/editor/position',
             offset = 0;
             imageFloatMode = $(node).data('mode');
             checkImageFloatMode = false;
-        }
-
-        // check input values
-        if (! node) {
-            Utils.error('Position.getTextLevelOxoPosition(): Invalid DOM position. Node not defined');
-            return;
         }
 
         // 2. Handling all selections, in which the node is above paragraph level
