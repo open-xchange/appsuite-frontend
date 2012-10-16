@@ -3,10 +3,6 @@ define("plugins/liberty/register", ["io.ox/core/extensions", "io.ox/core/http"],
     
     require("themes").set("liberty");
     
-    $.get('/ox7/api/noms/apps?action=clear', function (data) {
-		console.log("Was successful refreshing the app cache");
-	});
-    
     ext.point("io.ox/core/apps/category").extend({
         id: 'noms',
         title: 'Fujitsu BSS',
@@ -23,14 +19,6 @@ define("plugins/liberty/register", ["io.ox/core/extensions", "io.ox/core/http"],
         visible: true
     });
     
-    ext.point("io.ox/core/apps/installed").extend({
-        id: "plugins/liberty/webOffice",
-        icon: ox.base + '/apps/io.ox/core/images/default.png',
-        title: "Trve Office",
-        description: "Trve Office",
-        visible: true
-    });
-    
     require([ox.base + '/liberty/config.js?time=' + new Date().getTime()]).done(function (libertyConfig) {
         _(libertyConfig.apps).each(function (entry, id) {
             ext.point("io.ox/core/apps/installed").extend({
@@ -42,6 +30,19 @@ define("plugins/liberty/register", ["io.ox/core/extensions", "io.ox/core/http"],
                 entryModule: "plugins/liberty/generic/main",
                 launchArguments: [entry]
             });
+        });
+        
+        ext.point('io.ox/core/apps/manage').extend({
+            id: 'liberty',
+            index: 100,
+            openStore: function () {
+                require(["plugins/liberty/generic/main"], function (m) {
+                    m.getApp().launch({
+                        name: 'Fujitsu BSS',
+                        url: libertyConfig.shopUrl
+                    });
+                });
+            }
         });
     });
     
@@ -63,7 +64,10 @@ define("plugins/liberty/register", ["io.ox/core/extensions", "io.ox/core/http"],
                         description: app.name,
                         visible: true,
                         entryModule: 'plugins/liberty/generic/main',
-                        launchArguments: ['entry']
+                        launchArguments: [{
+                            url: app.serviceurl,
+                            name: app.name
+                        }]
                     };
                 });
             });
