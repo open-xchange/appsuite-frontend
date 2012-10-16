@@ -122,21 +122,27 @@ define('io.ox/settings/main',
         grid.requiresLabel = tmpl.requiresLabel;
 
         grid.setAllRequest(function () {
-            var apps = _.filter(appsApi.getInstalled(), function (item) {
-                return item.settings;
-            });
+            var def = $.Deferred();
+            appsApi.getInstalled().done(function (installed) {
+                var apps = _.filter(installed, function (item) {
+                    return item.settings;
+                });
 
-            apps.push({
-                category: 'Basic',
-                company: 'Open-Xchange',
-                description: 'Manage Accounts',
-                icon: '',
-                id: 'io.ox/settings/accounts',
-                settings: true,
-                title: 'Keyring'
+                apps.push({
+                    category: 'Basic',
+                    company: 'Open-Xchange',
+                    description: 'Manage Accounts',
+                    icon: '',
+                    id: 'io.ox/settings/accounts',
+                    settings: true,
+                    title: 'Keyring'
+                });
+                
+                def.resolve(apps);
             });
+            
 
-            return $.Deferred().resolve(apps);
+            return def;
         });
 
         grid.setMultiple(false);

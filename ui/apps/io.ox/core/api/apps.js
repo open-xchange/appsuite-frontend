@@ -127,7 +127,21 @@ define.async('io.ox/core/api/apps',
         getByCategory: getByCategory,
 
         getInstalled: function () {
-            return getSpecial('installed');
+            var installedLoaded = [];
+            installedLoaded.push(new $.Deferred().resolve(getSpecial('installed')));
+            ext.point("io.ox/core/apps/store").each(function (extension) {
+                if (extension.installed) {
+                    installedLoaded.push(extension.installed());
+                }
+            });
+            return $.when.apply($, installedLoaded).pipe(function () {
+                var all = [];
+                _(arguments).each(function (apps) {
+                    all = all.concat(apps);
+                });
+                
+                return all;
+            });
         },
 
         getFavorites: function () {

@@ -1,4 +1,4 @@
-define("plugins/liberty/register", ["io.ox/core/extensions"], function (ext) {
+define("plugins/liberty/register", ["io.ox/core/extensions", "io.ox/core/http"], function (ext, http) {
     "use strict";
     
     require("themes").set("liberty");
@@ -43,6 +43,31 @@ define("plugins/liberty/register", ["io.ox/core/extensions"], function (ext) {
                 launchArguments: [entry]
             });
         });
+    });
+    
+    ext.point("io.ox/core/apps/store").extend({
+        id: 'liberty',
+        index: 100,
+        installed: function () {
+            return http.GET({
+                module: 'liberty/apps',
+                params: {
+                    action: 'list'
+                }
+            }).pipe(function (apps) {
+                return _(apps).map(function (app) {
+                    return {
+                        id: app.serviceurl,
+                        icon: app.imageurl || ox.base + "/apps/io.ox/core/images/default.png",
+                        title: app.name,
+                        description: app.name,
+                        visible: true,
+                        entryModule: 'plugins/liberty/generic/main',
+                        launchArguments: ['entry']
+                    };
+                });
+            });
+        }
     });
     
 });

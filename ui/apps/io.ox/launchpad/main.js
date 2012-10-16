@@ -156,11 +156,15 @@ define('io.ox/launchpad/main',
                 )
             );
 
-            _(api.getInstalled()).each(function (data) {
-                // draw installed app
-                secInstalled.append(
-                    drawApp(data).on('click', data, launchApp)
-                );
+            api.getInstalled().done(function (installed) {
+                console.log(installed);
+                
+                _(installed).each(function (data) {
+                    // draw installed app
+                    secInstalled.append(
+                        drawApp(data).on('click', data, launchApp)
+                    );
+                });
             });
 
             if (running.length) {
