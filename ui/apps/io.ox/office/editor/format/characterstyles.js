@@ -87,6 +87,13 @@ define('io.ox/office/editor/format/characterstyles',
                 }
             },
 
+            fillcolor: {
+                def: Color.Transparent,
+                set: function (element, color) {
+                    element.css('background-color', this.getCssColor(color));
+                }
+            },
+            
             // special attributes
 
             highlight: {

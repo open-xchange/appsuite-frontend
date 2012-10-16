@@ -44,6 +44,26 @@ define('io.ox/office/editor/view',
             { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
             { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
             { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
+        ],
+    
+        // predefined highlight color definitions
+        BUILTIN_HIGHLIGHT_COLOR_DEFINITIONS = [
+            { label: gt('Black'),        color: { type: 'rgb', value: '000000' } },
+            { label: gt('Blue'),         color: { type: 'rgb', value: '0000FF' } },
+            { label: gt('Cyan'),         color: { type: 'rgb', value: '00FFFF' } },
+            { label: gt('Dark Blue'),    color: { type: 'rgb', value: '00008B' } },
+            { label: gt('Dark Cyan'),    color: { type: 'rgb', value: '008B8B' } },
+            { label: gt('Dark Gray'),    color: { type: 'rgb', value: 'A9A9A9' } },
+            { label: gt('Dark Green'),   color: { type: 'rgb', value: '006400' } },
+            { label: gt('Dark Magenta'), color: { type: 'rgb', value: '800080' } },
+            { label: gt('Dark Red'),     color: { type: 'rgb', value: '8B0000' } },
+            { label: gt('Dark Yellow'),  color: { type: 'rgb', value: '808000' } },
+            { label: gt('Green'),        color: { type: 'rgb', value: '00FF00' } },
+            { label: gt('Light Gray'),   color: { type: 'rgb', value: 'D3D3D3' } },
+            { label: gt('Magenta'),      color: { type: 'rgb', value: 'FF00FF' } },
+            { label: gt('Red'),          color: { type: 'rgb', value: 'FF0000' } },
+            { label: gt('White'),        color: { type: 'rgb', value: 'FFFFFF' } },
+            { label: gt('Yellow'),       color: { type: 'rgb', value: 'FFFF00' } }
         ];
 
         // class StyleSheetChooser ================================================
@@ -534,7 +554,9 @@ define('io.ox/office/editor/view',
                 .addSeparator()
                 .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color') }))
                 .addSeparator()
-                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }));
+                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }))
+                .addSeparator()
+                .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color') }));
         }
 
         // register a component that updates the window header tool bar

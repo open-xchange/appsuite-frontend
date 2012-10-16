@@ -150,6 +150,11 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.color; },
                     set: function (color) { editor.setAttribute('character', 'color', color); }
                 },
+                'character/fillcolor': {
+                    chain: 'character/attributes',
+                    get: function (attributes) { return attributes.fillcolor; },
+                    set: function (color) { editor.setAttribute('character', 'fillcolor', color); }
+                },
 
                 // tables
 
