@@ -110,7 +110,8 @@ define('io.ox/office/editor/format/paragraphstyles',
             if (attributes.ilvl && attributes.numId) {
                 var numberingElement = $('<div>');
                 numberingElement.addClass('list-label');
-                numberingElement.text(this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]));
+                var listObject = this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
+                numberingElement.text(listObject.text);
                 $(para).prepend(numberingElement);
             }
         }
