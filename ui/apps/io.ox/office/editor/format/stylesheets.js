@@ -152,18 +152,6 @@ define('io.ox/office/editor/format/stylesheets',
         // private methods ----------------------------------------------------
 
         /**
-         * Returns whether the passed style sheet is a descendant of the other
-         * passed style sheet.
-         */
-        function isDescendantStyleSheet(styleSheet, ancestorStyleSheet) {
-            while (styleSheet) {
-                if (styleSheet === ancestorStyleSheet) { return true; }
-                styleSheet = styleSheets[styleSheet.parentId];
-            }
-            return false;
-        }
-
-        /**
          * Returns whether the passed string is the name of a attribute
          * registered in the definitions passed to the constructor.
          *
@@ -181,6 +169,46 @@ define('io.ox/office/editor/format/stylesheets',
          */
         function isRegisteredAttribute(name, special) {
             return (name in definitions) && (special || (definitions[name].special !== true));
+        }
+
+        /**
+         * Calculates the default attributes from the attribute definitions and
+         * overrides the values of all attributes specified in the passed
+         * attribute map.
+         *
+         * @param {Object} [attributes]
+         *  The default values for some or all attributes of the main style
+         *  family, as name/value pairs. Attributes not specified in this map
+         *  will use the default values from the attribute definitions.
+         */
+        function setDefaultAttributes(attributes) {
+
+            // get default attribute values from definitions
+            defaultAttributes = {};
+            _(definitions).each(function (definition, name) {
+                defaultAttributes[name] = definition.def;
+            });
+
+            // override with passed values
+            if (_.isObject(attributes)) {
+                _(attributes).each(function (value, name) {
+                    if ((name in defaultAttributes) && !_.isNull(value) && !_.isUndefined(value)) {
+                        defaultAttributes[name] = value;
+                    }
+                });
+            }
+        }
+
+        /**
+         * Returns whether the passed style sheet is a descendant of the other
+         * passed style sheet.
+         */
+        function isDescendantStyleSheet(styleSheet, ancestorStyleSheet) {
+            while (styleSheet) {
+                if (styleSheet === ancestorStyleSheet) { return true; }
+                styleSheet = styleSheets[styleSheet.parentId];
+            }
+            return false;
         }
 
         /**
@@ -427,6 +455,31 @@ define('io.ox/office/editor/format/stylesheets',
                 }
             });
             return names;
+        };
+
+        /**
+         * Sets default values for the attributes of the main style family.
+         * These values override the defaults of the attribute definitions
+         * passed in the constructor, and will be used before the values of any
+         * style sheet attributes and explicit element attributes.
+         *
+         * @param {Object} attributes
+         *  The default values for some or all attributes of the main style
+         *  family, as name/value pairs. Attributes not specified in this map
+         *  will use the default values from the attribute definitions.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this instance.
+         */
+        this.setAttributeDefaults = function (attributes) {
+
+            // reinitialize the default attribute values
+            setDefaultAttributes(attributes);
+
+            // notify listeners
+            triggerChangeEvent();
+
+            return this;
         };
 
         /**
@@ -1026,10 +1079,8 @@ define('io.ox/office/editor/format/stylesheets',
         // add event hub
         Events.extend(this);
 
-        // build map with default attributes
-        _(definitions).each(function (definition, name) {
-            defaultAttributes[name] = definition.def;
-        });
+        // build map with default attributes from definitions
+        setDefaultAttributes();
 
     } // class StyleSheets
 

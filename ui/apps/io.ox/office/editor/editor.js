@@ -1714,7 +1714,7 @@ define('io.ox/office/editor/editor',
                 if (undomgr.isEnabled()) {
                     // TODO!!!
                 }
-                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default']);
+                implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default'], operation.pooldefault);
             }
             else if (operation.name === Operations.INSERT_THEME) {
                 if (undomgr.isEnabled()) {
@@ -3211,23 +3211,33 @@ define('io.ox/office/editor/editor',
          *  of name/value pairs.
          *
          * @param {Boolean} [hidden]
-         *  Optional property that determines if the style should be displayed in the UI (default is false)
+         *  Optional property that determines if the style should be displayed
+         *  in the GUI.
          *
-         * @param {Number} [uiPriority]
-         *  Optional property that describes the priority of the style (0 is default, the lower the value the higher the priority)
+         * @param {Number} [uiPriority=0]
+         *  Optional property that describes the priority of the style (the
+         *  lower the value the higher the priority).
          *
          * @param {Boolean} [defStyle]
          *  True, if the new style sheet is the default style sheet of the
          *  attribute family (will be used for elements without explicit style
          *  sheet).
+         *
+         * @param {Boolean} [poolDefault]
+         *  True, if the style sheet contains pool default settings for the
+         *  attribute family.
          */
-        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority, defStyle) {
+        function implInsertStyleSheet(family, id, name, parentId, attributes, hidden, uiPriority, defStyle, poolDefault) {
 
             var // the style sheet container
                 styleSheets = self.getStyleSheets(family);
 
             if (styleSheets) {
-                styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
+                if (poolDefault === true) {
+                    styleSheets.setAttributeDefaults(attributes[family]);
+                } else {
+                    styleSheets.addStyleSheet(id, name, parentId, attributes, { hidden: hidden, priority: uiPriority, defStyle: defStyle });
+                }
             }
         }
 
