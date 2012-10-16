@@ -94,7 +94,7 @@ define('io.ox/office/editor/position',
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
                     if ((DOM.isFieldSpan(prevNode)) || (DOM.isImageNode(prevNode))) {
                         textLength += 1;  // images and fields are counted as single character
-                    } else {
+                    } else if (DOM.isTextSpan(prevNode)) {
                         textLength += $(prevNode).text().length;
                     }
                 }
