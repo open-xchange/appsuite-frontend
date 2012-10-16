@@ -38,6 +38,16 @@ define('io.ox/office/editor/format/tablecellstyles',
             },
 
             /**
+             * Fill color of the table cell.
+             */
+            fillcolor: {
+                def: Color.AUTO,
+                set: function (element, color) {
+                    element.css('background-color', this.getCssColor(color, 'fill'));
+                }
+            },
+
+            /**
              * Style, width and color of the left table cell border.
              */
             borderleft: {
@@ -74,16 +84,6 @@ define('io.ox/office/editor/format/tablecellstyles',
                 def: NO_BORDER,
                 set: function (element, border) {
                     element.css('border-bottom', this.getCssBorder(border));
-                }
-            },
-
-            /**
-             * Fill color of the table cell.
-             */
-            fillcolor: {
-                def: Color.AUTO,
-                set: function (element, color) {
-                    element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             }
 
