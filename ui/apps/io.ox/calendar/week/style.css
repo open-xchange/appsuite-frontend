@@ -90,9 +90,8 @@
         position: relative;
         border-bottom: 1px solid #ccc;
         width: 100%;
-        overflow-y: scroll;
-        overflow-x: hidden;
-        -webkit-overflow-scrolling: touch;
+        .overflow-y(scroll);
+        .overflow-x(hidden);
     }
     
     .fulltime-lable {
@@ -109,8 +108,8 @@
     }
     
     .scrollpane {
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
+        .overflow-y(scroll);
+        .overflow-x(hidden);
         position: absolute;
         top: 40px;
         left: 0;
@@ -126,7 +125,7 @@
         right: 0;
         bottom: 0; 
         width: 100%;
-        overflow-y: scroll;
+        .overflow-y(scroll);
     }
     
     .footer-lable {
@@ -278,6 +277,7 @@
     .appointment.border {
         border: 1px solid rgba(255, 255, 255, 0.4);
     }
+    
     .appointment.current {
         z-index: 999 !important;
     }
