@@ -115,6 +115,8 @@ define.async('io.ox/core/api/apps',
             );
         };
 
+    var cachedInstalled = [];
+
     // public module interface
     api = {
 
@@ -126,7 +128,10 @@ define.async('io.ox/core/api/apps',
 
         getByCategory: getByCategory,
 
-        getInstalled: function () {
+        getInstalled: function (mode) {
+            if (mode === 'cached') {
+                return $.Deferred().resolve(cachedInstalled);
+            }
             var installedLoaded = [];
             installedLoaded.push(new $.Deferred().resolve(getSpecial('installed')));
             ext.point("io.ox/core/apps/store").each(function (extension) {
@@ -139,7 +144,7 @@ define.async('io.ox/core/api/apps',
                 _(arguments).each(function (apps) {
                     all = all.concat(apps);
                 });
-                
+                cachedInstalled = all;
                 return all;
             });
         },

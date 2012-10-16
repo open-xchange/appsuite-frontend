@@ -21,6 +21,7 @@ define("plugins/liberty/generic/main", function () {
         win.nodes.title.hide();
 
         win.show(function () {
+            console.log("NODES:", win.nodes, "ENTRY", entry);
             win.nodes.body.css({
                 top: '0px'
             });
