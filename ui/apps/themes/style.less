@@ -1642,3 +1642,32 @@ div.external-user-image {
     #io-ox-notifications { width: 320px; right: -320px; }
     #io-ox-notifications-overlay { right: 320px; }
 }
+
+// Helper classes for win.nodes.body responsiveness
+// If you want to lose the window header and have the window body snap to
+// the top on e.g. tablets and phones use:
+// win.nodes.body.addClass("full-height-tablet full-height-phone");
+// win.nodes.head.addClass("hidden-tablet hidden-phone");
+
+
+.window-body.full-height-desktop {
+  top: 0px !important;
+}
+
+@media (min-width: 768px) and (max-width: 979px) {
+
+  .window-body.full-height-tablet {
+     top: 0px !important;
+  }
+
+}
+
+@media (max-width: 767px) {
+  .window-body.full-height-tablet {
+    top: 0px !important;
+  }
+
+  .window-body.full-height-phone {
+    top: 0px !important;
+  }
+}

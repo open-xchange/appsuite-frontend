@@ -35,13 +35,14 @@ define("io.ox/applications/view-installed",
 
             // get apps
             var apps = $("<div>").addClass("apps");
-
-            _(api.getInstalled('installed')).each(function (data) {
-                apps.append(view.drawApp(data, context));
+            
+            api.getInstalled('installed').done(function (installed) {
+                _(installed).each(function (data) {
+                    apps.append(view.drawApp(data, context));
+                });
+                node.children().eq(1).after(apps);
             });
-
-            node.children().eq(1).after(apps);
-
+            
             return node;
         }
     };
