@@ -88,7 +88,7 @@ define('io.ox/mail/view-grid-template',
                                 $('<div class="thread-summary-right">')
                                     .addClass('date').text(_.noI18n(util.getTime(data.received_date))),
                                 $('<div class="thread-summary-left">').append(
-                                    $('<span class="thread-summary-pos">').text(_.noI18n((length - index - 1) + '.')),
+                                    $('<span class="thread-summary-pos">').text(_.noI18n((length - index - 1))),
                                     $('<span class="thread-summary-from">').append(util.getFrom(data).removeClass('person'), $.txt(' ')),
                                     $('<span class="thread-summary-subject">').text(_.noI18n(data.subject))
                                 )
