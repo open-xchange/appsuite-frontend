@@ -61,8 +61,8 @@ define('io.ox/calendar/week/view',
             'mousedown .week-container>.day' : 'onLasso',
             'mousemove .week-container>.day' : 'onLasso',
             'mouseup' : 'onLasso',
-            'swipeleft .week-container>.day' : 'onControlView',
-            'swiperight .week-container>.day' : 'onControlView',
+            'swipeleft .timeslot' : 'onControlView',
+            'swiperight .timeslot' : 'onControlView',
             'click .appointment': 'onClickAppointment',
             'mouseenter .appointment': 'onEnterAppointment',
             'mouseleave .appointment': 'onLeaveAppointment',
@@ -91,10 +91,10 @@ define('io.ox/calendar/week/view',
         onControlView: function (e) {
             var cT = $(e.currentTarget),
                 t = $(e.target);
-            if (cT.hasClass('next') || (t.hasClass('day') && e.type === 'swipeleft')) {
+            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft')) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if (cT.hasClass('prev') || (t.hasClass('day') && e.type === 'swiperight')) {
+            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight')) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
             }
             if (cT.hasClass('today')) {
@@ -357,7 +357,7 @@ define('io.ox/calendar/week/view',
 //            new Blubview();
 
             // create panes
-            this.fulltimeCon.append(
+            this.fulltimeCon.empty().append(
                 $('<div>').addClass('fulltime-lable'),
                 this.fulltimePane
             );
@@ -391,15 +391,16 @@ define('io.ox/calendar/week/view',
                 container.append(day);
             }
 
-            this.pane.append(times, container);
+            this.pane.empty().append(times, container);
 
             // create toolbar
-            this.$el.append(
+            this.$el.empty().append(
                 $('<div>')
                     .addClass('toolbar')
                     .append(
                         this.kwInfo,
                         this.showAllCon
+                            .empty()
                             .append(
                                 $('<label>')
                                     .addClass('checkbox')
