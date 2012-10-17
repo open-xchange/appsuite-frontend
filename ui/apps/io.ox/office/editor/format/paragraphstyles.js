@@ -47,7 +47,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                 def: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
-                    element.children('span').each(function () {
+                    element.children('span, div.list-label').each(function () {
                         LineHeight.setElementLineHeight($(this), lineHeight);
                     });
                 }
@@ -94,6 +94,11 @@ define('io.ox/office/editor/format/paragraphstyles',
      */
     function ParagraphStyles(rootNode, documentStyles) {
 
+        var // self reference
+            self = this;
+
+        // private methods ----------------------------------------------------
+
         /**
          * Will be called for every paragraph whose attributes have been
          * changed.
@@ -112,7 +117,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             if (attributes.ilvl && attributes.numId) {
                 var numberingElement = $('<div>');
                 numberingElement.addClass('list-label');
-                var listObject = this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
+                var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
                 numberingElement.text(listObject.text);
                 if (listObject.indent > 0) {
                     para.css("margin-left", (listObject.indent / 20) + "pt");
@@ -123,10 +128,11 @@ define('io.ox/office/editor/format/paragraphstyles',
                 $(para).prepend(numberingElement);
             }
         }
+
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'paragraph', definitions, documentStyles, {
-            globalSetHandler: updateParaFormatting,
+            updateHandler: updateParaFormatting,
             descendantStyleFamilies: 'character'
         });
 

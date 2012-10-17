@@ -81,7 +81,7 @@ define('io.ox/office/editor/format/tablerowstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'tablerow', definitions, documentStyles, {
-            globalSetHandler: updateTableRowFormatting
+            updateHandler: updateTableRowFormatting
         });
 
         // methods ------------------------------------------------------------

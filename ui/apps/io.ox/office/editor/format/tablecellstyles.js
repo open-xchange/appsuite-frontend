@@ -130,7 +130,7 @@ define('io.ox/office/editor/format/tablecellstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'tablecell', definitions, documentStyles, {
-            globalSetHandler: updateTableCellFormatting
+            updateHandler: updateTableCellFormatting
         });
 
         // methods ------------------------------------------------------------
@@ -142,7 +142,7 @@ define('io.ox/office/editor/format/tablecellstyles',
         this.iterateReadOnly = function (ranges, iterator, context) {
             // DOM.iterateAncestorNodesInRanges() passes the current element to
             // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'th, td', iterator, context);
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'td', iterator, context);
         };
 
         /**

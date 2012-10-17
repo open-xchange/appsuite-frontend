@@ -93,7 +93,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('background-color', this.getCssColor(color));
                 }
             },
-            
+
             // special attributes
 
             highlight: {
@@ -172,7 +172,7 @@ define('io.ox/office/editor/format/characterstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'character', definitions, documentStyles, {
-            globalSetHandler: updateSpanFormatting,
+            updateHandler: updateSpanFormatting,
             ancestorStyleFamily: 'paragraph',
             ancestorElementResolver: function (span) { return span.parentNode; }
         });

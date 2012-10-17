@@ -136,7 +136,6 @@ define('io.ox/office/editor/format/imagestyles',
         return WRAPPED_TEXT_VALUES.contains(textWrapMode);
     }
 
-
     /**
      * Calculates the original image size from the visible size and the cropping values.
      *
@@ -436,7 +435,7 @@ define('io.ox/office/editor/format/imagestyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'image', definitions, documentStyles, {
-            globalSetHandler: updateImageFormatting
+            updateHandler: updateImageFormatting
         });
 
         // methods ------------------------------------------------------------

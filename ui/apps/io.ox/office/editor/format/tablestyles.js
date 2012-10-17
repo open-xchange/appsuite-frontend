@@ -170,7 +170,7 @@ define('io.ox/office/editor/format/tablestyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'table', definitions, documentStyles, {
-            globalSetHandler: updateTableFormatting
+            updateHandler: updateTableFormatting
         });
 
         // methods ------------------------------------------------------------

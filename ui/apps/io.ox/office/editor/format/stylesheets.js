@@ -81,7 +81,7 @@ define('io.ox/office/editor/format/stylesheets',
      *      jQuery object in the first parameter, and the attribute value in
      *      the second parameter. An alternative way to update the element
      *      formatting using a complete map of all attribute values is to
-     *      specify a global setter handler (see options below).
+     *      specify a global update handler (see options below).
      *  - 'preview': An optional function that initializes an options map that
      *      will be used to create a list item in a GUI style sheet selector
      *      control. Will be called in the context of the style sheet container
@@ -95,7 +95,7 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
-     *  @param {Function} [options.globalSetHandler]
+     *  @param {Function} [options.updateHandler]
      *      If specified, this function will be called for every DOM element
      *      whose attributes have been changed. In difference to the individual
      *      setter functions defined for each single attribute (see parameter
@@ -134,8 +134,8 @@ define('io.ox/office/editor/format/stylesheets',
             // identifier of the default style sheet
             defaultStyleId = null,
 
-            // global element setter
-            globalSetHandler = Utils.getFunctionOption(options, 'globalSetHandler'),
+            // update handler, called after attributes have been changed
+            updateHandler = Utils.getFunctionOption(options, 'updateHandler'),
 
             // additional attribute families supported by the style sheets
             descendantStyleFamilies = _(Utils.getStringOption(options, 'descendantStyleFamilies', '').split(/\s+/)).without(''),
@@ -310,9 +310,9 @@ define('io.ox/office/editor/format/stylesheets',
                 });
             }
 
-            // call global setter handler taking all attributes at once
-            if (_.isFunction(globalSetHandler)) {
-                globalSetHandler.call(self, element, mergedAttributes);
+            // call update handler taking all attributes at once
+            if (_.isFunction(updateHandler)) {
+                updateHandler.call(self, element, mergedAttributes);
             }
         }
 
