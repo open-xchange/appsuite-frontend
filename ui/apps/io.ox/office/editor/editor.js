@@ -1059,13 +1059,12 @@ define('io.ox/office/editor/editor',
         };
 
         // PUBLIC IMAGE METHODS
-
         /**
          * Returns whether the current selection selects a single image.
          */
         this.isImageSelected = function () {
             var selection = getSelection();
-            return selection && _.isString(selection.endPaM.imageFloatMode);
+            return selection && _.isString(selection.startPaM.imageFloatMode) && _.isString(selection.endPaM.imageFloatMode);
         };
 
         /**
@@ -2238,8 +2237,8 @@ define('io.ox/office/editor/editor',
         function sendImageSize(position) {
 
             // sending size of image to the server in an operation -> necessary after loading the image
-            var returnImageNode = true,
-                imagePos = Position.getDOMPosition(paragraphs, _.copy(position), returnImageNode);
+            var useObjectNode = true,
+                imagePos = Position.getDOMPosition(paragraphs, _.copy(position), useObjectNode);
 
             if ((imagePos) && (imagePos.node) && (DOM.isImageNode(imagePos.node))) {
 
@@ -2859,8 +2858,8 @@ define('io.ox/office/editor/editor',
 
         function deleteSelectedImage(selection) {
             var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                returnImageNode = true,
-                imageDivNode = Position.getDOMPosition(paragraphs, imageStartPosition, returnImageNode).node;
+                useObjectNode = true,
+                imageDivNode = Position.getDOMPosition(paragraphs, imageStartPosition, useObjectNode).node;
 
             // only delete, if imageStartPosition is really an image position
             if (DOM.isImageNode(imageDivNode)) {
@@ -3052,10 +3051,12 @@ define('io.ox/office/editor/editor',
 
         function setAttributesToSelectedImage(selection, attributes) {
             var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                imageEndPostion = _.copy(imageStartPosition, true),
-                newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPostion };
+                imageEndPosition = _.copy(imageStartPosition, true),
+                newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPosition };
 
-            applyOperation(newOperation, true, true);
+            if (imageStartPosition && imageEndPosition) {
+                applyOperation(newOperation, true, true);
+            }
 
             // setting the cursor position
             if (lastOperationEnd) {
@@ -3336,6 +3337,8 @@ define('io.ox/office/editor/editor',
                 // options for StyleSheets.setAttributesInRanges() method calls
                 setAttributesOptions = undomgr.isEnabled() ? { changeListener: changeListener } : undefined;
 
+            if (start === null) { return; }
+
             // build local copies of the arrays (do not change caller's data)
             start = _.clone(start);
             end = _.isArray(end) ? _.clone(end) : _.clone(start);
@@ -3499,6 +3502,7 @@ define('io.ox/office/editor/editor',
             var localPos = _.copy(startPosition);
             localPos.pop();
             Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
+            Position.removeUnusedImageDivs(paragraphs, localPos);
 
             implParagraphChanged(position);
             implParagraphChanged(startPosition);
@@ -4043,9 +4047,9 @@ define('io.ox/office/editor/editor',
 
             var source = _.copy(_source, true),
                 dest = _.copy(_dest, true),
-                returnImageNode = true,
-                sourcePos = Position.getDOMPosition(paragraphs, source, returnImageNode),
-                destPos = Position.getDOMPosition(paragraphs, dest, returnImageNode),
+                useObjectNode = true,
+                sourcePos = Position.getDOMPosition(paragraphs, source, useObjectNode),
+                destPos = Position.getDOMPosition(paragraphs, dest, useObjectNode),
                 insertBefore = true,
                 splitNode = false;
 
@@ -4075,7 +4079,7 @@ define('io.ox/office/editor/editor',
                         Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // moving also the divs belonging to images
-                        if ((! imagePosDiv) || (! $(imagePosDiv).is('div'))) {
+                        if ((! imagePosDiv) || (! DOM.isOffsetNode(imagePosDiv))) {
                             imagePosDiv = false; // should never be reached
                         }
                     }

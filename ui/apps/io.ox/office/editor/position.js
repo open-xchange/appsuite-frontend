@@ -303,7 +303,7 @@ define('io.ox/office/editor/position',
      * @param {OXOPaM.oxoPosition} oxoPosition
      *  The logical position.
      *
-     * @param {Boolean} returnImageNode
+     * @param {Boolean} useObjectNode
      *  A boolean value, that needs to be set to 'true' in the special case,
      *  that an image node shall be returned instead of a text node. Typically
      *  previous or following siblings are returned, instead of image nodes.
@@ -312,13 +312,13 @@ define('io.ox/office/editor/position',
      *  The calculated dom position consisting of dom node and offset.
      *  Offset is only set for text nodes, otherwise it is undefined.
      */
-    Position.getDOMPosition = function (startnode, oxoPosition, returnImageNode) {
+    Position.getDOMPosition = function (startnode, oxoPosition, useObjectNode) {
 
         var oxoPos = _.copy(oxoPosition, true),
             node = startnode,
             offset = null;
 
-        returnImageNode = returnImageNode ? true : false;
+        useObjectNode = useObjectNode ? true : false;
 
         if ((oxoPosition === undefined) || (oxoPosition === null)) {
             // Utils.error('Position.getDOMPosition(): oxoPosition is undefined!');
@@ -332,7 +332,7 @@ define('io.ox/office/editor/position',
 
         while (oxoPos.length > 0) {
 
-            var returnObj = Position.getNextChildNode(node, oxoPos.shift(), returnImageNode);
+            var returnObj = Position.getNextChildNode(node, oxoPos.shift(), useObjectNode);
 
             if (returnObj) {
                 if (returnObj.node) {
@@ -562,24 +562,24 @@ define('io.ox/office/editor/position',
      *  The one integer number, that determines the child according to the
      *  parent position.
      *
-     * @param {Boolean} returnImageNode
+     * @param {Boolean} useObjectNode
      *  Typically (in the case of a full complete logical position)
      *  text nodes and the corresponding offset are returned. But there are
      *  some cases, in which not the text node, but the image or div, that
      *  can also be located inside a 'div.p', shall be returned. In this cases
-     *  returnImageNode has to be set to 'true'. The default is 'false', so
+     *  useObjectNode has to be set to 'true'. The default is 'false', so
      *  that text nodes are returned.
      *
      * @returns {Node | Number}
      *  The child node and an offset. Offset is only set for text nodes,
      *  otherwise it is undefined.
      */
-    Position.getNextChildNode = function (node, pos, returnImageNode) {
+    Position.getNextChildNode = function (node, pos, useObjectNode) {
 
         var childNode,
             offset;
 
-        returnImageNode = returnImageNode ? true : false;
+        useObjectNode = useObjectNode ? true : false;
 
         if (node instanceof $) {  // true for jQuery objects
             if (pos > node.length - 1) {
@@ -662,7 +662,7 @@ define('io.ox/office/editor/position',
             }
 
             // which node shall be returned, if the position is at the border between two nodes?
-            if ((returnImageNode) && (exactSum)) {  // special handling for images, that exactly fit the position
+            if ((useObjectNode) && (exactSum)) {  // special handling for images, that exactly fit the position
 
                 var nextNode = node.nextSibling;
 
@@ -679,7 +679,7 @@ define('io.ox/office/editor/position',
             }
 
             if ((isImage) || (isField)) {
-                if (! returnImageNode) {  // this can lead to to dom positions, that do not fit to the oxo position
+                if (! useObjectNode) {  // this can lead to to dom positions, that do not fit to the oxo position
                     // if the position is an image or field, the dom position shall be the following text node
                     if (isImage) {
                         childNode = Utils.findNextNodeInTree(node, Utils.JQ_TEXTNODE_SELECTOR); // can be more in a row without text span between them
@@ -742,7 +742,6 @@ define('io.ox/office/editor/position',
             if ((start.node.nodeType === 1) && (start.node.nodeType === 1)) {  // Todo: Clarification
                 start = DOM.Point.createPointForNode(start.node);
                 end = DOM.Point.createPointForNode(end.node);
-                end.offset += 1;
             }
 
         }
@@ -1997,8 +1996,8 @@ define('io.ox/office/editor/position',
     Position.getPositionAssignedFamily = function (startnode, startposition, isImageAttribute) {
 
         var family = null,
-            returnImageNode = isImageAttribute ? true : false,
-            domPos = Position.getDOMPosition(startnode, startposition, returnImageNode);
+            useObjectNode = isImageAttribute ? true : false,
+            domPos = Position.getDOMPosition(startnode, startposition, useObjectNode);
 
         if (domPos) {
             var node = domPos.node;
@@ -2183,7 +2182,7 @@ define('io.ox/office/editor/position',
             if ((DOM.isImageNode(child)) && ($(child).hasClass('float'))) {
                 counter++;
                 child = child.nextSibling;
-            } else if ($(child).is('div.float')) {
+            } else if (DOM.isOffsetNode(child)) {
                 // ignoring divs that exist only for positioning image
                 child = child.nextSibling;
             } else {
@@ -2303,7 +2302,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ($(child).is('div.float') && (! DOM.isImageNode(nextChild))) {
+                if ((DOM.isOffsetNode(child)) && (! DOM.isImageNode(nextChild))) {
                     var removeElement = child;
                     child = child.nextSibling;
                     $(removeElement).remove();
@@ -2333,7 +2332,7 @@ define('io.ox/office/editor/position',
 
         var paraNode = Position.getCurrentParagraph(startnode, position);
 
-        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
+        if ((paraNode) && ($(paraNode).find('div.offset').length > 0)) {
 
             var child = paraNode.firstChild;
 
@@ -2341,7 +2340,7 @@ define('io.ox/office/editor/position',
 
                 var nextChild = child.nextSibling;
 
-                if ($(child).is('div.float') && (! DOM.isImageNode(nextChild))) {
+                if ((DOM.isOffsetNode(child)) && (! DOM.isImageNode(nextChild))) {
                     var removeElement = child;
                     $(removeElement).remove();
                 }

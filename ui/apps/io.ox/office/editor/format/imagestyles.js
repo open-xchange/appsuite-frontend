@@ -318,7 +318,7 @@ define('io.ox/office/editor/format/imagestyles',
             } else {
                 // create offset node if not existing yet
                 if (verticalOffsetNode.length === 0) {
-                    verticalOffsetNode = $('<div>', { contenteditable: false }).width(1).insertBefore(div);
+                    verticalOffsetNode = $('<div>', { contenteditable: false }).addClass('offset').width(1).insertBefore(div);
                 }
                 // set height of the offset node
                 verticalOffsetNode.height(Utils.convertHmmToLength(topOffset, 'px', 0));
