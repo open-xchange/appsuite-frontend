@@ -151,7 +151,10 @@
 .io-ox-portal-tile-action {
     display: block;
     float: right;
-    margin: 6px 6px 0 0;
+    margin-right: 6px;
+}
+.io-ox-typeA-action .io-ox-portal-tile-action {
+    margin-top: 6px;
 }
 .tile-color0, .tile-color6 {
     background: #234;

@@ -46,7 +46,10 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
             'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/ignite.png'][pos];
         var $node = $('<div>').append(
             $('<div class="io-ox-typeB-image">').attr({'style': 'background-image: url(' + img + ')'}),
-            $('<div class="io-ox-typeB-title">').text("Dummy Type B" + pos)
+            $('<div class="io-ox-typeB-title">').text("Dummy Type B" + pos).append(
+                $('<i class="icon-edit io-ox-portal-tile-action">').text(" "),
+                $('<i class="icon-remove io-ox-portal-tile-action">').text(" ")
+            )
         );
         
         return $node;
