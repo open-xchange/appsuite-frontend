@@ -44,9 +44,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 7;
-                perspective.show(app);
+                perspective.days(7).show(app, true);
             });
         }
     });
@@ -55,9 +53,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 5;
-                perspective.show(app);
+                perspective.days(5).show(app, true);
             });
         }
     });
@@ -66,9 +62,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 1;
-                perspective.show(app);
+                perspective.days(1).show(app, true);
             });
         }
     });
