@@ -18,7 +18,48 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
     var load = function () {
         return $.Deferred().resolve($('<div>').text("Blablabla"));
     };
-    var draw = function (feed) {
+    var drawTypeA = function () {
+        var $node = $('<div class="io-ox-tile-container">').append(
+            $('<div class="io-ox-typeA-title">').text("Dummy Type A"),
+            $('<div class="io-ox-typeA-content">').append(
+                $('<div class="io-ox-typeA-item">').text('item #1'),
+                $('<div class="io-ox-typeA-item">').text('item #2'),
+                $('<div class="io-ox-typeA-item">').text('item #3'),
+                $('<div class="io-ox-typeA-item">').text('item #4'),
+                $('<div class="io-ox-typeA-item">').text('item #5'),
+                $('<div class="io-ox-typeA-item">').text('item #6'),
+                $('<div class="io-ox-typeA-item">').text('item #7'),
+                $('<div class="io-ox-typeA-item">').text('item #8'),
+                $('<div class="io-ox-typeA-item">').text('item #9')
+            ),
+            $('<div class="io-ox-typeA-action">')
+        );
+        return $node;
+    };
+    var drawTypeB = function () {
+        var pos = Math.floor(Math.random() * 3);
+        var img = ['http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/doller.png',
+            'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/gear.png',
+            'http://www.open-xchange.com/typo3conf/ext/opx/Resources/Public/Image/portal/icon/carousel/ignite.png'][pos];
+        var $node = $('<div>').append(
+            $('<div class="io-ox-typeB-image">').attr({'style': 'background-image: url(' + img + ')'}),
+            $('<div class="io-ox-typeB-title">').text("Dummy Type B" + pos)
+        );
+        
+        return $node;
+    };
+    var drawTile = function () {
+        var $node;
+        if (Math.random() > 0.5) {
+            $node = drawTypeA();
+        } else {
+            $node = drawTypeB();
+        }
+        $node.appendTo(this);
+        console.log("This is my node:", $node);
+        return $.Deferred().resolve($node);
+    };
+    var draw = function () {
         var $node = $('<div class="io-ox-portal-dummy">').appendTo(this).append(
             $('<h1 class="clear-title">').text("Dummy #" + i),
             $('<p>').text("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt " +
@@ -35,7 +76,8 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
             index: 500 + i,
             title: 'Dummy #' + i,
             load: load,
-            draw: draw
+            draw: draw,
+            drawTile: drawTile
         });
     }
 });

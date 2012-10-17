@@ -1,7 +1,7 @@
 @padding: 2px;
 @large-padding: 13px;
-@portal-background-alt: #050505;
-@portal-background: #222;
+@portal-background-alt: #333;
+@portal-background: #555;
 
 .io-ox-portal {
     padding: @large-padding;
@@ -24,7 +24,6 @@
 .io-ox-portal, .io-ox-portal * {
     .box-sizing(border-box);
 }
-
 .io-ox-portal .clear-title {
     margin: 0.5em 0 1em 0;
     font-size: 16pt;
@@ -41,27 +40,6 @@
 .io-ox-portal h2 {
     font-size: 18px;
     font-family: @font-light;
-}
-.io-ox-portal-column {
-    display: inline-block;
-    float: left;
-}
-.io-ox-portal-widget {
-    min-height: 100px;
-    margin-bottom: 40px;
-}
-.io-ox-portal-widget .clear-title {
-    margin-bottom: 0.5em;
-}
-.io-ox-portal-linkedin-updates-entry {
-    margin-bottom: 0.5em;
-}
-.io-ox-portal-linkedin-updates-details {
-    margin: 1em 0 1em 4em;
-}
-.io-ox-portal-intro {
-    margin-bottom: 16px;
-    line-height: 22px;
 }
 .io-ox-portal-greeting {
     font-family: @font-light;
@@ -80,6 +58,9 @@
     padding-right: 5px;
     padding-bottom: 0.5em;
 }
+.io-ox-tile-container {
+    position: absolute;
+}
 .io-ox-portal-settings a {
     color: #0AF;
     font-size: 13px;
@@ -87,17 +68,13 @@
 .io-ox-portal-tiles {
     clear: both;
     text-align: left;
-//    margin: 0 auto;
+    position: relative;
+    background: #999;
 }
-
-@tile-margin: 1px;
-@tile-width: 270px;
-@tile-height: 360px;
-
-.io-ox-portal-widget-tile-border {
-    margin: 0;
-    padding: 0 @padding @padding 0;
-    background: transparent;
+.io-ox-portal-widget-tile {
+    display: block;
+    width: 240px;
+    height: 320px;
     float: left;
 } 
 .io-ox-portal-widget-tile { 
@@ -128,98 +105,64 @@
 @media all and (min-width: 1200px) {
     .io-ox-portal-widget-tile-border { width: 20%; }
 }
-@media all and (min-width: 1500px) {
-    .io-ox-portal-widget-tile-border { width: 16.66%; }
+.io-ox-typeA-title, .io-ox-typeB-title {
+    height: 40px;
+    font-family: @font-light;
+    color: #888;
 }
-@media all and (min-width: 1800px) {
-    .io-ox-portal-widget-tile-border { width: 14.28%; }
+.io-ox-typeA-item {
+    height: 40px;
+    border-top: 1px solid rgba(255,255,255,0.5);
+    width: 100%;
+    color: #888;
+    padding: 0 10px;
 }
-@media all and (min-width: 2100px) {
-    .io-ox-portal-widget-tile-border { width: 12.5%; }
+.io-ox-typeA-content :first-child.io-ox-typeA-item{
+    border: none;
 }
-.io-ox-portal, .io-ox-portal-tiles {
-    height: 100%;
+.io-ox-typeA-content {
+    height: 280px;
+    overflow: hidden;
 }
 
-.io-ox-portal-widget-tile {
-    background: #cce;
-    float: left;
-    padding: @large-padding;
-    overflow: hidden;
-    margin: 0;
-    cursor: pointer;
-    color: white;
-}
-.io-ox-portal-preview {
-    overflow: hidden;
-    line-height: 1.5em;
-    text-overflow: ellipsis;
-}
-.io-ox-portal-preview-firstline {
-    font-weight: bold;
-    color: white;
-}
-.io-ox-portal-preview-secondline {
-    color: white;
-    font-weight: normal;
-}
-.io-ox-portal-preview-thirdline {
-    color: rgba(255, 255, 255, 0.7);
-    font-weight: normal;
-}
-.io-ox-portal-widget-tile h1 {
+.io-ox-typeA-title {
+    width: 240px;
+    background: #000;
     color: #eee;
-    color: rgba(255, 255, 255, 0.70);
-    line-height: 1em;
-    margin: 0.7em 0 1em 0;
+    text-align: center;
+    padding-top: 6px;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
 }
-.io-ox-sidepopup-pane h1.clear-title {
-    margin-bottom: @large-padding;
+.io-ox-typeB-title{
+    width: 240px;
+    background: #000;
+    color: #eee;
+    text-align: center;
+    padding-top: 6px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
-.io-ox-portal-content .vgrid-cell.mail {
-    height: 8em;
+.io-ox-typeB-image {
+    height: 280px; /* height - title */
+    background: no-repeat center;
+    background-size: cover;
 }
-.io-ox-portal-tile-active {
+.tile-color0, .tile-color6 {
+    background: #234;
 }
-.io-ox-portal .tile-image {
-    width: 32px;
-    height: auto;
-    float: right;
-    margin: 8px 0 8px 0;
+.tile-color1, .tile-color7 {
+    background: #243;
 }
-
-.io-ox-portal {
-
-    .tile-color0 { background-color: @tile-color-0; }
-    .tile-color0:hover { background-color: darken(@tile-color-0, @tile-hover); }
-    .tile-color1 { background-color: @tile-color-1; }
-    .tile-color1:hover { background-color: darken(@tile-color-1, @tile-hover); }
-    .tile-color2 { background-color: @tile-color-2; }
-    .tile-color2:hover { background-color: darken(@tile-color-2, @tile-hover); }
-    .tile-color3 { background-color: @tile-color-3; }
-    .tile-color3:hover { background-color: darken(@tile-color-3, @tile-hover); }
-    .tile-color4 { background-color: @tile-color-4; }
-    .tile-color4:hover { background-color: darken(@tile-color-4, @tile-hover); }
-
-    .tile-color5 { background-color: @tile-color-5; }
-    .tile-color5:hover { background-color: darken(@tile-color-5, @tile-hover); }
-    .tile-color6 { background-color: @tile-color-6; }
-    .tile-color6:hover { background-color: darken(@tile-color-6, @tile-hover); }
-    .tile-color7 { background-color: @tile-color-7; }
-    .tile-color8:hover { background-color: darken(@tile-color-7, @tile-hover); }
-    .tile-color8 { background-color: @tile-color-8; }
-    .tile-color8:hover { background-color: darken(@tile-color-8, @tile-hover); }
-    .tile-color9 { background-color: @tile-color-9; }
-    .tile-color9:hover { background-color: darken(@tile-color-9, @tile-hover); }
-    
-    .tile-colorX { background-color: rgba(255, 255, 255, 0.10); cursor: default; }
-
-    .io-ox-portal-createMe { background-color: #444; }
-    .io-ox-portal-createMe:hover { background-color: #333; }
-    
-    .io-ox-portal-createMe .centered {
-        line-height: 6em;
-        text-align: center;
-        color: #888;
-    }
+.tile-color2, .tile-color8 {
+    background: #324;
+}
+.tile-color3, .tile-color9 {
+    background: #342;
+}
+.tile-color4, .tile-color10 {
+    background: #423;
+}
+.tile-color5, .tile-color11 {
+    background: #432;
 }

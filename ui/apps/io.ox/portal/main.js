@@ -265,32 +265,32 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 }
 
                 contentQueue.enqueue(createContentTask(extension));
-                var $borderBox = $('<div class="io-ox-portal-widget-tile-border">').appendTo(tileSide);
-                var $node = $('<div class="io-ox-portal-widget-tile">')
+
+                var $tile = $('<div class="io-ox-portal-widget-tile">')
                     // experimental
                     .addClass('tile-color' + getColorIndex(extension))
                     .attr('widget-id', extension.id)
-                    .appendTo($borderBox)
+                    .appendTo(tileSide)
                     .busy();
 
                 if (extension.tileClass) {
-                    $node.addClass(extension.tileClass);
+                    $tile.addClass(extension.tileClass);
                 }
 
                 if (extension.requiresSetUp()) {
                     if (extension.performSetUp) {
-                        $node.on('click', extension.performSetUp);
+                        $tile.on('click', extension.performSetUp);
                     } else {
-                        $node.on('click', function () { return keychain.createInteractively(extension.id); });
+                        $tile.on('click', function () { return keychain.createInteractively(extension.id); });
                     }
                 } else {
                     if (!extension.hideSidePopup) {
-                        $node.on('click', makeClickHandler(extension));
+                        $tile.on('click', makeClickHandler(extension));
                     }
                 }
 
                 if (/^filler/.test(extension.id)) {
-                    $node.off('click');
+                    $tile.off('click');
                 }
 
                 if (!extension.loadTile) {
@@ -306,14 +306,14 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
 
                         extension.asyncMetadata("title").done(function (title) {
                             if (title === control.CANCEL) {
-                                $borderBox.remove();
+                                $tile.remove();
                                 return;
                             }
                             $node.find(".tile-heading").text(title);
                         });
                         extension.asyncMetadata("icon").done(function (icon) {
                             if (icon === control.CANCEL) {
-                                $borderBox.remove();
+                                $tile.remove();
                                 return;
                             }
                             if (icon) {
@@ -324,7 +324,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         });
                         extension.asyncMetadata("preview").done(function (preview) {
                             if (preview === control.CANCEL) {
-                                $borderBox.remove();
+                                $tile.remove();
                                 return;
                             }
                             if (preview) {
@@ -333,7 +333,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         });
                         extension.asyncMetadata("tileColor").done(function (color) {
                             if (color === control.CANCEL) {
-                                $borderBox.remove();
+                                $tile.remove();
                                 return;
                             }
                             if (color !== undefined) {
@@ -343,7 +343,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         });
                         extension.asyncMetadata("color").done(function (color) {
                             if (color === control.CANCEL) {
-                                $borderBox.remove();
+                                $tile.remove();
                                 return;
                             }
                             if (color !== undefined) {
@@ -354,27 +354,27 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                 } //END of "is draw method missing?"
 
                 if (extension.requiresSetUp()) {
-                    $node.addClass("io-ox-portal-createMe");
-                    return (extension.invoke.apply(extension, ['drawCreationDialog', $node].concat($.makeArray(arguments))) || $.Deferred())
+                    $tile.addClass("io-ox-portal-createMe");
+                    return (extension.invoke.apply(extension, ['drawCreationDialog', $tile].concat($.makeArray(arguments))) || $.Deferred())
                         .done(function () {
-                            $node.idle();
-                            extension.invoke('postTile', $node, extension);
+                            $tile.idle();
+                            extension.invoke('postTile', $tile, extension);
                         })
                         .fail(function (e) {
-                            $node.idle().remove();
+                            $tile.idle().remove();
                         });
                 }
 
                 return extension.invoke('loadTile')
                 .pipe(function (a1, a2) {
-                    return (extension.invoke.apply(extension, ['drawTile', $node].concat($.makeArray(arguments))) || $.Deferred())
+                    return (extension.invoke.apply(extension, ['drawTile', $tile].concat($.makeArray(arguments))) || $.Deferred())
                         .done(function () {
-                            $node.idle();
-                            extension.invoke('postTile', $node, extension);
+                            $tile.idle();
+                            extension.invoke('postTile', $tile, extension);
                         });
                 })
                 .fail(function (e) {
-                    $node.idle().remove();
+                    $tile.idle().remove();
                 });
             });
         }

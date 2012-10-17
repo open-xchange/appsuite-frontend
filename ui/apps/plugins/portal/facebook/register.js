@@ -82,7 +82,6 @@ define('plugins/portal/facebook/register',
                     $previewNode.append(
                         $('<div>').text(gt('No wall posts yet.')));
                 } else {
-                    console.log("Preview:", wall);
                     _(wall).each(function (post) {
                         var message = post.message || post.description || '';
                         if (message.length > 150) {
@@ -145,7 +144,7 @@ define('plugins/portal/facebook/register',
                 ext.point('plugins/portal/facebook/renderer').each(function (renderer) {
                     var content_container = wall_content.find('div.wall-post-content');
                     if (renderer.accepts(post) && ! foundHandler) {
-//                        console.log(profile.name, ' Renderer: ', renderer.id, post);
+                        //console.log(profile.name, ' Renderer: ', renderer.id, post); //this is too useful to delete it, just uncomment it
                         renderer.draw.apply(content_container, [post]);
                         foundHandler = true;
                     }
