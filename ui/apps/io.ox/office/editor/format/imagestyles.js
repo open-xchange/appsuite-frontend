@@ -216,7 +216,7 @@ define('io.ox/office/editor/format/imagestyles',
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
             // preceding div element used for vertical offset
-            verticalOffsetNode = div.prev('div.float'),
+            verticalOffsetNode = div.prev('div.offset'),
             // first text node in paragraph
             firstTextNode = null,
             // current object width, in 1/100 mm
