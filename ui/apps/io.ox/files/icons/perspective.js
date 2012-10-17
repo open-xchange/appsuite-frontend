@@ -96,6 +96,7 @@ define('io.ox/files/icons/perspective',
 
     ext.point('io.ox/files/icons/actions').extend({
         id: 'slideshow',
+        require: 'one',
         draw: function (baton) {
             this.append(
                 $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
@@ -217,32 +218,28 @@ define('io.ox/files/icons/perspective',
     }
 
     function filterList(mediatype, list) {
-        var pattern = {
-            audio: '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)',
-            video: '\\.(mp3|m4a|m4b|wma|wav|ogg)',
-            image: '\\.(gif|bmp|tiff|jpe?g|gmp|png)'
-        };
-        _.each(_.browser, function (value, key) {
-            if (!value) return;
-            switch (key) {
-            case 'Chrome':
-                pattern.video = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
-                break;
-            case 'Safari':
-                break;
-            case 'Firefox':
-                break;
-            case 'IE':
-                break;
-            }
-        });
-        return $.grep(list, function (o) { return (new RegExp(pattern[mediatype], 'i')).test(o.filename); });
+        var pattern;
+        switch (mediatype) {
+        case 'audio':
+            pattern = '\\.(mp3|m4a|m4b|wma|wav|ogg)';
+            break;
+        case 'video':
+            pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
+            if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+            break;
+        case 'image':
+            pattern = '\\.(gif|bmp|tiff|jpe?g|gmp|png)';
+            break;
+        }
+        return $.grep(list, function (o) { return (new RegExp(pattern, 'i')).test(o.filename); });
     }
 
     function activateInlineLinks(list) {
-        if (filterList('image', list).length > 0) $('span.slideshow_fullscreen, a.slideshow').show();
-        if (filterList('audio', list).length > 0) $('a.mediaplayer.audio').show();
-        if (filterList('video', list).length > 0) $('a.mediaplayer.video').show();
+        $('span.slideshow_fullscreen, a.slideshow, a.audio, a.video').hide();
+        if (filterList('image', list).length !== 0) $('span.slideshow_fullscreen, a.slideshow').show();
+        if (filterList('audio', list).length !== 0) $('a.audio').show();
+        if (filterList('video', list).length !== 0) $('a.video').show();
+
     }
 
     function calculateLayout(el, options) {
