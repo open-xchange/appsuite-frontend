@@ -562,6 +562,9 @@ define('io.ox/office/editor/main',
             // - prevent resize handles for tables and objects (re-enabled after detach/insert)
             win.detachable = false;
 
+            // create the editor model
+            editor = new Editor(self);
+
             // create controller
             controller = new Controller(self);
 
@@ -572,8 +575,20 @@ define('io.ox/office/editor/main',
             // register window event handlers
             Utils.registerWindowResizeHandler(win, windowResizeHandler);
 
-            // register for browser offline mode event
-            $(window).on('offline', offlineHandler);
+            // cache operations from editor
+            editor.on('operation', function (event, operation) {
+                operationsBuffer.push(operation);
+            });
+
+            // wait for unload events and send notification to server
+            self.registerEventHandler(window, 'unload', function () {
+                sendCloseNotification(true);
+            });
+
+            // set into read only mode on browser 'offline' event
+            self.registerEventHandler(window, 'offline', function () {
+                controller.setEditMode(false);
+            });
 
             // disable Firefox spell checking. TODO: better solution...
             $('body').attr('spellcheck', false);
@@ -657,23 +672,6 @@ define('io.ox/office/editor/main',
             });
 
             return def;
-        }
-
-        /**
-         * Handler for the 'unload' event of the browser window. Sends a
-         * 'closedocument' notification to the server.
-         */
-        function unloadHandler() {
-            // send notification synchronously, otherwise browser may cancel it
-            sendCloseNotification(true);
-        }
-
-        /**
-         * Handler for the 'offline' mode event of the browser.
-         * Sets the editor into read only mode.
-         */
-        function offlineHandler() {
-            controller.setEditMode(false);
         }
 
         // methods ------------------------------------------------------------
@@ -892,10 +890,6 @@ define('io.ox/office/editor/main',
                 window.clearTimeout(operationsTimer);
                 operationsTimer = null;
             }
-            // unregister the unload handler for this application
-            $(window).off('unload', unloadHandler);
-            // unregister the offline handler for this application
-            $(window).off('offline', offlineHandler);
             controller.destroy();
             view.destroy();
             editor.destroy();
@@ -903,17 +897,6 @@ define('io.ox/office/editor/main',
         };
 
         // initialization -----------------------------------------------------
-
-        // create the editor model
-        editor = new Editor(this);
-
-        // cache operations from editor
-        editor.on('operation', function (event, operation) {
-            operationsBuffer.push(operation);
-        });
-
-        // wait for unload events and send notification to server
-        $(window).on('unload', unloadHandler);
 
         // configure application
         initializeFromOptions(options);

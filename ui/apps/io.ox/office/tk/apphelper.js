@@ -129,6 +129,39 @@ define('io.ox/office/tk/apphelper',
             return this.buildServiceUrl('oxodocumentfilter', options);
         };
 
+        /**
+         * Registers an event handler for specific events at the passed target
+         * object. The event handler will be unregistered automatically when
+         * the application has been closed.
+         *
+         * @param {HTMLElement|Window|jQuery} target
+         *  The target object the event handler will be bound to. Can be a DOM
+         *  node, the browser window, or a jQuery object containing DOM nodes
+         *  and/or the browser window.
+         *
+         * @param {String} events
+         *  The names of the events, as space-separated string.
+         *
+         * @param {Function} handler
+         *  The event handler function that will be bound to the specified
+         *  events.
+         *
+         * @return {ApplicationBase}
+         *  A reference to this application object.
+         */
+        this.registerEventHandler = function (target, events, handler) {
+
+            // bind event handler to events
+            $(target).on(events, handler);
+
+            // unbind handler when the application window triggers the 'quit' event
+            this.getWindow().on('quit', function () {
+                $(target).off(events, handler);
+            });
+
+            return this;
+        };
+
     } // class ApplicationBase
 
     // static class AppHelper =================================================

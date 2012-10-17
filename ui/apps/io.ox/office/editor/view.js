@@ -45,7 +45,7 @@ define('io.ox/office/editor/view',
             { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
             { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
         ],
-    
+
         // predefined highlight color definitions
         BUILTIN_HIGHLIGHT_COLOR_DEFINITIONS = [
             { label: gt('Black'),        color: { type: 'rgb', value: '000000' } },
@@ -178,11 +178,11 @@ define('io.ox/office/editor/view',
             if (theme) {
 
                 switch (context) {
-                case 'paragraph':
+                case 'fill':
                     filter = ['text1', 'text2', 'background1', 'background2'];
                     break;
-                case 'character':
-                case 'border':
+                case 'text':
+                case 'line':
                     filter = ['dark1', 'dark2', 'light1', 'light2'];
                     break;
                 default:
