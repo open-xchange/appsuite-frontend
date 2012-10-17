@@ -163,6 +163,7 @@ var jshintOptions = {
 
 function hint (data, getSrc) {
     if (jshint(data, jshintOptions)) return data;
+    fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
         var e = jshint.errors[i];
