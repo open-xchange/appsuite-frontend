@@ -2017,8 +2017,6 @@ define('io.ox/office/editor/editor',
             // Multi selection for rectangle cell selection in Firefox.
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = Position.getCellDOMSelections(paragraphs, oxosel);
-//            } else if (Position.isObjectSelection(oxosel)) {
-                // TODO
             } else {
                 ranges = Position.getDOMSelection(paragraphs, oxosel, useNonTextNode);
             }
