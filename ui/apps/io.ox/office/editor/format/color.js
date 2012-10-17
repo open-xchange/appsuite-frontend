@@ -50,7 +50,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         var r, g, b;
         
         if (hsl.s === 0) {
-            r = g = b = hsl.l * 255;
+            r = g = b = Math.round(hsl.l * 255);
         }
         else {
             var t1, t2, tr, tg, tb;
