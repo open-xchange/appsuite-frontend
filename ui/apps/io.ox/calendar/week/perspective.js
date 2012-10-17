@@ -33,6 +33,14 @@ define('io.ox/calendar/week/perspective',
         app:            null,
         view:           null,
         folder:         null,
+        days: function (d) {
+            if (d) {
+                this.columns = d;
+                return this;
+            } else {
+                return d;
+            }
+        },
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -129,6 +137,7 @@ define('io.ox/calendar/week/perspective',
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
+
             // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {
                 this.startTimeUTC = util.getTodayStart();
