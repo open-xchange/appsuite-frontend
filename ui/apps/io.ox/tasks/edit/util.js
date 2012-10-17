@@ -119,14 +119,14 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             detailsTab.trip_meter = $('<input>').attr({type: 'text', id: 'task-edit-trip-meter'}).addClass('trip_meter');
             detailsTab.currency = $('<select>').addClass('currency').attr('id', 'task-edit-currency');
             for (var i = 0; i < currencyArray.length; i++) {
-                $('<option>').text(currencyArray[i]).appendTo(detailsTab.currency);
+                $('<option>').text(_.noI18n(currencyArray[i])).appendTo(detailsTab.currency);
             }
             detailsTab.currency.prop('selectedIndex', 3);
             
             //build Output
-            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time") + ' ' + gt("in minutes"),
+            this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated time in minutes"),
                                              detailsTab.target_duration.attr('id')), detailsTab.target_duration],
-                                            [this.buildLabel(gt("Actual time") + ' ' + gt("in minutes"),
+                                            [this.buildLabel(gt("Actual time in minutes"),
                                              detailsTab.actual_duration.attr('id')), detailsTab.actual_duration]]);
             this.buildRow(detailsTab.main, [[this.buildLabel(gt("Estimated costs"),
                                              detailsTab.target_costs.attr('id')), detailsTab.target_costs],
@@ -192,10 +192,10 @@ define("io.ox/tasks/edit/util", ['gettext!io.ox/tasks',
             for (var i = 0; i < attachments.length; i++) {
                 tempNodes.push([$('<i>').addClass("icon-remove task-remove-attachment").attr('lnr', i),
                                 $('<i>').addClass('icon-paper-clip'),
-                                $('<div>').text(attachments[i].name).addClass("task-attachment-name"),
-                                $('<div>').text(strings.fileSize(attachments[i].size)).addClass("task-attachment-filesize")]);
+                                $('<div>').text(_.noI18n(attachments[i].name)).addClass("task-attachment-name"),
+                                $('<div>').text(_.noI18n(strings.fileSize(attachments[i].size))).addClass("task-attachment-filesize")]);
             }
-            //check if we have an odd number of attachements
+            //check if we have an odd number of attachments
             if (tempNodes.length !== 0 && tempNodes.length % 2 !== 0) {
                 tempNodes.push({});
             }

@@ -12,15 +12,22 @@
  */
 
 define('io.ox/calendar/edit/view-addparticipants',
-      ['io.ox/calendar/edit/module-participants',
-       'io.ox/core/tk/autocomplete',
+      ['io.ox/core/tk/autocomplete',
        'io.ox/core/api/autocomplete',
        'io.ox/mail/util',
-       'gettext!io.ox/calendar/edit/main'], function (participants, autocomplete, AutocompleteAPI, mailUtil, gt) {
+       'io.ox/participants/model',
+       'io.ox/participants/views',
+       'gettext!io.ox/calendar/edit/main'], function (autocomplete, AutocompleteAPI, mailUtil, pModel, pViews, gt) {
 
     'use strict';
 
-    var autocompleteAPI = new AutocompleteAPI({id: 'participants', contacts: true, groups: true, resources: true, distributionlists: true});
+    var autocompleteAPI = new AutocompleteAPI({
+        id: 'participants',
+        contacts: true,
+        groups: true,
+        resources: true,
+        distributionlists: true
+    });
 
     var AddParticipantView = Backbone.View.extend({
         events: {
@@ -76,16 +83,10 @@ define('io.ox/calendar/edit/view-addparticipants',
                             }
 
                             obj.data.image1_url = obj.data.image1_url || '';
-                            var pmodel = new participants.Model(obj.data);
-                            var pview = new participants.ItemView({model: pmodel, prefetched: true});
+                            var pmodel = new pModel.Participant(obj.data);
+                            var pview = new pViews.ParticipantEntryView({model: pmodel, prefetched: true, closeButton: false});
                             var markup = pview.render().el;
-
-                            // just hack a bit to make it work easely
-                            $(this).css({height: '47px'});
-                            $(markup).css({'list-style': 'none', 'margin-left': '0px', 'background': 'none'});
-                            $(markup).find('.person-link').removeClass('person-link');
-
-                            $(markup).find('.remove').remove();
+                            
                             this.append(markup);
                         }
                     },

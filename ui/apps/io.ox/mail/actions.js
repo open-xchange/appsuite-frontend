@@ -17,9 +17,10 @@ define('io.ox/mail/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'gettext!io.ox/mail/mail',
+     'gettext!io.ox/mail',
      'io.ox/core/config',
-     'io.ox/core/notifications', 'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
+     'io.ox/core/notifications',
+     'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
 
     'use strict';
 
@@ -294,6 +295,27 @@ define('io.ox/mail/actions',
             _(list).each(function (data) {
                 var url = api.getUrl(data, 'view');
                 window.open(url);
+            });
+        }
+    });
+
+    new Action('io.ox/mail/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return _(e.context).reduce(function (memo, obj) {
+                return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, true);
+        },
+        multiple: function (list) {
+            _(list).each(function (data) {
+                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+            });
+            require(['io.ox/files/carousel'], function (slideshow) {
+                slideshow.init({
+                    fullScreen: false,
+                    list: list,
+                    attachmentMode: true
+                });
             });
         }
     });
@@ -640,7 +662,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
-        prio: 'hi',
+        prio: 'lo',
         id: 'reminder',
         label: gt("Reminder"),
         ref: 'io.ox/mail/actions/reminder'
@@ -650,36 +672,43 @@ define('io.ox/mail/actions',
         index: 1200,
         prio: 'lo',
         id: 'saveEML',
-        label: gt('Save as EML'),
+        label: gt('Save as file'),
         ref: 'io.ox/mail/actions/save'
     }));
 
     // Attachments
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'preview',
+        id: 'slideshow',
         index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/mail/actions/slideshow-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 200,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
-        index: 200,
+        index: 300,
         label: gt('Open in new tab'),
         ref: 'io.ox/mail/actions/open-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
-        index: 300,
+        index: 400,
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
-        index: 400,
+        index: 500,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));

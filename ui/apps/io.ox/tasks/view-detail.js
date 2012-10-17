@@ -41,20 +41,29 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             if (task.end_date) {
                 infoPanel.append(
                         $('<br>'),
-                        $('<div>').text(gt("Due") + " " + task.end_date).addClass("end-date")
+                        
+                        $('<div>').text(//#. %1$s due date of a task
+                                        //#, c-format
+                                        gt("Due %1$s", _.noI18n(task.end_date))).addClass("end-date")
                 );
             }
             
             if (task.alarm) {
                 infoPanel.append(
                         $('<br>'),
-                        $('<div>').text(gt("Remind date") + " " + task.alarm).addClass("alarm-date")
+                        
+                        $('<div>').text(//#. %1$s reminder date of a task
+                                        //#, c-format
+                                        gt("Remind date %1$s", _.noI18n(task.alarm))).addClass("alarm-date")
                 );
             }
             if (task.percent_completed && task.percent_completed !== 0) {
                 infoPanel.append(
                         $('<br>'),
-                        $('<div>').text(gt("Progress") + " " + task.percent_completed + "%").addClass("task-progress")
+                        
+                        $('<div>').text(//#. %1$s how much of a task is completed in percent, values from 0-100
+                                        //#, c-format
+                                        gt("Progress %1$s %", _.noI18n(task.percent_completed))).addClass("task-progress")
                     );
             }
             infoPanel.append(
@@ -64,7 +73,7 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             
             if (data.priority === 3) {
                 $('<br>').appendTo(infoPanel);
-                $('<div>').text("\u2605\u2605\u2605").addClass("priority").appendTo(infoPanel);
+                $('<div>').text(gt.noI18n("\u2605\u2605\u2605")).addClass("priority").appendTo(infoPanel);
             }
             
             //check to see if there is a leading <br> and remove it
@@ -74,14 +83,14 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
             }
             infoPanel.appendTo(node);
             
-            $('<div>').text(task.title).addClass("title clear-title").appendTo(node);
+            $('<div>').text(gt.noI18n(task.title)).addClass("title clear-title").appendTo(node);
             if (task.number_of_attachments > 0) {
                 ext.point("io.ox/tasks/detail-attach").invoke("draw", node, task);
             }
             
             var inlineLinks = $('<div>').addClass("tasks-inline-links").appendTo(node);
             ext.point("io.ox/tasks/detail-inline").invoke("draw", inlineLinks, data);
-            $('<div>').text(task.note).addClass("note").appendTo(node);
+            $('<div>').text(gt.noI18n(task.note)).addClass("note").appendTo(node);
             
             return node;
         }
@@ -100,12 +109,12 @@ define("io.ox/tasks/view-detail", ['io.ox/tasks/util',
         id: 'attachments',
         draw: function (task) {
             var attachmentNode = $('<div>').addClass("attachments-container").appendTo(this);
-            $('<span>').text(gt("Attachments") + '\u00A0\u00A0').addClass("attachments").appendTo(attachmentNode);
+            $('<span>').text(gt("Attachments \u00A0\u00A0")).addClass("attachments").appendTo(attachmentNode);
             require(['io.ox/core/api/attachment'], function (api) {
                 api.getAll({folder_id: task.folder_id, id: task.id, module: 4}).done(function (data) {
                     _(data).each(function (a, index) {
                         // draw
-                        buildDropdown(attachmentNode, a.filename, a);
+                        buildDropdown(attachmentNode, _.noI18n(a.filename), a);
                     });
                     if (data.length > 1) {
                         buildDropdown(attachmentNode, gt("all"), data);

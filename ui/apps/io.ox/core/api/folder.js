@@ -15,7 +15,8 @@ define('io.ox/core/api/folder',
      'io.ox/core/cache',
      'io.ox/core/config',
      'io.ox/core/api/account',
-     'io.ox/core/event'], function (http, cache, config, account, Events) {
+     'io.ox/core/event',
+     'gettext!io.ox/core'], function (http, cache, config, account, Events, gt) {
 
     'use strict';
 
@@ -197,7 +198,7 @@ define('io.ox/core/api/folder',
 
             // options
             var opt = _.extend({
-                    type: 'mail',
+                    type: 'contacts',
                     cache: true
                 }, options || {}),
 
@@ -206,9 +207,9 @@ define('io.ox/core/api/folder',
                             module: 'folders',
                             appendColumns: true,
                             params: {
-                                tree: '1',
                                 action: 'allVisible',
-                                content_type: opt.type
+                                content_type: opt.type,
+                                tree: '1'
                             }
                         })
                         .pipe(function (data, timestamp) {
@@ -259,27 +260,65 @@ define('io.ox/core/api/folder',
             return opt.cache === false ? getter() : visibleCache.get(opt.type, getter);
         },
 
+        remove: function (options) {
+
+            var opt = _.extend({
+                folder: null
+            }, options || {});
+
+            // get folder
+            return this.get({ folder: opt.folder }).pipe(function (data) {
+
+                var id = data.id, folder_id = data.folder_id;
+
+                // clear caches first
+                return $.when(
+                    folderCache.remove(id),
+                    subFolderCache.remove(id),
+                    subFolderCache.remove(folder_id),
+                    visibleCache.remove(data.module)
+                )
+                .pipe(function () {
+                    // trigger event
+                    api.trigger('delete:prepare', id, folder_id);
+                    // delete on server
+                    return http.PUT({
+                        module: 'folders',
+                        params: {
+                            action: 'delete',
+                            folder_id: opt.folder,
+                            tree: '1'
+                        },
+                        data: [opt.folder],
+                        appendColumns: false
+                    })
+                    .done(function () {
+                        api.trigger('delete', id, folder_id);
+                    });
+                });
+            })
+            .fail(function (error) {
+                api.trigger('delete:fail', opt.folder);
+            });
+        },
+
         create: function (options) {
 
             // options
             var opt = $.extend({
-                folder: '1',
-                tree: '1',
-                event: true
+                folder: null
             }, options || {});
 
             // default data
             opt.data = $.extend({
-                module: 'mail',
-                title: 'New Folder',
+                title: gt('New Folder'),
                 subscribed: 1
             }, opt.data || {});
 
             // get parent folder to inherit permissions
-            return api.get({
-                folder: opt.folder
-            })
-            .pipe(function (parent) {
+            return api.get({ folder: opt.folder }).pipe(function (parent) {
+                // inherit module
+                var module = (opt.data.module = opt.data.module || parent.module);
                 // inherit rights only if folder isn't a system folder
                 // (type = 5)
                 if (parent.type === 5) {
@@ -304,14 +343,60 @@ define('io.ox/core/api/folder',
                 })
                 .pipe(function (data) {
                     // wait for updating sub folder cache
-                    return api.getSubFolders({
-                        folder: opt.folder,
-                        cache: false
-                    })
-                    .pipe(function () {
+                    return $.when(
+                        api.get({ folder: data, cache: false }),
+                        api.getSubFolders({ folder: opt.folder, cache: false }),
+                        !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
+                    )
+                    .pipe(function (getRequest) {
                         // return proper data
-                        return data;
+                        return getRequest[0];
                     });
+                });
+            })
+            .fail(function (error) {
+                api.trigger('create:fail', error, opt.folder);
+            });
+        },
+
+        update: function (options) {
+
+            // options
+            var opt = $.extend({
+                folder: '1',
+                changes: {}
+            }, options || {});
+
+            return this.get({ folder: opt.folder }).pipe(function (data) {
+                // trigger event
+                api.trigger('update:prepare', opt.folder);
+                // remove from caches
+                return $.when(
+                    folderCache.remove(data.id),
+                    subFolderCache.remove(data.folder_id),
+                    visibleCache.remove(data.module)
+                )
+                .pipe(function () {
+                    // update folder on server (unless no changes are given)
+                    return http.PUT({
+                        module: 'folders',
+                        params: {
+                            action: 'update',
+                            id: opt.folder,
+                            tree: '1'
+                        },
+                        data: opt.changes || {}
+                    })
+                    .done(function (id) {
+                        // get fresh folder data (use maybe changed id)
+                        api.get({ folder: id}, false).done(function () {
+                            // trigger event
+                            api.trigger('update', opt.folder, id, data);
+                        });
+                    });
+                })
+                .fail(function (error) {
+                    api.trigger('update:fail', error, opt.folder);
                 });
             });
         },
@@ -566,17 +651,17 @@ define('io.ox/core/api/folder',
                         // add first folder as dropdown
                         first = list[0];
                         li.after(
-                            $('<span class="divider">').text(' / '),
+                            $('<span class="divider">').text(gt.noI18n(' / ')),
                             $('<li class="dropdown">').append(
                                 $('<a class="dropdown-toggle" data-toggle="dropdown" href="#">').append(
-                                    $.txt(first.title + ' ... '),
+                                    $.txt(gt.noI18n(first.title + ' ... ')),
                                     $('<b class="caret">')
                                 ),
                                 $('<ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">').append(
                                     _(list).map(function (folder) {
                                         return $('<li>').append(
                                             $('<a href="#">')
-                                            .attr('data-folder-id', folder.id).text(folder.title)
+                                            .attr('data-folder-id', folder.id).text(gt.noI18n(folder.title))
                                         );
                                     })
                                 )
@@ -590,15 +675,19 @@ define('io.ox/core/api/folder',
         var add = function (folder, i, list, options) {
             var li = $('<li>'), elem, isLast = i === list.length - 1;
             if (isLast && options.last) {
-                elem = li.addClass('active');
+                elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
-                elem = $('<a href="#">');
-                li.append(elem, isLast ? $() : $('<span class="divider">').text(' / '));
+                if (options.handler === undefined) {
+                    elem = li.addClass('active').text(gt.noI18n(folder.title));
+                } else {
+                    li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
+                }
+                li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
             }
             if (isLast && options.subfolder && options.handler !== undefined) {
                 dropdown(elem, folder.id);
             }
-            elem.attr('data-folder-id', folder.id).text(folder.title);
+            elem.attr('data-folder-id', folder.id);
             this.append(li);
         };
 

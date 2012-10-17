@@ -19,7 +19,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/calendar/calendar",
+     "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"
     ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links, gt) {
 

@@ -34,7 +34,7 @@
 }
 .portal-full {
     height: 100%;
-    overflow: auto;
+    .overflow(auto);
 }
 .io-ox-portal-rss-feedname {
     font-weight: 500;

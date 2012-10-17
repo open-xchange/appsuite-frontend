@@ -17,7 +17,8 @@ define('io.ox/settings/main',
       'io.ox/core/tk/forms',
       'io.ox/core/tk/view',
       'io.ox/core/commons',
-      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons) {
+      'gettext!io.ox/core',
+      'less!io.ox/settings/style.css'], function (VGrid, appsApi, ext, forms, View, commons, gt) {
 
     'use strict';
 
@@ -73,7 +74,7 @@ define('io.ox/settings/main',
 
         app.setWindow(win = ox.ui.createWindow({
             name: 'io.ox/settings',
-            title: 'Settings',
+            title: gt('Settings'),
             toolbar: true
         }));
 
@@ -90,7 +91,7 @@ define('io.ox/settings/main',
             forms.createCheckbox({
                 dataid: 'settings-expertcb',
                 initialValue: expertmode,
-                label: 'Expert\u00a0mode' // mmmh, nbsp sucks here
+                label: gt('Expert mode')
             })
             .on('update.model', function (e, options) {
                 expertmode = options.value;
@@ -121,21 +122,27 @@ define('io.ox/settings/main',
         grid.requiresLabel = tmpl.requiresLabel;
 
         grid.setAllRequest(function () {
-            var apps = _.filter(appsApi.getInstalled(), function (item) {
-                return item.settings;
-            });
+            var def = $.Deferred();
+            appsApi.getInstalled().done(function (installed) {
+                var apps = _.filter(installed, function (item) {
+                    return item.settings;
+                });
 
-            apps.push({
-                category: 'Basic',
-                company: 'Open-Xchange',
-                description: 'Manage Accounts',
-                icon: '',
-                id: 'io.ox/settings/accounts',
-                settings: true,
-                title: 'Keyring'
+                apps.push({
+                    category: 'Basic',
+                    company: 'Open-Xchange',
+                    description: 'Manage Accounts',
+                    icon: '',
+                    id: 'io.ox/settings/accounts',
+                    settings: true,
+                    title: 'Keyring'
+                });
+                
+                def.resolve(apps);
             });
+            
 
-            return $.Deferred().resolve(apps);
+            return def;
         });
 
         grid.setMultiple(false);

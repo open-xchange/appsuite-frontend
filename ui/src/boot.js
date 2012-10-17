@@ -20,7 +20,7 @@ require({
 
 // add fake console (esp. for IE)
 if (typeof window.console === 'undefined') {
-    window.console = { log: $.noop, debug: $.noop, error: $.noop };
+    window.console = { log: $.noop, debug: $.noop, error: $.noop, warn: $.noop };
 }
 
 $(document).ready(function () {
@@ -101,7 +101,7 @@ $(document).ready(function () {
                         .off('submit')
                         .attr('action', ox.apiRoot + '/redirect')
                         .removeAttr('target')
-                        .find('input[type=hidden][name=location]').val(ox.root + '/' + location).end()
+                        .find('input[type=hidden][name=location]').val(ox.root + '/' + location /* _.url.get(location) */).end()
                         .submit();
                 }
             });
@@ -127,6 +127,9 @@ $(document).ready(function () {
             ).done(function (core) {
                 // go!
                 core.launch();
+            })
+            .fail(function (e) {
+                console.error('Cannot launch core!', e);
             });
         });
     };
@@ -157,7 +160,7 @@ $(document).ready(function () {
                 // restore form
                 restore();
                 // reset focus
-                $("#io-ox-login-" + (focus || (relogin ? "password" : "username"))).focus().select();
+                $("#io-ox-login-" + (_.isString(focus) ? focus : (relogin ? "password" : "username"))).focus().select();
             },
             // get user name / password
             username = $("#io-ox-login-username").val(),
@@ -297,6 +300,12 @@ $(document).ready(function () {
             }
         }
 
+        function loadCoreFiles() {
+            // Set user's language (as opposed to the browser's language)
+            require("io.ox/core/gettext").setLanguage(ox.language);
+            return require([ox.base + "/pre-core.js"]);
+        }
+
         // got session via hash?
         if (_.url.hash('session')) {
             ox.session = _.url.hash('session');
@@ -305,14 +314,17 @@ $(document).ready(function () {
             ox.language = _.url.hash('language');
             ref = _.url.hash('ref');
             _.url.redirect('#' + (ref ? decodeURIComponent(ref) : ''));
-            loadCore();
+            loadCoreFiles().done(function () {
+                loadCore();
+            });
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            require("io.ox/core/session").autoLogin()
-                .done(function () {
+            return require("io.ox/core/session").autoLogin().done(function () {
+                loadCoreFiles().done(function () {
                     gotoCore(true);
-                })
-                .fail(fail);
+                });
+            })
+            .fail(fail);
         } else {
             fail();
         }
@@ -464,16 +476,13 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // Set user's language (as opposed to the browser's language)
-        require("io.ox/core/gettext").setLanguage(ox.language);
-
         // get pre core & server config
-        require([ox.base + "/src/serverconfig.js", ox.base + "/pre-core.js"])
+        require([ox.base + "/src/serverconfig.js"])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;
                 // set page title now
-                document.title = ox.serverConfig.pageTitle || '';
+                document.title = _.noI18n(ox.serverConfig.pageTitle || '');
                 // continue
                 autoLogin();
             });

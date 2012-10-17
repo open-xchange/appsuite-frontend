@@ -368,6 +368,7 @@ exports.gzip = function(src, dest, callback) {
  * (like Array.prototype.sort).
  * @param {Array} a The first array.
  * @param {Array} b The second array.
+ * @param {Function} cmp An optional comparison function like in Array.sort().
  * @type Array
  * @return A sorted array with elements from a and b, except for duplicates
  * from b. All entries from a are included. 

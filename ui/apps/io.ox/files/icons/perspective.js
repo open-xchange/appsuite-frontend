@@ -20,7 +20,7 @@ define('io.ox/files/icons/perspective',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
      'io.ox/core/api/folder',
-     'gettext!io.ox/files/files'
+     'gettext!io.ox/files'
      ], function (viewDetail, ext, dialogs, api, upload, dnd, shortcuts, commons, folderAPI, gt) {
 
     'use strict';
@@ -30,7 +30,7 @@ define('io.ox/files/icons/perspective',
         thumbnailHeight: 90,
         fileIconWidth: 158,
         fileIconHeight: 182,
-        fileFilterRegExp: '^((?![.]_?).)'
+        fileFilterRegExp: '^[^.].*$'
     });
 
     ext.point('io.ox/files/icons').extend({
@@ -52,7 +52,7 @@ define('io.ox/files/icons/perspective',
             if (baton.app.getWindow().search.active) {
                 this.append(
                     $('<li class="breadcrumb">').append(
-                        $('<li class="active">').text('Searched for: ' + baton.app.getWindow().search.query)
+                        $('<li class="active">').text(gt('Searched for') + ': ' + baton.app.getWindow().search.query)
                     )
                 );
             }
@@ -76,42 +76,63 @@ define('io.ox/files/icons/perspective',
             carousel.init({
                 fullScreen: !!e.data.fullScreen,
                 list: app.getFiles(),
-                app: app
+                app: app,
+                attachmentMode: false
             });
         });
     }
 
-//    function startMediaplayer(e) {
-//        e.preventDefault();
-//        require(['io.ox/files/mediaplayer'], function (//mediaplayer) {
-//            var app = e.data.app;
-//            mediaplayer.init({
-//                list: app.getFiles(),
-//                app: app
-//            });
-//        });
-//    }
-
-    function setContentType(ids)
-    {
-
+    function startMediaplayer(e) {
+        e.preventDefault();
+        require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+            var app = e.data.app;
+            mediaplayer.init({
+                list: app.getFiles(),
+                app: app,
+                videoSupport: !!e.data.videoSupport
+            });
+        });
     }
 
     ext.point('io.ox/files/icons/actions').extend({
         id: 'slideshow',
+        require: 'one',
         draw: function (baton) {
             this.append(
                 $('<a href="#" class="slideshow">').text(gt('View Slideshow'))
                     .on('click', { app: baton.app, fullScreen: false }, startSlideshow),
-                $.txt(' ('),
-                $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
-                    .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
-                $.txt(')')
- //               $('<a href="#" class="mediaplayer">').text(gt('//Mediaplayer'))
- //                   .on('click', { app: baton.app, fullScreen: true }, startMediaplayer)
+                $('<span class="slideshow_fullscreen">').append(
+                    $.txt(gt.noI18n('(')),
+                    $('<a href="#" class="slideshow">').text(gt('Fullscreen'))
+                        .on('click', { app: baton.app, fullScreen: true }, startSlideshow),
+                    $.txt(gt.noI18n(')'))
+                )
             );
         }
     });
+
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'audioplayer',
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="mediaplayer audio">').text(gt('Play audio files'))
+                    .on('click', { app: baton.app, fullScreen: true, videoSupport: false }, startMediaplayer)
+            );
+        }
+    });
+
+    ext.point('io.ox/files/icons/actions').extend({
+        id: 'videoplayer',
+        draw: function (baton) {
+            this.append(
+                $('<a href="#" class="mediaplayer video">').text(gt('Play video files'))
+                    .on('click', { app: baton.app, fullScreen: true, videoSupport: true }, startMediaplayer)
+            );
+        }
+    });
+
+
+
 
     function drawGeneric(name) {
         var node = $('<i>');
@@ -126,17 +147,35 @@ define('io.ox/files/icons/perspective',
         return node;
     }
 
-    function iconError() {
-        $(this).replaceWith(drawGeneric());
+    function imageIconError(e) {
+        $(this).replaceWith(drawGeneric(e.data.name));
+    }
+
+    function audioIconError(e) {
+        $(this).replaceWith(drawGeneric(e.data.name));
     }
 
     function drawImage(src) {
-        return $('<img>', { alt: '', src: src })
-            .addClass('img-polaroid').on('error', iconError);
+        return $('<img>', { alt: '', src: src }).addClass('img-polaroid');
+    }
+
+    function getCover(file, options) {
+        return 'api/image/file/mp3Cover?folder=' + file.folder_id + '&id=' + file.id +
+            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&content_type=' + file.file_mimetype;
+        return api.getUrl(file, 'open') +
+            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight +
+            '&content_type=' + file.file_mimetype;
+    }
+
+    function cut(str) {
+        str = String(str || '');
+        var parts = str.split('.'),
+            extension = parts.length > 1 ? parts.pop() : '';
+        str = parts.join('');
+        return (str.length <= 40 ? str + '.' : str.substr(0, 40) + '…') + extension;
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -146,13 +185,15 @@ define('io.ox/files/icons/perspective',
                 img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-                img = drawImage(getIcon(file, options));
+                img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
+            } else if ((/^audio\/mp3$/i).test(file.file_mimetype)) {
+                img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else {
                 img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2"))
+                $('<div class="title">').text(gt.noI18n(cut(file.title)))
             );
         }
     });
@@ -174,6 +215,31 @@ define('io.ox/files/icons/perspective',
 
     function filterFiles(files, options) {
         return $.grep(files, function (e) { return (new RegExp(options.fileFilterRegExp)).test(e.filename); });
+    }
+
+    function filterList(mediatype, list) {
+        var pattern;
+        switch (mediatype) {
+        case 'audio':
+            pattern = '\\.(mp3|m4a|m4b|wma|wav|ogg)';
+            break;
+        case 'video':
+            pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
+            if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+            break;
+        case 'image':
+            pattern = '\\.(gif|bmp|tiff|jpe?g|gmp|png)';
+            break;
+        }
+        return $.grep(list, function (o) { return (new RegExp(pattern, 'i')).test(o.filename); });
+    }
+
+    function activateInlineLinks(list) {
+        $('span.slideshow_fullscreen, a.slideshow, a.audio, a.video').hide();
+        if (filterList('image', list).length !== 0) $('span.slideshow_fullscreen, a.slideshow').show();
+        if (filterList('audio', list).length !== 0) $('a.audio').show();
+        if (filterList('video', list).length !== 0) $('a.video').show();
+
     }
 
     function calculateLayout(el, options) {
@@ -277,6 +343,7 @@ define('io.ox/files/icons/perspective',
                         start = 0;
                         end = displayedRows * layout.iconCols;
                         allIds = filterFiles(ids, options);
+                        activateInlineLinks(allIds);
                         redraw(allIds.slice(start, end));
                     })
                     .fail(function (response) {
@@ -341,6 +408,11 @@ define('io.ox/files/icons/perspective',
             win.on('cancel-search', function () {
                 // TODO: Abort xhr request if still running
                 drawFirst();
+            });
+
+            win.on("hide", function () {
+                dropZone.remove();
+                shortcutPoint.deactivate();
             });
 
 //            // published?

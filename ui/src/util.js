@@ -15,14 +15,8 @@
 
     "use strict";
 
-    // browser detection
-    // adopted from prototype.js
-    var ua = navigator.userAgent,
-        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
-        webkit = ua.indexOf('AppleWebKit/') > -1,
-        chrome = ua.indexOf('Chrome/') > -1,
-        // shortcut
-        slice = Array.prototype.slice,
+    // shortcut
+    var slice = Array.prototype.slice,
         // deserialize
         deserialize = function (str, delimiter) {
             var pairs = (str || "").split(delimiter === undefined ? "&" : delimiter);
@@ -98,6 +92,12 @@
         'Safari': '5'
     };
 
+    // browser detection - adopted from prototype.js
+    var ua = navigator.userAgent,
+        isOpera = Object.prototype.toString.call(window.opera) === "[object Opera]",
+        webkit = ua.indexOf('AppleWebKit/') > -1,
+        chrome = ua.indexOf('Chrome/') > -1;
+
     // add namespaces
     _.browser = {
         /** is IE? */
@@ -108,13 +108,15 @@
         /** is WebKit? */
         WebKit: webkit,
         /** Safari */
-        Safari: webkit && !chrome ? ua.split('Version/')[1].split(' ')[0].split('.')[0]: undefined,
+        Safari: webkit && !chrome ? ua.split('AppleWebKit/')[1].split(' ')[0].split('.')[0]: undefined,
         /** Chrome */
         Chrome: webkit && chrome ? ua.split('Chrome/')[1].split(' ')[0].split('.')[0] : undefined,
         /** is Firefox? */
         Firefox:  (ua.indexOf('Gecko') > -1 && ua.indexOf('KHTML') === -1) ? ua.split('Firefox/')[1].split('.')[0] : undefined,
         /** MacOS **/
-        MacOS: ua.indexOf('Macintosh') > -1
+        MacOS: ua.indexOf('Macintosh') > -1,
+        /** iOS **/
+        iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
     };
 
     _.url = {
@@ -156,8 +158,12 @@
          * Redirect
          */
         redirect: function (path) {
-            var l = location, href = l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
-            location.href = href;
+            location.href = _.url.get(path);
+        },
+
+        get: function (path) {
+            var l = location;
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
         }
     };
 
@@ -386,10 +392,6 @@
             );
         },
 
-        prewrap: function (text) {
-            return String(text).replace(/([\/\.\,\-]+)/g, "$1\u200B");
-        },
-
         // good for leading-zeros for example
         pad: function (val, length, fill) {
             var str = String(val), n = length || 1, diff = n - str.length;
@@ -481,6 +483,10 @@
 
         fallback: function (o, defaultValue) {
             return _.isSet(o) ? o : defaultValue;
+        },
+
+        noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
+            return '\u200b' + text + '\u200c';
         }
     });
 

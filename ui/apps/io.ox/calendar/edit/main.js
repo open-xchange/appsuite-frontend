@@ -12,11 +12,15 @@
  */
 
 define('io.ox/calendar/edit/main',
-      ['io.ox/calendar/edit/model-appointment',
+      ['io.ox/calendar/model',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'less!io.ox/calendar/edit/style.less'], function (AppointmentModel, api, MainView, gt) {
+       'io.ox/core/api/folder',
+       'io.ox/core/config',
+       'io.ox/core/date',
+       'io.ox/core/extensions',
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI, date, ext) {
 
     'use strict';
 
@@ -31,7 +35,7 @@ define('io.ox/calendar/edit/main',
                 df = new $.Deferred();
 
             //be gently
-            if (self.model.isDirty()) {
+            if (self.getDirtyStatus()) {
                 require(['io.ox/core/tk/dialogs'], function (dialogs) {
                     new dialogs.ModalDialog()
                         .text(gt('Do you really want to lose your changes?'))
@@ -39,10 +43,10 @@ define('io.ox/calendar/edit/main',
                         .addButton('cancel', gt('Cancel'))
                         .show()
                         .done(function (action) {
-                            console.debug('Action', action);
                             if (action === 'delete') {
                                 self.dispose();
                                 df.resolve();
+
                             } else {
                                 df.reject();
                             }
@@ -67,30 +71,33 @@ define('io.ox/calendar/edit/main',
         },
         edit: function (data) {
             var self = this;
-            var cont = function (data) {
-                self.model = new AppointmentModel(data);
+            function cont(data) {
+                self.model = appointmentModel.factory.create(data);
+                appointmentModel.setDefaultParticipants(self.model).done(function () {
+                    self.view = new MainView({model: self.model, mode: data.id ? 'edit' : 'create'});
+                    self.model.on('create:start update:start', function () {
+                        self.getWindow().busy();
+                    });
+                    self.model.on('create update', _.bind(self.onSave, self));
+                    self.model.on('backendError', function () {
+                        self.getWindow().idle();
+                    });
 
-                window.mymodel = self.model;
+                    self.setTitle(gt('Edit Appointment'));
 
-                if (self._restored === true) {
-                    self.model.toSync = data; //just to make it dirty
-                }
+                    // create app window
+                    self.setWindow(ox.ui.createWindow({
+                        name: 'io.ox/calendar/edit',
+                        title: gt('Create Appointment'),
+                        toolbar: true,
+                        search: false,
+                        close: true
+                    }));
 
-                self.view = new MainView({model: self.model});
-                self.view.on('save', _.bind(self.onSave, self));
-
-                // create app window
-                self.setWindow(ox.ui.createWindow({
-                    name: 'io.ox/calendar/edit',
-                    title: gt('Edit Appointment'),
-                    toolbar: true,
-                    search: false,
-                    close: true
-                }));
-
-                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-                self.getWindow().show(_.bind(self.onShowWindow, self));
-            };
+                    $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                    self.getWindow().show(_.bind(self.onShowWindow, self));
+                });
+            }
 
             if (data) {
                 //hash support
@@ -105,25 +112,41 @@ define('io.ox/calendar/edit/main',
                     });
             }
         },
+        considerSaved: false,
         create: function (data) {
             var self = this;
+            self.model = appointmentModel.factory.create(data);
+            appointmentModel.setDefaultParticipants(self.model).done(function () {
+                self.view = new MainView({model: self.model, lasso: data.lasso || false});
+                self.model.on('create update', _.bind(self.onSave, self));
 
-            self.model = new AppointmentModel(data);
-            self.view = new MainView({model: self.model});
-            self.view.on('save', _.bind(self.onSave, self));
-            self.setTitle(gt('Create Appointment'));
+                self.view.on('save:success', function () {
+                    self.considerSaved = true;
+                    self.view.idle();
+                    self.quit();
+                });
 
-            // create app window
-            self.setWindow(ox.ui.createWindow({
-                name: 'io.ox/calendar/edit',
-                title: gt('Create Appointment'),
-                toolbar: false,
-                search: false,
-                close: true
-            }));
+                self.setTitle(gt('Create Appointment'));
 
-            $(self.getWindow().nodes.main[0]).append(self.view.render().el);
-            self.getWindow().show(_.bind(self.onShowWindow, self));
+                // create app window
+                self.setWindow(ox.ui.createWindow({
+                    name: 'io.ox/calendar/edit',
+                    title: gt('Create Appointment'),
+                    toolbar: true,
+                    search: false,
+                    close: true
+                }));
+
+                $(self.getWindow().nodes.main[0]).append(self.view.render().el);
+                self.getWindow().show(_.bind(self.onShowWindow, self));
+            });
+
+        },
+        getDirtyStatus : function () {
+            if (this.considerSaved) {
+                return false;
+            }
+            return !_.isEmpty(this.model.changedSinceLoading());
         },
         onShowWindow: function () {
             var self = this;
@@ -135,68 +158,18 @@ define('io.ox/calendar/edit/main',
                 self.getWindow().setTitle(value);
                 self.setTitle(value);
             });
-            $('#' + self.view.guid + '_title').get(0).focus();
+            //$('#' + self.view.guid + '_title').get(0).focus();
+
             $(self.getWindow().nodes.main[0]).addClass('scrollable');
         },
         onSave: function () {
-            var self = this;
-            self.getWindow().busy();
-            self.model.save()
-                .done(
-                    function (data) {
-                        self.getWindow().idle();
-                        self.trigger('save', data);
-                        self.quit();
-                    }
-                )
-                .fail(
-                    function (err) {
-                        self.getWindow().idle();
-                        var errContainer = $('<div>').addClass('alert alert-error');
-                        $(self.view.el).find('.error-display').empty().append(errContainer);
+            this.considerSaved = true;
+            this.getWindow().idle();
+            this.quit();
 
-                        if (err.conflicts !== null && err.conflicts !== undefined) {
-                            errContainer.text(gt('Conflicts detected'));
-
-                            require(['io.ox/calendar/edit/module-conflicts'], function (conflictsModule) {
-                                var conflicts = new conflictsModule.Collection(err.conflicts);
-                                conflicts.fetch()
-                                    .done(function () {
-                                        var conView = new conflictsModule.CollectionView({collection: conflicts});
-                                        window.cview = conView;
-                                        $(self.view.el).find('.additional-info').empty().append(
-                                            conView.render().el
-                                        );
-                                        conView.on('ignore', function () {
-                                            self.model.set('ignore_conflicts', true);
-                                            return self.onSave();
-                                        });
-                                        conView.on('cancel', function () {
-                                            $(conView.el).remove();
-                                            $(self.view.el).find('.error-display').empty();
-                                        });
-
-                                        if (conView.isResource) {
-                                            errContainer.text(gt('Resource Conflicts detected!'));
-                                        }
-                                    });
-
-                            });
-                        } else if (err.error !== undefined) {
-                            errContainer.append(
-                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
-                                $('<p>').text(_.formatError(err))
-                            );
-                        } else {
-                            errContainer.append(
-                                $('<a>').addClass('close').attr('data-dismiss', 'alert').attr('type', 'button').text('x'),
-                                $('<p>').text(err)
-                            );
-                        }
-                    }
-                );
-        },
+        }/*,
         failSave: function () {
+            console.log("fail save", this);
             return {
                 module: 'io.ox/calendar/edit',
                 point: this.model.attributes
@@ -212,7 +185,7 @@ define('io.ox/calendar/edit/main',
             }
             df.resolve();
             return df;
-        }
+        }*/
     };
 
 

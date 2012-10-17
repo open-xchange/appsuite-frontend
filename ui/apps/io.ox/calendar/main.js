@@ -22,7 +22,7 @@ define("io.ox/calendar/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/calendar' }),
+    var app = ox.ui.createApp({ name: 'io.ox/calendar', title: 'Calendar' }),
         // app window
         win;
 
@@ -45,7 +45,7 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to month view
+                // switch to week view
                 require(['io.ox/calendar/week/perspective'], function (perspective) {
                     perspective.show(app);
                 });

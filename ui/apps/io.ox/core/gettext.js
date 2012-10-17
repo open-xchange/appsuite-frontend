@@ -47,8 +47,8 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function verify(s, node) {
-        if (isTranslated(s)) return;
-        console.error("Untranslated string", s, node);
+        if (isTranslated(s) || $(node).closest('.noI18n').length) return;
+        console.error(isDoubleTranslated(s) ? 'Double translated string' : 'Untranslated string', s, encodeURIComponent(s), node);
         $(node).css('backgroundColor', 'rgba(255, 192, 0, 0.5)');
     }
 
@@ -57,16 +57,26 @@ define("io.ox/core/gettext", [], function () {
     }
 
     function isTranslated(text) {
-        return (/^\u200b[^\u200b\u200c]*\u200c$/).test(text);
+        return (/^(\u200b[^\u200b\u200c]*\u200c|\s*)$/).test(text);
+    }
+
+    function isDoubleTranslated(text) {
+        return (/^\u200b\u200b.+\u200c\u200c$/).test(text);
     }
 
     function gt(id, po) {
         po.plural = new Function("n", "return " + po.plural + ";");
 
         function gettext(text) {
+            var args;
             text = gettext.pgettext("", text);
-            return arguments.length < 2 ? text :
-                gettext.format.apply(gettext, arguments);
+            if (arguments.length < 2) {
+                return text;
+            } else {
+                args = Array.prototype.slice.call(arguments);
+                args.splice(0, 1, text);
+                return gettext.format.apply(gettext, args);
+            }
         }
 
         if (_.url.hash('debug-i18n')) {

@@ -28,7 +28,10 @@ define("io.ox/contacts/main",
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/contacts' }),
+    var app = ox.ui.createApp({
+            name: 'io.ox/contacts',
+            title: 'Address Book'
+        }),
         // app window
         win,
         // grid

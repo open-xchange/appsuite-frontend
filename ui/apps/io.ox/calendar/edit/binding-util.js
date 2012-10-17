@@ -25,7 +25,7 @@ define('io.ox/calendar/edit/binding-util',
         },
         convertTime: function (direction, value, attribute, model) {
             if (direction === 'ModelToView') {
-                return BinderUtils._toTime(value, attribute, model);
+                return BinderUtils._toTime(value, attribute, model, direction);
             } else {
                 return BinderUtils._timeStrToDate(value, attribute, model);
             }
@@ -39,6 +39,7 @@ define('io.ox/calendar/edit/binding-util',
         },
 
         _toDate: function (value, attribute, model) {
+
             var mydate, formatted;
             if (!value) {
                 return null;
@@ -55,7 +56,7 @@ define('io.ox/calendar/edit/binding-util',
             formatted = new dateAPI.Local(mydate).format(dateAPI.DATE);
             return formatted;
         },
-        _toTime: function (value, attribute, model) {
+        _toTime: function (value, attribute) {
             var myTime, formatted;
             if (!value) {
                 return null;
@@ -80,7 +81,6 @@ define('io.ox/calendar/edit/binding-util',
                 return mydate.getTime();
             }
 
-
             if (parsedDate.getTime() === 0) {
                 return model.get(attribute);
             }
@@ -92,6 +92,7 @@ define('io.ox/calendar/edit/binding-util',
             return dateAPI.Local.localTime(mydate.getTime());
         },
         _dateStrToDate: function (value, attribute, model) {
+
             var myValue = parseInt(model.get(attribute), 10) || false;
             if (!myValue) {
                 return value;

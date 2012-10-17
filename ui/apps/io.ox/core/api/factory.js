@@ -29,7 +29,7 @@ define("io.ox/core/api/factory",
 
     // reduce object to id, folder, recurrence_position
     var reduce = function (obj) {
-        return !obj ? obj : _(GET_IDS).reduce(function (memo, prop) {
+        return !_.isObject(obj) ? obj : _(GET_IDS).reduce(function (memo, prop) {
             var p = prop.split(':'), source = p[0], target = p[1] || p[0];
             if (source in obj) { memo[target] = obj[source]; }
             return memo;

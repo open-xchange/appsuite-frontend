@@ -12,7 +12,7 @@
  */
 
 define("io.ox/portal/pulltorefresh",
-    ['gettext!io.ox/portal/pulltorefresh', 'less!io.ox/portal/pulltorefresh.css'], function (gt) {
+    ['gettext!io.ox/portal', 'less!io.ox/portal/pulltorefresh.css'], function (gt) {
 
     'use strict';
 

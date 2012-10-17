@@ -44,9 +44,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 7;
-                perspective.show(app);
+                perspective.days(7).show(app, true);
             });
         }
     });
@@ -55,9 +53,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 5;
-                perspective.show(app);
+                perspective.days(5).show(app, true);
             });
         }
     });
@@ -66,9 +62,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.setRendered(false);
-                perspective.columns = 1;
-                perspective.show(app);
+                perspective.days(1).show(app, true);
             });
         }
     });
@@ -151,7 +145,7 @@ define('io.ox/calendar/actions',
 
 
     new Action('io.ox/calendar/detail/actions/delete', {
-        id: 'edit',
+        id: 'delete',
         requires: 'one modify',
         action: function (params) {
             var o = {
@@ -163,10 +157,10 @@ define('io.ox/calendar/actions',
             }
             api.get(o)
                 .done(function (data) {
-                    require(['io.ox/calendar/edit/model-appointment'], function (Model) {
+                    require(['io.ox/calendar/model'], function (Model) {
                         // different warnings especially for events with
                         // external users should handled here
-                        var myModel = new Model(data);
+                        var myModel = new Model.Appointment(data);
                         if (data.recurrence_type > 0) {
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()
@@ -217,11 +211,11 @@ define('io.ox/calendar/actions',
             require(['io.ox/calendar/edit/main'], function (editmain) {
                 // FIXME: what a hack > folder_id
                 editmain.getApp().launch().done(function () {
-                    _.extend(obj, {
+
+                    this.create({
                         folder_id: app.folder.get(),
                         participants: []
                     });
-                    this.create(obj);
                 });
             });
         }
@@ -243,7 +237,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
-        label: gt('Create'),
+        label: gt('New appointment'),
         cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
     }));
@@ -265,7 +259,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
-        label: gt('Work Week'),
+        label: gt('Workweek'),
         cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
     }));

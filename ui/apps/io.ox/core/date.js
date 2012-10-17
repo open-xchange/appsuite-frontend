@@ -12,8 +12,10 @@
  */
 
 define.async('io.ox/core/date',
-['io.ox/core/gettext', 'io.ox/core/config', 'gettext!io.ox/core/date'],
-function (gettext, config, gt) {
+    ['io.ox/core/gettext',
+     'io.ox/core/config',
+     'gettext!io.ox/core'], function (gettext, config, gt) {
+
     /*jshint white:false */
 
     'use strict';

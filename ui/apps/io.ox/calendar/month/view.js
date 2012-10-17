@@ -14,7 +14,7 @@ define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
      'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
-     'gettext!io.ox/calendar/view',
+     'gettext!io.ox/calendar',
      'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
 
     'use strict';

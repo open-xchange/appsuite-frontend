@@ -26,7 +26,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
 
     function createApp() {
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: 'Edit task' }),
+        var app = ox.ui.createApp({ name: 'io.ox/tasks/edit', title: "Edit task" }),
             // app window
             win,
             //app
@@ -91,7 +91,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             // get window
             win = ox.ui.createWindow({
                 name: 'io.ox/tasks/edit',
-                title: "Edit task",
+                title: gt("Edit task"),
                 toolbar: false,
                 close: true
             });
@@ -113,7 +113,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     ext.point('io.ox/tasks/edit/actions/save').invoke('action', null, app, app.updateData());
                 });
             
-            util.buildRow(node, [[util.buildLabel(gt("Title"), title.attr('id')), title], [util.buildLabel('\u00A0'), saveButton]], [9, 3]);
+            util.buildRow(node, [[util.buildLabel(gt("Subject"), title.attr('id')), title], [util.buildLabel('\u00A0'), saveButton]], [9, 3]);
             
             //row 2 reminder
             reminderDropdown = $('<select>').attr('id', 'task-edit-reminder-select')
@@ -270,7 +270,9 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             util.buildRow(node, repeatLink);
             
             //tabsection
-            var temp = util.buildTabs([gt('Participants'), gt('Attachments') + ' (0)', gt('Details')]);
+            var temp = util.buildTabs([gt('Participants'), //#. %1$s is the number of currently attachened attachments
+                                                           //#, c-format
+                                                           gt('Attachments (%1$s)', attachmentArray.length), gt('Details')]);
             tabs = temp.table;
             participantsTab = temp.content.find('#edit-task-tab0');
             attachmentsTab = temp.content.find('#edit-task-tab1');
@@ -292,7 +294,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             dropZone = upload.dnd.createDropZone({'type': 'single'});
             dropZone.on('drop', function (e, file) {
                 attachmentArray.push(file);
-                tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                
+                tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
+                                          //#, c-format
+                                          gt('Attachments (%1$s)', attachmentArray.length));
                 util.buildAttachmentNode(attachmentDisplay, attachmentArray);
             });
             
@@ -302,7 +307,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                     attachmentsToRemove.push(attachmentArray[$(this).attr('lnr')].id);
                 }
                 attachmentArray.splice($(this).attr('lnr'), 1);
-                tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                
+                tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
+                                          //#, c-format
+                                          gt('Attachments (%1$s)', attachmentArray.length));
                 util.buildAttachmentNode(attachmentDisplay, attachmentArray);
             });
             
@@ -393,7 +401,10 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                                 attachmentArray.push(data[i]);
                             }
                             util.buildAttachmentNode(attachmentDisplay, attachmentArray);
-                            tabs.find('a:eq(1)').text(gt('Attachments') + " (" + attachmentArray.length + ")");
+                            
+                            tabs.find('a:eq(1)').text(//#. %1$s is the number of currently attachened attachments
+                                                      //#, c-format
+                                                      gt('Attachments (%1$s)', attachmentArray.length));
                         });
                     });
                 }

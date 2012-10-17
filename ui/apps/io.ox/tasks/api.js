@@ -13,10 +13,10 @@
 define("io.ox/tasks/api", ["io.ox/core/http",
                            'io.ox/core/api/factory',
                            "io.ox/core/api/folder"], function (http, apiFactory, folderApi) {
-    
+
     "use strict";
-    
-    
+
+
  // generate basic API
     var api = apiFactory({
         module: "tasks",
@@ -30,7 +30,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 console.log("no folderAttribute for cache Keygen found, using default");
                 folder = folderApi.getDefaultFolder("tasks");
             }
-                
+
             return obj ? folder + '.' + obj.id : '';
         },
         requests: {
@@ -44,7 +44,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             },
             list: {
                 action: "list",
-                columns: "1,20,200,202,203,300,309",
+                columns: "1,20,200,202,203,220,300,301,309",
                 timezone: "UTC"
             },
             get: {
@@ -53,8 +53,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             }
         }
     });
-            
-            
+
+
     api.create = function (task) {
                 return http.PUT({
                     module: "tasks",
@@ -64,7 +64,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     appendColumns: false
                 });
             };
-            
+
     api.update = function (timestamp, taskId, modifications, folder) {
                 var useFolder;
                 if (folder === undefined) {
@@ -73,7 +73,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                     useFolder = folder;
                 }
                 var key = useFolder + "." + taskId;
-                
+
                 return http.PUT({
                     module: "tasks",
                     params: {action: "update",
@@ -96,11 +96,11 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 });
 
             };
-            
+
     api.getDefaultFolder = function () {
         return folderApi.getDefaultFolder('tasks');
     };
-    
+
     //for notification view
     api.getTasks = function () {
 
@@ -129,7 +129,7 @@ define("io.ox/tasks/api", ["io.ox/core/http",
             return list;
         });
     };
-    
+
     // global refresh
     api.refresh = function () {
         if (ox.online) {
@@ -141,8 +141,8 @@ define("io.ox/tasks/api", ["io.ox/core/http",
                 api.trigger("refresh.all");
             });
         }
-        
+
     };
-    
+
     return api;
 });

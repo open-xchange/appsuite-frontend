@@ -10,9 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/backbone/model'], function (ext, gt) {
-    "use strict";
+define("io.ox/backbone/modelFactory",
+    ["io.ox/core/extensions",
+     'gettext!io.ox/core'], function (ext, gt) {
 
+    "use strict";
 
     function ValidationErrors() {
         this.errors = {};
@@ -39,20 +41,35 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
     var OXModel = Backbone.Model.extend({
         idAttribute: '_uid',
         initialize: function (obj) {
+            var self = this;
             this.realm = this.get('_realm') || this.factory.realm("default");
             this._valid = true;
             this.attributeValidity = {};
+            this.id = obj.id;
 
             delete this.attributes._realm;
 
+            this.on("change:id", function () {
+                self.id = self.get("id");
+            });
+
+            if (this.init) {
+                this.init();
+            }
+
         },
-        validate: function (attributes) {
+        validate: function (attributes, evt, options) {
+            options = options || {};
             var self = this,
                 errors = new ValidationErrors();
 
             attributes = attributes || this.toJSON();
+
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
 
+            if (options.isSave) {
+                this.factory.point("validation/save").invoke("validate", errors, attributes, errors, this);
+            }
             if (errors.hasErrors()) {
                 var validAttributes = {};
                 _(attributes).chain().keys().each(function (key) {
@@ -89,6 +106,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             }
         },
         sync: function (action, model, callbacks) {
+
             var self = this;
 
             // action is one of 'update', 'create', 'delete' or 'read'
@@ -96,18 +114,23 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
                 action = 'destroy';
             }
             if ((action === 'update' || action === 'create')) {
-                this.validate(this.toJSON());
+                this.validate(this.toJSON(), null, {
+                    isSave: true
+                });
                 if (!this.isValid()) {
                     return $.Deferred().reject({error: gt('Invalid data')});
                 }
             }
+            this.trigger(action + ':start');
             return this.factory.internal[action].call(this.factory.internal, model)
                 .done(function (response) {
                     callbacks.success(model, response);
+                    self.trigger(action, response);
                 })
                 .fail(function (response) {
                     callbacks.error(model, response);
                     self.trigger('backendError', response);
+                    self.trigger(action + ':fail', response);
                 });
         },
 
@@ -167,7 +190,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             });
         },
         getCompositeId: function () {
-            return (this.get('folder') || this.get('folder_id')) + '.' + (this.get('id') || 'new-object');
+            return "id.folder : " + (this.get('id') || 'new-object') + '.' + (this.get('folder') || this.get('folder_id'));
         },
         isValid: function () {
             return this._valid;
@@ -198,6 +221,14 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             }
         };
 
+        this.create = function (options) {
+            var loaded = new factory.model(options);
+            var uid = factory.internal.toUniqueIdFromObject(options);
+
+            models[uid] = loaded;
+            serverAttributes[uid] = JSON.parse(JSON.stringify(loaded.toJSON()));
+            return loaded;
+        };
 
         this.get = function () {
             var args = $.makeArray(arguments);
@@ -211,7 +242,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             factory.internal.load.apply(factory.internal, args).done(function (data) {
                 data._realm = self;
 
-                var loaded = factory.create(data);
+                var loaded = new factory.model(data);
                 models[loaded.id] = loaded;
                 serverAttributes[loaded.id] = JSON.parse(JSON.stringify(loaded.toJSON()));
                 def.resolve(loaded);
@@ -439,6 +470,11 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
 
         this.create = this.create || function (options) {
             options = options || {};
+            if (options.id) {
+                // Assume this was loaded
+                var realm = this.realm('default');
+                return realm.create.call(realm, options);
+            }
             return new this.model(options);
         };
 

@@ -32,11 +32,6 @@ html, body {
     cursor: default;
 }
 
-.boxshadow a:focus {
-    outline: 0;
-    box-shadow: 0px 0px 4px 0px #00a0cd;
-}
-
 @font-face {
     font-family: OpenSans;
     src: url(fonts/opensans-300.woff);

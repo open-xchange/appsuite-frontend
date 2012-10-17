@@ -13,8 +13,7 @@
  * @author Markus Bode <markus.bode@open-xchange.com>
  */
 
-define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache',
-                    'io.ox/core/tk/model', 'io.ox/mail/util'], function (http, cache, Model, util) {
+define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache'], function (http, cache) {
 
     'use strict';
 
@@ -249,3 +248,11 @@ define("io.ox/core/settings", ['io.ox/core/http', 'io.ox/core/cache',
         }
     };
 });
+
+// define corresponding plugin now (not earlier)
+(function () {
+    'use strict';
+    // just to fool build system.
+    window[0 || 'define']('settings', ['io.ox/core/settings'], _.identity);
+}());
+

@@ -86,7 +86,7 @@ define("io.ox/calendar/api",
                     order: "asc",
                     timezone: "UTC"
                 };
-            
+
             if (o.folder !== undefined) {
                 params.folder = o.folder;
             }
@@ -138,7 +138,9 @@ define("io.ox/calendar/api",
         },
 
         update: function (o) {
-            var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
+            var folder_id = o.folder_id || o.folder;
+
+            var key = folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             if (_.isEmpty(o)) {
                 return $.when();
             } else {
@@ -147,7 +149,7 @@ define("io.ox/calendar/api",
                     params: {
                         action: 'update',
                         id: o.id,
-                        folder: o.folder_id,
+                        folder: folder_id,
                         timestamp: _.now(),
                         timezone: "UTC"
                     },
@@ -158,14 +160,14 @@ define("io.ox/calendar/api",
                     if (!_.isUndefined(obj.conflicts)) {
                         var df = new $.Deferred();
                         _(obj.conflicts).each(function (item) {
-                            item.folder_id = o.folder_id;
+                            item.folder_id = folder_id;
                         });
                         df.reject(obj);
                         return df;
                     }
 
                     getObj.id = o.id;
-                    getObj.folder = o.folder_id;
+                    getObj.folder = folder_id;
                     if (o.recurrence_position !== null) {
                         getObj.recurrence_position = o.recurrence_position;
                     }
@@ -176,19 +178,18 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
-
                             return data;
                         });
                 });
             }
         },
-        
+
         create: function (o) {
             return http.PUT({
                 module: 'calendar',
                 params: {
-                    action: 'new',
-                    timezone: "UTC"
+                    action: 'new'/*,
+                    timezone: "UTC"*/
                 },
                 data: o
             })
@@ -220,14 +221,15 @@ define("io.ox/calendar/api",
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
-            var key = o.data.folder_id + "." + o.data.id + "." + (o.data.recurrence_position || 0);
+            console.log('-->', o);
+            var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             return http.PUT({
                 module: 'calendar',
                 params: {
                     action: 'delete',
                     timestamp: _.now()
                 },
-                data: o.data
+                data: o
             })
             .done(function (resp) {
                 all_cache = {};

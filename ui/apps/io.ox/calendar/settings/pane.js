@@ -20,6 +20,7 @@ define('io.ox/calendar/settings/pane',
 
 
 
+
     var calendarSettings =  settings.createModel(calendarSettingsModel),
         staticStrings =  {
             TITLE_CALENDAR: gt('Calendar'),
@@ -116,6 +117,7 @@ define('io.ox/calendar/settings/pane',
             self._modelBinder.bind(self.model, self.el, defaultBindings);
 
             return self;
+
         }
     });
 

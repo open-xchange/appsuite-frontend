@@ -9,13 +9,12 @@ CACHE:
 @base@/blank.html
 @base@/src/serverconfig.js
 @base@/src/offline.js
-# core - bootstrap
+# bootstrap
 @base@/apps/io.ox/core/bootstrap/basics.js
 @base@/apps/io.ox/core/bootstrap/css/bootstrap.min.css
-# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings.png
-# @base@/apps/io.ox/core/bootstrap/img/glyphicons-halflings-white.png
 # theme
 @base@/apps/themes/login/login.css
+@base@/apps/themes/login/font-awesome.css
 @base@/apps/themes/login/busy.gif
 @base@/apps/themes/login/fonts/opensans-300.woff
 @base@/apps/themes/login/fonts/fontawesome-webfont.woff
@@ -24,6 +23,8 @@ CACHE:
 @base@/apps/themes/default/definitions.less
 @base@/apps/themes/default/dummypicture.png
 @base@/apps/themes/default/logo-small.xpng
+# core
+@base@/apps/io.ox/core/main.js
 # mail
 @base@/apps/io.ox/mail/actions.js
 @base@/apps/io.ox/mail/api.js

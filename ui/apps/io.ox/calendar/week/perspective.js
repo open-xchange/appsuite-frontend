@@ -17,7 +17,7 @@ define('io.ox/calendar/week/perspective',
          'io.ox/core/http',
          'io.ox/core/tk/dialogs',
          'io.ox/calendar/view-detail',
-         'gettext!io.ox/calendar/view'
+         'gettext!io.ox/calendar'
          ], function (View, api, util, http, dialogs, detailView, gt) {
 
     'use strict';
@@ -33,6 +33,14 @@ define('io.ox/calendar/week/perspective',
         app:            null,
         view:           null,
         folder:         null,
+        days: function (d) {
+            if (d) {
+                this.columns = d;
+                return this;
+            } else {
+                return d;
+            }
+        },
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -46,7 +54,7 @@ define('io.ox/calendar/week/perspective',
         },
 
         updateAppointment: function (obj) {
-            var that = this;
+            var self = this;
             if (obj.recurrence_type > 0) {
                 new dialogs.ModalDialog()
                     .text(gt('Do you want to edit the whole series or just one appointment within the series?'))
@@ -56,7 +64,7 @@ define('io.ox/calendar/week/perspective',
                     .show()
                     .done(function (action) {
                         if (action === 'cancel') {
-                            that.refresh();
+                            self.refresh();
                             return;
                         }
                         if (action === 'series') {
@@ -106,22 +114,21 @@ define('io.ox/calendar/week/perspective',
                     start: this.startTimeUTC,
                     end: this.startTimeUTC + util.DAY * this.columns
                 },
-                that = this;
+                self = this;
             this.app.folder.getData().done(function (data) {
                 // switch only visible on private folders
-                that.view.setShowAllVisibility(data.type === 1);
+                self.view.setShowAllVisibility(data.type === 1);
                 // set folder data to view
-                that.view.setFolder(data);
+                self.view.setFolder(data);
                 // do folder magic
-                if (data.type > 1 || that.view.getShowAllStatus() === false) {
+                if (data.type > 1 || self.view.getShowAllStatus() === false) {
                     obj.folder = data.id;
                 }
-                that.getAppointments(obj);
+                self.getAppointments(obj);
             });
         },
 
         changeFolder: function (e, data) {
-            console.log('changeFolder', data);
             this.folder = data;
             this.refresh();
         },
@@ -130,6 +137,7 @@ define('io.ox/calendar/week/perspective',
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
+
             // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {
                 this.startTimeUTC = util.getTodayStart();
@@ -152,24 +160,25 @@ define('io.ox/calendar/week/perspective',
                     this.refresh();
                 }, this);
 
-            this.main
-                .empty()
-                .append(this.view.render().el);
+            this.main.append(this.view.render().el);
 
             this.dialog = new dialogs.SidePopup()
                 .on('close', function () {
                     $('.appointment', this.main).removeClass('opac current');
                 });
 
+            var refresh = $.proxy(this.refresh, this);
+
             // watch for api refresh
-            api.on('refresh.all', $.proxy(this.refresh, this));
-
-            this.app
-                .on('folder:change', $.proxy(this.refresh, this))
+            api.on('refresh.all', refresh);
+            // watch for folder change
+            app.on('folder:change', refresh)
                 .getWindow()
-                .on('show', $.proxy(this.refresh, this));
+                .on('show', refresh);
 
-            this.refresh();
+            this.view.setScrollPos();
+
+            refresh();
         }
     });
 

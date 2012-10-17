@@ -120,7 +120,7 @@ define('io.ox/core/tk/vgrid',
             row.node.add(row.node.find('div, span, p, td')).each(function () {
                 var node = $(this);
                 if (node.children().length === 0 && node.text() === '') {
-                    node.text('\u00A0');
+                    node.text(_.noI18n('\u00A0'));
                 }
             });
             row.node.find('img').each(function () {
@@ -542,35 +542,37 @@ define('io.ox/core/tk/vgrid',
             var id = _.url.hash('id'), ids, cid, index, selectionChanged;
             // use url?
             ids = id !== undefined ? id.split(/,/) : [];
-            if (ids.length && self.selection.contains(ids)) {
-                // convert ids to objects first - avoids problems with
-                // non-existing items that cannot be resolved in selections
-                //console.debug('case #1:', ids);
-                ids = _(ids).map(deserialize);
-                selectionChanged = !self.selection.equals(ids);
-                if (selectionChanged) {
-                    // set
-                    self.selection.set(ids);
-                    firstAutoSelect = false;
-                }
-                //changed = true;
-                if (selectionChanged || changed) {
-                    // scroll to first selected item
-                    cid = _(ids).first();
-                    index = self.selection.getIndex(cid) || 0;
-                    if (!isVisible(index)) {
-                        setIndex(index - 2); // not at the very top
+            if (all.length) {
+                if (ids.length && self.selection.contains(ids)) {
+                    // convert ids to objects first - avoids problems with
+                    // non-existing items that cannot be resolved in selections
+                    //console.debug('case #1:', ids);
+                    ids = _(ids).map(deserialize);
+                    selectionChanged = !self.selection.equals(ids);
+                    if (selectionChanged) {
+                        // set
+                        self.selection.set(ids);
+                        firstAutoSelect = false;
                     }
+                    //changed = true;
+                    if (selectionChanged || changed) {
+                        // scroll to first selected item
+                        cid = _(ids).first();
+                        index = self.selection.getIndex(cid) || 0;
+                        if (!isVisible(index)) {
+                            setIndex(index - 2); // not at the very top
+                        }
+                    }
+                } else if (firstAutoSelect) {
+                    // select first or previous selection
+                    //console.debug('case #2: smart');
+                    self.selection.selectSmart();
+                    firstAutoSelect = false;
+                } else {
+                    // set selection based on last index
+                    //console.debug('case #3: last index');
+                    self.selection.selectLastIndex();
                 }
-            } else if (firstAutoSelect) {
-                // select first or previous selection
-                //console.debug('case #2: smart');
-                self.selection.selectSmart();
-                firstAutoSelect = false;
-            } else {
-                // set selection based on last index
-                //console.debug('case #3: last index');
-                self.selection.selectLastIndex();
             }
         }
 
@@ -618,6 +620,7 @@ define('io.ox/core/tk/vgrid',
                                 container.css({ visibility: '' }).parent().idle();
                             })
                             .done(function () {
+                                firstAutoSelect = firstAutoSelect || list.length === 0;
                                 updateSelection(list.length !== all.length || !_.isEqual(all, list));
                             });
                     } else {
@@ -696,7 +699,7 @@ define('io.ox/core/tk/vgrid',
                         return self.selection.serialize(obj);
                     }).join(',');
                 _.url.hash('id', id !== '' ? id : null);
-                // proppagate select event?
+                // propagate DOM-based select event?
                 if (list.length >= 1) {
                     node.trigger('select', list);
                 }

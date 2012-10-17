@@ -1,0 +1,263 @@
+/**
+ * All content on this website (including text, images, source
+ * code and any other original works), unless otherwise noted,
+ * is licensed under a Creative Commons License.
+ *
+ * http://creativecommons.org/licenses/by-nc-sa/2.5/
+ *
+ * Copyright (C) Open-Xchange Inc., 2006-2012
+ * Mail: info@open-xchange.com
+ *
+ * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ */
+
+.border-radius(@radius) {
+    -webkit-border-radius: @radius;
+    -moz-border-radius: @radius;
+    border-radius: @radius;
+}
+
+.opacity(@opacity) {
+    @opacity-percent: @opacity * 100;
+    opacity: @opacity;
+    filter: alpha(opacity=@opacity-percent);
+}
+
+.debug-highlight-mixin(@color) {
+    outline: 1px @color solid;
+    background-color: fade(lighten(@color, 10%), 50%) !important;
+}
+
+.io-ox-office-title {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border: 1px solid transparent;
+    cursor: pointer;
+
+    &:hover {
+        border-color: #d5d5d5;
+        .border-radius(4px);
+    }
+}
+
+.io-ox-office-main {
+    margin: 0;
+    padding: 0;
+
+    div.page {
+        .box-sizing(border-box);
+
+        /* text cursor over entire page, but not in read-only mode */
+        &.user-select-text {
+            cursor: text;
+        }
+
+        /* default page formatting */
+        width: 210mm;
+        min-height: 297mm;
+        padding: 15mm;
+
+        /* default paragraph formatting */
+        div.p {
+            position: relative;
+            margin: 0;
+            line-height: 0;
+        
+            /* default text formatting */
+            > span {
+                font-family: sans-serif;
+                font-size: 11pt;
+                line-height: normal;
+
+                /* highlighted portions (quick search) */
+                &.highlight {
+                    .opacity(1);
+                    background-color: yellow !important;
+                    color: black !important;
+                }
+            }
+            > div.list-label {
+                display : inline-block;
+                line-height: 12pt;
+                /*font-size: 15pt;
+                background-color: red;
+                width: 40pt;
+                text-align: right;
+                font-family: 'Symbol';*/
+            }
+        }
+
+        /* no text cursor in read-only mode */
+        &:not(.user-select-text) div.p {
+            cursor: default;
+        }
+
+        /* default table formatting */
+        table {
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 6px 0;
+
+            &:first-child { margin-top: 0; }
+            &:last-child { margin-bottom: 0; }
+
+            th, td {
+                padding: 4px;
+                border: 1px solid black;
+                vertical-align: top;
+            }
+        }
+
+        /* objects */
+        div.object {
+            position: relative;
+            cursor: default;
+            font-size: 0;
+
+            /* inlined objects */
+            &.inline {
+                display: inline-block;
+                vertical-align: bottom;
+            }
+
+            /* crop object contents at object border */
+            > div.content {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+
+                img {
+                    position: relative;
+                    /* remove max-width:100% derived from Bootstrap */
+                    max-width: none;
+                }
+            }
+
+            /* selection box for objects/images */
+            > div.selection {
+                @border-color: #3f7fff;
+
+                position: absolute;
+                top: -1px;
+                bottom: -1px;
+                left: -1px;
+                right: -1px;
+                border: 3px fade(@border-color, 70%) solid;
+                .box-shadow(0 5px 10px fade(black, 20%));
+
+                cursor: default;
+                &.moveable { cursor: move; }
+
+                > div.handle {
+                    position: absolute;
+                    width: 5px;
+                    height: 5px;
+                    background-color: white;
+                    border: 1px @border-color solid;
+                    .border-radius(3px);
+
+                    .v-beg() { top: -5px; }
+                    .v-cen() { top: 50%; margin-top: -3px; }
+                    .v-end() { bottom: -5px; }
+
+                    .h-beg() { left: -5px; }
+                    .h-cen() { left: 50%; margin-left: -3px; }
+                    .h-end() { right: -5px; }
+
+                    &.tl { .v-beg(); .h-beg(); cursor: nw-resize; }
+                    &.t  { .v-beg(); .h-cen(); cursor: n-resize;  }
+                    &.tr { .v-beg(); .h-end(); cursor: ne-resize; }
+                    &.r  { .v-cen(); .h-end(); cursor: e-resize;  }
+                    &.br { .v-end(); .h-end(); cursor: se-resize; }
+                    &.b  { .v-end(); .h-cen(); cursor: s-resize;  }
+                    &.bl { .v-end(); .h-beg(); cursor: sw-resize; }
+                    &.l  { .v-cen(); .h-beg(); cursor: w-resize;  }
+                }
+
+                &:not(.sizeable) > div.handle {
+                    cursor: inherit;
+                }
+            }
+        }
+
+        /* floated elements (object spans and offset helper divs) */
+        .float {
+            display: block;
+
+            &.left { float: left; clear: left; }
+            &.right { float: right; clear: right; }
+        }
+
+        /* prevent dotted focus rectangle around page area */
+        &:focus, &:active {
+            outline: none;
+        }
+
+        &.highlight > * {
+            .opacity(0.7);
+        }
+
+        &.debug-highlight {
+
+            div.p {
+                .debug-highlight-mixin(#8f8);
+            }
+
+            span {
+                .debug-highlight-mixin(#88f);
+            }
+
+            span.field {
+                .debug-highlight-mixin(#f8f);
+            }
+
+            table, .object {
+                .debug-highlight-mixin(#f88);
+                outline-offset: 1px;
+            }
+        }
+    }
+
+    div.io-ox-pane.debug > table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: separate;
+        border-spacing: 1px;
+        background-color: white;
+
+        td {
+            padding: 0;
+            border: 1px #d5d5d5 solid;
+
+            > div {
+                height: 5cm;
+                overflow: auto;
+
+                > table {
+                    width: 100%;
+                    table-layout: auto;
+                    border-collapse: collapse;
+                    font-family: 'Open Sans',Arial,sans-serif;
+                    font-size: 8pt;
+                    line-height: normal;
+                    white-space: nowrap;
+
+                    td {
+                        padding: 0 1mm;
+
+                        &:first-child {
+                            background-color: #d5d5d5;
+                            color: white;
+                            font-weight: bold;
+                            text-align: right;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

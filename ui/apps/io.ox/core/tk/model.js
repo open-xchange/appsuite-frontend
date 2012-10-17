@@ -92,8 +92,8 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
 
         formats: formats,
 
-        get: function (prop) {
-            return this._definitions[prop] || {};
+        get: function (key) {
+            return this._definitions[key] || {};
         },
 
         getDefaults: function () {
@@ -132,17 +132,17 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             return this.get(key).trim !== false;
         },
 
-        validate: function (prop, value) {
-            var def = this.get(prop),
+        validate: function (key, value) {
+            var def = this.get(key),
                 format = def.format || 'string',
                 isEmpty = value === '' || value === null,
                 isNotMandatory = def.mandatory !== true;
             if (isEmpty) {
                 return isNotMandatory ||
-                    new Error(prop, _.printf('%s is mandatory', def.i18n || prop));
+                    new Error(key, _.printf('%s is mandatory', def.i18n || key));
             }
             if (_.isFunction(this.formats[format])) {
-                return this.formats[format](prop, value, def);
+                return this.formats[format](key, value, def);
             }
             // undefined format
             console.error('Unknown format used in model schema', format);
@@ -209,7 +209,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
             // however, the model is not dirty
             this._data = _.extend({}, this._defaults, _.copy(data || {}, true));
 
-            // set the id addionally if possible (useful for identifying duplicates and the likes
+            // set the id additionally if possible (useful for identifying duplicates and the likes
             if (this.idAttribute in this._data) {
                 this.id = this._data[this.idAttribute];
             }
@@ -311,7 +311,7 @@ define('io.ox/core/tk/model', ['io.ox/core/event'], function (Events) {
         // DEPRECATED
         setData: function (data) {
             console.warn('DEPRECATED: setData - use initialize()');
-            this.init(data);
+            this.initialize(data);
         },
 
         /* DEPRECATED - get() without any parameter returns all data as well */
