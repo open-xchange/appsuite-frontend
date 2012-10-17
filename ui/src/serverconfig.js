@@ -26,8 +26,8 @@ define(function () {
         buildDate: '2012-10-17',
 
         plugins: {
-            signin: ['liberty/login'],
-            core: ['halo', 'liberty'],
+            signin: [],
+            core: ['halo'],
             halo: ['halo/contacts', 'halo/appointments', 'halo/linkedIn', 'halo/mail'],
             keychain: ["io.ox/mail/accounts/keychain", 'io.ox/oauth/keychain'],
             keychainSettings: ['io.ox/mail/accounts/settings', 'io.ox/oauth/settings'],
