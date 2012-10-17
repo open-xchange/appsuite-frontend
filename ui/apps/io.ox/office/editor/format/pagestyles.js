@@ -22,22 +22,14 @@ define('io.ox/office/editor/format/pagestyles',
         definitions = {
 
             /**
-             * Top margin between page border and editing area, in 1/100 of
-             * millimeters.
+             * Total width of a single page, in 1/100 of millimeters.
              */
-            width: {
-                def: 21000,
-                set: function (element, width) {
-                    element.width(Utils.convertHmmToLength(Math.max(width, 2000), 'px', 0));
-                }
-            },
+            width: { def: 21000 },
 
-            height: {
-                def: 29700,
-                set: function (element, height) {
-                    // TODO: page layout
-                }
-            },
+            /**
+             * Total height of a single page, in 1/100 of millimeters.
+             */
+            height: { def: 29700 },
 
             /**
              * Margin between left page border and editing area, in 1/100 of
@@ -81,35 +73,50 @@ define('io.ox/office/editor/format/pagestyles',
      */
     function updatePageHandler(page, attributes) {
 
-        var // effective page width, in 1/100 mm
-            pageWidth = Utils.convertLengthToHmm(page.width(), 'px'),
-            // effective page width, in 1/100 mm
-            pageHeight = Utils.convertLengthToHmm(page.height(), 'px'),
+        var // effective page width (at least 2cm)
+            pageWidth = Math.max(attributes.width, 2000),
+            // effective page height (at least 2cm)
+            pageHeight = Math.max(attributes.height, 2000),
             // left page margin
             leftMargin = Math.max(attributes.marginl, 0),
             // right page margin
             rightMargin = Math.max(attributes.marginr, 0),
+            // total horizontal margin
+            horizontalMargin = leftMargin + rightMargin,
             // top page margin
             topMargin = Math.max(attributes.margint, 0),
             // bottom page margin
-            bottomMargin = Math.max(attributes.marginb, 0);
+            bottomMargin = Math.max(attributes.marginb, 0),
+            // total vertical margin
+            verticalMargin = topMargin + bottomMargin;
 
         // restrict left/right margin to keep an editing area of at least 1cm
-        if (pageWidth - leftMargin - rightMargin < 1000) {
-            leftMargin = rightMargin = (pageWidth - 1000) / 2;
+        if ((horizontalMargin > 0) && (pageWidth - horizontalMargin < 1000)) {
+            // Change margins according to ratio of original left/right margins
+            // (e.g. keep left margin twice as big as right margin, if
+            // specified in the original attribute values).
+            leftMargin = (pageWidth - 1000) * (leftMargin / horizontalMargin);
+            rightMargin = (pageWidth - 1000) * (rightMargin / horizontalMargin);
         }
 
         // restrict top/bottom margin to keep an editing area of at least 1cm
-        if (pageHeight - topMargin - bottomMargin < 1000) {
+        if ((verticalMargin > 0) && (pageHeight - verticalMargin < 1000)) {
             // TODO: enable when page layout is supported
-            // topMargin = bottomMargin = (pageHeight - 1000) / 2;
+            // Change margins according to ratio of original top/bottom margins
+            // (e.g. keep top margin twice as big as bottom margin, if
+            // specified in the original attribute values).
+            //topMargin = (pageHeight - 1000) * (topMargin / verticalMargin);
+            //bottomMargin = (pageHeight - 1000) * (bottomMargin / verticalMargin);
         }
 
         page.css({
-            marginLeft: Utils.convertHmmToCssLength(leftMargin, 'px', 0),
-            marginRight: Utils.convertHmmToCssLength(rightMargin, 'px', 0),
-            marginTop: Utils.convertHmmToCssLength(topMargin, 'px', 0),
-            marginBottom: Utils.convertHmmToCssLength(bottomMargin, 'px', 0)
+            width: Utils.convertHmmToCssLength(pageWidth, 'mm', 1),
+            // TODO: enable when page layout is supported
+            // height: Utils.convertHmmToCssLength(pageHeight, 'mm', 1),
+            paddingLeft: Utils.convertHmmToCssLength(leftMargin, 'mm', 1),
+            paddingRight: Utils.convertHmmToCssLength(rightMargin, 'mm', 1),
+            paddingTop: Utils.convertHmmToCssLength(topMargin, 'mm', 1),
+            paddingBottom: Utils.convertHmmToCssLength(bottomMargin, 'mm', 1)
         });
     }
 
@@ -133,6 +140,9 @@ define('io.ox/office/editor/format/pagestyles',
      */
     function PageStyles(rootNode, documentStyles) {
 
+        var // self reference
+            self = this;
+
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'page', definitions, documentStyles, {
@@ -155,6 +165,12 @@ define('io.ox/office/editor/format/pagestyles',
          * read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
+
+        // initialization -----------------------------------------------------
+
+        // for now, update the root node after every change event
+        // TODO: page layout, update entire document formatting
+        this.on('change', function () { self.updateElementFormatting(rootNode); });
 
     } // class PageStyles
 
