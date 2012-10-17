@@ -345,20 +345,6 @@ define('io.ox/calendar/week/view',
             }
             times = $('<div>').addClass('lable').append(times);
 
-//            var Blubview = views.point('io.ox/calendar/week/section').createView({
-//                tagName: 'div',
-//                className: 'lable',
-//                render: function () {
-//                    var self = this;
-//                    this.point.each(function (extension) {
-//                        extension.invoke('draw', this.el, self.baton);
-//                    });
-//                    return this;
-//                }
-//            });
-//
-//            new Blubview();
-
             // create panes
             this.fulltimeCon.empty().append(
                 $('<div>').addClass('fulltime-lable'),
