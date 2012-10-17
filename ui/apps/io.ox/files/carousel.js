@@ -39,10 +39,12 @@ define('io.ox/files/carousel',
         pos: {},
 
         firstStart: true,
-
-        container: $('<div class="carousel slide">'),
-
-        inner: $('<div class="carousel-inner">'),
+        list: [],
+        container:      $('<div class="carousel slide">'),
+        inner:          $('<div class="carousel-inner">'),
+        prevControl:    $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev'),
+        nextControl:    $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next'),
+        closeControl:   $('<button class="btn btn-primary closecarousel">').text(gt('Close')),
 
         config: {
             fullScreen: false,
@@ -53,7 +55,8 @@ define('io.ox/files/carousel',
         },
 
         init: function (config) {
-            $('.window-container .carousel').remove();
+            this.inner.empty();
+            this.container.empty().remove();
             $.extend(this.config, config);
 
             this.app = config.app;
@@ -93,10 +96,10 @@ define('io.ox/files/carousel',
             var self = this;
             var pos = this.pos;
 
-            pos.first = parseInt($('.carousel .item:first').attr('data-index'), 10);
-            pos.last = parseInt($('.carousel .item:last').attr('data-index'), 10);
+            pos.first = parseInt(this.inner.find('.item:first').attr('data-index'), 10);
+            pos.last = parseInt(this.inner.find('.item:last').attr('data-index'), 10);
             // Hide left control on start
-            $('.carousel-control.left').hide();
+            this.prevControl.hide();
 
             // before transition
             this.container.on('slide', function () {
@@ -112,15 +115,15 @@ define('io.ox/files/carousel',
                 pos.direction = oldpos < pos.cur ? 'next' : 'prev';
 
                 if (pos.cur > 0) {
-                    $('.carousel-control.left').show();
+                    self.prevControl.show();
                 } else {
-                    $('.carousel-control.left').hide();
+                    self.prevControl.hide();
                 }
 
                 if (pos.cur < (self.list.length - 1)) {
-                    $('.carousel-control.right').show();
+                    self.nextControl.show();
                 } else {
-                    $('.carousel-control.right').hide();
+                    self.nextControl.hide();
                 }
 
                 if (pos.direction === 'next' && pos.cur >= (pos.end - 1) && (pos.cur + 1) < self.list.length) {
@@ -134,9 +137,9 @@ define('io.ox/files/carousel',
                 self.pos.sliding = false;
             });
 
-            $('.carousel-control.left').on('click', this.prevItem);
-            $('.carousel-control.right').on('click', this.nextItem);
-            $('.closecarousel').on('click', $.proxy(this.close, this));
+            this.prevControl.on('click', $.proxy(this.prevItem, this));
+            this.nextControl.on('click', $.proxy(this.nextItem, this));
+            this.closeControl.on('click', $.proxy(this.close, this));
 
             $(document).keyup(function (e) {
                 if (e.keyCode === 27) self.close();
@@ -221,34 +224,30 @@ define('io.ox/files/carousel',
         },
 
         prevItem: function () {
-            if (!carouselSlider.pos.sliding && carouselSlider.pos.cur > 0) {
-                $('.carousel').carousel('prev');
+            if (this.prevControl.is(':visible'))
+            {
+                if (!this.pos.sliding && this.pos.cur > 0) {
+                    this.container.carousel('prev');
+                }
             }
         },
 
         nextItem: function () {
-            if (!carouselSlider.pos.sliding && carouselSlider.pos.cur < (carouselSlider.list.length - 1)) {
-                $('.carousel').carousel('next');
+            if (this.nextControl.is(':visible'))
+            {
+                if (!this.pos.sliding && this.pos.cur < (this.list.length - 1)) {
+                    this.container.carousel('next');
+                }
             }
         },
 
-        prevControl: function () {
-            return $('<a class="carousel-control left">').text(gt.noI18n('‹')).attr('data-slide', 'prev');
-        },
 
-        nextControl: function () {
-            return $('<a class="carousel-control right">').text(gt.noI18n('›')).attr('data-slide', 'next');
-        },
-
-        closeControl: function () {
-            return $('<button class="btn btn-primary closecarousel">').text(gt('Close'));
-        },
 
         show: function () {
             var win;
             if (this.config.attachmentMode)
             {
-                win = $('.window-container');
+                win = $('.window-container.io-ox-mail-window');
             }
             else
             {
@@ -258,9 +257,9 @@ define('io.ox/files/carousel',
             win.append(
                 this.container.append(
                     this.inner,
-                    this.prevControl(),
-                    this.nextControl(),
-                    this.closeControl()
+                    this.prevControl,
+                    this.nextControl,
+                    this.closeControl
                 )
                 .on('click', '.breadcrumb li a', $.proxy(this.close, this))
             );
@@ -270,13 +269,15 @@ define('io.ox/files/carousel',
 
         close: function () {
             var self = this;
-            if (BigScreen.enabled) {
-                BigScreen.exit();
+            if (self.closeControl.is(':visible'))
+            {
+                if (BigScreen.enabled) {
+                    BigScreen.exit();
+                }
+                self.inner.empty().remove();
+                self.container.empty().remove();
+                self.list = [];
             }
-            self.inner.empty().remove();
-            self.container.empty().remove();
-            self.list = [];
-            $('.carousel').remove();
         }
     };
 
