@@ -13,12 +13,13 @@
 define('io.ox/calendar/week/view',
     ['io.ox/calendar/util',
      'io.ox/core/date',
+     'io.ox/core/extensions',
      'gettext!io.ox/calendar',
      'io.ox/core/api/folder',
      'io.ox/backbone/views',
      'less!io.ox/calendar/week/style.css',
      'apps/io.ox/core/tk/jquery-ui.min.js',
-     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, gt, folder, views) {
+     'apps/io.ox/core/tk/jquery.mobile.touch.min.js'], function (util, date, ext, gt, folder, views) {
 
     'use strict';
 
@@ -324,12 +325,14 @@ define('io.ox/calendar/week/view',
         initialize: function (options) {
             this.columns = options.columns;
             this.curTimeUTC = options.startTimeUTC;
-            this.collection.on('reset', this.renderAppointments, this);
+            this.collection
+                .on('reset', this.renderAppointments, this)
+                .on('change', this.redrawAppointment, this);
         },
 
         render: function () {
             // create scaffold
-
+            window.collection = this.collection;
             // create timelabels
             var times = [];
             for (var i = 1; i < this.slots; i++) {
@@ -510,7 +513,7 @@ define('io.ox/calendar/week/view',
                 }
 
                 if (model.get('full_time')) {
-                    var app = this.renderAppointment(model.attributes),
+                    var app = this.renderAppointment(model),
                         fulltimePos = (model.get('start_date') - this.curTimeUTC) / date.DAY,
                         fulltimeWidth = (model.get('end_date') - model.get('start_date')) / date.DAY + Math.min(0, fulltimePos);
                     // loop over all column positions
@@ -541,7 +544,7 @@ define('io.ox/calendar/week/view',
 
                     // draw across multiple days
                     while (true && maxCount <= this.columns) {
-                        var app = this.renderAppointment(model.attributes),
+                        var app = this.renderAppointment(model),
                             sel = '[date="' + Math.floor((startDate.getTime() - date.Local.utc(this.curTimeUTC)) / date.DAY) + '"]';
                         maxCount++;
 
@@ -1037,27 +1040,29 @@ define('io.ox/calendar/week/view',
         renderAppointment: function (a) {
             myself = myself || ox.user_id;
 
-            // check confirmations
-            var state = (_(a.participants).find(function (o) {
-                    return o.id === myself;
-                }) || { type: 0 }).type;
+            var el = $('<div>')
+                .addClass('appointment')
+                .attr({
+                    'data-cid': a.id,
+                    'data-extension-point': 'io.ox/calendar/week/view/appointment',
+                    'data-composite-id': a.id
+                });
 
-            return $('<div>')
-                .addClass(
-                    'appointment ' +
-                    util.getShownAsClass(a) +
-                    (a.private_flag ? ' private' : '') +
-                    (state === 0 ? ' unconfirmed' : '') +
-                    (folder.can('write', this.folder, a) ? ' modify' : '')
-                )
-                .attr('data-cid', _.cid(a))
-                .append(
-                    $('<div>')
-                        .addClass('appointment-content')
-                        .css('lineHeight', (a.full_time ? this.fulltimeHeight : this.cellHeight) + 'px')
-                        .append($('<div>').addClass('title').text(gt.noI18n(a.title)))
-                        .append($('<div>').addClass('location').text(gt.noI18n(a.location || '')))
-                );
+            ext.point('io.ox/calendar/week/view/appointment')
+                .invoke('draw', el, ext.Baton.wrap(_.extend({}, this.options, {model: a, folder: this.folder})));
+            return el;
+        },
+
+        redrawAppointment: function (a) {
+            var positionFieldChanged = _(['start_date', 'end_date', 'full_time'])
+                .any(function (attr) { return !_.isUndefined(a.changed[attr]); });
+            if (positionFieldChanged) {
+                this.renderAppointments();
+            } else {
+                var el = this.$el.find('[data-cid="' + a.id + '"]');
+                el.replaceWith(this.renderAppointment(a)
+                    .attr('style', el.attr('style')));
+            }
         },
 
         // round an integer to the next grid size
@@ -1130,5 +1135,38 @@ define('io.ox/calendar/week/view',
 
     });
 
+    ext.point('io.ox/calendar/week/view/appointment').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            var a = baton.model;
+                    // check confirmations
+            var state = (_(a.get('participants')).find(function (o) {
+                    return o.id === myself;
+                }) || { type: 0 }).type;
+
+            this
+                .addClass(
+                        util.getShownAsClass(a.attributes) +
+                        (a.get('private_flag') ? ' private' : '') +
+                        (state === 0 ? ' unconfirmed' : '') +
+                        (folder.can('write', baton.folder, a.attributes) ? ' modify' : '')
+                )
+                .append(
+                        $('<div>')
+                        .addClass('appointment-content')
+                        .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                        .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
+                        .append($('<div>').addClass('location').text(gt.noI18n(a.get('location') || '')))
+                )
+                .attr({
+                    'data-extension': 'default'
+                });
+        }
+    });
+
+
     return View;
 });
+
+
