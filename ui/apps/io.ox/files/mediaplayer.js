@@ -60,34 +60,41 @@ define('io.ox/files/mediaplayer',
             }
         },
 
-        eventHandler: function () {
-
-            var self = this;
-
-            $('.mediaplayer_playlist li').on('click', function (e)
-            {
-                e.preventDefault();
-                var node = $(this), file = node.data('file');
-                self.loadTrack(file);
-                node.parent().addClass('active').siblings().removeClass('active');
-                if (!self.config.videoSupport) self.drawTrackInfo(file);
-            });
-
-            $('.closemediaplayer').on('click', $.proxy(this.close, this));
-            $('.minimizemediaplayer').on('click', $.proxy(this.minimize, this));
-
-            $(document).keyup(function (e) {
-                if (e.keyCode === 27) self.close();
-            });
-
-        },
-
-        loadTrack: function (file) {
+        load: function (file) {
             this.currentTrack = this.getURL(file);
             this.mediaelement.pause();
             this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
             this.mediaelement.load();
             this.mediaelement.play();
+        },
+
+        // DRY!
+        play: function (file) {
+            // get CID and new active list item
+            var cid = _.cid(file), active = this.playlist.find('[data-cid="' + cid + '"]');
+            // remove active class
+            this.playlist.find('.active').removeClass('active');
+            active.addClass('active');
+            // load & play
+            this.load(file);
+            if (!this.config.videoSupport) this.drawTrackInfo(file);
+        },
+
+        eventHandler: function () {
+
+            var self = this;
+
+            this.playlist.on('click', 'li', function (e) {
+                e.preventDefault();
+                self.play($(this).data('file'));
+            });
+
+            this.container.find('.closemediaplayer').on('click', $.proxy(this.close, this));
+            this.container.find('.minimizemediaplayer').on('click', $.proxy(this.minimize, this));
+
+            $(document).keyup(function (e) {
+                if (e.keyCode === 27) self.close();
+            });
         },
 
         filterMediaList: function (list, videoSupport) {
@@ -175,7 +182,10 @@ define('io.ox/files/mediaplayer',
         drawItem: function (file, i) {
 
             var url = this.getURL(file),
-                item = $('<li>').text(gt.noI18n(file.filename)).data('file', file);
+                item = $('<li>')
+                    .attr('data-cid', _.cid(file))
+                    .data('file', file)
+                    .text(gt.noI18n(file.filename));
 
             if (this.player.find('.mejs-audio').length > 0) {
                 if (i === 0) {
@@ -194,16 +204,11 @@ define('io.ox/files/mediaplayer',
             this.playlist.append(item);
         },
 
-        selectTrack: function (dir) {
-            var current = this.playlist.find('li.active');
-            var selected = (dir === 'prev' ? current.prev() : current.next());
-            if (selected.length > 0)
-            {
-                var link = selected.find('a'), file = link.data('file');
-                this.loadTrack(file);
-                current.removeClass('active');
-                selected.addClass('active');
-                this.drawTrackInfo(file);
+        select: function (dir) {
+            var current = this.playlist.find('li.active'),
+                selected = dir === 'prev' ? current.prev() : current.next();
+            if (selected.length > 0) {
+                this.play(selected.data('file'));
             }
         },
 
@@ -277,19 +282,19 @@ define('io.ox/files/mediaplayer',
                     {
                         keys: [38], // UP
                         action: function (player, media) {
-                            self.selectTrack('prev');
+                            self.select('prev');
                         }
                     },
                     {
                         keys: [40], // DOWN
                         action: function (player, media) {
-                            self.selectTrack('next');
+                            self.select('next');
                         }
                     }],
                     success: function (me, domObject) {
                         self.mediaelement = me;
                         self.mediaelement.addEventListener('ended', function () {
-                            self.selectTrack('next');
+                            self.select('next');
                         }, false);
                     }
                 });
