@@ -50,7 +50,10 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
             $node.find(".plugins-portal-quota-filebar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-file")
-            .text(strings.fileSize(quota.file.use) + " " + gt("of") + " " + strings.fileSize(quota.file.quota));
+            .text(//#. %1$s is the storagespace in use
+                  //#. %2$s is the max storagespace
+                  //#, c-format
+                  gt("%1$s of %2$s", strings.fileSize(quota.file.use), strings.fileSize(quota.file.quota)));
 
             var width = (quota.file.use / quota.file.quota) * 100;
             $node.find(".plugins-portal-quota-filebar")
@@ -66,7 +69,10 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
             $node.find(".plugins-portal-quota-mailbar").remove();
         } else {
             $node.find(".plugins-portal-quota-memory-mail")
-            .text(strings.fileSize(quota.mail.use) + " " + gt("of") + " " + strings.fileSize(quota.mail.quota));
+            .text(//#. %1$s is the storagespace in use
+                  //#. %2$s is the max storagespace
+                  //#, c-format
+                  gt("%1$s of %2$s", strings.fileSize(quota.mail.use),  strings.fileSize(quota.mail.quota)));
 
             var width = (quota.mail.use / quota.mail.quota) * 100;
             $node.find(".plugins-portal-quota-mailbar")
@@ -81,7 +87,11 @@ define("plugins/portal/quota/register", ["io.ox/core/extensions",
 
         } else {
             $node.find(".plugins-portal-quota-memory-mailcount")
-            .text(quota.mail.countuse + " " + gt("of") + " " + quota.mail.countquota);
+            
+            .text(//#. %1$s is the number of mails
+                  //#. %2$s is the maximum number of mails
+                  //#, c-format
+                  gt("%1$s of %2$s", gt.noI18n(quota.mail.countuse), gt.noI18n(quota.mail.countquota)));
 
             var width = (quota.mail.countuse / quota.mail.countquota) * 100;
             $node.find(".plugins-portal-quota-mailcountbar")

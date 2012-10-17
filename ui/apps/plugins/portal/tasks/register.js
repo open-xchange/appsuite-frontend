@@ -49,10 +49,13 @@ define("plugins/portal/tasks/register", ["io.ox/core/extensions",
 
             $node.append(
                     $('<div class="io-ox-clear io-ox-portal-preview">').append(
-                            $("<span>").text(gt("Next due task") + ': '),
-                            $("<span>").text(strings.shorten(task.title, 50) + ' ').addClass("io-ox-portal-tasks-preview-title"),
-                            $('<span>').text(gt("Due in") + " " + task.end_date + ' ').addClass("io-ox-portal-tasks-preview-date"),
-                            $("<span>").text(strings.shorten(task.note, 100)).addClass("io-ox-portal-tasks-preview-note")
+                            $("<span>").text(gt("Next due task:")),
+                            $("<span>").text(gt.noI18n(strings.shorten(task.title, 50) + ' ')).addClass("io-ox-portal-tasks-preview-title"),
+                            
+                            $('<span>').text(//#. %1$s is the task due date
+                                             //#, c-format
+                                             gt("Due in %1$s ", _.noI18n(task.end_date))).addClass("io-ox-portal-tasks-preview-date"),
+                            $("<span>").text(gt.noI18n(strings.shorten(task.note, 100))).addClass("io-ox-portal-tasks-preview-note")
                     )
             );
 

@@ -194,15 +194,15 @@ define("io.ox/tasks/main", ["io.ox/tasks/api",
                     .dropdown(),
                     $('<ul>').addClass("dropdown-menu")
                     .append(
-                        $('<li>').append("<a data-option='state'><i/> " + gt('Status') + "</a>"), // state becomes Bundesland :)
-                        $('<li>').append("<a data-option='202'><i/> " + gt('Due date') + "</a>"),
-                        $('<li>').append("<a data-option='200'><i/> " + gt('Subject') + "</a>"),
-                        $('<li>').append("<a data-option='309'><i/> " + gt('Priority') + "</a>"),
+                        $('<li>').append($("<a data-option='state'>").text(gt('Status')).prepend($("<i>"))), // state becomes Bundesland :)
+                        $('<li>').append($("<a data-option='202'>").text(gt('Due date')).prepend($("<i>"))),
+                        $('<li>').append($("<a data-option='200'>").text(gt('Subject')).prepend($("<i>"))),
+                        $('<li>').append($("<a data-option='309'>").text(gt('Priority')).prepend($("<i>"))),
                         $('<li class="divider">'),
-                        $('<li>').append("<a data-option='asc'><i/> " + gt('Ascending') + "</a>"),
-                        $('<li>').append("<a data-option='desc'><i/> " + gt('Descending') + "</a>"),
+                        $('<li>').append($("<a data-option='asc'>").text(gt('Ascending')).prepend($("<i>"))),
+                        $('<li>').append($("<a data-option='desc'>").text(gt('Descending')).prepend($("<i>"))),
                         $('<li class="divider">'),
-                        $('<li>').append("<a data-option='done'><i/> " + gt('Show done tasks') + "</a>")
+                        $('<li>').append($("<a data-option='done'>").text(gt('Show done tasks')).prepend($("<i>")))
                     ).on('click', 'a', { grid: grid }, taskToolbarOptions)
                 )
             );

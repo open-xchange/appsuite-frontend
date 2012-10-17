@@ -164,7 +164,7 @@ define("io.ox/tasks/util",
 
                 while (i < lookupDaytimeStrings.length) {
                     temp = lookupDaytimeStrings[i];
-                    appendString = appendString + "<option finderId='d" + i + "'>" + gt(temp) + "</option>";
+                    appendString = appendString + "<option finderId='d" + i + "'>" + temp + "</option>";
                     i++;
                 }
 
@@ -178,7 +178,7 @@ define("io.ox/tasks/util",
 
                 while (circleIncomplete) {
                     temp = lookupWeekdayStrings[i];
-                    appendString = appendString + "<option finderId='w" + i + "'>" + gt(temp) + "</option>";
+                    appendString = appendString + "<option finderId='w" + i + "'>" + temp + "</option>";
                     if (i < 6) {
                         i++;
                     } else {

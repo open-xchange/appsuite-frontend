@@ -71,7 +71,7 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
             .append($('<i>').addClass('icon-chevron-left'))
             .appendTo(node);
             
-            yearLabel = $('<div>').text(pickDate.getYear()).addClass('picker-label').appendTo(node);
+            yearLabel = $('<div>').text(gt.noI18n(pickDate.getYear())).addClass('picker-label').appendTo(node);
             
             nextYearButton = $('<button>').addClass('btn picker-button-right').on('click', function () {
                 table.empty();
@@ -100,7 +100,7 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
             .append($('<i>').addClass('icon-chevron-left'))
             .appendTo(node);
             
-            monthLabel = $('<div>').text(date.locale.months[pickDate.getMonth()]).addClass('picker-label').appendTo(node);
+            monthLabel = $('<div>').text(gt.noI18n(date.locale.months[pickDate.getMonth()])).addClass('picker-label').appendTo(node);
             
             nextMonthButton = $('<button>').addClass('btn picker-button-right').on('click', function () {
                 table.empty();
@@ -124,7 +124,7 @@ define('io.ox/tasks/edit/pickerPopup', ['io.ox/core/tk/dialogs',
                 currentRow = $('<tr>').appendTo(table);
                 
                 while (tempDate.getMonth() === pickDate.getMonth()) {
-                    var temp = $('<th>').text(tempDate.getDate())
+                    var temp = $('<th>').text(gt.noI18n(tempDate.getDate()))
                         .attr('timevalue', tempDate.getTime())
                         .addClass("picker-day")
                         .appendTo(currentRow);

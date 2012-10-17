@@ -1991,6 +1991,10 @@ msgstr "Fälligkeitsdatum ändern"
 msgid "Changed due date"
 msgstr "Fälligkeitsdatum wurde geändert"
 
+#: apps/io.ox/tasks/edit/main.js:29 apps/io.ox/tasks/edit/main.js:94
+msgid "Edit task"
+msgstr "Aufgabe bearbeiten"
+
 #: apps/io.ox/tasks/edit/main.js:161 apps/io.ox/tasks/edit/main.js:262
 #: apps/io.ox/tasks/edit/main.js:263
 msgid "Time"

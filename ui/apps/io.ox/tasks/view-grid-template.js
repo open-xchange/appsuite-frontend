@@ -40,15 +40,10 @@ define('io.ox/tasks/view-grid-template',
                 },
 
                 set: function (data, fields, index) {
-//                    if (data.priority === 3) {
-//                        fields.priority.text("\u2605\u2605\u2605");
-//                    } else {
-//                        fields.priority.html("&nbsp");
-//                    }
-                    fields.title.text($.trim(data.title));
-                    fields.end_date.text(data.end_date);
+                    fields.title.text(_.noI18n(data.title));
+                    fields.end_date.text(_.noI18n(data.end_date));
                     fields.status.attr('class', 'status ' + data.badge) //important. with addClass old classes aren't removed correctly
-                        .text($.trim(data.status) || '\u00A0');
+                        .text(data.status || _.noI18n('\u00A0'));
                     fields.user[data.participants && data.participants.length ? 'show' : 'hide']();
                     if (data.percent_completed > 0 && data.percent_completed < 100) {
                         fields.progress.find('.bar').css('width', data.percent_completed + '%').end().show();
