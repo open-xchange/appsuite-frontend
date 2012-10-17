@@ -26,7 +26,7 @@ define("io.ox/mail/write/view-main",
      'io.ox/core/api/autocomplete',
      'io.ox/core/api/account',
      'io.ox/core/strings',
-     'gettext!io.ox/mail/mail'
+     'gettext!io.ox/mail'
     ], function (ext, util, actions, View, Model, contactsAPI, contactsUtil, mailUtil, pre, autocomplete, AutocompleteAPI, accountAPI, strings, gt) {
 
     'use strict';

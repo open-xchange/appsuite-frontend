@@ -19,7 +19,7 @@ define("io.ox/calendar/view-detail",
      "io.ox/core/api/resource",
      "io.ox/core/api/folder",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/calendar/calendar",
+     "gettext!io.ox/calendar",
      "less!io.ox/calendar/style.css"
     ], function (ext, util, userAPI, groupAPI, resourceAPI, folderAPI, links, gt) {
 
@@ -292,8 +292,10 @@ define("io.ox/calendar/view-detail",
         index: 550,
         id: 'inline-actions-participantrelated',
         draw: function (data) {
+            if (data.participants.length > 1) {
+                ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
+            }
 
-            ext.point('io.ox/calendar/detail/actions-participantrelated').invoke('draw', this, data);
         }
     });
 

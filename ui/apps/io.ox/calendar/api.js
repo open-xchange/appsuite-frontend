@@ -178,7 +178,6 @@ define("io.ox/calendar/api",
                         .pipe(function (data) {
                             api.trigger('refresh.all');
                             api.trigger('update', data);
-
                             return data;
                         });
                 });

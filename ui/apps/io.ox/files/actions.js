@@ -15,7 +15,8 @@ define("io.ox/files/actions",
     ["io.ox/files/api",
      "io.ox/core/extensions",
      "io.ox/core/extPatterns/links",
-     "gettext!io.ox/files/files"], function (api, ext, links, gt) {
+     'io.ox/office/tk/config',
+     "gettext!io.ox/files"], function (api, ext, links, OfficeConfig, gt) {
 
     'use strict';
 
@@ -83,6 +84,49 @@ define("io.ox/files/actions",
             ox.launch('io.ox/editor/main').done(function () {
                 this.create({ folder: app.folder.get() });
             });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/newdocument', {
+        id: 'officenew',
+        action: function (app) {
+            ox.launch('io.ox/office/editor/main', { file: 'new', folder_id: app.folder.get() });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/editor', {
+        id: 'officeeditor',
+        requires: function (e) {
+            var pattern = OfficeConfig.isODFSupported() ? /\.(odt|docx)$/i : /\.(docx)$/i;
+            return e.collection.has('one') && pattern.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/editor/main', { file: data });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/view', {
+        id: 'officepreview',
+        requires: function (e) {
+            return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|odc|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
+        },
+        action: function (data) {
+            ox.launch('io.ox/office/preview/main', { file: data }).done(function () {
+                this.load();
+            });
+        }
+    });
+
+    new Action('io.ox/files/actions/office/refresh_hack', {
+        id: 'refresh_hack',
+        requires: function (e) {
+            return true;
+        },
+        action: function (data) {
+            api.caches.get.clear();
+            api.caches.versions.clear();
+            api.trigger('refresh.all');
+            window.location.reload();
         }
     });
 
@@ -215,6 +259,14 @@ define("io.ox/files/actions",
     });
 
     ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
+        index: 50,
+        id: "officenew",
+        label: gt("New Document"),
+        cssClasses: 'btn btn-inverse',
+        ref: "io.ox/files/actions/office/newdocument"
+    }));
+
+    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 100,
         id: "upload",
         label: gt("Upload"),
@@ -277,6 +329,29 @@ define("io.ox/files/actions",
         index: 50,
         label: gt("Edit"),
         ref: "io.ox/files/actions/edit"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officeeditor",
+        index: 60,
+        prio: 'hi',
+        label: gt("Change"),
+        ref: "io.ox/files/actions/office/editor"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "officepreview",
+        index: 65,
+        prio: 'hi',
+        label: gt("View"),
+        ref: "io.ox/files/actions/office/view"
+    }));
+
+    ext.point('io.ox/files/links/inline').extend(new links.Link({
+        id: "refresh_hack",
+        index: 666,
+        label: gt("Refresh!"),
+        ref: "io.ox/files/actions/office/refresh_hack"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({
@@ -372,8 +447,8 @@ define("io.ox/files/actions",
         id: 'create',
         index: 10,
         label: gt("Drop here to upload a <b>new file</b>"),
-        action: function (file, app) {
-            app.queues.create.offer(file);
+        multiple: function (files, app) {
+            app.queues.create.offer(files);
         }
     });
 

@@ -14,15 +14,15 @@
 
 define("io.ox/files/main",
     ["io.ox/core/commons",
-     "gettext!io.ox/files/files",
+     "gettext!io.ox/files",
      "io.ox/files/actions",
-     "less!io.ox/files/style.css"
+     "less!io.ox/files/style.less"
     ], function (commons, gt) {
 
     "use strict";
 
     // application object
-    var app = ox.ui.createApp({ name: 'io.ox/files' }),
+    var app = ox.ui.createApp({ name: 'io.ox/files', title: 'Files' }),
         // app window
         win;
 

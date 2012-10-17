@@ -23,12 +23,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
             this.model.on('change', _.bind(this.onChange, this));
         },
         render: function () {
-            this.$el.text(this.model.get('count'));
+            this.$el.text(_.noI18n(this.model.get('count')));
             return this;
         },
         onChange: function () {
             this.$el.addClass('badge-info');
-            this.$el.text(this.model.get('count'));
+            this.$el.text(_.noI18n(this.model.get('count')));
         },
         setNotifier: function (b) {
             if (b) {
@@ -104,12 +104,12 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
     };
 
     NotificationController.prototype = {
-        attach: function (desktop, pos) {
+        attach: function (addLauncher) {
             //view
             var self = this;
             var badgeView = new BadgeView({model: new Backbone.Model({ count: 0})});
             this.notificationsView = new NotificationsView();
-            desktop.addLauncher(pos, badgeView.render().$el, $.proxy(this.toggleList, this));
+            addLauncher('right', badgeView.render().$el, $.proxy(this.toggleList, this));
             $('#io-ox-core').prepend(
                 $('<div id="io-ox-notifications" class="scrollable">'),
                 $('<div id="io-ox-notifications-overlay" class="abs notifications-overlay">').click(function (e) {
@@ -255,16 +255,19 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
 
                 // add message
                 if (validType.test(type)) {
-                    container.empty().append(
-                        $('<div class="alert alert-' + type + '">')
-                        .append($('<b>').text(message || ''))
-                    );
-                    if (!active) {
-                        $('body').on('click', fader);
-                    }
-                    active = true;
-                    clear();
-                    timer = setTimeout(fader, TIMEOUT);
+                    // put at end of stack not to run into opening click
+                    setTimeout(function () {
+                        container.empty().append(
+                            $('<div class="alert alert-' + type + '">')
+                            .append($('<b>').text(message || ''))
+                        );
+                        if (!active) {
+                            $('body').on('click', fader);
+                        }
+                        active = true;
+                        clear();
+                        timer = setTimeout(fader, TIMEOUT);
+                    }, 0);
                 }
             };
         }())

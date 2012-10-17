@@ -10,7 +10,13 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io.ox/core/date', 'gettext!io.ox/backbone/forms', 'less!io.ox/backbone/forms.less'], function (ext, Events, date, gt) {
+
+define('io.ox/backbone/forms',
+    ['io.ox/core/extensions',
+     'io.ox/core/event',
+     'io.ox/core/date',
+     'gettext!io.ox/core',
+     'less!io.ox/backbone/forms.less'], function (ext, Events, date, gt) {
 
     "use strict";
 
@@ -165,7 +171,6 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
             showError: function (messages) {
                 this.$el.find('.help-block').remove();
                 var helpBlock = $('<div class="help-block error">');
-                helpBlock.empty();
                 _(messages).each(function (msg) {
                     helpBlock.append($.txt(msg));
                 });
@@ -262,9 +267,7 @@ define('io.ox/backbone/forms', ['io.ox/core/extensions', 'io.ox/core/event', 'io
                         $("<option>", {value: value}).text(label)
                     );
                 });
-
                 this.$el.append($('<label>').addClass(this.labelClassName || '').text(this.label), this.nodes.select);
-
                 this.updateChoice();
                 this.nodes.select.on('change', function () {
                     self.model.set(self.attribute, self.nodes.select.val());

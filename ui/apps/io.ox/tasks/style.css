@@ -40,15 +40,29 @@
 }
 
 .vgrid-cell.tasks .priority i.icon-star { 
-	display: inline-block;
-	
+	display: inline-block;	
 }
 
-.vgrid-cell.tasks .title{
+.vgrid-cell.tasks .title {
     color: black;
     font-weight: 500;
 }
 
+.vgrid-cell.tasks .second-row {
+    margin-top: 5px;
+    height: 17px;
+}
+
+.vgrid-cell.tasks .participants {
+    line-height: 1em;
+    margin-right: 1em;
+}
+
+.vgrid-cell.tasks .progress {
+    width: 100px;
+    height: 13px;
+    margin: 0 1em 0 0;
+}
 
 //detailview
 

@@ -12,7 +12,10 @@
  * @author Christoph Kopp <christoph.kopp@open-xchange.com>
  */
 
-define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], function (ext, config) {
+define('io.ox/mail/util',
+    ['io.ox/core/extensions',
+     'io.ox/core/config',
+     'gettext!io.ox/core'], function (ext, config, gt) {
 
     'use strict';
 
@@ -92,17 +95,17 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             field = field || 'from';
             var list = data[field] || [['', '']],
                 i = 0, $i = list.length,
-                tmp = $('<div>'), node, obj, sender;
+                tmp = $('<div>'), obj, sender;
 
             for (; i < $i; i++) {
                 obj = {
                     display_name: this.getDisplayName(list[i]),
                     email1: String(list[i][1] || '').toLowerCase()
                 };
-                node = $('<a>', { href: '#', title: obj.email1 })
+                $('<a>', { href: '#', title: obj.email1 })
                     .addClass('person-link')
                     .css('whiteSpace', 'nowrap')
-                    .text(obj.display_name)
+                    .text(_.noI18n(obj.display_name))
                     .data('person', obj)
                     .on('click', obj, fnClickPerson).css('cursor', 'pointer')
                     .appendTo(tmp);
@@ -110,14 +113,20 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
                 // add 'on behalf of'?
                 if (field === 'from' && 'headers' in data && 'Sender' in data.headers) {
                     sender = this.parseRecipients(data.headers.Sender);
-                    tmp.prepend(
-                        this.serializeList({ sender: sender }, 'sender'),
-                        $.txt(' on behalf of ')
-                    );
+                    // only show if display names differ (otherwise it looks like a senseless duplicate)
+                    if (sender[0][0] !== data.from[0][0]) {
+                        tmp.prepend(
+                            this.serializeList({ sender: sender }, 'sender'),
+                            $.txt(_.noI18n(' ')),
+                            gt(' on behalf of '),
+                            $.txt(_.noI18n(' '))
+                        );
+                    }
                 }
 
                 if (i < $i - 1) {
-                    tmp.append($('<span>').addClass('delimiter').html('&nbsp;&bull; '));
+                    tmp.append($('<span>').addClass('delimiter')
+                        .append($.txt(_.noI18n('\u00A0\u2022 ')))); // '&nbsp;&bull; '
                 }
             }
             return tmp.contents();
@@ -136,11 +145,12 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
                 });
                 tmp = tmp.add(
                     $('<a>', { href: href, target: '_blank' })
-                    .addClass('attachment-link').text(filename)
+                    .addClass('attachment-link').text(_.noI18n(filename))
                 );
                 if (i < $i - 1) {
                     tmp = tmp.add(
-                        $('<span>').addClass('delimiter').html('&nbsp;&bull; ')
+                        $('<span>').addClass('delimiter')
+                            .append($.txt(_.noI18n('\u00A0\u2022 '))) // '&nbsp;&bull; '
                     );
                 }
             }
@@ -156,11 +166,11 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             return display_name || email;
         },
 
-        getFrom: function (data, field, prewrap) {
+        getFrom: function (data, field) {
             field = field || 'from';
             var list = data[field] || [['', '']],
                 dn = that.getDisplayName(list[0]);
-            return $('<span>').addClass('person').text(prewrap ? _.prewrap(dn) : dn);
+            return $('<span>').addClass('person').text(_.noI18n(dn));
         },
 
         getFlag: function (data) {
@@ -169,7 +179,7 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
 
         getPriority: function (data) {
             var i = '<i class="icon-star"></i>';
-            return data.priority < 3 ? $('<span>\u00A0' + i + i + i + '</span>') : $();
+            return data.priority < 3 ? $('<span>').append(_.noI18n('\u00A0'), i, i, i) : $();
         },
 
         getTime: function (timestamp) {
@@ -230,10 +240,16 @@ define('io.ox/mail/util', ['io.ox/core/extensions', 'io.ox/core/config'], functi
             }
         },
 
+        count: function (data) {
+            return _(data).reduce(function (memo, obj) {
+                return memo + (obj.thread ? obj.thread.length : 1);
+            }, 0);
+        },
+
         isUnread: function (data) {
             if (data && data.thread) {
-                return _(data.thread).inject(function (memo, data) {
-                    return memo || (data.flags & 32) !== 32;
+                return _(data.thread).reduce(function (memo, obj) {
+                    return memo || (obj.flags & 32) !== 32;
                 }, false);
             } else {
                 return (data.flags & 32) !== 32;

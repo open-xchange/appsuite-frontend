@@ -19,7 +19,7 @@ define('plugins/portal/twitter/register',
      'io.ox/core/strings',
      'io.ox/portal/pulltorefresh',
      'io.ox/keychain/api',
-     'gettext!plugins/portal/twitter',
+     'gettext!plugins/portal',
      'io.ox/core/notifications',
      'io.ox/core/date',
      'less!plugins/portal/twitter/style.css'], function (ext, proxy, control, strings, ptr, keychain, gt, notifications, date) {
@@ -142,7 +142,7 @@ define('plugins/portal/twitter/register',
         }
         return renderTweet(tweet);
     };
-    
+
     var renderTweet = function (tweet) {
         var tweetLink = 'https://twitter.com/' + tweet.user.screen_name + '/status/' + tweet.id_str;
         var profileLink = 'https://twitter.com/' + tweet.user.screen_name;
@@ -262,7 +262,7 @@ define('plugins/portal/twitter/register',
             var script   = document.createElement('script');
             script.type  = 'text/javascript';
             script.src   = 'http://platform.twitter.com/widgets.js'; //TODO must be stored locally, even if the Twitter guys hate us
-            
+
             self.empty().append(
                 $('<a>').text(gt('Tweet')).attr({
                     href: 'https://twitter.com/share',
@@ -274,7 +274,7 @@ define('plugins/portal/twitter/register',
                 $('<div>').addClass('clear-title').text('Twitter'),
                 script
             );
-            
+
             $tweets.empty();
 
             $tweets.appendTo(self);

@@ -18,7 +18,7 @@ define.async('io.ox/portal/main',
      'io.ox/core/date',
      'io.ox/core/taskQueue',
      'io.ox/core/flowControl',
-     'gettext!io.ox/portal/portal',
+     'gettext!io.ox/portal',
      'io.ox/core/tk/dialogs',
      'io.ox/keychain/api',
      'settings!io.ox/portal',
@@ -79,7 +79,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         setOrder(arguments);
 
         // application object
-        var app = ox.ui.createApp({ name: 'io.ox/portal' }),
+        var app = ox.ui.createApp({ name: 'io.ox/portal', title: 'Portal' }),
             // app window
             win,
             intro = $('<div class="io-ox-portal-intro">'),
@@ -96,6 +96,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         function getGreetingPhrase(name) {
             var hour = new date.Local().getHours();
             // find proper phrase
+            console.log('name', name, 'hour', hour);
             if (hour >= 4 && hour <= 11) {
                 return gt('Good morning, %s', name);
             } else if (hour >= 18 && hour <= 23) {
@@ -440,22 +441,29 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
         ext.point('plugins/portal/intro').extend({
             id: 'default-intro',
             node: function () {
-                var username = userAPI.getTextNode(ox.user_id).nodeValue;
-                return $('<div>').append(
-                    $('<span class="io-ox-portal-settings">').append(
-                        $('<button class="btn btn-primary">')
-                        .text(gt('Personalize this page'))
-                        .on('click', function (event) {
-                            return require(["io.ox/settings/main"], function (m) {
-                                m.getApp().launch().done(function () {
-                                    this.getGrid().selection.set({ id: 'io.ox/portal' });
+                var node;
+                try {
+                    return (node = $('<div>').append(
+                        $('<span class="io-ox-portal-settings">').append(
+                            $('<button class="btn btn-primary">')
+                            .text(gt('Personalize this page'))
+                            .on('click', function (event) {
+                                return require(["io.ox/settings/main"], function (m) {
+                                    m.getApp().launch().done(function () {
+                                        this.getGrid().selection.set({ id: 'io.ox/portal' });
+                                    });
                                 });
-                            });
-                        })
-                    ),
-                    $('<span class="io-ox-portal-greeting">').text(getGreetingPhrase(username)),
-                    $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
-                );
+                            })
+                        ),
+                        $('<span class="io-ox-portal-greeting">'),
+                        $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
+                    ));
+                } finally {
+                    userAPI.getName(ox.user_id).done(function (name) {
+                        node.find('.io-ox-portal-greeting').text(getGreetingPhrase(name));
+                        node = null;
+                    });
+                }
             }
         });
 

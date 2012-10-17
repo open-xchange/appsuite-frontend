@@ -20,7 +20,7 @@ define('io.ox/portal/settings/pane',
        'settings!io.ox/portal',
        'text!io.ox/portal/settings/tpl/listbox.html',
        'text!io.ox/portal/settings/tpl/plugin.html',
-       'gettext!io.ox/portal/settings',
+       'gettext!io.ox/portal',
        'apps/io.ox/core/tk/jquery-ui.min.js'], function (ext, utils, PluginModel, dialogs, settings, tmplListBox, tmplPlugin, gt) {
 
     'use strict';

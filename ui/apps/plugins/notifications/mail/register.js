@@ -17,7 +17,7 @@ define('plugins/notifications/mail/register',
      'io.ox/core/extensions',
      'io.ox/core/config',
      'dot!plugins/notifications/mail/template.html',
-     'gettext!plugins/notifications/mail'
+     'gettext!plugins/notifications'
     ], function (notificationsController, mailApi, util, ext, config, tpl, gt) {
 
     'use strict';
@@ -41,9 +41,9 @@ define('plugins/notifications/mail/register',
                 .done(function (data) {
                     var f = data.from || [['', '']];
                     self.model.set({
-                        title: util.getDisplayName(f[0]),
-                        subject: data.subject,
-                        content: mailApi.beautifyMailText(data.attachments[0].content),
+                        title: _.noI18n(util.getDisplayName(f[0])),
+                        subject: _.noI18n(data.subject),
+                        content: _.noI18n(mailApi.beautifyMailText(data.attachments[0].content)),
                         data: data
                     });
                     self.$('.content').html(self.model.get('content'));

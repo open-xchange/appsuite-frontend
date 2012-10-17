@@ -10,9 +10,11 @@
  *
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
-define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/backbone/model'], function (ext, gt) {
-    "use strict";
+define("io.ox/backbone/modelFactory",
+    ["io.ox/core/extensions",
+     'gettext!io.ox/core'], function (ext, gt) {
 
+    "use strict";
 
     function ValidationErrors() {
         this.errors = {};
@@ -64,7 +66,7 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
             attributes = attributes || this.toJSON();
 
             this.factory.point("validation").invoke("validate", errors, attributes, errors, this);
-            
+
             if (options.isSave) {
                 this.factory.point("validation/save").invoke("validate", errors, attributes, errors, this);
             }
@@ -359,7 +361,6 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         this.model = OXModel.extend(_.extend({
             factory: this
         }, (delegate.model || {})));
-
         this.collection = Backbone.Collection.extend({
             model: this.model,
             sync: function () {
@@ -489,11 +490,13 @@ define("io.ox/backbone/modelFactory", ["io.ox/core/extensions", 'gettext!io.ox/b
         _(this.internal.updateEvents).each(function (eventName) {
 
             self.api.on(eventName, function () {
+                console.log("Caught event", eventName);
                 var args = self.internal.eventToGetArguments.apply(self, $.makeArray(arguments)),
                     uid = self.internal.toUniqueIdFromGet.apply(self, args);
 
                 self.api.get.apply(self.api, args).done(function (loaded) {
                     _(realms).each(function (realm) {
+                        console.log(realm, uid, loaded);
                         realm.refresh(uid, loaded);
                     });
                 });

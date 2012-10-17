@@ -33,9 +33,8 @@
     margin-left: 1em;
     border-radius: 5px;
     display: inline-block;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
     float: right;
+    .box-sizing(border-box);
 }
 
 .vgrid-cell.mail .flag.flag_0 {
@@ -130,7 +129,7 @@
 }
 
 .vgrid-cell .thread-summary-item {
-    padding: 5px 12px 5px 25px;
+    padding: 5px 13px 5px 13px;
     border-bottom: 1px solid #fff;
     background-color: #eee;
     cursor: pointer;
@@ -158,6 +157,20 @@
     border-bottom: 0px none;
 }
 
+.vgrid-cell .thread-summary-pos {
+    display: inline-block;
+    min-width: 1.5em;
+    color: #777;
+    text-align: right;
+    padding-right: 0.75em;
+}
+
+.vgrid-cell .thread-summary-from { font-weight: bold; }
+.vgrid-cell .thread-summary-subject { }
+
+.vgrid-cell .thread-summary-left { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vgrid-cell .thread-summary-right { float: right; }
+
 /* Detail view */
 
 .rightside.mail-detail-pane {
@@ -173,12 +186,13 @@
 
 .mail-detail-pane .mail-detail.view {
     background-color: white;
-    border: 1px solid #ddd;
     padding: 20px 20px 20px 20px;
     margin: 20px 20px 0px 20px;
-    -webkit-box-shadow: 0px 4px 10px -5px black;
-    -moz-box-shadow: 0px 4px 10px -5px black;
-    box-shadow: 0px 4px 10px -5px black;
+    .box-shadow(0px 3px 10px -3px black);
+}
+
+.mail-detail-pane .mail-detail.view.by-myself {
+    background-color: #f5f5f5;
 }
 
 .mail-detail-pane .mail-detail.thread-inline-actions {
@@ -191,21 +205,13 @@
     
     position: relative;
     overflow-y: visible;
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+    .user-select(text);
     clear: both;
     padding: 30px 40px 30px 40px;
     border-bottom: 1px solid #eee;
     min-height: 200px;
     z-index: 0;
     
-    &.by-myself .from.list a,
-    &.by-myself .to-cc.list a,
-    &.by-myself .io-ox-inline-links a {
-        color: #888 !important;
-    }
-
     .mail-detail-clear-both {
         clear: both;
         height: 0px;
@@ -224,7 +230,7 @@
     }
 
     &.thread-inline-actions .io-ox-inline-links {
-        margin-bottom: 0;
+        margin: 0;
     }
 
     .alert {
@@ -239,8 +245,8 @@
 
     .subject, .thread-size, .flag {
         font-size: 16pt;
-        margin: 0 0 0.6em 0;
-        word-wrap: break-word;
+        margin: @inline-links-margin;
+        word-break: break-all;
     }
 
     &.unread .from .person-link {
@@ -261,8 +267,9 @@
 
     .flag-dropdown {
         position: relative;
-        width: 1.25em;
-        height: 1.25em;
+        width: 30px;
+        height: 24px;
+        margin-left: 1em;
         border: 1px solid rgba(0, 0, 0, 0.15);
         cursor: pointer;
         z-index: 10001; // to be above attachment dropdowns
@@ -287,23 +294,22 @@
         height: 64px;
         margin: 0 0 1em 1.5em;
         background-repeat: no-repeat;
-        background-position: center center;
+        background-position: top right;
         background-size: contain;
-    }
-
-    .list {
-        line-height: 1.40em;
-        margin: 0 0 0.8em 0;
-        vertical-align: top;
     }
 
     .io-ox-label {
         font-family: @font-light;
         color: #aaa;
+        white-space: nowrap;
     }
 
     .to-cc .person-link {
         color: #333;
+    }
+    
+    .attachment-list b {
+        opacity: 0.30;
     }
 
     .instant-preview {
@@ -336,7 +342,7 @@
     .content {
         
         font-family: Arial, Helvetica, sans-serif;
-        font-size: 13px;
+        font-size: 14px;
         line-height: 20px;
         max-width: 750px;
         margin-top: 1em;
@@ -429,4 +435,19 @@ h4.mail-attachment-preview {
 
 .touch .mail-detail .content.plain-text {
     font-size: @touch-font-size;
+}
+
+@media (max-width: 700px) {
+    .mail-detail-pane .mail-detail.view {
+        border: 0px none;
+        border-bottom: 2px solid #555;
+        margin: 0;
+    }
+    .mail-detail-pane .mail-detail.thread-inline-actions {
+        margin-bottom: 20px;
+    }
+    .scrollable-pane::after {
+        content: ''
+    }
+    .mail-detail .contact-picture { display: none; }
 }

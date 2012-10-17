@@ -163,6 +163,7 @@ var jshintOptions = {
 
 function hint (data, getSrc) {
     if (jshint(data, jshintOptions)) return data;
+    fs.writeFileSync('tmp/errorfile.js', data, 'utf8');
     console.error(jshint.errors.length + " Errors:");
     for (var i = 0; i < jshint.errors.length; i++) {
         var e = jshint.errors[i];
@@ -267,18 +268,25 @@ utils.concat("boot.js", [
         "lib/backbone.custom.js",
         "lib/doT.js",
         "lib/tinycon/tinycon.min.js",
+        "apps/io.ox/core/event.js",
+        "apps/io.ox/core/http.js",
+        "apps/io.ox/core/session.js",
+        "apps/io.ox/core/gettext.js",
         "tmp/boot.js"]);
 
 utils.concat("pre-core.js",
     utils.list("apps/io.ox/core", [
-        "event.js", "extensions.js", "http.js",
+        "async.js", "extensions.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
-        "config.js", "session.js",
+        "settings.js", // settings plugin
+        "config.js",
         "tk/selection.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
-        "api/folder.js", "desktop.js", "commons.js", "collection.js", "notifications",
-        "extPatterns/actions.js", "extPatterns/links.js",
-        "settings.js" // settings plugin
+        "api/folder.js", "api/apps.js", "desktop.js",
+        "commons.js",
+        "commons-folderview.js",
+        "collection.js", "notifications.js", "date.js",
+        "extPatterns/actions.js", "extPatterns/links.js"
     ]), { type: "source" }
 );
 
@@ -287,14 +295,14 @@ utils.concat("pre-core.js",
 utils.copy(utils.list("lib/bootstrap", ["css/bootstrap.min.css", "img/*"]),
     { to: utils.dest("apps/io.ox/core/bootstrap") });
 
-// Concat styles of core and plugins
-utils.concat( "bootstrap.min.css", ["lib/bootstrap/css/bootstrap.min.css", "lib/bootstrap-datepicker.css"],
-        { to: utils.dest("apps/io.ox/core/bootstrap/css") });
-
 // jQuery UI
 
-utils.copy(utils.list("lib", "jquery-ui.min.js"),
+utils.copy(utils.list("lib", ["jquery-ui.min.js", "jquery.mobile.touch.min.js"]),
     { to: utils.dest("apps/io.ox/core/tk") });
+
+//Mediaelement.js
+
+utils.copy(utils.list("lib", "mediaelement/"), {to: utils.dest("apps") });
 
 // Ace editor
 

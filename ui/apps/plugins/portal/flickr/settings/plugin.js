@@ -17,7 +17,7 @@ define('plugins/portal/flickr/settings/plugin',
         'text!plugins/portal/flickr/settings/tpl/stream.html',
         'text!plugins/portal/flickr/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/flickr',
-        'gettext!io.ox/portal/flickr'
+        'gettext!io.ox/portal'
         ], function (ext, dialogs, streamSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';

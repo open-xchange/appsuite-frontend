@@ -17,9 +17,10 @@ define('io.ox/mail/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/mail/api',
      'io.ox/mail/util',
-     'gettext!io.ox/mail/mail',
+     'gettext!io.ox/mail',
      'io.ox/core/config',
-     'io.ox/core/notifications', 'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
+     'io.ox/core/notifications',
+     'io.ox/contacts/api'], function (ext, links, api, util, gt, config, notifications, contactAPI) {
 
     'use strict';
 
@@ -298,6 +299,27 @@ define('io.ox/mail/actions',
         }
     });
 
+    new Action('io.ox/mail/actions/slideshow-attachment', {
+        id: 'slideshow',
+        requires: function (e) {
+            return _(e.context).reduce(function (memo, obj) {
+                return memo && (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, true);
+        },
+        multiple: function (list) {
+            _(list).each(function (data) {
+                data.url = api.getUrl(data, 'view') + '&scaleType=contain&width=' + $(window).width() + '&height=' + $(window).height();
+            });
+            require(['io.ox/files/carousel'], function (slideshow) {
+                slideshow.init({
+                    fullScreen: false,
+                    list: list,
+                    attachmentMode: true
+                });
+            });
+        }
+    });
+
     new Action('io.ox/mail/actions/download-attachment', {
         id: 'download',
         requires: 'some',
@@ -337,13 +359,59 @@ define('io.ox/mail/actions',
 
     //all actions
 
-//    new Action('io.ox/mail/actions/createdistlist', {
-//        id: 'create-distlist',
-//        requires: 'some',
-//        action: function (data) {
-////            console.log(data);
-//        }
-//    });
+    new Action('io.ox/mail/actions/createdistlist', {
+        id: 'create-distlist',
+        requires: 'some',
+        action: function (data) {
+
+            var collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
+                collectedRecipients = [],
+                dev = $.Deferred(),
+                arrayOfMembers = [],
+                currentId = ox.user_id,
+                lengthValue,
+                contactsFolder = config.get('folder.contacts'),
+
+                createDistlist = function (members) {
+                    require(['io.ox/contacts/distrib/main'], function (m) {
+                        m.getApp().launch().done(function () {
+                            this.create(contactsFolder, {distribution_list: members});
+                        });
+                    });
+                };
+
+            _(collectedRecipientsArray).each(function (single) {
+                collectedRecipients.push(single[1]);
+            });
+
+            lengthValue = collectedRecipients.length;
+
+            _(collectedRecipients).each(function (mail, index) {
+                contactAPI.search(mail).done(function (obj) {
+
+                    var currentObj = (obj[0]) ? {id: obj[0].id, folder_id: obj[0].folder_id, display_name: obj[0].display_name, mail: obj[0].email1, mail_field: 1} : {mail: mail, display_name: mail, mail_field: 0};
+
+                    if (obj[0]) {
+                        if (obj[0].internal_userid !== currentId) {
+                            arrayOfMembers.push(currentObj);
+                        } else {
+                            lengthValue = lengthValue - 1;
+                        }
+                    } else {
+                        arrayOfMembers.push(currentObj);
+                    }
+
+                    if (arrayOfMembers.length === lengthValue) {
+                        dev.resolve();
+                    }
+                });
+            });
+
+            dev.done(function () {
+                createDistlist(arrayOfMembers);
+            });
+        }
+    });
 
     new Action('io.ox/mail/actions/invite', {
         id: 'invite',
@@ -353,7 +421,7 @@ define('io.ox/mail/actions',
                 participantsArray = [],
                 currentId = ox.user_id,
                 currentFolder = config.get('folder.calendar'),
-                collectedRecipientsArray = data.to.concat(data.cc),
+                collectedRecipientsArray = data.to.concat(data.cc).concat(data.from),
                 dev = $.Deferred(),
                 lengthValue,
 
@@ -594,7 +662,7 @@ define('io.ox/mail/actions',
 
     ext.point('io.ox/mail/links/inline').extend(new links.Link({
         index: 1100,
-        prio: 'hi',
+        prio: 'lo',
         id: 'reminder',
         label: gt("Reminder"),
         ref: 'io.ox/mail/actions/reminder'
@@ -604,46 +672,53 @@ define('io.ox/mail/actions',
         index: 1200,
         prio: 'lo',
         id: 'saveEML',
-        label: gt('Save as EML'),
+        label: gt('Save as file'),
         ref: 'io.ox/mail/actions/save'
     }));
 
     // Attachments
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
-        id: 'preview',
+        id: 'slideshow',
         index: 100,
+        label: gt('Slideshow'),
+        ref: 'io.ox/mail/actions/slideshow-attachment'
+    }));
+
+    ext.point('io.ox/mail/attachment/links').extend(new links.Link({
+        id: 'preview',
+        index: 200,
         label: gt('Preview'),
         ref: 'io.ox/mail/actions/preview-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'open',
-        index: 200,
+        index: 300,
         label: gt('Open in new tab'),
         ref: 'io.ox/mail/actions/open-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'download',
-        index: 300,
+        index: 400,
         label: gt('Download'),
         ref: 'io.ox/mail/actions/download-attachment'
     }));
 
     ext.point('io.ox/mail/attachment/links').extend(new links.Link({
         id: 'save',
-        index: 400,
+        index: 500,
         label: gt('Save in file store'),
         ref: 'io.ox/mail/actions/save-attachment'
     }));
 
-//    ext.point('io.ox/mail/all/actions').extend(new links.Link({
-//        id: 'save-as-distlist',
-//        index: 100,
-//        label: gt('Save as distribution list'),
-//        ref: 'io.ox/mail/actions/createdistlist'
-//    }));
+    ext.point('io.ox/mail/all/actions').extend(new links.Link({
+        id: 'save-as-distlist',
+        index: 100,
+        label: gt('Save as distribution list'),
+        ref: 'io.ox/mail/actions/createdistlist'
+    }));
 
     ext.point('io.ox/mail/all/actions').extend(new links.Link({
         id: 'invite-to-appointment',

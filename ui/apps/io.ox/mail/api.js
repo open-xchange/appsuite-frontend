@@ -13,82 +13,144 @@
 
 define("io.ox/mail/api",
     ["io.ox/core/http",
-     "io.ox/core/config",
      "io.ox/core/cache",
+     "io.ox/core/config",
      "io.ox/core/api/factory",
      "io.ox/core/api/folder",
      "io.ox/core/api/account",
-     "io.ox/core/notifications"], function (http, config, cache, apiFactory, folderAPI, accountAPI, notifications) {
+     "io.ox/core/notifications"], function (http, cache, config, apiFactory, folderAPI, accountAPI, notifications) {
 
-    "use strict";
+    'use strict';
 
-    // simple temporary thread cache
-    var threads = {},
-        threadHash = {},
+    var tracker = (function () {
 
-        // track mails that are manually marked as unseen
-        explicitUnseen = {},
+        // simple temporary thread cache
+        var threads = {},
 
-        // default separator
-        separator = config.get('modules.mail.defaultseparator', '/');
+            // stores CIDs to find items in threads
+            // key is item CID, value is top-level item CID
+            threadHash = {},
 
-    // helper: get number of mails in thread
-    var getThreadSize = function (obj) {
-        var cid = _.cid(obj);
-        return cid in threads ? threads[cid].length : 0;
-    };
+            // track mails that are manually marked as unseen
+            explicitUnseen = {};
 
-    var calculateUnread = function (memo, obj) {
-        return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
-    };
+        var extend = function (a, b) {
+            return _.extend(a, { flags: b.flags, color_label: b.color_label });
+        };
 
-    var getUnreadCount = function (obj) {
-        var cid = _.cid(obj), root = threads[cid];
-        return root === undefined ? 0 : _(root.thread).inject(calculateUnread, 0);
-    };
+        var calculateUnread = function (memo, obj) {
+            return memo + ((obj.flags & 32) !== 32 ? 1 : 0);
+        };
 
-    var getThreadTopItem = function (cid) {
-        var t = threadHash[cid], item;
-        if (t === cid) { item = threads[t]; }
-        return item;
-    };
+        var getCID = function (param) {
+            return _.isString(param) ? param : _.cid(param);
+        };
 
-    var getThreadItem = function (cid) {
-        var t = threadHash[cid], item = threads[t];
-        return item !== undefined ? _(item.thread).find(function (obj) {
-            return _.cid(obj) === cid;
-        }) : item;
-    };
+        var self = {
 
-    var extend = function (a, b) {
-        return _.extend(a, { flags: b.flags, color_label: b.color_label });
-    };
+            addThread: function (obj) {
+                var cid = getCID(obj);
+                threads[cid] = obj.thread;
+                _(obj.thread).each(function (o) {
+                    threadHash[_.cid(o)] = cid;
+                });
+            },
 
-    // track changes locally (flags & color_label)
-    var update = function (data) {
-        var cid = _.cid(data), item;
-        if ((item = getThreadTopItem(cid))) {
-            extend(item, data);
-        }
-        // change proper thread item
-        if ((item = getThreadItem(cid))) {
-            extend(item, data);
-        }
-    };
+            hasThread: function (obj) {
+                var cid = getCID(obj);
+                return cid in threads;
+            },
 
-    var applyLatestChanges = function (data) {
-        var cid = _.cid(data), item = getThreadItem(cid);
-        return item ? extend(data, item) : data;
-    };
+            getThread: function (obj, copy) {
+                var cid = getCID(obj),
+                    thread = threads[cid] || [];
+                return copy ? _.deepCopy(thread) : thread;
+            },
 
-    var fixUnseen = function (data) {
-        var cid = _.cid(data);
-        if (explicitUnseen[cid] === true) {
-            data.unseen = false;
-            data.flags = data.flags & ~32;
-        }
-        return data;
-    };
+            getThreadCID: function (obj) {
+                var cid = getCID(obj);
+                return threadHash[cid];
+            },
+
+            getThreadSize: function (obj) {
+                var cid = getCID(obj);
+                return cid in threads ? threads[cid].length : 0;
+            },
+
+            getUnreadCount: function (obj) {
+                var cid = getCID(obj), root = threads[cid];
+                return root === undefined ? 0 : _(root.thread).inject(calculateUnread, 0);
+            },
+
+            getThreadTopItem: function (cid) {
+                var t = threadHash[cid], item;
+                if (t === cid) { item = threads[t][0]; }
+                return item;
+            },
+
+            getThreadItem: function (cid) {
+                var t = threadHash[cid], item = threads[t];
+                return item !== undefined ? _(item).find(function (obj) {
+                    return _.cid(obj) === cid;
+                }) : item;
+            },
+
+            update: function (data) {
+                var cid = getCID(data), item;
+                if ((item = this.getThreadTopItem(cid))) {
+                    extend(item, data);
+                }
+                // change proper thread item
+                if ((item = this.getThreadItem(cid))) {
+                    extend(item, data);
+                }
+            },
+
+            applyLatestChanges: (function () {
+
+                function apply(data) {
+                    var cid, item;
+                    if (_.isObject(data)) {
+                        cid = getCID(data);
+                        if ((item = self.getThreadItem(cid))) {
+                            data = self.fixUnseen(extend(data, item));
+                        }
+                    }
+                    return data;
+                }
+
+                return function (data) {
+                    if (_.isObject(data)) {
+                        data = apply(data);
+                        _(data.thread).each(apply);
+                    }
+                    return data;
+                };
+            }()),
+
+            setUnseen: function (obj) {
+                var cid = getCID(obj);
+                explicitUnseen[cid] = true;
+            },
+
+            setSeen: function (obj) {
+                var cid = getCID(obj);
+                delete explicitUnseen[cid];
+            },
+
+            fixUnseen: function (data) {
+                var cid = getCID(data);
+                if (explicitUnseen[cid] === true) {
+                    if ('unseen' in data) data.unseen = false;
+                    if ('flags' in data) data.flags = data.flags & ~32;
+                }
+                return data;
+            }
+        };
+
+        return self;
+
+    }());
 
     // generate basic API
     var api = apiFactory({
@@ -103,7 +165,7 @@ define("io.ox/mail/api",
                 sort: "610", // received_date
                 order: "desc",
                 deleted: 'false',
-                cache: true // allow DB cache
+                cache: false // allow DB cache
             },
             list: {
                 action: "list",
@@ -151,16 +213,22 @@ define("io.ox/mail/api",
         pipe: {
             all: function (data, opt) {
                 // apply unread count
-                folderAPI.setUnread(opt.folder, getUnreadCount(data));
+                folderAPI.setUnread(opt.folder, tracker.getUnreadCount(data));
                 return data;
             },
+            allPost: function (response) {
+                if (response.data) {
+                    _(response.data).each(tracker.applyLatestChanges);
+                }
+                return response;
+            },
             listPost: function (data) {
-                _(data).each(applyLatestChanges);
+                _(data).each(tracker.applyLatestChanges);
                 return data;
             },
             get: function (data) {
                 // fix unseen
-                fixUnseen(data);
+                tracker.fixUnseen(data);
                 // was unseen?
                 if (data.unseen) {
                     folderAPI.decUnread(data);
@@ -168,7 +236,7 @@ define("io.ox/mail/api",
                 return data;
             },
             getPost: function (data) {
-                return applyLatestChanges(data);
+                return tracker.applyLatestChanges(data);
             }
         },
         params: {
@@ -180,6 +248,9 @@ define("io.ox/mail/api",
             }
         }
     });
+
+    // publish tracker
+    api.tracker = tracker;
 
     api.SENDTYPE = {
         NORMAL:  0,
@@ -230,7 +301,7 @@ define("io.ox/mail/api",
             sortKey: 'threaded-' + (options.sort || '610'),
             konfetti: true,
             order: options.order || 'desc',
-            includeSent: false, //!accountAPI.is(options.folder, 'sent')
+            includeSent: !accountAPI.is(options.folder, 'sent'),
             cache: false, // never use server cache
             max: 1000 // apply internal limit to build threads fast enough
         });
@@ -240,16 +311,7 @@ define("io.ox/mail/api",
         }
         return this.getAll(options, useCache, null, false)
             .done(function (response) {
-                _(response.data).each(function (obj) {
-                    // build thread hash
-                    var cid = _.cid(obj);
-                    // store thread
-                    threads[cid] = obj.thread;
-                    // build lookup hash
-                    _(obj.thread).each(function (o) {
-                        threadHash[_.cid(o)] = cid;
-                    });
-                });
+                _(response.data).each(tracker.addThread);
                 cacheControl[options.folder] = true;
             });
     };
@@ -267,7 +329,7 @@ define("io.ox/mail/api",
             obj = api.reduce(obj);
         }
 
-        if (cid in threads && (thread = threads[cid].slice()).length) {
+        if ((thread = tracker.getThread(cid)).length) {
             len = thread.length;
             return _(thread).map(function (obj, i) {
                 return {
@@ -299,8 +361,8 @@ define("io.ox/mail/api",
                 // inject thread size
                 var i = 0, obj;
                 for (; (obj = data[i]); i++) {
-                    obj.threadSize = getThreadSize(obj);
-                    obj.unreadCount = getUnreadCount(obj);
+                    obj.threadSize = tracker.getThreadSize(obj);
+                    obj.unreadCount = tracker.getUnreadCount(obj);
                 }
                 return data;
             });
@@ -323,7 +385,7 @@ define("io.ox/mail/api",
                     } else {
                         obj.flags = obj.flags & ~data.flags;
                     }
-                    update(obj);
+                    tracker.update(obj);
                     return $.when(
                          api.caches.list.merge(obj),
                          api.caches.get.merge(obj)
@@ -348,7 +410,7 @@ define("io.ox/mail/api",
                     action: apiAction,
                     id: obj.id,
                     folder: obj.folder || obj.folder_id,
-                    timestamp: 0
+                    timestamp: _.now() // to be safe
                 },
                 data: data,
                 appendColumns: false
@@ -359,7 +421,7 @@ define("io.ox/mail/api",
                     // color_label?
                     if ('color_label' in data) {
                         obj.color_label = data.color_label;
-                        update(obj);
+                        tracker.update(obj);
                     }
                     // remove affected object from caches
                     return $.when(
@@ -421,7 +483,7 @@ define("io.ox/mail/api",
                                     obj.flags = obj.flags & bitmask;
                                 }
                             });
-                            return cache.add(folder, co.data);
+                            return cache.add(folder, co);
                         } else {
                             return $.when();
                         }
@@ -463,20 +525,14 @@ define("io.ox/mail/api",
 
     api.markUnread = function (list) {
         return mark(list, 32, ~32, false, 'incUnread').done(function (list) {
-            _(list).each(function (obj) {
-                var cid = _.cid(obj);
-                explicitUnseen[cid] = true;
-            });
+            _(list).each(tracker.setUnseen);
             api.trigger('refresh.list');
         });
     };
 
     api.markRead = function (list) {
         return mark(list, 0, 32, true, 'decUnread').done(function (list) {
-            _(list).each(function (obj) {
-                var cid = _.cid(obj);
-                delete explicitUnseen[cid];
-            });
+            _(list).each(tracker.setSeen);
             api.trigger('refresh.list');
         });
     };
@@ -510,11 +566,15 @@ define("io.ox/mail/api",
     };
 
     var react = function (action, obj, view) {
+        // get proper view first
+        view = $.trim(view || 'text').toLowerCase();
+        view = view === 'text/plain' ? 'text' : view;
+        view = view === 'text/html' ? 'html' : view;
         return http.PUT({
                 module: 'mail',
                 params: {
                     action: action || '',
-                    view: view || 'text'
+                    view: view
                 },
                 data: _([].concat(obj)).map(function (obj) {
                     return api.reduce(obj);
@@ -884,9 +944,9 @@ define("io.ox/mail/api",
         // reverse lookup first to get affacted top-level elements
         var reverse = {};
         _(hash).each(function (obj) {
-            var cid = _.cid(obj);
-            if (threadHash[cid] !== undefined) {
-                reverse[threadHash[cid]] = true;
+            var threadCID = tracker.getThreadCID(obj);
+            if (threadCID !== undefined) {
+                reverse[threadCID] = true;
             }
         });
         // loop over list and check occurence via hash

@@ -12,7 +12,7 @@
  */
 
 define("plugins/portal/quota/register", ["io.ox/core/extensions",
-                                         'gettext!plugins/portal/quota',
+                                         'gettext!plugins/portal',
                                          'io.ox/core/api/quota',
                                          'io.ox/core/strings',
                                          'less!plugins/portal/quota/style.css'], function (ext, gt, api, strings) {

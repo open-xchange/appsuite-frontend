@@ -12,18 +12,18 @@
  */
 
 define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
-                                                'gettext!plugins/notifications/tasks',
+                                                'gettext!plugins/notifications',
                                                 'dot!plugins/notifications/tasks/template.html',
                                                 'io.ox/tasks/api',
                                                 'io.ox/core/api/reminder',
                                                 'io.ox/tasks/util',
                                                 'less!plugins/notifications/tasks/style.css'],
                                                 function (ext, gt, templ, api, reminderApi, util) {
-    
+
     "use strict";
-    
+
     //this file builds two notification views: dueTasks and reminderTasks
-    
+
     /*
      * DUE TASKS
      */
@@ -57,7 +57,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             this.close();
         },
-        
+
         onClickItem: function (e) {
             var overlay = $('#io-ox-notifications-overlay'),
                 data = {
@@ -74,7 +74,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
                     // get task and draw detailview
                     api.get(data, false).done(function (taskData) {
-                    
+
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
@@ -85,14 +85,14 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             }
         },
-        
+
         close: function () {
             this.unbind();
             this.remove();
             this.model.destroy();
         }
     });
-    
+
     var NotificationsView = Backbone.View.extend({
         className: 'notifications',
         id: 'io-ox-notifications-tasks',
@@ -110,12 +110,12 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                     NEW_TASKS: gt('Over due Tasks')
                 }
             }));
-            
+
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
             return this;
         }
     });
-    
+
     ext.point('io.ox/core/notifications/register').extend({
         id: 'dueTasks',
         index: 350,
@@ -130,19 +130,19 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                         badge: task.badge,
                         taskId: task.id,
                         folderId: task.folder_id,
-                        title: task.title,
+                        title: _.noI18n(task.title),
                         end_date: task.end_date,
                         status: task.status
                     };
                     notifications.collection.push(inObj);
                 });
             });
-            
-            
+
+
             api.getTasks();
         }
     });
-    
+
     /*------------------------------------------
      *
      * REMINDER TASKS
@@ -158,7 +158,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
         },
         _modelBinder: undefined,
         initialize: function () {
-            
+
             this._modelBinder = new Backbone.ModelBinder();
         },
         render: function () {
@@ -188,7 +188,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
             e.stopPropagation();
             this.close();
         },
-        
+
         onClickItem: function (e) {
             var overlay = $('#io-ox-notifications-overlay'),
                 data = {
@@ -198,7 +198,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 sidepopup = overlay.prop('sidepopup'),
                 cidthis = data.folder + "." + data.id,
                 cid = overlay.find('.tasks-detailview').attr('data-cid');
-        
+
                 // toggle?
             if (sidepopup && cid === cidthis) {
                 sidepopup.close();
@@ -206,7 +206,7 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 require(['io.ox/core/tk/dialogs', 'io.ox/tasks/view-detail'], function (dialogs, viewDetail) {
                     // get task and draw detailview
                     api.get(data, false).done(function (taskData) {
-                
+
                         // open SidePopup without arrow
                         new dialogs.SidePopup({ arrow: false, side: 'right' })
                             .setTarget(overlay)
@@ -217,14 +217,14 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                 });
             }
         },
-        
+
         close: function () {
             this.unbind();
             this.remove();
             this.model.destroy();
         }
     });
-    
+
     var NotificationsReminderView = Backbone.View.extend({
         className: 'notifications',
         id: 'io-ox-notifications-reminder-tasks',
@@ -243,13 +243,13 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                     TASKS: gt('Tasks')
                 }
             }));
-            
+
             this._collectionBinder.bind(this.collection, this.$('.notifications'));
 
             return this;
         }
     });
-    
+
     ext.point('io.ox/core/notifications/register').extend({
         id: 'reminderTasks',
         index: 300,
@@ -274,8 +274,8 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
                             notifications.collection.push(inObj);
                         }
                     });
-                
-                
+
+
                 });
             });
             var now = new Date();
@@ -284,5 +284,5 @@ define('plugins/notifications/tasks/register', ['io.ox/core/extensions',
     });
 
     return true;
-    
+
 });

@@ -12,7 +12,7 @@
  */
 
 define("io.ox/core/api/user",
-    ["io.ox/core/http", "io.ox/core/api/factory"], function (http, apiFactory) {
+    ["io.ox/core/http", "io.ox/core/api/factory", "gettext!io.ox/core"], function (http, apiFactory, gt) {
 
     "use strict";
 
@@ -46,12 +46,18 @@ define("io.ox/core/api/user",
             }
         }
     });
-    
+
+    api.getName = function (id) {
+        return api.get({ id: id }).pipe(function (data) {
+            return gt.noI18n(data.display_name || data.email1 || '');
+        });
+    };
+
     api.getTextNode = function (id) {
         var node = document.createTextNode("");
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = data.display_name || data.email1;
+                node.nodeValue = gt.noI18n(data.display_name || data.email1);
             })
             .always(function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit

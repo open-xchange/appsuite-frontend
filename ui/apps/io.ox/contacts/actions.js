@@ -14,7 +14,7 @@
 define('io.ox/contacts/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
-     'gettext!io.ox/contacts/contacts'], function (ext, links, gt) {
+     'gettext!io.ox/contacts'], function (ext, links, gt) {
 
     'use strict';
 

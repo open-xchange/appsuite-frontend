@@ -17,7 +17,7 @@ define('plugins/portal/tumblr/settings/plugin',
         'text!plugins/portal/tumblr/settings/tpl/blog.html',
         'text!plugins/portal/tumblr/settings/tpl/pluginsettings.html',
         'settings!plugins/portal/tumblr',
-        'gettext!io.ox/portal/tumblr'
+        'gettext!io.ox/portal'
         ], function (ext, dialogs, blogSelectTemplate, pluginSettingsTemplate, settings, gt) {
 
     'use strict';

@@ -21,7 +21,7 @@ define('io.ox/mail/view-detail',
      'io.ox/core/http',
      'io.ox/core/api/account',
      'settings!io.ox/mail',
-     'gettext!io.ox/mail/mail',
+     'gettext!io.ox/mail',
      'io.ox/mail/actions',
      'less!io.ox/mail/style.css'
     ], function (ext, links, util, api, config, http, account, settings, gt) {
@@ -218,7 +218,7 @@ define('io.ox/mail/view-detail',
 
             // robust constructor for large HTML
             content = document.createElement('DIV');
-            content.className = 'content';
+            content.className = 'content noI18n';
             content.innerHTML = source;
             content = $(content);
 
@@ -412,7 +412,7 @@ define('io.ox/mail/view-detail',
                     inline = $('<div class="mail-detail thread-inline-actions">');
                     ext.point('io.ox/mail/thread').invoke('draw', inline, list);
                     inline.children().first().prepend(
-                        $('<span class="io-ox-label">').text('Entire thread')
+                        $('<span class="io-ox-label">').text(gt('Entire thread'))
                     );
                     frag.appendChild(inline.get(0));
                 }
@@ -478,7 +478,7 @@ define('io.ox/mail/view-detail',
                 api.getPictureURL(data.from[0][1])
                     .done(function (url) {
                         if (url) {
-                            picture.css('background-image', 'url(' + url + ')').show();
+                            picture.css({ backgroundImage: 'url(' + url + ')', display: '' });
                         }
                         if (/dummypicture\.png$/.test(url)) {
                             picture.addClass('default-picture');
@@ -496,7 +496,7 @@ define('io.ox/mail/view-detail',
             // some mails just have a sent_date, e.g. nested EMLs
             var date = util.getDateTime(data.received_date || data.sent_date || 0);
             this.append(
-                $('<div>').addClass('date list').text(date)
+                $('<div>').addClass('date list').text(_.noI18n(date))
             );
         }
     });
@@ -515,21 +515,16 @@ define('io.ox/mail/view-detail',
         index: 120,
         id: 'fromlist',
         draw: function (data) {
-            this.append(
-                $('<div>')
-                .addClass('from list')
-                .append(
-                    util.serializeList(data, 'from').each(function () {
-                        var node = $(this), obj = node.data('person');
-                        if (ox.ui.App.get('io.ox/mail').length) {
-                            node.parent().append(
-                                $('<i class="icon-search">').on('click', obj, searchSender)
-                                    .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
-                            );
-                        }
-                    })
-                )
-            );
+            var list = util.serializeList(data, 'from'), node;
+            this.append($('<div class="from list">').append(list));
+            if (ox.ui.App.get('io.ox/mail').length) {
+                node = list.last();
+                node.after(
+                    $('<i class="icon-search">').on('click', node.data('person'), searchSender)
+                        .css({ marginLeft: '0.5em', opacity: 0.3, cursor: 'pointer' })
+                );
+            }
+            list = node = null;
         }
     });
 
@@ -541,7 +536,7 @@ define('io.ox/mail/view-detail',
                 this.append(
                     $('<div>')
                     .addClass('thread-size clear-title')
-                    .text(data.threadPosition + ' / ' + data.threadSize)
+                    .text(_.noI18n(data.threadPosition + ' / ' + data.threadSize))
                 );
             }
         }
@@ -600,7 +595,7 @@ define('io.ox/mail/view-detail',
                 $('<div>')
                     .addClass('subject clear-title')
                     // inject some zero width spaces for better word-break
-                    .text(_.prewrap(data.subject ? $.trim(data.subject) : '\u00A0'))
+                    .text(_.noI18n(data.subject ? $.trim(data.subject) : '\u00A0'))
                     .append($('<span>').addClass('priority').append(util.getPriority(data)))
             );
         }
@@ -633,13 +628,19 @@ define('io.ox/mail/view-detail',
                 this.append(
                     container.append(
                         // TO
-                        $('<span>').addClass('io-ox-label').text(gt('To') + '\u00A0\u00A0'),
+                        $('<span>').addClass('io-ox-label').append(
+                            $.txt(gt('To')),
+                            $.txt(_.noI18n('\u00A0\u00A0'))
+                        ),
                         util.serializeList(data, 'to'),
-                        $.txt(' \u00A0 '),
-                        // CC
-                        showCC ? $('<span>').addClass('io-ox-label').text(gt('Copy') + '\u00A0\u00A0') : [],
+                        $.txt(_.noI18n(' \u00A0 ')),
+                        //#. CC list - use npgettext cause pgettext is broken
+                        showCC ? $('<span>').addClass('io-ox-label').append(
+                            $.txt(gt.npgettext('CC', 'Copy', 'Copy', 1)),
+                            _.noI18n('\u00A0\u00A0')
+                        ) : [],
                         util.serializeList(data, 'cc'),
-                        $.txt(' \u00A0 ')
+                        $.txt(_.noI18n(' \u00A0 '))
                     )
                 );
                 drawAllDropDown(container, gt('All recipients'), data);
@@ -688,18 +689,27 @@ define('io.ox/mail/view-detail',
                 $(this).css({ display: 'inline-block', backgroundColor: 'white' });
                 e.originalEvent.dataTransfer.setData('DownloadURL', this.dataset.downloadurl);
             });
+        return dd;
     };
+
+    function showAllAttachments(e) {
+        $(this).closest('.attachment-list').children().css('display', 'inline-block');
+        $(this).remove();
+    }
 
     ext.point('io.ox/mail/detail').extend({
         index: 160,
         id: 'attachments',
         draw: function (data) {
 
-            var attachments = util.getAttachments(data);
+            var attachments = util.getAttachments(data), length = attachments.length;
 
-            if (attachments.length > 0) {
+            if (length > 0) {
                 var outer = $('<div>').addClass('list attachment-list').append(
-                    $('<span>').addClass('io-ox-label').text(gt('Attachments') + '\u00A0\u00A0')
+                    $('<span>').addClass('io-ox-label').append(
+                        $.txt(gt.ngettext('Attachment', 'Attachments', length)),
+                        $.txt('\u00A0\u00A0')
+                    )
                 );
                 _(attachments).each(function (a, i) {
                     var label = (a.filename || ('Attachment #' + i))
@@ -708,12 +718,23 @@ define('io.ox/mail/view-detail',
                             return match.toLowerCase();
                         });
                     // draw
-                    drawAttachmentDropDown(outer, label, a);
+                    var dd = drawAttachmentDropDown(outer, _.noI18n(label), a);
+                    // cut off long lists?
+                    if (i > 3 && length > 5) {
+                        dd.hide();
+                    }
                 });
+                // add "[n] more ..."
+                if (length > 5) {
+                    outer.append(
+                        //#. 'more' like in 'x more attachments' / 'weitere' in German
+                        $('<a href="#" class="n-more">').text((length - 4) + ' ' + gt('more') + ' ...').click(showAllAttachments)
+                    );
+                }
                 // how 'all' drop down?
-                if (attachments.length > 1) {
+                if (length > 1) {
                     attachments.subject = data.subject;
-                    drawAttachmentDropDown(outer, gt('All'), attachments);
+                    drawAttachmentDropDown(outer, gt('All attachments'), attachments).find('a').removeClass('attachment-link');
                 }
                 this.append(outer);
             }
@@ -769,9 +790,9 @@ define('io.ox/mail/view-detail',
                     $('<div class="alert alert-info cursor-pointer">')
                     .append(
                          $('<a>').text(gt('Show images')),
-                         $('<i>').text(
-                              ' \u2013 ' +
-                              gt('External images have been blocked to protect you against potential spam!')
+                         $('<i>').append(
+                             $.txt(_.noI18n(' \u2013 ')),
+                             $.txt(gt('External images have been blocked to protect you against potential spam!'))
                          )
                      )
                     .on('click', function (e) {

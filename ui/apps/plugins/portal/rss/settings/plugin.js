@@ -15,7 +15,7 @@ define('plugins/portal/rss/settings/plugin',
        ['io.ox/core/extensions',
         'io.ox/core/tk/dialogs',
         'settings!io.ox/rss',
-        'gettext!io.ox/rss',
+        'gettext!io.ox/portal',
         'text!plugins/portal/rss/settings/tpl/pluginsettings.html',
         'io.ox/messaging/accounts/api',
         'less!plugins/portal/rss/style.css'
@@ -107,7 +107,7 @@ define('plugins/portal/rss/settings/plugin',
         PluginSettingsView = Backbone.View.extend({
             initialize: function (options) {
                 this.template = doT.template(pluginSettingsTemplate);
-                
+
                 if (feedgroups) {
                     return;
                 }
@@ -179,7 +179,7 @@ define('plugins/portal/rss/settings/plugin',
             },
             makeFeedgroupSelection: function (highlight) {
                 var $select = $('<select>');
-                
+
                 _(feedgroups).each(function (feedgroup) {
                     var $option = $('<option>').text(feedgroup.groupname);
                     if (feedgroup.groupname === highlight) {
@@ -187,11 +187,11 @@ define('plugins/portal/rss/settings/plugin',
                     }
                     $select.append($option);
                 });
-                
+
                 if (!feedgroups || feedgroups.length === 0) {
                     $select.append($('<option>').attr({value: 'Default group'}).text('Default group'));
                 }
-                
+
                 return $select;
             },
             onAddFeed: function (args) {
@@ -202,7 +202,7 @@ define('plugins/portal/rss/settings/plugin',
                     $group = this.makeFeedgroupSelection(callerGroupname),
                     $error = $('<div>').addClass('alert alert-error').hide(),
                     that = this;
-                
+
                 dialog.header($("<h4>").text(gt('Add a feed')))
                     .append($url)
                     .append($feedname)
@@ -218,9 +218,9 @@ define('plugins/portal/rss/settings/plugin',
                         groupname = $.trim($group.val()),
                         deferred = $.Deferred(),
                         newFeed;
-                        
+
                     $error.hide();
-                    
+
                     if (url.length === 0) {
                         $error.text(gt('Please enter a feed-url.'));
                         deferred.reject();
@@ -255,8 +255,8 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
-            
-            
+
+
             onAddGroup: function (args) {
                 var dialog = new dialogs.ModalDialog({ easyOut: true, async: true });
 
@@ -304,8 +304,8 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
-            
-            
+
+
             onEditFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({easyOut: true, async: true }),
                     $changed = $(this.$el.find('[selected]'));
@@ -422,8 +422,8 @@ define('plugins/portal/rss/settings/plugin',
                     });
                 });
             },
-            
-            
+
+
             onDeleteFeed: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
@@ -458,8 +458,8 @@ define('plugins/portal/rss/settings/plugin',
                         return false;
                     });
             },
-            
-            
+
+
             onDeleteGroup: function (args) {
                 var dialog = new dialogs.ModalDialog({
                     easyOut: true
@@ -482,7 +482,7 @@ define('plugins/portal/rss/settings/plugin',
                             feedgroups = feedgroups.filter(function (groups) { return groups.groupname !== groupname; });
                             settings.set('groups', feedgroups);
                             settings.save();
-                            
+
                             that.trigger('redraw');
                             ox.trigger("refresh^");
                         }
@@ -490,8 +490,8 @@ define('plugins/portal/rss/settings/plugin',
                     });
             }
         }),
-        
-        
+
+
         removeFeedgroup = function (feedgroups, groupname) {
             var newfeedgroups = [];
             _.each(feedgroups, function (group) {

@@ -18,7 +18,7 @@ define('io.ox/files/list/perspective',
      'io.ox/core/extPatterns/dnd',
      'io.ox/core/extPatterns/shortcuts',
      'io.ox/core/commons',
-     'gettext!io.ox/files/files',
+     'gettext!io.ox/files',
      "io.ox/core/bootstrap/basics"
      ], function (viewDetail, api, VGrid, upload, dnd, shortcuts, commons, gt) {
 
@@ -49,15 +49,9 @@ define('io.ox/files/list/perspective',
             var win = app.getWindow(),
                 left, right, grid;
 
-            // left panel
-            left = $("<div>")
-                .addClass("leftside border-right")
-                .appendTo(this.main);
-
-            // right panel
-            right = $("<div>")
-                .addClass("rightside default-content-padding")
-                .appendTo(this.main);
+            var vsplit = commons.vsplit(this.main);
+            left = vsplit.left.addClass('border-right');
+            right = vsplit.right.addClass('default-content-padding').scrollable();
 
             // grid
             grid = new VGrid(left);
@@ -162,24 +156,29 @@ define('io.ox/files/list/perspective',
             app.queues = {};
 
             app.queues.create = upload.createQueue({
-                processFile: function (file) {
+                start: function () {
                     win.busy();
-                    return api.uploadFile({file: file, folder: app.folder.get()})
-                        .done(function (data) {
-                            // select new item
-                            grid.selection.set([data]);
-                            grid.refresh();
-                            // TODO: Error Handling
-                        })
-                        .always(win.idle);
+                },
+                progress: function (file) {
+                    return api.uploadFile({ file: file, folder: app.folder.get() }).done(function (data) {
+                        // select new item
+                        grid.selection.set([data]);
+                        grid.refresh();
+                        // TODO: Error Handling
+                    });
+                },
+                stop: function () {
+                    win.idle();
                 }
             });
 
             app.queues.update = upload.createQueue({
-                processFile: function (fileData) {
+                start: function () {
                     win.busy();
+                },
+                progress: function (data) {
                     return api.uploadNewVersion({
-                            file: fileData,
+                            file: data,
                             id: app.currentFile.id,
                             folder: app.currentFile.folder,
                             timestamp: app.currentFile.last_modified
@@ -189,8 +188,10 @@ define('io.ox/files/list/perspective',
                             grid.selection.set([data]);
                             grid.refresh();
                             // TODO: Error Handling
-                        })
-                        .always(win.idle);
+                        });
+                },
+                stop: function () {
+                    win.idle();
                 }
             });
 
@@ -205,7 +206,6 @@ define('io.ox/files/list/perspective',
             dropZone.include();
 
             win.on("hide", function () {
-                console.log('hide');
                 dropZone.remove();
                 shortcutPoint.deactivate();
             });

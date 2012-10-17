@@ -13,7 +13,10 @@
  */
 
 define("io.ox/core/extPatterns/links",
-    ["io.ox/core/extensions", "io.ox/core/collection", "io.ox/core/extPatterns/actions"], function (ext, Collection, actions) {
+    ["io.ox/core/extensions",
+     "io.ox/core/collection",
+     "io.ox/core/extPatterns/actions",
+     "gettext!io.ox/core"], function (ext, Collection, actions, gt) {
 
     "use strict";
 
@@ -71,9 +74,11 @@ define("io.ox/core/extPatterns/links",
             this.append(
                 $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
                 .addClass(self.cssClasses || 'btn')
+                .css(self.css || {})
                 .data({ ref: self.ref, context: context })
                 .click(click)
-                .text(String(self.label))
+                .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
+                .append(_.isUndefined(self.label) ? $() : $('<span>').text(String(self.label)))
             );
         };
     };
@@ -123,12 +128,8 @@ define("io.ox/core/extPatterns/links",
         };
     };
 
-    var inlineToggle = function (e) {
-        var node = $(this), A = 'data-toggle',
-            list = node.parent().children('[data-prio="lo"]'),
-            expand = node.attr(A) === 'more';
-        list[expand ? 'show' : 'hide']();
-        node.text(expand ? 'Less' : 'More ...').attr(A, expand ? 'less' : 'more');
+    var wrapAsListItem = function () {
+        return $('<li>').append(this).get(0);
     };
 
     var InlineLinks = function (options) {
@@ -149,17 +150,22 @@ define("io.ox/core/extPatterns/links",
             drawLinks(self, new Collection(context), node, context, args)
             .done(function () {
                 // add toggle unless multi-selection
-                var length = node.children().length;
-                if (!multiple && length > 5) {
+                var all = node.children(), lo = node.children('[data-prio="lo"]');
+                if (!multiple && all.length > 5 && lo.length > 1) {
                     node.append(
-                        $('<button>', { 'data-toggle': 'more' })
-                        .addClass('btn btn-mini btn-primary io-ox-action-link')
-                        .css({ cursor: 'pointer', marginLeft: '1.5em' })
-                        .click(inlineToggle)
-                        .text('More ...')
+                        $('<span class="io-ox-action-link dropdown">').append(
+                            $('<a href="#" data-toggle="dropdown">').append(
+                                $.txt(gt('More')),
+                                $.txt(_.noI18n(' ...')),
+                                $('<b class="caret">')
+                            ),
+                            $('<ul class="dropdown-menu dropdown-right">').append(
+                                lo.map(wrapAsListItem)
+                            )
+                        )
                     );
-                    node.children('[data-prio="lo"]').hide();
                 }
+                all = lo = null;
                 if (options.customizeNode) {
                     options.customizeNode(node);
                 }
@@ -170,16 +176,20 @@ define("io.ox/core/extPatterns/links",
     var z = 0;
     var drawDropDown = function (options, context) {
         var args = $.makeArray(arguments),
-            $parent = $("<div>").addClass('dropdown')
+            $parent = $('<div>').addClass('dropdown')
                 .css({ display: 'inline-block', zIndex: (z = z > 0 ? z - 1 : 10000) })
                 .appendTo(this),
-            $toggle = $("<a>", { href: '#' })
-                .attr('data-toggle', 'dropdown')
+            $toggle = $('<a href="#" data-toggle="dropdown">')
                 .data('context', context)
-                .text(options.label + " ").append($("<b>").addClass("caret")).appendTo($parent);
+                .text(options.label)
+                .append(
+                    $('<span>').text(_.noI18n(' ')),
+                    $('<b>').addClass('caret')
+                )
+                .appendTo($parent);
 
         $toggle.addClass(options.classes);
-        $parent.append($.txt('\u00A0\u00A0 ')); // a bit more space
+        $parent.append($.txt(_.noI18n('\u00A0\u00A0 '))); // a bit more space
 
         // create & add node first, since the rest is async
         var node = $('<ul>').addClass('dropdown-menu').appendTo($parent);

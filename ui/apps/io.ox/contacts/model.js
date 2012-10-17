@@ -12,9 +12,10 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 define('io.ox/contacts/model',
-      ['io.ox/backbone/modelFactory', 'io.ox/backbone/validation',
-       'io.ox/contacts/api', 'gettext!io.ox/contacts/contacts'
-
+      ['io.ox/backbone/modelFactory',
+       'io.ox/backbone/validation',
+       'io.ox/contacts/api',
+       'gettext!io.ox/contacts'
        ], function (ModelFactory, Validators, api, gt) {
 
     'use strict';
@@ -27,15 +28,14 @@ define('io.ox/contacts/model',
 
             addMember: function (member) {
 
-                var currentDistListArray;
-                if (this.get('distribution_list') === undefined) {
-                    this.set('distribution_list', []);
+                var currentDistListArray = this.get('distribution_list');
+
+                if (currentDistListArray === undefined) {
+                    this.set('distribution_list', [member]);
+                } else {
+                    currentDistListArray.push(member);
+                    this.set('distribution_list', currentDistListArray);
                 }
-
-                currentDistListArray = this.get('distribution_list');
-                currentDistListArray.push(member);
-
-                this.set('distribution_list', currentDistListArray);
 
                 this.trigger("change");
                 this.trigger("change:distribution_list");
