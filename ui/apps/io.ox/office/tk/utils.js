@@ -556,6 +556,29 @@ define('io.ox/office/tk/utils',
         var value = Utils.getOption(options, name);
         return _.isFunction(value) ? value : def;
     };
+    
+    /**
+     * Extracts a array from the passed object. If the attribute does not
+     * exist, or is not an array, returns the specified default value.
+     *
+     * @param {Object|Undefined} options
+     *  An object containing some attribute values. May be undefined.
+     *
+     * @param {String} name
+     *  The name of the attribute to be returned.
+     *
+     * @param [def]
+     *  The default value returned when the options parameter is not an
+     *  array, or if it does not contain the specified attribute, or if the
+     *  attribute is not an object. May be any value.
+     *
+     * @returns
+     *  The value of the specified attribute, or the default value.
+     */
+    Utils.getArrayOption = function (options, name, def) {
+        var value = Utils.getOption(options, name);
+        return _.isArray(value) ? value : def;
+    };
 
     /**
      * Extends the passed object with the specified attributes. Unlike
