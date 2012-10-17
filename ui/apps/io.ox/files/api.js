@@ -30,7 +30,7 @@ define("io.ox/files/api",
         'gif' : 'image/gif',
         'tif' : 'image/tiff',
         'tiff': 'image/tiff',
-        'mp3' : 'audio/mpeg3',
+        'mp3' : 'audio/mpeg',
         'ogg' : 'audio/ogg',
         'mp4' : 'video/mp4',
         'm4v' : 'video/mp4',
@@ -40,13 +40,13 @@ define("io.ox/files/api",
     };
 
     var fixContentType = function (data) {
-        if (data.file_mimetype === 'application/octet-stream')
-        {
-            var ext = _((data.filename || '').split('.'))
-                .last().toLowerCase();
+        if (data.file_mimetype === 'application/octet-stream') {
+            var ext = _((data.filename || '').split('.')).last().toLowerCase();
             if (ext in mime_types) {
                 data.file_mimetype = mime_types[ext];
             }
+        } else if (data.file_mimetype === 'audio/mp3') {
+            data.file_mimetype = 'audio/mpeg'; // might be superstition
         }
         return data;
     };

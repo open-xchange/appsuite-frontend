@@ -186,7 +186,7 @@ define('io.ox/files/icons/perspective',
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
                 img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
-            } else if ((/^audio\/mp3$/i).test(file.file_mimetype)) {
+            } else if ((/^audio\/mpeg$/i).test(file.file_mimetype)) {
                 img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else {
                 img = drawGeneric(file.filename);
