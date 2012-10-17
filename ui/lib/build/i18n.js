@@ -75,15 +75,23 @@ function addMsg(map, key, msg) {
     }
     if (key in map) {
         if (!_.isEqual(map[key].comments, msg.comments)) {
-            throw new Error("Different comments for the same text:\n\n" +
-                            generateComment(msg) + "\n\nvs\n\n" +
-                            generateComment(map[key]) + "\n");
+            var comments = map[key].comments;
+            addSeparator(comments);
+            addSeparator(msg.comments);
+            if (comments.join('\n').indexOf(msg.comments.join('\n')) < 0) {
+                comments.push.apply(comments, msg.comments);
+            }
         }
         map[key].locations = utils.merge(map[key].locations, msg.locations,
                                          cmp);
     } else {
         map[key] = msg;
     }
+}
+
+function addSeparator(comments) {
+    if (comments[0] ===   '#. #-#-#-#-#-#-#-#-#-#') return;
+    comments.splice(0, 0, '#. #-#-#-#-#-#-#-#-#-#');
 }
 
 exports.addMessage = function(msg, filename) {
