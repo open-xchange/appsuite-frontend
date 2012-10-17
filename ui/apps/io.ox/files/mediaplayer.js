@@ -130,12 +130,8 @@ define('io.ox/files/mediaplayer',
             return api.getUrl(file, 'open') + '&content_type=' + file.file_mimetype;
         },
 
-        getItems: function () {
-
-            var self = this;
-            _(this.list).each(function (file, i) {
-                self.drawItem(file, i);
-            });
+        drawItems: function () {
+            _(this.list).each(this.drawItem, this);
         },
 
         drawTrackInfo: (function () {
@@ -215,12 +211,9 @@ define('io.ox/files/mediaplayer',
         show: function () {
             var self = this;
             var features = ['playpause', 'progress', 'current', 'volume'];
-            if (this.player.find('.mejs-audio').length > 0)
-            {
-                this.getItems();
-            }
-            else
-            {
+            if (this.player.find('.mejs-audio').length > 0) {
+                this.drawItems();
+            } else {
                 this.win.busy().nodes.outer.append(
                     this.container.append(
                         $('<div class="atb mediaplayer_inner">').append(
@@ -240,13 +233,11 @@ define('io.ox/files/mediaplayer',
                     this.container.addClass('videoplayer');
                     this.container.find('.minimizemediaplayer').remove();
                     features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
-                }
-                else
-                {
+                } else {
                     this.container.addClass('audioplayer');
                     this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
                 }
-                this.getItems();
+                this.drawItems();
                 this.playlist.sortable({ axis: 'y' });
                 this.player.find('video, audio').parent().addClass('noI18n');
                 this.player.find('video, audio').mediaelementplayer({
