@@ -106,16 +106,14 @@
     .io-ox-portal-widget-tile-border { width: 20%; }
 }
 .io-ox-typeA-title, .io-ox-typeB-title {
-    height: 40px;
     font-family: @font-light;
-    color: #888;
 }
 .io-ox-typeA-item {
     height: 40px;
     border-top: 1px solid rgba(255,255,255,0.5);
     width: 100%;
-    color: #888;
-    padding: 0 10px;
+    color: #eee;
+    padding: 0 6px 0 12px;
 }
 .io-ox-typeA-content :first-child.io-ox-typeA-item{
     border: none;
@@ -127,6 +125,7 @@
 
 .io-ox-typeA-title {
     width: 240px;
+    height: 36px;
     background: #000;
     color: #eee;
     text-align: center;
@@ -136,6 +135,7 @@
 }
 .io-ox-typeB-title{
     width: 240px;
+    height: 36px;
     background: #000;
     color: #eee;
     text-align: center;
@@ -147,6 +147,11 @@
     height: 280px; /* height - title */
     background: no-repeat center;
     background-size: cover;
+}
+.io-ox-portal-tile-action {
+    display: block;
+    float: right;
+    margin: 6px 6px 0 0;
 }
 .tile-color0, .tile-color6 {
     background: #234;

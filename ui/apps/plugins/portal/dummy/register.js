@@ -32,7 +32,10 @@ define("plugins/portal/dummy/register", ["io.ox/core/extensions"], function (ext
                 $('<div class="io-ox-typeA-item">').text('item #8'),
                 $('<div class="io-ox-typeA-item">').text('item #9')
             ),
-            $('<div class="io-ox-typeA-action">')
+            $('<div class="io-ox-typeA-action">').append(
+                $('<i class="icon-edit io-ox-portal-tile-action">').text(" "),
+                $('<i class="icon-remove io-ox-portal-tile-action">').text(" ")
+            )
         );
         return $node;
     };
