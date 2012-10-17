@@ -157,7 +157,6 @@ define('io.ox/calendar/actions',
             }
             api.get(o)
                 .done(function (data) {
-                    console.log('data', data);
                     require(['io.ox/calendar/model'], function (Model) {
                         // different warnings especially for events with
                         // external users should handled here
@@ -208,11 +207,15 @@ define('io.ox/calendar/actions',
         id: 'create',
         requires: 'one create',
         action: function (app, obj) {
-            require(['io.ox/calendar/edit/main'], function (m) {
-                m.getApp().launch().done(function () {
-                    this.create(_.extend({
-                        folder_id: app.folder.get()
-                    }, obj));
+            obj = obj || {};
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                // FIXME: what a hack > folder_id
+                editmain.getApp().launch().done(function () {
+
+                    this.create({
+                        folder_id: app.folder.get(),
+                        participants: []
+                    });
                 });
             });
         }
@@ -234,7 +237,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
-        label: gt('Create'),
+        label: gt('New appointment'),
         cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
     }));
@@ -256,7 +259,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
-        label: gt('Work Week'),
+        label: gt('Workweek'),
         cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
     }));
