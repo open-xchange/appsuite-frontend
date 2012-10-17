@@ -513,8 +513,11 @@ define("io.ox/core/desktop",
 
             this.main = $();
 
-            this.show = function (app) {
+            this.show = function (app, force) {
                 // make sure it's initialized
+                if (!force) {
+                    force = false;
+                }
                 if (!initialized) {
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
@@ -523,7 +526,7 @@ define("io.ox/core/desktop",
                 app.getWindow().setPerspective(name);
                 _.url.hash('perspective', name);
                 // render?
-                if (!rendered) {
+                if (!rendered || force) {
                     this.render(app);
                     rendered = true;
                 }
