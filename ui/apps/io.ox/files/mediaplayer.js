@@ -237,11 +237,13 @@ define('io.ox/files/mediaplayer',
                 this.win.idle();
                 if (this.config.videoSupport) {
                     this.trackdisplay.remove();
+                    this.container.addClass('videoplayer');
                     this.container.find('.minimizemediaplayer').remove();
                     features = ['playpause', 'progress', 'current', 'volume', 'fullscreen'];
                 }
                 else
                 {
+                    this.container.addClass('audioplayer');
                     this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
                 }
                 this.getItems();
