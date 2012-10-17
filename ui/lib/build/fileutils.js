@@ -468,6 +468,6 @@ exports.includeFilter = function (data) {
                 var include = path.join(dir, file);
                 exports.includes.add(dest, include);
                 return fs.readFileSync(include, "utf8");
-            }).join("\n") + (semicolon || "");
+            }).join("\n") + (semicolon + "\n" || "");
         });
 };
