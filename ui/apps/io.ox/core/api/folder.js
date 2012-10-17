@@ -346,7 +346,7 @@ define('io.ox/core/api/folder',
                     return $.when(
                         api.get({ folder: data, cache: false }),
                         api.getSubFolders({ folder: opt.folder, cache: false }),
-                        module !== 'mail' ? api.getVisible({ type: module, cache: false }) : $.when()
+                        !/^(mail|infostore)$/.test(module) ? api.getVisible({ type: module, cache: false }) : $.when()
                     )
                     .pipe(function (getRequest) {
                         // return proper data
