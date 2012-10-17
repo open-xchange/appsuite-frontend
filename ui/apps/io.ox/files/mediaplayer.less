@@ -71,9 +71,9 @@
                 color: @playerTextColor;
                 font-family: OpenSans;
                 font-size: 18px;
-                line-height: 18px;
+                line-height: 24px;
                 font-weight: 200;
-                max-height: 54px;
+                max-height: 24px * 3;
                 overflow: hidden;
             }
         }
@@ -127,30 +127,19 @@
             overflow-y: auto;
 
             li {
-                list-style:none;
-                background:@playerSecondaryColor;
-                margin-bottom:1px;
-                a {
-                    padding:@playerMargin;
-                    display:block;
-                    color:@playerTextColor;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-
-                    &:hover {
-                        text-decoration:none;
-                    }
-                }
+                list-style: none;
+                color: @playerTextColor;
+                background-color: @playerSecondaryColor;
+                margin-bottom: 1px;
+                padding: @playerMargin;
+                cursor: pointer;
+                .ellipsis;
                 &:hover {
-                    background-color:@playerHighlightColor;
-
+                    background-color: @playerHighlightColor;
                 }
                 &.active {
-                    background-color:@playerSelectionColor;
-                    a {
-                        color:@playerSelectionTextColor;
-                    }
+                    color: @playerSelectionTextColor;
+                    background-color: @playerSelectionColor;
                 }
             }
         }

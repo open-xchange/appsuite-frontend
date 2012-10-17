@@ -146,17 +146,35 @@ define('io.ox/files/icons/perspective',
         return node;
     }
 
-    function iconError() {
-        $(this).replaceWith(drawGeneric());
+    function imageIconError(e) {
+        $(this).replaceWith(drawGeneric(e.data.name));
+    }
+
+    function audioIconError(e) {
+        $(this).replaceWith(drawGeneric(e.data.name));
     }
 
     function drawImage(src) {
-        return $('<img>', { alt: '', src: src })
-            .addClass('img-polaroid').on('error', iconError);
+        return $('<img>', { alt: '', src: src }).addClass('img-polaroid');
+    }
+
+    function getCover(file, options) {
+        return 'api/image/file/mp3Cover?folder=' + file.folder_id + '&id=' + file.id +
+            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight;
     }
 
     function getIcon(file, options) {
-        return api.getUrl(file, 'open') + '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight + '&content_type=' + file.file_mimetype;
+        return api.getUrl(file, 'open') +
+            '&scaleType=contain&width=' + options.thumbnailWidth + '&height=' + options.thumbnailHeight +
+            '&content_type=' + file.file_mimetype;
+    }
+
+    function cut(str) {
+        str = String(str || '');
+        var parts = str.split('.'),
+            extension = parts.length > 1 ? parts.pop() : '';
+        str = parts.join('');
+        return (str.length <= 40 ? str + '.' : str.substr(0, 40) + '…') + extension;
     }
 
     ext.point('io.ox/files/icons/file').extend({
@@ -166,13 +184,15 @@ define('io.ox/files/icons/perspective',
                 img;
             this.addClass('file-icon pull-left').attr('data-cid', _.cid(file));
             if ((/^(image\/(gif|png|jpe?g|bmp|tiff))$/i).test(file.file_mimetype)) {
-                img = drawImage(getIcon(file, options));
+                img = drawImage(getIcon(file, options)).on('error', { name: file.filename }, imageIconError);
+            } else if ((/^audio\/mp3$/i).test(file.file_mimetype)) {
+                img = drawImage(getCover(file, options)).on('error', { name: file.filename }, audioIconError);
             } else {
                 img = drawGeneric(file.filename);
             }
             this.append(
                 $('<div class="wrap">').append(img),
-                $('<div class="title">').text(gt.noI18n((file.title || '').replace(/^(.{10}).+(.{9})$/, "$1…$2")))
+                $('<div class="title">').text(gt.noI18n(cut(file.title)))
             );
         }
     });

@@ -64,12 +64,13 @@ define('io.ox/files/mediaplayer',
 
             var self = this;
 
-            $('.mediaplayer_playlist li a').on('click', function (e)
+            $('.mediaplayer_playlist li').on('click', function (e)
             {
                 e.preventDefault();
-                self.loadTrack($(this).attr('href'), $(this).attr('data-mimetype'));
-                $(this).parent().addClass('active').siblings().removeClass('active');
-                if (!self.config.videoSupport) self.drawTrackInfo($(this).text());
+                var node = $(this), file = node.data('file');
+                self.loadTrack(file);
+                node.parent().addClass('active').siblings().removeClass('active');
+                if (!self.config.videoSupport) self.drawTrackInfo(file);
             });
 
             $('.closemediaplayer').on('click', $.proxy(this.close, this));
@@ -81,10 +82,10 @@ define('io.ox/files/mediaplayer',
 
         },
 
-        loadTrack: function (url, mimetype) {
-            this.currentTrack = url;
+        loadTrack: function (file) {
+            this.currentTrack = this.getURL(file);
             this.mediaelement.pause();
-            this.mediaelement.setSrc([{src: url, type: mimetype}]);
+            this.mediaelement.setSrc([{ src: this.currentTrack, type: file.file_mimetype }]);
             this.mediaelement.load();
             this.mediaelement.play();
         },
@@ -118,7 +119,7 @@ define('io.ox/files/mediaplayer',
             });
         },
 
-        addURL: function (file) {
+        getURL: function (file) {
             return api.getUrl(file, 'open') + '&content_type=' + file.file_mimetype;
         },
 
@@ -130,9 +131,28 @@ define('io.ox/files/mediaplayer',
             });
         },
 
-        drawTrackInfo: function (data) {
-            if (!this.config.videoSupport) this.trackdisplay.find('.track').text(data);
-        },
+        drawTrackInfo: (function () {
+
+            var self = this;
+
+            function audioIconError(e) {
+                self.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
+            }
+
+            function getCover(file) {
+                return 'api/image/file/mp3Cover?folder=' + file.folder_id + '&id=' + file.id +
+                    '&scaleType=contain&width=90&height=90';
+            }
+
+            return function (file) {
+                if (!this.config.videoSupport) {
+                    this.trackdisplay.find('.track').text(gt.noI18n(file.filename));
+                    this.trackdisplay.find('.album').empty().append(
+                        $('<img>', { alt: '', src: getCover(file) }).on('error', audioIconError)
+                    );
+                }
+            };
+        }()),
 
         quicktimeFallbackObject: function (url) {
             return $('<object>', { 'classid' : 'clsid:02BF25D5-8C17-4B23-BC80-D3488ABDDC6B', 'codebase': 'http://www.apple.com/qtactivex/qtplugin.cab' })
@@ -153,23 +173,21 @@ define('io.ox/files/mediaplayer',
         },
 
         drawItem: function (file, i) {
-            var url = this.addURL(file);
-            var item = $('<li>').append($('<a>', { href: url, 'data-mimetype': file.file_mimetype }).text(gt.noI18n(file.filename)));
-            if (this.player.find('.mejs-audio').length > 0)
-            {
+
+            var url = this.getURL(file),
+                item = $('<li>').text(gt.noI18n(file.filename)).data('file', file);
+
+            if (this.player.find('.mejs-audio').length > 0) {
                 if (i === 0) {
                     this.playlist.empty();
                 }
-                if (this.currentTrack === url)
-                {
+                if (this.currentTrack === url) {
                     item.addClass('active');
                 }
-            }
-            else
-            {
+            } else {
                 if (i === 0) {
                     this.drawPlayer(url, file.file_mimetype);
-                    this.drawTrackInfo(gt.noI18n(file.filename));
+                    this.drawTrackInfo(file);
                     item.addClass('active');
                 }
             }
@@ -181,11 +199,11 @@ define('io.ox/files/mediaplayer',
             var selected = (dir === 'prev' ? current.prev() : current.next());
             if (selected.length > 0)
             {
-                var link = selected.find('a');
-                this.loadTrack(link.attr('href'), link.attr('data-mimetype'));
+                var link = selected.find('a'), file = link.data('file');
+                this.loadTrack(file);
                 current.removeClass('active');
                 selected.addClass('active');
-                this.drawTrackInfo(link.text());
+                this.drawTrackInfo(file);
             }
         },
 
