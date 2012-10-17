@@ -304,6 +304,7 @@ define('io.ox/calendar/week/view',
                     });
                     lData = null;
                     this.lasso.remove();
+
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,
                         end_date: end,
@@ -331,35 +332,24 @@ define('io.ox/calendar/week/view',
         },
 
         render: function () {
-            // create scaffold
-            window.collection = this.collection;
             // create timelabels
-            var times = [];
+            var timeLabel = [];
             for (var i = 1; i < this.slots; i++) {
-                times.push(
+                timeLabel.push(
                     $('<div>')
                         .addClass('time')
                         .append($('<div>').addClass('number').text(gt.noI18n((i < 10 ? '0' + i : i) + '.00')))
                         .height(this.cellHeight * this.fragmentation)
                 );
             }
-            times = $('<div>').addClass('lable').append(times);
-
-            // create panes
-            this.fulltimeCon.empty().append(
-                $('<div>').addClass('fulltime-lable'),
-                this.fulltimePane.empty()
-            );
-
-            // create days container
-            var container = $('<div>').addClass('week-container');
+            timeLabel = $('<div>').addClass('week-container-label').append(timeLabel);
 
             // create and animate timeline
-            container.append(this.timeline);
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
 
             // create days
+            var weekCon = $('<div>').addClass('week-container').append(this.timeline);
             for (var d = 0; d < this.columns; d++) {
 
                 var day = $('<div>')
@@ -371,7 +361,7 @@ define('io.ox/calendar/week/view',
                 this.fulltimePane
                     .append(day.clone());
 
-                // create timeslots
+                // create timeslots and add days to week container
                 for (var i = 1; i <= this.slots * this.fragmentation; i++) {
                     day.append(
                         $('<div>')
@@ -379,12 +369,10 @@ define('io.ox/calendar/week/view',
                             .height(this.cellHeight)
                     );
                 }
-                container.append(day);
+                weekCon.append(day);
             }
 
-            this.pane.empty().append(times, container);
-
-            // create toolbar
+            // create toolbar, view space and footer
             this.$el.empty().append(
                 $('<div>')
                     .addClass('toolbar')
@@ -423,12 +411,15 @@ define('io.ox/calendar/week/view',
                 $('<div>')
                     .addClass('week-view-container')
                     .append(
-                        this.fulltimeCon,
-                        this.pane,
+                        this.fulltimeCon.empty().append(
+                            $('<div>').addClass('fulltime-label'),
+                            this.fulltimePane.empty()
+                        ),
+                        this.pane.empty().append(timeLabel, weekCon),
                         $('<div>')
                             .addClass('footer-container')
                             .append(
-                                $('<div>').addClass('footer-lable'),
+                                $('<div>').addClass('footer-label'),
                                 this.footer
                             )
                     )
