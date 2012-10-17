@@ -15,8 +15,7 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar',
-     'io.ox/core/config'], function (ext, links, api, util, gt, config) {
+     'gettext!io.ox/calendar/actions', 'io.ox/core/config'], function (ext, links, api, util, gt, config) {
 
     'use strict';
 
@@ -152,7 +151,7 @@ define('io.ox/calendar/actions',
 
 
     new Action('io.ox/calendar/detail/actions/delete', {
-        id: 'edit',
+        id: 'delete',
         requires: 'one modify',
         action: function (params) {
             var o = {
@@ -164,10 +163,11 @@ define('io.ox/calendar/actions',
             }
             api.get(o)
                 .done(function (data) {
-                    require(['io.ox/calendar/edit/model-appointment'], function (Model) {
+                    console.log('data', data);
+                    require(['io.ox/calendar/model'], function (Model) {
                         // different warnings especially for events with
                         // external users should handled here
-                        var myModel = new Model(data);
+                        var myModel = new Model.Appointment(data);
                         if (data.recurrence_type > 0) {
                             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                                 new dialogs.ModalDialog()
@@ -214,15 +214,11 @@ define('io.ox/calendar/actions',
         id: 'create',
         requires: 'one create',
         action: function (app, obj) {
-            obj = obj || {};
-            require(['io.ox/calendar/edit/main'], function (editmain) {
-                // FIXME: what a hack > folder_id
-                editmain.getApp().launch().done(function () {
-                    _.extend(obj, {
-                        folder_id: app.folder.get(),
-                        participants: []
-                    });
-                    this.create(obj);
+            require(['io.ox/calendar/edit/main'], function (m) {
+                m.getApp().launch().done(function () {
+                    this.create(_.extend({
+                        folder_id: app.folder.get()
+                    }, obj));
                 });
             });
         }
@@ -244,7 +240,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
         index: 100,
         id: 'create',
-        label: gt('New appointment'),
+        label: gt('Create'),
         cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
     }));
@@ -266,7 +262,7 @@ define('io.ox/calendar/actions',
     ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
         id: 'week',
         index: 200,
-        label: gt('Workweek'),
+        label: gt('Work Week'),
         cssClasses: 'btn btn-inverse',
         ref: 'io.ox/calendar/actions/switch-to-week-view'
     }));
