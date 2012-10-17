@@ -306,7 +306,8 @@ define('io.ox/calendar/week/view',
                     this.lasso.remove();
                     this.trigger('openCreateAppointment', e, {
                         start_date: start,
-                        end_date: end
+                        end_date: end,
+                        lasso: true
                     });
                     e.stopImmediatePropagation();
                 }

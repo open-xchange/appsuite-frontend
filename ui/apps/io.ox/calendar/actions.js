@@ -207,15 +207,19 @@ define('io.ox/calendar/actions',
         id: 'create',
         requires: 'one create',
         action: function (app, obj) {
-            obj = obj || {};
-            require(['io.ox/calendar/edit/main'], function (editmain) {
-                // FIXME: what a hack > folder_id
-                editmain.getApp().launch().done(function () {
+            // FIXME: if this action is invoked by the menu button, both
+            // arguments are the same (the app)
 
-                    this.create({
-                        folder_id: app.folder.get(),
-                        participants: []
-                    });
+            var params = {
+                folder_id: app.folder.get(),
+                participants: []
+            };
+            if (obj.start_date) {
+                _.extend(params, obj);
+            }
+            require(['io.ox/calendar/edit/main'], function (editmain) {
+                editmain.getApp().launch().done(function () {
+                    this.create(params);
                 });
             });
         }
