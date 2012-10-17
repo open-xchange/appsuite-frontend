@@ -76,14 +76,14 @@ define('io.ox/calendar/week/view',
 
         // handler for onmouseenter event for hover effect
         onEnterAppointment: function (e) {
-            if (this.lasso === false) {
+            if (!this.lasso) {
                 $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').addClass('hover');
             }
         },
 
         // handler for onmouseleave event for hover effect
         onLeaveAppointment: function (e) {
-            if (this.lasso === false) {
+            if (!this.lasso) {
                 $('[data-cid="' + $(e.currentTarget).data('cid') + '"]').removeClass('hover');
             }
         },
@@ -91,10 +91,11 @@ define('io.ox/calendar/week/view',
         onControlView: function (e) {
             var cT = $(e.currentTarget),
                 t = $(e.target);
-            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && this.lasso === false)) {
+            console.log(t, cT, e.type, this.lasso);
+            if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
-            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && this.lasso === false)) {
+            if (cT.hasClass('prev') || (t.hasClass('timeslot') && e.type === 'swiperight' && !this.lasso)) {
                 this.curTimeUTC -= (this.columns === 1 ? date.DAY : date.WEEK);
             }
             if (cT.hasClass('today')) {
@@ -105,7 +106,7 @@ define('io.ox/calendar/week/view',
 
         // handler for single- and double-click events on appointments
         onClickAppointment: function (e) {
-            if ($(e.currentTarget).hasClass('appointment') && this.lasso === false) {
+            if ($(e.currentTarget).hasClass('appointment') && !this.lasso) {
                 var cid = $(e.currentTarget).data('cid'),
                     obj = _.cid(cid + ''),
                     self = this;
@@ -183,8 +184,8 @@ define('io.ox/calendar/week/view',
 
             case 'mousemove':
 
-                var curTar = $(e.currentTarget),
-                    curDay = parseInt(curTar.attr('date'), 10),
+                var cT = $(e.currentTarget),
+                    curDay = parseInt(cT.attr('date'), 10),
                     mouseY = e.pageY - (this.pane.offset().top - this.pane.scrollTop());
 
                 // normal move
@@ -234,8 +235,7 @@ define('io.ox/calendar/week/view',
                             lData.last = tmpLasso;
 
                             // add last helper to pane
-                            curTar
-                                .append(tmpLasso);
+                            cT.append(tmpLasso);
                         } else {
                             // change only last helper height
                             lData.last.css({
@@ -270,20 +270,18 @@ define('io.ox/calendar/week/view',
                             height: this.cellHeight,
                             minHeight: this.cellHeight,
                             top: this.roundToGrid(mouseY, 'n')
-                        });
-                    this.lasso.data({
-                        start: mouseY,
-                        stop: 0,
-                        startDay: curDay,
-                        lastDay: curDay,
-                        helper: {}
-                    });
-                    curTar
-                        .append(this.lasso);
+                        })
+                        .data({
+                            start: mouseY,
+                            stop: 0,
+                            startDay: curDay,
+                            lastDay: curDay,
+                            helper: {}
+                        })
+                        .appendTo(cT);
                 } else {
                     this.trigger('mouseup');
                 }
-
                 break;
 
             case 'mouseup':
@@ -310,6 +308,7 @@ define('io.ox/calendar/week/view',
                         start_date: start,
                         end_date: end
                     });
+                    e.stopImmediatePropagation();
                 }
                 this.lasso = false;
                 break;
@@ -655,7 +654,6 @@ define('io.ox/calendar/week/view',
                     minHeight: self.gridHeight(),
                     containment: "parent",
                     start: function (e, ui) {
-                        self.lasso = true;
                         var d = $(this).data('resizable');
                         // init custom resize object
                         d.my = {};
@@ -827,14 +825,12 @@ define('io.ox/calendar/week/view',
                         }
                         el.busy();
                         self.onUpdateAppointment(app);
-                        self.lasso = false;
                     }
                 })
                 .draggable({
                     grid: [colWidth, self.gridHeight()],
                     scroll: true,
                     start: function (e, ui) {
-                        self.lasso = true;
                         self.onEnterAppointment(e);
                         // write all appointment divs to draggable object
                         var d = $(this).data('draggable');
@@ -943,7 +939,6 @@ define('io.ox/calendar/week/view',
                         d.my.lastTop = top;
                     },
                     stop: function (e, ui) {
-                        self.lasso = false;
                         var d = $(this).data('draggable'),
                             move = Math.round((ui.position.left - ui.originalPosition.left) / colWidth),
                             app = self.collection.get($(this).data('cid')).attributes,
@@ -970,11 +965,7 @@ define('io.ox/calendar/week/view',
                     scroll: true,
                     snap: '.day',
                     zIndex: 2,
-                    start: function (e, ui) {
-                        self.lasso = true;
-                    },
                     stop: function (e, ui) {
-                        self.lasso = false;
                         $(this).busy();
                         var newPos = Math.round($(this).position().left / (self.fulltimePane.width() / self.columns)),
                             startTS = self.curTimeUTC + (newPos * date.DAY),
@@ -994,11 +985,9 @@ define('io.ox/calendar/week/view',
                     handles: "w, e",
                     containment: "parent",
                     start: function (e, ui) {
-                        self.lasso = true;
                         $(this).addClass('opac').css('zIndex', $(this).css('zIndex') + 2000);
                     },
                     stop: function (e, ui) {
-                        self.lasso = false;
                         var el = $(this),
                             cid = el.data('cid'),
                             app = self.collection.get(cid).attributes,
