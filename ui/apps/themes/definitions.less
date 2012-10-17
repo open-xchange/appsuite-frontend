@@ -159,6 +159,12 @@
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
 }
 
+.ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .overflow(@type: auto) {
     overflow: @type;
     -webkit-overflow-scrolling: touch;
