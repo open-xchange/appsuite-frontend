@@ -114,6 +114,12 @@ define('io.ox/office/editor/format/paragraphstyles',
                 numberingElement.addClass('list-label');
                 var listObject = this.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
                 numberingElement.text(listObject.text);
+                if (listObject.indent > 0) {
+                    para.css("margin-left", (listObject.indent / 20) + "pt");
+                }
+                if (listObject.labelWidth > 0) {
+                    numberingElement.css("width", (listObject.labelWidth / 20) + "pt");
+                }
                 $(para).prepend(numberingElement);
             }
         }

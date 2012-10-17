@@ -123,7 +123,9 @@ define('io.ox/office/editor/format/lists',
             }
             var numberFormat = levelFormat.numberFormat;
             ret.text = this.formatNumberType(levelIndexes === undefined ? 0 : levelIndexes[ilvl], numberFormat);
-
+            ret.indent = levelFormat.leftIndent - (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
+            //+ levelFormat.firstLineIndent
+            ret.labelWidth = (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
             return ret;
         };
 
