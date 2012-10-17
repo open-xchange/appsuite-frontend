@@ -99,8 +99,8 @@ define('io.ox/office/editor/format/documentstyles',
         containers.tablecell = new TableCellStyles(rootNode, this);
         containers.page = new PageStyles(rootNode, this);
 
-        themes = new Themes(rootNode, this);
-        lists = new Lists(rootNode, this);
+        themes = new Themes(this);
+        lists = new Lists(this);
 
     } // class DocumentStyles
 

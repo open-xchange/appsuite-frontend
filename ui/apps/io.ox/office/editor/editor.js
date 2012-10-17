@@ -73,6 +73,7 @@ define('io.ox/office/editor/editor',
             tableStyles = documentStyles.getStyleSheets('table'),
             tableRowStyles = documentStyles.getStyleSheets('tablerow'),
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
+            pageStyles = documentStyles.getStyleSheets('page'),
 
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
@@ -237,7 +238,7 @@ define('io.ox/office/editor/editor',
          */
         this.removeHighlighting = function () {
             if (highlightRanges.length) {
-                characterStyles.clearAttributesInRanges(highlightRanges, 'highlight', { special: true });
+                characterStyles.setAttributesInRanges(highlightRanges, { highlight: null }, { special: true });
                 editdiv.removeClass('highlight');
             }
             highlightRanges = [];
@@ -1038,8 +1039,7 @@ define('io.ox/office/editor/editor',
          * Returns whether the current selection selects any text.
          */
         this.isTextSelected = function () {
-            // TODO: in the future, this depends on real selection mode
-            return !this.isImageSelected();
+            return selectedObjects.length === 0;
         };
 
         // PUBLIC TABLE METHODS
@@ -1058,13 +1058,22 @@ define('io.ox/office/editor/editor',
             return Position.isPositionInTable(paragraphs, position);
         };
 
-        // PUBLIC IMAGE METHODS
+        // PUBLIC OBJECT METHODS
+
         /**
-         * Returns whether the current selection selects a single image.
+         * Returns whether the current selection selects one or more objects.
+         */
+        this.isObjectSelected = function () {
+            return selectedObjects.length > 0;
+        };
+
+        /**
+         * Returns whether the current selection selects one or more image
+         * objects. Returns also true, if the object selection contains other
+         * objects too.
          */
         this.isImageSelected = function () {
-            var selection = getSelection();
-            return selection && _.isString(selection.startPaM.imageFloatMode) && _.isString(selection.endPaM.imageFloatMode);
+            return _(selectedObjects.get()).any(function (object) { return DOM.isImageNode(object); });
         };
 
         /**
@@ -2125,7 +2134,7 @@ define('io.ox/office/editor/editor',
             if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
                 // initialize paragraph and character formatting from current paragraph style
-                paragraphStyles.updateFormattingInRanges([DOM.Range.createRangeForNode(paragraph)]);
+                paragraphStyles.updateElementFormatting(paragraph);
             }
 
             // append dummy <br> if the paragraph contains no text, or remove
@@ -3080,14 +3089,14 @@ define('io.ox/office/editor/editor',
         }
 
         function implInitDocument() {
+
+            // create empty page with single paragraph
             editdiv.empty().append(DOM.createParagraphNode());
+            pageStyles.updateElementFormatting(editdiv);
+
+            // update the new paragraph
             paragraphs = editdiv.children();
             implParagraphChanged([0]);
-            setSelection(new OXOSelection());
-            lastOperationEnd = new OXOPaM([0, 0]);
-            self.clearUndo();
-            self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
-
             // Special handling for first paragraph, that has been inserted
             // above and thus exists already before any style sheets have been
             // inserted into the document. It may still refer implicitly to the
@@ -3097,6 +3106,13 @@ define('io.ox/office/editor/editor',
             paragraphStyles.one('change', function () {
                 paragraphStyles.updateElementFormatting(editdiv.children('div.p').first());
             });
+
+            // set initial selection
+            setSelection(new OXOSelection());
+            lastOperationEnd = new OXOPaM([0, 0]);
+
+            self.clearUndo();
+            self.setEditMode(null); // set null for 'read-only' and not yet determined edit status by the server
         }
 
         function implInsertText(text, position) {

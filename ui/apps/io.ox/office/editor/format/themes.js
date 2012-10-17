@@ -12,11 +12,10 @@
  */
 
 define('io.ox/office/editor/format/themes',
-    ['io.ox/core/event',
-     'io.ox/office/tk/utils',
-     'io.ox/office/editor/dom',
+    ['io.ox/office/tk/utils',
+     'io.ox/office/editor/format/container',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, gt) {
+    ], function (Utils, Container, gt) {
 
     'use strict';
 
@@ -99,41 +98,23 @@ define('io.ox/office/editor/format/themes',
      *
      * @constructor
      *
-     * @param {HTMLElement|jQuery} rootNode
+     * @extends Container
      *
      * @param {DocumentStyles} documentStyles
-     *  Collection with the style containers of all style families, themes and lists.
+     *  Collection with the style containers of all style families, themes and
+     *  lists.
      */
-    function Themes(rootNode, documentStyles) {
+    function Themes(documentStyles) {
 
-        var // self reference
-            self = this,
-
-            // themes, mapped by identifier
+        var // themes, mapped by identifier
             themes = {},
 
             // default theme (first inserted theme)
-            defaultTheme = null,
+            defaultTheme = null;
 
-            // timeout handler for postponed change events
-            triggerTimeout = null;
+        // base constructor ---------------------------------------------------
 
-        // private methods ----------------------------------------------------
-
-        /**
-         * Triggers a 'change' event that notifies listeners about added,
-         * removed, or changed themes. Multiple calls of this method are
-         * collected, and a single 'change' event will be triggered after the
-         * current script has been executed.
-         */
-        function triggerChangeEvent() {
-            if (!triggerTimeout) {
-                triggerTimeout = window.setTimeout(function () {
-                    triggerTimeout = null;
-                    self.trigger('change');
-                }, 0);
-            }
-        }
+        Container.call(this, documentStyles);
 
         // methods ------------------------------------------------------------
 
@@ -160,7 +141,7 @@ define('io.ox/office/editor/format/themes',
             defaultTheme = defaultTheme || theme;
 
             // notify listeners
-            triggerChangeEvent();
+            this.triggerChangeEvent();
 
             return this;
         };
@@ -179,20 +160,11 @@ define('io.ox/office/editor/format/themes',
             return (name in themes) ? themes[name] : defaultTheme;
         };
 
-        this.destroy = function () {
-            this.events.destroy();
-        };
-
-        // initialization -----------------------------------------------------
-
-        // add event hub
-        Events.extend(this);
-
     } // class Themes
 
     // exports ================================================================
 
-    return Themes;
-
+    // derive this class from class Container
+    return Container.extend({ constructor: Themes });
 
 });

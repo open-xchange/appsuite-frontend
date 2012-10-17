@@ -47,8 +47,9 @@ define('io.ox/office/editor/format/paragraphstyles',
                 def: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
-                    element.children('span, div.list-label').each(function () {
-                        LineHeight.setElementLineHeight($(this), lineHeight);
+                    // use the iterator go get all child nodes that need to be formatted
+                    iterateChildNodes(element, function (node) {
+                        LineHeight.setElementLineHeight($(node), lineHeight);
                     });
                 }
             },
@@ -73,6 +74,15 @@ define('io.ox/office/editor/format/paragraphstyles',
             }
 
         };
+
+    // global private functions ===============================================
+
+    /**
+     * Visits all child nodes of the passed paragraph.
+     */
+    function iterateChildNodes(paragraph, iterator, context) {
+        return Utils.iterateSelectedDescendantNodes(paragraph, 'span, div.list-label', iterator, context, { children: true });
+    }
 
     // class ParagraphStyles ==================================================
 
@@ -112,7 +122,7 @@ define('io.ox/office/editor/format/paragraphstyles',
          *  effective attribute values merged from style sheets and explicit
          *  attributes.
          */
-        function updateParaFormatting(para, attributes) {
+        function updateParagraphFormatting(para, attributes) {
             // take care of numberings
             if (attributes.ilvl && attributes.numId) {
                 var numberingElement = $('<div>');
@@ -132,8 +142,9 @@ define('io.ox/office/editor/format/paragraphstyles',
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, 'paragraph', definitions, documentStyles, {
-            updateHandler: updateParaFormatting,
-            descendantStyleFamilies: 'character'
+            updateHandler: updateParagraphFormatting,
+            childStyleFamily: 'character',
+            childNodeIterator: iterateChildNodes
         });
 
         // methods ------------------------------------------------------------

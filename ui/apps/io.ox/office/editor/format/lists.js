@@ -12,37 +12,34 @@
  */
 
 define('io.ox/office/editor/format/lists',
-    ['io.ox/core/event',
-     'io.ox/office/tk/utils',
-     'io.ox/office/editor/dom'
-    ], function (Events, Utils, DOM) {
+    ['io.ox/office/tk/utils',
+     'io.ox/office/editor/format/container'
+    ], function (Utils, Container) {
 
     'use strict';
 
-    // class Lists ==================================================
+    // class Lists ============================================================
 
     /**
      * Contains the definitions of lists.
      *
      * @constructor
      *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing all elements formatted by the style sheets of
-     *  this container. If this object is a jQuery collection, uses the first
-     *  node it contains.
+     * @extends Container
      *
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      */
-    function Lists(rootNode, documentStyles) {
+    function Lists(documentStyles) {
 
-        var // self reference
-        self = this,
+        var // list definitions
+            lists = [];
 
-        // list definitons
-        lists = [];
+        // base constructor ---------------------------------------------------
+
+        Container.call(this, documentStyles);
+
         // methods ------------------------------------------------------------
-
 
         /**
          * Adds a new style sheet to this container. An existing list definition
@@ -74,10 +71,11 @@ define('io.ox/office/editor/format/lists',
             list.listLevels[8] = listDefinition.listLevel8;
 
             // notify listeners
-            this.trigger('change');
+            this.triggerChangeEvent();
 
             return this;
         };
+
         /**
          * Gives access to a single list definition.
          *
@@ -88,16 +86,12 @@ define('io.ox/office/editor/format/lists',
         this.getList = function (name) {
             return (name in lists) ? lists[name] : undefined;
         };
+
         /**
          * Gives access to all list definitions.
-         *
          */
         this.getLists = function () {
             return lists;
-        };
-
-        this.destroy = function () {
-            this.events.destroy();
         };
 
         /**
@@ -109,7 +103,6 @@ define('io.ox/office/editor/format/lists',
          *      contains an array with ilvl + 1 elements that determines the sequential position of the current paragraph within the numbering
          *
          * @returns tbd.
-         *
          */
         this.formatNumber = function (listId, ilvl, levelIndexes) {
             var ret = {};
@@ -154,12 +147,12 @@ define('io.ox/office/editor/format/lists',
             }
             return retString;
         };
-        // add event hub
-        Events.extend(this);
+
     } // class Lists
+
     // exports ================================================================
 
-    return Lists;
-
+    // derive this class from class Container
+    return Container.extend({ constructor: Lists });
 
 });
