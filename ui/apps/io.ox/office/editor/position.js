@@ -719,7 +719,7 @@ define('io.ox/office/editor/position',
      * @param {OXOSelection} oxoSelection
      *  The logical selection consisting of two logical positions.
      *
-     * @param {Boolean} useNonTextNode
+     * @param {Boolean} useObjectNode
      *  If set to false, only text nodes shall be returned for 'complete'
      *  logical positions. If set to true, it is allowed to return nodes, that
      *  are also described by a 'complete' logical positio, like images or
@@ -728,19 +728,24 @@ define('io.ox/office/editor/position',
      * @returns {DOM.Range}
      *  The calculated selection (DOM.Range) consisting of two dom points (DOM.Point).
      */
-    Position.getDOMSelection = function (startnode, oxoSelection, useNonTextNode) {
+    Position.getDOMSelection = function (startnode, oxoSelection, useObjectNode) {
 
-        useNonTextNode = useNonTextNode ? true : false;
+        useObjectNode = useObjectNode ? true : false;
 
         // Only supporting single selection at the moment
-        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, useNonTextNode),
-            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition, useNonTextNode);
+        var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, useObjectNode),
+            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition, useObjectNode);
 
-        // if ((start === end) && (start.node.nodeType === 1)) {
-        //     start = DOM.Point.createPointForNode(start.node);
-        //     end = DOM.Point.createPointForNode(end.node);
-        //     end.offset += 1;
-        // }
+        if (useObjectNode) {
+
+            // if ((start === end) && (start.node.nodeType === 1)) {
+            if ((start.node.nodeType === 1) && (start.node.nodeType === 1)) {  // Todo: Clarification
+                start = DOM.Point.createPointForNode(start.node);
+                end = DOM.Point.createPointForNode(end.node);
+                end.offset += 1;
+            }
+
+        }
 
         // DOM selection is always an array of text ranges
         // TODO: fallback to HOME position in document instead of empty array?

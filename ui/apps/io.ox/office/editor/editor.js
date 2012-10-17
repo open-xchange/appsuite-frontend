@@ -1089,7 +1089,7 @@ define('io.ox/office/editor/editor',
                 focused = state;
                 if (focused && currentSelection) {
                     // Update Browser Selection, might got lost.
-                    setSelection(currentSelection, selectedObjects.length > 0);
+                    setSelection(currentSelection);
                 }
                 self.trigger('focus', state);
             }
@@ -1994,7 +1994,9 @@ define('io.ox/office/editor/editor',
                     endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
-                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + ']');
+                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
+                          ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
+                          ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
 
                 // Keeping selections synchronuous. Without setting selection now, there are cursor travel problems in Firefox.
                 // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
@@ -2004,11 +2006,9 @@ define('io.ox/office/editor/editor',
             }
         }
 
-        function setSelection(oxosel, useNonTextNode) {
+        function setSelection(oxosel) {
 
             var ranges = [];
-
-            useNonTextNode = useNonTextNode ? true : false;
 
             // window.console.log('setSelection: Input of Oxo Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
 
@@ -2018,7 +2018,8 @@ define('io.ox/office/editor/editor',
             if (oxosel.hasRange() && (Position.isCellSelection(oxosel.startPaM, oxosel.endPaM))) {
                 ranges = Position.getCellDOMSelections(paragraphs, oxosel);
             } else {
-                ranges = Position.getDOMSelection(paragraphs, oxosel, useNonTextNode);
+                var useObjectNode = (selectedObjects.length > 0);
+                ranges = Position.getDOMSelection(paragraphs, oxosel, useObjectNode);
             }
 
             // for (var i = 0; i < ranges.length; i++) {
@@ -3058,9 +3059,7 @@ define('io.ox/office/editor/editor',
 
             // setting the cursor position
             if (lastOperationEnd) {
-                // var useImageNode = true;
-                var useImageNode = false;
-                setSelection(new OXOSelection(lastOperationEnd), useImageNode);
+                setSelection(new OXOSelection(lastOperationEnd));
             }
         }
 
@@ -3372,21 +3371,7 @@ define('io.ox/office/editor/editor',
             styleSheets = self.getStyleSheets(family);
             if (styleSheets) {
 
-                // calculate DOM ranges from selection
-                if (family === 'image') {
-                    var useNonTextNode = true,
-                        startPaM = Position.getDOMPosition(paragraphs, start, useNonTextNode),
-                        endPaM = Position.getDOMPosition(paragraphs, end, useNonTextNode),
-                        // Image position described by the parent plus offset
-                        startPoint = DOM.Point.createPointForNode(startPaM.node),
-                        endPoint = DOM.Point.createPointForNode(endPaM.node);
-
-                    endPoint.offset += 1;
-                    ranges = [new DOM.Range(startPoint, endPoint)];
-                } else {
-                    ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family !== 'character');
-                }
-
+                ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family === 'image');
                 // change attributes in document and store the undo/redo action
                 styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
                 undomgr.addUndo(undoOperations, redoOperations);
