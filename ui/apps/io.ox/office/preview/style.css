@@ -21,7 +21,7 @@
         text-align: center;
 
         div.page {
-            width: auto;
+            display: inline-block;
         }
     }
 }
