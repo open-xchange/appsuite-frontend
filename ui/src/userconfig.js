@@ -65,8 +65,8 @@ define(function () {
                 title: "Calendar",
                 company: "Open-Xchange",
                 icon: "calendar.png",
-                category: "Productivity"
-                //settings: true
+                category: "Productivity",
+                settings: true
             },
 
             "io.ox/tasks": {
@@ -76,7 +76,7 @@ define(function () {
                 category: "Productivity",
                 settings: false
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",

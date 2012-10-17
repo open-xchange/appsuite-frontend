@@ -15,29 +15,29 @@ define.async('io.ox/core/date',
 ['io.ox/core/gettext', 'io.ox/core/config', 'gettext!io.ox/core/date'],
 function (gettext, config, gt) {
     /*jshint white:false */
-    
+
     'use strict';
-    
+
     var dateTimeFormats = ['', 'E', 'yMd', 'yMEd', 'Hm', 'yMEdHm', 'yMdHm',
                            'yMEdHm', 'v', 'yMEdHmv', 'yMdHmv', 'yMEdHmv', 'Hmv',
                            'yMEdHmv', 'yMdHmv', 'yMEdHmv'];
-    
+
     var AVG_YEAR = 31556952000; // average ms / year
-    
+
     var api = {
         SECOND:    1000, // ms / s
         MINUTE:   60000, // ms / min
         HOUR:   3600000, // ms / h
         DAY:   86400000, // ms / day
         WEEK: 604800000, // ms / week
-        
+
         // Flags for format functions. Multiple flags can be combined through
         // addition or bitwise ORing.
         DAYOFWEEK: 1,
         DATE:      2,
         TIME:      4,
         TIMEZONE:  8,
-        
+
         // Valid format flag combinations as dedicated constants.
         // In a combination, DAYOFWEEK implies DATE and TIMEZONE implies TIME.
         DAYOFWEEK_DATE:       3,
@@ -46,7 +46,7 @@ function (gettext, config, gt) {
         TIME_TIMEZONE:       12,
         DATE_TIME_TIMEZONE:  14,
         FULL_DATE:           15,
-        
+
         getFormat: function (format) {
             format = format || api.DATE_TIME;
             if (typeof format === 'number') {
@@ -56,7 +56,7 @@ function (gettext, config, gt) {
             }
             return format;
         },
-        
+
         /**
          * Formats a duration as a string
          * @param {Number} t The duration in milliseconds
@@ -164,13 +164,13 @@ function (gettext, config, gt) {
             }
         }
     };
-    
+
     //@include api.locale = date/date.root.json
     ;
-    
+
     // TODO: Difference between server and client clocks.
     var offset = 0;
-    
+
     /**
      * Computes the number of the first day of the specified week, taking into
      * account weekStart.
@@ -183,7 +183,7 @@ function (gettext, config, gt) {
     function getWeekStart(d) {
         return d.getDays() - (d.getDay() - api.locale.weekStart + 7) % 7;
     }
-    
+
     /**
      * Returns the day of the week which decides the week number
      * @return Day of week as the number of days since 1970-01-01.
@@ -220,7 +220,7 @@ function (gettext, config, gt) {
     function isLeapYear(year) {
         return year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
     }
-    
+
     var reLetters = "GyYMwWDdFEuaHkKhmsSzZvV".split("").join("+|") + "+";
     var regex = new RegExp("(" + reLetters + ")|'((?:[^']|'')+)'|('')", "g");
 
@@ -285,7 +285,7 @@ function (gettext, config, gt) {
             return num(n, n === 2 ? y % 100 : y);
         },
         z: function (n, d) {
-            
+
         },
         Z: function (n, d) {
 
@@ -294,7 +294,7 @@ function (gettext, config, gt) {
             return d.getTimeZone();
         },
         V: function (n, d) {
-            
+
         }
         // TODO: z, Z, v and V
     };
@@ -406,7 +406,7 @@ function (gettext, config, gt) {
 
     var threshold = new Date();
     var century = Math.floor((threshold.getUTCFullYear() + 20) / 100) * 100;
-    
+
     function parseDateTime(formatMatch, string, D) {
         var handlers = [];
         var rex = formatMatch.replace(pregex,
@@ -717,7 +717,7 @@ function (gettext, config, gt) {
         }
 
         // time zone specific Date class
-        
+
         function LocalDate(y, m, d, h, min, s, ms) {
             switch (arguments.length) {
                 case 0:
@@ -733,7 +733,7 @@ function (gettext, config, gt) {
                     this.t = LocalDate.utc(this.local);
             }
         }
-        
+
         $.extend(LocalDate.prototype, DatePrototype);
         if (Object.defineProperty) {
             for (var i in DatePrototype) {
@@ -741,16 +741,16 @@ function (gettext, config, gt) {
                                       { enumerable: false });
             }
         }
-        
+
         LocalDate.getTTInfo = makeGetTTInfo(transitions);
-        
+
         /**
          * Returns the local timestamp for a UTC timestamp
          */
         LocalDate.localTime = function (t) {
             return t + LocalDate.getTTInfo(t).gmtoff;
         };
-        
+
         var prev = initialTTInfo;
         LocalDate.getTTInfoLocal = makeGetTTInfo(_.map(transitions,
             function (tr) {
@@ -759,20 +759,20 @@ function (gettext, config, gt) {
                     ttinfo: prev = tr.ttinfo
                 };
             }), true);
-        
+
         /**
          * Returns the UTC timestamp for a local timestamp
          */
         LocalDate.utc = function (t) {
             return t - LocalDate.getTTInfoLocal(t).gmtoff;
         };
-        
+
         LocalDate.parse = function (string, format) {
             return parseDateTime(api.getFormat(format), string, LocalDate);
         };
-        
+
         assert(LocalDate.transitions = transitions);
-        
+
         return LocalDate;
     }
 
@@ -943,7 +943,7 @@ function (gettext, config, gt) {
             }
         }
     };
-    
+
     api.getTimeZone = _.memoize(function (name) {
         return require(["raw!io.ox/core/date/tz/zoneinfo/" + name])
             .pipe(parseTZInfo)
@@ -953,7 +953,7 @@ function (gettext, config, gt) {
                 return D;
             });
     });
-    
+
     var locale = gettext.language.pipe(function (lang) {
         return require(["text!io.ox/core/date/date." + lang + ".json"]);
     }).done(function (locale) {
@@ -963,7 +963,7 @@ function (gettext, config, gt) {
         monthMap = makeMap(api.locale.months, api.locale.monthsShort);
         dayMap = makeMap(api.locale.days, api.locale.daysShort);
     });
-    
+
     // TODO: load the entire locale config
     return $.when(api.getTimeZone('Europe/Berlin'), locale/*, config */)
         .pipe(function (tz) {
