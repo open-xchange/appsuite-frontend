@@ -275,7 +275,7 @@
     }
     
     .fulltime .appointment-content {
-        border-left: 1px solid white;
+        border-left: 1px solid rgba(255, 255, 255, 0.6);
     }
     
     .appointment.border {
