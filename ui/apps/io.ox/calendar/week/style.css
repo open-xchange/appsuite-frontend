@@ -254,6 +254,9 @@
         -webkit-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
+    }
+
+    .week-container .appointment {
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     }
 
