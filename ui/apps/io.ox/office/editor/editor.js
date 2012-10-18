@@ -1746,8 +1746,10 @@ define('io.ox/office/editor/editor',
 
         operationHandlers[Operations.PARA_DELETE] = function (operation) {
             if (undomgr.isEnabled()) {
-                var undoOperation = { name: Operations.PARA_INSERT, start: operation.start, text: Position.getParagraphText(paragraphs, operation.start) };
-                undomgr.addUndo(undoOperation, operation);
+                var paragraph = Position.getCurrentParagraph(paragraphs, operation.start),
+                    generator = new Operations.Generator();
+                generator.generateParagraphOperations(paragraph, operation.start);
+                undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteParagraph(operation.start);
         };

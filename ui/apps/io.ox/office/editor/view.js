@@ -141,7 +141,7 @@ define('io.ox/office/editor/view',
         function fillList() {
 
             var filter = null;
-            
+
             theme = themes.getTheme();
             self.clearOptionButtons();
 
@@ -193,7 +193,7 @@ define('io.ox/office/editor/view',
             var menuButton = self.getMenuButton();
             var updateOptions = { label: Utils.getStringOption(options, 'label') };
             var labelCss = { 'font-weight': 'bold' }, rgbColor, color = value;
-            
+
             if (context === 'text') {
                 rgbColor = color ? Color.getCssColor(color, context, theme) : Color.getCssColor(Color.BLACK);
                 if (rgbColor === 'transparent')
@@ -215,7 +215,6 @@ define('io.ox/office/editor/view',
         // base constructor ---------------------------------------------------
 
         RadioGroup.call(this, Utils.extendOptions({
-            width: 50,
             tooltip: gt('Color'),
             dropDown: true,
             updateCaptionMode: 'none',

@@ -45,15 +45,15 @@ define('io.ox/office/tk/control/radiogroup',
      *      nothing will be copied. By default, icon and label of the list item
      *      will be copied.
      *  @param {Function} [options.updateCaptionHandler]
-     *      A function that will be called after list item has been activated,
-     *      and the caption of the drop-down button has been updated according
-     *      to the 'options.updateCaptionMode' option. Receives the button
-     *      element of the activated list item (as jQuery object) in the first
-     *      parameter. The selected/activated value in the second parameter.
-     *      This can be necessary if the activated value is not part of the
-     *      radio group. If no list item is active, the parameter will be an
-     *      empty jQuery object. Will be called in the context of this radio
-     *      group instance.
+     *      A function that will be called after a list item has been
+     *      activated, and the caption of the drop-down button has been updated
+     *      according to the 'options.updateCaptionMode' option. Receives the
+     *      button element of the activated list item (as jQuery object) in the
+     *      first parameter (empty jQuery object, if no list item is active),
+     *      and the value of the selected/activated list item in the second
+     *      parameter (also if this value does not correspond to any existing
+     *      list item). Will be called in the context of this radio group
+     *      instance.
      */
     function RadioGroup(options) {
 

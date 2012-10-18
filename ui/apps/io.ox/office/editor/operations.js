@@ -337,7 +337,7 @@ define('io.ox/office/editor/operations',
 
             // operations to create the paragraph element and formatting
             if (initialParagraph !== true) {
-                generateOperation(Operations.PARA_INSERT, { position: position });
+                generateOperation(Operations.PARA_INSERT, { start: position });
             }
             generateSetAttributesOperation(paragraph, position);
 

@@ -1486,65 +1486,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Returns the text contents of the paragraph located at the specified
-     * logical position. If no paragraph is defined by the logical position, an
-     * empty string is returned. If the optional parameter start end end are
-     * defined, a substring is returned.
-     *
-     * @param {Node|jQuery} startnode
-     *  The start node corresponding to the logical position. if this object is
-     *  a jQuery collection, uses its contents.
-     *
-     * @param {Number[]} position
-     *  The logical position of the paragraph.
-     *
-     * @param {Number} [start=0]
-     *  The logical offset of the first character to be included into the
-     *  result string.
-     *
-     * @param {Number} [end=0x7FFFFFFF]
-     *  The logical offset of the first character following the specified start
-     *  offset to be excluded from the result string (half-open range).
-     *
-     * @returns {String}
-     *  The text of all content nodes inside the paragraph or an empty string,
-     *  if the logical position does not contain a paragraph.
-     */
-    Position.getParagraphText = function (startnode, position, start, end) {
-
-        var // the paragraph element addressed by the passed logical position
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p'),
-            // the text of the paragraph
-            text = '';
-
-        if (paragraph) {
-
-            // logical offset of first character to be included into the result
-            start = _.isNumber(start) ? Math.max(start, 0) : 0;
-            // logical offset of first character not to be included into the result
-            end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
-
-            // visit all content nodes of the paragraph, and collect their text
-            Position.iterateParagraphContentNodes(paragraph, function (node, offset, length) {
-                if ((start < offset + length) && (offset < end)) {
-                    if (DOM.isPortionSpan(node)) {
-                        // insert the text selected by the passed range
-                        text += node.firstChild.nodeValue.substring(Math.max(start - offset, 0), end - offset);
-                    } else if (DOM.isFieldSpan(node)) {
-                        // field span have a logical length of 1, insert their full representation text
-                        text += node.firstChild.nodeValue;
-                    } else {
-                        // field span have a logical length of 1, insert the Unicode OBJ placeholder
-                        text += '\uFFFC';
-                    }
-                }
-            });
-        }
-
-        return text;
-    };
-
-    /**
      * Returns the logical offset of a paragraph content node in its paragraph.
      *
      * @param {HTMLElement|jQuery} node
