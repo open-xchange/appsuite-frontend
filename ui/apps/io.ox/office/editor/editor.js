@@ -1451,7 +1451,31 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            updateSelection();
+            updateSelection()
+            .done(function () {
+                if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
+
+                    if ((currentSelection) &&
+                        (currentSelection.startPaM.imageFloatMode) &&
+                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
+
+                        // getting object and drawing frame around it
+                        window.console.log("AAA: This is an image selection!");
+//                        // click on object node: set browser selection to object node, draw selection
+//                        if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
+//                            // prevent default click handling of the browser
+//                            event.preventDefault();
+//                            // but set focus to the document container (may be loacted in GUI edit fields)
+//                            self.grabFocus();
+//                            // select single objects only (multi selection not supported yet)
+//                            selectObjects(object, false);
+//                        } else {
+//                            deselectAllObjects();
+//                        }
+                    }
+                }
+
+            });
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1998,14 +2022,25 @@ define('io.ox/office/editor/editor',
                 }
 
                 var isPos1Endpoint = false,
-                    isPos2Endpoint = true;
+                    isPos2Endpoint = true,
+                    hasRange = true;
 
                 if ((domRange.start.node === domRange.end.node) && (domRange.start.offset === domRange.end.offset)) {
                     isPos2Endpoint = false;
+                    hasRange = false;
                 }
 
-                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
-                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint);
+
+                if ((startPaM.imageFloatMode) && (!hasRange)) {
+                    // images (and objects) get their own selection and shall not use the selection of the browser.
+                    // Therefore it is necessary to let the browser 'think' that this is no selection. If an image is selected
+                    // in domSelection there are two identical points (f.e. div.p offset 0 to div.p offset 0). But it is
+                    // necessary to make a logical selection with a range -> [6,0] to [6,1] -> using endpoint logic.
+                    isPos2Endpoint = true;
+                }
+
+                var endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
                 Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +

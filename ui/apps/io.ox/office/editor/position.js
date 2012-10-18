@@ -530,7 +530,7 @@ define('io.ox/office/editor/position',
         if (localNode && (DOM.isImageNode(localNode))) {
             imageFloatMode = $(localNode).data('mode');
             foundValidNode = true;  // image nodes are valid
-            offset = 0;
+            offset = isEndPoint ? 1 : 0;
         }
 
         // checking, if a valid node was already found
@@ -2385,6 +2385,30 @@ define('io.ox/office/editor/position',
      */
     Position.positionsAreEqual = function (pos1, pos2) {
         return (_.copy(pos1).join('') === _.copy(pos2).join(''));
+    };
+
+    /**
+     * Checking, if two logical positions have a difference of one
+     * in the final position and are equal in all other positions.
+     *
+     * @param {OXOPaM.oxoPosition} pos1
+     *  The first logical position.
+     *
+     * @param {OXOPaM.oxoPosition} pos2
+     *  The second logical position.
+     *
+     * @returns {Boolean}
+     *  Returns true, if pos2 is directly following pos1 with a
+     *  difference of 1.
+     */
+    Position.isOneCharacterSelection = function (_pos1, _pos2) {
+
+        var pos1 = _.copy(_pos1, true),
+            pos2 = _.copy(_pos2, true),
+            lastPos1 = pos1.pop(),
+            lastPos2 = pos2.pop();
+
+        return ((pos1).join('') === (pos2).join('')) && (lastPos2 === lastPos1 + 1);
     };
 
     return Position;
