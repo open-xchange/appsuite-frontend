@@ -133,15 +133,16 @@ define('io.ox/office/editor/view',
     var ColorChooser = RadioGroup.extend({ constructor: function (themes, context, options) {
 
         var // self reference
-            self = this;
+            self = this,
+            theme = null;
 
         // private methods ----------------------------------------------------
 
         function fillList() {
 
-            var theme = themes.getTheme(),
-                filter = null;
-
+            var filter = null;
+            
+            theme = themes.getTheme();
             self.clearOptionButtons();
 
             // add transparent color if supported
@@ -184,8 +185,31 @@ define('io.ox/office/editor/view',
          *  The DOM button element representing the activated list item. If no
          *  list item is active (ambiguous state), this object will be an empty
          *  jQuery collection.
+         *
+         *  @param {String} value
+         *  The activated/selected color value.
          */
-        function updateCaptionHandler(button) {
+        function updateCaptionHandler(button, value) {
+            var menuButton = self.getMenuButton();
+            var updateOptions = { label: Utils.getStringOption(options, 'label') };
+            var labelCss = { 'font-weight': 'bold' }, rgbColor, color = value;
+            
+            if (context === 'text') {
+                rgbColor = color ? Color.getCssColor(color, context, theme) : Color.getCssColor(Color.BLACK);
+                if (rgbColor === 'transparent')
+                    rgbColor = Color.getCssColor(Color.BLACK);
+                labelCss.color = rgbColor;
+            }
+            else if (context === 'fill') {
+                rgbColor = color ? Color.getCssColor(color, context, theme) : 'transparent';
+                if (rgbColor === 'transparent')
+                    labelCss.color = Color.getCssColor(Color.BLACK);
+                else
+                    labelCss.color = Color.isDark(rgbColor) ? Color.getCssColor(Color.WHITE) : Color.getCssColor(Color.BLACK);
+                labelCss['background-color'] = rgbColor;
+            }
+            updateOptions.labelCss = labelCss;
+            Utils.setControlCaption(menuButton, updateOptions);
         }
 
         // base constructor ---------------------------------------------------
@@ -478,6 +502,10 @@ define('io.ox/office/editor/view',
             .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
+            .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color'), label: 'ab' }))
+            .addSeparator()
+            .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color'), label: 'A' }))
+            .addSeparator()
             .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
@@ -489,7 +517,9 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
-                .end();
+                .end()
+            .addSeparator()
+            .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }));
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new TableSizeChooser())
@@ -544,12 +574,6 @@ define('io.ox/office/editor/view',
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
-                .addSeparator()
-                .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color') }))
-                .addSeparator()
-                .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }))
-                .addSeparator()
-                .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color') }))
                 .addSeparator()
                 .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
                 .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })

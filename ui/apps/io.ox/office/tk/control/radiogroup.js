@@ -49,7 +49,9 @@ define('io.ox/office/tk/control/radiogroup',
      *      and the caption of the drop-down button has been updated according
      *      to the 'options.updateCaptionMode' option. Receives the button
      *      element of the activated list item (as jQuery object) in the first
-     *      parameter. If no list item is active, the parameter will be an
+     *      parameter. The selected/activated value in the second parameter.
+     *      This can be necessary if the activated value is not part of the
+     *      radio group. If no list item is active, the parameter will be an
      *      empty jQuery object. Will be called in the context of this radio
      *      group instance.
      */
@@ -112,7 +114,7 @@ define('io.ox/office/tk/control/radiogroup',
 
                 // call custom update handler
                 if (_.isFunction(updateCaptionHandler)) {
-                    updateCaptionHandler.call(self, button);
+                    updateCaptionHandler.call(self, button, value);
                 }
             }
         }
