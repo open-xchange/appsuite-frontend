@@ -323,7 +323,8 @@ define('io.ox/calendar/edit/template',
                         $('<input type="text" class="add-participant">'),
                         $('<button class="btn" type="button" data-action="add">')
                             .append($('<i class="icon-plus">'))
-                    )
+                    ),
+                    $('<div>').css('height', '220px') // default height of autocomplete popup, we do need expand the page to a height which can show the autocomplete popup
                 );
 
                 var autocomplete = new AddParticipantsView({el: node});
