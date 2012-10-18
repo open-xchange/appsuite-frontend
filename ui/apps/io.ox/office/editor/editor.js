@@ -2965,16 +2965,14 @@ define('io.ox/office/editor/editor',
             // only delete, if imageStartPosition is really an image position
             if (DOM.isImageNode(imageDivNode)) {
                 // delete an corresponding div
-                var divNode = imageDivNode.previousSibling;
-                if ($(divNode).is('div.float')) {
+                var divOffsetNode = imageDivNode.previousSibling;
+                if (DOM.isOffsetNode(divOffsetNode)) {
                     // removing position div node
-                    $(divNode).remove();
+                    $(divOffsetNode).remove();
                 }
 
-                var imageEndPosition = _.copy(imageStartPosition, true);
-                imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                 // deleting the image with an operation
-                self.deleteText(imageStartPosition, imageEndPosition);
+                self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
             }
         }
 
