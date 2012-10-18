@@ -124,16 +124,20 @@ define('io.ox/office/editor/format/paragraphstyles',
          */
         function updateParagraphFormatting(para, attributes) {
             // take care of numberings
+            // always remove an existing label
+            // TODO: it might make more sense to change the label appropriately
+            $(para).children('div.list-label').remove();
+            $(para).css('margin-left', '');
             if (attributes.ilvl && attributes.numId) {
                 var numberingElement = $('<div>');
                 numberingElement.addClass('list-label');
                 var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
                 numberingElement.text(listObject.text);
                 if (listObject.indent > 0) {
-                    para.css("margin-left", (listObject.indent / 20) + "pt");
+                    para.css('margin-left', (listObject.indent / 20) + 'pt');
                 }
                 if (listObject.labelWidth > 0) {
-                    numberingElement.css("width", (listObject.labelWidth / 20) + "pt");
+                    numberingElement.css('width', (listObject.labelWidth / 20) + 'pt');
                 }
                 $(para).prepend(numberingElement);
             }
