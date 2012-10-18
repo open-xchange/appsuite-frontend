@@ -165,8 +165,8 @@ define('io.ox/calendar/month/view',
                         $('<div>')
                         .addClass('appointment-content')
                         .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
-                        .text(gt.noI18n(a.get('title')))
-                        .append($('<span>').addClass('location').text(gt.noI18n(a.get('location') || '')))
+                        .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
+                        .append($('<div>').addClass('location').text(gt.noI18n(a.get('location') || '')))
                 )
                 .attr({
                     'data-extension': 'default'
