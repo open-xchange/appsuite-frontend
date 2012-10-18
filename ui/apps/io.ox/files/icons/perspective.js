@@ -213,6 +213,7 @@ define('io.ox/files/icons/perspective',
                             $(this).off('scroll');
                             start = end;
                             end = end + layout.iconCols;
+                            if (layout.iconCols <= 3) end = end + 10;
                             displayedRows = displayedRows + 1;
                             redraw(allIds.slice(start, end));
                         }
@@ -246,8 +247,8 @@ define('io.ox/files/icons/perspective',
                         displayedRows = layout.iconRows;
                         start = 0;
                         end = displayedRows * layout.iconCols;
+                        if (layout.iconCols <= 3) end = end + 10;
                         allIds = filterFiles(ids, options);
-                        // activateInlineLinks(allIds);
                         ext.point('io.ox/files/icons/actions').invoke('draw', inline, { baton: baton, allIds: allIds });
                         redraw(allIds.slice(start, end));
                     })
