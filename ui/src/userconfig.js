@@ -65,8 +65,8 @@ define(function () {
                 title: "Calendar",
                 company: "Open-Xchange",
                 icon: "calendar.png",
-                category: "Productivity"
-                //settings: true
+                category: "Productivity",
+                settings: true
             },
 
             "io.ox/tasks": {
@@ -74,9 +74,9 @@ define(function () {
                 company: "Open-Xchange",
                 icon: "default.png",
                 category: "Productivity",
-                settings: false
+                settings: true
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",
@@ -85,7 +85,7 @@ define(function () {
                 settings: false,
                 visible: false
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",
@@ -94,7 +94,7 @@ define(function () {
                 settings: false,
                 visible: false
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",
@@ -109,7 +109,7 @@ define(function () {
                 company: "Open-Xchange",
                 icon: "files.png",
                 category: "Productivity",
-                settings: false
+                settings: true
             },
 
             "io.ox/conversations": {

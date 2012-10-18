@@ -106,7 +106,7 @@ define('io.ox/office/editor/format/lists',
             if (!defaultBulletNumId) {
 
                 //TODO: search for a 'free' id
-                defaultBulletNumId = '99';
+                defaultBulletNumId = 99;
                 var listDefinition = {};
                 listDefinition.listLevel0 = {numberFormat: 'bullet', leftIndent: 720, hangingIndent: 360 };
                 listDefinition.listLevel1 = {numberFormat: 'bullet', leftIndent: 2 * 720, hangingIndent: 360 };
@@ -129,7 +129,7 @@ define('io.ox/office/editor/format/lists',
         this.getDefaultNumberingNumId = function () {
             // TODO: find or create default definition
             if (!defaultNumberingNumId) {
-                defaultNumberingNumId = '98';
+                defaultNumberingNumId = 98;
                 var listDefinition = {};
                 listDefinition.listLevel0 = {numberFormat: 'decimal', leftIndent: 720, hangingIndent: 360 };
                 listDefinition.listLevel1 = {numberFormat: 'lowerLetter', leftIndent: 2 * 720, hangingIndent: 360 };

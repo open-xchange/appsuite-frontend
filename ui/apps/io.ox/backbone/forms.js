@@ -11,6 +11,7 @@
  * @author Francisco Laguna <francisco.laguna@open-xchange.com>
  */
 
+
 define('io.ox/backbone/forms',
     ['io.ox/core/extensions',
      'io.ox/core/event',
@@ -45,6 +46,7 @@ define('io.ox/backbone/forms',
 
                 this.observeModel('backendError', showBackendError);
             },
+
             isRelevant: function (response) {
                 return true;
             },
@@ -157,6 +159,7 @@ define('io.ox/backbone/forms',
 
         this.modelEvents['invalid:' + options.attribute] = 'onValidationError';
         this.modelEvents['valid:' + options.attribute] = 'removeError';
+
         _.extend(this, options); // May override any of the above aspects
     }
 
@@ -292,6 +295,7 @@ define('io.ox/backbone/forms',
             }
         }, options);
     }
+
     // Form Sections made up of horizontal forms
 
     function Section(options) {
@@ -444,6 +448,7 @@ define('io.ox/backbone/forms',
                 return $(this.container || '<form class="form-horizontal">');
             }
         }, options);
+
     }
 
     function DatePicker(options) {
@@ -675,6 +680,8 @@ define('io.ox/backbone/forms',
 
                 if (string !== '' && reg.test(string)) {
                     var dateArray = string.split('.');
+                    console.log(Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0])));
+                    console.log(date.DATE);
                     return Date.UTC(dateArray[2], (--dateArray[1]), (dateArray[0]));
                 } else {
                     return string;

@@ -40,7 +40,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = this.draw || function (context) {
             this.append(
                 $("<a>", { href: "#", tabindex: "1", "data-action": self.id })
-                .addClass('io-ox-action-link')
+                .addClass(self.cssClasses || 'io-ox-action-link')
                 .attr({
                     'data-prio': options.prio || 'lo',
                     'data-ref': self.ref

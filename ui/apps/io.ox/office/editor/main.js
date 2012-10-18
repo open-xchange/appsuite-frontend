@@ -390,6 +390,7 @@ define('io.ox/office/editor/main',
                             // operations
                             operations = extractOperationsList(response);
 
+                        controller.setEditUser(data && data.editUser);
                         controller.setEditMode(data && data.canEdit);
 
                         if (_.isArray(operations) && (operations.length > 0)) {
