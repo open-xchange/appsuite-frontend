@@ -69,6 +69,8 @@ define('io.ox/office/editor/operations',
      */
     var Operations = {
 
+        INIT_DOCUMENT: 'initDocument',
+
         DELETE: 'delete',
         MOVE: 'move',
 
