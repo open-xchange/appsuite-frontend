@@ -1471,19 +1471,25 @@ define('io.ox/office/editor/editor',
                         (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
 
                         // getting object and drawing frame around it
-                        window.console.log("AAA: This is an image selection!");
-//                        // click on object node: set browser selection to object node, draw selection
-//                        if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
-//                            // prevent default click handling of the browser
-//                            event.preventDefault();
-//                            // but set focus to the document container (may be loacted in GUI edit fields)
-//                            self.grabFocus();
-//                            // select single objects only (multi selection not supported yet)
-//                            selectObjects(object, false);
-//                        } else {
-//                            deselectAllObjects();
-//                        }
+
+                        var useObjectNode = true,
+                            imageDivNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
+
+                        // only delete, if imageStartPosition is really an image position
+                        if (DOM.isImageNode(imageDivNode)) {
+                            // prevent default click handling of the browser
+                            event.preventDefault();
+                            // but set focus to the document container (may be loacted in GUI edit fields)
+                            self.grabFocus();
+                            // select single objects only (multi selection not supported yet)
+                            selectObjects(imageDivNode, false);
+                        }
+
+                    } else {
+                        deselectAllObjects();
                     }
+                } else {
+                    deselectAllObjects();
                 }
 
             });
