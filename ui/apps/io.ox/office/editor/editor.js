@@ -358,7 +358,12 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                if ((buttonEvent) && (selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                    // An image selection
+                    // This deleting of images is only possible with the button, not with an key down event.
+                    deleteSelectedImage(selection);
+
+                } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
@@ -387,12 +392,7 @@ define('io.ox/office/editor/editor',
 
                 undomgr.endGroup();
             }
-            else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                // deleting images without selection (only workaround until image selection with mouse is possible)
-                // This deleting of images is only possible with the button, not with an key down event.
-                deleteSelectedImage(selection);
-            }
         };
 
         this.deleteText = function (startposition, endposition) {
@@ -2258,8 +2258,7 @@ define('io.ox/office/editor/editor',
 
             var para,
                 start,
-                end,
-                buttonEvent = (startPosition === undefined) && (endPosition === undefined);
+                end;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
@@ -2279,7 +2278,11 @@ define('io.ox/office/editor/editor',
 
                     selection.adjust();
 
-                    if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    if ((selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                        // An image selection
+                        setAttributesToSelectedImage(selection, attributes);
+
+                    } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // Only one paragraph concerned from attribute changes.
                         setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
@@ -2304,10 +2307,6 @@ define('io.ox/office/editor/editor',
                         // This probably works not reliable for tables in tables.
                         setAttributesInDifferentParagraphLevels(selection, family, attributes);
                     }
-                }
-                else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
-
-                    setAttributesToSelectedImage(selection, attributes);
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
