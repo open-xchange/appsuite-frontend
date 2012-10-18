@@ -37,6 +37,29 @@ define('io.ox/office/editor/format/lists',
         // defaults - TODO: check each added lists if it is a default!
             defaultNumberingNumId, defaultBulletNumId;
 
+        var defaultBulletDefinition = {};
+        defaultBulletDefinition.listLevel0 = {numberFormat: 'bullet', leftIndent: 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel1 = {numberFormat: 'bullet', leftIndent: 2 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel2 = {numberFormat: 'bullet', leftIndent: 3 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel3 = {numberFormat: 'bullet', leftIndent: 4 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel4 = {numberFormat: 'bullet', leftIndent: 5 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel5 = {numberFormat: 'bullet', leftIndent: 6 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel6 = {numberFormat: 'bullet', leftIndent: 7 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel7 = {numberFormat: 'bullet', leftIndent: 8 * 720, hangingIndent: 360 };
+        defaultBulletDefinition.listLevel8 = {numberFormat: 'bullet', leftIndent: 9 * 720, hangingIndent: 360 };
+
+        var defaultNumberingDefinition = {};
+        defaultNumberingDefinition.listLevel0 = {numberFormat: 'decimal', leftIndent: 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel1 = {numberFormat: 'lowerLetter', leftIndent: 2 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel2 = {numberFormat: 'upperLetter', leftIndent: 3 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel3 = {numberFormat: 'lowerRoman', leftIndent: 4 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel4 = {numberFormat: 'upperRoman', leftIndent: 5 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel5 = {numberFormat: 'decimal', leftIndent: 6 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel6 = {numberFormat: 'lowerLetter', leftIndent: 7 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel7 = {numberFormat: 'upperLetter', leftIndent: 8 * 720, hangingIndent: 360 };
+        defaultNumberingDefinition.listLevel8 = {numberFormat: 'lowerRoman', leftIndent: 9 * 720, hangingIndent: 360 };
+
+
         // base constructor ---------------------------------------------------
 
         Container.call(this, documentStyles);
@@ -98,49 +121,27 @@ define('io.ox/office/editor/format/lists',
 
         /**
          *
-         * @returns {String}
-         *  the Id of a default bullet numbering. If this default numbering definition is not availabe then it will be created
+         * @returns {integer}
+         *  the Id of a default bullet numbering. If this default numbering definition is not available then it will be created
          */
         this.getDefaultBulletNumId = function () {
             // TODO: find or create default definition
-            if (!defaultBulletNumId) {
-
+            if (defaultBulletNumId === undefined) {
                 //TODO: search for a 'free' id
                 defaultBulletNumId = 99;
-                var listDefinition = {};
-                listDefinition.listLevel0 = {numberFormat: 'bullet', leftIndent: 720, hangingIndent: 360 };
-                listDefinition.listLevel1 = {numberFormat: 'bullet', leftIndent: 2 * 720, hangingIndent: 360 };
-                listDefinition.listLevel2 = {numberFormat: 'bullet', leftIndent: 3 * 720, hangingIndent: 360 };
-                listDefinition.listLevel3 = {numberFormat: 'bullet', leftIndent: 4 * 720, hangingIndent: 360 };
-                listDefinition.listLevel4 = {numberFormat: 'bullet', leftIndent: 5 * 720, hangingIndent: 360 };
-                listDefinition.listLevel5 = {numberFormat: 'bullet', leftIndent: 6 * 720, hangingIndent: 360 };
-                listDefinition.listLevel6 = {numberFormat: 'bullet', leftIndent: 7 * 720, hangingIndent: 360 };
-                listDefinition.listLevel7 = {numberFormat: 'bullet', leftIndent: 8 * 720, hangingIndent: 360 };
-                listDefinition.listLevel8 = {numberFormat: 'bullet', leftIndent: 9 * 720, hangingIndent: 360 };
-                this.addList(defaultBulletNumId, listDefinition);
+                this.addList(defaultBulletNumId, defaultBulletDefinition);
             }
             return defaultBulletNumId;
         };
         /**
-         *
-         * @returns {String}
-         *  the Id of a default ordered numbering. If this default numbering definition is not availabe then it will be created
+         * @returns {integer}
+         *  the Id of a default ordered numbering. If this default numbering definition is not available then it will be created
          */
         this.getDefaultNumberingNumId = function () {
             // TODO: find or create default definition
-            if (!defaultNumberingNumId) {
+            if (defaultNumberingNumId === undefined) {
                 defaultNumberingNumId = 98;
-                var listDefinition = {};
-                listDefinition.listLevel0 = {numberFormat: 'decimal', leftIndent: 720, hangingIndent: 360 };
-                listDefinition.listLevel1 = {numberFormat: 'lowerLetter', leftIndent: 2 * 720, hangingIndent: 360 };
-                listDefinition.listLevel2 = {numberFormat: 'upperLetter', leftIndent: 3 * 720, hangingIndent: 360 };
-                listDefinition.listLevel3 = {numberFormat: 'lowerRoman', leftIndent: 4 * 720, hangingIndent: 360 };
-                listDefinition.listLevel4 = {numberFormat: 'upperRoman', leftIndent: 5 * 720, hangingIndent: 360 };
-                listDefinition.listLevel5 = {numberFormat: 'decimal', leftIndent: 6 * 720, hangingIndent: 360 };
-                listDefinition.listLevel6 = {numberFormat: 'lowerLetter', leftIndent: 7 * 720, hangingIndent: 360 };
-                listDefinition.listLevel7 = {numberFormat: 'upperLetter', leftIndent: 8 * 720, hangingIndent: 360 };
-                listDefinition.listLevel8 = {numberFormat: 'lowerRoman', leftIndent: 9 * 720, hangingIndent: 360 };
-                this.addList(defaultNumberingNumId, listDefinition);
+                this.addList(defaultNumberingNumId, defaultNumberingDefinition);
             }
             return defaultNumberingNumId;
         };
