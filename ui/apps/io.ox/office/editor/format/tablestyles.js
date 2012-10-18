@@ -94,35 +94,35 @@ define('io.ox/office/editor/format/tablestyles',
                 set: function (element, border) {
                     element.css('border-bottom', this.getCssBorder(border));
                 }
-            },
-
-            /**
-             * Style, width and color of the inner horizontal borders.
-             */
-            borderinsideh: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    // setting top border for every td inside the table
-                    // -> td and th do not exist after operation insertTable
-                    $('th, td', element).css('border-top', this.getCssBorder(border));
-                    // setting hidden border for the table
-                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
-                }
-            },
-
-            /**
-             * Style, width and color of the inner vertical borders.
-             */
-            borderinsidev: {
-                def: NO_BORDER,
-                set: function (element, border) {
-                    // setting left border for every td inside the table
-                    // -> td and th do not exist after operation insertTable
-                    $('th, td', element).css('border-left', this.getCssBorder(border));
-                    // setting hidden border for the table
-                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
-                }
             }
+
+//            /**
+//             * Style, width and color of the inner horizontal borders.
+//             */
+//            borderinsideh: {
+//                def: NO_BORDER,
+//                set: function (element, border) {
+//                    // setting top border for every td inside the table
+//                    // -> td and th do not exist after operation insertTable
+//                    $('th, td', element).css('border-top', this.getCssBorder(border));
+//                    // setting hidden border for the table
+//                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
+//                }
+//            },
+//
+//            /**
+//             * Style, width and color of the inner vertical borders.
+//             */
+//            borderinsidev: {
+//                def: NO_BORDER,
+//                set: function (element, border) {
+//                    // setting left border for every td inside the table
+//                    // -> td and th do not exist after operation insertTable
+//                    $('th, td', element).css('border-left', this.getCssBorder(border));
+//                    // setting hidden border for the table
+//                    element.css({'border': 'hidden', 'border-collapse': 'collapse'});
+//                }
+//            }
 
         };
 

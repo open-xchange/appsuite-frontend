@@ -12,37 +12,36 @@
  */
 
 define('io.ox/office/editor/format/lists',
-    ['io.ox/core/event',
-     'io.ox/office/tk/utils',
-     'io.ox/office/editor/dom'
-    ], function (Events, Utils, DOM) {
+    ['io.ox/office/tk/utils',
+     'io.ox/office/editor/format/container'
+    ], function (Utils, Container) {
 
     'use strict';
 
-    // class Lists ==================================================
+    // class Lists ============================================================
 
     /**
      * Contains the definitions of lists.
      *
      * @constructor
      *
-     * @param {HTMLElement|jQuery} rootNode
-     *  The root node containing all elements formatted by the style sheets of
-     *  this container. If this object is a jQuery collection, uses the first
-     *  node it contains.
+     * @extends Container
      *
      * @param {DocumentStyles} documentStyles
      *  Collection with the style containers of all style families.
      */
-    function Lists(rootNode, documentStyles) {
+    function Lists(documentStyles) {
 
-        var // self reference
-        self = this,
+        var // list definitions
+            lists = [],
+        // defaults - TODO: check each added lists if it is a default!
+            defaultNumberingNumId, defaultBulletNumId;
 
-        // list definitons
-        lists = [];
+        // base constructor ---------------------------------------------------
+
+        Container.call(this, documentStyles);
+
         // methods ------------------------------------------------------------
-
 
         /**
          * Adds a new style sheet to this container. An existing list definition
@@ -74,10 +73,11 @@ define('io.ox/office/editor/format/lists',
             list.listLevels[8] = listDefinition.listLevel8;
 
             // notify listeners
-            this.trigger('change');
+            this.triggerChangeEvent();
 
             return this;
         };
+
         /**
          * Gives access to a single list definition.
          *
@@ -88,18 +88,62 @@ define('io.ox/office/editor/format/lists',
         this.getList = function (name) {
             return (name in lists) ? lists[name] : undefined;
         };
+
         /**
          * Gives access to all list definitions.
-         *
          */
         this.getLists = function () {
             return lists;
         };
 
-        this.destroy = function () {
-            this.events.destroy();
-        };
+        /**
+         *
+         * @returns {String}
+         *  the Id of a default bullet numbering. If this default numbering definition is not availabe then it will be created
+         */
+        this.getDefaultBulletNumId = function () {
+            // TODO: find or create default definition
+            if (!defaultBulletNumId) {
 
+                //TODO: search for a 'free' id
+                defaultBulletNumId = '99';
+                var listDefinition = {};
+                listDefinition.listLevel0 = {numberFormat: 'bullet', leftIndent: 720, hangingIndent: 360 };
+                listDefinition.listLevel1 = {numberFormat: 'bullet', leftIndent: 2 * 720, hangingIndent: 360 };
+                listDefinition.listLevel2 = {numberFormat: 'bullet', leftIndent: 3 * 720, hangingIndent: 360 };
+                listDefinition.listLevel3 = {numberFormat: 'bullet', leftIndent: 4 * 720, hangingIndent: 360 };
+                listDefinition.listLevel4 = {numberFormat: 'bullet', leftIndent: 5 * 720, hangingIndent: 360 };
+                listDefinition.listLevel5 = {numberFormat: 'bullet', leftIndent: 6 * 720, hangingIndent: 360 };
+                listDefinition.listLevel6 = {numberFormat: 'bullet', leftIndent: 7 * 720, hangingIndent: 360 };
+                listDefinition.listLevel7 = {numberFormat: 'bullet', leftIndent: 8 * 720, hangingIndent: 360 };
+                listDefinition.listLevel8 = {numberFormat: 'bullet', leftIndent: 9 * 720, hangingIndent: 360 };
+                this.addList(defaultBulletNumId, listDefinition);
+            }
+            return defaultBulletNumId;
+        };
+        /**
+         *
+         * @returns {String}
+         *  the Id of a default ordered numbering. If this default numbering definition is not availabe then it will be created
+         */
+        this.getDefaultNumberingNumId = function () {
+            // TODO: find or create default definition
+            if (!defaultNumberingNumId) {
+                defaultNumberingNumId = '98';
+                var listDefinition = {};
+                listDefinition.listLevel0 = {numberFormat: 'decimal', leftIndent: 720, hangingIndent: 360 };
+                listDefinition.listLevel1 = {numberFormat: 'lowerLetter', leftIndent: 2 * 720, hangingIndent: 360 };
+                listDefinition.listLevel2 = {numberFormat: 'upperLetter', leftIndent: 3 * 720, hangingIndent: 360 };
+                listDefinition.listLevel3 = {numberFormat: 'lowerRoman', leftIndent: 4 * 720, hangingIndent: 360 };
+                listDefinition.listLevel4 = {numberFormat: 'upperRoman', leftIndent: 5 * 720, hangingIndent: 360 };
+                listDefinition.listLevel5 = {numberFormat: 'decimal', leftIndent: 6 * 720, hangingIndent: 360 };
+                listDefinition.listLevel6 = {numberFormat: 'lowerLetter', leftIndent: 7 * 720, hangingIndent: 360 };
+                listDefinition.listLevel7 = {numberFormat: 'upperLetter', leftIndent: 8 * 720, hangingIndent: 360 };
+                listDefinition.listLevel8 = {numberFormat: 'lowerRoman', leftIndent: 9 * 720, hangingIndent: 360 };
+                this.addList(defaultNumberingNumId, listDefinition);
+            }
+            return defaultNumberingNumId;
+        };
         /**
          * Generates the numbering Label for the given paragraph
          *
@@ -109,7 +153,6 @@ define('io.ox/office/editor/format/lists',
          *      contains an array with ilvl + 1 elements that determines the sequential position of the current paragraph within the numbering
          *
          * @returns tbd.
-         *
          */
         this.formatNumber = function (listId, ilvl, levelIndexes) {
             var ret = {};
@@ -154,12 +197,12 @@ define('io.ox/office/editor/format/lists',
             }
             return retString;
         };
-        // add event hub
-        Events.extend(this);
+
     } // class Lists
+
     // exports ================================================================
 
-    return Lists;
-
+    // derive this class from class Container
+    return Container.extend({ constructor: Lists });
 
 });

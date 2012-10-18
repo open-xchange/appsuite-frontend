@@ -122,9 +122,13 @@
         }
 
         .mediaplayer_playlist {
-
+            position: absolute;
+            left: 13px;
+            right: 13px;
+            bottom: 13px;
+            width: 480px;
             margin: 0;
-            overflow-y: auto;
+            overflow-y: scroll;
 
             li {
                 list-style: none;
@@ -144,6 +148,13 @@
             }
         }
     }
+}
+.audioplayer .mediaplayer_playlist {
+    top: 219px;
+}
+
+.videoplayer .mediaplayer_playlist {
+    top: 340px;
 }
 
 // Animation for minimized button in launcher
@@ -172,7 +183,7 @@
 // SMALL DEVICES
 
 @media (max-width: 700px) {
-
+    .mejs-video { width:290px;}
     .mediaplayer_container .mediaplayer_inner {
         @width: 320px - 2 * @playerMargin;
         width: @width;
@@ -187,6 +198,7 @@
         }
         .mediaplayer_playlist {
             top: 219px - 60px;
+            width: 290px;
         }
     }
 }

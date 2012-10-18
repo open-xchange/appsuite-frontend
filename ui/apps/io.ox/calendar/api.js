@@ -221,7 +221,6 @@ define("io.ox/calendar/api",
         // delete is a reserved word :( - but this will delete the
         // appointment on the server
         remove: function (o) {
-            console.log('-->', o);
             var key = o.folder_id + "." + o.id + "." + (o.recurrence_position || 0);
             return http.PUT({
                 module: 'calendar',

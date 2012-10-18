@@ -221,6 +221,58 @@ define('io.ox/office/editor/controller',
                     set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
+                // numbering and bullets
+                'list/bullets': {
+                    chain: 'paragraph/attributes',
+                    get: function (attributes) { return attributes.ilvl !== undefined && attributes.ilvl !== ''; },
+                    set: function (mode) {
+                        if (mode) {
+                            var defNumId = editor.getLists().getDefaultBulletNumId();
+                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: '0'});
+                        } else {
+                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                        }
+                    }
+                },
+                'list/numbering': {
+                    chain: 'paragraph/attributes',
+                    get: function (attributes) {
+                        return attributes.ilvl !== undefined && attributes.ilvl !== '';
+                    },
+                    set: function (mode) {
+                        if (mode) {
+                            var defNumId = editor.getLists().getDefaultNumberingNumId();
+                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: '0'});
+                        } else {
+                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                        }
+                    }
+                },
+                'list/incindent': {
+                    chain: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl < 8; },
+                    get: function (attributes) {
+                        this.ilvl = parseInt(attributes.ilvl, 10);
+                    },
+                    set: function () {
+                        if (this.ilvl < 8) {
+                            editor.setAttribute('paragraph', 'ilvl', this.ilvl + 1);
+                        }
+                    }
+                },
+                'list/decindent': {
+                    chain: 'paragraph/attributes',
+                    enable: function (enabled) { return enabled && this.ilvl > 0; },
+                    get: function (attributes) {
+                        this.ilvl = parseInt(attributes.ilvl, 10);
+                    },
+                    set: function () {
+                        if (this.ilvl > 0) {
+                            editor.setAttribute('paragraph', 'ilvl', this.ilvl === 1 ? '0' : this.ilvl - 1);
+                        }
+                    }
+                },
+
                 // debug
 
                 'debug/toggle': {

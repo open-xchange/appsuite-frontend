@@ -78,8 +78,7 @@ $(document).ready(function () {
         // unbind
         $("#io-ox-login-form").off("submit");
         // free closures
-        cleanUp = fnChangeLanguage =
-            changeLanguage = initialize = null;
+        cleanUp = fnChangeLanguage = changeLanguage = initialize = $.noop;
     };
 
     gotoCore = function (viaAutoLogin) {

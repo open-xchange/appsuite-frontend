@@ -94,7 +94,7 @@
         .overflow-x(hidden);
     }
     
-    .fulltime-lable {
+    .fulltime-label {
         height: 100%;
         width: @weekview-time-with;
         position: absolute;
@@ -128,7 +128,7 @@
         .overflow-y(scroll);
     }
     
-    .footer-lable {
+    .footer-label {
         height: 100%;
         width: @weekview-time-with;
         position: absolute;
@@ -152,8 +152,9 @@
     }
     
     .day {
+        position: relative;
+        float: left;
         border-left: 1px solid #ccc;
-        height: 100%;
     }
     
     .day.today .timeslot.in { 
@@ -166,12 +167,8 @@
         background-color: rgba(0, 136, 204, 0.20);
     }
 
-    .day, .lable {
-        position: relative;
-        float: left;
-    }
-
-    .lable {
+    .week-container-label {
+        width: @weekview-time-with;
         position: absolute;
     }
     
@@ -180,7 +177,6 @@
     }
     
     .time {
-        width: @weekview-time-with;
         position: relative;
     }
 
@@ -205,21 +201,6 @@
         user-select: none;
     }
     
-    .timeline .glow {
-        position: relative;
-        top: -2px;
-        left: -2px;
-        width: 5px;
-        height: 5px;
-        background-color: blue;
-        border-radius: 2px;
-        -moz-border-radius: 2px;
-        -webkit-border-radius: 2px;
-        box-shadow: 0 0 5px rgba(0, 0, 255, 1);
-        -webkit-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
-        -moz-box-shadow: 0 0 5px rgba(0, 0, 255, 1); 
-    }
-    
     .day .timeslot:nth-child(2n+1) {
         border-bottom-style: dotted;
     }
@@ -241,7 +222,7 @@
         padding-left: 10px;
         overflow: hidden;
         text-overflow: ellipsis;
-}
+    }
     
     .appointment {
         position: absolute;
@@ -254,6 +235,9 @@
         -webkit-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
+    }
+
+    .week-container .appointment {
         border-bottom: 1px solid rgba(255, 255, 255, 0.4);
     }
 
@@ -272,7 +256,7 @@
     }
     
     .fulltime .appointment-content {
-        border-left: 1px solid white;
+        border-left: 1px solid rgba(255, 255, 255, 0.6);
     }
     
     .appointment.border {

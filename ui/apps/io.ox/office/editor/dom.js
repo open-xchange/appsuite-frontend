@@ -406,6 +406,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <div> element for positioning
+     * an object with a vertical or horizontal offset.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element wrapping an object.
+     */
+    DOM.isOffsetNode = function (node) {
+        return $(node).is('div.offset');
+    };
+
+    /**
      * Returns whether the passed node is a <div> element wrapping an image.
      *
      * @param {Node|jQuery} node

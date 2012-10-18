@@ -457,7 +457,7 @@ exports.includeFilter = function (data) {
     var dest = this.task.name;
     exports.includes.set(dest, []);
     var self = this, line = 1;
-    return data.replace(/(\/\/@include\s+(.*?)(\S*)(;?))?$/gm,
+    return data.replace(/(\/\/@include\s+(.*?)(\S*)(;?))?\r?\n/g,
         function(m, include, prefix, name, semicolon) {
             if (!include) {
                 line++;
@@ -468,6 +468,6 @@ exports.includeFilter = function (data) {
                 var include = path.join(dir, file);
                 exports.includes.add(dest, include);
                 return fs.readFileSync(include, "utf8");
-            }).join("\n") + (semicolon || "");
+            }).join("\n") + (semicolon + "\n");
         });
 };

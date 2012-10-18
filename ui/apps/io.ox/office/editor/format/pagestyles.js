@@ -101,18 +101,17 @@ define('io.ox/office/editor/format/pagestyles',
 
         // restrict top/bottom margin to keep an editing area of at least 1cm
         if ((verticalMargin > 0) && (pageHeight - verticalMargin < 1000)) {
-            // TODO: enable when page layout is supported
             // Change margins according to ratio of original top/bottom margins
             // (e.g. keep top margin twice as big as bottom margin, if
             // specified in the original attribute values).
-            //topMargin = (pageHeight - 1000) * (topMargin / verticalMargin);
-            //bottomMargin = (pageHeight - 1000) * (bottomMargin / verticalMargin);
+            topMargin = (pageHeight - 1000) * (topMargin / verticalMargin);
+            bottomMargin = (pageHeight - 1000) * (bottomMargin / verticalMargin);
         }
 
         page.css({
             width: Utils.convertHmmToCssLength(pageWidth, 'mm', 1),
-            // TODO: enable when page layout is supported
-            // height: Utils.convertHmmToCssLength(pageHeight, 'mm', 1),
+            // TODO: change to 'height' when page layout is supported
+            minHeight: Utils.convertHmmToCssLength(pageHeight, 'mm', 1),
             paddingLeft: Utils.convertHmmToCssLength(leftMargin, 'mm', 1),
             paddingRight: Utils.convertHmmToCssLength(rightMargin, 'mm', 1),
             paddingTop: Utils.convertHmmToCssLength(topMargin, 'mm', 1),

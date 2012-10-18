@@ -216,7 +216,7 @@ define('io.ox/office/editor/format/imagestyles',
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
             // preceding div element used for vertical offset
-            verticalOffsetNode = div.prev('div.float'),
+            verticalOffsetNode = div.prev('div.offset'),
             // first text node in paragraph
             firstTextNode = null,
             // current object width, in 1/100 mm
@@ -318,7 +318,7 @@ define('io.ox/office/editor/format/imagestyles',
             } else {
                 // create offset node if not existing yet
                 if (verticalOffsetNode.length === 0) {
-                    verticalOffsetNode = $('<div>', { contenteditable: false }).width(1).insertBefore(div);
+                    verticalOffsetNode = $('<div>', { contenteditable: false }).addClass('offset').width(1).insertBefore(div);
                 }
                 // set height of the offset node
                 verticalOffsetNode.height(Utils.convertHmmToLength(topOffset, 'px', 0));
