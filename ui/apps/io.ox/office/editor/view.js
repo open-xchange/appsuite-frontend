@@ -556,7 +556,12 @@ define('io.ox/office/editor/view',
                 .addSeparator()
                 .addGroup('character/color', new ColorChooser(editor.getThemes(), 'text', { tooltip: gt('Text Color') }))
                 .addSeparator()
-                .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color') }));
+                .addGroup('character/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Text fill color') }))
+                .addSeparator()
+                .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
+                .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })
+                .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Numbering'), toggle: false })
+                .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Numbering'), toggle: false });
         }
 
         // register a component that updates the window header tool bar

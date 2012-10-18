@@ -138,6 +138,11 @@ i.icon-io-ox-image-float-right      { background-position: -240px  -20px; }
 i.icon-io-ox-image-center           { background-position: -260px  -20px; }
 i.icon-io-ox-image-inline           { background-position: -280px  -20px; }
 
+i.icon-io-ox-bullets                { background-position: -300px  -20px; }
+i.icon-io-ox-numbering              { background-position: -320px  -20px; }
+i.icon-io-ox-num-inc-indent         { background-position: -340px  -20px; }
+i.icon-io-ox-num-dec-indent         { background-position: -360px  -20px; }
+
 /* ========================================================================= */
 /* panes and view components                                                 */
 /* ========================================================================= */

@@ -33,7 +33,9 @@ define('io.ox/office/editor/format/lists',
     function Lists(documentStyles) {
 
         var // list definitions
-            lists = [];
+            lists = [],
+        // defaults - TODO: check each added lists if it is a default!
+            defaultNumberingNumId, defaultBulletNumId;
 
         // base constructor ---------------------------------------------------
 
@@ -94,6 +96,54 @@ define('io.ox/office/editor/format/lists',
             return lists;
         };
 
+        /**
+         *
+         * @returns {String}
+         *  the Id of a default bullet numbering. If this default numbering definition is not availabe then it will be created
+         */
+        this.getDefaultBulletNumId = function () {
+            // TODO: find or create default definition
+            if (!defaultBulletNumId) {
+
+                //TODO: search for a 'free' id
+                defaultBulletNumId = '99';
+                var listDefinition = {};
+                listDefinition.listLevel0 = {numberFormat: 'bullet', leftIndent: 720, hangingIndent: 360 };
+                listDefinition.listLevel1 = {numberFormat: 'bullet', leftIndent: 2 * 720, hangingIndent: 360 };
+                listDefinition.listLevel2 = {numberFormat: 'bullet', leftIndent: 3 * 720, hangingIndent: 360 };
+                listDefinition.listLevel3 = {numberFormat: 'bullet', leftIndent: 4 * 720, hangingIndent: 360 };
+                listDefinition.listLevel4 = {numberFormat: 'bullet', leftIndent: 5 * 720, hangingIndent: 360 };
+                listDefinition.listLevel5 = {numberFormat: 'bullet', leftIndent: 6 * 720, hangingIndent: 360 };
+                listDefinition.listLevel6 = {numberFormat: 'bullet', leftIndent: 7 * 720, hangingIndent: 360 };
+                listDefinition.listLevel7 = {numberFormat: 'bullet', leftIndent: 8 * 720, hangingIndent: 360 };
+                listDefinition.listLevel8 = {numberFormat: 'bullet', leftIndent: 9 * 720, hangingIndent: 360 };
+                this.addList(defaultBulletNumId, listDefinition);
+            }
+            return defaultBulletNumId;
+        };
+        /**
+         *
+         * @returns {String}
+         *  the Id of a default ordered numbering. If this default numbering definition is not availabe then it will be created
+         */
+        this.getDefaultNumberingNumId = function () {
+            // TODO: find or create default definition
+            if (!defaultNumberingNumId) {
+                defaultNumberingNumId = '98';
+                var listDefinition = {};
+                listDefinition.listLevel0 = {numberFormat: 'decimal', leftIndent: 720, hangingIndent: 360 };
+                listDefinition.listLevel1 = {numberFormat: 'lowerLetter', leftIndent: 2 * 720, hangingIndent: 360 };
+                listDefinition.listLevel2 = {numberFormat: 'upperLetter', leftIndent: 3 * 720, hangingIndent: 360 };
+                listDefinition.listLevel3 = {numberFormat: 'lowerRoman', leftIndent: 4 * 720, hangingIndent: 360 };
+                listDefinition.listLevel4 = {numberFormat: 'upperRoman', leftIndent: 5 * 720, hangingIndent: 360 };
+                listDefinition.listLevel5 = {numberFormat: 'decimal', leftIndent: 6 * 720, hangingIndent: 360 };
+                listDefinition.listLevel6 = {numberFormat: 'lowerLetter', leftIndent: 7 * 720, hangingIndent: 360 };
+                listDefinition.listLevel7 = {numberFormat: 'upperLetter', leftIndent: 8 * 720, hangingIndent: 360 };
+                listDefinition.listLevel8 = {numberFormat: 'lowerRoman', leftIndent: 9 * 720, hangingIndent: 360 };
+                this.addList(defaultNumberingNumId, listDefinition);
+            }
+            return defaultNumberingNumId;
+        };
         /**
          * Generates the numbering Label for the given paragraph
          *
