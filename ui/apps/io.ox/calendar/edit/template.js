@@ -140,6 +140,8 @@ define('io.ox/calendar/edit/template',
         id: 'start-date',
         index: 400,
         className: 'span6',
+        labelClassName: 'control-label desc',
+        display: 'DATETIME',
         attribute: 'start_date',
         label: gt('Starts on')
     }));
@@ -148,6 +150,8 @@ define('io.ox/calendar/edit/template',
     point.extend(new forms.DatePicker({
         id: 'end-date',
         className: 'span6',
+        labelClassName: 'control-label desc',
+        display: 'DATETIME',
         index: 500,
         attribute: 'end_date',
         label: gt('Ends on')

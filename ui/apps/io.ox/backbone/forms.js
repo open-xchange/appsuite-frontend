@@ -589,6 +589,7 @@ define('io.ox/backbone/forms',
             },
             autocompleteBehavoir: false
         };
+
         var modelEvents = {};
         modelEvents['change:' + options.attribute] = 'setValueInField';
         modelEvents['invalid:' + options.attribute] = 'showError';
@@ -598,16 +599,24 @@ define('io.ox/backbone/forms',
         _.extend(this, {
             tagName: 'div',
             render: function () {
+                var self = this;
                 this.nodes = {};
                 this.$el.append(
                         this.nodes.controlGroup = $('<div class="control-group">').append(
-                            $('<label>').text(this.label),
+                            $('<label>').addClass(options.labelClassName || '').text(this.label),
                             $('<div class="control">').append(
-                                this.nodes.dayField = $('<input type="text" class="input-small">'),
-                                '&nbsp;',
-                                this.nodes.timeField = $('<input type="text" class="input-mini">'),
-                                '&nbsp;',
-                                this.nodes.timezoneField = $('<span class="label">').text(date.Local.getTTInfoLocal(this.model.get(this.attribute)).abbr)
+                                function () {
+                                    self.nodes.dayField = $('<input type="text" class="input-small">');
+                                    self.nodes.timezoneField = $('<span class="label">')
+                                        .text(date.Local.getTTInfoLocal(self.model.get(self.attribute)).abbr);
+
+                                    if (options.display === "DATE") {
+                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timezoneField];
+                                    } else if (options.display === "DATETIME") {
+                                        self.nodes.timeField = $('<input type="text" class="input-mini">');
+                                        return [self.nodes.dayField, '&nbsp;', self.nodes.timeField, '&nbsp;', self.nodes.timezoneField];
+                                    }
+                                }
                             )
                         )
                 );
@@ -623,6 +632,7 @@ define('io.ox/backbone/forms',
             },
             setValueInField: function () {
                 var value = this.model.get(this.attribute);
+                // custom for appointment edit
                 var cValue = (this.baton.mode === 'edit') ? date.Local.localTime(value): value;
                 this.nodes.timezoneField.text(date.Local.getTTInfoLocal(value).abbr);
                 this.nodes.dayField.val(BinderUtils.convertDate('ModelToView', cValue, this.attribute, this.model));
@@ -662,7 +672,6 @@ define('io.ox/backbone/forms',
             modelEvents: modelEvents
         }, options);
     }
-
 
 
     var forms = {
