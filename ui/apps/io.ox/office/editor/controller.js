@@ -318,6 +318,15 @@ define('io.ox/office/editor/controller',
             }
         };
 
+        /**
+         * Sets the name of the user that currently has the edit rigths
+         */
+        this.setEditUser = function (user) {
+            if (user !== editor.getEditUser()) {
+                editor.setEditUser(user);
+            }
+        };
+
         // initialization -----------------------------------------------------
 
         // update GUI after operations or changed selection

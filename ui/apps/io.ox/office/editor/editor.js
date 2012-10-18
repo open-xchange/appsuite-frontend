@@ -109,6 +109,9 @@ define('io.ox/office/editor/editor',
             // init with null for 'read only' and mode not yet determined by the server
             editMode = null,
 
+            // name of the user that currently has the edit rigths
+            editUser = '',
+
             dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
@@ -1024,7 +1027,7 @@ define('io.ox/office/editor/editor',
 
             if (showReadOnlyInfo) {
                 Alert.showWarning(gt('Read Only Mode'),
-                        gt('Another user is currently editing this document.'),
+                        (editUser || gt('Another user')) + gt(' is currently editing this document.'),
                         editdiv.parent(),
                         -1,
                         {label: gt('Acquire Edit Rights'), key: 'file/editrights', controller: app.getController()}
@@ -1036,6 +1039,14 @@ define('io.ox/office/editor/editor',
 
         this.isEditMode = function () {
             return editMode;
+        };
+
+        this.setEditUser = function (user) {
+            editUser = user || '';
+        };
+
+        this.getEditUser = function () {
+            return editUser;
         };
 
         /**
