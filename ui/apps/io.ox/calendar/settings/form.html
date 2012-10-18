@@ -22,7 +22,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="starttime" id="working_time_start" class="input-xlarge">
-						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -32,7 +32,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="endtime" id="working_time_end" class="input-xlarge">
-						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsTimeWorktime :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -45,7 +45,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="view_view" id="view" class="input-xlarge">
-						{{~it.optionsViewDefault :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -55,7 +55,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="view_calendar" id="range_calendar_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -65,7 +65,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="view_team" id="range_team_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -75,7 +75,7 @@
 			<div class="controls">
 				<label class="select">
 					<select data-property="view_list" id="range_list_view" class="input-xlarge">
-						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+						{{~it.optionsCalendarRangeDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
 					</select>
 				</label>
 			</div>
@@ -89,7 +89,7 @@
             <div class="controls">
                 <label class="select">
                     <select data-property="default_reminder" id="time_for_reminder" class="input-xlarge">
-                        {{~it.optionsReminderSelection :value:index}}<option value="{{=value}}">{{=value}}</option>{{~}}
+                        {{~it.optionsReminderSelection :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
                     </select>
                 </label>
             </div>
@@ -101,11 +101,11 @@
             <div class="control-group">
                 <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_APPOINTMENTS}}</label>
                 <div class="controls">
-                    <label class="radio">{{=it.strings.YES}}
-                        <input type="radio" data-property="notifyNewModifiedDeleted" value="true">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" data-property="notifyNewModifiedDeleted" value="{{=it.optionsYesAnswers.value}}">
                     </label>
-                    <label class="radio">{{=it.strings.NO}}
-                        <input type="radio" data-property="notifyNewModifiedDeleted" value="false">
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" data-property="notifyNewModifiedDeleted" value="{{=it.optionsNoAnswers.value}}">
                     </label>
                 </div>
             </div>
@@ -115,22 +115,22 @@
             <div class="control-group">
                 <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR}}</label>
                 <div class="controls">
-                    <label class="radio">{{=it.strings.YES}}
-                        <input type="radio" data-property="notifyAcceptedDeclinedAsCreator" value="true">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsYesAnswers.value}}">
                     </label>
-                    <label class="radio">{{=it.strings.NO}}
-                        <input type="radio" data-property="notifyAcceptedDeclinedAsCreator" value="false">
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" data-property="notifyAcceptedDeclinedAsCreator" value="{{=it.optionsNoAnswers.value}}">
                     </label>
                 </div>
             </div>
             <div class="control-group">
                 <label class="control-label">{{=it.strings.NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT}}</label>
                 <div class="controls">
-                    <label class="radio">{{=it.strings.YES}}
-                        <input type="radio" data-property="notifyAcceptedDeclinedAsParticipant" value="true">
+                    <label class="radio">{{=it.optionsYesAnswers.label}}
+                        <input type="radio" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsYesAnswers.value}}">
                     </label>
-                    <label class="radio">{{=it.strings.NO}}
-                        <input type="radio" data-property="notifyAcceptedDeclinedAsParticipant" value="false">
+                    <label class="radio">{{=it.optionsNoAnswers.label}}
+                        <input type="radio" data-property="notifyAcceptedDeclinedAsParticipant" value="{{=it.optionsNoAnswers.value}}">
                     </label>
                 </div>
             </div>

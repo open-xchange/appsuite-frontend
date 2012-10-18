@@ -19,8 +19,18 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-
-    };
+            interval: '10',
+            starttime: '8',
+            endtime: '18',
+            view_view: 'calendar',
+            view_calendar: 'workweek',
+            view_team: 'workweek',
+            view_list: 'workweek',
+            default_reminder: '15',
+            notifyNewModifiedDeleted: true,
+            notifyAcceptedDeclinedAsCreator: false,
+            notifyAcceptedDeclinedAsParticipant: false
+        };
 
     return settingsDefaults;
 });
