@@ -17,14 +17,46 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
 
     // private static functions ===============================================
 
+    /**
+     * Converts a hex based rgb color value to a
+     * number.
+     *
+     * @param {String} rgbColor
+     * A hex based rgb color value (RRGGBB).
+     *
+     * @return {Number}
+     * The integer based value of the hex string.
+     */
     function convertRgbColorToNumber(rgbColor) {
         return parseInt(rgbColor, 16);
     }
     
+    /**
+     * Converts a number to a hex based rgb color string.
+     *
+     * @param {Number} colorValue
+     * A rgb color value.
+     *
+     * @return {String}
+     * Hex based color string (RRGGBB).
+     */
     function convertNumberToRgbColor(colorValue) {
         return colorValue.toString(16);
     }
     
+    /**
+     * Converts a RGB color value to a HSL color object
+     * which contains the attributes h (hue),
+     * s (saturation) and l (luminance).
+     *
+     * @param {Number} rgbValue
+     * The rgb color value to be converted to the HSL
+     * color model.
+     *
+     * @return {Object}
+     * The HSL color object which contains h,s,l attributes
+     * based on the provided rgb color value.
+     */
     function convertRgbToHsl(rgbValue) {
         var r, g, b, min, max, h, s, l;
        
@@ -46,6 +78,16 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         return { h: h, s: s, l: l };
     }
     
+    /**
+     * Converts a HSL color object to a rgb color value.
+     *
+     * @param {Object} hsl
+     * The HSL color object which contains the color
+     * attributes h, s, l
+     *
+     * @return {Number} rgb color value
+     * The rgb color value calculated from the hsl color object.
+     */
     function convertHslToRgb(hsl) {
         var r, g, b;
         
@@ -85,6 +127,19 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         return ((r << 16) + (g << 8) + b);
     }
     
+    /**
+     * Tints the rgb color value with the provided tint value
+     * according to ooxml documentation.
+     *
+     * @param {Number} rgbValue
+     *  The rgb color value.
+     *
+     * @param {String} shade
+     *  A hex based value (00-FF) that is used to tint the
+     *  rgb color value.
+     *
+     * @return {Number} tint rgb color value
+     */
     function tintColor(rgbValue, tint) {
         var hsl = convertRgbToHsl(rgbValue);
         var tintValue = parseInt(tint, 16);
@@ -92,6 +147,19 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         return convertHslToRgb(hsl);
     }
     
+    /**
+     * Shades the rgb color value with the provided shade value
+     * according to ooxml documentation.
+     *
+     * @param {Number} rgbValue
+     *  The rgb color value.
+     *
+     * @param {String} shade
+     *  A hex based value (00-FF) that is used to shade the
+     *  rgb color value.
+     *
+     * @return {Number} shaded rgb color value
+     */
     function shadeColor(rgbValue, shade) {
         var hsl = convertRgbToHsl(rgbValue);
         var shadeValue = parseInt(shade, 16);
@@ -106,7 +174,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * @param {String} rgbColor
      *  The source color as a hexadecimal string (RRGGBB).
      *
-     *  @param {Array} transformations
+     * @param {Array} transformations
      *  An array with transformation objects describing the
      *  transformation rules to be applied to the provided rgbColor.
      *
