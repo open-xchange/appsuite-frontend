@@ -406,6 +406,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <div> element wrapping an object
+     * in floating mode.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element wrapping an object and is
+     *  rendered floated.
+     */
+    DOM.isFloatingObjectNode = function (node) {
+        return DOM.isObjectNode(node) && $(node).hasClass('float');
+    };
+
+    /**
      * Returns whether the passed node is a <div> element for positioning
      * an object with a vertical or horizontal offset.
      *
@@ -455,16 +471,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isListlabelNode = function (node) {
         return $(node).is('div.list-label');
-    };
-
-    /**
-     * Creates a new text portion element.
-     *
-     * @returns {jQuery}
-     *  A span element with class field, as jQuery object.
-     */
-    DOM.createFieldSpanNode = function () {
-        return $('<span>').addClass('field');
     };
 
     /**

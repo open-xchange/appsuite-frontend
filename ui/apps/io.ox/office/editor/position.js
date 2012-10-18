@@ -92,8 +92,8 @@ define('io.ox/office/editor/position',
             }
             if (evaluateCharacterPosition) {
                 for (var prevNode = node; (prevNode = prevNode.previousSibling);) {
-                    if ((DOM.isFieldSpan(prevNode)) || (DOM.isImageNode(prevNode))) {
-                        textLength += 1;  // images and fields are counted as single character
+                    if ((DOM.isFieldSpan(prevNode)) || (DOM.isObjectNode(prevNode))) {
+                        textLength += 1;  // objects and fields are counted as single character
                     } else if (DOM.isTextSpan(prevNode)) {
                         textLength += $(prevNode).text().length;
                     }
@@ -399,7 +399,7 @@ define('io.ox/office/editor/position',
      * @param {Number[]} position
      *  The logical position of the target paragraph element.
      *
-     * @returns {HTMLParagraphElement|Null}
+     * @returns {HTMLElement|Null}
      *  The DOM paragraph element at the passed logical position, if existing,
      *  otherwise null.
      */
@@ -1384,93 +1384,193 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Determining the length of the text nodes of the current paragraph
-     * specified by the logical position inside a row.
-     * If no paragraph is defined by the logical position, 0 is returned.
+     * Calls the passed iterator function for all child elements in a paragraph
+     * node that represent editable contents (text spans and object nodes).
      *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
+     * @param {HTMLElement|jQuery} paragraph
+     *  The paragraph element whose child nodes will be visited. If this object
+     *  is a jQuery collection, uses the first DOM node it contains.
      *
-     * @param {OXOPam.oxoPosition} position
-     *  The logical position.
+     * @param {Function} iterator
+     *  The iterator function that will be called for every matching node.
+     *  Receives the DOM node object as first parameter, the logical start
+     *  index of the node in the paragraph as second parameter, and the logical
+     *  length of the node as third parameter. Note that text fields and object
+     *  nodes have a logical length of 1, and helper nodes that do not
+     *  represent editable contents have a logical length of 0. If the iterator
+     *  returns the Utils.BREAK object, the iteration process will be stopped
+     *  immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @param {Object} [options]
+     *  A map of options to control the iteration. Supports the following
+     *  options:
+     *  @param {Boolean} [options.allNodes=false]
+     *      If set to true, all child nodes of the paragraph will be visited,
+     *      also helper nodes that do not represent editable content and have a
+     *      logical length of 0. Otherwise, only real content nodes will be
+     *      visited (non-empty text portions, text fields, and object nodes).
      *
      * @returns {Number}
-     *  Returns the length of all text nodes inside the paragraph or 0,
-     *  if the logical position does not contain a paragraph.
+     *  The logical length of all visited content nodes in the paragraph. If
+     *  the iterator function never returns Utils.BREAK, this value represents
+     *  the logical length of the paragraph contents. Otherwise, the value
+     *  represents the start index of the content node that follows the last
+     *  visited content node.
      */
-    Position.getParagraphLength = function (startnode, position) {
+    Position.iterateParagraphContentNodes = function (paragraph, iterator, context, options) {
 
-        var paraLen = 0,
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
+        var // whether to visit all child nodes
+            allNodes = Utils.getBooleanOption(options, 'allNodes', false),
+            // the logical start offset of the visited content node
+            offset = 0;
 
-        if (paragraph) {
-            if (paragraph.hasChildNodes()) {
-                var nodeList = paragraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    if ((DOM.isImageNode(nodeList[i])) || (DOM.isFieldSpan(nodeList[i]))) {
-                        paraLen++;
-                    } else {
-                        paraLen += $(nodeList[i]).text().length;
-                    }
-                }
+        // visit the content nodes of the specified paragraph element (only child nodes, no other descendants)
+        Utils.iterateDescendantNodes(paragraph, function (node) {
+
+            var // the logical length of the node
+                length = 0,
+                // result of the iterator call
+                result = null;
+
+            // calculate length of the node
+            if (DOM.isFieldSpan(node) || DOM.isObjectNode(node)) {
+                // text fields and objects count as one character
+                length = 1;
+            } else if (DOM.isPortionSpan(node)) {
+                // portion nodes contain regular text
+                length = node.firstChild.nodeValue.length;
             }
-        }
 
-        return paraLen;
+            // call the iterator for the current content node
+            if (allNodes || (length > 0)) {
+                result = iterator.call(context, node, offset, length);
+            }
+
+            // update offset and return result of iterator function (it may escape from iteration)
+            offset += length;
+            return result;
+
+        }, undefined, { children: true });
+
+        // 'offset' points behind last visited content node
+        return offset;
     };
 
     /**
-     * Returning the text content of the text nodes of the current
-     * paragraph specified by the logical position.
-     * If no paragraph is defined by the logical position, an empty
-     * string is returned.
-     * If the optional parameter start end end are defined, a
-     * substring is returned. The position 'end' is not included
-     * into the substring.
+     * Returns the logical length of the content nodes of the paragraph located
+     * at the specified logical position. Text fields and object nodes have a
+     * logical length of 1.
      *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
+     * @param {Node|jQuery} startnode
+     *  The start node corresponding to the logical position. if this object is
+     *  a jQuery collection, uses the first DOM node it contains.
      *
-     * @param {OXOPam.oxoPosition} position
-     *  The logical position.
+     * @param {Number[]} position
+     *  The logical position of the paragraph.
      *
-     * @param {Number} start (optional)
-     *  An integer value for the start of an substring.
+     * @returns {Number}
+     *  The logical length of all content nodes inside the paragraph or 0, if
+     *  the logical position does not point to a paragraph.
+     */
+    Position.getParagraphLength = function (startnode, position) {
+
+        var // the paragraph element addressed by the passed logical position
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
+
+        // Position.iterateParagraphContentNodes() returns the paragraph length
+        return paragraph ? Position.iterateParagraphContentNodes(paragraph, $.noop) : 0;
+    };
+
+    /**
+     * Returns the text contents of the paragraph located at the specified
+     * logical position. If no paragraph is defined by the logical position, an
+     * empty string is returned. If the optional parameter start end end are
+     * defined, a substring is returned.
      *
-     * @param {Number} end (optional)
-     *  An integer value for the end of an substring. The character
-     *  at this position is not included into the substring.
+     * @param {Node|jQuery} startnode
+     *  The start node corresponding to the logical position. if this object is
+     *  a jQuery collection, uses the first DOM node it contains.
+     *
+     * @param {Number[]} position
+     *  The logical position of the paragraph.
+     *
+     * @param {Number} [start=0]
+     *  The logical offset of the first character to be included into the
+     *  result string.
+     *
+     * @param {Number} [end=0x7FFFFFFF]
+     *  The logical offset of the first character following the specified start
+     *  offset to be excluded from the result string (half-open range).
      *
      * @returns {String}
-     *  Returns the text of all text nodes inside the paragraph or
-     *  empty string, if the logical position does not contain a
-     *  paragraph.
+     *  The text of all content nodes inside the paragraph or an empty string,
+     *  if the logical position does not contain a paragraph.
      */
     Position.getParagraphText = function (startnode, position, start, end) {
 
-        var paraText = '',
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
+        var // the paragraph element addressed by the passed logical position
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p'),
+            // the text of the paragraph
+            text = '';
 
         if (paragraph) {
-            if (paragraph.hasChildNodes()) {
-                var nodeList = paragraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    if (DOM.isImageNode(nodeList[i])) {
-                        paraText += 'I';  // placeholder for an image
+
+            // logical offset of first character to be included into the result
+            start = _.isNumber(start) ? Math.max(start, 0) : 0;
+            // logical offset of first character not to be included into the result
+            end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
+
+            // visit all content nodes of the paragraph, and collect their text
+            Position.iterateParagraphContentNodes(paragraph, function (node, offset, length) {
+                if ((start < offset + length) && (offset < end)) {
+                    if (DOM.isPortionSpan(node)) {
+                        // insert the text selected by the passed range
+                        text += node.firstChild.nodeValue.substring(Math.max(start - offset, 0), end - offset);
+                    } else if (DOM.isFieldSpan(node)) {
+                        // field span have a logical length of 1, insert their full representation text
+                        text += node.firstChild.nodeValue;
                     } else {
-                        paraText += $(nodeList[i]).text();
+                        // field span have a logical length of 1, insert the Unicode OBJ placeholder
+                        text += '\uFFFC';
                     }
                 }
+            });
+        }
+
+        return text;
+    };
+
+    /**
+     * Returns the logical offset of a paragraph content node in its paragraph.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The paragraph content node, whose logical offset will be calculated.
+     *  If this object is a jQuery collection, uses the first node it contains.
+     *
+     * @returns {Number}
+     *  Returns the logical offset of the specified node in its parent
+     *  paragraph element, or -1, if the node is not a child content node of
+     *  the paragraph.
+     */
+    Position.getParagraphContentNodeOffset = function (node) {
+
+        var // the logical offset of the passed node
+            offset = -1;
+
+        // visit all content nodes of the node parent (the paragraph), and search for the node
+        node = Utils.getDomNode(node);
+        Position.iterateParagraphContentNodes(node.parentNode, function (contentNode, contentOffset) {
+            if (node === contentNode) {
+                offset = contentOffset;
+                return Utils.BREAK;
             }
-        }
+        });
 
-        if ((paraText !== '') && _.isNumber(start) && _.isNumber(end)) {
-            paraText = paraText.substring(start, end);  // invalid for fields
-        }
-
-        return paraText;
+        return offset;
     };
 
     /**
@@ -2181,82 +2281,29 @@ define('io.ox/office/editor/position',
 
     /**
      * Counting the number of floated elements at the beginning of a paragraph.
-     * Typically the floated elements are images.
      *
-     * @param {HTMLElement} node
-     *  A DOM element object.
+     * @param {HTMLElement|jQuery} paragraph
+     *  A paragraph node. If this object is a jQuery collection, uses the first
+     *  DOM node it contains.
      *
      * @returns {Number}
-     *  The number of the floated elements, that are children of parameter 'node'
-     *  and that are the first children of 'node'.
+     *  The number of *leading* floated objects in the passed paragraph.
      */
-    Position.getNumberOfFloatedImagesInParagraph = function (node) {
+    Position.getNumberOfFloatedObjectsInParagraph = function (paragraph) {
 
-        var counter = 0,
-            child = node.firstChild,
-            continue_ = true;
+        var counter = 0;
 
-        while ((child !== null) && (continue_)) {
-
-            if ((DOM.isImageNode(child)) && ($(child).hasClass('float'))) {
-                counter++;
-                child = child.nextSibling;
-            } else if (DOM.isOffsetNode(child)) {
-                // ignoring divs that exist only for positioning image
-                child = child.nextSibling;
-            } else {
-                continue_ = false;
+        Utils.iterateDescendantNodes(paragraph, function (node) {
+            if (DOM.isFloatingObjectNode(node)) {
+                counter += 1;
+            } else if (!DOM.isOffsetNode(node)) { // skip offset divs
+                return Utils.BREAK;
             }
-        }
+        }, undefined, { children: true });
 
-        // return $(node).find('img.float').length;  // to be used in the future
+        // return $(paragraph).children('div.float').length;  // to be used in the future
 
         return counter;
-    };
-
-    /**
-     * Determining the position of a node (for example an image)
-     * in a paragraph.
-     *
-     * @param Node paragraph
-     *  The paragraph node, in which the node (second parameter) is
-     *  searched.
-     *
-     * @param Node node
-     *  The node (for example an image), whose position shall be found.
-     *
-     * @returns Number
-     *  Returns the integer value representing the position of the
-     *  searched node in the paragraph. Returns '-1', if the node cannot
-     *  be found inside the paragraph.
-     */
-    Position.getObjectPositionInParagraph = function (paragraph, node) {
-
-        var position = 0,
-            found = false;
-
-        if (paragraph) {
-            if (paragraph.hasChildNodes()) {
-                var nodeList = paragraph.childNodes;
-                for (var i = 0; i < nodeList.length; i++) {
-                    if (nodeList[i] === node) {
-                        found = true;
-                        break;
-                    }
-                    if ((DOM.isImageNode(nodeList[i])) || (DOM.isFieldSpan(nodeList[i]))) {
-                        position++;
-                    } else {
-                        position += $(nodeList[i]).text().length;
-                    }
-                }
-            }
-        }
-
-        if (! found) {
-            position = -1;
-        }
-
-        return position;
     };
 
     /**
@@ -2297,9 +2344,8 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * After splitting a paragraph, it might be necessary to remove
-     * leading divs belonging to floated images at the beginning of
-     * the paragraph.
+     * After splitting a paragraph, it might be necessary to remove leading
+     * floating objects at the beginning of the paragraph.
      *
      * @param {Node} startnode
      *  The start node corresponding to the logical position.
@@ -2312,24 +2358,21 @@ define('io.ox/office/editor/position',
 
         var paraNode = Position.getCurrentParagraph(startnode, position);
 
-        if ((paraNode) && ($(paraNode).find('div.float').length > 0)) {
+        if ((paraNode) && ($(paraNode).children('div.float').length > 0)) {
 
-            var child = paraNode.firstChild,
-                continue_ = true;
+            var child = paraNode.firstChild;
 
-            while ((child !== null) && (continue_)) {
+            while (child) {
 
                 var nextChild = child.nextSibling;
 
-                if ((DOM.isOffsetNode(child)) && (! DOM.isImageNode(nextChild))) {
+                if (DOM.isOffsetNode(child) && !DOM.isObjectNode(nextChild)) {
                     var removeElement = child;
-                    child = child.nextSibling;
                     $(removeElement).remove();
-                } else if ((DOM.isImageNode(child)) && ($(child).hasClass('float'))) {
-                    child = child.nextSibling;
-                } else {
-                    continue_ = false;
+                } else if (!DOM.isFloatingObjectNode(child)) {
+                    break;
                 }
+                child = nextChild;
             }
         }
 
@@ -2355,13 +2398,12 @@ define('io.ox/office/editor/position',
 
             var child = paraNode.firstChild;
 
-            while (child !== null) {
+            while (child) {
 
                 var nextChild = child.nextSibling;
 
-                if ((DOM.isOffsetNode(child)) && (! DOM.isImageNode(nextChild))) {
-                    var removeElement = child;
-                    $(removeElement).remove();
+                if (DOM.isOffsetNode(child) && !DOM.isObjectNode(nextChild)) {
+                    $(child).remove();
                 }
 
                 child = nextChild;
@@ -2370,22 +2412,7 @@ define('io.ox/office/editor/position',
 
     };
 
-    /**
-     * Checking, if two logical positions are equal. Returns true,
-     * if the positions are equal, otherwise false.
-     *
-     * @param {OXOPaM.oxoPosition} pos1
-     *  The first logical position.
-     *
-     * @param {OXOPaM.oxoPosition} pos2
-     *  The second logical position.
-     *
-     * @returns {Boolean}
-     *  Returns true, if the positions are equal, otherwise false.
-     */
-    Position.positionsAreEqual = function (pos1, pos2) {
-        return (_.copy(pos1).join('') === _.copy(pos2).join(''));
-    };
+    // exports ================================================================
 
     /**
      * Checking, if two logical positions have a difference of one

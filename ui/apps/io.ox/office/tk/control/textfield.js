@@ -413,10 +413,10 @@ define('io.ox/office/tk/control/textfield',
      *  following options are supported:
      *  @param {Number} [options.min]
      *      The minimum value allowed to enter. If omitted, defaults to
-     *      -Math.MAX_VALUE.
+     *      -Number.MAX_VALUE.
      *  @param {Number} [options.max]
      *      The maximum value allowed to enter. If omitted, defaults to
-     *      Math.MAX_VALUE.
+     *      Number.MAX_VALUE.
      *  @param {Number} [options.digits=2]
      *      The number of digits after the decimal point. If omitted, defaults
      *      to 2.
@@ -424,8 +424,8 @@ define('io.ox/office/tk/control/textfield',
     TextField.NumberValidator = TextField.Validator.extend({ constructor: function (options) {
 
         var // minimum and maximum
-            min = Utils.getIntegerOption(options, 'min', -Math.MAX_VALUE, -Math.MAX_VALUE, Math.MAX_VALUE),
-            max = Utils.getIntegerOption(options, 'max', Math.MAX_VALUE, min, Math.MAX_VALUE),
+            min = Utils.getIntegerOption(options, 'min', -Number.MAX_VALUE, -Number.MAX_VALUE, Number.MAX_VALUE),
+            max = Utils.getIntegerOption(options, 'max', Number.MAX_VALUE, min, Number.MAX_VALUE),
             digits = Utils.getIntegerOption(options, 'digits', 2, 0, 10),
             regex = new RegExp('^' + ((min < 0) ? '-?' : '') + '[0-9]*' + ((digits > 0) ? '(\\.[0-9]*)?' : '') + '$');
 

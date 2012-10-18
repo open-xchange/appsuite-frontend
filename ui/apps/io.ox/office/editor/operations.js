@@ -217,7 +217,7 @@ define('io.ox/office/editor/operations',
         /**
          * Generates all operations needed to recreate the passed paragraph.
          *
-         * @param {HTMLParagraphElement|jQuery} paragraph
+         * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element whose contents will be converted to
          *  operations. If this object is a jQuery collection, uses the first
          *  node it contains.

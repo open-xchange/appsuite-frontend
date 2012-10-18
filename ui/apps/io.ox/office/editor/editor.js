@@ -1244,13 +1244,13 @@ define('io.ox/office/editor/editor',
                             minDeletePos = 0,
                             domPos;
 
-                        // Getting the first position, that is not a floated image,
-                        // because DELETE has to ignore floated images.
+                        // Getting the first position, that is not a floated object,
+                        // because DELETE has to ignore floated objects.
                         localPos.pop();
                         domPos = Position.getDOMPosition(paragraphs, localPos);
 
                         if (domPos) {
-                            minDeletePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                            minDeletePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
                         }
 
                         if (selection.startPaM.oxoPosition[lastValue] < minDeletePos) {
@@ -1329,12 +1329,12 @@ define('io.ox/office/editor/editor',
                         localPos = _.copy(selection.startPaM.oxoPosition, true);
 
                     localPos.pop();
-                    // Getting the first position, that is not a floated image,
-                    // because BACKSPACE has to ignore floated images.
+                    // Getting the first position, that is not a floated object,
+                    // because BACKSPACE has to ignore floated objects.
                     var domPos = Position.getDOMPosition(paragraphs, localPos);
 
                     if (domPos) {
-                        backspacePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                        backspacePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
                     }
 
                     if (selection.startPaM.oxoPosition[lastValue] > backspacePos) {
@@ -2143,7 +2143,7 @@ define('io.ox/office/editor/editor',
          * needs a trailing <br> element, and converts consecutive white-space
          * characters.
          *
-         * @param {HTMLParagraphElement|jQuery} paragraph
+         * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
          *  collection, uses the first DOM node it contains.
          */
@@ -2748,7 +2748,7 @@ define('io.ox/office/editor/editor',
             if ((domPos) && (domPos.node) && (DOM.isParagraphNode(domPos.node))) {
 
                 var para = domPos.node,
-                    counter = Position.getNumberOfFloatedImagesInParagraph(para),  // counting number of floated images at begin of paragraph
+                    counter = Position.getNumberOfFloatedObjectsInParagraph(para),  // number of floated objects at begin of paragraph
                     child = para.firstChild;
 
                 while (child !== null) {
@@ -2756,7 +2756,7 @@ define('io.ox/office/editor/editor',
 
                     if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
 
-                        var localPos = Position.getObjectPositionInParagraph(para, child),
+                        var localPos = Position.getParagraphContentNodeOffset(child),
                             source = _.copy(position, true),
                             dest = _.copy(position, true);
 
@@ -4163,7 +4163,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((DOM.isImageNode(destPos.node)) && (destPos.offset === 1)) {
+            } else if ((DOM.isObjectNode(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -4174,19 +4174,19 @@ define('io.ox/office/editor/editor',
 
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
-                    useImageDiv = true,
-                    imagePosDiv = sourceNode.previousSibling,
+                    useOffsetDiv = true,
+                    offsetDiv = sourceNode.previousSibling,
                     doMove = true;
 
                 if ((sourceNode) && (destNode)) {
 
-                    if (! DOM.isImageNode(sourceNode)) {
+                    if (! DOM.isObjectNode(sourceNode)) {
                         doMove = false; // supporting only images at the moment
                         Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
                     } else {
-                        // moving also the divs belonging to images
-                        if ((! imagePosDiv) || (! DOM.isOffsetNode(imagePosDiv))) {
-                            imagePosDiv = false; // should never be reached
+                        // also move the offset divs
+                        if (!offsetDiv || !DOM.isOffsetNode(offsetDiv)) {
+                            useOffsetDiv = false; // should never be reached
                         }
                     }
 
@@ -4215,8 +4215,8 @@ define('io.ox/office/editor/editor',
                         }
 
                         // moving also the corresponding div before the moved image
-                        if (useImageDiv) {
-                            $(imagePosDiv).insertBefore(sourceNode);
+                        if (useOffsetDiv) {
+                            $(offsetDiv).insertBefore(sourceNode);
                         }
                     }
                 }
