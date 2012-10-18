@@ -22,8 +22,9 @@ define("io.ox/contacts/main",
      "io.ox/core/config",
      "io.ox/core/extensions",
      "io.ox/core/commons",
+     "gettext!io.ox/contacts",
      "less!io.ox/contacts/style.css"
-    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons) {
+    ], function (util, api, VGrid, hints, viewDetail, config, ext, commons, gt) {
 
     "use strict";
 
@@ -50,7 +51,6 @@ define("io.ox/contacts/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            title: "Global Address Book",
             toolbar: true,
             search: true
         });
@@ -78,23 +78,20 @@ define("io.ox/contacts/main",
         // add template
         grid.addTemplate({
             build: function () {
-                var name, email, job;
-                this
-                    .addClass("contact")
-                    .append(name = $("<div>").addClass("fullname"))
-                    .append(email = $("<div>"))
-                    .append(job = $("<div>").addClass("bright-text"));
-                return { name: name, job: job, email: email };
+                var name, description;
+                this.addClass("contact").append(
+                    name = $("<div>").addClass("fullname"),
+                    description = $("<div>").addClass("bright-text")
+                );
+                return { name: name, description: description };
             },
             set: function (data, fields, index) {
                 if (data.mark_as_distributionlist === true) {
                     fields.name.text(data.display_name || "");
-                    fields.email.text("");
-                    fields.job.text("Distribution list");
+                    fields.description.text(gt('Distribution list'));
                 } else {
                     fields.name.text(util.getFullName(data));
-                    fields.email.text(util.getMail(data));
-                    fields.job.text(util.getJob(data));
+                    fields.description.text(util.getDescription(data));
                 }
             }
         });
@@ -132,7 +129,6 @@ define("io.ox/contacts/main",
         };
 
         drawContact = function (data) {
-            //right.idle().empty().append(base.draw(data));
             right.idle().empty().append(viewDetail.draw(data));
         };
 

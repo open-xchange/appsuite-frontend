@@ -65,6 +65,12 @@ define('io.ox/contacts/util', [], function () {
             return (obj.email1 || obj.email2 || obj.email3 || '').toLowerCase();
         },
 
+        getDescription: function (obj) {
+            // try some combinations
+            var list = _([obj.company, obj.department, obj.position, obj.city_business, obj.city_home]).compact();
+            return list.length ? list.join(', ') : (obj.email1 || '');
+        },
+
         getJob: function (obj) {
             // combine position and company
             return obj.position && obj.company ?

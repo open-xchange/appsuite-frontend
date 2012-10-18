@@ -14,7 +14,7 @@
 /* VGrid elements */
 
 .vgrid-cell.contact {
-    height: 60px;
+    height: 40px;
     padding: 0.75em 13px 0.75em 13px;
 }
 
@@ -97,49 +97,45 @@
     width: 100%;
 }
 
-.contact-detail td {
-    padding: 0 3em 1em 0;
-}
+.contact-detail {
 
-.contact-detail td:first-child {
-    width: 130px;
-}
+    .field-label {
+        font-family: @font-light;
+        font-weight: 200;
+        color: #555;
+        text-align: right;
+        vertical-align: top;
+        // fix spans
+        padding-right: 2em;
+    }
 
-.contact-detail td:last-child {
-    padding-right: 0em;
-}
+    .field-value {
+        font-weight: normal;
+        vertical-align: top;
+    }
 
-.contact-detail td.io-ox-label,
-.contact-detail div.io-ox-label {
-    color: #888;
-    font-weight: normal;
-    text-align: right;
-    vertical-align: top;
-    width: 100px;
-}
+    .name {
+        margin-bottom: 0.25em;
+    }
 
-.contact-detail .value {
-    font-weight: normal;
-    vertical-align: top;
-}
+    .job {
+        font-size: 1.25em;
+        color: #888;
+    }
 
-.contact-detail .name {
-    margin-bottom: 0.25em;
-}
-
-.contact-detail .job {
-    font-size: 1.25em;
-    color: #888;
-}
-
-.contact-detail .picture {
-    width: 100px;
-    height: 100px;
-    display: inline-block;
-    float: right;
-    background-position: right top;
-    background-repeat: no-repeat;
-    background-size: contain;
+    .picture {
+        width: 100px;
+        height: 100px;
+        display: inline-block;
+        float: right;
+        background-position: right top;
+        background-repeat: no-repeat;
+        background-size: contain;
+    }
+    
+    .breadcrumb {
+        margin: 3em 0 0 0;
+    }
 }
 
 /*new contact form*/

@@ -112,7 +112,7 @@ define('io.ox/contacts/api',
             });
     };
 
-    api.edit =  function (o) {
+    api.update =  function (o) {
 
         if (_.isEmpty(o.data)) {
             return $.when();
@@ -132,29 +132,21 @@ define('io.ox/contacts/api',
                     // get updated contact
                     return api.get({ id: o.id, folder: o.folder }, false)
                         .pipe(function (data) {
-                            $.when(
+                            return $.when(
                                 api.caches.get.add(data),
                                 api.caches.all.grepRemove(o.folder + '\t'),
                                 api.caches.list.remove({ id: o.id, folder: o.folder }),
                                 contactPictures.clear()
                             )
-                            .pipe(function () {
+                            .done(function () {
+                                api.trigger('update:' + _.cid(data), data);
+                                api.trigger('update', data);
                                 api.trigger('refresh.list');
-                                api.trigger('edit', { // TODO needs a switch for created by hand or by test
-                                    id: o.id,
-                                    folder: o.folder
-                                });
-                                return data;
                             });
                         });
-                })
-                .fail(function () {
-                    console.log('connection lost'); //what to do if fails?
                 });
         }
     };
-    
-    api.update = api.edit;
 
     api.editNewImage = function (o, changes, file) {
 
@@ -180,7 +172,7 @@ define('io.ox/contacts/api',
                         folder: o.folder_id
                     });
                 });
-                
+
                 return data;
             });
     };
