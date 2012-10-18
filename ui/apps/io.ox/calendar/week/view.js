@@ -1132,7 +1132,6 @@ define('io.ox/calendar/week/view',
         }
     });
 
-
     return View;
 });
 

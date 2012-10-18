@@ -109,6 +109,9 @@ define('io.ox/office/editor/editor',
             // init with null for 'read only' and mode not yet determined by the server
             editMode = null,
 
+            // name of the user that currently has the edit rigths
+            editUser = '',
+
             dbgoutEvents = false, dbgoutObjects = false;
 
         // add event hub
@@ -355,7 +358,12 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                if ((buttonEvent) && (selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                    // An image selection
+                    // This deleting of images is only possible with the button, not with an key down event.
+                    deleteSelectedImage(selection);
+
+                } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // Only one paragraph concerned from deletion.
                     this.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
@@ -384,12 +392,7 @@ define('io.ox/office/editor/editor',
 
                 undomgr.endGroup();
             }
-            else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
 
-                // deleting images without selection (only workaround until image selection with mouse is possible)
-                // This deleting of images is only possible with the button, not with an key down event.
-                deleteSelectedImage(selection);
-            }
         };
 
         this.deleteText = function (startposition, endposition) {
@@ -1024,7 +1027,7 @@ define('io.ox/office/editor/editor',
 
             if (showReadOnlyInfo) {
                 Alert.showWarning(gt('Read Only Mode'),
-                        gt('Another user is currently editing this document.'),
+                        (editUser || gt('Another user')) + gt(' is currently editing this document.'),
                         editdiv.parent(),
                         -1,
                         {label: gt('Acquire Edit Rights'), key: 'file/editrights', controller: app.getController()}
@@ -1036,6 +1039,14 @@ define('io.ox/office/editor/editor',
 
         this.isEditMode = function () {
             return editMode;
+        };
+
+        this.setEditUser = function (user) {
+            editUser = user || '';
+        };
+
+        this.getEditUser = function () {
+            return editUser;
         };
 
         /**
@@ -1233,13 +1244,13 @@ define('io.ox/office/editor/editor',
                             minDeletePos = 0,
                             domPos;
 
-                        // Getting the first position, that is not a floated image,
-                        // because DELETE has to ignore floated images.
+                        // Getting the first position, that is not a floated object,
+                        // because DELETE has to ignore floated objects.
                         localPos.pop();
                         domPos = Position.getDOMPosition(paragraphs, localPos);
 
                         if (domPos) {
-                            minDeletePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                            minDeletePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
                         }
 
                         if (selection.startPaM.oxoPosition[lastValue] < minDeletePos) {
@@ -1318,12 +1329,12 @@ define('io.ox/office/editor/editor',
                         localPos = _.copy(selection.startPaM.oxoPosition, true);
 
                     localPos.pop();
-                    // Getting the first position, that is not a floated image,
-                    // because BACKSPACE has to ignore floated images.
+                    // Getting the first position, that is not a floated object,
+                    // because BACKSPACE has to ignore floated objects.
                     var domPos = Position.getDOMPosition(paragraphs, localPos);
 
                     if (domPos) {
-                        backspacePos = Position.getNumberOfFloatedImagesInParagraph(domPos.node);
+                        backspacePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
                     }
 
                     if (selection.startPaM.oxoPosition[lastValue] > backspacePos) {
@@ -1451,7 +1462,31 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            updateSelection();
+            updateSelection()
+            .done(function () {
+                if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
+
+                    if ((currentSelection) &&
+                        (currentSelection.startPaM.imageFloatMode) &&
+                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
+
+                        // getting object and drawing frame around it
+                        window.console.log("AAA: This is an image selection!");
+//                        // click on object node: set browser selection to object node, draw selection
+//                        if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
+//                            // prevent default click handling of the browser
+//                            event.preventDefault();
+//                            // but set focus to the document container (may be loacted in GUI edit fields)
+//                            self.grabFocus();
+//                            // select single objects only (multi selection not supported yet)
+//                            selectObjects(object, false);
+//                        } else {
+//                            deselectAllObjects();
+//                        }
+                    }
+                }
+
+            });
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1998,14 +2033,25 @@ define('io.ox/office/editor/editor',
                 }
 
                 var isPos1Endpoint = false,
-                    isPos2Endpoint = true;
+                    isPos2Endpoint = true,
+                    hasRange = true;
 
                 if ((domRange.start.node === domRange.end.node) && (domRange.start.offset === domRange.end.offset)) {
                     isPos2Endpoint = false;
+                    hasRange = false;
                 }
 
-                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
-                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint);
+
+                if ((startPaM.imageFloatMode) && (!hasRange)) {
+                    // images (and objects) get their own selection and shall not use the selection of the browser.
+                    // Therefore it is necessary to let the browser 'think' that this is no selection. If an image is selected
+                    // in domSelection there are two identical points (f.e. div.p offset 0 to div.p offset 0). But it is
+                    // necessary to make a logical selection with a range -> [6,0] to [6,1] -> using endpoint logic.
+                    isPos2Endpoint = true;
+                }
+
+                var endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
                 Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
@@ -2097,7 +2143,7 @@ define('io.ox/office/editor/editor',
          * needs a trailing <br> element, and converts consecutive white-space
          * characters.
          *
-         * @param {HTMLParagraphElement|jQuery} paragraph
+         * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
          *  collection, uses the first DOM node it contains.
          */
@@ -2212,8 +2258,7 @@ define('io.ox/office/editor/editor',
 
             var para,
                 start,
-                end,
-                buttonEvent = (startPosition === undefined) && (endPosition === undefined);
+                end;
 
             if ((startPosition !== undefined) && (endPosition !== undefined)) {
                 var startposLength = startPosition.length - 1,
@@ -2233,7 +2278,11 @@ define('io.ox/office/editor/editor',
 
                     selection.adjust();
 
-                    if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
+                    if ((selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                        // An image selection
+                        setAttributesToSelectedImage(selection, attributes);
+
+                    } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                         // Only one paragraph concerned from attribute changes.
                         setAttributes(family, attributes, selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
 
@@ -2258,10 +2307,6 @@ define('io.ox/office/editor/editor',
                         // This probably works not reliable for tables in tables.
                         setAttributesInDifferentParagraphLevels(selection, family, attributes);
                     }
-                }
-                else if ((selection.endPaM.imageFloatMode !== null) && (buttonEvent)) {
-
-                    setAttributesToSelectedImage(selection, attributes);
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
@@ -2703,7 +2748,7 @@ define('io.ox/office/editor/editor',
             if ((domPos) && (domPos.node) && (DOM.isParagraphNode(domPos.node))) {
 
                 var para = domPos.node,
-                    counter = Position.getNumberOfFloatedImagesInParagraph(para),  // counting number of floated images at begin of paragraph
+                    counter = Position.getNumberOfFloatedObjectsInParagraph(para),  // number of floated objects at begin of paragraph
                     child = para.firstChild;
 
                 while (child !== null) {
@@ -2711,7 +2756,7 @@ define('io.ox/office/editor/editor',
 
                     if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
 
-                        var localPos = Position.getObjectPositionInParagraph(para, child),
+                        var localPos = Position.getParagraphContentNodeOffset(child),
                             source = _.copy(position, true),
                             dest = _.copy(position, true);
 
@@ -2920,16 +2965,14 @@ define('io.ox/office/editor/editor',
             // only delete, if imageStartPosition is really an image position
             if (DOM.isImageNode(imageDivNode)) {
                 // delete an corresponding div
-                var divNode = imageDivNode.previousSibling;
-                if ($(divNode).is('div.float')) {
+                var divOffsetNode = imageDivNode.previousSibling;
+                if (DOM.isOffsetNode(divOffsetNode)) {
                     // removing position div node
-                    $(divNode).remove();
+                    $(divOffsetNode).remove();
                 }
 
-                var imageEndPosition = _.copy(imageStartPosition, true);
-                imageEndPosition[imageEndPosition.length - 1] += 1;  // creating a range, should be superfluous in the future
                 // deleting the image with an operation
-                self.deleteText(imageStartPosition, imageEndPosition);
+                self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
             }
         }
 
@@ -4120,7 +4163,7 @@ define('io.ox/office/editor/editor',
                 insertBefore = true;
             } else if ((destPos.node.length) && (destPos.offset === (destPos.node.length - 1))) {
                 insertBefore = false;
-            } else if ((DOM.isImageNode(destPos.node)) && (destPos.offset === 1)) {
+            } else if ((DOM.isObjectNode(destPos.node)) && (destPos.offset === 1)) {
                 insertBefore = false;
             } else {
                 splitNode = true;  // splitting node is required
@@ -4131,19 +4174,19 @@ define('io.ox/office/editor/editor',
 
                 var sourceNode = sourcePos.node,
                     destNode = destPos.node,
-                    useImageDiv = true,
-                    imagePosDiv = sourceNode.previousSibling,
+                    useOffsetDiv = true,
+                    offsetDiv = sourceNode.previousSibling,
                     doMove = true;
 
                 if ((sourceNode) && (destNode)) {
 
-                    if (! DOM.isImageNode(sourceNode)) {
+                    if (! DOM.isObjectNode(sourceNode)) {
                         doMove = false; // supporting only images at the moment
                         Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
                     } else {
-                        // moving also the divs belonging to images
-                        if ((! imagePosDiv) || (! DOM.isOffsetNode(imagePosDiv))) {
-                            imagePosDiv = false; // should never be reached
+                        // also move the offset divs
+                        if (!offsetDiv || !DOM.isOffsetNode(offsetDiv)) {
+                            useOffsetDiv = false; // should never be reached
                         }
                     }
 
@@ -4172,8 +4215,8 @@ define('io.ox/office/editor/editor',
                         }
 
                         // moving also the corresponding div before the moved image
-                        if (useImageDiv) {
-                            $(imagePosDiv).insertBefore(sourceNode);
+                        if (useOffsetDiv) {
+                            $(offsetDiv).insertBefore(sourceNode);
                         }
                     }
                 }

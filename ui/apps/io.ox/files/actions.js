@@ -488,4 +488,125 @@ define("io.ox/files/actions",
         ref: "io.ox/files/actions/edit"
     });
 
+    // Iconview Inline Links
+
+    new Action('io.ox/files/icons/slideshow', {
+        requires: function (e) {
+            return _(e.context.allIds).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
+        },
+        action: function (e) {
+            var baton = e.baton;
+            require(['io.ox/files/carousel'], function (carousel) {
+                var app = baton.data.app;
+                carousel.init({
+                    fullScreen: false,
+                    list: e.allIds,
+                    app: baton.app,
+                    attachmentMode: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/slideshow-fullscreen', {
+        requires: function (e) {
+            return _(e.context.allIds).reduce(function (memo, obj) {
+                return memo || (/\.(gif|bmp|tiff|jpe?g|gmp|png)$/i).test(obj.filename);
+            }, false);
+        },
+        action: function (e) {
+            var baton = e.baton;
+            require(['io.ox/files/carousel'], function (carousel) {
+                var app = baton.data.app;
+                carousel.init({
+                    fullScreen: true,
+                    list: e.allIds,
+                    app: baton.app,
+                    attachmentMode: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/audioplayer', {
+        requires: function (e) {
+            return _(e.context.allIds).reduce(function (memo, obj) {
+                return memo || (/\.(mp3|m4a|m4b|wma|wav|ogg)$/i).test(obj.filename);
+            }, false);
+        },
+        action: function (e) {
+            var baton = e.baton;
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                var app = baton.data.app;
+                mediaplayer.init({
+                    list: e.allIds,
+                    app: baton.app,
+                    videoSupport: false
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/files/icons/videoplayer', {
+        requires: function (e) {
+            var pattern = '\\.(mp4|m4v|mov|avi|wmv|mpe?g|ogv|webm|3gp)';
+            if (_.browser.Chrome) pattern = '\\.(mp4|m4v|avi|wmv|mpe?g|ogv|webm)';
+            return _(e.context.allIds).reduce(function (memo, obj) {
+                return memo || (new RegExp(pattern, 'i')).test(obj.filename);
+            }, false);
+        },
+        action: function (idk, e) {
+            var baton = e.baton;
+            require(['io.ox/files/mediaplayer'], function (mediaplayer) {
+                var app = baton.data.app;
+                mediaplayer.init({
+                    list: e.allIds,
+                    app: baton.app,
+                    videoSupport: true
+                });
+            });
+        }
+    });
+
+    ext.point('io.ox/files/icons/actions').extend(new links.InlineLinks({
+        index: 100,
+        id: 'inline-links',
+        ref: 'io.ox/files/icons/inline'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 100,
+        prio: 'hi',
+        id: 'slideshow',
+        label: gt('View Slideshow'),
+        ref: 'io.ox/files/icons/slideshow'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 200,
+        prio: 'hi',
+        cssClasses: 'io-ox-action-link fullscreen',
+        id: 'slideshow-fullscreen',
+        label: gt('Fullscreen'),
+        ref: 'io.ox/files/icons/slideshow-fullscreen'
+    }));
+
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 300,
+        id: 'mediaplayer-audio',
+        label: gt('Play audio files'),
+        ref: 'io.ox/files/icons/audioplayer'
+    }));
+
+    ext.point('io.ox/files/icons/inline').extend(new links.Link({
+        index: 400,
+        id: 'mediaplayer-video',
+        label: gt('Play video files'),
+        ref: 'io.ox/files/icons/videoplayer'
+    }));
+
+
 });

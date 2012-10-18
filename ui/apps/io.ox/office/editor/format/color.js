@@ -265,6 +265,25 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
 
         return _.isString(rgbColor) ? ('#' + rgbColor) : 'transparent';
     };
+    
+    /**
+     * Determine if the provided color is dark or light
+     *
+     * @param {String} rgbColor
+     * The rgb color as hex value string (RRGGBB) with/without trailing #
+     */
+    Color.isDark = function (rgbColor) {
+        if (_.isString(rgbColor) && (6 <= rgbColor.length <= 7)) {
+            var hsl, hexString = rgbColor.length === 6 ? rgbColor : rgbColor.substring(1);
+            hsl = convertRgbToHsl(convertRgbColorToNumber(hexString));
+            if (hsl.l < 0.5)
+                return true;
+            else
+                return false;
+        }
+        
+        return false;
+    };
 
     // exports ================================================================
 

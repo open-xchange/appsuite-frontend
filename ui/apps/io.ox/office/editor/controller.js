@@ -224,11 +224,11 @@ define('io.ox/office/editor/controller',
                 // numbering and bullets
                 'list/bullets': {
                     chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.ilvl !== undefined && attributes.ilvl !== ''; },
+                    get: function (attributes) { return attributes.ilvl !== undefined; },
                     set: function (mode) {
                         if (mode) {
                             var defNumId = editor.getLists().getDefaultBulletNumId();
-                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: '0'});
+                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: 0});
                         } else {
                             editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
                         }
@@ -237,12 +237,12 @@ define('io.ox/office/editor/controller',
                 'list/numbering': {
                     chain: 'paragraph/attributes',
                     get: function (attributes) {
-                        return attributes.ilvl !== undefined && attributes.ilvl !== '';
+                        return attributes.ilvl !== undefined;
                     },
                     set: function (mode) {
                         if (mode) {
                             var defNumId = editor.getLists().getDefaultNumberingNumId();
-                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: '0'});
+                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: 0});
                         } else {
                             editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
                         }
@@ -250,9 +250,9 @@ define('io.ox/office/editor/controller',
                 },
                 'list/incindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl < 8; },
+                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl < 8; },
                     get: function (attributes) {
-                        this.ilvl = parseInt(attributes.ilvl, 10);
+                        this.ilvl = attributes.ilvl;
                     },
                     set: function () {
                         if (this.ilvl < 8) {
@@ -262,13 +262,13 @@ define('io.ox/office/editor/controller',
                 },
                 'list/decindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl > 0; },
+                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl > 0; },
                     get: function (attributes) {
-                        this.ilvl = parseInt(attributes.ilvl, 10);
+                        this.ilvl = attributes.ilvl;
                     },
                     set: function () {
                         if (this.ilvl > 0) {
-                            editor.setAttribute('paragraph', 'ilvl', this.ilvl === 1 ? '0' : this.ilvl - 1);
+                            editor.setAttribute('paragraph', 'ilvl', this.ilvl - 1);
                         }
                     }
                 },
@@ -315,6 +315,15 @@ define('io.ox/office/editor/controller',
             if (state !== editor.isEditMode()) {
                 editor.setEditMode(state);
                 this.update();
+            }
+        };
+
+        /**
+         * Sets the name of the user that currently has the edit rigths
+         */
+        this.setEditUser = function (user) {
+            if (user !== editor.getEditUser()) {
+                editor.setEditUser(user);
             }
         };
 

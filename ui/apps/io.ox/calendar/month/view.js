@@ -12,10 +12,11 @@
 
 define('io.ox/calendar/month/view',
     ['io.ox/calendar/util',
-     'dot!io.ox/calendar/month/template.html',
      'io.ox/core/date',
+     'io.ox/core/extensions',
+     'io.ox/core/api/folder',
      'gettext!io.ox/calendar',
-     'less!io.ox/calendar/month/style.css'], function (util, tmpl, date, gt) {
+     'less!io.ox/calendar/month/style.css'], function (util, date, ext, folder, gt) {
 
     'use strict';
 
@@ -47,7 +48,17 @@ define('io.ox/calendar/month/view',
             var list = util.getWeekScaffold(this.options.day);
 
             _(list).each(function (day) {
-                this.$el.append(tmpl.render('day', day));
+                this.$el.append(
+                    $('<div>')
+                        .addClass('day out' + (day.isFirst ? ' first' : '') + (day.isToday ? ' today' : '') + (day.isWeekend ? ' weekend' : ''))
+                        .attr('month', day.year + '-' + day.month)
+                        .attr('date', day.year + '-' + day.month + '-' + day.date)
+                        .append(
+                            $('<div>').addClass('list abs'),
+                            $('<div>').addClass('number').text(day.date)
+                        )
+                );
+
                 if (day.isFirst) {
                     this.$el.prepend(
                         $('<div>').addClass('vertical').html(
@@ -61,24 +72,19 @@ define('io.ox/calendar/month/view',
         },
 
         renderAppointment: function (a) {
-
             myself = myself || ox.user_id;
 
-            // check confirmations
-            var state = (_(a.participants).find(function (o) {
-                    return o.id === myself;
-                }) || { type: 0 }).type;
+            var el = $('<div>')
+                .addClass('appointment')
+                .attr({
+                    'data-cid': a.id,
+                    'data-extension-point': 'io.ox/calendar/month/view/appointment',
+                    'data-composite-id': a.id
+                });
 
-            return tmpl.render('appointment', {
-                cid: _.cid(a),
-                full_time: a.full_time,
-                location: a.location,
-                private_flag: a.private_flag,
-                shownAs: util.getShownAsClass(a),
-                start: util.getTime(a.start_date),
-                title: a.title,
-                unconfirmed: state === 0
-            });
+            ext.point('io.ox/calendar/month/view/appointment')
+                .invoke('draw', el, ext.Baton.wrap(_.extend({}, this.options, {model: a, folder: this.folder})));
+            return el;
         },
 
         renderAppointments: function () {
@@ -103,7 +109,7 @@ define('io.ox/calendar/month/view',
                     maxCount--;
                     //console.log('start/end', start, end);
                     selector = '[date="' + start + '"] .list';
-                    this.$(selector).append(this.renderAppointment(copy));
+                    this.$(selector).append(this.renderAppointment(model));
                     // inc date
                     if (start !== end) {
                         copy.start_date += date.DAY;
@@ -121,11 +127,52 @@ define('io.ox/calendar/month/view',
 
     View.drawScaffold = function () {
 
-        var days = date.locale.days, node;
+        var days = date.locale.days;
         days = days.slice(1).concat(days[0]);
-        node = tmpl.render('scaffold', { days: days });
-        return node;
+
+        return $('<div>')
+            .addClass('abs')
+            .append(
+                $('<div>').addClass('scrollpane'),
+                $('<div>').addClass('footer').append(function () {
+                    var tmp = [];
+                    _(days).each(function (day) {
+                        tmp.push($('<div>').addClass('weekday').text(day));
+                    });
+                    return tmp;
+                })
+            );
     };
+
+    ext.point('io.ox/calendar/month/view/appointment').extend({
+        id: 'default',
+        index: 100,
+        draw: function (baton) {
+            console.log(baton);
+            var a = baton.model;
+                    // check confirmations
+            var state = (_(a.get('participants')).find(function (o) {
+                    return o.id === myself;
+                }) || { type: 0 }).type;
+
+            this
+                .addClass(
+                        util.getShownAsClass(a.attributes) +
+                        (a.get('private_flag') ? ' private' : '') +
+                        (state === 0 ? ' unconfirmed' : '')
+                )
+                .append(
+                        $('<div>')
+                        .addClass('appointment-content')
+                        .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
+                        .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
+                        .append($('<div>').addClass('location').text(gt.noI18n(a.get('location') || '')))
+                )
+                .attr({
+                    'data-extension': 'default'
+                });
+        }
+    });
 
     return View;
 });
