@@ -57,6 +57,7 @@ $(document).ready(function () {
             });
 
             this.$menu
+                .on('click', $.proxy(this.click, this))
                 .on('mouseenter', 'li', $.proxy(this.mouseenter, this));
 
         },
@@ -66,6 +67,7 @@ $(document).ready(function () {
             this.select();
         },
         focus: function (e) {
+            console.log('focus');
             this.lookup();
         },
         blur: function (e) {
@@ -154,7 +156,11 @@ $(document).ready(function () {
             this.$menu.show();
             var selected = this.$menu.find('.active');
             if (selected.length > 0) {
-                selected.get(0).scrollIntoView();
+                // calculate position to center actual time in dropdown
+                //selected.get(0).scrollIntoView();
+                var itemPos = selected.get(0).offsetTop;
+                var ownHeight = this.$menu.height();
+                this.$menu.scrollTop(itemPos - ownHeight / 2 );
             }
             this.shown = true;
             return this;
