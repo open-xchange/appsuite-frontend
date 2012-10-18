@@ -263,13 +263,13 @@ define("io.ox/files/api",
     api.getUrl = function (file, mode) {
         var url = ox.apiRoot + '/infostore',
             query = '?action=document&id=' + file.id + '&folder=' + file.folder_id +
-                (file.version !== undefined ? '&version=' + file.version : '');
+                (file.version !== undefined ? '&version=' + file.version : ''),
+            name = (file.filename ? '/' + encodeURIComponent(file.filename) : '');
         switch (mode) {
         case 'open':
-            return url + query + '&delivery=view';
+            return url + name + query + '&delivery=view';
         case 'download':
-            return url + (file.filename ? '/' + encodeURIComponent(file.filename) : '') +
-                query + '&delivery=download';
+            return url + name + query + '&delivery=download';
         default:
             return url + query;
         }
