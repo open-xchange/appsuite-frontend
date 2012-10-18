@@ -15,8 +15,9 @@
 define('io.ox/office/editor/operations',
     ['io.ox/office/tk/utils',
      'io.ox/office/editor/dom',
+     'io.ox/office/editor/position',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, DOM, StyleSheets) {
+    ], function (Utils, DOM, Position, StyleSheets) {
 
     'use strict';
 
@@ -26,18 +27,22 @@ define('io.ox/office/editor/operations',
     // private global functions ===============================================
 
     /**
-     * Creates a clone of the passed logical position and appends the index 0.
-     * The passed array object will not be changed.
+     * Creates a clone of the passed logical position and appends the specified
+     * offset value. The passed array object will not be changed.
      *
      * @param {Number[]} position
      *  The initial logical position.
      *
+     * @param {Number} [offset=0]
+     *  The value that will be appended to the new position.
+     *
      * @returns {Number[]}
-     *  A clone of the passed logical position, with the index 0 appended.
+     *  A clone of the passed logical position, with the specified offset
+     *  appended.
      */
-    function appendNewIndex(position) {
+    function appendNewIndex(position, offset) {
         position = _.clone(position);
-        position.push(0);
+        position.push(_.isNumber(offset) ? offset : 0);
         return position;
     }
 
@@ -49,15 +54,15 @@ define('io.ox/office/editor/operations',
      * @param {Number[]} position
      *  The initial logical position.
      *
-     * @param {Number} [offset=1]
-     *  The offset that will be added to the last index of the position.
+     * @param {Number} [increment=1]
+     *  The value that will be added to the last index of the position.
      *
      * @returns {Number[]}
      *  A clone of the passed logical position, with the last index increased.
      */
-    function increaseLastIndex(position, offset) {
+    function increaseLastIndex(position, increment) {
         position = _.clone(position);
-        position[position.length - 1] += (_.isNumber(offset) ? offset : 1);
+        position[position.length - 1] += (_.isNumber(increment) ? increment : 1);
         return position;
     }
 
@@ -215,6 +220,100 @@ define('io.ox/office/editor/operations',
         };
 
         /**
+         * Generates all operations needed to recreate the content nodes of the
+         * passed paragraph.
+         *
+         * @param {HTMLElement|jQuery} paragraph
+         *  The paragraph element whose content nodes will be converted to
+         *  operations. If this object is a jQuery collection, uses the first
+         *  node it contains.
+         *
+         * @param {Number[]} position
+         *  The logical position of the passed paragraph node. The generated
+         *  operations will contain positions starting with this address.
+         *
+         * @param {Number} [start=0]
+         *  The logical offset of the first character to be included into the
+         *  generated operations.
+         *
+         * @param {Number} [end=0x7FFFFFFF]
+         *  The logical offset behind the last character to be included in the
+         *  generated operations (half-open range).
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
+         */
+        this.generateParagraphContentOperations = function (paragraph, position, start, end) {
+
+            var // used to merge several text portions into the same operation
+                lastOperation = null,
+                // formatting ranges for text portions, must be applied after the contents
+                attributeRanges = [];
+
+            // logical offset of first character to be included into the result
+            start = _.isNumber(start) ? Math.max(start, 0) : 0;
+            // logical offset of first character not to be included into the result
+            end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
+
+            // process all content nodes in the paragraph and create operations
+            position = appendNewIndex(position, start);
+            Position.iterateParagraphContentNodes(paragraph, function (node, offset, length) {
+
+                var // text of a portion span
+                    text = null;
+
+                // node ends before the specified start offset (continue with next node)
+                if (offset + length <= start) { return; }
+                // node starts after the specified end offset (escape from iteration)
+                if (offset >= end) { return Utils.BREAK; }
+
+                // operation to create a (non-empty) generic text portion
+                if (DOM.isPortionSpan(node)) {
+                    // extract the text covered by the specified offset range
+                    text = node.firstChild.nodeValue.substring(Math.max(start - offset, 0), end - offset);
+                    // try to merge text portions into the last 'insertText' operation
+                    if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
+                        lastOperation.text += text;
+                    } else {
+                        lastOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
+                    }
+                    attributeRanges.push({ node: node, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
+                    position = increaseLastIndex(position, text.length);
+                }
+
+                // operation to create a text field
+                // TODO: field type
+                else if (DOM.isFieldSpan(node)) {
+                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: node.firstChild.nodeValue });
+                    attributeRanges.push({ node: node, position: position });
+                    position = increaseLastIndex(position);
+                }
+
+                // operation to create an image (including its attributes)
+                else if (DOM.isImageNode(node)) {
+                    lastOperation = generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
+                    position = increaseLastIndex(position);
+                }
+
+                // TODO: other objects
+                else {
+                    Utils.warn('Operations.Generator.generateParagraphContentOperations(): unknown content node');
+                }
+
+            }, this);
+
+            // Generate 'setAttribute' operations after all contents have been
+            // created via 'insertText', 'insertField', etc. Otherwise, these
+            // operations would clone the attributes of the last text portion
+            // instead of creating a clean text node as expected in this case.
+            _(attributeRanges).each(function (range) {
+                generateSetAttributesOperation(range.node, range.position, range.endPosition);
+            });
+
+            return this;
+        };
+
+        /**
          * Generates all operations needed to recreate the passed paragraph.
          *
          * @param {HTMLElement|jQuery} paragraph
@@ -230,13 +329,11 @@ define('io.ox/office/editor/operations',
          *  If set to true, no 'insertParagraph' operation will be generated.
          *  The generated operations will assume that an empty paragraph
          *  element exists at the passed logical position.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
         this.generateParagraphOperations = function (paragraph, position, initialParagraph) {
-
-            var // used to merge several text portions into the same operation
-                lastOperation = null,
-                // formatting ranges for text portions, must be applied after the contents
-                attributeRanges = [];
 
             // operations to create the paragraph element and formatting
             if (initialParagraph !== true) {
@@ -244,55 +341,8 @@ define('io.ox/office/editor/operations',
             }
             generateSetAttributesOperation(paragraph, position);
 
-            // process all spans in the paragraph and create operations
-            position = appendNewIndex(position);
-            Utils.iterateSelectedDescendantNodes(paragraph, 'span', function (span) {
-
-                var // whether node is a regular text portion
-                    isPortionSpan = DOM.isPortionSpan(span),
-                    // text contents of a text span
-                    text = isPortionSpan ? $(span).text() : '';
-
-                // operation to create a (non-empty) generic text portion
-                if (text.length > 0) {
-                    // try to merge text portions into the last 'insertText' operation
-                    if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
-                        lastOperation.text += text;
-                    } else {
-                        lastOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
-                    }
-                    attributeRanges.push({ node: span, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
-                    position = increaseLastIndex(position, text.length);
-                }
-
-                // operation to create a text field
-                // TODO: field type
-                else if (DOM.isFieldSpan(span)) {
-                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
-                    attributeRanges.push({ node: span, position: position });
-                    position = increaseLastIndex(position);
-                }
-
-                // operation to create an image (including its attributes)
-                else if (DOM.isImageNode(span)) {
-                    lastOperation = generateOperationWithAttributes(span, Operations.IMAGE_INSERT, { position: position, imgurl: $(span).data('url') });
-                    position = increaseLastIndex(position);
-                }
-
-                // TODO: other objects
-                else {
-                    Utils.warn('Operations.Generator.generateParagraphOperations(): unknown span element');
-                }
-
-            }, this, { children: true });
-
-            // Generate 'setAttribute' operations after all contents have been
-            // created via 'insertText', 'insertField', etc. Otherwise, these
-            // operations would clone the attributes of the last text portion
-            // instead of creating a clean text node as expected in this case.
-            _(attributeRanges).each(function (range) {
-                generateSetAttributesOperation(range.node, range.position, range.endPosition);
-            });
+            // process all content nodes in the paragraph and create operations
+            return this.generateParagraphContentOperations(paragraph, position);
         };
 
         /**
@@ -306,6 +356,9 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table cell. The generated
          *  operations will contain positions starting with this address.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
         this.generateTableCellOperations = function (cell, position) {
 
@@ -313,7 +366,7 @@ define('io.ox/office/editor/operations',
             generateOperationWithAttributes(cell, Operations.CELL_INSERT, { position: position, count: 1 });
 
             // generate operations for the contents of the cell
-            this.generateContentOperations(cell, position);
+            return this.generateContentOperations(cell, position);
         };
 
         /**
@@ -326,6 +379,9 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table row. The generated
          *  operations will contain positions starting with this address.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
         this.generateTableRowOperations = function (row, position) {
 
@@ -338,6 +394,8 @@ define('io.ox/office/editor/operations',
                 self.generateTableCellOperations(this, position);
                 position = increaseLastIndex(position);
             });
+
+            return this;
         };
 
         /**
@@ -350,6 +408,9 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed table node. The generated operations
          *  will contain positions starting with this address.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
         this.generateTableOperations = function (table, position) {
 
@@ -362,6 +423,8 @@ define('io.ox/office/editor/operations',
                 self.generateTableRowOperations(this, position);
                 position = increaseLastIndex(position);
             });
+
+            return this;
         };
 
         /**
@@ -380,6 +443,9 @@ define('io.ox/office/editor/operations',
          * @param {Number[]} position
          *  The logical position of the passed node. The generated operations
          *  will contain positions starting with this address.
+         *
+         * @returns {Operations.Generator}
+         *  A reference to this instance.
          */
         this.generateContentOperations = function (node, position) {
 
@@ -407,6 +473,8 @@ define('io.ox/office/editor/operations',
                 position = increaseLastIndex(position);
 
             }, this, { children: true });
+
+            return this;
         };
 
     }; // class Operations.Generator
