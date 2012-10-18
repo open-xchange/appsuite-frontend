@@ -129,7 +129,8 @@ define("io.ox/contacts/main",
         };
 
         drawContact = function (data) {
-            right.idle().empty().append(viewDetail.draw(data));
+            var baton = ext.Baton({ data: data, app: app });
+            right.idle().empty().append(viewDetail.draw(baton));
         };
 
         drawFail = function (obj) {

@@ -319,14 +319,14 @@ define("io.ox/contacts/view-detail",
         id: 'breadcrumb',
         draw: function (baton) {
 
-            var options = {};
+            var options = { subfolder: false, prefix: gt('Folder'), module: 'contacts' };
 
             // this is also used by halo, so we might miss a folder id
             if (baton.data.folder_id) {
-
                 // do we know the app?
-                //if ()
-
+                if (baton.app) {
+                    options.handler = baton.app.folder.set;
+                }
                 this.append(
                     folderAPI.getBreadcrumb(baton.data.folder_id, options)
                 );

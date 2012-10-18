@@ -673,18 +673,22 @@ define('io.ox/core/api/folder',
         };
 
         var add = function (folder, i, list, options) {
-            var li = $('<li>'), elem, isLast = i === list.length - 1;
+
+            var li = $('<li>'), elem, isLast = i === list.length - 1,
+                properModule = options.module === undefined || folder.module === options.module,
+                clickable = properModule && options.handler !== undefined;
+
             if (isLast && options.last) {
                 elem = li.addClass('active').text(gt.noI18n(folder.title));
             } else {
-                if (options.handler === undefined) {
+                if (!clickable) {
                     elem = li.addClass('active').text(gt.noI18n(folder.title));
                 } else {
                     li.append(elem = $('<a href="#">').text(gt.noI18n(folder.title)));
                 }
                 li.append(isLast ? $() : $('<span class="divider">').text(gt.noI18n(' / ')));
             }
-            if (isLast && options.subfolder && options.handler !== undefined) {
+            if (isLast && options.subfolder && clickable) {
                 dropdown(elem, folder.id);
             }
             elem.attr('data-folder-id', folder.id);
@@ -695,13 +699,19 @@ define('io.ox/core/api/folder',
             var ul;
             options = _.extend({ subfolder: true, last: true }, options);
             try {
-                return (ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
+                ul = $('<ul class="breadcrumb">').on('click', 'a', function (e) {
                     e.preventDefault();
                     var id = $(this).attr('data-folder-id');
                     if (id !== undefined) {
                         _.call(options.handler, id);
                     }
-                }));
+                });
+                if (options.prefix) {
+                    ul.append($('<li>').append(
+                        $.txt(options.prefix), $('<span class="divider">').text(gt.noI18n(' '))
+                    ));
+                }
+                return ul;
             }
             finally {
                 api.getPath({ folder: id }).done(function (list) {
