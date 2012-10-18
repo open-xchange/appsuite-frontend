@@ -267,7 +267,8 @@ define("io.ox/mail/api",
         RECENT:     16,
         SEEN:       32,
         USER:       64,
-        FORWARDED: 128
+        SPAM:      128,
+        FORWARDED: 256
     };
 
     api.COLORS = {
@@ -534,6 +535,14 @@ define("io.ox/mail/api",
         return mark(list, 0, 32, true, 'decUnread').done(function (list) {
             _(list).each(tracker.setSeen);
             api.trigger('refresh.list');
+        });
+    };
+    
+    api.markSpam = function (list) {
+        return api.update(list, { flags: api.FLAGS.SPAM, value: true })
+        .pipe(function () {
+            api.trigger('refresh.list');
+            return list;
         });
     };
 

@@ -242,6 +242,22 @@ define('io.ox/mail/actions',
             api.markRead(list);
         }
     });
+    
+    new Action('io.ox/mail/actions/markspam', {
+        id: 'marspam',
+        requires: function (e) {
+            return api.getList(e.context).pipe(function (list) {
+                var bool = e.collection.has('toplevel') &&
+                    _(list).reduce(function (memo, data) {
+                        return memo || (data && (data.flags & api.FLAGS.SPAM) === 0);
+                    }, false);
+                return bool;
+            });
+        },
+        multiple: function (list) {
+            api.markSpam(list);
+        }
+    });
 
     new Action('io.ox/mail/actions/preview-attachment', {
         id: 'preview',
