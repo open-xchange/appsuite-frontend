@@ -62,13 +62,11 @@ define('io.ox/office/editor/format/paragraphstyles',
             },
 
             ilvl: {
-                def: '',
                 set: function (element, value) {
                 }
             },
 
             numId: {
-                def: '',
                 set: function (element, value) {
                 }
             }
@@ -128,7 +126,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // TODO: it might make more sense to change the label appropriately
             $(para).children('div.list-label').remove();
             $(para).css('margin-left', '');
-            if (attributes.ilvl && attributes.numId) {
+            if (attributes.ilvl !== undefined && attributes.numId !== undefined) {
                 var numberingElement = $('<div>');
                 numberingElement.addClass('list-label');
                 var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
