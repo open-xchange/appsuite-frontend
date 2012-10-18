@@ -137,6 +137,10 @@
     .io-ox-inline-links {
         margin: 2em 0;
     }
+    
+    .breadcrumb {
+        margin: 3em 0 0 0;
+    }
 }
 
 /*new contact form*/

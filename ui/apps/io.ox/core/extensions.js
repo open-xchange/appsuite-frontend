@@ -288,12 +288,20 @@ define("io.ox/core/extensions",
     function returnFalse() { return false; }
     function returnTrue() { return true; }
 
-    function Baton(options) {
-        // to be safe
-        this.data = {};
-        this.$ = {};
-        // just copy options
-        _.extend(this, options);
+    function Baton(obj) {
+        // bypass?
+        if (obj instanceof Baton) return obj;
+        // called via new?
+        if (this instanceof Baton) {
+            // to be safe
+            this.data = {};
+            this.$ = {};
+            // just copy given object
+            _.extend(this, 'data' in obj ? obj : { data: obj });
+        } else {
+            // for the lazy way: b = Baton() instead of b = new Baton()
+            return new Baton(obj);
+        }
     }
 
     Baton.prototype = {
@@ -304,11 +312,11 @@ define("io.ox/core/extensions",
             this.isDefaultPrevented = returnTrue;
         }
     };
-    
+
     Baton.wrap = function (object) {
         return object instanceof Baton ? object : new Baton(object);
     };
-        
+
     that = {
 
         // get point

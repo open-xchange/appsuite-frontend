@@ -243,10 +243,14 @@
         float: right;
     }
 
+    .subject {
+        padding-right: 180px;
+        word-break: break-word;
+    }
+    
     .subject, .thread-size, .flag {
         font-size: 16pt;
         margin: @inline-links-margin;
-        word-break: break-all;
     }
 
     &.unread .from .person-link {
