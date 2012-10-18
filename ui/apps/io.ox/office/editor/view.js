@@ -44,29 +44,9 @@ define('io.ox/office/editor/view',
             { label: gt('Blue'),        color: { type: 'rgb', value: '0070C0' } },
             { label: gt('Dark Blue'),   color: { type: 'rgb', value: '002060' } },
             { label: gt('Purple'),      color: { type: 'rgb', value: '7030A0' } }
-        ],
-
-        // predefined highlight color definitions
-        BUILTIN_HIGHLIGHT_COLOR_DEFINITIONS = [
-            { label: gt('Black'),        color: { type: 'rgb', value: '000000' } },
-            { label: gt('Blue'),         color: { type: 'rgb', value: '0000FF' } },
-            { label: gt('Cyan'),         color: { type: 'rgb', value: '00FFFF' } },
-            { label: gt('Dark Blue'),    color: { type: 'rgb', value: '00008B' } },
-            { label: gt('Dark Cyan'),    color: { type: 'rgb', value: '008B8B' } },
-            { label: gt('Dark Gray'),    color: { type: 'rgb', value: 'A9A9A9' } },
-            { label: gt('Dark Green'),   color: { type: 'rgb', value: '006400' } },
-            { label: gt('Dark Magenta'), color: { type: 'rgb', value: '800080' } },
-            { label: gt('Dark Red'),     color: { type: 'rgb', value: '8B0000' } },
-            { label: gt('Dark Yellow'),  color: { type: 'rgb', value: '808000' } },
-            { label: gt('Green'),        color: { type: 'rgb', value: '00FF00' } },
-            { label: gt('Light Gray'),   color: { type: 'rgb', value: 'D3D3D3' } },
-            { label: gt('Magenta'),      color: { type: 'rgb', value: 'FF00FF' } },
-            { label: gt('Red'),          color: { type: 'rgb', value: 'FF0000' } },
-            { label: gt('White'),        color: { type: 'rgb', value: 'FFFFFF' } },
-            { label: gt('Yellow'),       color: { type: 'rgb', value: 'FFFF00' } }
         ];
 
-        // class StyleSheetChooser ================================================
+    // class StyleSheetChooser ================================================
 
     /**
      * A drop-down list control used to select a style sheet from a list. The
@@ -197,12 +177,25 @@ define('io.ox/office/editor/view',
             }
         }
 
+        /**
+         * Will be called after a new list item has been activated.
+         *
+         * @param {jQuery} button
+         *  The DOM button element representing the activated list item. If no
+         *  list item is active (ambiguous state), this object will be an empty
+         *  jQuery collection.
+         */
+        function updateCaptionHandler(button) {
+        }
+
         // base constructor ---------------------------------------------------
 
         RadioGroup.call(this, Utils.extendOptions({
             width: 50,
             tooltip: gt('Color'),
-            dropDown: true
+            dropDown: true,
+            updateCaptionMode: 'none',
+            updateCaptionHandler: updateCaptionHandler
         }, options));
 
         // initialization -----------------------------------------------------
@@ -485,14 +478,14 @@ define('io.ox/office/editor/view',
             .addButton('character/italic',    { icon: 'icon-io-ox-italic',    tooltip: gt('Italic'),    toggle: true })
             .addButton('character/underline', { icon: 'icon-io-ox-underline', tooltip: gt('Underline'), toggle: true })
             .addSeparator()
-            .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('paragraph/alignment', { icon: 'icon-align-left', tooltip: gt('Paragraph Alignment'), auto: true, updateCaptionMode: 'icon' })
                 .addOptionButton('left',    { icon: 'icon-io-ox-align-left',    tooltip: gt('Left') })
                 .addOptionButton('center',  { icon: 'icon-io-ox-align-center',  tooltip: gt('Center') })
                 .addOptionButton('right',   { icon: 'icon-io-ox-align-right',   tooltip: gt('Right') })
                 .addOptionButton('justify', { icon: 'icon-io-ox-align-justify', tooltip: gt('Justify') })
                 .end()
             .addSeparator()
-            .addRadioGroup('paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('paragraph/lineheight', { icon: 'icon-io-ox-line-spacing-1', tooltip: gt('Line Spacing'), auto: true, updateCaptionMode: 'icon' })
                 .addOptionButton(LineHeight.SINGLE,   { icon: 'icon-io-ox-line-spacing-1',   tooltip: gt('Single') })
                 .addOptionButton(LineHeight.ONE_HALF, { icon: 'icon-io-ox-line-spacing-1-5', tooltip: gt('One and a Half') })
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
@@ -512,7 +505,7 @@ define('io.ox/office/editor/view',
             .addSeparator()
             .addButton('image/delete', { icon: 'icon-io-ox-image-delete', tooltip: gt('Delete Image') })
             .addSeparator()
-            .addRadioGroup('image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), auto: true, copyMode: 'icon' })
+            .addRadioGroup('image/floatmode', { icon: 'icon-io-ox-image-inline', tooltip: gt('Image Position'), auto: true, updateCaptionMode: 'icon' })
                 .addOptionButton('inline',       { icon: 'icon-io-ox-image-inline',      tooltip: gt('Inline') })
                 .addOptionButton('leftFloated',  { icon: 'icon-io-ox-image-float-left',  tooltip: gt('Float Left') })
                 .addOptionButton('rightFloated', { icon: 'icon-io-ox-image-float-right', tooltip: gt('Float Right') })

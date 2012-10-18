@@ -37,19 +37,33 @@ define('io.ox/office/tk/control/radiogroup',
      *      If set to true, a drop-down button will be created, showing a list
      *      with all option buttons when opened. Otherwise, the option buttons
      *      will be inserted directly into this group.
-     *  @param {String} [options.copyMode='all']
-     *      Specifies which parts of the caption of a drop-down list item will
-     *      be copied to the top-level button. If set to 'label', only the
-     *      label text will be copied. If set to 'icon', only the icon will be
-     *      copied. Otherwise, icon and label will be copied.
+     *  @param {String} [options.updateCaptionMode='all']
+     *      Specifies how to update the caption of the drop-down button when a
+     *      list item in the drop-down menu has been activated. If set to
+     *      'label', only the label text of the list item will be copied. If
+     *      set to 'icon', only the icon will be copied. If set to 'none',
+     *      nothing will be copied. By default, icon and label of the list item
+     *      will be copied.
+     *  @param {Function} [options.updateCaptionHandler]
+     *      A function that will be called after list item has been activated,
+     *      and the caption of the drop-down button has been updated according
+     *      to the 'options.updateCaptionMode' option. Receives the drop-down
+     *      menu button element (as jQuery object) in the first parameter, and
+     *      the button element of the activated list item (as jQuery object) in
+     *      the second parameter. If no list item is active, the second
+     *      parameter will be an empty jQuery object. Will be called in the
+     *      context of this radio group instance.
      */
     function RadioGroup(options) {
 
         var // self reference
             self = this,
 
-            // which parts of a list item caption will be copied to the top-level button
-            copyMode = Utils.getStringOption(options, 'copyMode', 'all');
+            // which parts of a list item caption will be copied to the menu button
+            updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
+
+            // custom update handler for the caption of the menu button
+            updateCaptionHandler = Utils.getFunctionOption(options, 'updateCaptionHandler');
 
         // private methods ----------------------------------------------------
 
@@ -79,20 +93,28 @@ define('io.ox/office/tk/control/radiogroup',
 
             var // activate a radio button
                 button = Utils.selectOptionButton(getOptionButtons(), value),
-                // the options used to set the caption of the drop-down button
+                // the options used to set the caption of the drop-down menu button
                 captionOptions = options;
 
-            // update the caption of the drop-down button
             if (self.hasDropDown) {
-                if (button.length) {
-                    if (copyMode !== 'label') {
-                        captionOptions = Utils.extendOptions(captionOptions, { icon: Utils.getControlIcon(button) });
+
+                // update the caption of the drop-down menu button
+                if (updateCaptionMode !== 'none') {
+                    if (button.length) {
+                        if (updateCaptionMode !== 'label') {
+                            captionOptions = Utils.extendOptions(captionOptions, { icon: Utils.getControlIcon(button) });
+                        }
+                        if (updateCaptionMode !== 'icon') {
+                            captionOptions = Utils.extendOptions(captionOptions, { label: Utils.getControlLabel(button) });
+                        }
                     }
-                    if (copyMode !== 'icon') {
-                        captionOptions = Utils.extendOptions(captionOptions, { label: Utils.getControlLabel(button) });
-                    }
+                    Utils.setControlCaption(self.getMenuButton(), captionOptions);
                 }
-                Utils.setControlCaption(self.getMenuButton(), captionOptions);
+
+                // call custom update handler
+                if (_.isFunction(updateCaptionHandler)) {
+                    updateCaptionHandler.call(self, self.getMenuButton(), button);
+                }
             }
         }
 
