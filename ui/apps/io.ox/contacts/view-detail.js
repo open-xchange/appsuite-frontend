@@ -235,19 +235,23 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: 'contact-address',
         draw: function (data) {
-            addField(gt("Department"), data.department, this);
-            addField(gt("Position"), data.position, this);
-            addField(gt("Profession"), data.profession, this);
+
             var r = 0;
+
+            r += addField(gt("Department"), data.department, this);
+            r += addField(gt("Position"), data.position, this);
+            r += addField(gt("Profession"), data.profession, this);
+
+            if (r > 0) { addField("", "\u00A0", this); r = 0; }
+
             if (data.street_business || data.city_business) {
                 r += addAddress(gt.pgettext("address", "Work"), data.street_business, data.postal_code_business, data.city_business, null, this);
             }
             if (data.street_home || data.city_home) {
                 r += addAddress(gt.pgettext("address", "Home"), data.street_home, data.postal_code_home, data.city_home, null, this);
             }
-            if (r > 0) {
-                addField("", "\u00A0", this);
-            }
+
+            if (r > 0) { addField("", "\u00A0", this); }
         }
     });
 
@@ -288,14 +292,14 @@ define("io.ox/contacts/view-detail",
             } else {
                 var dupl = {},
                 r = 0;
-                r += addMail.call(this, gt("Email"), data.email1, data);
+                r += addMail.call(this, gt("Primary Email"), data.email1, data);
                 dupl[data.email1] = true;
                 if (dupl[data.email2] !== true) {
-                    r += addMail.call(this, gt("Email"), data.email2, data);
+                    r += addMail.call(this, gt("Alternative Email"), data.email2, data);
                     dupl[data.email2] = true;
                 }
                 if (dupl[data.email3] !== true) {
-                    r += addMail.call(this, gt("Email"), data.email3, data);
+                    r += addMail.call(this, gt("Alternative Email"), data.email3, data);
                 }
                 if (r > 0) {
                     addField("", "\u00A0", this);

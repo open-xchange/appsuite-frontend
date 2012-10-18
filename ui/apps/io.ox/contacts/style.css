@@ -112,6 +112,7 @@
     .field-value {
         font-weight: normal;
         vertical-align: top;
+        padding-bottom: 0.5em;
     }
 
     .name {
@@ -133,8 +134,8 @@
         background-size: contain;
     }
     
-    .breadcrumb {
-        margin: 3em 0 0 0;
+    .io-ox-inline-links {
+        margin: 2em 0;
     }
 }
 
