@@ -74,7 +74,7 @@ define(function () {
                 company: "Open-Xchange",
                 icon: "default.png",
                 category: "Productivity",
-                settings: false
+                settings: true
             },
 
             "io.ox/tasks/edit": {
@@ -85,7 +85,7 @@ define(function () {
                 settings: false,
                 visible: false
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",
@@ -94,7 +94,7 @@ define(function () {
                 settings: false,
                 visible: false
             },
-            
+
             "io.ox/tasks/edit": {
                 title: "Edit task",
                 company: "Open-Xchange",
@@ -109,7 +109,7 @@ define(function () {
                 company: "Open-Xchange",
                 icon: "files.png",
                 category: "Productivity",
-                settings: false
+                settings: true
             },
 
             "io.ox/conversations": {
