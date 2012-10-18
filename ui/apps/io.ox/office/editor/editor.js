@@ -1131,47 +1131,6 @@ define('io.ox/office/editor/editor',
             updateSelection();
         }
 
-        /**
-         * Deselects all selected object nodes and destroys the browser
-         * selection that represents the selected objects.
-         */
-        function deselectAllObjects() {
-            // remove the selection boxes
-            DOM.clearObjectSelection(selectedObjects);
-            // clear collection of selected objects
-            selectedObjects = $();
-        }
-
-        /**
-         * Selects the specified object node and updates the browser selection
-         * that represents the selected objects.
-         *
-         * @param {HTMLElement|jQuery} objectNode
-         *  The root node of the object to be selected. If the passed value is
-         *  a jQuery collection, all contained objects will be selected.
-         */
-        function selectObjects(objects, extend) {
-
-            var // the browser sleection representing all selected ojects
-                browserSelection = [];
-
-            // remove old object selection, unless selection will be extended
-            if (extend !== true) {
-                deselectAllObjects();
-            }
-
-            // collect selected objects
-            selectedObjects = selectedObjects.add(objects);
-            // draw the selection box into the passed objects
-            DOM.drawObjectSelection(objects, { moveable: false, sizeable: false });
-
-            // build browser selection from objects
-            selectedObjects.each(function () {
-                browserSelection.push(new DOM.Range(DOM.Point.createPointForNode(this)));
-            });
-            DOM.setBrowserSelection(browserSelection);
-        }
-
         function processKeyDown(event) {
 
             implDbgOutEvent(event);
@@ -1610,15 +1569,21 @@ define('io.ox/office/editor/editor',
         }
 
         function updateSelection() {
+            var def = $.Deferred();
             window.setTimeout(function () {
                 currentSelection = getSelection(true);
                 if (currentSelection) {
                     self.trigger('selection', currentSelection);
+                    def.resolve();
                 } else if (focused && editMode) {
                     // if not focused, browser selection might not be available...
                     Utils.warn('Editor.updateSelection(): missing selection!');
+                    def.reject();
+                } else {
+                    def.reject();
                 }
             }, 0);
+            return def.promise();
         }
 
         /**
@@ -2082,6 +2047,47 @@ define('io.ox/office/editor/editor',
             } else {
                 Utils.error('Editor.setSelection(): Failed to determine DOM Selection from OXO Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
             }
+        }
+
+        /**
+         * Deselects all selected object nodes and destroys the browser
+         * selection that represents the selected objects.
+         */
+        function deselectAllObjects() {
+            // remove the selection boxes
+            DOM.clearObjectSelection(selectedObjects);
+            // clear collection of selected objects
+            selectedObjects = $();
+        }
+
+        /**
+         * Selects the specified object node and updates the browser selection
+         * that represents the selected objects.
+         *
+         * @param {HTMLElement|jQuery} objectNode
+         *  The root node of the object to be selected. If the passed value is
+         *  a jQuery collection, all contained objects will be selected.
+         */
+        function selectObjects(objects, extend) {
+
+            var // the browser sleection representing all selected ojects
+                browserSelection = [];
+
+            // remove old object selection, unless selection will be extended
+            if (extend !== true) {
+                deselectAllObjects();
+            }
+
+            // collect selected objects
+            selectedObjects = selectedObjects.add(objects);
+            // draw the selection box into the passed objects
+            DOM.drawObjectSelection(objects, { moveable: false, sizeable: false });
+
+            // build browser selection from objects
+            selectedObjects.each(function () {
+                browserSelection.push(new DOM.Range(DOM.Point.createPointForNode(this)));
+            });
+            DOM.setBrowserSelection(browserSelection);
         }
 
         // End of private selection functions

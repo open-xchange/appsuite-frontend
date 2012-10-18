@@ -389,6 +389,25 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Tries to get a DOM paragraph element from the specified logical
+     * position. The passed position must point to a paragraph element.
+     * Otherwise, a warning will be printed to the debug console.
+     *
+     * @param {jQuery} paragraphs
+     *  The list of top-level content nodes.
+     *
+     * @param {Number[]} position
+     *  The logical position of the target paragraph element.
+     *
+     * @returns {HTMLParagraphElement|Null}
+     *  The DOM paragraph element at the passed logical position, if existing,
+     *  otherwise null.
+     */
+    Position.getParagraphElement = function (paragraphs, position) {
+        return Position.getSelectedElement(paragraphs, position, 'div.p');
+    };
+
+    /**
      * Tries to get a DOM table element from the specified logical position.
      * The passed position must point to a table element. Otherwise, a warning
      * will be printed to the debug console.
