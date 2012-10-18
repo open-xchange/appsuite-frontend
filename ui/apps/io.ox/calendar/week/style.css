@@ -324,12 +324,15 @@
     .appointment.reserved.unconfirmed {
         background-color: hsla(hue(@appointment-reserved), saturation(@appointment-reserved), lightness(@appointment-reserved), @appointment-unconfirmed-alpha);
     }
+    
     .appointment.temporary.unconfirmed {
         background-color: hsla(hue(@appointment-temporary), saturation(@appointment-temporary), lightness(@appointment-temporary), @appointment-unconfirmed-alpha);
     }
+    
     .appointment.absent.unconfirmed {
         background-color: hsla(hue(@appointment-absent), saturation(@appointment-absent), lightness(@appointment-absent), @appointment-unconfirmed-alpha);
     }
+    
     .appointment.free.unconfirmed {
         background-color: hsla(hue(@appointment-free), saturation(@appointment-free), lightness(@appointment-free), @appointment-unconfirmed-alpha);
     }
