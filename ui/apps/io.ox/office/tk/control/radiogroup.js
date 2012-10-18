@@ -47,12 +47,11 @@ define('io.ox/office/tk/control/radiogroup',
      *  @param {Function} [options.updateCaptionHandler]
      *      A function that will be called after list item has been activated,
      *      and the caption of the drop-down button has been updated according
-     *      to the 'options.updateCaptionMode' option. Receives the drop-down
-     *      menu button element (as jQuery object) in the first parameter, and
-     *      the button element of the activated list item (as jQuery object) in
-     *      the second parameter. If no list item is active, the second
-     *      parameter will be an empty jQuery object. Will be called in the
-     *      context of this radio group instance.
+     *      to the 'options.updateCaptionMode' option. Receives the button
+     *      element of the activated list item (as jQuery object) in the first
+     *      parameter. If no list item is active, the parameter will be an
+     *      empty jQuery object. Will be called in the context of this radio
+     *      group instance.
      */
     function RadioGroup(options) {
 
@@ -113,7 +112,7 @@ define('io.ox/office/tk/control/radiogroup',
 
                 // call custom update handler
                 if (_.isFunction(updateCaptionHandler)) {
-                    updateCaptionHandler.call(self, self.getMenuButton(), button);
+                    updateCaptionHandler.call(self, button);
                 }
             }
         }
