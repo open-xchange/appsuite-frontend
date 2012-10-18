@@ -40,4 +40,10 @@ define("plugins/halo/register", ["io.ox/core/extensions"], function (ext) {
         file: "plugins/halo/config-test",
         title: "Halo Config"
     });
+
+    // use global click handler
+    $('body').on('click', 'a.halo-link', function (e) {
+        e.preventDefault();
+        ext.point('io.ox/core/person:action').invoke('action', this, $(this).data(), e);
+    });
 });

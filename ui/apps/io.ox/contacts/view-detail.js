@@ -63,7 +63,8 @@ define("io.ox/contacts/view-detail",
                 $('<div class="span4 field-label">').text(label),
                 // value
                 $('<div class="span8 field-value">').append(
-                    $('<span class="blue">').text(_.noI18n(name)), $.txt(_.noI18n(' ')),
+                    $('<a href="#" class="halo-link">').data({ email1: mail })
+                        .text(_.noI18n(name)), $.txt(_.noI18n(' ')),
                     $('<span>').text(_.noI18n(mail))
                 )
             )
@@ -345,7 +346,7 @@ define("io.ox/contacts/view-detail",
             if (!baton) return $();
 
             // make sure we have a baton
-            baton = ext.Baton(baton);
+            baton = ext.Baton.ensure(baton);
 
             var node = $.createViewContainer(baton.data, api).on('redraw', { view: this }, redraw);
             node.addClass('contact-detail view user-select-text');

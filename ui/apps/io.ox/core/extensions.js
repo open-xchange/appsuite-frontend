@@ -297,12 +297,18 @@ define("io.ox/core/extensions",
             this.data = {};
             this.$ = {};
             // just copy given object
-            _.extend(this, 'data' in obj ? obj : { data: obj });
+            _.extend(this, obj);
         } else {
             // for the lazy way: b = Baton() instead of b = new Baton()
             return new Baton(obj);
         }
     }
+
+    Baton.ensure = function (obj) {
+        if (obj instanceof Baton) return obj;
+        if ('data' in obj) return new Baton(obj);
+        return new Baton({ data: obj });
+    };
 
     Baton.prototype = {
 
