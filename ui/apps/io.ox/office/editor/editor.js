@@ -1687,12 +1687,14 @@ define('io.ox/office/editor/editor',
 
         operationHandlers[Operations.TEXT_DELETE] = function (operation) {
             if (undomgr.isEnabled()) {
-                var localStart = _.clone(operation.start),
-                    localEnd = _.clone(operation.end),
-                    startLastVal = localStart.pop(),
-                    endLastVal = localEnd.pop() + 1, // switching operation mode from TEXT_DELETE
-                    undoOperation = { name: Operations.TEXT_INSERT, start: operation.start, text: Position.getParagraphText(paragraphs, localStart, startLastVal, endLastVal) };
-                undomgr.addUndo(undoOperation, operation);
+                var position = operation.start.slice(0, -1),
+                    paragraph = Position.getCurrentParagraph(paragraphs, position),
+                    start = operation.start[operation.start.length - 1],
+                    end = operation.end[operation.end.length - 1] + 1, // half-open range
+                    generator = new Operations.Generator();
+
+                generator.generateParagraphContentOperations(paragraph, position, start, end);
+                undomgr.addUndo(generator.getOperations(), operation);
             }
             implDeleteText(operation.start, operation.end);
         };

@@ -1493,7 +1493,7 @@ define('io.ox/office/editor/position',
      *
      * @param {Node|jQuery} startnode
      *  The start node corresponding to the logical position. if this object is
-     *  a jQuery collection, uses the first DOM node it contains.
+     *  a jQuery collection, uses its contents.
      *
      * @param {Number[]} position
      *  The logical position of the paragraph.
