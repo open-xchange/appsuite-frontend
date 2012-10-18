@@ -88,9 +88,9 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             fillcolor: {
-                def: Color.Transparent,
+                def: Color.AUTO,
                 set: function (element, color) {
-                    element.css('background-color', this.getCssColor(color));
+                    element.css('background-color', this.getCssColor(color, 'fill'));
                 }
             },
 
