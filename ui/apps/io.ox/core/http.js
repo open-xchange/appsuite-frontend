@@ -524,8 +524,18 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
         function lowLevelSend(r) {
             // TODO: remove backend fix
             var fixPost = r.o.fixPost && r.xhr.type === 'POST',
-                xhr = _.extend({}, r.xhr, { dataType: fixPost ? 'text' : r.xhr.dataType });
-            $.ajax(xhr)
+                ajaxOptions = _.extend({}, r.xhr, { dataType: fixPost ? 'text' : r.xhr.dataType });
+
+            // extend xhr to support upload/progress notifications
+            var xhr = $.ajaxSettings.xhr();
+            if (xhr.upload) {
+                ajaxOptions.xhr = function () { return xhr; };
+                xhr.upload.addEventListener('progress', function (e) {
+                    r.def.notify(e);
+                }, false);
+            }
+
+            $.ajax(ajaxOptions)
                 // TODO: remove backend fix
                 .pipe(function (response) {
                     if (fixPost) {

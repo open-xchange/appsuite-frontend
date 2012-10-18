@@ -867,7 +867,7 @@ define("io.ox/core/desktop",
                 var BUSY_SELECTOR = 'input, select, textarea, button',
                     TOGGLE_CLASS = 'toggle-disabled';
 
-                this.busy = function (pct) {
+                this.busy = function (pct, sub) {
                     // use self instead of this to make busy/idle robust for callback use
                     var blocker;
                     if (self) {
@@ -877,8 +877,12 @@ define("io.ox/core/desktop",
                             .not(':disabled').attr('disabled', 'disabled').addClass(TOGGLE_CLASS);
                         if (_.isNumber(pct)) {
                             pct = Math.max(0, Math.min(pct, 1));
-                            blocker.idle().find('.bar').css('width', (pct * 100) + '%').parent().show();
+                            blocker.idle().find('.bar').eq(0).css('width', (pct * 100) + '%').parent().show();
+                            if (_.isNumber(sub)) {
+                                blocker.find('.bar').eq(1).css('width', (sub * 100) + '%').parent().show();
+                            }
                             blocker.show();
+
                         } else {
                             blocker.find('.progress').hide();
                             blocker.busy().show();
@@ -1029,7 +1033,8 @@ define("io.ox/core/desktop",
                     .append(
                         // blocker
                         win.nodes.blocker = $('<div>').addClass('abs window-blocker').hide()
-                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide()),
+                            .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide())
+                            .append($('<div class="progress progress-striped progress-warning active"><div class="bar" style="width: 0%;"></div></div>').hide()),
                         // window HEAD
                         win.nodes.head = $('<div class="window-head css-table">'),
                         // window BODY

@@ -286,8 +286,12 @@ define('io.ox/files/icons/perspective',
                     win.busy(0);
                 },
                 progress: function (file, position, files) {
-                    win.busy((position + 1) / files.length);
-                    return api.uploadFile({ file: file, folder: app.folder.get() });
+                    var pct = position / files.length;
+                    win.busy(pct, 0);
+                    return api.uploadFile({ file: file, folder: app.folder.get() }).progress(function (e) {
+                        var sub = e.loaded / e.total;
+                        win.busy(pct + sub / files.length, sub);
+                    });
                 },
                 stop: function () {
                     drawFirst();
