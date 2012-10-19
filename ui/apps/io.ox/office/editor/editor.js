@@ -3179,10 +3179,10 @@ define('io.ox/office/editor/editor',
                 applyOperation(newOperation, true, true);
             }
 
-            // setting the cursor position
-            if (lastOperationEnd) {
-                setSelection(new OXOSelection(lastOperationEnd));
-            }
+            // setting the cursor position -> only required for changes to inline
+            // if (lastOperationEnd) {
+            //     setSelection(new OXOSelection(lastOperationEnd));
+            // }
         }
 
         // ====================================================================
@@ -3495,18 +3495,17 @@ define('io.ox/office/editor/editor',
                 end[endLastIndex] = Position.getParagraphLength(paragraphs, start);
             }
 
-            // store last position
-            lastOperationEnd = new OXOPaM(end);
-
             // build the DOM text range, set the formatting attributes, create undo operations
             styleSheets = self.getStyleSheets(family);
             if (styleSheets) {
-
                 ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family === 'image');
                 // change attributes in document and store the undo/redo action
                 styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
                 undomgr.addUndo(undoOperations, redoOperations);
             }
+
+            // store last position
+            lastOperationEnd = new OXOPaM(end);
         }
 
         function implInsertParagraph(position) {

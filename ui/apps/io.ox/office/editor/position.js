@@ -640,7 +640,7 @@ define('io.ox/office/editor/position',
                         lastChild = true;
                     }
 
-                    if (DOM.isObjectNode(currentNode)) {
+                    if (DOM.isImageNode(currentNode)) {
                         currentLength = 1;
                         isImage = true;
                     } else if (DOM.isFieldSpan(currentNode)) {
@@ -688,7 +688,7 @@ define('io.ox/office/editor/position',
                 if ((nextNode) && (DOM.isImageNode(nextNode))) {  // if the next node is an image span, this should be preferred
                     node = nextNode;
                     isImage = true;
-                } else if ((nextNode) && ($(nextNode).is('div.float')) && (nextNode.nextSibling) && (DOM.isImageNode(nextNode.nextSibling))) {
+                } else if ((nextNode) && ($(nextNode).is('div.offset')) && (nextNode.nextSibling) && (DOM.isImageNode(nextNode.nextSibling))) {
                     node = nextNode.nextSibling;
                     isImage = true;
                 } else if ((nextNode) && (DOM.isFieldSpan(nextNode))) {  // also preferring following fields
