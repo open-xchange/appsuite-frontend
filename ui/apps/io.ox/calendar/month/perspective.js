@@ -14,7 +14,8 @@ define('io.ox/calendar/month/perspective',
     ['io.ox/calendar/month/view',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'io.ox/core/http'], function (View, api, util, http) {
+     'io.ox/core/date',
+     'io.ox/core/http'], function (View, api, util, date, http) {
 
     'use strict';
 
@@ -98,28 +99,27 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
-            var year = 2012,
-                month = 6,
-                first = Date.UTC(year, month, 1),
-                start = util.getWeekStart(first) - 10 * util.WEEK,
-                i;
-            for (i = 0; i < 20; i += 1, start += util.WEEK) {
+            var start = new date.Local(),
+                year = start.getYear(),
+                month = start.getMonth(),
+            start = util.getWeekStart(new date.Local(year, month - 1, 1));
+            for (var i = 0; i < 20; i += 1, start += util.WEEK) {
                 this.updateWeek(start, start + util.WEEK);
             }
         },
 
         render: function (app) {
 
-            var year = 2012,
-                month = 10,
-                first = Date.UTC(year, month, 1),
-                start = util.getWeekStart(first) - 10 * util.WEEK,
-                i, tops = {};
+            var start = new date.Local(),
+                year = start.getYear(),
+                month = start.getMonth(),
+                tops = {};
+            start = util.getWeekStart(new date.Local(year, month - 1, 1));
 
             this.scaffold = View.drawScaffold();
             this.pane = this.scaffold.find('.scrollpane');
 
-            for (i = 0; i < 20; i += 1, start += util.WEEK) {
+            for (var i = 0; i < 20; i += 1, start += util.WEEK) {
                 this.drawWeek(start);
             }
 

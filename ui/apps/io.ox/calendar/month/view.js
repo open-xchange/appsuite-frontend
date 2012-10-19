@@ -126,7 +126,8 @@ define('io.ox/calendar/month/view',
 
     View.drawScaffold = function () {
 
-        var days = date.locale.days;
+        var days = date.locale.days,
+            tmp = [];
         days = days.slice(1).concat(days[0]);
 
         return $('<div>')
@@ -134,7 +135,6 @@ define('io.ox/calendar/month/view',
             .append(
                 $('<div>').addClass('scrollpane'),
                 $('<div>').addClass('footer').append(function () {
-                    var tmp = [];
                     _(days).each(function (day) {
                         tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                     });
