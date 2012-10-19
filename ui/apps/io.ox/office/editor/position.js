@@ -2376,7 +2376,7 @@ define('io.ox/office/editor/position',
             lastPos1 = pos1.pop(),
             lastPos2 = pos2.pop();
 
-        return ((pos1).join('') === (pos2).join('')) && (lastPos2 === lastPos1 + 1);
+        return (_.isEqual(pos1, pos2)) && (lastPos2 === lastPos1 + 1);
     };
 
     return Position;
