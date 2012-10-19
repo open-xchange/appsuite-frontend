@@ -107,7 +107,7 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             if (data.note) {
                 this.append(
-                    $("<div>").addClass("note").html(gt.noI18n(util.getNote(data)))
+                    $("<div>").addClass("note").html(util.getNote(data))
                 );
             }
         }
@@ -319,7 +319,7 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text(gt("Show as") + ":\u00A0")
+                    .append($.txt(gt("Show as")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
@@ -329,7 +329,7 @@ define("io.ox/calendar/view-detail",
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .text(gt.noI18n(" " + util.getShownAs(data)))
+                    .append($.txt(gt.noI18n(" ")), $.txt(gt.noI18n(util.getShownAs(data))))
             )
             .append($("<br>"));
         }
@@ -341,8 +341,12 @@ define("io.ox/calendar/view-detail",
         id: "folder",
         draw: function (data) {
             this.append(
-                $("<span>").addClass("detail-label").text(gt("Folder") + ":\u00A0"),
-                $("<span>").addClass("detail").append(folderAPI.getTextNode(data.folder_id)),
+                $("<span>")
+                    .addClass("detail-label")
+                    .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
+                $("<span>")
+                    .addClass("detail")
+                    .text(gt.noI18n(folderAPI.getTextNode(data.folder_id))),
                 $("<br>")
             );
         }
@@ -356,13 +360,13 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text(gt("Created") + ":\u00A0")
+                    .append($.txt(gt("Created")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .append($("<span>").text(util.getDate(data.creation_date)))
-                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").text(gt.noI18n(util.getDate(data.creation_date))))
+                    .append($("<span>").text(gt.noI18n(" \u2013 ")))
                     .append($("<span>").append(userAPI.getTextNode(data.created_by)))
              )
              .append($("<br>"));
@@ -377,13 +381,13 @@ define("io.ox/calendar/view-detail",
             this.append(
                 $("<span>")
                     .addClass("detail-label")
-                    .text(gt("Modified") + ":\u00A0")
+                    .append($.txt(gt("Modified")), $.txt(gt.noI18n(":\u00A0")))
             )
             .append(
                 $("<span>")
                     .addClass("detail")
-                    .append($("<span>").text(util.getDate(data.last_modified)))
-                    .append($("<span>").text(" \u2013 "))
+                    .append($("<span>").text(gt.noI18n(util.getDate(data.last_modified))))
+                    .append($("<span>").text(gt.noI18n(" \u2013 ")))
                     .append($("<span>").append(userAPI.getTextNode(data.modified_by)))
              )
              .append($("<br>"));
