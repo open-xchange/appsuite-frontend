@@ -259,14 +259,6 @@ define("io.ox/files/actions",
     });
 
     ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
-        index: 50,
-        id: "officenew",
-        label: gt("New Document"),
-        cssClasses: 'btn btn-inverse',
-        ref: "io.ox/files/actions/office/newdocument"
-    }));
-
-    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
         index: 100,
         id: "upload",
         label: gt("Upload"),
@@ -337,21 +329,6 @@ define("io.ox/files/actions",
         prio: 'hi',
         label: gt("Change"),
         ref: "io.ox/files/actions/office/editor"
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "officepreview",
-        index: 65,
-        prio: 'hi',
-        label: gt("View"),
-        ref: "io.ox/files/actions/office/view"
-    }));
-
-    ext.point('io.ox/files/links/inline').extend(new links.Link({
-        id: "refresh_hack",
-        index: 666,
-        label: gt("Refresh!"),
-        ref: "io.ox/files/actions/office/refresh_hack"
     }));
 
     ext.point("io.ox/files/links/inline").extend(new links.Link({
