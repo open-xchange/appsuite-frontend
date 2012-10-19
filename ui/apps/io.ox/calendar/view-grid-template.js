@@ -48,10 +48,10 @@ define("io.ox/calendar/view-grid-template",
                 return { title: title, location: location, time: time, date: date, shown_as: shown_as, conflicts: conflicts, isPrivate: isPrivate };
             },
             set: function (data, fields, index) {
-                fields.title.text(data.title || '\u00A0');
-                fields.location.text(data.location || '\u00A0');
+                fields.title.text(gt.noI18n(data.title || '\u00A0'));
+                fields.location.text(gt.noI18n(data.location || '\u00A0'));
                 util.addTimezoneLabel(fields.time.empty(), data);
-                fields.date.text(util.getDateInterval(data));
+                fields.date.text(gt.noI18n(util.getDateInterval(data)));
                 fields.shown_as.get(0).className = "shown_as label " + util.getShownAsLabel(data);
                 if (data.conflicting_participants) {
                     var conflicts = $('<span>');
@@ -63,7 +63,7 @@ define("io.ox/calendar/view-grid-template",
                                 conflicts.append(
                                     $('<a>')
                                         .addClass('person-link')
-                                        .text(participant.get('display_name'))
+                                        .text(gt.noI18n(participant.get('display_name')))
                                         .css('margin-left', '4px')
                                         .on('click', { internal_userid: participant.get('id') }, fnClickPerson)
                                 );
@@ -76,14 +76,12 @@ define("io.ox/calendar/view-grid-template",
                     fields.conflicts.show();
                     fields.conflicts.css('white-space', 'normal');
                     this.css('height', 'auto');
-                    console.log('data vgrid', data);
                     window.cdata = data;
                 } else {
                     fields.conflicts.hide();
                 }
 
                 if (data.private_flag === true) {
-                    console.log('render private');
                     fields.isPrivate.text(gt('private')).show();
                 } else {
                     fields.isPrivate.hide();
@@ -98,7 +96,7 @@ define("io.ox/calendar/view-grid-template",
             },
             set: function (data, fields, index) {
                 var d = util.getSmartDate(data.start_date);
-                this.text(d);
+                this.text(gt.noI18n(d));
             }
         },
 

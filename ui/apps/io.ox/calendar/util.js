@@ -16,7 +16,7 @@ define("io.ox/calendar/util",
      'gettext!io.ox/calendar',
      'io.ox/core/api/user',
      'io.ox/contacts/api',
-     'io.ox/core/api/group'], function (date, gettext, userAPI, contactAPI, groupAPI) {
+     'io.ox/core/api/group'], function (date, gt, userAPI, contactAPI, groupAPI) {
 
     "use strict";
 
@@ -26,12 +26,12 @@ define("io.ox/calendar/util",
         // month names
         n_month = date.locale.months,
         // day names
-        n_count = [gettext("last"), "", gettext("first"), gettext("second"),
-                   gettext("third"), gettext("fourth"), gettext("last")
+        n_count = [gt("last"), "", gt("first"), gt("second"),
+                   gt("third"), gt("fourth"), gt("last")
                    ],
         // shown as
-        n_shownAs = [gettext("Reserved"), gettext("Temporary"),
-                     gettext("Absent"), gettext("Free")
+        n_shownAs = [gt("Reserved"), gt("Temporary"),
+                     gt("Absent"), gt("Free")
                      ],
         shownAsClass = "reserved temporary absent free".split(' '),
         shownAsLabel = "label-info label-warning label-important label-success".split(' '),
@@ -197,11 +197,11 @@ define("io.ox/calendar/util",
             D = D || date.Local;
             if (data.full_time) {
                 length = (data.end_date - data.start_date) / DAY >> 0;
-                return length <= 1 ? gettext('Whole day') : gettext.format(
+                return length <= 1 ? gt('Whole day') : gt.format(
                     //#. General duration (nominative case): X days
                     //#. %d is the number of days
                     //#, c-format
-                    gettext.ngettext('%d day', '%d days', length), length);
+                    gt.ngettext('%d day', '%d days', length), length);
             } else {
                 start = new date.Local(data.start_date);
                 end = new date.Local(data.end_date);
@@ -215,8 +215,8 @@ define("io.ox/calendar/util",
             var current = date.Local.getTTInfoLocal(data.start_date);
 
             parent.append(
-                $.txt(that.getTimeInterval(data) + ' '),
-                $('<span>').addClass('label').text(current.abbr).popover({
+                $.txt(gt.noI18n(that.getTimeInterval(data) + ' ')),
+                $('<span>').addClass('label').text(gt.noI18n(current.abbr)).popover({
                     title: that.getTimeInterval(data) + ' ' + current.abbr,
                     content: getContent,
                     animation: false,
@@ -235,11 +235,11 @@ define("io.ox/calendar/util",
                 _(zones).each(function (zone) {
                     // must use outer DIV with "clear: both" here for proper layout in firefox
                     div.append($('<div>').addClass('clear').append(
-                        $('<span>').text(zone.displayName.replace(/^.*?\//, '')),
+                        $('<span>').text(gt.noI18n(zone.displayName.replace(/^.*?\//, ''))),
                         $('<b>').append($('<span>')
                             .addClass('label label-info')
-                            .text(zone.getTTInfoLocal(data.start_date).abbr)),
-                        $('<i>').text(that.getTimeInterval(data, zone))
+                            .text(gt.noI18n(zone.getTTInfoLocal(data.start_date).abbr))),
+                        $('<i>').text(gt.noI18n(that.getTimeInterval(data, zone)))
                     ));
                 });
                 return '<div class="timezones">' + div.html() + '</div>';
@@ -281,35 +281,35 @@ define("io.ox/calendar/util",
                 var tmp = [];
                 switch (i) {
                 case 62:
-                    tmp.push(gettext("Work Day"));
+                    tmp.push(gt("Work Day"));
                     break;
                 case 65:
-                    tmp.push(gettext("Weekend Day"));
+                    tmp.push(gt("Weekend Day"));
                     break;
                 case 127:
-                    tmp.push(gettext("Day"));
+                    tmp.push(gt("Day"));
                     break;
                 default:
                     if ((i % MONDAY) / SUNDAY >= 1) {
-                        tmp.push(gettext("Sunday"));
+                        tmp.push(gt("Sunday"));
                     }
                     if ((i % THUESDAY) / MONDAY >= 1) {
-                        tmp.push(gettext("Monday"));
+                        tmp.push(gt("Monday"));
                     }
                     if ((i % WEDNESDAY) / THUESDAY >= 1) {
-                        tmp.push(gettext("Tuesday"));
+                        tmp.push(gt("Tuesday"));
                     }
                     if ((i % THURSDAY) / WEDNESDAY >= 1) {
-                        tmp.push(gettext("Wednesday"));
+                        tmp.push(gt("Wednesday"));
                     }
                     if ((i % FRIDAY) / THURSDAY >= 1) {
-                        tmp.push(gettext("Thursday"));
+                        tmp.push(gt("Thursday"));
                     }
                     if ((i % SATURDAY) / FRIDAY >= 1) {
-                        tmp.push(gettext("Friday"));
+                        tmp.push(gt("Friday"));
                     }
                     if (i / SATURDAY >= 1) {
-                        tmp.push(gettext("Saturday"));
+                        tmp.push(gt("Saturday"));
                     }
                 }
                 return tmp.join(", ");
@@ -327,29 +327,29 @@ define("io.ox/calendar/util",
 
             switch (data.recurrence_type) {
             case 1:
-                str = f(gettext("Each %s Day"), interval);
+                str = f(gt("Each %s Day"), interval);
                 break;
             case 2:
                 str = interval === 1 ?
-                    f(gettext("Weekly on %s"), getDayString(days)) :
-                    f(gettext("Each %s weeks on %s"), interval, getDayString(days));
+                    f(gt("Weekly on %s"), getDayString(days)) :
+                    f(gt("Each %s weeks on %s"), interval, getDayString(days));
                 break;
             case 3:
                 if (days === null) {
                     str = interval === 1 ?
-                        f(gettext("On %s. day every month"), day_in_month) :
-                        f(gettext("On %s. day every %s. month"), day_in_month, interval);
+                        f(gt("On %s. day every month"), day_in_month) :
+                        f(gt("On %s. day every %s. month"), day_in_month, interval);
                 } else {
                     str = interval === 1 ?
-                        f(gettext("On %s %s every month"), getCountString(day_in_month), getDayString(days)) :
-                        f(gettext("On %s %s each %s. months"), getCountString(day_in_month), getDayString(days), interval);
+                        f(gt("On %s %s every month"), getCountString(day_in_month), getDayString(days)) :
+                        f(gt("On %s %s each %s. months"), getCountString(day_in_month), getDayString(days), interval);
                 }
                 break;
             case 4:
                 if (days === null) {
-                    str = f(gettext("Each %s. %s"), day_in_month, getMonthString(month));
+                    str = f(gt("Each %s. %s"), day_in_month, getMonthString(month));
                 } else {
-                    str = f(gettext("On %s %s in %s"), getCountString(day_in_month), getDayString(days), getMonthString(month));
+                    str = f(gt("On %s %s in %s"), getCountString(day_in_month), getDayString(days), getMonthString(month));
                 }
                 break;
             }
@@ -358,7 +358,7 @@ define("io.ox/calendar/util",
         },
 
         getNote: function (data) {
-            return $.trim(data.note || "")
+            return $.trim(gt.noI18n(data.note) || "")
                 .replace(/\n{3,}/g, "\n\n")
                 .replace(/</g, "&lt;")
                 .replace(/(https?\:\/\/\S+)/g, '<a href="$1" target="_blank">$1</a>');
