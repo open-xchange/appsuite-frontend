@@ -133,7 +133,7 @@ define('io.ox/office/editor/table',
         tableGrid.splice(insertPos, 0, additionalWidth);  // ignoring insertmode !?
 
         for (var i = 0; i < tableGrid.length; i++) {
-            tableGrid[i] = Utils.roundDigits(factor * tableGrid[i], 2);
+            tableGrid[i] = Utils.roundDigits(factor * tableGrid[i], 0);  // only ints
         }
 
         return tableGrid;
