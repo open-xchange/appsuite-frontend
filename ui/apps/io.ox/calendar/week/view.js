@@ -347,6 +347,7 @@ define('io.ox/calendar/week/view',
             // create and animate timeline
             this.renderTimeline(this.timeline);
             setInterval(this.renderTimeline, 60000, this.timeline);
+            this.fulltimePane.empty();
 
             // create days
             var weekCon = $('<div>').addClass('week-container').append(this.timeline);
@@ -413,7 +414,7 @@ define('io.ox/calendar/week/view',
                     .append(
                         this.fulltimeCon.empty().append(
                             $('<div>').addClass('fulltime-label'),
-                            this.fulltimePane.empty()
+                            this.fulltimePane
                         ),
                         this.pane.empty().append(timeLabel, weekCon),
                         $('<div>')
