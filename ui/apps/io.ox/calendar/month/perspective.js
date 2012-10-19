@@ -114,7 +114,7 @@ define('io.ox/calendar/month/perspective',
                 month = 10,
                 first = Date.UTC(year, month, 1),
                 start = util.getWeekStart(first) - 10 * util.WEEK,
-                i, tops;
+                i, tops = {};
 
             this.scaffold = View.drawScaffold();
             this.pane = this.scaffold.find('.scrollpane');
@@ -133,19 +133,21 @@ define('io.ox/calendar/month/perspective',
             var getFirsts = $.proxy(function (e) {
                 tops = {};
                 var top = this.pane.scrollTop() - 200; /* cheap trick */
-                this.pane.find('.first').each(function () {
-                    tops[Math.max(0, $(this).position().top + top)] = $(this).attr('month');
+                $('.first', this.pane).each(function () {
+                    var spDate = $(this).attr('date').split("-");
+                    tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
                 });
             }, this);
 
-            this.pane.one('scroll', getFirsts);
             $(window).on('resize', getFirsts);
 
-            var currentMonth;
+            var currentMonth = '';
 
             this.pane.on('scroll', $.proxy(function (e) {
-                var top = this.pane.scrollTop(), y, first = true, month;
-                for (y in tops) {
+                var top = this.pane.scrollTop(),
+                    first = true,
+                    month = '';
+                for (var y in tops) {
                     if (first || top >= y) {
                         month = tops[y];
                         first = false;
@@ -154,17 +156,20 @@ define('io.ox/calendar/month/perspective',
                     }
                 }
                 if (month !== currentMonth) {
-                    $('[month="' + currentMonth + '"]', this.pane).addClass('out');
+                    $('[date^="' + currentMonth + '"]', this.pane).addClass('out');
                     currentMonth = month;
-                    $('[month="' + month + '"]', this.pane).removeClass('out');
+                    $('[date^="' + month + '"]', this.pane).removeClass('out');
                 }
 
             }, this));
 
-            this.pane.find('[month="' + year + '-' + month + '"]').removeClass('out');
+            this.pane.find('[date^="' + year + '-' + month + '"]').removeClass('out');
+
+            getFirsts();
 
             var refresh = $.proxy(function () {
                 this.update();
+                getFirsts();
                 var first = this.main.find('[date="' + year + '-' + month + '-1"]'),
                     top = this.scrollTop() + first.position().top;
                 this.scrollTop(top);
