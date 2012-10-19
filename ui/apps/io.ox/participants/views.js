@@ -13,6 +13,7 @@ define("io.ox/participants/views",
             'click .remove': 'onRemove'
         },
         render: function () {
+            console.log(this.model.toJSON());
             this.$el.attr('data-cid', this.model.cid);
             var self = this,
                 $wrapper = $('<div class="participant-wrapper">'),
@@ -21,9 +22,8 @@ define("io.ox/participants/views",
                 $mail = $('<div>'),
                 $removeButton = $('<div class="remove">')
                     .append($('<div class="icon">')
-                        .append($('<i class="icon-remove">')
-                    )
-                );
+                        .append($('<i class="icon-remove">'))
+                    );
             self.nodes = {};
             self.nodes.$mail = $mail;
             self.nodes.$img = $img;
@@ -43,9 +43,10 @@ define("io.ox/participants/views",
                 $text.text(this.model.getDisplayName()),
                 $mail
             );
-            
-            if (this.options.closeButon || _.isUndefined(this.options.closeButton)) {
-                $wrapper.append($removeButton);
+            if (this.options.closeButton || _.isUndefined(this.options.closeButton)) {
+                if (this.model.get('ui_removable') !== false) {
+                    $wrapper.append($removeButton);
+                }
             }
 
             this.$el.append($wrapper);
