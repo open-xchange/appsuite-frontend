@@ -486,9 +486,19 @@
         },
 
         noI18n: !_.url.hash('debug-i18n') ? _.identity : function (text) {
-            return '\u200b' + text + '\u200c';
+            return '\u200b' + String(text).replace(/[\u200b\u200c]/g, '') + '\u200c';
         }
     });
+
+    _.noI18n.fix = !_.url.hash('debug-i18n') ? _.identity : function (text) {
+        return text.replace(/^\u200b|\u200c$/g, '');
+    };
+
+    _.noI18n.text = function () {
+        return _(arguments).reduce(function (memo, str) {
+            return memo.add($.txt(_.noI18n(str)));
+        }, $());
+    };
 
     window.assert = function (value, message) {
         if (value) return;

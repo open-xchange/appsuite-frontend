@@ -118,7 +118,10 @@ define('io.ox/mail/write/main',
             mailState = app.STATES.CLEAN;
         };
 
-        view.signatures = config.get('gui.mail.signatures', []); // removed from mail setting
+        view.signatures = _(config.get('gui.mail.signatures', [])).map(function (obj) {
+            obj.signature_name = _.noI18n(obj.signature_name);
+            return obj;
+        });
 
         app.setSignature = function (e) {
 
@@ -486,7 +489,7 @@ define('io.ox/mail/write/main',
             // add files (from file storage)
             this.addFiles(data.infostore_ids);
             // apply mode
-            var title = data.subject ? data.subject : windowTitles[composeMode = mail.mode];
+            var title = data.subject ? _.noI18n(data.subject) : windowTitles[composeMode = mail.mode];
             win.setTitle(title);
             app.setTitle(title);
             // set signature
@@ -518,9 +521,10 @@ define('io.ox/mail/write/main',
 
         app.failRestore = function (point) {
             var def = $.Deferred();
-            win.show(function () {
+            win.busy().show(function () {
                 app.setMail(point).done(function () {
                     app.getEditor().focus();
+                    win.idle();
                     def.resolve();
                 });
             });

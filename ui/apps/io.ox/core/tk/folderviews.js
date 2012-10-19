@@ -839,7 +839,7 @@ define('io.ox/core/tk/folderviews',
                         self.container.append(
                             section = $('<div>').addClass('section')
                             .append(
-                                $('<div>').addClass('section-title').text(gt(sections[id]))
+                                $('<div>').addClass('section-title').text(sections[id])
                             )
                         );
                         drawSection(section, data[id]);

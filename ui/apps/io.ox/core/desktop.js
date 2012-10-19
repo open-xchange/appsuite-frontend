@@ -349,7 +349,7 @@ define("io.ox/core/desktop",
         },
 
         saveRestorePoint: function () {
-            var self = this;
+            var self = this, uniqueID = self.get('uniqueID');
             if (this.failSave) {
                 appCache.get('savepoints').done(function (list) {
                     // might be null, so:
@@ -357,9 +357,9 @@ define("io.ox/core/desktop",
 
                     var data = self.failSave(),
                         ids = _(list).pluck('id'),
-                        pos = _(ids).indexOf(self.get('uniqueID'));
+                        pos = _(ids).indexOf(uniqueID);
 
-                    data.id = self.get('uniqueID');
+                    data.id = uniqueID;
 
                     if (pos > -1) {
                         // replace
@@ -374,12 +374,12 @@ define("io.ox/core/desktop",
         },
 
         removeRestorePoint: function () {
-            var self = this;
+            var uniqueID = this.get('uniqueID');
             appCache.get('savepoints').done(function (list) {
                 list = list || [];
                 var ids = _(list).pluck('id'),
-                    pos = _(ids).indexOf(self.get('uniqueID'));
-
+                    pos = _(ids).indexOf(uniqueID);
+                list = list.slice();
                 if (pos > -1) {
                     list.splice(pos, 1);
                 }
@@ -411,7 +411,7 @@ define("io.ox/core/desktop",
                         return require([obj.module + '/main']).pipe(function (m) {
                             return m.getApp().launch().done(function () {
                                 // update unique id
-                                obj.id = this.id;
+                                obj.id = this.get('uniqueID');
                                 if (this.failRestore) {
                                     // restore
                                     this.failRestore(obj.point);

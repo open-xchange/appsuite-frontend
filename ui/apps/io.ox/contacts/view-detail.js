@@ -48,7 +48,7 @@ define("io.ox/contacts/view-detail",
                 if (typeof fn === "string") {
                     node.addClass(fn);
                 }
-                node.text(value);
+                node.text(_.noI18n(value));
             }
             return 1;
         } else {
@@ -89,8 +89,8 @@ define("io.ox/contacts/view-detail",
             node
             .addClass('blue')
             .append(
-                $('<a>', { href: 'mailto:' + value })
-                .addClass("blue").text(value)
+                $('<a href="#" class="blue">')
+                .attr({ href: 'mailto:' + value }).text(_.noI18n(value))
                 .on('click', { email: value, display_name: data.display_name }, clickMail)
             );
         });
@@ -101,8 +101,8 @@ define("io.ox/contacts/view-detail",
             node
             .addClass("blue")
             .append(
-                $('<a>', { href: 'callto:' + value })
-                .addClass("blue").text(value)
+                $('<a href="#" class="blue">')
+                .attr({ href: 'callto:' + value }).text(_.noI18n(value))
             );
         });
     }
@@ -114,22 +114,26 @@ define("io.ox/contacts/view-detail",
                     target: "_blank"
                 }).addClass("nolink");
             if (street) {
-                a.append($("<span>").text(street));
+                a.append($("<span>").text(_.noI18n(street)));
                 if (city) {
                     a.append($("<br>"));
                 }
             }
             if (code) {
-                a.append($("<span>").text(code + " "));
+                a.append($("<span>").text(_.noI18n(code + ' ')));
             }
             if (city) {
-                a.append($("<span>").text(city));
+                a.append($("<span>").text(_.noI18n(city)));
             }
             if (country) {
                 a.append($("<br>"));
-                a.append($("<span>").text(country));
+                a.append($("<span>").text(_.noI18n(country)));
             }
-            a.append($("<br><small class='blue'>(Google Maps&trade;)</small>"));
+            a.append(
+                $('<br>').append(
+                    $('<small class="blue">').text(_.noI18n('(Google Maps \u2122)')) // \u2122 = &trade;
+                )
+            );
             node.append(a);
         });
     }
@@ -145,8 +149,8 @@ define("io.ox/contacts/view-detail",
 
     function getDescription(data) {
         return data.mark_as_distributionlist ? gt('Distribution list') :
-            (data.company || data.position || data.profession) ?
-            join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0";
+            _.noI18n((data.company || data.position || data.profession) ?
+            join(", ", data.company, data.position, data.profession) + "\u00A0" : util.getMail(data) + "\u00A0");
     }
 
     ext.point("io.ox/contacts/detail/head").extend({
@@ -170,7 +174,7 @@ define("io.ox/contacts/view-detail",
                 // right side
                 $('<div class="span8 field-value">').append(
                     $('<div class="name clear-title user-select-text">')
-                        .text(util.getFullName(baton.data)),
+                        .text(_.noI18n(util.getFullName(baton.data))),
                     $('<div class="job clear-title user-select-text">')
                         .text(getDescription(baton.data))
                 )
@@ -298,7 +302,7 @@ define("io.ox/contacts/view-detail",
                     node.append(
                         $('<i class="icon-qrcode">'), $.txt(' '),
                         $("<a>", { href: '#' })
-                        .text("Show QR code")
+                        .text(gt('Show QR code'))
                         .on("click", function (e) {
                             e.preventDefault();
                             node.empty().busy();

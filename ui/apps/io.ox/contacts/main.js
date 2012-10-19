@@ -42,8 +42,13 @@ define("io.ox/contacts/main",
         thumbs,
         gridContainer,
         right,
-        // full thumb index
-        fullIndex = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        //#. Address book thumb index
+        //#. (guess translation is only needed for Asian languages)
+        //#. This string is simply split at spaces
+        fullIndex = gt('A B C D E F G H I J K L M N O P Q R S T U V W X Y Z');
+
+    // we have to fix the string first, otherwise we get false positives during i18n debug
+    fullIndex = _.noI18n.fix(fullIndex).split(' ');
 
     // launcher
     app.setLauncher(function () {
@@ -79,19 +84,19 @@ define("io.ox/contacts/main",
         grid.addTemplate({
             build: function () {
                 var name, description;
-                this.addClass("contact").append(
-                    name = $("<div>").addClass("fullname"),
-                    description = $("<div>").addClass("bright-text")
+                this.addClass('contact').append(
+                    name = $('<div class="fullname">'),
+                    description = $('<div class="bright-text">')
                 );
                 return { name: name, description: description };
             },
             set: function (data, fields, index) {
                 if (data.mark_as_distributionlist === true) {
-                    fields.name.text(data.display_name || "");
+                    fields.name.text(_.noI18n(data.display_name || ''));
                     fields.description.text(gt('Distribution list'));
                 } else {
-                    fields.name.text(util.getFullName(data));
-                    fields.description.text(util.getDescription(data));
+                    fields.name.text(_.noI18n(util.getFullName(data)));
+                    fields.description.text(_.noI18n(util.getDescription(data)));
                 }
             }
         });
@@ -102,14 +107,14 @@ define("io.ox/contacts/main",
             },
             set: function (data, fields, index) {
                 var name = data.last_name || data.display_name || "#";
-                this.text(name.substr(0, 1).toUpperCase());
+                this.text(_.noI18n(name.substr(0, 1).toUpperCase()));
             }
         });
 
         // requires new label?
         grid.requiresLabel = function (i, data, current) {
             var name = data.last_name || data.display_name || "#",
-                prefix = name.substr(0, 1).toUpperCase();
+                prefix = _.noI18n(name.substr(0, 1).toUpperCase());
             return (i === 0 || prefix !== current) ? prefix : false;
         };
 
@@ -147,7 +152,7 @@ define("io.ox/contacts/main",
         function drawThumb(char, enabled) {
             var node = $('<div>')
                 .addClass('thumb-index border-bottom' + (enabled ? '' : ' thumb-index-disabled'))
-                .text(char);
+                .text(_.noI18n(char));
             if (enabled) {
                 node.on('click', { text: char }, grid.scrollToLabelText);
             }

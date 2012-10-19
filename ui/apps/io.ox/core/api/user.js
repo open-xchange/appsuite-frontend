@@ -54,10 +54,10 @@ define("io.ox/core/api/user",
     };
 
     api.getTextNode = function (id) {
-        var node = document.createTextNode("");
+        var node = document.createTextNode(_.noI18n(''));
         api.get({ id: id })
             .done(function (data) {
-                node.nodeValue = gt.noI18n(data.display_name || data.email1);
+                node.nodeValue = _.noI18n(data.display_name || data.email1);
             })
             .always(function () {
                 _.defer(function () { // use defer! otherwise we return null on cache hit
@@ -68,17 +68,8 @@ define("io.ox/core/api/user",
     };
 
     api.getLink = function (id, text) {
-        var textNode = text ? $.txt(text) : api.getTextNode(id);
-        return $("<a>", { href: '#' })
-            .append(textNode)
-            .on("click", function (e) {
-                e.preventDefault();
-                require(["io.ox/core/extensions"], function (ext) {
-                    ext.point("io.ox/core/person:action").each(function (ext) {
-                        _.call(ext.action, { internal_userid: id }, e);
-                    });
-                });
-            });
+        text = text ? $.txt(_.noI18n(text)) : api.getTextNode(id);
+        return $('<a href="#" class="halo-link">').append(text).data({ internal_userid: id });
     };
 
     api.getPictureURL = function (id) {

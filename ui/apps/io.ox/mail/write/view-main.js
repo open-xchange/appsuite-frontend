@@ -49,7 +49,7 @@ define("io.ox/mail/write/view-main",
             this.sections[id + 'Label'] = $('<div>')
                 .attr('data-section-label', id)
                 .addClass('io-ox-label')
-                .text(label + '')
+                .text(label)
                 .prepend(
                     collapsable ?
                         $('<a>', { href: '#', tabindex: '7' })
@@ -97,7 +97,7 @@ define("io.ox/mail/write/view-main",
                 .append(
                     $('<a>', { href: '#', tabindex: '5' })
                     .attr('data-section-link', id)
-                    .text(label + '')
+                    .text(label)
                     .on('click', { id: id }, $.proxy(fnShowSection, this))
                 )
                 .appendTo(this.sidepanel);
@@ -222,7 +222,7 @@ define("io.ox/mail/write/view-main",
                     var display_name = obj.personal || obj.primary_address,
                         value = obj.primary_address + '|' + display_name,
                         option = $('<option>', { 'data-displayname': display_name, value: value })
-                            .text(obj.primary_address);
+                            .text(_.noI18n(obj.primary_address));
                     if (index === 0) {
                         option.attr('selected', 'selected');
                     }
@@ -288,7 +288,7 @@ define("io.ox/mail/write/view-main",
                                     }
                                 })
                                 .on('keyup', function () {
-                                    var title = $.trim($(this).val());
+                                    var title = _.noI18n($.trim($(this).val()));
                                     app.getWindow().setTitle(title);
                                     app.setTitle(title);
                                 }),
@@ -299,7 +299,7 @@ define("io.ox/mail/write/view-main",
                     .append(
                         this.priorityOverlay = $('<div>').addClass('priority-overlay')
                             .attr('title', 'Priority')
-                            .text('\u2605\u2605\u2605')
+                            .text(_.noI18n('\u2605\u2605\u2605'))
                             .on('click', $.proxy(togglePriority, this))
                     )
                     .append(
@@ -424,7 +424,7 @@ define("io.ox/mail/write/view-main",
                             .append(
                                 preview.length ?
                                     $('<div>').addClass('signature-preview')
-                                    .text(' ' + preview) :
+                                    .text(_.noI18n(' ' + preview)) :
                                     $()
                             )
                             .on('click', { index: index }, function (e) {
@@ -484,12 +484,9 @@ define("io.ox/mail/write/view-main",
             if (!Modernizr.touch) {
                 this.addSection('format', gt('Text format'), true, false)
                     .append(
-                        $('<div>').addClass('change-format')
-                        .append(
-                            $('<a>', { href: '#' }).text(gt('Text')).on('click', { format: 'text' }, fnChangeFormat)
-                        )
-                        .append($.txt(' \u00A0\u2013\u00A0 ')) // &ndash;
-                        .append(
+                        $('<div>').addClass('change-format').append(
+                            $('<a>', { href: '#' }).text(gt('Text')).on('click', { format: 'text' }, fnChangeFormat),
+                            $.txt(_.noI18n(' \u00A0\u2013\u00A0 ')), // &ndash;
                             $('<a>', { href: '#' }).text(gt('HTML')).on('click', { format: 'html' }, fnChangeFormat)
                         )
                     );
@@ -499,7 +496,6 @@ define("io.ox/mail/write/view-main",
     });
 
     var dummySignature = { signature_name: gt('No signature') };
-
     var handleFileSelect, addUpload, supportsPreview, createPreview;
 
     supportsPreview = function (file) {
@@ -531,7 +527,7 @@ define("io.ox/mail/write/view-main",
                                 });
                             if (preview.supportsPreview()) {
                                 preview.appendTo(popup);
-                                popup.append($('<div>').text('\u00A0'));
+                                popup.append($('<div>').text(_.noI18n('\u00A0')));
                             }
                         } else {
                             // inject image as data-url
@@ -577,13 +573,12 @@ define("io.ox/mail/write/view-main",
             _(list).each(function (file) {
                 // get size
                 var size = file.size || file.file_size;
-                size = size !== undefined ? strings.fileSize(size) + '\u00A0 ' :
-                                            '';
+                size = size !== undefined ? gt.format('%$1s\u00A0 ', strings.fileSize(size)) : '';
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
                         // filename
-                        $('<div class="row-1">').text(file.filename || file.name || ''),
+                        $('<div class="row-1">').text(_.noI18n(file.filename || file.name || '')),
                         // filesize / preview
                         $('<div class="row-2">').append(
                             // filesize
@@ -597,7 +592,7 @@ define("io.ox/mail/write/view-main",
                         $('<a>', { href: '#', tabindex: '6' })
                         .addClass('remove')
                         .append(
-                            $('<div>').addClass('icon').text('x')
+                            $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // 00D7 = &times;
                         )
                         .on('click', function (e) {
                             e.preventDefault();
@@ -711,20 +706,20 @@ define("io.ox/mail/write/view-main",
             $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
             // display name
             $('<div>').append(
-                $('<a>', { href: '#' }).addClass('person-link')
-                .text(data.display_name + '\u00A0')
-                .on('click', {
+                $('<a href="#" class="halo-link">')
+                .data({
                     display_name: data.display_name,
                     email1: data.email
-                }, fnClickPerson)
+                })
+                .text(_.noI18n(data.display_name + '\u00A0'))
             ),
             // email address
-            $('<div>').text(String(data.email || '').toLowerCase()),
+            $('<div>').text(_.noI18n(String(data.email || '').toLowerCase())),
             // remove
             $('<a>', { href: '#', tabindex: '6' })
                 .addClass('remove')
                 .append(
-                    $('<div>').addClass('icon').text('x')
+                    $('<div>').addClass('icon').text(_.noI18n('\u00D7')) // &times;
                 )
                 .on('click', { id: id }, function (e) {
                     e.preventDefault();
@@ -746,13 +741,6 @@ define("io.ox/mail/write/view-main",
              '"' + obj.display_name.replace(/"/g, '\"') + '" <' + obj.email + '>' : '<' + obj.email + '>';
     }
 
-    var fnClickPerson = function (e) {
-        e.preventDefault(e);
-        ext.point('io.ox/core/person:action').each(function (ext) {
-            _.call(ext.action, e.data, e);
-        });
-    };
-
     function highlight(text, query) {
         return String(text).replace(/</g, '&lt;')
             .replace(new RegExp(query, 'i'), '<b>' + query + '</b>');
@@ -761,7 +749,9 @@ define("io.ox/mail/write/view-main",
     function createRadio(name, value, text, isChecked) {
         var id = name + '_' + value + '_' + _.now(),
             radio = $('<input>', { type: 'radio', name: name, id: id, value: value, tabindex: '5' }),
-            label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
+            label = $('<label>', { 'for': id }).append(
+                        $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
+                    );
         if (isChecked) {
             radio.attr('checked', 'checked');
         }
@@ -777,7 +767,9 @@ define("io.ox/mail/write/view-main",
     function createCheckbox(name, text, isChecked) {
         var id = name + '_' + _.now(),
             box = $('<input>', { type: 'checkbox', name: name, id: id, value: '1', tabindex: '5' }),
-            label = $('<label>', { 'for': id }).text('\u00A0\u00A0' + text + '\u00A0\u00A0\u00A0\u00A0 ');
+            label = $('<label>', { 'for': id }).append(
+                        $.txt(_.noI18n('\u00A0\u00A0')), text, $.txt(_.noI18n('\u00A0\u00A0\u00A0\u00A0 '))
+                    );
         if (isChecked) {
             box.attr('checked', 'checked');
         }
