@@ -556,7 +556,7 @@ define('io.ox/office/tk/utils',
         var value = Utils.getOption(options, name);
         return _.isFunction(value) ? value : def;
     };
-    
+
     /**
      * Extracts a array from the passed object. If the attribute does not
      * exist, or is not an array, returns the specified default value.
@@ -835,8 +835,9 @@ define('io.ox/office/tk/utils',
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every node. Receives the
-     *  DOM node object as first parameter. If the iterator returns the
-     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *  DOM node as first parameter. If the iterator returns the Utils.BREAK
+     *  object, the iteration process will be stopped immediately. The iterator
+     *  can remove visited nodes from the DOM.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -859,17 +860,24 @@ define('io.ox/office/tk/utils',
         var // only child nodes
             children = Utils.getBooleanOption(options, 'children', false),
             // iteration direction
-            reverse = Utils.getBooleanOption(options, 'reverse', false);
+            reverse = Utils.getBooleanOption(options, 'reverse', false),
+            // the next or previous sibling of the visited node
+            nextSibling = null;
 
         // visit all child nodes
         element = Utils.getDomNode(element);
-        for (var child = reverse ? element.lastChild : element.firstChild; child; child = reverse ? child.previousSibling : child.nextSibling) {
+        for (var child = reverse ? element.lastChild : element.firstChild; child; child = nextSibling) {
+
+            // get next/previous sibling in case the iterator removes the node
+            nextSibling = reverse ? child.previousSibling : child.nextSibling;
 
             // call iterator for child node; if it returns Utils.BREAK, exit loop and return too
             if (iterator.call(context, child) === Utils.BREAK) { return Utils.BREAK; }
 
-            // iterate grand child nodes; if iterator for any descendant node returns Utils.BREAK, return too
-            if (!children && (child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
+            // iterate grand child nodes (only if the previous iterator did not
+            // remove the node from the DOM); if iterator for any descendant
+            // node returns Utils.BREAK, return too
+            if (!children && element.contains(child) && (child.nodeType === 1) && (Utils.iterateDescendantNodes(child, iterator, context, options) === Utils.BREAK)) { return Utils.BREAK; }
         }
     };
 
@@ -890,9 +898,9 @@ define('io.ox/office/tk/utils',
      *
      * @param {Function} iterator
      *  The iterator function that will be called for every matching node.
-     *  Receives the DOM node object as first parameter. If the iterator
-     *  returns the Utils.BREAK object, the iteration process will be stopped
-     *  immediately.
+     *  Receives the DOM node as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *  The iterator can remove visited nodes from the DOM.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -926,7 +934,7 @@ define('io.ox/office/tk/utils',
      *  The iterator function that will be called for every text node. Receives
      *  the DOM text node object as first parameter. If the iterator returns
      *  the Utils.BREAK object, the iteration process will be stopped
-     *  immediately.
+     *  immediately. The iterator can remove visited nodes from the DOM.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
