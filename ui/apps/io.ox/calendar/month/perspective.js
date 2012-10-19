@@ -154,9 +154,9 @@ define('io.ox/calendar/month/perspective',
                     }
                 }
                 if (month !== currentMonth) {
-                    this.pane.find('[month="' + currentMonth + '"]').addClass('out');
+                    $('[month="' + currentMonth + '"]', this.pane).addClass('out');
                     currentMonth = month;
-                    this.pane.find('[month="' + month + '"]').removeClass('out');
+                    $('[month="' + month + '"]', this.pane).removeClass('out');
                 }
 
             }, this));

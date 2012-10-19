@@ -40,6 +40,7 @@
     
     .scrollpane {
         .overflow(auto);
+        -webkit-backface-visibility: hidden;
         position: absolute;
         top: 0;
         right: 0;
@@ -68,19 +69,22 @@
         -webkit-transition: background-color 0.4s;
         -moz-transition: background-color 0.4s;
         transition: background-color 0.4s;
+        -webkit-backface-visibility: hidden;
     }
     
     .vertical {
         font-family: @font-light;
-        font-size: 30px;
+        font-size: 28px;
         line-height: 1.1em;
         color: #aaa;
         position: absolute;
         right: 0;
         width: 12.5%;
         height: 100/6%;
-        padding: 13px;
+        padding: 13px 5px;
         text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .day.out {
@@ -120,7 +124,7 @@
     }
     
     .day .list {
-        margin: 6px;
+        margin: 5px;
         .overflow(auto);
     }
     
