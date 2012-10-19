@@ -19,8 +19,12 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-
-    };
+            view: 'tasks/split',
+            interval: '30',
+            notifyNewModifiedDeleted: 'true',
+            notifyAcceptedDeclinedAsCreator: 'false',
+            notifyAcceptedDeclinedAsParticipant: 'false'
+        };
 
     return settingsDefaults;
 });

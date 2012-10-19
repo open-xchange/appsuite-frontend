@@ -22,7 +22,22 @@ define('io.ox/tasks/settings/pane',
 
 
     var tasksSettings =  settings.createModel(tasksSettingsModel),
-        staticStrings =  {},
+        staticStrings =  {
+        TITLE_TASKS: gt('Tasks'),
+        TITLE_COMMON: gt('Common'),
+        DEFAULT_VIEW: gt('Default view'),
+        INTERVAL_IN_MINUTES: gt('Interval of the reminder in minutes'),
+        TITLE_NOTIFICATIONS_FOR_TASKS: gt('E-Mail notification for task'),
+        TITLE_NOTIFICATIONS_FOR_ACCEPTDECLINED: gt('E-Mail notification for Accept/Declined'),
+        NOTIFICATIONS_FOR_ACCEPTDECLINEDCREATOR: gt('E-Mail notification for task creator?'),
+        NOTIFICATIONS_FOR_ACCEPTDECLINEDPARTICIPANT: gt('E-Mail notification for task participant?')
+    },
+        optionsYes = {label: gt('Yes'), value: true},
+        optionsNo = {label: gt('No'), value: false},
+        optionsView = [{label: gt('H-split view'), value: 'tasks/split'},
+                       {label: gt('List view'), value: 'tasks/list'}],
+        optionsInterval = [gt('5'), gt('10'), gt('15'), gt('20'), gt('30'), gt('60')],
+
         tasksViewSettings;
 
     var TasksSettingsView = Backbone.View.extend({
@@ -36,7 +51,11 @@ define('io.ox/tasks/settings/pane',
         render: function () {
             var self = this;
             self.$el.empty().append(tmpl.render('io.ox/tasks/settings', {
-                strings: staticStrings
+                strings: staticStrings,
+                optionsYesAnswers: optionsYes,
+                optionsNoAnswers: optionsNo,
+                optionsViewDefault: optionsView,
+                optionsIntervalMinutes: optionsInterval
             }));
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');
