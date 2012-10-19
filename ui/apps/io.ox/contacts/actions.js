@@ -15,7 +15,8 @@ define('io.ox/contacts/actions',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'io.ox/contacts/api',
-     'gettext!io.ox/contacts'], function (ext, links, api, gt) {
+     'io.ox/core/config',
+     'gettext!io.ox/contacts'], function (ext, links, api, config, gt) {
 
     'use strict';
 
@@ -148,9 +149,9 @@ define('io.ox/contacts/actions',
         requires: function (e) {
             var list = [].concat(e.context);
             return api.getList(list).pipe(function (list) {
-                return e.collection.has('some', 'read') && _(list).reduce(function (memo, obj) {
+                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
                     return memo + (obj.mark_as_distributionlist || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
-                }, 0) > 0;
+                }, 0).value() > 0;
             });
         },
         multiple: function (list) {
@@ -178,6 +179,56 @@ define('io.ox/contacts/actions',
                 require(['io.ox/mail/write/main'], function (m) {
                     m.getApp().launch().done(function () {
                         this.compose(data);
+                    });
+                });
+            });
+        }
+    });
+
+    new Action('io.ox/contacts/actions/invite', {
+        requires: function (e) {
+            var list = [].concat(e.context);
+            return api.getList(list).pipe(function (list) {
+                return e.collection.has('some', 'read') && _.chain(list).compact().reduce(function (memo, obj) {
+                    return memo + (obj.mark_as_distributionlist || obj.internal_userid || obj.email1 || obj.email2 || obj.email3) ? 1 : 0;
+                }, 0).value() > 0;
+            });
+        },
+        multiple: function (list) {
+
+            function mapList(obj) {
+                if (obj.id) {
+                    // internal
+                    return { type: 1, id: obj.id };
+                } else {
+                    // external
+                    return { type: 5, display_name: obj.display_name, mail: obj.mail };
+                }
+            }
+
+            function mapContact(obj) {
+                if (obj.distribution_list && obj.distribution_list.length) {
+                    return _(obj.distribution_list).map(mapList);
+                } else if (obj.internal_userid) {
+                    // internal user
+                    return { type: 1, id: obj.internal_userid };
+                } else {
+                    // external user
+                    return { type: 5, display_name: obj.display_name, mail: obj.email1 || obj.email2 || obj.email3 };
+                }
+            }
+
+            function filterContact(obj) {
+                return obj.type === 1 || !!obj.mail;
+            }
+
+            api.getList(list).done(function (list) {
+                // set participants
+                var participants = _.chain(list).map(mapContact).flatten(true).filter(filterContact).value();
+                // open app
+                require(['io.ox/calendar/edit/main'], function (m) {
+                    m.getApp().launch().done(function () {
+                        this.create({ participants: participants, folder_id: config.get('folder.calendar') });
                     });
                 });
             });
@@ -228,11 +279,28 @@ define('io.ox/contacts/actions',
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'invite',
+        index: INDEX += 100,
+        prio: 'hi',
+        label: gt('Invite to appointment'),
+        ref: 'io.ox/contacts/actions/invite'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
         id: 'edit',
         index: INDEX += 100,
         prio: 'hi',
         label: gt('Edit'),
         ref: 'io.ox/contacts/actions/update'
+    }));
+
+    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
+        id: 'delete',
+        index: INDEX += 100,
+        prio: 'hi',
+        label: gt('Delete'),
+        ref: 'io.ox/contacts/actions/delete',
+        special: 'danger'
     }));
 
     ext.point('io.ox/contacts/links/inline').extend(new links.Link({
@@ -247,14 +315,5 @@ define('io.ox/contacts/actions',
         index: INDEX += 100,
         label: gt('Copy'),
         ref: 'io.ox/contacts/actions/copy'
-    }));
-
-    ext.point('io.ox/contacts/links/inline').extend(new links.Link({
-        id: 'delete',
-        index: INDEX += 100,
-        prio: 'hi',
-        label: gt('Delete'),
-        ref: 'io.ox/contacts/actions/delete',
-        special: 'danger'
     }));
 });

@@ -77,6 +77,7 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "521" : "employee_type",
             "522" : "room_number",
             "523" : "street_business",
+            "524" : "internal_userid",
             "525" : "postal_code_business",
             "526" : "city_business",
             "527" : "state_business",
@@ -153,7 +154,6 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
             "601" : "image1_content_type",
             "602" : "mark_as_distributionlist",
             "605" : "default_address",
-            "524" : "internal_userid",
             "606" : "image1_url"
         },
         "calendar" : {
@@ -771,13 +771,17 @@ define("io.ox/core/http", ["io.ox/core/event"], function (Events) {
                     ids = that.simplify(ids);
                     // build hash (uses folder_id!)
                     var i, obj, hash = {}, tmp = new Array(data.length), key;
+                    // use internal_userid?
+                    var useInternalUserId = _(ids).reduce(function (memo, obj) {
+                        return memo && _.isNumber(obj);
+                    }, true);
                     for (i = 0; (obj = data[i]); i++) {
-                        key = String(obj.internal_userid ? obj.internal_userid : (obj.folder_id || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0));
+                        key = useInternalUserId ? obj.internal_userid : _.cid(obj);
                         hash[key] = obj;
                     }
                     // fix order (uses folder!)
                     for (i = 0; (obj = ids[i]); i++) {
-                        key = String(typeof obj === "object" ? (obj.folder || 0) + "." + (obj.internal_userid || obj.id) + "." + (obj.recurrence_position || 0) : obj);
+                        key = useInternalUserId ? obj : _.cid(obj);
                         tmp[i] = hash[key];
                     }
                     hash = obj = ids = null;

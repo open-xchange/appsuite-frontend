@@ -57,12 +57,14 @@ define('io.ox/contacts/distrib/main',
                 model = contactModel.factory.create({
                     folder_id: folderId,
                     mark_as_distributionlist: true,
-                    distribution_list: initdata.distribution_list
+                    distribution_list: initdata.distribution_list,
+                    last_name: ''
                 });
             } else {
                 model = contactModel.factory.create({
                     folder_id: folderId,
-                    mark_as_distributionlist: true
+                    mark_as_distributionlist: true,
+                    last_name: ''
                 });
             }
 

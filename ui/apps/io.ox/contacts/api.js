@@ -33,8 +33,8 @@ define('io.ox/contacts/api',
             },
             list: {
                 action: 'list',
-                columns: '20,1,500,501,502,505,520,555,556,557,569,592,602,606'
-                    // 592 = distribution_list
+                columns: '20,1,500,501,502,505,520,524,555,556,557,569,592,602,606'
+                    // 524 = internal_userid, 592 = distribution_list,
                     // 602 = mark_as_distributionlist, 606 = image1_url
             },
             get: {
@@ -118,6 +118,9 @@ define('io.ox/contacts/api',
         if (_.isEmpty(o.data)) {
             return $.when();
         } else {
+            // fix last_name for distribution lists
+            if (o.data.distribution_list && o.data.distribution_list.length) { o.data.last_name = ''; }
+            // go!
             return http.PUT({
                     module: 'contacts',
                     params: {
