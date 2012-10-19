@@ -99,6 +99,10 @@
 
 .contact-detail {
 
+    .contact-header {
+        min-height: 90px;
+    }
+
     .field-label {
         font-family: @font-light;
         font-weight: 200;

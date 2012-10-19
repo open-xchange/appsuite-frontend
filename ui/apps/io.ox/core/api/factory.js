@@ -147,6 +147,12 @@ define("io.ox/core/api/factory",
                 if (ids.length === 0) {
                     return $.Deferred().resolve([])
                         .done(o.done.list || $.noop);
+                } else if (ids.length === 1) {
+                    // if just one item, we use get request
+                    return this.get(http.simplify(ids)[0])
+                        .pipe(function (data) { return [data]; })
+                        .pipe(o.pipe.listPost)
+                        .done(o.done.list || $.noop);
                 } else {
                     // cache miss?
                     return (useCache ? caches.list.get(ids, getter) : getter())

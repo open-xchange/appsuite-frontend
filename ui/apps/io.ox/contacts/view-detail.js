@@ -142,7 +142,7 @@ define("io.ox/contacts/view-detail",
         index: 100,
         id: "contact-details",
         draw: function (baton) {
-            var node = $('<div class="row-fluid">').appendTo(this);
+            var node = $('<div class="row-fluid contact-header">').appendTo(this);
             ext.point('io.ox/contacts/detail/head').invoke('draw', node, baton);
         }
     });
