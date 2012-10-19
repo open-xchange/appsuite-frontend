@@ -247,11 +247,9 @@ $(document).ready(function () {
                 queue = [{ request: request, deferred: deferred }];
                 // set flag
                 relogin = true;
-                // set header
-                $("#io-ox-login-header").html(
-                    "Your session is expired." + "<br/>" +
-                    "<small>Please sign in again to continue.</small>"
-                );
+                // set header (if we come around here, we have extensions)
+                var ext = require('io.ox/core/extensions');
+                ext.point('io.ox/core/relogin').invoke('draw', $('#io-ox-login-header').find('h1').empty());
                 // bind
                 $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-username").val(ox.user || "");

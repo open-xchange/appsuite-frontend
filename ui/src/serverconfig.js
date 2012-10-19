@@ -5,7 +5,7 @@ define(function () {
 
         pageTitle: 'App Suite. ',
 
-        pageHeaderPrefix: 'open xchange',
+        pageHeaderPrefix: 'Open-Xchange',
         pageHeader: 'App Suite',
 
         productNameMail: 'OX Mail',
@@ -21,7 +21,7 @@ define(function () {
 
         hosts: ['ox7-dev.open-xchange.com', 'ox6-dev.open-xchange.com', 'ox6.open-xchange.com'],
 
-        copyright: '\u00A9 2012 open xchange.',
+        copyright: '\u00A9 2012 Open-Xchange.',
         version: '7.0.0 Drop #5',
         buildDate: '2012-10-17',
 

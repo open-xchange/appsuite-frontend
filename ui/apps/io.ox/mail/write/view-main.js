@@ -163,18 +163,6 @@ define("io.ox/mail/write/view-main",
                                         return hash[o.email] === undefined;
                                     });
                                 });
-                            /*return contactsAPI.autocomplete(query)
-                                .pipe(function (data) {
-                                    // remove duplicates
-                                    var hash = {};
-                                    node.find('input[name=' + id + ']').map(function () {
-                                        var rcpt = mailUtil.parseRecipient($(this).val())[1];
-                                        hash[rcpt] = true;
-                                    });
-                                    return _(data).filter(function (o) {
-                                        return hash[o.email] === undefined;
-                                    });
-                                });*/
                         },
                         stringify: function (data) {
                             return data.display_name ?
@@ -573,7 +561,7 @@ define("io.ox/mail/write/view-main",
             _(list).each(function (file) {
                 // get size
                 var size = file.size || file.file_size;
-                size = size !== undefined ? gt.format('%$1s\u00A0 ', strings.fileSize(size)) : '';
+                size = size !== undefined ? gt.format('%1$s\u00A0 ', strings.fileSize(size)) : '';
                 // draw
                 view.sections.attachments.append(
                     $('<div>').addClass('section-item file').append(
@@ -689,8 +677,8 @@ define("io.ox/mail/write/view-main",
 
         node.addClass('io-ox-mail-write-contact').append(
             img,
-            $('<div>').addClass('person-link ellipsis').html(name + '\u00A0'),
-            $('<div>').addClass('ellipsis').html(email)
+            $('<div>').addClass('person-link ellipsis noI18n').html(name + '\u00A0'),
+            $('<div>').addClass('ellipsis noI18n').html(email)
         );
     }
 

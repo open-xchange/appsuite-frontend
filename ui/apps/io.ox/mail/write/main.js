@@ -522,6 +522,7 @@ define('io.ox/mail/write/main',
         app.failRestore = function (point) {
             var def = $.Deferred();
             win.busy().show(function () {
+                _.url.hash('app', 'io.ox/mail/write:' + point.mode);
                 app.setMail(point).done(function () {
                     app.getEditor().focus();
                     win.idle();
@@ -561,6 +562,8 @@ define('io.ox/mail/write/main',
                 _.url.hash('mailto', null);
             }
 
+            _.url.hash('app', 'io.ox/mail/write:compose');
+
             win.busy().show(function () {
                 app.setMail({ data: data, mode: 'compose', initial: true })
                 .done(function () {
@@ -580,52 +583,52 @@ define('io.ox/mail/write/main',
         };
 
         /**
-         * Reply all
+         * Reply (all)
          */
-        app.replyall = function (obj) {
-            var def = $.Deferred();
-            win.busy().show(function () {
-                mailAPI.replyall(obj, defaultEditorMode || 'text')
-                .done(function (data) {
-                    data.sendtype = mailAPI.SENDTYPE.REPLY;
-                    app.setMail({ data: data, mode: 'replyall', initial: true })
-                    .done(function () {
-                        app.getEditor().focus();
-                        view.scrollpane.scrollTop(0);
-                        win.idle();
-                        def.resolve();
-                    });
-                });
-            });
-            return def;
-        };
+        function reply(type) {
 
-        /**
-         * Reply
-         */
-        app.reply = function (obj) {
-            var def = $.Deferred();
-            win.busy().show(function () {
-                mailAPI.reply(obj, defaultEditorMode || 'text')
-                .done(function (data) {
-                    data.sendtype = mailAPI.SENDTYPE.REPLY;
-                    app.setMail({ data: data, mode: 'reply', initial: true })
-                    .done(function () {
-                        app.getEditor().focus();
-                        view.scrollpane.scrollTop(0);
-                        win.idle();
-                        def.resolve();
+            return function (obj) {
+
+                var def = $.Deferred();
+                _.url.hash('app', 'io.ox/mail/write:' + type);
+
+                function cont(obj) {
+                    win.busy().show(function () {
+                        mailAPI[type](obj, defaultEditorMode || 'text')
+                        .done(function (data) {
+                            data.sendtype = mailAPI.SENDTYPE.REPLY;
+                            app.setMail({ data: data, mode: type, initial: true })
+                            .done(function () {
+                                app.getEditor().focus();
+                                view.scrollpane.scrollTop(0);
+                                win.idle();
+                                def.resolve();
+                            });
+                        });
                     });
-                });
-            });
-            return def;
-        };
+                }
+
+                if (obj === undefined) {
+                    cont({ folder: _.url.hash('folder'), id: _.url.hash('id') });
+                } else {
+                    cont(obj);
+                }
+
+                return def;
+            };
+        }
+
+        app.replyall = reply('replyall');
+        app.reply = reply('reply');
 
         /**
          * Forward
          */
         app.forward = function (obj) {
+
             var def = $.Deferred();
+            _.url.hash('app', 'io.ox/mail/write:forward');
+
             win.busy().show(function () {
                 mailAPI.forward(obj, defaultEditorMode || 'text')
                 .done(function (data) {
