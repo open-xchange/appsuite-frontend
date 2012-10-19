@@ -49,6 +49,7 @@
     }
     
     .week {
+        -webkit-backface-visibility: hidden;
         height: 100/6%; /* might be 6 weeks in a month */
         min-height: 80px;
         max-height: 160px;
@@ -69,7 +70,6 @@
         -webkit-transition: background-color 0.4s;
         -moz-transition: background-color 0.4s;
         transition: background-color 0.4s;
-        -webkit-backface-visibility: hidden;
     }
     
     .vertical {
