@@ -28,37 +28,38 @@ define('io.ox/office/editor/operations',
 
     /**
      * Creates a clone of the passed logical position and appends the specified
-     * offset value. The passed array object will not be changed.
+     * start index. The passed array object will not be changed.
      *
      * @param {Number[]} position
      *  The initial logical position.
      *
-     * @param {Number} [offset=0]
+     * @param {Number} [start=0]
      *  The value that will be appended to the new position.
      *
      * @returns {Number[]}
-     *  A clone of the passed logical position, with the specified offset
+     *  A clone of the passed logical position, with the specified start value
      *  appended.
      */
-    function appendNewIndex(position, offset) {
+    function appendNewIndex(position, start) {
         position = _.clone(position);
-        position.push(_.isNumber(offset) ? offset : 0);
+        position.push(_.isNumber(start) ? start : 0);
         return position;
     }
 
     /**
      * Creates a clone of the passed logical position and increases the last
-     * element of the array by the specified offset. The passed array object
+     * element of the array by the specified value. The passed array object
      * will not be changed.
      *
      * @param {Number[]} position
      *  The initial logical position.
      *
      * @param {Number} [increment=1]
-     *  The value that will be added to the last index of the position.
+     *  The value that will be added to the last element of the position.
      *
      * @returns {Number[]}
-     *  A clone of the passed logical position, with the last index increased.
+     *  A clone of the passed logical position, with the last element
+     *  increased.
      */
     function increaseLastIndex(position, increment) {
         position = _.clone(position);
@@ -233,12 +234,12 @@ define('io.ox/office/editor/operations',
          *  operations will contain positions starting with this address.
          *
          * @param {Number} [start=0]
-         *  The logical offset of the first character to be included into the
+         *  The logical index of the first character to be included into the
          *  generated operations.
          *
          * @param {Number} [end=0x7FFFFFFF]
-         *  The logical offset behind the last character to be included in the
-         *  generated operations (half-open range).
+         *  The logical index of the last character to be included in the
+         *  generated operations (closed range).
          *
          * @returns {Operations.Generator}
          *  A reference to this instance.
@@ -250,27 +251,27 @@ define('io.ox/office/editor/operations',
                 // formatting ranges for text portions, must be applied after the contents
                 attributeRanges = [];
 
-            // logical offset of first character to be included into the result
+            // logical index of first character to be included into the result
             start = _.isNumber(start) ? Math.max(start, 0) : 0;
-            // logical offset of first character not to be included into the result
+            // logical index of last character to be included into the result
             end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
 
             // process all content nodes in the paragraph and create operations
             position = appendNewIndex(position, start);
-            Position.iterateParagraphContentNodes(paragraph, function (node, offset, length) {
+            Position.iterateParagraphContentNodes(paragraph, function (node, nodeStart, nodeLength) {
 
                 var // text of a portion span
                     text = null;
 
-                // node ends before the specified start offset (continue with next node)
-                if (offset + length <= start) { return; }
-                // node starts after the specified end offset (escape from iteration)
-                if (offset >= end) { return Utils.BREAK; }
+                // node ends before the specified start index (continue with next node)
+                if (nodeStart + nodeLength <= start) { return; }
+                // node starts after the specified end index (escape from iteration)
+                if (nodeStart > end) { return Utils.BREAK; }
 
                 // operation to create a (non-empty) generic text portion
                 if (DOM.isPortionSpan(node)) {
-                    // extract the text covered by the specified offset range
-                    text = node.firstChild.nodeValue.substring(Math.max(start - offset, 0), end - offset);
+                    // extract the text covered by the specified range
+                    text = node.firstChild.nodeValue.substring(Math.max(start - nodeStart, 0), end - nodeStart + 1);
                     // try to merge text portions into the last 'insertText' operation
                     if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
                         lastOperation.text += text;

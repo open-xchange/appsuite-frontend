@@ -1414,22 +1414,19 @@ define('io.ox/office/editor/position',
      *      logical length of 0. Otherwise, only real content nodes will be
      *      visited (non-empty text portions, text fields, and object nodes).
      *
-     * @returns {Number}
-     *  The logical length of all visited content nodes in the paragraph. If
-     *  the iterator function never returns Utils.BREAK, this value represents
-     *  the logical length of the paragraph contents. Otherwise, the value
-     *  represents the start index of the content node that follows the last
-     *  visited content node.
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
      */
     Position.iterateParagraphContentNodes = function (paragraph, iterator, context, options) {
 
         var // whether to visit all child nodes
             allNodes = Utils.getBooleanOption(options, 'allNodes', false),
-            // the logical start offset of the visited content node
-            offset = 0;
+            // the logical start index of the visited content node
+            start = 0;
 
         // visit the content nodes of the specified paragraph element (only child nodes, no other descendants)
-        Utils.iterateDescendantNodes(paragraph, function (node) {
+        return Utils.iterateDescendantNodes(paragraph, function (node) {
 
             var // the logical length of the node
                 length = 0,
@@ -1447,17 +1444,14 @@ define('io.ox/office/editor/position',
 
             // call the iterator for the current content node
             if (allNodes || (length > 0)) {
-                result = iterator.call(context, node, offset, length);
+                result = iterator.call(context, node, start, length);
             }
 
-            // update offset and return result of iterator function (it may escape from iteration)
-            offset += length;
+            // update start index and return result of iterator function (it may escape from iteration)
+            start += length;
             return result;
 
         }, undefined, { children: true });
-
-        // 'offset' points behind last visited content node
-        return offset;
     };
 
     /**
@@ -1479,39 +1473,48 @@ define('io.ox/office/editor/position',
     Position.getParagraphLength = function (startnode, position) {
 
         var // the paragraph element addressed by the passed logical position
-            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p');
+            paragraph = Position.getLastNodeFromPositionByNodeName(startnode, position, 'div.p'),
+            // length of the paragraph contents
+            length = 0;
 
-        // Position.iterateParagraphContentNodes() returns the paragraph length
-        return paragraph ? Position.iterateParagraphContentNodes(paragraph, $.noop) : 0;
+        if (paragraph) {
+            Position.iterateParagraphContentNodes(paragraph, function (node, start, nodeLength) {
+                length += nodeLength;
+            });
+        }
+
+        return length;
     };
 
     /**
-     * Returns the logical offset of a paragraph content node in its paragraph.
+     * Returns the logical start index of a paragraph child node in its
+     * paragraph. The passed node may be any child node of a paragraph (either
+     * an editable content node, or a helper node such as an offset container
+     * used to position floated objects).
      *
      * @param {HTMLElement|jQuery} node
-     *  The paragraph content node, whose logical offset will be calculated.
+     *  The paragraph child node, whose logical start index will be calculated.
      *  If this object is a jQuery collection, uses the first node it contains.
      *
      * @returns {Number}
-     *  Returns the logical offset of the specified node in its parent
-     *  paragraph element, or -1, if the node is not a child content node of
-     *  the paragraph.
+     *  Returns the logical start index of the specified node in its parent
+     *  paragraph element.
      */
-    Position.getParagraphContentNodeOffset = function (node) {
+    Position.getStartOfParagraphChildNode = function (node) {
 
-        var // the logical offset of the passed node
-            offset = -1;
+        var // the logical start index of the passed node
+            start = -1;
 
         // visit all content nodes of the node parent (the paragraph), and search for the node
         node = Utils.getDomNode(node);
-        Position.iterateParagraphContentNodes(node.parentNode, function (contentNode, contentOffset) {
-            if (node === contentNode) {
-                offset = contentOffset;
+        Position.iterateParagraphContentNodes(node.parentNode, function (childNode, nodeStart) {
+            if (node === childNode) {
+                start = nodeStart;
                 return Utils.BREAK;
             }
-        });
+        }, undefined, { allNodes: true }); // visit all child nodes of the paragraph
 
-        return offset;
+        return start;
     };
 
     /**
@@ -2353,8 +2356,6 @@ define('io.ox/office/editor/position',
 
     };
 
-    // exports ================================================================
-
     /**
      * Checking, if two logical positions have a difference of one
      * in the final position and are equal in all other positions.
@@ -2378,6 +2379,8 @@ define('io.ox/office/editor/position',
 
         return (_.isEqual(pos1, pos2)) && (lastPos2 === lastPos1 + 1);
     };
+
+    // exports ================================================================
 
     return Position;
 

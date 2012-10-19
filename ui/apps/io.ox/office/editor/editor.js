@@ -1708,7 +1708,7 @@ define('io.ox/office/editor/editor',
                 var position = operation.start.slice(0, -1),
                     paragraph = Position.getCurrentParagraph(paragraphs, position),
                     start = operation.start[operation.start.length - 1],
-                    end = operation.end[operation.end.length - 1] + 1, // half-open range
+                    end = operation.end[operation.end.length - 1],
                     generator = new Operations.Generator();
 
                 generator.generateParagraphContentOperations(paragraph, position, start, end);
@@ -2776,9 +2776,9 @@ define('io.ox/office/editor/editor',
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
+                    if ((DOM.isImageNode(child)) && !$(child).hasClass('inline')) {
 
-                        var localPos = Position.getParagraphContentNodeOffset(child),
+                        var localPos = Position.getStartOfParagraphChildNode(child),
                             source = _.copy(position, true),
                             dest = _.copy(position, true);
 
