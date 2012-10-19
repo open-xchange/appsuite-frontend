@@ -545,9 +545,9 @@ define('io.ox/office/tk/utils',
      *  The name of the attribute to be returned.
      *
      * @param [def]
-     *  The default value returned when the options parameter is not a
-     *  function, or if it does not contain the specified attribute, or if the
-     *  attribute is not an object. May be any value (not only functions).
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not an object. May be any value (not only functions).
      *
      * @returns
      *  The value of the specified attribute, or the default value.
@@ -568,9 +568,9 @@ define('io.ox/office/tk/utils',
      *  The name of the attribute to be returned.
      *
      * @param [def]
-     *  The default value returned when the options parameter is not an
-     *  array, or if it does not contain the specified attribute, or if the
-     *  attribute is not an object. May be any value.
+     *  The default value returned when the options parameter is not an object,
+     *  or if it does not contain the specified attribute, or if the attribute
+     *  is not an array. May be any value.
      *
      * @returns
      *  The value of the specified attribute, or the default value.
