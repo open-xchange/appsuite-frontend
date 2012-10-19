@@ -632,6 +632,11 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
             line-height: 32px;
         }
 
+        > input {
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
         /* selected toggle/radio buttons */
         > button.selected {
             .vertical-gradient(@selected-accent-color, @selected-color);

@@ -101,7 +101,27 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return this;
     };
 
+    /**
+     * Converts this DOM point to a human readable string representation.
+     */
     DOM.Point.prototype.toString = function () {
+
+        var // full string representation of this DOM Point
+            result = this.node.nodeName.toLowerCase();
+
+        if ((this.node.nodeType === 1) && (this.node.className.length > 0)) {
+            // add class names of an element
+            result += '.' + this.node.className.replace(/ /g, '.');
+        } else if (this.node.nodeType === 3) {
+            // add some text of a text node
+            result += '"' + this.node.nodeValue.substr(0, 10) + ((this.node.nodeValue.length > 10) ? '...' : '') + '"';
+        }
+
+        if (_.isNumber(this.offset)) {
+            result += ':' + this.offset;
+        }
+
+        return result;
     };
 
     // static methods ---------------------------------------------------------
@@ -252,6 +272,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.Range.prototype.isCollapsed = function () {
         return DOM.Point.equalPoints(this.start, this.end);
+    };
+
+    /**
+     * Converts this DOM range to a human readable string representation.
+     */
+    DOM.Range.prototype.toString = function () {
+        return '[start=' + this.start + ', end=' + this.end + ']';
     };
 
     // static methods ---------------------------------------------------------

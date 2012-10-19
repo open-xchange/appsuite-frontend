@@ -35,27 +35,41 @@ define('io.ox/office/editor/editor',
     var // shortcut for the KeyCodes object
         KeyCodes = Utils.KeyCodes,
 
-        // key codes of navigation keys that will be passed directly to the browser
-        NAVIGATION_KEYS = _([
-            // KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT,
-            // KeyCodes.CAPS_LOCK,
+        // key codes of keys that change the text cursor position
+        CURSOR_KEYS = _([
             KeyCodes.PAGE_UP, KeyCodes.PAGE_DOWN, KeyCodes.END, KeyCodes.HOME,
-            KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW,
+            KeyCodes.LEFT_ARROW, KeyCodes.UP_ARROW, KeyCodes.RIGHT_ARROW, KeyCodes.DOWN_ARROW
+        ]),
+
+        // key codes of keys that will be passed directly to the browser
+        IGNORABLE_KEYS = _([
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
-            KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
+            KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
+            KeyCodes.F5
         ]);
 
     // private global functions ===============================================
 
     /**
-     * Returns true, if the passed keyboard event is a navigation event (cursor
-     * traveling etc.) and will be passed directly to the browser.
+     * Returns true, if the passed keyboard event is an event that moves the
+     * text cursor.
      *
      * @param event
      *  A jQuery keyboard event object.
      */
-    function isNavigationKeyEvent(event) {
-        return event && NAVIGATION_KEYS.contains(event.keyCode);
+    function isCursorKeyEvent(event) {
+        return event && CURSOR_KEYS.contains(event.keyCode);
+    }
+
+    /**
+     * Returns true, if the passed keyboard event must be ignored and passed
+     * directly to the browser.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isIgnorableKeyEvent(event) {
+        return isCursorKeyEvent(event) || (event && IGNORABLE_KEYS.contains(event.keyCode));
     }
 
     function getPrintableChar(event) {
@@ -375,8 +389,7 @@ define('io.ox/office/editor/editor',
         this.deleteSelected = function (_selection) {
 
             // implCheckSelection();
-            var buttonEvent = _selection ? false : true,
-                selection = _selection || getSelection();
+            var selection = _selection || getSelection();
 
             if (selection.hasRange()) {
 
@@ -384,7 +397,7 @@ define('io.ox/office/editor/editor',
 
                 selection.adjust();
 
-                if ((buttonEvent) && (selection.startPaM.imageFloatMode) && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
+                if (selection.startPaM.imageFloatMode && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
                     deleteSelectedImage(selection);
@@ -997,7 +1010,7 @@ define('io.ox/office/editor/editor',
          */
         this.getAttributes = function (family) {
             var styleSheets = this.getStyleSheets(family),
-                ranges = DOM.getBrowserSelection(editdiv);
+                ranges = getBrowserSelection();
             return styleSheets ? styleSheets.getAttributesInRanges(ranges) : {};
         };
 
@@ -1184,14 +1197,19 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
+            // any navigation key: change object selection to text selection before
+            if (isCursorKeyEvent(event)) {
+                deselectAllObjects();
+            }
+
+/*            if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
                 // Do nothing in processKeyDown and not in the following processKeyPressed.
                 // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
                 lastKeyDownEvent = event;
                 return;
             }
-
+*/
             // TODO: How to strip away debug code?
             if (event.keyCode && event.shiftKey && event.ctrlKey && event.altKey) {
                 var c = getPrintableChar(event);
@@ -1217,29 +1235,8 @@ define('io.ox/office/editor/editor',
                 else if (c === 'N') {
                     self.insertCell();
                 }
-                else if (c === 'G') {
-                    var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'AsCharacter', inline: true}};
-                    applyOperation(newOperation, true, true);
-                }
-                else if (c === 'R') {
-                    var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToParagraph', top: '50px', left: '100px', inline: false}};
-                    applyOperation(newOperation, true, true);
-                }
-                else if (c === 'S') {
-                    var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToCharacter', top: '50px', left: '100px', inline: false}};
-                    applyOperation(newOperation, true, true);
-                }
-                else if (c === 'V') {
-                    var selection = getSelection();
-                    var newOperation = {name: Operations.IMAGE_INSERT, position: _.copy(selection.startPaM.oxoPosition), imgurl: 'Pictures/10000000000000500000005076371D39.jpg', attrs: {anchortype: 'ToPage', top: '50px', left: '100px', inline: false}};
-                    applyOperation(newOperation, true, true);
-                }
                 else if (c === 'F') {
                     var selection = getSelection();
-                    // {'type':' DATE \\* MERGEFORMAT ','name':'insertField','position':[0,24],'representation':'05.09.2012'}
                     var newOperation = {name: Operations.FIELD_INSERT, position: _.copy(selection.startPaM.oxoPosition), type: ' DATE \\* MERGEFORMAT ', representation: '07.09.2012'};
                     applyOperation(newOperation, true, true);
                 }
@@ -1276,16 +1273,16 @@ define('io.ox/office/editor/editor',
                         // getting object and drawing frame around it
 
                         var useObjectNode = true,
-                            imageDivNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
+                            objectNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
 
                         // only delete, if imageStartPosition is really an image position
-                        if (DOM.isImageNode(imageDivNode)) {
-                            // prevent default click handling of the browser
+                        if (objectNode && DOM.isObjectNode(objectNode)) {
+                            // prevent default key handling of the browser
                             event.preventDefault();
-                            // but set focus to the document container (may be loacted in GUI edit fields)
-                            self.grabFocus();
                             // select single objects only (multi selection not supported yet)
-                            selectObjects(imageDivNode, false);
+                            selectObjects(objectNode, false);
+                            // special mark about direction of selection
+                            $(objectNode).data('cursor-backwards', event.keyCode === KeyCodes.LEFT_ARROW);
                         }
 
                     } else {
@@ -1538,7 +1535,7 @@ define('io.ox/office/editor/editor',
                 return;
             }
 
-            if (isNavigationKeyEvent(lastKeyDownEvent)) {
+            if (isIgnorableKeyEvent(lastKeyDownEvent)) {
                 // Don't block cursor navigation keys.
                 // Use lastKeyDownEvent, because some browsers (eg Chrome) change keyCode to become the charCode in keyPressed.
                 // Some adjustments in getSelection/setSelection are also necessary for cursor navigation keys. Therefore this
@@ -1552,8 +1549,8 @@ define('io.ox/office/editor/editor',
             }
 
             /*
-            Utils.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + isNavigationKeyEvent(event));
-            if (isNavigationKeyEvent(event)) {
+            Utils.log('processKeyPressed: keyCode: ' + event.keyCode + ' isNavi: ' + isIgnorableKeyEvent(event));
+            if (isIgnorableKeyEvent(event)) {
                 return;
             }
             */
@@ -1957,7 +1954,7 @@ define('io.ox/office/editor/editor',
             // get and check operation handler
             operationHandler = operationHandlers[operation.name];
             if (!_.isFunction(operationHandler)) {
-                Utils.warning('Editor.applyOperation(): invalid operation name "' + operation.name + '".');
+                Utils.warn('Editor.applyOperation(): invalid operation name "' + operation.name + '".');
                 return;
             }
 
@@ -2002,18 +1999,43 @@ define('io.ox/office/editor/editor',
         // Private selection functions
         // ==================================================================
 
+        /**
+         * Returns the current selection as array of DOM.Range objects. Adds
+         * special handling, if the editor is in object selection mode where
+         * the real browser selection is deleted, and the selected objects are
+         * stored in a private collection.
+         *
+         * @returns {DOM.Range[]}
+         *  An array of DOM.Range objects representing the current editor
+         *  selection.
+         */
+        function getBrowserSelection() {
+
+            var browserSelection = null;
+
+            // if objects are selected, the real browser selection has been
+            // deleted, recreate it from the selected objects themselves
+            if (selectedObjects.length > 0) {
+                browserSelection = _(selectedObjects.get()).map(DOM.Range.createRangeForNode);
+            } else {
+                browserSelection = DOM.getBrowserSelection(editdiv);
+            }
+
+            return browserSelection;
+        }
+
         function getSelection(updateFromBrowser) {
 
             if (currentSelection && !updateFromBrowser)
                 return currentSelection;
 
-            var domSelection = DOM.getBrowserSelection(editdiv),
+            var domSelection = getBrowserSelection(),
                 domRange = null;
 
             if (domSelection.length) {
 
                 _(domSelection).each(function (range, index) {
-                    Utils.log('getSelection(): range[' + index + '], start=' + range.start.node.nodeName + ':' + range.start.offset + ', end=' + range.end.node.nodeName + ':' + range.end.offset);
+                    Utils.log('getSelection(): range[' + index + ']=' + range);
                 });
 
                 domRange = _(domSelection).last();
@@ -2045,9 +2067,9 @@ define('io.ox/office/editor/editor',
                 var endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
-                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
-                          ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
-                          ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
+//                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
+//                          ' start: ' + currentSelection.startPaM.selectedNodeName + ' (image float mode: ' + currentSelection.startPaM.imageFloatMode + '),' +
+//                          ' end: ' + currentSelection.endPaM.selectedNodeName + ' (image float mode: ' + currentSelection.endPaM.imageFloatMode + ')');
 
                 // Keeping selections synchronuous. Without setting selection now, there are cursor travel problems in Firefox.
                 // -> too many problems. It is not a good idea to call setSelection() inside getSelection() !
@@ -2105,28 +2127,14 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Deselects all selected object nodes and destroys the browser
-         * selection that represents the selected objects.
-         */
-        function deselectAllObjects() {
-            // remove the selection boxes
-            DOM.clearObjectSelection(selectedObjects);
-            // clear collection of selected objects
-            selectedObjects = $();
-        }
-
-        /**
-         * Selects the specified object node and updates the browser selection
-         * that represents the selected objects.
+         * Selects the specified object nodes and clears the browser selection
+         * which hides the blinking text cursor.
          *
-         * @param {HTMLElement|jQuery} objectNode
+         * @param {HTMLElement|jQuery} objects
          *  The root node of the object to be selected. If the passed value is
          *  a jQuery collection, all contained objects will be selected.
          */
         function selectObjects(objects, extend) {
-
-            var // the browser sleection representing all selected ojects
-                browserSelection = [];
 
             // remove old object selection, unless selection will be extended
             if (extend !== true) {
@@ -2138,11 +2146,72 @@ define('io.ox/office/editor/editor',
             // draw the selection box into the passed objects
             DOM.drawObjectSelection(objects, { moveable: false, sizeable: false });
 
-            // build browser selection from objects
-            selectedObjects.each(function () {
-                browserSelection.push(new DOM.Range(DOM.Point.createPointForNode(this)));
-            });
-            DOM.setBrowserSelection(browserSelection);
+            // clear browser selection to hide the text cursor
+            DOM.setBrowserSelection([]);
+        }
+
+        /**
+         * Updates the broser selection to a range that starts directly before
+         * the passed object node, and ends diectly after the object.
+         *
+         * @param {HTMLElement|jQuery} object
+         *  The root node of the object to be selected. If the passed value is
+         *  a jQuery collection, uses the first DOM node it contains.
+         */
+        function selectObjectAsText(object) {
+
+            var // previous text span of the object node
+                prevTextSpan = Utils.findPreviousNodeInTree(object, function () {
+                    return DOM.isPortionSpan(this);
+                }),
+                // next text span of the object node
+                nextTextSpan = Utils.findNextNodeInTree(selectedObjects.last(), function () {
+                    return DOM.isPortionSpan(this);
+                }),
+                // DOM points representing the text selection over the object
+                startPoint = null, endPoint = null;
+
+            // start point after the last character preceding the object
+            if (prevTextSpan) {
+                startPoint = new DOM.Point(prevTextSpan.firstChild, prevTextSpan.firstChild.nodeValue.length);
+            }
+            // end point before the first character following the object
+            if (nextTextSpan) {
+                endPoint = new DOM.Point(nextTextSpan.firstChild, 0);
+            }
+
+            // set browser selection (do nothing if no start and no end point
+            // have been found - but that should never happen)
+            if (startPoint || endPoint) {
+                if (selectedObjects.data('cursor-backwards')) {
+                    DOM.setBrowserSelection(new DOM.Range(endPoint || startPoint, startPoint || endPoint));
+                } else {
+                    DOM.setBrowserSelection(new DOM.Range(startPoint || endPoint, endPoint || startPoint));
+                }
+            }
+        }
+
+        /**
+         * Deselects all selected object nodes and destroys the browser
+         * selection that represents the selected objects.
+         */
+        function deselectAllObjects() {
+
+            if (selectedObjects.length > 0) {
+
+                // remove the selection boxes
+                DOM.clearObjectSelection(selectedObjects);
+
+                // select last object with browser selection (needed to
+                // continue with cursor travelling)
+                selectObjectAsText(selectedObjects.last());
+
+                // remove the marker used for backward cursor traveling
+                selectedObjects.data('cursor-backwards', false);
+
+                // clear collection of selected objects
+                selectedObjects = $();
+            }
         }
 
         // End of private selection functions
@@ -2979,6 +3048,9 @@ define('io.ox/office/editor/editor',
                     // removing position div node
                     $(divOffsetNode).remove();
                 }
+
+                // remove the object from the internal object selection
+                selectedObjects = selectedObjects.not(imageDivNode);
 
                 // deleting the image with an operation
                 self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
