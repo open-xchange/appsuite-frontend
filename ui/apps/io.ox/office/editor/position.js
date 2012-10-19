@@ -753,7 +753,16 @@ define('io.ox/office/editor/position',
 
         // Only supporting single selection at the moment
         var start = Position.getDOMPosition(startnode, oxoSelection.startPaM.oxoPosition, useObjectNode),
-            end = Position.getDOMPosition(startnode, oxoSelection.endPaM.oxoPosition, useObjectNode);
+            endSelection = _.copy(oxoSelection.endPaM.oxoPosition, true);
+
+        if ((useObjectNode) && (start) &&
+            (DOM.isObjectNode(start.node)) &&
+            (start.offset === 0) &&
+            (Position.isOneCharacterSelection(oxoSelection.startPaM.oxoPosition, oxoSelection.endPaM.oxoPosition))) {
+            endSelection = _.copy(oxoSelection.startPaM.oxoPosition, true);  // end position is copy of start position, so that end will be start
+        }
+
+        var end = Position.getDOMPosition(startnode, endSelection, useObjectNode);
 
         if (useObjectNode) {
 
