@@ -227,8 +227,7 @@ define('io.ox/office/editor/controller',
                     get: function (attributes) { return attributes.ilvl !== undefined; },
                     set: function (mode) {
                         if (mode) {
-                            var defNumId = editor.getLists().getDefaultBulletNumId();
-                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+                            editor.createList('bullet');
                         } else {
                             editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
                         }
@@ -241,8 +240,7 @@ define('io.ox/office/editor/controller',
                     },
                     set: function (mode) {
                         if (mode) {
-                            var defNumId = editor.getLists().getDefaultNumberingNumId();
-                            editor.setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+                            editor.createList('numbering');
                         } else {
                             editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
                         }

@@ -919,6 +919,18 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
         };
 
+        this.createList = function (type) {
+            var lists = self.getLists();
+            var defNumId = lists.getDefaultNumId(type);
+            if (defNumId === undefined) {
+                var listOperation = lists.getDefaultListOperation(type);
+                applyOperation(listOperation, true, true);
+                defNumId = listOperation.listName;
+            }
+            setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+
+        };
+
         // style sheets and formatting attributes -----------------------------
 
         /**
