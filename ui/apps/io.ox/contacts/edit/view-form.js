@@ -222,18 +222,15 @@ define('io.ox/contacts/edit/view-form', [
 
     new actions.Action('io.ox/contacts/actions/edit/save', {
         id: 'save',
-        action: function (options) {
-            console.log(options);
-            options.parentView.trigger('save:start');
-            options.model.save().done(function () {
-                options.parentView.trigger('save:success');
+        action: function (options, baton) {
+            baton.parentView.trigger('save:start');
+            baton.model.save().done(function () {
+                baton.parentView.trigger('save:success');
             }).fail(function () {
-                options.parentView.trigger('save:fail');
+                baton.parentView.trigger('save:fail');
             });
         }
     });
-
-
 
     var index = 400;
 

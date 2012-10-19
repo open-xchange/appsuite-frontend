@@ -16,22 +16,22 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
     var views;
 
     function attributeDefinitions(observeDefinition) {
-        
+
         if (_.isString(observeDefinition)) {
             return attributeDefinitions(observeDefinition.split(/\s+/));
         }
-        
+
         return _(observeDefinition).map(function (attributeDefinition) {
-            
+
             if (_.isObject(attributeDefinition)) {
                 return attributeDefinition;
             }
-            
+
             var canonicalName = "";
             var forceUpcase = true;
             for (var i = 0, length = attributeDefinition.length; i < length; i++) {
                 var c = attributeDefinition.charAt(i);
-                
+
                 if (c === '-' || c === '_') {
                     forceUpcase = true;
                 } else {
@@ -39,26 +39,26 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                         c = c.toUpperCase();
                         forceUpcase = false;
                     }
-                    
+
                     canonicalName = canonicalName + c;
                 }
             }
-            
+
             return {
                 canonicalName: canonicalName,
                 attributeName: attributeDefinition
             };
-            
+
         });
-    
+
     }
-    
+
     function createViewClass(options, extOptions) {
         extOptions = extOptions || {};
         var id = options.id;
         delete options.id;
-        
-        
+
+
         // A few overridable default implementations
         options.initialize = options.initialize || function () {
             var self = this;
@@ -72,7 +72,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     self.modelInvalid();
                 });
             }
-            
+
             if (this.modelValid) {
                 self.observeModel('invalid', function () {
                     self.modelValid();
@@ -100,7 +100,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                             self['on' + definition.canonicalName + 'Invalid'].call(self);
                         });
                     }
-                    
+
                     if (self['on' + definition.canonicalName + 'Valid']) {
                         self.observeModel('valid:' + definition.attributeName, function () {
                             self['on' + definition.canonicalName + 'Valid'].call(self);
@@ -108,13 +108,14 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     }
                 });
             }
-            
+
             this.$el.attr({
                 'data-extension-id': extOptions.id || id,
                 'data-extension-point': name,
                 'data-composite-id': (this.model && this.model.getCompositeId) ? this.model.getCompositeId() : ''
             });
-            this.baton = ext.Baton.wrap(this.options);
+
+            this.baton = ext.Baton(this.options);
 
             if (options.init) {
                 options.init.apply(this, $.makeArray(arguments));
@@ -123,7 +124,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             if (options.customizeNode) {
                 this.customizeNode();
             }
-            
+
         };
 
         options.close = options.close || function () {
@@ -140,15 +141,15 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
 
         var ViewClass = Backbone.View.extend(options);
-        
+
         ViewClass.extId = id;
-        
+
         return ViewClass;
     }
-    
+
     function buildExtension(ViewClass, options, extOptions) {
         extOptions = extOptions || {};
-        
+
         return _.extend({}, {
             id: ViewClass.extId,
             index: options.index,
@@ -159,7 +160,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             }
         }, extOptions);
     }
-    
+
     function ViewExtensionPoint(name) {
 
         this.basicExtend = function (extension) {
@@ -181,7 +182,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
             var point = views.point(name + "/" + subpath),
                 ViewClass = point.createView(options);
             var id = options.id || name + "/" + subpath;
-            
+
             if (options.id) {
                 delete options.id;
             }
@@ -202,10 +203,10 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
         this.createView = function (options) {
             options = options || {};
-            
+
             var id = options.id || '';
             delete options.id;
-            
+
             options.render = options.render || function () {
                 this.point.invoke.apply(this.point, ['draw', this.$el].concat(this.extensionOptions ? this.extensionOptions() : [this.baton]));
                 return this;
@@ -213,7 +214,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
 
             options.initialize = options.initialize || function () {
                 Events.extend(this);
-                this.baton = ext.Baton.wrap(_.extend({}, this.options, {parentView: this}));
+                this.baton = ext.Baton(_.extend({}, this.options, {parentView: this}));
                 if (this.init) {
                     this.init.apply(this, $.makeArray(arguments));
                 }
@@ -258,7 +259,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     } else if (self.initialValue) {
                         self.$el.append($.txt(self.initialValue));
                     }
-                    
+
                     first = false;
                 });
 

@@ -1016,7 +1016,7 @@ define('io.ox/calendar/week/view',
                 });
 
             ext.point('io.ox/calendar/week/view/appointment')
-                .invoke('draw', el, ext.Baton.wrap(_.extend({}, this.options, {model: a, folder: this.folder})));
+                .invoke('draw', el, ext.Baton(_.extend({}, this.options, {model: a, folder: this.folder})));
             return el;
         },
 
