@@ -13,7 +13,6 @@ define("io.ox/participants/views",
             'click .remove': 'onRemove'
         },
         render: function () {
-            console.log(this.model.toJSON());
             this.$el.attr('data-cid', this.model.cid);
             var self = this,
                 $wrapper = $('<div class="participant-wrapper">'),
