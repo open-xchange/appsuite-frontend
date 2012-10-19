@@ -384,7 +384,7 @@ define("io.ox/mail/main",
                     badge = $('<span class="badge">').appendTo(win.nodes.title);
                 }
                 if (unread > 0) {
-                    badge.text(unread).show();
+                    badge.text(_.noI18n(unread)).show();
                 } else {
                     badge.hide();
                 }

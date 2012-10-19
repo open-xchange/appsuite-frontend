@@ -330,7 +330,7 @@ define('io.ox/contacts/api',
         });
     };
 
-    api.getPictureURL = function (obj) {
+    api.getPictureURL = function (obj, options) {
 
         var deferred = $.Deferred(),
             defaultUrl = ox.base + '/apps/themes/default/dummypicture.png',
@@ -342,15 +342,18 @@ define('io.ox/contacts/api',
             // assume input is email address
             api.getPictureByMailAddress(obj)
                 .done(function (url) {
-                    deferred.resolve(url || defaultUrl);
+                    url = url ? url + '&' + $.param($.extend({}, options)) : defaultUrl;
+                    deferred.resolve(url);
                 })
                 .fail(fail);
         } else if (typeof obj === 'object' && obj !== null) {
             // also look for contact_id to support user objects directly
             api.get({ id: obj.contact_id || obj.id, folder: obj.folder_id || obj.folder })
                 .done(function (data) {
+                    var url;
                     if (data.image1_url) {
-                        deferred.resolve(data.image1_url.replace(/^\/ajax/, ox.apiRoot));
+                        url = data.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options));
+                        deferred.resolve(url);
                     } else {
                         fail();
                     }
@@ -363,17 +366,11 @@ define('io.ox/contacts/api',
         return deferred;
     };
 
-    api.getPicture = function (obj) {
+    api.getPicture = function (obj, options) {
         var node, set, clear, cont;
         node = $('<div>');
         set = function (e) {
-            if (Modernizr.backgroundsize) {
-                node.css('backgroundImage', 'url(' + e.data.url + ')');
-            } else {
-                node.append(
-                    $('<img>', { src: e.data.url, alt: '' }).css({ width: '100%', height: '100%' })
-                );
-            }
+            node.css('backgroundImage', 'url(' + e.data.url + ')');
             if (/dummypicture\.png$/.test(e.data.url)) {
                 node.addClass('default-picture');
             }
@@ -392,9 +389,9 @@ define('io.ox/contacts/api',
                 .prop('src', url);
         };
         if (obj && _.isString(obj.image1_url)) {
-            cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot));
+            cont(obj.image1_url.replace(/^\/ajax/, ox.apiRoot) + '&' + $.param($.extend({}, options)));
         } else {
-            api.getPictureURL(obj).done(cont).fail(clear);
+            api.getPictureURL(obj, options).done(cont).fail(clear);
         }
         return node;
     };

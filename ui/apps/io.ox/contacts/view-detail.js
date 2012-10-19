@@ -160,7 +160,7 @@ define("io.ox/contacts/view-detail",
             this.append(
                 // left side / picture
                 $('<div class="span4 field-label">').append(
-                    api.getPicture(baton.data).addClass('picture')
+                    api.getPicture(baton.data, { scaleType: 'contain', width: 80, height: 80 }).addClass('picture')
                 )
             );
         }
