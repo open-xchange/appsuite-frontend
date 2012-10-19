@@ -45,6 +45,32 @@ define('io.ox/office/editor/editor',
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK
         ]);
 
+    // private global functions ===============================================
+
+    /**
+     * Returns true, if the passed keyboard event is a navigation event (cursor
+     * traveling etc.) and will be passed directly to the browser.
+     *
+     * @param event
+     *  A jQuery keyboard event object.
+     */
+    function isNavigationKeyEvent(event) {
+        return event && NAVIGATION_KEYS.contains(event.keyCode);
+    }
+
+    function getPrintableChar(event) {
+        // event.char preferred. DL2, but nyi in most browsers:(
+        if (event.char) {
+            return String.fromCharCode(event.char);
+        }
+        // event.which deprecated, but seems to work well
+        if (event.which && (event.which >= 32) /* && (event.which <= 255)*/) {
+            return String.fromCharCode(event.which);
+        }
+        // TODO: Need to handle other cases - later...
+        return '';
+    }
+
     // class Editor ===========================================================
 
     /**'io.ox/office/editor/position',
@@ -1238,7 +1264,38 @@ define('io.ox/office/editor/editor',
             var selection = getSelection();
 
             lastKeyDownEvent = event;   // for some keys we only get keyDown, not keyPressed!
-            updateSelection();
+
+            updateSelection()
+            .done(function () {
+                if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
+
+                    if ((currentSelection) &&
+                        (currentSelection.startPaM.imageFloatMode) &&
+                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
+
+                        // getting object and drawing frame around it
+
+                        var useObjectNode = true,
+                            imageDivNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
+
+                        // only delete, if imageStartPosition is really an image position
+                        if (DOM.isImageNode(imageDivNode)) {
+                            // prevent default click handling of the browser
+                            event.preventDefault();
+                            // but set focus to the document container (may be loacted in GUI edit fields)
+                            self.grabFocus();
+                            // select single objects only (multi selection not supported yet)
+                            selectObjects(imageDivNode, false);
+                        }
+
+                    } else {
+                        deselectAllObjects();
+                    }
+                } else {
+                    deselectAllObjects();
+                }
+
+            });
 
             if (event.keyCode === KeyCodes.DELETE) {
                 var imageShift = 0;
@@ -1474,37 +1531,7 @@ define('io.ox/office/editor/editor',
 
             implDbgOutEvent(event);
 
-            updateSelection()
-            .done(function () {
-                if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
-
-                    if ((currentSelection) &&
-                        (currentSelection.startPaM.imageFloatMode) &&
-                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
-
-                        // getting object and drawing frame around it
-
-                        var useObjectNode = true,
-                            imageDivNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
-
-                        // only delete, if imageStartPosition is really an image position
-                        if (DOM.isImageNode(imageDivNode)) {
-                            // prevent default click handling of the browser
-                            event.preventDefault();
-                            // but set focus to the document container (may be loacted in GUI edit fields)
-                            self.grabFocus();
-                            // select single objects only (multi selection not supported yet)
-                            selectObjects(imageDivNode, false);
-                        }
-
-                    } else {
-                        deselectAllObjects();
-                    }
-                } else {
-                    deselectAllObjects();
-                }
-
-            });
+            updateSelection();
 
             if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.UP_ARROW)) && (event.shiftKey)) {
                 // Do absolutely nothing for cursor navigation keys with pressed shift key.
@@ -1606,64 +1633,6 @@ define('io.ox/office/editor/editor',
         function getDocumentUrl(options) {
             // do not cache the URL, it may change during runtime (versions etc)
             return app.getDocumentFilterUrl('getfile', options);
-        }
-
-        function getPrintableChar(event) {
-            // event.char preferred. DL2, but nyi in most browsers:(
-            if (event.char) {
-                return String.fromCharCode(event.char);
-            }
-            // event.which deprecated, but seems to work well
-            if (event.which && (event.which >= 32) /* && (event.which <= 255)*/) {
-                return String.fromCharCode(event.which);
-            }
-            // TODO: Need to handle other cases - later...
-            return '';
-        }
-
-        function updateSelection() {
-            var def = $.Deferred();
-            window.setTimeout(function () {
-                currentSelection = getSelection(true);
-                if (currentSelection) {
-                    self.trigger('selection', currentSelection);
-                    def.resolve();
-                } else if (focused && editMode) {
-                    // if not focused, browser selection might not be available...
-                    Utils.warn('Editor.updateSelection(): missing selection!');
-                    def.reject();
-                } else {
-                    def.reject();
-                }
-            }, 0);
-            return def.promise();
-        }
-
-        /**
-         * Returns true, if the passed keyboard event is a navigation event (cursor
-         * traveling etc.) and will be passed directly to the browser.
-         *
-         * @param event
-         *  A jQuery keyboard event object.
-         */
-        function isNavigationKeyEvent(event) {
-            return event && NAVIGATION_KEYS.contains(event.keyCode);
-        }
-
-        /**
-         * Selects the specified object node.
-         *
-         * @param {HTMLElement|jQuery} objectNode
-         *  The root node of the object to be selected. If the passed value is
-         *  a jQuery collection, uses the first DOM node it contains.
-         */
-        function selectObject(objectNode) {
-
-            // draw the object selection box
-            DOM.addObjectSelection(objectNode, { moveable: false, sizeable: false });
-
-            // set the browser selection
-            DOM.setBrowserSelection(DOM.Range.createRangeForNode(objectNode));
         }
 
         operationHandlers[Operations.INIT_DOCUMENT] = function (operation) {
@@ -2115,6 +2084,24 @@ define('io.ox/office/editor/editor',
             } else {
                 Utils.error('Editor.setSelection(): Failed to determine DOM Selection from OXO Selection: ' + oxosel.startPaM.oxoPosition + ' : ' + oxosel.endPaM.oxoPosition);
             }
+        }
+
+        function updateSelection() {
+            var def = $.Deferred();
+            window.setTimeout(function () {
+                currentSelection = getSelection(true);
+                if (currentSelection) {
+                    self.trigger('selection', currentSelection);
+                    def.resolve();
+                } else if (focused && editMode) {
+                    // if not focused, browser selection might not be available...
+                    Utils.warn('Editor.updateSelection(): missing selection!');
+                    def.reject();
+                } else {
+                    def.reject();
+                }
+            }, 0);
+            return def.promise();
         }
 
         /**

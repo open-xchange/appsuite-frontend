@@ -101,6 +101,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return this;
     };
 
+    DOM.Point.prototype.toString = function () {
+    };
+
     // static methods ---------------------------------------------------------
 
     /**
