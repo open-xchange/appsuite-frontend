@@ -271,12 +271,18 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      *
      * @param {String} rgbColor
      * The rgb color as hex value string (RRGGBB) with/without trailing #
+     *
+     * @return {Boolean}
+     * True if the color is dark otherwise false.
      */
     Color.isDark = function (rgbColor) {
         if (_.isString(rgbColor) && (6 <= rgbColor.length <= 7)) {
-            var hsl, hexString = rgbColor.length === 6 ? rgbColor : rgbColor.substring(1);
-            hsl = convertRgbToHsl(convertRgbColorToNumber(hexString));
-            if (hsl.l < 0.5)
+            var hexString = rgbColor.length === 6 ? rgbColor : rgbColor.substring(1);
+            var rgbColorValue = convertRgbColorToNumber(hexString);
+            var luminance = ((((rgbColorValue & 0x00ff0000) >> 16) * 5036060) +
+                             (((rgbColorValue & 0x0000ff00) >> 8) * 9886846) +
+                              ((rgbColorValue & 0x000000ff) * 1920103)) / (1 << 24);
+            if (luminance <= 60)
                 return true;
             else
                 return false;
