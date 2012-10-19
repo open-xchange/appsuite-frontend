@@ -43,6 +43,8 @@ define('io.ox/office/editor/editor',
 
         // key codes of keys that will be passed directly to the browser
         IGNORABLE_KEYS = _([
+            KeyCodes.SHIFT, KeyCodes.CONTROL, KeyCodes.ALT, KeyCodes.BREAK,
+            KeyCodes.CAPS_LOCK, KeyCodes.PRINT, KeyCodes.SELECT,
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
             KeyCodes.F5
@@ -1266,9 +1268,13 @@ define('io.ox/office/editor/editor',
             .done(function () {
                 if (((event.keyCode === KeyCodes.LEFT_ARROW) || (event.keyCode === KeyCodes.RIGHT_ARROW)) && (event.shiftKey)) {
 
+                    // check that the selection covers a single image (must be
+                    // checked separately for both directions, foward and backward)
                     if ((currentSelection) &&
-                        (currentSelection.startPaM.imageFloatMode) &&
-                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) {
+                        (((currentSelection.startPaM.imageFloatMode) &&
+                        (Position.isOneCharacterSelection(currentSelection.startPaM.oxoPosition, currentSelection.endPaM.oxoPosition))) ||
+                        ((currentSelection.endPaM.imageFloatMode) &&
+                        (Position.isOneCharacterSelection(currentSelection.endPaM.oxoPosition, currentSelection.startPaM.oxoPosition))))) {
 
                         // getting object and drawing frame around it
 
@@ -1288,7 +1294,7 @@ define('io.ox/office/editor/editor',
                     } else {
                         deselectAllObjects();
                     }
-                } else {
+                } else if (!isIgnorableKeyEvent(event)) {
                     deselectAllObjects();
                 }
 
@@ -2021,6 +2027,11 @@ define('io.ox/office/editor/editor',
                 browserSelection = DOM.getBrowserSelection(editdiv);
             }
 
+            // log the selection
+            _(browserSelection).each(function (range, index) {
+                Utils.log('getBrowserSelection(): range[' + index + ']=' + range);
+            });
+
             return browserSelection;
         }
 
@@ -2033,10 +2044,6 @@ define('io.ox/office/editor/editor',
                 domRange = null;
 
             if (domSelection.length) {
-
-                _(domSelection).each(function (range, index) {
-                    Utils.log('getSelection(): range[' + index + ']=' + range);
-                });
 
                 domRange = _(domSelection).last();
 

@@ -1050,10 +1050,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             ranges = [],
             // a single range object
             range = null,
-            // an adjusted clone of the range
-            adjustedRange = null,
             // the limiting point for valid ranges (next sibling of root node)
             globalEndPos = null;
+
+        // creates a DOM.Range object and pushes it into the result array if it is inside the root node
+        function pushRange(startNode, startOffset, endNode, endOffset) {
+
+            var // the range to be pushed into the array
+                range = DOM.Range.createRange(startNode, startOffset, endNode, endOffset),
+                // check that the nodes are inside the root node (with adjusted clone of the range)
+                adjustedRange = range.clone().adjust();
+
+            if (rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0)) {
+                ranges.push(range);
+            }
+        }
 
         // convert parameter to DOM element
         rootNode = Utils.getDomNode(rootNode);
@@ -1062,19 +1073,25 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         globalEndPos = DOM.Point.createPointForNode(rootNode);
         globalEndPos.offset += 1;
 
-        // build an array of text range objects holding start and end nodes/offsets
-        for (var index = 0; index < selection.rangeCount; index += 1) {
+        // single range: use attributes of the Selection object (anchor/focus)
+        // directly to preserve direction of selection when selecting backwards
+        // (range objects received by the Selection.getRangeAt() method are
+        // adjusted already)
+        if (selection.rangeCount === 1) {
 
-            // get the native selection Range object
-            range = selection.getRangeAt(index);
+            // 'anchor' always points to selection start point, 'focus' always
+            // points to current cursor position (may precede anchor when
+            // selecting backwards with mouse or keyboard)
+            pushRange(selection.anchorNode, selection.anchorOffset, selection.focusNode, selection.focusOffset);
 
-            // translate to the internal text range representation
-            range = DOM.Range.createRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+        } else if (selection.rangeCount > 1) {
 
-            // check that the nodes are inside the root node (with adjusted clone of the range)
-            adjustedRange = range.clone().adjust();
-            if (rootNode.contains(adjustedRange.start.node) && (DOM.Point.comparePoints(adjustedRange.end, globalEndPos) <= 0)) {
-                ranges.push(range);
+            // get all ranges of a multi-selection
+            for (var index = 0; index < selection.rangeCount; index += 1) {
+                // get the native selection Range object
+                range = selection.getRangeAt(index);
+                // translate to the internal text range representation
+                pushRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
             }
         }
 
@@ -1093,18 +1110,39 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         var // the browser selection
             selection = window.getSelection();
 
-        // process all passed text ranges
+        // clear the old browser selection
         selection.removeAllRanges();
-        _.chain(ranges).getArray().each(function (range) {
+
+        // convert to array
+        ranges = _.getArray(ranges);
+
+        // single range: use attributes of the Selection object (anchor/focus)
+        // directly to preserve direction of selection when selecting backwards
+        if (ranges.length === 1) {
+
             try {
-                var docRange = window.document.createRange();
-                docRange.setStart(range.start.node, range.start.offset);
-                docRange.setEnd(range.end.node, range.end.offset);
-                selection.addRange(docRange);
+                selection.collapse(ranges[0].start.node, ranges[0].start.offset);
+                selection.extend(ranges[0].end.node, ranges[0].end.offset);
             } catch (ex) {
                 Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
             }
-        });
+
+        } else {
+
+            // create a multi-selection
+            _(ranges).each(function (range) {
+
+                var docRange = null;
+                try {
+                    docRange = window.document.createRange();
+                    docRange.setStart(range.start.node, range.start.offset);
+                    docRange.setEnd(range.end.node, range.end.offset);
+                    selection.addRange(docRange);
+                } catch (ex) {
+                    Utils.warn('DOM.setBrowserSelection(): failed to add range to selection');
+                }
+            });
+        }
     };
 
     // object selection =======================================================
