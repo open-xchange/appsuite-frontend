@@ -188,11 +188,18 @@ define("io.ox/files/actions",
         id: 'delete',
         requires: 'some',
         multiple: function (list) {
+
+            var question = gt.ngettext(
+                    'Do you really want to delete this file?',
+                    'Do you really want to delete these files?',
+                    list.length
+            );
+
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 new dialogs.ModalDialog()
-                    .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
-                    .addPrimaryButton("delete", gt("Shut up and delete it!"))
-                    .addButton("cancel", gt("No, rather not"))
+                    .text(question)
+                    .addPrimaryButton("delete", gt('Delete'))
+                    .addButton("cancel", gt('Cancel'))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {

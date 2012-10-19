@@ -27,11 +27,23 @@ define('io.ox/contacts/actions',
         id: 'delete',
         requires: 'some delete',
         action:  function (data) {
+
+            var question;
+
+            // get proper question
+            if (_.isArray(data) && data.length > 1) {
+                question = gt('Do you really want to delete these items?');
+            } else if (data.mark_as_distributionlist) {
+                question = gt('Do you really want to delete this distribution list?');
+            } else {
+                question = gt('Do you really want to delete this contact?');
+            }
+
             require(['io.ox/contacts/api', 'io.ox/core/tk/dialogs'], function (api, dialogs) {
                 new dialogs.ModalDialog()
-                .text('Are you really sure about your decision? Are you aware of all consequences you have to live with?')
-                .addPrimaryButton('delete', 'Shut up and delete it!', 'delete')
-                .addButton('cancel', 'No, rather not', 'cancel')
+                .text(question)
+                .addPrimaryButton('delete', gt('Delete'))
+                .addButton('cancel', gt('Cancel'), 'cancel')
                 .show()
                 .done(function (action) {
                     if (action === 'delete') {
