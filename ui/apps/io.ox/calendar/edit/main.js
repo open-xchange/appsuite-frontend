@@ -167,9 +167,8 @@ define('io.ox/calendar/edit/main',
             this.getWindow().idle();
             this.quit();
 
-        }/*,
+        },
         failSave: function () {
-            console.log("fail save", this);
             return {
                 module: 'io.ox/calendar/edit',
                 point: this.model.attributes
@@ -177,7 +176,6 @@ define('io.ox/calendar/edit/main',
         },
         failRestore: function (point) {
             var df = $.Deferred();
-            this._restored = true; //to set model dirty by default
             if (_.isUndefined(point.id)) {
                 this.create(point);
             } else {
@@ -185,7 +183,7 @@ define('io.ox/calendar/edit/main',
             }
             df.resolve();
             return df;
-        }*/
+        }
     };
 
 
