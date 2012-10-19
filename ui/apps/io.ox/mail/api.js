@@ -540,10 +540,13 @@ define("io.ox/mail/api",
     
     api.markSpam = function (list) {
         return api.update(list, { flags: api.FLAGS.SPAM, value: true })
-        .pipe(function () {
-            api.trigger('refresh.list');
-            return list;
-        });
+            .pipe(function () {
+                return $.when(
+                    // clear source folder
+                    api.caches.all.grepRemove(_(list).first().folder_id + '\t')
+                );
+            })
+            .done(refreshAll);
     };
 
     api.move = function (list, targetFolderId) {
