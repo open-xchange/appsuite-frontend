@@ -129,7 +129,7 @@
     }
     
     .appointment {
-        line-height: 13px;
+        line-height: 14px;
         background-color: #08c;
         margin-bottom: 1px;
         white-space: nowrap;
@@ -154,9 +154,6 @@
     }
     
     .appointment-content * {
-        width: 100%;
-        float: left;
-        margin-right: 3px;
         overflow: hidden;
         text-overflow: ellipsis;
     }

@@ -155,16 +155,20 @@ define('io.ox/calendar/month/view',
 
             this
                 .addClass(
-                        util.getShownAsClass(a.attributes) +
-                        (a.get('private_flag') ? ' private' : '') +
-                        (state === 0 ? ' unconfirmed' : '')
+                    util.getShownAsClass(a.attributes) +
+                    (a.get('private_flag') ? ' private' : '') +
+                    (state === 0 ? ' unconfirmed' : '')
                 )
                 .append(
-                        $('<div>')
+                    $('<div>')
                         .addClass('appointment-content')
                         .css('lineHeight', (a.get('full_time') ? this.fulltimeHeight : this.cellHeight) + 'px')
                         .append($('<div>').addClass('title').text(gt.noI18n(a.get('title'))))
-                        .append($('<div>').addClass('location').text(gt.noI18n(a.get('location') || '')))
+                        .append(function () {
+                            if (a.get('location')) {
+                                return $('<div>').addClass('location').text(gt.noI18n(a.get('location') || ''));
+                            }
+                        })
                 )
                 .attr({
                     'data-extension': 'default'
