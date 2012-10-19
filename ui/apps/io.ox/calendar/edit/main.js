@@ -16,11 +16,9 @@ define('io.ox/calendar/edit/main',
        'io.ox/calendar/api',
        'io.ox/calendar/edit/view-main',
        'gettext!io.ox/calendar/edit/main',
-       'io.ox/core/api/folder',
-       'io.ox/core/config',
        'io.ox/core/date',
        'io.ox/core/extensions',
-       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, folderAPI, configAPI, date, ext) {
+       'less!io.ox/calendar/edit/style.less'], function (appointmentModel, api, MainView, gt, date, ext) {
 
     'use strict';
 
@@ -46,7 +44,6 @@ define('io.ox/calendar/edit/main',
                             if (action === 'delete') {
                                 self.dispose();
                                 df.resolve();
-
                             } else {
                                 df.reject();
                             }
@@ -139,6 +136,7 @@ define('io.ox/calendar/edit/main',
 
                 $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                 self.getWindow().show(_.bind(self.onShowWindow, self));
+            
             });
 
         },
@@ -158,9 +156,8 @@ define('io.ox/calendar/edit/main',
                 self.getWindow().setTitle(value);
                 self.setTitle(value);
             });
-            //$('#' + self.view.guid + '_title').get(0).focus();
-
-            $(self.getWindow().nodes.main[0]).addClass('scrollable');
+            $(self.getWindow().nodes.main).find('input')[0].focus(); // focus first input element
+            $(self.getWindow().nodes.main[0]).addClass('scrollable'); // make window scrollable
         },
         onSave: function () {
             this.considerSaved = true;
@@ -169,9 +166,10 @@ define('io.ox/calendar/edit/main',
 
         },
         failSave: function () {
+            var self = this;
             return {
                 module: 'io.ox/calendar/edit',
-                point: this.model.attributes
+                point: self.model.attributes
             };
         },
         failRestore: function (point) {
