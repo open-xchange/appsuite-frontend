@@ -109,7 +109,6 @@ define('io.ox/contacts/edit/main',
                             if (action === 'delete') {
                                 def.resolve();
                                 model.factory.realm('edit').release();
-                                container.find('#myGrowl').jGrowl('shutdown');
                             } else {
                                 def.reject();
                             }
