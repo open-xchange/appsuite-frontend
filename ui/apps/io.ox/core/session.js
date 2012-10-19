@@ -45,7 +45,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                 timeout: 3000, // just try that for 3 secs
                 params: {
                     action: 'autologin',
-                    client: 'com.openexchange.ox.gui.dhtml'
+                    client: that.client()
                 }
             })
             .done(set);
@@ -78,7 +78,8 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
                             params: {
                                 action: 'login',
                                 name: username,
-                                password: password
+                                password: password,
+                                client: that.client()
                             }
                         })
                         .done(function (data) {
@@ -131,6 +132,10 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
             } else {
                 return $.Deferred().resolve();
             }
+        },
+
+        client: function () {
+            return 'com.openexchange.ui7';
         }
     };
 
