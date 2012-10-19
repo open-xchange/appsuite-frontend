@@ -62,9 +62,9 @@ define("io.ox/calendar/view-detail",
         draw: function (data) {
             var recurrenceString = util.getRecurrenceString(data);
             this.append(
-                $("<div>").addClass("day").text(gt.noI18n(
-                    util.getDateInterval(data) +
-                    (recurrenceString !== "" ? " \u2013 " + recurrenceString : ""))
+                $("<div>").addClass("day").append(
+                    $.txt(gt.noI18n(util.getDateInterval(data))),
+                    $.txt(gt.noI18n((recurrenceString !== "" ? " \u2013 " + recurrenceString : "")))
                 )
             );
         }
@@ -346,7 +346,7 @@ define("io.ox/calendar/view-detail",
                     .append($.txt(gt("Folder")), $.txt(gt.noI18n(":\u00A0"))),
                 $("<span>")
                     .addClass("detail")
-                    .text(gt.noI18n(folderAPI.getTextNode(data.folder_id))),
+                    .text(gt.noI18n(folderAPI.getTextNode(data.folder_id).data)),
                 $("<br>")
             );
         }

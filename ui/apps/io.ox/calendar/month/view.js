@@ -51,18 +51,17 @@ define('io.ox/calendar/month/view',
                 this.$el.append(
                     $('<div>')
                         .addClass('day out' + (day.isFirst ? ' first' : '') + (day.isToday ? ' today' : '') + (day.isWeekend ? ' weekend' : ''))
-                        .attr('month', day.year + '-' + day.month)
                         .attr('date', day.year + '-' + day.month + '-' + day.date)
                         .append(
                             $('<div>').addClass('list abs'),
-                            $('<div>').addClass('number').text(day.date)
+                            $('<div>').addClass('number').text(gt.noI18n(day.date))
                         )
                 );
 
                 if (day.isFirst) {
                     this.$el.prepend(
                         $('<div>').addClass('vertical').html(
-                            date.locale.months[day.month] + '<br>' + day.year
+                                gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year)
                         )
                     );
                 }
@@ -137,7 +136,7 @@ define('io.ox/calendar/month/view',
                 $('<div>').addClass('footer').append(function () {
                     var tmp = [];
                     _(days).each(function (day) {
-                        tmp.push($('<div>').addClass('weekday').text(day));
+                        tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                     });
                     return tmp;
                 })
@@ -148,7 +147,6 @@ define('io.ox/calendar/month/view',
         id: 'default',
         index: 100,
         draw: function (baton) {
-            console.log(baton);
             var a = baton.model;
                     // check confirmations
             var state = (_(a.get('participants')).find(function (o) {
