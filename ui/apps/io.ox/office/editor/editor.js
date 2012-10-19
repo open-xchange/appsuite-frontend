@@ -872,7 +872,7 @@ define('io.ox/office/editor/editor',
                     width = 0;  // defaulting to 'auto'
 
                 for (var i = 0; i < size.width; i++) {
-                    tableGrid.push(Utils.roundDigits(1 / size.width, 2));
+                    tableGrid.push(Utils.roundDigits(1000 / size.width, 0));  // only ints
                 }
 
                 var newOperation = {name: Operations.TABLE_INSERT, position: _.copy(selection.startPaM.oxoPosition, true), attrs: {'tablegrid': tableGrid, 'width': width}};
