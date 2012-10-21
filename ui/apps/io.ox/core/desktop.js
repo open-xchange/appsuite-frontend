@@ -277,7 +277,7 @@ define("io.ox/core/desktop",
             return _.url.hash();
         },
 
-        launch: function () {
+        launch: function (options) {
 
             var deferred = $.when(), self = this;
 
@@ -1244,7 +1244,7 @@ define("io.ox/core/desktop",
         var def = $.Deferred();
         if (_.isString(id)) {
             require([id], function (m) {
-                m.getApp(data).launch().done(function () {
+                m.getApp(data).launch(data).done(function () {
                     def.resolveWith(this, arguments);
                 });
             });

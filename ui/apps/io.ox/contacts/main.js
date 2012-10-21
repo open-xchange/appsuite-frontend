@@ -51,7 +51,9 @@ define("io.ox/contacts/main",
     fullIndex = _.noI18n.fix(fullIndex).split(' ');
 
     // launcher
-    app.setLauncher(function () {
+    app.setLauncher(function (options) {
+
+        options = options || {};
 
         // get window
         win = ox.ui.createWindow({
@@ -187,7 +189,7 @@ define("io.ox/contacts/main",
         };
 
         // go!
-        commons.addFolderSupport(app, grid, 'contacts')
+        commons.addFolderSupport(app, grid, 'contacts', options.folder)
             .done(commons.showWindow(win, grid));
     });
 

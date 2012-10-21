@@ -200,8 +200,12 @@ define("io.ox/core/main",
             id: 'notifications',
             index: 10000,
             draw: function () {
-                notifications.attach(addLauncher);
-                notifications.addFaviconNotification();
+                // we don't need this right from the start,
+                // so let's delay this for responsiveness
+                setTimeout(function () {
+                    notifications.attach(addLauncher);
+                    notifications.addFaviconNotification();
+                }, 5000);
             }
         });
 

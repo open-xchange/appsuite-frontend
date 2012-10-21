@@ -280,7 +280,7 @@ utils.concat("pre-core.js",
         "cache.js", "cache/*.js", // cache + cache storage layers
         "settings.js", // settings plugin
         "config.js",
-        "tk/selection.js", "tk/model.js", "tk/upload.js",
+        "tk/selection.js", "tk/vgrid.js", "tk/model.js", "tk/upload.js",
         "api/factory.js", "api/user.js", "api/resource.js", "api/group.js", "api/account.js",
         "api/folder.js", "api/apps.js", "desktop.js",
         "commons.js",
