@@ -621,20 +621,16 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
         }
 
         > label, > button, > input {
+            height: 32px;
+            border: none;
+
             ~ label, ~ button, ~ input {
                 margin-left: 0;
             }
         }
 
-        > button, > label {
-            height: 32px;
-            border: none;
+        > label, > button {
             line-height: 32px;
-        }
-
-        > input {
-            margin-top: 2px;
-            margin-bottom: 2px;
         }
 
         /* selected toggle/radio buttons */
@@ -671,6 +667,35 @@ div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
                 &:active {
                     .vertical-gradient(darken(@selected-accent-color, 10%), @selected-color);
                     border: none;
+                }
+            }
+        }
+
+        /* groups with white background and shadowed borders */
+        &.white {
+            top: 2px;
+            .box-shadow(0 0 4px fade(black, 15%));
+
+            > label, > button, > input {
+                height: 28px;
+                background: white;
+            }
+
+            > label, > button {
+                line-height: 28px;
+            }
+
+            /* keyboard/mouse effects (not for disabled buttons) */
+            &:not(.disabled) > button:not(.disabled) {
+    
+                /* mouse/keyboard effects */
+                &:hover, &:focus {
+                    .vertical-gradient(darken(white, 5%), white);
+                }
+    
+                /* active effect (control currently clicked) */
+                &:active {
+                    .vertical-gradient(darken(white, 10%), white);
                 }
             }
         }

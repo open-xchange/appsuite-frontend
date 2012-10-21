@@ -43,6 +43,9 @@ define('io.ox/office/tk/control/group',
      *  @param {String} [options.tooltip]
      *      Tool tip text shown when the mouse hovers the control. If omitted,
      *      the control will not show a tool tip.
+     *  @param {Boolean} [options.white]
+     *      If set to true, control embedded in the group will get a white
+     *      background instead of being transparent.
      */
     function Group(options) {
 
@@ -319,7 +322,8 @@ define('io.ox/office/tk/control/group',
         // add event hub
         Events.extend(this);
 
-        // tool tip
+        // formatting and tool tip
+        groupNode.addClass(Utils.getBooleanOption(options, 'white') ? 'white' : '');
         Utils.setControlTooltip(groupNode, Utils.getStringOption(options, 'tooltip'));
 
         // add event handlers

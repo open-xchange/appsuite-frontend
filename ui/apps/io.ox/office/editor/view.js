@@ -113,6 +113,7 @@ define('io.ox/office/editor/view',
 
         RadioGroup.call(this, Utils.extendOptions(options, {
             width: 120,
+            white: true,
             dropDown: true,
             sorted: true,
             sortFunctor: sortFunctor
