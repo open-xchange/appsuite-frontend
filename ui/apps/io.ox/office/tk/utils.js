@@ -531,7 +531,7 @@ define('io.ox/office/tk/utils',
      */
     Utils.getObjectOption = function (options, name, def) {
         var value = Utils.getOption(options, name);
-        return _.isObject(value) ? value : def;
+        return (_.isObject(value) && !_.isFunction(value) && !_.isArray(value)) ? value : def;
     };
 
     /**
