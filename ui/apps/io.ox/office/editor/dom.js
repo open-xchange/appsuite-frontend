@@ -348,8 +348,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a span element with a text node.
      */
     DOM.isTextSpan = function (node) {
-        var childNodes = Utils.getDomNode(node).childNodes;
-        return (Utils.getNodeName(node) === 'span') && (childNodes.length === 1) && (childNodes[0].nodeType === 3);
+        var contents = $(node).contents();
+        return $(node).is('span') && (contents.length === 1) && (contents[0].nodeType === 3);
     };
 
     /**
@@ -396,6 +396,30 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isFieldSpan = function (node) {
         return DOM.isTextSpan(node) && $(node).hasClass('field');
+    };
+
+    /**
+     * Returns all field span elements, that are the direct preceding and
+     * following siblings of the passed text field node, in a jQuery
+     * collection.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node representing a text field whose associated text field
+     *  spans will be collected. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {jQuery}
+     *  All text field spans that are the direct preceding and following
+     *  siblings of the passed text field node. If the passed node is not a
+     *  text field span, returns an empty jQuery object.
+     */
+    DOM.getFieldSpans = function (node) {
+        var spans = $(), span = $(node);
+        if (DOM.isFieldSpan(node)) {
+            while (DOM.isFieldSpan(span.prev())) { span = span.prev(); }
+            while (DOM.isFieldSpan(span)) { spans = spans.add(span); span = span.next(); }
+        }
+        return spans;
     };
 
     /**
@@ -452,21 +476,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * Returns whether the passed node is a <div> element for positioning
-     * an object with a vertical or horizontal offset.
-     *
-     * @param {Node|jQuery} node
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a div element wrapping an object.
-     */
-    DOM.isOffsetNode = function (node) {
-        return $(node).is('div.offset');
-    };
-
-    /**
      * Returns whether the passed node is a <div> element wrapping an image.
      *
      * @param {Node|jQuery} node
@@ -488,6 +497,21 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * selectors.
      */
     DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
+
+    /**
+     * Returns whether the passed node is a <div> element for positioning
+     * an object with a vertical or horizontal offset.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a div element wrapping an object.
+     */
+    DOM.isOffsetNode = function (node) {
+        return $(node).is('div.offset');
+    };
 
     /**
      * Returns whether the passed node is a <div> element with class list-label.

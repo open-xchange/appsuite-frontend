@@ -1421,7 +1421,8 @@ define('io.ox/office/editor/position',
      *      If set to true, all child nodes of the paragraph will be visited,
      *      also helper nodes that do not represent editable content and have a
      *      logical length of 0. Otherwise, only real content nodes will be
-     *      visited (non-empty text portions, text fields, and object nodes).
+     *      visited (non-empty text portions, the first span element of text
+     *      fields, and object nodes).
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -1443,12 +1444,15 @@ define('io.ox/office/editor/position',
                 result = null;
 
             // calculate length of the node
-            if (DOM.isFieldSpan(node) || DOM.isObjectNode(node)) {
-                // text fields and objects count as one character
-                length = 1;
-            } else if (DOM.isPortionSpan(node)) {
+            if (DOM.isPortionSpan(node)) {
                 // portion nodes contain regular text
                 length = node.firstChild.nodeValue.length;
+            } else if (DOM.isFieldSpan(node) && !DOM.isFieldSpan(node.previousSibling)) {
+                // text fields count as one character (but only the first span element of a field)
+                length = 1;
+            } else if (DOM.isObjectNode(node)) {
+                // objects count as one character
+                length = 1;
             }
 
             // call the iterator for the current content node

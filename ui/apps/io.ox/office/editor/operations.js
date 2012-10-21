@@ -272,7 +272,7 @@ define('io.ox/office/editor/operations',
                 if (DOM.isPortionSpan(node)) {
                     // extract the text covered by the specified range
                     text = node.firstChild.nodeValue.substring(Math.max(start - nodeStart, 0), end - nodeStart + 1);
-                    // try to merge text portions into the last 'insertText' operation
+                    // merge text portions into the last 'insertText' operation
                     if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
                         lastOperation.text += text;
                     } else {
@@ -285,7 +285,9 @@ define('io.ox/office/editor/operations',
                 // operation to create a text field
                 // TODO: field type
                 else if (DOM.isFieldSpan(node)) {
-                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: node.firstChild.nodeValue });
+                    // extract text of all spans representing the field
+                    text = DOM.getFieldSpans(node).text();
+                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
                     attributeRanges.push({ node: node, position: position });
                     position = increaseLastIndex(position);
                 }
