@@ -227,6 +227,7 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             }
         }))
         .done(function (services, accounts) {
+
             // build and register extensions
             cache = {};
             _(services[0]).each(function (service) {
@@ -247,7 +248,11 @@ define.async("io.ox/oauth/keychain", ["io.ox/core/extensions", "io.ox/core/http"
             });
         })
         .fail(function () {
-            throw new Error("Could not initialize OAuth keyring!");
+
+            console.error("Could not initialize OAuth keyring!");
+
+            // Resolve on fail
+            moduleDeferred.resolve({ message: 'Init failed', services: [], accounts: [], serviceIDs: [] });
         });
 
     return moduleDeferred;
