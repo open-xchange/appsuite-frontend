@@ -56,6 +56,8 @@ define('io.ox/calendar/month/perspective',
         fisrtWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
         initLoad: 20,       // amount of preloaded weeks
+        updateCount: 6,     // amount of weeks to be loaded on scroll events
+        scrollOffset: 10,   // offset space to trigger update event on scroll stop
 
         collections: {},
 
@@ -90,16 +92,29 @@ define('io.ox/calendar/month/perspective',
 
         drawWeek: function (day, pos) {
             pos = pos || false;
-            if (pos) {
-                this.pane.scrollTop($('.week:first').height());
-            }
             this.collections[day] = new Backbone.Collection([]);
             var view = new View({ collection: this.collections[day], day: day });
             // add and render view
             this.pane[(pos ? 'pre' : 'ap') + 'pend'](view.render().el);
-            // update collection
-            this.updateWeek(day, day + util.DAY * 7);
             view.on('showAppoinment', this.showAppointment, this);
+            // update collection
+            this.updateWeek(day, day + date.WEEK);
+        },
+
+        drawWeeks: function (start, end, pos) {
+            pos = pos || false;
+            var weeks = 0;
+            if (pos) {
+                for (var i = end; i > start; i -= date.WEEK) {
+                    weeks++;
+                    this.drawWeek(i, pos);
+                }
+                this.scrollTop($('.week:first', this.pane).height() * weeks);
+            } else {
+                for (var i = start; i < end; i += date.WEEK) {
+                    this.drawWeek(i, pos);
+                }
+            }
         },
 
         scrollTop: function (top) {
@@ -108,15 +123,13 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
-            for (var i = this.firstWeek; i <= this.lastWeek; i += util.WEEK) {
-                this.updateWeek(i, i + util.WEEK);
-            }
+            this.updateWeek(this.firstWeek, this.lastWeek + date.WEEK);
         },
 
         getFirsts: function (e) {
             this.tops = {};
             var self = this,
-                top = this.pane.scrollTop() - 200; /* cheap trick */
+                top = this.scrollTop() - 150; /* cheap trick */
             $('.first', this.pane).each(function () {
                 var spDate = $(this).attr('date').split("-");
                 self.tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
@@ -133,10 +146,8 @@ define('io.ox/calendar/month/perspective',
             this.pane = this.scaffold.find('.scrollpane');
 
             this.firstWeek = start;
-            for (var i = 0; i < this.initLoad; i += 1, start += util.WEEK) {
-                this.drawWeek(start);
-            }
-            this.lastWeek = start;
+            this.lastWeek = start + (this.initLoad * date.WEEK);
+            this.drawWeeks(this.firstWeek, this.lastWeek);
 
             this.main.addClass('month-view').empty().append(this.scaffold);
 
@@ -149,39 +160,41 @@ define('io.ox/calendar/month/perspective',
 
             var currentMonth = '';
 
-            this.pane.on('scroll', $.proxy(function (e) {
-                var top = this.pane.scrollTop(),
-                    first = true,
-                    scrollOffset = 10,
-                    month = '';
-
-                // find first visible month on scroll-position
-                for (var y in this.tops) {
-                    if (first || top >= y) {
-                        month = this.tops[y];
-                        first = false;
-                    } else {
-                        break;
+            this.pane
+                .on('scrollstop', $.proxy(function (e) {
+                    var top = this.scrollTop();
+                    // check position for infinite scroll
+                    if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - this.scrollOffset) {
+                        this.drawWeeks(this.lastWeek, this.lastWeek += date.WEEK * this.updateCount);
                     }
-                }
+                    if (top <= this.scrollOffset) {
+                        var first = this.firstWeek - date.WEEK;
+                        this.drawWeeks(first - date.WEEK * this.updateCount, first,  true);
+                        this.firstWeek -= date.WEEK * this.updateCount;
+                    }
+                }, this))
+                .on('scroll', $.proxy(function (e) {
+                    var top = this.scrollTop(),
+                        first = true,
+                        month = '';
 
-                // highlight current visible month
-                if (month !== currentMonth) {
-                    $('.day', this.pane).addClass('out');
-                    $('[date^="' + month + '-"]', this.pane).removeClass('out');
-                    currentMonth = month;
-                }
+                    // find first visible month on scroll-position
+                    for (var y in this.tops) {
+                        if (first || top >= y) {
+                            month = this.tops[y];
+                            first = false;
+                        } else {
+                            break;
+                        }
+                    }
 
-                // check position for infinite scroll
-                if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - scrollOffset) {
-                    this.lastWeek += date.WEEK;
-                    this.drawWeek(this.lastWeek);
-                }
-                if (top <= scrollOffset) {
-                    this.firstWeek -= date.WEEK;
-                    this.drawWeek(this.firstWeek, true);
-                }
-            }, this));
+                    // highlight current visible month
+                    if (month !== currentMonth) {
+                        $('.day', this.pane).addClass('out');
+                        $('[date^="' + month + '-"]', this.pane).removeClass('out');
+                        currentMonth = month;
+                    }
+                }, this));
 
             this.pane.find('[date^="' + year + '-' + month + '"]').removeClass('out');
             this.getFirsts();
