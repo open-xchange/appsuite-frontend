@@ -1285,9 +1285,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             }
 
             // set classes according to passed options, and resize handles
-            selectionBox = $('<div>').addClass('selection')
-                .toggleClass('moveable', moveable)
-                .toggleClass('sizeable', sizeable);
+            selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
         });
     };
 
