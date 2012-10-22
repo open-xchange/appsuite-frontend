@@ -139,7 +139,7 @@ define('io.ox/files/mediaplayer',
             var self = this;
 
             function audioIconError(e) {
-                self.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
+                this.trackdisplay.find('.album').empty().append($('<i class="icon-music"></i>'));
             }
 
             function getCover(file) {
@@ -151,7 +151,7 @@ define('io.ox/files/mediaplayer',
                 if (!this.config.videoSupport) {
                     this.trackdisplay.find('.track').text(gt.noI18n(file.filename));
                     this.trackdisplay.find('.album').empty().append(
-                        $('<img>', { alt: '', src: getCover(file) }).on('error', audioIconError)
+                        $('<img>', { alt: '', src: getCover(file) }).on('error', $.proxy(audioIconError, this))
                     );
                 }
             };
