@@ -2053,25 +2053,14 @@ define('io.ox/office/editor/editor',
                 }
 
                 var isPos1Endpoint = false,
-                    isPos2Endpoint = true,
-                    hasRange = true;
+                    isPos2Endpoint = true;
 
                 if ((domRange.start.node === domRange.end.node) && (domRange.start.offset === domRange.end.offset)) {
                     isPos2Endpoint = false;
-                    hasRange = false;
                 }
 
-                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint);
-
-                if ((startPaM.imageFloatMode) && (!hasRange)) {
-                    // images (and objects) get their own selection and shall not use the selection of the browser.
-                    // Therefore it is necessary to let the browser 'think' that this is no selection. If an image is selected
-                    // in domSelection there are two identical points (f.e. div.p offset 0 to div.p offset 0). But it is
-                    // necessary to make a logical selection with a range -> [6,0] to [6,1] -> using endpoint logic.
-                    isPos2Endpoint = true;
-                }
-
-                var endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
+                var startPaM = Position.getTextLevelOxoPosition(domRange.start, editdiv, isPos1Endpoint),
+                    endPaM = Position.getTextLevelOxoPosition(domRange.end, editdiv, isPos2Endpoint);
 
                 currentSelection = new OXOSelection(startPaM, endPaM);
 //                Utils.log('getSelection(): logical position: start=[' + currentSelection.startPaM.oxoPosition + '], end=[' + currentSelection.endPaM.oxoPosition + '],' +
