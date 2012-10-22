@@ -186,6 +186,7 @@ define('io.ox/contacts/actions',
     });
 
     new Action('io.ox/contacts/actions/invite', {
+
         requires: function (e) {
             var list = [].concat(e.context);
             return api.getList(list).pipe(function (list) {
@@ -194,6 +195,7 @@ define('io.ox/contacts/actions',
                 }, 0).value() > 0;
             });
         },
+
         multiple: function (list) {
 
             function mapList(obj) {

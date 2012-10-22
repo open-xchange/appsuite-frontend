@@ -12,7 +12,7 @@ define(function () {
 
         favorites: [
             "io.ox/portal", "io.ox/mail", "io.ox/contacts", "io.ox/calendar",
-            "io.ox/files", "io.ox/tasks", "io.ox/conversations"
+            "io.ox/files", "io.ox/tasks" //"io.ox/conversations"
         ],
 
         categories: ["Basic", "Business", "Productivity", "Dev"],
