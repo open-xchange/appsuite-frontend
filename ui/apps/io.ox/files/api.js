@@ -14,14 +14,14 @@
  *
  */
 
-define("io.ox/files/api",
-    ["io.ox/core/http",
-     "io.ox/core/api/factory",
-     "io.ox/core/config",
-     "io.ox/core/cache"
+define('io.ox/files/api',
+    ['io.ox/core/http',
+     'io.ox/core/api/factory',
+     'io.ox/core/config',
+     'io.ox/core/cache'
     ], function (http, apiFactory, config, cache) {
 
-    "use strict";
+    'use strict';
 
     var mime_types = {
         'jpg' : 'image/jpeg',
@@ -53,27 +53,27 @@ define("io.ox/files/api",
 
     // generate basic API
     var api = apiFactory({
-        module: "infostore",
+        module: 'infostore',
         requests: {
             all: {
-                action: "all",
-                folder: config.get("folder.infostore"),
-                columns: "20,1,702,703",
-                sort: "700",
-                order: "asc"
+                action: 'all',
+                folder: config.get('folder.infostore'),
+                columns: '20,1,702,703',
+                sort: '700',
+                order: 'asc'
             },
             list: {
-                action: "list",
-                columns: "20,1,700,701,702,703,704,705,706,707,709,711"
+                action: 'list',
+                columns: '20,1,700,701,702,703,704,705,706,707,709,711'
             },
             get: {
-                action: "get"
+                action: 'get'
             },
             search: {
-                action: "search",
-                columns: "20,1,702,703",
-                sort: "700",
-                order: "asc",
+                action: 'search',
+                columns: '20,1,702,703',
+                sort: '700',
+                order: 'asc',
                 getData: function (query) {
                     return { pattern: query };
                 }
@@ -95,25 +95,44 @@ define("io.ox/files/api",
         }
     });
 
-    api.caches.versions = new cache.SimpleCache("infostore-versions", true);
+
+    api.getUpdates = function (options) {
+
+        var params = {
+            action: 'updates',
+            columns: '20,1,700,702,703,706',
+            folder: options.folder,
+            timestamp: options.timestamp,
+            ignore: 'deleted'
+            /*sort: '700',
+            order: 'asc'*/
+        };
+
+        return http.GET({
+            module: 'infostore',
+            params: params
+        });
+    };
+
+    api.caches.versions = new cache.SimpleCache('infostore-versions', true);
 
     // Upload a file and store it
     // As options, we expect:
-    // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // "json" - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // "file" - the file object to upload
+    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+    // 'file' - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadFile = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get("folder.infostore")
+            folder: config.get('folder.infostore')
         }, options || {});
 
         var formData = new FormData();
         if ('filename' in options) {
-            formData.append("file", options.file, options.filename);
+            formData.append('file', options.file, options.filename);
         } else {
-            formData.append("file", options.file);
+            formData.append('file', options.file);
         }
 
         if (options.json && !$.isEmptyObject(options.json)) {
@@ -123,11 +142,11 @@ define("io.ox/files/api",
         } else {
             options.json = { folder_id: options.folder };
         }
-        formData.append("json", JSON.stringify(options.json));
+        formData.append('json', JSON.stringify(options.json));
 
         return http.UPLOAD({
-                module: "infostore",
-                params: { action: "new" },
+                module: 'infostore',
+                params: { action: 'new' },
                 data: formData,
                 fixPost: true
             })
@@ -135,7 +154,7 @@ define("io.ox/files/api",
                 // clear folder cache
                 return api.caches.all.grepRemove(options.json.folder_id + '\t')
                     .pipe(function () {
-                        api.trigger("create.file refresh.all");
+                        api.trigger('create.file refresh.all');
                         return { folder_id: String(options.json.folder_id), id: parseInt(data.data, 10) };
                     });
             });
@@ -143,21 +162,21 @@ define("io.ox/files/api",
 
     // Upload a file and store it
     // As options, we expect:
-    // "folder" - The folder ID to upload the file to. This is optional and defaults to the standard files folder
-    // "json" - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
-    // "file" - the file object to upload
+    // 'folder' - The folder ID to upload the file to. This is optional and defaults to the standard files folder
+    // 'json' - The complete file object. This is optional and defaults to an empty object with just the folder_id set.
+    // 'file' - the file object to upload
     // The method returns a deferred that is resolved once the file has been uploaded
     api.uploadNewVersion = function (options) {
         // Alright, let's simulate a multipart formdata form
         options = $.extend({
-            folder: config.get("folder.infostore")
+            folder: config.get('folder.infostore')
         }, options || {});
 
         var formData = new FormData();
         if ('filename' in options) {
-            formData.append("file", options.file, options.filename);
+            formData.append('file', options.file, options.filename);
         } else {
-            formData.append("file", options.file);
+            formData.append('file', options.file);
         }
 
         if (options.json && !$.isEmptyObject(options.json)) {
@@ -167,11 +186,11 @@ define("io.ox/files/api",
         } else {
             options.json = { folder_id: options.folder };
         }
-        formData.append("json", JSON.stringify(options.json));
+        formData.append('json', JSON.stringify(options.json));
 
         return http.UPLOAD({
-                module: "infostore",
-                params: { action: "update", timestamp: _.now(), id: options.id },
+                module: 'infostore',
+                params: { action: 'update', timestamp: _.now(), id: options.id },
                 data: formData,
                 fixPost: true // TODO: temp. backend fix
             })
@@ -184,7 +203,7 @@ define("io.ox/files/api",
                     api.caches.versions.remove(id)
                 )
                 .pipe(function () {
-                    api.trigger("create.version update refresh.all", { id: id, folder: options.json.folder_id });
+                    api.trigger('create.version update refresh.all', { id: id, folder: options.json.folder_id });
                     return { folder_id: String(options.json.folder_id), id: id, timestamp: data.timestamp};
                 });
             });
@@ -213,7 +232,7 @@ define("io.ox/files/api",
     api.create = function (options) {
 
         options = $.extend({
-            folder: config.get("folder.infostore")
+            folder: config.get('folder.infostore')
         }, options || {});
 
         if (!options.json.folder_id) {
@@ -221,8 +240,8 @@ define("io.ox/files/api",
         }
 
         return http.PUT({
-                module: "infostore",
-                params: { action: "new" },
+                module: 'infostore',
+                params: { action: 'new' },
                 data: options.json,
                 appendColumns: false
             })
@@ -230,17 +249,17 @@ define("io.ox/files/api",
                 // clear folder cache
                 return api.caches.all.grepRemove(options.folder)
                     .pipe(function () {
-                        api.trigger("create.file", {id: data, folder: options.folder});
+                        api.trigger('create.file', {id: data, folder: options.folder});
                         return { folder_id: String(options.folder), id: String(data ? data : 0) };
                     });
             });
     };
 
     api.versions = function (options) {
-        var getOptions = {action: "versions"};
+        var getOptions = {action: 'versions'};
         options = options || {};
         if (!options.id) {
-            throw new Error("Please specify an id for which to fetch versions");
+            throw new Error('Please specify an id for which to fetch versions');
         }
         getOptions.id = options.id;
         return api.caches.versions.get(options.id).pipe(function (data) {
@@ -248,7 +267,7 @@ define("io.ox/files/api",
                 return data;
             } else {
                 return http.GET({
-                    module: "infostore",
+                    module: 'infostore',
                     params: getOptions,
                     appendColumns: true
                 })
@@ -277,8 +296,8 @@ define("io.ox/files/api",
 
     api.detach = function (version) {
         return http.PUT({
-            module: "infostore",
-            params: { action: "detach", id: version.id, folder: version.folder, timestamp: _.now() },
+            module: 'infostore',
+            params: { action: 'detach', id: version.id, folder: version.folder, timestamp: _.now() },
             data: [version.version],
             appendColumns: false
         })
@@ -291,7 +310,7 @@ define("io.ox/files/api",
             );
         })
         .done(function () {
-            api.trigger("delete.version update refresh.all", {id: version.id, folder: version.folder, version: version.version});
+            api.trigger('delete.version update refresh.all', {id: version.id, folder: version.folder, version: version.version});
         });
     };
 
