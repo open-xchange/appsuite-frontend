@@ -313,7 +313,7 @@ define('io.ox/office/editor/editor',
             query = query.toLowerCase();
 
             // search in all paragraphs (TODO: other elements, e.g. headers, ...?)
-            Utils.iterateSelectedDescendantNodes(editdiv, 'div.p', function (node) {
+            Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (node) {
 
                 var // the concatenated text from all text nodes
                     elementText = $(node).text().replace(/\s/g, ' ').toLowerCase(),
@@ -480,7 +480,7 @@ define('io.ox/office/editor/editor',
                 end = Position.getRowIndexInTable(paragraphs, selection.endPaM.oxoPosition);
             }
 
-            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'table'),
+            var tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, DOM.TABLE_NODE_SELECTOR),
                 lastRow = Position.getLastRowIndexInTable(paragraphs, position),
                 isCompleteTable = ((start === 0) && (end === lastRow)) ? true : false,
                 newOperation;
@@ -670,7 +670,7 @@ define('io.ox/office/editor/editor',
                 var tableDomPoint = Position.getDOMPosition(paragraphs, tablePos),
                     rowDomPoint = Position.getDOMPosition(paragraphs, rowPosition);
 
-                if ((tableDomPoint) && (tableDomPoint.node) && (Utils.getNodeName(tableDomPoint.node) === 'table')) {
+                if ((tableDomPoint) && (tableDomPoint.node) && (DOM.isTableNode(tableDomPoint.node))) {
 
                     var tableGridCount = StyleSheets.getExplicitAttributes(tableDomPoint.node).tablegrid.length,
                         rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
@@ -704,7 +704,7 @@ define('io.ox/office/editor/editor',
 
             var selection = getSelection(),
                 position = _.copy(selection.startPaM.oxoPosition, true),
-                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'table'),
+                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, DOM.TABLE_NODE_SELECTOR),
                 tableNode = Position.getDOMPosition(paragraphs, tablePos).node,
                 maxGrid = $(tableNode).children('colgroup').children('col').length - 1,
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'tr'),
@@ -798,7 +798,7 @@ define('io.ox/office/editor/editor',
             var selection = getSelection(),
                 cellPosition = Position.getColumnIndexInRow(paragraphs, selection.endPaM.oxoPosition),
                 position = _.copy(selection.endPaM.oxoPosition, true),
-                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'table'),
+                tablePos = Position.getLastPositionFromPositionByNodeName(paragraphs, position, DOM.TABLE_NODE_SELECTOR),
                 rowNode = Position.getLastNodeFromPositionByNodeName(paragraphs, position, 'tr'),
                 insertmode = 'behind',
                 gridPosition = Table.getGridPositionFromCellPosition(rowNode, cellPosition).start,
@@ -1076,6 +1076,9 @@ define('io.ox/office/editor/editor',
 
                 // disable IE table manipulation handlers in edit mode
                 Utils.getDomNode(editdiv).onresizestart = function () { return false; };
+
+                // focus back to editor
+                this.grabFocus(true);
             }
 
             if (showReadOnlyInfo) {
@@ -1347,7 +1350,7 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = false;
 
                         if (domPos) {
-                            if ($(domPos.node).is('table')) {
+                            if (DOM.isTableNode(domPos.node)) {
                                 nextIsTable = true;
                             }
                         } else {
@@ -1429,7 +1432,7 @@ define('io.ox/office/editor/editor',
                                 prevIsTable = false;
 
                             if (domPos) {
-                                if ($(Position.getDOMPosition(paragraphs, startPosition).node).is('table')) {
+                                if (DOM.isTableNode(Position.getDOMPosition(paragraphs, startPosition).node)) {
                                     prevIsTable = true;
                                 }
                             }
@@ -2482,7 +2485,7 @@ define('io.ox/office/editor/editor',
                         localPos.pop();
                     }
 
-                    var isTable = $(Position.getDOMPosition(paragraphs, localPos).node).is('table');
+                    var isTable = DOM.isTableNode(Position.getDOMPosition(paragraphs, localPos).node);
 
                     if (i < lastParaInCell) {
                         if (isTable) {
@@ -2519,7 +2522,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'div.p'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
                     lastPara =  localPos[paraIndex],
                     paragraphPosition = [];
 
@@ -2530,7 +2533,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 for (var i = 0; i < lastPara; i++) {
-                    var isTable = $(Position.getDOMPosition(paragraphs, paragraphPosition).node).is('table');
+                    var isTable = DOM.isTableNode(Position.getDOMPosition(paragraphs, paragraphPosition).node);
                     if (isTable) {
                         self.deleteTable(localPos);
                     } else {
@@ -2576,7 +2579,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'div.p'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  Position.getLastParaIndexInCell(paragraphs, localPos),
                     paragraphPosition = [];
@@ -2588,7 +2591,7 @@ define('io.ox/office/editor/editor',
                 }
 
                 for (var i = startPara; i <= lastPara; i++) {
-                    var isTable = $(Position.getDOMPosition(paragraphs, paragraphPosition).node).is('table');
+                    var isTable = DOM.isTableNode(Position.getDOMPosition(paragraphs, paragraphPosition).node);
                     if (isTable) {
                         self.deleteTable(localPos);
                     } else {
@@ -2605,7 +2608,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'div.p');
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.PARAGRAPH_NODE_SELECTOR);
 
                 if (paraIndex !== -1) {
 
@@ -2678,7 +2681,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'div.p'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
                     thisPara = localPos[paraIndex],
                     paragraphPosition = [];
 
@@ -2691,7 +2694,7 @@ define('io.ox/office/editor/editor',
                     paragraphPosition[paraIndex] = i;
 
                     // it can be a table next to a paragraph
-                    if ($(Position.getDOMPosition(paragraphs, paragraphPosition).node).is('table')) {
+                    if (DOM.isTableNode(Position.getDOMPosition(paragraphs, paragraphPosition).node)) {
                         setAttributesToCompleteTable(family, attributes, localPos);
                     } else {
                         setAttributesToParagraphInCell(family, attributes, localPos);
@@ -2707,7 +2710,7 @@ define('io.ox/office/editor/editor',
 
             if (isInTable) {
 
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'div.p'),
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.PARAGRAPH_NODE_SELECTOR),
                     startPara = localPos[paraIndex] + 1,
                     lastPara =  Position.getLastParaIndexInCell(paragraphs, position),
                     paragraphPosition = [];
@@ -2721,7 +2724,7 @@ define('io.ox/office/editor/editor',
                     paragraphPosition[paraIndex] = i;
 
                     // it can be a table next to a paragraph
-                    if ($(Position.getDOMPosition(paragraphs, paragraphPosition).node).is('table')) {
+                    if (DOM.isTableNode(Position.getDOMPosition(paragraphs, paragraphPosition).node)) {
                         setAttributesToCompleteTable(family, attributes, localPos);
                     } else {
                         setAttributesToParagraphInCell(family, attributes, localPos);
@@ -2733,7 +2736,7 @@ define('io.ox/office/editor/editor',
         function setAttributesToCompleteTable(family, attributes, position) {
 
             var localPos = _.copy(position),
-                tableIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, 'table'),
+                tableIndex = Position.getLastIndexInPositionByNodeName(paragraphs, localPos, DOM.TABLE_NODE_SELECTOR),
                 localPos = [];
 
             for (var i = 0; i <= tableIndex; i++) {
@@ -2769,7 +2772,7 @@ define('io.ox/office/editor/editor',
                 isInTable = Position.isPositionInTable(paragraphs, startPosition);
 
             if (isInTable) {
-                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPosition, 'div.p');
+                var paraIndex = Position.getLastIndexInPositionByNodeName(paragraphs, startPosition, DOM.PARAGRAPH_NODE_SELECTOR);
 
                 startPosition[paraIndex + 1] = 0;
                 endPosition[paraIndex + 1] = Position.getParagraphLength(paragraphs, position);
@@ -2875,7 +2878,7 @@ define('io.ox/office/editor/editor',
 
                 // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
                 startPosition.pop();
-                var isTable = $(Position.getDOMPosition(paragraphs, startPosition).node).is('table');
+                var isTable = DOM.isTableNode(Position.getDOMPosition(paragraphs, startPosition).node);
 
                 if (isTable) {
                     self.deleteTable(startPosition);
@@ -3072,7 +3075,7 @@ define('io.ox/office/editor/editor',
                 // Is the new dom position a table or a paragraph or whatever? Special handling for tables required
                 // Removing position temporarely
                 var pos = localstartPosition.pop();
-                var isTable = $(Position.getDOMPosition(paragraphs, localstartPosition).node).is('table');
+                var isTable = DOM.isTableNode(Position.getDOMPosition(paragraphs, localstartPosition).node);
 
                 if (isTable) {
                     setAttributesToCompleteTable(family, attributes, localstartPosition);
@@ -3271,7 +3274,7 @@ define('io.ox/office/editor/editor',
             // updated after the document has been loaded.
             // TODO: better solution needed when style cheets may change at runtime
             paragraphStyles.one('change', function () {
-                paragraphStyles.updateElementFormatting(editdiv.children('div.p').first());
+                paragraphStyles.updateElementFormatting(editdiv.children(DOM.PARAGRAPH_NODE_SELECTOR).first());
             });
 
             // set initial selection
@@ -3828,7 +3831,7 @@ define('io.ox/office/editor/editor',
 
         function implDeleteTable(position) {
 
-            var tablePosition = Position.getLastPositionFromPositionByNodeName(paragraphs, position, 'table'),
+            var tablePosition = Position.getLastPositionFromPositionByNodeName(paragraphs, position, DOM.TABLE_NODE_SELECTOR),
                 lastRow = Position.getLastRowIndexInTable(paragraphs, position),
                 lastColumn = Position.getLastColumnIndexInTable(paragraphs, position);
 

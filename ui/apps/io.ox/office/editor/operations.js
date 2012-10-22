@@ -463,7 +463,7 @@ define('io.ox/office/editor/operations',
                     // operations to create a paragraph (first paragraph node exists in every root node)
                     this.generateParagraphOperations(node, position, initialParagraph);
                     initialParagraph = false;
-                } else if ($(node).is('table')) {
+                } else if (DOM.isTableNode(node)) {
                     // operations to create a table with its structure and contents
                     this.generateTableOperations(node, position);
                 } else {

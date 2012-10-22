@@ -143,7 +143,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'paragraph', definitions, documentStyles, {
+        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, definitions, {
             updateHandler: updateParagraphFormatting,
             childStyleFamily: 'character',
             childNodeIterator: iterateChildNodes
@@ -158,7 +158,7 @@ define('io.ox/office/editor/format/paragraphstyles',
         this.iterateReadOnly = function (ranges, iterator, context) {
             // DOM.iterateAncestorNodesInRanges() passes the current element to
             // the passed iterator function exactly as expected
-            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, 'div.p', iterator, context);
+            return DOM.iterateAncestorNodesInRanges(ranges, rootNode, DOM.PARAGRAPH_NODE_SELECTOR, iterator, context);
         };
 
         /**

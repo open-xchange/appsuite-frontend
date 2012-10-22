@@ -13,8 +13,9 @@
 
 define('io.ox/office/editor/format/pagestyles',
     ['io.ox/office/tk/utils',
+     'io.ox/office/editor/dom',
      'io.ox/office/editor/format/stylesheets'
-    ], function (Utils, StyleSheets) {
+    ], function (Utils, DOM, StyleSheets) {
 
     'use strict';
 
@@ -144,7 +145,7 @@ define('io.ox/office/editor/format/pagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'page', definitions, documentStyles, {
+        StyleSheets.call(this, documentStyles, 'page', DOM.PAGE_NODE_SELECTOR, definitions, {
             updateHandler: updatePageHandler
         });
 

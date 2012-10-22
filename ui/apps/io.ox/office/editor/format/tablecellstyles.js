@@ -129,7 +129,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'tablecell', definitions, documentStyles, {
+        StyleSheets.call(this, documentStyles, 'tablecell', 'td', definitions, {
             updateHandler: updateTableCellFormatting
         });
 

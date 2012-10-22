@@ -353,6 +353,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A selector function that matches elements refered by the 'this' symbol
+     * representing a text node (portions and fields). Can be used in the
+     * jQuery method is() and in the DOM iterator methods supporting selectors.
+     */
+    DOM.TEXT_SPAN_SELECTOR = function () { return DOM.isTextSpan(this); };
+
+    /**
      * Returns whether the passed node is a <span> element representing a
      * regular text portion, or an empty text span.
      *
@@ -523,7 +530,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @returns {Boolean}
      *  Whether the passed node is a div element with class list-label.
      */
-    DOM.isListlabelNode = function (node) {
+    DOM.isListLabelNode = function (node) {
         return $(node).is('div.list-label');
     };
 
@@ -650,7 +657,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return (node && DOM.isTextSpan(node)) ? node.firstChild : null;
     };
 
-    // paragraphs =============================================================
+    // paragraphs and tables ==================================================
+
+    /**
+     * A jQuery selector that matches elements representing a paragraph.
+     */
+    DOM.PARAGRAPH_NODE_SELECTOR = 'div.p';
 
     /**
      * Returns whether the passed node is a paragraph element.
@@ -663,7 +675,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a paragraph element.
      */
     DOM.isParagraphNode = function (node) {
-        return $(node).is('div.p');
+        return $(node).is(DOM.PARAGRAPH_NODE_SELECTOR);
     };
 
     /**
@@ -674,6 +686,67 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.createParagraphNode = function () {
         return $('<div>').addClass('p');
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a table.
+     */
+    DOM.TABLE_NODE_SELECTOR = 'table';
+
+    /**
+     * Returns whether the passed node is a table element.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a table element.
+     */
+    DOM.isTableNode = function (node) {
+        return $(node).is(DOM.TABLE_NODE_SELECTOR);
+    };
+
+    /**
+     * A jQuery selector that matches elements representing a top-level content
+     * node (e.g. paragraphs or tables).
+     */
+    DOM.CONTENT_NODE_SELECTOR = DOM.PARAGRAPH_NODE_SELECTOR + ', ' + DOM.TABLE_NODE_SELECTOR;
+
+    /**
+     * Returns whether the passed node is a top-level content node (e.g.
+     * paragraphs or tables).
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a top-level content node.
+     */
+    DOM.isContentNode = function (node) {
+        return $(node).is(DOM.CONTENT_NODE_SELECTOR);
+    };
+
+    // pages ==================================================================
+
+    /**
+     * A jQuery selector that matches elements representing a page.
+     */
+    DOM.PAGE_NODE_SELECTOR = 'div.page';
+
+    /**
+     * Returns whether the passed node is a page element.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a page element.
+     */
+    DOM.isPageNode = function (node) {
+        return $(node).is(DOM.PAGE_NODE_SELECTOR);
     };
 
     // range iteration ========================================================

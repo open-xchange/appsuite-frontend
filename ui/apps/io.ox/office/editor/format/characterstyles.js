@@ -106,6 +106,17 @@ define('io.ox/office/editor/format/characterstyles',
 
         };
 
+    // private global functions ===============================================
+
+    /**
+     * A jQuery selector function that returns whether the DOM node bound to
+     * the 'this' symbol is an element that can receive character formatting
+     * attributes.
+     */
+    function characterNodeSelector() {
+        return DOM.isTextSpan(this) || DOM.isListLabelNode(this);
+    }
+
     // class CharacterStyles ==================================================
 
     /**
@@ -171,10 +182,9 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'character', definitions, documentStyles, {
+        StyleSheets.call(this, documentStyles, 'character', characterNodeSelector, definitions, {
             updateHandler: updateSpanFormatting,
-            ancestorStyleFamily: 'paragraph',
-            ancestorElementResolver: function (span) { return span.parentNode; }
+            parentStyleFamily: 'paragraph'
         });
 
         // methods ------------------------------------------------------------

@@ -434,7 +434,7 @@ define('io.ox/office/editor/format/imagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, 'image', definitions, documentStyles, {
+        StyleSheets.call(this, documentStyles, 'image', DOM.IMAGE_NODE_SELECTOR, definitions, {
             updateHandler: updateImageFormatting
         });
 
