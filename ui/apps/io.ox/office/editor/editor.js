@@ -2422,9 +2422,20 @@ define('io.ox/office/editor/editor',
 
                 $('img', imagePos.node).one('load', function () {
                     var width = Utils.convertLengthToHmm($(this).width(), 'px'),
-                        height = Utils.convertLengthToHmm($(this).height(), 'px'),
-                        // updating the logical position of the image div, maybe it changed in the meantime while loading the image
-                        updatePosition = Position.getOxoPosition(editdiv, this, 0),
+                        height = Utils.convertLengthToHmm($(this).height(), 'px');
+
+                    // maybe the paragraph is not so big
+                    var para = imagePos.node.parentNode,
+                        maxWidth = Utils.convertLengthToHmm($(para).outerWidth(), 'px');
+
+                    if (width > maxWidth) {
+                        var factor = Utils.roundDigits(maxWidth / width, 2);
+                        width = maxWidth;
+                        height = Utils.roundDigits(height * factor, 0);
+                    }
+
+                    // updating the logical position of the image div, maybe it changed in the meantime while loading the image
+                    var updatePosition = Position.getOxoPosition(editdiv, this, 0),
                         newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
                     applyOperation(newOperation, true, true);
