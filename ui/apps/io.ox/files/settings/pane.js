@@ -22,7 +22,12 @@ define('io.ox/files/settings/pane',
 
 
     var filesSettings =  settings.createModel(filesSettingsModel),
-        staticStrings =  {},
+        staticStrings =  {
+            TITLE_FILES: gt('Files'),
+            DEFAULT_VIEW: gt('Default view')
+        },
+        optionsView = [{label: gt('H-split view'), value: 'files/split'},
+                       {label: gt('List view'), value: 'files/list'}],
         filesViewSettings;
 
     var FilesSettingsView = Backbone.View.extend({
@@ -36,7 +41,8 @@ define('io.ox/files/settings/pane',
         render: function () {
             var self = this;
             self.$el.empty().append(tmpl.render('io.ox/files/settings', {
-                strings: staticStrings
+                strings: staticStrings,
+                optionsViewDefault: optionsView
             }));
 
             var defaultBindings = Backbone.ModelBinder.createDefaultBindings(self.el, 'data-property');

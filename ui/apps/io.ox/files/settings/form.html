@@ -1,8 +1,20 @@
 <part id='io.ox/files/settings'>
     <extension id='title'>
         <div>
-            <div class="clear-title">Files</div>
+            <div class="clear-title">{{=it.strings.TITLE_FILES}}</div>
             <div class="settings sectiondelimiter"></div>
+        </div>
+    </extension>
+    <extension id='common'>
+        <div class="control-group expertmode">
+            <label for="default_view" class="control-label">{{=it.strings.DEFAULT_VIEW}}</label>
+            <div class="controls">
+                <label class="select">
+                    <select data-property="view" id="default_view" class="input-xlarge">
+                        {{~it.optionsViewDefault :value:index}}<option value="{{=value.value}}">{{=value.label}}</option>{{~}}
+                    </select>
+                </label>
+            </div>
         </div>
     </extension>
     

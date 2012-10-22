@@ -19,8 +19,8 @@ function () {
     'use strict';
 
     var settingsDefaults = {
-
-    };
+            view: "files/split"
+        };
 
     return settingsDefaults;
 });
