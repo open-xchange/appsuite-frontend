@@ -336,7 +336,7 @@ div.io-ox-view-component {
                 background-color: white;
                 border: none;
                 .border-radius(0);
-                .box-shadow(0 5px 10px fade(black, 20%));
+                .box-shadow(0 5px 10px fade(black, 25%));
 
                 /* the Scrollable mix-in class */
                 &.scrollable {
@@ -460,7 +460,7 @@ div.io-ox-view-component {
     /* tool bars ----------------------------------------------------------- */
 
     &.toolbar {
-        @control-heigth: 32px;
+        @control-height: 32px;
 
         padding: 0;
 
@@ -478,12 +478,12 @@ div.io-ox-view-component {
                 }
 
                 > label, > button, > input {
-                    height: @control-heigth;
+                    height: @control-height;
                     border: none;
                 }
 
                 > label, > button {
-                    line-height: @control-heigth;
+                    line-height: @control-height;
                 }
 
                 /* selected toggle/radio buttons */
@@ -515,12 +515,12 @@ div.io-ox-view-component {
                     .box-shadow(0 0 4px fade(black, 15%));
         
                     > label, > button, > input {
-                        height: @control-heigth - 6px;
+                        height: @control-height - 6px;
                         background: white;
                     }
         
                     > label, > button {
-                        line-height: @control-heigth - 6px;
+                        line-height: @control-height - 6px;
                     }
         
                     /* keyboard/mouse effects (not for disabled buttons) */
