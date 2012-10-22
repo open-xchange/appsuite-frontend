@@ -37,13 +37,18 @@ define('io.ox/office/tk/control/radiogroup',
      *      If set to true, a drop-down button will be created, showing a list
      *      with all option buttons when opened. Otherwise, the option buttons
      *      will be inserted directly into this group.
+     *  @param {Boolean} [options.highlight=false]
+     *      If set to true, the drop-down button will be highlighted if a list
+     *      item in the drop-down menu is active. Has no effect, if the radio
+     *      group is not in drop-down mode.
      *  @param {String} [options.updateCaptionMode='all']
      *      Specifies how to update the caption of the drop-down button when a
      *      list item in the drop-down menu has been activated. If set to
      *      'label', only the label text of the list item will be copied. If
      *      set to 'icon', only the icon will be copied. If set to 'none',
      *      nothing will be copied. By default, icon and label of the list item
-     *      will be copied.
+     *      will be copied. Has no effect, if the radio group is not in
+     *      drop-down mode.
      *  @param {Function} [options.updateCaptionHandler]
      *      A function that will be called after a list item has been
      *      activated, and the caption of the drop-down button has been updated
@@ -53,12 +58,16 @@ define('io.ox/office/tk/control/radiogroup',
      *      and the value of the selected/activated list item in the second
      *      parameter (also if this value does not correspond to any existing
      *      list item). Will be called in the context of this radio group
-     *      instance.
+     *      instance. Has no effect, if the radio group is not in drop-down
+     *      mode.
      */
     function RadioGroup(options) {
 
         var // self reference
             self = this,
+
+            // whether to highlight the drop-down menu button
+            highlight = Utils.getBooleanOption(options, 'highlight', false),
 
             // which parts of a list item caption will be copied to the menu button
             updateCaptionMode = Utils.getStringOption(options, 'updateCaptionMode', 'all'),
@@ -98,6 +107,9 @@ define('io.ox/office/tk/control/radiogroup',
                 captionOptions = options;
 
             if (self.hasDropDown) {
+
+                // highlight the drop-down button
+                Utils.toggleButtons(self.getMenuButton(), highlight && (button.length > 0));
 
                 // update the caption of the drop-down menu button
                 if (updateCaptionMode !== 'none') {
