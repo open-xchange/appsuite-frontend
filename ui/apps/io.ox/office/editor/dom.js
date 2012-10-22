@@ -509,9 +509,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Returns whether the passed node is a <div> element for positioning
      * an object with a vertical or horizontal offset.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object.
@@ -523,9 +523,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns whether the passed node is a <div> element with class list-label.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element with class list-label.
@@ -667,9 +667,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns whether the passed node is a paragraph element.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a paragraph element.
@@ -689,6 +689,34 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a dummy paragraph terminator that is
+     * used in empty paragraphs to preserve an initial element height according
+     * to the current font size.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a dummy paragraph terminator element.
+     */
+    DOM.isDummyTerminatorNode = function (node) {
+        return $(node).data('dummy') === true;
+    };
+
+    /**
+     * Creates a dummy paragraph terminator that is used in empty paragraphs to
+     * preserve an initial element height according to the current font size.
+     *
+     * @returns {jQuery}
+     *  A dummy paragraph terminator element, as jQuery object.
+     */
+    DOM.createDummyTerminatorNode = function () {
+        // TODO: create correct element for current browser
+        return $('<br>').data('dummy', true);
+    };
+
+    /**
      * A jQuery selector that matches elements representing a table.
      */
     DOM.TABLE_NODE_SELECTOR = 'table';
@@ -696,9 +724,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns whether the passed node is a table element.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a table element.
@@ -1115,8 +1143,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // call iterator for the text node, return if iterator returns Utils.BREAK
                 if (callIterator() === Utils.BREAK) { return Utils.BREAK; }
 
-            // cursor selects a single <br> element, visit last preceding text node instead
-            } else if (range.isCollapsed() && (Utils.getNodeName(node) === 'br') && (node = DOM.getSiblingTextNode(node, false))) {
+            // cursor selects a single dummy paragraph terminator, visit last preceding text node instead
+            } else if (range.isCollapsed() && DOM.isDummyTerminatorNode(node) && (node = DOM.getSiblingTextNode(node, false))) {
                 // prepare start, end, and current DOM range object
                 start = range.start.offset = end = range.end.offset = node.nodeValue.length;
                 range.start.node = range.end.node = node;

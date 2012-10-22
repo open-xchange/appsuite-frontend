@@ -265,11 +265,11 @@ define('io.ox/office/editor/position',
             characterPositionOffset = 1;
         } else if (DOM.isFieldSpan(node)) {
             characterPositionOffset = 1;
-        } else if ($(node).is('span')) {
+        } else if (DOM.isPortionSpan(node)) {
             characterPositionOffset = $(node).text().length;
         } else if ((node.nodeType === 3) && DOM.isFieldSpan(node.parentNode)) {
             characterPositionOffset = 1;
-        } else if (node.nodeType === 3) {
+        } else if ((node.nodeType === 3) && DOM.isPortionSpan(node.parentNode)) {
             characterPositionOffset = node.nodeValue.length;
         }
 
@@ -518,8 +518,8 @@ define('io.ox/office/editor/position',
             useFirstTextNode = false;
         }
 
-        // special handling for <br>, use last preceding text node instead
-        if (localNode && ($(localNode).is('br'))) {
+        // special handling for dummy terminator, use last preceding text node instead
+        if (DOM.isDummyTerminatorNode(localNode)) {
             localNode = localNode.previousSibling;
             useFirstTextNode = false;
         }
@@ -1029,13 +1029,11 @@ define('io.ox/office/editor/position',
 
                 domNode = nextChild.node;
 
-                if (domNode) {
-                    if (DOM.isTableNode(domNode)) {
-                        positionInTable = true;
-                        break;
-                    } else if (DOM.isParagraphNode(domNode)) {
-                        break;
-                    }
+                if (DOM.isTableNode(domNode)) {
+                    positionInTable = true;
+                    break;
+                } else if (DOM.isParagraphNode(domNode)) {
+                    break;
                 }
             }
         }

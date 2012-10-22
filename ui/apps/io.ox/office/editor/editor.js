@@ -670,7 +670,7 @@ define('io.ox/office/editor/editor',
                 var tableDomPoint = Position.getDOMPosition(paragraphs, tablePos),
                     rowDomPoint = Position.getDOMPosition(paragraphs, rowPosition);
 
-                if ((tableDomPoint) && (tableDomPoint.node) && (DOM.isTableNode(tableDomPoint.node))) {
+                if (tableDomPoint && DOM.isTableNode(tableDomPoint.node)) {
 
                     var tableGridCount = StyleSheets.getExplicitAttributes(tableDomPoint.node).tablegrid.length,
                         rowGridCount = Table.getColSpanSum($(rowDomPoint.node).children());
@@ -1050,11 +1050,6 @@ define('io.ox/office/editor/editor',
 
         this.getParagraphCount = function () {
             return paragraphs.size();
-        };
-
-        this.prepareNewParagraph = function (paragraph) {
-            // insert an empty <span> with a text node, followed by a dummy <br>
-            $(paragraph).append($('<span>').text(''), $('<br>').data('dummy', true));
         };
 
         this.setEditMode = function (state) {
@@ -2216,9 +2211,9 @@ define('io.ox/office/editor/editor',
         // End of private selection functions
 
         /**
-         * Removes empty text nodes from the passed paragraph, checks whether it
-         * needs a trailing <br> element, and converts consecutive white-space
-         * characters.
+         * Removes empty text nodes from the passed paragraph, checks whether
+         * it needs a dummy terminator element, and converts consecutive
+         * white-space characters.
          *
          * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
@@ -2230,14 +2225,14 @@ define('io.ox/office/editor/editor',
                 siblingTextNodes = [],
                 // whether the paragraph contains any text
                 hasText = false,
-                // whether the last child node is the dummy <br> element
-                lastDummy = false;
+                // whether the last child node is the dummy element
+                hasLastDummy = false;
 
             // convert parameter to a DOM node
             paragraph = Utils.getDomNode(paragraph);
 
-            // whether last node is the dummy <br> node
-            lastDummy = paragraph.lastChild && $(paragraph.lastChild).data('dummy');
+            // whether last node is the dummy node
+            hasLastDummy = DOM.isDummyTerminatorNode(paragraph.lastChild);
 
             // remove all empty text spans which have sibling text spans, and collect
             // sequences of sibling text spans (needed for white-space handling)
@@ -2300,18 +2295,18 @@ define('io.ox/office/editor/editor',
                 }
             });
 
-            // insert an empty text span if there is no other content (except the dummy <br>)
-            if (!paragraph.hasChildNodes() || (lastDummy && (paragraph.childNodes.length === 1))) {
+            // insert an empty text span if there is no other content (except the dummy node)
+            if (!paragraph.hasChildNodes() || (hasLastDummy && (paragraph.childNodes.length === 1))) {
                 $(paragraph).prepend($('<span>').text(''));
                 // initialize paragraph and character formatting from current paragraph style
                 paragraphStyles.updateElementFormatting(paragraph);
             }
 
-            // append dummy <br> if the paragraph contains no text, or remove
-            // the dummy <br> if there is any text
-            if (!hasText && !lastDummy) {
-                $(paragraph).append($('<br>').data('dummy', true));
-            } else if (hasText && lastDummy) {
+            // append dummy terminator if the paragraph contains no text,
+            // or remove it if there is any text
+            if (!hasText && !hasLastDummy) {
+                $(paragraph).append(DOM.createDummyTerminatorNode());
+            } else if (hasText && hasLastDummy) {
                 $(paragraph.lastChild).remove();
             }
 
@@ -2833,7 +2828,7 @@ define('io.ox/office/editor/editor',
             var domPos = Position.getDOMPosition(paragraphs, position),
                 imageShift = 0;
 
-            if ((domPos) && (domPos.node) && (DOM.isParagraphNode(domPos.node))) {
+            if (domPos && DOM.isParagraphNode(domPos.node)) {
 
                 var para = domPos.node,
                     counter = Position.getNumberOfFloatedObjectsInParagraph(para),  // number of floated objects at begin of paragraph
@@ -3262,7 +3257,8 @@ define('io.ox/office/editor/editor',
 
         function implParagraphChanged(position) {
 
-            // Make sure that a completly empty para has the dummy br element, and that all others don't have it anymore...
+            // Make sure that an empty paragraph has the dummy terminator element,
+            // and that all others don't have it anymore...
             var paragraph = Position.getCurrentParagraph(paragraphs, position);
             if (paragraph) {
                 validateParagraphNode(paragraph);
@@ -3737,7 +3733,7 @@ define('io.ox/office/editor/editor',
                     oldParaLen = Position.getParagraphLength(paragraphs, position);
 
                     var lastCurrentChild = thisPara.lastChild;
-                    if (lastCurrentChild && ($(lastCurrentChild).is('br'))) {
+                    if (lastCurrentChild && DOM.isDummyTerminatorNode(lastCurrentChild)) {
                         thisPara.removeChild(lastCurrentChild);
                     }
 
@@ -4275,7 +4271,7 @@ define('io.ox/office/editor/editor',
                         Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // also move the offset divs
-                        if (!offsetDiv || !DOM.isOffsetNode(offsetDiv)) {
+                        if (!DOM.isOffsetNode(offsetDiv)) {
                             useOffsetDiv = false; // should never be reached
                         }
                     }
