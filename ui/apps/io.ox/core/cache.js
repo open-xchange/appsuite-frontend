@@ -12,7 +12,10 @@
  * @author Martin Holzhauer <martin.holzhauer@open-xchange.com>
  */
 
-define('io.ox/core/cache', function () {
+define('io.ox/core/cache',
+    ["io.ox/core/cache/indexeddb",
+     "io.ox/core/cache/localstorage",
+     "io.ox/core/cache/simple"], function () {
 
     'use strict';
 

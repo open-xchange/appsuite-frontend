@@ -119,16 +119,18 @@ $(document).ready(function () {
         $("#io-ox-login-screen").hide();
         $(this).busy();
         // get configuration & core
-        require("io.ox/core/config").load().done(function () {
-            $.when(
-                require(["io.ox/core/main"]),
-                require("themes").set("default")
-            ).done(function (core) {
-                // go!
-                core.launch();
-            })
-            .fail(function (e) {
-                console.error('Cannot launch core!', e);
+        require(['io.ox/core/config', 'themes']).done(function (config, themes) {
+            config.load().done(function () {
+                $.when(
+                    require(['io.ox/core/main']),
+                    themes.set("default")
+                ).done(function (core) {
+                    // go!
+                    core.launch();
+                })
+                .fail(function (e) {
+                    console.error('Cannot launch core!', e);
+                });
             });
         });
     };
@@ -176,8 +178,8 @@ $(document).ready(function () {
             return fail({ error: "Please enter your password.", code: "UI-0002" }, 'password');
         }
         // login
-        require("io.ox/core/session")
-            .login(
+        require(['io.ox/core/session']).done(function (session) {
+            session.login(
                 username,
                 password,
                 $("#io-ox-login-store-box").prop("checked")
@@ -188,10 +190,11 @@ $(document).ready(function () {
                 loginSuccess();
             })
             .fail(fail);
+        });
     };
 
     changeLanguage = function (id) {
-        return require(["io.ox/core/login." + id]).done(function (gt) {
+        return require(['io.ox/core/login.' + id]).done(function (gt) {
             // get all nodes
             $("[data-i18n]").each(function () {
                 var node = $(this),
@@ -248,8 +251,9 @@ $(document).ready(function () {
                 // set flag
                 relogin = true;
                 // set header (if we come around here, we have extensions)
-                var ext = require('io.ox/core/extensions');
-                ext.point('io.ox/core/relogin').invoke('draw', $('#io-ox-login-header').find('h1').empty());
+                require(['io.ox/core/extensions'], function (ext) {
+                    ext.point('io.ox/core/relogin').invoke('draw', $('#io-ox-login-header').find('h1').empty());
+                });
                 // bind
                 $("#io-ox-login-form").on("submit", fnSubmit);
                 $("#io-ox-login-username").val(ox.user || "");
@@ -259,7 +263,7 @@ $(document).ready(function () {
                     $("#io-ox-login-screen").fadeOut(DURATION, function () {
                         $("#io-ox-login-screen-decorator").hide();
                         // process queue
-                        var i = 0, item, http = require("io.ox/core/http");
+                        var i = 0, item, http = require('io.ox/core/http');
                         for (; (item = queue[i]); i++) {
                             http.retry(item.request)
                                 .done(item.deferred.resolve)
@@ -299,8 +303,10 @@ $(document).ready(function () {
 
         function loadCoreFiles() {
             // Set user's language (as opposed to the browser's language)
-            require("io.ox/core/gettext").setLanguage(ox.language);
-            return require([ox.base + "/pre-core.js"]);
+            return require(['io.ox/core/gettext']).pipe(function (gt) {
+                gt.setLanguage(ox.language);
+                return require([ox.base + '/pre-core.js']);
+            });
         }
 
         // got session via hash?
@@ -316,12 +322,14 @@ $(document).ready(function () {
             });
         } else if (ox.serverConfig.autoLogin === true && ox.online) {
             // try auto login
-            return require("io.ox/core/session").autoLogin().done(function () {
-                loadCoreFiles().done(function () {
-                    gotoCore(true);
-                });
-            })
-            .fail(fail);
+            return require(['io.ox/core/session']).pipe(function (session) {
+                return session.autoLogin().done(function () {
+                    loadCoreFiles().done(function () {
+                        gotoCore(true);
+                    });
+                })
+                .fail(fail);
+            });
         } else {
             fail();
         }
@@ -394,7 +402,7 @@ $(document).ready(function () {
 
         return $.when(
                 // load extensions
-                require(["io.ox/core/extensions"]).pipe(function (ext) { return ext.loadPlugins(); }),
+                require(['io.ox/core/extensions']).pipe(function (ext) { return ext.loadPlugins(); }),
                 // use browser language
                 setDefaultLanguage()
             )
@@ -473,8 +481,8 @@ $(document).ready(function () {
 
     var boot = function () {
 
-        // get pre core & server config
-        require([ox.base + "/src/serverconfig.js"])
+        // get pre core & server config -- and init http & session
+        require([ox.base + '/src/serverconfig.js', 'io.ox/core/http', 'io.ox/core/session'])
             .done(function (data) {
                 // store server config
                 ox.serverConfig = data;

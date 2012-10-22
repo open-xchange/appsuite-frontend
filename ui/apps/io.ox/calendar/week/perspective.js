@@ -14,11 +14,11 @@ define('io.ox/calendar/week/perspective',
         ['io.ox/calendar/week/view',
          'io.ox/calendar/api',
          'io.ox/calendar/util',
-         'io.ox/core/http',
+         'io.ox/core/extensions',
          'io.ox/core/tk/dialogs',
          'io.ox/calendar/view-detail',
          'gettext!io.ox/calendar'
-         ], function (View, api, util, http, dialogs, detailView, gt) {
+         ], function (View, api, util, ext, dialogs, detailView, gt) {
 
     'use strict';
 
@@ -82,14 +82,12 @@ define('io.ox/calendar/week/perspective',
         },
 
         openCreateAppointment: function (e, obj) {
-            require('io.ox/core/extensions')
-                .point('io.ox/calendar/detail/actions/create')
+            ext.point('io.ox/calendar/detail/actions/create')
                 .invoke('action', this, this.app, obj);
         },
 
         openEditAppointment: function (e, obj) {
-            require('io.ox/core/extensions')
-                .point('io.ox/calendar/detail/actions/edit')
+            ext.point('io.ox/calendar/detail/actions/edit')
                 .invoke('action', this, obj);
         },
 
