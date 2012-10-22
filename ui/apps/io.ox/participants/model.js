@@ -32,13 +32,17 @@ define("io.ox/participants/model",
             var self = this,
                 df = new $.Deferred();
 
-
             switch (self.get('type')) {
             case self.TYPE_USER:
                 //fetch user contact
                 userAPI.get({id: self.get('id')}).done(function (user) {
                     self.set(user);
                     self.trigger('change', self);
+                    df.resolve();
+                }).fail(function () {
+                    if (!self.get('display_name')) {
+                        self.set('display_name', self.get('mail'));
+                    }
                     df.resolve();
                 });
                 break;
@@ -111,7 +115,20 @@ define("io.ox/participants/model",
     });
 
     var ParticipantsCollection = Backbone.Collection.extend({
-        model: ParticipantModel
+        model: ParticipantModel,
+        addUniquely: function (models, options) {
+            var self = this;
+            if (!_.isArray(models)) {
+                models = [models];
+            }
+            var toAdd = [];
+            _(models).each(function (participant) {
+                if (!self.get(participant.id)) {
+                    toAdd.push(participant);
+                }
+            });
+            this.add(toAdd);
+        }
     });
 
     return {

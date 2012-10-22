@@ -199,7 +199,7 @@ define('io.ox/contacts/actions',
             function mapList(obj) {
                 if (obj.id) {
                     // internal
-                    return { type: 1, id: obj.id };
+                    return { type: 1, id: obj.id, display_name: obj.display_name, mail: obj.mail };
                 } else {
                     // external
                     return { type: 5, display_name: obj.display_name, mail: obj.mail };

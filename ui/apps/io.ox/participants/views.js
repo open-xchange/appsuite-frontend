@@ -12,6 +12,13 @@ define("io.ox/participants/views",
         events: {
             'click .remove': 'onRemove'
         },
+        initialize: function () {
+            var self = this;
+            this.model.on("change", function () {
+                self.$el.empty();
+                self.render();
+            });
+        },
         render: function () {
             this.$el.attr('data-cid', this.model.cid);
             var self = this,
