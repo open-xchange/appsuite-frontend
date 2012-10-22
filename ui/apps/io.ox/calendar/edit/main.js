@@ -166,19 +166,19 @@ define('io.ox/calendar/edit/main',
 
         },
         failSave: function () {
-            var self = this;
+            /*var self = this;
             return {
                 module: 'io.ox/calendar/edit',
                 point: self.model.attributes
-            };
+            };*/
         },
         failRestore: function (point) {
             var df = $.Deferred();
-            if (_.isUndefined(point.id)) {
+            /*if (_.isUndefined(point.id)) {
                 this.create(point);
             } else {
                 this.edit(point);
-            }
+            }*/
             df.resolve();
             return df;
         }

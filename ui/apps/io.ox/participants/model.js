@@ -22,7 +22,17 @@ define("io.ox/participants/model",
             image1_url: ''
         },
         initialize: function () {
-            this.fetch();
+            var self = this;
+            if (self.get('internal_userid')) {
+                self.id = self.get('internal_userid');
+                self.set({
+                    id: self.get('internal_userid'),
+                    type: ParticipantModel.TYPE_USER
+                });
+            }
+            this.fetch().done(function () {
+                self.trigger("fetch");
+            });
             if (this.get('type') === this.TYPE_EXTERNAL_USER) {
                 this.id = this.get('mail');
                 this.set('id', this.get('mail'));
@@ -31,7 +41,6 @@ define("io.ox/participants/model",
         fetch: function (options) {
             var self = this,
                 df = new $.Deferred();
-
             switch (self.get('type')) {
             case self.TYPE_USER:
                 //fetch user contact
@@ -76,8 +85,12 @@ define("io.ox/participants/model",
                         self.set({
                             display_name: itemWithImage.display_name,
                             email1: self.get('mail') || self.get('email1'),
-                            image1_url: itemWithImage.image1_url
+                            image1_url: itemWithImage.image1_url,
+                            type: itemWithImage.internal_userid ? self.TYPE_USER : self.TYPE_EXTERNAL_USER,
+                            id: itemWithImage.internal_userid ? itemWithImage.internal_userid : self.get('id')
                         });
+                        self.id = self.get('id');
+                        self.trigger("change");
                     } else {
                         self.set({display_name: self.get('display_name').replace(/(^["'\\\s]+|["'\\\s]+$)/g, ''), email1: self.get('mail') || self.get('email1')});
                     }
@@ -115,6 +128,22 @@ define("io.ox/participants/model",
     });
 
     var ParticipantsCollection = Backbone.Collection.extend({
+        initialize: function () {
+            var self = this;
+            self.on("change", function () {
+                // Deduplication
+                var idMap = {};
+                var duplicates = [];
+                self.each(function (p, index) {
+                    if (idMap[p.id]) {
+                        duplicates.push(p);
+                    } else {
+                        idMap[p.id] = true;
+                    }
+                });
+                self.remove(duplicates);
+            });
+        },
         model: ParticipantModel,
         addUniquely: function (models, options) {
             var self = this;
