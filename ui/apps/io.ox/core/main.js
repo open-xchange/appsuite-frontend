@@ -157,7 +157,12 @@ define("io.ox/core/main",
             add(node, launchers, model);
             // add list item
             node = $('<li>').append(
-                $('<a href="#">').text(gt(title))
+                $('<a>', {
+                    href: '#',
+                    'data-app-name': model.get('name') || model.id,
+                    'data-app-guid': model.guid
+                })
+                .text(gt(title))
             );
             node.on('click', function () { model.launch(); }).appendTo(launcherDropdown);
             add(node, launcherDropdown, model);
@@ -214,20 +219,12 @@ define("io.ox/core/main",
             index: 100,
             draw: function () {
                 this.append(
-                    $('<li>').append($('<a>').text(gt('Settings')))
+                    $('<li>').append(
+                        $('<a href="#" data-app-name="io.ox/settings">').text(gt('Settings'))
+                    )
                     .on('click', function () {
                         ox.launch('io.ox/settings/main');
                     })
-                );
-            }
-        });
-
-        ext.point('io.ox/core/topbar/right/dropdown').extend({
-            id: 'settings',
-            index: 100,
-            draw: function () {
-                this.append(
-                    $('<li>').append($('<a>').text(gt('Settings')))
                 );
             }
         });
@@ -237,7 +234,9 @@ define("io.ox/core/main",
             index: 200,
             draw: function () {
                 this.append(
-                    $('<li>').append($('<a>').text(gt('Help')))
+                    $('<li>').append(
+                        $('<a href="#" data-app-name="io.ox/help">').text(gt('Help'))
+                    )
                     .on('click', function () {
                         require(['io.ox/help/center'], function (center) {
                             setTimeout(function () {
@@ -254,7 +253,9 @@ define("io.ox/core/main",
             index: 200,
             draw: function () {
                 this.append(
-                    $('<li>').append($('<a>').text(gt('Fullscreen')))
+                    $('<li>').append(
+                        $('<a href="#" data-action="fullscreen">').text(gt('Fullscreen'))
+                    )
                     .on('click', function () {
                         // Maximize
                         if (BigScreen.enabled) {
@@ -271,7 +272,9 @@ define("io.ox/core/main",
             draw: function () {
                 this.append(
                     $('<li class="divider"></li>'),
-                    $('<li>').append($('<a>').text(gt('Sign out')))
+                    $('<li>').append(
+                        $('<a href="#" data-action="logout">').text(gt('Sign out'))
+                    )
                     .on('click', logout)
                 );
             }
