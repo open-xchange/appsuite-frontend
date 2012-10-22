@@ -329,65 +329,41 @@ define('io.ox/files/icons/perspective',
 
             api.on("refresh.all", function () {
                 if (!app.getWindow().search.active) {
-                    api.getAll({ folder: app.folder.get() })
-                    .done(function (ids) {
-                        var oldIds = _.map(allIds, function (o) { return _.cid(o); }),
-                        newIds = _.map(ids, function (o) { return _.cid(o); }),
-                        deleted = _.difference(oldIds, newIds),
-                        added = _.difference(newIds, oldIds);
-                        if (deleted.length > 0)
-                        {
-                            _.each(deleted, function (cid) {
-                                iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
-                            });
-                        }
-                        if (added.length > 0)
-                        {
-                            http.pause();
-                            _.each(added, function (cid) { api.get(_.cid(cid)); });
-                            http.resume()
-                            .done(function (data) {
-                                _.each(data, function (file) {
-                                    var prevArrayItem = newIds[($.inArray(_.cid(file.data), newIds) - 1 + newIds.length) % newIds.length];
-                                    var node = $('<div>');
-                                    ext.point('io.ox/files/icons/file').invoke(
-                                        'draw', node, new ext.Baton({ data: file.data, options: options })
-                                    );
-                                    iconview.find('.file-icon[data-cid="' + prevArrayItem + '"]').after(node);
-                                });
-                            });
-                        }
-                        allIds = ids;
-                    });
+                    api.getAll({ folder: app.folder.get() }).done(function (ids) {
 
-                    //var params = { folder: app.folder.get(), timestamp: lastTimestamp };
-                    //api.getUpdates(params).done(function (data) {
-                    //    console.log('Refresh', lastTimestamp, data);
-                    //    lastTimestamp = _.now();
-                    //}).fail(function (data) {
-                    //    console.log(data);
-                    //});
-                }
-                else
-                {
+                        var hash = {}, oldIds, newIds, deleted, added;
+
+                        _(ids).each(function (obj) {
+                            var cid = _.cid(obj);
+                            hash[cid] = obj;
+                        });
+
+                        oldIds = _.map(allIds, _.cid);
+                        newIds = _.map(ids, _.cid);
+                        deleted = _.difference(oldIds, newIds);
+                        added = _.difference(newIds, oldIds);
+                        allIds = ids;
+
+                        _(deleted).each(function (cid) {
+                            iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
+                        });
+
+                        _(added).each(function (cid) {
+                            var data = hash[cid],
+                                prevArrayItem = newIds[(_.indexOf(newIds, cid) - 1 + newIds.length) % newIds.length],
+                                node = $('<div>');
+                            ext.point('io.ox/files/icons/file').invoke(
+                                'draw', node, new ext.Baton({ data: data, options: options })
+                            );
+                            iconview.find('.file-icon[data-cid="' + prevArrayItem + '"]').after(node);
+                        });
+
+                        hash = ids = null;
+                    });
+                } else {
                     drawFirst();
                 }
             });
-
-//            // published?
-//            app.folder.getData().done(function (data) {
-//                win.nodes.title.find('.has-publications').remove();
-//                if (data['com.openexchange.publish.publicationFlag']) {
-//                    win.nodes.title.prepend(
-//                        $('<img>', {
-//                            src: ox.base + '/apps/themes/default/glyphicons_232_cloud_white.png',
-//                            title: gt('This folder has publications'),
-//                            alt: ''
-//                        })
-//                        .addClass('has-publications')
-//                    );
-//                }
-//            });
         },
 
         render: function (app) {

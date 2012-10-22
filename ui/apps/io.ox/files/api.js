@@ -88,6 +88,9 @@ define('io.ox/files/api',
                 _(data).each(fixContentType);
                 return data;
             },
+            get: function (data) {
+                return fixContentType(data);
+            },
             search: function (data) {
                 _(data).each(fixContentType);
                 return data;
