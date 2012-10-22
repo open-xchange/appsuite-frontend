@@ -255,7 +255,7 @@ define('io.ox/contacts/actions',
         id: 'create',
         label: gt('Add contact'),
         cssClasses: 'btn btn-primary',
-        ref: 'io.ox/contacts/main/create'
+        ref: 'io.ox/contacts/actions/create'
     }));
 
     ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
@@ -263,7 +263,7 @@ define('io.ox/contacts/actions',
         id: 'create-dist',
         cssClasses: 'btn btn-inverse',
         label: gt('Add distribution list'),
-        ref: 'io.ox/contacts/main/distrib'
+        ref: 'io.ox/contacts/actions/distrib'
     }));
 
     //  inline links
