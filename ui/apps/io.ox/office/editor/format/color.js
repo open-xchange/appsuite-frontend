@@ -267,6 +267,34 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
     };
     
     /**
+     * Determine if provided color has theme based color value
+     *
+     * @param color
+     * A color object
+     *
+     * @returns {Boolean}
+     * true if color is theme based otherwise false
+     */
+    Color.isThemeColor = function (color) {
+        var type = Utils.getStringOption(color, 'type', 'none');
+        return (type === 'scheme');
+    };
+    
+    /**
+     * Determine if provided color has type auto
+     *
+     * @param color
+     * A color object
+     *
+     * @returns {Boolean}
+     * true if color has type auto otherwise false
+     */
+    Color.isAutoColor = function (color) {
+        var type = Utils.getStringOption(color, 'type', 'auto');
+        return (type === 'auto');
+    };
+    
+    /**
      * Determine if the provided color is dark or light
      *
      * @param {String} rgbColor
