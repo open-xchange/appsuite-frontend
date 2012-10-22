@@ -511,7 +511,11 @@ define('io.ox/office/editor/position',
 
         offset = 0;
 
-        if (($(node).is('tr')) && (isEndPoint)) {
+        if ((isEndPoint) && ($(node).is('tr'))) {
+            usePreviousCell = true;
+        }
+
+        if ((isEndPoint) && (localNode) && (localNode.previousSibling) && (DOM.isObjectNode($(localNode.previousSibling)))) {
             usePreviousCell = true;
         }
 
