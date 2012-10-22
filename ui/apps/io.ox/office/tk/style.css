@@ -156,29 +156,14 @@ i.icon-io-ox-num-dec-indent         { background-position:  -60px  -40px; }
 /* border color for panes */
 @pane-border-color: #d5d5d5;
 
-/* base border color for controls */
-@control-border-color: @pane-border-color;
-
 /* base text color for controls */
 @control-text-color: #333333;
 
-/* border color for selected controls */
-@selected-border-color: #85b5ff;
+/* fill color of selected buttons */
+@button-selected-color: #8fbfff;
 
-/* fill color for input controls */
-@input-fill-color: white;
-
-/* fill color for tool bar tab buttons */
-@tab-fill-color: #222222;
-
-/* second fill color for tool bar tab buttons gradient */
-@tab-accented-fill-color: #333333;
-
-/* text color for tool bar tab buttons */
-@tab-text-color: white;
-
-/* fill color for selected tool bar tab buttons */
-@tab-selected-fill-color: @pane-accented-fill-color;
+/* lighter version of the fill color of selected buttons */
+@button-accented-selected-color: #eff7ff;
 
 /* panes =================================================================== */
 
@@ -248,15 +233,14 @@ div.io-ox-view-component {
             display: inline-block;
             position: relative;
             .box-sizing(border-box);
-            height: 28px;
             margin: 0;
             padding: 0;
             background: none;
-            /* reserve space for border */
-            border: 1px solid transparent;
+            border: none;
             .border-radius(0);
+            .box-shadow(none);
+            .transition(none);
             white-space: nowrap;
-            line-height: 26px;
             font-size: 13px;
             font-weight: normal;
             color: @control-text-color;
@@ -316,15 +300,10 @@ div.io-ox-view-component {
             width: 150px;
             padding-left: 4px;
             padding-right: 4px;
-            background-color: @input-fill-color;
-            border-color: @control-border-color;
-            .box-shadow(none);
-            .transition(none);
             line-height: 18px;
             cursor: text;
 
             &.readonly {
-                background: none;
                 cursor: default;
             }
 
@@ -337,19 +316,10 @@ div.io-ox-view-component {
         /* drop-down groups ------------------------------------------------ */
 
         &.dropdown-group {
-            &:not(.disabled) {
 
-                /* show drop-down menu element */
-                &.menu-open > .dropdown-menu {
-                    display: block;
-                }
-
-                /* set border to all buttons in the group when hovered or opened (split mode) */
-                &.menu-open, &:hover {
-                    > button:not(:focus):not(:active) {
-                        border-color: @control-border-color;
-                    }
-                }
+            /* show drop-down menu element */
+            &.menu-open:not(.disabled) > .dropdown-menu {
+                display: block;
             }
 
             /* the drop-down menu element */
@@ -363,8 +333,8 @@ div.io-ox-view-component {
                 z-index: 1000;
                 margin: 1px 0 0 0;
                 padding: 0;
-                background-color: @pane-fill-color;
-                border: 1px solid @control-border-color;
+                background-color: white;
+                border: none;
                 .border-radius(0);
                 .box-shadow(0 5px 10px fade(black, 20%));
 
@@ -387,34 +357,22 @@ div.io-ox-view-component {
                         > button {
                             width: 100%;
                             height: 26px;
-                            border-color: transparent;
-                            line-height: 24px;
+                            line-height: 26px;
                             text-align: left;
 
-                            /* mouse hover and focus effect */
-                            &:hover:not(:active), &:focus:not(:active) {
-                                background-color: fade(@control-border-color, 25%);
-                            }
+                            /* mouse/keyboard effects */
+                            &:hover { .vertical-gradient(@pane-accented-fill-color, @pane-fill-color); }
+                            &:focus { .vertical-gradient(@pane-accented-fill-color, @pane-fill-color); }
+                            &:active { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
 
-                            /* active effect (button currently clicked) */
-                            &:active {
-                                background-color: fade(@control-border-color, 50%);
-                            }
-
+                            /* selected list items */
                             &.selected {
-                                background-color: fade(@selected-border-color, 50%);
+                                .vertical-gradient(@button-accented-selected-color, @button-selected-color);
 
-                                /* mouse hover and focus effect */
-                                &:hover:not(:active), &:focus:not(:active) {
-                                    background-color: fade(@selected-border-color, 75%);
-                                    border-color: transparent;
-                                }
-
-                                /* active effect (button currently clicked) */
-                                &:active {
-                                    background-color: @selected-border-color;
-                                    border-color: transparent;
-                                }
+                                /* mouse/keyboard effects */
+                                &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                                &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                                &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
                             }
                         }
                     }
@@ -445,12 +403,8 @@ div.io-ox-view-component {
                             height: auto;
                             margin: 0;
                             padding: 0;
-                            background-color: @pane-fill-color;
-
-                            /* always show the same border */
-                            &, &:hover, &:focus, &:active {
-                                border: 1px solid @control-border-color;
-                            }
+                            .vertical-gradient(@pane-accented-fill-color, @pane-fill-color);
+                            border: 1px solid @pane-border-color;
 
                             /* a row in the grid */
                             > div {
@@ -465,12 +419,12 @@ div.io-ox-view-component {
                                     vertical-align: top;
 
                                     &:not(:last-child) {
-                                        border-right: 1px solid @control-border-color;
+                                        border-right: 1px solid @pane-border-color;
                                     }
                                 }
 
                                 &:not(:last-child) > div {
-                                    border-bottom: 1px solid @control-border-color;
+                                    border-bottom: 1px solid @pane-border-color;
                                 }
 
                                 /* height for last row (again, especially for Firefox) */
@@ -506,7 +460,9 @@ div.io-ox-view-component {
     /* tool bars ----------------------------------------------------------- */
 
     &.toolbar {
-        padding: 4px 0;
+        @control-heigth: 32px;
+
+        padding: 0;
 
         > span {
             display: inline-block;
@@ -517,57 +473,63 @@ div.io-ox-view-component {
                 display: inline-block;
 
                 /* group spacing */
-                + .group {
-                    margin-left: -1px;
-                }
-
                 &.separator {
                     width: 10px;
                 }
 
-                /* collapse borders of top-level control elements inside group */
                 > label, > button, > input {
-                    ~ label, ~ button, ~ input {
-                        margin-left: -1px;
-                    }
+                    height: @control-heigth;
+                    border: none;
+                }
+
+                > label, > button {
+                    line-height: @control-heigth;
                 }
 
                 /* selected toggle/radio buttons */
                 > button.selected {
-                    z-index: 20;
-                    background-color: fade(@selected-border-color, 50%);
-                    border-color: @selected-border-color;
+                    .vertical-gradient(@button-accented-selected-color, @button-selected-color);
                 }
 
                 /* keyboard/mouse effects (not for disabled buttons) */
                 &:not(.disabled) > button:not(.disabled) {
 
                     /* mouse/keyboard effects */
-                    &:hover, &:focus, &:active {
-                        z-index: 2;
-                        border-color: @control-border-color;
-                    }
-
-                    /* active effect (control currently clicked) */
-                    &:active {
-                        z-index: 4;
-                        background-color: fade(@control-border-color, 25%);
-                    }
+                    &:hover { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
+                    &:focus { .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color); }
+                    &:active { .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color); }
 
                     /* selected toggle/radio buttons */
                     &.selected {
 
                         /* mouse/keyboard effects */
-                        &:hover, &:focus, &:active {
-                            z-index: 22;
-                            border-color: darken(@selected-border-color, 10%);
-                        }
-
-                        /* active effect (button currently clicked) */
-                        &:active {
-                            z-index: 24;
-                            background-color: fade(@selected-border-color, 75%);
-                        }
+                        &:hover { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                        &:focus { .vertical-gradient(darken(@button-accented-selected-color, 3%), @button-selected-color); }
+                        &:active { .vertical-gradient(darken(@button-accented-selected-color, 6%), @button-selected-color); }
+                    }
+                }
+                
+                /* groups with white background and shadowed borders */
+                &.white {
+                    top: 3px;
+                    .box-shadow(0 0 4px fade(black, 15%));
+        
+                    > label, > button, > input {
+                        height: @control-heigth - 6px;
+                        background: white;
+                    }
+        
+                    > label, > button {
+                        line-height: @control-heigth - 6px;
+                    }
+        
+                    /* keyboard/mouse effects (not for disabled buttons) */
+                    &:not(.disabled) > button:not(.disabled) {
+            
+                        /* mouse/keyboard effects */
+                        &:hover { .vertical-gradient(darken(white, 5%), white); }
+                        &:focus { .vertical-gradient(darken(white, 5%), white); }
+                        &:active { .vertical-gradient(darken(white, 10%), white); }
                     }
                 }
             }
@@ -590,113 +552,12 @@ div.io-ox-view-component {
             /* menu items as buttons */
             > button {
                 width: 100%;
-                border-color: transparent;
                 text-align: left;
 
-                /* mouse hover and focus effect */
-                &:hover:not(:active), &:focus:not(:active) {
-                    background-color: fade(@control-border-color, 25%);
-                }
-
-                /* active effect (button currently clicked) */
-                &:active {
-                    background-color: fade(@control-border-color, 50%);
-                }
-            }
-        }
-    }
-}
-
-/* borderless tool bars ---------------------------------------------------- */
-
-div.io-ox-pane.borderless div.io-ox-view-component.toolbar {
-    padding: 0;
-
-    > span > .group {
-        @selected-accent-color: #dfefff;
-        @selected-color: #8fbfff;
-
-        + .group {
-            margin-left: 0;
-        }
-
-        > label, > button, > input {
-            height: 32px;
-            border: none;
-
-            ~ label, ~ button, ~ input {
-                margin-left: 0;
-            }
-        }
-
-        > label, > button {
-            line-height: 32px;
-        }
-
-        /* selected toggle/radio buttons */
-        > button.selected {
-            .vertical-gradient(@selected-accent-color, @selected-color);
-            border: none;
-        }
-
-        /* keyboard/mouse effects (not for disabled buttons) */
-        &:not(.disabled) > button:not(.disabled) {
-
-            /* mouse/keyboard effects */
-            &:hover, &:focus {
-                .vertical-gradient(darken(@pane-accented-fill-color, 10%), @pane-fill-color);
-                border: none;
-            }
-
-            /* active effect (control currently clicked) */
-            &:active {
-                .vertical-gradient(darken(@pane-accented-fill-color, 20%), @pane-fill-color);
-                border: none;
-            }
-
-            /* selected toggle/radio buttons */
-            &.selected {
-
                 /* mouse/keyboard effects */
-                &:hover, &:focus {
-                    .vertical-gradient(darken(@selected-accent-color, 5%), @selected-color);
-                    border: none;
-                }
-
-                /* active effect (button currently clicked) */
-                &:active {
-                    .vertical-gradient(darken(@selected-accent-color, 10%), @selected-color);
-                    border: none;
-                }
-            }
-        }
-
-        /* groups with white background and shadowed borders */
-        &.white {
-            top: 3px;
-            .box-shadow(0 0 4px fade(black, 15%));
-
-            > label, > button, > input {
-                height: 26px;
-                background: white;
-            }
-
-            > label, > button {
-                line-height: 26px;
-            }
-
-            /* keyboard/mouse effects (not for disabled buttons) */
-            &:not(.disabled) > button:not(.disabled) {
-    
-                /* mouse/keyboard effects */
-                &:hover, &:focus {
-                    .vertical-gradient(darken(white, 5%), white);
-                }
-    
-                /* active effect (control currently clicked) */
-                &:active {
-                    .vertical-gradient(darken(white, 10%), white);
-                }
+                &:hover { background-color: fade(@pane-border-color, 25%); }
+                &:focus { background-color: fade(@pane-border-color, 25%); }
+                &:active { background-color: fade(@pane-border-color, 50%); }
             }
         }
     }

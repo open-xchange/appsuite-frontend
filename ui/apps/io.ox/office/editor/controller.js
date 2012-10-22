@@ -280,10 +280,6 @@ define('io.ox/office/editor/controller',
                 'debug/sync': {
                     get: function () { return app.isSynchronizedMode(); },
                     set: function (state) { app.setSynchronizedMode(state); }
-                },
-                'debug/borderless': {
-                    get: function () { return app.getView().getToolPane().getNode().hasClass('borderless'); },
-                    set: function (state) { return app.getView().getToolPane().getNode().toggleClass('borderless', state); }
                 }
 
             };

@@ -82,7 +82,7 @@ define('io.ox/office/tk/dropdown/scrollable',
             // content node enough space. Then, set it to the calculated width
             // of the content node. Take the width of the top-level buttons as
             // minimum width into account.
-            menuNode.width(99999).width(Math.max(minWidth - 2, contentNode.outerWidth() + scrollBarWidth));
+            menuNode.width(99999).width(Math.max(minWidth, contentNode.outerWidth() + scrollBarWidth));
             // 4) Expand width of the content node to the menu width (needed in
             // case minimum width is active).
             contentNode.css('width', '100%');

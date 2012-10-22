@@ -570,7 +570,6 @@ define('io.ox/office/editor/view',
             createToolBar('debug', { label: gt('Debug') })
                 .addButton('debug/toggle',     { icon: 'icon-eye-open',   tooltip: 'Debug Mode',               toggle: true })
                 .addButton('debug/sync',       { icon: 'icon-refresh',    tooltip: 'Synchronize With Backend', toggle: true })
-                .addButton('debug/borderless', { icon: 'icon-fullscreen', tooltip: 'Borderless Tool Bars',     toggle: true })
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
