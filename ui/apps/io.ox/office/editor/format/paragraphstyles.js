@@ -132,10 +132,10 @@ define('io.ox/office/editor/format/paragraphstyles',
                 var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
                 numberingElement.text(listObject.text);
                 if (listObject.indent > 0) {
-                    para.css('margin-left', (listObject.indent / 20) + 'pt');
+                    para.css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
                 }
                 if (listObject.labelWidth > 0) {
-                    numberingElement.css('width', (listObject.labelWidth / 20) + 'pt');
+                    numberingElement.css('width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
                 }
                 $(para).prepend(numberingElement);
             }

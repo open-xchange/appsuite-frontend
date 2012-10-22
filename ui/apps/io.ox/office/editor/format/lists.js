@@ -38,12 +38,58 @@ define('io.ox/office/editor/format/lists',
         // defaults
             defaultNumberingNumId, defaultBulletNumId;
 
-
+        var defaultBulletListDefinition = {
+            listLevel0: { justification: 'left', leftIndent: 1270,     numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 },
+            listLevel1: { justification: 'left', leftIndent: 2 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: 'o',  hangingIndent: 635 },
+            listLevel2: { justification: 'left', leftIndent: 3 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 },
+            listLevel3: { justification: 'left', leftIndent: 4 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 },
+            listLevel4: { justification: 'left', leftIndent: 5 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: 'o', hangingIndent: 635 },
+            listLevel5: { justification: 'left', leftIndent: 6 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 },
+            listLevel6: { justification: 'left', leftIndent: 7 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 },
+            listLevel7: { justification: 'left', leftIndent: 8 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: 'o',  hangingIndent: 635 },
+            listLevel8: { justification: 'left', leftIndent: 9 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 }
+        };
+        var defaultNumberingListDefinition = {
+            listLevel0: { numberFormat: 'decimal',       leftIndent: 1270,     hangingIndent: 635, justification: 'left',  levelText: '%1.'},
+            listLevel1: { numberFormat: 'lowerLetter',   leftIndent: 2 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%2.'},
+            listLevel2: { numberFormat: 'upperLetter',   leftIndent: 3 * 1270, hangingIndent: 635, justification: 'right', levelText: '%3.'},
+            listLevel3: { numberFormat: 'lowerRoman',    leftIndent: 4 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%4.'},
+            listLevel4: { numberFormat: 'upperRoman',    leftIndent: 5 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%5.'},
+            listLevel5: { numberFormat: 'decimal',       leftIndent: 6 * 1270, hangingIndent: 635, justification: 'right', levelText: '%6.'},
+            listLevel6: { numberFormat: 'lowerLetter',   leftIndent: 7 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%7.'},
+            listLevel7: { numberFormat: 'upperLetter',   leftIndent: 8 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%8.'},
+            listLevel8: { numberFormat: 'lowerRoman',    leftIndent: 9 * 1270, hangingIndent: 635, justification: 'right', levelText: '%9.'}
+        };
         // base constructor ---------------------------------------------------
 
         Container.call(this, documentStyles);
 
         // methods ------------------------------------------------------------
+
+        function isLevelEqual(defaultLevel, compareLevel) {
+            var ret = defaultLevel !== undefined && compareLevel !== undefined &&
+            defaultLevel.numberFormat === compareLevel.numberFormat &&
+            defaultLevel.leftIndent === compareLevel.leftIndent &&
+            defaultLevel.hangingIndent === compareLevel.hangingIndent &&
+            defaultLevel.firstLineIndent === compareLevel.firstLineIndent &&
+            defaultLevel.justification === compareLevel.justification &&
+            defaultLevel.levelText === compareLevel.levelText &&
+            defaultLevel.fontName === compareLevel.fontName;
+            return ret;
+        }
+        function isDefinitionEqual(defaultDefinition, compareDefinition) {
+            var ret = isLevelEqual(defaultDefinition.listLevel0, compareDefinition.listLevel0) &&
+                    isLevelEqual(defaultDefinition.listLevel1, compareDefinition.listLevel1) &&
+                    isLevelEqual(defaultDefinition.listLevel2, compareDefinition.listLevel2) &&
+                    isLevelEqual(defaultDefinition.listLevel3, compareDefinition.listLevel3) &&
+                    isLevelEqual(defaultDefinition.listLevel4, compareDefinition.listLevel4) &&
+                    isLevelEqual(defaultDefinition.listLevel5, compareDefinition.listLevel5) &&
+                    isLevelEqual(defaultDefinition.listLevel6, compareDefinition.listLevel6) &&
+                    isLevelEqual(defaultDefinition.listLevel7, compareDefinition.listLevel7) &&
+                    isLevelEqual(defaultDefinition.listLevel8, compareDefinition.listLevel8);
+
+            return ret;
+        }
 
         /**
          * Adds a new style sheet to this container. An existing list definition
@@ -64,22 +110,32 @@ define('io.ox/office/editor/format/lists',
             var list = lists[listIdentifier];
             //list.listIdentifier = listIdentifier;
             list.listLevels = [];
-            list.listLevels[0] = listDefinition.listLevel0;
-            list.listLevels[1] = listDefinition.listLevel1;
-            list.listLevels[2] = listDefinition.listLevel2;
-            list.listLevels[3] = listDefinition.listLevel3;
-            list.listLevels[4] = listDefinition.listLevel4;
-            list.listLevels[5] = listDefinition.listLevel5;
-            list.listLevels[6] = listDefinition.listLevel6;
-            list.listLevels[7] = listDefinition.listLevel7;
-            list.listLevels[8] = listDefinition.listLevel8;
-            if (listDefinition.defaultList) {
-                if (listDefinition.defaultList === 'bullet')
-                    defaultBulletNumId = listIdentifier;
-                else
-                    defaultNumberingNumId = listIdentifier;
+            if (listDefinition) {
+                list.listLevels[0] = listDefinition.listLevel0;
+                list.listLevels[1] = listDefinition.listLevel1;
+                list.listLevels[2] = listDefinition.listLevel2;
+                list.listLevels[3] = listDefinition.listLevel3;
+                list.listLevels[4] = listDefinition.listLevel4;
+                list.listLevels[5] = listDefinition.listLevel5;
+                list.listLevels[6] = listDefinition.listLevel6;
+                list.listLevels[7] = listDefinition.listLevel7;
+                list.listLevels[8] = listDefinition.listLevel8;
+                if (listDefinition.defaultList) {
+                    if (listDefinition.defaultList === 'bullet')
+                        defaultBulletNumId = listIdentifier;
+                    else
+                        defaultNumberingNumId = listIdentifier;
+                } else {
+                    if (defaultBulletNumId === undefined) {
+                        if (isDefinitionEqual(defaultBulletListDefinition, listDefinition) === true)
+                            defaultBulletNumId = listIdentifier;
+                    }
+                    if (defaultNumberingNumId === undefined) {
+                        if (isDefinitionEqual(defaultNumberingListDefinition, listDefinition) === true)
+                            defaultNumberingNumId = listIdentifier;
+                    }
+                }
             }
-
             // notify listeners
             this.triggerChangeEvent();
 
@@ -128,30 +184,11 @@ define('io.ox/office/editor/format/lists',
             }
             var newOperation = { name: Operations.INSERT_LIST, listName: freeId };
             if (type === 'bullet') {
-                newOperation.listDefinition = {
-                    listLevel0: { numberFormat: 'bullet',   leftIndent: 720,     hangingIndent: 360 },
-                    listLevel1: { numberFormat: 'bullet',   leftIndent: 2 * 720, hangingIndent: 360 },
-                    listLevel2: { numberFormat: 'bullet',   leftIndent: 3 * 720, hangingIndent: 360 },
-                    listLevel3: { numberFormat: 'bullet',   leftIndent: 4 * 720, hangingIndent: 360 },
-                    listLevel4: { numberFormat: 'bullet',   leftIndent: 5 * 720, hangingIndent: 360 },
-                    listLevel5: { numberFormat: 'bullet',   leftIndent: 6 * 720, hangingIndent: 360 },
-                    listLevel6: { numberFormat: 'bullet',   leftIndent: 7 * 720, hangingIndent: 360 },
-                    listLevel7: { numberFormat: 'bullet',   leftIndent: 8 * 720, hangingIndent: 360 },
-                    listLevel8: { numberFormat: 'bullet',   leftIndent: 9 * 720, hangingIndent: 360 }
-                };
+                newOperation.listDefinition = defaultBulletListDefinition;
             } else {
-                newOperation.listDefinition = {
-                    listLevel0: {numberFormat: 'decimal',       leftIndent: 720,     hangingIndent: 360 },
-                    listLevel1: {numberFormat: 'lowerLetter',   leftIndent: 2 * 720, hangingIndent: 360 },
-                    listLevel2: {numberFormat: 'upperLetter',   leftIndent: 3 * 720, hangingIndent: 360 },
-                    listLevel3: {numberFormat: 'lowerRoman',    leftIndent: 4 * 720, hangingIndent: 360 },
-                    listLevel4: {numberFormat: 'upperRoman',    leftIndent: 5 * 720, hangingIndent: 360 },
-                    listLevel5: {numberFormat: 'decimal',       leftIndent: 6 * 720, hangingIndent: 360 },
-                    listLevel6: {numberFormat: 'lowerLetter',   leftIndent: 7 * 720, hangingIndent: 360 },
-                    listLevel7: {numberFormat: 'upperLetter',   leftIndent: 8 * 720, hangingIndent: 360 },
-                    listLevel8: {numberFormat: 'lowerRoman',    leftIndent: 9 * 720, hangingIndent: 360 }
-                };
+                newOperation.listDefinition = defaultNumberingListDefinition;
             }
+
             newOperation.listDefinition.defaultList = type;
             return newOperation;
         };
