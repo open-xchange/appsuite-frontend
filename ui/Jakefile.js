@@ -254,8 +254,10 @@ utils.concat("boot.js",
 
 utils.concat("boot.js", [
         "lib/jquery.min.js",
+        "lib/jquery.mobile.touch.min.js",
         "lib/underscore.js", // load this before require.js to keep global object
         "lib/require.js",
+        "lib/require-fix.js",
         "lib/modernizr.js",
         "lib/jquery.lazyload.js",
         "lib/bigscreen.js",
