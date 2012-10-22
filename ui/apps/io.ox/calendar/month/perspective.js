@@ -50,8 +50,12 @@ define('io.ox/calendar/month/perspective',
 
     _.extend(perspective, {
 
-        scaffold: $(),
-        pane: $(),
+        scaffold: $(),      // perspective
+        pane: $(),          // scrollpane
+        tops: {},           // scrollTop positions of the shown weeks
+        fisrtWeek: 0,       // timestamp of the first week
+        lastWeek: 0,        // timestamp of the last week
+        initLoad: 20,       // amount of preloaded weeks
 
         collections: {},
 
@@ -81,13 +85,18 @@ define('io.ox/calendar/month/perspective',
                     collection = null;
                 });
             }
+            this.getFirsts();
         },
 
-        drawWeek: function (day) {
+        drawWeek: function (day, pos) {
+            pos = pos || false;
+            if (pos) {
+                this.pane.scrollTop($('.week:first').height());
+            }
             this.collections[day] = new Backbone.Collection([]);
             var view = new View({ collection: this.collections[day], day: day });
             // add and render view
-            this.pane.append(view.render().el);
+            this.pane[(pos ? 'pre' : 'ap') + 'pend'](view.render().el);
             // update collection
             this.updateWeek(day, day + util.DAY * 7);
             view.on('showAppoinment', this.showAppointment, this);
@@ -99,29 +108,35 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
-            var start = new date.Local(),
-                year = start.getYear(),
-                month = start.getMonth(),
-            start = util.getWeekStart(new date.Local(year, month - 1, 1));
-            for (var i = 0; i < 20; i += 1, start += util.WEEK) {
-                this.updateWeek(start, start + util.WEEK);
+            for (var i = this.firstWeek; i <= this.lastWeek; i += util.WEEK) {
+                this.updateWeek(i, i + util.WEEK);
             }
+        },
+
+        getFirsts: function (e) {
+            this.tops = {};
+            var self = this,
+                top = this.pane.scrollTop() - 200; /* cheap trick */
+            $('.first', this.pane).each(function () {
+                var spDate = $(this).attr('date').split("-");
+                self.tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
+            });
         },
 
         render: function (app) {
 
             var start = new date.Local(),
                 year = start.getYear(),
-                month = start.getMonth(),
-                tops = {};
+                month = start.getMonth();
             start = util.getWeekStart(new date.Local(year, month - 1, 1));
-
             this.scaffold = View.drawScaffold();
             this.pane = this.scaffold.find('.scrollpane');
 
-            for (var i = 0; i < 20; i += 1, start += util.WEEK) {
+            this.firstWeek = start;
+            for (var i = 0; i < this.initLoad; i += 1, start += util.WEEK) {
                 this.drawWeek(start);
             }
+            this.lastWeek = start;
 
             this.main.addClass('month-view').empty().append(this.scaffold);
 
@@ -130,46 +145,50 @@ define('io.ox/calendar/month/perspective',
             this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
             //this.pane.on('scroll', magneticScroll).on('scroll', getLastScrollTop);
 
-            var getFirsts = $.proxy(function (e) {
-                tops = {};
-                var top = this.pane.scrollTop() - 200; /* cheap trick */
-                $('.first', this.pane).each(function () {
-                    var spDate = $(this).attr('date').split("-");
-                    tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
-                });
-            }, this);
-
-            $(window).on('resize', getFirsts);
+            $(window).on('resize', this.getFirsts);
 
             var currentMonth = '';
 
             this.pane.on('scroll', $.proxy(function (e) {
                 var top = this.pane.scrollTop(),
                     first = true,
+                    scrollOffset = 10,
                     month = '';
-                for (var y in tops) {
+
+                // find first visible month on scroll-position
+                for (var y in this.tops) {
                     if (first || top >= y) {
-                        month = tops[y];
+                        month = this.tops[y];
                         first = false;
                     } else {
                         break;
                     }
                 }
+
+                // highlight current visible month
                 if (month !== currentMonth) {
-                    $('[date^="' + currentMonth + '"]', this.pane).addClass('out');
+                    $('.day', this.pane).addClass('out');
+                    $('[date^="' + month + '-"]', this.pane).removeClass('out');
                     currentMonth = month;
-                    $('[date^="' + month + '"]', this.pane).removeClass('out');
                 }
 
+                // check position for infinite scroll
+                if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - scrollOffset) {
+                    this.lastWeek += date.WEEK;
+                    this.drawWeek(this.lastWeek);
+                }
+                if (top <= scrollOffset) {
+                    this.firstWeek -= date.WEEK;
+                    this.drawWeek(this.firstWeek, true);
+                }
             }, this));
 
             this.pane.find('[date^="' + year + '-' + month + '"]').removeClass('out');
-
-            getFirsts();
+            this.getFirsts();
 
             var refresh = $.proxy(function () {
                 this.update();
-                getFirsts();
+                this.getFirsts();
                 var first = this.main.find('[date="' + year + '-' + month + '-1"]'),
                     top = this.scrollTop() + first.position().top;
                 this.scrollTop(top);
@@ -177,7 +196,6 @@ define('io.ox/calendar/month/perspective',
 
             // watch for api refresh
             api.on('refresh.all', refresh);
-
             app.getWindow().on('show', refresh);
         }
     });
