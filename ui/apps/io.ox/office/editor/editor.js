@@ -1523,8 +1523,10 @@ define('io.ox/office/editor/editor',
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
+                //var position = _.copy(selection.startPaM.oxoPosition, true);
+                var paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                 if (!selection.hasRange() &&
-                        selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraphs)) {
+                        selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
                     var ilvl = self.getAttributes('paragraph').ilvl;
                     if (ilvl !== -1) {
                         if (!event.shiftKey && ilvl < 8) {
