@@ -11,6 +11,7 @@
  * @author Malte Timmermann <malte.timmermann@open-xchange.com>
  * @author Ingo Schmidt-Rosbiegal <ingo.schmidt-rosbiegal@open-xchange.com>
  * @author Daniel Rentz <daniel.rentz@open-xchange.com>
+ * @author Carsten Driesner <carsten.driesner@open-xchange.com>
  */
 
 define('io.ox/office/editor/editor',
@@ -48,7 +49,17 @@ define('io.ox/office/editor/editor',
             KeyCodes.LEFT_WINDOWS, KeyCodes.RIGHT_WINDOWS,
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
             KeyCodes.F5
-        ]);
+        ]),
+    
+        // style attributes for heading 1 -6 based on latent styles
+        HEADINGS_CHARATTRIBUTES = [
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 'BF' }]}, bold: true, fontsize: 14 },
+            { color: { type: 'scheme', value: 'accent1'}, bold: true, fontsize: 13 },
+            { color: { type: 'scheme', value: 'accent1'}, bold: true },
+            { color: { type: 'scheme', value: 'accent1'}, bold: true, italic: true },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]} },
+            { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: '7F' }]}, italic: true }
+        ];
 
     // private global functions ===============================================
 
@@ -1149,10 +1160,67 @@ define('io.ox/office/editor/editor',
             return selection ? selection.endPaM.imageFloatMode : null;
         };
 
+        /**
+         * Returns the default heading character styles
+         */
+        this.getDefaultHeadingCharacterStyles = function () {
+            return HEADINGS_CHARATTRIBUTES;
+        };
+        
+        /**
+         * Called when all initial document operations have been processed.
+         * Can be used to start post-processing tasks which need a fully
+         * processed document.
+         */
+        this.documentLoaded = function () {
+            var postProcessingTasks = [insertMissingParagraphStyles];
+            
+            _(postProcessingTasks).each(function (task) {
+                task.call(self);
+            });
+        };
+        
         // ==================================================================
         // END of Editor API
         // ==================================================================
 
+        // ==================================================================
+        // Private functions for document post-processing
+        // ==================================================================
+        
+        /**
+         * Check the stored paragraph styles of a document and adds "missing"
+         * heading / default paragraph styles.
+         */
+        function insertMissingParagraphStyles() {
+            var headings = [0, 1, 2, 3, 4, 5],
+                paragraphStyles = self.getStyleSheets('paragraph'),
+                styleNames = paragraphStyles.getStyleSheetNames(),
+                parentId = paragraphStyles.getDefaultStyleSheetId();
+            
+            // find out which outline level paragraph styles are missing
+            _(styleNames).each(function (name, id) {
+                var styleAttributes = paragraphStyles.getStyleSheetAttributes(id, 'paragraph'),
+                    outlineLvl = styleAttributes.outlinelvl;
+                if (_.isNumber(outlineLvl) && (outlineLvl >= 0 && outlineLvl < 6)) {
+                    headings = _(headings).without(outlineLvl);
+                }
+            });
+            
+            // add the missing paragraph styles using predefined values
+            if (headings.length > 0) {
+                var defaultCharStyles = self.getDefaultHeadingCharacterStyles();
+                _(headings).each(function (level) {
+                    var attr = {},
+                        charAttr = defaultCharStyles[level];
+                    attr.character = charAttr;
+                    attr.paragraph = { outlinelvl: level };
+                    attr.next = parentId;
+                    paragraphStyles.addStyleSheet("heading " + (level + 1), "heading " + (level + 1), parentId, attr, { hidden: false, priority: 9, defStyle: false, dirty : true });
+                });
+            }
+        }
+        
         // ====================================================================
         // Private functions for the hybrid edit mode
         // ====================================================================
@@ -2418,6 +2486,10 @@ define('io.ox/office/editor/editor',
                 }
                 // paragraph attributes also for cursor without selection (// if (selection.hasRange()))
                 else if (family === 'paragraph') {
+                    var insStyleSheetOperation = neededInsertStyleSheetOperation(family, attributes);
+                    if (insStyleSheetOperation)
+                        applyOperation(insStyleSheetOperation, true, true);
+                    
                     startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
                     endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
                     var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
@@ -2425,6 +2497,10 @@ define('io.ox/office/editor/editor',
                 }
             }
             else {
+                var insStyleSheetOperation = neededInsertStyleSheetOperation(family, attributes);
+                if (insStyleSheetOperation)
+                    applyOperation(insStyleSheetOperation, true, true);
+
                 startPosition = Position.getFamilyAssignedPosition(family, paragraphs, startPosition);
                 endPosition = Position.getFamilyAssignedPosition(family, paragraphs, endPosition);
 
@@ -2437,6 +2513,46 @@ define('io.ox/office/editor/editor',
                 // var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
                 applyOperation(newOperation, true, true);
             }
+        }
+        
+        /**
+         * Private set attributes helper. Checks if the used style sheet
+         * must be added to the document. If yes, the operation is provided
+         * otherwise null.
+         *
+         * @param {String} family
+         * The style family which must be checked.
+         *
+         * @param attributes
+         * The attributes used for the setAttributes call.
+         *
+         * @returns {Object}
+         * The operation to insert a dirty style sheet or null.
+         *
+         */
+        function neededInsertStyleSheetOperation(family, attributes) {
+            var operation = null,
+                styleSheets = self.getStyleSheets(family);
+            
+            if (styleSheets) {
+                var styleId = attributes.style,
+                    dirty = styleSheets.isDirty(styleId);
+                
+                if (dirty) {
+                    var styleAttr = styleSheets.getStyleSheetAttributesOnly(styleId),
+                        uiPriority = styleSheets.getUIPriority(styleId),
+                        parentId = styleSheets.getParentId(styleId),
+                        styleName = styleSheets.getName(styleId);
+                    styleSheets.setDirty(styleId, false);
+                    //implInsertStyleSheet(operation.type, operation.styleid, operation.stylename, operation.parent, operation.attrs, operation.hidden, operation.uipriority, operation['default'], operation.pooldefault);
+                    operation = {name: Operations.INSERT_STYLE,
+                                 attrs: styleAttr, type: family, styleid: styleId, stylename: styleName,
+                                 parent: parentId, 'default': false, hidden: false,
+                                 uipriority: uiPriority, pooldefault: false};
+                }
+            }
+            
+            return operation;
         }
 
         // ==================================================================
@@ -3529,25 +3645,27 @@ define('io.ox/office/editor/editor',
                     // the operation used to redo the attribute changes
                     redoOperation = _({ name: Operations.ATTRS_SET, attrs: {} }).extend(range);
 
-                // find all old attributes that have been changed or cleared
-                _(oldAttributes).each(function (value, name) {
-                    if (!_.isEqual(value, newAttributes[name])) {
-                        undoOperation.attrs[name] = value;
-                        redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
-                    }
-                });
-
-                // find all newly added attributes
-                _(newAttributes).each(function (value, name) {
-                    if (!(name in oldAttributes)) {
-                        undoOperation.attrs[name] = null;
-                        redoOperation.attrs[name] = value;
-                    }
-                });
-
-                // add operations to arrays
-                undoOperations.push(undoOperation);
-                redoOperations.push(redoOperation);
+                if (undomgr.isEnabled()) {
+                    // find all old attributes that have been changed or cleared
+                    _(oldAttributes).each(function (value, name) {
+                        if (!_.isEqual(value, newAttributes[name])) {
+                            undoOperation.attrs[name] = value;
+                            redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
+                        }
+                    });
+    
+                    // find all newly added attributes
+                    _(newAttributes).each(function (value, name) {
+                        if (!(name in oldAttributes)) {
+                            undoOperation.attrs[name] = null;
+                            redoOperation.attrs[name] = value;
+                        }
+                    });
+    
+                    // add operations to arrays
+                    undoOperations.push(undoOperation);
+                    redoOperations.push(redoOperation);
+                }
             }
 
             var // last index in the start/end position arrays
@@ -3559,7 +3677,7 @@ define('io.ox/office/editor/editor',
                 // the style sheet container of the specified attribute family
                 styleSheets = null,
                 // options for StyleSheets.setAttributesInRanges() method calls
-                setAttributesOptions = undomgr.isEnabled() ? { changeListener: changeListener } : undefined;
+                setAttributesOptions = { changeListener: changeListener };
 
             if (start === null) { return; }
 

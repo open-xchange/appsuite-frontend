@@ -244,6 +244,7 @@ define('io.ox/office/editor/main',
                         if (_.isArray(operations)) {
                             editor.enableUndo(false);
                             applyOperations(operations);
+                            editor.documentLoaded();
                             editor.enableUndo(true);
                             startOperationsTimer();
                             def.resolve();

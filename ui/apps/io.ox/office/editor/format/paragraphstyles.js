@@ -71,6 +71,12 @@ define('io.ox/office/editor/format/paragraphstyles',
                 def: -1,
                 set: function (element, value) {
                 }
+            },
+            
+            outlinelvl: {
+                def: 9,
+                set: function (element, value) {
+                }
             }
 
         };

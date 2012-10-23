@@ -441,6 +441,10 @@ define('io.ox/office/editor/format/stylesheets',
          *      elements without explicit style sheet. Only the first style
          *      sheet that will be inserted with this flag will be permanently
          *      registered as default style sheet.
+         *  @param {Boolean} [options.dirty=false]
+         *      True, if the new style sheet has been added manually and not
+         *      by loading a document. Therefore this style sheet needs to be
+         *      saved as soon as it will be used.
          *
          * @returns {StyleSheets}
          *  A reference to this instance.
@@ -463,6 +467,7 @@ define('io.ox/office/editor/format/stylesheets',
             // set style sheet options
             styleSheet.hidden = Utils.getBooleanOption(options, 'hidden', false);
             styleSheet.priority = Utils.getIntegerOption(options, 'priority', 0);
+            styleSheet.dirty = Utils.getBooleanOption(options, 'dirty', false);
 
             // set default style sheet
             if (Utils.getBooleanOption(options, 'defStyle', false)) {
@@ -605,6 +610,79 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.getUIPriority = function (id) {
             return (id in styleSheets) ? styleSheets[id].priority : 0;
+        };
+        
+        /**
+         * Returns the parent id for the specified style sheet.
+         * @param {String} id
+         *
+         * @returns {String}
+         *  The parent id of the style sheet or null if no parent exists.
+         */
+        this.getParentId = function (id) {
+            return (id in styleSheets) ? styleSheets[id].parentId : null;
+        };
+        
+        /**
+         * Returns the user defined name for the specified style sheet.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns
+         *  The user defined name of the style sheet or null
+         */
+        this.getName = function (id) {
+            return (id in styleSheets) ? styleSheets[id].name : null;
+        };
+        
+        /**
+         * Return if the specified style sheet is dirty or not.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @returns {Boolean}
+         *  The dirty state of the style sheet.
+         */
+        this.isDirty = function (id) {
+            return (id in styleSheets) ? styleSheets[id].dirty : false;
+        };
+        
+        /**
+         * Change dirty state of the specified style sheet
+         *
+         * @param {String} id
+         * @param {Boolean} dirty
+         */
+        this.setDirty = function (id, dirty) {
+            if (id in styleSheets) {
+                styleSheets[id].dirty = dirty;
+            }
+        };
+        
+        /**
+         * Returns the attributes of a specified style sheet.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @param {String} family
+         *  The attribute family whose attributes will be returned.
+         *
+         * @returns {Object}
+         *  The formatting attributes contained in the style sheet and its
+         *  ancestor style sheets up to the map of default attributes, as map
+         *  of name/value pairs.
+         */
+        this.getStyleSheetAttributesOnly = function (id) {
+            var attributes = {};
+            
+            if (id in styleSheets) {
+                var styleSheet = styleSheets[id];
+                _(attributes).extend(styleSheet.attributes);
+            }
+            return attributes;
         };
 
         /**
