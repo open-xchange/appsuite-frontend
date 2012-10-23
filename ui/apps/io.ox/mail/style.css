@@ -454,4 +454,5 @@ h4.mail-attachment-preview {
         content: ''
     }
     .mail-detail .contact-picture { display: none; }
+    .mail-detail .subject { padding-right: 0px; }
 }
