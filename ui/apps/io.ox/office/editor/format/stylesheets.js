@@ -819,7 +819,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.setElementAttributes = function (element, attributes, options) {
 
             var // the style sheet identifier
-                styleId = Utils.getStringOption(attributes, 'style'),
+                styleId = Utils.getOption(attributes, 'style'),
                 // whether to remove element attributes equal to style attributes
                 clear = Utils.getBooleanOption(options, 'clear', false),
                 // allow special attributes
@@ -840,11 +840,11 @@ define('io.ox/office/editor/format/stylesheets',
                 // names of all attributes needed to update the current element
                 updateAttributeNames = null;
 
-            if (styleId) {
+            if (_.isString(styleId) || _.isNull(styleId)) {
                 // style sheet of the element will be changed: remove all
                 // existing element attributes
                 styleAttributes = this.getStyleSheetAttributes(styleId, styleFamily, $element);
-                elementAttributes = { style: styleAttributes.style };
+                elementAttributes = _.isNull(styleId) ? {} : { style: styleAttributes.style };
             } else {
                 // clone the attributes coming from the element, there may
                 // be multiple elements pointing to the same data object,
@@ -883,7 +883,7 @@ define('io.ox/office/editor/format/stylesheets',
 
                 // update CSS formatting of child elements, if the style sheet
                 // of the current element has been changed
-                if (styleId in styleSheets) {
+                if (_.isString(styleId) || _.isNull(styleId)) {
                     updateChildNodeFormatting($element);
                 }
 
