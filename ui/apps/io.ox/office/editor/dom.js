@@ -462,6 +462,38 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A jQuery selector that matches elements representing a list label.
+     */
+    DOM.LIST_LABEL_NODE_SELECTOR = 'div.list-label';
+
+    /**
+     * Returns whether the passed node is an element representing a list label.
+     *
+     * @param {Node|jQuery|Null} [node]
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains. If missing or null, returns false.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node is a list label element.
+     */
+    DOM.isListLabelNode = function (node) {
+        return $(node).is(DOM.LIST_LABEL_NODE_SELECTOR);
+    };
+
+    /**
+     * Creates a new element representing a list label.
+     *
+     * @param {String} [text]
+     *  The text contents of the list label node.
+     *
+     * @returns
+     *  A new list label node, as jQuery object.
+     */
+    DOM.createListLabelNode = function (text) {
+        return $('<div>').addClass('list-label').text(_.isString(text) ? text : '');
+    };
+
+    /**
      * A jQuery selector that matches elements representing an object.
      */
     DOM.OBJECT_NODE_SELECTOR = 'div.object';
@@ -546,35 +578,6 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.isOffsetNode = function (node) {
         return $(node).is(DOM.OFFSET_NODE_SELECTOR);
-    };
-
-    /**
-     * A jQuery selector that matches elements representing a list label.
-     */
-    DOM.LIST_LABEL_NODE_SELECTOR = 'div.list-label';
-
-    /**
-     * Returns whether the passed node is an element representing a list label.
-     *
-     * @param {Node|jQuery|Null} [node]
-     *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains. If missing or null, returns false.
-     *
-     * @returns {Boolean}
-     *  Whether the passed node is a list label element.
-     */
-    DOM.isListLabelNode = function (node) {
-        return $(node).is(DOM.LIST_LABEL_NODE_SELECTOR);
-    };
-
-    /**
-     * Creates a new element representing a list label.
-     *
-     * @returns
-     *  A new list label node, as jQuery object.
-     */
-    DOM.createListLabelNode = function () {
-        return $('<div>').addClass('list-label');
     };
 
     /**
