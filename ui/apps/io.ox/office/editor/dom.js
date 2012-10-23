@@ -691,6 +691,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns whether the passed node is a <div> element that contains a
+     * selection. The selection is represented by a <div> element with
+     * class 'selection'.
+     *
+     * @param {Node|jQuery} node
+     *  The DOM node to be checked. If this object is a jQuery collection, uses
+     *  the first DOM node it contains.
+     *
+     * @returns {Boolean}
+     *  Whether the passed node contains a div element with class selection.
+     */
+    DOM.hasObjectSelection = function (node) {
+        return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
+    };
+
+    /**
      * Splits the passed text span element into two text span elements. Clones
      * all formatting to the new span element.
      *
@@ -1399,7 +1415,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      pointer when the mouse hovers the corner handles of the selected
      *      element.
      */
-    DOM.drawObjectSelection = function (objects, options) {
+    DOM.drawObjectSelection = function (objects, options, mousedownhandler, mousemovehandler, mouseuphandler, context) {
 
         $(objects).each(function () {
 
@@ -1408,16 +1424,55 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // whether object is moveable
                 moveable = Utils.getBooleanOption(options, 'moveable', false),
                 // whether object is sizeable
-                sizeable = Utils.getBooleanOption(options, 'sizeable', false);
+                sizeable = Utils.getBooleanOption(options, 'sizeable', false),
+                // whether mousedown is a current event
+                mousedownevent = false,
+                // saving the selected object node
+                objectNode = this,
+                // an object with information about the node, on which mousedown was pressed
+                nodeOptions = {};
 
             // create a new selection box if missing
             if (selectionBox.length === 0) {
                 $(this).append(selectionBox = $('<div>').addClass('selection'));
                 // add resize handles
                 _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
-                    selectionBox.append($('<div>').addClass('handle ' + pos));
+
+                    var handleDiv = $('<div>')
+                    .mousedown(function (event) {
+                        mousedownevent = true;
+
+                        // storing old height and width of image
+                        nodeOptions.oldWidth = $(objectNode).width();
+                        nodeOptions.oldHeight = $(objectNode).height();
+
+                        // collecting information about the handle node
+                        nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos)) ? true : false;
+                        nodeOptions.useY = (_.contains(['tl', 't', 'tr', 'br', 'b', 'bl'], pos)) ? true : false;
+                        nodeOptions.topSelection = (_.contains(['tl', 't', 'tr'], pos)) ? true : false;
+                        nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos)) ? true : false;
+                        nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos)) ? true : false;
+                        nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos)) ? true : false;
+
+                        mousedownhandler.call(context, event, nodeOptions);
+                    });
+
+                    selectionBox.append(handleDiv.addClass('handle ' + pos));
                 });
             }
+
+            // mousemove and mouseup events can be anywhere on the page
+            $(document)
+            .mouseup(function (e) {
+                if (mousedownevent) {
+                    mouseuphandler.call(context, e, objectNode);
+                }
+                mousedownevent = false;
+            })
+            .mousemove(function (e) {
+                if (! mousedownevent) return;
+                mousemovehandler.call(context, e);
+            });
 
             // set classes according to passed options, and resize handles
             selectionBox.toggleClass('moveable', moveable).toggleClass('sizeable', sizeable);
@@ -1434,6 +1489,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.clearObjectSelection = function (objects) {
         $(objects).children('div.selection').remove();
+        // removing mouse event handler (mouseup and mousemove) from page div
+        $(document).off('mouseup mousemove');
     };
 
     // exports ================================================================

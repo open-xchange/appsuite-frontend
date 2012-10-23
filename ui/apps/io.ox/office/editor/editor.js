@@ -50,7 +50,7 @@ define('io.ox/office/editor/editor',
             KeyCodes.NUM_LOCK, KeyCodes.SCROLL_LOCK,
             KeyCodes.F5
         ]),
-    
+
         // style attributes for heading 1 -6 based on latent styles
         HEADINGS_CHARATTRIBUTES = [
             { color: { type: 'scheme', value: 'accent1', transformations: [{ type: 'shade', value: 'BF' }]}, bold: true, fontsize: 14 },
@@ -1166,7 +1166,7 @@ define('io.ox/office/editor/editor',
         this.getDefaultHeadingCharacterStyles = function () {
             return HEADINGS_CHARATTRIBUTES;
         };
-        
+
         /**
          * Called when all initial document operations have been processed.
          * Can be used to start post-processing tasks which need a fully
@@ -1174,12 +1174,12 @@ define('io.ox/office/editor/editor',
          */
         this.documentLoaded = function () {
             var postProcessingTasks = [insertMissingParagraphStyles];
-            
+
             _(postProcessingTasks).each(function (task) {
                 task.call(self);
             });
         };
-        
+
         // ==================================================================
         // END of Editor API
         // ==================================================================
@@ -1187,7 +1187,7 @@ define('io.ox/office/editor/editor',
         // ==================================================================
         // Private functions for document post-processing
         // ==================================================================
-        
+
         /**
          * Check the stored paragraph styles of a document and adds "missing"
          * heading / default paragraph styles.
@@ -1197,7 +1197,7 @@ define('io.ox/office/editor/editor',
                 paragraphStyles = self.getStyleSheets('paragraph'),
                 styleNames = paragraphStyles.getStyleSheetNames(),
                 parentId = paragraphStyles.getDefaultStyleSheetId();
-            
+
             // find out which outline level paragraph styles are missing
             _(styleNames).each(function (name, id) {
                 var styleAttributes = paragraphStyles.getStyleSheetAttributes(id, 'paragraph'),
@@ -1206,7 +1206,7 @@ define('io.ox/office/editor/editor',
                     headings = _(headings).without(outlineLvl);
                 }
             });
-            
+
             // add the missing paragraph styles using predefined values
             if (headings.length > 0) {
                 var defaultCharStyles = self.getDefaultHeadingCharacterStyles();
@@ -1220,7 +1220,7 @@ define('io.ox/office/editor/editor',
                 });
             }
         }
-        
+
         // ====================================================================
         // Private functions for the hybrid edit mode
         // ====================================================================
@@ -1239,22 +1239,35 @@ define('io.ox/office/editor/editor',
         function processMouseDown(event) {
 
             var // mouse click on an object node
-                object = $(event.target).closest(DOM.OBJECT_NODE_SELECTOR);
+                object = $(event.target).closest(DOM.OBJECT_NODE_SELECTOR),
+                alreadySelected = false;
 
             // click on object node: set browser selection to object node, draw selection
             if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
-                // prevent default click handling of the browser
-                event.preventDefault();
-                // but set focus to the document container (may be loacted in GUI edit fields)
-                self.grabFocus();
-                // select single objects only (multi selection not supported yet)
-                selectObjects(object, false);
+
+                // checking if the object already has a selection
+                if (! DOM.hasObjectSelection(object)) {
+                    // prevent default click handling of the browser
+                    event.preventDefault();
+                    // but set focus to the document container (may be loacted in GUI edit fields)
+                    self.grabFocus();
+                    // select single objects only (multi selection not supported yet)
+                    selectObjects(object, false);
+                } else {
+                    // prevent default click handling of the browser
+                    event.preventDefault();
+                    // no new calculation of browser selection required
+                    alreadySelected = true;
+                }
+
             } else {
                 deselectAllObjects();
             }
 
-            // calculate logical selection from browser selection
-            updateSelection();
+            if (! alreadySelected) {
+                // calculate logical selection from browser selection
+                updateSelection();
+            }
         }
 
         function processMouseUp() {
@@ -2127,9 +2140,9 @@ define('io.ox/office/editor/editor',
             }
 
             // log the selection
-            _(browserSelection).each(function (range, index) {
-                Utils.log('getBrowserSelection(): range[' + index + ']=' + range);
-            });
+            // _(browserSelection).each(function (range, index) {
+            //     Utils.log('getBrowserSelection(): range[' + index + ']=' + range);
+            // });
 
             return browserSelection;
         }
@@ -2236,10 +2249,53 @@ define('io.ox/office/editor/editor',
                 deselectAllObjects();
             }
 
+            var startX, startY, endX, endY, currentX, currentY,
+                nodeOptions = {};
+
             // collect selected objects
             selectedObjects = selectedObjects.add(objects);
             // draw the selection box into the passed objects
-            DOM.drawObjectSelection(objects, { moveable: false, sizeable: false });
+            DOM.drawObjectSelection(objects, { moveable: false, sizeable: true
+            }, function (event, startNodeOptions) {
+                // mouse down event handler
+                startX = event.pageX;
+                startY = event.pageY;
+                nodeOptions = _.copy(startNodeOptions, true);
+            }, function (event) {
+                // mouse move event handler
+                currentX = event.pageX;
+                currentY = event.pageY;
+            }, function (event, imageNode) {
+                // mouse up handler
+                endX = event.pageX;
+                endY = event.pageY;
+
+                var deltaX = 0;
+                var deltaY = 0;
+
+                if (nodeOptions.useX) { deltaX = endX - startX; }
+                if (nodeOptions.useY) { deltaY = endY - startY; }
+
+                if ((deltaX !== 0) || (deltaY !== 0)) {
+
+                    if (nodeOptions.leftSelection) { deltaX = - deltaX; }
+                    if (nodeOptions.topSelection) { deltaY = - deltaY; }
+
+                    var newWidth = nodeOptions.oldWidth + deltaX,
+                        newHeight = nodeOptions.oldHeight + deltaY;
+
+                    if ((newWidth > 0) && (newHeight > 0)) {
+
+                        var width = Utils.convertLengthToHmm(newWidth, 'px'),
+                            height = Utils.convertLengthToHmm(newHeight, 'px'),
+                            updatePosition = Position.getOxoPosition(editdiv, imageNode, 0),
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
+
+                        applyOperation(newOperation, true, true);
+                    }
+                }
+
+            }, this);
 
             // clear browser selection to hide the text cursor
             DOM.setBrowserSelection([]);
@@ -2489,7 +2545,7 @@ define('io.ox/office/editor/editor',
                     var insStyleSheetOperation = neededInsertStyleSheetOperation(family, attributes);
                     if (insStyleSheetOperation)
                         applyOperation(insStyleSheetOperation, true, true);
-                    
+
                     startPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.startPaM.oxoPosition);
                     endPosition = Position.getFamilyAssignedPosition(family, paragraphs, selection.endPaM.oxoPosition);
                     var newOperation = {name: Operations.ATTRS_SET, attrs: attributes, start: startPosition, end: endPosition};
@@ -2514,7 +2570,7 @@ define('io.ox/office/editor/editor',
                 applyOperation(newOperation, true, true);
             }
         }
-        
+
         /**
          * Private set attributes helper. Checks if the used style sheet
          * must be added to the document. If yes, the operation is provided
@@ -2533,11 +2589,11 @@ define('io.ox/office/editor/editor',
         function neededInsertStyleSheetOperation(family, attributes) {
             var operation = null,
                 styleSheets = self.getStyleSheets(family);
-            
+
             if (styleSheets) {
                 var styleId = attributes.style,
                     dirty = styleSheets.isDirty(styleId);
-                
+
                 if (dirty) {
                     var styleAttr = styleSheets.getStyleSheetAttributesOnly(styleId),
                         uiPriority = styleSheets.getUIPriority(styleId),
@@ -2551,7 +2607,7 @@ define('io.ox/office/editor/editor',
                                  uipriority: uiPriority, pooldefault: false};
                 }
             }
-            
+
             return operation;
         }
 
@@ -3653,7 +3709,7 @@ define('io.ox/office/editor/editor',
                             redoOperation.attrs[name] = (name in newAttributes) ? newAttributes[name] : null;
                         }
                     });
-    
+
                     // find all newly added attributes
                     _(newAttributes).each(function (value, name) {
                         if (!(name in oldAttributes)) {
@@ -3661,7 +3717,7 @@ define('io.ox/office/editor/editor',
                             redoOperation.attrs[name] = value;
                         }
                     });
-    
+
                     // add operations to arrays
                     undoOperations.push(undoOperation);
                     redoOperations.push(redoOperation);
