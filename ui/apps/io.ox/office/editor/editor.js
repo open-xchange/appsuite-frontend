@@ -4496,6 +4496,10 @@ define('io.ox/office/editor/editor',
                     if (!listItemCounter[attributes.numId])
                         listItemCounter[attributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
                     listItemCounter[attributes.numId][attributes.ilvl]++;
+                    // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
+                    var subLevelIdx = attributes.ilvl + 1;
+                    for (; subLevelIdx < 9; subLevelIdx++)
+                        listItemCounter[attributes.numId][subLevelIdx] = 0;
                     var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
                     var numberingElement = DOM.createListLabelNode(listObject.text);
                     if (listObject.indent > 0) {

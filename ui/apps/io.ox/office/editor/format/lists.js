@@ -50,15 +50,15 @@ define('io.ox/office/editor/format/lists',
             listLevel8: { justification: 'left', leftIndent: 9 * 1270, numberFormat: 'bullet', levelStart: 1, fontName: 'Symbol', levelText: '', hangingIndent: 635 }
         };
         var defaultNumberingListDefinition = {
-            listLevel0: { numberFormat: 'decimal',       leftIndent: 1270,     hangingIndent: 635, justification: 'left',  levelText: '%1.'},
-            listLevel1: { numberFormat: 'lowerLetter',   leftIndent: 2 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%2.'},
-            listLevel2: { numberFormat: 'upperLetter',   leftIndent: 3 * 1270, hangingIndent: 635, justification: 'right', levelText: '%3.'},
-            listLevel3: { numberFormat: 'lowerRoman',    leftIndent: 4 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%4.'},
-            listLevel4: { numberFormat: 'upperRoman',    leftIndent: 5 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%5.'},
-            listLevel5: { numberFormat: 'decimal',       leftIndent: 6 * 1270, hangingIndent: 635, justification: 'right', levelText: '%6.'},
-            listLevel6: { numberFormat: 'lowerLetter',   leftIndent: 7 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%7.'},
-            listLevel7: { numberFormat: 'upperLetter',   leftIndent: 8 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%8.'},
-            listLevel8: { numberFormat: 'lowerRoman',    leftIndent: 9 * 1270, hangingIndent: 635, justification: 'right', levelText: '%9.'}
+            listLevel0: { numberFormat: 'decimal',       levelStart: 1, leftIndent: 1270,     hangingIndent: 635, justification: 'left',  levelText: '%1.'},
+            listLevel1: { numberFormat: 'lowerLetter',   levelStart: 1, leftIndent: 2 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%2.'},
+            listLevel2: { numberFormat: 'upperLetter',   levelStart: 1, leftIndent: 3 * 1270, hangingIndent: 635, justification: 'right', levelText: '%3.'},
+            listLevel3: { numberFormat: 'lowerRoman',    levelStart: 1, leftIndent: 4 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%4.'},
+            listLevel4: { numberFormat: 'upperRoman',    levelStart: 1, leftIndent: 5 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%5.'},
+            listLevel5: { numberFormat: 'decimal',       levelStart: 1, leftIndent: 6 * 1270, hangingIndent: 635, justification: 'right', levelText: '%6.'},
+            listLevel6: { numberFormat: 'lowerLetter',   levelStart: 1, leftIndent: 7 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%7.'},
+            listLevel7: { numberFormat: 'upperLetter',   levelStart: 1, leftIndent: 8 * 1270, hangingIndent: 635, justification: 'left',  levelText: '%8.'},
+            listLevel8: { numberFormat: 'lowerRoman',    levelStart: 1, leftIndent: 9 * 1270, hangingIndent: 635, justification: 'right', levelText: '%9.'}
         };
         // base constructor ---------------------------------------------------
 
