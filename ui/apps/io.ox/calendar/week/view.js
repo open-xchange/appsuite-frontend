@@ -91,7 +91,6 @@ define('io.ox/calendar/week/view',
         onControlView: function (e) {
             var cT = $(e.currentTarget),
                 t = $(e.target);
-            console.log(t, cT, e.type, this.lasso);
             if (cT.hasClass('next') || (t.hasClass('timeslot') && e.type === 'swipeleft' && !this.lasso)) {
                 this.curTimeUTC += (this.columns === 1 ? date.DAY : date.WEEK);
             }
