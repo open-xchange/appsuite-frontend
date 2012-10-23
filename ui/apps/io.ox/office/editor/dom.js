@@ -340,9 +340,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * text node. The <span> element may represent regular text portions, an
      * empty text span, or a text field.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element with a text node.
@@ -353,19 +353,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A selector function that matches elements refered by the 'this' symbol
-     * representing a text node (portions and fields). Can be used in the
-     * jQuery method is() and in the DOM iterator methods supporting selectors.
-     */
-    DOM.TEXT_SPAN_SELECTOR = function () { return DOM.isTextSpan(this); };
-
-    /**
      * Returns whether the passed node is a <span> element representing a
      * regular text portion, or an empty text span.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element representing a text field.
@@ -375,13 +368,26 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * Returns a new text span element with a single child text node.
+     *
+     * @param {String} [text]
+     *  The text contents of the span element.
+     *
+     * @returns {jQuery}
+     *  The text span element, as jQuery object.
+     */
+    DOM.createTextSpan = function (text) {
+        return $('<span>').text(_.isString(text) ? text : '');
+    };
+
+    /**
      * Returns whether the passed node is a <span> element containing an empty
      * text portion. Does NOT return true for text fields with an empty
      * representation text.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element with an empty text node.
@@ -391,18 +397,36 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
+     * A jQuery selector that matches elements representing a text field.
+     */
+    DOM.FIELD_NODE_SELECTOR = 'div.field';
+
+    /**
      * Returns whether the passed node is a <span> element representing a text
      * field.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a span element representing a text field.
      */
     DOM.isFieldSpan = function (node) {
         return DOM.isTextSpan(node) && $(node).hasClass('field');
+    };
+
+    /**
+     * Returns a new text field element.
+     *
+     * @param {String} [text]
+     *  The text contents of the field element.
+     *
+     * @returns {jQuery}
+     *  A new text field element containing a text span, as jQuery object.
+     */
+    DOM.createFieldNode = function (text) {
+        return $('<div>').addClass('field').append(DOM.createTextSpan(text));
     };
 
     /**
@@ -421,42 +445,48 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  text field span, returns an empty jQuery object.
      */
     DOM.getFieldSpans = function (node) {
-        var spans = $(), span = $(node);
+
+        var // the result collection
+            spans = $(),
+            // current span element in iteration
+            span = $(node);
+
         if (DOM.isFieldSpan(node)) {
+            // find first field span
             while (DOM.isFieldSpan(span.prev())) { span = span.prev(); }
+            // collect all sibling field spans
             while (DOM.isFieldSpan(span)) { spans = spans.add(span); span = span.next(); }
         }
+
         return spans;
     };
 
     /**
+     * A jQuery selector that matches elements representing an object.
+     */
+    DOM.OBJECT_NODE_SELECTOR = 'div.object';
+
+    /**
      * Returns whether the passed node is a <div> element wrapping an object.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object.
      */
     DOM.isObjectNode = function (node) {
-        return $(node).is('div.object');
+        return $(node).is(DOM.OBJECT_NODE_SELECTOR);
     };
-
-    /**
-     * A selector function that matches <div> elements refered by the 'this'
-     * symbol representing an object (floating or inline). Can be used in the
-     * jQuery method is() and in the DOM iterator methods supporting selectors.
-     */
-    DOM.OBJECT_NODE_SELECTOR = function () { return DOM.isObjectNode(this); };
 
     /**
      * Returns whether the passed node is a <div> element wrapping an object
      * in inline mode.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object and is
@@ -470,9 +500,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * Returns whether the passed node is a <div> element wrapping an object
      * in floating mode.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an object and is
@@ -485,9 +515,9 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     /**
      * Returns whether the passed node is a <div> element wrapping an image.
      *
-     * @param {Node|jQuery} node
+     * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
-     *  the first DOM node it contains.
+     *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
      *  Whether the passed node is a div element wrapping an image.
@@ -498,12 +528,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
     };
 
     /**
-     * A selector function that matches <div> elements refered by the 'this'
-     * symbol representing an image object (floating or inline). Can be used in
-     * the jQuery method is() and in the DOM iterator methods supporting
-     * selectors.
+     * A jQuery selector that matches elements representing an object offset
+     * helper node.
      */
-    DOM.IMAGE_NODE_SELECTOR = function () { return DOM.isImageNode(this); };
+    DOM.OFFSET_NODE_SELECTOR = 'div.offset';
 
     /**
      * Returns whether the passed node is a <div> element for positioning
@@ -517,21 +545,36 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  Whether the passed node is a div element wrapping an object.
      */
     DOM.isOffsetNode = function (node) {
-        return $(node).is('div.offset');
+        return $(node).is(DOM.OFFSET_NODE_SELECTOR);
     };
 
     /**
-     * Returns whether the passed node is a <div> element with class list-label.
+     * A jQuery selector that matches elements representing a list label.
+     */
+    DOM.LIST_LABEL_NODE_SELECTOR = 'div.list-label';
+
+    /**
+     * Returns whether the passed node is an element representing a list label.
      *
      * @param {Node|jQuery|Null} [node]
      *  The DOM node to be checked. If this object is a jQuery collection, uses
      *  the first DOM node it contains. If missing or null, returns false.
      *
      * @returns {Boolean}
-     *  Whether the passed node is a div element with class list-label.
+     *  Whether the passed node is a list label element.
      */
     DOM.isListLabelNode = function (node) {
-        return $(node).is('div.list-label');
+        return $(node).is(DOM.LIST_LABEL_NODE_SELECTOR);
+    };
+
+    /**
+     * Creates a new element representing a list label.
+     *
+     * @returns
+     *  A new list label node, as jQuery object.
+     */
+    DOM.createListLabelNode = function () {
+        return $('<div>').addClass('list-label');
     };
 
     /**

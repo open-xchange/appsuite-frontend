@@ -509,7 +509,7 @@ define('io.ox/office/editor/position',
             usePreviousCell = true;
         }
 
-        if ((isEndPoint) && (localNode) && (localNode.previousSibling) && (DOM.isObjectNode($(localNode.previousSibling)))) {
+        if ((isEndPoint) && (localNode) && DOM.isObjectNode(localNode.previousSibling)) {
             usePreviousCell = true;
         }
 
@@ -683,13 +683,13 @@ define('io.ox/office/editor/position',
 
                 var nextNode = node.nextSibling;
 
-                if ((nextNode) && (DOM.isImageNode(nextNode))) {  // if the next node is an image span, this should be preferred
+                if (DOM.isImageNode(nextNode)) {  // if the next node is an image span, this should be preferred
                     node = nextNode;
                     isImage = true;
-                } else if ((nextNode) && ($(nextNode).is('div.offset')) && (nextNode.nextSibling) && (DOM.isImageNode(nextNode.nextSibling))) {
+                } else if (DOM.isOffsetNode(nextNode) && DOM.isImageNode(nextNode.nextSibling)) {
                     node = nextNode.nextSibling;
                     isImage = true;
-                } else if ((nextNode) && (DOM.isFieldSpan(nextNode))) {  // also preferring following fields
+                } else if (DOM.isFieldSpan(nextNode)) {  // also preferring following fields
                     node = nextNode;
                     isField = true;
                 }
@@ -2372,7 +2372,7 @@ define('io.ox/office/editor/position',
 
         var paraNode = Position.getCurrentParagraph(startnode, position);
 
-        if ((paraNode) && ($(paraNode).find('div.offset').length > 0)) {
+        if ((paraNode) && ($(paraNode).children(DOM.OFFSET_NODE_SELECTOR).length > 0)) {
 
             var child = paraNode.firstChild;
 

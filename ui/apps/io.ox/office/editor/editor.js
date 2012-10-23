@@ -1171,7 +1171,7 @@ define('io.ox/office/editor/editor',
         function processMouseDown(event) {
 
             var // mouse click on an object node
-                object = $(event.target).closest('div.object');
+                object = $(event.target).closest(DOM.OBJECT_NODE_SELECTOR);
 
             // click on object node: set browser selection to object node, draw selection
             if ((object.length > 0) && (editdiv[0].contains(object[0]))) {
@@ -1280,7 +1280,7 @@ define('io.ox/office/editor/editor',
                             objectNode = Position.getDOMPosition(paragraphs, currentSelection.startPaM.oxoPosition, useObjectNode).node;
 
                         // only delete, if imageStartPosition is really an image position
-                        if (objectNode && DOM.isObjectNode(objectNode)) {
+                        if (DOM.isObjectNode(objectNode)) {
                             // prevent default key handling of the browser
                             event.preventDefault();
                             // select single objects only (multi selection not supported yet)
@@ -2269,10 +2269,10 @@ define('io.ox/office/editor/editor',
                 // check if current node is a text span (portion or field)
                 if (DOM.isTextSpan(this)) {
 
-                    if (DOM.isEmptySpan(this) && ((this.previousSibling && DOM.isPortionSpan(this.previousSibling)) || (this.nextSibling && DOM.isPortionSpan(this.nextSibling)))) {
+                    if (DOM.isEmptySpan(this) && (DOM.isPortionSpan(this.previousSibling) || DOM.isPortionSpan(this.nextSibling))) {
                         // remove this span, if it is an empty portion and has a sibling text portion
                         $(this).remove();
-                    } else if (this.previousSibling && DOM.isTextSpan(this.previousSibling)) {
+                    } else if (DOM.isTextSpan(this.previousSibling)) {
                         // append to array that contains the previous text node (portion or field)
                         _(siblingTextNodes).last().push(this.firstChild);
                     } else {
@@ -2325,7 +2325,7 @@ define('io.ox/office/editor/editor',
 
             // insert an empty text span if there is no other content (except the dummy node)
             if (!paragraph.hasChildNodes() || (hasLastDummy && (paragraph.childNodes.length === 1))) {
-                $(paragraph).prepend($('<span>').text(''));
+                $(paragraph).prepend(DOM.createTextSpan());
                 // initialize paragraph and character formatting from current paragraph style
                 paragraphStyles.updateElementFormatting(paragraph);
             }
@@ -2441,7 +2441,7 @@ define('io.ox/office/editor/editor',
             var useObjectNode = true,
                 imagePos = Position.getDOMPosition(paragraphs, _.copy(position), useObjectNode);
 
-            if ((imagePos) && (imagePos.node) && (DOM.isImageNode(imagePos.node))) {
+            if (imagePos && DOM.isImageNode(imagePos.node)) {
 
                 $('img', imagePos.node).one('load', function () {
                     var width = Utils.convertLengthToHmm($(this).width(), 'px'),
@@ -3401,8 +3401,7 @@ define('io.ox/office/editor/editor',
             DOM.splitTextNode(node, domPos.offset);
 
             // insert a new text field between the text nodes
-            node = DOM.splitTextNode(node, 0);
-            $(node.parentNode).addClass('field');
+            node = DOM.createFieldNode(representation);
             node.nodeValue = representation;
 
             implParagraphChanged(position);
@@ -3774,7 +3773,7 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if ((DOM.isImageNode(child)) && ($(child).data('mode') !== 'inline')) {
+                            if (DOM.isImageNode(child) && !$(child).hasClass('inline')) {
                                 imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
                             }
 
@@ -4207,21 +4206,15 @@ define('io.ox/office/editor/editor',
             }
 
             var paragraph = Position.getCurrentParagraph(paragraphs, startPosition);
-            var searchNodes = $(paragraph).children('span, div.object').get();
+            var searchNodes = $(paragraph).children('span, ' + DOM.FIELD_NODE_SELECTOR + ', ' + DOM.OBJECT_NODE_SELECTOR).get();
             var node, nodeLen, delStart, delEnd;
             var nodes = searchNodes.length;
             var nodeStart = 0;
             for (var i = 0; i < nodes; i++) {
-                var isImage = false,
-                    isField = false,
-                    text = '';
+                var text = '';
                 node = searchNodes[i];
-                if (DOM.isImageNode(node)) {
+                if (DOM.isObjectNode(node) || DOM.isFieldSpan(node)) {
                     nodeLen = 1;
-                    isImage = true;
-                } else if (DOM.isFieldSpan(node)) {
-                    nodeLen = 1;
-                    isField = true;
                 } else if (DOM.isPortionSpan(node)) {
                     text = $(node).text();
                     nodeLen = text.length;
@@ -4239,12 +4232,12 @@ define('io.ox/office/editor/editor',
                         delEnd = end - nodeStart;
                     }
                     if ((delEnd - delStart) === nodeLen) {
-                        // remove element completely.
-                        if (isImage || isField) {
-                            paragraph.removeChild(node);
-                        } else {
+                        if (DOM.isPortionSpan(node)) {
                             // clear simple text span but do not remove it from the DOM
                             $(node).text('');
+                        } else {
+                            // remove element completely
+                            paragraph.removeChild(node);
                         }
                     }
                     else {
@@ -4317,7 +4310,7 @@ define('io.ox/office/editor/editor',
 
                         // there can be empty text spans before the destination node
                         if (DOM.isTextSpan(destNode)) {
-                            while (destNode.previousSibling && DOM.isEmptySpan(destNode.previousSibling)) {
+                            while (DOM.isEmptySpan(destNode.previousSibling)) {
                                 destNode = destNode.previousSibling;
                             }
                         }

@@ -81,7 +81,7 @@ define('io.ox/office/editor/format/paragraphstyles',
      * Visits all child nodes of the passed paragraph.
      */
     function iterateChildNodes(paragraph, iterator, context) {
-        return Utils.iterateSelectedDescendantNodes(paragraph, 'span, div.list-label', iterator, context, { children: true });
+        return Utils.iterateSelectedDescendantNodes(paragraph, 'span, ' + DOM.LIST_LABEL_NODE_SELECTOR, iterator, context, { children: true });
     }
 
     // class ParagraphStyles ==================================================
@@ -126,7 +126,7 @@ define('io.ox/office/editor/format/paragraphstyles',
             // take care of numberings
             // always remove an existing label
             // TODO: it might make more sense to change the label appropriately
-            $(para).children('div.list-label').remove();
+            $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
             $(para).css('margin-left', '');
             if (attributes.ilvl !== -1 && attributes.numId !== -1) {
 //                var allNumberingElementsInDoc = $(rootNode).find('div.list-label');
@@ -136,10 +136,8 @@ define('io.ox/office/editor/format/paragraphstyles',
 //
 //                }
 
-                var numberingElement = $('<div>');
-                numberingElement.addClass('list-label');
                 var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
-                numberingElement.text(listObject.text);
+                var numberingElement = DOM.createListLabelNode(listObject.text);
                 if (listObject.indent > 0) {
                     para.css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
                 }

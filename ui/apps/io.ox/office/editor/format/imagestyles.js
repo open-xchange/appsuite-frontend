@@ -216,7 +216,7 @@ define('io.ox/office/editor/format/imagestyles',
             // total width of the paragraph, in 1/100 mm
             paraWidth = Utils.convertLengthToHmm(paragraph.width(), 'px'),
             // preceding div element used for vertical offset
-            verticalOffsetNode = div.prev('div.offset'),
+            verticalOffsetNode = div.prev(DOM.OFFSET_NODE_SELECTOR),
             // first text node in paragraph
             firstTextNode = null,
             // current object width, in 1/100 mm
@@ -412,6 +412,17 @@ define('io.ox/office/editor/format/imagestyles',
         }
     }
 
+    // private global functions ===============================================
+
+    /**
+     * A jQuery selector function that returns whether the DOM node bound to
+     * the 'this' symbol is an element that can receive image formatting
+     * attributes.
+     */
+    function imageNodeSelector() {
+        return DOM.isImageNode(this);
+    }
+
     // class ImageStyles ======================================================
 
     /**
@@ -434,7 +445,7 @@ define('io.ox/office/editor/format/imagestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'image', DOM.IMAGE_NODE_SELECTOR, definitions, {
+        StyleSheets.call(this, documentStyles, 'image', imageNodeSelector, definitions, {
             updateHandler: updateImageFormatting
         });
 
