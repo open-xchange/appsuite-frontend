@@ -679,7 +679,7 @@ define("io.ox/core/desktop",
 
                 this.id = id;
                 this.name = name;
-                this.nodes = { title: $(), toolbar: $(), controls: $() };
+                this.nodes = { title: $(), toolbar: $(), controls: $(), closeButton: $() };
                 this.search = { query: '', active: false };
                 this.state = { visible: false, running: false, open: false };
                 this.app = null;
@@ -693,8 +693,9 @@ define("io.ox/core/desktop",
                     firstShow = true;
 
                 this.updateToolbar = function () {
-                    ext.point(name + '/toolbar')
-                        .invoke('draw', this.nodes.toolbar.empty(), this.app || this);
+                    var folder = this.app && this.app.folder ? this.app.folder.get() : null,
+                        baton = ext.Baton({ window: this, $: this.nodes, app: this.app, folder: folder });
+                    ext.point(name + '/toolbar').invoke('draw', this.nodes.toolbar.empty(), baton);
                 };
 
                 ext.point(name + '/window-title').extend({
@@ -742,24 +743,28 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return this.head.append(
-                            $('<div class="css-table-row">').append(
-                                // title
-                                $('<div class="css-table-cell cell-30">').append(
-                                    this.title = ext.point(name + '/window-title')
-                                        .invoke('draw', this).first().value() || $()
-                                ),
-                                // toolbar
-                                $("<div class='css-table-cell cell-40 cell-center'>").append(
-                                    this.toolbar = ext.point(name + '/window-toolbar')
-                                        .invoke('draw', this).first().value() || $()
-                                ),
-                                // controls
-                                $("<div class='css-table-cell cell-30 cell-right'>").append(
-                                    this.controls = ext.point(name + '/window-controls')
-                                        .invoke('draw', this).first().value() || $()
-                                )
-                            )
+                            this.toolbar = ext.point(name + '/window-toolbar')
+                                .invoke('draw', this).first().value() || $()
                         );
+//                        return this.head.append(
+//                            $('<div class="css-table-row">').append(
+//                                // title
+//                                $('<div class="css-table-cell cell-30">').append(
+//                                    this.title = ext.point(name + '/window-title')
+//                                        .invoke('draw', this).first().value() || $()
+//                                ),
+//                                // toolbar
+//                                $("<div class='css-table-cell cell-40 cell-center'>").append(
+//                                    this.toolbar = ext.point(name + '/window-toolbar')
+//                                        .invoke('draw', this).first().value() || $()
+//                                ),
+//                                // controls
+//                                $("<div class='css-table-cell cell-30 cell-right'>").append(
+//                                    this.controls = ext.point(name + '/window-controls')
+//                                        .invoke('draw', this).first().value() || $()
+//                                )
+//                            )
+//                        );
                     }
                 });
 
@@ -953,11 +958,11 @@ define("io.ox/core/desktop",
                 };
 
                 this.getSearchQuery = function () {
-                    return $.trim(this.nodes.search.val());
+                    return $.trim(this.nodes.searchField.val());
                 };
 
                 this.setSearchQuery = function (q) {
-                    this.nodes.search.val(q);
+                    this.nodes.searchField.val(q);
                     return this;
                 };
 
@@ -1042,9 +1047,11 @@ define("io.ox/core/desktop",
                             .append($('<div class="progress progress-striped active"><div class="bar" style="width: 0%;"></div></div>').hide())
                             .append($('<div class="progress progress-striped progress-warning active"><div class="bar" style="width: 0%;"></div></div>').hide()),
                         // window HEAD
-                        win.nodes.head = $('<div class="window-head css-table">'),
+                        win.nodes.head = $('<div class="window-head">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">')
+                        win.nodes.body = $('<div class="window-body">'),
+                        // window SEARCH
+                        win.nodes.search = $('<div class="window-search">')
                     )
                 );
 
@@ -1131,13 +1138,13 @@ define("io.ox/core/desktop",
 
                 var setActive = function () {
                     win.search.active = true;
-                    win.nodes.search.closest('form').addClass('active-search');
+                    win.nodes.searchField.closest('form').addClass('active-search');
                 };
 
                 var setInactive = function () {
                     win.search.active = false;
-                    win.nodes.search.val(win.search.query = '');
-                    win.nodes.search.closest('form').removeClass('active-search');
+                    win.nodes.searchField.val(win.search.query = '');
+                    win.nodes.searchField.closest('form').removeClass('active-search');
                 };
 
                 var searchHandler = {
@@ -1175,7 +1182,7 @@ define("io.ox/core/desktop",
                 $('<form class="form-search pull-right">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.search = $('<input type="text" class="input-medium search-query">')
+                            win.nodes.searchField = $('<input type="text" class="input-medium search-query">')
                             .attr({
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
@@ -1188,12 +1195,18 @@ define("io.ox/core/desktop",
                     )
                 )
                 .on('submit', false)
-                .appendTo(win.nodes.controls);
+                .appendTo(win.nodes.search);
             }
 
-            // toolbar extension point
-            if (opt.toolbar === true) {
-                // add "create" link
+            // fix height/position/appearance
+            if (opt.chromeless) {
+
+                win.nodes.head.hide();
+                win.nodes.body.css('left', '0px');
+
+            } else {
+
+                // add toolbar
                 if (opt.name) {
                     // ToolbarLinks VS ToolbarButtons
                     ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
@@ -1201,33 +1214,33 @@ define("io.ox/core/desktop",
                         ref: opt.name + '/links/toolbar'
                     }));
                 }
-            } else {
-                // hide toolbar
-                win.nodes.head.find('.css-table-cell')
-                    .eq(0).removeClass('cell-30').addClass('cell-70').end()
-                    .eq(1).hide();
-            }
-
-            // fix height/position/appearance
-            if (opt.chromeless) {
-
-                win.nodes.head.hide();
-                win.nodes.body.css("top", "0px");
-
-            } else {
 
                 // add close handler
                 if (opt.close === true) {
-                    win.nodes.closeButton.show().on("click", close);
+                    win.nodes.closeButton.show().on('click', close);
                     win.setQuitOnClose(true);
                 }
 
                 // add fullscreen handler
-                if (opt.fullscreen === true && win.nodes.fullscreenButton) {
-                    win.nodes.fullscreenButton.show().on('click', function () {
-                        // Maximize
-                        if (BigScreen.enabled) {
-                            BigScreen.toggle(win.nodes.outer.get(0));
+                if (opt.fullscreen === true && opt.name) {
+
+                    new links.Action(opt.name + '/actions/fullscreen', {
+                        action:  function (baton) {
+                            if (BigScreen.enabled) {
+                                BigScreen.toggle(baton.$.outer.get(0));
+                            }
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/fullscreen', {
+                        ref: opt.name + '/actions/fullscreen'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'fullscreen',
+                        index: 1000,
+                        icon: function () {
+                            return $('<i class="icon-resize-full">');
                         }
                     });
                 }

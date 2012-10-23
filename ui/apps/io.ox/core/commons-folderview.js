@@ -12,9 +12,10 @@
 
 define('io.ox/core/commons-folderview',
     ['io.ox/core/extensions',
+     'io.ox/core/extPatterns/links',
      'io.ox/core/notifications',
      'io.ox/core/api/folder',
-      'gettext!io.ox/core'], function (ext, notifications, api, gt) {
+      'gettext!io.ox/core'], function (ext, links, notifications, api, gt) {
 
     'use strict';
 
@@ -187,9 +188,11 @@ define('io.ox/core/commons-folderview',
             top = 0, UP = 'icon-chevron-up', DOWN = 'icon-chevron-down',
             fnChangeFolder, fnHide, fnShow, togglePermanent,
             disablePermanent, enablePermanent,
-            fnToggle, toggle, loadTree, initTree,
+            toggle, toggleTree, loadTree, initTree,
             name = app.getName(),
             POINT = name + '/folderview',
+            TOGGLE = name + '/links/toolbar',
+            ACTION = name + '/actions/toggle-folderview',
             baton = new ext.Baton({ app: app });
 
         fnChangeFolder = function (e, selection) {
@@ -209,14 +212,14 @@ define('io.ox/core/commons-folderview',
         };
 
         disablePermanent = function () {
-            app.getWindow().nodes.body.css('left', '0px');
-            sidepanel.css({ width: '', left: '0px' });
+            app.getWindow().nodes.body.removeClass('side-shift');
+            sidepanel.removeClass('side-shift');//css({ width: '', left: '0px' });
         };
 
         enablePermanent = function () {
-            var width = 250; //sidepanel.outerWidth();
-            app.getWindow().nodes.body.css('left', width + 'px');
-            sidepanel.css({ width: width + 'px', left: -width + 'px' });
+            //var width = 250; //sidepanel.outerWidth();
+            app.getWindow().nodes.body.addClass('side-shift');
+            sidepanel.addClass('side-shift');//css({ width: width + 'px', left: -width + 'px' });
         };
 
         togglePermanent = function () {
@@ -243,14 +246,8 @@ define('io.ox/core/commons-folderview',
             return $.when();
         };
 
-        toggle = function (e) {
+        toggle = function () {
             if (visible) { fnHide(); } else { fnShow(); }
-        };
-
-        fnToggle = function (e) {
-            if (!e.isDefaultPrevented()) {
-                toggle(e);
-            }
         };
 
         initTree = function (views) {
@@ -268,7 +265,7 @@ define('io.ox/core/commons-folderview',
             return tree.paint().pipe(function () {
                 return tree.select(app.folder.get()).done(function () {
                     tree.selection.on('change', fnChangeFolder);
-                    app.getWindow().nodes.title.on('click', fnToggle);
+                    toggleTree = toggle;
                     sidepanel.idle();
                     api.on('delete:prepare', function (e, id, folder_id) {
                         tree.select(folder_id);
@@ -297,16 +294,14 @@ define('io.ox/core/commons-folderview',
         };
 
         loadTree = function (e) {
-            if (!e || !e.isDefaultPrevented()) {
-                toggle(e);
-                app.showFolderView = fnShow;
-                app.toggleFolderView = toggle;
-                app.getWindow().nodes.title.off('click', loadTree);
-                return require(['io.ox/core/tk/folderviews']).pipe(initTree);
-            } else {
-                return $.when();
-            }
+            toggle();
+            app.showFolderView = fnShow;
+            app.toggleFolderView = toggle;
+            loadTree = toggleTree = $.noop;
+            return require(['io.ox/core/tk/folderviews']).pipe(initTree);
         };
+
+        toggleTree = loadTree;
 
         app.showFolderView = loadTree;
         app.toggleFolderView = loadTree;
@@ -327,12 +322,30 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
-        app.getWindow().nodes.title
-            .css('cursor', 'pointer')
-            .on('click', loadTree);
+        new links.ButtonGroup(TOGGLE, {
+            id: 'folder',
+            index: 110,
+            icon: function () {
+                return $('<i class="icon-folder-close">');
+            }
+        });
+
+        new links.Action(ACTION, {
+            action: function (baton) {
+                toggleTree();
+            }
+        });
+
+        new links.ActionLink(TOGGLE + '/folder', {
+            index: 100,
+            id: 'toggle',
+            label: gt('Toggle folder'),
+            addClass: 'folderview-toggle',
+            ref: ACTION
+        });
 
         if (options.visible === true) {
-            loadTree();
+            toggleTree();
         }
     }
 

@@ -124,7 +124,11 @@ define('io.ox/contacts/distrib/main',
 
         app.setLauncher(function () {
 
-            app.setWindow(win = ox.ui.createWindow({ title: '', toolbar: true, close: true, name: 'io.ox/contacts/distrib' }));
+            app.setWindow(win = ox.ui.createWindow({
+                title: '',
+                chromeless: true,
+                name: 'io.ox/contacts/distrib'
+            }));
 
             container = win.nodes.main
                 .addClass('create-distributionlist')

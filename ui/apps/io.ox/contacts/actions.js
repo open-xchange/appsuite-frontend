@@ -21,7 +21,8 @@ define('io.ox/contacts/actions',
     'use strict';
 
     //  actions
-    var Action = links.Action, Button = links.Button, ButtonGroup = links.ButtonGroup;
+    var Action = links.Action, Button = links.Button,
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
     new Action('io.ox/contacts/actions/delete', {
         index: 100,
@@ -78,11 +79,11 @@ define('io.ox/contacts/actions',
         index: 100,
         id: 'create',
 		requires: 'create',
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/contacts/create/main'], function (create) {
-                create.show(app).done(function (data) {
+                create.show(baton.app).done(function (data) {
                     if (data) {
-                        app.getGrid().selection.set(data);
+                        baton.app.getGrid().selection.set(data);
                     }
                 });
             });
@@ -95,10 +96,10 @@ define('io.ox/contacts/actions',
 		requires: function (e) {
             return e.collection.has('create');
         },
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/contacts/distrib/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.create(app.folder.get());
+                    this.create(baton.app.folder.get());
                 });
             });
         }
@@ -247,26 +248,27 @@ define('io.ox/contacts/actions',
 
     // toolbar
 
-    new ButtonGroup('io.ox/contacts/links/toolbar', {
-        id: 'buttongroup',
-        index: 100
+    new ActionGroup('io.ox/contacts/links/toolbar', {
+        id: 'default',
+        index: 100,
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
     });
 
-    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
+    new ActionLink('io.ox/contacts/links/toolbar/default', {
         index: 100,
         id: 'create',
         label: gt('Add contact'),
-        cssClasses: 'btn btn-primary',
         ref: 'io.ox/contacts/actions/create'
-    }));
+    });
 
-    ext.point('io.ox/contacts/links/toolbar/buttongroup').extend(new links.Button({
+    new ActionLink('io.ox/contacts/links/toolbar/default', {
         index: 200,
         id: 'create-dist',
-        cssClasses: 'btn btn-inverse',
         label: gt('Add distribution list'),
         ref: 'io.ox/contacts/actions/distrib'
-    }));
+    });
 
     //  inline links
 

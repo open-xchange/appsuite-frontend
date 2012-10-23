@@ -58,7 +58,6 @@ define("io.ox/contacts/main",
         // get window
         win = ox.ui.createWindow({
             name: 'io.ox/contacts',
-            toolbar: true,
             search: true
         });
 

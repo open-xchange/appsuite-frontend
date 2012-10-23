@@ -14,7 +14,7 @@ define('io.ox/core/commons',
     ['io.ox/core/extensions',
      'io.ox/core/extPatterns/links',
      'gettext!io.ox/core',
-     'io.ox/core/commons-folderview'], function (ext, extLinks, gt, folderview) {
+     'io.ox/core/commons-folderview'], function (ext, links, gt, folderview) {
 
     'use strict';
 
@@ -41,7 +41,7 @@ define('io.ox/core/commons',
             function draw(id, selection) {
                 // inline links
                 var links = $('<div>');
-                (points[id] || (points[id] = new extLinks.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
+                (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
                     .draw.call(links, selection);
                 return $().add(
                     $('<div>').addClass('summary').html(
@@ -204,9 +204,6 @@ define('io.ox/core/commons',
          */
         addFolderSupport: function (app, grid, type, defaultFolderId) {
 
-            var name = app.getName(),
-                POINT = name + '/folderview';
-
             app.folder
                 .updateTitle(app.getWindow())
                 .updateGrid(grid)
@@ -214,21 +211,6 @@ define('io.ox/core/commons',
             if (grid) {
                 app.folder.updateGrid(grid);
             }
-
-            ext.point(POINT + '/toggle').extend({
-                id: 'default',
-                index: 100,
-                draw: function () {
-                    return $().add($.txt(' ')).add(
-                        $('<i class="icon-chevron-down folderview-toggle">')
-                    );
-                }
-            });
-
-            // add visual caret
-            app.getWindow().nodes.title.append(
-                ext.point(POINT + '/toggle').invoke('draw').value()
-            );
 
             // hash support
             app.getWindow().on('show', function () {

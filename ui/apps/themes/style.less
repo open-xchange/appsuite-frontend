@@ -35,8 +35,9 @@
 /* top bar */
 
 #io-ox-topbar {
-    bottom: auto;
+ 
     height: 40px;
+    bottom: auto;
     z-index: 2;
     
     .vertical-gradient(@topbar-background-alt, @topbar-background);
@@ -428,23 +429,19 @@
 }
 
 .window-head {
+
     position: absolute;
     top: 0px;
-    right: 0px;
-    height: 49px;
+    width: @window-head-width;
+    bottom: 0px;
     left: 0px;
+    
     z-index: 20;
     
     font-size: @window-head-font-size;
     color: @head-color;
-    white-space: nowrap;
 
-    border-top: 1px solid @topbar-launcher-background-active;
-
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    user-select: none;
-
+    .user-select(none);
     .vertical-gradient(@window-head-top, @window-head-bottom);
 }
 
@@ -462,9 +459,25 @@
 .cell-center { text-align: center; }
 .cell-right { text-align: right; }
 
-.window-head .caret {
-    border-top-color: #ccc;
-    border-bottom-color: #ccc;
+.toolbar-button {
+
+    font-size: 26px;
+    line-height: 40px;
+    margin-bottom: 10px;
+    
+    & > a {
+        width: 100%;
+        text-align: center;
+        height: 40px;
+        display: inline-block;
+        outline: 0;
+    }
+    & > a i { color: @link-on-dark; }
+    &:hover > a i { color: @link-color; text-decoration: none; }
+    
+    & > a.disabled i { color: #555; cursor: default; }
+    
+    ul { font-size: 14px; line-height: 20px; }
 }
 
 .window-title {
@@ -497,12 +510,6 @@
     line-height: 1.4em;
     top: -3px;
     left: 10px;
-}
-
-.window-toolbar {
-    padding: 4px 0 4px 0;
-    white-space: nowrap;
-    line-height: 1.5em;
 }
 
 .window-toolbar > a {
@@ -543,6 +550,16 @@
     font-size: 13px;
     line-height: 18px;
     text-decoration: none;
+}
+
+.window-search {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    min-height: 100px;
+    left: 0px;
+    z-index: 10 - 1; // less than window-body
+    background-color: #eee;
 }
 
 .window-head .search-query {
@@ -595,12 +612,16 @@ a.button {
 
 .window-body {
     position: absolute;
-    top: 50px;
+    top: 0px;
     right: 0px;
     bottom: 0px;
-    left: 0px;
+    left: @window-head-width;
     white-space: normal;
     z-index: 10;
+}
+
+.window-body.side-shift {
+    left: @window-content-shift + @window-head-width;
 }
 
 .window-body.movedown {
@@ -1406,7 +1427,7 @@ input.nice-input {
 
 .foldertree-sidepanel {
     
-    background-color: @window-head-bottom; /* must match lower window-head color or it's simply white */
+    background-color: @foldertree-sidepanel-background;
     width: 330px;
 
     &.border-right { border: 0px none; }
@@ -1443,6 +1464,11 @@ input.nice-input {
         line-height: 40px - 1;
         border-top: 1px solid #222;
         background-color: #333;
+    }
+    
+    &.side-shift {
+        width: @window-content-shift;
+        left: 0 - @window-content-shift;
     }
 }
 
@@ -1536,6 +1562,7 @@ div.external-user-image {
 /** DROPDOWNS **/
 
 .dropdown-right { right: 0; left: auto; }
+.dropdown-right-side { top: 15%; left: 42px; }
 
 .dropdown-header {
     display: block;
