@@ -45,7 +45,16 @@ define('io.ox/calendar/month/view',
 
         render: function () {
 
-            var list = util.getWeekScaffold(this.options.day);
+            var list = util.getWeekScaffold(this.options.day),
+                weekinfo = $('<div>')
+                    .addClass('week-info')
+                    .append(
+                        $('<span>').addClass('cw').append(
+                            gt('CW'),
+                            gt.noI18n(' ' + new date.Local(this.options.day).format('w'))
+                        )
+                    );
+
 
             _(list).each(function (day) {
                 this.$el.append(
@@ -59,13 +68,11 @@ define('io.ox/calendar/month/view',
                 );
 
                 if (day.isFirst) {
-                    this.$el.prepend(
-                        $('<div>').addClass('vertical').html(
-                                gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year)
-                        )
-                    );
+                    weekinfo.prepend(gt.noI18n(date.locale.months[day.month]) + '<br>' + gt.noI18n(day.year));
                 }
             }, this);
+
+            this.$el.prepend(weekinfo);
 
             return this;
         },
