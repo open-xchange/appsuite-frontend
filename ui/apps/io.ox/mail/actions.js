@@ -670,7 +670,8 @@ define('io.ox/mail/actions',
         index: 900,
         prio: 'lo',
         id: 'source',
-        label: gt('View Source'),
+        //#. source in terms of source code
+        label: gt('View source'),
         ref: 'io.ox/mail/actions/source'
     }));
 
