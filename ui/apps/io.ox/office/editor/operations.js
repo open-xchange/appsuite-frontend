@@ -28,21 +28,21 @@ define('io.ox/office/editor/operations',
 
     /**
      * Creates a clone of the passed logical position and appends the specified
-     * start index. The passed array object will not be changed.
+     * index. The passed array object will not be changed.
      *
      * @param {Number[]} position
      *  The initial logical position.
      *
-     * @param {Number} [start=0]
+     * @param {Number} [index=0]
      *  The value that will be appended to the new position.
      *
      * @returns {Number[]}
      *  A clone of the passed logical position, with the specified start value
      *  appended.
      */
-    function appendNewIndex(position, start) {
+    function appendNewIndex(position, index) {
         position = _.clone(position);
-        position.push(_.isNumber(start) ? start : 0);
+        position.push(_.isNumber(index) ? index : 0);
         return position;
     }
 
@@ -253,37 +253,33 @@ define('io.ox/office/editor/operations',
                 // formatting ranges for text portions, must be applied after the contents
                 attributeRanges = [];
 
-            // logical index of first character to be included into the result
-            start = _.isNumber(start) ? Math.max(start, 0) : 0;
-            // logical index of last character to be included into the result
-            end = _.isNumber(end) ? Math.max(start, end) : 0x7FFFFFFF;
-
             // process all content nodes in the paragraph and create operations
-            position = appendNewIndex(position, start);
-            DOM.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength) {
+            DOM.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
 
-                var // text of a portion span
+                var // logical start index of the covered part of the child node
+                    startIndex = nodeStart + offsetStart,
+                    // logical end index of the covered part of the child node (closed range)
+                    endIndex = startIndex + offsetLength - 1,
+                    // logical start position of the covered part of the child node
+                    startPosition = appendNewIndex(position, startIndex),
+                    // logical end position of the covered part of the child node
+                    endPosition = appendNewIndex(position, endIndex),
+                    // text of a portion span
                     text = null;
-
-                // node ends before the specified start index (continue with next node)
-                if (nodeStart + nodeLength <= start) { return; }
-                // node starts after the specified end index (escape from iteration)
-                if (nodeStart > end) { return Utils.BREAK; }
 
                 // operation to create a (non-empty) generic text portion
                 if (DOM.isTextSpan(node)) {
                     // extract the text covered by the specified range
-                    text = node.firstChild.nodeValue.substring(Math.max(start - nodeStart, 0), end - nodeStart + 1);
+                    text = node.firstChild.nodeValue.substr(offsetStart, offsetLength);
                     // append text portions to the last 'insertText' operation
                     if (lastTextOperation) {
                         lastTextOperation.text += text;
-                        lastClearOperation.end[lastClearOperation.end.length - 1] += text.length;
+                        lastClearOperation.end = endPosition;
                     } else {
-                        lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
-                        lastClearOperation = generateOperation(Operations.ATTRS_CLEAR, { start: position, end: increaseLastIndex(position, text.length - 1) });
+                        lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: startPosition, text: text });
+                        lastClearOperation = generateOperation(Operations.ATTRS_CLEAR, { start: startPosition, end: endPosition });
                     }
-                    attributeRanges.push({ node: node, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
-                    position = increaseLastIndex(position, text.length);
+                    attributeRanges.push({ node: node, position: startPosition, endPosition: (text.length > 1) ? endPosition : null });
 
                 } else {
 
@@ -295,17 +291,15 @@ define('io.ox/office/editor/operations',
                     if (DOM.isFieldNode(node)) {
                         // extract text of all embedded spans representing the field
                         text = $(node).text();
-                        generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
-                        generateOperation(Operations.ATTRS_CLEAR, { start: position });
+                        generateOperation(Operations.FIELD_INSERT, { position: startPosition, representation: text });
+                        generateOperation(Operations.ATTRS_CLEAR, { start: startPosition });
                         // attributes are contained in the embedded span elements
-                        attributeRanges.push({ node: node.firstChild, position: position });
-                        position = increaseLastIndex(position);
+                        attributeRanges.push({ node: node.firstChild, position: startPosition });
                     }
 
                     // operation to create an image (including its attributes)
                     else if (DOM.isImageNode(node)) {
-                        generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
-                        position = increaseLastIndex(position);
+                        generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: startPosition, imgurl: $(node).data('url') });
                     }
 
                     // TODO: other objects
@@ -314,7 +308,7 @@ define('io.ox/office/editor/operations',
                     }
                 }
 
-            }, this);
+            }, this, { start: start, end: end });
 
             // Generate 'setAttribute' operations after all contents have been
             // created via 'insertText', 'insertField', etc. Otherwise, these

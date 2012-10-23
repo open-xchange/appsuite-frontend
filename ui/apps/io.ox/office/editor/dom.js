@@ -843,12 +843,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * @param {Function} iterator
      *  The iterator function that will be called for every matching node.
      *  Receives the DOM node object as first parameter, the logical start
-     *  index of the node in the paragraph as second parameter, and the logical
-     *  length of the node as third parameter. Note that text fields and object
-     *  nodes have a logical length of 1, and other helper nodes that do not
-     *  represent editable contents have a logical length of 0. If the iterator
-     *  returns the Utils.BREAK object, the iteration process will be stopped
-     *  immediately.
+     *  index of the node in the paragraph as second parameter, the logical
+     *  length of the node as third parameter, the relative start offset of the
+     *  covered part in the child node as fourth parameter, and the offset
+     *  length of the covered part of the child node as fifth parameter. The
+     *  last two parameters are important if the options 'options.start' and
+     *  'options.end' will be used to iterate over a specific sub-range in the
+     *  paragraph where the first and last visited text nodes may be covered
+     *  only partly. Note that text fields and object nodes have a logical
+     *  length of 1, and other helper nodes that do not represent editable
+     *  contents have a logical length of 0. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
      *
      * @param {Object} [context]
      *  If specified, the iterator will be called with this context (the symbol
@@ -862,6 +867,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *      also helper nodes that do not represent editable content and have a
      *      logical length of 0. Otherwise, only real content nodes will be
      *      visited (non-empty text portions, text fields, and object nodes).
+     *  @param {Number} [options.start=0]
+     *      The logical index of the first node to be included into the
+     *      iteration process. Text spans covered partly will be visited too.
+     *  @param {Number} [options.end=0x7FFFFFFF]
+     *      The logical index of the last node to be included in the iteration
+     *      process. Text spans covered partly will be visited too. Note that
+     *      this index is considered inclusive (NOT a half-open range).
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -871,33 +883,52 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
         var // whether to visit all child nodes
             allNodes = Utils.getBooleanOption(options, 'allNodes', false),
+            // logical index of first node to be visited
+            rangeStart = Utils.getIntegerOption(options, 'start', 0, 0),
+            // logical index of last node to be visited
+            rangeEnd = Utils.getIntegerOption(options, 'end', 0x7FFFFFFF, rangeStart),
             // the logical start index of the visited content node
-            start = 0;
+            nodeStart = 0;
 
         // visit the content nodes of the specified paragraph element (only child nodes, no other descendants)
         return Utils.iterateDescendantNodes(paragraph, function (node) {
 
             var // the logical length of the node
-                length = 0;
+                nodeLength = 0,
+                // start offset of partly covered nodes
+                offsetStart = 0,
+                // offset length of partly covered nodes
+                offsetLength = 0;
 
             // calculate length of the node
             if (DOM.isTextSpan(node)) {
                 // portion nodes contain regular text
-                length = node.firstChild.nodeValue.length;
+                nodeLength = node.firstChild.nodeValue.length;
             } else if (DOM.isFieldNode(node) || DOM.isObjectNode(node)) {
                 // text fields and objects count as one character
-                length = 1;
+                nodeLength = 1;
             }
 
-            // call the iterator for the current content node
-            if (allNodes || (length > 0)) {
-                if (iterator.call(context, node, start, length) === Utils.BREAK) {
+            // node ends before the specified start index (continue with next node)
+            if (nodeStart + nodeLength < rangeStart) { return; }
+            // node starts after the specified end index (escape from iteration)
+            if (rangeEnd < nodeStart) { return Utils.BREAK; }
+
+            // always visit non-empty nodes
+            if (allNodes || (nodeLength > 0)) {
+
+                // calculate offset start and length of partly covered text nodes
+                offsetStart = Math.max(rangeStart - nodeStart, 0);
+                offsetLength = Math.min(rangeEnd - nodeStart + 1, nodeLength) - offsetStart;
+
+                // call the iterator for the current content node
+                if (iterator.call(context, node, nodeStart, nodeLength, offsetStart, offsetLength) === Utils.BREAK) {
                     return Utils.BREAK;
                 }
             }
 
-            // update start index
-            start += length;
+            // update start index of next visited node
+            nodeStart += nodeLength;
 
         }, undefined, { children: true });
     };

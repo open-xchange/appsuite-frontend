@@ -2412,7 +2412,7 @@ define('io.ox/office/editor/editor',
                     // anything else: start a new sequence of text nodes
                     allSiblingTextNodes.push(siblingTextNodes = []);
                 }
-            });
+            }, undefined, { allNodes: true });
 
             // Convert consecutive white-space characters to sequences of SPACE/NBSP
             // pairs. We cannot use the CSS attribute white-space:pre-wrap, because
@@ -3521,14 +3521,14 @@ define('io.ox/office/editor/editor',
                 image = null;
 
             // check position
-            if (!node || (node.nodeType !== 3)) {
+            if (!DOM.isPortionTextNode(node)) {
                 Utils.error('Editor.implInsertImage(): expecting text position to insert image.');
                 return false;
             }
 
             // prepend text before offset in a new span (also if position
             // points to start or end of text, needed to clone formatting)
-            DOM.splitTextNode(node, domPos.offset);
+            DOM.splitTextSpan(node.parentNode, domPos.offset);
 
             // insert the image with default settings (inline) between the two text nodes (store original URL for later use)
             image = $('<div>', { contenteditable: false })
@@ -3565,25 +3565,25 @@ define('io.ox/office/editor/editor',
         function implInsertField(position, type, representation) {
 
             var domPos = Position.getDOMPosition(paragraphs, position),
-                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
+                node = domPos ? domPos.node : null,
                 fieldSpan = null;
 
             // check position
-            if (!DOM.isPortionSpan(node)) {
+            if (!DOM.isPortionTextNode(node)) {
                 Utils.error('Editor.implInsertField(): expecting text position to insert field.');
                 return false;
             }
 
             // split the text span at the specified position
-            DOM.splitTextSpan(node, domPos.offset);
+            DOM.splitTextSpan(node.parentNode, domPos.offset);
 
             // split the text span again to get initial character formatting
             // for the field, and insert the field representation text
-            fieldSpan = DOM.splitTextSpan(node, 0).text(representation);
+            fieldSpan = DOM.splitTextSpan(node.parentNode, 0).text(representation);
 
             // insert a new text field before the addressed text node, move
             // the field span element into the field node
-            DOM.createFieldNode().append(fieldSpan).insertBefore(node);
+            DOM.createFieldNode().append(fieldSpan).insertBefore(node.parentNode);
 
             implParagraphChanged(position);
             return true;
@@ -3780,7 +3780,9 @@ define('io.ox/office/editor/editor',
 
             // store last position
             lastOperationEnd = new OXOPaM(end);
-            if (('ilvl' in attributes) || ('numId' in attributes)) {
+
+            // update numberings and bullets (attributes may be null if called from clearAttributes operation)
+            if (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes)) {
                 implUpdateLists();
             }
         }
@@ -4487,8 +4489,7 @@ define('io.ox/office/editor/editor',
                     if (doMove) {
 
                         if (splitNode) {
-                            var newTextNode = DOM.splitTextNode(destNode, destPos.offset + 1);
-                            destNode = newTextNode.parentNode;
+                            destNode = DOM.splitTextSpan(destNode.parentNode, destPos.offset + 1)[0];
                         } else {
                             if (destNode.nodeType === 3) {
                                 destNode = destNode.parentNode;
