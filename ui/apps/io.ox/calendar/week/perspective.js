@@ -132,12 +132,13 @@ define('io.ox/calendar/week/perspective',
             this.refresh();
         },
 
-        render: function (app, opt) {
+        render: function (app, options) {
+
             this.app = app;
             this.collection = new Backbone.Collection([]);
             this.main.addClass('week-view').empty();
 
-            this.days(this.mode[opt.perspective[1]]);
+            this.days(this.mode[options.perspective[1]]);
 
             // FIXME: replace 'startTimeUTC' with calendar logic
             if (this.columns === 1) {

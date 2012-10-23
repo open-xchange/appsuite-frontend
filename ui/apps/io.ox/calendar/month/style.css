@@ -55,6 +55,11 @@
         max-height: 160px;
     }
     
+    @-webkit-keyframes day-out {
+        from { background-color: #fff; }
+        to { background-color: #e0e0e0; }
+    }
+    
     .day {
         width: 100/8%;
         height: 100%;
@@ -67,9 +72,8 @@
         border-width: 0 1px 1px 0;
         overflow: hidden;
         background-color: #fff;
-        -webkit-transition: background-color 0.4s;
-        -moz-transition: background-color 0.4s;
-        transition: background-color 0.4s;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-duration: 100ms;
     }
     
     .week-info {
@@ -99,7 +103,8 @@
     }
     
     .day.out {
-        background-color: #e0e0e0;
+        background-color: #f0f0f0;
+        -webkit-animation-name: day-out;
     }
     
     .day.out.today {
