@@ -45,7 +45,7 @@ define('io.ox/contacts/edit/main',
             container = win.nodes.main
                 .css({ backgroundColor: '#fff' })
                 .scrollable()
-                .css({ width: '1000px', margin: '20px auto 20px auto' });
+                .css({ width: '700px', margin: '20px auto 20px auto' });
 
             var cont = function (data) {
 
