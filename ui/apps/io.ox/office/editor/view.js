@@ -519,7 +519,12 @@ define('io.ox/office/editor/view',
                 .addOptionButton(LineHeight.DOUBLE,   { icon: 'icon-io-ox-line-spacing-2',   tooltip: gt('Double') })
                 .end()
             .addSeparator()
-            .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }));
+            .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }))
+            .addSeparator()
+            .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
+            .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })
+            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Numbering'), toggle: false })
+            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Numbering'), toggle: false });
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new TableSizeChooser())
@@ -573,11 +578,7 @@ define('io.ox/office/editor/view',
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
-                .addSeparator()
-                .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
-                .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })
-                .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Numbering'), toggle: false })
-                .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Numbering'), toggle: false });
+                .addSeparator();
         }
 
         // register a component that updates the window header tool bar
