@@ -45,10 +45,14 @@ define("io.ox/calendar/main",
         commons.addFolderSupport(app, null, 'calendar')
             .pipe(commons.showWindow(win))
             .done(function () {
-                // switch to week view
-                require(['io.ox/calendar/week/perspective'], function (perspective) {
-                    perspective.show(app);
+                // switch to week perspective or perspective in hash
+                var options = {
+                    perspective: (_.url.hash('perspective') ? _.url.hash('perspective').split(":") : ["week", "week"])
+                };
+                require(['io.ox/calendar/' + options.perspective[0] + '/perspective'], function (perspective) {
+                    perspective.show(app, options);
                 });
+
             });
     });
 

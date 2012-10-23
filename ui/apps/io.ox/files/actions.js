@@ -28,7 +28,7 @@ define("io.ox/files/actions",
         requires: true,
         action: function (app) {
             require(['io.ox/files/list/perspective'], function (perspective) {
-                perspective.show(app);
+                perspective.show(app, { perspective: 'list' });
             });
         }
     });
@@ -37,7 +37,7 @@ define("io.ox/files/actions",
         requires: true,
         action: function (app) {
             require(['io.ox/files/icons/perspective'], function (perspective) {
-                perspective.show(app);
+                perspective.show(app, { perspective: 'icons' });
             });
         }
     });

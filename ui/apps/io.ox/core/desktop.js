@@ -140,6 +140,7 @@ define("io.ox/core/desktop",
                         if (grid) {
                             grid.clear();
                         }
+
                     },
 
                     set: function (id) {
@@ -509,25 +510,30 @@ define("io.ox/core/desktop",
 
             // init
             var rendered = false,
-                initialized = false;
+                initialized = false,
+                options = {
+                    force: false
+                };
 
             this.main = $();
 
-            this.show = function (app, force) {
+            this.show = function (app, opt) {
                 // make sure it's initialized
-                if (!force) {
-                    force = false;
-                }
+
+                _.extend(options, opt);
+
                 if (!initialized) {
                     this.main = app.getWindow().addPerspective(name);
                     initialized = true;
                 }
                 // set perspective
                 app.getWindow().setPerspective(name);
-                _.url.hash('perspective', name);
+
+                _.url.hash('perspective', (_.isArray(options.perspective) ? options.perspective.join(':') : options.perspective));
+
                 // render?
-                if (!rendered || force) {
-                    this.render(app);
+                if (!rendered || options.force) {
+                    this.render(app, options);
                     rendered = true;
                 }
             };

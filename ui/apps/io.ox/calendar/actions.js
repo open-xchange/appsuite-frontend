@@ -26,7 +26,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/list/perspective'], function (perspective) {
-                perspective.show(app);
+                perspective.show(app, { perspective: 'list' });
             });
         }
     });
@@ -35,7 +35,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/month/perspective'], function (perspective) {
-                perspective.show(app);
+                perspective.show(app, { perspective: 'month' });
             });
         }
     });
@@ -44,7 +44,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.days(7).show(app, true);
+                perspective.show(app, { perspective: ['week', 'week'], force: true });
             });
         }
     });
@@ -53,7 +53,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.days(5).show(app, true);
+                perspective.show(app, { perspective: ['week', 'workweek'], force: true });
             });
         }
     });
@@ -62,7 +62,7 @@ define('io.ox/calendar/actions',
         requires: true,
         action: function (app) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.days(1).show(app, true);
+                perspective.show(app, { perspective: ['week', 'day'], force: true });
             });
         }
     });
@@ -249,6 +249,7 @@ define('io.ox/calendar/actions',
     new ButtonGroup('io.ox/calendar/links/toolbar', {
         id: 'view',
         index: 200,
+        radio: true,
         label: gt('View')
     });
 
@@ -256,7 +257,8 @@ define('io.ox/calendar/actions',
         id: 'day',
         index: 100,
         label: gt('Day'),
-        cssClasses: 'btn btn-inverse',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:day' ? 'active' : ''),
+        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-day-view'
     }));
 
@@ -264,7 +266,8 @@ define('io.ox/calendar/actions',
         id: 'week',
         index: 200,
         label: gt('Workweek'),
-        cssClasses: 'btn btn-inverse',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:workweek' ? 'active' : ''),
+        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-week-view'
     }));
 
@@ -272,7 +275,8 @@ define('io.ox/calendar/actions',
         id: 'fullweek',
         index: 300,
         label: gt('Week'),
-        cssClasses: 'btn btn-inverse',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:week' ? 'active' : ''),
+        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
     }));
 
@@ -280,7 +284,8 @@ define('io.ox/calendar/actions',
         id: 'month',
         index: 400,
         label: gt('Month'),
-        cssClasses: 'btn btn-inverse',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'month' ? 'active' : ''),
+        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-month-view'
     }));
 
@@ -288,7 +293,8 @@ define('io.ox/calendar/actions',
         id: 'list',
         index: 500,
         label: gt('List'),
-        cssClasses: 'btn btn-inverse',
+        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
+        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-list-view'
     }));
 
