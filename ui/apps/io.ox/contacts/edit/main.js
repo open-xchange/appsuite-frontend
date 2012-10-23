@@ -35,7 +35,7 @@ define('io.ox/contacts/edit/main',
 
             win = ox.ui.createWindow({
                 name: 'io.ox/contacts/edit',
-                title: 'Edit Contact',
+                title: gt('Edit Contact'),
                 toolbar: true,
                 close: true
             });
