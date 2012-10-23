@@ -444,6 +444,17 @@ define('io.ox/contacts/api',
         return copymove(list, 'copy', targetFolderId);
     };
 
+    api.birthdays = function (start, end, columns) {
+        return http.GET({
+            module: 'contacts',
+            params: {
+                action: 'birthdays',
+                start: start,
+                end: end,
+                columns: columns || '500,501,502,503,504,505,511'
+            }
+        });
+    };
     return api;
 
 });
