@@ -283,9 +283,7 @@ define("io.ox/core/desktop",
 
             // update hash
             if (this.get('name') !== _.url.hash('app')) {
-                _.url.hash('folder', null);
-                _.url.hash('perspective', null);
-                _.url.hash('id', null);
+                _.url.hash({ folder: null, perspective: null, id: null });
             }
             if (this.has('name')) {
                 _.url.hash('app', this.get('name'));
@@ -319,10 +317,7 @@ define("io.ox/core/desktop",
                     self.destroy();
                 }
                 // update hash
-                _.url.hash('app', null);
-                _.url.hash('folder', null);
-                _.url.hash('perspective', null);
-                _.url.hash('id', null);
+                _.url.hash({ app: null, folder: null, perspective: null, id: null });
                 // don't save
                 clearInterval(self.get('saveRestorePointTimer'));
                 self.removeRestorePoint();

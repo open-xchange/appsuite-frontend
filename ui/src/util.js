@@ -119,55 +119,6 @@
         iOS: !!navigator.userAgent.match(/(iPad|iPhone|iPod)/i)
     };
 
-    _.url = {
-        /**
-         * @param name {string} [Name] of the query parameter
-         * @returns {Object} Value or all values
-         */
-        param: function (name) {
-            return name === undefined ? queryData : queryData[name];
-        },
-        /**
-         * @param {string} [name] Name of the hash parameter
-         * @returns {Object} Value or all values
-         */
-        hash: function (name, value) {
-            // since the hash might change we decode it for every request
-            // firefox has a bug and already decodes the hash string, so we use href
-            var hashData = location.href.split(/#/)[1] || '';
-            hashData = deserialize(
-                 hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
-            );
-            if (value !== undefined) {
-                if (value === null) {
-                    delete hashData[name];
-                } else {
-                    hashData[name] = value;
-                }
-                // update hash
-                var hashStr = _.serialize(hashData, '&', function (v) {
-                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
-                });
-                // be persistent
-                document.location.hash = hashStr;
-            } else {
-                return name === undefined ? hashData : hashData[name];
-            }
-        },
-        /**
-         * Redirect
-         */
-        redirect: function (path) {
-            location.href = _.url.get(path);
-        },
-
-        get: function (path) {
-            var l = location;
-            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
-        }
-    };
-
-
     // extend underscore utilities
     _.mixin({
 
@@ -199,7 +150,89 @@
          * @example
          * _.deserialize("a=1&b=2&c=text");
          */
-        deserialize: deserialize,
+        deserialize: deserialize
+    });
+
+    _.url = {
+        /**
+         * @param name {string} [Name] of the query parameter
+         * @returns {Object} Value or all values
+         */
+        param: function (name) {
+            return name === undefined ? queryData : queryData[name];
+        },
+        /**
+         * @param {string} [name] Name of the hash parameter
+         * @returns {Object} Value or all values
+         */
+        hash: (function () {
+
+            var hashData = {};
+
+            function decode() {
+                // since the hash might change we decode it for every request
+                // firefox has a bug and already decodes the hash string, so we use href
+                hashData = location.href.split(/#/)[1] || '';
+                hashData = deserialize(
+                     hashData.substr(0, 1) === "?" ? rot(decodeURIComponent(hashData.substr(1)), -1) : hashData
+                );
+            }
+
+            function set(name, value) {
+                if (value === null) {
+                    delete hashData[name];
+                } else {
+                    hashData[name] = value;
+                }
+            }
+
+            function update() {
+                // update hash
+                var hashStr = _.serialize(hashData, '&', function (v) {
+                    return v.replace(/\=/g, '%3D').replace(/\&/g, '%26');
+                });
+                // be persistent
+                document.location.hash = hashStr;
+            }
+
+            decode();
+            $(window).on('hashchange', decode);
+
+            return function (name, value) {
+                if (arguments.length === 0) {
+                    return hashData;
+                } else if (arguments.length === 1) {
+                    if (_.isString(name)) {
+                        return hashData[name];
+                    } else {
+                        _(name).each(function (value, name) {
+                            set(name, value);
+                        });
+                        update();
+                    }
+                } else if (arguments.length === 2) {
+                    set(name, value);
+                    update();
+                }
+            };
+        }()),
+
+        /**
+         * Redirect
+         */
+        redirect: function (path) {
+            location.href = _.url.get(path);
+        },
+
+        get: function (path) {
+            var l = location;
+            return l.protocol + "//" + l.host + l.pathname.replace(/\/[^\/]*$/, "/" + path);
+        }
+    };
+
+
+    // extend underscore utilities
+    _.mixin({
 
         rot: rot,
 
