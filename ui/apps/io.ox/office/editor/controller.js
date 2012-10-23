@@ -224,7 +224,7 @@ define('io.ox/office/editor/controller',
                 // numbering and bullets
                 'list/bullets': {
                     chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.ilvl !== -1; },
+                    get: function (attributes) { return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'bullet'); },
                     set: function (mode) {
                         if (mode) {
                             editor.createList('bullet');
@@ -236,7 +236,7 @@ define('io.ox/office/editor/controller',
                 'list/numbering': {
                     chain: 'paragraph/attributes',
                     get: function (attributes) {
-                        return attributes.ilvl !== -1;
+                        return attributes.ilvl !== null && attributes.ilvl !== -1 && editor.getLists().isDefaultList(attributes.numId, 'numbering');
                     },
                     set: function (mode) {
                         if (mode) {
@@ -248,7 +248,7 @@ define('io.ox/office/editor/controller',
                 },
                 'list/incindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== -1 && this.ilvl < 8; },
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl < 8; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },
@@ -260,7 +260,7 @@ define('io.ox/office/editor/controller',
                 },
                 'list/decindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== -1 && this.ilvl > 0; },
+                    enable: function (enabled) { return enabled && this.ilvl !== null && this.ilvl !== -1 && this.ilvl > 0; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },

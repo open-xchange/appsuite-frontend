@@ -193,6 +193,20 @@ define('io.ox/office/editor/format/lists',
             return newOperation;
         };
         /**
+         *
+         * @param {integer} numId
+         *  id of a list
+         * @param {String} type
+         *  either bullet or numbering
+         * @returns {bool}
+         *  determines whether a supplied id is points to the default list of bullets or numberings
+         *
+         */
+        this.isDefaultList = function (numId, type) {
+            return (type === 'bullet' && defaultBulletNumId === numId) ||
+                    (type === 'numbering' && defaultNumberingNumId === numId);
+        };
+        /**
          * Generates the numbering Label for the given paragraph
          *
          * @param listId identifier of the applied numbering definition
