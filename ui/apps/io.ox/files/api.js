@@ -58,7 +58,7 @@ define('io.ox/files/api',
             all: {
                 action: 'all',
                 folder: config.get('folder.infostore'),
-                columns: '20,1,702,703',
+                columns: '20,1,5,700,702,703',
                 sort: '700',
                 order: 'asc'
             },

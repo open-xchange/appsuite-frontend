@@ -173,10 +173,12 @@ define('io.ox/files/icons/perspective',
                 iconContainer,
                 start,
                 end,
+                drawIcon,
                 drawIcons,
                 redraw,
                 drawFirst,
                 allIds = [],
+                drawnCids = [],
                 displayedRows,
                 layout,
                 recalculateLayout,
@@ -192,15 +194,20 @@ define('io.ox/files/icons/perspective',
 
             dialog.delegate(iconview, '.file-icon', iconClick);
 
+            drawIcon = function (file) {
+                var node = $('<div>');
+                ext.point('io.ox/files/icons/file').invoke(
+                    'draw', node, new ext.Baton({ data: file, options: options })
+                );
+                return node;
+            };
+
             drawIcons = function (ids) {
                 return api.getList(ids).done(function (files) {
                     var nodes = [];
                     _(files).each(function (file) {
-                        var node = $('<div>');
-                        ext.point('io.ox/files/icons/file').invoke(
-                            'draw', node, new ext.Baton({ data: file, options: options })
-                        );
-                        nodes.push(node);
+                        nodes.push(drawIcon(file));
+                        drawnCids.push(_.cid(file));
                     });
                     iconContainer.find('.scroll-spacer').before(nodes);
                 });
@@ -244,7 +251,6 @@ define('io.ox/files/icons/perspective',
                 loadFiles(app)
                     .done(function (ids) {
                         lastTimestamp = _.now();
-                        //console.log('all', lastTimestamp);
                         iconview.idle();
                         displayedRows = layout.iconRows;
                         start = 0;
@@ -296,7 +302,8 @@ define('io.ox/files/icons/perspective',
                     });
                 },
                 stop: function () {
-                    drawFirst();
+                    //drawFirst();
+                    api.trigger('refresh.all');
                     win.idle();
                 }
             });
@@ -327,38 +334,90 @@ define('io.ox/files/icons/perspective',
                 shortcutPoint.deactivate();
             });
 
+            api.on("delete.version", function () {
+                // Close dialog after delete
+                dialog.close();
+            });
+
             api.on("refresh.all", function () {
                 if (!app.getWindow().search.active) {
                     api.getAll({ folder: app.folder.get() }).done(function (ids) {
 
-                        var hash = {}, oldIds, newIds, deleted, added;
+                        var hash = {}, oldhash = {}, oldIds, newIds, changed = [], deleted, added, indexPrev, indexPrevPosition, indexNextPosition;
+
+                        indexPrev = function (index, cid) {
+                            return _.indexOf(drawnCids, _.indexOf(index, cid) - 1);
+                        };
+
+                        indexPrevPosition = function (arr, key) {
+                            return arr[(_.indexOf(arr, key) - 1 + arr.length) % arr.length];
+                        };
+
+                        indexNextPosition = function (arr, key) {
+                            return arr[(_.indexOf(arr, key) + 1 + arr.length) % arr.length];
+                        };
+
+                        _(allIds).each(function (obj) {
+                            oldhash[_.cid(obj)] = obj;
+                        });
 
                         _(ids).each(function (obj) {
                             var cid = _.cid(obj);
                             hash[cid] = obj;
+
+                            // Update if cid still exists, has already been drawn and object was modified.
+                            // Note: If title is changed, last_modified date is not updated
+                            if (_.isObject(oldhash[cid]) && (_.indexOf(drawnCids, cid) !== -1) &&
+                               (obj.last_modified !== oldhash[cid].last_modified || obj.title !== oldhash[cid].title)) {
+                                changed.push(cid);
+                            }
                         });
 
                         oldIds = _.map(allIds, _.cid);
                         newIds = _.map(ids, _.cid);
+
                         deleted = _.difference(oldIds, newIds);
-                        added = _.difference(newIds, oldIds);
-                        allIds = ids;
+                        added   = _.difference(newIds, oldIds);
+
+                        allIds  = ids;
+
+                        _(changed).each(function (cid) {
+
+                            var data = hash[cid],
+                                prev = indexPrevPosition(newIds, cid),
+                                next = indexNextPosition(newIds, cid);
+
+                            iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
+
+                            if (indexPrev(newIds, cid)) {
+                                iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                            } else {
+                                end = end - 1;
+                            }
+
+                        });
 
                         _(deleted).each(function (cid) {
+
                             iconview.find('.file-icon[data-cid="' + cid + '"]').remove();
+                            end = end - 1;
+
                         });
 
                         _(added).each(function (cid) {
+
                             var data = hash[cid],
-                                prevArrayItem = newIds[(_.indexOf(newIds, cid) - 1 + newIds.length) % newIds.length],
-                                node = $('<div>');
-                            ext.point('io.ox/files/icons/file').invoke(
-                                'draw', node, new ext.Baton({ data: data, options: options })
-                            );
-                            iconview.find('.file-icon[data-cid="' + prevArrayItem + '"]').after(node);
+                                prev = indexPrevPosition(newIds, cid);
+                            if (indexPrev(newIds, cid)) {
+                                iconview.find('.file-icon[data-cid="' + prev + '"]').after(drawIcon(data));
+                                end = end + 1;
+                            }
+
                         });
 
-                        hash = ids = null;
+                        recalculateLayout();
+
+                        hash = oldhash = ids = null;
                     });
                 } else {
                     drawFirst();
