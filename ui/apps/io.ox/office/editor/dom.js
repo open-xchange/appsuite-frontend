@@ -1478,12 +1478,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                         nodeOptions.oldHeight = $(objectNode).height();
 
                         // collecting information about the handle node
-                        nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos)) ? true : false;
-                        nodeOptions.useY = (_.contains(['tl', 't', 'tr', 'br', 'b', 'bl'], pos)) ? true : false;
-                        nodeOptions.topSelection = (_.contains(['tl', 't', 'tr'], pos)) ? true : false;
-                        nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos)) ? true : false;
-                        nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos)) ? true : false;
-                        nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos)) ? true : false;
+                        nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos));
+                        nodeOptions.useY = (_.contains(['tl', 't', 'tr', 'br', 'b', 'bl'], pos));
+                        nodeOptions.topSelection = (_.contains(['tl', 't', 'tr'], pos));
+                        nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos));
+                        nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos));
+                        nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos));
 
                         mousedownhandler.call(context, event, nodeOptions);
                     });

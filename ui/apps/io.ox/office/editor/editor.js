@@ -2249,7 +2249,12 @@ define('io.ox/office/editor/editor',
                 deselectAllObjects();
             }
 
-            var startX, startY, endX, endY, currentX, currentY,
+            var startX,
+                startY,
+                endX,
+                endY,
+                currentX,
+                currentY,
                 nodeOptions = {};
 
             // collect selected objects
@@ -2295,7 +2300,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-            }, this);
+            }, self);
 
             // clear browser selection to hide the text cursor
             DOM.setBrowserSelection([]);
