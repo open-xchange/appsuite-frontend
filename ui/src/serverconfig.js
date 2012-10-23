@@ -5,7 +5,7 @@ define(function () {
 
         pageTitle: 'App Suite. ',
 
-        pageHeaderPrefix: 'Open-Xchange',
+        pageHeaderPrefix: 'OX',
         pageHeader: 'App Suite',
 
         productNameMail: 'OX Mail',
