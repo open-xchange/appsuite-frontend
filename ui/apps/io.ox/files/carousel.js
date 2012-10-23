@@ -137,6 +137,10 @@ define('io.ox/files/carousel',
                 self.pos.sliding = false;
             });
 
+            this.container.on('click', '.item', function (e) {
+                if (!self.pos.sliding) self.nextItem(e);
+            });
+
             this.prevControl.on('click', $.proxy(this.prevItem, this));
             this.nextControl.on('click', $.proxy(this.nextItem, this));
             this.closeControl.on('click', $.proxy(this.close, this));

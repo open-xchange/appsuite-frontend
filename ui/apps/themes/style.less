@@ -430,7 +430,6 @@
     z-index: 20;
     
     font-size: @window-head-font-size;
-    color: @head-color;
 
     .user-select(none);
     .vertical-gradient(@window-head-top, @window-head-bottom);
@@ -453,13 +452,12 @@
 .toolbar-button {
 
     font-size: 26px;
-    line-height: 40px;
-    margin-bottom: 10px;
+    line-height: 52px;
     
     & > a {
         width: 100%;
         text-align: center;
-        height: 40px;
+        height: 52px;
         display: inline-block;
         outline: 0;
     }
@@ -1524,6 +1522,8 @@ div.external-user-image {
     cursor: default;
     border-bottom: 1px solid #ddd;
     margin-bottom: 6px;
+    max-width: 200px;
+    .ellipsis();
 }
 
 /** BOOTSTRAP FIXES **/
@@ -1539,15 +1539,6 @@ div.external-user-image {
 
 @media (max-width: 900px) {
 
-    // SMALL SCREENS
-    .window-head.css-table { display: block; }
-    .window-head .css-table-row { display: block; position: absolute; top: 5px; right: 0; bottom: 10px; left: 0; }
-    .window-head .css-table-cell:nth-child(1) { display: block; position: absolute; top: 0; right: 50%; bottom: 50%; left: 0; width: auto; }
-    .window-head .css-table-cell:nth-child(3) { display: block; position: absolute; top: 0; right: 0; bottom: 50%; left: 50%; width: auto; }
-    .window-head .css-table-cell:nth-child(2) { display: block; position: absolute; top: 50%; right: 0; bottom: 0; left: 0; width: auto; text-align: left; padding-left: 13px; }
-    .window-head { height: 80px; }
-    .window-body { top: 80px; }
-    
     .io-ox-sidepopup.right, .io-ox-sidepopup.left {
         left: 0; right: 0;
         border-left: 0px none; border-right: 0px none;
@@ -1559,11 +1550,6 @@ div.external-user-image {
     .leftside { width: 250px; }
     .rightside { left: 250px; }
     .default-content-padding { padding: 26px 13px 26px 13px; }
-}
-
-@media screen and (min-width: 900px) and (min-height: 800px) {
-    .window-head { height: 59px; }
-    .window-body { top: 60px; }
 }
 
 @-webkit-keyframes slideleft {
@@ -1632,31 +1618,3 @@ div.external-user-image {
     #io-ox-notifications-overlay { right: 320px; }
 }
 
-// Helper classes for win.nodes.body responsiveness
-// If you want to lose the window header and have the window body snap to
-// the top on e.g. tablets and phones use:
-// win.nodes.body.addClass("full-height-tablet full-height-phone");
-// win.nodes.head.addClass("hidden-tablet hidden-phone");
-
-
-.window-body.full-height-desktop {
-  top: 0px !important;
-}
-
-@media (min-width: 768px) and (max-width: 979px) {
-
-  .window-body.full-height-tablet {
-     top: 0px !important;
-  }
-
-}
-
-@media (max-width: 767px) {
-  .window-body.full-height-tablet {
-    top: 0px !important;
-  }
-
-  .window-body.full-height-phone {
-    top: 0px !important;
-  }
-}

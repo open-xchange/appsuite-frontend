@@ -20,24 +20,28 @@ define("io.ox/files/actions",
 
     'use strict';
 
-    var Action = links.Action, Link = links.XLink, Button = links.Button, Dropdown = links.Dropdown, ButtonGroup = links.ButtonGroup;
+    var Action = links.Action,
+        ActionGroup = links.ActionGroup,
+        ActionLink = links.ActionLink,
+
+        POINT = 'io.ox/files';
 
     // actions
 
 	new Action('io.ox/files/actions/switch-to-list-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/files/list/perspective'], function (perspective) {
-                perspective.show(app, { perspective: 'list' });
+                perspective.show(baton.app, { perspective: 'list' });
             });
         }
     });
 
     new Action('io.ox/files/actions/switch-to-icon-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/files/icons/perspective'], function (perspective) {
-                perspective.show(app, { perspective: 'icons' });
+                perspective.show(baton.app, { perspective: 'icons' });
             });
         }
     });
@@ -45,11 +49,11 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/upload', {
         id: 'upload',
         requires: 'create',
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/files/views/create'], function (create) {
-                create.show(app, {
+                create.show(baton.app, {
                     uploadedFile: function (data) {
-                        app.invalidateFolder(data);
+                        baton.app.invalidateFolder(data);
                     }
                 });
             });
@@ -58,9 +62,9 @@ define("io.ox/files/actions",
 
     new Action('io.ox/files/actions/share', {
         id: 'share',
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/publications/wizard'], function (wizard) {
-                wizard.oneClickAdd(app.folder.get());
+                wizard.oneClickAdd(baton.app.folder.get());
             });
         }
     });
@@ -80,17 +84,17 @@ define("io.ox/files/actions",
 
     new Action('io.ox/files/actions/editor-new', {
         id: 'editor-new',
-        action: function (app) {
+        action: function (baton) {
             ox.launch('io.ox/editor/main').done(function () {
-                this.create({ folder: app.folder.get() });
+                this.create({ folder: baton.app.folder.get() });
             });
         }
     });
 
     new Action('io.ox/files/actions/office/newdocument', {
         id: 'officenew',
-        action: function (app) {
-            ox.launch('io.ox/office/editor/main', { file: 'new', folder_id: app.folder.get() });
+        action: function (baton) {
+            ox.launch('io.ox/office/editor/main', { file: 'new', folder_id: baton.app.folder.get() });
         }
     });
 
@@ -259,69 +263,63 @@ define("io.ox/files/actions",
         }
     });
 
-    new ButtonGroup('io.ox/files/links/toolbar', {
-        id: 'buttongroup',
+    // groups
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'default',
         index: 100,
-        label: gt('View')
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
     });
 
-    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
-        index: 50,
-        id: "officenew",
-        label: gt("New Document"),
-        cssClasses: 'btn btn-inverse',
-        ref: "io.ox/files/actions/office/newdocument"
-    }));
-
-    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/default', {
         index: 100,
         id: "upload",
-        label: gt("Upload"),
-        cssClasses: 'btn btn-primary',
-        ref: "io.ox/files/actions/upload"
-    }));
-
-    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
-        index: 200,
-        id: "share",
-        label: gt("Share"),
-        cssClasses: 'btn btn-inverse',
-        ref: "io.ox/files/actions/share"
-    }));
-
-    ext.point('io.ox/files/links/toolbar/buttongroup').extend(new links.Button({
-        index: 300,
-        id: "editor-new",
-        label: gt("Pad!"),
-        cssClasses: 'btn btn-inverse',
-        ref: "io.ox/files/actions/editor-new"
-    }));
-
-    // links
-	new ButtonGroup('io.ox/files/links/toolbar', {
-        id: 'view',
-        index: 400,
-        radio: true,
-        label: gt('View')
+        label: gt("Upload new file"),
+        ref: POINT + '/actions/upload'
     });
 
-    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
-        id: 'list',
+    new ActionLink(POINT + '/links/toolbar/default', {
         index: 200,
-        label: gt('List'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
-        groupButton: true,
-        ref: 'io.ox/files/actions/switch-to-list-view'
-    }));
+        id: "officenew",
+        label: gt("New office document"),
+        ref: "io.ox/files/actions/office/newdocument"
+    });
 
-    ext.point('io.ox/files/links/toolbar/view').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/default', {
+        index: 300,
+        id: "share",
+        label: gt("Share current folder"),
+        ref: "io.ox/files/actions/share"
+    });
+
+    // VIEWS
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'view',
+        index: 150,
+        label: gt('View'),
+        icon: function () {
+            return $('<i class="icon-eye-open">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'icons',
         index: 100,
         label: gt('Icons'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'icons' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/files/actions/switch-to-icon-view'
-    }));
+    });
+
+    new ActionLink(POINT + '/links/toolbar/view', {
+        id: 'list',
+        index: 200,
+        label: gt('List'),
+        ref: 'io.ox/files/actions/switch-to-list-view'
+    });
+
+    // INLINE
 
     ext.point('io.ox/files/links/inline').extend(new links.Link({
         id: "editor",
@@ -506,7 +504,6 @@ define("io.ox/files/actions",
         action: function (e) {
             var baton = e.baton;
             require(['io.ox/files/carousel'], function (carousel) {
-                var app = baton.data.app;
                 carousel.init({
                     fullScreen: false,
                     list: e.allIds,
@@ -526,7 +523,6 @@ define("io.ox/files/actions",
         action: function (e) {
             var baton = e.baton;
             require(['io.ox/files/carousel'], function (carousel) {
-                var app = baton.data.app;
                 carousel.init({
                     fullScreen: true,
                     list: e.allIds,
@@ -546,7 +542,6 @@ define("io.ox/files/actions",
         action: function (e) {
             var baton = e.baton;
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                var app = baton.data.app;
                 mediaplayer.init({
                     list: e.allIds,
                     app: baton.app,
@@ -564,10 +559,9 @@ define("io.ox/files/actions",
                 return memo || (new RegExp(pattern, 'i')).test(obj.filename);
             }, false);
         },
-        action: function (idk, e) {
+        action: function (e) {
             var baton = e.baton;
             require(['io.ox/files/mediaplayer'], function (mediaplayer) {
-                var app = baton.data.app;
                 mediaplayer.init({
                     list: e.allIds,
                     app: baton.app,

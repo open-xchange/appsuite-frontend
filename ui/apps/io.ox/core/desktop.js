@@ -1056,8 +1056,7 @@ define("io.ox/core/desktop",
                     )
                     // capture controller events
                     .on('controller:quit', function () {
-                        console.log('geil!', this);
-                        if (win.app) win.app.quit();
+                        if (win.app) { win.app.quit(); }
                     })
                 );
 

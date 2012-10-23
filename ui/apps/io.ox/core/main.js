@@ -306,7 +306,8 @@ define("io.ox/core/main",
                     return require(["io.ox/launchpad/main"], function (m) {
                         m.show();
                     });
-                });
+                })
+                .css('width', '26px'); // to match side navigation
             }
         });
 

@@ -322,9 +322,9 @@ define('io.ox/core/commons-folderview',
         sidepanel = baton.$.sidepanel;
         container = baton.$.container;
 
-        new links.ButtonGroup(TOGGLE, {
+        new links.ActionGroup(TOGGLE, {
             id: 'folder',
-            index: 110,
+            index: 200,
             icon: function () {
                 return $('<i class="icon-folder-close">');
             }

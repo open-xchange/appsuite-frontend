@@ -262,6 +262,13 @@ define("io.ox/core/extPatterns/links",
                     ul = $('<ul class="dropdown-menu dropdown-right-side">')
                 )
             );
+            // add label?
+            if (extension.label) {
+                console.log('label', extension.label);
+                ul.append(
+                    $('<li class="dropdown-header">').text(extension.label)
+                );
+            }
             // get links
             return getLinks(extension, new Collection(baton), ul, baton, args).done(function (links) {
                 if (links.length > 1) {
