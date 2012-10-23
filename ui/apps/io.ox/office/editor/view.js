@@ -521,10 +521,10 @@ define('io.ox/office/editor/view',
             .addSeparator()
             .addGroup('paragraph/fillcolor', new ColorChooser(editor.getThemes(), 'fill', { tooltip: gt('Paragraph Fill Color'), label: '==' }))
             .addSeparator()
-            .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets'), toggle: true })
-            .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering'), toggle: true })
-            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Numbering'), toggle: false })
-            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Numbering'), toggle: false });
+            .addButton('list/bullets', { icon: 'icon-io-ox-bullets', tooltip: gt('Bullets On/Off'), toggle: true })
+            .addButton('list/numbering', { icon: 'icon-io-ox-numbering', tooltip: gt('Numbering On/Off'), toggle: true })
+            .addButton('list/decindent', { icon: 'icon-io-ox-num-dec-indent', tooltip: gt('Demote one level'), toggle: false })
+            .addButton('list/incindent', { icon: 'icon-io-ox-num-inc-indent', tooltip: gt('Promote one level'), toggle: false });
 
         createToolBar('table', { label: gt('Table') })
             .addGroup('table/insert', new TableSizeChooser())
