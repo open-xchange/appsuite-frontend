@@ -224,31 +224,31 @@ define('io.ox/office/editor/controller',
                 // numbering and bullets
                 'list/bullets': {
                     chain: 'paragraph/attributes',
-                    get: function (attributes) { return attributes.ilvl !== undefined; },
+                    get: function (attributes) { return attributes.ilvl !== -1; },
                     set: function (mode) {
                         if (mode) {
                             editor.createList('bullet');
                         } else {
-                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
                         }
                     }
                 },
                 'list/numbering': {
                     chain: 'paragraph/attributes',
                     get: function (attributes) {
-                        return attributes.ilvl !== undefined;
+                        return attributes.ilvl !== -1;
                     },
                     set: function (mode) {
                         if (mode) {
                             editor.createList('numbering');
                         } else {
-                            editor.setAttributes('paragraph', { numId: undefined, ilvl: undefined });
+                            editor.setAttributes('paragraph', { numId: -1, ilvl: -1 });
                         }
                     }
                 },
                 'list/incindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl < 8; },
+                    enable: function (enabled) { return enabled && this.ilvl !== -1 && this.ilvl < 8; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },
@@ -260,7 +260,7 @@ define('io.ox/office/editor/controller',
                 },
                 'list/decindent': {
                     chain: 'paragraph/attributes',
-                    enable: function (enabled) { return enabled && this.ilvl !== undefined && this.ilvl > 0; },
+                    enable: function (enabled) { return enabled && this.ilvl !== -1 && this.ilvl > 0; },
                     get: function (attributes) {
                         this.ilvl = attributes.ilvl;
                     },

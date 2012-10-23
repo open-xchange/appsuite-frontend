@@ -1521,7 +1521,24 @@ define('io.ox/office/editor/editor',
                 else if (c === 'xxxxxxx') {
                     event.preventDefault();
                 }
+            } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
+                // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
+                if (!selection.hasRange() &&
+                        selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraphs)) {
+                    var ilvl = self.getAttributes('paragraph').ilvl;
+                    if (ilvl !== -1) {
+                        if (!event.shiftKey && ilvl < 8) {
+                            ilvl += 1;
+                            self.setAttribute('paragraph', 'ilvl', ilvl);
+                        } else if (event.shiftKey && ilvl > 0) {
+                            ilvl -= 1;
+                            self.setAttribute('paragraph', 'ilvl', ilvl);
+                        }
+                    }
+                    event.preventDefault();
+                }
             }
+
             // DEBUG STUFF
             if (self.getParagraphCount() !== editdiv.children().size()) {
                 Utils.warn('Editor.processKeyDown(): paragraph count invalid!');
