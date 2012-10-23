@@ -57,7 +57,7 @@ define('io.ox/calendar/month/perspective',
         lastWeek: 0,        // timestamp of the last week
         initLoad: 20,       // amount of preloaded weeks
         updateCount: 6,     // amount of weeks to be loaded on scroll events
-        scrollOffset: 10,   // offset space to trigger update event on scroll stop
+        scrollOffset: 250,   // offset space to trigger update event on scroll stop
 
         collections: {},
 
@@ -129,7 +129,7 @@ define('io.ox/calendar/month/perspective',
         getFirsts: function (e) {
             this.tops = {};
             var self = this,
-                top = this.scrollTop() - 150; /* cheap trick */
+                top = this.scrollTop() - 200; /* cheap trick */
             $('.first', this.pane).each(function () {
                 var spDate = $(this).attr('date').split("-");
                 self.tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
