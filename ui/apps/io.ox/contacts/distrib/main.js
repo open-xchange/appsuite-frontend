@@ -95,11 +95,13 @@ define('io.ox/contacts/distrib/main',
             var considerSaved = false;
 
             return contactModel.factory.realm("edit").get(obj).done(function (data) {
+
+                // actually data IS a model
                 model = data;
+
                 // set state
-                app.setState({ folder: data.folder_id, id: data.id });
-                // set title, init model/view
-                win.setTitle(gt('Edit distribution list'));
+                app.setState({ folder: model.get('folder_id'), id: model.get('id') });
+
                 view = new ContactCreateDistView({ model: model });
 
                 view.on('save:start', function () {
@@ -111,7 +113,6 @@ define('io.ox/contacts/distrib/main',
                 });
 
                 view.on('save:success', function () {
-
                     considerSaved = true;
                     win.idle();
                     app.quit();

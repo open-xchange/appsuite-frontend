@@ -26,9 +26,9 @@
 	overflow: hidden;
 }
 
-.create-distributionlist .btn.btn-primary {
-	margin-top: 0px;
+.create-distributionlist .controls .btn {
 	float: right;
+	margin-left: 13px;
 }
 
 .create-distributionlist .item-list {

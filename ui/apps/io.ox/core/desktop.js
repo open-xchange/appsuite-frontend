@@ -1054,6 +1054,11 @@ define("io.ox/core/desktop",
                         // window BODY
                         win.nodes.body = $('<div class="window-body">')
                     )
+                    // capture controller events
+                    .on('controller:quit', function () {
+                        console.log('geil!', this);
+                        if (win.app) win.app.quit();
+                    })
                 );
 
             // add default css class
