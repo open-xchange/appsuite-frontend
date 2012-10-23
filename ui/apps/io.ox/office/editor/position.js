@@ -2233,6 +2233,31 @@ define('io.ox/office/editor/position',
     };
 
     /**
+     * Calculating the first text node position in a paragraph.
+     *
+     * @param {HTMLElement|jQuery} paragraph
+     *  A paragraph node. If this object is a jQuery collection, uses the first
+     *  DOM node it contains.
+     *
+     * @returns {Number}
+     *  The position of the first text node in the passed paragraph.
+     */
+    Position.getFirstTextNodePositionInParagraph = function (paragraph) {
+
+        var counter = 0;
+
+        Utils.iterateDescendantNodes(paragraph, function (node) {
+            if (DOM.isFloatingObjectNode(node)) {
+                counter += 1;
+            } else if (DOM.isPortionSpan(node)) {
+                return Utils.BREAK;
+            }
+        }, undefined, { children: true });
+
+        return counter;
+    };
+
+    /**
      * Counting the number of floated elements at the beginning of a paragraph.
      *
      * @param {HTMLElement|jQuery} paragraph
