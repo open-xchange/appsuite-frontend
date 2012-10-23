@@ -457,7 +457,7 @@ function (ext, userAPI, date, tasks, control, gt, dialogs, keychain, settings) {
                         $('<span class="io-ox-portal-login">').text(' / Logged in as ' + ox.user + '')
                     ));
                 } finally {
-                    userAPI.getName(ox.user_id).done(function (name) {
+                    userAPI.getGreeting(ox.user_id).done(function (name) {
                         node.find('.io-ox-portal-greeting').text(getGreetingPhrase(name));
                         node = null;
                     });

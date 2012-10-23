@@ -553,7 +553,7 @@ define('io.ox/office/editor/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
-                close: true,
+                classic: true,
                 search: true,
                 toolbar: true
             });

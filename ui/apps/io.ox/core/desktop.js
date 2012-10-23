@@ -636,9 +636,7 @@ define("io.ox/core/desktop",
 
             scrollTo = function (node, cont) {
 
-                var children = pane.find(".window-container-center"),
-                    center = node.find(".window-container-center").show(),
-                    index = node.data("index") || 0,
+                var index = node.data("index") || 0,
                     left = (-index * 101),
                     done = function () {
                         // use timeout for smoother animations
@@ -1012,15 +1010,14 @@ define("io.ox/core/desktop",
         return function (options) {
 
             var opt = $.extend({
-                id: "window-" + guid,
-                name: "",
-                width: 0,
-                title: "",
-                titleWidth: '300px',
+                chromeless: false,
+                classic: false,
+                id: 'window-' + guid,
+                name: '',
                 search: false,
+                title: '',
                 toolbar: false,
-                settings: false,
-                chromeless: false
+                width: 0
             }, options);
 
             // get width
@@ -1059,6 +1056,9 @@ define("io.ox/core/desktop",
                         if (win.app) { win.app.quit(); }
                     })
                 );
+
+            // classic window header?
+            if (opt.classic) win.nodes.outer.addClass('classic');
 
             // add default css class
             if (opt.name) {

@@ -245,7 +245,33 @@ define("io.ox/core/extPatterns/links",
         );
     };
 
-    var ButtonGroup = (function () {
+    var drawButtonGroup = function (options, context) {
+        var args = $.makeArray(arguments),
+            $parent = $("<div>").addClass('btn-group')
+                .css({ display: 'inline-block' })
+                .addClass(options.classes)
+                .attr('data-toggle', (options.radio ? 'buttons-radio' : ''))
+                .appendTo(this);
+        // create & add node first, since the rest is async
+        var node = $parent;
+        drawLinks(options, new Collection(context), node, context, args, false);
+        return $parent;
+    };
+
+    var ButtonGroup = function (id, options) {
+        var o = options || {};
+        o.ref = id + '/' + o.id;
+        ext.point(id).extend(
+            _.extend({
+                ref: o.ref,
+                draw: function (context) {
+                    drawButtonGroup.call(this, o, context);
+                }
+            }, o)
+        );
+    };
+
+    var ActionGroup = (function () {
 
         function preventDefault(e) {
             e.preventDefault();
@@ -293,7 +319,7 @@ define("io.ox/core/extPatterns/links",
             return $('<i class="icon-magic">');
         }
 
-        return function ButtonGroup(id, extension) {
+        return function ActionGroup(id, extension) {
             extension = extension || {};
             extension = _.extend({
                 ref: id + '/' + (extension.id || 'default'),
@@ -320,6 +346,6 @@ define("io.ox/core/extPatterns/links",
         DropdownLinks: DropdownLinks,
         Dropdown: Dropdown,
         ButtonGroup: ButtonGroup,
-        ActionGroup: ButtonGroup
+        ActionGroup: ActionGroup
     };
 });
