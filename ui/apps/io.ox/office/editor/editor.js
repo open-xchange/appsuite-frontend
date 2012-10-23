@@ -3050,7 +3050,7 @@ define('io.ox/office/editor/editor',
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if (DOM.isFloatedObjectNode(child)) {
+                    if (DOM.isFloatingObjectNode(child)) {
 
                         var localPos = Position.getStartOfParagraphChildNode(child),
                             source = _.copy(position, true),
