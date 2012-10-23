@@ -24,7 +24,6 @@ define('io.ox/mail/actions',
 
     'use strict';
 
-
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
 

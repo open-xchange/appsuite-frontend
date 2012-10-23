@@ -19,11 +19,12 @@ define("io.ox/tasks/actions",
      'io.ox/core/notifications'], function (ext, util, links, gt, notifications) {
 
     "use strict";
-    var Action = links.Action;
 
+    //  actions
+    var Action = links.Action, Button = links.Button,
+        ActionGroup = links.ActionGroup, ActionLink = links.ActionLink;
 
-    new Action('io.ox/tasks/actions/newtask', {
-        id: 'newtask',
+    new Action('io.ox/tasks/actions/create', {
         action: function (app) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch();
@@ -32,7 +33,6 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/edit', {
-        id: 'edit',
         action: function (data) {
             require(['io.ox/tasks/edit/main'], function (edit) {
                 edit.getApp().launch().done(function () {
@@ -43,7 +43,6 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/delete', {
-        id: 'delete',
         action: function (data) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
                 //build popup
@@ -76,7 +75,6 @@ define("io.ox/tasks/actions",
     });
 
     new Action('io.ox/tasks/actions/done', {
-        id: 'done',
         action: function (data) {
             require(['io.ox/tasks/api'], function (api) {
                 api.update(data.last_modified, data.id, {status: 3, percent_completed: 100}, data.folder_id)
@@ -177,16 +175,22 @@ define("io.ox/tasks/actions",
         }
     });
 
-    //extension points
     // toolbar
 
-    ext.point('io.ox/tasks/links/toolbar').extend(new links.Button({
+    new links.ActionGroup('io.ox/tasks/links/toolbar', {
+        id: 'default',
         index: 100,
-        id: 'newtask',
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
+    });
+
+    new links.ActionLink('io.ox/tasks/links/toolbar/default', {
+        index: 100,
+        id: 'create',
         label: gt('Create new task'),
-        cssClasses: 'btn btn-primary',
-        ref: 'io.ox/tasks/actions/newtask'
-    }));
+        ref: 'io.ox/tasks/actions/create'
+    });
 
     //inline
     ext.point('io.ox/tasks/links/inline').extend(new links.Link({

@@ -1131,7 +1131,7 @@ define("io.ox/core/desktop",
                     },
                     search: function (e) {
                         e.stopPropagation();
-                        if ($(this).val() === "") {
+                        if ($(this).val() === '') {
                             $(this).blur();
                             win.search.close();
                         }
@@ -1145,7 +1145,6 @@ define("io.ox/core/desktop",
                                 triggerSearch(win.search.previous = win.search.query);
                             }
                         } else if (win.search.previous !== '') {
-                            win.search.previous = '';
                             win.search.close();
                         }
                     }
