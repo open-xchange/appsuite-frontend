@@ -1523,7 +1523,6 @@ define('io.ox/office/editor/editor',
                 }
             } else if (event.keyCode === KeyCodes.TAB && !event.ctrlKey && !event.metaKey) {
                 // (shift)Tab: Change list indent (if in list) when selection is at first position in paragraph
-                //var position = _.copy(selection.startPaM.oxoPosition, true);
                 var paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
@@ -1602,11 +1601,12 @@ define('io.ox/office/editor/editor',
             else {
 
                 if (event.keyCode === KeyCodes.ENTER) {
-
+                    var hasSelection = selection.hasRange();
                     self.deleteSelected(selection);
                     var startPosition = _.copy(selection.startPaM.oxoPosition, true),
                         lastValue = selection.startPaM.oxoPosition.length - 1;
 
+                    //at first check if a paragraph has to be inserted before the current table
                     if ((lastValue >= 4) &&
                         (Position.isPositionInTable(paragraphs, [0])) &&
                         _(startPosition).all(function (value) { return (value === 0); })) {
@@ -1614,11 +1614,20 @@ define('io.ox/office/editor/editor',
                         paragraphs = editdiv.children();
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
-                        self.splitParagraph(startPosition);
-                        // TODO / TBD: Should all API / Operation calls return the new position?!
-                        var lastValue = selection.startPaM.oxoPosition.length - 1;
-                        selection.startPaM.oxoPosition[lastValue - 1] += 1;
-                        selection.startPaM.oxoPosition[lastValue] = 0;
+                        // demote or end numbering instead of creating a new paragraph
+                        var ilvl = self.getAttributes('paragraph').ilvl;
+                        var paragraphLength = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
+                        if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
+                            ilvl--;
+                            self.setAttribute('paragraph', 'ilvl', ilvl);
+                        }
+                        else {
+                            self.splitParagraph(startPosition);
+                            // TODO / TBD: Should all API / Operation calls return the new position?!
+                            var lastValue = selection.startPaM.oxoPosition.length - 1;
+                            selection.startPaM.oxoPosition[lastValue - 1] += 1;
+                            selection.startPaM.oxoPosition[lastValue] = 0;
+                        }
                     }
                     selection.endPaM = _.copy(selection.startPaM, true);
                     event.preventDefault();
