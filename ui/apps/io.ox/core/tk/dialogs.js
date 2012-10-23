@@ -230,7 +230,7 @@ define("io.ox/core/tk/dialogs", ['io.ox/core/event', 'gettext!io.ox/core'], func
             }
 
             var dim = {
-                width: parseInt(o.width || nodes.popup.width(), 10),
+                width: parseInt(o.width || nodes.popup.width() * 1.1, 10),
                 height: parseInt(o.height || nodes.popup.height(), 10)
             };
 

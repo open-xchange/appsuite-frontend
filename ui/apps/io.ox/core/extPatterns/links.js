@@ -84,24 +84,23 @@ define("io.ox/core/extPatterns/links",
         _.extend(this, options);
 
         var self = this,
+
             click = function (e) {
                 e.preventDefault();
-                var node = $(this),
-                    context = node.data("context"),
-                    ref = node.data("ref");
-                actions.invoke(ref, self, context);
+                var extension = e.data.extension;
+                actions.invoke(extension.ref, extension, e.data.baton);
             };
 
-        this.draw = function (context) {
+        this.draw = function (baton) {
 
             this.append(
-                $("<button>", { "data-action": self.id, tabIndex: self.tabIndex || '' })
-                .addClass(self.cssClasses || 'btn')
+                $('<a href="#" class="btn">')
+                .attr({ "data-action": self.id, tabIndex: self.tabIndex })
+                .addClass(self.cssClasses)
                 .css(self.css || {})
-                .data({ ref: self.ref, context: context })
-                .click(click)
+                .on('click', { extension: self, baton: baton }, click)
+                .append(_.isString(self.label) ? $.txt(self.label) : $())
                 .append(_.isString(self.icon) ? $('<i>').addClass(self.icon) : $())
-                .append(_.isUndefined(self.label) ? $() : $('<span>').text(String(self.label)))
             );
         };
     };
@@ -257,12 +256,12 @@ define("io.ox/core/extPatterns/links",
             this.append(
                 $('<div class="toolbar-button dropdown">').append(
                     a = $('<a href="#" data-toggle="dropdown">')
-                        .attr('data-ref', extension.ref).addClass(extension.addClass),
+                        .attr('data-ref', extension.ref)
+                        .addClass(extension.addClass)
+                        .append(extension.icon()),
                     ul = $('<ul class="dropdown-menu dropdown-right-side">')
                 )
             );
-            // add icon
-            a.append(extension.icon());
             // get links
             return getLinks(extension, new Collection(baton), ul, baton, args).done(function (links) {
                 if (links.length > 1) {
@@ -284,10 +283,15 @@ define("io.ox/core/extPatterns/links",
             });
         }
 
+        function icon() {
+            return $('<i class="icon-heart">');
+        }
+
         return function ButtonGroup(id, extension) {
             extension = extension || {};
             extension = _.extend({
                 ref: id + '/' + (extension.id || 'default'),
+                icon: icon,
                 draw: function (baton) {
                     draw.call(this, extension, baton);
                 }

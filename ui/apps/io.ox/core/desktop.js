@@ -165,9 +165,8 @@ define("io.ox/core/desktop",
                                     if (grid && grid.prop('folder') !== folder) {
                                         grid.clear();
                                         grid.prop('folder', folder);
-                                        if (win && win.getSearchQuery() !== '') {
-                                            win.setSearchQuery('');
-                                            grid.setMode('all');
+                                        if (win && win.search.active) {
+                                            win.search.close();
                                         } else {
                                             grid.refresh();
                                         }
@@ -722,23 +721,6 @@ define("io.ox/core/desktop",
                     }
                 });
 
-                ext.point(name + '/window-controls').extend({
-                    id: 'default',
-                    draw: function () {
-                        return $('<div class="window-controls">').append(
-                            // fullscreen
-                            this.fullscreenButton = $('<div class="window-control pull-right">').hide()
-                                .append($('<button class="btn btn-inverse pull-right"><i class="icon-resize-full icon-white"></button>')),
-                                // settings
-                            this.settingsButton = $('<div class="window-control pull-right">').hide()
-                                .text(_.noI18n('\u270E')),
-                            // close
-                            this.closeButton = $('<div class="window-control pull-right">').hide()
-                                .append($('<a class="close">').text(_.noI18n('\u00D7')))
-                        );
-                    }
-                });
-
                 ext.point(name + '/window-head').extend({
                     id: 'default',
                     draw: function () {
@@ -746,25 +728,6 @@ define("io.ox/core/desktop",
                             this.toolbar = ext.point(name + '/window-toolbar')
                                 .invoke('draw', this).first().value() || $()
                         );
-//                        return this.head.append(
-//                            $('<div class="css-table-row">').append(
-//                                // title
-//                                $('<div class="css-table-cell cell-30">').append(
-//                                    this.title = ext.point(name + '/window-title')
-//                                        .invoke('draw', this).first().value() || $()
-//                                ),
-//                                // toolbar
-//                                $("<div class='css-table-cell cell-40 cell-center'>").append(
-//                                    this.toolbar = ext.point(name + '/window-toolbar')
-//                                        .invoke('draw', this).first().value() || $()
-//                                ),
-//                                // controls
-//                                $("<div class='css-table-cell cell-30 cell-right'>").append(
-//                                    this.controls = ext.point(name + '/window-controls')
-//                                        .invoke('draw', this).first().value() || $()
-//                                )
-//                            )
-//                        );
                     }
                 });
 
@@ -772,7 +735,10 @@ define("io.ox/core/desktop",
                     id: 'default',
                     draw: function () {
                         return this.body.append(
-                            this.main = $('<div class="window-content">')
+                            // default perspective
+                            this.main = $('<div class="abs window-content">'),
+                            // search area
+                            this.search = $('<div class="window-search">')
                         );
                     }
                 });
@@ -957,13 +923,52 @@ define("io.ox/core/desktop",
                     return this;
                 };
 
-                this.getSearchQuery = function () {
-                    return $.trim(this.nodes.searchField.val());
-                };
+                this.search = {
 
-                this.setSearchQuery = function (q) {
-                    this.nodes.searchField.val(q);
-                    return this;
+                    active: false,
+                    query: '',
+                    previous: '',
+
+                    open: function () {
+                        if (!this.active) {
+                            self.nodes.body.addClass('search-open');
+                            self.nodes.searchField.focus();
+                            this.active = true;
+                        }
+                        return this;
+                    },
+
+                    close: function () {
+                        if (this.active) {
+                            self.nodes.body.removeClass('search-open');
+                            this.active = false;
+                            self.nodes.searchField.val('');
+                            if (this.previous !== '') {
+                                self.trigger('cancel-search', this.query = this.previous = '');
+                            }
+                        }
+                        return this;
+                    },
+
+                    toggle: function () {
+                        if (this.active) { this.close(); } else { this.open(); }
+                        return this;
+                    },
+
+                    getQuery: function () {
+                        return $.trim(self.nodes.searchField.val());
+                    },
+
+                    setQuery: function (query) {
+                        self.nodes.searchField.val(this.query = query);
+                        return this;
+                    },
+
+                    start: function (query) {
+                        this.open().setQuery(query);
+                        self.trigger('search', query);
+                        return this;
+                    }
                 };
 
                 this.addClass = function () {
@@ -987,9 +992,7 @@ define("io.ox/core/desktop",
 
                 this.addPerspective = function (id) {
                     if (this.nodes[id] === undefined) {
-                        var node = $("<div>")
-                            .addClass("window-content").hide()
-                            .appendTo(this.nodes.body);
+                        var node = $('<div class="abs window-content">').hide().appendTo(this.nodes.body);
                         return (this.nodes[id] = perspectives[id] = node);
                     }
                 };
@@ -1049,9 +1052,7 @@ define("io.ox/core/desktop",
                         // window HEAD
                         win.nodes.head = $('<div class="window-head">'),
                         // window BODY
-                        win.nodes.body = $('<div class="window-body">'),
-                        // window SEARCH
-                        win.nodes.search = $('<div class="window-search">')
+                        win.nodes.body = $('<div class="window-body">')
                     )
                 );
 
@@ -1070,47 +1071,26 @@ define("io.ox/core/desktop",
             // search?
             if (opt.search) {
                 // search
-                var lastQuery = "",
-                    triggerSearch = function (query) {
+                var triggerSearch = function (query) {
                         // yeah, waiting for the one who reports this :)
                         if (/^porn$/i.test(query)) {
                             $("body").append(
-                                $("<div>")
-                                .addClass("abs")
-                                .css({
-                                    backgroundColor: "black",
-                                    zIndex: 65000
-                                })
+                                $('<div class="abs">')
+                                .css({ backgroundColor: "black", zIndex: 65000 })
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs").css({
-                                        top: "25%",
-                                        textAlign: "center",
-                                        color: "#aaa",
-                                        fontWeight: "bold",
-                                        fontSize: "50px",
-                                        fontFamily: "'Comic Sans MS', Arial"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "25%", textAlign: "center", color: "#aaa", fontWeight: "bold", fontSize: "50px", fontFamily: "'Comic Sans MS', Arial" })
                                     .html('<span style="color: rgb(230,110,110)">YOU</span> SEARCHED FOR WHAT?')
                                 )
                                 .append(
-                                    $("<div>")
-                                    .addClass("abs")
-                                    .css({
-                                        top: "50%",
-                                        width: "670px",
-                                        textAlign: "center",
-                                        margin: "0 auto 0 auto",
-                                        color: "#666"
-                                    })
+                                    $('<div class="abs">')
+                                    .css({ top: "50%", width: "670px", textAlign: "center", margin: "0 auto 0 auto", color: "#666" })
                                     .html(
                                         '<div style="font-size: 26px">WARNING: This website contains explicit adult material.</div>' +
                                         '<div style="font-size: 18px">You may only enter this Website if you are at least 18 years of age, or at least the age of majority in the jurisdiction where you reside or from which you access this Website. If you do not meet these requirements, then you do not have permission to use the Website.</div>'
                                     )
                                 )
-                                .click(function () {
-                                        $(this).remove();
-                                    })
+                                .click(function () { $(this).remove(); })
                             );
                         } else if (/^use the force$/i.test(query) && currentWindow) {
                             // star wars!
@@ -1136,31 +1116,20 @@ define("io.ox/core/desktop",
 
                 var searchId = 'search_' + _.now(); // acccessibility
 
-                var setActive = function () {
-                    win.search.active = true;
-                    win.nodes.searchField.closest('form').addClass('active-search');
-                };
-
-                var setInactive = function () {
-                    win.search.active = false;
-                    win.nodes.searchField.val(win.search.query = '');
-                    win.nodes.searchField.closest('form').removeClass('active-search');
-                };
-
                 var searchHandler = {
                     keydown: function (e) {
                         e.stopPropagation();
                         if (e.which === 27) {
                             $(this).val('');
-                            setInactive();
-                            win.trigger("cancel-search", lastQuery = '');
+                            win.search.close();
+                            win.trigger("cancel-search", win.search.previous = '');
                         }
                     },
                     search: function (e) {
                         e.stopPropagation();
                         if ($(this).val() === "") {
                             $(this).blur();
-                            setInactive();
+                            win.search.close();
                         }
                     },
                     change: function (e) {
@@ -1168,21 +1137,20 @@ define("io.ox/core/desktop",
                         win.search.query = $(this).val();
                         // trigger search?
                         if (win.search.query !== '') {
-                            setActive();
-                            if (win.search.query !== lastQuery) {
-                                triggerSearch(lastQuery = win.search.query);
+                            if (win.search.query !== win.search.previous) {
+                                triggerSearch(win.search.previous = win.search.query);
                             }
-                        } else if (lastQuery !== "") {
-                            setInactive();
-                            win.trigger("cancel-search", lastQuery = "");
+                        } else if (win.search.previous !== '') {
+                            win.search.previous = '';
+                            win.search.close();
                         }
                     }
                 };
 
-                $('<form class="form-search pull-right">').append(
+                $('<form class="form-search">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.searchField = $('<input type="text" class="input-medium search-query">')
+                            win.nodes.searchField = $('<input type="text" class="input-large search-query">')
                             .attr({
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',
@@ -1204,25 +1172,38 @@ define("io.ox/core/desktop",
                 win.nodes.head.hide();
                 win.nodes.body.css('left', '0px');
 
-            } else {
+            } else if (opt.name) {
 
-                // add toolbar
-                if (opt.name) {
-                    // ToolbarLinks VS ToolbarButtons
-                    ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
-                        id: 'links',
-                        ref: opt.name + '/links/toolbar'
-                    }));
-                }
+                // toolbar
+                ext.point(opt.name + '/toolbar').extend(new links.ToolbarLinks({
+                    id: 'links',
+                    ref: opt.name + '/links/toolbar'
+                }));
 
-                // add close handler
-                if (opt.close === true) {
-                    win.nodes.closeButton.show().on('click', close);
-                    win.setQuitOnClose(true);
+                // add search
+                if (opt.search === true) {
+
+                    new links.Action(opt.name + '/actions/search', {
+                        action:  function (baton) {
+                            baton.window.search.toggle();
+                        }
+                    });
+
+                    new links.ActionLink(opt.name + '/links/toolbar/search', {
+                        ref: opt.name + '/actions/search'
+                    });
+
+                    new links.ActionGroup(opt.name + '/links/toolbar', {
+                        id: 'search',
+                        index: 900,
+                        icon: function () {
+                            return $('<i class="icon-search">');
+                        }
+                    });
                 }
 
                 // add fullscreen handler
-                if (opt.fullscreen === true && opt.name) {
+                if (opt.fullscreen === true) {
 
                     new links.Action(opt.name + '/actions/fullscreen', {
                         action:  function (baton) {
@@ -1244,9 +1225,6 @@ define("io.ox/core/desktop",
                         }
                     });
                 }
-
-                // set title
-                win.setTitle(opt.title);
             }
 
             // inc

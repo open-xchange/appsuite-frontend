@@ -165,6 +165,23 @@
     filter: e(%("progid:DXImageTransform.Microsoft.gradient(startColorstr='%d', endColorstr='%d', GradientType=0)",argb(@color1),argb(@color3)));
 }
 
+.transition(@transition: all 1s linear) {
+    -webkit-transition: @transition;
+    -moz-transition: @transition;
+    transition: @transition;
+}
+
+.animation(@animation) {
+    -webkit-animation: @animation;
+    animation: @animation;
+}
+
+.animation-name(@name) {
+    -webkit-animation-name: @name;
+    -moz-animation-name: @name;
+    animation-name: @name;
+}
+
 .ellipsis {
     white-space: nowrap;
     overflow: hidden;

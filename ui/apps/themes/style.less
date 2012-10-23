@@ -236,16 +236,12 @@
     position: absolute;
     right: -350px;
     bottom: 0px;
-    transition: all 0.1s;
-    -webkit-transition: all 0.1s;
-    -moz-transition: all 0.1s;
     border-top: 1px solid #000;
     overflow: hidden;
     z-index: 30;
-    -moz-box-shadow: 0 10px 20px 1px black;
-    -webkit-box-shadow: 0 10px 20px 1px black;
-    box-shadow: 0 10px 20px 1px black;
     display: none;
+    .transition(all 0.1s);
+    .box-shadow(0 10px 20px 1px black);
 }
 
 #io-ox-notifications-overlay {
@@ -367,11 +363,6 @@
     left: 0%;
     width: 100%;
 }
-
-/* .csstransforms3d.touch #io-ox-windowmanager-pane { */
-/*     -webkit-transition-duration: 0.35s; */
-/*     -webkit-transition-timing-function: linear; */
-/* } */
 
 .window-container {
     position: absolute;
@@ -552,20 +543,6 @@
     text-decoration: none;
 }
 
-.window-search {
-    position: absolute;
-    top: 0px;
-    right: 0px;
-    min-height: 100px;
-    left: 0px;
-    z-index: 10 - 1; // less than window-body
-    background-color: #eee;
-}
-
-.window-head .search-query {
-    font-size: 13px;
-}
-
 a.button {
     line-height: 18px;
     color: #fff;
@@ -586,30 +563,6 @@ a.button {
     text-decoration: underline;
 }
 
-.window-controls {
-    padding-right: 13px;
-}
-
-/* avoid bootstrap's form margins */
-.window-controls form { margin-bottom: 0; }
-.window-controls label { margin-bottom: 0; }
-
-.window-control {
-    font-family: Arial, Helvetica, sans-serif;
-    margin-left: 5px;
-    display: inline-block;
-    overflow: hidden;
-    height: 30px;
-}
-
-.window-control .close {
-    font-size: 40px;
-    line-height: 30px;
-    color: white;
-    text-shadow: 0 1px 0 #555;
-    opacity: 0.9;
-}
-
 .window-body {
     position: absolute;
     top: 0px;
@@ -624,53 +577,40 @@ a.button {
     left: @window-content-shift + @window-head-width;
 }
 
-.window-body.movedown {
-    top: 56px;
-}
-
-.window-settings {
-    position: absolute;
-    top: 0px;
-    right: -1px !important;
-    left: -1px !important;
-    z-index: 1;
-    padding: 10px 15px 10px 15px;
-    color: @head-color;
-    background-color: mix(@settings-color, @settings-background, 400%/15);
-    background-image: -moz-linear-gradient(center top,
-        mix(@settings-color, @settings-background, 100%/15),
-        mix(@settings-color, @settings-background, 500%/15));
-    background-image: -webkit-gradient(linear, 0% 0%, 0% 100%,
-        from(mix(@settings-color, @settings-background, 100%/15)),
-        to(mix(@settings-color, @settings-background, 500%/15)));
-    background-image: -o-linear-gradient(top,
-        mix(@settings-color, @settings-background, 100%/15) 0%,
-        mix(@settings-color, @settings-background, 500%/15) 100%);
-    filter: ~"progid:DXImageTransform.Microsoft.gradient(startColorstr="mix(@settings-color, @settings-background, 100%/15)~", endColorstr="mix(@settings-color, @settings-background, 500%/15)~")";
-}
-
-.window-content {
+.window-search {
     position: absolute;
     top: 0px;
     right: 0px;
-    bottom: 0px;
+    min-height: 30px;
     left: 0px;
+    z-index: 1;
+    
+    padding: 13px;
+    border-bottom: 1px solid #ccc;
+    
+    .box-sizing(border-box);
+    .vertical-gradient(#f5f5f5, #eee);
+    
+    form { margin: 0; }
+}
+
+.window-content {
+    top: 0px;
     z-index: 2;
     background-color: @background;
     overflow: hidden;
+    .transition(top 300ms ease-out);
 }
 
 .window-content textarea, textarea {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+    .user-select(text);
     resize: none;
 }
 
+.window-body.search-open .window-content { top: 62px; }
+
 .user-select-text {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    user-select: text;
+    .user-select(text)
 }
 
 /* vGrid */
@@ -1166,6 +1106,19 @@ span.hint {
 
 .io-ox-multi-selection .io-ox-inline-links.empty {
     display: none;
+}
+
+.inline-buttons {
+
+    margin: 13px 0 13px 0;
+    height: 30px;
+    
+    &.top { margin-top: 0; }
+    
+    .btn {
+        float: right;
+        margin-left: 13px;
+    }
 }
 
 /* side popups */

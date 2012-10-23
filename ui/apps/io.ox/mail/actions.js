@@ -28,15 +28,14 @@ define('io.ox/mail/actions',
     var defaultDraftFolder = config.get('modules.mail.defaultFolder.drafts'),
         Action = links.Action;
 
-
     // actions
 
     new Action('io.ox/mail/actions/compose', {
         id: 'compose',
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/mail/write/main'], function (m) {
                 m.getApp().launch().done(function () {
-                    this.compose({ folder_id: app.folder.get() });
+                    this.compose({ folder_id: baton.app.folder.get() });
                 });
             });
         }
@@ -242,7 +241,7 @@ define('io.ox/mail/actions',
             api.markRead(list);
         }
     });
-    
+
     new Action('io.ox/mail/actions/markspam', {
         id: 'marspam',
         requires: function (e) {
@@ -563,13 +562,20 @@ define('io.ox/mail/actions',
 
     // toolbar
 
-    ext.point('io.ox/mail/links/toolbar').extend(new links.Button({
+    new links.ActionGroup('io.ox/mail/links/toolbar', {
+        id: 'default',
+        index: 100,
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
+    });
+
+    new links.ActionLink('io.ox/mail/links/toolbar/default', {
         index: 100,
         id: 'compose',
         label: gt('Compose new mail'),
-        cssClasses: 'btn btn-primary',
         ref: 'io.ox/mail/actions/compose'
-    }));
+    });
 
     // inline links
 

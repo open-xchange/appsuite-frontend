@@ -506,9 +506,7 @@ define('io.ox/mail/view-detail',
             win = app.getWindow(),
             query = e.data.display_name || e.data.email1;
         // trigger search
-        win.nodes.searchField.val(query).focus();
-        win.search.query = query;
-        win.trigger('search');
+        win.search.start(query);
     }
 
     ext.point('io.ox/mail/detail').extend({

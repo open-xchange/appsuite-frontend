@@ -32,40 +32,29 @@ define('io.ox/mail/write/main',
 
     'use strict';
 
+    var ACTIONS = 'io.ox/mail/write/actions';
+
     // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/send').extend({
-        id: 'send',
-        action: function (app) {
-            app.send();
+    ext.point(ACTIONS + '/send').extend({
+        action: function (baton) {
+            baton.app.send();
         }
     });
 
     // actions (define outside of multi-instance app)
-    ext.point('io.ox/mail/write/actions/draft').extend({
-        id: 'send',
-        action: function (app) {
-            app.saveDraft().done(function (data) {
-                app.setMsgRef(data.data);
-            }).fail(function (e) {
-
+    ext.point(ACTIONS + '/draft').extend({
+        action: function (baton) {
+            baton.app.saveDraft().done(function (data) {
+                baton.app.setMsgRef(data.data);
             });
         }
     });
 
-    ext.point('io.ox/mail/write/actions/proofread').extend({
-        id: 'proofread',
-        action: function (app) {
-            app.proofread();
+    ext.point(ACTIONS + '/cancel').extend({
+        action: function (baton) {
+            baton.app.quit();
         }
     });
-
-    // links
-//    ext.point('io.ox/mail/write/links/toolbar').extend(new ext.Link({
-//        index: 200,
-//        id: 'proofread',
-//        label: 'Proofread',
-//        ref: 'io.ox/mail/write/actions/proofread'
-//    }));
 
     var UUID = 1;
 
@@ -165,9 +154,7 @@ define('io.ox/mail/write/main',
 
             win = ox.ui.createWindow({
                 name: 'io.ox/mail/write',
-                title: '',
-                toolbar: true,
-                close: true
+                chromeless: true
             });
 
             // due to tinyMCE's iframe
@@ -490,7 +477,8 @@ define('io.ox/mail/write/main',
             this.addFiles(data.infostore_ids);
             // apply mode
             var title = data.subject ? _.noI18n(data.subject) : windowTitles[composeMode = mail.mode];
-            win.setTitle(title);
+            // set title once in DOM
+            win.nodes.main.find('h1.title').text(title);
             app.setTitle(title);
             // set signature
             currentSignature = mail.signature || '';
