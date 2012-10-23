@@ -109,49 +109,10 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // private methods ----------------------------------------------------
 
-        /**
-         * Will be called for every paragraph whose attributes have been
-         * changed.
-         *
-         * @param {jQuery} para
-         *  The <p> element whose character attributes have been changed, as
-         *  jQuery object.
-         *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
-         */
-        function updateParagraphFormatting(para, attributes) {
-            // take care of numberings
-            // always remove an existing label
-            // TODO: it might make more sense to change the label appropriately
-            $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
-            $(para).css('margin-left', '');
-            if (attributes.ilvl !== -1 && attributes.numId !== -1) {
-//                var allNumberingElementsInDoc = $(rootNode).find('div.list-label');
-//                var numNodeIndex = 0;
-//                for (; numNodeIndex < allNumberingElementsInDoc.length; numNodeIndex++) {
-//                    var numPara = $(allNumberingElementsInDoc[numNodeIndex]).parent();
-//
-//                }
-
-                var listObject = self.getDocumentStyles().getLists().formatNumber(attributes.numId, attributes.ilvl, [0]);
-                var numberingElement = DOM.createListLabelNode(listObject.text);
-                if (listObject.indent > 0) {
-                    para.css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
-                }
-                if (listObject.labelWidth > 0) {
-                    numberingElement.css('width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
-                }
-                $(para).prepend(numberingElement);
-            }
-        }
 
         // base constructor ---------------------------------------------------
 
         StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, definitions, {
-            updateHandler: updateParagraphFormatting,
             childStyleFamily: 'character',
             childNodeIterator: iterateChildNodes
         });

@@ -116,6 +116,7 @@ define('io.ox/office/editor/editor',
             tableRowStyles = documentStyles.getStyleSheets('tablerow'),
             tableCellStyles = documentStyles.getStyleSheets('tablecell'),
             pageStyles = documentStyles.getStyleSheets('page'),
+            lists = documentStyles.getLists(),
 
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
@@ -961,7 +962,6 @@ define('io.ox/office/editor/editor',
         };
 
         this.createList = function (type) {
-            var lists = self.getLists();
             var defNumId = lists.getDefaultNumId(type);
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type);
@@ -996,7 +996,7 @@ define('io.ox/office/editor/editor',
          * Returns the lists container.
          */
         this.getLists = function () {
-            return documentStyles.getLists();
+            return lists;
         };
 
         /**
@@ -3482,13 +3482,7 @@ define('io.ox/office/editor/editor',
          *  The attributes of the scheme.
          */
         function implInsertList(listName, listDefinition) {
-
-            var // the themes container
-                lists = self.getLists();
-
-            if (lists) {
-                lists.addList(listName, listDefinition);
-            }
+            lists.addList(listName, listDefinition);
         }
 
         /**
@@ -3598,6 +3592,9 @@ define('io.ox/office/editor/editor',
 
             // store last position
             lastOperationEnd = new OXOPaM(end);
+            if (('ilvl' in attributes) || ('numId' in attributes)) {
+                implUpdateLists();
+            }
         }
 
         function implInsertParagraph(position) {
@@ -3632,6 +3629,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(lastPos);
 
             implParagraphChanged(position);
+            implUpdateLists();
         }
 
         function implInsertTable(pos, attrs) {
@@ -3731,6 +3729,7 @@ define('io.ox/office/editor/editor',
             if (paragraphs.size() !== (dbg_oldparacount + 1)) {
                 Utils.warn('Editor.implSplitParagraph(): paragraph count invalid!');
             }
+            implUpdateLists();
         }
 
         function implMergeParagraph(position) {
@@ -3803,7 +3802,7 @@ define('io.ox/office/editor/editor',
                     }
                 }
             }
-
+            implUpdateLists();
         }
 
         function implDeleteParagraph(position) {
@@ -4350,7 +4349,34 @@ define('io.ox/office/editor/editor',
             // apply the passed table attributes
             tableCellStyles.setElementAttributes(targetCell, { 'gridspan' : colSpanSum });
         }
+        /**
+         * iterate over _all_ paragraphs and update numbering symbols and index
+         */
+        function implUpdateLists() {
+            var listItemCounter = [];
+            Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
+                // always remove an existing label
+                // TODO: it might make more sense to change the label appropriately
+                var attributes = paragraphStyles.getElementAttributes(para, false);
+                $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
+                $(para).css('margin-left', '');
+                if (attributes.ilvl !== -1 && attributes.ilvl < 9 && attributes.numId !== -1) {
+                    if (!listItemCounter[attributes.numId])
+                        listItemCounter[attributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                    listItemCounter[attributes.numId][attributes.ilvl]++;
+                    var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
+                    var numberingElement = DOM.createListLabelNode(listObject.text);
+                    if (listObject.indent > 0) {
+                        $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
+                    }
+                    if (listObject.labelWidth > 0) {
+                        numberingElement.css('width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                    }
+                    $(para).prepend(numberingElement);
+                }
 
+            });
+        }
         function implDbgOutEvent(event) {
 
             if (!dbgoutEvents)

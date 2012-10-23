@@ -238,19 +238,23 @@ define('io.ox/office/editor/format/lists',
             var retString = "???";
             switch (numberFormat) {
             case "decimal":
-                retString = "1";
+                retString = seqNo.toString();
                 break;
             case "lowerLetter":
-                retString = "a";
+                retString = String.fromCharCode(96 + seqNo);
                 break;
             case "upperLetter":
-                retString = "A";
+                retString = String.fromCharCode(64 + seqNo);
                 break;
             case "lowerRoman":
-                retString = "i";
+                var romanSmall = ['i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x' ];
+                if (seqNo < 11)
+                    retString = romanSmall[seqNo - 1];
                 break;
             case "upperRoman":
-                retString = "I";
+                var romanCaps = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X' ];
+                if (seqNo < 11)
+                    retString = romanCaps[seqNo - 1];
                 break;
             case "bullet":
                 retString = "●";
