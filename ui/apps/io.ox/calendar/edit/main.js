@@ -85,10 +85,7 @@ define('io.ox/calendar/edit/main',
                     // create app window
                     self.setWindow(ox.ui.createWindow({
                         name: 'io.ox/calendar/edit',
-                        title: gt('Create Appointment'),
-                        toolbar: true,
-                        search: false,
-                        close: true
+                        chromeless: true
                     }));
 
                     $(self.getWindow().nodes.main[0]).append(self.view.render().el);
@@ -136,7 +133,7 @@ define('io.ox/calendar/edit/main',
 
                 $(self.getWindow().nodes.main[0]).append(self.view.render().el);
                 self.getWindow().show(_.bind(self.onShowWindow, self));
-            
+
             });
 
         },

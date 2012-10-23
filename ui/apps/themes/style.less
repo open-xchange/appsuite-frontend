@@ -1515,15 +1515,24 @@ div.external-user-image {
 .dropdown-right { right: 0; left: auto; }
 .dropdown-right-side { top: 15%; left: 42px; }
 
-.dropdown-header {
+.dropdown-header, .dropdown-footer {
     display: block;
-    padding: 3px 20px 6px 20px;
     font-weight: bold;
     cursor: default;
-    border-bottom: 1px solid #ddd;
-    margin-bottom: 6px;
     max-width: 200px;
     .ellipsis();
+}
+
+.dropdown-header {
+    padding: 3px 20px 6px 20px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 6px;
+}
+
+.dropdown-footer {
+    padding: 6px 20px 3px 20px;
+    border-top: 1px solid #ddd;
+    margin-top: 6px;
 }
 
 /** BOOTSTRAP FIXES **/

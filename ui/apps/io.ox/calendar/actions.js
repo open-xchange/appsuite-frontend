@@ -19,50 +19,54 @@ define('io.ox/calendar/actions',
 
     'use strict';
 
-    var Action = links.Action, Link = links.XLink, Dropdown = links.Dropdown, Button = links.Button, ButtonGroup = links.ButtonGroup;
+    var Action = links.Action,
+        ActionGroup = links.ActionGroup,
+        ActionLink = links.ActionLink,
+
+        POINT = 'io.ox/calendar';
 
     // Actions
     new Action('io.ox/calendar/actions/switch-to-list-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/calendar/list/perspective'], function (perspective) {
-                perspective.show(app, { perspective: 'list' });
+                perspective.show(baton.app, { perspective: 'list' });
             });
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-month-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/calendar/month/perspective'], function (perspective) {
-                perspective.show(app, { perspective: 'month' });
+                perspective.show(baton.app, { perspective: 'month' });
             });
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-fullweek-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(app, { perspective: ['week', 'week'], force: true });
+                perspective.show(baton.app, { perspective: ['week', 'week'], force: true });
             });
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-week-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(app, { perspective: ['week', 'workweek'], force: true });
+                perspective.show(baton.app, { perspective: ['week', 'workweek'], force: true });
             });
         }
     });
 
     new Action('io.ox/calendar/actions/switch-to-day-view', {
         requires: true,
-        action: function (app) {
+        action: function (baton) {
             require(['io.ox/calendar/week/perspective'], function (perspective) {
-                perspective.show(app, { perspective: ['week', 'day'], force: true });
+                perspective.show(baton.app, { perspective: ['week', 'day'], force: true });
             });
         }
     });
@@ -206,15 +210,14 @@ define('io.ox/calendar/actions',
     new Action('io.ox/calendar/detail/actions/create', {
         id: 'create',
         requires: 'one create',
-        action: function (app, obj) {
+        action: function (baton, obj) {
             // FIXME: if this action is invoked by the menu button, both
             // arguments are the same (the app)
-
             var params = {
-                folder_id: app.folder.get(),
+                folder_id: baton.app.folder.get(),
                 participants: []
             };
-            if (obj.start_date) {
+            if (obj && obj.start_date) {
                 _.extend(params, obj);
             }
             require(['io.ox/calendar/edit/main'], function (editmain) {
@@ -238,65 +241,66 @@ define('io.ox/calendar/actions',
 
     // Links - toolbar
 
-    ext.point('io.ox/calendar/links/toolbar').extend(new links.Button({
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'default',
+        index: 100,
+        icon: function () {
+            return $('<i class="icon-pencil">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/default', {
         index: 100,
         id: 'create',
         label: gt('New appointment'),
-        cssClasses: 'btn btn-primary',
         ref: 'io.ox/calendar/detail/actions/create'
-    }));
-
-    new ButtonGroup('io.ox/calendar/links/toolbar', {
-        id: 'view',
-        index: 200,
-        radio: true,
-        label: gt('View')
     });
 
-    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
+    // VIEWS
+
+    new ActionGroup(POINT + '/links/toolbar', {
+        id: 'view',
+        index: 150,
+        label: gt('View'),
+        icon: function () {
+            return $('<i class="icon-eye-open">');
+        }
+    });
+
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'day',
         index: 100,
         label: gt('Day'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:day' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-day-view'
-    }));
+    });
 
-    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'week',
         index: 200,
         label: gt('Workweek'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:workweek' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-week-view'
-    }));
+    });
 
-    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'fullweek',
         index: 300,
         label: gt('Week'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'week:week' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-fullweek-view'
-    }));
+    });
 
-    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'month',
         index: 400,
         label: gt('Month'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'month' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-month-view'
-    }));
+    });
 
-    ext.point('io.ox/calendar/links/toolbar/view').extend(new links.Button({
+    new ActionLink(POINT + '/links/toolbar/view', {
         id: 'list',
         index: 500,
         label: gt('List'),
-        cssClasses: 'btn btn-inverse ' + (_.url.hash('perspective') === 'list' ? 'active' : ''),
-        groupButton: true,
         ref: 'io.ox/calendar/actions/switch-to-list-view'
-    }));
+    });
 
     // FIXME: should only be visible if rights are ok
     ext.point('io.ox/calendar/detail/actions').extend(new links.InlineLinks({
@@ -312,8 +316,6 @@ define('io.ox/calendar/actions',
         label: gt('Edit'),
         ref: 'io.ox/calendar/detail/actions/edit'
     }));
-
-
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
         index: 100,

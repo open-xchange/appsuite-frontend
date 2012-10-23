@@ -262,13 +262,6 @@ define("io.ox/core/extPatterns/links",
                     ul = $('<ul class="dropdown-menu dropdown-right-side">')
                 )
             );
-            // add label?
-            if (extension.label) {
-                console.log('label', extension.label);
-                ul.append(
-                    $('<li class="dropdown-header">').text(extension.label)
-                );
-            }
             // get links
             return getLinks(extension, new Collection(baton), ul, baton, args).done(function (links) {
                 if (links.length > 1) {
@@ -276,6 +269,12 @@ define("io.ox/core/extPatterns/links",
                     _(links).chain().pluck('draw').compact().each(function (fn) {
                         fn.call(ul, baton);
                     });
+                    // add footer label?
+                    if (extension.label) {
+                        ul.append(
+                            $('<li class="dropdown-footer">').text(extension.label)
+                        );
+                    }
                 } else {
                     // disable dropdown
                     a.removeAttr('data-toggle');
@@ -291,7 +290,7 @@ define("io.ox/core/extPatterns/links",
         }
 
         function icon() {
-            return $('<i class="icon-heart">');
+            return $('<i class="icon-magic">');
         }
 
         return function ButtonGroup(id, extension) {
