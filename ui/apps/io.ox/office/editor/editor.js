@@ -403,7 +403,7 @@ define('io.ox/office/editor/editor',
                 if (selection.startPaM.imageFloatMode && (Position.isOneCharacterSelection(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition))) {
                     // An image selection
                     // This deleting of images is only possible with the button, not with an key down event.
-                    deleteSelectedImage(selection);
+                    deleteSelectedObject(selection);
 
                 } else if (Position.isSameParagraph(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition)) {
                     // Only one paragraph concerned from deletion.
@@ -949,7 +949,7 @@ define('io.ox/office/editor/editor',
                 var newOperation = {name: Operations.PARA_MERGE, start: _.copy(position)};
                 applyOperation(newOperation, true, true);
 
-                imageShift = moveFloatedImages(position);
+                imageShift = moveFloatedObjects(position);
 
             }, this);
 
@@ -1741,6 +1741,11 @@ define('io.ox/office/editor/editor',
             implSetAttributes(operation.start, operation.end, operation.attrs);
         };
 
+        operationHandlers[Operations.ATTRS_CLEAR] = function (operation) {
+            // undo/redo is done inside implSetAttributes()
+            implSetAttributes(operation.start, operation.end, null);
+        };
+
         operationHandlers[Operations.PARA_INSERT] = function (operation) {
             if (undomgr.isEnabled()) {
                 var undoOperation = { name: Operations.PARA_DELETE, start: operation.start };
@@ -2183,13 +2188,9 @@ define('io.ox/office/editor/editor',
         function selectObjectAsText(object) {
 
             var // previous text span of the object node
-                prevTextSpan = Utils.findPreviousNodeInTree(object, function () {
-                    return DOM.isPortionSpan(this);
-                }),
+                prevTextSpan = Utils.findPreviousNodeInTree(object, 'span'),
                 // next text span of the object node
-                nextTextSpan = Utils.findNextNodeInTree(selectedObjects.last(), function () {
-                    return DOM.isPortionSpan(this);
-                }),
+                nextTextSpan = Utils.findNextNodeInTree(selectedObjects.last(), 'span'),
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
@@ -2240,8 +2241,8 @@ define('io.ox/office/editor/editor',
 
         /**
          * Removes empty text nodes from the passed paragraph, checks whether
-         * it needs a dummy terminator element, and converts consecutive
-         * white-space characters.
+         * it needs a dummy text node, and converts consecutive white-space
+         * characters.
          *
          * @param {HTMLElement|jQuery} paragraph
          *  The paragraph element to be validated. If this object is a jQuery
@@ -2249,8 +2250,10 @@ define('io.ox/office/editor/editor',
          */
         function validateParagraphNode(paragraph) {
 
-            var // array of arrays collecting all sequences of sibling text nodes
+            var // current sequence of sibling text nodes
                 siblingTextNodes = [],
+                // array of arrays collecting all sequences of sibling text nodes
+                allSiblingTextNodes = [siblingTextNodes],
                 // whether the paragraph contains any text
                 hasText = false,
                 // whether the last child node is the dummy element
@@ -2260,25 +2263,30 @@ define('io.ox/office/editor/editor',
             paragraph = Utils.getDomNode(paragraph);
 
             // whether last node is the dummy node
-            hasLastDummy = DOM.isDummyTerminatorNode(paragraph.lastChild);
+            hasLastDummy = DOM.isDummyTextNode(paragraph.lastChild);
 
             // remove all empty text spans which have sibling text spans, and collect
             // sequences of sibling text spans (needed for white-space handling)
-            $(paragraph).contents().each(function () {
+            DOM.iterateParagraphChildNodes(paragraph, function (node) {
 
-                // check if current node is a text span (portion or field)
-                if (DOM.isTextSpan(this)) {
-
-                    if (DOM.isEmptySpan(this) && (DOM.isPortionSpan(this.previousSibling) || DOM.isPortionSpan(this.nextSibling))) {
-                        // remove this span, if it is an empty portion and has a sibling text portion
-                        $(this).remove();
-                    } else if (DOM.isTextSpan(this.previousSibling)) {
-                        // append to array that contains the previous text node (portion or field)
-                        _(siblingTextNodes).last().push(this.firstChild);
-                    } else {
-                        // start a new sequence of text nodes
-                        siblingTextNodes.push([this.firstChild]);
+                if (DOM.isEmptySpan(node)) {
+                    // remove this span, if it is an empty portion and has a sibling text portion
+                    if (DOM.isTextSpan(node.previousSibling) || DOM.isTextSpan(node.nextSibling)) {
+                        $(node).remove();
                     }
+                    // otherwise simply ignore the span
+
+                } else if (DOM.isTextSpan(node) || DOM.isListLabelNode(node)) {
+                    // append text node to current sequence
+                    siblingTextNodes.push(node.firstChild);
+
+                } else if (DOM.isFieldNode(node)) {
+                    // append all text nodes of the field to current sequence of text nodes
+                    Utils.iterateDescendantTextNodes(node, function (textNode) { siblingTextNodes.push(textNode); });
+
+                } else {
+                    // anything else: start a new sequence of text nodes
+                    allSiblingTextNodes.push(siblingTextNodes = []);
                 }
             });
 
@@ -2289,7 +2297,7 @@ define('io.ox/office/editor/editor',
             // sequences may be interrupted by other elements such as hard line
             // breaks, images, or other objects).
             // TODO: handle explicit NBSP inserted by the user (when supported)
-            _(siblingTextNodes).each(function (textNodes) {
+            _(allSiblingTextNodes).each(function (siblingTextNodes) {
 
                 var // the complete text of all sibling text nodes
                     text = '',
@@ -2297,7 +2305,7 @@ define('io.ox/office/editor/editor',
                     offset = 0;
 
                 // collect the complete text in all text nodes
-                _(textNodes).each(function (textNode) { text += textNode.nodeValue; });
+                _(siblingTextNodes).each(function (textNode) { text += textNode.nodeValue; });
 
                 // ignore empty sequences
                 if (text.length > 0) {
@@ -2315,7 +2323,7 @@ define('io.ox/office/editor/editor',
                         .replace(/ $/, '\xa0');
 
                     // distribute converted text to the text nodes
-                    _(textNodes).each(function (textNode) {
+                    _(siblingTextNodes).each(function (textNode) {
                         var length = textNode.nodeValue.length;
                         textNode.nodeValue = text.substr(offset, length);
                         offset += length;
@@ -2330,10 +2338,10 @@ define('io.ox/office/editor/editor',
                 paragraphStyles.updateElementFormatting(paragraph);
             }
 
-            // append dummy terminator if the paragraph contains no text,
+            // append dummy text node if the paragraph contains no text,
             // or remove it if there is any text
             if (!hasText && !hasLastDummy) {
-                $(paragraph).append(DOM.createDummyTerminatorNode());
+                $(paragraph).append(DOM.createDummyTextNode());
             } else if (hasText && hasLastDummy) {
                 $(paragraph.lastChild).remove();
             }
@@ -2843,15 +2851,15 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * After merging two paragraphs, it can be necessary to move floated images
-         * of the second paragraph to the beginning of the first paragraph. This can
-         * done using this function 'moveFloatedImages', that generates 'move'
-         * operations for moving the images.
+         * After merging two paragraphs, it can be necessary to move floated
+         * objects of the second paragraph to the beginning of the first
+         * paragraph. This can done using this methid, that generates 'move'
+         * operations for moving the objects.
          *
          * @param {OXOPaM.oxoPosition} position
          *  The logical position describing the paragraph.
          */
-        function moveFloatedImages(position) {
+        function moveFloatedObjects(position) {
 
             var domPos = Position.getDOMPosition(paragraphs, position),
                 imageShift = 0;
@@ -2865,7 +2873,7 @@ define('io.ox/office/editor/editor',
                 while (child !== null) {
                     var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
 
-                    if ((DOM.isImageNode(child)) && !$(child).hasClass('inline')) {
+                    if (DOM.isFloatedObjectNode(child)) {
 
                         var localPos = Position.getStartOfParagraphChildNode(child),
                             source = _.copy(position, true),
@@ -3068,22 +3076,18 @@ define('io.ox/office/editor/editor',
 
         }
 
-        function deleteSelectedImage(selection) {
-            var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
+        function deleteSelectedObject(selection) {
+            var position = _.copy(selection.startPaM.oxoPosition, true),
                 useObjectNode = true,
-                imageDivNode = Position.getDOMPosition(paragraphs, imageStartPosition, useObjectNode).node;
+                objectNode = Position.getDOMPosition(paragraphs, position, useObjectNode).node;
 
             // only delete, if imageStartPosition is really an image position
-            if (DOM.isImageNode(imageDivNode)) {
-                // delete an corresponding div
-                var divOffsetNode = imageDivNode.previousSibling;
-                if (DOM.isOffsetNode(divOffsetNode)) {
-                    // removing position div node
-                    $(divOffsetNode).remove();
-                }
+            if (DOM.isObjectNode(objectNode)) {
+                // delete an corresponding offset div
+                $(objectNode).prev(DOM.OFFSET_NODE_SELECTOR).remove();
 
                 // remove the object from the internal object selection
-                selectedObjects = selectedObjects.not(imageDivNode);
+                selectedObjects = selectedObjects.not(objectNode);
 
                 // deleting the image with an operation
                 self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
@@ -3285,7 +3289,7 @@ define('io.ox/office/editor/editor',
 
         function implParagraphChanged(position) {
 
-            // Make sure that an empty paragraph has the dummy terminator element,
+            // Make sure that an empty paragraph has the dummy text node,
             // and that all others don't have it anymore...
             var paragraph = Position.getCurrentParagraph(paragraphs, position);
             if (paragraph) {
@@ -3389,20 +3393,25 @@ define('io.ox/office/editor/editor',
         function implInsertField(position, type, representation) {
 
             var domPos = Position.getDOMPosition(paragraphs, position),
-                node = domPos ? domPos.node : null;
+                node = (domPos && domPos.node) ? domPos.node.parentNode : null,
+                fieldSpan = null;
 
             // check position
-            if (!node || (node.nodeType !== 3)) {
+            if (!DOM.isPortionSpan(node)) {
                 Utils.error('Editor.implInsertField(): expecting text position to insert field.');
                 return false;
             }
 
-            // split the text node at the specified position
-            DOM.splitTextNode(node, domPos.offset);
+            // split the text span at the specified position
+            DOM.splitTextSpan(node, domPos.offset);
 
-            // insert a new text field between the text nodes
-            node = DOM.createFieldNode(representation);
-            node.nodeValue = representation;
+            // split the text span again to get initial character formatting
+            // for the field, and insert the field representation text
+            fieldSpan = DOM.splitTextSpan(node, 0).text(representation);
+
+            // insert a new text field before the addressed text node, move
+            // the field span element into the field node
+            DOM.createFieldNode().append(fieldSpan).insertBefore(node);
 
             implParagraphChanged(position);
             return true;
@@ -3498,9 +3507,10 @@ define('io.ox/office/editor/editor',
          *  The logical end position of the element or text range to be
          *  formatted.
          *
-         * @param {Object} attributes
+         * @param {Object|Null} attributes
          *  A map with formatting attribute values, mapped by the attribute
-         *  names.
+         *  names. If the value null is passed, all exlicit attributes will be
+         *  cleared from the selection.
          */
         function implSetAttributes(start, end, attributes) {
 
@@ -3560,7 +3570,7 @@ define('io.ox/office/editor/editor',
             endLastIndex = end.length - 1;
 
             // TODO: remove when object selection engine exists
-            var containsImageAttribute = Image.containsImageAttributes(attributes);
+            var containsImageAttribute = attributes && Image.containsImageAttributes(attributes);
 
             // get attribute family according to position
             family = Position.getPositionAssignedFamily(paragraphs, start, containsImageAttribute);
@@ -3586,7 +3596,11 @@ define('io.ox/office/editor/editor',
             if (styleSheets) {
                 ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family === 'image');
                 // change attributes in document and store the undo/redo action
-                styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                if (_.isNull(attributes)) {
+                    styleSheets.clearAttributesInRanges(ranges, undefined, setAttributesOptions);
+                } else {
+                    styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                }
                 undomgr.addUndo(undoOperations, redoOperations);
             }
 
@@ -3755,12 +3769,12 @@ define('io.ox/office/editor/editor',
                 if ((DOM.isParagraphNode(thisPara)) && (DOM.isParagraphNode(nextPara))) {
 
                     var oldParaLen = 0;
-                    var imageCounter = 0;
+                    var floatingCounter = 0;
                     oldParaLen = Position.getParagraphLength(paragraphs, position);
 
                     var lastCurrentChild = thisPara.lastChild;
-                    if (lastCurrentChild && DOM.isDummyTerminatorNode(lastCurrentChild)) {
-                        thisPara.removeChild(lastCurrentChild);
+                    if (lastCurrentChild && DOM.isDummyTextNode(lastCurrentChild)) {
+                        $(lastCurrentChild).remove();
                     }
 
                     var child = nextPara.firstChild;
@@ -3772,8 +3786,8 @@ define('io.ox/office/editor/editor',
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
 
-                            if (DOM.isImageNode(child) && !$(child).hasClass('inline')) {
-                                imageCounter++; // counting all floated images in the added paragraph (required for cursor setting)
+                            if (DOM.isFloatingObjectNode(child)) {
+                                floatingCounter++; // counting all floated objects in the added paragraph (required for cursor setting)
                             }
 
                             thisPara.appendChild(child);
@@ -3791,7 +3805,7 @@ define('io.ox/office/editor/editor',
                     implDeleteParagraph(localPosition);
 
                     var lastPos = _.copy(position);
-                    oldParaLen += imageCounter;
+                    oldParaLen += floatingCounter;
                     lastPos.push(oldParaLen);
                     lastOperationEnd = new OXOPaM(lastPos);
                     implParagraphChanged(position);
@@ -4212,9 +4226,9 @@ define('io.ox/office/editor/editor',
             for (var i = 0; i < nodes; i++) {
                 var text = '';
                 node = searchNodes[i];
-                if (DOM.isObjectNode(node) || DOM.isFieldSpan(node)) {
+                if (DOM.isObjectNode(node) || DOM.isFieldNode(node)) {
                     nodeLen = 1;
-                } else if (DOM.isPortionSpan(node)) {
+                } else if (DOM.isTextSpan(node)) {
                     text = $(node).text();
                     nodeLen = text.length;
                 } else {
@@ -4231,7 +4245,7 @@ define('io.ox/office/editor/editor',
                         delEnd = end - nodeStart;
                     }
                     if ((delEnd - delStart) === nodeLen) {
-                        if (DOM.isPortionSpan(node)) {
+                        if (DOM.isTextSpan(node)) {
                             // clear simple text span but do not remove it from the DOM
                             $(node).text('');
                         } else {
@@ -4288,7 +4302,7 @@ define('io.ox/office/editor/editor',
 
                     if (! DOM.isObjectNode(sourceNode)) {
                         doMove = false; // supporting only images at the moment
-                        Utils.warn('Editor.implMove(): moved object is not an image div: ' + Utils.getNodeName(sourceNode));
+                        Utils.warn('Editor.implMove(): moved  node is not an object: ' + Utils.getNodeName(sourceNode));
                     } else {
                         // also move the offset divs
                         if (!DOM.isOffsetNode(offsetDiv)) {

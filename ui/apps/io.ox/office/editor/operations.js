@@ -104,10 +104,10 @@ define('io.ox/office/editor/operations',
         INSERT_THEME: 'insertTheme',
         INSERT_LIST: 'insertList',
         ATTRS_SET: 'setAttributes',
+        ATTRS_CLEAR: 'clearAttributes',
 
         IMAGE_INSERT: 'insertImage',
         FIELD_INSERT: 'insertField'
-        // ATTR_DELETE:  'deleteAttribute'
 
     };
 
@@ -247,7 +247,9 @@ define('io.ox/office/editor/operations',
         this.generateParagraphContentOperations = function (paragraph, position, start, end) {
 
             var // used to merge several text portions into the same operation
-                lastOperation = null,
+                lastTextOperation = null,
+                // used to clear the attributes of the entire inserted text
+                lastClearOperation = null,
                 // formatting ranges for text portions, must be applied after the contents
                 attributeRanges = [];
 
@@ -258,7 +260,7 @@ define('io.ox/office/editor/operations',
 
             // process all content nodes in the paragraph and create operations
             position = appendNewIndex(position, start);
-            Position.iterateParagraphContentNodes(paragraph, function (node, nodeStart, nodeLength) {
+            DOM.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength) {
 
                 var // text of a portion span
                     text = null;
@@ -269,38 +271,47 @@ define('io.ox/office/editor/operations',
                 if (nodeStart > end) { return Utils.BREAK; }
 
                 // operation to create a (non-empty) generic text portion
-                if (DOM.isPortionSpan(node)) {
+                if (DOM.isTextSpan(node)) {
                     // extract the text covered by the specified range
                     text = node.firstChild.nodeValue.substring(Math.max(start - nodeStart, 0), end - nodeStart + 1);
-                    // merge text portions into the last 'insertText' operation
-                    if (lastOperation && (lastOperation.name === Operations.TEXT_INSERT)) {
-                        lastOperation.text += text;
+                    // append text portions to the last 'insertText' operation
+                    if (lastTextOperation) {
+                        lastTextOperation.text += text;
+                        lastClearOperation.end[lastClearOperation.end.length - 1] += text.length;
                     } else {
-                        lastOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
+                        lastTextOperation = generateOperation(Operations.TEXT_INSERT, { start: position, text: text });
+                        lastClearOperation = generateOperation(Operations.ATTRS_CLEAR, { start: position, end: increaseLastIndex(position, text.length - 1) });
                     }
                     attributeRanges.push({ node: node, position: position, endPosition: (text.length > 1) ? increaseLastIndex(position, text.length - 1) : null });
                     position = increaseLastIndex(position, text.length);
-                }
 
-                // operation to create a text field
-                // TODO: field type
-                else if (DOM.isFieldSpan(node)) {
-                    // extract text of all spans representing the field
-                    text = DOM.getFieldSpans(node).text();
-                    lastOperation = generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
-                    attributeRanges.push({ node: node, position: position });
-                    position = increaseLastIndex(position);
-                }
+                } else {
 
-                // operation to create an image (including its attributes)
-                else if (DOM.isImageNode(node)) {
-                    lastOperation = generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
-                    position = increaseLastIndex(position);
-                }
+                    // anything else than plain text will be inserted, forget last text operation
+                    lastTextOperation = null;
 
-                // TODO: other objects
-                else {
-                    Utils.warn('Operations.Generator.generateParagraphContentOperations(): unknown content node');
+                    // operation to create a text field
+                    // TODO: field type
+                    if (DOM.isFieldNode(node)) {
+                        // extract text of all embedded spans representing the field
+                        text = $(node).text();
+                        generateOperation(Operations.FIELD_INSERT, { position: position, representation: text });
+                        generateOperation(Operations.ATTRS_CLEAR, { start: position });
+                        // attributes are contained in the embedded span elements
+                        attributeRanges.push({ node: node.firstChild, position: position });
+                        position = increaseLastIndex(position);
+                    }
+
+                    // operation to create an image (including its attributes)
+                    else if (DOM.isImageNode(node)) {
+                        generateOperationWithAttributes(node, Operations.IMAGE_INSERT, { position: position, imgurl: $(node).data('url') });
+                        position = increaseLastIndex(position);
+                    }
+
+                    // TODO: other objects
+                    else {
+                        Utils.warn('Operations.Generator.generateParagraphContentOperations(): unknown content node');
+                    }
                 }
 
             }, this);

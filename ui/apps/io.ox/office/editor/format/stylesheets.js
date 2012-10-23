@@ -921,8 +921,15 @@ define('io.ox/office/editor/format/stylesheets',
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
          *  @param {Function} [options.changeListener]
-         *      If specified, will be called for each DOM element covered by
-         *      the passed ranges whose attributes have been changed.
+         *      If specified, will be called if the attributes of the element
+         *      have been changed. Will be called in the context of this style
+         *      sheet container instance. Receives the passed element as first
+         *      parameter, the old explicit attributes (name/value map) as
+         *      second parameter, and the new explicit attributes (name/value
+         *      map) as third parameter.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
          */
         this.setAttributesInRanges = function (ranges, attributes, options) {
 
@@ -942,9 +949,8 @@ define('io.ox/office/editor/format/stylesheets',
          *  jQuery collection, uses the first DOM node it contains.
          *
          * @param {String|String[]} [attributeNames]
-         *  A single attribute name, or an an array of attribute names. It is
-         *  not possible to clear the style sheet name. If omitted, clears all
-         *  explicit element formatting attributes.
+         *  A single attribute name, or an an array of attribute names. If
+         *  omitted, clears all explicit element formatting attributes.
          *
          * @param {Object} [options]
          *  A map of options controlling the operation. Supports the following
@@ -953,6 +959,13 @@ define('io.ox/office/editor/format/stylesheets',
          *      If set to true, allows to clear special attributes (attributes
          *      that are marked with the 'special' flag in the attribute
          *      definitions passed to the constructor).
+         *  @param {Function} [options.changeListener]
+         *      If specified, will be called if the attributes of the element
+         *      have been changed. Will be called in the context of this style
+         *      sheet container instance. Receives the passed element as first
+         *      parameter, the old explicit attributes (name/value map) as
+         *      second parameter, and the new explicit attributes (name/value
+         *      map) as third parameter.
          *
          * @returns {StyleSheets}
          *  A reference to this style sheets container.
@@ -973,6 +986,7 @@ define('io.ox/office/editor/format/stylesheets',
                 });
             } else {
                 // no valid attribute names passed: clear all attributes
+                attributes.style = null;
                 _(definitions).each(function (definition, name) {
                     attributes[name] = null;
                 });
@@ -980,6 +994,46 @@ define('io.ox/office/editor/format/stylesheets',
 
             // use method setElementAttributes() to do the real work
             return this.setElementAttributes(element, attributes, options);
+        };
+
+        /**
+         * Clears specific formatting attributes in the specified DOM ranges.
+         *
+         * @param {DOM.Range[]} ranges
+         *  (in/out) The DOM ranges to be formatted. The array will be
+         *  validated and sorted before iteration starts (see method
+         *  DOM.iterateNodesInRanges() for details).
+         *
+         * @param {String|String[]} [attributeNames]
+         *  A single attribute name, or an an array of attribute names. If
+         *  omitted, clears all explicit element formatting attributes.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, allows to change special attributes (attributes
+         *      that are marked with the 'special' flag in the attribute
+         *      definitions passed to the constructor).
+         *  @param {Function} [options.changeListener]
+         *      If specified, will be called if the attributes of the element
+         *      have been changed. Will be called in the context of this style
+         *      sheet container instance. Receives the passed element as first
+         *      parameter, the old explicit attributes (name/value map) as
+         *      second parameter, and the new explicit attributes (name/value
+         *      map) as third parameter.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this style sheets container.
+         */
+        this.clearAttributesInRanges = function (ranges, attributeNames, options) {
+
+            // iterate all covered elements and change their formatting
+            this.iterateReadWrite(ranges, function (element) {
+                this.clearElementAttributes(element, attributeNames, options);
+            }, this);
+
+            return this;
         };
 
         /**

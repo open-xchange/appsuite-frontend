@@ -267,7 +267,7 @@ define('io.ox/office/editor/format/imagestyles',
 
                 // create empty text span before first text span
                 firstTextNode = Utils.findFirstTextNode(paragraph);
-                DOM.splitTextNode(firstTextNode, 0);
+                DOM.splitTextSpan(firstTextNode.parentNode, 0);
 
                 // remove floating classes, move image behind floated images
                 div.removeClass('float left right').insertBefore(firstTextNode.parentNode);

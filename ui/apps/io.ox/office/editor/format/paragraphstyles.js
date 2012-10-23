@@ -47,8 +47,8 @@ define('io.ox/office/editor/format/paragraphstyles',
                 def: LineHeight.SINGLE,
                 set: function (element, lineHeight) {
                     lineHeight = LineHeight.validateLineHeight(lineHeight);
-                    // use the iterator go get all child nodes that need to be formatted
-                    iterateChildNodes(element, function (node) {
+                    // use the iterator go get all text nodes that need to be formatted
+                    iterateTextNodes(element, function (node) {
                         LineHeight.setElementLineHeight($(node), lineHeight);
                     });
                 }
@@ -78,10 +78,13 @@ define('io.ox/office/editor/format/paragraphstyles',
     // global private functions ===============================================
 
     /**
-     * Visits all child nodes of the passed paragraph.
+     * Visits all descendant nodes of the passed paragraph that contain text
+     * nodes.
      */
-    function iterateChildNodes(paragraph, iterator, context) {
-        return Utils.iterateSelectedDescendantNodes(paragraph, 'span, ' + DOM.LIST_LABEL_NODE_SELECTOR, iterator, context, { children: true });
+    function iterateTextNodes(paragraph, iterator, context) {
+        return Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
+            return iterator.call(context, textNode.parentNode);
+        });
     }
 
     // class ParagraphStyles ==================================================
@@ -114,7 +117,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, definitions, {
             childStyleFamily: 'character',
-            childNodeIterator: iterateChildNodes
+            childNodeIterator: iterateTextNodes
         });
 
         // methods ------------------------------------------------------------
