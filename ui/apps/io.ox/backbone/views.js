@@ -255,7 +255,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     }
 
                     if (self.model.isSet(attribute)) {
-                        self.$el.append($.txt(value));
+                        self.$el.append($.txt(_.noI18n(value)));
                     } else if (self.initialValue) {
                         self.$el.append($.txt(self.initialValue));
                     }

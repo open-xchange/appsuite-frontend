@@ -136,7 +136,7 @@ define('io.ox/contacts/edit/view-form', [
             options.point.extend(new CityControlGroup({
                 id: cityAttribute,
                 index: options.index,
-                label: model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute],
+                label: _.noI18n(model.fields[postalCodeAttribute] + '/' + model.fields[cityAttribute]),
                 zipControl: '<input type="text" class="span1" name="' + postalCodeAttribute + '">',
                 control: '<input type="text" class="span3" name="' + cityAttribute + '">',
                 zipAttribute: postalCodeAttribute,
