@@ -209,7 +209,6 @@ define("io.ox/core/main",
                 // so let's delay this for responsiveness
                 setTimeout(function () {
                     notifications.attach(addLauncher);
-                    notifications.addFaviconNotification();
                 }, 5000);
             }
         });

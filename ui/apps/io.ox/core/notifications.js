@@ -131,15 +131,8 @@ define('io.ox/core/notifications', ['io.ox/core/extensions'], function (ext) {
                 mailNotifications.register();
                 calNotifications.register();
             });*/
-
-
-
         },
-        addFaviconNotification: function () {
-            if (window.Tinycon) {
-                this.badges.push(new FaviconBadge());
-            }
-        },
+
         get: function (key, listview) {
             if (_.isUndefined(this.notifications[key])) {
                 var module = {};

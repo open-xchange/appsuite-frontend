@@ -936,9 +936,8 @@ define("io.ox/core/desktop",
                             self.nodes.body.removeClass('search-open');
                             this.active = false;
                             self.nodes.searchField.val('');
-                            if (this.previous !== '') {
-                                self.trigger('cancel-search', this.query = this.previous = '');
-                            }
+                            self.trigger('cancel-search', '');
+                            this.query = this.previous = '';
                         }
                         return this;
                     },
@@ -1119,27 +1118,19 @@ define("io.ox/core/desktop",
                     keydown: function (e) {
                         e.stopPropagation();
                         if (e.which === 27) {
-                            $(this).val('');
                             win.search.close();
-                            win.trigger("cancel-search", win.search.previous = '');
-                        }
-                    },
-                    search: function (e) {
-                        e.stopPropagation();
-                        if ($(this).val() === '') {
-                            $(this).blur();
+                        } else if (e.which === 13 && $(this).val() === '') {
                             win.search.close();
                         }
                     },
                     change: function (e) {
                         e.stopPropagation();
-                        win.search.query = $(this).val();
+                        win.search.query = $.trim($(this).val());
                         // trigger search?
-                        if (win.search.query !== '') {
-                            if (win.search.query !== win.search.previous) {
-                                triggerSearch(win.search.previous = win.search.query);
-                            }
-                        } else if (win.search.previous !== '') {
+                        if (win.search.query !== '' && win.search.query !== win.search.previous) {
+                            triggerSearch(win.search.previous = win.search.query);
+                        }
+                        else if (win.search.query === '') {
                             win.search.close();
                         }
                     }
@@ -1148,7 +1139,7 @@ define("io.ox/core/desktop",
                 $('<form class="form-search">').append(
                     $('<div class="input-append">').append(
                         $('<label>', { 'for': searchId }).append(
-                            win.nodes.searchField = $('<input type="text" class="input-large search-query">')
+                            win.nodes.searchField = $('<input type="text" class="input-xlarge search-query">')
                             .attr({
                                 tabindex: '1',
                                 placeholder: gt('Search') + ' ...',

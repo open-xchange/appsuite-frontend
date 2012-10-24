@@ -231,7 +231,7 @@ define('io.ox/core/commons-folderview',
             app.getWindow().nodes.title.find('.' + UP).removeClass(UP).addClass(DOWN);
             top = container.scrollTop();
             disablePermanent();
-            sidepanel.hide();
+            sidepanel[options.permanent ? 'hide' : 'fadeOut']();
             visible = false;
         };
 
@@ -239,7 +239,7 @@ define('io.ox/core/commons-folderview',
             if (!visible) {
                 app.getWindow().nodes.title.find('.' + DOWN).removeClass(DOWN).addClass(UP);
                 if (options.permanent) { enablePermanent(); }
-                sidepanel.show();
+                sidepanel[options.permanent ? 'show' : 'fadeIn']();
                 container.scrollTop(top);
                 visible = true;
             }
