@@ -115,7 +115,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && /\.(doc|docx|odt|xls|xlsx|odc|ppt|pptx|odp|odg)$/i.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/office/preview/main', { file: data }).done(function () {
+            ox.launch('io.ox/office/preview/main', { file: data.data }).done(function () {
                 this.load();
             });
         }

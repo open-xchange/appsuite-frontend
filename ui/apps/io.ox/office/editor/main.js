@@ -865,8 +865,9 @@ define('io.ox/office/editor/main',
         };
 
         /**
-         * Triggers the acquire edit rights action.
-         * If the edit rights were aquired is determined by the server response to the pull operation action
+         * Triggers the acquire edit rights action. If the edit rights were
+         * aquired is determined by the server response to the pull operation
+         * action.
          */
         this.acquireEditRights = function () {
 
@@ -919,6 +920,9 @@ define('io.ox/office/editor/main',
             .addButton('table',  { label: gt('Table') })
             .addButton('image',  { label: gt('Image') })
             .addButton('debug',  { label: gt('Debug'), active: Config.isDebugAvailable() })
+            .end()
+        .addButtonGroup('quit')
+            .addButton('file/quit', { label: gt('Close') })
             .end();
 
     // exports ================================================================

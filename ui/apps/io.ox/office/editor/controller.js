@@ -63,6 +63,9 @@ define('io.ox/office/editor/controller',
                     enable: function () { return !editor.isEditMode() && app.hasFileDescriptor(); },
                     set: function (state) { app.acquireEditRights(); }
                 },
+                'file/quit': {
+                    set: function () { window.setTimeout(function () { app.quit(); }); }
+                },
 
                 // document contents
 

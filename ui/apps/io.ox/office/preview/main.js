@@ -41,6 +41,10 @@ define('io.ox/office/preview/main',
             // the controller
             controller = new Controller({
 
+                    'file/quit': {
+                        set: function () { window.setTimeout(function () { self.quit(); }); }
+                    },
+
                     'pages/first': {
                         enable: function () { return preview.getPage() > 1; },
                         set: function () { preview.firstPage(); }
@@ -141,7 +145,7 @@ define('io.ox/office/preview/main',
             // create the application window
             win = ox.ui.createWindow({
                 name: MODULE_NAME,
-                close: true,
+                classic: true,
                 search: false,
                 toolbar: true
             });
@@ -304,6 +308,9 @@ define('io.ox/office/preview/main',
             .addLabel('pages/current', { width: 100 })
             .addButton('pages/next', { icon: 'icon-chevron-right' })
             .addButton('pages/last', { icon: 'icon-fast-forward' })
+            .end()
+        .addButtonGroup('quit')
+            .addButton('file/quit', { label: gt('Close') })
             .end();
 
     // exports ================================================================
