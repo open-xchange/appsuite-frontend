@@ -2351,7 +2351,7 @@ define('io.ox/office/editor/position',
         return (_.isEqual(pos1, pos2)) && (lastPos2 === lastPos1 + 1);
     };
 
-    // iteration ==============================================================
+    // iteration --------------------------------------------------------------
 
     /**
      * Calls the passed iterator function for all or selected child elements in
@@ -2453,6 +2453,134 @@ define('io.ox/office/editor/position',
             nodeStart += nodeLength;
 
         }, undefined, { children: true });
+    };
+
+    // position ---------------------------------------------------------------
+
+    // resolves the top-level content node from the container element
+    function resolveContentNode(element, start) {
+
+        var // use iterator to find content node instead of jQuery.find for performance
+            node = Utils.getSelectedChildNodeByIndex(element, DOM.CONTENT_NODE_SELECTOR, start);
+
+        if (!node) {
+            Utils.warn('Position.resolveContentNode(): invalid index of content node: ' + start);
+        }
+        return { node: node, start: start, offset: 0 };
+    }
+
+    // resolves the paragraph child node from the paragraph
+    function resolveParagraphChildNode(paragraph, start) {
+
+        var nodeInfo = { node: null, start: 0, offset: 0 };
+
+        Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart) {
+            // first matching node is the requested node, store data and escape from iteration
+            nodeInfo = { node: node, start: nodeStart, offset: offsetStart };
+            return Utils.BREAK;
+        }, undefined, { start: start });
+
+        if (!nodeInfo.node) {
+            Utils.warn('Position.resolveParagraphChildNode(): invalid index of paragraph child node: ' + start);
+        }
+        return nodeInfo;
+    }
+
+    // resolves the descendant node from the container element with a jQuery selector
+    function resolveDescendantNode(element, selector, start) {
+
+        var // get the node by using a jQuery selector
+            node = $(element).find(selector).get(start);
+
+        if (!node) {
+            Utils.warn('Position.resolveDescendantNode(): invalid index of node: ' + start);
+        }
+        return { node: node, start: start, offset: 0 };
+    }
+
+    /**
+     * Returns the DOM node that corresponds to the specified logical position,
+     * relative to a root node that contains top-level content nodes (e.g.
+     * paragraphs and tables). Nodes that may cover several logical positions
+     * (e.g. text spans) will be found even if their actual start position does
+     * not match the passed position.
+     *
+     * @param {HTMLElement|jQuery} rootNode
+     *  The root node containing top-level content nodes. If this object is a
+     *  jQuery collection, uses the first node it contains.
+     *
+     * @param {Number[]} position
+     *  The logical position of the node to be returned.
+     *
+     * @param {Object} [options]
+     *  A map with additional options to control the behavior of this method.
+     *  The following options are supported:
+     *  @param {Number} [options.arrayIndex=0]
+     *      If specified, the 'position' array will be evaluated starting at
+     *      the element with this array index. By default, evaluation will
+     *      start at the beginning of the position array.
+     *
+     * @returns {Object}
+     *  An object that contains the DOM node in the 'node' attribute, the
+     *  logical start index of this node in the 'start' attribute (usually
+     *  equal to the last element of the 'position' array, but may differ when
+     *  addressing a sub component in a node containing multiple sub
+     *  components, such as characters in a text span), and the relative offset
+     *  of the sub component addressed by the 'position' array (usually 0,
+     *  except for nodes containing multiple sub components) in the 'offset'
+     *  attribute.
+     */
+    Position.getNodeAtPosition = function (rootNode, position, options) {
+
+        var // index of current element in the 'position' array
+            arrayIndex = Utils.getIntegerOption(options, 'arrayIndex', 0),
+            // the result object to be returned
+            nodeInfo = { node: null, start: 0, offset: 0 };
+
+        // increases array index and returns whether it is still valid
+        function nextArrayIndex() {
+            arrayIndex += 1;
+            return arrayIndex < position.length;
+        }
+
+        // check input parameters
+        if ((arrayIndex < 0) || (arrayIndex >= position.length)) {
+            Utils.warn('Position.getNodeAtPosition(): invalid array index');
+            return { node: null, start: 0, offset: 0 };
+        }
+
+        // resolve the top-level content node
+        nodeInfo = resolveContentNode(rootNode, position[arrayIndex]);
+        if (!nextArrayIndex()) { return nodeInfo; }
+
+        // paragraph: resolve paragraph child node
+        if (DOM.isParagraphNode(nodeInfo.node)) {
+
+            // get child node in paragraph
+            nodeInfo = resolveParagraphChildNode(nodeInfo.node, position[arrayIndex]);
+            // there cannot be more nested nodes
+            if (nextArrayIndex()) { Utils.warn('Position.getNodeAtPosition(): too many values in position'); }
+            return nodeInfo;
+        }
+
+        // table: resolve rows, cells, and cell contents
+        if (DOM.isTableNode(nodeInfo.node)) {
+
+            // get table row
+            nodeInfo = resolveDescendantNode(nodeInfo.node, '> tbody > tr', position[arrayIndex]);
+            if (!nextArrayIndex()) { return nodeInfo; }
+
+            // get table cell
+            nodeInfo = resolveDescendantNode(nodeInfo.node, '> td', position[arrayIndex]);
+            if (!nextArrayIndex()) { return nodeInfo; }
+
+            // find a node inside table cell
+            return Position.getNodeAtPosition(nodeInfo.node, position, { arrayIndex: arrayIndex });
+        }
+
+        Utils.error('Position.getNodeAtPosition(): unknown content node');
+        nodeInfo.node = null;
+        return nodeInfo;
     };
 
     // exports ================================================================

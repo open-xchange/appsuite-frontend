@@ -1020,6 +1020,48 @@ define('io.ox/office/tk/utils',
     };
 
     /**
+     * Returns a child node of the passed node, that is at a specific index in
+     * the array of all matching child nodes.
+     *
+     * @param {HTMLElement|jQuery} element
+     *  A DOM element object whose child nodes will be visited. If this object
+     *  is a jQuery collection, uses the first node it contains.
+     *
+     * @param {String|Function|Node|jQuery} selector
+     *  A jQuery selector that will be used to decide which child nodes are
+     *  matching while searching to the specified index. The selector will be
+     *  passed to the jQuery method jQuery.is() for each node. If this selector
+     *  is a function, it will be called with the current DOM node bound to the
+     *  symbol 'this'. See the jQuery API documentation at
+     *  http://api.jquery.com/is for details.
+     *
+     * @param {Number} index
+     *  The zero-based index of the child node in the set of child nodes
+     *  matching the selector that will be returned.
+     *
+     * @returns {Node|Null}
+     *  The 'index'-th child node that matches the selector; or null, if the
+     *  index is outside the valid range.
+     */
+    Utils.getSelectedChildNodeByIndex = function (element, selector, index) {
+
+        var // the node to be returned
+            resultNode = null;
+
+        // find the 'index'-th matching child node
+        Utils.iterateSelectedDescendantNodes(element, selector, function (node) {
+            // node found: store and escape from loop
+            if (index === 0) {
+                resultNode = node;
+                return Utils.BREAK;
+            }
+            index -= 1;
+        }, undefined, { children: true });
+
+        return resultNode;
+    };
+
+    /**
      * Scrolls a specific child node of a container node into its visible area.
      *
      * @param {HTMLElement|jQuery} scrollableNode
