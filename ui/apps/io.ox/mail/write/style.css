@@ -183,9 +183,9 @@
 }
 
 .io-ox-mail-write-contact .contact-image {
-    height: 3em;
-    width: 3em;
-    margin-right: 1em;
+    height: 3 * 14px;
+    width: 3 * 14px;
+    margin-right: 14px;
     display: inline-block;
     background-size: cover;
     background-repeat: no-repeat;

@@ -475,7 +475,7 @@ define('io.ox/mail/view-detail',
             );
             require(['io.ox/contacts/api'], function (api) {
                 // get contact picture
-                api.getPictureURL(data.from[0][1])
+                api.getPictureURL(data.from[0][1], { width: 64, height: 64, scaleType: 'contain' })
                     .done(function (url) {
                         if (url) {
                             picture.css({ backgroundImage: 'url(' + url + ')', display: '' });

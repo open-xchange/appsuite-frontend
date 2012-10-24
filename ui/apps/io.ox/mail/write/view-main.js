@@ -60,6 +60,8 @@ define("io.ox/mail/write/view-main",
         ref: POINT + '/actions/cancel'
     }));
 
+    var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };
+
     var autocompleteAPI = new AutocompleteAPI({id: 'mailwrite', contacts: true });
 
     var view = View.extend({
@@ -662,23 +664,14 @@ define("io.ox/mail/write/view-main",
 
     function drawAutoCompleteItem(node, data, query) {
 
-        var img = $('<div>').addClass('contact-image'),
-            url = contactsUtil.getImage(data.data),
+        var url = contactsUtil.getImage(data.data, contactPictureOptions),
             name = highlight(data.display_name, query),
             email = highlight(data.email, query);
 
-        if (Modernizr.backgroundsize) {
-            img.css('backgroundImage', 'url(' + url + ')');
-        } else {
-            img.append(
-                $('<img>', { src: url, alt: '' }).css({ width: '100%', height: '100%' })
-            );
-        }
-
         node.addClass('io-ox-mail-write-contact').append(
-            img,
-            $('<div>').addClass('person-link ellipsis noI18n').html(name + '\u00A0'),
-            $('<div>').addClass('ellipsis noI18n').html(email)
+            $('<div class="contact-image">').css('backgroundImage', 'url(' + url + ')'),
+            $('<div class="person-link ellipsis noI18n">').html(name + '\u00A0'),
+            $('<div class="ellipsis noI18n">').html(email)
         );
     }
 
@@ -689,7 +682,7 @@ define("io.ox/mail/write/view-main",
 
         node.addClass('io-ox-mail-write-contact section-item').append(
             // picture
-            contactsAPI.getPicture(data.email + '').addClass('contact-image'),
+            contactsAPI.getPicture(data.email + '', contactPictureOptions).addClass('contact-image'),
             // hidden field
             $('<input>', { type: 'hidden', name: id, value: serialize(data) }),
             // display name
