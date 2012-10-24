@@ -176,8 +176,8 @@ define('io.ox/mail/write/main',
                 .append(
                     $('<input>', { type: 'hidden', name: 'msgref', value: '' }),
                     $('<input>', { type: 'hidden', name: 'sendtype', value: mailAPI.SENDTYPE.NORMAL }),
-                    view.main,
-                    view.scrollpane
+                    view.leftside,
+                    view.rightside
                 )
             );
 
@@ -294,14 +294,14 @@ define('io.ox/mail/write/main',
         };
 
         app.getFrom = function () {
-            return (view.sidepanel.find('.fromselect-wrapper select').val() || '')
+            return (view.leftside.find('.fromselect-wrapper select').val() || '')
                 .split(/\|/).reverse();
         };
 
         app.setFrom = function (data) {
             return this.getPrimaryAddressFromFolder(data).done(function (from) {
                 var value = from[1] + '|' + (from[0] || from[1]);
-                view.sidepanel.find('select').val(value);
+                view.leftside.find('select').val(value);
             });
         };
 

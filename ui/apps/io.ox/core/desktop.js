@@ -1158,6 +1158,7 @@ define("io.ox/core/desktop",
             // fix height/position/appearance
             if (opt.chromeless) {
 
+                win.nodes.outer.addClass('chromeless-window');
                 win.nodes.head.hide();
                 win.nodes.body.css('left', '0px');
 

@@ -47,7 +47,7 @@ define("io.ox/mail/write/view-main",
     ext.point(POINT + '/toolbar').extend(new links.Button({
         id: 'draft',
         index: 200,
-        label: gt('Save as draft'),
+        label: gt('Save'), // is "Save as draft" but let's keep it short for small devices
         cssClasses: 'btn',
         ref: POINT + '/actions/draft'
     }));
@@ -101,7 +101,7 @@ define("io.ox/mail/write/view-main",
 
             this.sections[id] = $('<div>').addClass('section').attr('data-section', id);
 
-            this.sidepanel.append(this.sections[id + 'Label'], this.sections[id]);
+            this.scrollpane.append(this.sections[id + 'Label'], this.sections[id]);
 
             if (show === false) {
                 this.sections[id + 'Label'].hide();
@@ -134,7 +134,7 @@ define("io.ox/mail/write/view-main",
                     .text(label)
                     .on('click', { id: id }, $.proxy(fnShowSection, this))
                 )
-                .appendTo(this.sidepanel);
+                .appendTo(this.scrollpane);
         },
 
         applyHighPriority: function (flag) {
@@ -146,6 +146,7 @@ define("io.ox/mail/write/view-main",
         },
 
         addUpload: function () {
+
             var inputOptions, self = this;
 
             if (Modernizr.file) {
@@ -278,87 +279,16 @@ define("io.ox/mail/write/view-main",
 
             var self = this, app = self.app, buttons;
 
-            // main panel
-            this.main = $('<div class="rightside">');
-
-            ext.point(POINT + '/toolbar').invoke(
-                'draw', buttons = $('<div class="inline-buttons top">'), ext.Baton({ app: app })
-            );
-
-            this.main.append(
-                $('<div class="abs io-ox-mail-write-main">').append(
-                    // buttons
-                    buttons,
-                    // subject field
-                    $('<div>').css('position', 'relative').append(
-                        $('<div>').addClass('subject-wrapper')
-                        .append(
-                            // subject
-                            $.labelize(
-                                this.subject = $('<input>')
-                                .attr({
-                                    type: 'text',
-                                    name: 'subject',
-                                    tabindex: '3',
-                                    placeholder: gt('Subject'),
-                                    autocomplete: 'off'
-                                })
-                                .addClass('subject')
-                                .val('')
-                                .placeholder()
-                                .on('keydown', function (e) {
-                                    if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
-                                        // auto jump to editor on enter/tab
-                                        e.preventDefault();
-                                        app.getEditor().focus();
-                                    }
-                                })
-                                .on('keyup', function () {
-                                    var title = _.noI18n($.trim($(this).val()));
-                                    app.setTitle(title);
-                                }),
-                                'mail_subject'
-                            )
-                        ),
-                        // priority
-                        this.priorityOverlay = $('<div>').addClass('priority-overlay')
-                            .attr('title', 'Priority')
-                            .text(_.noI18n('\u2605\u2605\u2605'))
-                            .on('click', $.proxy(togglePriority, this))
-                    )
-                )
-                .append(
-                    $('<div>')
-                    .addClass('abs editor-outer-container')
-                    .append(
-                        // white background
-                        $('<div>').addClass('abs editor-background')
-                    )
-                    .append(
-                        // editor's print margin
-                        $('<div>').addClass('abs editor-print-margin')
-                    )
-                    .append(
-                        $('<div>')
-                        .addClass('abs editor-inner-container')
-                        .css('overflow', 'hidden')
-                        .append(
-                            // text editor
-                            // FIXME: Labelize Call?
-                            this.textarea = $('<textarea>')
-                            .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
-                            .addClass('text-editor')
-                        )
-                    )
-                )
-            );
+            /*
+             * LEFTSIDE
+             */
 
             // side panel
-            this.scrollpane = $('<div class="leftside io-ox-mail-write-sidepanel">');
-            this.sidepanel = this.scrollpane.scrollable();
+            this.leftside = $('<div class="leftside io-ox-mail-write-sidepanel">');
+            this.scrollpane = this.leftside.scrollable();
 
             // title
-            this.sidepanel.append(
+            this.scrollpane.append(
                 $('<h1 class="title">').text('\u00A0')
             );
 
@@ -375,23 +305,20 @@ define("io.ox/mail/write/view-main",
             this.addSection('cc', gt('Copy to'), false, true)
                 .append(this.createRecipientList('cc'))
                 .append(this.createField('cc'));
-            this.addLink('cc', gt('Copy (CC) to ...'));
+            this.addLink('cc', gt('Copy (CC) to'));
 
             // BCC
             this.addSection('bcc', gt('Blind copy to'), false, true)
                 .append(this.createRecipientList('bcc'))
                 .append(this.createField('bcc'));
-            this.addLink('bcc', gt('Blind copy (BCC) to ...'));
+            this.addLink('bcc', gt('Blind copy (BCC) to'));
 
-         // FROM
-            this.addSection('from', gt('From'), false, true)
-            .append(this.createSenderField());
-            this.addLink('from', gt('From'));
-
-            // Attachments
-            this.addSection('attachments', gt('Attachments'), false, true);
-            this.addUpload();
-            this.addLink('attachments', gt('Attachments'));
+            // Attachments (unless we're on iOS)
+            if (!_.browser.iOS) {
+                this.addSection('attachments', gt('Attachments'), false, true);
+                this.addUpload();
+                this.addLink('attachments', gt('Attachments'));
+            }
 
             // Signatures
             if (this.signatures.length) {
@@ -428,6 +355,11 @@ define("io.ox/mail/write/view-main",
                 this.addLink('signatures', gt('Signatures'));
             }
 
+            // FROM
+            this.addSection('from', gt('From'), false, true)
+                .append(this.createSenderField());
+            this.addLink('from', gt('Sender'));
+
             // Options
             this.addSection('options', gt('Options'), false, true)
                 .append(
@@ -462,7 +394,7 @@ define("io.ox/mail/write/view-main",
                     .append(createCheckbox('vcard', gt('Attach vCard')))
                 );
 
-            this.addLink('options', gt('More ...'));
+            this.addLink('options', gt('More'));
 
             var fnChangeFormat = function (e) {
                 e.preventDefault();
@@ -482,6 +414,74 @@ define("io.ox/mail/write/view-main",
                     );
             }
 
+            /*
+             * RIGHTSIDE
+             */
+
+            this.rightside = $('<div class="rightside">');
+
+            ext.point(POINT + '/toolbar').invoke(
+                'draw', buttons = $('<div class="inline-buttons top">'), ext.Baton({ app: app })
+            );
+
+            this.rightside.append(
+                // buttons
+                buttons,
+                // subject field
+                $('<div>').css('position', 'relative').append(
+                    $('<div>').addClass('subject-wrapper')
+                    .append(
+                        // subject
+                        $.labelize(
+                            this.subject = $('<input>')
+                            .attr({
+                                type: 'text',
+                                name: 'subject',
+                                tabindex: '3',
+                                placeholder: gt('Subject'),
+                                autocomplete: 'off'
+                            })
+                            .addClass('subject')
+                            .val('')
+                            .placeholder()
+                            .on('keydown', function (e) {
+                                if (e.which === 13 || (e.which === 9 && !e.shiftKey)) {
+                                    // auto jump to editor on enter/tab
+                                    e.preventDefault();
+                                    app.getEditor().focus();
+                                }
+                            })
+                            .on('keyup', function () {
+                                var title = _.noI18n($.trim($(this).val()));
+                                app.setTitle(title);
+                            }),
+                            'mail_subject'
+                        )
+                    ),
+                    // priority
+                    this.priorityOverlay = $('<div>').addClass('priority-overlay')
+                        .attr('title', 'Priority')
+                        .text(_.noI18n('\u2605\u2605\u2605'))
+                        .on('click', $.proxy(togglePriority, this))
+                ),
+                // editor container
+                $('<div class="abs editor-outer-container">').append(
+                    // white background
+                    $('<div>').addClass('abs editor-background'),
+                    // editor's print margin
+                    $('<div>').addClass('abs editor-print-margin'),
+                    // inner div
+                    $('<div>').addClass('abs editor-inner-container')
+                    .css('overflow', 'hidden')
+                    .append(
+                        // text editor
+                        // FIXME: Labelize Call?
+                        this.textarea = $('<textarea>')
+                        .attr({ name: 'content', tabindex: '4', disabled: 'disabled' })
+                        .addClass('text-editor')
+                    )
+                )
+            );
         }
     });
 
