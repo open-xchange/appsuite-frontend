@@ -95,18 +95,14 @@ define('io.ox/calendar/month/perspective',
             }
         },
 
-        drawWeeks: function (weeks, pos) {
-            pos = pos || false;
+        drawWeeks: function (weeks, up) {
+            up = up || false;
             var def = $.Deferred(),
                 self = this,
                 views = [],
                 updateWeek = function (day) {
                     return function () {
-                        return self.updateWeek({start: day, end: day + date.WEEK}).done(function () {
-                            if (pos) {
-                                self.scrollTop($('.week:first', self.pane).height());
-                            }
-                        });
+                        return self.updateWeek({start: day, end: day + date.WEEK});
                     };
                 };
             def.resolve();
@@ -114,7 +110,7 @@ define('io.ox/calendar/month/perspective',
             // draw all weeks
             for (var i = 1; i <= weeks; i++) {
                 var day = self.firstWeek;
-                if (pos) {
+                if (up) {
                     self.firstWeek -= date.WEEK;
                 } else {
                     self.lastWeek += date.WEEK;
@@ -122,13 +118,19 @@ define('io.ox/calendar/month/perspective',
                 }
                 self.collections[day] = new Backbone.Collection([]);
                 var view = new View({ collection: self.collections[day], day: day });
-                views[pos ? 'unshift' : 'push'](view.render().el);
+                views[up ? 'unshift' : 'push'](view.render().el);
                 view.on('showAppoinment', self.showAppointment, self);
-                def = def.pipe(updateWeek(day, pos));
+                def = def.pipe(updateWeek(day, up));
             }
 
             // add and render view
-            this.pane[(pos ? 'pre' : 'ap') + 'pend'](views);
+            if (up) {
+                var firstMsg = $('.week:first', this.pane);
+                var curOffset = firstMsg.offset().top - this.scrollTop();
+                this.pane.prepend(views).scrollTop(firstMsg.offset().top - curOffset);
+            } else {
+                this.pane.append(views);
+            }
 
             // when all updates finished
             def.done(function () {
