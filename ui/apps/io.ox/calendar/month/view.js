@@ -39,13 +39,13 @@ define('io.ox/calendar/month/view',
         },
 
         onClickAppointment: function (e) {
-            var obj = _.cid($(e.currentTarget).attr('data-cid'));
-            this.trigger('showAppoinment', e, obj);
+            this.trigger('showAppoinment', e, _.cid($(e.currentTarget).data('cid')));
         },
 
         render: function () {
 
             var list = util.getWeekScaffold(this.options.day),
+                firstFound = false,
                 weekinfo = $('<div>')
                     .addClass('week-info')
                     .append(
@@ -55,11 +55,19 @@ define('io.ox/calendar/month/view',
                         )
                     );
 
-
-            _(list).each(function (day) {
+            _(list.days).each(function (day, i) {
+                if (day.isFirst) {
+                    firstFound = true;
+                }
                 this.$el.append(
                     $('<div>')
-                        .addClass('day out' + (day.isFirst ? ' first' : '') + (day.isToday ? ' today' : '') + (day.isWeekend ? ' weekend' : ''))
+                        .addClass('day out' +
+                            (day.isFirst ? ' first' : '') +
+                            (day.isToday ? ' today' : '') +
+                            (day.isWeekend ? ' weekend' : '') +
+                            (day.isFirst && i > 0 ? ' borderleft' : '') +
+                            (list.hasFirst ? (firstFound ? ' bordertop' : ' borderbottom') : '')
+                        )
                         .attr('date', day.year + '-' + day.month + '-' + day.date)
                         .append(
                             $('<div>').addClass('list abs'),
@@ -72,7 +80,7 @@ define('io.ox/calendar/month/view',
                 }
             }, this);
 
-            this.$el.prepend(weekinfo);
+            this.$el.prepend(weekinfo.addClass(firstFound ? ' bordertop' : ''));
 
             return this;
         },
@@ -141,7 +149,7 @@ define('io.ox/calendar/month/view',
             .addClass('abs')
             .append(
                 $('<div>').addClass('scrollpane'),
-                $('<div>').addClass('footer').append(function () {
+                $('<div>').addClass('daylabel').append(function () {
                     _(days).each(function (day) {
                         tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                     });
