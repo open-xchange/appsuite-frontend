@@ -452,6 +452,10 @@
         [data-section-label="format"], [data-section="format"] {
             display: none;
         }
+        
+        .inline-buttons .btn {
+            margin-left: 4px;
+        }
     }
 }
 

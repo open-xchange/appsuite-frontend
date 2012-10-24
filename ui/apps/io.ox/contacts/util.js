@@ -23,7 +23,7 @@ define('io.ox/contacts/util', [], function () {
             } else if (obj.image1_url) {
                 return obj.image1_url
                     .replace(/^https?\:\/\/[^\/]+/i, '')
-                    .replace(/\/ajax/, ox.apiRoot) + '&' + $.param(options);
+                    .replace(/\/ajax/, ox.apiRoot) + (options ? '&' + $.param(options) : '');
             } else {
                 return ox.base + '/apps/themes/default/dummypicture.png';
             }
