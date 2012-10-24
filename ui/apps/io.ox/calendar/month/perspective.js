@@ -234,7 +234,7 @@ define('io.ox/calendar/month/perspective',
                     if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - this.scrollOffset) {
                         this.drawWeeks(this.updateLoad);
                     }
-                    if (top <= 0) {
+                    if (top <= this.scrollOffset) {
                         this.drawWeeks(this.updateLoad,  true);
                     }
                 }, this))
