@@ -196,6 +196,11 @@ define("io.ox/mail/api",
                 }
             }
         },
+        // composite key for "all" cache
+        cid: function (o) {
+            return (o.action || 'all') + ':' + o.folder + '//' + [o.sort, o.order, o.limit || 0, !!o.unseen, !!o.deleted].join('.');
+        },
+
         fail: {
             get: function (e, params) {
                 if (e.code === "MSG-0032") {
@@ -289,7 +294,18 @@ define("io.ox/mail/api",
     // undefined -> first fetch
     // true -> has been fetched in this session
     // false -> caused by refresh
-    var cacheControl = {};
+    var cacheControl = {}, getAll = api.getAll;
+
+    api.getAll = function (options, useCache) {
+        // use cache?
+        var cid = api.cid(options);
+        if (useCache === 'auto') {
+            useCache = (cacheControl[cid] !== false);
+        }
+        return getAll.call(this, options, useCache).done(function () {
+            cacheControl[cid] = true;
+        });
+    };
 
     // ~ all
     api.getAllThreads = function (options, useCache) {
@@ -307,13 +323,14 @@ define("io.ox/mail/api",
             max: 1000 // apply internal limit to build threads fast enough
         });
         // use cache?
+        var cid = api.cid(options);
         if (useCache === 'auto') {
-            useCache = (cacheControl[options.folder] !== false);
+            useCache = (cacheControl[cid] !== false);
         }
-        return this.getAll(options, useCache, null, false)
+        return getAll.call(this, options, useCache, null, false)
             .done(function (response) {
                 _(response.data).each(tracker.addThread);
-                cacheControl[options.folder] = true;
+                cacheControl[cid] = true;
             });
     };
 
@@ -537,7 +554,7 @@ define("io.ox/mail/api",
             api.trigger('refresh.list');
         });
     };
-    
+
     api.markSpam = function (list) {
         return api.update(list, { flags: api.FLAGS.SPAM, value: true })
             .pipe(function () {
@@ -942,8 +959,8 @@ define("io.ox/mail/api",
     api.refresh = function (e) {
         if (ox.online) {
             // reset cache control
-            _(cacheControl).each(function (val, id) {
-                cacheControl[id] = false;
+            _(cacheControl).each(function (val, cid) {
+                cacheControl[cid] = false;
             });
             api.checkInbox().done(function () {
                 // trigger

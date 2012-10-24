@@ -54,6 +54,9 @@ define("io.ox/core/api/factory",
                 search: { action: "search" },
                 remove: { action: "delete" }
             },
+            cid: function (o) {
+                return o.folder + '\t' + (o.sortKey || o.sort) + '.' + o.order + '.' + (o.max || o.limit || 0);
+            },
             done: {},
             fail: {},
             pipe: {},
@@ -78,11 +81,13 @@ define("io.ox/core/api/factory",
 
             options: o,
 
+            cid: o.cid,
+
             getAll: function (options, useCache, cache, processResponse) {
 
                 // merge defaults for "all"
                 var opt = $.extend({}, o.requests.all, options || {}),
-                    cid = opt.folder + '\t' + (opt.sortKey || opt.sort) + '.' + opt.order + '.' + (opt.max || opt.limit || 0);
+                    cid = o.cid(opt);
 
                 // use cache?
                 useCache = useCache === undefined ? true : !!useCache;

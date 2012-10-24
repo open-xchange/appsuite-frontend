@@ -146,6 +146,7 @@ define('io.ox/core/tk/vgrid',
             self = this,
             // states
             initialized = false,
+            loaded = false,
             firstRun = true,
             firstAutoSelect = true,
             paused = false,
@@ -520,7 +521,7 @@ define('io.ox/core/tk/vgrid',
             }
             // empty?
             scrollpane.find('.io-ox-center').remove().end();
-            if (list.length === 0) {
+            if (list.length === 0 && loaded) {
                 scrollpane.append($.fail(emptyMessage ? emptyMessage(self.getMode()) : gt('Empty')));
             }
             // trigger event
@@ -605,8 +606,10 @@ define('io.ox/core/tk/vgrid',
             // get all IDs
             var load = loadIds[currentMode] || loadIds.all;
 
-            return load.call(self)
-                .done(function (list) {
+            return load.call(self).then(
+                function (list) {
+                    // mark as loaded
+                    loaded = true;
                     // get list
                     if (!isArray(list)) {
                         // try to use 'data' property
@@ -627,8 +630,9 @@ define('io.ox/core/tk/vgrid',
                         console.warn('VGrid.all() must provide an array!');
                         return $.Deferred().reject();
                     }
-                })
-                .fail(handleFail);
+                },
+                handleFail
+            );
         };
 
         init = function () {
