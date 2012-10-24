@@ -84,6 +84,7 @@ define("io.ox/core/extPatterns/links",
         _.extend(this, options);
 
         var self = this,
+            tag = options.tagtype ? options.tagtype : 'a',
 
             click = function (e) {
                 e.preventDefault();
@@ -94,7 +95,7 @@ define("io.ox/core/extPatterns/links",
         this.draw = function (baton) {
 
             this.append(
-                $('<a href="#" class="btn">')
+                $('<' + tag + ' href="#" class="btn">')
                 .attr({ "data-action": self.id, tabIndex: self.tabIndex })
                 .addClass(self.cssClasses)
                 .css(self.css || {})

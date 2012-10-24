@@ -14,7 +14,8 @@
 define('io.ox/contacts/edit/main',
     ['io.ox/contacts/edit/view-form',
      'io.ox/contacts/model',
-     'gettext!io.ox/contacts'
+     'gettext!io.ox/contacts',
+     'less!io.ox/contacts/edit/style.css'
      ], function (view, model, gt) {
 
     'use strict';
