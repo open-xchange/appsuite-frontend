@@ -12,8 +12,7 @@
  */
 
 define('io.ox/office/editor/format/documentstyles',
-    ['io.ox/office/editor/dom',
-     'io.ox/office/editor/format/characterstyles',
+    ['io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/paragraphstyles',
      'io.ox/office/editor/format/imagestyles',
      'io.ox/office/editor/format/tablestyles',
@@ -22,7 +21,7 @@ define('io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/pagestyles',
      'io.ox/office/editor/format/themes',
      'io.ox/office/editor/format/lists'
-    ], function (DOM, CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
+    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
 
     'use strict';
 
