@@ -135,7 +135,7 @@ define('io.ox/core/session', ['io.ox/core/http'], function (http) {
         },
 
         client: function () {
-            return 'com.openexchange.ui7';
+            return 'open-xchange-ui7';
         }
     };
 
