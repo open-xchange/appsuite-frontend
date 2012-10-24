@@ -254,7 +254,7 @@ define('io.ox/office/editor/operations',
                 attributeRanges = [];
 
             // process all content nodes in the paragraph and create operations
-            DOM.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
+            Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart, offsetLength) {
 
                 var // logical start index of the covered part of the child node
                     startIndex = nodeStart + offsetStart,

@@ -23,7 +23,7 @@ define('io.ox/office/editor/format/characterstyles',
     'use strict';
 
     var // definitions for character attributes
-        definitions = {
+        DEFINITIONS = {
 
             fontname: {
                 def: 'sans-serif',
@@ -117,6 +117,46 @@ define('io.ox/office/editor/format/characterstyles',
         return DOM.isTextSpan(this) || DOM.isListLabelNode(this);
     }
 
+    /**
+     * Will be called for every element whose character attributes have been
+     * changed.
+     *
+     * @param {jQuery} node
+     *  The element whose character attributes have been changed, as jQuery
+     *  object.
+     *
+     * @param {Object} attributes
+     *  A map of all attributes (name/value pairs), containing the
+     *  effective attribute values merged from style sheets and explicit
+     *  attributes.
+     */
+    function updateCharacterFormatting(node, attributes) {
+        // update calculated line height due to changed font settings
+        LineHeight.updateElementLineHeight(node);
+    }
+
+    /**
+     * Returns whether the passed text nodes contain equal character
+     * formatting attributes.
+     */
+    function hasEqualAttributes(textNode1, textNode2) {
+        return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
+    }
+
+    /**
+     * Iterates over all text nodes covered by the passed DOM ranges and
+     * calls the passed iterator function for their parent <span> elements.
+     */
+    function iterateTextSpans(ranges, iterator, context, readWrite) {
+
+        var // options for DOM.iterateTextPortionsInRanges() depending on read/write mode
+            options = readWrite ? { split: true, merge: hasEqualAttributes } : undefined;
+
+        return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
+            return iterator.call(context, textNode.parentNode);
+        }, context, options);
+    }
+
     // class CharacterStyles ==================================================
 
     /**
@@ -138,52 +178,9 @@ define('io.ox/office/editor/format/characterstyles',
      */
     function CharacterStyles(rootNode, documentStyles) {
 
-        // private methods ----------------------------------------------------
-
-        /**
-         * Returns whether the passed text nodes contain equal character
-         * formatting attributes.
-         */
-        function hasEqualAttributes(textNode1, textNode2) {
-            return StyleSheets.hasEqualElementAttributes(textNode1.parentNode, textNode2.parentNode);
-        }
-
-        /**
-         * Iterates over all text nodes covered by the passed DOM ranges and
-         * calls the passed iterator function for their parent <span> elements.
-         */
-        function iterateTextSpans(ranges, iterator, context, readWrite) {
-
-            var // options for DOM.iterateTextPortionsInRanges() depending on read/write mode
-                options = readWrite ? { split: true, merge: hasEqualAttributes } : undefined;
-
-            return DOM.iterateTextPortionsInRanges(ranges, function (textNode) {
-                return iterator.call(context, textNode.parentNode);
-            }, context, options);
-        }
-
-        /**
-         * Will be called for every text span whose attributes have been
-         * changed.
-         *
-         * @param {jQuery} span
-         *  The <span> element whose character attributes have been changed, as
-         *  jQuery object.
-         *
-         * @param {Object} attributes
-         *  A map of all attributes (name/value pairs), containing the
-         *  effective attribute values merged from style sheets and explicit
-         *  attributes.
-         */
-        function updateSpanFormatting(span, attributes) {
-            // update calculated line height due to changed font settings
-            LineHeight.updateElementLineHeight(span);
-        }
-
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character', characterNodeSelector, definitions, {
-            updateHandler: updateSpanFormatting,
+        StyleSheets.call(this, documentStyles, 'character', characterNodeSelector, DEFINITIONS, {
             parentStyleFamily: 'paragraph'
         });
 
@@ -207,6 +204,10 @@ define('io.ox/office/editor/format/characterstyles',
         this.iterateReadWrite = function (ranges, iterator, context) {
             return iterateTextSpans(ranges, iterator, context, true);
         };
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateCharacterFormatting);
 
     } // class CharacterStyles
 

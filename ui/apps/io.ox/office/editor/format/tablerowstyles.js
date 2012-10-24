@@ -21,7 +21,7 @@ define('io.ox/office/editor/format/tablerowstyles',
     'use strict';
 
     var // definitions for table row attributes
-        definitions = {
+        DEFINITIONS = {
 
             /**
              * The height of the table row. If zero then the row is auto sized.
@@ -80,9 +80,7 @@ define('io.ox/office/editor/format/tablerowstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'tablerow', 'tr', definitions, {
-            updateHandler: updateTableRowFormatting
-        });
+        StyleSheets.call(this, documentStyles, 'tablerow', 'tr', DEFINITIONS);
 
         // methods ------------------------------------------------------------
 
@@ -101,6 +99,10 @@ define('io.ox/office/editor/format/tablerowstyles',
          * for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateTableRowFormatting);
 
     } // class TableRowStyles
 

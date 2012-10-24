@@ -97,18 +97,6 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
-     *  @param {Function} [options.updateHandler]
-     *      If specified, this function will be called for every DOM element
-     *      whose attributes have been changed. In difference to the individual
-     *      setter functions defined for each single attribute (see parameter
-     *      definitions above), this handler will be called once for an element
-     *      regardless of the number of changed attributes. The function
-     *      receives the element whose attributes have been changed as jQuery
-     *      object as first parameter, and a map of all attributes (name/value
-     *      pairs, effective values merged from style sheets and explicit
-     *      attributes) of the element as second parameter. Only attributes of
-     *      the main style family will be passed. Will be called in the context
-     *      of this style sheet container instance.
      *  @param {String} [options.childStyleFamily]
      *      Additional attribute family whose attributes may be inserted into
      *      the attribute map of a style sheet, and will be applied to the
@@ -123,15 +111,15 @@ define('io.ox/office/editor/format/stylesheets',
      *      The attribute family of the style sheets assigned to parent
      *      elements (or other ancestors). Used to resolve attributes from the
      *      style sheet of an ancestor of the current element.
-     *  @param {Function} [options.conditionalFamiliesResolver]
-     *      If specified, a function that returns an array containing the names
-     *      of conditional families that are used to store multiple attribute
-     *      maps in the 'attributes' object of a style sheet. The usage of the
-     *      conditional attribute families depend on a context element (e.g. on
-     *      the position of the context element in its parents). The function
-     *      receives the desired attribute family as first parameter, and the
-     *      context element as jQuery object as second parameter. Will be
-     *      called in the context of this style sheet container instance.
+     *  @param {Function} [options.childStyleAttributesResolver]
+     *      If specified, a function that returns the attributes of a child
+     *      attribute family (not the own style family) from the 'attributes'
+     *      object of a style sheet. The set of attributes returned may depend
+     *      on a context element (e.g. on the position of the context element
+     *      in its parents). The function receives the desired attribute family
+     *      as first parameter, and the context element as jQuery object as
+     *      second parameter. Will be called in the context of this style sheet
+     *      container instance.
      */
     function StyleSheets(documentStyles, styleFamily, selector, definitions, options) {
 
@@ -147,8 +135,8 @@ define('io.ox/office/editor/format/stylesheets',
             // identifier of the default style sheet
             defaultStyleId = null,
 
-            // update handler, called after attributes have been changed
-            updateHandler = Utils.getFunctionOption(options, 'updateHandler'),
+            // update handlers, called after attributes have been changed
+            updateHandlers = [],
 
             // attribute family of child elements supported by the style sheet
             childStyleFamily = Utils.getStringOption(options, 'childStyleFamily'),
@@ -156,11 +144,11 @@ define('io.ox/office/editor/format/stylesheets',
             // iterator for child nodes supporting the attributes of 'childStyleFamily'
             childNodeIterator = Utils.getFunctionOption(options, 'childNodeIterator'),
 
-            // style family of parent style sheets
-            parentStyleFamily = Utils.getStringOption(options, 'parentStyleFamily'),
+            // custom resolver for style attributes of child families depending on a context element
+            childStyleAttributesResolver = Utils.getFunctionOption(options, 'childStyleAttributesResolver'),
 
-            // returns the names of custom conditional families that map attributes by family
-            conditionalFamiliesResolver = Utils.getFunctionOption(options, 'conditionalFamiliesResolver');
+            // style family of parent style sheets
+            parentStyleFamily = Utils.getStringOption(options, 'parentStyleFamily');
 
         // private methods ----------------------------------------------------
 
@@ -261,10 +249,10 @@ define('io.ox/office/editor/format/stylesheets',
                 });
             }
 
-            // call update handler taking all attributes at once
-            if (_.isFunction(updateHandler)) {
+            // call update handlers taking all attributes at once
+            _(updateHandlers).each(function (updateHandler) {
                 updateHandler.call(self, element, mergedAttributes);
-            }
+            });
         }
 
         /**
@@ -341,6 +329,30 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         // methods ------------------------------------------------------------
+
+        /**
+         * Registers an update handler that will be called for every DOM
+         * element whose attributes have been changed. In difference to the
+         * individual setter functions specified in the definitions for single
+         * attributes, this handler will be called once for a DOM element
+         * regardless of the number of changed attributes.
+         *
+         * @param {Function} updateHandler
+         *  The update handler function. Receives the element whose attributes
+         *  have been changed (as jQuery object) as first parameter, and a map
+         *  of all attributes (name/value pairs, effective values merged from
+         *  style sheets and explicit attributes) of the element as second
+         *  parameter. Only attributes of the main style family will be passed.
+         *  Will be called in the context of this style sheet container
+         *  instance.
+         *
+         * @returns {StyleSheets}
+         *  A reference to this instance.
+         */
+        this.registerUpdateHandler = function (updateHandler) {
+            updateHandlers.push(updateHandler);
+            return this;
+        };
 
         /**
          * Returns the names of all style sheets in a map, keyed by their
@@ -562,17 +574,13 @@ define('io.ox/office/editor/format/stylesheets',
                     if (_.isObject(styleSheet.attributes[family])) {
                         // attributes directly mapped by family name in own 'attributes' member
                         _(attributes).extend(styleSheet.attributes[family]);
-                    } else if (element && (element.length > 0) && _.isFunction(conditionalFamiliesResolver)) {
-                        // try conditional resolver for attributes not directly mapped by family, but by custom conditional families
-                        _(conditionalFamiliesResolver.call(self, family, element)).each(function (conditionalFamily) {
-                            var attributes = styleSheet.attributes[conditionalFamily];
-                            if (_.isObject(attributes) && _.isObject(attributes[family])) {
-                                _(attributes).extend(attributes[family]);
-                            }
-                        });
+                    }
+                    // try resolver for child style attributes
+                    if ((family !== styleFamily) && _.isFunction(childStyleAttributesResolver)) {
+                        _(attributes).extend(childStyleAttributesResolver.call(self, family, styleSheet.attributes, element));
                     }
 
-                // no style sheet passed (no more parent style sheets): defaults and parent families
+                // no style sheet passed (no more parent style sheets): collect defaults and visit parent style container
                 } else {
                     // start with default attribute values (only if in own style family)
                     attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
@@ -611,7 +619,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.getUIPriority = function (id) {
             return (id in styleSheets) ? styleSheets[id].priority : 0;
         };
-        
+
         /**
          * Returns the parent id for the specified style sheet.
          * @param {String} id
@@ -622,7 +630,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.getParentId = function (id) {
             return (id in styleSheets) ? styleSheets[id].parentId : null;
         };
-        
+
         /**
          * Returns the user defined name for the specified style sheet.
          *
@@ -635,7 +643,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.getName = function (id) {
             return (id in styleSheets) ? styleSheets[id].name : null;
         };
-        
+
         /**
          * Return if the specified style sheet is dirty or not.
          *
@@ -648,7 +656,7 @@ define('io.ox/office/editor/format/stylesheets',
         this.isDirty = function (id) {
             return (id in styleSheets) ? styleSheets[id].dirty : false;
         };
-        
+
         /**
          * Change dirty state of the specified style sheet
          *
@@ -660,7 +668,7 @@ define('io.ox/office/editor/format/stylesheets',
                 styleSheets[id].dirty = dirty;
             }
         };
-        
+
         /**
          * Returns the attributes of a specified style sheet.
          *
@@ -677,7 +685,7 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.getStyleSheetAttributesOnly = function (id) {
             var attributes = {};
-            
+
             if (id in styleSheets) {
                 var styleSheet = styleSheets[id];
                 _(attributes).extend(styleSheet.attributes);

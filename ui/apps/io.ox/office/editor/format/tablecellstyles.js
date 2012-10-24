@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/tablecellstyles',
         NO_BORDER = { style: 'none' },
 
         // definitions for table cell attributes
-        definitions = {
+        DEFINITIONS = {
 
             /**
              * The number of grid columns spanned by the table cell.
@@ -129,9 +129,7 @@ define('io.ox/office/editor/format/tablecellstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'tablecell', 'td', definitions, {
-            updateHandler: updateTableCellFormatting
-        });
+        StyleSheets.call(this, documentStyles, 'tablecell', 'td', DEFINITIONS);
 
         // methods ------------------------------------------------------------
 
@@ -150,6 +148,10 @@ define('io.ox/office/editor/format/tablecellstyles',
          * for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateTableCellFormatting);
 
     } // class TableCellStyles
 

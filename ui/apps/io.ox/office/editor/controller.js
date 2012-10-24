@@ -14,8 +14,8 @@
 define('io.ox/office/editor/controller',
     ['io.ox/office/tk/controller',
      'io.ox/office/editor/image',
-     'io.ox/office/editor/format/imagestyles'
-    ], function (BaseController, Image, ImageStyles) {
+     'io.ox/office/editor/format/objectstyles'
+    ], function (BaseController, Image, ObjectStyles) {
 
     'use strict';
 
@@ -215,10 +215,10 @@ define('io.ox/office/editor/controller',
                 },
                 'image/floatmode': {
                     chain: 'image/attributes',
-                    // TODO: enable this when image selection works correctly
-                    // get: function (attributes) { return ImageStyles.getFloatModeFromAttributes(attributes); },
+                    // TODO: enable this when object selection works correctly
+                    // get: function (attributes) { return ObjectStyles.getFloatModeFromAttributes(attributes); },
                     get: function () { return editor.getImageFloatMode(); },
-                    set: function (floatMode) { editor.setAttributes('image', ImageStyles.getAttributesFromFloatMode(floatMode)); }
+                    set: function (floatMode) { editor.setAttributes('image', ObjectStyles.getAttributesFromFloatMode(floatMode)); }
                 },
 
                 // numbering and bullets

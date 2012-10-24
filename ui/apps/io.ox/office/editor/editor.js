@@ -2396,7 +2396,7 @@ define('io.ox/office/editor/editor',
 
             // remove all empty text spans which have sibling text spans, and collect
             // sequences of sibling text spans (needed for white-space handling)
-            DOM.iterateParagraphChildNodes(paragraph, function (node) {
+            Position.iterateParagraphChildNodes(paragraph, function (node) {
 
                 if (DOM.isEmptySpan(node)) {
                     // remove this span, if it is an empty portion and has a sibling text portion
@@ -3691,9 +3691,19 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
-            var // undo and redo operations going into one action
+            var // last index in the start/end position arrays
+                startLastIndex = 0, endLastIndex = 0,
+                // the DOM text range to be formatted
+                ranges = null,
+                // the attribute family according to the passed range address
+                family = null,
+                // the style sheet container of the specified attribute family
+                styleSheets = null,
+                // options for StyleSheets method calls
+                options = null,
+                // undo and redo operations going into a single action
                 undoOperations = [], redoOperations = [];
-
+            
             // change listener used to build the undo operations
             function changeListener(element, oldAttributes, newAttributes) {
 
@@ -3728,17 +3738,6 @@ define('io.ox/office/editor/editor',
                     redoOperations.push(redoOperation);
                 }
             }
-
-            var // last index in the start/end position arrays
-                startLastIndex = 0, endLastIndex = 0,
-                // the DOM text range to be formatted
-                ranges = null,
-                // the attribute family according to the passed range address
-                family = null,
-                // the style sheet container of the specified attribute family
-                styleSheets = null,
-                // options for StyleSheets.setAttributesInRanges() method calls
-                setAttributesOptions = { changeListener: changeListener };
 
             if (start === null) { return; }
 
@@ -3775,10 +3774,11 @@ define('io.ox/office/editor/editor',
             if (styleSheets) {
                 ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family === 'image');
                 // change attributes in document and store the undo/redo action
+                options = undomgr.isEnabled() ? { changeListener: changeListener } : null;
                 if (_.isNull(attributes)) {
-                    styleSheets.clearAttributesInRanges(ranges, undefined, setAttributesOptions);
+                    styleSheets.clearAttributesInRanges(ranges, undefined, options);
                 } else {
-                    styleSheets.setAttributesInRanges(ranges, attributes, setAttributesOptions);
+                    styleSheets.setAttributesInRanges(ranges, attributes, options);
                 }
                 undomgr.addUndo(undoOperations, redoOperations);
             }
@@ -3787,7 +3787,7 @@ define('io.ox/office/editor/editor',
             lastOperationEnd = new OXOPaM(end);
 
             // update numberings and bullets (attributes may be null if called from clearAttributes operation)
-            if (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes)) {
+            if ((family === 'paragraph') && (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
                 implUpdateLists();
             }
         }

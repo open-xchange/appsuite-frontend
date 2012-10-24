@@ -25,7 +25,7 @@ define('io.ox/office/editor/format/tablestyles',
         NO_BORDER = { style: 'none' },
 
         // definitions for table attributes
-        definitions = {
+        DEFINITIONS = {
 
             /**
              * Width of the table, as number in 1/100 of millimeters.
@@ -147,6 +147,11 @@ define('io.ox/office/editor/format/tablestyles',
 
     }
 
+
+    function resolveChildStyleAttributes(family, styleAttributes, node) {
+        return {};
+    }
+
     // class TableStyles ======================================================
 
     /**
@@ -169,8 +174,8 @@ define('io.ox/office/editor/format/tablestyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'table', DOM.TABLE_NODE_SELECTOR, definitions, {
-            updateHandler: updateTableFormatting
+        StyleSheets.call(this, documentStyles, 'table', DOM.TABLE_NODE_SELECTOR, DEFINITIONS, {
+            childStyleAttributesResolver: resolveChildStyleAttributes
         });
 
         // methods ------------------------------------------------------------
@@ -190,6 +195,10 @@ define('io.ox/office/editor/format/tablestyles',
          * for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateTableFormatting);
 
     } // class TableStyles
 

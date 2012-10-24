@@ -22,7 +22,7 @@ define('io.ox/office/editor/format/paragraphstyles',
     'use strict';
 
     var // definitions for paragraph attributes
-        definitions = {
+        DEFINITIONS = {
 
             alignment: {
                 def: 'left',
@@ -72,7 +72,7 @@ define('io.ox/office/editor/format/paragraphstyles',
                 set: function (element, value) {
                 }
             },
-            
+
             outlinelvl: {
                 def: 9,
                 set: function (element, value) {
@@ -113,15 +113,9 @@ define('io.ox/office/editor/format/paragraphstyles',
      */
     function ParagraphStyles(rootNode, documentStyles) {
 
-        var // self reference
-            self = this;
-
-        // private methods ----------------------------------------------------
-
-
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, definitions, {
+        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, DEFINITIONS, {
             childStyleFamily: 'character',
             childNodeIterator: iterateTextNodes
         });
