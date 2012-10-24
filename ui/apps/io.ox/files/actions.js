@@ -105,7 +105,7 @@ define("io.ox/files/actions",
             return e.collection.has('one') && pattern.test(e.context.data.filename);
         },
         action: function (data) {
-            ox.launch('io.ox/office/editor/main', { file: data });
+            ox.launch('io.ox/office/editor/main', { file: data.data });
         }
     });
 
