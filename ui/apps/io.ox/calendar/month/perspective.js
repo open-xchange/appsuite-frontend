@@ -15,7 +15,8 @@ define('io.ox/calendar/month/perspective',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
      'io.ox/core/date',
-     'io.ox/core/http'], function (View, api, util, date, http) {
+     'gettext!io.ox/calendar',
+     'io.ox/core/http'], function (View, api, util, date, gt, http) {
 
     'use strict';
 
@@ -52,14 +53,15 @@ define('io.ox/calendar/month/perspective',
 
         scaffold: $(),      // perspective
         pane: $(),          // scrollpane
+        kwInfo: $('<div>'), //
         tops: {},           // scrollTop positions of the shown weeks
         fisrtWeek: 0,       // timestamp of the first week
         lastWeek: 0,        // timestamp of the last week
         initLoad: 20,       // amount of preloaded weeks
-        updateCount: 6,     // amount of weeks to be loaded on scroll events
-        scrollOffset: 250,   // offset space to trigger update event on scroll stop
-
-        collections: {},
+        updateLoad: 8,      // amount of weeks to be loaded on scroll events
+        scrollOffset: 250,  // offset space to trigger update event on scroll stop
+        collections: {},    // all week collections of appointments
+        folder: 0,
 
         showAppointment: function (e, obj) {
             // open appointment details
@@ -73,12 +75,15 @@ define('io.ox/calendar/month/perspective',
             });
         },
 
-        updateWeek: function (start, end) {
+        updateWeek: function (obj) {
+//            console.log('updateWeek', (obj.end - obj.start) / date.WEEK);
             // fetch appointments
+            obj.folder = this.folder;
             var self = this,
-                collection = self.collections[start];
+                collection = self.collections[obj.start];
             if (collection) {
-                api.getAll({ start: start, end: end }).done(function (list) {
+                var def = api.getAll(obj);
+                def.done(function (list) {
                     collection.reset(_(list).map(function (obj) {
                         var m = new Backbone.Model(obj);
                         m.id = _.cid(obj);
@@ -86,35 +91,51 @@ define('io.ox/calendar/month/perspective',
                     }));
                     collection = null;
                 });
+                return def;
             }
-            this.getFirsts();
         },
 
-        drawWeek: function (day, pos) {
+        drawWeeks: function (weeks, pos) {
             pos = pos || false;
-            this.collections[day] = new Backbone.Collection([]);
-            var view = new View({ collection: this.collections[day], day: day });
+            var def = $.Deferred(),
+                self = this,
+                views = [],
+                updateWeek = function (day) {
+                    return function () {
+                        return self.updateWeek({start: day, end: day + date.WEEK}).done(function () {
+                            if (pos) {
+                                self.scrollTop($('.week:first', self.pane).height());
+                            }
+                        });
+                    };
+                };
+            def.resolve();
+
+            // draw all weeks
+            for (var i = 1; i <= weeks; i++) {
+                var day = self.firstWeek;
+                if (pos) {
+                    self.firstWeek -= date.WEEK;
+                } else {
+                    self.lastWeek += date.WEEK;
+                    day = self.lastWeek;
+                }
+                self.collections[day] = new Backbone.Collection([]);
+                var view = new View({ collection: self.collections[day], day: day });
+                views[pos ? 'unshift' : 'push'](view.render().el);
+                view.on('showAppoinment', self.showAppointment, self);
+                def = def.pipe(updateWeek(day, pos));
+            }
+
             // add and render view
-            this.pane[(pos ? 'pre' : 'ap') + 'pend'](view.render().el);
-            view.on('showAppoinment', this.showAppointment, this);
-            // update collection
-            this.updateWeek(day, day + date.WEEK);
-        },
+            this.pane[(pos ? 'pre' : 'ap') + 'pend'](views);
 
-        drawWeeks: function (start, end, pos) {
-            pos = pos || false;
-            var weeks = 0;
-            if (pos) {
-                for (var i = end; i > start; i -= date.WEEK) {
-                    weeks++;
-                    this.drawWeek(i, pos);
-                }
-                this.scrollTop($('.week:first', this.pane).height() * weeks);
-            } else {
-                for (var i = start; i < end; i += date.WEEK) {
-                    this.drawWeek(i, pos);
-                }
-            }
+            // when all updates finished
+            def.done(function () {
+                // update first positions
+                self.getFirsts();
+            });
+            return def;
         },
 
         scrollTop: function (top) {
@@ -123,61 +144,102 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
-            this.updateWeek(this.firstWeek, this.lastWeek + date.WEEK);
+            console.log('update');
+            for (var i = this.firstWeek; i <= this.lastWeek; i += date.WEEK) {
+                this.updateWeek({ start: i, end: i + date.WEEK});
+            }
         },
 
         getFirsts: function (e) {
             this.tops = {};
-            var self = this,
-                top = this.scrollTop() - 200; /* cheap trick */
-            $('.first', this.pane).each(function () {
+            var self = this;
+            $('.day.first', this.pane).each(function () {
                 var spDate = $(this).attr('date').split("-");
-                self.tops[Math.max(0, $(this).position().top + top)] = spDate[0] + '-' + spDate[1];
+                self.tops[($(this).position().top + self.scrollTop()) >> 0] = spDate[0] + '-' + spDate[1];
             });
         },
 
-        render: function (app) {
-
-            var start = new date.Local(),
-                year = start.getYear(),
-                month = start.getMonth();
-            start = util.getWeekStart(new date.Local(year, month - 1, 1));
-            this.scaffold = View.drawScaffold();
-            this.pane = this.scaffold.find('.scrollpane');
-
-            this.firstWeek = start;
-            this.lastWeek = start + (this.initLoad * date.WEEK);
-            this.drawWeeks(this.firstWeek, this.lastWeek);
-
-            this.main.addClass('month-view').empty().append(this.scaffold);
-
+        gotoMonth: function () {
+            var today = new date.Local();
             // set initial scroll position
             this.scrollTop(0); // esp. for firefox
-            this.scrollTop(this.main.find('[date="' + year + '-' + month + '-1"]').position().top);
+            this.scrollTop($('[date="' + today.getYear() + '-' + today.getMonth() + '-1"]', this.pane).position().top - 23);
             //this.pane.on('scroll', magneticScroll).on('scroll', getLastScrollTop);
+        },
 
-            $(window).on('resize', this.getFirsts);
+        render: function (app) {
+            var start = new date.Local(),
+                year = start.getYear(),
+                month = start.getMonth(),
+                curMonth = '',
+                self = this;
 
-            var currentMonth = '';
+            this.lastWeek = this.firstWeek = util.getWeekStart(new date.Local(year, month - 1, 1));
+
+            this.main
+                .addClass('month-view')
+                .empty()
+                .append(this.scaffold = View.drawScaffold());
+
+            this.pane = $('.scrollpane', this.scaffold).before(
+                $('<div>')
+                    .addClass('toolbar')
+                    .append(
+                        this.kwInfo.addClass('info'),
+                        $('<div>').addClass('showall')
+                            .append(
+                                $('<label>')
+                                    .addClass('checkbox')
+                                    .text(gt('show all'))
+                                    .prepend(
+                                        $('<input type="checkbox">')
+                                            .prop('checked', true)
+                                    )
+                            ),
+                        $('<div>')
+                            .addClass('pagination')
+                            .append(
+                                $('<ul>')
+                                    .append(
+                                        $('<li>')
+                                            .append(
+                                                $('<a href="#">').addClass('control prev').append($('<i>').addClass('icon-chevron-left'))
+                                            ),
+                                        $('<li>').append(
+                                            $('<a>').addClass('link today').text(gt('Today'))
+                                        ),
+                                        $('<li>')
+                                            .append(
+                                                    $('<a href="#">').addClass('control next').append($('<i>').addClass('icon-chevron-right'))
+                                            )
+                                    )
+                            )
+                    )
+            );
+
+            app.folder.getData().done(function (data) {
+                self.folder = data.id;
+                self.drawWeeks(self.initLoad).done(function () {
+                    self.gotoMonth();
+                    $('[date^="' + year + '-' + month + '"]', self.pane).removeClass('out');
+                });
+            });
 
             this.pane
                 .on('scrollstop', $.proxy(function (e) {
                     var top = this.scrollTop();
                     // check position for infinite scroll
                     if (this.pane[0].offsetHeight + top >= this.pane[0].scrollHeight - this.scrollOffset) {
-                        this.drawWeeks(this.lastWeek, this.lastWeek += date.WEEK * this.updateCount);
+                        this.drawWeeks(this.updateLoad);
                     }
-                    if (top <= this.scrollOffset) {
-                        var first = this.firstWeek - date.WEEK;
-                        this.drawWeeks(first - date.WEEK * this.updateCount, first,  true);
-                        this.firstWeek -= date.WEEK * this.updateCount;
+                    if (top <= 0) {
+                        this.drawWeeks(this.updateLoad,  true);
                     }
                 }, this))
                 .on('scroll', $.proxy(function (e) {
-                    var top = this.scrollTop(),
+                    var top = this.scrollTop() + 200,
                         first = true,
                         month = '';
-
                     // find first visible month on scroll-position
                     for (var y in this.tops) {
                         if (first || top >= y) {
@@ -189,27 +251,38 @@ define('io.ox/calendar/month/perspective',
                     }
 
                     // highlight current visible month
-                    if (month !== currentMonth) {
-                        $('.day', this.pane).addClass('out');
+                    if (month !== curMonth) {
+                        $('.day:not(.out)', this.pane).addClass('out');
                         $('[date^="' + month + '-"]', this.pane).removeClass('out');
-                        currentMonth = month;
+//                        console.log(month);
+                        curMonth = month;
                     }
                 }, this));
 
-            this.pane.find('[date^="' + year + '-' + month + '"]').removeClass('out');
-            this.getFirsts();
+            $(window).on('resize', this.getFirsts);
 
             var refresh = $.proxy(function () {
-                this.update();
-                this.getFirsts();
-                var first = this.main.find('[date="' + year + '-' + month + '-1"]'),
-                    top = this.scrollTop() + first.position().top;
-                this.scrollTop(top);
+                var self = this;
+                app.folder.getData().done(function (data) {
+                    self.folder = data.id;
+                    self.update();
+//                    // switch only visible on private folders
+//                    self.view.setShowAllVisibility(data.type === 1);
+//                    // set folder data to view
+//                    self.view.setFolder(data);
+//                    // do folder magic
+//                    if (data.type > 1 || self.view.getShowAllStatus() === false) {
+//                        obj.folder = data.id;
+//                    }
+//                    self.getAppointments(obj);
+                });
             }, this);
 
             // watch for api refresh
             api.on('refresh.all', refresh);
-            app.getWindow().on('show', refresh);
+            app.on('folder:change', refresh)
+                .getWindow()
+                .on('show', refresh);
         }
     });
 
