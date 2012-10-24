@@ -1983,55 +1983,6 @@ define('io.ox/office/editor/position',
     };
 
     /**
-     * Calculating the correct family that fits to the logical
-     * position. Allowed values for family are 'paragraph', 'image' and
-     * 'character'. So the family has to fit to the node, that
-     * is described by the logical position.
-     *
-     * @param {String} family
-     *  The string describing the 'family'.
-     *
-     * @param {Node} startnode
-     *  The start node corresponding to the logical position.
-     *  (Can be a jQuery object for performance reasons.)
-     *
-     * @param {OXOPaM.oxoPosition} position
-     *  The logical position.
-     *
-     * @returns {String}
-     *  Returns the family that fits to the logical position or null,
-     *  if no correct assignment can be made
-     */
-    Position.getPositionAssignedFamily = function (startnode, startposition, isImageAttribute) {
-
-        var family = null,
-            useObjectNode = isImageAttribute ? true : false,
-            domPos = Position.getDOMPosition(startnode, startposition, useObjectNode);
-
-        if (domPos) {
-            var node = domPos.node;
-
-            if (node.nodeType === 3) {
-                family = 'character';
-            } else if (DOM.isParagraphNode(node)) {
-                family = 'paragraph';
-            } else if (($(node).is('img')) || (DOM.isImageNode(node))) {
-                family = 'image';
-            } else if (DOM.isTableNode(node)) {
-                family = 'table';
-            } else if ($(node).is('tr')) {
-                family = 'tablerow';
-            } else if ($(node).is('th, td')) {
-                family = 'tablecell';
-            } else {
-                Utils.error('Position.getPositionAssignedFamily(): Cannot determine family from position: ' + startposition);
-            }
-        }
-
-        return family;
-    };
-
-    /**
      * Calculating the logical position of a character in a text node
      * that preceds the logical position of the input parameter.
      *
@@ -2396,6 +2347,11 @@ define('io.ox/office/editor/position',
      *      The logical index of the last node to be included in the iteration
      *      process. Text spans covered partly will be visited too. Note that
      *      this index is considered inclusive (NOT a half-open range).
+     *  @param {Boolean} [options.split=false]
+     *      If set to true, the first and last text span not covered completely
+     *      by the specified range will be split before the iterator function
+     *      will be called. The iterator function will always receive a text
+     *      span that completely covers the contained text.
      *
      * @returns {Utils.BREAK|Undefined}
      *  A reference to the Utils.BREAK object, if the iterator has returned
@@ -2409,6 +2365,8 @@ define('io.ox/office/editor/position',
             rangeStart = Utils.getIntegerOption(options, 'start', 0, 0),
             // logical index of last node to be visited
             rangeEnd = Utils.getIntegerOption(options, 'end', 0x7FFFFFFF, rangeStart),
+            // split partly covered text spans before visiting them
+            split = Utils.getBooleanOption(options, 'split', false),
             // the logical start index of the visited content node
             nodeStart = 0;
 
@@ -2420,10 +2378,12 @@ define('io.ox/office/editor/position',
                 // start offset of partly covered nodes
                 offsetStart = 0,
                 // offset length of partly covered nodes
-                offsetLength = 0;
+                offsetLength = 0,
+                // whether node is a regular text span
+                isTextSpan = DOM.isTextSpan(node);
 
             // calculate length of the node
-            if (DOM.isTextSpan(node)) {
+            if (isTextSpan) {
                 // portion nodes contain regular text
                 nodeLength = node.firstChild.nodeValue.length;
             } else if (DOM.isFieldNode(node) || DOM.isObjectNode(node)) {
@@ -2432,9 +2392,14 @@ define('io.ox/office/editor/position',
             }
 
             // node ends before the specified start index (continue with next node)
-            if (nodeStart + nodeLength < rangeStart) { return; }
+            if (nodeStart + nodeLength <= rangeStart) {
+                nodeStart += nodeLength;
+                return;
+            }
             // node starts after the specified end index (escape from iteration)
-            if (rangeEnd < nodeStart) { return Utils.BREAK; }
+            if (rangeEnd < nodeStart) {
+                return Utils.BREAK;
+            }
 
             // always visit non-empty nodes
             if (allNodes || (nodeLength > 0)) {
@@ -2442,6 +2407,20 @@ define('io.ox/office/editor/position',
                 // calculate offset start and length of partly covered text nodes
                 offsetStart = Math.max(rangeStart - nodeStart, 0);
                 offsetLength = Math.min(rangeEnd - nodeStart + 1, nodeLength) - offsetStart;
+
+                // split first text span (insert new span before current span)
+                if (split && isTextSpan && (offsetStart > 0)) {
+                    DOM.splitTextSpan(node, offsetStart);
+                    nodeStart += offsetStart;
+                    nodeLength -= offsetStart;
+                    offsetStart = 0;
+                }
+
+                // split last text span (insert new span before current span)
+                if (split && isTextSpan && (offsetLength < nodeLength)) {
+                    DOM.splitTextSpan(node, offsetLength, { append: true });
+                    nodeLength = offsetLength;
+                }
 
                 // call the iterator for the current content node
                 if (iterator.call(context, node, nodeStart, nodeLength, offsetStart, offsetLength) === Utils.BREAK) {
@@ -2530,7 +2509,7 @@ define('io.ox/office/editor/position',
      *  except for nodes containing multiple sub components) in the 'offset'
      *  attribute.
      */
-    Position.getNodeAtPosition = function (rootNode, position, options) {
+    Position.getNodeInfoAtPosition = function (rootNode, position, options) {
 
         var // index of current element in the 'position' array
             arrayIndex = Utils.getIntegerOption(options, 'arrayIndex', 0),
@@ -2545,7 +2524,7 @@ define('io.ox/office/editor/position',
 
         // check input parameters
         if ((arrayIndex < 0) || (arrayIndex >= position.length)) {
-            Utils.warn('Position.getNodeAtPosition(): invalid array index');
+            Utils.warn('Position.getNodeInfoAtPosition(): invalid array index');
             return { node: null, start: 0, offset: 0 };
         }
 
@@ -2559,7 +2538,7 @@ define('io.ox/office/editor/position',
             // get child node in paragraph
             nodeInfo = resolveParagraphChildNode(nodeInfo.node, position[arrayIndex]);
             // there cannot be more nested nodes
-            if (nextArrayIndex()) { Utils.warn('Position.getNodeAtPosition(): too many values in position'); }
+            if (nextArrayIndex()) { Utils.warn('Position.getNodeInfoAtPosition(): too many values in position'); }
             return nodeInfo;
         }
 
@@ -2575,10 +2554,10 @@ define('io.ox/office/editor/position',
             if (!nextArrayIndex()) { return nodeInfo; }
 
             // find a node inside table cell
-            return Position.getNodeAtPosition(nodeInfo.node, position, { arrayIndex: arrayIndex });
+            return Position.getNodeInfoAtPosition(nodeInfo.node, position, { arrayIndex: arrayIndex });
         }
 
-        Utils.error('Position.getNodeAtPosition(): unknown content node');
+        Utils.error('Position.getNodeInfoAtPosition(): unknown content node');
         nodeInfo.node = null;
         return nodeInfo;
     };

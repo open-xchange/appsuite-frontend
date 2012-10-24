@@ -117,8 +117,9 @@ define('io.ox/office/editor/format/stylesheets',
      *      object of a style sheet. The set of attributes returned may depend
      *      on a context element (e.g. on the position of the context element
      *      in its parents). The function receives the desired attribute family
-     *      as first parameter, and the context element as jQuery object as
-     *      second parameter. Will be called in the context of this style sheet
+     *      as first parameter, the complete 'attributes' object of the style
+     *      sheet as second parameter, and the source node as jQuery object as
+     *      third parameter. Will be called in the context of this style sheet
      *      container instance.
      */
     function StyleSheets(documentStyles, styleFamily, selector, definitions, options) {
@@ -210,6 +211,83 @@ define('io.ox/office/editor/format/stylesheets',
                 styleSheet = styleSheets[styleSheet.parentId];
             }
             return false;
+        }
+
+        /**
+         * Returns the merged attributes of a specific attribute family from
+         * the specified style sheet, its parent style sheets, and all style
+         * sheets from other containers referred by ancestor elements.
+         *
+         * @param {String} id
+         *  The unique identifier of the style sheet.
+         *
+         * @param {String} family
+         *  The attribute family whose attributes will be returned.
+         *
+         * @param {HTMLElement|jQuery} [sourceNode]
+         *  The source DOM node corresponding to the specified attribute family
+         *  that has initiated the call to this method. Will be used to receive
+         *  attributes from style sheets in other container, referred by the
+         *  ancestors of this node. Will be passed to a custom style attributes
+         *  resolver (see the 'options.childStyleAttributesResolver' option
+         *  passed to the constructor).
+         *
+         * @returns {Object}
+         *  The formatting attributes contained in the style sheet and its
+         *  ancestor style sheets, including the style sheets from other
+         *  containers referred by ancestor elements, up to the map of default
+         *  attributes, as map of name/value pairs.
+         */
+        function getStyleSheetAttributes(id, family, sourceNode) {
+
+            var // the attributes of the style sheet and its ancestors
+                attributes = null,
+                // parent style sheet container from the document styles collection
+                parentStyleSheets = null;
+
+            // collects style sheet attributes recursively through parents
+            function collectStyleAttributes(styleSheet) {
+
+                // exit recursive call chain if no more parent styles are available
+                if (!styleSheet) { return; }
+
+                // call recursively to get the attributes of the parent style sheets
+                collectStyleAttributes(styleSheets[styleSheet.parentId]);
+
+                // add own attributes of the specified attribute family
+                if (_.isObject(styleSheet.attributes[family])) {
+                    // attributes directly mapped by family name in 'attributes' member of the style sheet
+                    _(attributes).extend(styleSheet.attributes[family]);
+                }
+
+                // try resolver for style attributes of other families
+                if ((family !== styleFamily) && _.isFunction(childStyleAttributesResolver)) {
+                    _(attributes).extend(childStyleAttributesResolver.call(self, family, styleSheet.attributes, $(sourceNode)));
+                }
+            }
+
+            // start with default attribute values (only if in own style family)
+            attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
+
+            // collect styles from ancestor elements if specified
+            if (_.isString(parentStyleFamily) && ($(sourceNode).length > 0)) {
+                parentStyleSheets = documentStyles.getStyleSheets(parentStyleFamily);
+                // ask the container of the parent style family for style attributes
+                _(attributes).extend(parentStyleSheets.resolveParentStyleAttributes(family, sourceNode));
+            }
+
+            // fall-back to default style sheet if passed identifier is invalid
+            if (!(id in styleSheets) && (defaultStyleId in styleSheets)) {
+                id = defaultStyleId;
+            }
+
+            // collect attributes from the style sheet and its parents
+            collectStyleAttributes(styleSheets[id]);
+
+            // add style sheet identifier to attributes
+            attributes.style = id;
+
+            return attributes;
         }
 
         /**
@@ -536,75 +614,19 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the merged attributes of a specific attribute family from
-         * the specified style sheet, its parent style sheets, and all style
-         * sheets from other containers referred by ancestor elements.
+         * Returns the merged attributes of the own style family from the
+         * specified style sheet and its parent style sheets.
          *
          * @param {String} id
          *  The unique identifier of the style sheet.
          *
-         * @param {String} family
-         *  The attribute family whose attributes will be returned.
-         *
-         * @param {jQuery} [element]
-         *  The DOM element used to resolve attributes of style sheets referred
-         *  by ancestor elements, as jQuery object.
-         *
          * @returns {Object}
          *  The formatting attributes contained in the style sheet and its
-         *  ancestor style sheets up to the map of default attributes, as map
-         *  of name/value pairs.
+         *  parent style sheets in this container up to the map of default
+         *  attributes, as map of name/value pairs.
          */
-        this.getStyleSheetAttributes = function (id, family, element) {
-
-            var // the attributes of the style sheet and its ancestors
-                attributes = {};
-
-            // collects style sheet attributes recursively through parents and parent families
-            function collectAttributes(styleSheet) {
-
-                var // parent style sheet container from the document styles collection
-                    parentStyleSheets = null;
-
-                // valid style sheet object passed: collect attributes of itself and its parents
-                if (styleSheet) {
-                    // call recursively to get the attributes of the parent style sheet
-                    collectAttributes(styleSheets[styleSheet.parentId]);
-                    // add own attributes of the specified attribute family
-                    if (_.isObject(styleSheet.attributes[family])) {
-                        // attributes directly mapped by family name in own 'attributes' member
-                        _(attributes).extend(styleSheet.attributes[family]);
-                    }
-                    // try resolver for child style attributes
-                    if ((family !== styleFamily) && _.isFunction(childStyleAttributesResolver)) {
-                        _(attributes).extend(childStyleAttributesResolver.call(self, family, styleSheet.attributes, element));
-                    }
-
-                // no style sheet passed (no more parent style sheets): collect defaults and visit parent style container
-                } else {
-                    // start with default attribute values (only if in own style family)
-                    attributes = (family === styleFamily) ? _.clone(defaultAttributes) : {};
-                    // collect styles from ancestor elements if specified
-                    if (element && (element.length > 0) && _.isString(parentStyleFamily)) {
-                        parentStyleSheets = documentStyles.getStyleSheets(parentStyleFamily);
-                        // ask the container of the parent style family for style attributes
-                        _(attributes).extend(parentStyleSheets.resolveStyleAttributes(element, family));
-                    }
-                }
-            }
-
-            // add style sheet identifier to attributes
-            if (!(id in styleSheets) && (defaultStyleId in styleSheets)) {
-                id = defaultStyleId;
-            }
-
-            // collect attributes from the style sheet and its ancestors
-            collectAttributes(styleSheets[id]);
-
-            // add style sheet identifier to attributes
-            attributes.style = id;
-
-            return attributes;
+        this.getStyleSheetAttributes = function (id) {
+            return getStyleSheetAttributes(id, styleFamily);
         };
 
         /**
@@ -670,27 +692,18 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
-         * Returns the attributes of a specified style sheet.
+         * Returns the complete 'attributes' object of the specified style
+         * sheet as-is, without resolving the parent style sheets.
          *
          * @param {String} id
          *  The unique identifier of the style sheet.
          *
-         * @param {String} family
-         *  The attribute family whose attributes will be returned.
-         *
          * @returns {Object}
-         *  The formatting attributes contained in the style sheet and its
-         *  ancestor style sheets up to the map of default attributes, as map
-         *  of name/value pairs.
+         *  The complete 'attributes' object contained in the style sheet, as a
+         *  deep clone.
          */
         this.getStyleSheetAttributesOnly = function (id) {
-            var attributes = {};
-
-            if (id in styleSheets) {
-                var styleSheet = styleSheets[id];
-                _(attributes).extend(styleSheet.attributes);
-            }
-            return attributes;
+            return (id in styleSheets) ? _.copy(styleSheets[id].attributes, true) : {};
         };
 
         /**
@@ -718,10 +731,11 @@ define('io.ox/office/editor/format/stylesheets',
                 styleAttributes = null;
 
             // iterate through all family names (as specified by the
-            // 'childStyleFamily' constructor option) and add options for all
-            // the attributes contained in the *own* style sheet
+            // 'childStyleFamily' constructor option of this container and the
+            // other child style containers) and add options for all the
+            // attributes contained in the *own* style sheet
             while (_.isString(family)) {
-                styleAttributes = this.getStyleSheetAttributes(id, family);
+                styleAttributes = getStyleSheetAttributes(id, family);
                 styleSheets = documentStyles.getStyleSheets(family);
                 // style sheet container adds preview options according to its attribute definitions
                 styleSheets.updatePreviewButtonOptions(options, styleAttributes);
@@ -740,26 +754,30 @@ define('io.ox/office/editor/format/stylesheets',
          * found by traversing the parent chain of the specified element, using
          * the jQuery selector passed to the constructor of this container.
          *
-         * @param {HTMLElement|jQuery} descendantNode
-         *  A descendant node embedded in an element that refers to a style
-         *  sheet contained in this style sheet container. If this object is a
-         *  jQuery collection, uses the first DOM node it contains.
+         * @internal
+         *  Called from internal code of other style container instances to
+         *  resolve style attributes across multiple style families.
          *
          * @param {String} family
          *  The attribute family whose attributes will be returned.
+         *
+         * @param {HTMLElement|jQuery} sourceNode
+         *  A descendant node embedded in an element which refers to a style
+         *  sheet contained in this style sheet container. If this object is a
+         *  jQuery collection, uses the first DOM node it contains.
          *
          * @returns {Object}
          *  A map of name/value pairs containing the attributes of the style
          *  sheet referred by the correct ancestor element of the passed node.
          */
-        this.resolveStyleAttributes = function (descendantNode, family) {
+        this.resolveParentStyleAttributes = function (family, sourceNode) {
 
-            var // the ancestor element of the passed node
-                element = Utils.getDomNode(descendantNode),
+            var // the ancestor element of the passed source node
+                element = Utils.getDomNode(sourceNode).parentNode,
                 // the explicit attributes of the ancestor element
                 attributes = null;
 
-            // find the first ancestor that matches the own selector
+            // find the ancestor of the source node that matches the own selector
             while (element && !$(element).is(selector)) {
                 element = element.parentNode;
             }
@@ -768,7 +786,7 @@ define('io.ox/office/editor/format/stylesheets',
             attributes = element ? getElementAttributes($(element)) : {};
 
             // return the attributes of the style sheet referred by the element
-            return this.getStyleSheetAttributes(attributes.style, family, $(element));
+            return getStyleSheetAttributes(attributes.style, family, sourceNode);
         };
 
         /**
@@ -802,7 +820,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // get the element attributes
                 elementAttributes = getElementAttributes($element),
                 // get attributes of the style sheets
-                styleAttributes = this.getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
+                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
                 // the resulting attributes according to style sheet and explicit formatting
                 mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 
@@ -929,14 +947,14 @@ define('io.ox/office/editor/format/stylesheets',
             if (_.isString(styleId) || _.isNull(styleId)) {
                 // style sheet of the element will be changed: remove all
                 // existing element attributes
-                styleAttributes = this.getStyleSheetAttributes(styleId, styleFamily, $element);
+                styleAttributes = getStyleSheetAttributes(styleId, styleFamily, $element);
                 elementAttributes = _.isNull(styleId) ? {} : { style: styleAttributes.style };
             } else {
                 // clone the attributes coming from the element, there may
                 // be multiple elements pointing to the same data object,
                 // e.g. after using the $.clone() method.
                 elementAttributes = _.clone(oldElementAttributes);
-                styleAttributes = this.getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
+                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element);
                 // collect every single changed attribute
                 updateAttributeNames = [];
             }
@@ -1140,7 +1158,7 @@ define('io.ox/office/editor/format/stylesheets',
                 // explicit element attributes
                 elementAttributes = getElementAttributes($element),
                 // get attributes of the style sheet
-                styleAttributes = this.getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
+                styleAttributes = getStyleSheetAttributes(elementAttributes.style, styleFamily, $element),
                 // the resulting attributes to be updated at each element
                 mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
 

@@ -147,8 +147,24 @@ define('io.ox/office/editor/format/tablestyles',
 
     }
 
+    /**
+     * Returns the attributes of the specified attribute family contained in
+     * table style sheets. Resolves the conditional attributes that match the
+     * position of the passed source element.
+     */
+    function resolveChildStyleAttributes(family, styleAttributes, sourceNode) {
 
-    function resolveChildStyleAttributes(family, styleAttributes, node) {
+        var // the cell element (source node may be a paragraph or text span)
+            cell = sourceNode.closest('td'),
+            // the table row containing the cell
+            row = cell.parent(),
+            // whether cell is in first row
+            isFirstRow = (cell.length > 0) && (row.index() === 0),
+            // whether cell is in last row (jQuery.siblings() excludes the own row!)
+            isLastRow = (cell.length > 0) && (row.index() === row.siblings('tr').length);
+
+        // TODO: collect attributes from the 'attributes' parameter according to the cell position
+
         return {};
     }
 

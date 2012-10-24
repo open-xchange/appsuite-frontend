@@ -37,39 +37,6 @@ define('io.ox/office/editor/image',
     // static functions =======================================================
 
     /**
-     * Checking, if at least one property of the attributes is
-     * relevant for images.
-     *
-     * @param {Object} attr
-     *  A map with formatting attribute values, mapped by the attribute
-     *  names.
-     *
-     * @returns {Boolean} containsImageProperty
-     *  A boolean value, indicating if the properties are relevant for
-     *  images.
-     */
-    Image.containsImageAttributes = function (attributes) {
-
-        var allImageAttributes = ['inline',
-                                  'width',
-                                  'height',
-                                  'marginl',
-                                  'margint',
-                                  'marginr',
-                                  'marginb',
-                                  'anchorhbase',
-                                  'anchorhalign',
-                                  'anchorhoffset',
-                                  'anchorvbase',
-                                  'anchorvalign',
-                                  'anchorvoffset',
-                                  'textwrapmode',
-                                  'textwrapside'];
-
-        return _.any(allImageAttributes, function (attr) { return (attr in attributes); });
-    };
-
-    /**
      * Shows an insert image file dialog
      *
      * @param  app the current application

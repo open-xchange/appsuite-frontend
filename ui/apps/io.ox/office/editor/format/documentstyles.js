@@ -12,7 +12,8 @@
  */
 
 define('io.ox/office/editor/format/documentstyles',
-    ['io.ox/office/editor/format/characterstyles',
+    ['io.ox/office/editor/dom',
+     'io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/paragraphstyles',
      'io.ox/office/editor/format/imagestyles',
      'io.ox/office/editor/format/tablestyles',
@@ -21,7 +22,7 @@ define('io.ox/office/editor/format/documentstyles',
      'io.ox/office/editor/format/pagestyles',
      'io.ox/office/editor/format/themes',
      'io.ox/office/editor/format/lists'
-    ], function (CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
+    ], function (DOM, CharacterStyles, ParagraphStyles, ImageStyles, TableStyles, TableRowStyles, TableCellStyles, PageStyles, Themes, Lists) {
 
     'use strict';
 
@@ -81,12 +82,10 @@ define('io.ox/office/editor/format/documentstyles',
         };
 
         this.destroy = function () {
-            _(containers).invoke('destroy');
-            containers = null;
-            _([themes]).invoke('destroy');
-            themes = null;
             _([lists]).invoke('destroy');
-            lists = null;
+            _([themes]).invoke('destroy');
+            _(containers).invoke('destroy');
+            containers = themes = lists = null;
         };
 
         // initialization -----------------------------------------------------

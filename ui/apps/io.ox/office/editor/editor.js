@@ -1194,13 +1194,12 @@ define('io.ox/office/editor/editor',
          */
         function insertMissingParagraphStyles() {
             var headings = [0, 1, 2, 3, 4, 5],
-                paragraphStyles = self.getStyleSheets('paragraph'),
                 styleNames = paragraphStyles.getStyleSheetNames(),
                 parentId = paragraphStyles.getDefaultStyleSheetId();
 
             // find out which outline level paragraph styles are missing
             _(styleNames).each(function (name, id) {
-                var styleAttributes = paragraphStyles.getStyleSheetAttributes(id, 'paragraph'),
+                var styleAttributes = paragraphStyles.getStyleSheetAttributes(id),
                     outlineLvl = styleAttributes.outlinelvl;
                 if (_.isNumber(outlineLvl) && (outlineLvl >= 0 && outlineLvl < 6)) {
                     headings = _(headings).without(outlineLvl);
@@ -3727,6 +3726,62 @@ define('io.ox/office/editor/editor',
         }
 
         /**
+         * Returns the family of the attributes supported by the passed DOM
+         * element.
+         *
+         * @param {HTMLElement|jQuery} element
+         *  The DOM element whose associated attribute family will be returned.
+         *  If this object is a jQuery collection, returns its first node.
+         */
+        function resolveElementFamily(element) {
+
+            var // the resulting style family
+                family = null;
+
+            if (DOM.isTextSpan(element) || DOM.isFieldNode(element)) {
+                family = 'character';
+            } else if (DOM.isParagraphNode(element)) {
+                family = 'paragraph';
+            } else if (DOM.isTableNode(element)) {
+                family = 'table';
+            } else if ($(element).is('tr')) {
+                family = 'tablerow';
+            } else if ($(element).is('td')) {
+                family = 'tablecell';
+            } else if (DOM.isImageNode(element)) {
+                family = 'image';
+            } else {
+                Utils.warn('Editor.resolveElementFamily(): unsupported element');
+            }
+
+            return family;
+        }
+
+        /**
+         * Tries to merge the passed text span with its next or previous
+         * sibling text span.
+         */
+        function mergeSiblingTextSpan(span, next) {
+
+            var // the sibling text node, depending on the passed direction
+                siblingSpan = next ? span.nextSibling : span.previousSibling,
+                // text in the passed and in the sibling node
+                text = null, siblingText = null;
+
+            // both text spans must contain the same attributes
+            if (DOM.isTextSpan(siblingSpan) && StyleSheets.hasEqualElementAttributes(span, siblingSpan)) {
+
+                // add text of the sibling text node to the passed text node
+                text = span.firstChild.nodeValue;
+                siblingText = siblingSpan.firstChild.nodeValue;
+                span.firstChild.nodeValue = next ? (text + siblingText) : (siblingText + text);
+
+                // remove the entire sibling span element
+                $(siblingSpan).remove();
+            }
+        }
+
+        /**
          * Changes a specific formatting attribute of the specified element or
          * text range. The type of the attributes will be determined from the
          * specified range.
@@ -3746,19 +3801,31 @@ define('io.ox/office/editor/editor',
          */
         function implSetAttributes(start, end, attributes) {
 
-            var // last index in the start/end position arrays
-                startLastIndex = 0, endLastIndex = 0,
-                // the DOM text range to be formatted
-                ranges = null,
-                // the attribute family according to the passed range address
-                family = null,
+            var // node info for start/end position
+                startInfo = null, endInfo = null,
                 // the style sheet container of the specified attribute family
                 styleSheets = null,
                 // options for StyleSheets method calls
                 options = null,
                 // undo and redo operations going into a single action
                 undoOperations = [], redoOperations = [];
-            
+
+            // sets or clears the attributes using the current style sheet container
+            function setElementAttributes(element, merge) {
+
+                // set or clear the attributes at the element
+                if (_.isNull(attributes)) {
+                    styleSheets.clearElementAttributes(element, undefined, options);
+                } else {
+                    styleSheets.setElementAttributes(element, attributes, options);
+                }
+
+                // try to merge a text span with previous sibling text span (both text spans must contain the same attributes)
+                if (merge && DOM.isTextSpan(element)) {
+                    mergeSiblingTextSpan(element, false);
+                }
+            }
+
             // change listener used to build the undo operations
             function changeListener(element, oldAttributes, newAttributes) {
 
@@ -3794,57 +3861,69 @@ define('io.ox/office/editor/editor',
                 }
             }
 
-            if (start === null) { return; }
-
-            // build local copies of the arrays (do not change caller's data)
-            start = _.clone(start);
-            end = _.isArray(end) ? _.clone(end) : _.clone(start);
-            startLastIndex = start.length - 1;
-            endLastIndex = end.length - 1;
-
-            // TODO: remove when object selection engine exists
-            var containsImageAttribute = attributes && Image.containsImageAttributes(attributes);
-
-            // get attribute family according to position
-            family = Position.getPositionAssignedFamily(paragraphs, start, containsImageAttribute);
-
-            if (family === null) {
-                Utils.error('Editor.implSetAttributes(): Failed to get family from position: ' + start);
+            // resolve start and end position
+            if (!_.isArray(start)) {
+                Utils.warn('Editor.implSetAttributes(): missing start position');
+                return;
             }
+            startInfo = Position.getNodeInfoAtPosition(editdiv, start);
+            endInfo = _.isArray(end) ? Position.getNodeInfoAtPosition(editdiv, end) : startInfo;
+            if (!startInfo.node || !endInfo.node) { return; }
 
-            if (family === 'character') {
-                end[end.length - 1] += 1; // Switching from operation mode to range mode
-            }
+            // get attribute family of start and end node
+            startInfo.family = resolveElementFamily(startInfo.node);
+            endInfo.family = resolveElementFamily(endInfo.node);
+            if (!startInfo.family || !endInfo.family) { return; }
 
-            // validate text offset
-            if (!_.isFinite(start[startLastIndex]) || (start[startLastIndex] < 0)) {
-                start[startLastIndex] = 0;
-            }
-            if (!_.isFinite(end[endLastIndex]) || (end[endLastIndex] < 0)) {
-                end[endLastIndex] = Position.getParagraphLength(paragraphs, start);
-            }
+            // options for the StyleSheets method calls (build undo operations while formatting)
+            options = undomgr.isEnabled() ? { changeListener: changeListener } : null;
 
-            // build the DOM text range, set the formatting attributes, create undo operations
-            styleSheets = self.getStyleSheets(family);
-            if (styleSheets) {
-                ranges = Position.getDOMSelection(paragraphs, new OXOSelection(new OXOPaM(start), new OXOPaM(end)), family === 'image');
-                // change attributes in document and store the undo/redo action
-                options = undomgr.isEnabled() ? { changeListener: changeListener } : null;
-                if (_.isNull(attributes)) {
-                    styleSheets.clearAttributesInRanges(ranges, undefined, options);
-                } else {
-                    styleSheets.setAttributesInRanges(ranges, attributes, options);
+            // characters (either start or end may point to an object node, ignore that but format as characters)
+            if ((startInfo.family === 'character') || (endInfo.family === 'character')) {
+
+                // check that start and end are located in the same paragraph
+                if (startInfo.node.parentNode !== endInfo.node.parentNode) {
+                    Utils.warn('Editor.implSetAttributes(): end position in different paragraph');
+                    return;
                 }
-                undomgr.addUndo(undoOperations, redoOperations);
+
+                // visit all text spans (also empty spans, and spans embedded in fields)
+                styleSheets = characterStyles;
+                Position.iterateParagraphChildNodes(startInfo.node.parentNode, function (node) {
+                    if (DOM.isTextSpan(node)) {
+                        setElementAttributes(node, true);
+                    } else if (DOM.isFieldNode(node)) {
+                        // visit all spans in the field node
+                        Utils.iterateSelectedDescendantNodes(node, 'span', function (node) {
+                            setElementAttributes(node, true);
+                        }, undefined, { children: true });
+                    }
+                }, undefined, { allNodes: true, start: _(start).last(), end: _(end || start).last(), split: true });
+
+            // otherwise: only single components allowed at this time
+            } else {
+
+                // check that start and end point to the same element
+                if (startInfo.node !== endInfo.node) {
+                    Utils.warn('Editor.implSetAttributes(): no ranges supported for attribute family "' + startInfo.family + '"');
+                    return;
+                }
+
+                // format the (single) element
+                styleSheets = self.getStyleSheets(startInfo.family);
+                setElementAttributes(startInfo.node);
+            }
+
+            // create the undo action
+            undomgr.addUndo(undoOperations, redoOperations);
+
+            // update numberings and bullets (attributes may be null if called from clearAttributes operation)
+            if ((startInfo.family === 'paragraph') && (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
+                implUpdateLists();
             }
 
             // store last position
-            lastOperationEnd = new OXOPaM(end);
-
-            // update numberings and bullets (attributes may be null if called from clearAttributes operation)
-            if ((family === 'paragraph') && (_.isNull(attributes) || ('style' in attributes) || ('ilvl' in attributes) || ('numId' in attributes))) {
-                implUpdateLists();
-            }
+            lastOperationEnd = new OXOPaM(end || start);
         }
 
         function implInsertParagraph(position) {
