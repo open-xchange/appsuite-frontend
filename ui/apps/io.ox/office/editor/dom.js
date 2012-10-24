@@ -1436,8 +1436,12 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             .mouseup(function (e) {
                 if (mousedownevent) {
                     mouseuphandler.call(context, e, objectNode, moveBox);
+                    mousedownevent = false;
+                } else {
+                    // setting correct cursor, should not be necessary (but sometimes mousedownevent is 'false') -> should be removed
+                    $('div.page', document).css('cursor', 'default');
+                    $('div.object', document).css('cursor', 'inherit');
                 }
-                mousedownevent = false;
             })
             .mousemove(function (e) {
                 if (! mousedownevent) return;
