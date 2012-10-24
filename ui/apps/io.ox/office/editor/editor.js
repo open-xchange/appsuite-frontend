@@ -2251,54 +2251,109 @@ define('io.ox/office/editor/editor',
 
             var startX,
                 startY,
-                endX,
-                endY,
                 currentX,
                 currentY,
+                shiftX = 0,
+                shiftY = 0,
+                finalWidth = 0,
+                finalHeight = 0,
                 nodeOptions = {};
 
             // collect selected objects
             selectedObjects = selectedObjects.add(objects);
             // draw the selection box into the passed objects
-            DOM.drawObjectSelection(objects, { moveable: false, sizeable: true
+            DOM.drawObjectSelection(objects, { moveable: true, sizeable: true
             }, function (event, startNodeOptions) {
                 // mouse down event handler
                 startX = event.pageX;
                 startY = event.pageY;
                 nodeOptions = _.copy(startNodeOptions, true);
-            }, function (event) {
+
+                editdiv.css('cursor', nodeOptions.cursorStyle);  // setting cursor
+                $('div.object', editdiv).css('cursor', 'inherit');
+            }, function (event, moveBoxNode) {
                 // mouse move event handler
+                moveBoxNode.css('border-width', '2px');  // making move box visible
+
                 currentX = event.pageX;
                 currentY = event.pageY;
-            }, function (event, imageNode) {
+
+                if (nodeOptions.isResizeEvent) {
+
+                    // resetting values used in mouse up handler
+                    finalWidth = 0;
+                    finalHeight = 0;
+
+                    var deltaX = 0;
+                    var deltaY = 0;
+
+                    if (nodeOptions.useX) { deltaX = currentX - startX; }
+                    if (nodeOptions.useY) { deltaY = currentY - startY; }
+
+                    if ((deltaX !== 0) || (deltaY !== 0)) {
+
+                        if (nodeOptions.leftSelection) { deltaX = - deltaX; }
+                        if (nodeOptions.topSelection) { deltaY = - deltaY; }
+
+                        var newWidth = nodeOptions.oldWidth + deltaX,
+                            newHeight = nodeOptions.oldHeight + deltaY;
+
+                        if ((newWidth > 0) && (newHeight > 0)) {
+
+                            finalWidth = newWidth;
+                            finalHeight = newHeight;
+
+                            if (nodeOptions.isRightFloated) {
+                                moveBoxNode.css('left', - deltaX);
+                            } else if (nodeOptions.isInline) {
+                                moveBoxNode.css('top', - deltaY);
+                            }
+
+                            moveBoxNode.css({ width: finalWidth, height: finalHeight });
+                        }
+                    }
+                } else if (nodeOptions.isMoveEvent) {
+
+                    shiftX = currentX - startX;
+                    shiftY = currentY - startY;
+
+                    if ((shiftX !== 0) || (shiftY !== 0)) {
+                        moveBoxNode.css({ 'left': shiftX, 'top': shiftY, 'width': nodeOptions.oldWidth, 'height': nodeOptions.oldHeight });
+                    }
+                }
+
+            }, function (event, imageNode, moveBoxNode) {
                 // mouse up handler
-                endX = event.pageX;
-                endY = event.pageY;
+                moveBoxNode.css('border-width', '0px');  // making move box invisible
 
-                var deltaX = 0;
-                var deltaY = 0;
+                if (nodeOptions.isResizeEvent) {
 
-                if (nodeOptions.useX) { deltaX = endX - startX; }
-                if (nodeOptions.useY) { deltaY = endY - startY; }
+                    if ((finalWidth > 0) && (finalHeight > 0)) {
 
-                if ((deltaX !== 0) || (deltaY !== 0)) {
-
-                    if (nodeOptions.leftSelection) { deltaX = - deltaX; }
-                    if (nodeOptions.topSelection) { deltaY = - deltaY; }
-
-                    var newWidth = nodeOptions.oldWidth + deltaX,
-                        newHeight = nodeOptions.oldHeight + deltaY;
-
-                    if ((newWidth > 0) && (newHeight > 0)) {
-
-                        var width = Utils.convertLengthToHmm(newWidth, 'px'),
-                            height = Utils.convertLengthToHmm(newHeight, 'px'),
+                        var width = Utils.convertLengthToHmm(finalWidth, 'px'),
+                            height = Utils.convertLengthToHmm(finalHeight, 'px'),
                             updatePosition = Position.getOxoPosition(editdiv, imageNode, 0),
                             newOperation = { name: Operations.ATTRS_SET, attrs: {width: width, height: height}, start: updatePosition };
 
                         applyOperation(newOperation, true, true);
                     }
+                } else if (nodeOptions.isMoveEvent) {
+
+                    moveBoxNode.css({'left': 0, 'top': 0});  // shifting moveBoxNode back into image
+
+                    if ((shiftX !== 0) || (shiftY !== 0)) {
+
+                        var moveX = Utils.convertLengthToHmm(shiftX, 'px'),
+                            moveY = Utils.convertLengthToHmm(shiftY, 'px'),
+                            updatePosition = Position.getOxoPosition(editdiv, imageNode, 0),
+                            newOperation = { name: Operations.ATTRS_SET, attrs: {anchorhoffset: moveX, anchorvoffset: moveY}, start: updatePosition };
+
+                        applyOperation(newOperation, true, true);
+                    }
                 }
+
+                editdiv.css('cursor', 'default');
+                $('div.object', editdiv).css('cursor', 'inherit');
 
             }, self);
 

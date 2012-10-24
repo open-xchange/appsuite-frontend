@@ -1348,6 +1348,8 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
 
             var // the container element used to visualize the selection
                 selectionBox = $(this).children('div.selection'),
+                // the container element used to visualize the movement and resizing
+                moveBox = $(this).children('div.move'),
                 // whether object is moveable
                 moveable = Utils.getBooleanOption(options, 'moveable', false),
                 // whether object is sizeable
@@ -1357,21 +1359,37 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                 // saving the selected object node
                 objectNode = this,
                 // an object with information about the node, on which mousedown was pressed
-                nodeOptions = {};
+                nodeOptions = {},
+                // all available cursor styles
+                cursorstyles = {
+                    tl: 'nw-resize',
+                    t : 'n-resize',
+                    tr: 'ne-resize',
+                    r : 'e-resize',
+                    br: 'se-resize',
+                    b : 's-resize',
+                    bl: 'sw-resize',
+                    l : 'w-resize'
+                };
 
-            // create a new selection box if missing
+            // create a new selection box and a move box if missing
             if (selectionBox.length === 0) {
-                $(this).append(selectionBox = $('<div>').addClass('selection'));
+                $(this).append(selectionBox = $('<div>').addClass('selection')).append(moveBox = $('<div>').addClass('move'));
                 // add resize handles
                 _(['tl', 't', 'tr', 'r', 'br', 'b', 'bl', 'l']).each(function (pos) {
 
                     var handleDiv = $('<div>')
                     .mousedown(function (event) {
+
+                        if (mousedownevent === true) { return; }
+
                         mousedownevent = true;
 
                         // storing old height and width of image
                         nodeOptions.oldWidth = $(objectNode).width();
                         nodeOptions.oldHeight = $(objectNode).height();
+                        nodeOptions.isInline = $(objectNode).hasClass('inline');
+                        nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
 
                         // collecting information about the handle node
                         nodeOptions.useX = (_.contains(['tl', 'tr', 'r', 'br', 'bl', 'l'], pos));
@@ -1380,11 +1398,36 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
                         nodeOptions.rightSelection = (_.contains(['tr', 'r', 'br'], pos));
                         nodeOptions.bottomSelection = (_.contains(['br', 'b', 'bl'], pos));
                         nodeOptions.leftSelection = (_.contains(['tl', 'bl', 'l'], pos));
+                        nodeOptions.cursorStyle = cursorstyles[pos];
+
+                        nodeOptions.isResizeEvent = true;
+                        nodeOptions.isMoveEvent = false;
 
                         mousedownhandler.call(context, event, nodeOptions);
                     });
 
                     selectionBox.append(handleDiv.addClass('handle ' + pos));
+                });
+
+                // moving the image
+                $(this).mousedown(function (event) {
+
+                    if (mousedownevent === true) { return; }
+
+                    mousedownevent = true;
+
+                    // storing old height and width of image
+                    nodeOptions.oldWidth = $(objectNode).width();
+                    nodeOptions.oldHeight = $(objectNode).height();
+                    nodeOptions.isInline = $(objectNode).hasClass('inline');
+                    nodeOptions.isRightFloated = $(objectNode).hasClass('float') && $(objectNode).hasClass('right');
+
+                    nodeOptions.cursorStyle = 'move';
+
+                    nodeOptions.isResizeEvent = false;
+                    nodeOptions.isMoveEvent = true;
+
+                    mousedownhandler.call(context, event, nodeOptions);
                 });
             }
 
@@ -1392,13 +1435,13 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
             $(document)
             .mouseup(function (e) {
                 if (mousedownevent) {
-                    mouseuphandler.call(context, e, objectNode);
+                    mouseuphandler.call(context, e, objectNode, moveBox);
                 }
                 mousedownevent = false;
             })
             .mousemove(function (e) {
                 if (! mousedownevent) return;
-                mousemovehandler.call(context, e);
+                mousemovehandler.call(context, e, moveBox);
             });
 
             // set classes according to passed options, and resize handles
@@ -1416,6 +1459,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.clearObjectSelection = function (objects) {
         $(objects).children('div.selection').remove();
+        $(objects).children('div.move').remove();
         // removing mouse event handler (mouseup and mousemove) from page div
         $(document).off('mouseup mousemove');
     };
