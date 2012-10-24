@@ -587,7 +587,7 @@ define('io.ox/backbone/forms',
                 });
                 return items;
             },
-            autocompleteBehavoir: false
+            autocompleteBehaviour: false
         };
 
         var modelEvents = {};
