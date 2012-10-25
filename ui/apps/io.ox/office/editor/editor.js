@@ -26,10 +26,11 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/position',
      'io.ox/office/editor/undo',
      'io.ox/office/editor/format/stylesheets',
+     'io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/documentstyles',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, DocumentStyles, Alert, gt) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, Alert, gt) {
 
     'use strict';
 
@@ -2390,19 +2391,24 @@ define('io.ox/office/editor/editor',
         function selectObjectAsText(object) {
 
             var // previous text span of the object node
-                prevTextSpan = Utils.findPreviousNodeInTree(object, 'span'),
+                prevTextSpan = DOM.findPreviousTextSpan(object),
                 // next text span of the object node
-                nextTextSpan = Utils.findNextNodeInTree(selectedObjects.last(), 'span'),
+                nextTextSpan = DOM.findNextTextSpan(object),
                 // DOM points representing the text selection over the object
                 startPoint = null, endPoint = null;
 
             // start point after the last character preceding the object
-            if (prevTextSpan) {
+            if (DOM.isPortionSpan(prevTextSpan)) {
                 startPoint = new DOM.Point(prevTextSpan.firstChild, prevTextSpan.firstChild.nodeValue.length);
             }
             // end point before the first character following the object
-            if (nextTextSpan) {
+            if (DOM.isPortionSpan(nextTextSpan)) {
                 endPoint = new DOM.Point(nextTextSpan.firstChild, 0);
+            }
+
+            // floating objects: go to following text span (do not select 'over' the object)
+            if (DOM.isFloatingObjectNode(object) && endPoint) {
+                startPoint = endPoint;
             }
 
             // set browser selection (do nothing if no start and no end point
@@ -3777,30 +3783,6 @@ define('io.ox/office/editor/editor',
         }
 
         /**
-         * Tries to merge the passed text span with its next or previous
-         * sibling text span.
-         */
-        function mergeSiblingTextSpan(span, next) {
-
-            var // the sibling text node, depending on the passed direction
-                siblingSpan = next ? span.nextSibling : span.previousSibling,
-                // text in the passed and in the sibling node
-                text = null, siblingText = null;
-
-            // both text spans must contain the same attributes
-            if (DOM.isTextSpan(siblingSpan) && StyleSheets.hasEqualElementAttributes(span, siblingSpan)) {
-
-                // add text of the sibling text node to the passed text node
-                text = span.firstChild.nodeValue;
-                siblingText = siblingSpan.firstChild.nodeValue;
-                span.firstChild.nodeValue = next ? (text + siblingText) : (siblingText + text);
-
-                // remove the entire sibling span element
-                $(siblingSpan).remove();
-            }
-        }
-
-        /**
          * Changes a specific formatting attribute of the specified element or
          * text range. The type of the attributes will be determined from the
          * specified range.
@@ -3826,23 +3808,21 @@ define('io.ox/office/editor/editor',
                 styleSheets = null,
                 // options for StyleSheets method calls
                 options = null,
+                // the last element visited by the formatter
+                lastElement = null,
                 // undo and redo operations going into a single action
                 undoOperations = [], redoOperations = [];
 
             // sets or clears the attributes using the current style sheet container
-            function setElementAttributes(element, merge) {
-
+            function setElementAttributes(element) {
                 // set or clear the attributes at the element
                 if (_.isNull(attributes)) {
                     styleSheets.clearElementAttributes(element, undefined, options);
                 } else {
                     styleSheets.setElementAttributes(element, attributes, options);
                 }
-
-                // try to merge a text span with previous sibling text span (both text spans must contain the same attributes)
-                if (merge && DOM.isTextSpan(element)) {
-                    mergeSiblingTextSpan(element, false);
-                }
+                // store last visited element for later use
+                lastElement = element;
             }
 
             // change listener used to build the undo operations
@@ -3887,6 +3867,7 @@ define('io.ox/office/editor/editor',
             }
             startInfo = Position.getNodeInfoAtPosition(editdiv, start);
             endInfo = _.isArray(end) ? Position.getNodeInfoAtPosition(editdiv, end) : startInfo;
+            end = end || start;
             if (!startInfo.node || !endInfo.node) { return; }
 
             // get attribute family of start and end node
@@ -3897,8 +3878,10 @@ define('io.ox/office/editor/editor',
             // options for the StyleSheets method calls (build undo operations while formatting)
             options = undomgr.isEnabled() ? { changeListener: changeListener } : null;
 
-            // characters (either start or end may point to an object node, ignore that but format as characters)
-            if ((startInfo.family === 'character') || (endInfo.family === 'character')) {
+            // characters (start or end may point to an object node, ignore that but format as
+            // characters if the start objects is different from the end object)
+            if ((startInfo.family === 'character') || (endInfo.family === 'character') ||
+                    ((startInfo.node !== endInfo.node) && DOM.isObjectNode(startInfo.node) && DOM.isObjectNode(endInfo.node))) {
 
                 // check that start and end are located in the same paragraph
                 if (startInfo.node.parentNode !== endInfo.node.parentNode) {
@@ -3906,18 +3889,19 @@ define('io.ox/office/editor/editor',
                     return;
                 }
 
-                // visit all text spans (also empty spans, and spans embedded in fields)
+                // visit all paragraph child nodes covered by the passed range
                 styleSheets = characterStyles;
-                Position.iterateParagraphChildNodes(startInfo.node.parentNode, function (node) {
-                    if (DOM.isTextSpan(node)) {
-                        setElementAttributes(node, true);
-                    } else if (DOM.isFieldNode(node)) {
-                        // visit all spans in the field node
-                        Utils.iterateSelectedDescendantNodes(node, 'span', function (node) {
-                            setElementAttributes(node, true);
-                        }, undefined, { children: true });
-                    }
-                }, undefined, { allNodes: true, start: _(start).last(), end: _(end || start).last(), split: true });
+                Position.iterateParagraphChildNodes(startInfo.node.parentNode, setElementAttributes, undefined, {
+                    allNodes: true,
+                    start: _(start).last(),
+                    end: _(end).last(),
+                    split: true
+                });
+
+                // try to merge last text span in the range with its next sibling
+                if (lastElement) {
+                    CharacterStyles.mergeSiblingTextSpans(lastElement, true);
+                }
 
             // otherwise: only single components allowed at this time
             } else {
@@ -3942,7 +3926,7 @@ define('io.ox/office/editor/editor',
             }
 
             // store last position
-            lastOperationEnd = new OXOPaM(end || start);
+            lastOperationEnd = new OXOPaM(end);
         }
 
         function implInsertParagraph(position) {

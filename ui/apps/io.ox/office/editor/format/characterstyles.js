@@ -141,9 +141,11 @@ define('io.ox/office/editor/format/characterstyles',
 
             // update calculated line height due to changed font settings
             LineHeight.updateElementLineHeight(span, paragraphAttributes.lineheight);
-
             // determine auto text color
             Color.updateElementTextColor(span, theme, attributes, paragraphAttributes);
+
+            // try to merge with the preceding text span
+            CharacterStyles.mergeSiblingTextSpans(span, false);
         });
     }
 
@@ -222,6 +224,46 @@ define('io.ox/office/editor/format/characterstyles',
         this.registerUpdateHandler(updateCharacterFormatting);
 
     } // class CharacterStyles
+
+    // static methods ---------------------------------------------------------
+
+    /**
+     * Tries to merge the passed text span with its next or previous sibling
+     * text span. To be able to merge two text spans, they must contain equal
+     * formatting attributes. If merging was successful, the sibling span will
+     * be removed from the DOM.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM node to be merged with its sibling text span. If this object is
+     *  a jQuery object, uses the first DOM node it contains.
+     *
+     * @param {Boolean} next
+     *  If set to true, will try to merge with the next span, otherwise with
+     *  the previous text span.
+     */
+    CharacterStyles.mergeSiblingTextSpans = function (node, next) {
+
+        var // the sibling text span, depending on the passed direction
+            sibling = null,
+            // text in the passed and in the sibling node
+            text = null, siblingText = null;
+
+        // passed node and sibling node, as DOM nodes
+        node = Utils.getDomNode(node);
+        sibling = node[next ? 'nextSibling' : 'previousSibling'];
+
+        // both nodes must be text spans with the same attributes
+        if (DOM.isTextSpan(node) && DOM.isTextSpan(sibling) && StyleSheets.hasEqualElementAttributes(node, sibling)) {
+
+            // add text of the sibling text node to the passed text node
+            text = node.firstChild.nodeValue;
+            siblingText = sibling.firstChild.nodeValue;
+            node.firstChild.nodeValue = next ? (text + siblingText) : (siblingText + text);
+
+            // remove the entire sibling span element
+            $(sibling).remove();
+        }
+    };
 
     // exports ================================================================
 

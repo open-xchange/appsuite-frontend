@@ -101,7 +101,7 @@
 
             td {
                 padding: 4px;
-                border: none;
+                border: 1px solid gray;
                 vertical-align: top;
             }
         }

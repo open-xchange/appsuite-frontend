@@ -709,6 +709,22 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
     };
 
+    DOM.findPreviousTextSpan(node) {
+        node = Utils.getDomNode(node);
+        while (node && !DOM.isTextSpan(node)) {
+            node = node.previousSibling;
+        }
+        return node;
+    };
+
+    DOM.findNextTextSpan(node) {
+        node = Utils.getDomNode(node);
+        while (node && !DOM.isTextSpan(node)) {
+            node = node.nextSibling;
+        }
+        return node;
+    };
+
     /**
      * Calls the passed iterator function for all descendant text span elements
      * in a the passed node. As a special case, if the passed node is a text

@@ -137,6 +137,23 @@ define('io.ox/office/editor/view',
 
     }}); // class StyleSheetChooser
 
+    // class ParagraphStyleChooser ============================================
+
+    /**
+     * A style sheet chooser for paragraph style sheets.
+     *
+     * @constructor
+     *
+     * @extends StyleSheetChooser
+     *
+     * @param {Editor} editor
+     *  The editor instance containing the style sheet container visualized by
+     *  this control.
+     */
+    var ParagraphStyleChooser = StyleSheetChooser.extend({ constructor: function (editor) {
+        StyleSheetChooser.call(this, editor, 'paragraph', { tooltip: gt('Paragraph Style'), previewFamilies: ['paragraph', 'character'] });
+    }}); // class ParagraphStyleChooser
+
     // class ColorChooser =====================================================
 
     var ColorChooser = RadioGroup.extend({ constructor: function (themes, context, options) {
@@ -500,7 +517,7 @@ define('io.ox/office/editor/view',
 */
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor, 'paragraph', { tooltip: gt('Paragraph Style'), previewFamilies: ['paragraph', 'character'] }))
+            .addGroup('paragraph/stylesheet', new ParagraphStyleChooser(editor))
             .addSeparator()
             .addGroup('character/fontname', new FontFamilyChooser())
             .addSeparator()
