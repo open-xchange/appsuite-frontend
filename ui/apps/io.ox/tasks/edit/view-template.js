@@ -14,7 +14,8 @@
 define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
                                           'io.ox/backbone/views',
                                           'io.ox/core/date',
-                                          'io.ox/backbone/forms'], function (gt, views, date, forms) {
+                                          'io.ox/core/notifications',
+                                          'io.ox/backbone/forms'], function (gt, views, date, notifications, forms) {
     "use strict";
    
     var point = views.point('io.ox/tasks/edit/view');
@@ -128,7 +129,16 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="target_duration span12" id="task-edit-target-duration">',
         attribute: 'target_duration',
-        label: gt('Estimated time in minutes')
+        label: gt('Estimated time in minutes'),
+        updateModel: function () {
+            var value = parseFloat(this.nodes.inputField.val(), 10);
+            if (!isNaN(value)) {
+                this.model.set(this.attribute, this.nodes.inputField.val());
+            } else {
+                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                this.nodes.inputField.val(this.model.get(this.attribute));
+            }
+        }
     }));
     
     //actual time
@@ -139,7 +149,16 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="actual_duration span12" id="task-edit-actual-duration">',
         attribute: 'actual_duration',
-        label: gt('Actual time in minutes')
+        label: gt('Actual time in minutes'),
+        updateModel: function () {
+            var value = parseFloat(this.nodes.inputField.val(), 10);
+            if (!isNaN(value)) {
+                this.model.set(this.attribute, this.nodes.inputField.val());
+            } else {
+                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                this.nodes.inputField.val(this.model.get(this.attribute));
+            }
+        }
     }));
     
     //estimated costs
@@ -150,7 +169,16 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="target_costs span12" id="task-edit-target-costs">',
         attribute: 'target_costs',
-        label: gt('Estimated costs')
+        label: gt('Estimated costs'),
+        updateModel: function () {
+            var value = parseFloat(this.nodes.inputField.val(), 10);
+            if (!isNaN(value)) {
+                this.model.set(this.attribute, this.nodes.inputField.val());
+            } else {
+                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                this.nodes.inputField.val(this.model.get(this.attribute));
+            }
+        }
     }));
     
     //actual costs
@@ -161,7 +189,16 @@ define("io.ox/tasks/edit/view-template", ['gettext!io.ox/tasks/edit',
         labelClassName: 'task-edit-label',
         control: '<input type="text" class="actual_costs span12" id="task-edit-actual-costs">',
         attribute: 'actual_costs',
-        label: gt('Actual costs')
+        label: gt('Actual costs'),
+        updateModel: function () {
+            var value = parseFloat(this.nodes.inputField.val(), 10);
+            if (!isNaN(value)) {
+                this.model.set(this.attribute, this.nodes.inputField.val());
+            } else {
+                setTimeout(function () {notifications.yell("error", gt("Please enter a correct number.")); }, 300);
+                this.nodes.inputField.val(this.model.get(this.attribute));
+            }
+        }
     }));
     
     //currency

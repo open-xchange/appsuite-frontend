@@ -31,6 +31,7 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
         tagName: 'div',
         className: 'io-ox-tasks-edit  task-edit-wrapper container-fluid',
         init: function () {
+            //needed to do it this way, otherwise data stays for next instance of view and causes errors
             this.fields = {};
             this.rows = [];
             this.attachmentArray = [];
@@ -284,8 +285,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     alarmDateObj = temp;
                     self.model.set('alarm', temp.t);
                 } else {
-                    alarmDateObj = temp;
-                    self.model.set('alarm', undefined);
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    self.model.trigger('change:alarm');
                 }
             };
             this.fields.alarmDate.on("change", alarmupdate);
@@ -294,19 +295,25 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
             //row 4
             this.fields.progress = util.buildProgress();
             this.fields.progress.on('change', function () {
-                if (self.fields.progress.val() === '') {
-                    self.fields.progress.val(0);
-                    self.model.set('status', 1);
-                } else if (self.fields.progress.val() === '0' && self.model.get('status') === 2) {
-                    self.model.set('status', 1);
-                } else if (self.fields.progress.val() === '100' && self.model.get('status') !== 3) {
-                    self.model.set('status', 3);
-                } else if (self.model.get('status') === 3) {
-                    self.model.set('status', 2);
-                } else if (self.model.get('status') === 1) {
-                    self.model.set('status', 2);
+                var value = parseInt(self.fields.progress.val(), 10);
+                if (value !== 'NaN' && value >= 0 && value <= 100) {
+                    if (self.fields.progress.val() === '') {
+                        self.fields.progress.val(0);
+                        self.model.set('status', 1);
+                    } else if (self.fields.progress.val() === '0' && self.model.get('status') === 2) {
+                        self.model.set('status', 1);
+                    } else if (self.fields.progress.val() === '100' && self.model.get('status') !== 3) {
+                        self.model.set('status', 3);
+                    } else if (self.model.get('status') === 3) {
+                        self.model.set('status', 2);
+                    } else if (self.model.get('status') === 1) {
+                        self.model.set('status', 2);
+                    }
+                    self.model.set('percent_completed', value);
+                } else {
+                    setTimeout(function () {notifications.yell("error", gt("Please enter value between 0 and 100.")); }, 300);
+                    self.model.trigger('change:percent_completed');
                 }
-                self.model.set('percent_completed', parseInt(self.fields.progress.val(), 10));
             });
             this.model.on("change:percent_completed", function () {
                 self.fields.progress.val(self.model.get('percent_completed'));
@@ -380,8 +387,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     endDateObj = temp;
                     self.model.set('end_date', temp.t);
                 } else {
-                    endDateObj = temp;
-                    self.model.set('end_date', undefined);
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    self.model.trigger('change:end_date');
                 }
             };
             this.fields.endDate.on("change", endDateUpdate);
@@ -402,8 +409,8 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                     startDateObj = temp;
                     self.model.set('start_date', temp.t);
                 } else {
-                    startDateObj = undefined;
-                    self.model.set('start_date', undefined);
+                    setTimeout(function () {notifications.yell("error", gt("Please enter correct date and time.")); }, 300);
+                    self.model.trigger('change:start_date');
                 }
             };
             this.fields.startDate.on("change", startDateUpdate);
