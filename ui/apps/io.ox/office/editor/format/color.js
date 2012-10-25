@@ -304,7 +304,7 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
      * True if the color is dark otherwise false.
      */
     Color.isDark = function (rgbColor) {
-        if (_.isString(rgbColor) && (6 <= rgbColor.length <= 7)) {
+        if (rgbColor && (6 <= rgbColor.length <= 7)) {
             var hexString = rgbColor.length === 6 ? rgbColor : rgbColor.substring(1);
             var rgbColorValue = convertRgbColorToNumber(hexString);
             var luminance = ((((rgbColorValue & 0x00ff0000) >> 16) * 5036060) +
@@ -317,6 +317,45 @@ define('io.ox/office/editor/format/color', ['io.ox/office/tk/utils'], function (
         }
         
         return false;
+    };
+    
+    /**
+     * Updates the text color of the provided element dependent on the theme,
+     * character and paragraph attributes.
+     *
+     * @param element {jQuery} node
+     *  The element whose character attributes should be changed, as jQuery
+     *  object.
+     *
+     * @param theme {Object}
+     *  The theme object currently used by the document.
+     *
+     * @param attrs {Object}
+     *  The current character attributes
+     *
+     * @param paraAttrs
+     *  The paragraph attributes
+     */
+    Color.updateElementTextColor = function (element, theme, attrs, paraAttrs) {
+        var textColor = attrs.color,
+            backColor = attrs.fillcolor,
+            rgbBackColor = null;
+        
+        if (textColor && Color.isAutoColor(textColor)) {
+            if (Color.isAutoColor(backColor)) {
+                if (Color.isAutoColor(paraAttrs.fillcolor))
+                    rgbBackColor = Color.WHITE.value;
+                else
+                    rgbBackColor = Color.getCssColor(paraAttrs.fillcolor, 'fill', theme);
+            }
+            else
+                rgbBackColor = Color.getCssColor(backColor, 'fill', theme);
+            
+            if (Color.isDark(rgbBackColor))
+                element.css('color', '#' + Color.WHITE.value);
+            else
+                element.css('color', '#' + Color.BLACK.value);
+        }
     };
 
     // exports ================================================================

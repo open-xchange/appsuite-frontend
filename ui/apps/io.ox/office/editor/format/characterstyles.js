@@ -78,7 +78,7 @@ define('io.ox/office/editor/format/characterstyles',
             },
 
             color: {
-                def: Color.BLACK,
+                def: Color.AUTO,
                 set: function (element, color) {
                     element.css('color', this.getCssColor(color, 'text'));
                 },
@@ -133,6 +133,15 @@ define('io.ox/office/editor/format/characterstyles',
     function updateCharacterFormatting(node, attributes) {
         // update calculated line height due to changed font settings
         LineHeight.updateElementLineHeight(node);
+        
+        // determine auto text color
+        var para = $(node).closest(DOM.PARAGRAPH_NODE_SELECTOR);
+        if (para) {
+            var documentStyles = this.getDocumentStyles(),
+                paraAttrs = documentStyles.getStyleSheets('paragraph').getElementAttributes(para),
+                theme = documentStyles.getCurrentTheme();
+            Color.updateElementTextColor(node, theme, attributes, paraAttrs);
+        }
     }
 
     /**
