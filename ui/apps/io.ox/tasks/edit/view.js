@@ -35,7 +35,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
         attachmentArray: [],
         attachmentsToRemove: [],
         render: function (app) {
-            var self = this;
+            var self = this,
+                headline = $('<div>').addClass('headline').append($('<h1>').addClass('title').text(gt('Edit task')),
+                    $('<button>').addClass('btn btn-primary cancel').text(gt('Cancel')).css('float', 'right')
+                        .on('click', function () {
+                            app.quit();
+                        }));
+            self.$el.append(headline);
             console.log(app);
             //row 1 subject and savebutton
             util.buildExtensionRow(self.$el, this.getRow(0, app), self.baton);

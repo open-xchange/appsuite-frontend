@@ -17,17 +17,15 @@
 	font-size: 20px;
 	line-height: 30px;
 	height: 30px;
-	margin-left: 30px;
 	display: inline;
  }
  
- .io-ox-tasks-edit-main .headline {
-  	margin-top: 10px;
-  }
-  
+ .io-ox-tasks-edit-main .headline{
+	margin-bottom: 9px;
+ }
+ 
  .io-ox-tasks-edit-main .headline .cancel{
 	float: right;
-	margin-right: 30px;
  }
  
  .io-ox-tasks-edit .progress-field{

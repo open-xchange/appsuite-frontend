@@ -69,12 +69,6 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             win.addClass('io-ox-tasks-edit-main');
             app.setWindow(win);
             win.nodes.main.addClass("scrollable");
-            headline = $('<div>').addClass('headline').append($('<h1>').addClass('title').text(gt('Edit task')),
-                $('<button>').addClass('btn btn-primary cancel').text(gt('Cancel')).css('float', 'right')
-                    .on('click', function () {
-                        self.quit();
-                    }));
-            win.nodes.main.append(headline);
             //ModelView
             if (taskData) {
                 this.edit = true;
