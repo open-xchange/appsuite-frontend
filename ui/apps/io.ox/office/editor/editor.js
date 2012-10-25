@@ -980,19 +980,10 @@ define('io.ox/office/editor/editor',
         };
 
         this.mergeParagraph = function (position) {
-
-            var imageShift = null;
-
             undomgr.enterGroup(function () {
-
                 var newOperation = {name: Operations.PARA_MERGE, start: _.copy(position)};
                 applyOperation(newOperation, true, true);
-
-                imageShift = moveFloatedObjects(position);
-
             }, this);
-
-            return imageShift;
         };
 
         this.insertText = function (text, position) {
@@ -1417,7 +1408,6 @@ define('io.ox/office/editor/editor',
             });
 
             if (event.keyCode === KeyCodes.DELETE) {
-                var imageShift = 0;
                 selection.adjust();
                 if (selection.hasRange()) {
                     self.deleteSelected(selection);
@@ -1428,24 +1418,6 @@ define('io.ox/office/editor/editor',
                     var paraLen = Position.getParagraphLength(paragraphs, startPosition);
 
                     if (startPosition[lastValue] < paraLen) {
-                        var localPos = _.copy(selection.startPaM.oxoPosition, true),
-                            minDeletePos = 0,
-                            domPos;
-
-                        // Getting the first position, that is not a floated object,
-                        // because DELETE has to ignore floated objects.
-                        localPos.pop();
-                        domPos = Position.getDOMPosition(paragraphs, localPos);
-
-                        if (domPos) {
-                            minDeletePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
-                        }
-
-                        if (selection.startPaM.oxoPosition[lastValue] < minDeletePos) {
-                            selection.startPaM.oxoPosition[lastValue] = minDeletePos;
-                            selection.endPaM.oxoPosition[lastValue] = minDeletePos;
-                        }
-
                         selection.endPaM.oxoPosition[lastValue]++;
                         self.deleteText(selection.startPaM.oxoPosition, selection.endPaM.oxoPosition);
                     }
@@ -1471,7 +1443,7 @@ define('io.ox/office/editor/editor',
                             isLastParagraph = true;
                         }
 
-                        imageShift = self.mergeParagraph(mergeselection);
+                        self.mergeParagraph(mergeselection);
 
                         if (nextIsTable) {
                             if (characterPos === 0) {
@@ -1497,35 +1469,19 @@ define('io.ox/office/editor/editor',
                     }
                 }
 
-                if (imageShift > 0) {
-                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] += imageShift;
-                }
                 selection.endPaM = _.copy(selection.startPaM, true);
                 event.preventDefault();
                 setSelection(selection);
             }
             else if (event.keyCode === KeyCodes.BACKSPACE) {
-                var backspacePos = 0,
-                    paragraphsMerged = false;
-
                 selection.adjust();
                 if (selection.hasRange()) {
                     self.deleteSelected(selection);
                 }
                 else {
-                    var lastValue = selection.startPaM.oxoPosition.length - 1,
-                        localPos = _.copy(selection.startPaM.oxoPosition, true);
+                    var lastValue = selection.startPaM.oxoPosition.length - 1;
 
-                    localPos.pop();
-                    // Getting the first position, that is not a floated object,
-                    // because BACKSPACE has to ignore floated objects.
-                    var domPos = Position.getDOMPosition(paragraphs, localPos);
-
-                    if (domPos) {
-                        backspacePos = Position.getNumberOfFloatedObjectsInParagraph(domPos.node);
-                    }
-
-                    if (selection.startPaM.oxoPosition[lastValue] > backspacePos) {
+                    if (selection.startPaM.oxoPosition[lastValue] > 0) {
                         var startPosition = _.copy(selection.startPaM.oxoPosition, true);
                         var endPosition = _.copy(selection.startPaM.oxoPosition, true);
                         startPosition[lastValue] -= 1;
@@ -1553,7 +1509,6 @@ define('io.ox/office/editor/editor',
                             if (startPosition[lastValue - 1] >= 0) {
                                 if (! prevIsTable) {
                                     self.mergeParagraph(startPosition);
-                                    paragraphsMerged = true;
                                 }
                                 selection.startPaM.oxoPosition[lastValue - 1] -= 1;
                                 selection.startPaM.oxoPosition.pop();
@@ -1582,10 +1537,6 @@ define('io.ox/office/editor/editor',
                             }
                         }
                     }
-                }
-
-                if ((backspacePos > 0) && (paragraphsMerged)) {
-                    selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] += backspacePos;
                 }
 
                 selection.endPaM = _.copy(selection.startPaM, true);
@@ -3161,59 +3112,6 @@ define('io.ox/office/editor/editor',
             return str;
         }
 
-        /**
-         * After merging two paragraphs, it can be necessary to move floated
-         * objects of the second paragraph to the beginning of the first
-         * paragraph. This can done using this methid, that generates 'move'
-         * operations for moving the objects.
-         *
-         * @param {OXOPaM.oxoPosition} position
-         *  The logical position describing the paragraph.
-         */
-        function moveFloatedObjects(position) {
-
-            var domPos = Position.getDOMPosition(paragraphs, position),
-                imageShift = 0;
-
-            if (domPos && DOM.isParagraphNode(domPos.node)) {
-
-                var para = domPos.node,
-                    counter = Position.getNumberOfFloatedObjectsInParagraph(para),  // number of floated objects at begin of paragraph
-                    child = para.firstChild;
-
-                while (child !== null) {
-                    var nextChild = child.nextSibling; // saving next sibling, because it will be lost after appendChild()
-
-                    if (DOM.isFloatingObjectNode(child)) {
-
-                        var localPos = Position.getStartOfParagraphChildNode(child),
-                            source = _.copy(position, true),
-                            dest = _.copy(position, true);
-
-                        if (localPos > (counter - 1)) {  // only shifting images, that are not already at the beginning of the paragraph
-                            source.push(localPos);
-                            dest.push(counter);  // there might be floated images already in the first paragraph
-                            imageShift++;
-
-                            // moving floated images with operation
-                            var newOperation = {name: Operations.MOVE, start: _.copy(source, true), end: _.copy(dest, true)};
-                            applyOperation(newOperation, true, true);
-                        }
-
-                        counter++;
-                    }
-
-                    child = nextChild;
-                }
-
-                // finally delete all empty text spans in this paragraph, that are located before floated images
-                Position.removeLeadingEmptyTextSpans(paragraphs, _.copy(position));
-
-            }
-
-            return imageShift;
-        }
-
         function deleteSelectedInSameParagraphLevel(selection) {
             // The included paragraphs are neighbours.
             var endPosition = _.copy(selection.startPaM.oxoPosition, true),
@@ -3578,12 +3476,16 @@ define('io.ox/office/editor/editor',
         }
 
         function setAttributesToSelectedImage(selection, attributes) {
+
             var imageStartPosition = _.copy(selection.startPaM.oxoPosition, true),
-                imageEndPosition = _.copy(imageStartPosition, true),
-                newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPosition };
+                imageEndPosition = _.copy(imageStartPosition, true);
 
             if (imageStartPosition && imageEndPosition) {
+
+                // setting attributes to image
+                var newOperation = { name: Operations.ATTRS_SET, attrs: attributes, start: imageStartPosition, end: imageEndPosition };
                 applyOperation(newOperation, true, true);
+
             }
 
             // setting the cursor position -> only required for changes to inline
@@ -4105,7 +4007,6 @@ define('io.ox/office/editor/editor',
             // delete all empty text spans in cloned paragraph before floated images
             var localPos = _.copy(startPosition);
             localPos.pop();
-            Position.removeLeadingEmptyTextSpans(paragraphs, localPos);
             Position.removeUnusedImageDivs(paragraphs, localPos);
 
             implParagraphChanged(position);
@@ -4142,7 +4043,6 @@ define('io.ox/office/editor/editor',
                 if ((DOM.isParagraphNode(thisPara)) && (DOM.isParagraphNode(nextPara))) {
 
                     var oldParaLen = 0;
-                    var floatingCounter = 0;
                     oldParaLen = Position.getParagraphLength(paragraphs, position);
 
                     var lastCurrentChild = thisPara.lastChild;
@@ -4158,19 +4058,11 @@ define('io.ox/office/editor/editor',
                         if ((child.nodeType === 3) && (thisPara.lastChild !== null) && (thisPara.lastChild.nodeType === 3)) {
                             thisPara.lastChild.nodeValue += child.nodeValue;
                         } else {
-
-                            if (DOM.isFloatingObjectNode(child)) {
-                                floatingCounter++; // counting all floated objects in the added paragraph (required for cursor setting)
-                            }
-
                             thisPara.appendChild(child);
                         }
 
                         child = nextChild;
                     }
-
-                    // delete all empty text spans in merged paragraph before floated images
-                    Position.removeLeadingEmptyTextSpans(paragraphs, _.copy(position, true));
 
                     var localPosition = _.copy(position, true);
                     localPosition[posLength] += 1;  // posLength is 0 for non-tables
@@ -4178,7 +4070,6 @@ define('io.ox/office/editor/editor',
                     implDeleteParagraph(localPosition);
 
                     var lastPos = _.copy(position);
-                    oldParaLen += floatingCounter;
                     lastPos.push(oldParaLen);
                     lastOperationEnd = new OXOPaM(lastPos);
                     implParagraphChanged(position);
@@ -4710,6 +4601,8 @@ define('io.ox/office/editor/editor',
                         if (useOffsetDiv) {
                             $(offsetDiv).insertBefore(sourceNode);
                         }
+
+                        implParagraphChanged(dest);
                     }
                 }
             }

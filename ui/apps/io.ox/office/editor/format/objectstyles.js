@@ -176,13 +176,7 @@ define('io.ox/office/editor/format/objectstyles',
 
                 // remove leading node used for positioning
                 verticalOffsetNode.remove();
-
-                // create empty text span before first text span
-                firstTextNode = Utils.findFirstTextNode(paragraph);
-                DOM.splitTextSpan(firstTextNode.parentNode, 0);
-
-                // remove floating classes, move object behind floated objects
-                object.removeClass('float left right').insertBefore(firstTextNode.parentNode);
+                object.removeClass('float left right');
             }
 
             // TODO: Word uses fixed predefined margins in inline mode, we too?
@@ -196,12 +190,7 @@ define('io.ox/office/editor/format/objectstyles',
 
             // from inline mode to floating mode
             if (object.hasClass('inline')) {
-
-                // first text node in paragraph
-                firstTextNode = Utils.findFirstTextNode(paragraph);
-
-                // move object before the first text node
-                object.removeClass('inline').insertBefore(firstTextNode.parentNode);
+                object.removeClass('inline');
             }
 
             // calculate top offset (only if object is anchored to paragraph)
