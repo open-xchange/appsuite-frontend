@@ -981,7 +981,22 @@ define('io.ox/office/editor/editor',
                 applyOperation(listOperation, true, true);
                 defNumId = listOperation.listName;
             }
-            setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+            if (options && options.startPosition) {
+                var start = [];
+                var length = options.startPosition.length;
+                var index = 0;
+                for (; index < length - 1; ++index) {
+                    start[index] = options.startPosition[index];
+                }
+                var newOperation = {name: Operations.ATTRS_SET, attrs: { numId: defNumId, ilvl: 0}, start: start, end: start };
+                applyOperation(newOperation, true, true);
+                start[start.length - 1] += 1;
+                newOperation.start = start;
+                newOperation.end = newOperation.start;
+                applyOperation(newOperation, true, true);
+            } else {
+                setAttributes('paragraph', { numId: defNumId, ilvl: 0});
+            }
 
         };
 
@@ -1603,7 +1618,7 @@ define('io.ox/office/editor/editor',
                 var paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
                 if (!selection.hasRange() &&
                         selection.startPaM.oxoPosition[selection.startPaM.oxoPosition.length - 1] === Position.getFirstTextNodePositionInParagraph(paragraph)) {
-                    var ilvl = self.getAttributes('paragraph').ilvl;
+                    var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
                     if (ilvl !== -1) {
                         if (!event.shiftKey && ilvl < 8) {
                             ilvl += 1;
@@ -1692,38 +1707,51 @@ define('io.ox/office/editor/editor',
                         selection.startPaM.oxoPosition = [0, 0];
                     } else {
                         // demote or end numbering instead of creating a new paragraph
-                        var ilvl = self.getAttributes('paragraph').ilvl;
+                        var // the paragraph element addressed by the passed logical position
+                            paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+                        var ilvl = paragraphStyles.getElementAttributes(paragraph).ilvl;
                         var paragraphLength = Position.getParagraphLength(paragraphs, selection.startPaM.oxoPosition);
                         if (!hasSelection && ilvl >= 0 && paragraphLength === 0) {
                             ilvl--;
                             self.setAttribute('paragraph', 'ilvl', ilvl);
                         }
                         else {
+                            var numAutoCorrect = {};
                             if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
-                                // detect Numbering/Bullet labels at paragraph
-                                // start
-                                var // the paragraph element addressed by the
-                                    // passed logical position
-                                paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
-
-                                if (paragraph !== undefined) {
-                                    var paraText = paragraph.textContent,
-                                    labelText = paraText.split(' ')[0],
-                                    bullet,
-                                    startNumber;
-                                    if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
-                                        // bullet
-                                        bullet = labelText;
-                                        self.createList('bullet', {symbol: bullet});
-                                    } else if (labelText.substring(labelText.length - 1) === '.') {
-                                        var sub = labelText.substring(0, labelText.length - 1);
-                                        startNumber = parseInt(sub, 10);
-                                        if (startNumber > 0)
-                                            self.createList('numbering', {levelStart: startNumber});
+                                // detect Numbering/Bullet labels at paragraph start
+                                var paraText = paragraph.textContent,
+                                labelText = paraText.split(' ')[0],
+                                bullet,
+                                startNumber;
+                                numAutoCorrect.startPosition = _.copy(selection.startPaM.oxoPosition, true);
+                                numAutoCorrect.startPosition[numAutoCorrect.startPosition.length - 1] = 0;
+                                numAutoCorrect.endPosition = _.copy(selection.endPaM.oxoPosition, true);
+                                numAutoCorrect.endPosition[numAutoCorrect.endPosition.length - 1] = labelText.length + 1;
+                                if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
+                                    // bullet
+                                    numAutoCorrect.type = 'bullet';
+                                    numAutoCorrect.symbol = labelText;
+                                } else if (labelText.substring(labelText.length - 1) === '.') {
+                                    var sub = labelText.substring(0, labelText.length - 1);
+                                    startNumber = parseInt(sub, 10);
+                                    if (startNumber > 0) {
+                                        numAutoCorrect.type = 'numbering';
+                                        numAutoCorrect.levelStart = startNumber;
                                     }
                                 }
                             }
                             self.splitParagraph(startPosition);
+                            // now apply 'AutoCorrection'
+                            if (numAutoCorrect.type !== undefined) {
+                                undomgr.enterGroup(function () {
+                                    self.deleteText(numAutoCorrect.startPosition, numAutoCorrect.endPosition);
+                                    self.createList(numAutoCorrect.type,
+                                            {levelStart: numAutoCorrect.levelStart, symbol: numAutoCorrect.symbol,
+                                             startPosition: numAutoCorrect.startPosition
+                                            });
+                                });
+                            }
+
                             // TODO / TBD: Should all API / Operation calls return the new position?!
                             var lastValue = selection.startPaM.oxoPosition.length - 1;
                             selection.startPaM.oxoPosition[lastValue - 1] += 1;
