@@ -67,18 +67,18 @@
         "v": "v",
         "Hmv": "HH:mm v",
         "hmv": "h:mm a v",
-        "yMdHm": "M/d/y HH:mm",
-        "yMdHmv": "M/d/y HH:mm v",
-        "yMdhm": "M/d/y h:mm a",
-        "yMdhmv": "M/d/y h:mm a v",
-        "yMEdHm": "E, M/d/y HH:mm",
-        "yMEdHmv": "E, M/d/y HH:mm v",
-        "yMEdhm": "E, M/d/y h:mm a",
-        "yMEdhmv": "E, M/d/y h:mm a v"
+        "yMdHm": "M/d/y, HH:mm",
+        "yMdHmv": "M/d/y, HH:mm v",
+        "yMdhm": "M/d/y, h:mm a",
+        "yMdhmv": "M/d/y, h:mm a v",
+        "yMEdHm": "E, M/d/y, HH:mm",
+        "yMEdHmv": "E, M/d/y, HH:mm v",
+        "yMEdhm": "E, M/d/y, h:mm a",
+        "yMEdhmv": "E, M/d/y, h:mm a v"
     },
     "date": "MMM d, y",
     "time": "h:mm a",
-    "dateTimeFormat": "%2$s %1$s",
+    "dateTimeFormat": "%2$s, %1$s",
     "intervals": {
         "fallback": "%1$s – %2$s",
         "hm": {
@@ -87,7 +87,6 @@
             "m": "h:mm–h:mm a"
         },
         "Hm": {
-            "a": "HH:mm–HH:mm",
             "h": "HH:mm–HH:mm",
             "m": "HH:mm–HH:mm"
         },
@@ -97,7 +96,6 @@
             "m": "h:mm–h:mm a v"
         },
         "Hmv": {
-            "a": "HH:mm–HH:mm v",
             "h": "HH:mm–HH:mm v",
             "m": "HH:mm–HH:mm v"
         },
@@ -113,14 +111,14 @@
         }
     },
     "dayPeriods": {
-        "am": "a",
-        "noon": "n",
-        "pm": "p"
+        "am": "AM",
+        "noon": "noon",
+        "pm": "PM"
     },
     "eras": [
         "BC",
         "AD"
     ],
-    "dateTime": "MMM d, y h:mm a",
+    "dateTime": "MMM d, y, h:mm a",
     "h12": true
 }
