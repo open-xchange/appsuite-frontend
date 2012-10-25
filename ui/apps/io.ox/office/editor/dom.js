@@ -572,7 +572,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new list label node, as jQuery object.
      */
     DOM.createListLabelNode = function (text) {
-        return $('<div>').addClass('list-label').text(_.isString(text) ? text : '');
+        return $('<div>', { contenteditable: false }).addClass('list-label').text(_.isString(text) ? text : '');
     };
 
     /**
