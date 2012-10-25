@@ -975,9 +975,9 @@ define('io.ox/office/editor/editor',
         };
 
         this.createList = function (type, options) {
-            var defNumId = lists.getDefaultNumId(type, options);
+            var defNumId = (!options || (!options.symbol && !options.levelStart)) ? lists.getDefaultNumId(type) : undefined;
             if (defNumId === undefined) {
-                var listOperation = lists.getDefaultListOperation(type);
+                var listOperation = lists.getDefaultListOperation(type, options);
                 applyOperation(listOperation, true, true);
                 defNumId = listOperation.listName;
             }
@@ -4712,39 +4712,45 @@ define('io.ox/office/editor/editor',
         /**
          * iterate over _all_ paragraphs and update numbering symbols and index
          */
+        var listUpdateTimer = null;
         function implUpdateLists() {
-            var listItemCounter = [];
-            Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
-                // always remove an existing label
-                // TODO: it might make more sense to change the label appropriately
-                var attributes = paragraphStyles.getElementAttributes(para, false);
-                $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
-                $(para).css('margin-left', '');
-                if (attributes.ilvl !== -1 && attributes.ilvl < 9 && attributes.numId !== -1) {
-                    if (!listItemCounter[attributes.numId])
-                        listItemCounter[attributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-                    listItemCounter[attributes.numId][attributes.ilvl]++;
-                    // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
-                    var subLevelIdx = attributes.ilvl + 1;
-                    for (; subLevelIdx < 9; subLevelIdx++)
-                        listItemCounter[attributes.numId][subLevelIdx] = 0;
-                    var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
-                    var numberingElement = DOM.createListLabelNode(listObject.text);
-                    var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
-                    var charAttributes = characterStyles.getElementAttributes(span, false);
-                    numberingElement.css('font-size', charAttributes.fontsize + 'pt');
-                    var paraAttributes = paragraphStyles.getElementAttributes(para, false);
-                    LineHeight.setElementLineHeight(numberingElement, paraAttributes.lineheight);
-                    if (listObject.indent > 0) {
-                        $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
-                    }
-                    if (listObject.labelWidth > 0) {
-                        numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
-                    }
-                    $(para).prepend(numberingElement);
-                }
+            if (listUpdateTimer)
+                return;
+            listUpdateTimer = setTimeout(function () {
+                    listUpdateTimer = null;
+                    var listItemCounter = [];
+                    Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (para) {
+                        // always remove an existing label
+                        // TODO: it might make more sense to change the label appropriately
+                        var attributes = paragraphStyles.getElementAttributes(para, false);
+                        $(para).children(DOM.LIST_LABEL_NODE_SELECTOR).remove();
+                        $(para).css('margin-left', '');
+                        if (attributes.ilvl !== -1 && attributes.ilvl < 9 && attributes.numId !== -1) {
+                            if (!listItemCounter[attributes.numId])
+                                listItemCounter[attributes.numId] = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+                            listItemCounter[attributes.numId][attributes.ilvl]++;
+                            // TODO: reset sub-levels depending on their 'levelRestartValue' attribute
+                            var subLevelIdx = attributes.ilvl + 1;
+                            for (; subLevelIdx < 9; subLevelIdx++)
+                                listItemCounter[attributes.numId][subLevelIdx] = 0;
+                            var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
+                            var numberingElement = DOM.createListLabelNode(listObject.text);
+                            var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
+                            var charAttributes = characterStyles.getElementAttributes(span, false);
+                            numberingElement.css('font-size', charAttributes.fontsize + 'pt');
+                            var paraAttributes = paragraphStyles.getElementAttributes(para, false);
+                            LineHeight.setElementLineHeight(numberingElement, paraAttributes.lineheight);
+                            if (listObject.indent > 0) {
+                                $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
+                            }
+                            if (listObject.labelWidth > 0) {
+                                numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                            }
+                            $(para).prepend(numberingElement);
+                        }
 
-            });
+                    });
+                }, 0);
         }
         function implDbgOutEvent(event) {
 

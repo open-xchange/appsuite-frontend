@@ -172,11 +172,14 @@ define('io.ox/office/editor/format/lists',
         /**
          * @param {String} type
          *  either bullet or numbering
+         * @param {Object} options
+         *  can contain symbol - the bullet symbol
+         *              levelStart - start index of an ordered list
          * @returns {Object}
          *  the operation that creates the requested list
          *
          */
-        this.getDefaultListOperation = function (type) {
+        this.getDefaultListOperation = function (type, options) {
             var freeId = 1;
             for (;;++freeId) {
                 if (!(freeId in lists))
@@ -184,12 +187,21 @@ define('io.ox/office/editor/format/lists',
             }
             var newOperation = { name: Operations.INSERT_LIST, listName: freeId };
             if (type === 'bullet') {
-                newOperation.listDefinition = defaultBulletListDefinition;
+                newOperation.listDefinition = _.copy(defaultBulletListDefinition, true);
+                if (options.symbol && options.symbol !== '*') {
+                    newOperation.listDefinition.listLevel0.levelText = options.symbol;
+                } else {
+                    newOperation.listDefinition.defaultList = type;
+                }
             } else {
-                newOperation.listDefinition = defaultNumberingListDefinition;
+                newOperation.listDefinition = _.copy(defaultNumberingListDefinition, true);
+                if (options.levelStart) {
+                    newOperation.listDefinition.listLevel0.levelStart = options.levelStart;
+                } else {
+                    newOperation.listDefinition.defaultList = type;
+                }
             }
 
-            newOperation.listDefinition.defaultList = type;
             return newOperation;
         };
         /**
@@ -228,14 +240,15 @@ define('io.ox/office/editor/format/lists',
             }
             var numberFormat = levelFormat.numberFormat;
             ret.text = this.formatNumberType(levelIndexes === undefined ? 0 :
-                    levelIndexes[ilvl] + (levelFormat.levelStart !== undefined ? levelFormat.levelStart - 1 : 0), numberFormat);
+                    levelIndexes[ilvl] + (levelFormat.levelStart !== undefined ? levelFormat.levelStart - 1 : 0), numberFormat,
+                    levelFormat.levelText);
             ret.indent = levelFormat.leftIndent - (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
             //+ levelFormat.firstLineIndent
             ret.labelWidth = (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
             return ret;
         };
 
-        this.formatNumberType = function (seqNo, numberFormat) {
+        this.formatNumberType = function (seqNo, numberFormat, levelText) {
             var retString = "???";
             switch (numberFormat) {
             case "decimal":
@@ -258,7 +271,12 @@ define('io.ox/office/editor/format/lists',
                     retString = romanCaps[seqNo - 1];
                 break;
             case "bullet":
-                retString = "●";
+                var charCode = levelText ? levelText.charCodeAt(0) : -1;
+                if (charCode > 0 && (charCode < 0xE000 || charCode > 0xF8FF)) {
+                    retString = levelText;
+                }
+                else
+                    retString = "●";
                 break;
             default:
             }
