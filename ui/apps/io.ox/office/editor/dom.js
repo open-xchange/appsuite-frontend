@@ -709,7 +709,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
     };
 
-    DOM.findPreviousTextSpan(node) {
+    DOM.findPreviousTextSpan = function (node) {
         node = Utils.getDomNode(node);
         while (node && !DOM.isTextSpan(node)) {
             node = node.previousSibling;
@@ -717,7 +717,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return node;
     };
 
-    DOM.findNextTextSpan(node) {
+    DOM.findNextTextSpan = function (node) {
         node = Utils.getDomNode(node);
         while (node && !DOM.isTextSpan(node)) {
             node = node.nextSibling;
