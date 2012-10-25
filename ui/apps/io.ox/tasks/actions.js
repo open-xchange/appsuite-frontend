@@ -35,9 +35,7 @@ define("io.ox/tasks/actions",
     new Action('io.ox/tasks/actions/edit', {
         action: function (data) {
             require(['io.ox/tasks/edit/main'], function (edit) {
-                edit.getApp().launch().done(function () {
-                    this.preFill(data);
-                });
+                edit.getApp().launch(data);
             });
         }
     });
