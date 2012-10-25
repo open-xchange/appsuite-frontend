@@ -91,7 +91,7 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
             var def = $.Deferred();
             var clean = function () {
                 // clear private vars
-                taskView.remove();
+                taskView.trigger('dispose');
                 app = win = taskModel = taskView = null;
             };
 
@@ -115,10 +115,13 @@ define("io.ox/tasks/edit/main", ['gettext!io.ox/tasks',
                 if (app.edit) {
                     require(['io.ox/tasks/api'], function (api) {
                         api.trigger("update:" + taskModel.attributes.folder_id + '.' + taskModel.attributes.id);
+                        clean();
+                        def.resolve();
                     });
+                } else {
+                    clean();
+                    def.resolve();
                 }
-                clean();
-                def.resolve();
             }
 
             return def;

@@ -30,10 +30,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
     TaskEditView = point.createView({
         tagName: 'div',
         className: 'io-ox-tasks-edit  task-edit-wrapper container-fluid',
-        fields: {},
-        rows: [],
-        attachmentArray: [],
-        attachmentsToRemove: [],
+        init: function () {
+            this.fields = {};
+            this.rows = [];
+            this.attachmentArray = [];
+            this.attachmentsToRemove = [];
+            this.on('dispose', this.close);
+        },
         render: function (app) {
             var self = this,
                 headline = $('<div>').addClass('headline').append($('<h1>').addClass('title').text(gt('Edit task')),
@@ -42,7 +45,6 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                             app.quit();
                         }));
             self.$el.append(headline);
-            console.log(app);
             //row 1 subject and savebutton
             util.buildExtensionRow(self.$el, this.getRow(0, app), self.baton);
             
@@ -412,6 +414,13 @@ define('io.ox/tasks/edit/view', ['gettext!io.ox/tasks/edit',
                 .on('click', function (e) { e.preventDefault();
                                             setTimeout(function () {notifications.yell("info", gt("Under construction")); }, 300);
                                         });
+        },
+        close: function () {
+            //clean up to prevent strange sideeffects
+            this.fields = {};
+            this.rows = [];
+            this.attachmentArray = [];
+            this.attachmentsToRemove = [];
         },
         
         saveAttachments: function (model, data, self) {
