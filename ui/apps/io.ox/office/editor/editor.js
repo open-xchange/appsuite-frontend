@@ -972,8 +972,8 @@ define('io.ox/office/editor/editor',
             applyOperation(newOperation, true, true);
         };
 
-        this.createList = function (type) {
-            var defNumId = lists.getDefaultNumId(type);
+        this.createList = function (type, options) {
+            var defNumId = lists.getDefaultNumId(type, options);
             if (defNumId === undefined) {
                 var listOperation = lists.getDefaultListOperation(type);
                 applyOperation(listOperation, true, true);
@@ -1702,6 +1702,30 @@ define('io.ox/office/editor/editor',
                             self.setAttribute('paragraph', 'ilvl', ilvl);
                         }
                         else {
+                            if (!hasSelection && ilvl < 0 && paragraphLength > 3) {
+                                // detect Numbering/Bullet labels at paragraph
+                                // start
+                                var // the paragraph element addressed by the
+                                    // passed logical position
+                                paragraph = Position.getLastNodeFromPositionByNodeName(paragraphs, selection.startPaM.oxoPosition, DOM.PARAGRAPH_NODE_SELECTOR);
+
+                                if (paragraph !== undefined) {
+                                    var paraText = paragraph.textContent,
+                                    labelText = paraText.split(' ')[0],
+                                    bullet,
+                                    startNumber;
+                                    if (labelText.length === 1 && (labelText === '-' || labelText === '*')) {
+                                        // bullet
+                                        bullet = labelText;
+                                        self.createList('bullet', {symbol: bullet});
+                                    } else if (labelText.substring(labelText.length - 1) === '.') {
+                                        var sub = labelText.substring(0, labelText.length - 1);
+                                        startNumber = parseInt(sub, 10);
+                                        if (startNumber > 0)
+                                            self.createList('numbering', {levelStart: startNumber});
+                                    }
+                                }
+                            }
                             self.splitParagraph(startPosition);
                             // TODO / TBD: Should all API / Operation calls return the new position?!
                             var lastValue = selection.startPaM.oxoPosition.length - 1;
@@ -4702,7 +4726,7 @@ define('io.ox/office/editor/editor',
                         $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
                     }
                     if (listObject.labelWidth > 0) {
-                        numberingElement.css('width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
+                        numberingElement.css('min-width', Utils.convertHmmToLength(listObject.labelWidth, 'pt'));
                     }
                     $(para).prepend(numberingElement);
                 }
