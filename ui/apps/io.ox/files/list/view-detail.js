@@ -61,7 +61,7 @@ define("io.ox/files/list/view-detail",
                 }
                 var self = this;
                 if (evt && evt.id && evt.id === file.id && type !== "delete") {
-                    filesAPI.get({id: evt.id, folder: evt.folder}).done(function (file) {
+                    filesAPI.get({ id: evt.id, folder: evt.folder_id }).done(function (file) {
                         self.file = file;
                         sections.trigger($element, type, file);
                     });

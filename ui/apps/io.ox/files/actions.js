@@ -220,7 +220,7 @@ define("io.ox/files/actions",
         action: function (file, context) {
             var updatedFile = context.view.getModifiedFile();
             context.view.endEdit();
-            api.update(updatedFile).done();
+            api.update(updatedFile);
         }
     });
 
@@ -264,7 +264,6 @@ define("io.ox/files/actions",
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
-                            console.log('detach', data);
                             api.detach(data);
                         }
                     });

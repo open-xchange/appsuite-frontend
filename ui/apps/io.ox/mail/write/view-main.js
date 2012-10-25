@@ -53,11 +53,11 @@ define("io.ox/mail/write/view-main",
     }));
 
     ext.point(POINT + '/toolbar').extend(new links.Button({
-        id: 'cancel',
+        id: 'discard',
         index: 1000,
-        label: gt('Cancel'),
+        label: gt('Discard'),
         cssClasses: 'btn',
-        ref: POINT + '/actions/cancel'
+        ref: POINT + '/actions/discard'
     }));
 
     var contactPictureOptions = { width: 42, height: 42, scaleType: 'contain' };

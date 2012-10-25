@@ -218,13 +218,14 @@ define('io.ox/files/api',
                 appendColumns: false
             })
             .pipe(function () {
-                return api.propagate('change', obj);
+                return api.propagate('change', obj, true);
             })
             .pipe(function () {
-                return api.get(obj, false);
+                return api.get(obj);
             })
-            .done(function () {
-                api.trigger('update update:' + _.cid(obj), obj);
+            .done(function (data) {
+                api.trigger('update:' + _.cid(data), data);
+                api.trigger('update refresh.list');
             });
     };
 
@@ -253,7 +254,7 @@ define('io.ox/files/api',
             });
     };
 
-    api.propagate = function (type, obj) {
+    api.propagate = function (type, obj, silent) {
 
         var id, fid, all, list, get, versions, caches = api.caches, ready = $.when();
 
@@ -280,7 +281,9 @@ define('io.ox/files/api',
             }
 
             return $.when(all, list, get, versions).done(function () {
-                api.trigger(type === 'change' ? 'refresh.list' : 'refresh.all');
+                if (!silent) {
+                    api.trigger(type === 'change' ? 'refresh.list' : 'refresh.all');
+                }
             });
         } else {
             return ready;
@@ -333,11 +336,9 @@ define('io.ox/files/api',
             appendColumns: false
         })
         .pipe(function () {
-            console.log('propagate change', { folder_id: version.folder_id, id: version.id });
             return api.propagate('change', { folder_id: version.folder_id, id: version.id });
         })
         .done(function () {
-            console.log('detach...', { folder_id: version.folder_id, id: version.id });
             api.trigger('update:' + _.cid(version), version);
             api.trigger('delete.version update', version);
         });

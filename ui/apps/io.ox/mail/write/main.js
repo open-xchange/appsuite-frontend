@@ -50,7 +50,7 @@ define('io.ox/mail/write/main',
         }
     });
 
-    ext.point(ACTIONS + '/cancel').extend({
+    ext.point(ACTIONS + '/discard').extend({
         action: function (baton) {
             baton.app.quit();
         }
@@ -864,9 +864,9 @@ define('io.ox/mail/write/main',
             if (app.getState() === app.STATES.DIRTY) {
                 require(["io.ox/core/tk/dialogs"], function (dialogs) {
                     new dialogs.ModalDialog()
-                        .text(gt("Do you really want to cancel editing this mail?"))
-                        .addPrimaryButton("delete", gt('Lose changes'))
-                        .addAlternativeButton('savedraft', gt('Save as draft'))
+                        .text(gt("Do you really want to discard this mail?"))
+                        .addPrimaryButton("delete", gt('Discard'))
+                        .addAlternativeButton('savedraft', gt("Save as draft"))
                         .addButton("cancel", gt('Cancel'))
                         .show()
                         .done(function (action) {
