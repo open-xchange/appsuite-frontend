@@ -239,6 +239,41 @@ define('io.ox/calendar/actions',
         }
     });
 
+    var copyMove = function (type, apiAction, title) {
+        return function (list) {
+            require(['io.ox/calendar/api', 'io.ox/core/tk/dialogs', 'io.ox/core/tk/folderviews'], function (api, dialogs, views) {
+                var dialog = new dialogs.ModalDialog({ easyOut: true })
+                    .header($('<h3>').text(title))
+                    .addPrimaryButton('ok', gt('OK'))
+                    .addButton('cancel', gt('Cancel'));
+                dialog.getBody().css('maxHeight', '250px');
+                var item = _(list).first(),
+                    tree = new views.FolderTree(dialog.getBody(), { type: type });
+                tree.paint();
+                dialog.show(function () {
+                    tree.selection.set({ id: item.folder_id || item.folder });
+                })
+                .done(function (action) {
+                    if (action === 'ok') {
+                        var selectedFolder = tree.selection.get();
+                        if (selectedFolder.length === 1) {
+                            // move action
+                            api[apiAction](list, selectedFolder[0].id);
+                        }
+                    }
+                    tree.destroy();
+                    tree = dialog = null;
+                });
+            });
+        };
+    };
+
+    new Action('io.ox/calendar/detail/actions/move', {
+        id: 'move',
+        requires: 'some delete',
+        multiple: copyMove('calendar', 'move', gt('Move'))
+    });
+
     // Links - toolbar
 
     new ActionGroup(POINT + '/links/toolbar', {
@@ -318,7 +353,7 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 100,
+        index: 200,
         prio: 'hi',
         id: 'delete',
         label: gt('Delete'),
@@ -326,11 +361,19 @@ define('io.ox/calendar/actions',
     }));
 
     ext.point('io.ox/calendar/links/inline').extend(new links.Link({
-        index: 100,
+        index: 300,
         prio: 'hi',
         id: 'changestatus',
         label: gt('Change status'),
         ref: 'io.ox/calendar/detail/actions/changestatus'
+    }));
+
+    ext.point('io.ox/calendar/links/inline').extend(new links.Link({
+        index: 400,
+        prio: 'hi',
+        id: 'move',
+        label: gt('Move'),
+        ref: 'io.ox/calendar/detail/actions/move'
     }));
 
 

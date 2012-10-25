@@ -338,6 +338,43 @@ define("io.ox/calendar/api",
         });
     };
 
+    var copymove = function (list, action, targetFolderId) {
+        // allow single object and arrays
+        list = _.isArray(list) ? list : [list];
+        // pause http layer
+        http.pause();
+        // process all updates
+        _(list).map(function (o) {
+            return http.PUT({
+                module: 'calendar',
+                params: {
+                    action: action || 'update',
+                    id: o.id,
+                    folder: o.folder_id || o.folder,
+                    timestamp: o.timestamp || _.now() // mandatory for 'update'
+                },
+                data: { folder_id: targetFolderId },
+                appendColumns: false
+            });
+        });
+        // resume & trigger refresh
+        return http.resume()
+            .done(function () {
+                // clear cache and trigger local refresh
+                all_cache = {};
+                get_cache = {};
+                api.trigger('refresh.all');
+            });
+    };
+
+    api.move = function (list, targetFolderId) {
+        return copymove(list, 'update', targetFolderId);
+    };
+
+    api.copy = function (list, targetFolderId) {
+        return copymove(list, 'copy', targetFolderId);
+    };
+
     // global refresh
     api.refresh = function () {
         api.getInvites().done(function () {
