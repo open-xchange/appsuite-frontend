@@ -262,6 +262,8 @@ define('io.ox/office/editor/format/lists',
                 break;
             default:
             }
+            if (numberFormat !== 'bullet')
+                retString += '.';
             return retString;
         };
 
