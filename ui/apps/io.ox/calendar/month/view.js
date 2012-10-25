@@ -39,7 +39,7 @@ define('io.ox/calendar/month/view',
         },
 
         onClickAppointment: function (e) {
-            this.trigger('showAppoinment', e, _.cid($(e.currentTarget).data('cid')));
+            this.trigger('showAppoinment', e, _.cid($(e.currentTarget).data('cid') + ''));
         },
 
         render: function () {
