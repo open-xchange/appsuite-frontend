@@ -4765,7 +4765,7 @@ define('io.ox/office/editor/editor',
                             var charAttributes = characterStyles.getElementAttributes(span, false);
                             numberingElement.css('font-size', charAttributes.fontsize + 'pt');
                             var paraAttributes = paragraphStyles.getElementAttributes(para, false);
-                            LineHeight.setElementLineHeight(numberingElement, paraAttributes.lineheight);
+                            LineHeight.updateElementLineHeight(numberingElement, paraAttributes.lineheight);
                             if (listObject.indent > 0) {
                                 $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
                             }
