@@ -111,6 +111,12 @@
             position: relative;
             cursor: default;
             font-size: 0;
+            
+            /* inlined objects */
+            &.inline {
+                display: inline-block;
+                vertical-align: bottom;
+            }
 
             /* crop object contents at object border */
             > div.content {
