@@ -603,7 +603,8 @@ define('io.ox/office/editor/view',
                 .addSeparator()
                 .addButton('file/editrights', { icon: 'icon-pencil',    tooltip: 'Acquire Edit Rights' })
                 .addButton('file/flush',      { icon: 'icon-share-alt', tooltip: 'Flush Operations' })
-                .addSeparator();
+                .addSeparator()
+                .addGroup('document/quicksearch', new TextField({ tooltip: 'Quick Search' }));
         }
 
         // register a component that updates the window header tool bar

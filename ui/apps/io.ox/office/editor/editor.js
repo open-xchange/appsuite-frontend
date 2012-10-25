@@ -325,7 +325,7 @@ define('io.ox/office/editor/editor',
             }
             query = query.toLowerCase();
 
-            // search in all paragraphs (TODO: other elements, e.g. headers, ...?)
+            // search in all paragraph nodes (also embedded in tables etc.)
             Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (node) {
 
                 var // the concatenated text from all text nodes

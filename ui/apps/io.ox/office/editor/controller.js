@@ -80,7 +80,7 @@ define('io.ox/office/editor/controller',
                     set: function () { editor.redo(1); }
                 },
                 'document/quicksearch': {
-                    get: function () { return editor.hasHighlighting(); },
+                    //get: function () { return editor.hasHighlighting(); },
                     set: function (query) { editor.quickSearch(query); },
                     done: $.noop // do not focus editor
                 },
