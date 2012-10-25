@@ -72,7 +72,7 @@ define('io.ox/office/editor/format/characterstyles',
                     element.css('text-decoration', Utils.toggleToken(value, 'underline', state, 'none'));
                 },
                 preview: function (options, state) {
-                    var value = options.labelCss.textDecoration;
+                    var value = options.labelCss.textDecoration || '';
                     options.labelCss.textDecoration = Utils.toggleToken(value, 'underline', state, 'none');
                 }
             },
