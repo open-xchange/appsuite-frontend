@@ -1048,15 +1048,10 @@ define('io.ox/office/editor/editor',
          */
         this.setAttributes = function (family, attributes) {
 
-            var // whether undo is enabled
-                createUndo = undomgr.isEnabled();
-
             // Create an undo group that collects all undo operations generated
             // in the local setAttributes() method (it calls itself recursively
             // with smaller parts of the current selection).
-            if (createUndo) { undomgr.startGroup(); }
-            setAttributes(family, attributes);
-            if (createUndo) { undomgr.endGroup(); }
+            undomgr.enterGroup(function () { setAttributes(family, attributes); });
         };
 
         this.getParagraphCount = function () {
@@ -1072,8 +1067,8 @@ define('io.ox/office/editor/editor',
 
             // disable resize handlers etc. everytime the edit mode has been enabled
             if (editMode) {
+
                 // disable FireFox table manipulation handlers in edit mode
-                // (the commands must be executed after the editable div is in the DOM)
                 try {
                     document.execCommand('enableObjectResizing', false, false);
                     document.execCommand('enableInlineTableEditing', false, false);

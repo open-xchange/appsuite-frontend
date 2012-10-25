@@ -88,7 +88,7 @@ define('io.ox/office/editor/format/stylesheets',
      *      formatting using a complete map of all attribute values is to
      *      specify a global update handler (see options below).
      *  - 'preview': An optional function that initializes an options map that
-     *      will be used to create a list item in a GUI style sheet selector
+     *      will be used to create a list item in a GUI style sheet chooser
      *      control. Will be called in the context of the style sheet container
      *      instance. The function receives the options map to be extended in
      *      the first parameter, and the attribute value in the second
@@ -97,16 +97,6 @@ define('io.ox/office/editor/format/stylesheets',
      * @param {Object} [options]
      *  A map of options to control the behavior of the style sheet container.
      *  The following options are supported:
-     *  @param {String} [options.childStyleFamily]
-     *      Additional attribute family whose attributes may be inserted into
-     *      the attribute map of a style sheet, and will be applied to the
-     *      child nodes (or other descendant nodes) of the elements that are
-     *      formatted by this style sheet container.
-     *  @param {Function} [options.childNodeIterator]
-     *      A function that implements iterating through the child nodes (or
-     *      other descendant nodes) of the elements that are formatted by this
-     *      style sheet container. Used to apply the attributes of other
-     *      attribute families supported by the style sheets in this container.
      *  @param {String} [options.parentStyleFamily]
      *      The attribute family of the style sheets assigned to parent
      *      elements (or other ancestors). Used to resolve attributes from the
@@ -138,12 +128,6 @@ define('io.ox/office/editor/format/stylesheets',
 
             // update handlers, called after attributes have been changed
             updateHandlers = [],
-
-            // attribute family of child elements supported by the style sheet
-            childStyleFamily = Utils.getStringOption(options, 'childStyleFamily'),
-
-            // iterator for child nodes supporting the attributes of 'childStyleFamily'
-            childNodeIterator = Utils.getFunctionOption(options, 'childNodeIterator'),
 
             // custom resolver for style attributes of child families depending on a context element
             childStyleAttributesResolver = Utils.getFunctionOption(options, 'childStyleAttributesResolver'),
@@ -333,29 +317,6 @@ define('io.ox/office/editor/format/stylesheets',
             });
         }
 
-        /**
-         * Updates the formatting of the child nodes (or other descendant
-         * nodes) of the passed element, if the options passed to the
-         * constructor define a child attribute family and an iterator function
-         * to visit the child nodes.
-         *
-         * @param {jQuery} element
-         *  The element whose children will be visited and updated, as jQuery
-         *  object.
-         */
-        function updateChildNodeFormatting(element) {
-
-            var // style sheet container of the descendant style family
-                styleSheets = null;
-
-            if (_.isString(childStyleFamily) && _.isFunction(childNodeIterator)) {
-                styleSheets = documentStyles.getStyleSheets(childStyleFamily);
-                childNodeIterator.call(self, element, function (node) {
-                    styleSheets.updateElementFormatting(node);
-                }, self);
-            }
-        }
-
         // base constructor ---------------------------------------------------
 
         Container.call(this, documentStyles);
@@ -433,6 +394,29 @@ define('io.ox/office/editor/format/stylesheets',
         };
 
         /**
+         * Returns the definition of the specified formatting attribute.
+         *
+         * @param {String} name
+         *  The name of the attribute.
+         *
+         * @param {Object} [options]
+         *  A map of options controlling the operation. Supports the following
+         *  options:
+         *  @param {Boolean} [options.special=false]
+         *      If set to true, the definitions of special attributes
+         *      (attributes that are marked with the 'special' flag in the
+         *      attribute definitions passed to the constructor) will be
+         *      returned too.
+         *
+         * @return {Object}
+         *  The definition of the specified attribute, or null, if the
+         *  attribute does not exist.
+         */
+        this.getAttributeDefinition = function (name, options) {
+            return isRegisteredAttribute(name, Utils.getBooleanOption(options, 'special', false)) ? definitions[name] : null;
+        };
+
+        /**
          * Returns the names of all style sheets in a map, keyed by their
          * unique identifiers.
          *
@@ -457,17 +441,6 @@ define('io.ox/office/editor/format/stylesheets',
          */
         this.getDefaultStyleSheetId = function () {
             return defaultStyleId;
-        };
-
-        /**
-         * Returns the names of the child style family registered for this
-         * style sheet container.
-         *
-         * @return {String}
-         *  The name of the child style family, as passed to the constructor.
-         */
-        this.getChildStyleFamily = function () {
-            return childStyleFamily;
         };
 
         /**
@@ -510,11 +483,9 @@ define('io.ox/office/editor/format/stylesheets',
          *  will derive undefined attributes from.
          *
          * @param {Object} attributes
-         *  The formatting attributes contained in the new style sheet, as map
-         *  of attribute maps (name/value pairs), keyed by attribute family.
-         *  Supports the main attribute family passed in the styleFamily
-         *  parameter to the constructor, and all additional attribute families
-         *  registered via the 'childStyleFamily' constructor option.
+         *  The formatting attributes contained in the new style sheet. The
+         *  structure of this object is dependent on the style family of this
+         *  container.
          *
          * @param {Object} [options]
          *  A map of options to control the behavior of the new style sheet.
@@ -525,7 +496,7 @@ define('io.ox/office/editor/format/stylesheets',
          *  @param {Number} [options.priority=0]
          *      The sorting priority of the style (the lower the value the
          *      higher the priority).
-         *  @param {Boolean} [defStyle=false]
+         *  @param {Boolean} [options.defStyle=false]
          *      True, if the new style sheet is the default style sheet of this
          *      style sheet container. The default style will be used for all
          *      elements without explicit style sheet. Only the first style
@@ -715,33 +686,48 @@ define('io.ox/office/editor/format/stylesheets',
          *  The unique identifier of of the style sheet whose preview will be
          *  created.
          *
+         * @param {String|String[]} [families]
+         *  The attribute families used to add options to the options map. If
+         *  omitted, only attributes of the own style family will be processed.
+         *
          * @returns {Object}
          *  A map of options passed to the creator function of the preview
          *  button element.
          */
-        this.getPreviewButtonOptions = function (id) {
+        this.getPreviewButtonOptions = function (id, families) {
 
             var // the result options
-                options = { css: {}, labelCss: {} },
-                // style families containing attributes of this container
-                family = styleFamily,
-                // style sheet container for current family
-                styleSheets = this,
-                // formatting attributes of the style sheet
-                styleAttributes = null;
+                options = { css: {}, labelCss: {} };
 
-            // iterate through all family names (as specified by the
-            // 'childStyleFamily' constructor option of this container and the
-            // other child style containers) and add options for all the
-            // attributes contained in the *own* style sheet
-            while (_.isString(family)) {
-                styleAttributes = getStyleSheetAttributes(id, family);
-                styleSheets = documentStyles.getStyleSheets(family);
-                // style sheet container adds preview options according to its attribute definitions
-                styleSheets.updatePreviewButtonOptions(options, styleAttributes);
-                // continue with next child family
-                family = styleSheets.getChildStyleFamily();
+            // get families to be visited
+            if (_.isString(families)) {
+                families = [families];
+            } else if (!_.isArray(families)) {
+                families = [styleFamily];
             }
+
+            // iterate through all families and add options for all the
+            // attributes contained in the *own* style sheet
+            _(families).each(function (family) {
+
+                var // style sheet container for current family
+                    styleSheets = documentStyles.getStyleSheets(family),
+                    // formatting attributes of the own style sheet
+                    styleAttributes = getStyleSheetAttributes(id, family);
+
+                // generate options for the attributes
+                _(styleAttributes).each(function (value, name) {
+
+                    var // attribute definition from container corresponding to the current family
+                        definition = styleSheets.getAttributeDefinition(name);
+
+                    // call the preview handler of the attribute definition
+                    if (definition && _.isFunction(definition.preview)) {
+                        definition.preview.call(this, options, value);
+                    }
+                }, this);
+
+            }, this);
 
             return options;
         };
@@ -985,12 +971,6 @@ define('io.ox/office/editor/format/stylesheets',
                 mergedAttributes = _({}).extend(styleAttributes, elementAttributes);
                 updateElementFormatting($element, mergedAttributes, updateAttributeNames);
 
-                // update CSS formatting of child elements, if the style sheet
-                // of the current element has been changed
-                if (_.isString(styleId) || _.isNull(styleId)) {
-                    updateChildNodeFormatting($element);
-                }
-
                 // call the passed change listener
                 if (_.isFunction(changeListener)) {
                     changeListener.call(this, element, oldElementAttributes, elementAttributes);
@@ -1124,22 +1104,6 @@ define('io.ox/office/editor/format/stylesheets',
 
             // update element formatting according to current attribute values
             updateElementFormatting($element, mergedAttributes);
-
-            // update formatting of child elements
-            updateChildNodeFormatting($element);
-
-            return this;
-        };
-
-        this.updatePreviewButtonOptions = function (options, attributes) {
-
-            // generate options for the passed attributes
-            _(attributes).each(function (value, name) {
-                var definition = definitions[name];
-                if (definition && _.isFunction(definition.preview)) {
-                    definition.preview.call(this, options, value);
-                }
-            }, this);
 
             return this;
         };

@@ -2392,12 +2392,12 @@ define('io.ox/office/editor/position',
             }
 
             // node ends before the specified start index (continue with next node)
-            if ((_.isNumber(rangeStart)) && (nodeStart + nodeLength <= rangeStart)) {
+            if (_.isNumber(rangeStart) && (nodeStart + nodeLength <= rangeStart)) {
                 nodeStart += nodeLength;
                 return;
             }
             // node starts after the specified end index (escape from iteration)
-            if ((_.isNumber(rangeEnd)) && (rangeEnd < nodeStart)) {
+            if (_.isNumber(rangeEnd) && (rangeEnd < nodeStart)) {
                 return Utils.BREAK;
             }
 
@@ -2436,47 +2436,6 @@ define('io.ox/office/editor/position',
 
     // position ---------------------------------------------------------------
 
-    // resolves the top-level content node from the container element
-    function resolveContentNode(element, start) {
-
-        var // use iterator to find content node instead of jQuery.find for performance
-            node = Utils.getSelectedChildNodeByIndex(element, DOM.CONTENT_NODE_SELECTOR, start);
-
-        if (!node) {
-            Utils.warn('Position.resolveContentNode(): invalid index of content node: ' + start);
-        }
-        return { node: node, start: start, offset: 0 };
-    }
-
-    // resolves the paragraph child node from the paragraph
-    function resolveParagraphChildNode(paragraph, start) {
-
-        var nodeInfo = { node: null, start: 0, offset: 0 };
-
-        Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart) {
-            // first matching node is the requested node, store data and escape from iteration
-            nodeInfo = { node: node, start: nodeStart, offset: offsetStart };
-            return Utils.BREAK;
-        }, undefined, { start: start });
-
-        if (!nodeInfo.node) {
-            Utils.warn('Position.resolveParagraphChildNode(): invalid index of paragraph child node: ' + start);
-        }
-        return nodeInfo;
-    }
-
-    // resolves the descendant node from the container element with a jQuery selector
-    function resolveDescendantNode(element, selector, start) {
-
-        var // get the node by using a jQuery selector
-            node = $(element).find(selector).get(start);
-
-        if (!node) {
-            Utils.warn('Position.resolveDescendantNode(): invalid index of node: ' + start);
-        }
-        return { node: node, start: start, offset: 0 };
-    }
-
     /**
      * Returns the DOM node that corresponds to the specified logical position,
      * relative to a root node that contains top-level content nodes (e.g.
@@ -2514,7 +2473,9 @@ define('io.ox/office/editor/position',
         var // index of current element in the 'position' array
             arrayIndex = Utils.getIntegerOption(options, 'arrayIndex', 0),
             // the result object to be returned
-            nodeInfo = { node: null, start: 0, offset: 0 };
+            nodeInfo = { node: null, offset: 0 },
+            // temprary storage for current paragraph
+            paragraph = null;
 
         // increases array index and returns whether it is still valid
         function nextArrayIndex() {
@@ -2525,18 +2486,35 @@ define('io.ox/office/editor/position',
         // check input parameters
         if ((arrayIndex < 0) || (arrayIndex >= position.length)) {
             Utils.warn('Position.getNodeInfoAtPosition(): invalid array index');
-            return { node: null, start: 0, offset: 0 };
+            return nodeInfo;
         }
 
         // resolve the top-level content node
-        nodeInfo = resolveContentNode(rootNode, position[arrayIndex]);
+        // for performance, root nodes MUST NOT contain anything else than content nodes
+        nodeInfo.node = Utils.getDomNode(rootNode).childNodes[position[arrayIndex]];
+        if (!nodeInfo.node) {
+            Utils.warn('Position.getNodeInfoAtPosition(): invalid index of content node: ' + position[arrayIndex]);
+            return nodeInfo;
+        }
         if (!nextArrayIndex()) { return nodeInfo; }
 
         // paragraph: resolve paragraph child node
         if (DOM.isParagraphNode(nodeInfo.node)) {
 
-            // get child node in paragraph
-            nodeInfo = resolveParagraphChildNode(nodeInfo.node, position[arrayIndex]);
+            // get child node in paragraph (first reset nodeInfo.node to catch invalid position)
+            paragraph = nodeInfo.node;
+            nodeInfo.node = null;
+            Position.iterateParagraphChildNodes(paragraph, function (node, nodeStart, nodeLength, offsetStart) {
+                // first matching node is the requested node, store data and escape from iteration
+                nodeInfo = { node: node, offset: offsetStart };
+                return Utils.BREAK;
+            }, undefined, { start: position[arrayIndex] });
+
+            if (!nodeInfo.node) {
+                Utils.warn('Position.getNodeInfoAtPosition(): invalid index of paragraph child node: ' + position[arrayIndex]);
+                return nodeInfo;
+            }
+
             // there cannot be more nested nodes
             if (nextArrayIndex()) { Utils.warn('Position.getNodeInfoAtPosition(): too many values in position'); }
             return nodeInfo;
@@ -2546,11 +2524,19 @@ define('io.ox/office/editor/position',
         if (DOM.isTableNode(nodeInfo.node)) {
 
             // get table row
-            nodeInfo = resolveDescendantNode(nodeInfo.node, '> tbody > tr', position[arrayIndex]);
+            nodeInfo.node = $(nodeInfo.node).find('> tbody > tr').get(position[arrayIndex]);
+            if (!nodeInfo.node) {
+                Utils.warn('Position.getNodeInfoAtPosition(): invalid index for table row: ' + position[arrayIndex]);
+                return nodeInfo;
+            }
             if (!nextArrayIndex()) { return nodeInfo; }
 
             // get table cell
-            nodeInfo = resolveDescendantNode(nodeInfo.node, '> td', position[arrayIndex]);
+            nodeInfo.node = $(nodeInfo.node).children('td').get(position[arrayIndex]);
+            if (!nodeInfo.node) {
+                Utils.warn('Position.getNodeInfoAtPosition(): invalid index for table cell: ' + position[arrayIndex]);
+                return nodeInfo;
+            }
             if (!nextArrayIndex()) { return nodeInfo; }
 
             // find a node inside table cell

@@ -34,26 +34,6 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
 
-            // Logically, the line height is a paragraph attribute. But technically
-            // in CSS, the line height must be set separately at every span element
-            // because a relative CSS line-height attribute at the paragraph (e.g.
-            // 200%) will not be derived relatively to the spans, but absolutely
-            // according to the paragraph's font size. Example: The paragraph has a
-            // font size of 12pt and a line-height of 200%, resulting in 24pt. This
-            // value will be derived absolutely to a span with a font size of 6pt,
-            // resulting in a relative line height of 24pt/6pt = 400% instead of
-            // the expected 200%.
-            lineheight: {
-                def: LineHeight.SINGLE,
-                set: function (element, lineHeight) {
-                    lineHeight = LineHeight.validateLineHeight(lineHeight);
-                    // use the iterator go get all text nodes that need to be formatted
-                    iterateTextNodes(element, function (node) {
-                        LineHeight.setElementLineHeight($(node), lineHeight);
-                    });
-                }
-            },
-
             fillcolor: {
                 def: Color.AUTO, // auto for paragraph fill resolves to 'transparent'
                 set: function (element, color) {
@@ -61,36 +41,53 @@ define('io.ox/office/editor/format/paragraphstyles',
                 }
             },
 
-            ilvl: {
-                def: -1,
-                set: function (element, value) {
-                }
-            },
+            /**
+             * Line height relative to font settings. The CSS attribute
+             * 'line-height' must be set separately at every descendant text
+             * span because a relative line height (e.g. 200%) would not be
+             * derived from the paragraph relatively to the spans, but
+             * absolutely according to the paragraph's font size. Example: The
+             * paragraph has a font size of 12pt and a line-height of 200%,
+             * resulting in 24pt. This value will be derived absolutely to a
+             * span with a font size of 6pt, resulting in a relative line
+             * height of 24pt/6pt = 400% instead of the expected 200%.
+             */
+            lineheight: { def: LineHeight.SINGLE },
 
-            numId: {
-                def: -1,
-                set: function (element, value) {
-                }
-            },
+            ilvl: { def: -1 },
 
-            outlinelvl: {
-                def: 9,
-                set: function (element, value) {
-                }
-            }
+            numId: { def: -1 },
+
+            outlinelvl: { def: 9 }
 
         };
 
     // global private functions ===============================================
 
     /**
-     * Visits all descendant nodes of the passed paragraph that contain text
-     * nodes.
+     * Will be called for every paragraph whose character attributes have been
+     * changed.
+     *
+     * @param {jQuery} paragraph
+     *  The paragraph node whose attributes have been changed, as jQuery
+     *  object.
+     *
+     * @param {Object} attributes
+     *  A map of all attributes (name/value pairs), containing the
+     *  effective attribute values merged from style sheets and explicit
+     *  attributes.
      */
-    function iterateTextNodes(paragraph, iterator, context) {
-        return Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
-            return iterator.call(context, textNode.parentNode);
-        });
+    function updateParagraphFormatting(paragraph, attributes) {
+
+        var // the character styles/formatter
+            characterStyles = this.getDocumentStyles().getStyleSheets('character');
+
+        // Always update character formatting of all child nodes which may
+        // depend on paragraph settings, e.g. automatic text color which
+        // depends on the paragraph fill color.
+        return Utils.iterateDescendantNodes(paragraph, function (node) {
+            characterStyles.updateElementFormatting(node);
+        }, undefined, { children: true });
     }
 
     // class ParagraphStyles ==================================================
@@ -115,10 +112,7 @@ define('io.ox/office/editor/format/paragraphstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, DEFINITIONS, {
-            childStyleFamily: 'character',
-            childNodeIterator: iterateTextNodes
-        });
+        StyleSheets.call(this, documentStyles, 'paragraph', DOM.PARAGRAPH_NODE_SELECTOR, DEFINITIONS);
 
         // methods ------------------------------------------------------------
 
@@ -137,6 +131,10 @@ define('io.ox/office/editor/format/paragraphstyles',
          * ranges for read/write access and calls the passed iterator function.
          */
         this.iterateReadWrite = this.iterateReadOnly;
+
+        // initialization -----------------------------------------------------
+
+        this.registerUpdateHandler(updateParagraphFormatting);
 
     } // class ParagraphStyles
 

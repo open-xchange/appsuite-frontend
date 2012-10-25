@@ -66,14 +66,22 @@ define('io.ox/office/editor/view',
      *  control.
      *
      * @param {Object} [options]
-     *  Additional options passed to the RadioGroup constructor.
+     *  Additional options passed to the RadioGroup constructor. Supports all
+     *  options of the RadioGroup class, and the following additional options:
+     *  @param {String|String[]} previewFamilies
+     *      The attribute families used to get the formatting options of the
+     *      list items representing the style sheets. If omitted, only
+     *      attributes of the family specified by the 'family' parameter will
+     *      be used.
      */
     var StyleSheetChooser = RadioGroup.extend({ constructor: function (editor, family, options) {
 
         var // self reference
             self = this,
             // the style sheet container
-            styleSheets = editor.getStyleSheets(family);
+            styleSheets = editor.getStyleSheets(family),
+            // attribute families used to generate preview options
+            previewFamilies = Utils.getArrayOption(options, 'previewFamilies');
 
         /**
          * Called for each list item to get the sorting index, which has been
@@ -92,7 +100,7 @@ define('io.ox/office/editor/view',
             _(styleSheets.getStyleSheetNames()).each(function (name, id) {
 
                 var // options for the formatting preview
-                    options = styleSheets.getPreviewButtonOptions(id),
+                    options = styleSheets.getPreviewButtonOptions(id, previewFamilies),
                     // sorting priority
                     priority = styleSheets.getUIPriority(id),
                     // the sort index stored at the button for lexicographical sorting
@@ -492,7 +500,7 @@ define('io.ox/office/editor/view',
 */
 
         createToolBar('format', { label: gt('Format') })
-            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor, 'paragraph', { tooltip: gt('Paragraph Style') }))
+            .addGroup('paragraph/stylesheet', new StyleSheetChooser(editor, 'paragraph', { tooltip: gt('Paragraph Style'), previewFamilies: ['paragraph', 'character'] }))
             .addSeparator()
             .addGroup('character/fontname', new FontFamilyChooser())
             .addSeparator()

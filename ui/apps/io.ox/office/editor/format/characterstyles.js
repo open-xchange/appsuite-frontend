@@ -109,21 +109,15 @@ define('io.ox/office/editor/format/characterstyles',
     // private global functions ===============================================
 
     /**
-     * A jQuery selector function that returns whether the DOM node bound to
-     * the 'this' symbol is an element that can receive character formatting
-     * attributes.
-     */
-    function characterNodeSelector() {
-        return DOM.isTextSpan(this) || DOM.isListLabelNode(this);
-    }
-
-    /**
      * Will be called for every element whose character attributes have been
      * changed.
      *
      * @param {jQuery} node
-     *  The element whose character attributes have been changed, as jQuery
-     *  object.
+     *  The paragraph child node whose character attributes have been changed,
+     *  as jQuery object. May be a text field or a list label node, in that
+     *  case the text span contained in the node will be iterated. Other child
+     *  nodes of the paragraph (e.g. objects, helper nodes) will be ignored
+     *  silently.
      *
      * @param {Object} attributes
      *  A map of all attributes (name/value pairs), containing the
@@ -131,17 +125,26 @@ define('io.ox/office/editor/format/characterstyles',
      *  attributes.
      */
     function updateCharacterFormatting(node, attributes) {
-        // update calculated line height due to changed font settings
-        LineHeight.updateElementLineHeight(node);
-        
-        // determine auto text color
-        var para = $(node).closest(DOM.PARAGRAPH_NODE_SELECTOR);
-        if (para) {
-            var documentStyles = this.getDocumentStyles(),
-                paraAttrs = documentStyles.getStyleSheets('paragraph').getElementAttributes(para),
-                theme = documentStyles.getCurrentTheme();
-            Color.updateElementTextColor(node, theme, attributes, paraAttrs);
-        }
+
+        var // the parent paragraph of the node
+            paragraph = $(node).closest(DOM.PARAGRAPH_NODE_SELECTOR),
+            // the current theme
+            theme = this.getDocumentStyles().getCurrentTheme(),
+            // the paragraph style container
+            paragraphStyles = this.getDocumentStyles().getStyleSheets('paragraph'),
+            // the merged attributes of the paragraph
+            paragraphAttributes = paragraphStyles.getElementAttributes(paragraph);
+
+        // DOM.iterateTextSpans() visits the node itself if it is a text span,
+        // otherwise it visits all descendant text spans contained in the node
+        DOM.iterateTextSpans(node, function (span) {
+
+            // update calculated line height due to changed font settings
+            LineHeight.updateElementLineHeight(span, paragraphAttributes.lineheight);
+
+            // determine auto text color
+            Color.updateElementTextColor(span, theme, attributes, paragraphAttributes);
+        });
     }
 
     /**
@@ -170,8 +173,8 @@ define('io.ox/office/editor/format/characterstyles',
 
     /**
      * Contains the style sheets for character formatting attributes. The CSS
-     * formatting will be read from and written to <span> elements contained in
-     * paragraph <p> elements.
+     * formatting will be written to text span elements contained somewhere in
+     * the paragraph elements.
      *
      * @constructor
      *
@@ -189,7 +192,7 @@ define('io.ox/office/editor/format/characterstyles',
 
         // base constructor ---------------------------------------------------
 
-        StyleSheets.call(this, documentStyles, 'character', characterNodeSelector, DEFINITIONS, {
+        StyleSheets.call(this, documentStyles, 'character', undefined, DEFINITIONS, {
             parentStyleFamily: 'paragraph'
         });
 

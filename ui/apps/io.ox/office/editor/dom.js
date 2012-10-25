@@ -572,7 +572,10 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      *  A new list label node, as jQuery object.
      */
     DOM.createListLabelNode = function (text) {
-        return $('<div>', { contenteditable: false }).addClass('list-label').text(_.isString(text) ? text : '');
+        text = _.isString(text) ? text : '';
+        return $('<div>', { contenteditable: false })
+            .addClass('list-label')
+            .append(DOM.createTextSpan().text(text));
     };
 
     /**
@@ -704,6 +707,37 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      */
     DOM.hasObjectSelection = function (node) {
         return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
+    };
+
+    /**
+     * Calls the passed iterator function for all descendant text span elements
+     * in a the passed node. As a special case, if the passed node is a text
+     * span by itself, it will be visited directly. Text spans can be direct
+     * children of a paragraph node (regular editable text portions), or
+     * children of other nodes such as text fields or list label nodes.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The DOM ndoe whose descendant text spans will be visited (or which will
+     *  be visited by itself if it is a text span). If this object is a jQuery
+     *  collection, uses the first DOM node it contains.
+     *
+     * @param {Function} iterator
+     *  The iterator function that will be called for every text span. Receives
+     *  the DOM span element as first parameter. If the iterator returns the
+     *  Utils.BREAK object, the iteration process will be stopped immediately.
+     *
+     * @param {Object} [context]
+     *  If specified, the iterator will be called with this context (the symbol
+     *  'this' will be bound to the context inside the iterator function).
+     *
+     * @returns {Utils.BREAK|Undefined}
+     *  A reference to the Utils.BREAK object, if the iterator has returned
+     *  Utils.BREAK to stop the iteration process, otherwise undefined.
+     */
+    DOM.iterateTextSpans = function (node, iterator, context) {
+        return DOM.isTextSpan(node) ?
+            iterator.call(context, Utils.getDomNode(node)) :
+            Utils.iterateSelectedDescendantNodes(node, function () { return DOM.isTextSpan(this); }, iterator, context);
     };
 
     /**
