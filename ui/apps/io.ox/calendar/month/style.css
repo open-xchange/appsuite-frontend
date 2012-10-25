@@ -51,8 +51,8 @@
     
     .daylabel { 
         position: absolute;
-        width: 100/8*7%;
-        height: 25px;
+        width: 100%;
+        height: 26px;
         top: 41px;
         left: 0;
         white-space: nowrap;
@@ -61,10 +61,11 @@
         text-overflow: ellipsis;
         line-height: 25px;
         z-index: 3;
+        overflow-y: scroll;
     }
     
     .daylabel .weekday {
-        width: 100/7%;
+        width: 100/8%;
         display: inline-block;
         padding-left: 13px;
         background-color: white;
