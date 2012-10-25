@@ -21,7 +21,6 @@
         background-color: #FFF; 
         height: 41px;
         text-align: center;
-        border-bottom: 1px solid #ccc;
         padding: 3px;
     }
 
@@ -57,23 +56,19 @@
         left: 0;
         white-space: nowrap;
         font-family: @font-light;
-        font-size: 15px;
+        font-size: 13px;
         text-overflow: ellipsis;
         line-height: 25px;
         z-index: 3;
         overflow-y: scroll;
+        background-color: white;
+        border-bottom: 1px solid #ccc;
     }
     
     .daylabel .weekday {
         width: 100/8%;
         display: inline-block;
-        padding-left: 13px;
-        background-color: white;
-        border-bottom: 1px solid #ccc;
-    }
-    
-    .daylabel .weekday:last-child {
-        border-right: 1px solid #ccc;
+        text-align: center;
     }
     
     .scrollpane {
@@ -120,12 +115,12 @@
         font-family: Arial, Helvetica, sans-serif;
     }
     
-/*    
+    
     @-webkit-keyframes day-out {
         from { background-color: #fff; }
         to { background-color: #e0e0e0; }
     }
-*/    
+    
     .day {
         position: relative;
         display: inline-block;
@@ -134,10 +129,11 @@
         min-height: 80px;
         border-right: 1px solid #ccc;
         background-color: #fff;
-/*
-        -webkit-animation-timing-function: linear;
-        -webkit-animation-duration: 100ms;
-        */
+        -webkit-transition: background-color 0.2s linear;
+        -moz-transition: background-color 0.2s linear;
+        -o-transition: background-color 0.2s linear;
+        -ms-transition: background-color 0.2s linear;
+        transition: background-color 0.2s linear;
     }
 
     .day.bordertop, .week-info.bordertop {
@@ -154,7 +150,11 @@
 
     .day.out {
         background-color: #eee;
-        /*-webkit-animation-name: day-out;*/
+        -webkit-transition: background-color 0.2s linear;
+        -moz-transition: background-color 0.2s linear;
+        -o-transition: background-color 0.2s linear;
+        -ms-transition: background-color 0.2s linear;
+        transition: background-color 0.2s linear;
     }
     
     .day.out.today {
@@ -197,19 +197,10 @@
     
     .appointment {
         line-height: 14px;
-        background-color: #08c;
         margin-bottom: 1px;
         white-space: nowrap;
         cursor: pointer;
-        -webkit-transition: background-color, color 0.1s;
-        -moz-transition: background-color, color 0.1s;
-        -o-transition: background-color, color 0.1s;
-        transition: background-color, color 0.1s;
-        opacity: 1;
-        -webkit-transition: opacity 0.2s;
-        -moz-transition: opacity 0.2s;
-        -o-transition: opacity 0.2s;
-        transition: opacity 0.2s;
+        background-color: #08c;
     }
     
     .appointment-content {
