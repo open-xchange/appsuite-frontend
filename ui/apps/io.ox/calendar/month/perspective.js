@@ -1,3 +1,4 @@
+// NOJSHINT
 /**
  * This work is provided under the terms of the CREATIVE COMMONS PUBLIC
  * LICENSE. This work is protected by copyright and/or other applicable
@@ -17,7 +18,6 @@ define('io.ox/calendar/month/perspective',
      'io.ox/core/date',
      'gettext!io.ox/calendar',
      'io.ox/core/http'], function (View, api, util, date, gt, http) {
-
     'use strict';
 
     var perspective = new ox.ui.Perspective('month');
@@ -76,69 +76,73 @@ define('io.ox/calendar/month/perspective',
         },
 
         updateWeeks: function (obj) {
-//            console.log('updateWeeks', (obj.end - obj.start) / date.WEEK);
             // fetch appointments
+            obj = $.extend({
+                weeks: this.updateLoad
+            }, obj);
             obj.folder = this.folder;
-            var self = this,
-                collection = self.collections[obj.start];
-            if (collection) {
-                var def = api.getAll(obj);
-                def.done(function (list) {
-                    collection.reset(_(list).map(function (obj) {
-                        var m = new Backbone.Model(obj);
-                        m.id = _.cid(obj);
-                        return m;
-                    }));
-                    collection = null;
-                });
-                return def;
-            }
+            obj.end = obj.start + obj.weeks * date.WEEK;
+
+            var self = this;
+            return api.getAll(obj).done(function (list) {
+                if (list.length > 0) {
+                    var start = obj.start;
+                    for (var i = 1; i <= obj.weeks; i++, start += date.WEEK) {
+                       var end = start + date.WEEK;
+                        var collection = self.collections[start];
+                        if (collection) {
+                            collection.reset(_(list).chain().map(function (mod) {
+                                if ((mod.start_date >= start && mod.start_date <= end) || (mod.end_date >= start && mod.end_date <= end)) {
+                                    var m = new Backbone.Model(mod);
+                                    m.id = _.cid(mod);
+                                    return m;
+                                }
+
+                            }).compact().value());
+                        }
+                        collection = null;
+                    }
+                }
+            });
         },
 
-        drawWeeks: function (up, multi) {
-            multi = multi || 1;
-            up = up || false;
-            var def = $.Deferred(),
+        drawWeeks: function (opt) {
+            var param = $.extend({
+                    up: false,
+                    multi: 1
+                }, opt),
                 self = this,
                 views = [],
-                weeks = multi * self.updateLoad,
-                updateWeek = function (day) {
-                    return function () {
-                        return self.updateWeeks({start: day, end: day + date.WEEK});
-                    };
-                };
-            def.resolve();
+                weeks = param.multi * self.updateLoad,
+                day = param.up ? self.firstWeek -= (weeks) * date.WEEK : self.lastWeek,
+                start = day;
+
             // draw all weeks
-            for (var i = 1; i <= weeks; i++) {
-                var day = self.firstWeek;
-                if (up) {
-                    self.firstWeek -= date.WEEK;
-                } else {
-                    self.lastWeek += date.WEEK;
-                    day = self.lastWeek;
-                }
+            for (var i = 1; i <= weeks; i++, day += date.WEEK) {
+                // add collection for week
                 self.collections[day] = new Backbone.Collection([]);
+                // new view
                 var view = new View({ collection: self.collections[day], day: day });
                 view.on('showAppoinment', self.showAppointment, self);
-                views[up ? 'unshift' : 'push'](view.render().el);
-                def = def.pipe(updateWeek(day, up));
+                views.push(view.render().el);
+            }
+
+            if (!param.up) {
+                self.lastWeek += date.WEEK * weeks;
             }
 
             // add and render view
-            if (up) {
-                var firstMsg = $('.week:first', this.pane);
-                var curOffset = firstMsg.offset().top - this.scrollTop();
-                this.pane.prepend(views).scrollTop(firstMsg.offset().top - curOffset);
+            if (param.up) {
+                var firstWeek = $('.week:first', this.pane),
+                    curOffset = firstWeek.offset().top - this.scrollTop();
+                this.pane.prepend(views).scrollTop(firstWeek.offset().top - curOffset);
             } else {
                 this.pane.append(views);
             }
             // update first positions
             self.getFirsts();
 
-            // when all updates finished
-            def.done(function () {
-            });
-            return def;
+            return this.updateWeeks({start: start, weeks: weeks});
         },
 
         scrollTop: function (top) {
@@ -147,9 +151,8 @@ define('io.ox/calendar/month/perspective',
         },
 
         update: function () {
-            for (var i = this.firstWeek; i <= this.lastWeek; i += date.WEEK) {
-                this.updateWeeks({ start: i, end: i + date.WEEK});
-            }
+            var weeks = (this.lastWeek - this.firstWeek) / date.WEEK;
+            this.updateWeeks({start: this.firstWeek, weeks: weeks});
         },
 
         getFirsts: function (e) {
@@ -233,7 +236,7 @@ define('io.ox/calendar/month/perspective',
 
             app.folder.getData().done(function (data) {
                 self.folder = data.id;
-                self.drawWeeks(false, self.initLoad).done(function () {
+                self.drawWeeks({multi: self.initLoad}).done(function () {
                     self.gotoMonth();
                     $('[date^="' + year + '-' + month + '"]', self.pane).removeClass('out');
                 });
@@ -247,10 +250,10 @@ define('io.ox/calendar/month/perspective',
                         this.drawWeeks();
                     }
                     if (top <= this.scrollOffset) {
-                        this.drawWeeks(true);
+                        this.drawWeeks({up: true});
                     }
-                }, this))
-                .on('scroll', $.proxy(function (e) {
+//                }, this))
+//                .on('scroll', $.proxy(function (e) {
                     var top = this.scrollTop() + 200,
                         first = true,
                         month = '';

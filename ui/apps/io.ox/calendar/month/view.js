@@ -148,13 +148,13 @@ define('io.ox/calendar/month/view',
         return $('<div>')
             .addClass('abs')
             .append(
-                $('<div>').addClass('scrollpane'),
                 $('<div>').addClass('daylabel').append(function () {
                     _(days).each(function (day) {
                         tmp.push($('<div>').addClass('weekday').text(gt.noI18n(day)));
                     });
                     return tmp;
-                })
+                }),
+                $('<div>').addClass('scrollpane')
             );
     };
 
