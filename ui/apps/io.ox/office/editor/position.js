@@ -2362,9 +2362,9 @@ define('io.ox/office/editor/position',
         var // whether to visit all child nodes
             allNodes = Utils.getBooleanOption(options, 'allNodes', false),
             // logical index of first node to be visited
-            rangeStart = Utils.getIntegerOption(options, 'start', 0, 0),
+            rangeStart = Utils.getIntegerOption(options, 'start'),
             // logical index of last node to be visited
-            rangeEnd = Utils.getIntegerOption(options, 'end', 0x7FFFFFFF, rangeStart),
+            rangeEnd = Utils.getIntegerOption(options, 'end'),
             // split partly covered text spans before visiting them
             split = Utils.getBooleanOption(options, 'split', false),
             // the logical start index of the visited content node
@@ -2392,12 +2392,12 @@ define('io.ox/office/editor/position',
             }
 
             // node ends before the specified start index (continue with next node)
-            if (nodeStart + nodeLength <= rangeStart) {
+            if ((_.isNumber(rangeStart)) && (nodeStart + nodeLength <= rangeStart)) {
                 nodeStart += nodeLength;
                 return;
             }
             // node starts after the specified end index (escape from iteration)
-            if (rangeEnd < nodeStart) {
+            if ((_.isNumber(rangeEnd)) && (rangeEnd < nodeStart)) {
                 return Utils.BREAK;
             }
 
