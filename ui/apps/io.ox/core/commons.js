@@ -40,15 +40,15 @@ define('io.ox/core/commons',
 
             function draw(id, selection) {
                 // inline links
-                var links = $('<div>');
+                var node = $('<div>');
                 (points[id] || (points[id] = new links.InlineLinks({ id: 'inline-links', ref: id + '/links/inline' })))
-                    .draw.call(links, selection);
+                    .draw.call(node, selection);
                 return $().add(
                     $('<div>').addClass('summary').html(
                         gt('<b>%1$d</b> elements selected', selection.length)
                     )
                 )
-                .add(links.children().first());
+                .add(node.children().first());
             }
 
             return function (id, node, selection, api) {
