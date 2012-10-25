@@ -219,6 +219,22 @@ define('io.ox/office/editor/format/characterstyles',
             return iterateTextSpans(ranges, iterator, context, true);
         };
 
+        this.setAttributesInTextRange = function (span, start, end, attributes, options) {
+
+            var textLength = Utils.getDomNode(span).firstChild.nodeValue.length;
+
+            if (end + 1 < textLength) {
+                DOM.splitTextSpan(span, end, { append: true });
+            }
+            if (start > 0) {
+                DOM.splitTextSpan(span, start);
+            }
+
+            this.setElementAttributes(span, attributes, options);
+
+            CharacterStyles.mergeSiblingTextSpans(span, true);
+        };
+
         // initialization -----------------------------------------------------
 
         this.registerUpdateHandler(updateCharacterFormatting);

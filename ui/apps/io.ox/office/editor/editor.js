@@ -134,6 +134,9 @@ define('io.ox/office/editor/editor',
             // all highlighted DOM ranges (e.g. in quick search)
             highlightRanges = [],
 
+            // all text spans with highlighting
+            highlightedSpans = [],
+
             // list of operations
             operations = [],
 
@@ -292,18 +295,19 @@ define('io.ox/office/editor/editor',
          * Returns whether the document contains any highlighted ranges.
          */
         this.hasHighlighting = function () {
-            return highlightRanges.length > 0;
+            return highlightedSpans.length > 0;
         };
 
         /**
          * Removes all highlighting (e.g. from quick-search) from the document.
          */
         this.removeHighlighting = function () {
-            if (highlightRanges.length) {
+            if (highlightRanges.length > 0) {
                 characterStyles.setAttributesInRanges(highlightRanges, { highlight: null }, { special: true });
                 editdiv.removeClass('highlight');
             }
             highlightRanges = [];
+            highlightedSpans = [];
         };
 
         /**
@@ -327,29 +331,51 @@ define('io.ox/office/editor/editor',
             query = query.toLowerCase();
 
             // search in all paragraph nodes (also embedded in tables etc.)
-            Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (node) {
+            Utils.iterateSelectedDescendantNodes(editdiv, DOM.PARAGRAPH_NODE_SELECTOR, function (paragraph) {
 
-                var // the concatenated text from all text nodes
-                    elementText = $(node).text().replace(/\s/g, ' ').toLowerCase(),
+                var // all text spans in the paragraph, as array
+                    textSpans = [],
+                    // the concatenated text from all text spans
+                    elementText = '',
                     // all matching ranges of the query text in the element text
                     offsetRanges = [], offset = 0, index = 0;
 
-                // find all occurrences of the query text in the element
+                // collect all non-empty text spans in the paragraph
+                Position.iterateParagraphChildNodes(paragraph, function (node) {
+                    // skip object nodes (they may contain their own paragraphs)
+                    if (!DOM.isObjectNode(node)) {
+                        DOM.iterateTextSpans(node, function (span) {
+                            textSpans.push(span);
+                            elementText += span.firstChild.nodeValue;
+                        }, this);
+                    }
+                }, this, { allNodes: true });
+
+                // replace all whitespace characters, and convert to lower case
+                // for case-insensitive matching
+                elementText = elementText.replace(/\s/g, ' ').toLowerCase();
+
+                // find all occurrences of the query text in the paragraph text
                 while ((offset = elementText.indexOf(query, offset)) >= 0) {
                     // try to merge with last offset range
-                    if (offsetRanges.length && (_(offsetRanges).last().end >= offset)) {
+                    if ((offsetRanges.length > 0) && (_(offsetRanges).last().end >= offset)) {
                         _(offsetRanges).last().end = offset + query.length;
                     } else {
                         offsetRanges.push({ start: offset, end: offset + query.length });
                     }
-                    // continue at next character (occurences of the query text may overlap)
+                    // continue at next character (occurrences of the query text may overlap)
                     offset += 1;
                 }
 
+                // set highlighting to all occurrences
+                //start = index = 0;
+                _(textSpans).each(function (span) {
+
+                });
+
                 // translate offset ranges to DOM ranges
-                offset = 0;
-                index = 0;
-                Utils.iterateDescendantTextNodes(node, function (textNode) {
+                offset = index = 0;
+                Utils.iterateDescendantTextNodes(paragraph, function (textNode) {
 
                     var // do not declare in the for-loop header, this makes uglify.js very sad...
                         offsetRange = null;

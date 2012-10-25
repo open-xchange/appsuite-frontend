@@ -709,6 +709,18 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return (DOM.isObjectNode(node)) && ($(node).children('div.selection').length > 0);
     };
 
+    /**
+     * Searches a text span element in the previous siblings of the passed
+     * node.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose previous siblings will be searched for a text span
+     *  element. If this object is a jQuery collection, uses the first DOM node
+     *  it contains.
+     *
+     * @returns {HTMLElement|Null}
+     *  The closest text span preceding the specified node, or null.
+     */
     DOM.findPreviousTextSpan = function (node) {
         node = Utils.getDomNode(node);
         while (node && !DOM.isTextSpan(node)) {
@@ -717,6 +729,17 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
         return node;
     };
 
+    /**
+     * Searches a text span element in the next siblings of the passed node.
+     *
+     * @param {HTMLElement|jQuery} node
+     *  The node whose next siblings will be searched for a text span element.
+     *  If this object is a jQuery collection, uses the first DOM node it
+     *  contains.
+     *
+     * @returns {HTMLElement|Null}
+     *  The closest text span following the specified node, or null.
+     */
     DOM.findNextTextSpan = function (node) {
         node = Utils.getDomNode(node);
         while (node && !DOM.isTextSpan(node)) {
@@ -733,7 +756,7 @@ define('io.ox/office/editor/dom', ['io.ox/office/tk/utils'], function (Utils) {
      * children of other nodes such as text fields or list label nodes.
      *
      * @param {HTMLElement|jQuery} node
-     *  The DOM ndoe whose descendant text spans will be visited (or which will
+     *  The DOM node whose descendant text spans will be visited (or which will
      *  be visited by itself if it is a text span). If this object is a jQuery
      *  collection, uses the first DOM node it contains.
      *
