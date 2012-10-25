@@ -227,7 +227,8 @@ define('io.ox/office/editor/format/lists',
                 return "??";
             }
             var numberFormat = levelFormat.numberFormat;
-            ret.text = this.formatNumberType(levelIndexes === undefined ? 0 : levelIndexes[ilvl], numberFormat);
+            ret.text = this.formatNumberType(levelIndexes === undefined ? 0 :
+                    levelIndexes[ilvl] + (levelFormat.levelStart !== undefined ? levelFormat.levelStart - 1 : 0), numberFormat);
             ret.indent = levelFormat.leftIndent - (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
             //+ levelFormat.firstLineIndent
             ret.labelWidth = (levelFormat.hangingIndent ? levelFormat.hangingIndent : 0);
