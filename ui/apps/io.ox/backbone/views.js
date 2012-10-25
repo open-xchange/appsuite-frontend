@@ -108,10 +108,10 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
                     }
                 });
             }
-
+            
             this.$el.attr({
                 'data-extension-id': extOptions.id || id,
-                'data-extension-point': name,
+                'data-extension-point': options.ref || '',
                 'data-composite-id': (this.model && this.model.getCompositeId) ? this.model.getCompositeId() : ''
             });
 
@@ -169,7 +169,7 @@ define('io.ox/backbone/views', ['io.ox/core/extensions', 'io.ox/core/event'], fu
         };
 
         this.extend = function (options, extOptions) {
-            var ViewClass = createViewClass(options, extOptions);
+            var ViewClass = createViewClass(_.extend({}, options, {ref: name}), extOptions);
 
             extOptions = extOptions || {};
 
