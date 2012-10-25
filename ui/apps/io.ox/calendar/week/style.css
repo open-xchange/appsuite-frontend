@@ -228,12 +228,9 @@
     .appointment {
         position: absolute;
         background-color: #08c;
-        -webkit-transition: background-color, color 0.1s;
-        -moz-transition: background-color, color 0.1s;
-        transition: background-color, color 0.1s;
         opacity: 1;
-        -moz-transition: opacity 0.2s;
         -webkit-transition: opacity 0.2s;
+        -moz-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
     }
@@ -270,8 +267,8 @@
         
     .appointment.opac {
         opacity: 0.5;
-        -moz-transition: opacity 0.2s;
         -webkit-transition: opacity 0.2s;
+        -moz-transition: opacity 0.2s;
         -o-transition: opacity 0.2s;
         transition: opacity 0.2s;
     }
