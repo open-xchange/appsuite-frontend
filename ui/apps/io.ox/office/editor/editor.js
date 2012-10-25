@@ -28,9 +28,10 @@ define('io.ox/office/editor/editor',
      'io.ox/office/editor/format/stylesheets',
      'io.ox/office/editor/format/characterstyles',
      'io.ox/office/editor/format/documentstyles',
+     'io.ox/office/editor/format/lineheight',
      'io.ox/office/tk/alert',
      'gettext!io.ox/office/main'
-    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, Alert, gt) {
+    ], function (Events, Utils, DOM, OXOPaM, OXOSelection, Table, Image, Operations, Position, UndoManager, StyleSheets, CharacterStyles, DocumentStyles, LineHeight, Alert, gt) {
 
     'use strict';
 
@@ -4701,6 +4702,11 @@ define('io.ox/office/editor/editor',
                         listItemCounter[attributes.numId][subLevelIdx] = 0;
                     var listObject = lists.formatNumber(attributes.numId, attributes.ilvl, listItemCounter[attributes.numId]);
                     var numberingElement = DOM.createListLabelNode(listObject.text);
+                    var span = Utils.findDescendantNode(para, function () { return DOM.isPortionSpan(this); });
+                    var charAttributes = characterStyles.getElementAttributes(span, false);
+                    numberingElement.css('font-size', charAttributes.fontsize + 'pt');
+                    var paraAttributes = paragraphStyles.getElementAttributes(para, false);
+                    LineHeight.setElementLineHeight(numberingElement, paraAttributes.lineheight);
                     if (listObject.indent > 0) {
                         $(para).css('margin-left', Utils.convertHmmToLength(listObject.indent, 'pt'));
                     }
