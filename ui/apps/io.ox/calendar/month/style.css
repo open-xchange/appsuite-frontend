@@ -56,21 +56,25 @@
         top: 41px;
         left: 0;
         white-space: nowrap;
-        background-color: white;
         font-family: @font-light;
         font-size: 15px;
         text-overflow: ellipsis;
         line-height: 25px;
         z-index: 3;
-        border-bottom: 1px solid #ccc;
     }
     
     .daylabel .weekday {
         width: 100/7%;
         display: inline-block;
         padding-left: 13px;
+        background-color: white;
+        border-bottom: 1px solid #ccc;
     }
-
+    
+    .daylabel .weekday:last-child {
+        border-right: 1px solid #ccc;
+    }
+    
     .scrollpane {
         .overflow(auto);
         -webkit-backface-visibility: hidden;
@@ -96,7 +100,7 @@
         color: #555;
         position: absolute;
         right: 0px;
-        width: 12.5%;
+        width: 100/8+1%; /* fix for different round functions */
         height: 100/6%;
         padding: 13px 13px 13px 1px;
         text-align: right;
