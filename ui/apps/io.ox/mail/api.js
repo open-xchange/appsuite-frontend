@@ -198,7 +198,7 @@ define("io.ox/mail/api",
         },
         // composite key for "all" cache
         cid: function (o) {
-            return (o.action || 'all') + ':' + o.folder + '//' + [o.sort, o.order, o.limit || 0, !!o.unseen, !!o.deleted].join('.');
+            return (o.action || 'all') + ':' + o.folder + '//' + [o.sort, o.order, o.max || 0, !!o.unseen, !!o.deleted].join('.');
         },
 
         fail: {

@@ -28,15 +28,25 @@ define("io.ox/files/list/view-detail",
 
     "use strict";
 
-    var draw = function (file) {
+    var draw;
+
+    var createRedraw = function (node) {
+        return function (e, data) {
+            node.replaceWith(draw(data).element);
+        };
+    };
+
+    draw = function (file) {
 
         var self,
             mode = 'display',
-            $element = $("<div>").addClass("file-details view"),
+            $element = $.createViewContainer(file, filesAPI),
             sections = new layouts.Sections({
                 ref: "io.ox/files/details/sections"
             });
 
+        $element.on('redraw', createRedraw($element))
+            .addClass('file-details view');
 
         var blacklisted = {
             "refresh.list": true

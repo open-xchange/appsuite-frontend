@@ -153,8 +153,8 @@ define("io.ox/files/actions",
     new Action('io.ox/files/actions/edit', {
         id: 'edit',
         requires: 'one modify',
-        action: function (file, context) {
-            context.view.edit();
+        action: function (baton) {
+            baton.view.edit();
         }
     });
 
@@ -249,13 +249,22 @@ define("io.ox/files/actions",
         id: 'delete',
         action: function (data) {
             require(['io.ox/core/tk/dialogs'], function (dialogs) {
+                // get proper question
+                var question;
+                if (_.isArray(data) && data.length > 1) {
+                    question = gt('Do you really want to delete these files?');
+                } else {
+                    question = gt('Do you really want to delete this file?');
+                }
+                // ask
                 new dialogs.ModalDialog()
-                    .text(gt("Are you really sure about your decision? Are you aware of all consequences you have to live with?"))
-                    .addPrimaryButton("delete", gt("Shut up and delete it!"))
-                    .addButton("cancel", gt("No, rather not"))
+                    .text(question)
+                    .addPrimaryButton("delete", gt("Delete"))
+                    .addButton("cancel", gt("Cancel"))
                     .show()
                     .done(function (action) {
                         if (action === 'delete') {
+                            console.log('detach', data);
                             api.detach(data);
                         }
                     });

@@ -165,16 +165,19 @@ define('io.ox/core/commons',
                     grid.repaint().done(function () {
                         grid.selection.retrigger();
                     });
-                };
-            win.on('show', function () {
+                },
+                on = function () {
                     api.on('refresh.all refresh:all:local', refreshAll)
-                        .on('refresh.list', refreshList)
-                        .trigger('refresh.all');
-                })
-                .on('hide', function () {
+                    .on('refresh.list', refreshList)
+                    .trigger('refresh.all');
+                },
+                off = function () {
                     api.off('refresh.all refresh:all:local', refreshAll)
-                        .off('refresh.list', refreshList);
-                });
+                    .off('refresh.list', refreshList);
+                };
+            win.on({ show: on, hide: off });
+            // already visible?
+            if (win.state.visible) { on(); }
         },
 
         /**

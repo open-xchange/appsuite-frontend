@@ -341,9 +341,9 @@
                 }
             },
 
-            redraw = _.debounce(function () {
-                node && node.triggerHandler('redraw', data);
-            }, 10),
+//            redraw = _.debounce(function () {
+//                node && node.triggerHandler('redraw', data);
+//            }, 10),
 
             remove = function () {
                 node.remove();
@@ -352,8 +352,8 @@
         if (_.isArray(data)) {
             // multiple items
             _.chain(data).map(_.cid).each(function (cid) {
-                api.on('delete:' + cid, redraw);
-                api.on('update:' + cid, redraw);
+                api.on('delete:' + cid, remove);
+                api.on('update:' + cid, update);
             });
         } else {
             // single item
@@ -365,8 +365,8 @@
         return node.on('dispose', function () {
                 if (_.isArray(data)) {
                     _.chain(data).map(_.cid).each(function (cid) {
-                        api.off('delete:' + cid, redraw);
-                        api.off('update:' + cid, redraw);
+                        api.off('delete:' + cid, remove);
+                        api.off('update:' + cid, update);
                     });
                 } else {
                     cid = _.cid(data);
