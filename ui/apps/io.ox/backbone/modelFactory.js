@@ -21,12 +21,12 @@ define("io.ox/backbone/modelFactory",
         idAttribute: '_uid',
         initialize: function (obj) {
             BasicModel.prototype.initialize.apply(this, $.makeArray(arguments));
-            
+
             this.realm = this.get('_realm') || this.factory.realm("default");
             delete this.attributes._realm;
-            
+
             this.syncer = this.factory.internal;
-            
+
         },
         point: function (subpath) {
             return this.factory.point(subpath);

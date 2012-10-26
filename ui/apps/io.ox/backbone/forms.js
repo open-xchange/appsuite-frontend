@@ -299,6 +299,7 @@ define('io.ox/backbone/forms',
     // Form Sections made up of horizontal forms
 
     function Section(options) {
+        var self = this;
         _.extend(this, {
 
             tagName: 'div',
@@ -310,14 +311,13 @@ define('io.ox/backbone/forms',
             },
 
             point: function () {
-                return ext.point(this.ref);
+                return ext.point(self.ref);
             },
 
             render: function () {
-                var self = this;
-                var anyHidden = false;
-                var anyVisible = false;
-
+                var self = this,
+                    anyHidden = false,
+                    anyVisible = false;
                 this.point().each(function (extension) {
                     if (extension.metadata('hidden', [self.model])) {
                         anyHidden = anyHidden || true;
