@@ -15,7 +15,9 @@ define('io.ox/calendar/actions',
      'io.ox/core/extPatterns/links',
      'io.ox/calendar/api',
      'io.ox/calendar/util',
-     'gettext!io.ox/calendar/actions', 'io.ox/core/config'], function (ext, links, api, util, gt, config) {
+     'gettext!io.ox/calendar/actions',
+     'io.ox/core/config',
+     'io.ox/core/notifications'], function (ext, links, api, util, gt, config, notifications) {
 
     'use strict';
 
@@ -248,17 +250,26 @@ define('io.ox/calendar/actions',
                     .addButton('cancel', gt('Cancel'));
                 dialog.getBody().css('maxHeight', '250px');
                 var item = _(list).first(),
+                    id = String(item.folder_id || item.folder),
                     tree = new views.FolderTree(dialog.getBody(), { type: type });
-                tree.paint();
                 dialog.show(function () {
-                    tree.selection.set({ id: item.folder_id || item.folder });
+                    tree.paint().done(function () {
+                        tree.select(id);
+                    });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
-                        var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
-                            // move action
-                            api[apiAction](list, selectedFolder[0].id);
+                        var target = _(tree.selection.get()).first();
+                        if (target && target !== id) {
+                            // use proper action
+                            api[apiAction](list, target)
+                                .done(function () {
+                                    var response = apiAction === 'move' ?
+                                        gt.ngettext('Appointment has been moved', 'Appointments have been moved', list.length) :
+                                        gt.ngettext('Appointment has been copied', 'Appointments have been copied', list.length);
+                                    notifications.yell('success', response);
+                                })
+                                .fail(notifications.yell);
                         }
                     }
                     tree.destroy();
