@@ -154,15 +154,16 @@ define('io.ox/mail/actions',
                     .addButton("cancel", gt("Cancel"));
                 dialog.getBody().css({ height: '250px' });
                 var item = _(mail).first(),
+                    id = item.folder_id || item.folder,
                     tree = new views.FolderTree(dialog.getBody(), { type: 'mail' });
                 tree.paint();
                 dialog.show(function () {
-                    tree.selection.set(item.folder_id || item.folder);
+                    tree.selection.set({ id: id });
                 })
                 .done(function (action) {
                     if (action === 'ok') {
                         var selectedFolder = tree.selection.get();
-                        if (selectedFolder.length === 1) {
+                        if (selectedFolder.length === 1 && selectedFolder[0].id !== id) {
                             // move action
                             api.move(mail, selectedFolder[0].id);
                         }
